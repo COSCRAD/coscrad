@@ -74,10 +74,12 @@ export const validateCoscradModelProperty = (
             forbidUnknownValues,
         });
 
+    const isOptionallyOmitted = isOptional && isNullOrUndefined(actualPropertyValue);
+
     /**
      * If this property is optional and not specified, all is well.
      */
-    if (isOptional && isNullOrUndefined(actualPropertyValue)) return [];
+    if (isOptionallyOmitted) return [];
 
     if (isComplexCoscradDataTypeDefinition(propertyTypeDefinition)) {
         const { complexDataType } = propertyTypeDefinition;

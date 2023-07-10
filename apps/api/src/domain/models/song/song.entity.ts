@@ -1,12 +1,14 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
-import { NonEmptyString, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
-import { isNonEmptyString } from '@coscrad/validation-constraints';
+import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import { NestedDataType, NonEmptyString, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
+import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
 import { DTO } from '../../../types/DTO';
+import { DeepPartial } from '../../../types/DeepPartial';
+import { ResultOrError } from '../../../types/ResultOrError';
 import { buildMultilingualTextFromBilingualText } from '../../common/build-multilingual-text-from-bilingual-text';
-import { MultilingualText } from '../../common/entities/multilingual-text';
+import { MultilingualText, MultilingualTextItem } from '../../common/entities/multilingual-text';
 import MissingSongTitleError from '../../domainModelValidators/errors/song/MissingSongTitleError';
 import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../types/ResourceType';
@@ -15,6 +17,7 @@ import { ITimeBoundable } from '../interfaces/ITimeBoundable';
 import { Resource } from '../resource.entity';
 import validateTimeRangeContextForModel from '../shared/contextValidators/validateTimeRangeContextForModel';
 import { ContributorAndRole } from './ContributorAndRole';
+import { CannotAddDuplicateSetOfLyricsForSongError } from './errors';
 
 const isOptional = true;
 
@@ -44,9 +47,13 @@ export class Song extends Resource implements ITimeBoundable {
     // @deprecated Remove this in favor of edge connections to a Contributor resource
     readonly contributions?: ContributorAndRole[];
 
-    @NonEmptyString({ isOptional, label: 'lyrics', description: 'the lyrics of the song' })
+    @NestedDataType(MultilingualText, {
+        isOptional,
+        label: 'lyrics',
+        description: 'the lyrics of the song',
+    })
     // the type of `lyrics` should allow three way translation in future
-    readonly lyrics?: string;
+    readonly lyrics?: MultilingualText;
 
     @URL({ label: 'audio URL', description: 'a web link to the audio for the song' })
     readonly audioURL: string;
@@ -87,7 +94,7 @@ export class Song extends Resource implements ITimeBoundable {
             (contributorAndRoleDTO) => new ContributorAndRole(contributorAndRoleDTO)
         );
 
-        this.lyrics = lyrics;
+        if (!isNullOrUndefined(lyrics)) this.lyrics = new MultilingualText(lyrics);
 
         this.audioURL = audioURL;
 
@@ -140,6 +147,26 @@ export class Song extends Resource implements ITimeBoundable {
 
     validateTimeRangeContext(timeRangeContext: TimeRangeContext): ValidationResult {
         return validateTimeRangeContextForModel(this, timeRangeContext);
+    }
+
+    addLyrics(text: string, languageCode: LanguageCode): ResultOrError<Song> {
+        if (this.hasLyrics()) return new CannotAddDuplicateSetOfLyricsForSongError(this);
+
+        return this.safeClone({
+            lyrics: new MultilingualText({
+                items: [
+                    new MultilingualTextItem({
+                        text,
+                        languageCode,
+                        role: MultilingualTextItemRole.original,
+                    }),
+                ],
+            }),
+        } as DeepPartial<DTO<this>>);
+    }
+
+    hasLyrics(): boolean {
+        return this.lyrics instanceof MultilingualText;
     }
 
     getTimeBounds(): [number, number] {

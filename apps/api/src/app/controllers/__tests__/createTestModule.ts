@@ -64,6 +64,10 @@ import {
 } from '../../../domain/models/shared/common-commands';
 import { GrantResourceReadAccessToUser } from '../../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command';
 import { GrantResourceReadAccessToUserCommandHandler } from '../../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command-handler';
+import {
+    AddLyricsForSong,
+    AddLyricsForSongCommandHandler,
+} from '../../../domain/models/song/commands';
 import { CreateSong } from '../../../domain/models/song/commands/create-song.command';
 import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
 import {
@@ -378,6 +382,8 @@ export default async (
             CreateMediaItemCommandHandler,
             CreateSong,
             CreateSongCommandHandler,
+            AddLyricsForSong,
+            AddLyricsForSongCommandHandler,
             CreateBookBibliographicReference,
             CreateBookBibliographicReferenceCommandHandler,
             CreateCourtCaseBibliographicReference,
