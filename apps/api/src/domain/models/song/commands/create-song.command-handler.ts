@@ -46,14 +46,14 @@ export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
         aggregateCompositeIdentifier: { id },
         title,
         titleEnglish,
-        lyrics,
+
         audioURL,
     }: CreateSong): Promise<ResultOrError<Song>> {
         const songDTO: DTO<Song> = {
             id,
             title,
             titleEnglish,
-            lyrics,
+            // TODO remove lyrics from the create command
             audioURL,
             published: false,
             startMilliseconds: 0,
