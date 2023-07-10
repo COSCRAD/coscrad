@@ -1,3 +1,5 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
+import { buildMultilingualTextWithSingleItem } from '../domain/common/build-multilingual-text-with-single-item';
 import { Song } from '../domain/models/song/song.entity';
 import { ResourceType } from '../domain/types/ResourceType';
 import { DTO } from '../types/DTO';
@@ -18,7 +20,10 @@ const songDtos: DTO<Omit<Song, 'id'>>[] = [
         // ),
         title: 'Song title in language',
         titleEnglish: 'Mary had a little lamb',
-        lyrics: 'Mary had a little lamb, little lamb.',
+        lyrics: buildMultilingualTextWithSingleItem(
+            'Mary had a little lamb, little lamb.',
+            LanguageCode.English
+        ),
         audioURL:
             'https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav',
         published: true,
@@ -45,7 +50,10 @@ const songDtos: DTO<Omit<Song, 'id'>>[] = [
         // ),
         title: `Unpublished Song Title (lang)`,
         titleEnglish: 'Unpublished Song Title (Engl)',
-        lyrics: "Ain't gonna see the light of day, light of day, light of day",
+        lyrics: buildMultilingualTextWithSingleItem(
+            "Ain't gonna see the light of day, light of day, light of day",
+            LanguageCode.English
+        ),
         audioURL:
             'https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav',
         published: false,

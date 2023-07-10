@@ -153,6 +153,82 @@ exports[`command payload schemas Command payload schema should match the snapsho
     "type": "CREATE_SONG",
   },
   {
+    "description": "add lyrics for an existing song",
+    "label": "Add Lyrics for existing Song",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique idenifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "song",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+          },
+        },
+      },
+      "languageCode": {
+        "complexDataType": "ENUM",
+        "description": "the language of the lyrics",
+        "enumLabel": "language code",
+        "enumName": "LanguageCode",
+        "isArray": false,
+        "isOptional": false,
+        "label": "language",
+        "labelsAndValues": [
+          {
+            "label": "Chilcotin",
+            "value": "clc",
+          },
+          {
+            "label": "Haida",
+            "value": "hai",
+          },
+          {
+            "label": "English",
+            "value": "eng",
+          },
+          {
+            "label": "French",
+            "value": "fra",
+          },
+          {
+            "label": "Chinook",
+            "value": "chn",
+          },
+          {
+            "label": "Zapotec",
+            "value": "zap",
+          },
+          {
+            "label": "Spanish",
+            "value": "spa",
+          },
+        ],
+      },
+      "lyrics": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "lyrics for song",
+        "isArray": false,
+        "isOptional": false,
+        "label": "song lyrics",
+      },
+    },
+    "type": "ADD_LYRICS_FOR_SONG",
+  },
+  {
     "description": "Creates a new book bibliographic reference",
     "label": "Create Book Bibliographic Reference",
     "schema": {

@@ -4,7 +4,7 @@ import { NestedDataType, NonEmptyString, RawDataObject, URL, UUID } from '@coscr
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../types/AggregateType';
 
-class SongCompositeId {
+export class SongCompositeId {
     /**
      * This is a bit of a hack. It circumvents our `CoscradDataTypes` and may
      * cause problems for

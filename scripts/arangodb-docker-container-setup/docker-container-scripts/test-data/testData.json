@@ -1339,7 +1339,15 @@
                         "role": "performer"
                     }
                 ],
-                "lyrics": "Mary had a little lamb, little lamb.",
+                "lyrics": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "Mary had a little lamb, little lamb."
+                        }
+                    ]
+                },
                 "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
                 "lengthMilliseconds": 3500,
                 "startMilliseconds": 0
@@ -1363,7 +1371,15 @@
                         "role": "author"
                     }
                 ],
-                "lyrics": "Ain't gonna see the light of day, light of day, light of day",
+                "lyrics": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "Ain't gonna see the light of day, light of day, light of day"
+                        }
+                    ]
+                },
                 "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav",
                 "lengthMilliseconds": 33000,
                 "startMilliseconds": 0
