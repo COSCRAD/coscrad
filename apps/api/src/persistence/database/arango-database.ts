@@ -335,7 +335,9 @@ export class ArangoDatabase {
             '@collectionName': collectionName,
         };
 
-        this.#db.query({ query, bindVars });
+        await this.#db.query({ query, bindVars }).catch((error) => {
+            throw new Error(`failed to delete all in collection: ${collectionName}. ${error}`);
+        });
     };
 
     #getKeyOfDocument = <TEntityDTO>(document: ArangoDTO<TEntityDTO>): Maybe<string> =>

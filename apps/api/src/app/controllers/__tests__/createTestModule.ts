@@ -67,6 +67,8 @@ import { GrantResourceReadAccessToUserCommandHandler } from '../../../domain/mod
 import {
     AddLyricsForSong,
     AddLyricsForSongCommandHandler,
+    TranslateSongLyrics,
+    TranslateSongLyricsCommandHandler,
 } from '../../../domain/models/song/commands';
 import { CreateSong } from '../../../domain/models/song/commands/create-song.command';
 import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
@@ -424,6 +426,8 @@ export default async (
             TranslatePlaylistNameCommandHandler,
             CreateNoteAboutResourceCommandHandler,
             ConnectResourcesWithNoteCommandHandler,
+            TranslateSongLyrics,
+            TranslateSongLyricsCommandHandler,
         ],
 
         controllers: [
