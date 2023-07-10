@@ -1,10 +1,14 @@
-import { ICategorizableDetailQueryResult, ISongViewModel } from '@coscrad/api-interfaces';
+import {
+    ICategorizableDetailQueryResult,
+    IMultilingualText,
+    ISongViewModel,
+} from '@coscrad/api-interfaces';
 import { MediaPlayer } from '@coscrad/media-player';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Card, Divider } from '@mui/material';
 import { formatBilingualText } from '../vocabulary-lists/utils';
 
-const buildLyricsStatusMessage = (lyrics: string | null | undefined): string =>
+const buildLyricsStatusMessage = (lyrics: IMultilingualText | null | undefined): string =>
     isNullOrUndefined(lyrics) ? 'No Lyrics Available' : 'Lyrics are available for this song';
 
 export const SongDetailThumbnailPresenter = ({
