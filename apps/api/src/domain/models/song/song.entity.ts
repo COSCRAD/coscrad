@@ -4,6 +4,7 @@ import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constra
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
+import { isNotFound } from '../../../lib/types/not-found';
 import { DTO } from '../../../types/DTO';
 import { DeepPartial } from '../../../types/DeepPartial';
 import { ResultOrError } from '../../../types/ResultOrError';
@@ -17,7 +18,8 @@ import { ITimeBoundable } from '../interfaces/ITimeBoundable';
 import { Resource } from '../resource.entity';
 import validateTimeRangeContextForModel from '../shared/contextValidators/validateTimeRangeContextForModel';
 import { ContributorAndRole } from './ContributorAndRole';
-import { CannotAddDuplicateSetOfLyricsForSongError } from './errors';
+import { CannotAddDuplicateSetOfLyricsForSongError, NoLyricsToTranslateError } from './errors';
+import { SongLyricsHaveAlreadyBeenTranslatedToGivenLanguageError } from './errors/SongLyricsAlreadyHaveBeenTranslatedToGivenLanguageError';
 
 const isOptional = true;
 
@@ -149,6 +151,11 @@ export class Song extends Resource implements ITimeBoundable {
         return validateTimeRangeContextForModel(this, timeRangeContext);
     }
 
+    /**
+     * Adds lyrics for a song that does not yet have any lyrics. To translate
+     * existing lyrics (`original` item in multilingual-text valued `lyrics`),
+     * use `translateLyrics` instead.
+     */
     addLyrics(text: string, languageCode: LanguageCode): ResultOrError<Song> {
         if (this.hasLyrics()) return new CannotAddDuplicateSetOfLyricsForSongError(this);
 
@@ -165,8 +172,33 @@ export class Song extends Resource implements ITimeBoundable {
         } as DeepPartial<DTO<this>>);
     }
 
+    translateLyrics(text: string, languageCode: LanguageCode) {
+        if (!this.hasLyrics()) return new NoLyricsToTranslateError(this);
+
+        if (this.hasTranslation(languageCode))
+            return new SongLyricsHaveAlreadyBeenTranslatedToGivenLanguageError(this, languageCode);
+
+        return this.safeClone({
+            lyrics: this.lyrics.append(
+                new MultilingualTextItem({
+                    text,
+                    languageCode,
+                    role: MultilingualTextItemRole.freeTranslation,
+                })
+            ),
+        } as DeepPartial<DTO<this>>);
+    }
+
     hasLyrics(): boolean {
         return this.lyrics instanceof MultilingualText;
+    }
+
+    hasTranslation(languageCode: LanguageCode): boolean {
+        if (!this.hasLyrics()) return false;
+
+        const searchResult = this.lyrics.in(languageCode);
+
+        return !isNotFound(searchResult);
     }
 
     getTimeBounds(): [number, number] {
