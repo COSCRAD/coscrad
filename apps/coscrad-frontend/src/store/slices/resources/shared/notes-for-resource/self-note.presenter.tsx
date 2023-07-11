@@ -5,6 +5,9 @@ import { Box, Grid, Typography } from '@mui/material';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { SelfConnectionNote } from '../../../notes/hooks/use-loadable-self-notes-for-resource';
 
+/**
+ * TODO[https://www.pivotaltracker.com/story/show/185592121] augment the DefaultTheme
+ */
 const Item = styled(Box)(({ theme }) => ({
     padding: 0,
     marginBottom: '15px',

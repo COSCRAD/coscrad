@@ -2,10 +2,21 @@ import { AggregateCompositeIdentifier } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import {
     Close as CloseIcon,
+    ExpandLess as ExpandLessIcon,
+    ExpandMore as ExpandMoreIcon,
     Hub as HubIcon,
     TextSnippet as TextSnippetIcon,
 } from '@mui/icons-material';
-import { Box, Drawer, IconButton, Stack, Tooltip, Typography, styled } from '@mui/material';
+import {
+    Box,
+    Divider,
+    Drawer,
+    IconButton,
+    Stack,
+    Tooltip,
+    Typography,
+    styled,
+} from '@mui/material';
 import { ReactNode, useState } from 'react';
 import { CommandPanel } from '../commands';
 
@@ -25,8 +36,11 @@ const DrawerHeader = styled(Box)(({ theme }) => ({
 }));
 
 const DrawerContentStack = styled(Stack)(({ theme }) => ({
-    margin: theme.spacing(0, 0, 0, 4),
+    margin: theme.spacing(0, 4, 0, 4),
+    overflow: 'scroll',
 }));
+
+type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
 export const CategorizablePageLayout = ({
     compositeIdentifier: { type: resourceType, id },
@@ -35,8 +49,22 @@ export const CategorizablePageLayout = ({
     commandPanel,
     children,
 }: CategorizablePageLayoutProps) => {
-    const [bottomDrawerOpen, setBottomDrawerOpen] = useState(false);
-    const [rightSideDrawerOpen, setRightSideDrawerOpen] = useState(false);
+    const [drawerState, setDrawerState] = useState({
+        bottom: false,
+        right: false,
+    });
+    const [isBottomDrawerExpanded, setIsBottomDrawerExpanded] = useState(false);
+
+    const toggleDrawer = (anchor: Anchor, isOpen: boolean) => {
+        setDrawerState({ ...drawerState, [anchor]: isOpen });
+    };
+
+    // const toggleBottomDrawerSize = (isBottomDrawerExpanded) => {
+    //     if (isBottomDrawerExpanded) {
+
+    //     }
+    //     setIsBottomDrawerExpanded(isBottomDrawerExpanded);
+    // };
 
     return (
         <>
@@ -45,7 +73,7 @@ export const CategorizablePageLayout = ({
                 <Tooltip title="Open Notes Panel">
                     <IconButton
                         onClick={() => {
-                            setBottomDrawerOpen(!bottomDrawerOpen);
+                            toggleDrawer('bottom', !drawerState['bottom']);
                         }}
                     >
                         <TextSnippetIcon />
@@ -54,7 +82,7 @@ export const CategorizablePageLayout = ({
                 <Tooltip title="Open Connected Resources Panel">
                     <IconButton
                         onClick={() => {
-                            setRightSideDrawerOpen(!rightSideDrawerOpen);
+                            toggleDrawer('right', !drawerState['right']);
                         }}
                     >
                         <HubIcon />
@@ -66,9 +94,9 @@ export const CategorizablePageLayout = ({
                 PaperProps={{
                     sx: { width: '35vw' },
                 }}
-                variant="persistent"
+                variant="temporary"
                 data-testid="connected-resources-panel"
-                open={rightSideDrawerOpen}
+                open={drawerState['right']}
             >
                 <DrawerHeader>
                     <Box sx={{ mb: 2 }}>
@@ -76,27 +104,28 @@ export const CategorizablePageLayout = ({
                             Connected Resources
                         </Typography>
                         <Typography variant="subtitle2">
-                            {/* TODO: Remove this, it is for troubleshooting purposes only */}
+                            {/* TODO: Remove this in future, it is for troubleshooting purposes only */}
                             for {resourceType}/{id}
                         </Typography>
                     </Box>
                     <Tooltip title="Close Panel">
                         <IconButton
                             onClick={() => {
-                                setRightSideDrawerOpen(!rightSideDrawerOpen);
+                                toggleDrawer('right', false);
                             }}
                         >
                             <CloseIcon />
                         </IconButton>
                     </Tooltip>
                 </DrawerHeader>
+                <Divider variant="fullWidth" sx={{ mb: 3 }} />
                 <DrawerContentStack>{connectedResourcesList}</DrawerContentStack>
             </Drawer>
             <Drawer
                 anchor="bottom"
                 PaperProps={{
                     sx: {
-                        height: '30vh',
+                        height: isBottomDrawerExpanded ? '80vh' : '40vh',
                         width: '90vw',
                         margin: 'auto',
                         borderLeft: '1px solid rgba(0, 0, 0, 0.12)',
@@ -104,9 +133,9 @@ export const CategorizablePageLayout = ({
                         borderRadius: '20px 20px 0px 0px',
                     },
                 }}
-                variant="persistent"
+                variant="temporary"
                 data-testid="notes-panel"
-                open={bottomDrawerOpen}
+                open={drawerState['bottom']}
             >
                 <DrawerHeader>
                     <Box sx={{ mb: 2 }}>
@@ -117,16 +146,28 @@ export const CategorizablePageLayout = ({
                             for {resourceType}/{id}
                         </Typography>
                     </Box>
-                    <Tooltip title="Close Notes Panel">
-                        <IconButton
-                            onClick={() => {
-                                setBottomDrawerOpen(!bottomDrawerOpen);
-                            }}
-                        >
-                            <CloseIcon />
-                        </IconButton>
-                    </Tooltip>
+                    <Box>
+                        <Tooltip title="Expand/Contract Notes Panel">
+                            <IconButton
+                                onClick={() => {
+                                    setIsBottomDrawerExpanded(!isBottomDrawerExpanded);
+                                }}
+                            >
+                                {isBottomDrawerExpanded ? <ExpandMoreIcon /> : <ExpandLessIcon />}
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Close Notes Panel">
+                            <IconButton
+                                onClick={() => {
+                                    toggleDrawer('bottom', false);
+                                }}
+                            >
+                                <CloseIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </Box>
                 </DrawerHeader>
+                <Divider variant="fullWidth" sx={{ mb: 3 }} />
                 <DrawerContentStack>{selfNotesList}</DrawerContentStack>
             </Drawer>
             {!isNullOrUndefined(CommandPanel) ? <>{commandPanel}</> : null}
