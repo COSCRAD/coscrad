@@ -1,14 +1,10 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
-import { NonEmptyString } from '@coscrad/data-types';
-import { isNonEmptyString } from '@coscrad/validation-constraints';
+import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
-import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
+import { Valid, isValid } from '../../../domainModelValidators/Valid';
 import InvalidPublicationStatusError from '../../../domainModelValidators/errors/InvalidPublicationStatusError';
-import TermHasNoTextInAnyLanguageError from '../../../domainModelValidators/errors/term/TermHasNoTextInAnyLanguageError';
-import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
 import { ResourceType } from '../../../types/ResourceType';
@@ -23,19 +19,28 @@ const isOptional = true;
 export class Term extends Resource {
     readonly type: ResourceType = ResourceType.term;
 
-    @NonEmptyString({
-        isOptional,
-        label: 'text (language)',
-        description: 'the term in the language',
-    })
-    readonly term?: string;
+    // @NonEmptyString({
+    //     isOptional,
+    //     label: 'text (language)',
+    //     description: 'the term in the language',
+    // })
+    // readonly term?: string;
 
-    @NonEmptyString({
-        isOptional,
-        label: 'text (colonial language)',
-        description: 'the text in the colonial language',
+    // @NonEmptyString({
+    //     isOptional,
+    //     label: 'text (colonial language)',
+    //     description: 'the text in the colonial language',
+    // })
+    // readonly termEnglish?: string;
+
+    /**
+     * TODO We will need a migration for this change
+     */
+    @NestedDataType(MultilingualText, {
+        label: 'text',
+        description: 'the text for the term',
     })
-    readonly termEnglish?: string;
+    readonly text: MultilingualText;
 
     @NonEmptyString({
         label: 'contributor ID',
@@ -67,51 +72,19 @@ export class Term extends Resource {
         // This should only happen in the validation context
         if (isNullOrUndefined(dto)) return;
 
-        /**
-         * TODO [design]: We should abstract this pattern of having text in multiple
-         * languages. Options:
-         * 1. interface `hasBilingualText`
-         * ```js
-         * {
-         * text: string;
-         * textInTranslationLanguage: string;
-         * }
-         * ```
-         * 2. Have a separate layer that fetches translations. This approach would
-         * allow us to express the direction of the relationship. Did we start with
-         * an English gloss and ilicit the form in the indigenous language? Did we
-         * start with the indignous term and elicit a translation or gloss?
-         *
-         * Related models that will use this concept:
-         * Any entity that has (the potential for) a bilingual name
-         * Texts, including transcripts for audio \ video
-         */
-        this.term = dto.term;
+        const { contributorId, audioFilename, sourceProject, text } = dto;
 
-        this.termEnglish = dto.termEnglish;
+        this.text = new MultilingualText(text);
 
-        this.contributorId = dto.contributorId;
+        this.contributorId = contributorId;
 
-        this.audioFilename = dto.audioFilename;
+        this.audioFilename = audioFilename;
 
-        this.sourceProject = dto.sourceProject;
+        this.sourceProject = sourceProject;
     }
 
     getName(): MultilingualText {
-        /**
-         * TODO[migration] use a `text` property of type `MultilingualText` in
-         * place of `term` and `termEnglish`
-         */
-        return buildMultilingualTextFromBilingualText(
-            {
-                text: this.term,
-                languageCode: LanguageCode.Chilcotin,
-            },
-            {
-                text: this.termEnglish,
-                languageCode: LanguageCode.English,
-            }
-        );
+        return this.text.clone();
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {
@@ -121,11 +94,13 @@ export class Term extends Resource {
     protected validateComplexInvariants(): InternalError[] {
         const allErrors: InternalError[] = [];
 
-        const { term, termEnglish, id, published } = this;
+        const { text, published } = this;
 
-        if (!isNonEmptyString(term) && !isNonEmptyString(termEnglish))
-            allErrors.push(new TermHasNoTextInAnyLanguageError(id));
+        const textValidationResult = text.validateComplexInvariants();
 
+        if (!isValid(textValidationResult)) allErrors.push(textValidationResult);
+
+        // isn't this a simple invariant?
         if (typeof published !== 'boolean')
             allErrors.push(new InvalidPublicationStatusError(ResourceType.term));
 

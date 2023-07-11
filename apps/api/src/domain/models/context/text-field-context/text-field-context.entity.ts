@@ -1,3 +1,4 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
 import {
     FixedValue,
     NonEmptyString,
@@ -5,6 +6,7 @@ import {
     UnionMember,
 } from '@coscrad/data-types';
 import { DTO } from '../../../../types/DTO';
+import { LanguageCodeEnum } from '../../../common/entities/multilingual-text';
 import { EdgeConnectionContext } from '../context.entity';
 import { EDGE_CONNECTION_CONTEXT_UNION } from '../edge-connection-context-union';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
@@ -60,12 +62,18 @@ export class TextFieldContext extends EdgeConnectionContext {
     })
     readonly charRange: [number, number];
 
+    @LanguageCodeEnum({
+        label: 'language',
+        description: 'the language of the target text',
+    })
+    languageCode: LanguageCode;
+
     constructor(dto: DTO<TextFieldContext>) {
         super();
 
         if (!dto) return;
 
-        const { target, charRange } = dto;
+        const { target, charRange, languageCode } = dto;
 
         this.target = target;
 
@@ -74,5 +82,7 @@ export class TextFieldContext extends EdgeConnectionContext {
          * Remove this cast.
          */
         this.charRange = [...(charRange as [number, number])];
+
+        this.languageCode = languageCode;
     }
 }

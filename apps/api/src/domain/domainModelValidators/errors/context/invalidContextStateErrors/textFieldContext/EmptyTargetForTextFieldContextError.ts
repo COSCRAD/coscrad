@@ -9,7 +9,7 @@ export default class EmptyTargetForTextFieldContextError extends InternalError {
             `of resource ${formatResourceCompositeIdentifier(targetModel)}`,
             `is invalid`,
             '\n',
-            `Text provided as context must be a string with non-zero length`,
+            `Text provided as context must be multilingual text with a value in the provided language`,
         ].join(' ');
 
         super(msg);

@@ -1,10 +1,10 @@
 import { FactoryTestSuiteForAggregate } from '.';
-import { clonePlainObjectWithoutProperties } from '../../../../lib/utilities/clonePlainObjectWithoutProperties';
 import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpected';
-import InvariantValidationError from '../../../domainModelValidators/errors/InvariantValidationError';
-import TermHasNoTextInAnyLanguageError from '../../../domainModelValidators/errors/term/TermHasNoTextInAnyLanguageError';
-import { AggregateType } from '../../../types/AggregateType';
+import { InternalError } from '../../../../lib/errors/InternalError';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
+import { MultilingualText } from '../../../common/entities/multilingual-text';
+import { MultilingualTextHasNoOriginalError } from '../../../models/audio-item/errors/multilingual-text-has-no-original.error';
+import { AggregateType } from '../../../types/AggregateType';
 import buildNullAndUndefinedAggregateFactoryInvalidTestCases from './common/buildNullAndUndefinedAggregateFactoryInvalidTestCases';
 import { generateFuzzAggregateFactoryTestCases } from './utilities/generate-fuzz-aggregate-factory-test-cases';
 
@@ -24,15 +24,16 @@ export const buildTermAggregateFactoryTestSet = (): FactoryTestSuiteForAggregate
     ],
     invalidCases: [
         {
-            description: 'Both term and termEnglish are empty',
-            dto: clonePlainObjectWithoutProperties(validTermDto, ['term', 'termEnglish']),
-            checkError: (result: unknown) =>
+            description: 'The term has no text in any language',
+            dto: validTerm.clone({
+                text: new MultilingualText({ items: [] }),
+            }),
+            checkError: (result: unknown) => {
                 assertErrorAsExpected(
-                    result,
-                    new InvariantValidationError(validTerm.getCompositeIdentifier(), [
-                        new TermHasNoTextInAnyLanguageError(validTerm.id),
-                    ])
-                ),
+                    (result as InternalError).innerErrors[0].innerErrors[0],
+                    new MultilingualTextHasNoOriginalError()
+                );
+            },
         },
         ...buildNullAndUndefinedAggregateFactoryInvalidTestCases(AggregateType.term),
         ...generateFuzzAggregateFactoryTestCases(AggregateType.term, validTermDto),

@@ -122,7 +122,9 @@ describe(commandType, () => {
 
                     const playlist = playlistSearchResult as Playlist;
 
-                    const englishTextItemSearchResult = playlist.name.in(LanguageCode.English);
+                    const englishTextItemSearchResult = playlist.name.translate(
+                        LanguageCode.English
+                    );
 
                     expect(englishTextItemSearchResult).not.toBe(NotFound);
 

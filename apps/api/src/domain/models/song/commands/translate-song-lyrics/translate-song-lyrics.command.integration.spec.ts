@@ -106,7 +106,9 @@ describe(commandType, () => {
 
                     const song = searchResult as Song;
 
-                    const doesSongHaveTranslation = !isNotFound(song.lyrics.in(languageCode));
+                    const doesSongHaveTranslation = !isNotFound(
+                        song.lyrics.translate(languageCode)
+                    );
 
                     expect(doesSongHaveTranslation).toBe(true);
 

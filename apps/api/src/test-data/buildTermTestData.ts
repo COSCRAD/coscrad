@@ -1,6 +1,22 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
+import { buildMultilingualTextFromBilingualText } from '../domain/common/build-multilingual-text-from-bilingual-text';
+import { buildMultilingualTextWithSingleItem } from '../domain/common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../domain/common/entities/multilingual-text';
 import { Term } from '../domain/models/term/entities/term.entity';
 import { ResourceType } from '../domain/types/ResourceType';
 import { convertAggregatesIdToUuid } from './utilities/convertSequentialIdToUuid';
+
+const buildBilingualText = (text: string, textEnglish: string): MultilingualText =>
+    buildMultilingualTextFromBilingualText(
+        {
+            text,
+            languageCode: LanguageCode.Chilcotin,
+        },
+        {
+            text: textEnglish,
+            languageCode: LanguageCode.English,
+        }
+    );
 
 export const buildTermsForVocabularyList = (): Term[] =>
     [
@@ -56,6 +72,7 @@ export const buildTermsForVocabularyList = (): Term[] =>
         .map((partialDto) => ({
             ...partialDto,
             published: true,
+            text: buildBilingualText(partialDto.term, partialDto.termEnglish),
             type: ResourceType.term,
         }))
         .map((dto) => new Term(dto))
@@ -69,26 +86,26 @@ export const buildTermsForVocabularyList = (): Term[] =>
 export default (): Term[] => [
     ...[
         {
-            term: 'Chil-term-1',
-            termEnglish: 'Engl-term-1',
+            text: buildBilingualText('Chil-term-1', 'Engl-term-1'),
             contributorId: 'John Doe',
             id: '1',
             published: true,
         },
         {
-            term: 'Chil-term-2',
-            termEnglish: 'Engl-term-2',
+            text: buildBilingualText('Chil-term-2', 'Engl-term-2'),
             contributorId: 'John Doe',
             id: '2',
             published: true,
         },
         {
+            text: buildMultilingualTextWithSingleItem('Chil-term-no-english', LanguageCode.English),
             term: 'Chil-term-no-english',
             contributorId: 'Jane Deer',
             id: '3',
             published: false,
         },
         {
+            text: buildMultilingualTextWithSingleItem('My Secret Term', LanguageCode.English),
             term: 'My Secret Term',
             contributorId: 'This will be removed soon',
             id: '4',
