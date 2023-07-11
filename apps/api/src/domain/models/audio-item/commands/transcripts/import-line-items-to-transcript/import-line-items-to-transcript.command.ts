@@ -10,7 +10,7 @@ import { LanguageCodeEnum } from '../../../../../../domain/common/entities/multi
 import { AudioVisualCompositeIdentifier } from '../../../entities/audio-item-composite-identifier';
 import { IMPORT_LINE_ITEMS_TO_TRANSCRIPT } from '../constants';
 
-class TranscriptLineItem {
+export class TranscriptLineItem {
     @NonNegativeFiniteNumber({
         label: 'in point (ms)',
         description: 'the opening timestamp in milliseconds',
@@ -25,7 +25,7 @@ class TranscriptLineItem {
 
     @NonEmptyString({
         label: 'text',
-        description: 'mitli-lingual text transcription translation',
+        description: 'multi-lingual text transcription translation',
     })
     readonly text: string;
 

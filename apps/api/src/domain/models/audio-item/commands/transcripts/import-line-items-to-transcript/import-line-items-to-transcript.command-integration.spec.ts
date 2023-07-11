@@ -8,7 +8,6 @@ import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import getValidAggregateInstanceForTest from '../../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
-import { buildMultilingualTextWithSingleItem } from '../../../../../../domain/common/build-multilingual-text-with-single-item';
 import { IIdManager } from '../../../../../../domain/interfaces/id-manager.interface';
 import { DeluxeInMemoryStore } from '../../../../../../domain/types/DeluxeInMemoryStore';
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
@@ -70,7 +69,9 @@ describe(commandType, () => {
     });
 
     validAudiovisualItems.forEach((validInstance) => {
-        describe(`when transcribing a ${formatAggregateType(validInstance.type)}`, () => {
+        describe(`when importing line items to a transcript for a ${formatAggregateType(
+            validInstance.type
+        )}`, () => {
             const [startTime, endTime] = validInstance.getTimeBounds();
 
             const audioLength = endTime - startTime;
@@ -88,11 +89,12 @@ describe(commandType, () => {
                         epsilon,
                 ]);
 
-            const dummyText = 'bla bla bla';
+            const buildDummyText = ([inPoint, outPoint]: [number, number]) =>
+                `text for line item with time range: [${inPoint}, ${outPoint}]`;
 
             const languageCode = LanguageCode.Chilcotin;
 
-            const multilingualText = buildMultilingualTextWithSingleItem(dummyText, languageCode);
+            // const multilingualText = buildMultilingualTextWithSingleItem(dummyText, languageCode);
 
             const buildValidCommandFSA = (
                 validInstance: AudioItem | Video
@@ -103,15 +105,13 @@ describe(commandType, () => {
                         validInstance.getCompositeIdentifier() as ResourceCompositeIdentifier<
                             typeof ResourceType.audioItem | typeof ResourceType.video
                         >,
-                    lineItems: [
-                        {
-                            inPointMilliseconds: allTimestamps[0][0],
-                            outPointMilliseconds: allTimestamps[0][1],
-                            text: dummyText,
-                            languageCode,
-                            speakerInitials: validInstance.transcript.participants[0].initials,
-                        },
-                    ],
+                    lineItems: allTimestamps.map(([inPointMilliseconds, outPointMilliseconds]) => ({
+                        inPointMilliseconds,
+                        outPointMilliseconds,
+                        text: buildDummyText([inPointMilliseconds, outPointMilliseconds]),
+                        languageCode,
+                        speakerInitials: validInstance.transcript.participants[0].initials,
+                    })),
                 },
             });
 
