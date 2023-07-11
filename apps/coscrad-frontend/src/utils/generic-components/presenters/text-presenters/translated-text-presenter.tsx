@@ -7,7 +7,7 @@ interface TranslatedLanguageTextPresenterProps {
     languageCode: LanguageCode;
     text: string;
     role: MultilingualTextItemRole;
-    onTextSelection?: (charRange: [number, number]) => void;
+    onTextSelection?: (charRange: [number, number], languageCode: LanguageCode) => void;
 }
 
 export const TranslatedLanguageTextPresenter = ({
@@ -28,7 +28,8 @@ export const TranslatedLanguageTextPresenter = ({
                             e.currentTarget.selectionEnd,
                         ];
 
-                        if (typeof onTextSelection === 'function') onTextSelection(charRange);
+                        if (typeof onTextSelection === 'function')
+                            onTextSelection(charRange, languageCode);
                     }}
                 >
                     {text}

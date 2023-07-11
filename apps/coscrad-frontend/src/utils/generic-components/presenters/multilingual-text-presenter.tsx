@@ -1,4 +1,4 @@
-import { IMultilingualText } from '@coscrad/api-interfaces';
+import { IMultilingualText, LanguageCode } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import LanguageIcon from '@mui/icons-material/Language';
@@ -19,12 +19,12 @@ import { TranslatedLanguageTextPresenter } from './text-presenters/translated-te
 export interface MultilingualTextPresenterProps {
     text: IMultilingualText;
     // TODO include the langauge code
-    onCharRangeSelection?: (charRange: [number, number]) => void;
+    onTextSelection?: (charRange: [number, number], languageCode: LanguageCode) => void;
 }
 
 export const MultilingualTextPresenter = ({
     text,
-    onCharRangeSelection,
+    onTextSelection,
 }: MultilingualTextPresenterProps): JSX.Element => {
     const { defaultLanguageCode } = useContext(ConfigurableContentContext);
 
@@ -64,7 +64,7 @@ export const MultilingualTextPresenter = ({
                         languageCode={languageCode}
                         text={text}
                         role={role}
-                        onTextSelection={onCharRangeSelection}
+                        onTextSelection={onTextSelection}
                     />
                 ))}
             </Accordion>
