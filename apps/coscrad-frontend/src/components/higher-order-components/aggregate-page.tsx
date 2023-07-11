@@ -1,11 +1,11 @@
 import {
     AggregateCompositeIdentifier,
     AggregateType,
-    CategorizableCompositeIdentifier,
-    CategorizableType,
     ICommandFormAndLabels as IBackendCommandFormAndLabels,
     IBaseViewModel,
     IDetailQueryResult,
+    ResourceCompositeIdentifier,
+    ResourceType,
 } from '@coscrad/api-interfaces';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
@@ -19,7 +19,6 @@ import { buildCommandExecutor, buildDynamicCommandForm } from '../commands/comma
 import { ErrorDisplay } from '../error-display/error-display';
 import { Loading } from '../loading';
 import { NotFoundPresenter } from '../not-found';
-import { NoteDetailPageContainer } from '../notes/note-detail-page.container';
 import { buildUseLoadableSearchResult } from './buildUseLoadableSearchResult';
 
 type DetailPresenter = (viewModel: IDetailQueryResult<IBaseViewModel>) => JSX.Element;
@@ -29,14 +28,12 @@ interface AggregatePageProps {
     DetailPresenter: DetailPresenter;
 }
 
-const isCategorizableCompositeIdentifier = (
-    input: unknown
-): input is CategorizableCompositeIdentifier => {
+const isResourceCompositeIdentifier = (input: unknown): input is ResourceCompositeIdentifier => {
     if (input === null || typeof input === 'undefined') return false;
 
-    const { type } = input as CategorizableCompositeIdentifier;
+    const { type } = input as ResourceCompositeIdentifier;
 
-    return Object.values(CategorizableType).includes(type);
+    return Object.values(ResourceType).includes(type);
 };
 
 const buildCommandExecutionFormsAndLabels = (
@@ -87,6 +84,8 @@ export const AggregatePage = ({
         data: viewModel,
     } = useLoadableSearchResult(id) as IMaybeLoadable<IDetailQueryResult<IBaseViewModel>>;
 
+    console.log({ viewModel });
+
     const { shouldEnableWebOfKnowledgeForResources } = useContext(ConfigurableContentContext);
 
     if (errorInfo) return <ErrorDisplay {...errorInfo} />;
@@ -94,11 +93,6 @@ export const AggregatePage = ({
     if (viewModel === NOT_FOUND) return <NotFoundPresenter />;
 
     if (isLoading || viewModel === null) return <Loading />;
-
-    // TODO Remove this exceptional case
-    if (aggregateType === CategorizableType.note) {
-        return <NoteDetailPageContainer />;
-    }
 
     const compositeIdentifier = { type: aggregateType, id };
 
@@ -127,7 +121,7 @@ export const AggregatePage = ({
         <>
             <DetailPresenterWithCommands />
             {shouldEnableWebOfKnowledgeForResources &&
-            isCategorizableCompositeIdentifier(compositeIdentifier) ? (
+            isResourceCompositeIdentifier(compositeIdentifier) ? (
                 <>
                     <ConnectedResourcesPanel compositeIdentifier={compositeIdentifier} />
                     <SelfNotesPanelContainer compositeIdentifier={compositeIdentifier} />
