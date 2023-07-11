@@ -61,7 +61,7 @@ export const Footer = (): JSX.Element => {
     const handleClose = () => setOpen(false);
 
     return (
-        <Box>
+        <Box sx={{ backgroundColor: '#ededed' }}>
             <Grid
                 container
                 component="footer"
@@ -71,7 +71,6 @@ export const Footer = (): JSX.Element => {
                     py: 3,
                     px: 2,
                     mt: 'auto',
-                    backgroundColor: '#ededed',
                 }}
             >
                 <Grid container spacing={4} sx={{ padding: '20px' }}>
@@ -81,14 +80,7 @@ export const Footer = (): JSX.Element => {
                         </Typography>
                         <Typography variant="subtitle1">{subTitle}</Typography>
                     </Grid>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={3}
-                        component={Typography}
-                        variant="subtitle1"
-                        color="text.secondary"
-                    >
+                    <Grid item xs={12} sm={3} color="text.secondary">
                         <Typography color="primary.main" variant="h3">
                             QR Code
                         </Typography>
@@ -106,14 +98,7 @@ export const Footer = (): JSX.Element => {
                             </StyledQRCode>
                         </Modal>
                     </Grid>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={3}
-                        component={Typography}
-                        variant="subtitle1"
-                        color="text.secondary"
-                    >
+                    <Grid item xs={12} sm={3} color="text.secondary">
                         <Typography color="primary.main" variant="h3">
                             Contact
                         </Typography>
@@ -123,7 +108,6 @@ export const Footer = (): JSX.Element => {
                             </IconButton>
                             {phoneNumber}
                         </Box>
-
                         <Box>
                             <IconButton color="secondary">
                                 <LocationOn />
@@ -131,14 +115,7 @@ export const Footer = (): JSX.Element => {
                             {address}
                         </Box>
                     </Grid>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={3}
-                        component={Typography}
-                        variant="subtitle1"
-                        color="text.secondary"
-                    >
+                    <Grid item xs={12} sm={3} color="text.secondary">
                         <Typography color="primary.main" variant="h3">
                             Links
                         </Typography>
@@ -170,10 +147,10 @@ export const Footer = (): JSX.Element => {
                 </Grid>
             </Grid>
             <Grid container>
-                <Grid sx={{ backgroundColor: '#ededed' }} item xs={12}>
+                <Grid item xs={12}>
                     <Tenant />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} sx={{ height: '40px' }}>
                     <COSCRADByline />
                 </Grid>
             </Grid>
