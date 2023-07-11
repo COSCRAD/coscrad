@@ -21,20 +21,15 @@ interface SelectedCategorizablesOfMultipleTypesPresenterProps<
     viewModelSnapshot: ViewModelDetailSnapshot;
     presenterFactory: ICategorizableDetailPresenterFactory<ICategorizableDetailQueryResult<T>>;
     getPluralLabelForCategorizableType: (categorizableType: CategorizableType) => string;
-    heading?: string;
 }
 
 export const SelectedCategorizablesOfMultipleTypesPresenter = ({
     viewModelSnapshot,
     presenterFactory,
     getPluralLabelForCategorizableType,
-    heading,
 }: SelectedCategorizablesOfMultipleTypesPresenterProps): JSX.Element => {
     return (
         <div data-testid="multiple-categorizables-view">
-            {/* <Typography variant="h4">
-                {isNonEmptyString(heading) ? heading : 'Connected Resources'}
-            </Typography> */}
             {Object.entries(viewModelSnapshot)
                 // replace the slice name with corresponding categorizable type
                 .map(

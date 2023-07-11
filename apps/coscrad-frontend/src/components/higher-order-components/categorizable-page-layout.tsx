@@ -76,6 +76,7 @@ export const CategorizablePageLayout = ({
                             Connected Resources
                         </Typography>
                         <Typography variant="subtitle2">
+                            {/* TODO: Remove this, it is for troubleshooting purposes only */}
                             for {resourceType}/{id}
                         </Typography>
                     </Box>
