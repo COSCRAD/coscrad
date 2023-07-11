@@ -115,6 +115,13 @@ export class Transcript extends BaseDomainModel implements ITranscript {
         } as DeepPartial<DTO<this>>);
     }
 
+    importLineItems(items: TranscriptItem[]): ResultOrError<this> {
+        // TODO: validate the line items
+        const newItems = this.items.concat(items.map((item) => item.clone()));
+
+        return this.clone({ items: newItems } as DeepPartial<DTO<this>>);
+    }
+
     countParticipants(): number {
         return this.participants.length;
     }

@@ -1,7 +1,7 @@
 import { isNullOrUndefined, isNumberWithinRange } from '@coscrad/validation-constraints';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
-import { DeepPartial } from '../../../../types/DeepPartial';
 import { DTO } from '../../../../types/DTO';
+import { DeepPartial } from '../../../../types/DeepPartial';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { ResourceCompositeIdentifier } from '../../../types/ResourceCompositeIdentifier';
 import {
@@ -45,6 +45,10 @@ export interface ITranscribable {
     ): ResultOrError<ITranscribableBase>;
 
     addLineItemToTranscript(newItemDto: DTO<TranscriptItem>): ResultOrError<ITranscribableBase>;
+
+    importLineItemsToTranscript(
+        newItemDtos: DTO<TranscriptItem>[]
+    ): ResultOrError<ITranscribableBase>;
 
     countTranscriptParticipants(): number;
 }
@@ -95,6 +99,18 @@ export function Transcribable<TBase extends Constructor<ITranscribableBase>>(Bas
             const updatedTranscript = this.transcript.addLineItem(new TranscriptItem(newItem));
 
             if (isInternalError(updatedTranscript)) return updatedTranscript;
+
+            return this.safeClone({
+                transcript: updatedTranscript,
+            } as DeepPartial<DTO<this>>);
+        }
+
+        importLineItemsToTranscript(
+            newItemDtos: DTO<TranscriptItem>[]
+        ): ResultOrError<ITranscribableBase> {
+            const newItems = newItemDtos.map((newItemDto) => new TranscriptItem(newItemDto));
+
+            const updatedTranscript = this.transcript.importLineItems(newItems);
 
             return this.safeClone({
                 transcript: updatedTranscript,

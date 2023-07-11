@@ -45,7 +45,7 @@ export class TranscriptLineItem {
 @Command({
     type: IMPORT_LINE_ITEMS_TO_TRANSCRIPT,
     description: `import line items (in orignal language) to an existing transcript`,
-    label: `Import line items to trancript`,
+    label: `Import Line Items to Trancript`,
 })
 export class ImportLineItemsToTranscript implements ICommandBase {
     @NestedDataType(AudioVisualCompositeIdentifier, {
