@@ -67,6 +67,7 @@ export const CategorizablePageLayout = ({
                     sx: { width: '35vw' },
                 }}
                 variant="persistent"
+                data-testid="connected-resources-panel"
                 open={rightSideDrawerOpen}
             >
                 <DrawerHeader>
@@ -103,6 +104,7 @@ export const CategorizablePageLayout = ({
                     },
                 }}
                 variant="persistent"
+                data-testid="notes-panel"
                 open={bottomDrawerOpen}
             >
                 <DrawerHeader>
@@ -114,7 +116,7 @@ export const CategorizablePageLayout = ({
                             for {resourceType}/{id}
                         </Typography>
                     </Box>
-                    <Tooltip title="Close Panel">
+                    <Tooltip title="Close Notes Panel">
                         <IconButton
                             onClick={() => {
                                 setBottomDrawerOpen(!bottomDrawerOpen);
