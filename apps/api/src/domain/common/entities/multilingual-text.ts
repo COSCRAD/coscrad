@@ -135,7 +135,7 @@ export class MultilingualText extends BaseDomainModel implements IMultilingualTe
         return this.items.map(({ text, languageCode }) => `{${languageCode}}: ${text}`).join('\n');
     }
 
-    in(languageCode: LanguageCode): Maybe<MultilingualTextItem> {
+    translate(languageCode: LanguageCode): Maybe<MultilingualTextItem> {
         return this.items.find((item) => item.languageCode === languageCode) || NotFound;
     }
 

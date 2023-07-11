@@ -1844,6 +1844,45 @@ exports[`command payload schemas Command payload schema should match the snapsho
                 "isOptional": false,
                 "label": "character range",
               },
+              "languageCode": {
+                "complexDataType": "ENUM",
+                "description": "the language of the target text",
+                "enumLabel": "language code",
+                "enumName": "LanguageCode",
+                "isArray": false,
+                "isOptional": false,
+                "label": "language",
+                "labelsAndValues": [
+                  {
+                    "label": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "label": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "label": "English",
+                    "value": "eng",
+                  },
+                  {
+                    "label": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "label": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "label": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "label": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+              },
               "target": {
                 "coscradDataType": "NON_EMPTY_STRING",
                 "description": "the text-valued property that provides the context for this note or connection",
@@ -2018,6 +2057,45 @@ exports[`command payload schemas Command payload schema should match the snapsho
                 "isArray": true,
                 "isOptional": false,
                 "label": "character range",
+              },
+              "languageCode": {
+                "complexDataType": "ENUM",
+                "description": "the language of the target text",
+                "enumLabel": "language code",
+                "enumName": "LanguageCode",
+                "isArray": false,
+                "isOptional": false,
+                "label": "language",
+                "labelsAndValues": [
+                  {
+                    "label": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "label": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "label": "English",
+                    "value": "eng",
+                  },
+                  {
+                    "label": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "label": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "label": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "label": "Spanish",
+                    "value": "spa",
+                  },
+                ],
               },
               "target": {
                 "coscradDataType": "NON_EMPTY_STRING",
@@ -2202,6 +2280,45 @@ exports[`command payload schemas Command payload schema should match the snapsho
                 "isArray": true,
                 "isOptional": false,
                 "label": "character range",
+              },
+              "languageCode": {
+                "complexDataType": "ENUM",
+                "description": "the language of the target text",
+                "enumLabel": "language code",
+                "enumName": "LanguageCode",
+                "isArray": false,
+                "isOptional": false,
+                "label": "language",
+                "labelsAndValues": [
+                  {
+                    "label": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "label": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "label": "English",
+                    "value": "eng",
+                  },
+                  {
+                    "label": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "label": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "label": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "label": "Spanish",
+                    "value": "spa",
+                  },
+                ],
               },
               "target": {
                 "coscradDataType": "NON_EMPTY_STRING",

@@ -101,8 +101,6 @@ export class VocabularyListViewModel extends BaseViewModel implements IVocabular
     // })
     readonly form: IDynamicForm;
 
-    readonly #baseAudioURL: string;
-
     constructor(vocabularyList: VocabularyList, allTerms: Term[]) {
         super(vocabularyList);
 

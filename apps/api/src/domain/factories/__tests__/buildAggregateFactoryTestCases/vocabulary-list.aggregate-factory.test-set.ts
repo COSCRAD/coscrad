@@ -1,11 +1,11 @@
 import { FactoryTestSuiteForAggregate } from '.';
-import { clonePlainObjectWithoutProperties } from '../../../../lib/utilities/clonePlainObjectWithoutProperties';
 import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpected';
-import VocabularyListHasNoEntriesError from '../../../domainModelValidators/errors/vocabularyList/VocabularyListHasNoEntriesError';
-import VocabularyListHasNoNameInAnyLanguageError from '../../../domainModelValidators/errors/vocabularyList/VocabularyListHasNoNameInAnyLanguageError';
-import { AggregateType } from '../../../types/AggregateType';
+import { InternalError } from '../../../../lib/errors/InternalError';
 import buildInvariantValidationErrorFactoryFunction from '../../../__tests__/utilities/buildInvariantValidationErrorFactoryFunction';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
+import VocabularyListHasNoEntriesError from '../../../domainModelValidators/errors/vocabularyList/VocabularyListHasNoEntriesError';
+import { MultilingualTextHasNoOriginalError } from '../../../models/audio-item/errors/multilingual-text-has-no-original.error';
+import { AggregateType } from '../../../types/AggregateType';
 import buildNullAndUndefinedAggregateFactoryInvalidTestCases from './common/buildNullAndUndefinedAggregateFactoryInvalidTestCases';
 import { generateFuzzAggregateFactoryTestCases } from './utilities/generate-fuzz-aggregate-factory-test-cases';
 
@@ -30,14 +30,18 @@ export const buildVocabularyListAggregateFactoryTestSet = (): FactoryTestSuiteFo
     invalidCases: [
         {
             description: 'the vocabulary list has no name in either language',
-            dto: clonePlainObjectWithoutProperties(validDto, ['name', 'nameEnglish']),
-            checkError: (result: unknown) =>
+            dto: {
+                ...validDto,
+                name: {
+                    items: [],
+                },
+            },
+            checkError: (result: unknown) => {
                 assertErrorAsExpected(
-                    result,
-                    buildTopLevelError(validDto.id, [
-                        new VocabularyListHasNoNameInAnyLanguageError(),
-                    ])
-                ),
+                    (result as InternalError).innerErrors[0].innerErrors[0],
+                    new MultilingualTextHasNoOriginalError()
+                );
+            },
         },
         {
             description: 'vocabulary list has no entries',

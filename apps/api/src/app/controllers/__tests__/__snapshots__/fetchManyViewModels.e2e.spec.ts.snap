@@ -2422,8 +2422,6 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
           },
         },
       ],
-      "term": "Chil-term-1",
-      "termEnglish": "Engl-term-1",
     },
     {
       "actions": [],
@@ -2488,8 +2486,6 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
           },
         },
       ],
-      "term": "Chil-term-2",
-      "termEnglish": "Engl-term-2",
     },
     {
       "actions": [],
@@ -2498,7 +2494,7 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
       "name": {
         "items": [
           {
-            "languageCode": "clc",
+            "languageCode": "eng",
             "role": "original",
             "text": "Chil-term-no-english",
           },
@@ -2549,7 +2545,6 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
           },
         },
       ],
-      "term": "Chil-term-no-english",
     },
     {
       "actions": [],
@@ -2558,14 +2553,13 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
       "name": {
         "items": [
           {
-            "languageCode": "clc",
+            "languageCode": "eng",
             "role": "original",
             "text": "My Secret Term",
           },
         ],
       },
       "tags": [],
-      "term": "My Secret Term",
     },
     {
       "actions": [],
@@ -2587,8 +2581,6 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
         ],
       },
       "tags": [],
-      "term": "I am singing (lang)",
-      "termEnglish": "I am singing (Engl)",
     },
     {
       "actions": [],
@@ -2610,8 +2602,6 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
         ],
       },
       "tags": [],
-      "term": "You are singing (lang)",
-      "termEnglish": "You are singing (Engl)",
     },
     {
       "actions": [],
@@ -2633,8 +2623,6 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
         ],
       },
       "tags": [],
-      "term": "She is singing (lang)",
-      "termEnglish": "She is singing (Engl)",
     },
     {
       "actions": [],
@@ -2656,8 +2644,6 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
         ],
       },
       "tags": [],
-      "term": "I am not singing (lang)",
-      "termEnglish": "I am not singing (Engl)",
     },
     {
       "actions": [],
@@ -2679,8 +2665,6 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
         ],
       },
       "tags": [],
-      "term": "You are not singing (lang)",
-      "termEnglish": "You are not singing (Engl)",
     },
   ],
   "indexScopedActions": [],
@@ -2757,8 +2741,6 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
           },
         },
       ],
-      "term": "Chil-term-1",
-      "termEnglish": "Engl-term-1",
     },
     {
       "actions": [],
@@ -2823,8 +2805,6 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
           },
         },
       ],
-      "term": "Chil-term-2",
-      "termEnglish": "Engl-term-2",
     },
     {
       "actions": [],
@@ -2833,7 +2813,7 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
       "name": {
         "items": [
           {
-            "languageCode": "clc",
+            "languageCode": "eng",
             "role": "original",
             "text": "Chil-term-no-english",
           },
@@ -2884,7 +2864,6 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
           },
         },
       ],
-      "term": "Chil-term-no-english",
     },
     {
       "actions": [],
@@ -2893,14 +2872,13 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
       "name": {
         "items": [
           {
-            "languageCode": "clc",
+            "languageCode": "eng",
             "role": "original",
             "text": "My Secret Term",
           },
         ],
       },
       "tags": [],
-      "term": "My Secret Term",
     },
     {
       "actions": [],
@@ -2922,8 +2900,6 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
         ],
       },
       "tags": [],
-      "term": "I am singing (lang)",
-      "termEnglish": "I am singing (Engl)",
     },
     {
       "actions": [],
@@ -2945,8 +2921,6 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
         ],
       },
       "tags": [],
-      "term": "You are singing (lang)",
-      "termEnglish": "You are singing (Engl)",
     },
     {
       "actions": [],
@@ -2968,8 +2942,6 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
         ],
       },
       "tags": [],
-      "term": "She is singing (lang)",
-      "termEnglish": "She is singing (Engl)",
     },
     {
       "actions": [],
@@ -2991,8 +2963,6 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
         ],
       },
       "tags": [],
-      "term": "I am not singing (lang)",
-      "termEnglish": "I am not singing (Engl)",
     },
     {
       "actions": [],
@@ -3014,8 +2984,6 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
         ],
       },
       "tags": [],
-      "term": "You are not singing (lang)",
-      "termEnglish": "You are not singing (Engl)",
     },
   ],
   "indexScopedActions": [],
@@ -3101,8 +3069,6 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
                 },
               ],
             },
-            "term": "I am singing (lang)",
-            "termEnglish": "I am singing (Engl)",
           },
           "variableValues": {
             "person": "11",
@@ -3128,8 +3094,6 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
                 },
               ],
             },
-            "term": "You are singing (lang)",
-            "termEnglish": "You are singing (Engl)",
           },
           "variableValues": {
             "person": "12",
@@ -3155,8 +3119,6 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
                 },
               ],
             },
-            "term": "She is singing (lang)",
-            "termEnglish": "She is singing (Engl)",
           },
           "variableValues": {
             "person": "13",
@@ -3182,8 +3144,6 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
                 },
               ],
             },
-            "term": "I am not singing (lang)",
-            "termEnglish": "I am not singing (Engl)",
           },
           "variableValues": {
             "person": "01",
@@ -3209,8 +3169,6 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
                 },
               ],
             },
-            "term": "You are not singing (lang)",
-            "termEnglish": "You are not singing (Engl)",
           },
           "variableValues": {
             "person": "02",
@@ -3298,8 +3256,6 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
                 },
               ],
             },
-            "term": "Chil-term-1",
-            "termEnglish": "Engl-term-1",
           },
           "variableValues": {
             "person": "11",
@@ -3323,8 +3279,6 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
                 },
               ],
             },
-            "term": "Chil-term-2",
-            "termEnglish": "Engl-term-2",
           },
           "variableValues": {
             "person": "12",
@@ -3438,8 +3392,6 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
                 },
               ],
             },
-            "term": "Chil-term-2",
-            "termEnglish": "Engl-term-2",
           },
           "variableValues": {
             "his": false,
@@ -3463,8 +3415,6 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
                 },
               ],
             },
-            "term": "Chil-term-1",
-            "termEnglish": "Engl-term-1",
           },
           "variableValues": {
             "his": true,
@@ -3496,7 +3446,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
       "name": {
         "items": [
           {
-            "languageCode": "clc",
+            "languageCode": "hai",
             "role": "original",
             "text": "test VL 2 CHIL- no engl name",
           },
@@ -3574,8 +3524,6 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
                 },
               ],
             },
-            "term": "I am singing (lang)",
-            "termEnglish": "I am singing (Engl)",
           },
           "variableValues": {
             "person": "11",
@@ -3601,8 +3549,6 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
                 },
               ],
             },
-            "term": "You are singing (lang)",
-            "termEnglish": "You are singing (Engl)",
           },
           "variableValues": {
             "person": "12",
@@ -3628,8 +3574,6 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
                 },
               ],
             },
-            "term": "She is singing (lang)",
-            "termEnglish": "She is singing (Engl)",
           },
           "variableValues": {
             "person": "13",
@@ -3655,8 +3599,6 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
                 },
               ],
             },
-            "term": "I am not singing (lang)",
-            "termEnglish": "I am not singing (Engl)",
           },
           "variableValues": {
             "person": "01",
@@ -3682,8 +3624,6 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
                 },
               ],
             },
-            "term": "You are not singing (lang)",
-            "termEnglish": "You are not singing (Engl)",
           },
           "variableValues": {
             "person": "02",
@@ -3771,8 +3711,6 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
                 },
               ],
             },
-            "term": "Chil-term-1",
-            "termEnglish": "Engl-term-1",
           },
           "variableValues": {
             "person": "11",
@@ -3796,8 +3734,6 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
                 },
               ],
             },
-            "term": "Chil-term-2",
-            "termEnglish": "Engl-term-2",
           },
           "variableValues": {
             "person": "12",
@@ -3911,8 +3847,6 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
                 },
               ],
             },
-            "term": "Chil-term-2",
-            "termEnglish": "Engl-term-2",
           },
           "variableValues": {
             "his": false,
@@ -3936,8 +3870,6 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
                 },
               ],
             },
-            "term": "Chil-term-1",
-            "termEnglish": "Engl-term-1",
           },
           "variableValues": {
             "his": true,
@@ -3969,7 +3901,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
       "name": {
         "items": [
           {
-            "languageCode": "clc",
+            "languageCode": "hai",
             "role": "original",
             "text": "test VL 2 CHIL- no engl name",
           },

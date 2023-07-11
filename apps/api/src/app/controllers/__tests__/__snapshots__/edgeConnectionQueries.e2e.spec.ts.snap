@@ -105,6 +105,45 @@ exports[`When querying for edge connections GET /connections/ should return the 
                   "isOptional": false,
                   "label": "character range",
                 },
+                "languageCode": {
+                  "complexDataType": "ENUM",
+                  "description": "the language of the target text",
+                  "enumLabel": "language code",
+                  "enumName": "LanguageCode",
+                  "isArray": false,
+                  "isOptional": false,
+                  "label": "language",
+                  "labelsAndValues": [
+                    {
+                      "label": "Chilcotin",
+                      "value": "clc",
+                    },
+                    {
+                      "label": "Haida",
+                      "value": "hai",
+                    },
+                    {
+                      "label": "English",
+                      "value": "eng",
+                    },
+                    {
+                      "label": "French",
+                      "value": "fra",
+                    },
+                    {
+                      "label": "Chinook",
+                      "value": "chn",
+                    },
+                    {
+                      "label": "Zapotec",
+                      "value": "zap",
+                    },
+                    {
+                      "label": "Spanish",
+                      "value": "spa",
+                    },
+                  ],
+                },
                 "target": {
                   "coscradDataType": "NON_EMPTY_STRING",
                   "description": "the text-valued property that provides the context for this note or connection",
@@ -1403,7 +1442,8 @@ exports[`When querying for edge connections GET /connections/notes should return
               0,
               3,
             ],
-            "target": "term",
+            "languageCode": "clc",
+            "target": "text",
             "type": "textField",
           },
           "role": "self",
@@ -1523,6 +1563,7 @@ exports[`When querying for edge connections GET /connections/notes should return
               0,
               1,
             ],
+            "languageCode": "hai",
             "target": "name",
             "type": "textField",
           },
@@ -1543,7 +1584,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "hai",
             "role": "original",
             "text": "This is the first letter of the list name",
           },
@@ -2230,7 +2271,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "hai",
             "role": "original",
             "text": "This is the first letter of the list name",
           },
@@ -2431,7 +2472,8 @@ exports[`When querying for edge connections GET /connections/notes should return
               0,
               3,
             ],
-            "target": "term",
+            "languageCode": "clc",
+            "target": "text",
             "type": "textField",
           },
           "role": "to",
@@ -2446,6 +2488,7 @@ exports[`When querying for edge connections GET /connections/notes should return
               0,
               1,
             ],
+            "languageCode": "hai",
             "target": "name",
             "type": "textField",
           },
@@ -2487,6 +2530,7 @@ exports[`When querying for edge connections GET /connections/notes should return
               0,
               1,
             ],
+            "languageCode": "hai",
             "target": "name",
             "type": "textField",
           },
@@ -3046,7 +3090,8 @@ exports[`When querying for edge connections GET /connections/notes should return
               0,
               3,
             ],
-            "target": "term",
+            "languageCode": "clc",
+            "target": "text",
             "type": "textField",
           },
           "role": "from",
@@ -3334,7 +3379,8 @@ exports[`When querying for edge connections GET /connections/notes should return
               1,
               4,
             ],
-            "target": "term",
+            "languageCode": "eng",
+            "target": "text",
             "type": "textField",
           },
           "role": "to",

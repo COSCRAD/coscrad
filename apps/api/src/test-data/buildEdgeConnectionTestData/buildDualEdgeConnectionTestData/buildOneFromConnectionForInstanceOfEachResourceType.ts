@@ -44,7 +44,8 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
                 },
                 context: new TextFieldContext({
                     type: EdgeConnectionContextType.textField,
-                    target: 'term',
+                    target: 'text',
+                    languageCode: LanguageCode.English,
                     charRange: [1, 4],
                 }),
             },

@@ -1,3 +1,4 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { DTO } from '../../../../../types/DTO';
 import { TextFieldContext } from '../../../../models/context/text-field-context/text-field-context.entity';
@@ -13,6 +14,7 @@ const validDTO: DTO<TextFieldContext> = {
     type: EdgeConnectionContextType.textField,
     target: 'term',
     charRange: [3, 5],
+    languageCode: LanguageCode.English,
 };
 
 const topLevelErrorFactory = createInvalidContextErrorFactory(EdgeConnectionContextType.textField);

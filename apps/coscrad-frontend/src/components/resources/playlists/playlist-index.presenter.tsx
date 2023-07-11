@@ -1,4 +1,6 @@
 import { IPlayListViewModel } from '@coscrad/api-interfaces';
+import { useContext } from 'react';
+import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import { PlaylistIndexState } from '../../../store/slices/resources/playlists/types';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { Matchers } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/filter-table-data';
@@ -34,6 +36,8 @@ const doesCountSatisfyStringCriterion = (input: number, stringCriterion: string)
 };
 
 export const PlaylistIndexPresenter = ({ entities: playlists }: PlaylistIndexState) => {
+    const { defaultLanguageCode } = useContext(ConfigurableContentContext);
+
     const headingLabels: HeadingLabel<IPlayListViewModel>[] = [
         { propertyKey: 'id', headingLabel: 'Link' },
         { propertyKey: 'episodes', headingLabel: 'Number of Episodes' },
@@ -42,7 +46,7 @@ export const PlaylistIndexPresenter = ({ entities: playlists }: PlaylistIndexSta
 
     const cellRenderersDefinition: CellRenderersDefinition<IPlayListViewModel> = {
         id: renderAggregateIdCell,
-        name: ({ name }) => renderMultilingualTextCell(name),
+        name: ({ name }) => renderMultilingualTextCell(name, defaultLanguageCode),
         episodes: ({ episodes }) => episodes.length.toString(),
     };
 

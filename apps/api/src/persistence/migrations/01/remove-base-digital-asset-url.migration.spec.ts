@@ -1,8 +1,8 @@
 import { isDeepStrictEqual } from 'util';
 import createTestModule from '../../../app/controllers/__tests__/createTestModule';
+import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { Photograph } from '../../../domain/models/photograph/entities/photograph.entity';
 import { Term } from '../../../domain/models/term/entities/term.entity';
-import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { isNullOrUndefined } from '../../../domain/utilities/validation/is-null-or-undefined';
 import { InternalError } from '../../../lib/errors/InternalError';
@@ -16,8 +16,8 @@ import {
     ArangoDatabaseDocument,
     DatabaseDTO,
 } from '../../database/utilities/mapEntityDTOToDatabaseDTO';
-import generateDatabaseNameForTestSuite from '../../repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../../repositories/__tests__/generateDatabaseNameForTestSuite';
 import {
     BASE_DIGITAL_ASSET_URL,
     RemoveBaseDigitalAssetUrl,
@@ -29,7 +29,11 @@ process.env[BASE_DIGITAL_ASSET_URL] = baseDigitalAssetUrl;
 
 type OldPhotograph = Omit<Photograph, 'imageUrl'> & { filename?: string };
 
-describe(`RemoveBaseDigitalAssetUrl`, () => {
+/**
+ * This migration has been applied to all databases. We keep this test for
+ * posterity.
+ */
+describe.skip(`RemoveBaseDigitalAssetUrl`, () => {
     let testDatabaseProvider: ArangoDatabaseProvider;
 
     let testQueryRunner: ArangoQueryRunner;
@@ -70,7 +74,7 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
         });
 
         // TERMS
-        const dtoForTermToCheckManually: Omit<ArangoDatabaseDocument<DTO<Term>>, '_key'> = {
+        const dtoForTermToCheckManually = {
             term: `so bogus`,
             termEnglish: `so bogus (English)`,
             audioFilename: `bogus`,
@@ -88,8 +92,10 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
             contributorId: '55',
         };
 
-        const originalTermDocumentsWithoutKeys: Omit<ArangoDatabaseDocument<DTO<Term>>, '_key'>[] =
-            [dtoForTermToCheckManually, dtoForTermWithoutAudioFilename];
+        const originalTermDocumentsWithoutKeys = [
+            dtoForTermToCheckManually,
+            dtoForTermWithoutAudioFilename,
+        ];
 
         const originalTermDocuments = originalTermDocumentsWithoutKeys.map((partialDto, index) => ({
             ...partialDto,
