@@ -1,4 +1,6 @@
 import { IMultilingualText, IVocabularyListViewModel } from '@coscrad/api-interfaces';
+import { useContext } from 'react';
+import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import { VocabularyListIndexState } from '../../../store/slices/resources/vocabulary-lists/types/vocabulary-list-index-state';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { Matchers } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/filter-table-data';
@@ -9,6 +11,8 @@ import { renderMultilingualTextCell } from '../utils/render-multilingual-text-ce
 export const VocabularyListIndexPresenter = ({
     entities: vocabularyLists,
 }: VocabularyListIndexState) => {
+    const { defaultLanguageCode } = useContext(ConfigurableContentContext);
+
     const headingLabels: HeadingLabel<IVocabularyListViewModel>[] = [
         { propertyKey: 'id', headingLabel: 'link' },
         { propertyKey: 'name', headingLabel: 'Vocabulary List' },
@@ -16,7 +20,7 @@ export const VocabularyListIndexPresenter = ({
 
     const cellRenderersDefinition: CellRenderersDefinition<IVocabularyListViewModel> = {
         id: renderAggregateIdCell,
-        name: ({ name }) => renderMultilingualTextCell(name),
+        name: ({ name }) => renderMultilingualTextCell(name, defaultLanguageCode),
     };
 
     const matchers: Matchers<IVocabularyListViewModel> = {

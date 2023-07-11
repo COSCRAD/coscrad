@@ -5,8 +5,6 @@ import { IVocabularyListEntry } from './vocabulary-list-entry.interface';
 type VariableValueType = string | boolean;
 
 export interface IVocabularyListViewModel extends IBaseViewModel {
-    nameEnglish?: string;
-
     entries: IVocabularyListEntry<VariableValueType>[];
 
     form: IDynamicForm;

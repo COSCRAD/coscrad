@@ -31,7 +31,8 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
                 },
                 context: new TextFieldContext({
                     type: EdgeConnectionContextType.textField,
-                    target: 'term',
+                    target: 'text',
+                    languageCode: LanguageCode.Chilcotin,
                     charRange: [0, 3],
                 }).toDTO(),
             },
@@ -56,7 +57,7 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
     {
         note: buildMultilingualTextWithSingleItem(
             'This is the first letter of the list name',
-            LanguageCode.English
+            LanguageCode.Haida
         ),
         members: [
             {
@@ -68,6 +69,7 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
                 context: new TextFieldContext({
                     type: EdgeConnectionContextType.textField,
                     target: 'name',
+                    languageCode: LanguageCode.Haida,
                     charRange: [0, 1],
                 }).toDTO(),
             },
