@@ -15,16 +15,16 @@ import createInvalidContextErrorFactory from './utilities/createInvalidContextEr
 const validDTO: DTO<TimeRangeContext> = {
     type: EdgeConnectionContextType.timeRange,
     timeRange: {
-        inPoint: 22000,
-        outPoint: 57880,
+        inPointMilliseconds: 22000,
+        outPointMilliseconds: 57880,
     },
 };
 
 const topLevelErrorFactory = createInvalidContextErrorFactory(EdgeConnectionContextType.timeRange);
 
 const reversedTimeStamp: TimeRangeWithoutData = {
-    inPoint: validDTO.timeRange.outPoint,
-    outPoint: validDTO.timeRange.inPoint,
+    inPointMilliseconds: validDTO.timeRange.outPointMilliseconds,
+    outPointMilliseconds: validDTO.timeRange.inPointMilliseconds,
 };
 
 export const buildTimeRangeTestCase = (): ContextModelValidatorTestCase<TimeRangeContext> => ({

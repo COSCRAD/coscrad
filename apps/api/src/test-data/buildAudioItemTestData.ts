@@ -41,14 +41,14 @@ const partialDtos: DTO<Omit<AudioItem, 'type'>>[] = [
             ],
             items: [
                 {
-                    inPoint: 12000,
-                    outPoint: 15550,
+                    inPointMilliseconds: 12000,
+                    outPointMilliseconds: 15550,
                     text: 'There once was a little wooden boy.',
                     speakerInitials: 'JHC',
                 },
                 {
-                    inPoint: 18300,
-                    outPoint: 19240,
+                    inPointMilliseconds: 18300,
+                    outPointMilliseconds: 19240,
                     text: 'His name was Pinocchio',
                     speakerInitials: 'JHC',
                 },
@@ -74,20 +74,20 @@ const partialDtos: DTO<Omit<AudioItem, 'type'>>[] = [
             ],
             items: [
                 {
-                    inPoint: 3400,
-                    outPoint: 3670,
+                    inPointMilliseconds: 3400,
+                    outPointMilliseconds: 3670,
                     text: 'While she went down to the river',
                     speakerInitials: 'BL',
                 },
                 {
-                    inPoint: 3700,
-                    outPoint: 3980,
+                    inPointMilliseconds: 3700,
+                    outPointMilliseconds: 3980,
                     text: 'someone had already filled the water tank.',
                     speakerInitials: 'SD',
                 },
                 {
-                    inPoint: 4010,
-                    outPoint: 4290,
+                    inPointMilliseconds: 4010,
+                    outPointMilliseconds: 4290,
                     text: 'These were the types of problems we had.',
                     speakerInitials: 'BL',
                 },
@@ -116,14 +116,14 @@ const partialDtos: DTO<Omit<AudioItem, 'type'>>[] = [
             ],
             items: [
                 {
-                    inPoint: 120,
-                    outPoint: 848,
+                    inPointMilliseconds: 120,
+                    outPointMilliseconds: 848,
                     text: 'this type of spoon is used in ceremonies',
                     speakerInitials: 'E1',
                 },
                 {
-                    inPoint: 930,
-                    outPoint: 1080,
+                    inPointMilliseconds: 930,
+                    outPointMilliseconds: 1080,
                     text: 'by members of the opposite clan of the house chief',
                     speakerInitials: 'E2',
                 },

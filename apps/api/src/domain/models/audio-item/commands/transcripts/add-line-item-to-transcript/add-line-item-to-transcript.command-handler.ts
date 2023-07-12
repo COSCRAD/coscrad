@@ -62,8 +62,8 @@ export class AddLineItemtoTranscriptCommandHandler extends BaseCommandHandler<Tr
         }: AddLineItemToTranscript
     ): ResultOrError<TranscribableResource> {
         return instance.addLineItemToTranscript({
-            inPoint: inPointMilliseconds,
-            outPoint: outPointMilliseconds,
+            inPointMilliseconds: inPointMilliseconds,
+            outPointMilliseconds: outPointMilliseconds,
             // to add more items, run a translate command
             text: buildMultilingualTextWithSingleItem(text, languageCode),
             speakerInitials,

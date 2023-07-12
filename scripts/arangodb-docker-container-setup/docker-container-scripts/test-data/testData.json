@@ -888,8 +888,8 @@
                     ],
                     "items": [
                         {
-                            "inPoint": 12000,
-                            "outPoint": 15550,
+                            "inPointMilliseconds": 12000,
+                            "outPointMilliseconds": 15550,
                             "text": {
                                 "items": [
                                     {
@@ -902,8 +902,8 @@
                             "speakerInitials": "JHC"
                         },
                         {
-                            "inPoint": 18300,
-                            "outPoint": 19240,
+                            "inPointMilliseconds": 18300,
+                            "outPointMilliseconds": 19240,
                             "text": {
                                 "items": [
                                     {
@@ -951,8 +951,8 @@
                     ],
                     "items": [
                         {
-                            "inPoint": 3400,
-                            "outPoint": 3670,
+                            "inPointMilliseconds": 3400,
+                            "outPointMilliseconds": 3670,
                             "text": {
                                 "items": [
                                     {
@@ -965,8 +965,8 @@
                             "speakerInitials": "BL"
                         },
                         {
-                            "inPoint": 3700,
-                            "outPoint": 3980,
+                            "inPointMilliseconds": 3700,
+                            "outPointMilliseconds": 3980,
                             "text": {
                                 "items": [
                                     {
@@ -979,8 +979,8 @@
                             "speakerInitials": "SD"
                         },
                         {
-                            "inPoint": 4010,
-                            "outPoint": 4290,
+                            "inPointMilliseconds": 4010,
+                            "outPointMilliseconds": 4290,
                             "text": {
                                 "items": [
                                     {
@@ -1028,8 +1028,8 @@
                     ],
                     "items": [
                         {
-                            "inPoint": 120,
-                            "outPoint": 848,
+                            "inPointMilliseconds": 120,
+                            "outPointMilliseconds": 848,
                             "text": {
                                 "items": [
                                     {
@@ -1042,8 +1042,8 @@
                             "speakerInitials": "E1"
                         },
                         {
-                            "inPoint": 930,
-                            "outPoint": 1080,
+                            "inPointMilliseconds": 930,
+                            "outPointMilliseconds": 1080,
                             "text": {
                                 "items": [
                                     {
@@ -1612,8 +1612,8 @@
                     ],
                     "items": [
                         {
-                            "inPoint": 12000,
-                            "outPoint": 15550,
+                            "inPointMilliseconds": 12000,
+                            "outPointMilliseconds": 15550,
                             "text": {
                                 "items": [
                                     {
@@ -1626,8 +1626,8 @@
                             "speakerInitials": "DM"
                         },
                         {
-                            "inPoint": 18300,
-                            "outPoint": 19240,
+                            "inPointMilliseconds": 18300,
+                            "outPointMilliseconds": 19240,
                             "text": {
                                 "items": [
                                     {
@@ -1879,8 +1879,8 @@
                         "context": {
                             "type": "timeRange",
                             "timeRange": {
-                                "inPoint": 11000,
-                                "outPoint": 12950
+                                "inPointMilliseconds": 11000,
+                                "outPointMilliseconds": 12950
                             }
                         }
                     }
@@ -1986,8 +1986,8 @@
                         "context": {
                             "type": "timeRange",
                             "timeRange": {
-                                "inPoint": 300,
-                                "outPoint": 500
+                                "inPointMilliseconds": 300,
+                                "outPointMilliseconds": 500
                             }
                         }
                     }
@@ -2015,8 +2015,8 @@
                         "context": {
                             "type": "timeRange",
                             "timeRange": {
-                                "inPoint": 650,
-                                "outPoint": 1230
+                                "inPointMilliseconds": 650,
+                                "outPointMilliseconds": 1230
                             }
                         }
                     }
@@ -2069,8 +2069,8 @@
                         "context": {
                             "type": "timeRange",
                             "timeRange": {
-                                "inPoint": 11000,
-                                "outPoint": 12950
+                                "inPointMilliseconds": 11000,
+                                "outPointMilliseconds": 12950
                             }
                         }
                     }
@@ -2378,8 +2378,8 @@
                         "context": {
                             "type": "timeRange",
                             "timeRange": {
-                                "inPoint": 11000,
-                                "outPoint": 12950
+                                "inPointMilliseconds": 11000,
+                                "outPointMilliseconds": 12950
                             }
                         }
                     }
@@ -2407,8 +2407,8 @@
                         "context": {
                             "type": "timeRange",
                             "timeRange": {
-                                "inPoint": 11000,
-                                "outPoint": 12950
+                                "inPointMilliseconds": 11000,
+                                "outPointMilliseconds": 12950
                             }
                         }
                     },
@@ -2516,8 +2516,8 @@
                         "context": {
                             "type": "timeRange",
                             "timeRange": {
-                                "inPoint": 300,
-                                "outPoint": 500
+                                "inPointMilliseconds": 300,
+                                "outPointMilliseconds": 500
                             }
                         }
                     }
@@ -2545,8 +2545,8 @@
                         "context": {
                             "type": "timeRange",
                             "timeRange": {
-                                "inPoint": 300,
-                                "outPoint": 500
+                                "inPointMilliseconds": 300,
+                                "outPointMilliseconds": 500
                             }
                         }
                     },
@@ -2555,8 +2555,8 @@
                         "context": {
                             "type": "timeRange",
                             "timeRange": {
-                                "inPoint": 11000,
-                                "outPoint": 12950
+                                "inPointMilliseconds": 11000,
+                                "outPointMilliseconds": 12950
                             }
                         }
                     }
@@ -2584,8 +2584,8 @@
                         "context": {
                             "type": "timeRange",
                             "timeRange": {
-                                "inPoint": 11000,
-                                "outPoint": 12950
+                                "inPointMilliseconds": 11000,
+                                "outPointMilliseconds": 12950
                             }
                         }
                     },
@@ -2814,8 +2814,8 @@
                         "context": {
                             "type": "timeRange",
                             "timeRange": {
-                                "inPoint": 100,
-                                "outPoint": 1200
+                                "inPointMilliseconds": 100,
+                                "outPointMilliseconds": 1200
                             }
                         }
                     },
@@ -2886,8 +2886,8 @@
                         "context": {
                             "type": "timeRange",
                             "timeRange": {
-                                "inPoint": 300,
-                                "outPoint": 1800
+                                "inPointMilliseconds": 300,
+                                "outPointMilliseconds": 1800
                             }
                         }
                     },
@@ -2930,8 +2930,8 @@
                         "context": {
                             "type": "timeRange",
                             "timeRange": {
-                                "inPoint": 500,
-                                "outPoint": 778.4
+                                "inPointMilliseconds": 500,
+                                "outPointMilliseconds": 778.4
                             }
                         }
                     }
@@ -2965,8 +2965,8 @@
                         "context": {
                             "type": "timeRange",
                             "timeRange": {
-                                "inPoint": 500,
-                                "outPoint": 778.4
+                                "inPointMilliseconds": 500,
+                                "outPointMilliseconds": 778.4
                             }
                         }
                     }

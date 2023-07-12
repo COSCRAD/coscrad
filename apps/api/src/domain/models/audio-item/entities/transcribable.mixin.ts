@@ -1,7 +1,7 @@
 import { isNullOrUndefined, isNumberWithinRange } from '@coscrad/validation-constraints';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
-import { DeepPartial } from '../../../../types/DeepPartial';
 import { DTO } from '../../../../types/DTO';
+import { DeepPartial } from '../../../../types/DeepPartial';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { ResourceCompositeIdentifier } from '../../../types/ResourceCompositeIdentifier';
 import {
@@ -46,6 +46,10 @@ export interface ITranscribable {
 
     addLineItemToTranscript(newItemDto: DTO<TranscriptItem>): ResultOrError<ITranscribableBase>;
 
+    importLineItemsToTranscript(
+        newItemDtos: DTO<TranscriptItem>[]
+    ): ResultOrError<ITranscribableBase>;
+
     countTranscriptParticipants(): number;
 }
 
@@ -87,7 +91,7 @@ export function Transcribable<TBase extends Constructor<ITranscribableBase>>(Bas
 
             const timeBounds = this.getTimeBounds();
 
-            const { inPoint, outPoint } = newItem;
+            const { inPointMilliseconds: inPoint, outPointMilliseconds: outPoint } = newItem;
 
             if ([inPoint, outPoint].some((point) => !isNumberWithinRange(point, timeBounds)))
                 return new TranscriptLineItemOutOfBoundsError(newItem, timeBounds);
@@ -98,6 +102,36 @@ export function Transcribable<TBase extends Constructor<ITranscribableBase>>(Bas
 
             return this.safeClone({
                 transcript: updatedTranscript,
+            } as DeepPartial<DTO<this>>);
+        }
+
+        importLineItemsToTranscript(
+            newItemDtos: DTO<TranscriptItem>[]
+        ): ResultOrError<ITranscribableBase> {
+            const newItems = newItemDtos.map((newItemDto) => new TranscriptItem(newItemDto));
+
+            const outOfBoundsErrors = newItems.reduce((allErrors: InternalError[], item) => {
+                const { inPointMilliseconds: inPoint, outPointMilliseconds: outPoint } = item;
+
+                const timeBounds = this.getTimeBounds();
+
+                return [inPoint, outPoint].some((point) => !isNumberWithinRange(point, timeBounds))
+                    ? allErrors.concat(new TranscriptLineItemOutOfBoundsError(item, timeBounds))
+                    : allErrors;
+            }, []);
+
+            if (outOfBoundsErrors.length > 0)
+                return new InternalError(
+                    `Failed to import line items as one or more items are out of bounds`,
+                    outOfBoundsErrors
+                );
+
+            const transcriptUpdateResult = this.transcript.importLineItems(newItems);
+
+            if (isInternalError(transcriptUpdateResult)) return transcriptUpdateResult;
+
+            return this.safeClone({
+                transcript: transcriptUpdateResult,
             } as DeepPartial<DTO<this>>);
         }
 

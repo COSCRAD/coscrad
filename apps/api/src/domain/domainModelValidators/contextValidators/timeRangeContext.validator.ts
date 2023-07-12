@@ -25,7 +25,7 @@ export const timeRangeContextValidator = (input: unknown): Valid | InternalError
             allErrors.concat(new EmptyTimeRangeContextError())
         );
 
-    const { inPoint, outPoint } = timeRange;
+    const { inPointMilliseconds: inPoint, outPointMilliseconds: outPoint } = timeRange;
 
     // It's ok if they are equal. This is how we tag a single point in a media file
     if (outPoint < inPoint)

@@ -2,13 +2,13 @@ import { NonEmptyString } from '@coscrad/data-types';
 import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import { ValidationResult } from '../../lib/errors/types/ValidationResult';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
-import { DeepPartial } from '../../types/DeepPartial';
 import { DTO } from '../../types/DTO';
+import { DeepPartial } from '../../types/DeepPartial';
 import { ResultOrError } from '../../types/ResultOrError';
 import { MultilingualText } from '../common/entities/multilingual-text';
+import { Valid, isValid } from '../domainModelValidators/Valid';
 import InvariantValidationError from '../domainModelValidators/errors/InvariantValidationError';
 import validateSimpleInvariants from '../domainModelValidators/utilities/validateSimpleInvariants';
-import { isValid, Valid } from '../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../types/AggregateId';
 import { AggregateType } from '../types/AggregateType';
@@ -76,18 +76,61 @@ export abstract class Aggregate extends BaseDomainModel implements HasAggregateI
         return updatedInstance;
     }
 
+    /**
+     * Invariant validation ensures that it is not possible for an invalid
+     * (poorly formed) aggregate root to enter our system. We identify inconsistencies
+     * at the boundaries of our system. We call `validateInvariants` after building
+     * a new instance in the domain model factories. It's crucial that we use the
+     * factories when receiving a DTO from the database or from mapping a command
+     * payload (user input) to a create DTO for a create command.
+     *
+     * Note that failed invariant validation in the repository layer (when the DTO
+     * is coming from existing state in the database) is a system error, but we
+     * check for it none the less. This is why all fetch methods on our repositories
+     * return a `ResultOrError`. The most likely way to end up with invalid state
+     * in the database is after a database migration. For this reason, there is a
+     * post-op for each migration that runs and reports on the invariant validation
+     * status for every aggregate.
+     *
+     * In our system, invariant validation rules fall into 2 classes:
+     * **Simple Invariants** are rules that can be verified by looking at the value
+     * of one property alone. For example `count` might be required to be a
+     * non-negative finite integer. These constraints are defined using `@coscrad/data-types`
+     * property decorators. No methods need to be implemented manually. Note that
+     * these constraints could be deferred to the database by syncing the
+     * schema with our type decorators. We have elected not to do this as it is
+     * more hastle than it is worth when using a document store.
+     *
+     * **Complex Invariants** are interesting business rules. They require looking
+     * at multiple properties in combination. For example, we might require
+     * that a playlist cannot have the state `published=true` when it does not
+     * have any items. Or we might require that only one of `foo` and `bar` has a
+     * defined value, but not both. When implementing a new aggregate (root) class,
+     * you must implement `validateComplexInvariants` to specify this logic. The
+     * simple invariant validation will be mixed in for you.
+     */
     validateInvariants(): ResultOrError<Valid> {
         const simpleValidationResult = validateSimpleInvariants(
             Object.getPrototypeOf(this).constructor,
             this
         );
 
+        /**
+         * If simple invariant validation fails, the instance is ill-formed,
+         * and we would likely run into null check errors or other unexpected
+         * run-time issues when attempting to validate complex invariants. So
+         * we return early when simple invariant validation fails.
+         */
+        if (simpleValidationResult.length > 0)
+            return new InvariantValidationError(
+                this.getCompositeIdentifier(),
+                simpleValidationResult
+            );
+
         const complexValidationResult = this.validateComplexInvariants();
 
-        const allErrors = [...simpleValidationResult, ...complexValidationResult];
-
-        return allErrors.length > 0
-            ? new InvariantValidationError(this.getCompositeIdentifier(), allErrors)
+        return complexValidationResult.length > 0
+            ? new InvariantValidationError(this.getCompositeIdentifier(), complexValidationResult)
             : Valid;
     }
 

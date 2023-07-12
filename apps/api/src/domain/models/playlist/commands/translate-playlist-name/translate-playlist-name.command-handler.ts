@@ -1,4 +1,3 @@
-import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { CommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
 import {
@@ -10,7 +9,6 @@ import {
     ID_MANAGER_TOKEN,
     IIdManager,
 } from '../../../../../domain/interfaces/id-manager.interface';
-import { IRepositoryForAggregate } from '../../../../../domain/repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../../../domain/repositories/interfaces/repository-provider.interface';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../../domain/types/ResourceType';
@@ -25,20 +23,12 @@ import { TranslatePlaylistName } from './translate-playlist-name.command';
 
 @CommandHandler(TranslatePlaylistName)
 export class TranslatePlaylistNameCommandHandler extends BaseUpdateCommandHandler<Playlist> {
-    protected aggregateType: AggregateType = AggregateType.playlist;
-
-    protected repositoryForCommandsTargetAggregate: IRepositoryForAggregate<Playlist>;
-
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN)
         protected readonly repositoryProvider: IRepositoryProvider,
         @Inject(ID_MANAGER_TOKEN) protected readonly idManager: IIdManager
     ) {
         super(repositoryProvider, idManager);
-
-        this.repositoryForCommandsTargetAggregate = repositoryProvider.forResource(
-            ResourceType.playlist
-        );
     }
 
     // note that we don't prevent duplication in translation of a name, only the orignal

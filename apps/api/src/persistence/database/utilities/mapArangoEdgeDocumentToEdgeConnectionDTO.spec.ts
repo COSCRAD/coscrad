@@ -24,8 +24,8 @@ type TestCase = {
 const timeRangeContext = new TimeRangeContext({
     type: EdgeConnectionContextType.timeRange,
     timeRange: {
-        inPoint: 0,
-        outPoint: 3000,
+        inPointMilliseconds: 0,
+        outPointMilliseconds: 3000,
     },
 }).toDTO();
 
