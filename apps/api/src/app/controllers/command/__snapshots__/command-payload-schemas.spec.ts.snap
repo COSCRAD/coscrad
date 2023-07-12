@@ -1458,6 +1458,124 @@ exports[`command payload schemas Command payload schema should match the snapsho
     "type": "ADD_LINE_ITEM_TO_TRANSCRIPT",
   },
   {
+    "description": "import line items (in orignal language) to an existing transcript",
+    "label": "Import Line Items to Trancript",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "the audio visual resource's ID (generated)",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "the resource type of the audiovisual item",
+            "enumLabel": "Audiovisual Resource Type",
+            "enumName": "AudiovisualResourceType",
+            "isArray": false,
+            "isOptional": false,
+            "label": "Audiovisual Resource Type",
+            "labelsAndValues": [
+              {
+                "label": "video",
+                "value": "video",
+              },
+              {
+                "label": "audio item",
+                "value": "audioItem",
+              },
+            ],
+          },
+        },
+      },
+      "lineItems": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "line items (orignal language) from an existing transcript",
+        "isArray": true,
+        "isOptional": false,
+        "label": "line items",
+        "schema": {
+          "inPointMilliseconds": {
+            "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+            "description": "the opening timestamp in milliseconds",
+            "isArray": false,
+            "isOptional": false,
+            "label": "in point (ms)",
+          },
+          "languageCode": {
+            "complexDataType": "ENUM",
+            "description": "the language for this text item",
+            "enumLabel": "language code",
+            "enumName": "LanguageCode",
+            "isArray": false,
+            "isOptional": false,
+            "label": "language",
+            "labelsAndValues": [
+              {
+                "label": "Chilcotin",
+                "value": "clc",
+              },
+              {
+                "label": "Haida",
+                "value": "hai",
+              },
+              {
+                "label": "English",
+                "value": "eng",
+              },
+              {
+                "label": "French",
+                "value": "fra",
+              },
+              {
+                "label": "Chinook",
+                "value": "chn",
+              },
+              {
+                "label": "Zapotec",
+                "value": "zap",
+              },
+              {
+                "label": "Spanish",
+                "value": "spa",
+              },
+            ],
+          },
+          "outPointMilliseconds": {
+            "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+            "description": "the closing timestamp in milliseconds",
+            "isArray": false,
+            "isOptional": false,
+            "label": "out point (ms)",
+          },
+          "speakerInitials": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "the initials of the speaker whose words you are transribing \\ translating",
+            "isArray": false,
+            "isOptional": false,
+            "label": "speaker initials",
+          },
+          "text": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "multi-lingual text transcription translation",
+            "isArray": false,
+            "isOptional": false,
+            "label": "text",
+          },
+        },
+      },
+    },
+    "type": "IMPORT_LINE_ITEMS_TO_TRANSCRIPT",
+  },
+  {
     "description": "Creates a new playlist",
     "label": "Create Playlist",
     "schema": {

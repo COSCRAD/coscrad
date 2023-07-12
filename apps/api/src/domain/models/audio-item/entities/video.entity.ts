@@ -6,11 +6,11 @@ import {
     UUID,
 } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { InternalError } from '../../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
 import { DTO } from '../../../../types/DTO';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
-import { isValid, Valid } from '../../../domainModelValidators/Valid';
+import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
@@ -97,9 +97,17 @@ export class VideoBase extends Resource {
     }
 
     protected validateComplexInvariants(): InternalError[] {
+        const allErrors: InternalError[] = [];
+
+        const transcriptValidationResult = this.transcript?.validateComplexInvariants() || Valid;
+
+        if (isInternalError(transcriptValidationResult)) allErrors.push(transcriptValidationResult);
+
         const nameValidationResult = this.name.validateComplexInvariants();
 
-        return isValid(nameValidationResult) ? [] : [nameValidationResult];
+        if (isInternalError(nameValidationResult)) allErrors.push(nameValidationResult);
+
+        return allErrors;
     }
 
     protected getExternalReferences(): AggregateCompositeIdentifier[] {

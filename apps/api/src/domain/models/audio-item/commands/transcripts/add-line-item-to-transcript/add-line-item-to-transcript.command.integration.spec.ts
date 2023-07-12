@@ -326,6 +326,8 @@ describe(commandType, () => {
                         });
                     });
                 });
+
+                // TODO When the time stamp overlaps with an existing time-stamp
             });
         });
     });

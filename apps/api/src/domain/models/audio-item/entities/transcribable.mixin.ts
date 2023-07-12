@@ -110,10 +110,28 @@ export function Transcribable<TBase extends Constructor<ITranscribableBase>>(Bas
         ): ResultOrError<ITranscribableBase> {
             const newItems = newItemDtos.map((newItemDto) => new TranscriptItem(newItemDto));
 
-            const updatedTranscript = this.transcript.importLineItems(newItems);
+            const outOfBoundsErrors = newItems.reduce((allErrors: InternalError[], item) => {
+                const { inPoint, outPoint } = item;
+
+                const timeBounds = this.getTimeBounds();
+
+                return [inPoint, outPoint].some((point) => !isNumberWithinRange(point, timeBounds))
+                    ? allErrors.concat(new TranscriptLineItemOutOfBoundsError(item, timeBounds))
+                    : allErrors;
+            }, []);
+
+            if (outOfBoundsErrors.length > 0)
+                return new InternalError(
+                    `Failed to import line items as one or more items are out of bounds`,
+                    outOfBoundsErrors
+                );
+
+            const transcriptUpdateResult = this.transcript.importLineItems(newItems);
+
+            if (isInternalError(transcriptUpdateResult)) return transcriptUpdateResult;
 
             return this.safeClone({
-                transcript: updatedTranscript,
+                transcript: transcriptUpdateResult,
             } as DeepPartial<DTO<this>>);
         }
 

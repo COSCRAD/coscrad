@@ -1,12 +1,13 @@
 import { ITranscript } from '@coscrad/api-interfaces';
 import { NestedDataType } from '@coscrad/data-types';
-import { InternalError } from '../../../../lib/errors/InternalError';
+import { isNumberWithinRange } from '@coscrad/validation-constraints';
+import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
-import { isNotFound, NotFound } from '../../../../lib/types/not-found';
-import { DeepPartial } from '../../../../types/DeepPartial';
+import { NotFound, isNotFound } from '../../../../lib/types/not-found';
 import { DTO } from '../../../../types/DTO';
+import { DeepPartial } from '../../../../types/DeepPartial';
 import { ResultOrError } from '../../../../types/ResultOrError';
-import { isValid } from '../../../domainModelValidators/Valid';
+import { Valid, isValid } from '../../../domainModelValidators/Valid';
 import BaseDomainModel from '../../BaseDomainModel';
 import {
     ConflictingLineItemsError,
@@ -116,7 +117,17 @@ export class Transcript extends BaseDomainModel implements ITranscript {
     }
 
     importLineItems(items: TranscriptItem[]): ResultOrError<this> {
-        // TODO: validate the line items
+        const lineItemErrors = items
+            .map((item) => [item, this.validateLineItem(item)])
+            .filter(([_, result]: [TranscriptItem, InternalError[]]) => result.length > 0)
+            .map(
+                ([item, errors]: [TranscriptItem, InternalError[]]) =>
+                    new CannotAddInconsistentLineItemError(item, errors)
+            );
+
+        if (lineItemErrors.length > 0)
+            return new InternalError(`Failed to import line items: invalid state`, lineItemErrors);
+
         const newItems = this.items.concat(items.map((item) => item.clone()));
 
         return this.clone({ items: newItems } as DeepPartial<DTO<this>>);
@@ -128,6 +139,60 @@ export class Transcript extends BaseDomainModel implements ITranscript {
 
     toString(): string {
         return this.items.map((item) => item.toString()).join('\n');
+    }
+
+    public validateComplexInvariants(): ResultOrError<Valid> {
+        const lineItemInvariantValidationErrors = this.items
+            .map((item) => item.validateComplexInvariants())
+            .filter(isInternalError);
+
+        // TODO breakout an error for this
+        if (lineItemInvariantValidationErrors.length > 0)
+            return new InternalError(
+                `Encountered an invalid transcript`,
+                lineItemInvariantValidationErrors
+            );
+
+        const overlappingLineItems = this.getOverlappingLineItems();
+
+        const overlappingLineItemErrors = overlappingLineItems.map(
+            ([itemA, itemB]) => new InternalError(`item: ${itemA} overlaps with item: ${itemB}`)
+        );
+
+        return overlappingLineItemErrors.length > 0
+            ? new InternalError(`Encountered an invalid transcript`, overlappingLineItemErrors)
+            : Valid;
+    }
+
+    private getOverlappingLineItems(): [TranscriptItem, TranscriptItem][] {
+        const sortedItems = this.items.sort(
+            ({ inPoint: inPointA }, { inPoint: inPointB }) => inPointA - inPointB
+        );
+
+        return sortedItems.reduce(
+            (overlappingItemPairs: [TranscriptItem, TranscriptItem][], nextItem, index) =>
+                overlappingItemPairs.concat(
+                    sortedItems
+                        .map((otherItem, otherIndex): [TranscriptItem, TranscriptItem] | null => {
+                            if (index >= otherIndex) return null;
+
+                            const { inPoint, outPoint } = nextItem;
+
+                            const { inPoint: otherInPoint, outPoint: otherOutPoint } = otherItem;
+
+                            if (
+                                [otherInPoint, otherOutPoint].some((n) =>
+                                    isNumberWithinRange(n, [inPoint, outPoint])
+                                )
+                            )
+                                return [nextItem, otherItem];
+
+                            return null;
+                        })
+                        .filter((item) => item !== null)
+                ),
+            []
+        );
     }
 
     private getConflictingItems({
