@@ -7,7 +7,6 @@ import { Valid } from '../../../../domainModelValidators/Valid';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../../repositories/interfaces/repository-provider.interface';
-import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../types/ResourceType';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
@@ -19,8 +18,6 @@ import { TagRelabelled } from './tag-relabelled.event';
 
 @CommandHandler(RelabelTag)
 export class RelabelTagCommandHandler extends BaseUpdateCommandHandler<Tag> {
-    protected aggregateType: AggregateType = AggregateType.tag;
-
     protected repositoryForCommandsTargetAggregate: IRepositoryForAggregate<Tag>;
 
     constructor(

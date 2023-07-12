@@ -1,4 +1,9 @@
-import { ICommandBase } from '@coscrad/api-interfaces';
+import {
+    AggregateCompositeIdentifier,
+    ICommandBase,
+    isResourceType,
+} from '@coscrad/api-interfaces';
+import { InternalError } from '../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../lib/types/not-found';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { EVENT } from '../../../interfaces/id-manager.interface';
@@ -19,28 +24,59 @@ import { BaseCommandHandler } from './base-command-handler';
 export abstract class BaseUpdateCommandHandler<
     TAggregate extends Aggregate
 > extends BaseCommandHandler<TAggregate> {
-    protected abstract readonly repositoryForCommandsTargetAggregate: IRepositoryForAggregate<TAggregate>;
-
-    // TODO We should be able to get the repository from the `AggregateType`
-    protected abstract aggregateType: AggregateType;
-
     private getAggregateIdFromCommand({
-        aggregateCompositeIdentifier: { id },
-    }: ICommandBase): AggregateId {
-        return id;
+        aggregateCompositeIdentifier,
+    }: ICommandBase): AggregateCompositeIdentifier {
+        return aggregateCompositeIdentifier;
+    }
+
+    private getRepositoryForCommand<T extends Aggregate = Aggregate>(
+        command: ICommandBase
+    ): IRepositoryForAggregate<T> {
+        const { type: aggregateType } = this.getAggregateIdFromCommand(command);
+
+        // TODO a `forAggregate` method on the repository provider would be better
+        if (isResourceType(aggregateType))
+            return this.repositoryProvider.forResource(
+                aggregateType
+            ) as unknown as IRepositoryForAggregate<T>;
+
+        if (aggregateType === AggregateType.note)
+            return this.repositoryProvider.getEdgeConnectionRepository() as unknown as IRepositoryForAggregate<T>;
+
+        if (aggregateType === AggregateType.user)
+            return this.repositoryProvider.getUserRepository() as unknown as IRepositoryForAggregate<T>;
+
+        if (aggregateType === AggregateType.userGroup)
+            return this.repositoryProvider.getUserGroupRepository() as unknown as IRepositoryForAggregate<T>;
+
+        if (aggregateType === AggregateType.tag)
+            return this.repositoryProvider.getTagRepository() as unknown as IRepositoryForAggregate<T>;
+
+        if (aggregateType === AggregateType.category) {
+            throw new InternalError(
+                `Category Repository is not supported as it doesn not have an update method`
+            );
+        }
+
+        const exhaustiveCheck: never = aggregateType;
+
+        throw new InternalError(
+            `Failed to find repository for aggregate of type: ${exhaustiveCheck}`
+        );
     }
 
     protected async fetchInstanceToUpdate(
         command: ICommandBase
     ): Promise<ResultOrError<TAggregate>> {
-        const id = this.getAggregateIdFromCommand(command);
+        const { id, type: aggregateType } = this.getAggregateIdFromCommand(command);
 
-        const searchResult = await this.repositoryForCommandsTargetAggregate.fetchById(id);
+        const searchResult = await this.getRepositoryForCommand(command).fetchById(id);
 
         if (isNotFound(searchResult))
-            return new AggregateNotFoundError({ type: this.aggregateType, id });
+            return new AggregateNotFoundError({ type: aggregateType, id });
 
-        return searchResult;
+        return searchResult as ResultOrError<TAggregate>;
     }
 
     protected createOrFetchWriteContext(command: ICommandBase): Promise<ResultOrError<TAggregate>> {
@@ -62,7 +98,7 @@ export abstract class BaseUpdateCommandHandler<
 
         const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);
 
-        await this.repositoryForCommandsTargetAggregate.update(
+        await this.getRepositoryForCommand(command).update(
             instanceToPersistWithUpdatedEventHistory
         );
     }

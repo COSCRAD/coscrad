@@ -1,4 +1,9 @@
-import { LanguageCode, ResourceCompositeIdentifier, ResourceType } from '@coscrad/api-interfaces';
+import {
+    LanguageCode,
+    MultilingualTextItemRole,
+    ResourceCompositeIdentifier,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../../app/controllers/__tests__/setUpIntegrationTest';
@@ -18,14 +23,15 @@ import { DummyCommandFsaFactory } from '../../../../__tests__/command-helpers/du
 import { generateCommandFuzzTestCases } from '../../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
+import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUserId';
 import AggregateNotFoundError from '../../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../../shared/common-command-errors/CommandExecutionError';
 import { AudioItem } from '../../../entities/audio-item.entity';
 import { TranscriptItem } from '../../../entities/transcript-item.entity';
 import { Video } from '../../../entities/video.entity';
 import { TranscriptLineItemOutOfBoundsError } from '../../../errors';
-import { CannotAddInconsistentLineItemError } from '../../../errors/transcript-line-item/cannot-add-inconsistent-line-item.error';
 import { TranscriptParticipantInitialsNotRegisteredError } from '../../../errors/transcript-participant-initials-not-registered.error';
+import { CannotAddInconsistentLineItemError } from '../errors';
 import { AddLineItemToTranscript } from './add-line-item-to-transcript.command';
 
 const commandType = `ADD_LINE_ITEM_TO_TRANSCRIPT`;
@@ -200,8 +206,8 @@ describe(commandType, () => {
                                     new CommandExecutionError([
                                         new TranscriptLineItemOutOfBoundsError(
                                             new TranscriptItem({
-                                                inPoint: inPointMilliseconds,
-                                                outPoint: outPointMilliseconds,
+                                                inPointMilliseconds: inPointMilliseconds,
+                                                outPointMilliseconds: outPointMilliseconds,
                                                 text: multilingualText,
                                                 speakerInitials:
                                                     validCommandFSA.payload.speakerInitials,
@@ -235,8 +241,8 @@ describe(commandType, () => {
                                     new CommandExecutionError([
                                         new TranscriptLineItemOutOfBoundsError(
                                             new TranscriptItem({
-                                                inPoint: inPointMilliseconds,
-                                                outPoint: outPointMilliseconds,
+                                                inPointMilliseconds: inPointMilliseconds,
+                                                outPointMilliseconds: outPointMilliseconds,
                                                 text: multilingualText,
                                                 speakerInitials:
                                                     validCommandFSA.payload.speakerInitials,
@@ -258,8 +264,8 @@ describe(commandType, () => {
                         const outPointMilliseconds = validInstance.lengthMilliseconds / 4;
 
                         const newLineItem = new TranscriptItem({
-                            inPoint: inPointMilliseconds,
-                            outPoint: outPointMilliseconds,
+                            inPointMilliseconds: inPointMilliseconds,
+                            outPointMilliseconds: outPointMilliseconds,
                             speakerInitials: validCommandFSA.payload.speakerInitials,
                             text: multilingualText,
                         });
@@ -309,8 +315,8 @@ describe(commandType, () => {
                                     new CommandExecutionError([
                                         new CannotAddInconsistentLineItemError(
                                             new TranscriptItem({
-                                                inPoint: inPointMilliseconds,
-                                                outPoint: outPointMilliseconds,
+                                                inPointMilliseconds: inPointMilliseconds,
+                                                outPointMilliseconds: outPointMilliseconds,
                                                 speakerInitials: bogusInitials,
                                                 text: multilingualText,
                                             }),
@@ -319,6 +325,72 @@ describe(commandType, () => {
                                                     bogusInitials
                                                 ),
                                             ]
+                                        ),
+                                    ])
+                                );
+                            },
+                        });
+                    });
+                });
+
+                describe(`when the timestamp for the new line item overlaps with an existing item`, () => {
+                    it(`should fail with the expected errors`, async () => {
+                        const existingTimestamp: [number, number] = [12.4, 15];
+
+                        const overlappingTimestamp: [number, number] = [14.3, 20.3];
+
+                        const newText = `foo bar baz!`;
+
+                        const speakerInitials = validInstance.transcript.participants[0].initials;
+
+                        const inconsistentLineItem = new TranscriptItem({
+                            inPointMilliseconds: overlappingTimestamp[0],
+                            outPointMilliseconds: overlappingTimestamp[1],
+                            text: buildMultilingualTextWithSingleItem(newText, languageCode),
+                            speakerInitials,
+                        });
+
+                        await assertCommandError(assertionHelperDependencies, {
+                            systemUserId: dummySystemUserId,
+                            initialState: new DeluxeInMemoryStore({
+                                [validInstance.type]: [
+                                    validInstance.clone({
+                                        transcript: validInstance.transcript.clone({
+                                            items: [
+                                                {
+                                                    speakerInitials,
+                                                    inPointMilliseconds: existingTimestamp[0],
+                                                    outPointMilliseconds: existingTimestamp[1],
+                                                    text: {
+                                                        items: [
+                                                            {
+                                                                text: 'text for existing item',
+                                                                role: MultilingualTextItemRole.original,
+                                                                languageCode:
+                                                                    LanguageCode.Chilcotin,
+                                                            },
+                                                        ],
+                                                    },
+                                                },
+                                            ],
+                                        }),
+                                    }),
+                                ],
+                            }).fetchFullSnapshotInLegacyFormat(),
+                            buildCommandFSA: () =>
+                                commandFSAFactory.build(undefined, {
+                                    inPointMilliseconds: overlappingTimestamp[0],
+                                    outPointMilliseconds: overlappingTimestamp[1],
+                                    languageCode,
+                                    text: newText,
+                                }),
+                            checkError: (error) => {
+                                assertErrorAsExpected(
+                                    error,
+                                    new CommandExecutionError([
+                                        new CannotAddInconsistentLineItemError(
+                                            inconsistentLineItem,
+                                            []
                                         ),
                                     ])
                                 );

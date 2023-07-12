@@ -16,13 +16,13 @@ const validVideo = validCases[0].resource.clone({
 });
 
 const timeRangeWithInvalidOutPoint: TimeRangeWithoutData = {
-    inPoint: 0,
-    outPoint: validVideo.length() + 100,
+    inPointMilliseconds: 0,
+    outPointMilliseconds: validVideo.length() + 100,
 };
 
 const timeRangeWithInvalidInPoint: TimeRangeWithoutData = {
-    inPoint: -1200,
-    outPoint: validVideo.length(),
+    inPointMilliseconds: -1200,
+    outPointMilliseconds: validVideo.length(),
 };
 
 const invalidCases: ResourceModelContextStateValidatorInvalidTestCase[] = [

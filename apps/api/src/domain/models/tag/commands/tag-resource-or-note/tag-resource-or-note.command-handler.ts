@@ -6,9 +6,7 @@ import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { Valid, isValid } from '../../../../domainModelValidators/Valid';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
-import { IRepositoryForAggregate } from '../../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../../repositories/interfaces/repository-provider.interface';
-import { AggregateType } from '../../../../types/AggregateType';
 import { CategorizableType } from '../../../../types/CategorizableType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, isResourceType } from '../../../../types/ResourceType';
@@ -21,18 +19,12 @@ import { TagResourceOrNote } from './tag-resource-or-note.command';
 
 @CommandHandler(TagResourceOrNote)
 export class TagResourceOrNoteCommandHandler extends BaseUpdateCommandHandler<Tag> {
-    protected repositoryForCommandsTargetAggregate: IRepositoryForAggregate<Tag>;
-
-    protected aggregateType: AggregateType = AggregateType.tag;
-
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN)
         protected readonly repositoryProvider: IRepositoryProvider,
         @Inject('ID_MANAGER') protected readonly idManager: IIdManager
     ) {
         super(repositoryProvider, idManager);
-
-        this.repositoryForCommandsTargetAggregate = this.repositoryProvider.getTagRepository();
     }
 
     protected async fetchRequiredExternalState({

@@ -13,32 +13,35 @@ import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 
 export class TimeRange extends BaseDomainModel {
     @NonNegativeFiniteNumber({
-        label: 'in point',
-        description: 'starting time stamp',
+        label: 'in point (ms)',
+        description: 'starting time stamp in milliseconds',
     })
-    readonly inPoint: number;
+    readonly inPointMilliseconds: number;
 
     @NonNegativeFiniteNumber({
-        label: 'out point',
-        description: 'ending time stamp',
+        label: 'out point (ms)',
+        description: 'ending time stamp in milliseconds',
     })
-    readonly outPoint: number;
+    readonly outPointMilliseconds: number;
 
     constructor(dto: DTO<TimeRange>) {
         super();
 
         if (!dto) return;
 
-        const { inPoint, outPoint } = dto;
+        const { inPointMilliseconds, outPointMilliseconds } = dto;
 
-        this.inPoint = inPoint;
+        this.inPointMilliseconds = inPointMilliseconds;
 
-        this.outPoint = outPoint;
+        this.outPointMilliseconds = outPointMilliseconds;
     }
 }
 
 // TODO Remove this in favor of a proper data class
-export type TimeRangeWithoutData = Pick<TranscriptItem, 'inPoint' | 'outPoint'>;
+export type TimeRangeWithoutData = Pick<
+    TranscriptItem,
+    'inPointMilliseconds' | 'outPointMilliseconds'
+>;
 
 @UnionMember(EDGE_CONNECTION_CONTEXT_UNION, EdgeConnectionContextType.timeRange)
 export class TimeRangeContext extends EdgeConnectionContext {

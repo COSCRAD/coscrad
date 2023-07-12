@@ -1,8 +1,8 @@
 import { IMultilingualText } from './multilingual-text.interface';
 
 export interface ITranscriptItem {
-    inPoint: number;
-    outPoint: number;
+    inPointMilliseconds: number;
+    outPointMilliseconds: number;
     text: IMultilingualText;
     speakerInitials: string;
 }
