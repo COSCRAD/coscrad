@@ -342,6 +342,22 @@ describe(commandType, () => {
                     });
                 });
 
+                /**
+                 * This would be a pointless command as nothing would be updated.
+                 */
+                describe(`when line items is an empty array`, () => {
+                    it(`should fail with the expected error`, async () => {
+                        assertCommandError(assertionHelperDependencies, {
+                            systemUserId: dummySystemUserId,
+                            initialState: validInitialState,
+                            buildCommandFSA: () =>
+                                commandFsaFactory.build(undefined, {
+                                    lineItems: [],
+                                }),
+                        });
+                    });
+                });
+
                 describe('when the command payload type is invalid', () => {
                     generateCommandFuzzTestCases(ImportLineItemsToTranscript).forEach(
                         ({ description, propertyName, invalidValue }) => {
