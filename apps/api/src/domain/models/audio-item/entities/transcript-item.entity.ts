@@ -10,7 +10,7 @@ import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../BaseDomainModel';
-import { InvalidTimestampOrderError } from '../errors';
+import { InvalidTimestampOrderError } from '../commands/transcripts/errors';
 
 // We can change this later
 type MediaTimestamp = number;
@@ -18,15 +18,15 @@ type MediaTimestamp = number;
 export class TranscriptItem extends BaseDomainModel implements ITranscriptItem {
     @NonNegativeFiniteNumber({
         label: 'in point',
-        description: 'starting time stamp',
+        description: 'starting time stamp (ms)',
     })
-    readonly inPoint: MediaTimestamp;
+    readonly inPointMilliseconds: MediaTimestamp;
 
     @NonNegativeFiniteNumber({
         label: 'out point',
-        description: 'ending time stamp',
+        description: 'ending time stamp (ms)',
     })
-    readonly outPoint: MediaTimestamp;
+    readonly outPointMilliseconds: MediaTimestamp;
 
     @NestedDataType(MultilingualText, {
         label: 'text',
@@ -45,11 +45,16 @@ export class TranscriptItem extends BaseDomainModel implements ITranscriptItem {
 
         if (!dto) return;
 
-        const { inPoint, outPoint, text: data, speakerInitials: label } = dto;
+        const {
+            inPointMilliseconds: inPoint,
+            outPointMilliseconds: outPoint,
+            text: data,
+            speakerInitials: label,
+        } = dto;
 
-        this.inPoint = inPoint;
+        this.inPointMilliseconds = inPoint;
 
-        this.outPoint = outPoint;
+        this.outPointMilliseconds = outPoint;
 
         if (data) this.text = new MultilingualText(data);
 
@@ -71,17 +76,25 @@ export class TranscriptItem extends BaseDomainModel implements ITranscriptItem {
     }
 
     getTimeBounds(): [number, number] {
-        return [this.inPoint, this.outPoint];
+        return [this.inPointMilliseconds, this.outPointMilliseconds];
     }
 
-    conflictsWith({ inPoint, outPoint }: Pick<TranscriptItem, 'inPoint' | 'outPoint'>): boolean {
-        return [inPoint, outPoint].some((point) =>
+    conflictsWith({
+        inPointMilliseconds,
+        outPointMilliseconds,
+    }: Pick<TranscriptItem, 'inPointMilliseconds' | 'outPointMilliseconds'>): boolean {
+        return [inPointMilliseconds, outPointMilliseconds].some((point) =>
             isNumberWithinRange(point, this.getTimeBounds())
         );
     }
 
     toString() {
-        const { inPoint, outPoint, text, speakerInitials } = this;
+        const {
+            inPointMilliseconds: inPoint,
+            outPointMilliseconds: outPoint,
+            text,
+            speakerInitials,
+        } = this;
 
         // todo remove ? chaining
         return `[${inPoint}] [${speakerInitials}] ${text?.toString()} [${outPoint}]`;
@@ -90,7 +103,8 @@ export class TranscriptItem extends BaseDomainModel implements ITranscriptItem {
     validateComplexInvariants(): ResultOrError<Valid> {
         const allErrors: InternalError[] = [];
 
-        if (this.inPoint > this.outPoint) allErrors.push(new InvalidTimestampOrderError(this));
+        if (this.inPointMilliseconds > this.outPointMilliseconds)
+            allErrors.push(new InvalidTimestampOrderError(this));
 
         const textValidationResult = this.text.validateComplexInvariants();
 

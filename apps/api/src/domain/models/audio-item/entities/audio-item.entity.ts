@@ -6,7 +6,7 @@ import {
     UUID,
 } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { InternalError } from '../../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
 import { DTO } from '../../../../types/DTO';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
@@ -106,10 +106,17 @@ class AudioItemBase extends Resource implements IRadioPublishableResource {
     }
 
     protected validateComplexInvariants(): InternalError[] {
-        return [];
-        // const nameValidationResult = this.name.validateComplexInvariants();
+        const allErrors: InternalError[] = [];
 
-        // return isValid(nameValidationResult) ? [] : [nameValidationResult];
+        const transcriptValidationResult = this.transcript?.validateComplexInvariants() || Valid;
+
+        if (isInternalError(transcriptValidationResult)) allErrors.push(transcriptValidationResult);
+
+        const nameValidationResult = this.name.validateComplexInvariants();
+
+        if (isInternalError(nameValidationResult)) allErrors.push(nameValidationResult);
+
+        return allErrors;
     }
 
     protected getExternalReferences(): AggregateCompositeIdentifier[] {

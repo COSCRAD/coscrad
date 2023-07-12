@@ -5,10 +5,8 @@ import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../../persistence/constan
 import { ResultOrError } from '../../../../../../types/ResultOrError';
 import { Valid } from '../../../../../domainModelValidators/Valid';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
-import { IRepositoryForAggregate } from '../../../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../../../repositories/interfaces/repository-provider.interface';
 import { AggregateId } from '../../../../../types/AggregateId';
-import { AggregateType } from '../../../../../types/AggregateType';
 import { InMemorySnapshot } from '../../../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../../../utilities/buildInMemorySnapshot';
 import { BaseUpdateCommandHandler } from '../../../../shared/command-handlers/base-update-command-handler';
@@ -19,18 +17,12 @@ import { UserRoleGranted } from './user-role-granted.event';
 
 @CommandHandler(GrantUserRole)
 export class GrantUserRoleCommandHandler extends BaseUpdateCommandHandler<CoscradUser> {
-    protected readonly repositoryForCommandsTargetAggregate: IRepositoryForAggregate<CoscradUser>;
-
-    protected readonly aggregateType = AggregateType.user;
-
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN)
         protected readonly repositoryProvider: IRepositoryProvider,
         @Inject('ID_MANAGER') protected readonly idManager: IIdManager
     ) {
         super(repositoryProvider, idManager);
-
-        this.repositoryForCommandsTargetAggregate = this.repositoryProvider.getUserRepository();
     }
 
     protected actOnInstance(

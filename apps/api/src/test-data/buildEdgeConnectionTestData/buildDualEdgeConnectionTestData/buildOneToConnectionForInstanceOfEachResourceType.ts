@@ -32,8 +32,8 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
                 context: new TimeRangeContext({
                     type: EdgeConnectionContextType.timeRange,
                     timeRange: {
-                        inPoint: 300,
-                        outPoint: 1800,
+                        inPointMilliseconds: 300,
+                        outPointMilliseconds: 1800,
                     },
                 }),
             },
@@ -74,8 +74,8 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
                 context: new TimeRangeContext({
                     type: EdgeConnectionContextType.timeRange,
                     timeRange: {
-                        inPoint: 500,
-                        outPoint: 778.4,
+                        inPointMilliseconds: 500,
+                        outPointMilliseconds: 778.4,
                     },
                 }),
             },
@@ -105,8 +105,8 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
                 context: new TimeRangeContext({
                     type: EdgeConnectionContextType.timeRange,
                     timeRange: {
-                        inPoint: 500,
-                        outPoint: 778.4,
+                        inPointMilliseconds: 500,
+                        outPointMilliseconds: 778.4,
                     },
                 }),
             },

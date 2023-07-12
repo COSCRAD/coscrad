@@ -70,19 +70,19 @@ exports[`When querying for edge connections GET /connections/ should return the 
                   "isOptional": false,
                   "label": "time range",
                   "schema": {
-                    "inPoint": {
+                    "inPointMilliseconds": {
                       "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
-                      "description": "starting time stamp",
+                      "description": "starting time stamp in milliseconds",
                       "isArray": false,
                       "isOptional": false,
-                      "label": "in point",
+                      "label": "in point (ms)",
                     },
-                    "outPoint": {
+                    "outPointMilliseconds": {
                       "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
-                      "description": "ending time stamp",
+                      "description": "ending time stamp in milliseconds",
                       "isArray": false,
                       "isOptional": false,
-                      "label": "out point",
+                      "label": "out point (ms)",
                     },
                   },
                 },
@@ -1666,8 +1666,8 @@ exports[`When querying for edge connections GET /connections/notes should return
           },
           "context": {
             "timeRange": {
-              "inPoint": 11000,
-              "outPoint": 12950,
+              "inPointMilliseconds": 11000,
+              "outPointMilliseconds": 12950,
             },
             "type": "timeRange",
           },
@@ -1893,8 +1893,8 @@ exports[`When querying for edge connections GET /connections/notes should return
           },
           "context": {
             "timeRange": {
-              "inPoint": 300,
-              "outPoint": 500,
+              "inPointMilliseconds": 300,
+              "outPointMilliseconds": 500,
             },
             "type": "timeRange",
           },
@@ -1981,8 +1981,8 @@ exports[`When querying for edge connections GET /connections/notes should return
           },
           "context": {
             "timeRange": {
-              "inPoint": 650,
-              "outPoint": 1230,
+              "inPointMilliseconds": 650,
+              "outPointMilliseconds": 1230,
             },
             "type": "timeRange",
           },
@@ -2105,8 +2105,8 @@ exports[`When querying for edge connections GET /connections/notes should return
           },
           "context": {
             "timeRange": {
-              "inPoint": 11000,
-              "outPoint": 12950,
+              "inPointMilliseconds": 11000,
+              "outPointMilliseconds": 12950,
             },
             "type": "timeRange",
           },
@@ -2543,8 +2543,8 @@ exports[`When querying for edge connections GET /connections/notes should return
           },
           "context": {
             "timeRange": {
-              "inPoint": 11000,
-              "outPoint": 12950,
+              "inPointMilliseconds": 11000,
+              "outPointMilliseconds": 12950,
             },
             "type": "timeRange",
           },
@@ -2623,8 +2623,8 @@ exports[`When querying for edge connections GET /connections/notes should return
           },
           "context": {
             "timeRange": {
-              "inPoint": 11000,
-              "outPoint": 12950,
+              "inPointMilliseconds": 11000,
+              "outPointMilliseconds": 12950,
             },
             "type": "timeRange",
           },
@@ -2885,8 +2885,8 @@ exports[`When querying for edge connections GET /connections/notes should return
           },
           "context": {
             "timeRange": {
-              "inPoint": 300,
-              "outPoint": 500,
+              "inPointMilliseconds": 300,
+              "outPointMilliseconds": 500,
             },
             "type": "timeRange",
           },
@@ -2973,8 +2973,8 @@ exports[`When querying for edge connections GET /connections/notes should return
           },
           "context": {
             "timeRange": {
-              "inPoint": 300,
-              "outPoint": 500,
+              "inPointMilliseconds": 300,
+              "outPointMilliseconds": 500,
             },
             "type": "timeRange",
           },
@@ -2987,8 +2987,8 @@ exports[`When querying for edge connections GET /connections/notes should return
           },
           "context": {
             "timeRange": {
-              "inPoint": 11000,
-              "outPoint": 12950,
+              "inPointMilliseconds": 11000,
+              "outPointMilliseconds": 12950,
             },
             "type": "timeRange",
           },
@@ -3027,8 +3027,8 @@ exports[`When querying for edge connections GET /connections/notes should return
           },
           "context": {
             "timeRange": {
-              "inPoint": 11000,
-              "outPoint": 12950,
+              "inPointMilliseconds": 11000,
+              "outPointMilliseconds": 12950,
             },
             "type": "timeRange",
           },
@@ -3362,8 +3362,8 @@ exports[`When querying for edge connections GET /connections/notes should return
           },
           "context": {
             "timeRange": {
-              "inPoint": 100,
-              "outPoint": 1200,
+              "inPointMilliseconds": 100,
+              "outPointMilliseconds": 1200,
             },
             "type": "timeRange",
           },
@@ -3464,8 +3464,8 @@ exports[`When querying for edge connections GET /connections/notes should return
           },
           "context": {
             "timeRange": {
-              "inPoint": 300,
-              "outPoint": 1800,
+              "inPointMilliseconds": 300,
+              "outPointMilliseconds": 1800,
             },
             "type": "timeRange",
           },
@@ -3527,8 +3527,8 @@ exports[`When querying for edge connections GET /connections/notes should return
           },
           "context": {
             "timeRange": {
-              "inPoint": 500,
-              "outPoint": 778.4,
+              "inPointMilliseconds": 500,
+              "outPointMilliseconds": 778.4,
             },
             "type": "timeRange",
           },
@@ -3577,8 +3577,8 @@ exports[`When querying for edge connections GET /connections/notes should return
           },
           "context": {
             "timeRange": {
-              "inPoint": 500,
-              "outPoint": 778.4,
+              "inPointMilliseconds": 500,
+              "outPointMilliseconds": 778.4,
             },
             "type": "timeRange",
           },

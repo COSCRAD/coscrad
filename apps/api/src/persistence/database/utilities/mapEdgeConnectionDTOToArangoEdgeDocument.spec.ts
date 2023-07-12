@@ -61,8 +61,8 @@ const validTimeRangeContext = new TimeRangeContext({
     type: EdgeConnectionContextType.timeRange,
 
     timeRange: {
-        inPoint: 3789,
-        outPoint: 3890,
+        inPointMilliseconds: 3789,
+        outPointMilliseconds: 3890,
     },
 });
 

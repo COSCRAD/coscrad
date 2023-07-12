@@ -1293,16 +1293,16 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "isOptional": true,
         "label": "items",
         "schema": {
-          "inPoint": {
+          "inPointMilliseconds": {
             "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
-            "description": "starting time stamp",
+            "description": "starting time stamp (ms)",
             "isArray": false,
             "isOptional": false,
             "label": "in point",
           },
-          "outPoint": {
+          "outPointMilliseconds": {
             "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
-            "description": "ending time stamp",
+            "description": "ending time stamp (ms)",
             "isArray": false,
             "isOptional": false,
             "label": "out point",
@@ -1692,16 +1692,16 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "isOptional": true,
         "label": "items",
         "schema": {
-          "inPoint": {
+          "inPointMilliseconds": {
             "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
-            "description": "starting time stamp",
+            "description": "starting time stamp (ms)",
             "isArray": false,
             "isOptional": false,
             "label": "in point",
           },
-          "outPoint": {
+          "outPointMilliseconds": {
             "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
-            "description": "ending time stamp",
+            "description": "ending time stamp (ms)",
             "isArray": false,
             "isOptional": false,
             "label": "out point",

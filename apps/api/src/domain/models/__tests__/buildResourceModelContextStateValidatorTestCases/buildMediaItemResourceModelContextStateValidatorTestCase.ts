@@ -20,8 +20,8 @@ const validMediaItem = validCases[0].resource;
 const invalidTimeRangeContext = new TimeRangeContext({
     type: EdgeConnectionContextType.timeRange,
     timeRange: {
-        inPoint: 0,
-        outPoint: validMediaItem.lengthMilliseconds + 500,
+        inPointMilliseconds: 0,
+        outPointMilliseconds: validMediaItem.lengthMilliseconds + 500,
     },
 });
 

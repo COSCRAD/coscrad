@@ -31,8 +31,8 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
                 context: new TimeRangeContext({
                     type: EdgeConnectionContextType.timeRange,
                     timeRange: {
-                        inPoint: 100,
-                        outPoint: 1200,
+                        inPointMilliseconds: 100,
+                        outPointMilliseconds: 1200,
                     },
                 }),
             },

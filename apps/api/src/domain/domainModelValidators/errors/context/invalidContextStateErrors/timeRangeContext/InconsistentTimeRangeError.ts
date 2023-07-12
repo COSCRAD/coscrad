@@ -9,8 +9,8 @@ export default class InconsistentTimeRangeError extends InternalError {
         const [inPoint, outPoint] = resource.getTimeBounds();
 
         const resourceTimeBounds: TimeRangeWithoutData = {
-            inPoint,
-            outPoint,
+            inPointMilliseconds: inPoint,
+            outPointMilliseconds: outPoint,
         };
 
         const msg = [
