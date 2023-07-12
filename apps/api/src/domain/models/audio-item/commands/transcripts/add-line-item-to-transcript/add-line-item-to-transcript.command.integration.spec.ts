@@ -1,4 +1,9 @@
-import { LanguageCode, ResourceCompositeIdentifier, ResourceType } from '@coscrad/api-interfaces';
+import {
+    LanguageCode,
+    MultilingualTextItemRole,
+    ResourceCompositeIdentifier,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../../app/controllers/__tests__/setUpIntegrationTest';
@@ -18,6 +23,7 @@ import { DummyCommandFsaFactory } from '../../../../__tests__/command-helpers/du
 import { generateCommandFuzzTestCases } from '../../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
+import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUserId';
 import AggregateNotFoundError from '../../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../../shared/common-command-errors/CommandExecutionError';
 import { AudioItem } from '../../../entities/audio-item.entity';
@@ -327,7 +333,53 @@ describe(commandType, () => {
                     });
                 });
 
-                // TODO When the time stamp overlaps with an existing time-stamp
+                describe.skip(`when the timestamp for the new line item overlaps with an existing item`, () => {
+                    it(`should fail with the expected errors`, async () => {
+                        const existingTimestamp: [number, number] = [12.4, 15];
+
+                        const overlappingTimestamp: [number, number] = [14.3, 20.3];
+
+                        await assertCommandError(assertionHelperDependencies, {
+                            systemUserId: dummySystemUserId,
+                            initialState: new DeluxeInMemoryStore({
+                                [validInstance.type]: [
+                                    validInstance.clone({
+                                        transcript: validInstance.transcript.clone({
+                                            items: [
+                                                {
+                                                    inPoint: existingTimestamp[0],
+                                                    outPoint: existingTimestamp[1],
+                                                    text: {
+                                                        items: [
+                                                            {
+                                                                text: 'text for existing item',
+                                                                role: MultilingualTextItemRole.original,
+                                                                languageCode:
+                                                                    LanguageCode.Chilcotin,
+                                                            },
+                                                        ],
+                                                    },
+                                                },
+                                            ],
+                                        }),
+                                    }),
+                                ],
+                            }).fetchFullSnapshotInLegacyFormat(),
+                            buildCommandFSA: () =>
+                                commandFSAFactory.build(undefined, {
+                                    inPointMilliseconds: overlappingTimestamp[0],
+                                    outPointMilliseconds: overlappingTimestamp[1],
+                                }),
+                            checkError: (error) => {
+                                assertErrorAsExpected(error, new CommandExecutionError([]));
+
+                                expect(error.innerErrors[0]).toBeInstanceOf(
+                                    CannotAddInconsistentLineItemError
+                                );
+                            },
+                        });
+                    });
+                });
             });
         });
     });
