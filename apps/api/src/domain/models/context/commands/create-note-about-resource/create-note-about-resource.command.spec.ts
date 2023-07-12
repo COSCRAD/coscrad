@@ -92,8 +92,8 @@ const validAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem)
 const validContext = new TimeRangeContext({
     type: EdgeConnectionContextType.timeRange,
     timeRange: {
-        inPoint: 0,
-        outPoint: validAudioItem.lengthMilliseconds / 2,
+        inPointMilliseconds: 0,
+        outPointMilliseconds: validAudioItem.lengthMilliseconds / 2,
     },
 });
 
@@ -314,9 +314,9 @@ describe(commandType, () => {
                 [EdgeConnectionContextType.timeRange]: new TimeRangeContext({
                     type: EdgeConnectionContextType.timeRange,
                     timeRange: {
-                        inPoint: 0,
+                        inPointMilliseconds: 0,
                         // surely out of bounds for any dummy data
-                        outPoint: 100000000000000,
+                        outPointMilliseconds: 100000000000000,
                     },
                 }),
                 [EdgeConnectionContextType.textField]: new TextFieldContext({

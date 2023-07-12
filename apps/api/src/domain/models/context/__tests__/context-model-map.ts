@@ -45,8 +45,8 @@ export const buildContextModelMap = () =>
             new TimeRangeContext({
                 type: EdgeConnectionContextType.timeRange,
                 timeRange: new TimeRange({
-                    inPoint: 0,
-                    outPoint: 100000000000000,
+                    inPointMilliseconds: 0,
+                    outPointMilliseconds: 100000000000000,
                 }),
             })
         );

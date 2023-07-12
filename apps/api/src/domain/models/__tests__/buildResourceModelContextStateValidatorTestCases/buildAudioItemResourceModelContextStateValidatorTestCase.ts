@@ -16,13 +16,13 @@ const validTranscribedAudio = validCases[0].resource.clone({
 });
 
 const timeRangeWithInvalidOutPoint: TimeRangeWithoutData = {
-    inPoint: 0,
-    outPoint: validTranscribedAudio.length() + 200,
+    inPointMilliseconds: 0,
+    outPointMilliseconds: validTranscribedAudio.length() + 200,
 };
 
 const timeRangeWithInvalidInPoint: TimeRangeWithoutData = {
-    inPoint: -10,
-    outPoint: validTranscribedAudio.length(),
+    inPointMilliseconds: -10,
+    outPointMilliseconds: validTranscribedAudio.length(),
 };
 
 const invalidCases: ResourceModelContextStateValidatorInvalidTestCase[] = [

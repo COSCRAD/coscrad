@@ -46,8 +46,8 @@ const buildValidBookEdgeConnectionMemberDto = (
 const validTimeRangeContext = new TimeRangeContext({
     type: EdgeConnectionContextType.timeRange,
     timeRange: {
-        inPoint: 3789,
-        outPoint: 3890,
+        inPointMilliseconds: 3789,
+        outPointMilliseconds: 3890,
     },
 });
 
@@ -297,8 +297,8 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                             context: new TimeRangeContext({
                                 type: EdgeConnectionContextType.timeRange,
                                 timeRange: {
-                                    inPoint: 3789,
-                                    outPoint: 3890,
+                                    inPointMilliseconds: 3789,
+                                    outPointMilliseconds: 3890,
                                 },
                             }),
                             compositeIdentifier: {
@@ -330,8 +330,8 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                             context: new TimeRangeContext({
                                 type: EdgeConnectionContextType.timeRange,
                                 timeRange: {
-                                    inPoint: 1200,
-                                    outPoint: 1000,
+                                    inPointMilliseconds: 1200,
+                                    outPointMilliseconds: 1000,
                                 },
                             }).toDTO(),
                         },

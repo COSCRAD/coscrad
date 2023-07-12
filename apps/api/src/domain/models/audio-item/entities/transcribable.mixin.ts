@@ -91,7 +91,7 @@ export function Transcribable<TBase extends Constructor<ITranscribableBase>>(Bas
 
             const timeBounds = this.getTimeBounds();
 
-            const { inPoint, outPoint } = newItem;
+            const { inPointMilliseconds: inPoint, outPointMilliseconds: outPoint } = newItem;
 
             if ([inPoint, outPoint].some((point) => !isNumberWithinRange(point, timeBounds)))
                 return new TranscriptLineItemOutOfBoundsError(newItem, timeBounds);
@@ -111,7 +111,7 @@ export function Transcribable<TBase extends Constructor<ITranscribableBase>>(Bas
             const newItems = newItemDtos.map((newItemDto) => new TranscriptItem(newItemDto));
 
             const outOfBoundsErrors = newItems.reduce((allErrors: InternalError[], item) => {
-                const { inPoint, outPoint } = item;
+                const { inPointMilliseconds: inPoint, outPointMilliseconds: outPoint } = item;
 
                 const timeBounds = this.getTimeBounds();
 

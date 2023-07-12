@@ -1927,19 +1927,19 @@ exports[`command payload schemas Command payload schema should match the snapsho
                 "isOptional": false,
                 "label": "time range",
                 "schema": {
-                  "inPoint": {
+                  "inPointMilliseconds": {
                     "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
-                    "description": "starting time stamp",
+                    "description": "starting time stamp in milliseconds",
                     "isArray": false,
                     "isOptional": false,
-                    "label": "in point",
+                    "label": "in point (ms)",
                   },
-                  "outPoint": {
+                  "outPointMilliseconds": {
                     "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
-                    "description": "ending time stamp",
+                    "description": "ending time stamp in milliseconds",
                     "isArray": false,
                     "isOptional": false,
-                    "label": "out point",
+                    "label": "out point (ms)",
                   },
                 },
               },
@@ -2141,19 +2141,19 @@ exports[`command payload schemas Command payload schema should match the snapsho
                 "isOptional": false,
                 "label": "time range",
                 "schema": {
-                  "inPoint": {
+                  "inPointMilliseconds": {
                     "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
-                    "description": "starting time stamp",
+                    "description": "starting time stamp in milliseconds",
                     "isArray": false,
                     "isOptional": false,
-                    "label": "in point",
+                    "label": "in point (ms)",
                   },
-                  "outPoint": {
+                  "outPointMilliseconds": {
                     "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
-                    "description": "ending time stamp",
+                    "description": "ending time stamp in milliseconds",
                     "isArray": false,
                     "isOptional": false,
-                    "label": "out point",
+                    "label": "out point (ms)",
                   },
                 },
               },
@@ -2364,19 +2364,19 @@ exports[`command payload schemas Command payload schema should match the snapsho
                 "isOptional": false,
                 "label": "time range",
                 "schema": {
-                  "inPoint": {
+                  "inPointMilliseconds": {
                     "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
-                    "description": "starting time stamp",
+                    "description": "starting time stamp in milliseconds",
                     "isArray": false,
                     "isOptional": false,
-                    "label": "in point",
+                    "label": "in point (ms)",
                   },
-                  "outPoint": {
+                  "outPointMilliseconds": {
                     "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
-                    "description": "ending time stamp",
+                    "description": "ending time stamp in milliseconds",
                     "isArray": false,
                     "isOptional": false,
-                    "label": "out point",
+                    "label": "out point (ms)",
                   },
                 },
               },

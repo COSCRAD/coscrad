@@ -14,6 +14,7 @@ import assertErrorAsExpected from '../../../../../../lib/__tests__/assertErrorAs
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import formatAggregateType from '../../../../../../view-models/presentation/formatAggregateType';
+import { buildMultilingualTextWithSingleItem } from '../../../../../common/build-multilingual-text-with-single-item';
 import { assertCommandError } from '../../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandFailsDueToTypeError } from '../../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCommandSuccess } from '../../../../__tests__/command-helpers/assert-command-success';
@@ -25,7 +26,12 @@ import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUs
 import AggregateNotFoundError from '../../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../../shared/common-command-errors/CommandExecutionError';
 import { AudioItem } from '../../../entities/audio-item.entity';
+import { TranscriptItem } from '../../../entities/transcript-item.entity';
 import { Video } from '../../../entities/video.entity';
+import {
+    CannotAddInconsistentLineItemError,
+    FailedToImportLineItemsToTranscriptError,
+} from '../errors';
 import { ImportLineItemsToTranscript } from './import-line-items-to-transcript.command';
 
 const commandType = `IMPORT_LINE_ITEMS_TO_TRANSCRIPT`;
@@ -126,8 +132,6 @@ describe(commandType, () => {
 
             const languageCode = LanguageCode.Chilcotin;
 
-            // const multilingualText = buildMultilingualTextWithSingleItem(dummyText, languageCode);
-
             const buildValidCommandFsa = (
                 validInstance: AudioItem | Video
             ): FluxStandardAction<ImportLineItemsToTranscript> => ({
@@ -221,6 +225,73 @@ describe(commandType, () => {
                                 expect(innerMostErrors).toHaveLength(1);
 
                                 //  TODO export specific errors and check for them here
+                            },
+                        });
+                    });
+                });
+
+                describe(`When one of the timestamps to add overlaps an existing time stamp`, () => {
+                    const existingTimestamp: [number, number] = [12.4, 15];
+
+                    const lineItemDto = buildLineItemForTimestamp(existingTimestamp);
+
+                    const existingTranscriptItem = new TranscriptItem({
+                        ...lineItemDto,
+                        text: buildMultilingualTextWithSingleItem(
+                            lineItemDto.text,
+                            lineItemDto.languageCode
+                        ),
+                    });
+
+                    const overlappingTimestamp: [number, number] = [14.3, 20.3];
+
+                    const speakerInitials = validInstance.transcript.participants[0].initials;
+
+                    const inconsistentLineItem = new TranscriptItem({
+                        inPointMilliseconds: overlappingTimestamp[0],
+                        outPointMilliseconds: overlappingTimestamp[1],
+                        text: buildMultilingualTextWithSingleItem(
+                            `foo bar baz!`,
+                            LanguageCode.Chilcotin
+                        ),
+                        speakerInitials,
+                    });
+
+                    it(`should fail with the expected error`, async () => {
+                        await assertCommandError(assertionHelperDependencies, {
+                            systemUserId: dummySystemUserId,
+                            initialState: new DeluxeInMemoryStore({
+                                [validInstance.type]: [
+                                    validInstance.clone({
+                                        transcript: validInstance.transcript.clone({
+                                            items: [existingTranscriptItem],
+                                        }),
+                                    }),
+                                ],
+                            }).fetchFullSnapshotInLegacyFormat(),
+                            buildCommandFSA: () =>
+                                commandFsaFactory.build(undefined, {
+                                    lineItems: [
+                                        {
+                                            ...inconsistentLineItem,
+                                            text: inconsistentLineItem.text.items[0].text,
+                                            languageCode:
+                                                inconsistentLineItem.text.items[0].languageCode,
+                                        },
+                                    ],
+                                }),
+                            checkError: (error) => {
+                                assertErrorAsExpected(
+                                    error,
+                                    new CommandExecutionError([
+                                        new FailedToImportLineItemsToTranscriptError([
+                                            new CannotAddInconsistentLineItemError(
+                                                inconsistentLineItem,
+                                                []
+                                            ),
+                                        ]),
+                                    ])
+                                );
                             },
                         });
                     });

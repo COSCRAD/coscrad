@@ -1,14 +1,16 @@
 import { isNumberWithinRange } from '@coscrad/validation-constraints';
 import { InternalError } from '../../../../lib/errors/InternalError';
-import InconsistentTimeRangeError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/timeRangeContext/InconsistentTimeRangeError';
 import { Valid } from '../../../domainModelValidators/Valid';
+import InconsistentTimeRangeError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/timeRangeContext/InconsistentTimeRangeError';
 import { TimeRangeContext } from '../../context/time-range-context/time-range-context.entity';
 import { ITimeBoundable } from '../../interfaces/ITimeBoundable';
 import { Resource } from '../../resource.entity';
 
 export default (
     resource: ITimeBoundable & Resource,
-    { timeRange: { inPoint, outPoint } }: TimeRangeContext
+    {
+        timeRange: { inPointMilliseconds: inPoint, outPointMilliseconds: outPoint },
+    }: TimeRangeContext
 ): InternalError | Valid => {
     if (!resource.getTimeBounds) {
         throw new Error('missing getTimeBounds method');
@@ -22,7 +24,10 @@ export default (
      * confirm here that `inPoint` isn't too low.
      */
     if ([inPoint, outPoint].some(isNumberOutOfRange))
-        return new InconsistentTimeRangeError({ inPoint, outPoint }, resource);
+        return new InconsistentTimeRangeError(
+            { inPointMilliseconds: inPoint, outPointMilliseconds: outPoint },
+            resource
+        );
 
     return Valid;
 };

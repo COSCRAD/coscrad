@@ -10,12 +10,16 @@ import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid, isValid } from '../../../domainModelValidators/Valid';
 import BaseDomainModel from '../../BaseDomainModel';
 import {
+    CannotAddInconsistentLineItemError,
+    FailedToImportLineItemsToTranscriptError,
+    InvalidTranscriptError,
+} from '../commands/transcripts/errors';
+import {
     ConflictingLineItemsError,
     DuplicateTranscriptParticipantError,
     DuplicateTranscriptParticipantInitialsError,
     DuplicateTranscriptParticipantNameError,
 } from '../errors';
-import { CannotAddInconsistentLineItemError } from '../errors/transcript-line-item/cannot-add-inconsistent-line-item.error';
 import { TranscriptParticipantInitialsNotRegisteredError } from '../errors/transcript-participant-initials-not-registered.error';
 import { TranscriptItem } from './transcript-item.entity';
 import { TranscriptParticipant } from './transcript-participant';
@@ -126,7 +130,7 @@ export class Transcript extends BaseDomainModel implements ITranscript {
             );
 
         if (lineItemErrors.length > 0)
-            return new InternalError(`Failed to import line items: invalid state`, lineItemErrors);
+            return new FailedToImportLineItemsToTranscriptError(lineItemErrors);
 
         const newItems = this.items.concat(items.map((item) => item.clone()));
 
@@ -146,12 +150,10 @@ export class Transcript extends BaseDomainModel implements ITranscript {
             .map((item) => item.validateComplexInvariants())
             .filter(isInternalError);
 
-        // TODO breakout an error for this
         if (lineItemInvariantValidationErrors.length > 0)
-            return new InternalError(
-                `Encountered an invalid transcript`,
-                lineItemInvariantValidationErrors
-            );
+            return new InvalidTranscriptError(lineItemInvariantValidationErrors);
+
+        new InternalError(`Encountered an invalid transcript`, lineItemInvariantValidationErrors);
 
         const overlappingLineItems = this.getOverlappingLineItems();
 
@@ -166,7 +168,8 @@ export class Transcript extends BaseDomainModel implements ITranscript {
 
     private getOverlappingLineItems(): [TranscriptItem, TranscriptItem][] {
         const sortedItems = this.items.sort(
-            ({ inPoint: inPointA }, { inPoint: inPointB }) => inPointA - inPointB
+            ({ inPointMilliseconds: inPointA }, { inPointMilliseconds: inPointB }) =>
+                inPointA - inPointB
         );
 
         return sortedItems.reduce(
@@ -176,9 +179,13 @@ export class Transcript extends BaseDomainModel implements ITranscript {
                         .map((otherItem, otherIndex): [TranscriptItem, TranscriptItem] | null => {
                             if (index >= otherIndex) return null;
 
-                            const { inPoint, outPoint } = nextItem;
+                            const { inPointMilliseconds: inPoint, outPointMilliseconds: outPoint } =
+                                nextItem;
 
-                            const { inPoint: otherInPoint, outPoint: otherOutPoint } = otherItem;
+                            const {
+                                inPointMilliseconds: otherInPoint,
+                                outPointMilliseconds: otherOutPoint,
+                            } = otherItem;
 
                             if (
                                 [otherInPoint, otherOutPoint].some((n) =>
@@ -196,10 +203,15 @@ export class Transcript extends BaseDomainModel implements ITranscript {
     }
 
     private getConflictingItems({
-        inPoint,
-        outPoint,
-    }: Pick<TranscriptItem, 'inPoint' | 'outPoint'>): TranscriptItem[] {
-        return this.items.filter((item) => item.conflictsWith({ inPoint, outPoint }));
+        inPointMilliseconds,
+        outPointMilliseconds,
+    }: Pick<TranscriptItem, 'inPointMilliseconds' | 'outPointMilliseconds'>): TranscriptItem[] {
+        return this.items.filter((item) =>
+            item.conflictsWith({
+                inPointMilliseconds: inPointMilliseconds,
+                outPointMilliseconds: outPointMilliseconds,
+            })
+        );
     }
 
     private validateLineItem(newLineItem: TranscriptItem): InternalError[] {

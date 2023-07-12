@@ -16,13 +16,13 @@ const validSong = validCases[0].resource.clone({
 });
 
 const timeRangeWithInvalidOutPoint: TimeRangeWithoutData = {
-    inPoint: validSongStartingPoint,
-    outPoint: validSong.getEndMilliseconds() + 5,
+    inPointMilliseconds: validSongStartingPoint,
+    outPointMilliseconds: validSong.getEndMilliseconds() + 5,
 };
 
 const timeRangeWithInvalidInPoint: TimeRangeWithoutData = {
-    inPoint: validSongStartingPoint - validSongStartingPoint / 2,
-    outPoint: validSong.getEndMilliseconds(),
+    inPointMilliseconds: validSongStartingPoint - validSongStartingPoint / 2,
+    outPointMilliseconds: validSong.getEndMilliseconds(),
 };
 
 export default () => ({

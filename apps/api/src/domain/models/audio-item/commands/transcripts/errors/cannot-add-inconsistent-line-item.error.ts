@@ -1,5 +1,5 @@
-import { InternalError } from '../../../../../lib/errors/InternalError';
-import { TranscriptItem } from '../../entities/transcript-item.entity';
+import { InternalError } from '../../../../../../lib/errors/InternalError';
+import { TranscriptItem } from '../../../entities/transcript-item.entity';
 
 /**
  * This is a top-level wrapper for any errors when adding a new line item to

@@ -24,8 +24,8 @@ WithTranscription {
   "transcript": Transcript {
     "items": [
       TranscriptItem {
-        "inPoint": 12000,
-        "outPoint": 15550,
+        "inPointMilliseconds": 12000,
+        "outPointMilliseconds": 15550,
         "speakerInitials": "JHC",
         "text": MultilingualText {
           "items": [
@@ -38,8 +38,8 @@ WithTranscription {
         },
       },
       TranscriptItem {
-        "inPoint": 18300,
-        "outPoint": 19240,
+        "inPointMilliseconds": 18300,
+        "outPointMilliseconds": 19240,
         "speakerInitials": "JHC",
         "text": MultilingualText {
           "items": [
@@ -474,8 +474,8 @@ WithTranscription {
   "transcript": Transcript {
     "items": [
       TranscriptItem {
-        "inPoint": 12000,
-        "outPoint": 15550,
+        "inPointMilliseconds": 12000,
+        "outPointMilliseconds": 15550,
         "speakerInitials": "DM",
         "text": MultilingualText {
           "items": [
@@ -488,8 +488,8 @@ WithTranscription {
         },
       },
       TranscriptItem {
-        "inPoint": 18300,
-        "outPoint": 19240,
+        "inPointMilliseconds": 18300,
+        "outPointMilliseconds": 19240,
         "speakerInitials": "DM",
         "text": MultilingualText {
           "items": [

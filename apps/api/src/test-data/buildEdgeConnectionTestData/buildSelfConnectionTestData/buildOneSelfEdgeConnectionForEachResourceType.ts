@@ -107,8 +107,8 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
                 context: new TimeRangeContext({
                     type: EdgeConnectionContextType.timeRange,
                     timeRange: {
-                        inPoint: 11000,
-                        outPoint: 12950,
+                        inPointMilliseconds: 11000,
+                        outPointMilliseconds: 12950,
                     },
                 }),
             },
@@ -226,8 +226,8 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
                 },
                 context: new TimeRangeContext({
                     timeRange: {
-                        inPoint: 300,
-                        outPoint: 500,
+                        inPointMilliseconds: 300,
+                        outPointMilliseconds: 500,
                     },
                     type: EdgeConnectionContextType.timeRange,
                 }),
@@ -249,8 +249,8 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
                 context: new TimeRangeContext({
                     type: EdgeConnectionContextType.timeRange,
                     timeRange: {
-                        inPoint: 650,
-                        outPoint: 1230,
+                        inPointMilliseconds: 650,
+                        outPointMilliseconds: 1230,
                     },
                 }),
             },
@@ -287,8 +287,8 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
                 context: new TimeRangeContext({
                     type: EdgeConnectionContextType.timeRange,
                     timeRange: {
-                        inPoint: 11000,
-                        outPoint: 12950,
+                        inPointMilliseconds: 11000,
+                        outPointMilliseconds: 12950,
                     },
                 }),
             },

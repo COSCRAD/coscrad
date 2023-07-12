@@ -10,7 +10,7 @@ import { LanguageCodeEnum } from '../../../../../../domain/common/entities/multi
 import { AudioVisualCompositeIdentifier } from '../../../entities/audio-item-composite-identifier';
 import { IMPORT_LINE_ITEMS_TO_TRANSCRIPT } from '../constants';
 
-export class TranscriptLineItem {
+export class TranscriptLineItemDto {
     @NonNegativeFiniteNumber({
         label: 'in point (ms)',
         description: 'the opening timestamp in milliseconds',
@@ -56,11 +56,11 @@ export class ImportLineItemsToTranscript implements ICommandBase {
         typeof ResourceType.video | typeof ResourceType.audioItem
     >;
 
-    @NestedDataType(TranscriptLineItem, {
+    @NestedDataType(TranscriptLineItemDto, {
         label: 'line items',
         description: 'line items (orignal language) from an existing transcript',
         isArray: true,
         isOptional: false,
     })
-    readonly lineItems: TranscriptLineItem[];
+    readonly lineItems: TranscriptLineItemDto[];
 }
