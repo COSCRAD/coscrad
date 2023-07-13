@@ -25,7 +25,7 @@ describe('Tags index-to-detail flow', () => {
                 // ensure the notes are loaded
                 cy.contains('Tags');
 
-                cy.get('[data-testid="1"] > :nth-child(1) > a').click();
+                cy.get('[data-testid="tag/1"] > :nth-child(1) > a').click();
             });
         });
     });

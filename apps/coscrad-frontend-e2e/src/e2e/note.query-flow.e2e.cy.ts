@@ -27,7 +27,7 @@ describe('Notes index-to-detail flow', () => {
                 // ensure the connected resource panel is loaded
                 cy.contains('Connected Resources');
 
-                cy.get('[data-testid="1"] > :nth-child(1) > a').click();
+                cy.get('[data-testid="note/1"] > :nth-child(1) > a').click();
             });
         });
     });

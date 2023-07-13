@@ -20,7 +20,7 @@ describe(`tagging a note`, () => {
 
             cy.navigateToResourceIndex('term');
 
-            cy.get(`[data-testid="${termId}"] > :nth-child(1)`).click();
+            cy.get(`[data-testid="term/${termId}"] > :nth-child(1)`).click();
         });
 
         describe(`when the selected tag has not yet been applied to the term`, () => {

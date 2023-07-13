@@ -1,9 +1,11 @@
 import {
+    AggregateType,
     CategorizableType,
     IBookViewModel,
     ICategorizableDetailQueryResult,
 } from '@coscrad/api-interfaces';
 import { Card, CardContent } from '@mui/material';
+import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { NoteDetailFullViewPresenter } from '../../notes/note-detail.full-view.presenter';
 import { AudioItemDetailFullViewPresenter } from '../audio-item/audio-item-detail.full-view.presenter';
@@ -43,7 +45,9 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
         const { id, pages } = book;
 
         return (
-            <div data-testid={id}>
+            <div
+                data-testid={buildDataAttributeForAggregateDetailComponent(AggregateType.book, id)}
+            >
                 <Card>
                     <CardContent>
                         {<BookInfo {...book} />}

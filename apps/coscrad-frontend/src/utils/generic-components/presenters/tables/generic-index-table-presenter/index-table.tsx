@@ -63,6 +63,8 @@ export type ValueUnion<T> = T[keyof T];
  * We may also want to require renderers for non-string (or maybe non-primitive types)
  */
 export interface GenericIndexTablePresenterProps<T> {
+    // AggregateType- we only use this to build data-testid attributes so we can easily query in tests
+    type: string;
     headingLabels: HeadingLabel<T>[];
     tableData: T[];
     cellRenderersDefinition: CellRenderersDefinition<T>;

@@ -36,7 +36,6 @@ export const BookBibliographicReferenceDetailFullViewPresenter = ({
             id={id}
             type={ResourceType.bibliographicReference}
         >
-            <div data-testid={id} />
             <SinglePropertyPresenter display="Reference Type" value="Book" />
             <CreatorsPresenter creators={creators} />
             <MultiplePropertyPresenter keysAndLabels={keysAndLabels} data={data} />

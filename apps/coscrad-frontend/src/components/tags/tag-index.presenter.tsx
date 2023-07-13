@@ -1,4 +1,4 @@
-import { ITagViewModel } from '@coscrad/api-interfaces';
+import { AggregateType, ITagViewModel } from '@coscrad/api-interfaces';
 import { TagIndexState } from '../../store/slices/tagSlice/types/tag-index-state';
 import { HeadingLabel, IndexTable } from '../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
@@ -22,6 +22,7 @@ export const TagIndexPresenter = ({ entities: tags }: TagIndexState): JSX.Elemen
 
     return (
         <IndexTable
+            type={AggregateType.tag}
             data-testid="tag-index-presenter"
             tableData={tags}
             headingLabels={headingLabels}

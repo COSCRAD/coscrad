@@ -9,12 +9,11 @@ describe(`Spatial Feature index-to-detail flow`, () => {
 
         it('should have an entry for spatial features', () => {
             // TODO: we should have a human readable resource name and modify this test to look for that.
-            cy.contains('spatialFeatures');
+            cy.contains('Spatial Features');
         });
 
         it('should have a link to the spatial features', () => {
-            const links = cy
-                .get('[data-cy="resourceInfos-stack"]')
+            cy.get('[data-cy="resourceInfos-stack"]')
                 .find('a[href*="Resources/Map"]')
                 .should('exist');
         });

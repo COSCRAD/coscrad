@@ -1,3 +1,5 @@
+import { AggregateType } from '@coscrad/api-interfaces';
+
 describe(`term detail flow`, () => {
     describe(`connect resources with note`, () => {
         const createConnectionCommandLabel = `Create Connection with Note`;
@@ -27,7 +29,9 @@ describe(`term detail flow`, () => {
 
                 cy.getByDataAttribute('term').click();
 
-                cy.get(`[data-testid="${termId}"] > :nth-child(1)`).click();
+                // cy.get(`[data-testid="term/${termId}"] > :nth-child(1)`).click();
+
+                cy.get(`[href="/Resources/Terms/${termId}"]`).click();
             });
 
             it(`should be avilable`, () => {
@@ -70,7 +74,7 @@ describe(`term detail flow`, () => {
 
                         cy.getByDataAttribute('global_resourceId_select')
                             .click()
-                            .get('[data-value=""]')
+                            .get(`[data-value="${connectedVideoId}"]`)
                             .click();
 
                         cy.get('@submit').should('be.disabled');
@@ -126,10 +130,12 @@ describe(`term detail flow`, () => {
                     cy.getByDataAttribute('submit-dynamic-form').should('not.be.disabled');
                 });
 
-                it.only('should create the new connection', () => {
+                it('should create the new connection', () => {
                     cy.getByDataAttribute('submit-dynamic-form').click();
 
-                    cy.getByDataAttribute(connectedVideoId);
+                    cy.acknowledgeCommandResult();
+
+                    cy.getAggregateDetailView(AggregateType.video, connectedVideoId);
                 });
             });
         });

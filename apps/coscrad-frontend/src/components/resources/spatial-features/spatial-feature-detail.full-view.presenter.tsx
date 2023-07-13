@@ -1,4 +1,5 @@
 import {
+    AggregateType,
     GeometricFeatureType,
     ICategorizableDetailQueryResult,
     ISpatialFeatureViewModel,
@@ -6,6 +7,7 @@ import {
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Grid, styled } from '@mui/material';
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
+import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { ResourceNamePresenter } from '../../../utils/generic-components/presenters/resource-name-presenter';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { LineTextPresenter } from './thumbnail-presenters/line-text-presenter';
@@ -54,7 +56,12 @@ export const SpatialFeatureDetailFullViewPresenter = (
     return (
         <Grid container spacing={0}>
             <Grid item xs={3}>
-                <div data-testid={id} />
+                <div
+                    data-testid={buildDataAttributeForAggregateDetailComponent(
+                        AggregateType.spatialFeature,
+                        id
+                    )}
+                />
                 {/* Preview will eventually include images taken from video or photos, etc. */}
                 <StyledPlaceIcon src={imageUrl} alt={`Spatial Feature ${id}`} />
             </Grid>

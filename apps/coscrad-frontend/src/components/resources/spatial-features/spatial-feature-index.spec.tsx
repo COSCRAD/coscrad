@@ -1,4 +1,5 @@
 import {
+    AggregateType,
     EdgeConnectionMemberRole,
     EdgeConnectionType,
     INoteViewModel,
@@ -9,6 +10,7 @@ import {
 import { MemoryRouter } from 'react-router-dom';
 import { getConfig } from '../../../config';
 import { SpatialFeatureIndexState } from '../../../store/slices/resources';
+import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { renderWithProviders } from '../../../utils/test-utils';
 import { assertElementWithEveryIdRenderedForIndex } from '../../../utils/test-utils/assertions/assert-element-with-every-id-rendered-for-index';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
@@ -25,7 +27,13 @@ import { SpatialFeatureDetailThumbnailPresenter } from './thumbnail-presenters';
 const MockMap: ICoscradMap = ({ spatialFeatures }) => (
     <div>
         {spatialFeatures.map(({ id }) => (
-            <div data-testid={id} key={id}></div>
+            <div
+                data-testid={buildDataAttributeForAggregateDetailComponent(
+                    AggregateType.spatialFeature,
+                    id
+                )}
+                key={id}
+            ></div>
         ))}
     </div>
 );

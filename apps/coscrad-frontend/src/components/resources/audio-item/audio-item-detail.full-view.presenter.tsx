@@ -24,7 +24,6 @@ export const AudioItemDetailFullViewPresenter = ({
 
     return (
         <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.audioItem}>
-            <div data-testid={id} />
             <MediaPlayer audioUrl={audioURL} />
             <SinglePropertyPresenter
                 display="Duration"

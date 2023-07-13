@@ -1,4 +1,5 @@
 import {
+    AggregateType,
     ICategorizableDetailQueryResult,
     IVocabularyListViewModel,
     ResourceType,
@@ -6,6 +7,7 @@ import {
 import { Card, CardContent, Divider } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { routes } from '../../../app/routes/routes';
+import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { MultilingualTextPresenter } from '../../../utils/generic-components/presenters/multilingual-text-presenter';
 
 export const VocabularyListDetailThumbnailPresenter = ({
@@ -13,7 +15,13 @@ export const VocabularyListDetailThumbnailPresenter = ({
     name,
     entries,
 }: ICategorizableDetailQueryResult<IVocabularyListViewModel>): JSX.Element => (
-    <div data-testid={id}>
+    <div
+        data-testid={buildDataAttributeForAggregateDetailComponent(
+            AggregateType.vocabularyList,
+            id
+        )}
+    >
+        ID: {id}
         <Link to={`/${routes.resources.ofType(ResourceType.vocabularyList).detail(id)}`}>
             <Card>
                 <CardContent>

@@ -1,6 +1,7 @@
-import { IValueAndDisplay } from '@coscrad/api-interfaces';
+import { AggregateType, IValueAndDisplay } from '@coscrad/api-interfaces';
 import { Card, CardContent, CardHeader, Divider } from '@mui/material';
 import { SinglePropertyPresenter } from '../../../../utils/generic-components';
+import { buildDataAttributeForAggregateDetailComponent } from '../../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 
 interface BibliographicReferenceCardProps {
     id: string;
@@ -22,7 +23,12 @@ export const BibliographicReferenceCard = ({
     <Card>
         <CardHeader title={header}></CardHeader>
         <CardContent>
-            <div data-testid={id}>
+            <div
+                data-testid={buildDataAttributeForAggregateDetailComponent(
+                    AggregateType.bibliographicReference,
+                    id
+                )}
+            >
                 {title}
                 <Divider />
                 <br />

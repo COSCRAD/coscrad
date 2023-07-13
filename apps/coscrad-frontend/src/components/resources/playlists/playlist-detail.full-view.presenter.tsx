@@ -1,4 +1,5 @@
 import {
+    AggregateType,
     ICategorizableDetailQueryResult,
     IPlaylistEpisode,
     IPlayListViewModel,
@@ -41,6 +42,7 @@ export const PlaylistDetailFullViewPresenter = ({
             <Typography component={'div'}>
                 <Typography variant={'h5'}> Episodes </Typography>
                 <IndexTable
+                    type={AggregateType.playlist}
                     headingLabels={headingLabels}
                     tableData={episodes}
                     cellRenderersDefinition={cellRenderers}
