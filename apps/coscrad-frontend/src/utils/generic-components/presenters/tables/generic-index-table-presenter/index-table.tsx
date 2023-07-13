@@ -76,6 +76,7 @@ export interface GenericIndexTablePresenterProps<T> {
 const allProperties = 'allProperties';
 
 export const IndexTable = <T,>({
+    type,
     headingLabels,
     tableData,
     cellRenderersDefinition,
@@ -175,7 +176,7 @@ export const IndexTable = <T,>({
                                     // TODO find a better fallback key
                                     <TableRow
                                         key={(row as HasId).id || index}
-                                        data-testid={(row as HasId).id || index}
+                                        data-testid={`${type}/${(row as HasId).id}` || index}
                                     >
                                         {headingLabels.map(({ propertyKey }) => (
                                             // A little inversion of control here

@@ -1,3 +1,4 @@
+import { AggregateType } from '@coscrad/api-interfaces';
 import { getConfig } from '../../config';
 import { assertElementWithTestIdOnScreen, renderWithProviders } from '../../utils/test-utils';
 import { buildMockSuccessfulGETHandler } from '../../utils/test-utils/build-mock-successful-get-handler';
@@ -37,7 +38,7 @@ describe(`Note detail flow`, () => {
         it('should display the notes', async () => {
             act();
 
-            assertElementWithTestIdOnScreen(noteToFind.id);
+            assertElementWithTestIdOnScreen(`${AggregateType.note}/${noteToFind.id}`);
         });
     });
 

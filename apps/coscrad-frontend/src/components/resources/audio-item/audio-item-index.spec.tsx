@@ -1,4 +1,5 @@
 import {
+    AggregateType,
     IAudioItemViewModel,
     LanguageCode,
     MIMEType,
@@ -62,7 +63,10 @@ describe('Transcribed Audio Index', () => {
         it('should display the transcribed audio items', async () => {
             act();
 
-            await assertElementWithEveryIdRenderedForIndex(dummyTranscribedAudioItems);
+            await assertElementWithEveryIdRenderedForIndex(
+                dummyTranscribedAudioItems,
+                AggregateType.audioItem
+            );
         });
     });
 

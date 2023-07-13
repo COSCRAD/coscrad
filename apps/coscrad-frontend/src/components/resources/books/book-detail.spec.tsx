@@ -1,4 +1,4 @@
-import { ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { getApiResourcesBaseRoute } from '../../../store/slices/resources/shared';
 import { assertElementWithTestIdOnScreen, assertNotFound } from '../../../utils/test-utils';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
@@ -40,7 +40,7 @@ describe('book detail', () => {
             it('should display the book', async () => {
                 act(idToFind);
 
-                await assertElementWithTestIdOnScreen(idToFind);
+                await assertElementWithTestIdOnScreen(`${AggregateType.book}/${idToFind}`);
             });
         });
 

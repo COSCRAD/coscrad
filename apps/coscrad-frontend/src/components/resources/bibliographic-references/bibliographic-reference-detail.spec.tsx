@@ -1,4 +1,4 @@
-import { ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { getConfig } from '../../../config';
 import { assertElementWithTestIdOnScreen, assertNotFound } from '../../../utils/test-utils';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
@@ -41,7 +41,9 @@ describe('bibliographic reference detail', () => {
             it('should display the bibliographic reference', async () => {
                 act(idToFind);
 
-                await assertElementWithTestIdOnScreen(idToFind);
+                await assertElementWithTestIdOnScreen(
+                    `${AggregateType.bibliographicReference}/${idToFind}`
+                );
             });
         });
 

@@ -1,7 +1,10 @@
 import { AggregateType, ITagViewModel } from '@coscrad/api-interfaces';
-import { screen, waitFor } from '@testing-library/react';
 import { getConfig } from '../../config';
-import { assertNotFound, renderWithProviders } from '../../utils/test-utils';
+import {
+    assertElementWithTestIdOnScreen,
+    assertNotFound,
+    renderWithProviders,
+} from '../../utils/test-utils';
 import { buildMockSuccessfulGETHandler } from '../../utils/test-utils/build-mock-successful-get-handler';
 import { testContainerComponentErrorHandling } from '../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { setupTestServer } from '../../utils/test-utils/setup-test-server';
@@ -48,7 +51,8 @@ describe(`Tag Detail`, () => {
             it('should display the tag', async () => {
                 act(idToFind);
 
-                await waitFor(() => expect(screen.getByTestId(idToFind)).toBeTruthy());
+                await assertElementWithTestIdOnScreen(`${AggregateType.tag}/${idToFind}`);
+                // await waitFor(() => expect(screen.getByTestId(idToFind)).toBeTruthy());
             });
         });
 

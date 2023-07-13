@@ -1,4 +1,4 @@
-import { ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { getConfig } from '../../../config';
 import { assertElementWithTestIdOnScreen, assertNotFound } from '../../../utils/test-utils';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
@@ -44,7 +44,9 @@ describe('vocabulary list detail', () => {
             it('should display the vocabulary list', async () => {
                 act(idToFind);
 
-                await assertElementWithTestIdOnScreen(idToFind);
+                await assertElementWithTestIdOnScreen(
+                    `${AggregateType.vocabularyList}/${idToFind}`
+                );
             });
         });
 

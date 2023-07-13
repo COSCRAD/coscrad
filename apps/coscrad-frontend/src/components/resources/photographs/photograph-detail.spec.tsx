@@ -1,4 +1,5 @@
 import {
+    AggregateType,
     IPhotographViewModel,
     LanguageCode,
     MultilingualTextItemRole,
@@ -57,7 +58,7 @@ describe('photograph detail', () => {
             it('should display the photograph', async () => {
                 act(idToFind);
 
-                await assertElementWithTestIdOnScreen(idToFind);
+                await assertElementWithTestIdOnScreen(`${AggregateType.photograph}/${idToFind}`);
             });
         });
 

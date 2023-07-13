@@ -1,4 +1,4 @@
-import { ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { getConfig } from '../../../config';
 import { assertElementWithEveryIdRenderedForIndex } from '../../../utils/test-utils/assertions/assert-element-with-every-id-rendered-for-index';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
@@ -29,7 +29,7 @@ describe('Song Index', () => {
         it('should display the songs', async () => {
             act();
 
-            await assertElementWithEveryIdRenderedForIndex(dummySongs);
+            await assertElementWithEveryIdRenderedForIndex(dummySongs, AggregateType.song);
         });
     });
 

@@ -183,7 +183,7 @@ exports[` 1`] = `
                 >
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="1"
+                    data-testid="widget/1"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -202,7 +202,7 @@ exports[` 1`] = `
                   </tr>
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="2"
+                    data-testid="widget/2"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -221,7 +221,7 @@ exports[` 1`] = `
                   </tr>
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="3"
+                    data-testid="widget/3"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -541,7 +541,7 @@ exports[` 2`] = `
                 >
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="1"
+                    data-testid="widget/1"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -560,7 +560,7 @@ exports[` 2`] = `
                   </tr>
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="2"
+                    data-testid="widget/2"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -579,7 +579,7 @@ exports[` 2`] = `
                   </tr>
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="3"
+                    data-testid="widget/3"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -894,7 +894,7 @@ exports[` 2`] = `
                 >
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="1"
+                    data-testid="widget/1"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -913,7 +913,7 @@ exports[` 2`] = `
                   </tr>
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="2"
+                    data-testid="widget/2"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -932,7 +932,7 @@ exports[` 2`] = `
                   </tr>
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="3"
+                    data-testid="widget/3"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -1254,7 +1254,7 @@ exports[` 3`] = `
                 >
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="1"
+                    data-testid="widget/1"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -1273,7 +1273,7 @@ exports[` 3`] = `
                   </tr>
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="2"
+                    data-testid="widget/2"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -1292,7 +1292,7 @@ exports[` 3`] = `
                   </tr>
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="3"
+                    data-testid="widget/3"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -1607,7 +1607,7 @@ exports[` 3`] = `
                 >
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="1"
+                    data-testid="widget/1"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -1626,7 +1626,7 @@ exports[` 3`] = `
                   </tr>
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="2"
+                    data-testid="widget/2"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -1645,7 +1645,7 @@ exports[` 3`] = `
                   </tr>
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="3"
+                    data-testid="widget/3"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -1962,7 +1962,7 @@ exports[` 3`] = `
                 >
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="1"
+                    data-testid="widget/1"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -1977,7 +1977,7 @@ exports[` 3`] = `
                   </tr>
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="2"
+                    data-testid="widget/2"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -1992,7 +1992,7 @@ exports[` 3`] = `
                   </tr>
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="3"
+                    data-testid="widget/3"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -2322,7 +2322,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                 >
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="1"
+                    data-testid="widget/1"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -2353,7 +2353,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   </tr>
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="2"
+                    data-testid="widget/2"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -2384,7 +2384,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   </tr>
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="3"
+                    data-testid="widget/3"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -2728,7 +2728,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                 >
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="1"
+                    data-testid="widget/1"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -2753,7 +2753,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   </tr>
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="2"
+                    data-testid="widget/2"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -2778,7 +2778,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   </tr>
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="3"
+                    data-testid="widget/3"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -3106,7 +3106,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                 >
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="1"
+                    data-testid="widget/1"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -3125,7 +3125,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   </tr>
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="2"
+                    data-testid="widget/2"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -3144,7 +3144,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   </tr>
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="3"
+                    data-testid="widget/3"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -3459,7 +3459,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                 >
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="1"
+                    data-testid="widget/1"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -3478,7 +3478,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   </tr>
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="2"
+                    data-testid="widget/2"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -3497,7 +3497,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   </tr>
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="3"
+                    data-testid="widget/3"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -3814,7 +3814,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                 >
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="1"
+                    data-testid="widget/1"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -3829,7 +3829,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   </tr>
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="2"
+                    data-testid="widget/2"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -3844,7 +3844,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   </tr>
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="3"
+                    data-testid="widget/3"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -4169,7 +4169,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                 >
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="1"
+                    data-testid="widget/1"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -4200,7 +4200,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   </tr>
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="2"
+                    data-testid="widget/2"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
@@ -4231,7 +4231,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   </tr>
                   <tr
                     class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
-                    data-testid="3"
+                    data-testid="widget/3"
                   >
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"

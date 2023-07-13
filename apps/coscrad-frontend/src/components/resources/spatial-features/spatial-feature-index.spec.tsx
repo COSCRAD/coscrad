@@ -150,7 +150,10 @@ describe('Spatial Feature Index', () => {
         it('should display the spatial features', async () => {
             act();
 
-            await assertElementWithEveryIdRenderedForIndex(dummySpatialFeatures);
+            await assertElementWithEveryIdRenderedForIndex(
+                dummySpatialFeatures,
+                AggregateType.spatialFeature
+            );
         });
     });
 
