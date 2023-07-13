@@ -31,9 +31,7 @@ describe(`term detail view `, () => {
 
                 cy.getByDataAttribute('term').click();
 
-                cy.get(
-                    '[data-testid="note/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002"] > :nth-child(1)'
-                ).click();
+                cy.get('[href="/Resources/Terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002"]').click();
             });
 
             it(`should be available`, () => {

@@ -1,7 +1,9 @@
+import { AggregateType } from '@coscrad/api-interfaces';
+
 describe(`tagging a note`, () => {
     const termBaseRoute = `/Resources/Terms/`;
 
-    const termId = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003`;
+    const termId = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002`;
 
     const tagId = '9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004';
 
@@ -20,7 +22,7 @@ describe(`tagging a note`, () => {
 
             cy.navigateToResourceIndex('term');
 
-            cy.get(`[data-testid="term/${termId}"] > :nth-child(1)`).click();
+            cy.get(`[href="/Resources/Terms/${termId}"]`).click();
         });
 
         describe(`when the selected tag has not yet been applied to the term`, () => {
@@ -47,7 +49,7 @@ describe(`tagging a note`, () => {
 
                     cy.visit(`/Tags/${tagId}`);
 
-                    cy.getByDataAttribute(termId);
+                    cy.getAggregateDetailView(AggregateType.term, termId);
                 });
             });
 

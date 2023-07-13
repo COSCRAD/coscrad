@@ -46,14 +46,12 @@ describe(`the video flow`, () => {
                 beforeEach(() => {
                     cy.contains(`Create Video`).click();
 
-                    cy.getByDataAttribute(`name:hai`).click();
-
-                    cy.getByDataAttribute('text-item-entry:hai').click().type(videoNameText);
-
-                    cy.getByDataAttribute('role-entry:hai')
+                    cy.getByDataAttribute('languageCodeForName_select')
                         .click()
-                        .get('[data-value="original"')
+                        .get('[data-value="clc"')
                         .click();
+
+                    cy.getByDataAttribute('text_name').click().type(videoNameText);
 
                     cy.get('#mui-component-select-mediaItemId')
                         .click()
@@ -63,6 +61,8 @@ describe(`the video flow`, () => {
                     cy.get(`input[name=lengthMilliseconds]`).click().type('30000');
 
                     cy.getByDataAttribute('submit-dynamic-form').click();
+
+                    cy.acknowledgeCommandResult();
                 });
 
                 it(`should succeed`, () => {

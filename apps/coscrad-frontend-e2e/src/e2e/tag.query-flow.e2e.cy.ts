@@ -3,7 +3,7 @@ describe('Tags index-to-detail flow', () => {
 
     const tagLabelToFind = 'animals';
 
-    const tagIdToFind = '2';
+    const tagIdToFind = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002`;
 
     beforeEach(() => {
         cy.visit('/Tags');
@@ -14,18 +14,18 @@ describe('Tags index-to-detail flow', () => {
             cy.contains('Tags');
         });
 
-        describe('the row for note/1', () => {
+        describe(`the row for tag/${tagIdToFind}`, () => {
             it('should exist', () => {
                 cy.contains(tagLabelToFind);
             });
         });
 
-        describe('the link for tag 1', () => {
+        describe(`the link for tag/${tagIdToFind}`, () => {
             it('should work', () => {
                 // ensure the notes are loaded
                 cy.contains('Tags');
 
-                cy.get('[data-testid="tag/1"] > :nth-child(1) > a').click();
+                cy.get(`[href="/Tags/${tagIdToFind}"]`).click();
             });
         });
     });

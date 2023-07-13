@@ -35,7 +35,7 @@ describe(`Term index-to-detail flow`, () => {
         it('should have a link to the detail view for term 13', () => {
             cy.contains(textForTerm);
 
-            cy.get(`[data-testid="term/${termId}"] > :nth-child(1) > a`).click();
+            cy.get(`[href="/Resources/Terms/${termId}"]`).click();
 
             cy.contains(textForTerm);
 
@@ -81,29 +81,35 @@ describe(`Term index-to-detail flow`, () => {
             });
         });
 
-        describe.only('when there are connections for the term (2)', () => {
+        describe('when there are connections for the term (2)', () => {
             const idForTermWithConnections = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002`;
 
             const connectedVideoId = '9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223';
 
             const connectedVocabularyListId = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002`;
 
+            const connectedPlaylistId = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501`;
+
             beforeEach(() => {
                 cy.visit(`/Resources/Terms/${idForTermWithConnections}`);
+
+                cy.getByDataAttribute('loading').should('not.exist');
 
                 cy.contains('Notes for');
 
                 cy.contains('Connected Resources');
-
-                cy.getByDataAttribute('loading').should('not.exist');
             });
 
-            it('should display the connected vocabulary list', () => {
-                cy.getAggregateDetailView(AggregateType.video, connectedVideoId);
+            it('should display the connected playlist', () => {
+                cy.getAggregateDetailView(AggregateType.playlist, connectedPlaylistId);
             });
 
             it('should display the connected media item', () => {
-                cy.contains('episode title (in language) (Metal Mondays episode 1)');
+                cy.getAggregateDetailView(
+                    AggregateType.mediaItem,
+                    '9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001'
+                );
+                // cy.contains('episode title (in language) (Metal Mondays episode 1)');
             });
 
             it('should display the connected vocabulary list', () => {
