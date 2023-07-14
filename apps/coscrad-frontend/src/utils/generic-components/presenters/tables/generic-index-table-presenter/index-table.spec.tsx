@@ -63,9 +63,7 @@ const allHeadings: HeadingLabel<Widget>[] = [
     },
 ];
 
-const filterableProperties: (keyof Widget)[] = [
-    'foo', 'bar', 'baz'
-]
+const filterableProperties: (keyof Widget)[] = ['foo', 'bar', 'baz'];
 
 const comprehensiveCellRenderersDefinition: CellRenderersDefinition<Widget> = {
     id: ({ id }: Widget) => <Link to={id}>LINK</Link>,
@@ -97,11 +95,12 @@ describe('IndexTable', () => {
             describe('when there is a cell renderer for every property', () => {
                 it('should render properly', () => {
                     assertValidTableRender({
+                        type: 'widget',
                         headingLabels: allHeadings,
                         tableData: widgets,
                         cellRenderersDefinition: comprehensiveCellRenderersDefinition,
                         heading,
-                        filterableProperties: []
+                        filterableProperties: [],
                     });
                 });
             });
@@ -115,11 +114,12 @@ describe('IndexTable', () => {
 
                 it('should render properly', () => {
                     assertValidTableRender({
+                        type: 'widget',
                         headingLabels: allHeadings,
                         tableData: widgets,
                         cellRenderersDefinition: partialRenderers,
                         heading,
-                        filterableProperties
+                        filterableProperties,
                     });
                 });
             });
@@ -127,11 +127,12 @@ describe('IndexTable', () => {
             describe('when all of the cell renders are omitted', () => {
                 it('should render properly', () => {
                     assertValidTableRender({
+                        type: 'widget',
                         headingLabels: allHeadings,
                         tableData: widgets,
                         cellRenderersDefinition: {},
                         heading,
-                        filterableProperties
+                        filterableProperties,
                     });
                 });
             });
@@ -149,33 +150,36 @@ describe('IndexTable', () => {
                 };
 
                 assertValidTableRender({
+                    type: 'widget',
                     headingLabels: partialHeadings,
                     tableData: widgets,
                     cellRenderersDefinition: renderers,
                     heading,
-                    filterableProperties
+                    filterableProperties,
                 });
             });
 
             describe('when a cell renderer is omitted for an included property (baz)', () => {
                 assertValidTableRender({
+                    type: 'widget',
                     headingLabels: partialHeadings,
                     tableData: widgets,
                     cellRenderersDefinition: {
                         id: comprehensiveCellRenderersDefinition.id,
                     },
                     heading,
-                    filterableProperties
+                    filterableProperties,
                 });
             });
 
             describe('when no cell renderers are specified', () => {
                 assertValidTableRender({
+                    type: 'widget',
                     headingLabels: partialHeadings,
                     tableData: widgets,
                     cellRenderersDefinition: {},
                     heading,
-                    filterableProperties
+                    filterableProperties,
                 });
             });
         });
@@ -194,11 +198,12 @@ describe('IndexTable', () => {
 
             const attemptBadRender = () =>
                 IndexTable({
+                    type: 'widget',
                     headingLabels: partialHeadings,
                     tableData: widgets,
                     cellRenderersDefinition: renderersWithExtra,
                     heading,
-                    filterableProperties
+                    filterableProperties,
                 });
 
             it('should throw', () => {
@@ -209,11 +214,12 @@ describe('IndexTable', () => {
         describe('when there are no headings specified', () => {
             const attemptBadRender = () =>
                 IndexTable({
+                    type: 'widget',
                     headingLabels: [],
                     tableData: widgets,
                     cellRenderersDefinition: {},
                     heading,
-                    filterableProperties
+                    filterableProperties,
                 });
 
             it('should throw', () => {

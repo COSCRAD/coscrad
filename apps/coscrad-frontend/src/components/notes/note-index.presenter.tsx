@@ -1,4 +1,5 @@
 import {
+    AggregateType,
     EdgeConnectionMemberRole,
     EdgeConnectionType,
     ICompositeIdentifier,
@@ -94,6 +95,7 @@ export const NoteIndexPresenter = ({ entities: notes }: NoteIndexState): JSX.Ele
 
     return (
         <IndexTable
+            type={AggregateType.note}
             data-testid="note-index"
             headingLabels={headingLabels}
             tableData={notes}

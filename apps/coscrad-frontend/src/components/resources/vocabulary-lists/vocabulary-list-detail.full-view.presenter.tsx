@@ -90,13 +90,7 @@ export const VocabularyListDetailFullViewPresenter = ({
     const selectedEntries = filterEntriesForSelectedTerms(entries, filterWithoutNullAndUndefined);
 
     return (
-        <ResourceDetailFullViewPresenter
-            name={name}
-            id={id}
-            type={ResourceType.vocabularyList}
-            data-testid={id}
-        >
-            <div data-testid={id} />
+        <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.vocabularyList}>
             <Divider sx={{ marginTop: 2, marginBottom: 2, backgroundColor: 'primary.main' }} />
             <Carousel
                 propsForItems={selectedEntries.map(({ term }) => term)}

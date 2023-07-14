@@ -1,4 +1,4 @@
-import { ITermViewModel } from '@coscrad/api-interfaces';
+import { AggregateType, ITermViewModel } from '@coscrad/api-interfaces';
 import { AudioClipPlayer } from '@coscrad/media-player';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { LinkOff } from '@mui/icons-material';
@@ -38,6 +38,7 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
 
     return (
         <IndexTable
+            type={AggregateType.term}
             headingLabels={headingLabels}
             tableData={terms}
             cellRenderersDefinition={cellRenderersDefinition}

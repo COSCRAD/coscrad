@@ -1,4 +1,5 @@
 import { BibliographicReferenceType } from '@coscrad/api-interfaces';
+import { buildMultilingualTextFromEnglishOriginal } from '../../../notes/test-utils';
 
 // TODO Use BibliographicSubjectCreator enum here
 const AUTHOR = 'author';
@@ -6,6 +7,7 @@ const AUTHOR = 'author';
 export const buildDummyBibliographicReferences = () => [
     // Book
     {
+        name: buildMultilingualTextFromEnglishOriginal('A Day in the Life'),
         data: {
             type: BibliographicReferenceType.book,
             title: 'A Day in the Life',
@@ -27,6 +29,9 @@ export const buildDummyBibliographicReferences = () => [
     },
     // Journal Article
     {
+        name: buildMultilingualTextFromEnglishOriginal(
+            'Report on the Cariboo Chilcotin Justice inquiry'
+        ),
         data: {
             type: BibliographicReferenceType.journalArticle,
             title: 'Report on the Cariboo Chilcotin Justice inquiry',
@@ -48,6 +53,7 @@ export const buildDummyBibliographicReferences = () => [
     },
     // Court Case
     {
+        name: buildMultilingualTextFromEnglishOriginal("2002-07-08_Tsilhqot'inTitleCase"),
         data: {
             type: BibliographicReferenceType.courtCase,
             caseName: "2002-07-08_Tsilhqot'inTitleCase",

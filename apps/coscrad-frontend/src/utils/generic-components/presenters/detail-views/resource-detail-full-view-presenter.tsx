@@ -1,6 +1,7 @@
 import { IMultilingualText, ResourceType } from '@coscrad/api-interfaces';
 import { Grid } from '@mui/material';
 import { ReactNode } from 'react';
+import { buildDataAttributeForAggregateDetailComponent } from './build-data-attribute-for-aggregate-detail-component';
 import { ResourceDetailPresenterHeader } from './resource-detail-presenter-header';
 import { ResourcePreviewIconFactory } from './resource-preview-icon';
 
@@ -40,6 +41,8 @@ export const ResourceDetailFullViewPresenter = ({
             <Grid item xs={2} sm={2} md={8}>
                 {/* TODO: consider putting a standardized name property on the view models */}
                 <ResourceDetailPresenterHeader id={id} type={type} name={name} variant="h3" />
+
+                <div data-testid={buildDataAttributeForAggregateDetailComponent(type, id)} />
                 {children}
             </Grid>
         </Grid>

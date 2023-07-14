@@ -1,4 +1,5 @@
 import {
+    AggregateType,
     IVideoViewModel,
     LanguageCode,
     MIMEType,
@@ -60,7 +61,7 @@ describe('video detail', () => {
             it('should display the video', async () => {
                 act(idtoFind);
 
-                await assertElementWithTestIdOnScreen(idtoFind);
+                await assertElementWithTestIdOnScreen(`${AggregateType.video}/${idtoFind}`);
             });
         });
 

@@ -1,3 +1,4 @@
+import { AggregateType } from '@coscrad/api-interfaces';
 import { BibliographicReferenceIndexState } from '../../../store/slices/resources';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
@@ -43,6 +44,7 @@ export const BibliographicReferenceIndexPresenter = ({
 
     return (
         <IndexTable
+            type={AggregateType.bibliographicReference}
             headingLabels={headingLabels}
             tableData={consolidatedViewOfBibliographicReferences}
             cellRenderersDefinition={cellRenderersDefinition}

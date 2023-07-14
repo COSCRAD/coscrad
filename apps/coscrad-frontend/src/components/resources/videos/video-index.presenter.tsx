@@ -1,4 +1,4 @@
-import { IVideoViewModel } from '@coscrad/api-interfaces';
+import { AggregateType, IVideoViewModel } from '@coscrad/api-interfaces';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import { VideoIndexState } from '../../../store/slices/resources/video';
@@ -29,6 +29,7 @@ export const VideoIndexPresenter = ({ entities: videos }: VideoIndexState): JSX.
 
     return (
         <IndexTable
+            type={AggregateType.video}
             headingLabels={headingLabels}
             tableData={videos}
             cellRenderersDefinition={cellRenderersDefinition}

@@ -1,4 +1,9 @@
-import { LanguageCode, MultilingualTextItemRole, ResourceType } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    LanguageCode,
+    MultilingualTextItemRole,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { getConfig } from '../../../config';
 import { assertElementWithEveryIdRenderedForIndex } from '../../../utils/test-utils/assertions/assert-element-with-every-id-rendered-for-index';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
@@ -50,7 +55,7 @@ describe(`Term Index`, () => {
         it('should display the tags', async () => {
             act();
 
-            await assertElementWithEveryIdRenderedForIndex(dummyTerms);
+            await assertElementWithEveryIdRenderedForIndex(dummyTerms, AggregateType.term);
         });
     });
 

@@ -1,4 +1,5 @@
 import {
+    AggregateType,
     IVideoViewModel,
     LanguageCode,
     MIMEType,
@@ -51,7 +52,7 @@ describe(`Video Index`, () => {
         it('should display the videos', async () => {
             act();
 
-            await assertElementWithEveryIdRenderedForIndex(dummyVideos);
+            await assertElementWithEveryIdRenderedForIndex(dummyVideos, AggregateType.video);
         });
     });
 

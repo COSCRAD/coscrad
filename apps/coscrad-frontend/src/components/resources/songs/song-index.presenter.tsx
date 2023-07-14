@@ -1,4 +1,4 @@
-import { ISongViewModel } from '@coscrad/api-interfaces';
+import { AggregateType, ISongViewModel } from '@coscrad/api-interfaces';
 import { SongIndexState } from '../../../store/slices/resources/songs/types';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
@@ -20,6 +20,7 @@ export const SongIndexPresenter = ({ entities: songs }: SongIndexState) => {
 
     return (
         <IndexTable
+            type={AggregateType.song}
             headingLabels={headingLabels}
             tableData={songs}
             cellRenderersDefinition={cellRenderersDefinition}

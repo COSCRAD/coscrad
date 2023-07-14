@@ -1,4 +1,4 @@
-import { ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { getApiResourcesBaseRoute } from '../../../store/slices/resources/shared';
 import { assertElementWithEveryIdRenderedForIndex } from '../../../utils/test-utils/assertions/assert-element-with-every-id-rendered-for-index';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
@@ -29,7 +29,7 @@ describe('Book Index', () => {
         it('should display the books', async () => {
             act();
 
-            await assertElementWithEveryIdRenderedForIndex(dummyBooks);
+            await assertElementWithEveryIdRenderedForIndex(dummyBooks, AggregateType.book);
         });
     });
 

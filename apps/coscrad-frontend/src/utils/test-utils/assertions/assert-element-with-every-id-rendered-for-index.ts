@@ -4,7 +4,10 @@ type HasId<T> = T & {
     id: string;
 };
 
-export const assertElementWithEveryIdRenderedForIndex = async <T>(models: HasId<T>[]) => {
+export const assertElementWithEveryIdRenderedForIndex = async <T>(
+    models: HasId<T>[],
+    aggregateType: string
+) => {
     const numberOfModelsForIndexAssertion = models.length;
 
     expect(numberOfModelsForIndexAssertion).toBeGreaterThan(0);
@@ -13,7 +16,7 @@ export const assertElementWithEveryIdRenderedForIndex = async <T>(models: HasId<
 
     await waitFor(() =>
         models.forEach(({ id }) => {
-            expect(screen.getByTestId(id)).toBeTruthy();
+            expect(screen.getByTestId(`${aggregateType}/${id}`)).toBeTruthy();
         })
     );
 };

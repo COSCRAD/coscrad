@@ -1,4 +1,4 @@
-import { ITagViewModel } from '@coscrad/api-interfaces';
+import { AggregateType, ITagViewModel } from '@coscrad/api-interfaces';
 import { MemoryRouter } from 'react-router-dom';
 import { getConfig } from '../../config';
 import { assertElementWithEveryIdRenderedForIndex } from '../../utils/test-utils/assertions/assert-element-with-every-id-rendered-for-index';
@@ -41,7 +41,7 @@ describe(`Tag Index`, () => {
         it('should display the tags', async () => {
             act();
 
-            await assertElementWithEveryIdRenderedForIndex(dummyTags);
+            await assertElementWithEveryIdRenderedForIndex(dummyTags, AggregateType.tag);
         });
     });
 

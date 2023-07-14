@@ -1,20 +1,26 @@
-import { ICategorizableDetailQueryResult, IMediaItemViewModel } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    ICategorizableDetailQueryResult,
+    IMediaItemViewModel,
+} from '@coscrad/api-interfaces';
 import { Card, Divider } from '@mui/material';
+import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
+import { MultilingualTextPresenter } from '../../../utils/generic-components/presenters/multilingual-text-presenter';
 import { renderMediaLengthInSeconds } from '../utils/render-media-length-in-seconds-cell';
-import { formatBilingualText } from '../vocabulary-lists/utils';
 
 export const MediaItemDetailThumbnailPresenter = ({
     id,
-    title,
-    titleEnglish,
+    name,
     url,
     lengthMilliseconds,
 }: ICategorizableDetailQueryResult<IMediaItemViewModel>): JSX.Element => {
     return (
-        <div data-testid={id}>
+        <div
+            data-testid={buildDataAttributeForAggregateDetailComponent(AggregateType.mediaItem, id)}
+        >
             <Card className="detail-card">
                 <div id="detail-term" className="detail-meta">
-                    {formatBilingualText(title, titleEnglish)}
+                    <MultilingualTextPresenter text={name} />
                 </div>
                 <Divider id="detail-divider" />
                 <div className="detail-meta">

@@ -1,5 +1,10 @@
-import { IBookViewModel, ICategorizableDetailQueryResult } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    IBookViewModel,
+    ICategorizableDetailQueryResult,
+} from '@coscrad/api-interfaces';
 import { Card, CardContent } from '@mui/material';
+import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { BookReader } from './pages';
 
 export const BookDetailFullViewPresenter = ({
@@ -11,7 +16,7 @@ export const BookDetailFullViewPresenter = ({
     publicationDate,
 }: ICategorizableDetailQueryResult<IBookViewModel>): JSX.Element => {
     return (
-        <div data-testid={id}>
+        <div data-testid={buildDataAttributeForAggregateDetailComponent(AggregateType.book, id)}>
             <Card>
                 <CardContent>
                     <div>
