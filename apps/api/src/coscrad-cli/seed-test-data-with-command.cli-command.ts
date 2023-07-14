@@ -8,7 +8,7 @@ import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.de
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
 
 interface SeedTestDataWithCommandOptions {
-    commandType: string;
+    type: string;
     payloadOverrides?: Record<string, unknown>;
 }
 
@@ -42,10 +42,9 @@ export class SeedTestDataWithCommand extends CliCommandRunner {
         super();
     }
 
-    async run(
-        _passedParams: string[],
-        { commandType, payloadOverrides }: SeedTestDataWithCommandOptions
-    ): Promise<void> {
+    async run(_passedParams: string[], options: SeedTestDataWithCommandOptions): Promise<void> {
+        const { type: commandType, payloadOverrides } = options;
+
         const fixtureFsaSearchResult = allFsas.find(({ type }) => type === commandType);
 
         if (isUndefined(fixtureFsaSearchResult)) {
@@ -54,9 +53,14 @@ export class SeedTestDataWithCommand extends CliCommandRunner {
             throw new InternalError(`No fixture command of type: ${commandType} found`);
         }
 
+        const { payload: defaultPayload } = fixtureFsaSearchResult;
+
         const fsaToWithOverrides = {
-            ...fixtureFsaSearchResult,
-            ...(payloadOverrides || {}),
+            type: commandType,
+            payload: {
+                ...defaultPayload,
+                ...(payloadOverrides || {}),
+            },
         };
 
         this.logger.log(`attempting to execute FSA: ${JSON.stringify(fsaToWithOverrides)}`);
@@ -83,7 +87,11 @@ export class SeedTestDataWithCommand extends CliCommandRunner {
             },
         };
 
-        const result = await this.commandHandlerService.execute(fsaToExecute);
+        const result = await this.commandHandlerService.execute(fsaToExecute, {
+            // TODO Assign the following to a constant
+            // Do we want to allow the admin user to provide a user ID here?
+            userId: `COSCRAD_ADMIN`,
+        });
 
         if (result === Ack) {
             this.logger.log(`success`);
@@ -103,7 +111,7 @@ export class SeedTestDataWithCommand extends CliCommandRunner {
         description: 'the type of the command to execute',
         required: true,
     })
-    parseType(value: string): string {
+    parseCommandType(value: string): string {
         if (!isNonEmptyString(value)) {
             throw new InternalError(`parameter: type must be a non-empty string`);
         }
@@ -127,10 +135,13 @@ export class SeedTestDataWithCommand extends CliCommandRunner {
 
             return parsed;
         } catch (error) {
-            throw new InternalError(
-                `Failed to parse [payload-overrides]`,
-                isNonEmptyString(error?.message) ? [new InternalError(error.message)] : []
+            const msg = `Failed to parse [payload-overrides] `.concat(
+                error?.message ? `: ${error.message}` : ''
             );
+
+            this.logger.log(msg);
+
+            throw new InternalError(msg);
         }
     }
 }
