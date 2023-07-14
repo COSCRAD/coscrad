@@ -21,7 +21,7 @@ describe(`Create Tag`, () => {
         });
 
         describe(`when the form is incomplete`, () => {
-            it.only(`should disable submission`, () => {
+            it(`should disable submission`, () => {
                 cy.get('@commandButton').click();
 
                 cy.getCommandFormSubmissionButton().should('be.disabled');

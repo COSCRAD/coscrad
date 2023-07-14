@@ -1,4 +1,5 @@
 import {
+    AggregateType,
     IAudioItemViewModel,
     LanguageCode,
     MIMEType,
@@ -94,7 +95,7 @@ describe('audio item detail', () => {
             it('should display the item', async () => {
                 act(idToFind);
 
-                await assertElementWithTestIdOnScreen(idToFind);
+                await assertElementWithTestIdOnScreen(`${AggregateType.audioItem}/${idToFind}`);
             });
         });
 

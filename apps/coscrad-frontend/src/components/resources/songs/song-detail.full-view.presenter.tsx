@@ -1,8 +1,13 @@
-import { ICategorizableDetailQueryResult, ISongViewModel } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    ICategorizableDetailQueryResult,
+    ISongViewModel,
+} from '@coscrad/api-interfaces';
 import { MediaPlayer } from '@coscrad/media-player';
 import { Card, Divider } from '@mui/material';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
+import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { formatBilingualText } from '../vocabulary-lists/utils';
 import { CreditsHack } from './credits-hack';
 import { SongLyrics } from './song-lyrics';
@@ -21,7 +26,7 @@ export const SongDetailFullViewPresenter = ({
     );
 
     return (
-        <div data-testid={id}>
+        <div data-testid={buildDataAttributeForAggregateDetailComponent(AggregateType.song, id)}>
             <Card className="detail-card">
                 <div id="detail-term" className="detail-meta">
                     {formatBilingualText(title, titleEnglish)}

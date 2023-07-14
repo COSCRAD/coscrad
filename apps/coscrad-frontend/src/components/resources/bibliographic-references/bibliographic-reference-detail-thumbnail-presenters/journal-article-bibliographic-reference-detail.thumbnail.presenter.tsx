@@ -20,7 +20,6 @@ export const JournalArticleBibliographicReferenceThumbnailPresenter = ({
             name={name}
             type={ResourceType.bibliographicReference}
         >
-            <div data-testid={id} />
             <SinglePropertyPresenter display="Reference Type" value="Journal Article" />
             {publicationTitle} ({issueDate})
         </ResourceDetailThumbnailPresenter>

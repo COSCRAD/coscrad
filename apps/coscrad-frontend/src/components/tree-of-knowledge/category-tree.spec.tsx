@@ -6,6 +6,7 @@ import { buildMockSuccessfulGETHandler } from '../../utils/test-utils/build-mock
 import { TestId } from '../../utils/test-utils/constants';
 import { setupTestServer } from '../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../utils/test-utils/test-data';
+import { buildMultilingualTextFromEnglishOriginal } from '../notes/test-utils';
 import { buildDummyBooks } from '../resources/books/test-utils/build-dummy-books';
 import { buildDummyTerms } from '../resources/terms/test-utils/build-dummy-terms';
 import { buildDummyVocabularyLists } from '../resources/vocabulary-lists/test-utils/build-dummy-vocabulary-lists';
@@ -19,6 +20,7 @@ const dummyVocabularyLists = buildDummyVocabularyLists();
 
 const grandChildCategory: ICategoryTreeViewModel = {
     id: 'grandchild-1',
+    name: buildMultilingualTextFromEnglishOriginal('grandchild category label'),
     label: 'grandchild category label',
     // bachelor for life
     children: [],
@@ -32,6 +34,7 @@ const grandChildCategory: ICategoryTreeViewModel = {
 
 const childCategory1: ICategoryTreeViewModel = {
     id: 'child-1',
+    name: buildMultilingualTextFromEnglishOriginal('child 1 label'),
     label: 'child 1 label',
     children: [grandChildCategory],
     members: [
@@ -48,6 +51,7 @@ const childCategory1: ICategoryTreeViewModel = {
 
 const childCategory2: ICategoryTreeViewModel = {
     id: 'child-2',
+    name: buildMultilingualTextFromEnglishOriginal('child 2 label'),
     label: 'child 2 label',
     children: [],
     members: [],
@@ -57,6 +61,7 @@ const childrenCategories: ICategoryTreeViewModel[] = [childCategory1, childCateg
 
 const dummyCategoryTree: ICategoryTreeViewModel = {
     id: '0',
+    name: buildMultilingualTextFromEnglishOriginal('zero node'),
     label: 'zero node',
     children: childrenCategories,
     members: [

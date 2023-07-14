@@ -1,3 +1,4 @@
+import { AggregateType } from '@coscrad/api-interfaces';
 import { MemoryRouter } from 'react-router-dom';
 import { getConfig } from '../../config';
 import { DEFAULT_PAGE_SIZE } from '../../utils/generic-components/presenters/tables';
@@ -42,7 +43,10 @@ describe(`NoteIndex`, () => {
              *
              * TODO We should test pagination behaviour.
              */
-            await assertElementWithEveryIdRenderedForIndex(dummyNotes.slice(0, DEFAULT_PAGE_SIZE));
+            await assertElementWithEveryIdRenderedForIndex(
+                dummyNotes.slice(0, DEFAULT_PAGE_SIZE),
+                AggregateType.note
+            );
         });
     });
 

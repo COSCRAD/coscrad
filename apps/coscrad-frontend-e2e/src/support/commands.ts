@@ -14,6 +14,8 @@ declare namespace Cypress {
 
         getByDataAttribute(value: string, attributeSuffix?: string): Chainable<Subject>;
 
+        getAggregateDetailView(aggregateType: string, id: string): void;
+
         navigateToResourceIndex(resourceType: string): Chainable<Subject>;
 
         navigateToTagIndex(): void;
@@ -25,6 +27,8 @@ declare namespace Cypress {
         acknowledgeCommandResult(): void;
 
         getCommandFormSubmissionButton(): Chainable<Subject>;
+
+        getLoading(): Chainable<Subject>;
     }
 }
 
@@ -152,3 +156,9 @@ Cypress.Commands.add(`getCommandFormSubmissionButton`, () =>
 Cypress.Commands.add(`acknowledgeCommandResult`, () => {
     cy.getByDataAttribute(`command-ack-button`).click();
 });
+
+Cypress.Commands.add(`getAggregateDetailView`, (aggregateType: string, id: string) => {
+    cy.getByDataAttribute(`${aggregateType}/${id}`);
+});
+
+Cypress.Commands.add(`getLoading`, () => cy.getByDataAttribute(`loading`));

@@ -1,4 +1,4 @@
-import { IBookViewModel } from '@coscrad/api-interfaces';
+import { AggregateType, IBookViewModel } from '@coscrad/api-interfaces';
 import { BookIndexState } from '../../../store/slices/resources/books/types';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
@@ -28,6 +28,7 @@ export const BookIndexPresenter = ({ entities: books }: BookIndexState) => {
 
     return (
         <IndexTable
+            type={AggregateType.book}
             headingLabels={headingLabels}
             tableData={books}
             cellRenderersDefinition={cellRenderersDefinition}
