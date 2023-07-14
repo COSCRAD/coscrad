@@ -30,7 +30,6 @@ export const CourtCaseBibliographicReferenceDetailThumbnailPresenter = ({
             name={name}
             type={ResourceType.bibliographicReference}
         >
-            <div data-testid={id} />
             <SinglePropertyPresenter display="Reference Type" value="Court Case" />
             <MultiplePropertyPresenter keysAndLabels={keysAndLabels} data={data} />
         </ResourceDetailThumbnailPresenter>

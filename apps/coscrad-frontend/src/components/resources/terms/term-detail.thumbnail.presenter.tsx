@@ -17,7 +17,6 @@ export const TermDetailThumbnailPresenter = ({
 }: ICategorizableDetailQueryResult<ITermViewModel>): JSX.Element => {
     return (
         <ResourceDetailThumbnailPresenter id={id} name={name} type={ResourceType.term}>
-            <div data-testid={id} />
             <SingleOptionalPropertyPresenter display="Contributor" value={contributor} />
             <div id="media-player">
                 <MediaPlayer listenMessage="Play!" audioUrl={audioURL} />

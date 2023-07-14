@@ -35,7 +35,6 @@ export const JournalArticleBibliographicReferenceDetailFullViewPresenter = ({
             id={id}
             type={ResourceType.bibliographicReference}
         >
-            <div data-testid={id} />
             {/* TODO: create label configuration for subtypes */}
             <SinglePropertyPresenter display="Reference Type" value="Journal Article" />
             <CreatorsPresenter creators={creators} />

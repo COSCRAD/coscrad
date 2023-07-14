@@ -1,5 +1,9 @@
+import { AggregateType } from '@coscrad/api-interfaces';
+
 describe(`Term index-to-detail flow`, () => {
     const textForTerm = 'She is singing (lang)';
+
+    const termId = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513`;
 
     describe(`the resource menu`, () => {
         beforeEach(() => {
@@ -11,7 +15,7 @@ describe(`Term index-to-detail flow`, () => {
         });
 
         it('should have a link to the terms', () => {
-            cy.contains('terms').click();
+            cy.contains('Terms').click();
 
             cy.contains('Terms');
 
@@ -24,28 +28,27 @@ describe(`Term index-to-detail flow`, () => {
             cy.visit(`/Resources/Terms`);
         });
 
-        it('should display the text for term 13', () => {
+        it('should display the text for term 513', () => {
             cy.contains(textForTerm);
         });
 
         it('should have a link to the detail view for term 13', () => {
             cy.contains(textForTerm);
 
-            cy.get('[data-testid="13"] > :nth-child(1) > a').click();
+            cy.get(`[href="/Resources/Terms/${termId}"]`).click();
 
             cy.contains(textForTerm);
 
-            cy.location('pathname').should(
-                'contain',
-                `/Resources/Terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513`
-            );
+            cy.location('pathname').should('contain', `/Resources/Terms/${termId}`);
         });
     });
 
     describe(`the term detail page`, () => {
+        const idForTermToView = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002`;
+
         describe('when there are notes for the term (2)', () => {
             beforeEach(() => {
-                cy.visit(`/Resources/Terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002`);
+                cy.visit(`/Resources/Terms/${idForTermToView}`);
             });
             const allNotes = [
                 'This first 4 letters of this term form a syllable that indicates this is a plant ',
@@ -61,8 +64,10 @@ describe(`Term index-to-detail flow`, () => {
         });
 
         describe('when there are no notes for the term (13)', () => {
+            const termWithoutNotes = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513`;
+
             beforeEach(() => {
-                cy.visit(`/Resources/Terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513`);
+                cy.visit(`/Resources/Terms/${termWithoutNotes}`);
             });
 
             it('should display the no notes message', () => {
@@ -77,24 +82,35 @@ describe(`Term index-to-detail flow`, () => {
         });
 
         describe('when there are connections for the term (2)', () => {
+            const idForTermWithConnections = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002`;
+
+            const connectedVocabularyListId = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002`;
+
+            const connectedPlaylistId = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501`;
+
             beforeEach(() => {
-                cy.visit(`/Resources/Terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002`);
+                cy.visit(`/Resources/Terms/${idForTermWithConnections}`);
+
+                cy.getByDataAttribute('loading').should('not.exist');
 
                 cy.contains('Notes for');
 
                 cy.contains('Connected Resources');
             });
 
-            it('should display the connected song', () => {
-                cy.contains('Song title in language (Mary had a little lamb)');
+            it('should display the connected playlist', () => {
+                cy.getAggregateDetailView(AggregateType.playlist, connectedPlaylistId);
             });
 
             it('should display the connected media item', () => {
-                cy.contains('episode title (in language) (Metal Mondays episode 1)');
+                cy.getAggregateDetailView(
+                    AggregateType.mediaItem,
+                    '9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001'
+                );
             });
 
             it('should display the connected vocabulary list', () => {
-                cy.contains('test VL 2');
+                cy.getAggregateDetailView(AggregateType.vocabularyList, connectedVocabularyListId);
             });
 
             it.skip('should display exactly 3 connected resources', () => {
@@ -103,8 +119,10 @@ describe(`Term index-to-detail flow`, () => {
         });
 
         describe('when there are no connections for the term (13)', () => {
+            const idForTermWithoutConnections = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513`;
+
             beforeEach(() => {
-                cy.visit(`/Resources/Terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513`);
+                cy.visit(`/Resources/Terms/${idForTermWithoutConnections}`);
             });
 
             it('should display the no connections message', () => {

@@ -1,4 +1,4 @@
-import { IMediaItemViewModel } from '@coscrad/api-interfaces';
+import { AggregateType, IMediaItemViewModel } from '@coscrad/api-interfaces';
 import { MediaItemIndexState } from '../../../store/slices/resources/media-items/types';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
@@ -30,6 +30,7 @@ export const MediaItemIndexPresenter = ({ entities: mediaItems }: MediaItemIndex
 
     return (
         <IndexTable
+            type={AggregateType.mediaItem}
             headingLabels={headingLabels}
             tableData={mediaItems}
             cellRenderersDefinition={cellRenderersDefinition}

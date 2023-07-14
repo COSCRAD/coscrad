@@ -1,8 +1,9 @@
 describe('Notes index-to-detail flow', () => {
     const textForTermAttachedToNote = 'Engl-term-2';
 
-    const noteText =
-        'This first 4 letters of this term form a syllable that indicates this is a plant';
+    const noteText = 'This first 4 letters of this term';
+
+    const noteId = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001`;
 
     beforeEach(() => {
         cy.visit('/Notes');
@@ -13,7 +14,7 @@ describe('Notes index-to-detail flow', () => {
             cy.contains('Notes');
         });
 
-        describe('the row for note/1', () => {
+        describe(`the row for note/${noteId}`, () => {
             it('should exist', () => {
                 cy.contains(noteText);
             });
@@ -27,14 +28,15 @@ describe('Notes index-to-detail flow', () => {
                 // ensure the connected resource panel is loaded
                 cy.contains('Connected Resources');
 
-                cy.get('[data-testid="1"] > :nth-child(1) > a').click();
+                cy.get(`[href="/Notes/${noteId}"]`).click();
             });
         });
     });
 
+    // This represents actual failure. We need to fix this.
     describe('the detail page', () => {
         beforeEach(() => {
-            cy.visit('Notes/1');
+            cy.visit(`/Notes/${noteId}`);
         });
 
         it('should contain the text for the note', () => {

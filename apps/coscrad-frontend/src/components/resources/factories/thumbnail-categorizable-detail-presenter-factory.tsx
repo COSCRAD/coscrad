@@ -1,4 +1,5 @@
 import {
+    AggregateType,
     CategorizableType,
     IBookViewModel,
     ICategorizableDetailQueryResult,
@@ -7,6 +8,7 @@ import {
 import { Card, CardContent } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { routes } from '../../../app/routes/routes';
+import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { NoteDetailThumbnailPresenter } from '../../notes/note-detail.thumbnail.presenter';
 import { AudioItemDetailThumbnailPresenter } from '../audio-item/audio-item-detail.thumbnail.presenter';
@@ -48,7 +50,12 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
         return (
             // TODO We may want to automate the link wrapping because it's easy to forget
             <Link to={`/${routes.resources.ofType(ResourceType.book).detail(id)}`}>
-                <div data-testid={id}>
+                <div
+                    data-testid={buildDataAttributeForAggregateDetailComponent(
+                        AggregateType.mediaItem,
+                        id
+                    )}
+                >
                     <Card>
                         <CardContent>
                             {<BookInfo {...book} />}

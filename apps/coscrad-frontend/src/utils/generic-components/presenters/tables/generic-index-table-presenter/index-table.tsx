@@ -63,6 +63,8 @@ export type ValueUnion<T> = T[keyof T];
  * We may also want to require renderers for non-string (or maybe non-primitive types)
  */
 export interface GenericIndexTablePresenterProps<T> {
+    // AggregateType- we only use this to build data-testid attributes so we can easily query in tests
+    type: string;
     headingLabels: HeadingLabel<T>[];
     tableData: T[];
     cellRenderersDefinition: CellRenderersDefinition<T>;
@@ -74,6 +76,7 @@ export interface GenericIndexTablePresenterProps<T> {
 const allProperties = 'allProperties';
 
 export const IndexTable = <T,>({
+    type,
     headingLabels,
     tableData,
     cellRenderersDefinition,
@@ -173,7 +176,11 @@ export const IndexTable = <T,>({
                                     // TODO find a better fallback key
                                     <TableRow
                                         key={(row as HasId).id || index}
-                                        data-testid={(row as HasId).id || index}
+                                        data-testid={
+                                            (row as HasId).id
+                                                ? `${type}/${(row as HasId).id}`
+                                                : index
+                                        }
                                     >
                                         {headingLabels.map(({ propertyKey }) => (
                                             // A little inversion of control here

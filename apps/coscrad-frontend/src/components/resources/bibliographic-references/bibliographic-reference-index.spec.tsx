@@ -1,4 +1,4 @@
-import { ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { getConfig } from '../../../config';
 import { assertElementWithEveryIdRenderedForIndex } from '../../../utils/test-utils/assertions/assert-element-with-every-id-rendered-for-index';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
@@ -29,7 +29,10 @@ describe('Bibliographic Reference Index', () => {
         it('should display the bibliographic references', async () => {
             act();
 
-            await assertElementWithEveryIdRenderedForIndex(dummyBibliographicReferences);
+            await assertElementWithEveryIdRenderedForIndex(
+                dummyBibliographicReferences,
+                AggregateType.bibliographicReference
+            );
         });
     });
 

@@ -1,4 +1,4 @@
-import { ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { getApiResourcesBaseRoute } from '../../../store/slices/resources/shared';
 import { assertElementWithEveryIdRenderedForIndex } from '../../../utils/test-utils/assertions/assert-element-with-every-id-rendered-for-index';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
@@ -28,7 +28,10 @@ describe('media item index', () => {
 
         it('should display the media items', async () => {
             act();
-            await assertElementWithEveryIdRenderedForIndex(dummyMediaItems);
+            await assertElementWithEveryIdRenderedForIndex(
+                dummyMediaItems,
+                AggregateType.mediaItem
+            );
         });
     });
 

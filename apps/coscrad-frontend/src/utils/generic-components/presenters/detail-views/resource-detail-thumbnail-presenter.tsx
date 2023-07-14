@@ -3,6 +3,7 @@ import { Card, CardContent, Grid } from '@mui/material';
 import { ReactNode } from 'react';
 import { routes } from '../../../../app/routes/routes';
 import { ResourceNavLink } from '../../../../components/resources/shared/resource-nav-link';
+import { buildDataAttributeForAggregateDetailComponent } from './build-data-attribute-for-aggregate-detail-component';
 import { ResourceDetailPresenterHeader } from './resource-detail-presenter-header';
 import { ResourcePreviewIconFactory } from './resource-preview-icon';
 
@@ -30,7 +31,7 @@ export const ResourceDetailThumbnailPresenter = ({
     <Card>
         <CardContent>
             <Grid container spacing={1} columns={{ xs: 2, sm: 4, md: 12 }}>
-                <div data-testid={id} />
+                <div data-testid={buildDataAttributeForAggregateDetailComponent(type, id)} />
                 <Grid item xs={2} sm={1} md={2}>
                     {/* Preview will eventually include images taken from video or photos, etc. */}
                     <ResourcePreviewIconFactory resourceType={type} size="md" />

@@ -1,4 +1,4 @@
-import { ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { getConfig } from '../../../config';
 import { assertElementWithEveryIdRenderedForIndex } from '../../../utils/test-utils/assertions/assert-element-with-every-id-rendered-for-index';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
@@ -29,7 +29,10 @@ describe('Vocabulary List Index', () => {
         it('should display the vocabulary lists', async () => {
             act();
 
-            await assertElementWithEveryIdRenderedForIndex(dummyVocabularyLists);
+            await assertElementWithEveryIdRenderedForIndex(
+                dummyVocabularyLists,
+                AggregateType.vocabularyList
+            );
         });
     });
 

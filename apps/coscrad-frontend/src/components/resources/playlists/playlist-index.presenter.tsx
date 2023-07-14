@@ -1,4 +1,4 @@
-import { IPlayListViewModel } from '@coscrad/api-interfaces';
+import { AggregateType, IPlayListViewModel } from '@coscrad/api-interfaces';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import { PlaylistIndexState } from '../../../store/slices/resources/playlists/types';
@@ -61,6 +61,7 @@ export const PlaylistIndexPresenter = ({ entities: playlists }: PlaylistIndexSta
 
     return (
         <IndexTable
+            type={AggregateType.playlist}
             headingLabels={headingLabels}
             tableData={playlists}
             cellRenderersDefinition={cellRenderersDefinition}

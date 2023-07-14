@@ -1,4 +1,4 @@
-import { IPhotographViewModel } from '@coscrad/api-interfaces';
+import { AggregateType, IPhotographViewModel } from '@coscrad/api-interfaces';
 import { PhotographIndexState } from '../../../store/slices/resources/photographs/types';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
@@ -20,6 +20,7 @@ export const PhotographIndexPresenter = ({ entities: photographs }: PhotographIn
 
     return (
         <IndexTable
+            type={AggregateType.photograph}
             headingLabels={headingLabels}
             tableData={photographs}
             cellRenderersDefinition={cellRenderersDefinition}

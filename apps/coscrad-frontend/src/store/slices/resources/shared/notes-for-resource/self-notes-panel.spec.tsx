@@ -1,4 +1,5 @@
 import {
+    AggregateType,
     EdgeConnectionMemberRole,
     EdgeConnectionType,
     INoteViewModel,
@@ -92,7 +93,7 @@ describe(`Self Notes Panel`, () => {
             it('should render each note', async () => {
                 act();
 
-                await assertElementWithEveryIdRenderedForIndex(dummyNotes);
+                await assertElementWithEveryIdRenderedForIndex(dummyNotes, AggregateType.note);
             });
         });
 

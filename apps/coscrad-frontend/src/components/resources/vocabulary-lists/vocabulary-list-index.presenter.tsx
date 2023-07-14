@@ -1,4 +1,8 @@
-import { IMultilingualText, IVocabularyListViewModel } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    IMultilingualText,
+    IVocabularyListViewModel,
+} from '@coscrad/api-interfaces';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import { VocabularyListIndexState } from '../../../store/slices/resources/vocabulary-lists/types/vocabulary-list-index-state';
@@ -30,6 +34,7 @@ export const VocabularyListIndexPresenter = ({
 
     return (
         <IndexTable
+            type={AggregateType.vocabularyList}
             headingLabels={headingLabels}
             tableData={vocabularyLists}
             cellRenderersDefinition={cellRenderersDefinition}
