@@ -10,36 +10,36 @@ interface TranslatedLanguageTextPresenterProps {
     onTextSelection?: (charRange: [number, number], languageCode: LanguageCode) => void;
 }
 
+const isWindowContext = typeof window !== 'undefined';
+
 export const TranslatedLanguageTextPresenter = ({
     languageCode,
     text,
     role,
     onTextSelection,
 }: TranslatedLanguageTextPresenterProps): JSX.Element => {
+    const onSelect = (e) => {
+        const startOffset = isWindowContext && window.getSelection().getRangeAt(0).startOffset;
+        const endOffset = isWindowContext && window.getSelection().getRangeAt(0).endOffset;
+
+        const charRange: [number, number] = [startOffset, endOffset];
+
+        if (typeof onTextSelection === 'function') onTextSelection(charRange, languageCode);
+    };
+
     return (
-        <AccordionDetails key={`${languageCode}-${role}`}>
-            <Typography color={'text.primary'}>
-                <textarea
-                    onSelect={(e) => {
-                        console.log({ eventdata: e });
-
-                        const charRange: [number, number] = [
-                            e.currentTarget.selectionStart,
-                            e.currentTarget.selectionEnd,
-                        ];
-
-                        if (typeof onTextSelection === 'function')
-                            onTextSelection(charRange, languageCode);
-                    }}
-                >
-                    {text}
-                </textarea>
-                <Tooltip title={`${getLabelForLanguage(languageCode)}, '${role}'`}>
-                    <IconButton>
-                        <LanguageIcon />
-                    </IconButton>
-                </Tooltip>
+        <AccordionDetails
+            key={`${languageCode}-${role}`}
+            sx={{ display: 'flex', alignItems: 'center' }}
+        >
+            <Typography color={'text.primary'} onMouseUp={onSelect}>
+                {text}
             </Typography>
+            <Tooltip title={`${getLabelForLanguage(languageCode)}, '${role}'`}>
+                <IconButton>
+                    <LanguageIcon />
+                </IconButton>
+            </Tooltip>
         </AccordionDetails>
     );
 };
