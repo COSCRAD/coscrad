@@ -5,31 +5,53 @@ import { InMemorySnapshot, ResourceType } from '../../../../../domain/types/Reso
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
+import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { validAggregateOrThrow } from '../../../shared/functional';
 import { Playlist } from '../../entities';
 import { PlaylistItem } from '../../entities/playlist-item.entity';
-import { importAudioItemsToPlaylist } from './import-audio-items-to-playlist.command';
+import { AudioItemsImportedToPlaylist } from './audio-items-imported-to-playlist.event';
+import { ImportAudioItemsToPlaylist } from './import-audio-items-to-playlist.command';
 
-@CommandHandler(importAudioItemsToPlaylist)
-export class importAudioItemsToPlaylistCommandHandler extends BaseUpdateCommandHandler<Playlist> {
-    protected fetchRequiredExternalState(_: importAudioItemsToPlaylist): Promise<InMemorySnapshot> {
-        return Promise.resolve(new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat());
+@CommandHandler(ImportAudioItemsToPlaylist)
+export class ImportAudioItemsToPlaylistCommandHandler extends BaseUpdateCommandHandler<Playlist> {
+    protected async fetchRequiredExternalState(
+        _: ImportAudioItemsToPlaylist
+    ): Promise<InMemorySnapshot> {
+        const audioItems = await this.repositoryProvider
+            .forResource(ResourceType.audioItem)
+            .fetchMany();
+
+        return new DeluxeInMemoryStore({
+            audioItem: audioItems.filter(validAggregateOrThrow),
+        }).fetchFullSnapshotInLegacyFormat();
     }
 
     protected validateExternalState(
-        _state: InMemorySnapshot,
-        _instance: Playlist
+        state: InMemorySnapshot,
+        instance: Playlist
     ): InternalError | Valid {
-        return Valid;
+        return instance.validateExternalReferences(state);
     }
 
     protected actOnInstance(
         playlist: Playlist,
-        { audioItemIds, aggregateCompositeIdentifier }: importAudioItemsToPlaylist
+        { audioItemIds }: ImportAudioItemsToPlaylist
     ): ResultOrError<Playlist> {
-        return playlist.addItem(
-            new PlaylistItem({
-                resourceCompositeIdentifier: { type: ResourceType.audioItem, id: audioItemIds },
-            })
+        return playlist.addItems(
+            audioItemIds.map(
+                (id) =>
+                    new PlaylistItem({
+                        resourceCompositeIdentifier: { type: ResourceType.audioItem, id },
+                    })
+            )
         );
+    }
+
+    protected buildEvent(
+        command: ImportAudioItemsToPlaylist,
+        eventId: string,
+        userId: string
+    ): BaseEvent {
+        return new AudioItemsImportedToPlaylist(command, eventId, userId);
     }
 }

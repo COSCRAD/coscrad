@@ -9,7 +9,7 @@ import { PlayListCompositeId } from '../create-playlist.command';
     label: 'import audio items to playlist',
     description: 'importing audio items to playlist',
 })
-export class importAudioItemsToPlaylist implements ICommandBase {
+export class ImportAudioItemsToPlaylist implements ICommandBase {
     @NestedDataType(PlayListCompositeId, {
         label: 'Composite Identifier',
         description: 'system-wide unique identifier',
