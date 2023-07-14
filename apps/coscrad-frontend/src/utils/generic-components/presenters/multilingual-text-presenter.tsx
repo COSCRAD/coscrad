@@ -5,7 +5,6 @@ import LanguageIcon from '@mui/icons-material/Language';
 import {
     Accordion,
     AccordionSummary,
-    Box,
     Divider,
     IconButton,
     Tooltip,
@@ -36,38 +35,36 @@ export const MultilingualTextPresenter = ({
     const translations = items.filter((items) => items.languageCode !== defaultLanguageCode);
 
     return (
-        <Box>
-            <Accordion variant="outlined">
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography variant="h4" sx={{ margin: '0' }}>
-                        {isNullOrUndefined(textItemWithDefaultLanguage)
-                            ? 'Translations'
-                            : textItemWithDefaultLanguage.text}
-                    </Typography>
-                    {isNullOrUndefined(textItemWithDefaultLanguage) ? null : (
-                        <Tooltip
-                            sx={{ paddingTop: 0, marginBottom: 0 }}
-                            title={`${getLabelForLanguage(
-                                textItemWithDefaultLanguage.languageCode
-                            )}, '${textItemWithDefaultLanguage.role}'`}
-                        >
-                            <IconButton>
-                                <LanguageIcon />
-                            </IconButton>
-                        </Tooltip>
-                    )}
-                </AccordionSummary>
-                <Divider />
-                {translations.map(({ languageCode, text, role }) => (
-                    <TranslatedLanguageTextPresenter
-                        key={`${languageCode}-${role}`}
-                        languageCode={languageCode}
-                        text={text}
-                        role={role}
-                        onTextSelection={onTextSelection}
-                    />
-                ))}
-            </Accordion>
-        </Box>
+        <Accordion variant="outlined">
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography variant="h4" sx={{ margin: '0' }}>
+                    {isNullOrUndefined(textItemWithDefaultLanguage)
+                        ? 'Translations'
+                        : textItemWithDefaultLanguage.text}
+                </Typography>
+                {isNullOrUndefined(textItemWithDefaultLanguage) ? null : (
+                    <Tooltip
+                        sx={{ paddingTop: 0, marginBottom: 0 }}
+                        title={`${getLabelForLanguage(
+                            textItemWithDefaultLanguage.languageCode
+                        )}, '${textItemWithDefaultLanguage.role}'`}
+                    >
+                        <IconButton>
+                            <LanguageIcon />
+                        </IconButton>
+                    </Tooltip>
+                )}
+            </AccordionSummary>
+            <Divider />
+            {translations.map(({ languageCode, text, role }) => (
+                <TranslatedLanguageTextPresenter
+                    key={`${languageCode}-${role}`}
+                    languageCode={languageCode}
+                    text={text}
+                    role={role}
+                    onTextSelection={onTextSelection}
+                />
+            ))}
+        </Accordion>
     );
 };
