@@ -84,8 +84,6 @@ describe(`Term index-to-detail flow`, () => {
         describe('when there are connections for the term (2)', () => {
             const idForTermWithConnections = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002`;
 
-            const connectedVideoId = '9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223';
-
             const connectedVocabularyListId = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002`;
 
             const connectedPlaylistId = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501`;
@@ -109,7 +107,6 @@ describe(`Term index-to-detail flow`, () => {
                     AggregateType.mediaItem,
                     '9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001'
                 );
-                // cy.contains('episode title (in language) (Metal Mondays episode 1)');
             });
 
             it('should display the connected vocabulary list', () => {

@@ -16,11 +16,6 @@ import { buildDummyTags } from './test-utils';
 
 const allTags: ITagViewModel[] = buildDummyTags();
 
-/**
- * TODO[https://www.pivotaltracker.com/story/show/183618729]
- * We need to inject a dummy config. This test should not be dependent upon
- * environment.
- */
 const endpoint = `${getConfig().apiUrl}/tags`;
 
 const tagToFind = allTags[0];
@@ -52,7 +47,6 @@ describe(`Tag Detail`, () => {
                 act(idToFind);
 
                 await assertElementWithTestIdOnScreen(`${AggregateType.tag}/${idToFind}`);
-                // await waitFor(() => expect(screen.getByTestId(idToFind)).toBeTruthy());
             });
         });
 
