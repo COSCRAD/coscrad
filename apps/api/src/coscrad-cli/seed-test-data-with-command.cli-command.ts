@@ -3,6 +3,7 @@ import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
 import { InternalError } from '../lib/errors/InternalError';
+import cloneToPlainObject from '../lib/utilities/cloneToPlainObject';
 import { buildTestCommandFsaMap } from '../test-data/commands';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
@@ -40,7 +41,9 @@ export class SeedTestDataWithCommand extends CliCommandRunner {
 
         const { payload: defaultPayload } = testFsa;
 
-        const fsaToWithOverrides = {
+        const fsaToWithOverrides = cloneToPlainObject 
+        
+        {
             type: commandType,
             payload: {
                 ...defaultPayload,
@@ -50,14 +53,7 @@ export class SeedTestDataWithCommand extends CliCommandRunner {
 
         this.logger.log(`attempting to execute FSA: ${JSON.stringify(fsaToWithOverrides)}`);
 
-        /**
-         * TODO We need to do this conditionally, only for create commands. For
-         * this reason, it is better if this logic gets moved to a special method
-         * on the command handler or a similar service. We don't want this logic
-         * in the CLI command controller in case we need to expose it via some
-         * other transport layer.
-         */
-        const generatedId = await this.idManager.generate();
+
 
         const { payload: payloadWithoutGeneratedId } = fsaToWithOverrides;
 
