@@ -47,7 +47,7 @@ describe(`CLI Command: ${cliCommandName}`, () => {
 
     let mockIdManager;
 
-    const mockLogger = buildMockLogger({ isEnabled: true });
+    const mockLogger = buildMockLogger({ isEnabled: false });
 
     beforeAll(async () => {
         const testAppModule = await createTestModule({
@@ -103,13 +103,13 @@ describe(`CLI Command: ${cliCommandName}`, () => {
 
     describe(`when the command is valid`, () => {
         describe(`when executing a create command (requires ID generation)`, () => {
-            const serializedPayloadOverrids = JSON.stringify(payloadOverrides);
+            const serializedPayloadOverrides = JSON.stringify(payloadOverrides);
 
             it(`should succeed`, async () => {
                 await CommandTestFactory.run(commandInstance, [
                     cliCommandName,
                     `--type=${createCommandType}`,
-                    `--payload-overrides=${serializedPayloadOverrids}`,
+                    `--payload-overrides=${serializedPayloadOverrides}`,
                 ]);
 
                 const newId = await mockIdManager.generate.mock.results[0].value;

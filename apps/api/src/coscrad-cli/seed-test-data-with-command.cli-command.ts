@@ -116,7 +116,6 @@ export class SeedTestDataWithCommand extends CliCommandRunner {
             throw new InternalError(`parameter: type must be a non-empty string`);
         }
 
-        // TODO Should we validate the command is a known type here?
         return value;
     }
 
