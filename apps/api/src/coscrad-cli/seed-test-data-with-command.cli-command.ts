@@ -1,9 +1,9 @@
 import { Ack, CommandHandlerService } from '@coscrad/commands';
-import { isNonEmptyString, isUndefined } from '@coscrad/validation-constraints';
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
-import { AggregateType } from '../domain/types/AggregateType';
 import { InternalError } from '../lib/errors/InternalError';
+import { buildTestCommandFsaMap } from '../test-data/commands';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
 
@@ -12,22 +12,7 @@ interface SeedTestDataWithCommandOptions {
     payloadOverrides?: Record<string, unknown>;
 }
 
-/**
- * TODO Move this to the test data directory. We may want to inject a `TestDataManager`
- * service that can find these for us.
- */
-const allFsas = [
-    {
-        type: 'CREATE_SONG',
-        payload: {
-            aggregateCompositeIdentifier: { id: 'dummy-song', type: AggregateType.song },
-            title: 'test-song-name (language)',
-            titleEnglish: 'test-song-name (English)',
-            lyrics: 'la la la',
-            audioURL: 'https://www.mysound.org/song.mp3',
-        },
-    },
-];
+const fsaMap = buildTestCommandFsaMap();
 
 @CliCommand({
     name: 'seed-test-data-with-command',
@@ -45,15 +30,15 @@ export class SeedTestDataWithCommand extends CliCommandRunner {
     async run(_passedParams: string[], options: SeedTestDataWithCommandOptions): Promise<void> {
         const { type: commandType, payloadOverrides } = options;
 
-        const fixtureFsaSearchResult = allFsas.find(({ type }) => type === commandType);
-
-        if (isUndefined(fixtureFsaSearchResult)) {
+        if (!fsaMap.has(commandType)) {
             this.logger.log(`failed to find a fixture command of type: ${commandType}. Exiting.`);
 
             throw new InternalError(`No fixture command of type: ${commandType} found`);
         }
 
-        const { payload: defaultPayload } = fixtureFsaSearchResult;
+        const testFsa = fsaMap.get(commandType);
+
+        const { payload: defaultPayload } = testFsa;
 
         const fsaToWithOverrides = {
             type: commandType,
