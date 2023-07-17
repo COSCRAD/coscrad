@@ -59,19 +59,13 @@ export const CategorizablePageLayout = ({
         setDrawerState({ ...drawerState, [anchor]: isOpen });
     };
 
-    // const toggleBottomDrawerSize = (isBottomDrawerExpanded) => {
-    //     if (isBottomDrawerExpanded) {
-
-    //     }
-    //     setIsBottomDrawerExpanded(isBottomDrawerExpanded);
-    // };
-
     return (
         <>
             {children}
             <Box sx={{ textAlign: 'right', pr: 8, mb: 8 }}>
                 <Tooltip title="Open Notes Panel">
                     <IconButton
+                        data-testid="open-notes-panel-button"
                         onClick={() => {
                             toggleDrawer('bottom', !drawerState['bottom']);
                         }}
@@ -81,6 +75,7 @@ export const CategorizablePageLayout = ({
                 </Tooltip>
                 <Tooltip title="Open Connected Resources Panel">
                     <IconButton
+                        data-testid="open-connected-resource-panel-button"
                         onClick={() => {
                             toggleDrawer('right', !drawerState['right']);
                         }}
@@ -110,6 +105,7 @@ export const CategorizablePageLayout = ({
                     </Box>
                     <Tooltip title="Close Panel">
                         <IconButton
+                            data-testid="close-connected-resources-panel-button"
                             onClick={() => {
                                 toggleDrawer('right', false);
                             }}
@@ -149,6 +145,7 @@ export const CategorizablePageLayout = ({
                     <Box>
                         <Tooltip title="Expand/Contract Notes Panel">
                             <IconButton
+                                data-testid="expand-notes-panel-button"
                                 onClick={() => {
                                     setIsBottomDrawerExpanded(!isBottomDrawerExpanded);
                                 }}
@@ -158,6 +155,7 @@ export const CategorizablePageLayout = ({
                         </Tooltip>
                         <Tooltip title="Close Notes Panel">
                             <IconButton
+                                data-testid="close-notes-panel-button"
                                 onClick={() => {
                                     toggleDrawer('bottom', false);
                                 }}
