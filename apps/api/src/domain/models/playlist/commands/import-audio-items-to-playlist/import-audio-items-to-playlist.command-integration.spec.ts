@@ -181,7 +181,7 @@ describe(commandType, () => {
         });
     });
 
-    describe(`when the audio item does not exist`, () => {
+    describe(`when one of the audio items does not exist`, () => {
         const missingAudioItemId = buildDummyUuid(123);
 
         const missingAudioItem = dummyAudioItemToUseAsTemplate.clone({
