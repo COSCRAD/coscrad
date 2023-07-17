@@ -12,6 +12,7 @@ import { ResourceType } from '../../../types/ResourceType';
 import { DuplicateLanguageInMultilingualTextError } from '../../audio-item/errors/duplicate-language-in-multilingual-text.error';
 import { Resource } from '../../resource.entity';
 import { CannotAddDuplicateItemToPlaylist } from '../errors';
+import { FailedToImportAudioItemsError } from '../errors/failed-to-import-audio-items.error';
 import { PlaylistItem } from './playlist-item.entity';
 
 @RegisterIndexScopedCommands(['CREATE_PLAYLIST'])
@@ -65,6 +66,20 @@ export class Playlist extends Resource {
 
         return this.safeClone<Playlist>({
             items: this.items.concat(item),
+        });
+    }
+
+    addItems(items: PlaylistItem[]): ResultOrError<Playlist> {
+        const duplicateItems = items.filter((item) => this.has(item.resourceCompositeIdentifier));
+
+        if (duplicateItems.length > 0)
+            return new FailedToImportAudioItemsError(
+                this,
+                duplicateItems.map((item) => new CannotAddDuplicateItemToPlaylist(this.id, item))
+            );
+
+        return this.safeClone<Playlist>({
+            items: this.items.concat(items),
         });
     }
 
