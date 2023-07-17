@@ -1,9 +1,9 @@
 import { Ack, CommandHandlerService } from '@coscrad/commands';
-import { isNonEmptyString, isUndefined } from '@coscrad/validation-constraints';
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
-import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
-import { AggregateType } from '../domain/types/AggregateType';
 import { InternalError } from '../lib/errors/InternalError';
+import { clonePlainObjectWithOverrides } from '../lib/utilities/clonePlainObjectWithOverrides';
+import { buildTestCommandFsaMap } from '../test-data/commands';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
 
@@ -12,22 +12,7 @@ interface SeedTestDataWithCommandOptions {
     payloadOverrides?: Record<string, unknown>;
 }
 
-/**
- * TODO Move this to the test data directory. We may want to inject a `TestDataManager`
- * service that can find these for us.
- */
-const allFsas = [
-    {
-        type: 'CREATE_SONG',
-        payload: {
-            aggregateCompositeIdentifier: { id: 'dummy-song', type: AggregateType.song },
-            title: 'test-song-name (language)',
-            titleEnglish: 'test-song-name (English)',
-            lyrics: 'la la la',
-            audioURL: 'https://www.mysound.org/song.mp3',
-        },
-    },
-];
+const fsaMap = buildTestCommandFsaMap();
 
 @CliCommand({
     name: 'seed-test-data-with-command',
@@ -36,7 +21,6 @@ const allFsas = [
 export class SeedTestDataWithCommand extends CliCommandRunner {
     constructor(
         private readonly commandHandlerService: CommandHandlerService,
-        @Inject(ID_MANAGER_TOKEN) private readonly idManager: IIdManager,
         @Inject(COSCRAD_LOGGER_TOKEN) private readonly logger: ICoscradLogger
     ) {
         super();
@@ -45,47 +29,27 @@ export class SeedTestDataWithCommand extends CliCommandRunner {
     async run(_passedParams: string[], options: SeedTestDataWithCommandOptions): Promise<void> {
         const { type: commandType, payloadOverrides } = options;
 
-        const fixtureFsaSearchResult = allFsas.find(({ type }) => type === commandType);
-
-        if (isUndefined(fixtureFsaSearchResult)) {
+        if (!fsaMap.has(commandType)) {
             this.logger.log(`failed to find a fixture command of type: ${commandType}. Exiting.`);
 
             throw new InternalError(`No fixture command of type: ${commandType} found`);
         }
 
-        const { payload: defaultPayload } = fixtureFsaSearchResult;
+        const testFsa = fsaMap.get(commandType);
 
-        const fsaToWithOverrides = {
-            type: commandType,
-            payload: {
-                ...defaultPayload,
-                ...(payloadOverrides || {}),
-            },
-        };
+        const { payload: defaultPayload } = testFsa;
 
-        this.logger.log(`attempting to execute FSA: ${JSON.stringify(fsaToWithOverrides)}`);
-
-        /**
-         * TODO We need to do this conditionally, only for create commands. For
-         * this reason, it is better if this logic gets moved to a special method
-         * on the command handler or a similar service. We don't want this logic
-         * in the CLI command controller in case we need to expose it via some
-         * other transport layer.
-         */
-        const generatedId = await this.idManager.generate();
-
-        const { payload: payloadWithoutGeneratedId } = fsaToWithOverrides;
+        const payloadWithOverrides = clonePlainObjectWithOverrides(
+            defaultPayload,
+            payloadOverrides
+        );
 
         const fsaToExecute = {
-            ...fsaToWithOverrides,
-            payload: {
-                ...payloadWithoutGeneratedId,
-                aggregateCompositeIdentifier: {
-                    ...payloadWithoutGeneratedId.aggregateCompositeIdentifier,
-                    id: generatedId,
-                },
-            },
+            type: commandType,
+            payload: payloadWithOverrides,
         };
+
+        this.logger.log(`attempting to execute FSA: ${JSON.stringify(fsaToExecute)}`);
 
         const result = await this.commandHandlerService.execute(fsaToExecute, {
             // TODO Assign the following to a constant
