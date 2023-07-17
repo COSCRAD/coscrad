@@ -1,9 +1,8 @@
 import { Ack, CommandHandlerService } from '@coscrad/commands';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
-import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
 import { InternalError } from '../lib/errors/InternalError';
-import cloneToPlainObject from '../lib/utilities/cloneToPlainObject';
+import { clonePlainObjectWithOverrides } from '../lib/utilities/clonePlainObjectWithOverrides';
 import { buildTestCommandFsaMap } from '../test-data/commands';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
@@ -22,7 +21,6 @@ const fsaMap = buildTestCommandFsaMap();
 export class SeedTestDataWithCommand extends CliCommandRunner {
     constructor(
         private readonly commandHandlerService: CommandHandlerService,
-        @Inject(ID_MANAGER_TOKEN) private readonly idManager: IIdManager,
         @Inject(COSCRAD_LOGGER_TOKEN) private readonly logger: ICoscradLogger
     ) {
         super();
@@ -41,32 +39,17 @@ export class SeedTestDataWithCommand extends CliCommandRunner {
 
         const { payload: defaultPayload } = testFsa;
 
-        const fsaToWithOverrides = cloneToPlainObject 
-        
-        {
-            type: commandType,
-            payload: {
-                ...defaultPayload,
-                ...(payloadOverrides || {}),
-            },
-        };
-
-        this.logger.log(`attempting to execute FSA: ${JSON.stringify(fsaToWithOverrides)}`);
-
-
-
-        const { payload: payloadWithoutGeneratedId } = fsaToWithOverrides;
+        const payloadWithOverrides = clonePlainObjectWithOverrides(
+            defaultPayload,
+            payloadOverrides
+        );
 
         const fsaToExecute = {
-            ...fsaToWithOverrides,
-            payload: {
-                ...payloadWithoutGeneratedId,
-                aggregateCompositeIdentifier: {
-                    ...payloadWithoutGeneratedId.aggregateCompositeIdentifier,
-                    id: generatedId,
-                },
-            },
+            type: commandType,
+            payload: payloadWithOverrides,
         };
+
+        this.logger.log(`attempting to execute FSA: ${JSON.stringify(fsaToExecute)}`);
 
         const result = await this.commandHandlerService.execute(fsaToExecute, {
             // TODO Assign the following to a constant
