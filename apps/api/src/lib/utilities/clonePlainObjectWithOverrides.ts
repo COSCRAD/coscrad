@@ -1,6 +1,7 @@
 import {
     isBoolean,
     isNull,
+    isNullOrUndefined,
     isNumber,
     isString,
     isUndefined,
@@ -16,39 +17,54 @@ export const clonePlainObjectWithOverrides = <T extends object = object>(
     // First we deep-clone to avoid shared references with the original
     const clone = cloneToPlainObject(object);
 
-    Object.entries(overrides).forEach(([key, value]) => {
+    Object.entries(overrides).forEach(([keyForThisProperty, overridesForThisProperty]) => {
         // Is this value a primitive type? Then we can do a shallow assign.
         if (
             [isNumber, isString, isNull, isUndefined, isBoolean].some((predicate) =>
-                predicate(value)
-            )
+                predicate(overridesForThisProperty)
+            ) ||
+            isNullOrUndefined(clone[keyForThisProperty])
         ) {
             Object.assign(clone, {
-                [key]: value,
+                [keyForThisProperty]: overridesForThisProperty,
             });
 
             return;
         }
 
-        if (Array.isArray(value)) {
+        if (Array.isArray(overridesForThisProperty)) {
             Object.assign(clone, {
-                [key]: value,
+                [keyForThisProperty]: overridesForThisProperty,
             });
 
             return;
         }
 
-        if (typeof value === 'function') {
+        if (typeof overridesForThisProperty === 'function') {
             throw new InternalError(`Cloning instances is not supported.`);
         }
 
-        // We have a plain object overrides
-        Object.entries(value).forEach(([overrideKey, overrideValue]) => {
-            Object.assign(
-                clone[overrideKey],
-                clonePlainObjectWithOverrides(clone[overrideKey], overrideValue)
+        /**
+         * Since our override value is an object, we need to recurse.
+         *
+         * At this point, either the original value is `null` \ `undefined` (in case it is optional),
+         * or it is an object.
+         *
+         * If it is null or undefined, we simply set the value.
+         *
+         * If it is an object, we recurse, overriding only the specified properties.
+         */
+
+        const originalValue = clone[keyForThisProperty];
+
+        if (isNullOrUndefined(originalValue)) {
+            clone[keyForThisProperty] = cloneToPlainObject(overridesForThisProperty);
+        } else {
+            clone[keyForThisProperty] = clonePlainObjectWithOverrides(
+                originalValue,
+                overridesForThisProperty
             );
-        });
+        }
     });
 
     return clone;
