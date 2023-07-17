@@ -1,8 +1,12 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
 import {
+    AddAudioItemToPlaylist,
+    AddAudioItemToPlaylistCommandHandler,
     CreatePlayList,
     CreatePlayListCommandHandler,
+    ImportAudioItemsToPlaylist,
+    ImportAudioItemsToPlaylistCommandHandler,
     TranslatePlaylistName,
     TranslatePlaylistNameCommandHandler,
 } from '../../domain/models/playlist/commands';
@@ -20,8 +24,15 @@ import { PlaylistController } from '../controllers/resources/playlist.controller
         PlaylistQueryService,
         CreatePlayListCommandHandler,
         TranslatePlaylistNameCommandHandler,
+        AddAudioItemToPlaylistCommandHandler,
+        ImportAudioItemsToPlaylistCommandHandler,
         // Data Classes
-        ...[CreatePlayList, TranslatePlaylistName].map((ctor) => ({
+        ...[
+            CreatePlayList,
+            TranslatePlaylistName,
+            AddAudioItemToPlaylist,
+            ImportAudioItemsToPlaylist,
+        ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
         })),
