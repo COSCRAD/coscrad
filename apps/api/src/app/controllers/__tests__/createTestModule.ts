@@ -60,6 +60,8 @@ import { CreateMediaItemCommandHandler } from '../../../domain/models/media-item
 import {
     AddAudioItemToPlaylistCommandHandler,
     CreatePlayListCommandHandler,
+    ImportAudioItemsToPlaylist,
+    ImportAudioItemsToPlaylistCommandHandler,
     TranslatePlaylistNameCommandHandler,
 } from '../../../domain/models/playlist/commands';
 import {
@@ -428,6 +430,8 @@ export default async (
             ImportLineItemsToTranscript,
             ImportLineItemsToTranscriptCommandHandler,
             CreatePlayListCommandHandler,
+            ImportAudioItemsToPlaylist,
+            ImportAudioItemsToPlaylistCommandHandler,
             AddAudioItemToPlaylistCommandHandler,
             TranslatePlaylistNameCommandHandler,
             CreateNoteAboutResourceCommandHandler,
