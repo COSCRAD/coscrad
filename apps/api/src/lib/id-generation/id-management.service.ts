@@ -5,8 +5,8 @@ import { IIdManager, UniquelyIdentifiableType } from '../../domain/interfaces/id
 import { AggregateId } from '../../domain/types/AggregateId';
 import { InternalError } from '../errors/InternalError';
 import { NotAvailable } from '../types/not-available';
-import { isNotFound, NotFound } from '../types/not-found';
-import { isOK, OK } from '../types/ok';
+import { NotFound, isNotFound } from '../types/not-found';
+import { OK, isOK } from '../types/ok';
 import { ID_RESPOSITORY_TOKEN, IIdRepository } from './interfaces/id-repository.interface';
 
 @Injectable()

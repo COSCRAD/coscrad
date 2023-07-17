@@ -71,6 +71,20 @@ export class ArangoIdRepository implements IIdRepository {
         await this.arangoDatabase.create(databaseDocument, ArangoCollectionId.uuids);
     }
 
+    async createMany(ids: AggregateId[]): Promise<void> {
+        const databaseDocuments = ids
+            .map(
+                (id) =>
+                    ({
+                        id,
+                        timeGenerated: new Date().toISOString,
+                    } as unknown as UuidDocument)
+            )
+            .map(mapUuidDocumentToDatabaseDocument);
+
+        await this.arangoDatabase.createMany(databaseDocuments, ArangoCollectionId.uuids);
+    }
+
     async reserve({
         id,
         type,
