@@ -19,8 +19,8 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
         ],
       },
       "tags": [],
-      "text": "[12000] [JHC] {eng}: There once was a little wooden boy. [15550]
-[18300] [JHC] {eng}: His name was Pinocchio [19240]",
+      "text": "[12000] [JHC] There once was a little wooden boy. {eng} (role: original) [15550]
+[18300] [JHC] His name was Pinocchio {eng} (role: original) [19240]",
     },
     {
       "actions": [],
@@ -38,9 +38,9 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
         ],
       },
       "tags": [],
-      "text": "[3400] [BL] {eng}: While she went down to the river [3670]
-[3700] [SD] {eng}: someone had already filled the water tank. [3980]
-[4010] [BL] {eng}: These were the types of problems we had. [4290]",
+      "text": "[3400] [BL] While she went down to the river {eng} (role: original) [3670]
+[3700] [SD] someone had already filled the water tank. {eng} (role: original) [3980]
+[4010] [BL] These were the types of problems we had. {eng} (role: original) [4290]",
     },
     {
       "actions": [],
@@ -58,8 +58,8 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
         ],
       },
       "tags": [],
-      "text": "[120] [E1] {eng}: this type of spoon is used in ceremonies [848]
-[930] [E2] {eng}: by members of the opposite clan of the house chief [1080]",
+      "text": "[120] [E1] this type of spoon is used in ceremonies {eng} (role: original) [848]
+[930] [E2] by members of the opposite clan of the house chief {eng} (role: original) [1080]",
     },
   ],
   "indexScopedActions": [],
@@ -85,8 +85,8 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
         ],
       },
       "tags": [],
-      "text": "[12000] [JHC] {eng}: There once was a little wooden boy. [15550]
-[18300] [JHC] {eng}: His name was Pinocchio [19240]",
+      "text": "[12000] [JHC] There once was a little wooden boy. {eng} (role: original) [15550]
+[18300] [JHC] His name was Pinocchio {eng} (role: original) [19240]",
     },
     {
       "actions": [],
@@ -104,9 +104,9 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
         ],
       },
       "tags": [],
-      "text": "[3400] [BL] {eng}: While she went down to the river [3670]
-[3700] [SD] {eng}: someone had already filled the water tank. [3980]
-[4010] [BL] {eng}: These were the types of problems we had. [4290]",
+      "text": "[3400] [BL] While she went down to the river {eng} (role: original) [3670]
+[3700] [SD] someone had already filled the water tank. {eng} (role: original) [3980]
+[4010] [BL] These were the types of problems we had. {eng} (role: original) [4290]",
     },
     {
       "actions": [],
@@ -124,8 +124,8 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
         ],
       },
       "tags": [],
-      "text": "[120] [E1] {eng}: this type of spoon is used in ceremonies [848]
-[930] [E2] {eng}: by members of the opposite clan of the house chief [1080]",
+      "text": "[120] [E1] this type of spoon is used in ceremonies {eng} (role: original) [848]
+[930] [E2] by members of the opposite clan of the house chief {eng} (role: original) [1080]",
     },
   ],
   "indexScopedActions": [],
@@ -1297,12 +1297,12 @@ exports[`When fetching multiple resources GET /resources/playlists when all of t
         {
           "mediaItemUrl": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
           "mimeType": "audio/x-wav",
-          "name": "{eng}: The Wooden Boy",
+          "name": "The Wooden Boy {eng} (role: original)",
         },
         {
           "mediaItemUrl": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
           "mimeType": "audio/mpeg",
-          "name": "{clc}: Down at the River",
+          "name": "Down at the River {clc} (role: original)",
         },
       ],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
@@ -1355,12 +1355,12 @@ exports[`When fetching multiple resources GET /resources/playlists when some of 
         {
           "mediaItemUrl": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
           "mimeType": "audio/x-wav",
-          "name": "{eng}: The Wooden Boy",
+          "name": "The Wooden Boy {eng} (role: original)",
         },
         {
           "mediaItemUrl": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
           "mimeType": "audio/mpeg",
-          "name": "{clc}: Down at the River",
+          "name": "Down at the River {clc} (role: original)",
         },
       ],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
@@ -3008,8 +3008,8 @@ exports[`When fetching multiple resources GET /resources/videos when all of the 
         ],
       },
       "tags": [],
-      "text": "[12000] [DM] {eng}: This is how. [15550]
-[18300] [DM] {eng}: It is done [19240]",
+      "text": "[12000] [DM] This is how. {eng} (role: original) [15550]
+[18300] [DM] It is done {eng} (role: original) [19240]",
       "videoUrl": "https://coscrad.org/wp-content/uploads/2023/05/Rexy-and-The-Egg-_3D-Dinosaur-Animation_-_-3D-Animation-_-Maya-3D.mp4",
     },
   ],
@@ -3035,8 +3035,8 @@ exports[`When fetching multiple resources GET /resources/videos when some of the
         ],
       },
       "tags": [],
-      "text": "[12000] [DM] {eng}: This is how. [15550]
-[18300] [DM] {eng}: It is done [19240]",
+      "text": "[12000] [DM] This is how. {eng} (role: original) [15550]
+[18300] [DM] It is done {eng} (role: original) [19240]",
       "videoUrl": "https://coscrad.org/wp-content/uploads/2023/05/Rexy-and-The-Egg-_3D-Dinosaur-Animation_-_-3D-Animation-_-Maya-3D.mp4",
     },
   ],
