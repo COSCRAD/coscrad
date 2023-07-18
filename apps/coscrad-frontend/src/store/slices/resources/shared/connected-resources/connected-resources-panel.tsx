@@ -1,5 +1,4 @@
 import { ResourceCompositeIdentifier } from '@coscrad/api-interfaces';
-import { Typography } from '@mui/material';
 import { SelectedCategorizablesOfMultipleTypesPresenter } from '../../../../../components/higher-order-components/selected-categorizables-of-multiple-types.presenter';
 import { useLoadableCategorizables } from '../../../../../components/higher-order-components/use-loadable-categorizables';
 import { thumbnailCategorizableDetailPresenterFactory } from '../../../../../components/resources/factories/thumbnail-categorizable-detail-presenter-factory';
@@ -21,13 +20,7 @@ export const ConnectedResourcesPanel = ({
 
     const loadableConnectedResources = useLoadableCategorizables(compositeIdentifiers);
 
-    if (compositeIdentifiers.length === 0)
-        return (
-            <>
-                <Typography variant="h3">Connected Resources</Typography>
-                No Connections Found
-            </>
-        );
+    if (compositeIdentifiers.length === 0) return <>No Connections Found</>;
 
     return SelectedCategorizablesOfMultipleTypesPresenter({
         viewModelSnapshot: loadableConnectedResources,

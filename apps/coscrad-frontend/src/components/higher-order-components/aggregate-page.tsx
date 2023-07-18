@@ -21,6 +21,7 @@ import { Loading } from '../loading';
 import { NotFoundPresenter } from '../not-found';
 import { NoteDetailPageContainer } from '../notes/note-detail-page.container';
 import { buildUseLoadableSearchResult } from './buildUseLoadableSearchResult';
+import { CategorizablePageLayout } from './categorizable-page-layout';
 
 type DetailPresenter = (viewModel: IDetailQueryResult<IBaseViewModel>) => JSX.Element;
 
@@ -104,9 +105,8 @@ export const AggregatePage = ({
 
     const actionsFromApi = viewModel.actions as IBackendCommandFormAndLabels[];
 
-    const DetailPresenterWithCommands = () => (
+    const Commands = () => (
         <>
-            <DetailPresenter {...viewModel} />
             {/* Note that we don't mix-in static forms if there were no
                     actions returned from the back-end as we're not in admin
                     mode in that case. Note that exposing the forms is only a 
@@ -125,14 +125,26 @@ export const AggregatePage = ({
 
     return (
         <>
-            <DetailPresenterWithCommands />
             {shouldEnableWebOfKnowledgeForResources &&
             isCategorizableCompositeIdentifier(compositeIdentifier) ? (
+                <CategorizablePageLayout
+                    compositeIdentifier={compositeIdentifier}
+                    selfNotesList={
+                        <SelfNotesPanelContainer compositeIdentifier={compositeIdentifier} />
+                    }
+                    connectedResourcesList={
+                        <ConnectedResourcesPanel compositeIdentifier={compositeIdentifier} />
+                    }
+                    commandPanel={<Commands />}
+                >
+                    <DetailPresenter {...viewModel} />
+                </CategorizablePageLayout>
+            ) : (
                 <>
-                    <ConnectedResourcesPanel compositeIdentifier={compositeIdentifier} />
-                    <SelfNotesPanelContainer compositeIdentifier={compositeIdentifier} />
+                    <DetailPresenter {...viewModel} />
+                    <Commands />
                 </>
-            ) : null}
+            )}
         </>
     );
 };
