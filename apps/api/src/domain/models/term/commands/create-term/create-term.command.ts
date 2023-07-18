@@ -1,25 +1,11 @@
 import { AggregateType, ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { ExternalEnum, NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
+import { NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
+import { AggregateTypeProperty } from '../../../shared/common-commands';
 import { CREATE_TERM } from './constants';
 
 export class TermCompositeIdentifier {
-    @ExternalEnum(
-        {
-            enumName: 'type',
-            enumLabel: 'type',
-            labelsAndValues: [
-                {
-                    label: 'type',
-                    value: AggregateType.term,
-                },
-            ],
-        },
-        {
-            label: 'type',
-            description: AggregateType.term,
-        }
-    )
+    @AggregateTypeProperty([AggregateType.term])
     type = AggregateType.term;
 
     @UUID({

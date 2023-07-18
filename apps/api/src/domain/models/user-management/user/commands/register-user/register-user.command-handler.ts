@@ -1,14 +1,9 @@
 import { CommandHandler } from '@coscrad/commands';
-import { Inject } from '@nestjs/common';
 import { InternalError } from '../../../../../../lib/errors/InternalError';
-import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../../persistence/constants/persistenceConstants';
 import { DTO } from '../../../../../../types/DTO';
 import { ResultOrError } from '../../../../../../types/ResultOrError';
 import { Valid } from '../../../../../domainModelValidators/Valid';
 import buildInstanceFactory from '../../../../../factories/utilities/buildInstanceFactory';
-import { IIdManager } from '../../../../../interfaces/id-manager.interface';
-import { IRepositoryProvider } from '../../../../../repositories/interfaces/repository-provider.interface';
-import { IUserRepository } from '../../../../../repositories/interfaces/user-repository.interface';
 import { AggregateId } from '../../../../../types/AggregateId';
 import { AggregateType } from '../../../../../types/AggregateType';
 import { InMemorySnapshot } from '../../../../../types/ResourceType';
@@ -22,20 +17,6 @@ import { UserRegistered } from './user-registered.event';
 
 @CommandHandler(RegisterUser)
 export class RegisterUserCommandHandler extends BaseCreateCommandHandler<CoscradUser> {
-    readonly aggregateType = AggregateType.user;
-
-    protected readonly repositoryForCommandsTargetAggregate: IUserRepository;
-
-    constructor(
-        @Inject(REPOSITORY_PROVIDER_TOKEN)
-        protected readonly repositoryProvider: IRepositoryProvider,
-        @Inject('ID_MANAGER') protected readonly idManager: IIdManager
-    ) {
-        super(repositoryProvider, idManager);
-
-        this.repositoryForCommandsTargetAggregate = this.repositoryProvider.getUserRepository();
-    }
-
     protected createNewInstance({
         aggregateCompositeIdentifier: { id },
         userIdFromAuthProvider,
@@ -63,7 +44,7 @@ export class RegisterUserCommandHandler extends BaseCreateCommandHandler<Coscrad
     }
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
-        const userSearchResult = await this.repositoryForCommandsTargetAggregate.fetchMany();
+        const userSearchResult = await this.repositoryProvider.getUserRepository().fetchMany();
 
         const users = userSearchResult.filter(validAggregateOrThrow);
 

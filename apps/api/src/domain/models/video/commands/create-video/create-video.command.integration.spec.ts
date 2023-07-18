@@ -198,6 +198,26 @@ describe(commandType, () => {
         });
 
         describe('when the command payload type is invalid', () => {
+            describe(`when aggregateCompositeIdentifier.type is not video`, () => {
+                Object.values(AggregateType)
+                    .filter((t) => t !== AggregateType.video)
+                    .forEach((invalidAggregateType) => {
+                        it(`should fail with the expected errors`, async () => {
+                            await assertCommandFailsDueToTypeError(
+                                assertionHelperDependencies,
+                                {
+                                    propertyName: `aggregateCompositeIdentifier`,
+                                    invalidValue: {
+                                        id: buildDummyUuid(125),
+                                        type: invalidAggregateType,
+                                    },
+                                },
+                                buildValidCommandFSA(buildDummyUuid(126))
+                            );
+                        });
+                    });
+            });
+
             describe('when there is no original item in the multilingual text provided', () => {
                 const multiLingualTextWithNoOriginal: DTO<MultilingualText> = {
                     items: [

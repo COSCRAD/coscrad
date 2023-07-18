@@ -6,8 +6,8 @@ import getValidAggregateInstanceForTest from '../../../../domain/__tests__/utili
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { NotAvailable } from '../../../../lib/types/not-available';
 import { NotFound } from '../../../../lib/types/not-found';
-import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../types/DTO';
 import InvariantValidationError from '../../../domainModelValidators/errors/InvariantValidationError';
 import MediaItemHasNoTitleInAnyLanguageError from '../../../domainModelValidators/errors/mediaItem/MediaItemHasNoTitleInAnyLanguageError';
@@ -18,8 +18,6 @@ import { AggregateType } from '../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../types/DeluxeInMemoryStore';
 import { ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
-import CommandExecutionError from '../../shared/common-command-errors/CommandExecutionError';
-import ResourceIdAlreadyInUseError from '../../shared/common-command-errors/ResourceIdAlreadyInUseError';
 import { assertCreateCommandError } from '../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../__tests__/command-helpers/assert-create-command-success';
 import { assertEventRecordPersisted } from '../../__tests__/command-helpers/assert-event-record-persisted';
@@ -27,6 +25,8 @@ import { generateCommandFuzzTestCases } from '../../__tests__/command-helpers/ge
 import { CommandAssertionDependencies } from '../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummyUuid } from '../../__tests__/utilities/dummyUuid';
+import CommandExecutionError from '../../shared/common-command-errors/CommandExecutionError';
+import ResourceIdAlreadyInUseError from '../../shared/common-command-errors/ResourceIdAlreadyInUseError';
 import { MediaItem } from '../entities/media-item.entity';
 import { CreateMediaItem } from './create-media-item.command';
 
@@ -222,5 +222,41 @@ describe('CreateMediaItem', () => {
                 });
             });
         });
+    });
+
+    describe('when the payload has an invalid type', () => {
+        describe(`when the payload has an invalid aggregate type`, () => {
+            Object.values(AggregateType)
+                .filter((t) => t !== AggregateType.mediaItem)
+                .forEach((invalidAggregateType) => {
+                    it(`should fail with the expected error`, async () => {
+                        await assertCommandFailsDueToTypeError(
+                            assertionHelperDependencies,
+                            {
+                                propertyName: 'aggregateCompositeIdentifier',
+                                invalidValue: {
+                                    type: invalidAggregateType,
+                                    id: buildDummyUuid(15),
+                                },
+                            },
+                            buildValidCommandFSA(buildDummyUuid(12))
+                        );
+                    });
+                });
+        });
+
+        generateCommandFuzzTestCases(CreateMediaItem).forEach(
+            ({ description, propertyName, invalidValue }) => {
+                describe(`when the property: ${propertyName} has the invalid value:${invalidValue} (${description}`, () => {
+                    it('should fail with the appropriate error', async () => {
+                        await assertCommandFailsDueToTypeError(
+                            assertionHelperDependencies,
+                            { propertyName, invalidValue },
+                            buildValidCommandFSA(buildDummyUuid(123))
+                        );
+                    });
+                });
+            }
+        );
     });
 });

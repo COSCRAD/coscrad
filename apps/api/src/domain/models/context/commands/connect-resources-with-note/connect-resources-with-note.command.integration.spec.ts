@@ -685,6 +685,26 @@ describe(commandType, () => {
         });
 
         describe('when the payload has an invalid type', () => {
+            describe(`when the payload has an invalid aggregate type`, () => {
+                Object.values(AggregateType)
+                    .filter((t) => t !== AggregateType.note)
+                    .forEach((invalidAggregateType) => {
+                        it(`should fail with the expected error`, async () => {
+                            await assertCommandFailsDueToTypeError(
+                                assertionHelperDependencies,
+                                {
+                                    propertyName: 'aggregateCompositeIdentifier',
+                                    invalidValue: {
+                                        type: invalidAggregateType,
+                                        id: buildDummyUuid(15),
+                                    },
+                                },
+                                buidlValidFsa(buildDummyUuid(42))
+                            );
+                        });
+                    });
+            });
+
             generateCommandFuzzTestCases(ConnectResourcesWithNote).forEach(
                 ({ description, propertyName, invalidValue }) => {
                     describe(`when the property: ${propertyName} has the invalid value:${invalidValue} (${description}`, () => {

@@ -1,3 +1,4 @@
+import { AggregateCompositeIdentifier, AggregateType, ICommandBase } from '@coscrad/api-interfaces';
 import { Ack, ICommand, ICommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
@@ -5,9 +6,10 @@ import { REPOSITORY_PROVIDER_TOKEN } from '../../../../persistence/constants/per
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
+import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../repositories/interfaces/repository-provider.interface';
 import { AggregateId } from '../../../types/AggregateId';
-import { InMemorySnapshot } from '../../../types/ResourceType';
+import { InMemorySnapshot, isResourceType } from '../../../types/ResourceType';
 import { Aggregate } from '../../aggregate.entity';
 import CommandExecutionError from '../common-command-errors/CommandExecutionError';
 import { BaseEvent } from '../events/base-event.entity';
@@ -22,6 +24,48 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
         protected readonly repositoryProvider: IRepositoryProvider,
         @Inject('ID_MANAGER') protected readonly idManager: IIdManager
     ) {}
+
+    protected getAggregateIdFromCommand({
+        aggregateCompositeIdentifier,
+    }: ICommandBase): AggregateCompositeIdentifier {
+        return aggregateCompositeIdentifier;
+    }
+
+    protected getRepositoryForCommand<T extends Aggregate = Aggregate>(
+        command: ICommandBase
+    ): IRepositoryForAggregate<T> {
+        const { type: aggregateType } = this.getAggregateIdFromCommand(command);
+
+        // TODO a `forAggregate` method on the repository provider would be better
+        if (isResourceType(aggregateType))
+            return this.repositoryProvider.forResource(
+                aggregateType
+            ) as unknown as IRepositoryForAggregate<T>;
+
+        if (aggregateType === AggregateType.note)
+            return this.repositoryProvider.getEdgeConnectionRepository() as unknown as IRepositoryForAggregate<T>;
+
+        if (aggregateType === AggregateType.user)
+            return this.repositoryProvider.getUserRepository() as unknown as IRepositoryForAggregate<T>;
+
+        if (aggregateType === AggregateType.userGroup)
+            return this.repositoryProvider.getUserGroupRepository() as unknown as IRepositoryForAggregate<T>;
+
+        if (aggregateType === AggregateType.tag)
+            return this.repositoryProvider.getTagRepository() as unknown as IRepositoryForAggregate<T>;
+
+        if (aggregateType === AggregateType.category) {
+            throw new InternalError(
+                `Category Repository is not supported as it doesn not have an update method`
+            );
+        }
+
+        const exhaustiveCheck: never = aggregateType;
+
+        throw new InternalError(
+            `Failed to find repository for aggregate of type: ${exhaustiveCheck}`
+        );
+    }
 
     protected validateType(command: ICommand, commandType: string): Valid | InternalError {
         return validateCommandPayloadType(command, commandType);

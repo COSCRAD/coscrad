@@ -1,19 +1,19 @@
 import { ISpatialFeatureProperties } from '@coscrad/api-interfaces';
-import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { InternalError } from '../../../../lib/errors/InternalError';
-import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
-import { DTO } from '../../../../types/DTO';
-import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
-import { MultilingualText } from '../../../common/entities/multilingual-text';
-import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
-import { ResourceType } from '../../../types/ResourceType';
-import { Resource } from '../../resource.entity';
-import { IGeometricFeature } from '../interfaces/geometric-feature.interface';
-import { ISpatialFeature } from '../interfaces/spatial-feature.interface';
-import { LineCoordinates } from '../types/Coordinates/LineCoordinates';
-import { GeometricFeatureType } from '../types/GeometricFeatureType';
-import validateAllCoordinatesInLinearStructure from '../validation/validateAllCoordinatesInLinearStructure';
-import { SpatialFeatureProperties } from './spatial-feature-properties.entity';
+import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { InternalError } from '../../../../../lib/errors/InternalError';
+import cloneToPlainObject from '../../../../../lib/utilities/cloneToPlainObject';
+import { DTO } from '../../../../../types/DTO';
+import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../../../common/entities/multilingual-text';
+import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
+import { ResourceType } from '../../../../types/ResourceType';
+import { Resource } from '../../../resource.entity';
+import { IGeometricFeature } from '../../interfaces/geometric-feature.interface';
+import { ISpatialFeature } from '../../interfaces/spatial-feature.interface';
+import { SpatialFeatureProperties } from '../../point/entities/spatial-feature-properties.entity';
+import { LineCoordinates } from '../../types/Coordinates/LineCoordinates';
+import { GeometricFeatureType } from '../../types/GeometricFeatureType';
+import validateAllCoordinatesInLinearStructure from '../../validation/validateAllCoordinatesInLinearStructure';
 
 @RegisterIndexScopedCommands([])
 export class Line extends Resource implements ISpatialFeature {

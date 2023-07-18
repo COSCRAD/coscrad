@@ -5,13 +5,10 @@ import { isNotAvailable } from '../../../../lib/types/not-available';
 import { isNotFound } from '../../../../lib/types/not-found';
 import { isOK } from '../../../../lib/types/ok';
 import { ResultOrError } from '../../../../types/ResultOrError';
-import { Valid, isValid } from '../../../domainModelValidators/Valid';
+import { Valid } from '../../../domainModelValidators/Valid';
 import { EVENT } from '../../../interfaces/id-manager.interface';
-import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { AggregateId } from '../../../types/AggregateId';
-import { AggregateType } from '../../../types/AggregateType';
 import { Aggregate } from '../../aggregate.entity';
-import InvalidCommandPayloadTypeError from '../common-command-errors/InvalidCommandPayloadTypeError';
 import UuidNotAvailableForUseError from '../common-command-errors/UuidNotAvailableForUseError';
 import UuidNotGeneratedInternallyError from '../common-command-errors/UuidNotGeneratedInternallyError';
 import { BaseCommandHandler } from './base-command-handler';
@@ -26,36 +23,7 @@ import { BaseCommandHandler } from './base-command-handler';
 export abstract class BaseCreateCommandHandler<
     TAggregate extends Aggregate
 > extends BaseCommandHandler<TAggregate> {
-    protected abstract readonly repositoryForCommandsTargetAggregate: IRepositoryForAggregate<TAggregate>;
-
-    // TODO We should be able to get the repository from the `AggregateType`
-    protected abstract readonly aggregateType: AggregateType;
-
     protected abstract createNewInstance(command: ICommandBase): ResultOrError<TAggregate>;
-
-    /**
-     * TODO Remove this in favor of validating the type property using the
-     * `@FixedValue` decorator.
-     */
-    protected validateType(
-        command: ICommandBase,
-        commandType: string
-    ): typeof Valid | InternalError {
-        const baseValidationResult = super.validateType(command, commandType);
-
-        const allErrors = isValid(baseValidationResult) ? [] : baseValidationResult.innerErrors;
-
-        if (this.aggregateType !== command?.aggregateCompositeIdentifier?.type)
-            allErrors.push(
-                new InternalError(
-                    `The property type of aggregateCompositeIdentifier has failed validation: must be: ${this.aggregateType}`
-                )
-            );
-
-        return allErrors.length > 0
-            ? new InvalidCommandPayloadTypeError(commandType, allErrors)
-            : Valid;
-    }
 
     protected createOrFetchWriteContext(command: ICommandBase): Promise<ResultOrError<TAggregate>> {
         return Promise.resolve(this.createNewInstance(command));
@@ -92,7 +60,7 @@ export abstract class BaseCreateCommandHandler<
         const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);
 
         // Persist the valid instance
-        await this.repositoryForCommandsTargetAggregate.create(
+        await this.getRepositoryForCommand(command).create(
             instanceToPersistWithUpdatedEventHistory
         );
     }

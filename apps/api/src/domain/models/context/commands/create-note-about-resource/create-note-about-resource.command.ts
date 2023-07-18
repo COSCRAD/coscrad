@@ -6,16 +6,13 @@ import {
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { FixedValue, NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
+import { NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
 import { LanguageCodeEnum } from '../../../../common/entities/multilingual-text';
+import { AggregateTypeProperty } from '../../../shared/common-commands';
 import { ContextUnion } from '../../edge-connection-context-union';
 
 export class ResourceCompositeIdentifier {
-    // TODO Make this an enum
-    @NonEmptyString({
-        label: 'type',
-        description: 'song',
-    })
+    @AggregateTypeProperty(Object.values(ResourceType))
     // TODO be sure to test when an invalid aggregate type comes through
     type: ResourceType;
 
@@ -28,12 +25,7 @@ export class ResourceCompositeIdentifier {
 }
 
 export class EdgeConnectionCompositeIdentifier {
-    // TODO Use a more restrictive type decorator
-    @FixedValue({
-        label: 'type',
-        description: `must be: note`,
-    })
-    // TODO be sure to test when an invalid aggregate type comes through
+    @AggregateTypeProperty([AggregateType.note])
     type = AggregateType.note;
 
     // TODO We should have a source of truth for the label \ description here

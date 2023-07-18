@@ -1,5 +1,5 @@
-import { Polygon } from '../../domain/models/spatial-feature/entities/polygon.entity';
 import { IGeometricFeature } from '../../domain/models/spatial-feature/interfaces/geometric-feature.interface';
+import { Polygon } from '../../domain/models/spatial-feature/polygon/entities/polygon.entity';
 import { PolygonCoordinates } from '../../domain/models/spatial-feature/types/Coordinates/PolygonCoordinates';
 import { GeometricFeatureType } from '../../domain/models/spatial-feature/types/GeometricFeatureType';
 import { ResourceType } from '../../domain/types/ResourceType';
