@@ -21,7 +21,12 @@ import BaseDomainModel from '../../models/BaseDomainModel';
 import { DuplicateLanguageInMultilingualTextError } from '../../models/audio-item/errors/duplicate-language-in-multilingual-text.error';
 import { MultilingualTextHasNoOriginalError } from '../../models/audio-item/errors/multilingual-text-has-no-original.error';
 import { MultipleOriginalsInMultilingualTextError } from '../../models/audio-item/errors/multiple-originals-in-multilingual-text.error';
-import { isNull, isUndefined } from '../../utilities/validation/is-null-or-undefined';
+import {
+    isNull,
+    isNullOrUndefined,
+    isUndefined,
+} from '../../utilities/validation/is-null-or-undefined';
+import { CannotAddDuplicateTranslationError } from './errors';
 
 export { MultilingualTextItemRole };
 
@@ -98,6 +103,11 @@ export class MultilingualTextItem extends BaseDomainModel implements IMultlingua
 
         this.text = text;
     }
+
+    toString(): string {
+        // TODO we need to use labels for the enums here
+        return `${this.text} {${this.languageCode}} (role: ${this.role})`;
+    }
 }
 
 export class MultilingualText extends BaseDomainModel implements IMultilingualText {
@@ -132,10 +142,16 @@ export class MultilingualText extends BaseDomainModel implements IMultilingualTe
             return 'invalid';
         }
 
-        return this.items.map(({ text, languageCode }) => `{${languageCode}}: ${text}`).join('\n');
+        return this.items.map((item) => item.toString()).join('\n');
     }
 
-    translate(languageCode: LanguageCode): Maybe<MultilingualTextItem> {
+    has(languageCode: LanguageCode): boolean {
+        const searchResult = this.items.find((item) => item.languageCode === languageCode);
+
+        return !isNullOrUndefined(searchResult);
+    }
+
+    getTranslation(languageCode: LanguageCode): Maybe<MultilingualTextItem> {
         return this.items.find((item) => item.languageCode === languageCode) || NotFound;
     }
 
@@ -143,7 +159,10 @@ export class MultilingualText extends BaseDomainModel implements IMultilingualTe
         return this.items.find(({ role }) => role === MultilingualTextItemRole.original).clone();
     }
 
-    append(item: MultilingualTextItem): MultilingualText {
+    translate(item: MultilingualTextItem): ResultOrError<this> {
+        if (this.has(item.languageCode)) return new CannotAddDuplicateTranslationError(item, this);
+
+        // TODO make this return an error if there is a conflict with existing items
         return this.clone({
             // avoid shared references
             items: this.items.concat(item).map((item) => new MultilingualTextItem(item)),

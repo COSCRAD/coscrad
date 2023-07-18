@@ -1,8 +1,9 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandFSA } from '../../app/controllers/command/command-fsa/command-fsa.entity';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
-import { CreateTerm } from '../../domain/models/term/commands';
+import { CreateTerm, TranslateTerm } from '../../domain/models/term/commands';
 import { CREATE_TERM } from '../../domain/models/term/commands/create-term/constants';
+import { TRANSLATE_TERM } from '../../domain/models/term/commands/translate-term/constants';
 import { AggregateType } from '../../domain/types/AggregateType';
 
 const id = buildDummyUuid(11);
@@ -22,4 +23,16 @@ const createTerm: CommandFSA<CreateTerm> = {
     },
 };
 
-export const buildTermTestCommandFsas = () => [createTerm];
+const translateTerm: CommandFSA<TranslateTerm> = {
+    type: TRANSLATE_TERM,
+    payload: {
+        aggregateCompositeIdentifier: {
+            id,
+            type,
+        },
+        translation: 'I am talking to him (English)',
+        languageCode: LanguageCode.English,
+    },
+};
+
+export const buildTermTestCommandFsas = () => [createTerm, translateTerm];
