@@ -23,7 +23,7 @@ export default (model: Resource, context: TextFieldContext): Valid | InternalErr
      */
     const multilingualTextProperty = valueOfTargetProperty as MultilingualText;
 
-    const translation = multilingualTextProperty.translate(languageCode);
+    const translation = multilingualTextProperty.getTranslation(languageCode);
 
     // TODO include the language code in the error
     if (isNotFound(translation))

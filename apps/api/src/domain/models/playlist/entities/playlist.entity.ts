@@ -1,7 +1,7 @@
 import { NestedDataType } from '@coscrad/data-types';
 import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { InternalError } from '../../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
@@ -83,12 +83,16 @@ export class Playlist extends Resource {
         });
     }
 
-    translateName(textItem: MultilingualTextItem) {
+    translateName(textItem: MultilingualTextItem): ResultOrError<Playlist> {
         if (this.name.items.some(({ languageCode }) => languageCode === textItem.languageCode))
             return new DuplicateLanguageInMultilingualTextError(textItem.languageCode);
 
+        const nameUpdateResult = this.name.translate(textItem);
+
+        if (isInternalError(nameUpdateResult)) return nameUpdateResult;
+
         return this.safeClone<Playlist>({
-            name: this.name.append(textItem).toDTO(),
+            name: nameUpdateResult,
         });
     }
 

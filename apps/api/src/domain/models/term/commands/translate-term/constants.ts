@@ -1,0 +1,3 @@
+export const TRANSLATE_TERM = 'TRANSLATE_TERM';
+
+export const TERM_TRANSLATED = 'TERM_TRANSLATED';

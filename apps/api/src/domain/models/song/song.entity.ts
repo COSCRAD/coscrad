@@ -2,7 +2,7 @@ import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces'
 import { NestedDataType, NonEmptyString, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
 import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { InternalError } from '../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
 import { isNotFound } from '../../../lib/types/not-found';
 import { DTO } from '../../../types/DTO';
@@ -172,21 +172,25 @@ export class Song extends Resource implements ITimeBoundable {
         } as DeepPartial<DTO<this>>);
     }
 
-    translateLyrics(text: string, languageCode: LanguageCode) {
+    translateLyrics(text: string, languageCode: LanguageCode): ResultOrError<Song> {
         if (!this.hasLyrics()) return new NoLyricsToTranslateError(this);
 
         if (this.hasTranslation(languageCode))
             return new SongLyricsHaveAlreadyBeenTranslatedToGivenLanguageError(this, languageCode);
 
-        return this.safeClone({
-            lyrics: this.lyrics.append(
-                new MultilingualTextItem({
-                    text,
-                    languageCode,
-                    role: MultilingualTextItemRole.freeTranslation,
-                })
-            ),
-        } as DeepPartial<DTO<this>>);
+        const newLyrics = this.lyrics.translate(
+            new MultilingualTextItem({
+                text,
+                languageCode,
+                role: MultilingualTextItemRole.freeTranslation,
+            })
+        );
+
+        if (isInternalError(newLyrics)) return newLyrics;
+
+        return this.safeClone<Song>({
+            lyrics: newLyrics,
+        });
     }
 
     hasLyrics(): boolean {
@@ -196,7 +200,7 @@ export class Song extends Resource implements ITimeBoundable {
     hasTranslation(languageCode: LanguageCode): boolean {
         if (!this.hasLyrics()) return false;
 
-        const searchResult = this.lyrics.translate(languageCode);
+        const searchResult = this.lyrics.getTranslation(languageCode);
 
         return !isNotFound(searchResult);
     }
