@@ -1,4 +1,4 @@
-import { MediaPlayer } from '@coscrad/media-player';
+import { IcecastStreamPlayer, MediaPlayer } from '@coscrad/media-player';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 
@@ -17,6 +17,7 @@ export const ListenLivePage = (): JSX.Element => {
             {title}
             <img src={logoUrl} alt="logo" />
             <MediaPlayer audioUrl={link} listenMessage={playingMessage} />
+            <IcecastStreamPlayer audioUrl={link} />
             {playingMessage}
             {missionStatement}
         </div>
