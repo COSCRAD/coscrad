@@ -35,12 +35,31 @@ const DrawerHeader = styled(Box)(({ theme }) => ({
     justifyContent: 'space-between',
 }));
 
+const drawerContentStackMargin = {
+    top: 0,
+    right: 4,
+    bottom: 0,
+    left: 4,
+};
+
 const DrawerContentStack = styled(Stack)(({ theme }) => ({
-    margin: theme.spacing(0, 4, 0, 4),
+    margin: theme.spacing(
+        drawerContentStackMargin.top,
+        drawerContentStackMargin.right,
+        drawerContentStackMargin.bottom,
+        drawerContentStackMargin.left
+    ),
     overflow: 'scroll',
 }));
 
-type Anchor = 'top' | 'left' | 'bottom' | 'right';
+type AnchorLocation = 'bottom' | 'right';
+
+type UXState = {
+    openPanelLocation: AnchorLocation | null;
+};
+
+const isPanelOpen = (location: AnchorLocation, { openPanelLocation }: UXState) =>
+    openPanelLocation === location;
 
 export const CategorizablePageLayout = ({
     compositeIdentifier: { type: resourceType, id },
@@ -49,15 +68,21 @@ export const CategorizablePageLayout = ({
     commandPanel,
     children,
 }: CategorizablePageLayoutProps) => {
-    const [drawerState, setDrawerState] = useState({
-        bottom: false,
-        right: false,
+    const [drawerState, setDrawerState] = useState<UXState>({
+        openPanelLocation: null,
     });
-    const [isBottomDrawerExpanded, setIsBottomDrawerExpanded] = useState(false);
 
-    const toggleDrawer = (anchor: Anchor, isOpen: boolean) => {
-        setDrawerState({ ...drawerState, [anchor]: isOpen });
+    const toggleDrawer = (anchor: AnchorLocation) => {
+        const isOpen = isPanelOpen(anchor, drawerState);
+
+        if (isOpen) {
+            setDrawerState({ openPanelLocation: null });
+        } else {
+            setDrawerState({ openPanelLocation: anchor });
+        }
     };
+
+    const [isBottomDrawerExpanded, setIsBottomDrawerExpanded] = useState(false);
 
     return (
         <>
@@ -67,7 +92,7 @@ export const CategorizablePageLayout = ({
                     <IconButton
                         data-testid="open-notes-panel-button"
                         onClick={() => {
-                            toggleDrawer('bottom', !drawerState['bottom']);
+                            toggleDrawer('bottom');
                         }}
                     >
                         <TextSnippetIcon />
@@ -77,7 +102,7 @@ export const CategorizablePageLayout = ({
                     <IconButton
                         data-testid="open-connected-resource-panel-button"
                         onClick={() => {
-                            toggleDrawer('right', !drawerState['right']);
+                            toggleDrawer('right');
                         }}
                     >
                         <HubIcon />
@@ -91,7 +116,7 @@ export const CategorizablePageLayout = ({
                 }}
                 variant="temporary"
                 data-testid="connected-resources-panel"
-                open={drawerState['right']}
+                open={isPanelOpen('right', drawerState)}
             >
                 <DrawerHeader>
                     <Box sx={{ mb: 2 }}>
@@ -107,7 +132,7 @@ export const CategorizablePageLayout = ({
                         <IconButton
                             data-testid="close-connected-resources-panel-button"
                             onClick={() => {
-                                toggleDrawer('right', false);
+                                toggleDrawer('right');
                             }}
                         >
                             <CloseIcon />
@@ -131,7 +156,7 @@ export const CategorizablePageLayout = ({
                 }}
                 variant="temporary"
                 data-testid="notes-panel"
-                open={drawerState['bottom']}
+                open={isPanelOpen('bottom', drawerState)}
             >
                 <DrawerHeader>
                     <Box sx={{ mb: 2 }}>
@@ -157,7 +182,7 @@ export const CategorizablePageLayout = ({
                             <IconButton
                                 data-testid="close-notes-panel-button"
                                 onClick={() => {
-                                    toggleDrawer('bottom', false);
+                                    toggleDrawer('bottom');
                                 }}
                             >
                                 <CloseIcon />
