@@ -1,23 +1,25 @@
 import { AggregateType, ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
+import { ExternalEnum, NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
 import { CREATE_TERM } from './constants';
 
 export class TermCompositeIdentifier {
-    /**
-     * This is a bit of a hack. It circumvents our `CoscradDataTypes` and may
-     * cause problems for
-     * - Schema management
-     * - Anyone using our API directly (not via front-end)
-     *
-     * The simple answer is that you always have to tack on an
-     * `aggregateCompositeIdentifier`.
-     */
-
-    @NonEmptyString({
-        label: 'type',
-        description: 'song',
-    })
+    @ExternalEnum(
+        {
+            enumName: 'type',
+            enumLabel: 'type',
+            labelsAndValues: [
+                {
+                    label: 'type',
+                    value: AggregateType.term,
+                },
+            ],
+        },
+        {
+            label: 'type',
+            description: AggregateType.term,
+        }
+    )
     type = AggregateType.term;
 
     @UUID({

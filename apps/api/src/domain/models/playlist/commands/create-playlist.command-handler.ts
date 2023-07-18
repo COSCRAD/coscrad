@@ -5,11 +5,7 @@ import { InternalError, isInternalError } from '../../../../lib/errors/InternalE
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../persistence/constants/persistenceConstants';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
-import {
-    MultilingualText,
-    MultilingualTextItem,
-    MultilingualTextItemRole,
-} from '../../../common/entities/multilingual-text';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { Valid } from '../../../domainModelValidators/Valid';
 import getInstanceFactoryForResource from '../../../factories/getInstanceFactoryForResource';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
@@ -54,15 +50,7 @@ export class CreatePlayListCommandHandler extends BaseCreateCommandHandler<Playl
         const createDto: DTO<Playlist> = {
             id,
             type: AggregateType.playlist,
-            name: new MultilingualText({
-                items: [],
-            }).append(
-                new MultilingualTextItem({
-                    text: name,
-                    languageCode: languageCodeForName,
-                    role: MultilingualTextItemRole.original,
-                })
-            ),
+            name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
             items: [],
             published: false,
         };

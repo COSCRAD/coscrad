@@ -1,6 +1,11 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
-import { CreateTerm, CreateTermCommandHandler } from '../../domain/models/term/commands';
+import {
+    CreateTerm,
+    CreateTermCommandHandler,
+    TranslateTerm,
+    TranslateTermCommandHandler,
+} from '../../domain/models/term/commands';
 import { TermQueryService } from '../../domain/services/query-services/term-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { PersistenceModule } from '../../persistence/persistence.module';
@@ -14,8 +19,9 @@ import { TermController } from '../controllers/resources/term.controller';
         CommandInfoService,
         TermQueryService,
         CreateTermCommandHandler,
+        TranslateTermCommandHandler,
         // Data Classes
-        ...[CreateTerm].map((ctor) => ({
+        ...[CreateTerm, TranslateTerm].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
         })),
