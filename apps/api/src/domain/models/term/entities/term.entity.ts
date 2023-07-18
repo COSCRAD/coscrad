@@ -12,10 +12,11 @@ import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-unde
 import { TextFieldContext } from '../../context/text-field-context/text-field-context.entity';
 import { Resource } from '../../resource.entity';
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
+import { CREATE_TERM } from '../commands/create-term/constants';
 
 const isOptional = true;
 
-@RegisterIndexScopedCommands([])
+@RegisterIndexScopedCommands([CREATE_TERM])
 export class Term extends Resource {
     readonly type: ResourceType = ResourceType.term;
 
