@@ -2594,5 +2594,56 @@ exports[`command payload schemas Command payload schema should match the snapsho
     },
     "type": "TRANSLATE_SONG_LYRICS",
   },
+  {
+    "description": "Create a new term in the language",
+    "label": "Create Term",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier for the new term",
+        "isArray": false,
+        "isOptional": false,
+        "label": "composite ID (generated)",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "song",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+          },
+        },
+      },
+      "contributorId": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "The ID of the knowledge keeper who contributed the term",
+        "isArray": false,
+        "isOptional": false,
+        "label": "contributor ID",
+      },
+      "languageCode": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the language of this term",
+        "isArray": false,
+        "isOptional": false,
+        "label": "language",
+      },
+      "text": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "text for the term (in the language)",
+        "isArray": false,
+        "isOptional": false,
+        "label": "text",
+      },
+    },
+    "type": "CREATE_TERM",
+  },
 ]
 `;

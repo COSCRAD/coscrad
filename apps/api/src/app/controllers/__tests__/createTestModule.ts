@@ -86,6 +86,7 @@ import {
     TagResourceOrNote,
     TagResourceOrNoteCommandHandler,
 } from '../../../domain/models/tag/commands';
+import { CreateTerm, CreateTermCommandHandler } from '../../../domain/models/term/commands';
 import {
     CreateGroup,
     CreateGroupCommandHandler,
@@ -438,6 +439,8 @@ export default async (
             ConnectResourcesWithNoteCommandHandler,
             TranslateSongLyrics,
             TranslateSongLyricsCommandHandler,
+            CreateTerm,
+            CreateTermCommandHandler,
         ],
 
         controllers: [
