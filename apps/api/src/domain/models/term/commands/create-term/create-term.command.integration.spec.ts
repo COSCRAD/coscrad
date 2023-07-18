@@ -2,6 +2,7 @@ import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
+import { NotFound } from '../../../../../lib/types/not-found';
 import { clonePlainObjectWithOverrides } from '../../../../../lib/utilities/clonePlainObjectWithOverrides';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -14,12 +15,14 @@ import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCreateCommandError } from '../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../__tests__/command-helpers/assert-create-command-success';
+import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
 import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
+import { Term } from '../../entities/term.entity';
 import { CreateTerm } from './create-term.command';
 
 const commandType = `CREATE_TERM`;
@@ -72,11 +75,26 @@ describe(commandType, () => {
     });
 
     describe(`when the command is valid`, () => {
-        it(`should succeed with the expected state upstates`, async () => {
+        it(`should succeed with the expected state updates`, async () => {
             await assertCreateCommandSuccess(assertionHelperDependencies, {
                 systemUserId: dummySystemUserId,
                 initialState: emptyInitialState,
                 buildValidCommandFSA,
+                checkStateOnSuccess: async ({
+                    aggregateCompositeIdentifier: { id },
+                }: CreateTerm) => {
+                    const searchResult = await testRepositoryProvider
+                        .forResource(AggregateType.term)
+                        .fetchById(id);
+
+                    expect(searchResult).not.toBe(NotFound);
+
+                    expect(searchResult).not.toBeInstanceOf(Error);
+
+                    const term = searchResult as Term;
+
+                    assertEventRecordPersisted(term, `TERM_CREATED`, dummySystemUserId);
+                },
             });
         });
     });
