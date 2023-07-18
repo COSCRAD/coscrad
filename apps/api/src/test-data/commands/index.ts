@@ -4,6 +4,7 @@ import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUu
 import { AddLyricsForSong } from '../../domain/models/song/commands';
 import { CreateSong } from '../../domain/models/song/commands/create-song.command';
 import { AggregateType } from '../../domain/types/AggregateType';
+import { buildTermTestCommandFsas } from './build-term-test-command-fsas';
 
 const id = buildDummyUuid(1);
 
@@ -36,7 +37,7 @@ const addLyricsForSong: CommandFSA<AddLyricsForSong> = {
 const buildSongTestCommandFsas = () => [createSong, addLyricsForSong];
 
 export const buildTestCommandFsaMap = () =>
-    [...buildSongTestCommandFsas()].reduce(
+    [...buildSongTestCommandFsas(), ...buildTermTestCommandFsas()].reduce(
         (fsaMap, nextFsa) => fsaMap.set(nextFsa.type, nextFsa),
         new Map<string, CommandFSA>()
     );
