@@ -96,7 +96,6 @@ export class Term extends Resource {
     }
 
     translate(text: string, languageCode: LanguageCode): ResultOrError<Term> {
-        // shouldn't append return ResultOrError<MultilingualText> >
         const textUpdateResult = this.text.translate(
             new MultilingualTextItem({
                 role: MultilingualTextItemRole.freeTranslation,
