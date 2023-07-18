@@ -1,6 +1,6 @@
 import { AggregateType } from '@coscrad/api-interfaces';
 
-describe(`tagging a note`, () => {
+describe(`tagging a term`, () => {
     const termBaseRoute = `/Resources/Terms/`;
 
     const termId = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002`;

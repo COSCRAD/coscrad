@@ -3,7 +3,7 @@ import {
     IBaseViewModel,
     ICategorizableDetailQueryResult,
 } from '@coscrad/api-interfaces';
-import { Typography } from '@mui/material';
+import { Box, Stack, Typography, styled } from '@mui/material';
 import { NOT_FOUND } from '../../store/slices/interfaces/maybe-loadable.interface';
 import { NotFoundPresenter } from '../not-found';
 import { ICategorizableDetailPresenterFactory } from '../resources/factories/categorizable-detail-presenter-factory.interface';
@@ -15,6 +15,11 @@ export interface SelectedCategorizablesPresenterProps<T extends IBaseViewModel =
     pluralLabelForCategorizableType: string;
 }
 
+const Item = styled(Box)(({ theme }) => ({
+    padding: 0,
+    marginBottom: '15px',
+}));
+
 export const SelectedCategorizablesPresenter = <T extends IBaseViewModel>({
     viewModels,
     presenterFactory,
@@ -24,13 +29,13 @@ export const SelectedCategorizablesPresenter = <T extends IBaseViewModel>({
     const Presenter = presenterFactory(categorizableType);
 
     return (
-        <div key={pluralLabelForCategorizableType}>
+        <Stack sx={{ width: '93%' }} key={pluralLabelForCategorizableType}>
             <Typography variant="h4">{pluralLabelForCategorizableType}</Typography>
             {viewModels.map((viewModel, index) => (
-                <div key={index}>
+                <Item key={index}>
                     {viewModel === NOT_FOUND ? <NotFoundPresenter /> : <Presenter {...viewModel} />}
-                </div>
+                </Item>
             ))}
-        </div>
+        </Stack>
     );
 };
