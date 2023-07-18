@@ -1,8 +1,14 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { InternalError } from '../../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
-import { MultilingualText } from '../../../common/entities/multilingual-text';
+import { ResultOrError } from '../../../../types/ResultOrError';
+import {
+    MultilingualText,
+    MultilingualTextItem,
+    MultilingualTextItemRole,
+} from '../../../common/entities/multilingual-text';
 import { Valid, isValid } from '../../../domainModelValidators/Valid';
 import InvalidPublicationStatusError from '../../../domainModelValidators/errors/InvalidPublicationStatusError';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
@@ -13,6 +19,7 @@ import { TextFieldContext } from '../../context/text-field-context/text-field-co
 import { Resource } from '../../resource.entity';
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
 import { CREATE_TERM } from '../commands/create-term/constants';
+import { TRANSLATE_TERM } from '../commands/translate-term/constants';
 
 const isOptional = true;
 
@@ -88,8 +95,25 @@ export class Term extends Resource {
         return this.text.clone();
     }
 
+    translate(text: string, languageCode: LanguageCode): ResultOrError<Term> {
+        // shouldn't append return ResultOrError<MultilingualText> >
+        const textUpdateResult = this.text.translate(
+            new MultilingualTextItem({
+                role: MultilingualTextItemRole.freeTranslation,
+                languageCode,
+                text,
+            })
+        );
+
+        if (isInternalError(textUpdateResult)) return textUpdateResult;
+
+        return this.safeClone<Term>({
+            text: textUpdateResult,
+        });
+    }
+
     protected getResourceSpecificAvailableCommands(): string[] {
-        return [];
+        return [TRANSLATE_TERM];
     }
 
     protected validateComplexInvariants(): InternalError[] {

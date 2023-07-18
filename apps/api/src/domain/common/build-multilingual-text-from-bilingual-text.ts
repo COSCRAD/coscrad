@@ -1,7 +1,11 @@
 import { InternalError } from '../../lib/errors/InternalError';
 import { isNullOrUndefined } from '../utilities/validation/is-null-or-undefined';
 import { buildMultilingualTextWithSingleItem } from './build-multilingual-text-with-single-item';
-import { MultilingualTextItem, MultilingualTextItemRole } from './entities/multilingual-text';
+import {
+    MultilingualText,
+    MultilingualTextItem,
+    MultilingualTextItemRole,
+} from './entities/multilingual-text';
 
 export class InvalidBilingualTextException extends InternalError {
     constructor() {
@@ -33,10 +37,10 @@ export const buildMultilingualTextFromBilingualText = (
 
     return isNullOrUndefined(secondary.text)
         ? multilingualTextForPrimary
-        : multilingualTextForPrimary.append(
+        : (multilingualTextForPrimary.translate(
               new MultilingualTextItem({
                   ...secondary,
                   role: MultilingualTextItemRole.freeTranslation,
               })
-          );
+          ) as MultilingualText);
 };

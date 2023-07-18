@@ -122,7 +122,7 @@ describe(commandType, () => {
 
                     const playlist = playlistSearchResult as Playlist;
 
-                    const englishTextItemSearchResult = playlist.name.translate(
+                    const englishTextItemSearchResult = playlist.name.getTranslation(
                         LanguageCode.English
                     );
 

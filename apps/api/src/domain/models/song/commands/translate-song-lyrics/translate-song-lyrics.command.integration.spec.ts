@@ -16,7 +16,10 @@ import TestRepositoryProvider from '../../../../../persistence/repositories/__te
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../../types/DTO';
 import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
-import { MultilingualTextItem } from '../../../../common/entities/multilingual-text';
+import {
+    MultilingualText,
+    MultilingualTextItem,
+} from '../../../../common/entities/multilingual-text';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
@@ -107,7 +110,7 @@ describe(commandType, () => {
                     const song = searchResult as Song;
 
                     const doesSongHaveTranslation = !isNotFound(
-                        song.lyrics.translate(languageCode)
+                        song.lyrics.getTranslation(languageCode)
                     );
 
                     expect(doesSongHaveTranslation).toBe(true);
@@ -166,13 +169,13 @@ describe(commandType, () => {
                     initialState: new DeluxeInMemoryStore({
                         [AggregateType.song]: [
                             existingSong.clone({
-                                lyrics: existingLyrics.append(
+                                lyrics: existingLyrics.translate(
                                     new MultilingualTextItem({
                                         text: translation,
                                         languageCode: translationLanguageCode,
                                         role: MultilingualTextItemRole.freeTranslation,
                                     })
-                                ),
+                                ) as MultilingualText,
                             }),
                         ],
                     }).fetchFullSnapshotInLegacyFormat(),
