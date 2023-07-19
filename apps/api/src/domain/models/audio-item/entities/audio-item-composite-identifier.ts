@@ -2,16 +2,14 @@ import { ExternalEnum, NonEmptyString, UUID } from '@coscrad/data-types';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
+import { AggregateTypeProperty } from '../../shared/common-commands';
 
 const audiovisualResourceTypes = [ResourceType.video, ResourceType.audioItem] as const;
 
 export type AudiovisualResourceType = typeof audiovisualResourceTypes[number];
 
 export class AudioItemCompositeIdentifier {
-    @NonEmptyString({
-        label: 'type',
-        description: 'audio item',
-    })
+    @AggregateTypeProperty([AggregateType.audioItem])
     type = AggregateType.audioItem;
 
     @UUID({

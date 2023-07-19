@@ -1,9 +1,7 @@
 import { CommandHandler } from '@coscrad/commands';
-import { Inject } from '@nestjs/common';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { DomainModelCtor } from '../../../../../lib/types/DomainModelCtor';
 import { isNotFound } from '../../../../../lib/types/not-found';
-import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import formatAggregateCompositeIdentifier from '../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import {
     MultilingualText,
@@ -12,12 +10,9 @@ import {
 } from '../../../../common/entities/multilingual-text';
 import { Valid } from '../../../../domainModelValidators/Valid';
 import buildInstanceFactory from '../../../../factories/utilities/buildInstanceFactory';
-import { ID_MANAGER_TOKEN, IIdManager } from '../../../../interfaces/id-manager.interface';
-import { IRepositoryForAggregate } from '../../../../repositories/interfaces/repository-for-aggregate.interface';
-import { IRepositoryProvider } from '../../../../repositories/interfaces/repository-provider.interface';
 import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
-import { InMemorySnapshot, ResourceType } from '../../../../types/ResourceType';
+import { InMemorySnapshot } from '../../../../types/ResourceType';
 import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { AudioItem } from '../../entities/audio-item.entity';
@@ -26,22 +21,6 @@ import { AudioItemCreated } from './transcript-created.event';
 
 @CommandHandler(CreateAudioItem)
 export class CreateAudioItemCommandHandler extends BaseCreateCommandHandler<AudioItem> {
-    protected repositoryForCommandsTargetAggregate: IRepositoryForAggregate<AudioItem>;
-
-    protected aggregateType: AggregateType = AggregateType.audioItem;
-
-    constructor(
-        @Inject(REPOSITORY_PROVIDER_TOKEN)
-        protected readonly repositoryProvider: IRepositoryProvider,
-        @Inject(ID_MANAGER_TOKEN) protected readonly idManager: IIdManager
-    ) {
-        super(repositoryProvider, idManager);
-
-        this.repositoryForCommandsTargetAggregate = this.repositoryProvider.forResource<AudioItem>(
-            ResourceType.audioItem
-        );
-    }
-
     protected createNewInstance({
         aggregateCompositeIdentifier: { id },
         name,
