@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { bootstrapDynamicTypes, NonEmptyString, URL, UUID } from '../index';
 import {
     Enum,
+    FiniteNumber,
     ISBN,
     NestedDataType,
     NonNegativeFiniteNumber,
@@ -82,6 +83,12 @@ export class Widget {
 
     @NonNegativeFiniteNumber({ isOptional, ...buildDummyLabelAndDescription('averageRating') })
     averageRating = 3.5;
+
+    @FiniteNumber(buildDummyLabelAndDescription('muchness'))
+    muchness = 1234.56;
+
+    @FiniteNumber({ isOptional, ...buildDummyLabelAndDescription('maybeANumber') })
+    maybeANumber = -20;
 
     @NestedDataType(Whatsit, { ...buildDummyLabelAndDescription('primaryWhatsit') })
     primaryWhatsit = {};
@@ -170,6 +177,10 @@ export const buildValidWidgetDto = (): Widget => ({
     width: 134.5,
 
     averageRating: 3.5,
+
+    muchness: -3443.405,
+
+    maybeANumber: 506,
 
     primaryWhatsit: {
         whatsitName: 'whatsit 1',

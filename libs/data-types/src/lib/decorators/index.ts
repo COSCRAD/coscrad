@@ -1,6 +1,7 @@
 export * from './CompositeIdentifier';
 export * from './Enum';
 export * from './ExternalEnum';
+export * from './FiniteNumber';
 export * from './FixedValue';
 export * from './FromDomainModel';
 export * from './ISBN';

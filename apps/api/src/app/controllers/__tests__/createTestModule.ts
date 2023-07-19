@@ -79,6 +79,10 @@ import {
 import { CreateSong } from '../../../domain/models/song/commands/create-song.command';
 import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
 import {
+    CreatePoint,
+    CreatePointCommandHandler,
+} from '../../../domain/models/spatial-feature/point/commands';
+import {
     CreateTag,
     CreateTagCommandHandler,
     RelabelTag,
@@ -448,6 +452,8 @@ export default async (
             CreateTermCommandHandler,
             TranslateTerm,
             TranslateTermCommandHandler,
+            CreatePoint,
+            CreatePointCommandHandler,
         ],
 
         controllers: [

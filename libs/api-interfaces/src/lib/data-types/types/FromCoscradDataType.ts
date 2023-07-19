@@ -18,7 +18,8 @@ type CoscradDataTypeToTypeScriptType = {
     [CoscradDataType.Year]: number;
     [CoscradDataType.String]: string;
     [CoscradDataType.FixedValue]: unknown;
+    [CoscradDataType.FiniteNumber]: number;
 };
 
-// is this still used?
+// is this still used? Well is it?
 export type FromCoscradDataType<T extends CoscradDataType> = CoscradDataTypeToTypeScriptType[T];

@@ -13,9 +13,10 @@ import { ISpatialFeature } from '../../interfaces/spatial-feature.interface';
 import { PointCoordinates } from '../../types/Coordinates/PointCoordinates';
 import { GeometricFeatureType } from '../../types/GeometricFeatureType';
 import validatePosition2D from '../../validation/validatePosition2D';
+import { CREATE_POINT } from '../commands';
 import { SpatialFeatureProperties } from './spatial-feature-properties.entity';
 
-@RegisterIndexScopedCommands([])
+@RegisterIndexScopedCommands([CREATE_POINT])
 export class Point extends Resource implements ISpatialFeature {
     readonly type = ResourceType.spatialFeature;
 
