@@ -11,7 +11,7 @@ import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { IMaybeLoadable, NOT_FOUND } from '../../store/slices/interfaces/maybe-loadable.interface';
 import { ConnectedResourcesPanel } from '../../store/slices/resources/shared/connected-resources';
-import { SelfNotesPanelContainer } from '../../store/slices/resources/shared/notes-for-resource';
+import { SelfNotesContainer } from '../../store/slices/resources/shared/notes-for-resource';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
 import { CommandPanel, ICommandExecutorAndLabels } from '../commands';
 import { buildStaticCommandExecutors } from '../commands/build-static-command-executors';
@@ -129,9 +129,7 @@ export const AggregatePage = ({
             isCategorizableCompositeIdentifier(compositeIdentifier) ? (
                 <CategorizablePageLayout
                     compositeIdentifier={compositeIdentifier}
-                    selfNotesList={
-                        <SelfNotesPanelContainer compositeIdentifier={compositeIdentifier} />
-                    }
+                    selfNotesList={<SelfNotesContainer compositeIdentifier={compositeIdentifier} />}
                     connectedResourcesList={
                         <ConnectedResourcesPanel compositeIdentifier={compositeIdentifier} />
                     }

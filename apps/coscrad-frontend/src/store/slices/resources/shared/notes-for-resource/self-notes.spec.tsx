@@ -20,7 +20,7 @@ import { buildMockSuccessfulGETHandler } from '../../../../../utils/test-utils/b
 import { testContainerComponentErrorHandling } from '../../../../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { setupTestServer } from '../../../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../../../utils/test-utils/test-data';
-import { SelfNotesPanelContainer } from './self-notes-panel.container';
+import { SelfNotesContainer } from './self-notes.container';
 
 const resourceOfFocus = buildDummySongs()[0];
 
@@ -65,13 +65,11 @@ const dummyNotes: INoteViewModel[] = Array(NUMBER_OF_DUMMY_NOTES)
     );
 
 const act = () =>
-    renderWithProviders(
-        <SelfNotesPanelContainer compositeIdentifier={compositeIdentifierOfFocus} />
-    );
+    renderWithProviders(<SelfNotesContainer compositeIdentifier={compositeIdentifierOfFocus} />);
 
 const noteEndpoint = `${getConfig().apiUrl}/connections/notes`;
 
-describe(`Self Notes Panel`, () => {
+describe(`Self Notes`, () => {
     describe('when the API request succeeds', () => {
         describe('when there are some notes for the given resource', () => {
             setupTestServer(
@@ -84,10 +82,10 @@ describe(`Self Notes Panel`, () => {
                 })
             );
 
-            it('should render the self notes panel', async () => {
+            it('should render the self notes', async () => {
                 act();
 
-                await assertElementWithTestIdOnScreen('selfNotesPanel');
+                await assertElementWithTestIdOnScreen('selfNotes');
             });
 
             it('should render each note', async () => {
@@ -105,13 +103,13 @@ describe(`Self Notes Panel`, () => {
                 })
             );
 
-            it('should render the self notes panel', async () => {
+            it('should render the self notes', async () => {
                 act();
 
-                await assertElementWithTestIdOnScreen('selfNotesPanel');
+                await assertElementWithTestIdOnScreen('selfNotes');
             });
 
-            it.todo('should render an empty self notes panel');
+            it.todo('should render an empty self notes');
         });
     });
 

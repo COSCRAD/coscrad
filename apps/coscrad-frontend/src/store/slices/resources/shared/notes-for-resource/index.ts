@@ -1,1 +1,1 @@
-export * from './self-notes-panel.container';
+export * from './self-notes.container';

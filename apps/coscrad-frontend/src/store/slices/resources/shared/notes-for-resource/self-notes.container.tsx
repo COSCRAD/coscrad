@@ -4,19 +4,19 @@ import {
     SelfConnectionNote,
     useLoadableSelfNotesForResource,
 } from '../../../notes/hooks/use-loadable-self-notes-for-resource';
-import { SelfNotesPanelPresenter } from './self-notes-panel.presenter';
+import { SelfNotesPresenter } from './self-notes.presenter';
 
-interface SelfNotesPanelContainerProps {
+interface SelfNotesContainerProps {
     compositeIdentifier: ResourceCompositeIdentifier;
 }
 
-export const SelfNotesPanelContainer = ({
+export const SelfNotesContainer = ({
     compositeIdentifier,
-}: SelfNotesPanelContainerProps): JSX.Element => {
+}: SelfNotesContainerProps): JSX.Element => {
     const loadableSelfNotes = useLoadableSelfNotesForResource(compositeIdentifier);
 
     const Presenter = displayLoadableWithErrorsAndLoading(
-        SelfNotesPanelPresenter,
+        SelfNotesPresenter,
         (notes: SelfConnectionNote[]) => ({
             notes,
             compositeIdentifier,
