@@ -1,10 +1,13 @@
 import { CommandHandlerService } from '@coscrad/commands';
 import { CoscradUserRole } from '@coscrad/data-types';
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
+import { readFileSync } from 'fs';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
 import { GrantUserRole } from '../domain/models/user-management/user/commands/grant-user-role/grant-user-role.command';
 import { RegisterUser } from '../domain/models/user-management/user/commands/register-user/register-user.command';
 import { AggregateType } from '../domain/types/AggregateType';
+import { InternalError } from '../lib/errors/InternalError';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
 
@@ -72,18 +75,26 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
 
     async run(
         _passedParams: string[],
-        { name: commandFsas }: { name: CommandFsa[] }
+        {
+            name: commandFsasFromFixture,
+            dataFile: commandFsasFromDataFile,
+        }: { name: CommandFsa[]; dataFile: CommandFsa[] }
     ): Promise<void> {
+        if (commandFsasFromDataFile && commandFsasFromFixture) {
+            throw new InternalError(`You must only specify one of [name, data-file]`);
+        }
+
+        if (!commandFsasFromDataFile && !commandFsasFromFixture) {
+            throw new InternalError(`You must specify exactly one of [name, data-file]`);
+        }
+
+        const commandFsasToExecute = commandFsasFromDataFile || commandFsasFromFixture;
+
         const commandResults: CommandResult[] = [];
 
-        let generatedId: string;
+        const generatedId = await this.idManager.generate();
 
-        for (const [index, fsa] of commandFsas.entries()) {
-            const shouldGenerateId =
-                fsa.payload.aggregateCompositeIdentifier.id === GENERATE_THIS_ID;
-
-            if (shouldGenerateId) generatedId = await this.idManager.generate();
-
+        for (const [index, fsa] of commandFsasToExecute.entries()) {
             /**
              * Note that we need a more sophisticated way to deal with generating
              * and appending aggregate context in bulk execution.
@@ -95,6 +106,7 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
                     ...fsa.payload,
                     aggregateCompositeIdentifier: {
                         ...fsa.payload.aggregateCompositeIdentifier,
+                        // Note that we assume the entire command stream targets the same aggregate root
                         id: generatedId,
                     },
                 },
@@ -124,14 +136,35 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
     @CliCommandOption({
         flags: '--name [fixture-name]',
         description: 'the name of the fixture command stream to run',
-        // TODO later we can change this to `false` once we allow use of a `json` file or serialized FSAs as input
-        required: true,
+        required: false,
     })
     parseFixtureName(value: string): CommandFsa[] {
+        if (!isNonEmptyString(value)) return undefined;
+
         if (value !== 'users:create-admin') {
             throw new Error(`unrecognized command stream fixture name: ${value}`);
         }
 
         return createAdminUserCommandStream;
+    }
+
+    @CliCommandOption({
+        flags: '--data-file [data-file]',
+        description: 'path to the (local) JSON data file with an array of command FSAs',
+        required: false,
+    })
+    parseDataFile(value: string): CommandFsa[] {
+        if (!isNonEmptyString(value)) return undefined;
+
+        try {
+            const parsedCommandFsaStream = JSON.parse(readFileSync(value, { encoding: 'utf-8' }));
+
+            return parsedCommandFsaStream;
+        } catch (error) {
+            throw new InternalError(
+                `Failed to parse command stream from JSON file`,
+                error?.message ? [new InternalError(error.message)] : []
+            );
+        }
     }
 }
