@@ -102,8 +102,6 @@ describe(commandType, () => {
     describe(`when the command is invalid`, () => {
         describe(`when there is already a term with the given ID`, () => {
             it(`should return the expected error`, async () => {
-                await testRepositoryProvider.testSetup();
-
                 const newId = await idManager.generate();
 
                 const validCommandFSA = buildValidCommandFSA(newId);

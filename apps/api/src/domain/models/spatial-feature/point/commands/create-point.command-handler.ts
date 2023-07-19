@@ -50,26 +50,10 @@ export class CreatePointCommandHandler extends BaseCreateCommandHandler<Point> {
     }
 
     protected validateExternalState(
-        { resources: { spatialFeature: _allSpatialFeatures } }: InMemorySnapshot,
-        _point: Point
+        externalState: InMemorySnapshot,
+        point: Point
     ): InternalError | Valid {
-        // const spatialFeaturesWithTheSameName = allSpatialFeatures.filter(
-        //     ({ properties: { name: otherName } }) =>
-        //         otherName === point.getName().getOriginalTextItem().text
-        // );
-
-        // const nameOverlapErrors = spatialFeaturesWithTheSameName.map(
-        //     (sf) =>
-        //         new InternalError(
-        //             `There is already a spatial feature (${formatAggregateCompositeIdentifier(
-        //                 sf.getCompositeIdentifier()
-        //             )}, type: ${sf.geometry.type}) with the name: ${sf.properties.name} `
-        //         )
-        // );
-
-        // return nameOverlapErrors.length > 0? new InternalError(`Encountered a name collision`,nameOverlapErrors) : Valid;
-
-        return Valid;
+        return point.validateExternalState(externalState);
     }
 
     protected buildEvent(command: ICommand, eventId: string, userId: string): BaseEvent {

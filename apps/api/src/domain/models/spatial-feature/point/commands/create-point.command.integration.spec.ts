@@ -1,29 +1,43 @@
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
-import { CommandFSA } from '../../../../../app/controllers/command/command-fsa/command-fsa.entity';
 import { clonePlainObjectWithOverrides } from '../../../../../lib/utilities/clonePlainObjectWithOverrides';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { buildTestCommandFsaMap } from '../../../../../test-data/commands';
+import { getCommandFsaForTest } from '../../../../__tests__/utilities/getCommandFsaForTest';
+import { getValidSpatialFeatureInstanceForTest } from '../../../../__tests__/utilities/getValidSpatialFeatureInstanceForTest';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
+import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
+import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
+import { assertCreateCommandError } from '../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../__tests__/command-helpers/assert-create-command-success';
 import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
+import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
+import { GeometricFeatureType } from '../../types/GeometricFeatureType';
 import { CreatePoint } from './create-point.command';
 
-const commandType = `POINT_CREATED`;
+const commandType = `CREATE_POINT`;
 
-const dummyFsa = buildTestCommandFsaMap().get(commandType) as CommandFSA<CreatePoint>;
+const pointName = 'Sunny Park Point';
 
-const commandFsaFactory = new DummyCommandFsaFactory((id) =>
-    clonePlainObjectWithOverrides(dummyFsa, {
+// TODO optional payload overrides as second arg
+const dummyFsa = getCommandFsaForTest<CreatePoint>(commandType, {
+    aggregateCompositeIdentifier: { id: buildDummyUuid(55) },
+    name: pointName,
+});
+
+const commandFsaFactory = new DummyCommandFsaFactory((id) => {
+    const clone = clonePlainObjectWithOverrides(dummyFsa, {
         payload: { aggregateCompositeIdentifier: { id } },
-    })
-);
+    });
+
+    return clone;
+});
 
 describe(commandType, () => {
     let testRepositoryProvider: TestRepositoryProvider;
@@ -73,15 +87,72 @@ describe(commandType, () => {
 
     describe(`when the command is invalid`, () => {
         describe(`when there is already another spatial feature with the given name`, () => {
-            it.todo(`should have a test`);
+            Object.values(GeometricFeatureType).forEach((featureType) => {
+                describe(`with geometry type: ${featureType}`, () => {
+                    it(`should fail with the expected errors`, async () => {
+                        await assertCreateCommandError(assertionHelperDependencies, {
+                            systemUserId: dummySystemUserId,
+                            initialState: new DeluxeInMemoryStore({
+                                [AggregateType.spatialFeature]: [
+                                    getValidSpatialFeatureInstanceForTest(featureType).clone({
+                                        properties: {
+                                            name: pointName,
+                                            description: 'My name is already taken!',
+                                        },
+                                    }),
+                                ],
+                            }).fetchFullSnapshotInLegacyFormat(),
+                            buildCommandFSA: (id: AggregateId) => commandFsaFactory.build(id),
+                        });
+                    });
+                });
+            });
         });
 
-        describe(`when the ID was not generated with our system`, () => {
-            it.todo(`should have a test`);
+        describe('when the id has not been generated via our system', () => {
+            it('should return the expected error', async () => {
+                const bogusId = buildDummyUuid(8484);
+
+                await assertCreateCommandError(assertionHelperDependencies, {
+                    systemUserId: dummySystemUserId,
+                    buildCommandFSA: (_: AggregateId) => commandFsaFactory.build(bogusId),
+                    initialState: new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat(),
+                });
+            });
         });
 
         describe(`when the command payload type is invalid`, () => {
-            it.todo(`should have a test`);
+            Object.values(AggregateType)
+                .filter((t) => t !== AggregateType.spatialFeature)
+                .forEach((invalidAggregateType) => {
+                    it(`should fail with the expected error`, async () => {
+                        await assertCommandFailsDueToTypeError(
+                            assertionHelperDependencies,
+                            {
+                                propertyName: 'aggregateCompositeIdentifier',
+                                invalidValue: {
+                                    type: invalidAggregateType,
+                                    id: buildDummyUuid(15),
+                                },
+                            },
+                            commandFsaFactory.build(buildDummyUuid(12))
+                        );
+                    });
+                });
+
+            generateCommandFuzzTestCases(CreatePoint).forEach(
+                ({ description, propertyName, invalidValue }) => {
+                    describe(`when the property: ${propertyName} has the invalid value:${invalidValue} (${description}`, () => {
+                        it('should fail with the appropriate error', async () => {
+                            await assertCommandFailsDueToTypeError(
+                                assertionHelperDependencies,
+                                { propertyName, invalidValue },
+                                commandFsaFactory.build(buildDummyUuid(123))
+                            );
+                        });
+                    });
+                }
+            );
         });
     });
 });
