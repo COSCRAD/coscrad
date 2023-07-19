@@ -1,7 +1,7 @@
 import { ResourceType } from '@coscrad/api-interfaces';
 import { useState } from 'react';
 import { SpatialFeatureIndexState } from '../../../store/slices/resources';
-import { ConnectedResourcesPanel } from '../../../store/slices/resources/shared/connected-resources';
+import { ConnectedResources } from '../../../store/slices/resources/shared/connected-resources';
 import { SelfNotesContainer } from '../../../store/slices/resources/shared/notes-for-resource';
 import { ICoscradMap, SpatialFeatureDetailPresenter } from './map';
 import { Position2D } from './types';
@@ -39,7 +39,7 @@ export const SpatialFeatureIndexPresenter = ({
             />
 
             <>
-                <ConnectedResourcesPanel
+                <ConnectedResources
                     compositeIdentifier={{
                         type: ResourceType.spatialFeature,
                         id: selectedSpatialFeatureId,

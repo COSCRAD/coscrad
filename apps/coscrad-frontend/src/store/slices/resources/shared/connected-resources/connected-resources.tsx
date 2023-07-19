@@ -4,13 +4,13 @@ import { useLoadableCategorizables } from '../../../../../components/higher-orde
 import { thumbnailCategorizableDetailPresenterFactory } from '../../../../../components/resources/factories/thumbnail-categorizable-detail-presenter-factory';
 import { useLoadableConnectionsToResource } from '../../../notes/hooks';
 
-export interface ConnectedResourcesPanelProps {
+export interface ConnectedResourcesProps {
     compositeIdentifier: ResourceCompositeIdentifier;
 }
 
-export const ConnectedResourcesPanel = ({
+export const ConnectedResources = ({
     compositeIdentifier,
-}: ConnectedResourcesPanelProps): JSX.Element => {
+}: ConnectedResourcesProps): JSX.Element => {
     const loadableConnections = useLoadableConnectionsToResource(compositeIdentifier);
 
     const { data: connections } = loadableConnections;

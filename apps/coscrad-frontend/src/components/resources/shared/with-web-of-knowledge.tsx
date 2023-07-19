@@ -1,5 +1,5 @@
 import { ResourceCompositeIdentifier } from '@coscrad/api-interfaces';
-import { ConnectedResourcesPanel } from '../../../store/slices/resources/shared/connected-resources';
+import { ConnectedResources } from '../../../store/slices/resources/shared/connected-resources';
 import { SelfNotesContainer } from '../../../store/slices/resources/shared/notes-for-resource';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 
@@ -15,7 +15,7 @@ export const WithWebOfKnowledge =
         return (
             <div>
                 {WrappedComponent(props)}
-                <ConnectedResourcesPanel compositeIdentifier={compositeIdentifier} />
+                <ConnectedResources compositeIdentifier={compositeIdentifier} />
                 <SelfNotesContainer compositeIdentifier={compositeIdentifier} />
             </div>
         );

@@ -10,7 +10,7 @@ import {
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { IMaybeLoadable, NOT_FOUND } from '../../store/slices/interfaces/maybe-loadable.interface';
-import { ConnectedResourcesPanel } from '../../store/slices/resources/shared/connected-resources';
+import { ConnectedResources } from '../../store/slices/resources/shared/connected-resources';
 import { SelfNotesContainer } from '../../store/slices/resources/shared/notes-for-resource';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
 import { CommandPanel, ICommandExecutorAndLabels } from '../commands';
@@ -131,7 +131,7 @@ export const AggregatePage = ({
                     compositeIdentifier={compositeIdentifier}
                     selfNotesList={<SelfNotesContainer compositeIdentifier={compositeIdentifier} />}
                     connectedResourcesList={
-                        <ConnectedResourcesPanel compositeIdentifier={compositeIdentifier} />
+                        <ConnectedResources compositeIdentifier={compositeIdentifier} />
                     }
                     commandPanel={<Commands />}
                 >
