@@ -1,27 +1,12 @@
 import { AggregateType, ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { ExternalEnum, NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
+import { NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
 import { LanguageCodeEnum } from '../../../common/entities/multilingual-text';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
+import { AggregateTypeProperty } from '../../shared/common-commands';
 
 export class PlayListCompositeId {
-    // TODO [https://github.com/COSCRAD/coscrad/pull/392#discussion_r1210655537] Should we have an @FixedValue decorator instead?
-    @ExternalEnum(
-        {
-            enumName: 'type',
-            enumLabel: 'type',
-            labelsAndValues: [
-                {
-                    label: 'type',
-                    value: AggregateType.playlist,
-                },
-            ],
-        },
-        {
-            label: 'type',
-            description: AggregateType.playlist,
-        }
-    )
+    @AggregateTypeProperty([AggregateType.playlist])
     type = AggregateType.playlist;
 
     @UUID({

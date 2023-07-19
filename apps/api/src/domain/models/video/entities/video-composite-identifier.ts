@@ -1,12 +1,10 @@
-import { NonEmptyString, UUID } from '@coscrad/data-types';
+import { UUID } from '@coscrad/data-types';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
+import { AggregateTypeProperty } from '../../shared/common-commands';
 
 export class VideoCompositeIdentifier {
-    @NonEmptyString({
-        label: 'type',
-        description: 'video',
-    })
+    @AggregateTypeProperty([AggregateType.video])
     type = AggregateType.video;
 
     @UUID({

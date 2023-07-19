@@ -5,8 +5,8 @@ import getValidAggregateInstanceForTest from '../../../../domain/__tests__/utili
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { NotAvailable } from '../../../../lib/types/not-available';
 import { NotFound } from '../../../../lib/types/not-found';
-import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../types/DTO';
 import InvariantValidationError from '../../../domainModelValidators/errors/InvariantValidationError';
 import MissingSongTitleError from '../../../domainModelValidators/errors/song/MissingSongTitleError';
@@ -16,15 +16,15 @@ import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
-import CommandExecutionError from '../../shared/common-command-errors/CommandExecutionError';
-import InvalidCommandPayloadTypeError from '../../shared/common-command-errors/InvalidCommandPayloadTypeError';
 import { assertCreateCommandError } from '../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../__tests__/command-helpers/assert-create-command-success';
 import { assertEventRecordPersisted } from '../../__tests__/command-helpers/assert-event-record-persisted';
 import { generateCommandFuzzTestCases } from '../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../__tests__/command-helpers/types/CommandAssertionDependencies';
+import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../__tests__/utilities/dummySystemUserId';
 import { dummyUuid } from '../../__tests__/utilities/dummyUuid';
+import CommandExecutionError from '../../shared/common-command-errors/CommandExecutionError';
 import { Song } from '../song.entity';
 import { CreateSong } from './create-song.command';
 
@@ -140,23 +140,39 @@ describe('CreateSong', () => {
     });
 
     describe('when the payload has an invalid type', () => {
-        // TODO: Use the fuzz generator here
-        describe('when the id property has an invalid type (number[])', () => {
-            it('should return an error', async () => {
-                await assertCreateCommandError(assertionHelperDependencies, {
-                    buildCommandFSA: (id: AggregateId) =>
-                        buildInvalidFSA(id, {
-                            aggregateCompositeIdentifier: { id: [99], type: AggregateType.song },
-                        }),
-                    initialState,
-                    systemUserId: dummySystemUserId,
-                    checkError: (error) => {
-                        // TODO Check inner errors
-                        expect(error).toBeInstanceOf(InvalidCommandPayloadTypeError);
-                    },
+        describe(`when the payload has an invalid aggregate type`, () => {
+            Object.values(AggregateType)
+                .filter((t) => t !== AggregateType.song)
+                .forEach((invalidAggregateType) => {
+                    it(`should fail with the expected error`, async () => {
+                        await assertCommandFailsDueToTypeError(
+                            assertionHelperDependencies,
+                            {
+                                propertyName: 'aggregateCompositeIdentifier',
+                                invalidValue: {
+                                    type: invalidAggregateType,
+                                    id: buildDummyUuid(15),
+                                },
+                            },
+                            buildValidCommandFSA(buildDummyUuid(12))
+                        );
+                    });
                 });
-            });
         });
+
+        generateCommandFuzzTestCases(CreateSong).forEach(
+            ({ description, propertyName, invalidValue }) => {
+                describe(`when the property: ${propertyName} has the invalid value:${invalidValue} (${description}`, () => {
+                    it('should fail with the appropriate error', async () => {
+                        await assertCommandFailsDueToTypeError(
+                            assertionHelperDependencies,
+                            { propertyName, invalidValue },
+                            buildValidCommandFSA(buildDummyUuid(123))
+                        );
+                    });
+                });
+            }
+        );
     });
 
     /**

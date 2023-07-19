@@ -21,11 +21,19 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "ID",
           },
           "type": {
-            "coscradDataType": "NON_EMPTY_STRING",
-            "description": "song",
+            "complexDataType": "ENUM",
+            "description": "must be: mediaItem",
+            "enumLabel": "type",
+            "enumName": "type",
             "isArray": false,
             "isOptional": false,
             "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "mediaItem",
+                "value": "mediaItem",
+              },
+            ],
           },
         },
       },
@@ -106,11 +114,19 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "ID",
           },
           "type": {
-            "coscradDataType": "NON_EMPTY_STRING",
-            "description": "song",
+            "complexDataType": "ENUM",
+            "description": "must be: song",
+            "enumLabel": "type",
+            "enumName": "type",
             "isArray": false,
             "isOptional": false,
             "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "song",
+                "value": "song",
+              },
+            ],
           },
         },
       },
@@ -171,11 +187,19 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "ID",
           },
           "type": {
-            "coscradDataType": "NON_EMPTY_STRING",
-            "description": "song",
+            "complexDataType": "ENUM",
+            "description": "must be: song",
+            "enumLabel": "type",
+            "enumName": "type",
             "isArray": false,
             "isOptional": false,
             "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "song",
+                "value": "song",
+              },
+            ],
           },
         },
       },
@@ -254,11 +278,19 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "ID",
           },
           "type": {
-            "coscradDataType": "NON_EMPTY_STRING",
-            "description": "sub-type of bibliographic reference (e.g., book, journal article, or court case)",
+            "complexDataType": "ENUM",
+            "description": "must be: bibliographicReference",
+            "enumLabel": "type",
+            "enumName": "type",
             "isArray": false,
             "isOptional": false,
             "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "bibliographicReference",
+                "value": "bibliographicReference",
+              },
+            ],
           },
         },
       },
@@ -386,11 +418,19 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "ID",
           },
           "type": {
-            "coscradDataType": "NON_EMPTY_STRING",
-            "description": "sub-type of bibliographic reference (e.g., book, journal article, or court case)",
+            "complexDataType": "ENUM",
+            "description": "must be: bibliographicReference",
+            "enumLabel": "type",
+            "enumName": "type",
             "isArray": false,
             "isOptional": false,
             "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "bibliographicReference",
+                "value": "bibliographicReference",
+              },
+            ],
           },
         },
       },
@@ -465,11 +505,19 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "ID",
           },
           "type": {
-            "coscradDataType": "NON_EMPTY_STRING",
-            "description": "sub-type of bibliographic reference (e.g., book, journal article, or court case)",
+            "complexDataType": "ENUM",
+            "description": "must be: bibliographicReference",
+            "enumLabel": "type",
+            "enumName": "type",
             "isArray": false,
             "isOptional": false,
             "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "bibliographicReference",
+                "value": "bibliographicReference",
+              },
+            ],
           },
         },
       },
@@ -590,11 +638,19 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "ID",
           },
           "type": {
-            "coscradDataType": "NON_EMPTY_STRING",
-            "description": "user",
+            "complexDataType": "ENUM",
+            "description": "must be: user",
+            "enumLabel": "type",
+            "enumName": "type",
             "isArray": false,
             "isOptional": false,
             "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "user",
+                "value": "user",
+              },
+            ],
           },
         },
       },
@@ -634,11 +690,19 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "ID",
           },
           "type": {
-            "coscradDataType": "NON_EMPTY_STRING",
-            "description": "user group",
+            "complexDataType": "ENUM",
+            "description": "must be: userGroup",
+            "enumLabel": "type",
+            "enumName": "type",
             "isArray": false,
             "isOptional": false,
             "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "userGroup",
+                "value": "userGroup",
+              },
+            ],
           },
         },
       },
@@ -678,11 +742,19 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "ID",
           },
           "type": {
-            "coscradDataType": "NON_EMPTY_STRING",
-            "description": "user group",
+            "complexDataType": "ENUM",
+            "description": "must be: userGroup",
+            "enumLabel": "type",
+            "enumName": "type",
             "isArray": false,
             "isOptional": false,
             "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "userGroup",
+                "value": "userGroup",
+              },
+            ],
           },
         },
       },
@@ -716,11 +788,19 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "ID",
           },
           "type": {
-            "coscradDataType": "NON_EMPTY_STRING",
-            "description": "user",
+            "complexDataType": "ENUM",
+            "description": "must be: user",
+            "enumLabel": "type",
+            "enumName": "type",
             "isArray": false,
             "isOptional": false,
             "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "user",
+                "value": "user",
+              },
+            ],
           },
         },
       },
@@ -769,11 +849,19 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "ID",
           },
           "type": {
-            "coscradDataType": "NON_EMPTY_STRING",
-            "description": "user",
+            "complexDataType": "ENUM",
+            "description": "must be: user",
+            "enumLabel": "type",
+            "enumName": "type",
             "isArray": false,
             "isOptional": false,
             "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "user",
+                "value": "user",
+              },
+            ],
           },
         },
       },
@@ -885,7 +973,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "type",
+            "description": "must be: tag",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -930,7 +1018,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "type",
+            "description": "must be: tag",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -975,7 +1063,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "type",
+            "description": "must be: tag",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -1087,11 +1175,19 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "ID",
           },
           "type": {
-            "coscradDataType": "NON_EMPTY_STRING",
-            "description": "video",
+            "complexDataType": "ENUM",
+            "description": "must be: video",
+            "enumLabel": "type",
+            "enumName": "type",
             "isArray": false,
             "isOptional": false,
             "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "video",
+                "value": "video",
+              },
+            ],
           },
         },
       },
@@ -1178,11 +1274,19 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "ID",
           },
           "type": {
-            "coscradDataType": "NON_EMPTY_STRING",
-            "description": "audio item",
+            "complexDataType": "ENUM",
+            "description": "must be: audioItem",
+            "enumLabel": "type",
+            "enumName": "type",
             "isArray": false,
             "isOptional": false,
             "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "audioItem",
+                "value": "audioItem",
+              },
+            ],
           },
         },
       },
@@ -1595,7 +1699,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "playlist",
+            "description": "must be: playlist",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -1603,7 +1707,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "type",
             "labelsAndValues": [
               {
-                "label": "type",
+                "label": "playlist",
                 "value": "playlist",
               },
             ],
@@ -1679,7 +1783,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "playlist",
+            "description": "must be: playlist",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -1687,7 +1791,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "type",
             "labelsAndValues": [
               {
-                "label": "type",
+                "label": "playlist",
                 "value": "playlist",
               },
             ],
@@ -1725,7 +1829,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "playlist",
+            "description": "must be: playlist",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -1733,7 +1837,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "type",
             "labelsAndValues": [
               {
-                "label": "type",
+                "label": "playlist",
                 "value": "playlist",
               },
             ],
@@ -1771,7 +1875,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "playlist",
+            "description": "must be: playlist",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -1779,7 +1883,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "type",
             "labelsAndValues": [
               {
-                "label": "type",
+                "label": "playlist",
                 "value": "playlist",
               },
             ],
@@ -1854,11 +1958,19 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "ID",
           },
           "type": {
-            "coscradDataType": "FIXED_VALUE",
+            "complexDataType": "ENUM",
             "description": "must be: note",
+            "enumLabel": "type",
+            "enumName": "type",
             "isArray": false,
             "isOptional": false,
             "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "note",
+                "value": "note",
+              },
+            ],
           },
         },
       },
@@ -1916,11 +2028,59 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "ID",
           },
           "type": {
-            "coscradDataType": "NON_EMPTY_STRING",
-            "description": "song",
+            "complexDataType": "ENUM",
+            "description": "One of: term, vocabularyList, audioItem, book, photograph, spatialFeature, bibliographicReference, song, mediaItem, video, playlist",
+            "enumLabel": "type",
+            "enumName": "type",
             "isArray": false,
             "isOptional": false,
             "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "term",
+                "value": "term",
+              },
+              {
+                "label": "vocabularyList",
+                "value": "vocabularyList",
+              },
+              {
+                "label": "audioItem",
+                "value": "audioItem",
+              },
+              {
+                "label": "book",
+                "value": "book",
+              },
+              {
+                "label": "photograph",
+                "value": "photograph",
+              },
+              {
+                "label": "spatialFeature",
+                "value": "spatialFeature",
+              },
+              {
+                "label": "bibliographicReference",
+                "value": "bibliographicReference",
+              },
+              {
+                "label": "song",
+                "value": "song",
+              },
+              {
+                "label": "mediaItem",
+                "value": "mediaItem",
+              },
+              {
+                "label": "video",
+                "value": "video",
+              },
+              {
+                "label": "playlist",
+                "value": "playlist",
+              },
+            ],
           },
         },
       },
@@ -2107,11 +2267,19 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "ID",
           },
           "type": {
-            "coscradDataType": "FIXED_VALUE",
+            "complexDataType": "ENUM",
             "description": "must be: note",
+            "enumLabel": "type",
+            "enumName": "type",
             "isArray": false,
             "isOptional": false,
             "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "note",
+                "value": "note",
+              },
+            ],
           },
         },
       },
@@ -2130,11 +2298,59 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "ID",
           },
           "type": {
-            "coscradDataType": "NON_EMPTY_STRING",
-            "description": "song",
+            "complexDataType": "ENUM",
+            "description": "One of: term, vocabularyList, audioItem, book, photograph, spatialFeature, bibliographicReference, song, mediaItem, video, playlist",
+            "enumLabel": "type",
+            "enumName": "type",
             "isArray": false,
             "isOptional": false,
             "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "term",
+                "value": "term",
+              },
+              {
+                "label": "vocabularyList",
+                "value": "vocabularyList",
+              },
+              {
+                "label": "audioItem",
+                "value": "audioItem",
+              },
+              {
+                "label": "book",
+                "value": "book",
+              },
+              {
+                "label": "photograph",
+                "value": "photograph",
+              },
+              {
+                "label": "spatialFeature",
+                "value": "spatialFeature",
+              },
+              {
+                "label": "bibliographicReference",
+                "value": "bibliographicReference",
+              },
+              {
+                "label": "song",
+                "value": "song",
+              },
+              {
+                "label": "mediaItem",
+                "value": "mediaItem",
+              },
+              {
+                "label": "video",
+                "value": "video",
+              },
+              {
+                "label": "playlist",
+                "value": "playlist",
+              },
+            ],
           },
         },
       },
@@ -2353,11 +2569,59 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "ID",
           },
           "type": {
-            "coscradDataType": "NON_EMPTY_STRING",
-            "description": "song",
+            "complexDataType": "ENUM",
+            "description": "One of: term, vocabularyList, audioItem, book, photograph, spatialFeature, bibliographicReference, song, mediaItem, video, playlist",
+            "enumLabel": "type",
+            "enumName": "type",
             "isArray": false,
             "isOptional": false,
             "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "term",
+                "value": "term",
+              },
+              {
+                "label": "vocabularyList",
+                "value": "vocabularyList",
+              },
+              {
+                "label": "audioItem",
+                "value": "audioItem",
+              },
+              {
+                "label": "book",
+                "value": "book",
+              },
+              {
+                "label": "photograph",
+                "value": "photograph",
+              },
+              {
+                "label": "spatialFeature",
+                "value": "spatialFeature",
+              },
+              {
+                "label": "bibliographicReference",
+                "value": "bibliographicReference",
+              },
+              {
+                "label": "song",
+                "value": "song",
+              },
+              {
+                "label": "mediaItem",
+                "value": "mediaItem",
+              },
+              {
+                "label": "video",
+                "value": "video",
+              },
+              {
+                "label": "playlist",
+                "value": "playlist",
+              },
+            ],
           },
         },
       },
@@ -2537,11 +2801,19 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "ID",
           },
           "type": {
-            "coscradDataType": "NON_EMPTY_STRING",
-            "description": "song",
+            "complexDataType": "ENUM",
+            "description": "must be: song",
+            "enumLabel": "type",
+            "enumName": "type",
             "isArray": false,
             "isOptional": false,
             "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "song",
+                "value": "song",
+              },
+            ],
           },
         },
       },
@@ -2614,7 +2886,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "term",
+            "description": "must be: term",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -2622,7 +2894,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "type",
             "labelsAndValues": [
               {
-                "label": "type",
+                "label": "term",
                 "value": "term",
               },
             ],
@@ -2673,7 +2945,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "term",
+            "description": "must be: term",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -2681,7 +2953,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "type",
             "labelsAndValues": [
               {
-                "label": "type",
+                "label": "term",
                 "value": "term",
               },
             ],

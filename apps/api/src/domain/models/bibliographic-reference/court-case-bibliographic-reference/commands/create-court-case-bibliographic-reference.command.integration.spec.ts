@@ -18,6 +18,7 @@ import { assertResourcePersistedProperly } from '../../../__tests__/command-help
 import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import { dummyUuid } from '../../../__tests__/utilities/dummyUuid';
 import AggregateIdAlreadyInUseError from '../../../shared/common-command-errors/AggregateIdAlreadyInUseError';
@@ -110,6 +111,26 @@ describe(`The command: ${commandType}`, () => {
 
     describe('when the command is invalid', () => {
         describe('when the payload has an invalid type', () => {
+            describe(`when the payload has an invalid aggregate type`, () => {
+                Object.values(AggregateType)
+                    .filter((t) => t !== AggregateType.bibliographicReference)
+                    .forEach((invalidAggregateType) => {
+                        it(`should fail with the expected error`, async () => {
+                            await assertCommandFailsDueToTypeError(
+                                assertionHelperDependencies,
+                                {
+                                    propertyName: 'aggregateCompositeIdentifier',
+                                    invalidValue: {
+                                        type: invalidAggregateType,
+                                        id: buildDummyUuid(15),
+                                    },
+                                },
+                                buildValidCommandFSA(buildDummyUuid(12))
+                            );
+                        });
+                    });
+            });
+
             generateCommandFuzzTestCases(CreateCourtCaseBibliographicReference).forEach(
                 ({ description, propertyName, invalidValue }) => {
                     describe(`when the property: ${propertyName} has the invalid value: ${invalidValue} ${description}`, () => {

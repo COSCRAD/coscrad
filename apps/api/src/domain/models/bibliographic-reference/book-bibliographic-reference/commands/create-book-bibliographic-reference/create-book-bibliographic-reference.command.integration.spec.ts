@@ -24,6 +24,7 @@ import { assertCreateCommandSuccess } from '../../../../__tests__/command-helper
 import { DummyCommandFsaFactory } from '../../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { generateCommandFuzzTestCases } from '../../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
+import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { dummyIsbn } from '../../../../__tests__/utilities/dummyIsbn';
 import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUserId';
 import { dummyUuid } from '../../../../__tests__/utilities/dummyUuid';
@@ -143,6 +144,26 @@ describe(`The command: ${commandType}`, () => {
     });
 
     describe('when the payload has an invalid type', () => {
+        describe(`when the payload has an invalid aggregate type`, () => {
+            Object.values(AggregateType)
+                .filter((t) => t !== AggregateType.bibliographicReference)
+                .forEach((invalidAggregateType) => {
+                    it(`should fail with the expected error`, async () => {
+                        await assertCommandFailsDueToTypeError(
+                            assertionHelperDependencies,
+                            {
+                                propertyName: 'aggregateCompositeIdentifier',
+                                invalidValue: {
+                                    type: invalidAggregateType,
+                                    id: buildDummyUuid(15),
+                                },
+                            },
+                            buildValidCommandFSA(buildDummyUuid(12))
+                        );
+                    });
+                });
+        });
+
         generateCommandFuzzTestCases(CreateBookBibliographicReference).forEach(
             ({ description, propertyName, invalidValue }) => {
                 describe(`when the property: ${propertyName} has the invalid value:${invalidValue} (${description}`, () => {

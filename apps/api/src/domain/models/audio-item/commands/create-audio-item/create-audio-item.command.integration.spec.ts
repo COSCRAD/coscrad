@@ -126,6 +126,26 @@ describe('CREATE_AUDIO_ITEM', () => {
 
     describe('when the command is invalid', () => {
         describe('when the command payload type is invalid', () => {
+            describe(`when the payload has an invalid aggregate type`, () => {
+                Object.values(AggregateType)
+                    .filter((t) => t !== AggregateType.audioItem)
+                    .forEach((invalidAggregateType) => {
+                        it(`should fail with the expected error`, async () => {
+                            await assertCommandFailsDueToTypeError(
+                                assertionHelperDependencies,
+                                {
+                                    propertyName: 'aggregateCompositeIdentifier',
+                                    invalidValue: {
+                                        type: invalidAggregateType,
+                                        id: buildDummyUuid(15),
+                                    },
+                                },
+                                buildValidCommandFSA(buildDummyUuid(12))
+                            );
+                        });
+                    });
+            });
+
             generateCommandFuzzTestCases(CreateAudioItem).forEach(
                 ({ description, propertyName, invalidValue }) => {
                     describe(`when the property ${propertyName} has the invalid value: ${invalidValue} (${description})`, () => {

@@ -1,8 +1,6 @@
 import { CommandHandler } from '@coscrad/commands';
-import { Inject } from '@nestjs/common';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
-import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import {
@@ -12,9 +10,6 @@ import {
 } from '../../../../common/entities/multilingual-text';
 import { Valid } from '../../../../domainModelValidators/Valid';
 import buildAggregateFactory from '../../../../factories/buildAggregateFactory';
-import { IIdManager } from '../../../../interfaces/id-manager.interface';
-import { IRepositoryForAggregate } from '../../../../repositories/interfaces/repository-for-aggregate.interface';
-import { IRepositoryProvider } from '../../../../repositories/interfaces/repository-provider.interface';
 import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../types/ResourceType';
@@ -30,21 +25,6 @@ import { NoteAboutResourceCreated } from './note-about-resource-created.event';
 
 @CommandHandler(CreateNoteAboutResource)
 export class CreateNoteAboutResourceCommandHandler extends BaseCreateCommandHandler<EdgeConnection> {
-    protected repositoryForCommandsTargetAggregate: IRepositoryForAggregate<EdgeConnection>;
-
-    protected aggregateType: AggregateType = AggregateType.note;
-
-    constructor(
-        @Inject(REPOSITORY_PROVIDER_TOKEN)
-        protected readonly repositoryProvider: IRepositoryProvider,
-        @Inject('ID_MANAGER') protected readonly idManager: IIdManager
-    ) {
-        super(repositoryProvider, idManager);
-
-        this.repositoryForCommandsTargetAggregate =
-            this.repositoryProvider.getEdgeConnectionRepository();
-    }
-
     protected createNewInstance({
         resourceCompositeIdentifier,
         resourceContext,

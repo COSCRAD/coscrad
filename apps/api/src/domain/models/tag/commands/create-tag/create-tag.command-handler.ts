@@ -1,14 +1,9 @@
 import { CommandHandler } from '@coscrad/commands';
-import { Inject } from '@nestjs/common';
 import { InternalError } from '../../../../../lib/errors/InternalError';
-import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { Valid } from '../../../../domainModelValidators/Valid';
 import buildInstanceFactory from '../../../../factories/utilities/buildInstanceFactory';
-import { IIdManager } from '../../../../interfaces/id-manager.interface';
-import { IRepositoryForAggregate } from '../../../../repositories/interfaces/repository-for-aggregate.interface';
-import { IRepositoryProvider } from '../../../../repositories/interfaces/repository-provider.interface';
 import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../types/ResourceType';
@@ -21,20 +16,6 @@ import { TagCreated } from './tag-created.event';
 
 @CommandHandler(CreateTag)
 export class CreateTagCommandHandler extends BaseCreateCommandHandler<Tag> {
-    protected repositoryForCommandsTargetAggregate: IRepositoryForAggregate<Tag>;
-
-    protected aggregateType: AggregateType = AggregateType.tag;
-
-    constructor(
-        @Inject(REPOSITORY_PROVIDER_TOKEN)
-        protected readonly repositoryProvider: IRepositoryProvider,
-        @Inject('ID_MANAGER') protected readonly idManager: IIdManager
-    ) {
-        super(repositoryProvider, idManager);
-
-        this.repositoryForCommandsTargetAggregate = this.repositoryProvider.getTagRepository();
-    }
-
     createNewInstance({ aggregateCompositeIdentifier, label }: CreateTag): ResultOrError<Tag> {
         const { id } = aggregateCompositeIdentifier;
 
@@ -49,7 +30,7 @@ export class CreateTagCommandHandler extends BaseCreateCommandHandler<Tag> {
     }
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
-        const preExistingTags = await this.repositoryForCommandsTargetAggregate.fetchMany();
+        const preExistingTags = await this.repositoryProvider.getTagRepository().fetchMany();
 
         const validPreExistingTags = preExistingTags.filter(validAggregateOrThrow);
 

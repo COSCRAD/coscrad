@@ -1,15 +1,8 @@
-import {
-    AggregateCompositeIdentifier,
-    ICommandBase,
-    isResourceType,
-} from '@coscrad/api-interfaces';
-import { InternalError } from '../../../../lib/errors/InternalError';
+import { ICommandBase } from '@coscrad/api-interfaces';
 import { isNotFound } from '../../../../lib/types/not-found';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { EVENT } from '../../../interfaces/id-manager.interface';
-import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { AggregateId } from '../../../types/AggregateId';
-import { AggregateType } from '../../../types/AggregateType';
 import { Aggregate } from '../../aggregate.entity';
 import AggregateNotFoundError from '../common-command-errors/AggregateNotFoundError';
 import { BaseCommandHandler } from './base-command-handler';
@@ -24,48 +17,6 @@ import { BaseCommandHandler } from './base-command-handler';
 export abstract class BaseUpdateCommandHandler<
     TAggregate extends Aggregate
 > extends BaseCommandHandler<TAggregate> {
-    private getAggregateIdFromCommand({
-        aggregateCompositeIdentifier,
-    }: ICommandBase): AggregateCompositeIdentifier {
-        return aggregateCompositeIdentifier;
-    }
-
-    private getRepositoryForCommand<T extends Aggregate = Aggregate>(
-        command: ICommandBase
-    ): IRepositoryForAggregate<T> {
-        const { type: aggregateType } = this.getAggregateIdFromCommand(command);
-
-        // TODO a `forAggregate` method on the repository provider would be better
-        if (isResourceType(aggregateType))
-            return this.repositoryProvider.forResource(
-                aggregateType
-            ) as unknown as IRepositoryForAggregate<T>;
-
-        if (aggregateType === AggregateType.note)
-            return this.repositoryProvider.getEdgeConnectionRepository() as unknown as IRepositoryForAggregate<T>;
-
-        if (aggregateType === AggregateType.user)
-            return this.repositoryProvider.getUserRepository() as unknown as IRepositoryForAggregate<T>;
-
-        if (aggregateType === AggregateType.userGroup)
-            return this.repositoryProvider.getUserGroupRepository() as unknown as IRepositoryForAggregate<T>;
-
-        if (aggregateType === AggregateType.tag)
-            return this.repositoryProvider.getTagRepository() as unknown as IRepositoryForAggregate<T>;
-
-        if (aggregateType === AggregateType.category) {
-            throw new InternalError(
-                `Category Repository is not supported as it doesn not have an update method`
-            );
-        }
-
-        const exhaustiveCheck: never = aggregateType;
-
-        throw new InternalError(
-            `Failed to find repository for aggregate of type: ${exhaustiveCheck}`
-        );
-    }
-
     protected async fetchInstanceToUpdate(
         command: ICommandBase
     ): Promise<ResultOrError<TAggregate>> {

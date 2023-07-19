@@ -1,12 +1,12 @@
 import { AggregateFactoryValidTestCase, FactoryTestSuiteForAggregate } from '.';
 import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpected';
 import { formatGeometricFeatureType } from '../../../../view-models/presentation/formatGeometricFeatureType';
-import { Line } from '../../../models/spatial-feature/entities/line.entity';
-import { Point } from '../../../models/spatial-feature/entities/point.entity';
-import { GeometricFeatureType } from '../../../models/spatial-feature/types/GeometricFeatureType';
-import { AggregateType } from '../../../types/AggregateType';
 import buildInvariantValidationErrorFactoryFunction from '../../../__tests__/utilities/buildInvariantValidationErrorFactoryFunction';
 import { getValidSpatialFeatureInstanceForTest } from '../../../__tests__/utilities/getValidSpatialFeatureInstanceForTest';
+import { Line } from '../../../models/spatial-feature/line/entities/line.entity';
+import { Point } from '../../../models/spatial-feature/point/entities/point.entity';
+import { GeometricFeatureType } from '../../../models/spatial-feature/types/GeometricFeatureType';
+import { AggregateType } from '../../../types/AggregateType';
 import buildValidCasesForSubtypes from './common/buildValidCasesForSubtypes';
 
 const aggregateType = AggregateType.spatialFeature;
