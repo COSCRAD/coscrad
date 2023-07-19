@@ -8,7 +8,7 @@ interface CreditsHackProps {
 }
 
 export const CreditsHack = ({ resourceId, creditsMap }: CreditsHackProps): JSX.Element => {
-    if (!creditsMap.has(resourceId)) return <div>No Credits Found</div>;
+    if (!creditsMap.has(resourceId)) return null;
 
     return <SinglePropertyPresenter display="Credits" value={creditsMap.get(resourceId)} />;
 };
