@@ -1,6 +1,7 @@
 import { AggregateType, ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
+import { LanguageCodeEnum } from '../../../../common/entities/multilingual-text';
 import { AggregateTypeProperty } from '../../../shared/common-commands';
 import { CREATE_TERM } from './constants';
 
@@ -40,7 +41,7 @@ export class CreateTerm implements ICommandBase {
      * command for creating an English prompt term to later be translated via a
      * word collection process.
      */
-    @NonEmptyString({
+    @LanguageCodeEnum({
         label: 'language',
         description: 'the language of this term',
     })

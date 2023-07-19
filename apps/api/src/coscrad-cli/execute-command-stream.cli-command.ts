@@ -111,6 +111,9 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
                     },
                 },
             };
+
+            this.logger.log(`Attempting to execute command FSA: ${JSON.stringify(fsaToExecute)}`);
+
             const commandResult = await this.commandHandlerService.execute(fsaToExecute, {
                 userId: 'COSCRAD Admin',
             });
@@ -131,6 +134,8 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
 
             throw new Error(`Bulk command execution completed but with errors`);
         }
+
+        this.logger.log(`Success`);
     }
 
     @CliCommandOption({
