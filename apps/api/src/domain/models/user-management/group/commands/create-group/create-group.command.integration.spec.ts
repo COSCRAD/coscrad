@@ -184,6 +184,26 @@ describe('CreateGroup', () => {
         });
 
         describe('when the payload has a property with an invalid type', () => {
+            describe(`when the payload has an invalid aggregate type`, () => {
+                Object.values(AggregateType)
+                    .filter((t) => t !== AggregateType.userGroup)
+                    .forEach((invalidAggregateType) => {
+                        it(`should fail with the expected error`, async () => {
+                            await assertCommandFailsDueToTypeError(
+                                commandAssertionDependencies,
+                                {
+                                    propertyName: 'aggregateCompositeIdentifier',
+                                    invalidValue: {
+                                        type: invalidAggregateType,
+                                        id: buildDummyUuid(15),
+                                    },
+                                },
+                                buildValidCommandFSA(buildDummyUuid(12))
+                            );
+                        });
+                    });
+            });
+
             generateCommandFuzzTestCases(CreateGroup).forEach(
                 ({ description, propertyName, invalidValue }) => {
                     describe(`when the property ${propertyName} has the invalid value: ${invalidValue} (${description})`, () => {
