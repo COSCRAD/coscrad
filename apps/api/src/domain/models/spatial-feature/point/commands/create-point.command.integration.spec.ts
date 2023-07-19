@@ -25,7 +25,6 @@ const commandType = `CREATE_POINT`;
 
 const pointName = 'Sunny Park Point';
 
-// TODO optional payload overrides as second arg
 const dummyFsa = getCommandFsaForTest<CreatePoint>(commandType, {
     aggregateCompositeIdentifier: { id: buildDummyUuid(55) },
     name: pointName,
