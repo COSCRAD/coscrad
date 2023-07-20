@@ -21,6 +21,12 @@ export class CreateTermCommandHandler extends BaseCreateCommandHandler<Term> {
         languageCode,
         contributorId,
     }: CreateTerm): ResultOrError<Term> {
+        console.log({
+            text,
+            languageCode,
+            id,
+        });
+
         return new Term({
             type: AggregateType.term,
             id,
