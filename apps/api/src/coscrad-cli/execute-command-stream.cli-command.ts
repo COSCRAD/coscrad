@@ -81,11 +81,23 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
         }: { name: CommandFsa[]; dataFile: CommandFsa[] }
     ): Promise<void> {
         if (commandFsasFromDataFile && commandFsasFromFixture) {
-            throw new InternalError(`You must only specify one of [name, data-file]`);
+            const msg = `You must only specify one of [name, data-file]`;
+
+            this.logger.log(msg);
+
+            this.logger.log(`exiting.`);
+
+            throw new InternalError(msg);
         }
 
         if (!commandFsasFromDataFile && !commandFsasFromFixture) {
-            throw new InternalError(`You must specify exactly one of [name, data-file]`);
+            const msg = `You must specify exactly one of [name, data-file]`;
+
+            this.logger.log(msg);
+
+            this.logger.log(`Exiting.`);
+
+            throw new InternalError(msg);
         }
 
         const commandFsasToExecute = commandFsasFromDataFile || commandFsasFromFixture;
@@ -166,10 +178,14 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
 
             return parsedCommandFsaStream;
         } catch (error) {
-            throw new InternalError(
+            const customError = new InternalError(
                 `Failed to parse command stream from JSON file`,
                 error?.message ? [new InternalError(error.message)] : []
             );
+
+            this.logger.log(customError.toString());
+
+            throw customError;
         }
     }
 }

@@ -9,8 +9,14 @@ import { ArangoDatabaseProvider } from '../persistence/database/database.provide
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { CoscradCliModule } from './coscrad-cli.module';
+import { COSCRAD_LOGGER_TOKEN } from './logging';
+import { buildMockLogger } from './logging/__tests__';
 
 const cliCommandName = 'execute-command-stream';
+
+const fixtureName = `users:create-admin`;
+
+const dataFile = `apps/api/src/coscrad-cli/execute-command-stream.cli-command.SAMPLE.json`;
 
 describe(`CLI Command: ${cliCommandName}`, () => {
     let commandInstance: TestingModule;
@@ -18,6 +24,8 @@ describe(`CLI Command: ${cliCommandName}`, () => {
     let testRepositoryProvider: TestRepositoryProvider;
 
     let databaseProvider: ArangoDatabaseProvider;
+
+    const mockLogger = buildMockLogger({ isEnabled: true });
 
     beforeEach(async () => {
         const testAppModule = await createTestModule({
@@ -38,15 +46,17 @@ describe(`CLI Command: ${cliCommandName}`, () => {
             .useValue(testAppModule)
             .overrideProvider(REPOSITORY_PROVIDER_TOKEN)
             .useValue(testRepositoryProvider)
+            .overrideProvider(COSCRAD_LOGGER_TOKEN)
+            .useValue(mockLogger)
             .compile();
 
         await testRepositoryProvider.testTeardown();
+
+        await jest.clearAllMocks();
     });
 
     describe(`when the [name] property is specified`, () => {
         describe(`when the command is valid`, () => {
-            const fixtureName = `users:create-admin`;
-
             describe(`when executing the command fixture with name: ${fixtureName}`, () => {
                 it(`should succeed`, async () => {
                     await CommandTestFactory.run(commandInstance, [
@@ -66,8 +76,6 @@ describe(`CLI Command: ${cliCommandName}`, () => {
 
     describe(`when the [data-file] option is specified`, () => {
         describe(`when the command is valid`, () => {
-            const dataFile = `apps/api/src/coscrad-cli/execute-command-stream.cli-command.SAMPLE.json`;
-
             it(`should succeed with the expected updates`, async () => {
                 await CommandTestFactory.run(commandInstance, [
                     cliCommandName,
@@ -80,6 +88,55 @@ describe(`CLI Command: ${cliCommandName}`, () => {
 
                 expect(numberOfTerms).toBeGreaterThan(0);
             });
+        });
+
+        describe(`when the file does not exist`, () => {
+            it(`should fail with the correct message`, async () => {
+                await CommandTestFactory.run(commandInstance, [
+                    cliCommandName,
+                    `--data-file=sorry-mario.data.json`,
+                ]);
+
+                const message = mockLogger.log.mock.calls[0][0];
+
+                const expectedText = `Failed to parse`;
+
+                const invalidMessages = [message].filter((m) => !m.includes(expectedText));
+
+                expect(invalidMessages).toEqual([]);
+            });
+        });
+    });
+
+    describe(`when both [data-file] and [name] are specified`, () => {
+        it(`should fail with the expected error`, async () => {
+            await CommandTestFactory.run(commandInstance, [
+                cliCommandName,
+                `--name=${fixtureName}`,
+                `--data-file=${dataFile}`,
+            ]);
+
+            const message = mockLogger.log.mock.calls[0][0];
+
+            const expectedText = `only specify one`;
+
+            const invalidMessages = [message].filter((m) => !m.includes(expectedText));
+
+            expect(invalidMessages).toEqual([]);
+        });
+    });
+
+    describe(`when neither [data-file] nor [name] is specified`, () => {
+        it(`should fail with the expected error`, async () => {
+            await CommandTestFactory.run(commandInstance, [cliCommandName]);
+
+            const message = mockLogger.log.mock.calls[0][0];
+
+            const expectedText = `exactly one of`;
+
+            const invalidMessages = [message].filter((m) => !m.includes(expectedText));
+
+            expect(invalidMessages).toEqual([]);
         });
     });
 });
