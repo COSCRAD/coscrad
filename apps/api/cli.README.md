@@ -14,6 +14,9 @@ To build `coscrad-cli`, run
 
 > > > nx run api:build:cli
 
+Note that you should set an environment variable `NODE_ENV` to a non-production
+environment (e.g., `development` or `e2e`) before running the build.
+
 To run `coscrad-cli`, run
 
 > > > node dist/apps/coscrad-cli/main.js <command-name> <command-options>
@@ -22,7 +25,10 @@ For example,
 
 > > > node dist/apps/coscrad-cli/main.js data-dump -f mybackup.data.json
 
-You will need to copy a `production.env` to the directory you run the cli from.
+You will need to copy an `<Environment>.env` to the directory you run the cli from.
+Note that `Environment` must line up with the value of `NODE_ENV` when you
+ran the build.
+
 Any data dumps will be to the working directory. Note that we often use the
 format <{prefix}.data.json> for convenience, because any `*.data.json` is
 git ignored in our project.
@@ -39,7 +45,7 @@ display help for command
 
 dumps the database state to a snapshot file
 
-> > > data-restore [-f {filename} | --filename={filename}]
+> > > data-restore [-f {filename} | --filename={filename}] (`$DATA_MODE=import` mode only)
 
 restores the database state from a snapshot file
 

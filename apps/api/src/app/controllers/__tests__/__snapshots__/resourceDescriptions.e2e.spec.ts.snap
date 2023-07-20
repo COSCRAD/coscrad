@@ -62,7 +62,7 @@ exports[`GET /resources should return the expected result 1`] = `
                   },
                   {
                     "label": "English",
-                    "value": "eng",
+                    "value": "en",
                   },
                   {
                     "label": "French",
@@ -208,7 +208,7 @@ exports[`GET /resources should return the expected result 1`] = `
                           },
                           {
                             "label": "English",
-                            "value": "eng",
+                            "value": "en",
                           },
                           {
                             "label": "French",
@@ -321,7 +321,7 @@ exports[`GET /resources should return the expected result 1`] = `
                   },
                   {
                     "label": "English",
-                    "value": "eng",
+                    "value": "en",
                   },
                   {
                     "label": "French",
@@ -473,7 +473,7 @@ exports[`GET /resources should return the expected result 1`] = `
                   },
                   {
                     "label": "English",
-                    "value": "eng",
+                    "value": "en",
                   },
                   {
                     "label": "French",
@@ -625,7 +625,7 @@ exports[`GET /resources should return the expected result 1`] = `
                   },
                   {
                     "label": "English",
-                    "value": "eng",
+                    "value": "en",
                   },
                   {
                     "label": "French",
@@ -757,7 +757,7 @@ exports[`GET /resources should return the expected result 1`] = `
                   },
                   {
                     "label": "English",
-                    "value": "eng",
+                    "value": "en",
                   },
                   {
                     "label": "French",
@@ -896,7 +896,7 @@ exports[`GET /resources should return the expected result 1`] = `
                   },
                   {
                     "label": "English",
-                    "value": "eng",
+                    "value": "en",
                   },
                   {
                     "label": "French",
@@ -1014,7 +1014,7 @@ exports[`GET /resources should return the expected result 1`] = `
                   },
                   {
                     "label": "English",
-                    "value": "eng",
+                    "value": "en",
                   },
                   {
                     "label": "French",
@@ -1376,7 +1376,7 @@ exports[`GET /resources should return the expected result 1`] = `
                   },
                   {
                     "label": "English",
-                    "value": "eng",
+                    "value": "en",
                   },
                   {
                     "label": "French",
@@ -1501,7 +1501,7 @@ exports[`GET /resources should return the expected result 1`] = `
                   },
                   {
                     "label": "English",
-                    "value": "eng",
+                    "value": "en",
                   },
                   {
                     "label": "French",
@@ -1596,7 +1596,7 @@ exports[`GET /resources should return the expected result 1`] = `
                   },
                   {
                     "label": "English",
-                    "value": "eng",
+                    "value": "en",
                   },
                   {
                     "label": "French",
@@ -1721,7 +1721,7 @@ exports[`GET /resources should return the expected result 1`] = `
                   },
                   {
                     "label": "English",
-                    "value": "eng",
+                    "value": "en",
                   },
                   {
                     "label": "French",
@@ -1866,7 +1866,7 @@ exports[`GET /resources should return the expected result 1`] = `
                   },
                   {
                     "label": "English",
-                    "value": "eng",
+                    "value": "en",
                   },
                   {
                     "label": "French",

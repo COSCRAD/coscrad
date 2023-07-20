@@ -10,7 +10,7 @@
 export enum LanguageCode {
     Chilcotin = 'clc',
     Haida = 'hai',
-    English = 'eng',
+    English = 'en',
     French = 'fra',
     Chinook = 'chn',
     Zapotec = 'zap',

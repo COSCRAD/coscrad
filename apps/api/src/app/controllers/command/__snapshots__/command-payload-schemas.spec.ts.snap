@@ -222,7 +222,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           {
             "label": "English",
-            "value": "eng",
+            "value": "en",
           },
           {
             "label": "French",
@@ -1210,7 +1210,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           {
             "label": "English",
-            "value": "eng",
+            "value": "en",
           },
           {
             "label": "French",
@@ -1309,7 +1309,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           {
             "label": "English",
-            "value": "eng",
+            "value": "en",
           },
           {
             "label": "French",
@@ -1517,7 +1517,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           {
             "label": "English",
-            "value": "eng",
+            "value": "en",
           },
           {
             "label": "French",
@@ -1633,7 +1633,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
               },
               {
                 "label": "English",
-                "value": "eng",
+                "value": "en",
               },
               {
                 "label": "French",
@@ -1733,7 +1733,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           {
             "label": "English",
-            "value": "eng",
+            "value": "en",
           },
           {
             "label": "French",
@@ -1909,7 +1909,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           {
             "label": "English",
-            "value": "eng",
+            "value": "en",
           },
           {
             "label": "French",
@@ -1993,7 +1993,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           {
             "label": "English",
-            "value": "eng",
+            "value": "en",
           },
           {
             "label": "French",
@@ -2187,7 +2187,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
                   },
                   {
                     "label": "English",
-                    "value": "eng",
+                    "value": "en",
                   },
                   {
                     "label": "French",
@@ -2457,7 +2457,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
                   },
                   {
                     "label": "English",
-                    "value": "eng",
+                    "value": "en",
                   },
                   {
                     "label": "French",
@@ -2527,7 +2527,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           {
             "label": "English",
-            "value": "eng",
+            "value": "en",
           },
           {
             "label": "French",
@@ -2728,7 +2728,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
                   },
                   {
                     "label": "English",
-                    "value": "eng",
+                    "value": "en",
                   },
                   {
                     "label": "French",
@@ -2836,7 +2836,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           {
             "label": "English",
-            "value": "eng",
+            "value": "en",
           },
           {
             "label": "French",
@@ -2909,11 +2909,43 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "label": "contributor ID",
       },
       "languageCode": {
-        "coscradDataType": "NON_EMPTY_STRING",
+        "complexDataType": "ENUM",
         "description": "the language of this term",
+        "enumLabel": "language code",
+        "enumName": "LanguageCode",
         "isArray": false,
         "isOptional": false,
         "label": "language",
+        "labelsAndValues": [
+          {
+            "label": "Chilcotin",
+            "value": "clc",
+          },
+          {
+            "label": "Haida",
+            "value": "hai",
+          },
+          {
+            "label": "English",
+            "value": "en",
+          },
+          {
+            "label": "French",
+            "value": "fra",
+          },
+          {
+            "label": "Chinook",
+            "value": "chn",
+          },
+          {
+            "label": "Zapotec",
+            "value": "zap",
+          },
+          {
+            "label": "Spanish",
+            "value": "spa",
+          },
+        ],
       },
       "text": {
         "coscradDataType": "NON_EMPTY_STRING",
@@ -2979,7 +3011,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           {
             "label": "English",
-            "value": "eng",
+            "value": "en",
           },
           {
             "label": "French",
