@@ -22,7 +22,7 @@ export const assertCreateCommandError = async (
 
     const newId = await idManager.generate();
 
-    const commandFSA = await buildCommandFSA(newId);
+    const commandFSA = buildCommandFSA(newId);
 
     // Act
     const result = await commandHandlerService.execute(commandFSA, { userId: systemUserId });

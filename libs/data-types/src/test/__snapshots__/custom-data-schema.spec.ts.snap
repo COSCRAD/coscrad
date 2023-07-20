@@ -110,6 +110,13 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "isOptional": true,
     "label": "label for property: locationName",
   },
+  "maybeANumber": {
+    "coscradDataType": "FINITE_NUMBER",
+    "description": "description of property: maybeANumber",
+    "isArray": false,
+    "isOptional": true,
+    "label": "label for property: maybeANumber",
+  },
   "mimeType": {
     "complexDataType": "ENUM",
     "description": "description of property: mimeType",
@@ -136,6 +143,13 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
         "value": "video/mp4",
       },
     ],
+  },
+  "muchness": {
+    "coscradDataType": "FINITE_NUMBER",
+    "description": "description of property: muchness",
+    "isArray": false,
+    "isOptional": false,
+    "label": "label for property: muchness",
   },
   "numberOfDownvotes": {
     "coscradDataType": "POSITIVE_INTEGER",

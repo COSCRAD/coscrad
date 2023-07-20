@@ -14,5 +14,5 @@ export interface ISpatialFeatureProperties {
      * a map marker.
      */
     description: string;
-    imageUrl: string;
+    imageUrl?: string;
 }
