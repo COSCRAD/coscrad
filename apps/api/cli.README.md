@@ -72,3 +72,7 @@ clears the database between tests (`$DATA_MODE=_CYPRESS_` mode only)
 > > > seed-test-data-with-command --type={COMMAND_TYPE} (--payload-overrides={SERIALIZED_PAYLOAD_OVERRIDES_OBJECT})
 
 executes a fixture command (by type) with optional overrides to seed test data
+
+> > > seed-test-uuids --quantity={QUANTITY}
+
+seeds pseudo-uuids (trailing digits are sequential) for staging \ test data
