@@ -3009,5 +3009,78 @@ exports[`command payload schemas Command payload schema should match the snapsho
     },
     "type": "TRANSLATE_TERM",
   },
+  {
+    "description": "Create a spatial feature with 2D Point geometry",
+    "label": "Create Point",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier for this spatial feature",
+        "isArray": false,
+        "isOptional": false,
+        "label": "composite identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique ID for this spatial feature",
+            "isArray": false,
+            "isOptional": false,
+            "label": "id",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "must be: spatialFeature",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "spatialFeature",
+                "value": "spatialFeature",
+              },
+            ],
+          },
+        },
+      },
+      "description": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "a description of the place",
+        "isArray": false,
+        "isOptional": false,
+        "label": "description",
+      },
+      "imageUrl": {
+        "coscradDataType": "URL",
+        "description": "a full URL link to an image to display with this spatial feature",
+        "isArray": false,
+        "isOptional": true,
+        "label": "image link",
+      },
+      "lattitude": {
+        "coscradDataType": "FINITE_NUMBER",
+        "description": "lattitude",
+        "isArray": false,
+        "isOptional": false,
+        "label": "lattitude",
+      },
+      "longitude": {
+        "coscradDataType": "FINITE_NUMBER",
+        "description": "longitude",
+        "isArray": false,
+        "isOptional": false,
+        "label": "longitude",
+      },
+      "name": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "a place name (in any language)",
+        "isArray": false,
+        "isOptional": false,
+        "label": "name",
+      },
+    },
+    "type": "CREATE_POINT",
+  },
 ]
 `;

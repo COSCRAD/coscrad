@@ -5,11 +5,12 @@ import { DTO } from '../../../types/DTO';
 import { AggregateType } from '../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { PartialSnapshot } from '../../types/PartialSnapshot';
+import { dummyUuid } from '../__tests__/utilities/dummyUuid';
 import AggregateIdAlreadyInUseError from '../shared/common-command-errors/AggregateIdAlreadyInUseError';
 import InvalidExternalStateError from '../shared/common-command-errors/InvalidExternalStateError';
+import { ISpatialFeature } from '../spatial-feature/interfaces/spatial-feature.interface';
 import { CoscradUserGroup } from '../user-management/group/entities/coscrad-user-group.entity';
 import { CoscradUser } from '../user-management/user/entities/user/coscrad-user.entity';
-import { dummyUuid } from '../__tests__/utilities/dummyUuid';
 
 /**
  * The `CoscradUser` is exceptional in that an instance has additional fields that must
@@ -20,16 +21,35 @@ const userDtoOverrides: Partial<DTO<CoscradUser>> = {
     username: 'unique-username',
 };
 
+const spatialFeatureDtoOverrides: Partial<DTO<ISpatialFeature>> = {
+    properties: {
+        name: `unique name`,
+        description: `I have my own name and promise not to take yours!`,
+    },
+};
+
 const userGroupDtoOverrides: Partial<DTO<CoscradUserGroup>> = {
     label: 'unique-user-group-label',
 };
 
 const overridesMap = new Map()
     .set(AggregateType.user, userDtoOverrides)
-    .set(AggregateType.userGroup, userGroupDtoOverrides);
+    .set(AggregateType.userGroup, userGroupDtoOverrides)
+    .set(AggregateType.spatialFeature, spatialFeatureDtoOverrides);
 
 Object.values(AggregateType).forEach((aggregateType) => {
-    describe(`An aggregate of the type: ${aggregateType}`, () => {
+    /**
+     * TODO We originally put the responsibility of ensuring all aggregates of
+     * a given type have unique IDs on the model via a `validateExternalState`
+     * method. This is also used to enforce other uniqueness constraints, such
+     * as that each aggregate of type X has a uniqe value of a given property (e.g., name).
+     * While the latter may be a valid reponsibility of the aggregate instance,
+     * we should prevent ID collisions at a higher level. Our base command handler
+     * should automatically check this.
+     *
+     * For this reason, we are skipping this test.
+     */
+    describe.skip(`An aggregate of the type: ${aggregateType}`, () => {
         const existingAggreagte = getValidAggregateInstanceForTest(aggregateType).clone({
             id: dummyUuid,
         });

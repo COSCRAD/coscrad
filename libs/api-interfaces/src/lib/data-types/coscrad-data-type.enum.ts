@@ -3,6 +3,7 @@ export enum CoscradDataType {
     NonEmptyString = 'NON_EMPTY_STRING',
     UUID = 'UUID',
     URL = 'URL',
+    FiniteNumber = 'FINITE_NUMBER',
     NonNegativeFiniteNumber = 'NON_NEGATIVE_FINITE_NUMBER',
     // This should be used for "CREATE" command payloads only
     RawData = 'RAW_DATA',
