@@ -12,15 +12,15 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "The Wooden Boy",
           },
         ],
       },
       "tags": [],
-      "text": "[12000] [JHC] There once was a little wooden boy. {eng} (role: original) [15550]
-[18300] [JHC] His name was Pinocchio {eng} (role: original) [19240]",
+      "text": "[12000] [JHC] There once was a little wooden boy. {en} (role: original) [15550]
+[18300] [JHC] His name was Pinocchio {en} (role: original) [19240]",
     },
     {
       "actions": [],
@@ -38,9 +38,9 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
         ],
       },
       "tags": [],
-      "text": "[3400] [BL] While she went down to the river {eng} (role: original) [3670]
-[3700] [SD] someone had already filled the water tank. {eng} (role: original) [3980]
-[4010] [BL] These were the types of problems we had. {eng} (role: original) [4290]",
+      "text": "[3400] [BL] While she went down to the river {en} (role: original) [3670]
+[3700] [SD] someone had already filled the water tank. {en} (role: original) [3980]
+[4010] [BL] These were the types of problems we had. {en} (role: original) [4290]",
     },
     {
       "actions": [],
@@ -58,8 +58,8 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
         ],
       },
       "tags": [],
-      "text": "[120] [E1] this type of spoon is used in ceremonies {eng} (role: original) [848]
-[930] [E2] by members of the opposite clan of the house chief {eng} (role: original) [1080]",
+      "text": "[120] [E1] this type of spoon is used in ceremonies {en} (role: original) [848]
+[930] [E2] by members of the opposite clan of the house chief {en} (role: original) [1080]",
     },
   ],
   "indexScopedActions": [],
@@ -78,15 +78,15 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "The Wooden Boy",
           },
         ],
       },
       "tags": [],
-      "text": "[12000] [JHC] There once was a little wooden boy. {eng} (role: original) [15550]
-[18300] [JHC] His name was Pinocchio {eng} (role: original) [19240]",
+      "text": "[12000] [JHC] There once was a little wooden boy. {en} (role: original) [15550]
+[18300] [JHC] His name was Pinocchio {en} (role: original) [19240]",
     },
     {
       "actions": [],
@@ -104,9 +104,9 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
         ],
       },
       "tags": [],
-      "text": "[3400] [BL] While she went down to the river {eng} (role: original) [3670]
-[3700] [SD] someone had already filled the water tank. {eng} (role: original) [3980]
-[4010] [BL] These were the types of problems we had. {eng} (role: original) [4290]",
+      "text": "[3400] [BL] While she went down to the river {en} (role: original) [3670]
+[3700] [SD] someone had already filled the water tank. {en} (role: original) [3980]
+[4010] [BL] These were the types of problems we had. {en} (role: original) [4290]",
     },
     {
       "actions": [],
@@ -124,8 +124,8 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
         ],
       },
       "tags": [],
-      "text": "[120] [E1] this type of spoon is used in ceremonies {eng} (role: original) [848]
-[930] [E2] by members of the opposite clan of the house chief {eng} (role: original) [1080]",
+      "text": "[120] [E1] this type of spoon is used in ceremonies {en} (role: original) [848]
+[930] [E2] by members of the opposite clan of the house chief {en} (role: original) [1080]",
     },
   ],
   "indexScopedActions": [],
@@ -162,7 +162,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A Day in the Life",
           },
@@ -205,7 +205,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "animals",
               },
@@ -236,7 +236,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "Report on the Cariboo Chilcotin Justice inquiry",
           },
@@ -261,7 +261,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "2002-07-08_NationTitleCase",
           },
@@ -284,7 +284,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "law",
               },
@@ -328,7 +328,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A Day in the Life",
           },
@@ -371,7 +371,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "animals",
               },
@@ -402,7 +402,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "Report on the Cariboo Chilcotin Justice inquiry",
           },
@@ -427,7 +427,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "2002-07-08_NationTitleCase",
           },
@@ -450,7 +450,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "law",
               },
@@ -474,7 +474,7 @@ exports[`When fetching multiple resources GET /resources/books when all of the r
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "Three Little Pigs",
           },
@@ -535,7 +535,7 @@ exports[`When fetching multiple resources GET /resources/books when all of the r
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "plants",
               },
@@ -552,7 +552,7 @@ exports[`When fetching multiple resources GET /resources/books when all of the r
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "An Adventure Story",
           },
@@ -607,7 +607,7 @@ exports[`When fetching multiple resources GET /resources/books when all of the r
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "plants",
               },
@@ -624,7 +624,7 @@ exports[`When fetching multiple resources GET /resources/books when all of the r
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "An Adventure Story II",
           },
@@ -656,7 +656,7 @@ exports[`When fetching multiple resources GET /resources/books when some of the 
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "Three Little Pigs",
           },
@@ -717,7 +717,7 @@ exports[`When fetching multiple resources GET /resources/books when some of the 
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "plants",
               },
@@ -734,7 +734,7 @@ exports[`When fetching multiple resources GET /resources/books when some of the 
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "An Adventure Story",
           },
@@ -789,7 +789,7 @@ exports[`When fetching multiple resources GET /resources/books when some of the 
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "plants",
               },
@@ -806,7 +806,7 @@ exports[`When fetching multiple resources GET /resources/books when some of the 
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "An Adventure Story II",
           },
@@ -844,7 +844,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
             "text": "episode (media item 1) title (in language)",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "Metal Mondays episode 1",
           },
@@ -883,7 +883,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "legends",
               },
@@ -906,7 +906,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
             "text": "video (media item 2) title (in language)",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "cool video",
           },
@@ -928,7 +928,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
             "text": "episode (media item 3) title (in language)",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "Metal Mondays episode 2",
           },
@@ -958,7 +958,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
             "text": "episode (media item 1) title (in language)",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "Metal Mondays episode 1",
           },
@@ -997,7 +997,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "legends",
               },
@@ -1020,7 +1020,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
             "text": "video (media item 2) title (in language)",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "cool video",
           },
@@ -1042,7 +1042,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
             "text": "episode (media item 3) title (in language)",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "Metal Mondays episode 2",
           },
@@ -1066,7 +1066,7 @@ exports[`When fetching multiple resources GET /resources/photographs when all of
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png",
           },
@@ -1098,7 +1098,7 @@ exports[`When fetching multiple resources GET /resources/photographs when all of
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "placenames",
               },
@@ -1114,7 +1114,7 @@ exports[`When fetching multiple resources GET /resources/photographs when all of
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png",
           },
@@ -1142,7 +1142,7 @@ exports[`When fetching multiple resources GET /resources/photographs when all of
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "songs",
               },
@@ -1158,7 +1158,7 @@ exports[`When fetching multiple resources GET /resources/photographs when all of
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png",
           },
@@ -1182,7 +1182,7 @@ exports[`When fetching multiple resources GET /resources/photographs when some o
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png",
           },
@@ -1214,7 +1214,7 @@ exports[`When fetching multiple resources GET /resources/photographs when some o
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "placenames",
               },
@@ -1230,7 +1230,7 @@ exports[`When fetching multiple resources GET /resources/photographs when some o
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png",
           },
@@ -1258,7 +1258,7 @@ exports[`When fetching multiple resources GET /resources/photographs when some o
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "songs",
               },
@@ -1274,7 +1274,7 @@ exports[`When fetching multiple resources GET /resources/photographs when some o
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png",
           },
@@ -1297,7 +1297,7 @@ exports[`When fetching multiple resources GET /resources/playlists when all of t
         {
           "mediaItemUrl": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
           "mimeType": "audio/x-wav",
-          "name": "The Wooden Boy {eng} (role: original)",
+          "name": "The Wooden Boy {en} (role: original)",
         },
         {
           "mediaItemUrl": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
@@ -1332,7 +1332,7 @@ exports[`When fetching multiple resources GET /resources/playlists when all of t
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "law",
               },
@@ -1355,7 +1355,7 @@ exports[`When fetching multiple resources GET /resources/playlists when some of 
         {
           "mediaItemUrl": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
           "mimeType": "audio/x-wav",
-          "name": "The Wooden Boy {eng} (role: original)",
+          "name": "The Wooden Boy {en} (role: original)",
         },
         {
           "mediaItemUrl": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
@@ -1390,7 +1390,7 @@ exports[`When fetching multiple resources GET /resources/playlists when some of 
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "law",
               },
@@ -1415,7 +1415,7 @@ exports[`When fetching multiple resources GET /resources/songs when all of the r
       "lyrics": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "Mary had a little lamb, little lamb.",
           },
@@ -1429,7 +1429,7 @@ exports[`When fetching multiple resources GET /resources/songs when all of the r
             "text": "Song title in language",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "Mary had a little lamb",
           },
@@ -1469,7 +1469,7 @@ exports[`When fetching multiple resources GET /resources/songs when all of the r
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "legends",
               },
@@ -1486,7 +1486,7 @@ exports[`When fetching multiple resources GET /resources/songs when all of the r
       "lyrics": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "Ain't gonna see the light of day, light of day, light of day",
           },
@@ -1500,7 +1500,7 @@ exports[`When fetching multiple resources GET /resources/songs when all of the r
             "text": "Unpublished Song Title (lang)",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "Unpublished Song Title (Engl)",
           },
@@ -1525,7 +1525,7 @@ exports[`When fetching multiple resources GET /resources/songs when some of the 
       "lyrics": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "Mary had a little lamb, little lamb.",
           },
@@ -1539,7 +1539,7 @@ exports[`When fetching multiple resources GET /resources/songs when some of the 
             "text": "Song title in language",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "Mary had a little lamb",
           },
@@ -1579,7 +1579,7 @@ exports[`When fetching multiple resources GET /resources/songs when some of the 
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "legends",
               },
@@ -1596,7 +1596,7 @@ exports[`When fetching multiple resources GET /resources/songs when some of the 
       "lyrics": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "Ain't gonna see the light of day, light of day, light of day",
           },
@@ -1610,7 +1610,7 @@ exports[`When fetching multiple resources GET /resources/songs when some of the 
             "text": "Unpublished Song Title (lang)",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "Unpublished Song Title (Engl)",
           },
@@ -1640,7 +1640,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "Name of Point with ID: 100",
           },
@@ -1692,7 +1692,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "plants",
               },
@@ -1714,7 +1714,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "Name of Point with ID: 101",
           },
@@ -1758,7 +1758,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "legends",
               },
@@ -1780,7 +1780,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "Name of Point with ID: 102",
           },
@@ -1828,7 +1828,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "animals",
               },
@@ -1850,7 +1850,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "Name of Point with ID: 103",
           },
@@ -1876,7 +1876,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "Name of Point with ID: 104",
           },
@@ -1928,7 +1928,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "Windy Path",
           },
@@ -1970,7 +1970,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "Point with ID: 300 Name",
           },
@@ -2004,7 +2004,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "Name of Point with ID: 100",
           },
@@ -2056,7 +2056,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "plants",
               },
@@ -2078,7 +2078,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "Name of Point with ID: 101",
           },
@@ -2122,7 +2122,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "legends",
               },
@@ -2144,7 +2144,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "Name of Point with ID: 102",
           },
@@ -2192,7 +2192,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "animals",
               },
@@ -2214,7 +2214,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "Name of Point with ID: 103",
           },
@@ -2240,7 +2240,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "Name of Point with ID: 104",
           },
@@ -2292,7 +2292,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "Windy Path",
           },
@@ -2334,7 +2334,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "Point with ID: 300 Name",
           },
@@ -2367,7 +2367,7 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
             "text": "Chil-term-1",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "Engl-term-1",
           },
@@ -2414,7 +2414,7 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "plants",
               },
@@ -2435,7 +2435,7 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
             "text": "Chil-term-2",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "Engl-term-2",
           },
@@ -2478,7 +2478,7 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "animals",
               },
@@ -2494,7 +2494,7 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "Chil-term-no-english",
           },
@@ -2537,7 +2537,7 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "animals",
               },
@@ -2553,7 +2553,7 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "My Secret Term",
           },
@@ -2574,7 +2574,7 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
             "text": "I am singing (lang)",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "I am singing (Engl)",
           },
@@ -2595,7 +2595,7 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
             "text": "You are singing (lang)",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "You are singing (Engl)",
           },
@@ -2616,7 +2616,7 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
             "text": "She is singing (lang)",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "She is singing (Engl)",
           },
@@ -2637,7 +2637,7 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
             "text": "I am not singing (lang)",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "I am not singing (Engl)",
           },
@@ -2658,7 +2658,7 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
             "text": "You are not singing (lang)",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "You are not singing (Engl)",
           },
@@ -2686,7 +2686,7 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
             "text": "Chil-term-1",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "Engl-term-1",
           },
@@ -2733,7 +2733,7 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "plants",
               },
@@ -2754,7 +2754,7 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
             "text": "Chil-term-2",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "Engl-term-2",
           },
@@ -2797,7 +2797,7 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "animals",
               },
@@ -2813,7 +2813,7 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "Chil-term-no-english",
           },
@@ -2856,7 +2856,7 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "animals",
               },
@@ -2872,7 +2872,7 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "My Secret Term",
           },
@@ -2893,7 +2893,7 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
             "text": "I am singing (lang)",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "I am singing (Engl)",
           },
@@ -2914,7 +2914,7 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
             "text": "You are singing (lang)",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "You are singing (Engl)",
           },
@@ -2935,7 +2935,7 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
             "text": "She is singing (lang)",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "She is singing (Engl)",
           },
@@ -2956,7 +2956,7 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
             "text": "I am not singing (lang)",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "I am not singing (Engl)",
           },
@@ -2977,7 +2977,7 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
             "text": "You are not singing (lang)",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "You are not singing (Engl)",
           },
@@ -3001,15 +3001,15 @@ exports[`When fetching multiple resources GET /resources/videos when all of the 
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "The Demonstration",
           },
         ],
       },
       "tags": [],
-      "text": "[12000] [DM] This is how. {eng} (role: original) [15550]
-[18300] [DM] It is done {eng} (role: original) [19240]",
+      "text": "[12000] [DM] This is how. {en} (role: original) [15550]
+[18300] [DM] It is done {en} (role: original) [19240]",
       "videoUrl": "https://coscrad.org/wp-content/uploads/2023/05/Rexy-and-The-Egg-_3D-Dinosaur-Animation_-_-3D-Animation-_-Maya-3D.mp4",
     },
   ],
@@ -3028,15 +3028,15 @@ exports[`When fetching multiple resources GET /resources/videos when some of the
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "The Demonstration",
           },
         ],
       },
       "tags": [],
-      "text": "[12000] [DM] This is how. {eng} (role: original) [15550]
-[18300] [DM] It is done {eng} (role: original) [19240]",
+      "text": "[12000] [DM] This is how. {en} (role: original) [15550]
+[18300] [DM] It is done {en} (role: original) [19240]",
       "videoUrl": "https://coscrad.org/wp-content/uploads/2023/05/Rexy-and-The-Egg-_3D-Dinosaur-Animation_-_-3D-Animation-_-Maya-3D.mp4",
     },
   ],
@@ -3063,7 +3063,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
                   "text": "I am singing (lang)",
                 },
                 {
-                  "languageCode": "eng",
+                  "languageCode": "en",
                   "role": "free translation",
                   "text": "I am singing (Engl)",
                 },
@@ -3088,7 +3088,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
                   "text": "You are singing (lang)",
                 },
                 {
-                  "languageCode": "eng",
+                  "languageCode": "en",
                   "role": "free translation",
                   "text": "You are singing (Engl)",
                 },
@@ -3113,7 +3113,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
                   "text": "She is singing (lang)",
                 },
                 {
-                  "languageCode": "eng",
+                  "languageCode": "en",
                   "role": "free translation",
                   "text": "She is singing (Engl)",
                 },
@@ -3138,7 +3138,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
                   "text": "I am not singing (lang)",
                 },
                 {
-                  "languageCode": "eng",
+                  "languageCode": "en",
                   "role": "free translation",
                   "text": "I am not singing (Engl)",
                 },
@@ -3163,7 +3163,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
                   "text": "You are not singing (lang)",
                 },
                 {
-                  "languageCode": "eng",
+                  "languageCode": "en",
                   "role": "free translation",
                   "text": "You are not singing (Engl)",
                 },
@@ -3227,7 +3227,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
             "text": "To Sing (lang)",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "To Sing (Engl)",
           },
@@ -3250,7 +3250,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
                   "text": "Chil-term-1",
                 },
                 {
-                  "languageCode": "eng",
+                  "languageCode": "en",
                   "role": "free translation",
                   "text": "Engl-term-1",
                 },
@@ -3273,7 +3273,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
                   "text": "Chil-term-2",
                 },
                 {
-                  "languageCode": "eng",
+                  "languageCode": "en",
                   "role": "free translation",
                   "text": "Engl-term-2",
                 },
@@ -3315,7 +3315,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
             "text": "test VL 1 chil",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "test VL 1 engl",
           },
@@ -3362,7 +3362,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "plants",
               },
@@ -3386,7 +3386,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
                   "text": "Chil-term-2",
                 },
                 {
-                  "languageCode": "eng",
+                  "languageCode": "en",
                   "role": "free translation",
                   "text": "Engl-term-2",
                 },
@@ -3409,7 +3409,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
                   "text": "Chil-term-1",
                 },
                 {
-                  "languageCode": "eng",
+                  "languageCode": "en",
                   "role": "free translation",
                   "text": "Engl-term-1",
                 },
@@ -3485,7 +3485,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "legends",
               },
@@ -3518,7 +3518,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
                   "text": "I am singing (lang)",
                 },
                 {
-                  "languageCode": "eng",
+                  "languageCode": "en",
                   "role": "free translation",
                   "text": "I am singing (Engl)",
                 },
@@ -3543,7 +3543,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
                   "text": "You are singing (lang)",
                 },
                 {
-                  "languageCode": "eng",
+                  "languageCode": "en",
                   "role": "free translation",
                   "text": "You are singing (Engl)",
                 },
@@ -3568,7 +3568,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
                   "text": "She is singing (lang)",
                 },
                 {
-                  "languageCode": "eng",
+                  "languageCode": "en",
                   "role": "free translation",
                   "text": "She is singing (Engl)",
                 },
@@ -3593,7 +3593,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
                   "text": "I am not singing (lang)",
                 },
                 {
-                  "languageCode": "eng",
+                  "languageCode": "en",
                   "role": "free translation",
                   "text": "I am not singing (Engl)",
                 },
@@ -3618,7 +3618,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
                   "text": "You are not singing (lang)",
                 },
                 {
-                  "languageCode": "eng",
+                  "languageCode": "en",
                   "role": "free translation",
                   "text": "You are not singing (Engl)",
                 },
@@ -3682,7 +3682,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
             "text": "To Sing (lang)",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "To Sing (Engl)",
           },
@@ -3705,7 +3705,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
                   "text": "Chil-term-1",
                 },
                 {
-                  "languageCode": "eng",
+                  "languageCode": "en",
                   "role": "free translation",
                   "text": "Engl-term-1",
                 },
@@ -3728,7 +3728,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
                   "text": "Chil-term-2",
                 },
                 {
-                  "languageCode": "eng",
+                  "languageCode": "en",
                   "role": "free translation",
                   "text": "Engl-term-2",
                 },
@@ -3770,7 +3770,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
             "text": "test VL 1 chil",
           },
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "free translation",
             "text": "test VL 1 engl",
           },
@@ -3817,7 +3817,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "plants",
               },
@@ -3841,7 +3841,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
                   "text": "Chil-term-2",
                 },
                 {
-                  "languageCode": "eng",
+                  "languageCode": "en",
                   "role": "free translation",
                   "text": "Engl-term-2",
                 },
@@ -3864,7 +3864,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
                   "text": "Chil-term-1",
                 },
                 {
-                  "languageCode": "eng",
+                  "languageCode": "en",
                   "role": "free translation",
                   "text": "Engl-term-1",
                 },
@@ -3940,7 +3940,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "legends",
               },

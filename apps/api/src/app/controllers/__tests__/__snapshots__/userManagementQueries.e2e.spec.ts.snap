@@ -62,7 +62,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                   },
                   {
                     "label": "English",
-                    "value": "eng",
+                    "value": "en",
                   },
                   {
                     "label": "French",
@@ -194,7 +194,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                       },
                       {
                         "label": "English",
-                        "value": "eng",
+                        "value": "en",
                       },
                       {
                         "label": "French",
@@ -312,7 +312,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                   },
                   {
                     "label": "English",
-                    "value": "eng",
+                    "value": "en",
                   },
                   {
                     "label": "French",
@@ -423,7 +423,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                   },
                   {
                     "label": "English",
-                    "value": "eng",
+                    "value": "en",
                   },
                   {
                     "label": "French",
@@ -617,7 +617,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                   },
                   {
                     "label": "English",
-                    "value": "eng",
+                    "value": "en",
                   },
                   {
                     "label": "French",
@@ -726,7 +726,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                       },
                       {
                         "label": "English",
-                        "value": "eng",
+                        "value": "en",
                       },
                       {
                         "label": "French",
@@ -909,7 +909,7 @@ exports[`User Management Queries when the system user issuing the command is aut
   "name": {
     "items": [
       {
-        "languageCode": "eng",
+        "languageCode": "en",
         "role": "original",
         "text": "community members",
       },
@@ -921,7 +921,7 @@ exports[`User Management Queries when the system user issuing the command is aut
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "cool-james",
           },
@@ -989,7 +989,7 @@ exports[`User Management Queries when the system user issuing the command is aut
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "community members",
           },
@@ -1001,7 +1001,7 @@ exports[`User Management Queries when the system user issuing the command is aut
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "cool-james",
               },
@@ -1118,7 +1118,7 @@ exports[`User Management Queries when the system user issuing the command is aut
   "name": {
     "items": [
       {
-        "languageCode": "eng",
+        "languageCode": "en",
         "role": "original",
         "text": "cool-james",
       },
@@ -1189,7 +1189,7 @@ exports[`User Management Queries when the system user issuing the command is aut
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "cool-james",
           },
@@ -1255,7 +1255,7 @@ exports[`User Management Queries when the system user issuing the command is aut
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "cscrad-cypress-user",
           },
@@ -1321,7 +1321,7 @@ exports[`User Management Queries when the system user issuing the command is aut
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "testerkk",
           },
@@ -1431,7 +1431,7 @@ exports[`User Management Queries when the system user issuing the command is aut
   "name": {
     "items": [
       {
-        "languageCode": "eng",
+        "languageCode": "en",
         "role": "original",
         "text": "community members",
       },
@@ -1443,7 +1443,7 @@ exports[`User Management Queries when the system user issuing the command is aut
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "cool-james",
           },
@@ -1511,7 +1511,7 @@ exports[`User Management Queries when the system user issuing the command is aut
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "community members",
           },
@@ -1523,7 +1523,7 @@ exports[`User Management Queries when the system user issuing the command is aut
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "cool-james",
               },
@@ -1640,7 +1640,7 @@ exports[`User Management Queries when the system user issuing the command is aut
   "name": {
     "items": [
       {
-        "languageCode": "eng",
+        "languageCode": "en",
         "role": "original",
         "text": "cool-james",
       },
@@ -1711,7 +1711,7 @@ exports[`User Management Queries when the system user issuing the command is aut
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "cool-james",
           },
@@ -1777,7 +1777,7 @@ exports[`User Management Queries when the system user issuing the command is aut
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "cscrad-cypress-user",
           },
@@ -1843,7 +1843,7 @@ exports[`User Management Queries when the system user issuing the command is aut
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "testerkk",
           },

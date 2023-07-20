@@ -1,0 +1,34 @@
+[
+    {
+        "type": "CREATE_TERM",
+        "payload": {
+            "aggregateCompositeIdentifier": {
+                "id": "GENERATE_THIS_ID",
+                "type": "term"
+            },
+            "text": "I am talking to him (language)",
+            "languageCode": "clc",
+            "contributorId": "1"
+        }
+    },
+    {
+        "type": "TRANSLATE_TERM",
+        "payload": {
+            "aggregateCompositeIdentifier": {
+                "id": "APPEND_THIS_ID",
+                "type": "term"
+            },
+            "translation": "I am talking to him (English)",
+            "languageCode": "en"
+        }
+    },
+    {
+        "type": "PUBLISH_RESOURCE",
+        "payload": {
+            "aggregateCompositeIdentifier": {
+                "id": "APPEND_THIS_ID",
+                "type": "term"
+            }
+        }
+    }
+]
