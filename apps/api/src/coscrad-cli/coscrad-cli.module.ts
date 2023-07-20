@@ -13,6 +13,7 @@ import { ConsoleCoscradCliLogger, COSCRAD_LOGGER_TOKEN } from './logging';
 import { RevertLatestMigrationCliCommand } from './revert-latest-migration';
 import { RunMigrationsCliCommand } from './run-migrations.cli-command';
 import { SeedTestDataWithCommand } from './seed-test-data-with-command.cli-command';
+import { SeedTestUuids } from './seed-test-uuids.cli-command';
 import { ValidateInvariantsCliCommand } from './validate-invariants.cli-command';
 
 @Module({
@@ -26,6 +27,7 @@ import { ValidateInvariantsCliCommand } from './validate-invariants.cli-command'
         ClearDatabaseCliCommand,
         ExecuteCommandStreamCliCommand,
         SeedTestDataWithCommand,
+        SeedTestUuids,
         {
             provide: COSCRAD_LOGGER_TOKEN,
             useClass: ConsoleCoscradCliLogger,
