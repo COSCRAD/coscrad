@@ -9,6 +9,8 @@ export const ID_RESPOSITORY_TOKEN = 'IdRepository';
 export interface IIdRepository {
     create(id: AggregateId): Promise<void>;
 
+    createMany(ids: AggregateId[]): Promise<void>;
+
     reserve({ id, type }: { id: AggregateId; type: UniquelyIdentifiableType }): Promise<void>;
 
     fetchById(id: AggregateId): Promise<Maybe<UuidDocument>>;
