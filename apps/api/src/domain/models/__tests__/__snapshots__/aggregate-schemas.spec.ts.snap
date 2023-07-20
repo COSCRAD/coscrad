@@ -568,7 +568,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
               },
               {
                 "label": "English",
-                "value": "eng",
+                "value": "en",
               },
               {
                 "label": "French",
@@ -764,7 +764,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
               },
               {
                 "label": "English",
-                "value": "eng",
+                "value": "en",
               },
               {
                 "label": "French",
@@ -885,7 +885,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
               },
               {
                 "label": "English",
-                "value": "eng",
+                "value": "en",
               },
               {
                 "label": "French",
@@ -1096,7 +1096,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
               },
               {
                 "label": "English",
-                "value": "eng",
+                "value": "en",
               },
               {
                 "label": "French",
@@ -1217,7 +1217,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
               },
               {
                 "label": "English",
-                "value": "eng",
+                "value": "en",
               },
               {
                 "label": "French",
@@ -1347,7 +1347,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                       },
                       {
                         "label": "English",
-                        "value": "eng",
+                        "value": "en",
                       },
                       {
                         "label": "French",
@@ -1616,7 +1616,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
               },
               {
                 "label": "English",
-                "value": "eng",
+                "value": "en",
               },
               {
                 "label": "French",
@@ -1746,7 +1746,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                       },
                       {
                         "label": "English",
-                        "value": "eng",
+                        "value": "en",
                       },
                       {
                         "label": "French",
@@ -1896,7 +1896,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
               },
               {
                 "label": "English",
-                "value": "eng",
+                "value": "en",
               },
               {
                 "label": "French",

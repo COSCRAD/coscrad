@@ -124,7 +124,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
                     },
                     {
                       "label": "English",
-                      "value": "eng",
+                      "value": "en",
                     },
                     {
                       "label": "French",
@@ -240,7 +240,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
                 },
                 {
                   "label": "English",
-                  "value": "eng",
+                  "value": "en",
                 },
                 {
                   "label": "French",
@@ -335,7 +335,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
                 },
                 {
                   "label": "English",
-                  "value": "eng",
+                  "value": "en",
                 },
                 {
                   "label": "French",
@@ -1454,7 +1454,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A note about term/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           },
@@ -1463,7 +1463,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "This first 4 letters of this term form a syllable that indicates this is a plant ",
           },
@@ -1502,7 +1502,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "legends",
               },
@@ -1533,7 +1533,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A note about book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
           },
@@ -1542,7 +1542,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "This page is about bears",
           },
@@ -1575,7 +1575,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A note about vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           },
@@ -1611,7 +1611,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "songs",
               },
@@ -1639,7 +1639,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A note about spatialFeature/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
           },
@@ -1648,7 +1648,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "there is a placename for this point at the base of the mountain",
           },
@@ -1679,7 +1679,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A note about audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
           },
@@ -1688,7 +1688,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this clip talks about songs",
           },
@@ -1719,7 +1719,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "placenames",
               },
@@ -1747,7 +1747,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A note about photograph/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           },
@@ -1756,7 +1756,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this is the stem of the flower",
           },
@@ -1786,7 +1786,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A note about book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
           },
@@ -1795,7 +1795,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this section is the best part of an illustrated book about birds",
           },
@@ -1838,7 +1838,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "animals",
               },
@@ -1866,7 +1866,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A note about bibliographicReference/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           },
@@ -1875,7 +1875,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "found this in the archives",
           },
@@ -1906,7 +1906,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A note about song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           },
@@ -1915,7 +1915,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this is a song",
           },
@@ -1962,7 +1962,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "plants",
               },
@@ -1994,7 +1994,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A note about mediaItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           },
@@ -2003,7 +2003,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "important clip from the show",
           },
@@ -2030,7 +2030,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A note about bibliographicReference/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           },
@@ -2039,7 +2039,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this book is hard to track down",
           },
@@ -2086,7 +2086,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "plants",
               },
@@ -2118,7 +2118,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A note about video/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
           },
@@ -2127,7 +2127,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this clip talks about birds",
           },
@@ -2154,7 +2154,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A note about playlist/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
           },
@@ -2163,7 +2163,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this playlist is awesome",
           },
@@ -2190,7 +2190,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A note about term/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           },
@@ -2199,7 +2199,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "This first 4 letters of this term form a syllable that indicates this is a plant ",
           },
@@ -2226,7 +2226,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A note about book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
           },
@@ -2235,7 +2235,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "This page is about bears",
           },
@@ -2262,7 +2262,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A note about vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           },
@@ -2298,7 +2298,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A note about audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
           },
@@ -2307,7 +2307,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this clip talks about songs",
           },
@@ -2334,7 +2334,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A note about book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
           },
@@ -2343,7 +2343,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this section is the best part of an illustrated book about birds",
           },
@@ -2370,7 +2370,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A note about song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           },
@@ -2379,7 +2379,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this is a song",
           },
@@ -2406,7 +2406,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A note about mediaItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           },
@@ -2415,7 +2415,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "important clip from the show",
           },
@@ -2442,7 +2442,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A note about video/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
           },
@@ -2451,7 +2451,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this clip talks about birds",
           },
@@ -2500,7 +2500,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002 to term/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           },
@@ -2509,7 +2509,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "That is why term/2 is related to vocabularyList/2",
           },
@@ -2556,7 +2556,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110 to vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           },
@@ -2565,7 +2565,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "That is why vocabularyList/2 is related to audioItem/110",
           },
@@ -2604,7 +2604,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "legends",
               },
@@ -2649,7 +2649,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024 to audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
           },
@@ -2658,7 +2658,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "That is why audioItem/110 is related to book/24",
           },
@@ -2685,7 +2685,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "songs",
               },
@@ -2726,7 +2726,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from photograph/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002 to book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
           },
@@ -2735,7 +2735,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "That is why book/24 is related to photograph/2",
           },
@@ -2766,7 +2766,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "placenames",
               },
@@ -2804,7 +2804,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from spatialFeature/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300 to photograph/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           },
@@ -2813,7 +2813,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "That is why photograph/2 is related to spatialFeature/300",
           },
@@ -2856,7 +2856,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "animals",
               },
@@ -2898,7 +2898,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to spatialFeature/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
           },
@@ -2907,7 +2907,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "That is why spatialFeature/300 is related to song/1",
           },
@@ -2954,7 +2954,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "plants",
               },
@@ -3000,7 +3000,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from video/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223 to song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           },
@@ -3009,7 +3009,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "That is why song/1 is related to video/223",
           },
@@ -3050,7 +3050,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from playlist/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501 to video/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
           },
@@ -3059,7 +3059,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "That is why video/223 is related to playlist/501",
           },
@@ -3102,7 +3102,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from term/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002 to playlist/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
           },
@@ -3111,7 +3111,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "That is why playlist/501 is related to term/2",
           },
@@ -3151,7 +3151,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from term/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512 to book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
           },
@@ -3160,7 +3160,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this term appears on this page of the book",
           },
@@ -3197,7 +3197,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002 to video/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
           },
@@ -3206,7 +3206,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this vocabulary list should be used in preparation for studying the video",
           },
@@ -3243,7 +3243,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111 to vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           },
@@ -3252,7 +3252,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this vocabulary list should be used in preparation for studying this audio interview",
           },
@@ -3289,7 +3289,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from mediaItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to video/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
           },
@@ -3298,7 +3298,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this media item was extracted from the video",
           },
@@ -3335,7 +3335,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from video/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223 to book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
           },
@@ -3344,7 +3344,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this video is loosely based on the book",
           },
@@ -3379,7 +3379,7 @@ exports[`When querying for edge connections GET /connections/notes should return
               1,
               4,
             ],
-            "languageCode": "eng",
+            "languageCode": "en",
             "target": "text",
             "type": "textField",
           },
@@ -3391,7 +3391,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from mediaItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to term/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           },
@@ -3400,7 +3400,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this media item mentions a word in the term",
           },
@@ -3437,7 +3437,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from bibliographicReference/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
           },
@@ -3446,7 +3446,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "here is the digital version of the book!",
           },
@@ -3490,7 +3490,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024 to mediaItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           },
@@ -3499,7 +3499,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this selection from the media item portrays the events in the book",
           },
@@ -3540,7 +3540,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to bibliographicReference/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           },
@@ -3549,7 +3549,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this library book has the lyrics from the song, but we do not have access to the book",
           },
@@ -3590,7 +3590,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to term/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
           },
@@ -3599,7 +3599,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this term is used in the song",
           },
@@ -3636,7 +3636,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to video/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
           },
@@ -3645,7 +3645,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this video uses the song",
           },
@@ -3682,7 +3682,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b114567",
           },
@@ -3691,7 +3691,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this vocabulary list is relevant to learning the song lyrics",
           },
@@ -3728,7 +3728,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023 to audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
           },
@@ -3737,7 +3737,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this is an alternative reading of the book",
           },
@@ -3774,7 +3774,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from bibliographicReference/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
           },
@@ -3783,7 +3783,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this is the print version of the digital book",
           },
@@ -3823,7 +3823,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025 to song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           },
@@ -3832,7 +3832,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this song is mentioned on this page",
           },
@@ -3872,7 +3872,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025 to mediaItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           },
@@ -3881,7 +3881,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this media item is mentioned in the text",
           },
@@ -3921,7 +3921,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025 to mediaItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           },
@@ -3930,7 +3930,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this media item is mentioned in the text",
           },
@@ -3967,7 +3967,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from bibliographicReference/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003 to book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
           },
@@ -3976,7 +3976,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this is why bibliographic_references/3 is connected to book/24",
           },
@@ -4013,7 +4013,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "A connection from bibliographicReference/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023 to book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
           },
@@ -4022,7 +4022,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "this is why bibliographic_references/23 is connected to book/24",
           },

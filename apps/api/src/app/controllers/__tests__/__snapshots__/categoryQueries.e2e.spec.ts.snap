@@ -22,7 +22,7 @@ exports[`When fetching the category tree (/treeOfKnowledge) GET /treeOfKnowledge
                   "name": {
                     "items": [
                       {
-                        "languageCode": "eng",
+                        "languageCode": "en",
                         "role": "original",
                         "text": "wolves",
                       },
@@ -42,7 +42,7 @@ exports[`When fetching the category tree (/treeOfKnowledge) GET /treeOfKnowledge
                   "name": {
                     "items": [
                       {
-                        "languageCode": "eng",
+                        "languageCode": "en",
                         "role": "original",
                         "text": "domestic dogs",
                       },
@@ -61,7 +61,7 @@ exports[`When fetching the category tree (/treeOfKnowledge) GET /treeOfKnowledge
               "name": {
                 "items": [
                   {
-                    "languageCode": "eng",
+                    "languageCode": "en",
                     "role": "original",
                     "text": "canines",
                   },
@@ -78,7 +78,7 @@ exports[`When fetching the category tree (/treeOfKnowledge) GET /treeOfKnowledge
                   "name": {
                     "items": [
                       {
-                        "languageCode": "eng",
+                        "languageCode": "en",
                         "role": "original",
                         "text": "big cats",
                       },
@@ -102,7 +102,7 @@ exports[`When fetching the category tree (/treeOfKnowledge) GET /treeOfKnowledge
                   "name": {
                     "items": [
                       {
-                        "languageCode": "eng",
+                        "languageCode": "en",
                         "role": "original",
                         "text": "domestic cats",
                       },
@@ -116,7 +116,7 @@ exports[`When fetching the category tree (/treeOfKnowledge) GET /treeOfKnowledge
               "name": {
                 "items": [
                   {
-                    "languageCode": "eng",
+                    "languageCode": "en",
                     "role": "original",
                     "text": "felines",
                   },
@@ -136,7 +136,7 @@ exports[`When fetching the category tree (/treeOfKnowledge) GET /treeOfKnowledge
               "name": {
                 "items": [
                   {
-                    "languageCode": "eng",
+                    "languageCode": "en",
                     "role": "original",
                     "text": "rodents",
                   },
@@ -163,7 +163,7 @@ exports[`When fetching the category tree (/treeOfKnowledge) GET /treeOfKnowledge
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "mammals",
               },
@@ -183,7 +183,7 @@ exports[`When fetching the category tree (/treeOfKnowledge) GET /treeOfKnowledge
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "birds",
               },
@@ -202,7 +202,7 @@ exports[`When fetching the category tree (/treeOfKnowledge) GET /treeOfKnowledge
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "animals",
           },
@@ -228,7 +228,7 @@ exports[`When fetching the category tree (/treeOfKnowledge) GET /treeOfKnowledge
                   "name": {
                     "items": [
                       {
-                        "languageCode": "eng",
+                        "languageCode": "en",
                         "role": "original",
                         "text": "tools",
                       },
@@ -242,7 +242,7 @@ exports[`When fetching the category tree (/treeOfKnowledge) GET /treeOfKnowledge
               "name": {
                 "items": [
                   {
-                    "languageCode": "eng",
+                    "languageCode": "en",
                     "role": "original",
                     "text": "adornments",
                   },
@@ -266,7 +266,7 @@ exports[`When fetching the category tree (/treeOfKnowledge) GET /treeOfKnowledge
               "name": {
                 "items": [
                   {
-                    "languageCode": "eng",
+                    "languageCode": "en",
                     "role": "original",
                     "text": "clothing",
                   },
@@ -281,7 +281,7 @@ exports[`When fetching the category tree (/treeOfKnowledge) GET /treeOfKnowledge
               "name": {
                 "items": [
                   {
-                    "languageCode": "eng",
+                    "languageCode": "en",
                     "role": "original",
                     "text": "tools",
                   },
@@ -295,7 +295,7 @@ exports[`When fetching the category tree (/treeOfKnowledge) GET /treeOfKnowledge
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "props",
               },
@@ -310,7 +310,7 @@ exports[`When fetching the category tree (/treeOfKnowledge) GET /treeOfKnowledge
           "name": {
             "items": [
               {
-                "languageCode": "eng",
+                "languageCode": "en",
                 "role": "original",
                 "text": "wardrobe",
               },
@@ -324,7 +324,7 @@ exports[`When fetching the category tree (/treeOfKnowledge) GET /treeOfKnowledge
       "name": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "en",
             "role": "original",
             "text": "film",
           },
@@ -338,7 +338,7 @@ exports[`When fetching the category tree (/treeOfKnowledge) GET /treeOfKnowledge
   "name": {
     "items": [
       {
-        "languageCode": "eng",
+        "languageCode": "en",
         "role": "original",
         "text": "tree of knowledge",
       },
