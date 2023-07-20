@@ -46,6 +46,14 @@ const dataTypeToValidFuzz: DataTypeToFuzz = {
         'isbn13',
         'emptyObject',
     ],
+    [CoscradDataType.FiniteNumber]: [
+        'positiveInteger',
+        'positiveDecimal',
+        'zero',
+        'year',
+        'negativeDecimal',
+        'negativeInteger',
+    ],
     [CoscradDataType.NonNegativeFiniteNumber]: [
         'positiveInteger',
         'positiveDecimal',
