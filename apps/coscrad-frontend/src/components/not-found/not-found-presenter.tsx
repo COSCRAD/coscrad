@@ -13,7 +13,7 @@ export const NotFoundPresenter: FunctionalComponent = (): JSX.Element => {
             alignItems={'center'}
             width={'100%'}
             padding={'3em 0 3em 0'}
-            data-testid="notFound"
+            data-testid="not-found"
         >
             <SearchOffIcon sx={{ verticalAlign: 'text-bottom', paddingRight: '0.5em' }} />
             {notFoundMessage}

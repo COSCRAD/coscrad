@@ -4,6 +4,7 @@ import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUu
 import { AddLyricsForSong } from '../../domain/models/song/commands';
 import { CreateSong } from '../../domain/models/song/commands/create-song.command';
 import { AggregateType } from '../../domain/types/AggregateType';
+import { buildGeneralResourceTestCommandFsas } from './build-general-resource-test-command-fsas';
 import { buildSpatialFeatureTestCommandFsas } from './build-spatial-feature-test-command-fsas';
 import { buildTermTestCommandFsas } from './build-term-test-command-fsas';
 
@@ -39,6 +40,7 @@ const buildSongTestCommandFsas = () => [createSong, addLyricsForSong];
 
 export const buildTestCommandFsaMap = () =>
     [
+        ...buildGeneralResourceTestCommandFsas(),
         ...buildSongTestCommandFsas(),
         ...buildTermTestCommandFsas(),
         ...buildSpatialFeatureTestCommandFsas(),

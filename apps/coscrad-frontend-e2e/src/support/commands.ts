@@ -22,7 +22,11 @@ declare namespace Cypress {
 
         clearDatabase(): Chainable<Subject>;
 
-        executeCommandStream(name: string): Chainable<Subject>;
+        executeCommandStreamByName(name: string): Chainable<Subject>;
+
+        seedDataWithCommand(type: string, payloadOverrides: Record<string, unknown>): void;
+
+        seedTestUuids(quantity: number): void;
 
         acknowledgeCommandResult(): void;
 
@@ -145,9 +149,36 @@ Cypress.Commands.add(`clearDatabase`, () =>
     cy.exec(`node ../../dist/apps/coscrad-cli/main.js clear-database`)
 );
 
-Cypress.Commands.add(`executeCommandStream`, (name: string) =>
+Cypress.Commands.add(`executeCommandStreamByName`, (name: string) =>
     cy.exec(`node ../../dist/apps/coscrad-cli/main.js execute-command-stream --name=${name}`)
 );
+
+Cypress.Commands.add(
+    `seedDataWithCommand`,
+    (type: string, payloadOverrides: Record<string, unknown>) => {
+        const serializedOverrides = JSON.stringify(payloadOverrides);
+
+        console.log({
+            serializedOverrides,
+        });
+
+        // "{\\"foo\\": 5}"
+        const command = `node ../../dist/apps/coscrad-cli/main.js seed-test-data-with-command --type=${type} --payload-overrides="${serializedOverrides.replace(
+            /"/g,
+            `\\"`
+        )}"`;
+
+        cy.exec(command).then((result) => {
+            cy.wrap(result).its('code').should('eq', 0);
+
+            cy.wrap(`${result}`);
+        });
+    }
+);
+
+Cypress.Commands.add(`seedTestUuids`, (quantity: number) => {
+    cy.exec(`node ../../dist/apps/coscrad-cli/main.js seed-test-uuids --quantity=${quantity}`);
+});
 
 Cypress.Commands.add(`getCommandFormSubmissionButton`, () =>
     cy.getByDataAttribute('submit-dynamic-form')

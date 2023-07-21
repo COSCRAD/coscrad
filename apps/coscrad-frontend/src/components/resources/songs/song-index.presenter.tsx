@@ -18,7 +18,7 @@ export const SongIndexPresenter = (songsIndexResult: SongIndexState) => {
 
     const headingLabels: HeadingLabel<ISongViewModel>[] = [
         { propertyKey: 'id', headingLabel: 'Link' },
-        { propertyKey: 'name', headingLabel: 'Song' },
+        { propertyKey: 'name', headingLabel: 'Title' },
         { propertyKey: 'audioURL', headingLabel: 'Audio' },
     ];
 
