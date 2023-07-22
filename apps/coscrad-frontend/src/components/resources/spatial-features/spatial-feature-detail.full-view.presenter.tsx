@@ -25,7 +25,7 @@ const lookupTable: { [K in GeometricFeatureType]: FunctionalComponent<HasCoordin
 };
 
 const StyledPlaceIcon = styled('img')({
-    width: '150px',
+    width: '66px',
 });
 
 export const SpatialFeatureDetailFullViewPresenter = (
