@@ -1,4 +1,5 @@
 export * from './coscrad-constraint.enum';
+export * from './does-deep-any-property-equal';
 export * from './is-boolean';
 export * from './is-enum';
 export * from './is-finite';
