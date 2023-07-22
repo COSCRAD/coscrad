@@ -29,7 +29,6 @@ import { BibliographicReferenceController } from '../controllers/resources/bibli
         CreateJournalArticleBibliographicReferenceCommandHandler,
         CreateCourtCaseBibliographicReference,
         CreateCourtCaseBibliographicReferenceCommandHandler,
-        CommandInfoService,
         CourtCaseBibliographicReferenceData,
         // Data Classes
         ...[
