@@ -14,14 +14,17 @@ export const deepStringReplace = <T>(
             deepStringReplace(originalStringValue, stringReplacementValue, element)
         ) as T;
 
-    return Object.entries(input as any).reduce((acc: Partial<T>, [propertyKey, propertyValue]) => {
-        // Recurse on object-valued property
-        acc[propertyKey as keyof T] = deepStringReplace(
-            originalStringValue,
-            stringReplacementValue,
-            propertyValue
-        ) as T[keyof T];
+    return Object.entries(input as object).reduce(
+        (acc: Partial<T>, [propertyKey, propertyValue]) => {
+            // Recurse on object-valued property
+            acc[propertyKey as keyof T] = deepStringReplace(
+                originalStringValue,
+                stringReplacementValue,
+                propertyValue
+            ) as T[keyof T];
 
-        return acc as T;
-    }, {}) as T;
+            return acc as T;
+        },
+        {} as T
+    ) as T;
 };
