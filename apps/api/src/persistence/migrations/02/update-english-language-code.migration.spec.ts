@@ -101,9 +101,7 @@ describe(`UpdateEnglishLanguageCode`, () => {
                 .getDatabaseForCollection(ArangoCollectionId.audio_items)
                 .fetchMany()) as unknown as DatabaseDTO<DTO<AudioItem>>[];
 
-            const invalidDocuments = updatedAudioDocuments.filter((doc) =>
-                doesDeepAnyPropertyEqual('eng')(doc)
-            );
+            const invalidDocuments = updatedAudioDocuments.filter(doesDeepAnyPropertyEqual('eng'));
 
             expect(invalidDocuments).toEqual([]);
         });
@@ -118,9 +116,7 @@ describe(`UpdateEnglishLanguageCode`, () => {
                 .fetchMany()) as unknown as DatabaseDTO<DTO<AudioItem>>[];
 
             const invalidDocuments = updatedAudioDocuments.filter(
-                ({ name: { items } }) =>
-                    // The old database format knew nothing of `en`
-                    !items.every(({ languageCode }) => languageCode !== LanguageCode.English)
+                doesDeepAnyPropertyEqual(LanguageCode.English)
             );
 
             expect(invalidDocuments).toEqual([]);

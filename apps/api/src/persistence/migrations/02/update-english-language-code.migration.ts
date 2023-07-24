@@ -1,4 +1,5 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
+import { deepStringReplace, doesDeepAnyPropertyEqual } from '@coscrad/validation-constraints';
 import {
     MultilingualText,
     MultilingualTextItem,
@@ -11,6 +12,8 @@ import { ICoscradMigration } from '../coscrad-migration.interface';
 import { ICoscradQueryRunner } from '../coscrad-query-runner.interface';
 
 const OLD_ENGLISH_LANGUAGE_CODE = 'eng';
+
+const NEW_ENGLISH_LANGUAGE_CODE = 'en';
 
 type AudioDocument = DatabaseDTO<DTO<AudioItem>>;
 
@@ -28,28 +31,26 @@ export class UpdateEnglishLanguageCode implements ICoscradMigration {
     readonly name = `UpdateEnglishLanguageCode`;
 
     async up(queryRunner: ICoscradQueryRunner): Promise<void> {
+        const collectionsToUpdate: ArangoCollectionId[] = [
+            ArangoCollectionId.audio_items,
+            ArangoCollectionId.songs,
+            ArangoCollectionId.media_items,
+            ArangoCollectionId.vocabulary_lists,
+            ArangoCollectionId.terms,
+        ];
+
+        collectionsToUpdate.forEach(async (collectionName) => {
+            await queryRunner.update(collectionName, (doc) => {
+                if (!doesDeepAnyPropertyEqual(OLD_ENGLISH_LANGUAGE_CODE)(doc)) return {};
+            });
+        });
+
         await queryRunner.update<OldAudioDocument, AudioDocument>(
             ArangoCollectionId.audio_items,
-            ({ name }) => {
-                if (
-                    !name.items.some(
-                        ({ languageCode }) => languageCode === OLD_ENGLISH_LANGUAGE_CODE
-                    )
-                )
-                    return {};
+            (doc) => {
+                if (!doesDeepAnyPropertyEqual(OLD_ENGLISH_LANGUAGE_CODE)(doc)) return {};
 
-                return {
-                    name: {
-                        ...name,
-                        items: name.items.map((item: MultilingualTextItem) => ({
-                            ...item,
-                            languageCode:
-                                item.languageCode === (OLD_ENGLISH_LANGUAGE_CODE as LanguageCode)
-                                    ? LanguageCode.English
-                                    : item.languageCode,
-                        })),
-                    },
-                };
+                return deepStringReplace(OLD_ENGLISH_LANGUAGE_CODE, NEW_ENGLISH_LANGUAGE_CODE, doc);
             }
         );
     }
@@ -57,23 +58,10 @@ export class UpdateEnglishLanguageCode implements ICoscradMigration {
     async down(queryRunner: ICoscradQueryRunner): Promise<void> {
         await queryRunner.update<AudioDocument, AudioDocument>(
             ArangoCollectionId.audio_items,
-            // @ts-expect-error fix me
-            ({ name }) => {
-                if (!name.items.some(({ languageCode }) => languageCode === LanguageCode.English))
-                    return {};
+            (doc) => {
+                if (!doesDeepAnyPropertyEqual(NEW_ENGLISH_LANGUAGE_CODE)(doc)) return {};
 
-                return {
-                    name: {
-                        ...name,
-                        items: name.items.map((item: MultilingualTextItem) => ({
-                            ...item,
-                            languageCode:
-                                item.languageCode === LanguageCode.English
-                                    ? OLD_ENGLISH_LANGUAGE_CODE
-                                    : item.languageCode,
-                        })),
-                    },
-                };
+                return deepStringReplace(NEW_ENGLISH_LANGUAGE_CODE, OLD_ENGLISH_LANGUAGE_CODE, doc);
             }
         );
     }
