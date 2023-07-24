@@ -1,4 +1,6 @@
 export * from './coscrad-constraint.enum';
+export * from './deep-string-replace';
+export * from './does-deep-any-property-equal';
 export * from './is-boolean';
 export * from './is-enum';
 export * from './is-finite';
@@ -18,6 +20,7 @@ export * from './is-number-within-range';
 export * from './is-object';
 export * from './is-positive';
 export * from './is-positive-integer';
+export * from './is-primititve-type';
 export * from './is-string';
 export * from './is-undefined';
 export * from './is-url';
