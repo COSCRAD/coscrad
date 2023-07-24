@@ -59,7 +59,7 @@ describe(`UpdateEnglishLanguageCode`, () => {
             {
                 role: MultilingualTextItemRole.original,
                 text: `I am ok`,
-                LanguageCode: LanguageCode.Chilcotin,
+                languageCode: LanguageCode.Chilcotin,
             },
             {
                 role: MultilingualTextItemRole.freeTranslation,
@@ -95,6 +95,10 @@ describe(`UpdateEnglishLanguageCode`, () => {
         const migrationUnderTest = new UpdateEnglishLanguageCode();
 
         it(`should apply the appropriate updates`, async () => {
+            const originalDocuments = (await testDatabaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.audio_items)
+                .fetchMany()) as unknown as DatabaseDTO<DTO<AudioItem>>[];
+
             await migrationUnderTest.up(testQueryRunner);
 
             const updatedAudioDocuments = (await testDatabaseProvider
@@ -104,6 +108,8 @@ describe(`UpdateEnglishLanguageCode`, () => {
             const invalidDocuments = updatedAudioDocuments.filter(doesDeepAnyPropertyEqual('eng'));
 
             expect(invalidDocuments).toEqual([]);
+
+            expect(originalDocuments).not.toEqual(updatedAudioDocuments);
         });
 
         it(`should be reversible`, async () => {
