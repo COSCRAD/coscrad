@@ -158,10 +158,6 @@ Cypress.Commands.add(
     (type: string, payloadOverrides: Record<string, unknown>) => {
         const serializedOverrides = JSON.stringify(payloadOverrides);
 
-        console.log({
-            serializedOverrides,
-        });
-
         // "{\\"foo\\": 5}"
         const command = `node ../../dist/apps/coscrad-cli/main.js seed-test-data-with-command --type=${type} --payload-overrides="${serializedOverrides.replace(
             /"/g,

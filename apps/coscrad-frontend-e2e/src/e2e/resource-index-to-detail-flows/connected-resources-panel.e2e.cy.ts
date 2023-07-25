@@ -9,7 +9,7 @@ describe(`open connected resources panel for resource`, () => {
         });
 
         it(`should expose the open connected resources panel button`, () => {
-            cy.getByDataAttribute('open-connected-resource-panel-button').should('exist');
+            cy.getByDataAttribute('open-connected-resources-panel-button').should('exist');
         });
 
         describe(`the connected resources panel`, () => {

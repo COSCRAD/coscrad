@@ -3,6 +3,7 @@ import { buildGeneralResourceTestCommandFsas } from './build-general-resource-te
 import { buildSongTestCommandFsas } from './build-song-test-command-fsas';
 import { buildSpatialFeatureTestCommandFsas } from './build-spatial-feature-test-command-fsas';
 import { buildTermTestCommandFsas } from './build-term-test-command-fsas';
+import { buildEdgeConnectionTestCommandFsas } from './bulid-edge-connection-test-command-fsas';
 
 export const buildTestCommandFsaMap = () =>
     [
@@ -10,4 +11,5 @@ export const buildTestCommandFsaMap = () =>
         ...buildSongTestCommandFsas(),
         ...buildTermTestCommandFsas(),
         ...buildSpatialFeatureTestCommandFsas(),
+        ...buildEdgeConnectionTestCommandFsas(),
     ].reduce((fsaMap, nextFsa) => fsaMap.set(nextFsa.type, nextFsa), new Map<string, CommandFSA>());

@@ -71,7 +71,7 @@ export const AudioClipPlayer = ({ audioUrl, UserDefinedPlayButton }: AudioClipPl
     if (audioState === AudioState.canPlay)
         return (
             <Tooltip title={audioUrl}>
-                <span data-testid="audio-clip-play-button">
+                <span data-testid={`audio-for-${audioUrl}`}>
                     <PlayButtonToUse key={audioUrl} onButtonClick={handleMediaPlayerIconClick} />
                 </span>
             </Tooltip>
