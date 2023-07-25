@@ -1,3 +1,4 @@
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box, Link, Tooltip, Typography } from '@mui/material';
 import { truncateText } from '../../string-processor/shorten-string';
 
@@ -8,6 +9,8 @@ interface ExternalLinkProps {
 }
 
 export const ExternalLinkPresenter = ({ url }: ExternalLinkProps): JSX.Element => {
+    if (isNullOrUndefined(url) || url === '') return null;
+
     return (
         <Box mb={1}>
             <Typography component={'span'} sx={{ fontWeight: 'bold' }}>
