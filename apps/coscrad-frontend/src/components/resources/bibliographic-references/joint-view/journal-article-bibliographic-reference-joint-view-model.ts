@@ -2,7 +2,7 @@ import {
     IBibliographicReferenceViewModel,
     IJournalArticleBibliographicReferenceData,
 } from '@coscrad/api-interfaces';
-import { formatCitationInfromation } from './shared';
+import { formatCitationInformation } from './shared';
 import { BibliographicReferenceJointViewModel } from './types';
 
 export const JournalArticleBibliographicReferenceJointViewModel = ({
@@ -12,5 +12,5 @@ export const JournalArticleBibliographicReferenceJointViewModel = ({
     type: 'Journal Article',
     id,
     title,
-    citation: formatCitationInfromation([publicationTitle, issn, doi], issueDate),
+    citation: formatCitationInformation([publicationTitle, issn, doi], issueDate),
 });
