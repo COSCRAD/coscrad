@@ -168,11 +168,13 @@ Cypress.Commands.add(
             `\\"`
         )}"`;
 
-        cy.exec(command).then((result) => {
-            cy.wrap(result).its('code').should('eq', 0);
+        cy.exec(command);
 
-            cy.wrap(`${result}`);
-        });
+        // .then((result) => {
+        //     cy.wrap(result).its('code').should('eq', 0);
+
+        //     cy.wrap(`${result}`);
+        // });
     }
 );
 
