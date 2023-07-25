@@ -26,7 +26,7 @@ export const MultilingualTextPresenter = ({
 
     return (
         <Box width={'fit-content'}>
-            <Accordion variant="outlined">
+            <Accordion elevation={0}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     <Typography variant="h4" margin={'auto 0'}>
                         {isNullOrUndefined(textItemWithDefaultLanguage)
@@ -44,7 +44,7 @@ export const MultilingualTextPresenter = ({
                             </Tooltip>
                         )}
                     </Typography>
-                    {isNullOrUndefined(textItemWithDefaultLanguage) ? null : (
+                    {isNullOrUndefined(textItemWithOriginal) ? null : (
                         <Tooltip
                             title={`${getLabelForLanguage(
                                 textItemWithDefaultLanguage.languageCode

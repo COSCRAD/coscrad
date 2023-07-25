@@ -13,7 +13,7 @@ import {
 import { useState } from 'react';
 import { AggregateDetailContainer } from '../../higher-order-components/aggregate-detail-container';
 import { GlobalSearch } from '../../higher-order-components/global-search';
-import { fullViewCategorizablePresenterFactory } from '../../resources/factories/full-view-categorizable-presenter-factory';
+import { thumbnailCategorizableDetailPresenterFactory } from '../../resources/factories/thumbnail-categorizable-detail-presenter-factory';
 
 export interface ConnectResourcesWithNoteFormProps {
     /**
@@ -48,6 +48,17 @@ export const ConnectResourcesWithNoteForm = ({
         <Box>
             <Stack>
                 <Typography variant="h2">Connect Resources with Note</Typography>
+                <Typography variant="h3">From</Typography>
+                <AggregateDetailContainer
+                    compositeIdentifier={fromMemberCompositeIdentifier}
+                    detailPresenterFactory={thumbnailCategorizableDetailPresenterFactory}
+                />
+                <Typography variant="h3">To</Typography>
+                <GlobalSearch
+                    onNewSelection={(compositeIdentifier) => {
+                        setToMemberCompositeIdentifier({ ...compositeIdentifier });
+                    }}
+                />
                 <FormGroup>
                     <TextField
                         id="note_text"
@@ -81,17 +92,6 @@ export const ConnectResourcesWithNoteForm = ({
                         ))}
                     </Select>
                 </FormGroup>
-                <Typography variant="h3">From</Typography>
-                <AggregateDetailContainer
-                    compositeIdentifier={fromMemberCompositeIdentifier}
-                    detailPresenterFactory={fullViewCategorizablePresenterFactory}
-                />
-                <Typography variant="h3">To</Typography>
-                <GlobalSearch
-                    onNewSelection={(compositeIdentifier) => {
-                        setToMemberCompositeIdentifier({ ...compositeIdentifier });
-                    }}
-                />
                 <Button
                     disabled={!isFormComplete}
                     data-testid="submit-dynamic-form"

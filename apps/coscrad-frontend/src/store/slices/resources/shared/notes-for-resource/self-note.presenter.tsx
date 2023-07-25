@@ -15,7 +15,7 @@ const Item = styled(Box)(({ theme }) => ({
 
 export const SelfNotePresenter = ({ text, id, context }: SelfConnectionNote): JSX.Element => (
     <Item data-testid={buildDataAttributeForAggregateDetailComponent(AggregateType.note, id)}>
-        <Grid container spacing={0} columns={2}>
+        <Grid container wrap="nowrap" spacing={0} columns={2}>
             <Grid item sx={{ pr: 2 }}>
                 <TextSnippetIcon />
             </Grid>
