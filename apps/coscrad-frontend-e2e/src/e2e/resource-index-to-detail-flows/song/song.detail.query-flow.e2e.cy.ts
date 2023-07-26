@@ -20,10 +20,43 @@ const validUrl =
 
 const lyrics = `la la la (that's the jam)`;
 
-describe(`the song detail page`, () => {
-    let playedUrls: string[] = [];
+const lyricsTranslation = `la la la (but in English!)`;
 
-    const OriginalAudio = window.Audio;
+describe(`the song detail page`, () => {
+    before(() => {
+        cy.clearDatabase();
+
+        cy.seedTestUuids(10);
+
+        // TODO We'll need to update this when there's a proper translation flow
+        cy.seedDataWithCommand(`CREATE_SONG`, {
+            title: songTitleInLanguage,
+            aggregateCompositeIdentifier: songAggregateCompositeIdentifier,
+            audioURL: validUrl,
+        });
+
+        cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+            aggregateCompositeIdentifier: songAggregateCompositeIdentifier,
+        });
+    });
+
+    beforeEach(() => {
+        cy.visit(songDetailRoute);
+    });
+
+    /**
+     * This is a smoke test to ensure we don't have issues with null check errors,
+     * for example.
+     */
+    describe(`when the song is missing optional properties`, () => {
+        it(`should display the song title`, () => {
+            cy.contains(songTitleInLanguage);
+        });
+    });
+
+    // let playedUrls: string[] = [];
+
+    // const OriginalAudio = window.Audio;
 
     /**
      * - When the song has only title English
@@ -34,37 +67,24 @@ describe(`the song detail page`, () => {
      */
     describe(`when the song has all properties`, () => {
         before(() => {
-            cy.clearDatabase();
-
-            cy.seedTestUuids(10);
-
-            // TODO We'll need to update this when there's a proper translation flow
-            cy.seedDataWithCommand(`CREATE_SONG`, {
-                title: songTitleInLanguage,
-                aggregateCompositeIdentifier: songAggregateCompositeIdentifier,
-                audioURL: validUrl,
-            });
-
             cy.seedDataWithCommand(`ADD_LYRICS_FOR_SONG`, {
                 aggregateCompositeIdentifier: songAggregateCompositeIdentifier,
                 lyrics,
                 languageCode: originalLanguageCode,
             });
 
-            cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+            cy.seedDataWithCommand(`TRANSLATE_SONG_LYRICS`, {
                 aggregateCompositeIdentifier: songAggregateCompositeIdentifier,
+                translation: lyricsTranslation,
+                languageCode: LanguageCode.English,
             });
         });
 
         beforeEach(() => {
-            playedUrls = [];
+            // playedUrls = [];
 
             // TODO troubleshoot this
             cy.spy(window.Audio.prototype, 'play');
-        });
-
-        beforeEach(() => {
-            cy.visit(songDetailRoute);
         });
 
         it(`should render the song title`, () => {
@@ -73,6 +93,22 @@ describe(`the song detail page`, () => {
 
         it(`should display the lyrics`, () => {
             cy.contains(lyrics);
+        });
+
+        it(`should display the lyrics' translation`, () => {
+            cy.getLoading().should('not.exist');
+
+            cy.contains(`Translations`).click();
+
+            cy.contains(lyricsTranslation);
+        });
+
+        /**
+         * We don't need to test the functionality of the copy ID button, as this
+         * is done elsewhere. We merely check that it is available here.
+         */
+        it(`should expose the copy ID button`, () => {
+            cy.getByDataAttribute(`copy-id`);
         });
 
         // TODO verify this
@@ -186,6 +222,33 @@ describe(`the song detail page`, () => {
                     cy.contains(`Connected Resources`).should('not.be.visible');
                 });
             });
+        });
+    });
+
+    // TODO test this case
+    describe.skip(`when the audioUrl is invalid`, () => {
+        const compositeIdForSongWithInvalidAudioUrl = buildAggregateCompositeIdentifier('005');
+
+        const bogusUrl = `https://www.coscrad.org/i-do-not-exist.mp3`;
+
+        beforeEach(() => {
+            // TODO We'll need to update this when there's a proper translation flow
+            cy.seedDataWithCommand(`CREATE_SONG`, {
+                title: `my audio URL is bogus`,
+                aggregateCompositeIdentifier: compositeIdForSongWithInvalidAudioUrl,
+                audioURL: bogusUrl,
+            });
+
+            cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+                aggregateCompositeIdentifier: compositeIdForSongWithInvalidAudioUrl,
+            });
+        });
+
+        it(`should fail gracefully`, () => {
+            cy.getByDataAttribute(`audio-for-${bogusUrl}`).click();
+
+            // Ideally, we want to display the disabled icon once we find out that the URL doesn't work
+            cy.getByDataAttribute('error').should('not.exist');
         });
     });
 });

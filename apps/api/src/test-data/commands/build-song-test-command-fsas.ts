@@ -1,8 +1,9 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandFSA } from '../../app/controllers/command/command-fsa/command-fsa.entity';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
-import { AddLyricsForSong } from '../../domain/models/song/commands';
+import { AddLyricsForSong, TranslateSongLyrics } from '../../domain/models/song/commands';
 import { CreateSong } from '../../domain/models/song/commands/create-song.command';
+import { TRANSLATE_SONG_LYRICS } from '../../domain/models/song/commands/translate-song-lyrics/constants';
 import { AggregateType } from '../../domain/types/AggregateType';
 
 const id = buildDummyUuid(1);
@@ -29,8 +30,17 @@ const addLyricsForSong: CommandFSA<AddLyricsForSong> = {
             type,
         },
         lyrics: 'fa la la la la, is how it goes',
+        languageCode: LanguageCode.Haida,
+    },
+};
+
+const translateSongLyrics: CommandFSA<TranslateSongLyrics> = {
+    type: TRANSLATE_SONG_LYRICS,
+    payload: {
+        aggregateCompositeIdentifier: { id, type },
+        translation: `fo lo lo (in English)`,
         languageCode: LanguageCode.English,
     },
 };
 
-export const buildSongTestCommandFsas = () => [createSong, addLyricsForSong];
+export const buildSongTestCommandFsas = () => [createSong, addLyricsForSong, translateSongLyrics];
