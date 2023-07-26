@@ -5,7 +5,7 @@ interface OptionalComponentProps<T = unknown> {
     predicateValue: T;
 }
 
-const emptyValues = [null, undefined, ''];
+const emptyValues = [null, undefined, '', false];
 
 type EmptyValue = typeof emptyValues[number];
 

@@ -44,6 +44,14 @@ describe(`the song detail page`, () => {
         cy.visit(songDetailRoute);
     });
 
+    describe(`when visiting the detail route with a bogus ID`, () => {
+        beforeEach(() => {
+            cy.visit(`/Resources/Songs/${buildId('987')}`);
+
+            cy.getByDataAttribute('not-found');
+        });
+    });
+
     /**
      * This is a smoke test to ensure we don't have issues with null check errors,
      * for example.

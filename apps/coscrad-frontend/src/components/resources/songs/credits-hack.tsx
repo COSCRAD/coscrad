@@ -1,4 +1,5 @@
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
+import { Optional } from '../../../utils/generic-components/presenters/optional';
 
 export type CreditsMap = Map<string, string>;
 
@@ -7,8 +8,8 @@ interface CreditsHackProps {
     creditsMap: CreditsMap;
 }
 
-export const CreditsHack = ({ resourceId, creditsMap }: CreditsHackProps): JSX.Element => {
-    if (!creditsMap.has(resourceId)) return null;
-
-    return <SinglePropertyPresenter display="Credits" value={creditsMap.get(resourceId)} />;
-};
+export const CreditsHack = ({ resourceId, creditsMap }: CreditsHackProps): JSX.Element => (
+    <Optional predicateValue={creditsMap.has(resourceId)}>
+        <SinglePropertyPresenter display="Credits" value={creditsMap.get(resourceId)} />
+    </Optional>
+);
