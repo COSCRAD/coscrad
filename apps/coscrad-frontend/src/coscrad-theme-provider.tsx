@@ -9,7 +9,6 @@ interface CoscradThemeProviderProps {
 declare module '@mui/material/styles' {
     interface BreakpointOverrides {
         qhd: true;
-        mbp: true;
         uhd: true;
     }
 }
@@ -26,9 +25,8 @@ export const CoscradThemeProvider = ({ children }: CoscradThemeProviderProps): J
                     md: 900,
                     lg: 1200,
                     xl: 1536,
-                    qhd: 2560,
-                    mbp: 3456,
-                    uhd: 3840,
+                    qhd: 2560 /* QHD resolution 2560 x 1440 */,
+                    uhd: 3840 /* UHD resolution 3840 by 2160 */,
                 },
             },
             typography: {
