@@ -2,20 +2,22 @@ import {
     AggregateType,
     ICategorizableDetailQueryResult,
     ISongViewModel,
+    ResourceType,
 } from '@coscrad/api-interfaces';
-import { MediaPlayer } from '@coscrad/media-player';
-import { Card, Divider } from '@mui/material';
+import { AudioClipPlayer } from '@coscrad/media-player';
+import { Box } from '@mui/material';
+import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
+
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
-import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
-import { formatBilingualText } from '../vocabulary-lists/utils';
+import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components';
+import { MultilingualTextPresenter } from '../../../utils/generic-components/presenters/multilingual-text-presenter';
+import { Optional } from '../../../utils/generic-components/presenters/optional';
 import { CreditsHack } from './credits-hack';
-import { SongLyrics } from './song-lyrics';
 
 export const SongDetailFullViewPresenter = ({
     id,
-    title,
-    titleEnglish,
+    name,
     lyrics,
     audioURL,
 }: ICategorizableDetailQueryResult<ISongViewModel>): JSX.Element => {
@@ -26,27 +28,22 @@ export const SongDetailFullViewPresenter = ({
     );
 
     return (
-        <div data-testid={buildDataAttributeForAggregateDetailComponent(AggregateType.song, id)}>
-            <Card className="detail-card">
-                <div id="detail-term" className="detail-meta">
-                    {formatBilingualText(title, titleEnglish)}
-                </div>
-                <Divider id="detail-divider" />
+        <ResourceDetailFullViewPresenter
+            data-testid={buildDataAttributeForAggregateDetailComponent(AggregateType.song, id)}
+            name={name}
+            id={id}
+            type={ResourceType.song}
+        >
+            <Optional predicateValue={lyrics}>
+                <MultilingualTextPresenter text={lyrics} />
+            </Optional>
+            <Box id="media-player">
+                <AudioClipPlayer audioUrl={audioURL} />
+            </Box>
 
-                <div className="detail-meta">
-                    <h3 className="detail-headers">Contributions:</h3>
-                    TODO use config for this
-                </div>
-                <div className="detail-meta">
-                    {typeof lyrics === 'string' && <SongLyrics lyrics={lyrics} />}
-                </div>
-                <div id="media-player">
-                    <MediaPlayer listenMessage="Play" audioUrl={audioURL} />
-                </div>
-                <div className="detail-meta">
-                    <CreditsHack resourceId={id} creditsMap={creditsMap} />
-                </div>
-            </Card>
-        </div>
+            <Box className="detail-meta">
+                <CreditsHack resourceId={id} creditsMap={creditsMap} />
+            </Box>
+        </ResourceDetailFullViewPresenter>
     );
 };

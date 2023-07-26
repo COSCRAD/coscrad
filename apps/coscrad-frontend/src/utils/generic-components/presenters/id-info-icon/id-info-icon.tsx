@@ -30,6 +30,7 @@ export const IdInfoIcon = ({ id, type }: IdInfoIconProps): JSX.Element => {
 
     return (
         <>
+        <div data-testid='copy-id'/>
             <Tooltip title={`Click to Copy ID ${id}`}>
                 <IconButton component="span" onClick={handleDialogOpen}>
                     <InfoIcon />

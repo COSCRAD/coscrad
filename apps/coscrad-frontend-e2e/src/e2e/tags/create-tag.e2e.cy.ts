@@ -6,7 +6,7 @@ describe(`Create Tag`, () => {
 
         cy.clearDatabase();
 
-        cy.executeCommandStream('users:create-admin');
+        cy.executeCommandStreamByName('users:create-admin');
     });
 
     describe(`when the user is logged in`, () => {
