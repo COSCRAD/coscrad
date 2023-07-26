@@ -51,6 +51,7 @@ export class CreateSong implements ICommandBase {
     })
     readonly title?: string;
 
+    // TODO Remove this in favor of a translation flow
     @NonEmptyString({
         isOptional: true,
         label: 'title (colonial language)',

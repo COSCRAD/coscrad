@@ -3,6 +3,8 @@ import { Module } from '@nestjs/common';
 import {
     AddLyricsForSong,
     AddLyricsForSongCommandHandler,
+    TranslateSongLyrics,
+    TranslateSongLyricsCommandHandler,
 } from '../../domain/models/song/commands';
 import { CreateSong } from '../../domain/models/song/commands/create-song.command';
 import { CreateSongCommandHandler } from '../../domain/models/song/commands/create-song.command-handler';
@@ -20,8 +22,9 @@ import { SongController } from '../controllers/resources/song.controller';
         SongQueryService,
         CreateSongCommandHandler,
         AddLyricsForSongCommandHandler,
+        TranslateSongLyricsCommandHandler,
         // Data Classes
-        ...[CreateSong, AddLyricsForSong].map((ctor) => ({
+        ...[CreateSong, AddLyricsForSong, TranslateSongLyrics].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
         })),

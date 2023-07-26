@@ -35,7 +35,7 @@ export const NavMenuPresenter = ({ navItemInfos }: NavMenuPresenterProps): JSX.E
                     aria-expanded={isOpen ? 'true' : undefined}
                     onClick={handleClick}
                 >
-                    <MenuRoundedIcon />
+                    <MenuRoundedIcon sx={{ color: 'white' }} />
                 </IconButton>
             </Tooltip>
             <AuthenticationButton />

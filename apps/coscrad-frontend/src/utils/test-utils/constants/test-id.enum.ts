@@ -5,6 +5,6 @@
 export enum TestId {
     error = 'error',
     loading = 'loading',
-    notFound = 'notFound',
+    notFound = 'not-found',
     categoryTree = 'categoryTree',
 }

@@ -7,7 +7,7 @@ describe(`when seeding an admin user`, () => {
         it(`should display no errors`, () => {
             cy.clearDatabase();
 
-            cy.executeCommandStream('users:create-admin');
+            cy.executeCommandStreamByName('users:create-admin');
 
             cy.navigateToResourceIndex('term');
 
