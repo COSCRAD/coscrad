@@ -4,6 +4,7 @@ import {
     IPhotographViewModel,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
+import { ResourceNamePresenter } from 'apps/coscrad-frontend/src/utils/generic-components/presenters/resource-name-presenter';
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { ImageFullPageWidth } from '../../../utils/generic-components/presenters/image-full-page-width';
@@ -33,7 +34,7 @@ export const PhotographDetailFullViewPresenter = ({
                 )}
             />
             <ImageFullPageWidth image={image} />
-            <SinglePropertyPresenter display="Photograph ID" value={id} />
+            <ResourceNamePresenter name={name} variant="h2" />
             <SinglePropertyPresenter display="Photographer" value={photographer} />
         </>
     );

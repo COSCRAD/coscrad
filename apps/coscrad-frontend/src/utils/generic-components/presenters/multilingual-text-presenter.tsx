@@ -44,7 +44,7 @@ export const MultilingualTextPresenter = ({
                             </Tooltip>
                         )}
                     </Typography>
-                    {isNullOrUndefined(textItemWithOriginal) ? null : (
+                    {isNullOrUndefined(textItemWithDefaultLanguage) ? null : (
                         <Tooltip
                             title={`${getLabelForLanguage(
                                 textItemWithDefaultLanguage.languageCode
