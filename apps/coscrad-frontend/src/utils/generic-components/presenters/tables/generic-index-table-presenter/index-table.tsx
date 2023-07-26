@@ -268,6 +268,7 @@ export const IndexTable = <T,>({
         <FormControl sx={{ minWidth: 120 }} size={'small'}>
             <InputLabel>Filter</InputLabel>
             <Select
+                data-testid="select_index_search_scope"
                 label={'Filter'}
                 value={selectedFilterProperty}
                 onChange={(changeEvent) => {

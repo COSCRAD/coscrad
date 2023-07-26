@@ -1,9 +1,6 @@
-import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
+import { ResourceType } from '@coscrad/api-interfaces';
 import { getConfig } from '../../../config';
-import { assertElementWithTestIdOnScreen, assertNotFound } from '../../../utils/test-utils';
-import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
 import { testContainerComponentErrorHandling } from '../../../utils/test-utils/common-test-cases/test-container-component-error-handling';
-import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
 import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
 import { buildCategorizableDetailPageRendererForTest } from '../test-utils';
@@ -33,33 +30,10 @@ const act = buildCategorizableDetailPageRendererForTest(ResourceType.song);
 const mockGetNotesHandler = buildMockGetNotesHandler();
 
 describe('song detail', () => {
-    describe('when the API request succeeds', () => {
-        setupTestServer(
-            buildMockSuccessfulGETHandler({
-                endpoint,
-                response: dummyIndexResponse,
-            }),
-            mockGetNotesHandler
-        );
-
-        describe('when the ID in the route corresponds to an existing song', () => {
-            it('should display the song', async () => {
-                act(idToFind);
-
-                await assertElementWithTestIdOnScreen(`${AggregateType.song}/${idToFind}`);
-            });
-        });
-
-        describe('when there is no song that matches the ID in the route', () => {
-            it('should render not found', async () => {
-                act('bogus-id');
-
-                await assertNotFound();
-            });
-        });
-    });
-
-    // TODO [https://www.pivotaltracker.com/story/show/185546456] Implement this test with Cypress
+    /**
+     * TODO [https://www.pivotaltracker.com/story/show/185546456]
+     * Test error handling \ loading state with Cypress and remove this test
+     */
     describe('when the API request fails or is pending', () => {
         testContainerComponentErrorHandling(() => act(idToFind), endpoint, mockGetNotesHandler);
     });

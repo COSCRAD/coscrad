@@ -15,6 +15,7 @@ export const SearchBar = ({
     specialCharacterReplacements = {},
 }: SearchBarProps) => (
     <TextField
+        data-testid="index_search_bar"
         size="small"
         placeholder="Search..."
         value={value}

@@ -10,6 +10,12 @@ export interface MediaPlayerProps {
 
 const DEFAULT_LISTEN_MESSAGE = 'Listen Live!';
 
+/**
+ * TODO We abandoned this previously. We should rename this `AudioPlayer` and
+ * rename the file `audio-player.tsx` and re-implement the basic audio player
+ * with controls. Until this is done, we will use the audio clip player even in
+ * places where controls would be preferred.
+ */
 export function MediaPlayer({ audioUrl, listenMessage }: MediaPlayerProps) {
     const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
 
@@ -36,6 +42,7 @@ export function MediaPlayer({ audioUrl, listenMessage }: MediaPlayerProps) {
     }, [audioUrl]);
 
     return (
+        // <span data-testid={`audio-for-${audioUrl}`}>
         <div className={styles['container']}>
             {audio && (
                 <>

@@ -100,7 +100,7 @@ export const CategorizablePageLayout = ({
                 </Tooltip>
                 <Tooltip title="Open Connected Resources Panel">
                     <IconButton
-                        data-testid="open-connected-resource-panel-button"
+                        data-testid="open-connected-resources-panel-button"
                         onClick={() => {
                             toggleDrawer('right');
                         }}
