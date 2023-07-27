@@ -39,20 +39,20 @@ exports[`command payload schemas Command payload schema should match the snapsho
       },
       "mimeType": {
         "complexDataType": "ENUM",
-        "description": "technical specification of the type of this media item",
+        "description": "technical specification of the type of media item",
         "enumLabel": "MIME Type",
-        "enumName": "MIME_TYPE",
+        "enumName": "MIMEType",
         "isArray": false,
         "isOptional": false,
-        "label": "MIME type",
+        "label": "MIME Type",
         "labelsAndValues": [
+          {
+            "label": "png",
+            "value": "image/png",
+          },
           {
             "label": "mp3",
             "value": "audio/mpeg",
-          },
-          {
-            "label": "mp4",
-            "value": "video/mp4",
           },
           {
             "label": "wav",
@@ -61,6 +61,14 @@ exports[`command payload schemas Command payload schema should match the snapsho
           {
             "label": "mp4",
             "value": "video/mp4",
+          },
+          {
+            "label": "ogg",
+            "value": "video/ogg",
+          },
+          {
+            "label": "webm",
+            "value": "video/webm",
           },
         ],
       },

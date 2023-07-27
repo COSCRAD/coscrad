@@ -1,0 +1,38 @@
+import { styled } from '@mui/material';
+
+export enum VideoMIMEType {
+    mp4 = 'video/mp4',
+    ogg = 'video/ogg',
+    webm = 'video/webm',
+}
+
+const isVideoMIMEType = (input: unknown): input is VideoMIMEType =>
+    Object.values(VideoMIMEType).some((value) => value === (input as VideoMIMEType));
+
+interface VideoPlayerProps {
+    videoUrl: string;
+    mimeType?: VideoMIMEType;
+}
+
+const StyledVideoPlayer = styled('video')`
+    border-radius: 5px;
+    width: 100%;
+`;
+
+export const VideoPlayer = ({ videoUrl, mimeType }: VideoPlayerProps) => {
+    return (
+        <StyledVideoPlayer controls>
+            {isVideoMIMEType(mimeType) ? (
+                <source style={{ padding: 0 }} src={videoUrl} type={mimeType} />
+            ) : (
+                <>
+                    {/* Fallbacks for each media type */}
+                    {Object.values(VideoMIMEType).map((mimeType) => (
+                        <source style={{ padding: 0 }} src={videoUrl} type={mimeType} />
+                    ))}
+                </>
+            )}
+            Your browser does not support the video tag.
+        </StyledVideoPlayer>
+    );
+};

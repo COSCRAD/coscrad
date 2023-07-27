@@ -417,6 +417,10 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "label": "MIME type",
     "labelsAndValues": [
       {
+        "label": "png",
+        "value": "image/png",
+      },
+      {
         "label": "mp3",
         "value": "audio/mpeg",
       },
@@ -429,8 +433,12 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "value": "video/mp4",
       },
       {
-        "label": "png",
-        "value": "image/png",
+        "label": "ogg",
+        "value": "video/ogg",
+      },
+      {
+        "label": "webm",
+        "value": "video/webm",
       },
     ],
   },
