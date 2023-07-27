@@ -1,5 +1,6 @@
 import { CommandFSA } from '../../app/controllers/command/command-fsa/command-fsa.entity';
 import { buildGeneralResourceTestCommandFsas } from './build-general-resource-test-command-fsas';
+import { buildMediaItemTestCommandFsas } from './build-media-item-test-command-fsas';
 import { buildPlaylistTestCommandFsas } from './build-playlist-test-command-fsas';
 import { buildSongTestCommandFsas } from './build-song-test-command-fsas';
 import { buildSpatialFeatureTestCommandFsas } from './build-spatial-feature-test-command-fsas';
@@ -14,6 +15,7 @@ export const buildTestCommandFsaMap = () =>
         ...buildTermTestCommandFsas(),
         ...buildSpatialFeatureTestCommandFsas(),
         ...buildPlaylistTestCommandFsas(),
+        ...buildMediaItemTestCommandFsas(),
         // Edge Connections
         ...buildEdgeConnectionTestCommandFsas(),
     ].reduce((fsaMap, nextFsa) => fsaMap.set(nextFsa.type, nextFsa), new Map<string, CommandFSA>());
