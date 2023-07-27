@@ -30,6 +30,8 @@ declare namespace Cypress {
 
         acknowledgeCommandResult(): void;
 
+        openPanel(panelType: 'notes' | 'connections'): void;
+
         getCommandFormSubmissionButton(): Chainable<Subject>;
 
         getLoading(): Chainable<Subject>;
@@ -191,3 +193,17 @@ Cypress.Commands.add(`getAggregateDetailView`, (aggregateType: string, id: strin
 });
 
 Cypress.Commands.add(`getLoading`, () => cy.getByDataAttribute(`loading`));
+
+Cypress.Commands.add(`openPanel`, (panelType: 'notes' | 'connections') => {
+    if (panelType === 'notes') {
+        cy.getByDataAttribute(`open-notes-panel-button`).click();
+        return;
+    }
+
+    if (panelType === 'connections') {
+        cy.getByDataAttribute(`open-connections-panel-button`).click();
+        return;
+    }
+
+    throw new Error(`Failed to open panel of unknown type: ${panelType}`);
+});
