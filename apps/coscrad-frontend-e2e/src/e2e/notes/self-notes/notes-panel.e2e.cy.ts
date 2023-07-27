@@ -1,11 +1,36 @@
-describe(`open self notes panel for resource`, () => {
-    const photographBaseRoute = `/Resources/Photographs/`;
+import { AggregateType } from '@coscrad/api-interfaces';
+import { buildDummyAggregateCompositeIdentifier } from '../../../support/utilities';
 
-    const photographId = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002`;
+describe(`open self notes panel for resource`, () => {
+    const termsBaseRoute = `/Resources/Terms/`;
+
+    const termCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
+        AggregateType.photograph,
+        2
+    );
+
+    const { id: termId } = termCompositeIdentifier;
+
+    before(() => {
+        cy.seedDataWithCommand(`CREATE_TERM`, {
+            aggregateCompositeIdentifier: termCompositeIdentifier,
+        });
+
+        cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+            aggregateCompositeIdentifier: termCompositeIdentifier,
+        });
+
+        cy.seedDataWithCommand(`CREATE_NOTE_ABOUT_RESOURCE`, {
+            aggregateCompositeIdentifier: buildDummyAggregateCompositeIdentifier(
+                AggregateType.note,
+                3
+            ),
+        });
+    });
 
     describe(`when the photograph detail full view has loaded`, () => {
         beforeEach(() => {
-            cy.visit(`${photographBaseRoute}${photographId}`);
+            cy.visit(`${termsBaseRoute}${termId}`);
         });
 
         it(`should expose the open note panel button`, () => {
