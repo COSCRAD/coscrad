@@ -50,17 +50,17 @@ exports[`buildCommandForm should return the expected result 1`] = `
           "name": "IS_ENUM",
         },
       ],
-      "description": "technical specification of the type of this media item",
+      "description": "technical specification of the type of media item",
       "label": "MIME Type",
       "name": "mimeType",
       "options": [
         {
-          "display": "mp3",
-          "value": "audio/mpeg",
+          "display": "png",
+          "value": "image/png",
         },
         {
-          "display": "mp4",
-          "value": "video/mp4",
+          "display": "mp3",
+          "value": "audio/mpeg",
         },
         {
           "display": "wav",
@@ -69,6 +69,14 @@ exports[`buildCommandForm should return the expected result 1`] = `
         {
           "display": "mp4",
           "value": "video/mp4",
+        },
+        {
+          "display": "ogg",
+          "value": "video/ogg",
+        },
+        {
+          "display": "webm",
+          "value": "video/webm",
         },
       ],
       "type": "STATIC_SELECT",

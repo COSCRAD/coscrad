@@ -423,6 +423,10 @@ exports[`GET /resources should return the expected result 1`] = `
         "label": "MIME type",
         "labelsAndValues": [
           {
+            "label": "png",
+            "value": "image/png",
+          },
+          {
             "label": "mp3",
             "value": "audio/mpeg",
           },
@@ -435,8 +439,12 @@ exports[`GET /resources should return the expected result 1`] = `
             "value": "video/mp4",
           },
           {
-            "label": "png",
-            "value": "image/png",
+            "label": "ogg",
+            "value": "video/ogg",
+          },
+          {
+            "label": "webm",
+            "value": "video/webm",
           },
         ],
       },
@@ -575,6 +583,10 @@ exports[`GET /resources should return the expected result 1`] = `
         "label": "MIME type",
         "labelsAndValues": [
           {
+            "label": "png",
+            "value": "image/png",
+          },
+          {
             "label": "mp3",
             "value": "audio/mpeg",
           },
@@ -587,8 +599,12 @@ exports[`GET /resources should return the expected result 1`] = `
             "value": "video/mp4",
           },
           {
-            "label": "png",
-            "value": "image/png",
+            "label": "ogg",
+            "value": "video/ogg",
+          },
+          {
+            "label": "webm",
+            "value": "video/webm",
           },
         ],
       },
@@ -1816,6 +1832,10 @@ exports[`GET /resources should return the expected result 1`] = `
         "label": "MIME type",
         "labelsAndValues": [
           {
+            "label": "png",
+            "value": "image/png",
+          },
+          {
             "label": "mp3",
             "value": "audio/mpeg",
           },
@@ -1828,8 +1848,12 @@ exports[`GET /resources should return the expected result 1`] = `
             "value": "video/mp4",
           },
           {
-            "label": "png",
-            "value": "image/png",
+            "label": "ogg",
+            "value": "video/ogg",
+          },
+          {
+            "label": "webm",
+            "value": "video/webm",
           },
         ],
       },

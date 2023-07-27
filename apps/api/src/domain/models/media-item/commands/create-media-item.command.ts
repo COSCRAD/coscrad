@@ -1,8 +1,7 @@
 import { ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import {
-    CoscradEnum,
-    Enum,
+    ExternalEnum,
     MIMEType,
     NestedDataType,
     NonEmptyString,
@@ -96,10 +95,24 @@ export class CreateMediaItem implements ICommandBase {
     })
     readonly url: string;
 
-    @Enum(CoscradEnum.MIMEType, {
-        label: 'MIME type',
-        description: 'technical specification of the type of this media item',
-    })
+    // @Enum(CoscradEnum.MIMEType, {
+    //     label: 'MIME type',
+    //     description: 'technical specification of the type of this media item',
+    // })
+    @ExternalEnum(
+        {
+            enumName: `MIMEType`,
+            enumLabel: `MIME Type`,
+            labelsAndValues: Object.entries(MIMEType).map(([label, value]) => ({
+                label,
+                value,
+            })),
+        },
+        {
+            description: `technical specification of the type of media item`,
+            label: `MIME Type`,
+        }
+    )
     readonly mimeType: MIMEType;
 
     @RawDataObject({
