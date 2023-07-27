@@ -1,9 +1,31 @@
-import { AggregateType } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import { buildDummyAggregateCompositeIdentifier } from '../../../support/utilities';
 
 describe(`Term index-to-detail flow`, () => {
+    const basicTermCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
+        AggregateType.term,
+        513
+    );
+
     const textForTerm = 'She is singing (lang)';
 
-    const termId = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513`;
+    const { id: basicTermId } = basicTermCompositeIdentifier; // `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513`;
+
+    before(() => {
+        cy.clearDatabase();
+
+        cy.seedTestUuids(999);
+
+        cy.seedDataWithCommand(`CREATE_TERM`, {
+            aggregateCompositeIdentifier: basicTermCompositeIdentifier,
+            text: textForTerm,
+            languageCode: LanguageCode.Chilcotin,
+        });
+
+        cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+            aggregateCompositeIdentifier: basicTermCompositeIdentifier,
+        });
+    });
 
     describe(`the resource menu`, () => {
         beforeEach(() => {
@@ -32,105 +54,150 @@ describe(`Term index-to-detail flow`, () => {
             cy.contains(textForTerm);
         });
 
-        it('should have a link to the detail view for term 13', () => {
+        it('should have a link to the detail view for term 513', () => {
             cy.contains(textForTerm);
 
-            cy.get(`[href="/Resources/Terms/${termId}"]`).click();
+            cy.get(`[href="/Resources/Terms/${basicTermId}"]`).click();
 
             cy.contains(textForTerm);
 
-            cy.location('pathname').should('contain', `/Resources/Terms/${termId}`);
+            cy.location('pathname').should('contain', `/Resources/Terms/${basicTermId}`);
         });
     });
 
     describe(`the term detail page`, () => {
-        const idForTermToView = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002`;
+        const compositeIdentifierOfTermToView = buildDummyAggregateCompositeIdentifier(
+            AggregateType.term,
+            2
+        );
+
+        const { id: idForTermToView } = compositeIdentifierOfTermToView; // `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002`;
+
+        const noteText =
+            'This first 4 letters of this term form a syllable that indicates this is a plant ';
+
+        before(() => {
+            cy.seedDataWithCommand(`CREATE_TERM`, {
+                aggregateCompositeIdentifier: compositeIdentifierOfTermToView,
+                text: 'I have notes',
+            });
+
+            cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+                aggregateCompositeIdentifier: compositeIdentifierOfTermToView,
+            });
+
+            cy.seedDataWithCommand(`CREATE_NOTE_ABOUT_RESOURCE`, {
+                aggregateCompositeIdentifier: buildDummyAggregateCompositeIdentifier(
+                    AggregateType.note,
+                    801
+                ),
+                resourceCompositeIdentifier: compositeIdentifierOfTermToView,
+                text: noteText,
+            });
+        });
 
         describe('when there are notes for the term (2)', () => {
             beforeEach(() => {
                 cy.visit(`/Resources/Terms/${idForTermToView}`);
             });
-            const allNotes = [
-                'This first 4 letters of this term form a syllable that indicates this is a plant ',
-                // why are both notes the same? Fix the dummy data.
-                'This first 4 letters of this term form a syllable that indicates this is a plant ',
-            ];
 
-            allNotes.forEach((noteText) =>
-                it(`it should display the note text:\n${noteText}`, () => {
-                    cy.contains(noteText);
-                })
-            );
+            it(`it should display the note text:\n${noteText}`, () => {
+                cy.openPanel('notes');
+
+                cy.contains(noteText);
+            });
         });
 
         describe('when there are no notes for the term (13)', () => {
-            const termWithoutNotes = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513`;
+            // Note that we have yet to add a note for this term
+            const { id: idOfTermWithoutNotes } = basicTermCompositeIdentifier;
 
             beforeEach(() => {
-                cy.visit(`/Resources/Terms/${termWithoutNotes}`);
+                cy.visit(`/Resources/Terms/${idOfTermWithoutNotes}`);
             });
 
             it('should display the no notes message', () => {
                 cy.contains(textForTerm);
 
-                cy.contains('Notes for');
-
-                cy.contains('Connected Resources');
+                cy.openPanel('notes');
 
                 cy.contains('No Notes Found');
             });
         });
 
         describe('when there are connections for the term (2)', () => {
-            const idForTermWithConnections = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002`;
+            const connectedPlayListCompositeId = buildDummyAggregateCompositeIdentifier(
+                AggregateType.playlist,
+                12
+            );
 
-            const connectedVocabularyListId = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002`;
+            const { id: connectedPlaylistId } = connectedPlayListCompositeId;
 
-            const connectedPlaylistId = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501`;
+            before(() => {
+                cy.seedDataWithCommand(`CREATE_PLAYLIST`, {
+                    aggregateCompositeIdentifier: connectedPlayListCompositeId,
+                });
+
+                cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+                    aggregateCompositeIdentifier: connectedPlayListCompositeId,
+                });
+
+                cy.seedDataWithCommand(`CONNECT_RESOURCES_WITH_NOTE`, {
+                    aggregateCompositeIdentifier: buildDummyAggregateCompositeIdentifier(
+                        AggregateType.note,
+                        402
+                    ),
+                    toMemberCompositeIdentifier: connectedPlayListCompositeId,
+                    fromMemberCompositeIdentifier: basicTermCompositeIdentifier,
+                });
+            });
 
             beforeEach(() => {
-                cy.visit(`/Resources/Terms/${idForTermWithConnections}`);
+                cy.visit(`/Resources/Terms/${basicTermId}`);
 
                 cy.getByDataAttribute('loading').should('not.exist');
-
-                cy.contains('Notes for');
-
-                cy.contains('Connected Resources');
             });
 
             it('should display the connected playlist', () => {
+                cy.openPanel('connections');
+
                 cy.getAggregateDetailView(AggregateType.playlist, connectedPlaylistId);
             });
 
-            it('should display the connected media item', () => {
-                cy.getAggregateDetailView(
-                    AggregateType.mediaItem,
-                    '9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001'
-                );
-            });
-
-            it('should display the connected vocabulary list', () => {
-                cy.getAggregateDetailView(AggregateType.vocabularyList, connectedVocabularyListId);
-            });
-
-            it.skip('should display exactly 3 connected resources', () => {
+            it.skip('should display exactly 2 connected resources', () => {
                 // we should have a test here.
             });
         });
 
-        describe('when there are no connections for the term (13)', () => {
-            const idForTermWithoutConnections = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513`;
+        describe('when there are no connections for the term (123)', () => {
+            const textForTermWithNoConnections = 'I have no connections';
+
+            const compositeIdForTermWithNoConnections = buildDummyAggregateCompositeIdentifier(
+                AggregateType.term,
+                123
+            );
+
+            const { id: idForTermWithoutConnections } = compositeIdForTermWithNoConnections;
+
+            before(() => {
+                cy.seedDataWithCommand(`CREATE_TERM`, {
+                    aggregateCompositeIdentifier: compositeIdForTermWithNoConnections,
+                    text: textForTermWithNoConnections,
+                });
+
+                cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+                    aggregateCompositeIdentifier: compositeIdForTermWithNoConnections,
+                });
+            });
 
             beforeEach(() => {
                 cy.visit(`/Resources/Terms/${idForTermWithoutConnections}`);
             });
 
             it('should display the no connections message', () => {
-                cy.contains(textForTerm);
+                cy.contains(textForTermWithNoConnections);
 
-                cy.contains('Notes for');
-
-                cy.contains('Connected Resources');
+                cy.openPanel('connections');
 
                 cy.contains('No Connections Found');
             });

@@ -166,13 +166,11 @@ Cypress.Commands.add(
             `\\"`
         )}"`;
 
-        cy.exec(command);
-
-        // .then((result) => {
-        //     cy.wrap(result).its('code').should('eq', 0);
-
-        //     cy.wrap(`${result}`);
-        // });
+        cy.exec(command).then((_result) => {
+            if (command.includes(`CONNECT_RESOURCES_WITH_NOTE`))
+                /* eslint-disable-next-line */
+                debugger;
+        });
     }
 );
 
@@ -201,7 +199,7 @@ Cypress.Commands.add(`openPanel`, (panelType: 'notes' | 'connections') => {
     }
 
     if (panelType === 'connections') {
-        cy.getByDataAttribute(`open-connections-panel-button`).click();
+        cy.getByDataAttribute(`open-connected-resources-panel-button`).click();
         return;
     }
 
