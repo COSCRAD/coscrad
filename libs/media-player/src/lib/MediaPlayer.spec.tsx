@@ -1,10 +1,9 @@
 import { render } from '@testing-library/react';
+import { AudioPlayer } from './audio-player';
 
-import MediaPlayer from './audio-player';
-
-describe('MediaPlayer', () => {
+describe('AudioPlayer', () => {
     it('should render successfully', () => {
-        const { baseElement } = render(<MediaPlayer />);
+        const { baseElement } = render(<AudioPlayer audioUrl={''} />);
         expect(baseElement).toBeTruthy();
     });
 });
