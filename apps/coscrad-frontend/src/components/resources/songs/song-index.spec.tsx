@@ -2,9 +2,6 @@ import { ResourceType } from '@coscrad/api-interfaces';
 import { getConfig } from '../../../config';
 import { testContainerComponentErrorHandling } from '../../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { renderResourceIndexPageForTest } from '../test-utils';
-import { buildDummySongs } from './test-utils/build-dummy-songs';
-
-const dummySongs = buildDummySongs();
 
 const endpoint = `${getConfig().apiUrl}/resources/songs`;
 
