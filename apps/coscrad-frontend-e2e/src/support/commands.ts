@@ -167,7 +167,7 @@ Cypress.Commands.add(
         )}"`;
 
         cy.exec(command).then((_result) => {
-            if (command.includes(`CONNECT_RESOURCES_WITH_NOTE`))
+            if (command.includes(`PUBLISH_RESOURCE`))
                 /* eslint-disable-next-line */
                 debugger;
         });
