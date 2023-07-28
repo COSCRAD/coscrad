@@ -3,7 +3,7 @@ import {
     ICategorizableDetailQueryResult,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { MediaPlayer } from '@coscrad/media-player';
+import { AudioPlayer } from '@coscrad/media-player';
 import { Box, Grid, Typography } from '@mui/material';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 import { SinglePropertyPresenter } from '../../../utils/generic-components/presenters/single-property-presenter';
@@ -24,7 +24,7 @@ export const AudioItemDetailFullViewPresenter = ({
 
     return (
         <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.audioItem}>
-            <MediaPlayer audioUrl={audioURL} />
+            <AudioPlayer audioUrl={audioURL} />
             <SinglePropertyPresenter
                 display="Duration"
                 value={`${convertMillisecondsToSeconds(lengthMilliseconds)} secs`}

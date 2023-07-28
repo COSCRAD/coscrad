@@ -3,7 +3,7 @@ import {
     IMultilingualText,
     ISongViewModel,
 } from '@coscrad/api-interfaces';
-import { MediaPlayer } from '@coscrad/media-player';
+import { AudioPlayer } from '@coscrad/media-player';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Card, Divider } from '@mui/material';
 import { formatBilingualText } from '../vocabulary-lists/utils';
@@ -26,7 +26,7 @@ export const SongDetailThumbnailPresenter = ({
 
             <div className="detail-meta">{buildLyricsStatusMessage(lyrics)}</div>
             <div id="media-player">
-                <MediaPlayer listenMessage="Play" audioUrl={audioURL} />
+                <AudioPlayer audioUrl={audioURL} />
             </div>
         </Card>
         {/* TODO handle audio playback for lists */}

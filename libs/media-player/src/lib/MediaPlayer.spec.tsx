@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 
-import MediaPlayer from './MediaPlayer';
+import MediaPlayer from './audio-player';
 
 describe('MediaPlayer', () => {
     it('should render successfully', () => {

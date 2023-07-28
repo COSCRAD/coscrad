@@ -1,4 +1,4 @@
-import { MediaPlayer } from '@coscrad/media-player';
+import { AudioPlayer } from '@coscrad/media-player';
 import { PlayArrowRounded } from '@mui/icons-material';
 import { Box, Drawer } from '@mui/material';
 import { useState } from 'react';
@@ -21,7 +21,7 @@ const AudioPanel = ({ url }: AudioPanelProps): JSX.Element => {
 
             <Drawer anchor="bottom" open={open} onClose={toggleDrawer} variant="persistent">
                 <Box sx={{ background: '#EDEDED' }}>
-                    <MediaPlayer audioUrl={url} />
+                    <AudioPlayer audioUrl={url} />
                 </Box>
             </Drawer>
         </Box>
