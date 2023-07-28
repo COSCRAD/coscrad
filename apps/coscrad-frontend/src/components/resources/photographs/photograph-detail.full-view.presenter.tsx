@@ -13,6 +13,7 @@ export const PhotographDetailFullViewPresenter = ({
     id,
     imageUrl,
     name,
+    photographer,
 }: ICategorizableDetailQueryResult<IPhotographViewModel>): JSX.Element => {
     // Simulating image object retrieved from Digital Asset Manager
     const image = {
@@ -34,7 +35,7 @@ export const PhotographDetailFullViewPresenter = ({
             />
             <ImageFullPageWidth image={image} />
             <ResourceNamePresenter name={name} variant="h2" />
-            <SinglePropertyPresenter display="Photograph ID" value={id} />
+            <SinglePropertyPresenter display="Photographer" value={photographer} />
         </>
     );
 };

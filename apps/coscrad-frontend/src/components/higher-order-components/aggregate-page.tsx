@@ -123,28 +123,25 @@ export const AggregatePage = ({
         </>
     );
 
-    return (
+    const shouldUseCategorizableLayout =
+        shouldEnableWebOfKnowledgeForResources &&
+        isCategorizableCompositeIdentifier(compositeIdentifier);
+
+    return shouldUseCategorizableLayout ? (
+        <CategorizablePageLayout
+            compositeIdentifier={compositeIdentifier}
+            selfNotesList={<SelfNotesPanelContainer compositeIdentifier={compositeIdentifier} />}
+            connectedResourcesList={
+                <ConnectedResourcesPanel compositeIdentifier={compositeIdentifier} />
+            }
+            commandPanel={<Commands />}
+        >
+            <DetailPresenter {...viewModel} />
+        </CategorizablePageLayout>
+    ) : (
         <>
-            {shouldEnableWebOfKnowledgeForResources &&
-            isCategorizableCompositeIdentifier(compositeIdentifier) ? (
-                <CategorizablePageLayout
-                    compositeIdentifier={compositeIdentifier}
-                    selfNotesList={
-                        <SelfNotesPanelContainer compositeIdentifier={compositeIdentifier} />
-                    }
-                    connectedResourcesList={
-                        <ConnectedResourcesPanel compositeIdentifier={compositeIdentifier} />
-                    }
-                    commandPanel={<Commands />}
-                >
-                    <DetailPresenter {...viewModel} />
-                </CategorizablePageLayout>
-            ) : (
-                <>
-                    <DetailPresenter {...viewModel} />
-                    <Commands />
-                </>
-            )}
+            <DetailPresenter {...viewModel} />
+            <Commands />
         </>
     );
 };

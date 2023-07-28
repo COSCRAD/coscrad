@@ -25,7 +25,7 @@ export const ImageFullPageWidth = ({ image }: FullImageViewProps): JSX.Element =
     return (
         <StyledFullViewFigure>
             <StyledImage
-                sx={{ width: '100%', maxHeight: '60vh', display: 'block', objectFit: 'cover' }}
+                sx={{ width: '100%', maxHeight: '80vh', display: 'block', objectFit: 'cover' }}
                 src={src}
                 alt={alt}
             />

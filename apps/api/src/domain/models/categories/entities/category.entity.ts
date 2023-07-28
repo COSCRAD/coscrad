@@ -18,7 +18,7 @@ class CategorizableCompositeIdentifier {
     @ExternalEnum(
         {
             enumName: 'CategorizableType',
-            enumLabel: 'Reosurce Type or Note',
+            enumLabel: 'Resource Type or Note',
             labelsAndValues: Object.values(CategorizableType).map((ct) => ({
                 label: formatAggregateType(ct),
                 value: ct,

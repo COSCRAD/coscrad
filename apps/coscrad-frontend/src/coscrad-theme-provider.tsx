@@ -6,11 +6,29 @@ interface CoscradThemeProviderProps {
     children: ReactNode;
 }
 
+declare module '@mui/material/styles' {
+    interface BreakpointOverrides {
+        qhd: true;
+        uhd: true;
+    }
+}
+
 export const CoscradThemeProvider = ({ children }: CoscradThemeProviderProps): JSX.Element => {
     const { themeOverrides } = useContext(ConfigurableContentContext);
 
     const coscradDefaultTheme = responsiveFontSizes(
         createTheme({
+            breakpoints: {
+                values: {
+                    xs: 0,
+                    sm: 600,
+                    md: 900,
+                    lg: 1200,
+                    xl: 1536,
+                    qhd: 2560 /* QHD resolution 2560 x 1440 */,
+                    uhd: 3840 /* UHD resolution 3840 by 2160 */,
+                },
+            },
             typography: {
                 h1: {
                     fontSize: 40,

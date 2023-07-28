@@ -123,6 +123,7 @@ export const Footer = (): JSX.Element => {
                             .map(({ link, icon }) =>
                                 link ? (
                                     <IconButton
+                                        key={link}
                                         href={link}
                                         target="_blank"
                                         rel="noopener noreferrer"
@@ -136,7 +137,7 @@ export const Footer = (): JSX.Element => {
                             .filter((element) => element !== '')}
                         <Box>
                             {internalLinks.map(({ description, url, iconUrl }) => (
-                                <Tooltip title={description}>
+                                <Tooltip key={url} title={description}>
                                     <a href={url} target="_blank" rel="noopener noreferrer">
                                         <img height={40} src={iconUrl} alt={description} />
                                     </a>

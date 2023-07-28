@@ -17,7 +17,7 @@ export const PlaylistDetailFullViewPresenter = ({
     id,
     episodes,
 }: ICategorizableDetailQueryResult<IPlayListViewModel>): JSX.Element => {
-    const [url, setUrl] = useState<string | null>(null);
+    const [_url, setUrl] = useState<string | null>(null);
 
     const headingLabels: HeadingLabel<IPlaylistEpisode>[] = [
         {

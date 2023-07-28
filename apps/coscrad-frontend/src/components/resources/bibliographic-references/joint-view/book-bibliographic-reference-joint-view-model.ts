@@ -1,4 +1,5 @@
 import {
+    BibliographicReferenceType,
     IBibliographicReferenceViewModel,
     IBookBibliographicReferenceData,
 } from '@coscrad/api-interfaces';
@@ -9,7 +10,7 @@ export const BookBibliographicReferenceJointViewModel = ({
     id,
     data: { title, year, publisher, place, numberOfPages, isbn },
 }: IBibliographicReferenceViewModel<IBookBibliographicReferenceData>): BibliographicReferenceJointViewModel => ({
-    type: 'Book',
+    type: BibliographicReferenceType.book,
     id,
     title,
     citation: formatCitationInformation(
