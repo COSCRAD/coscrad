@@ -2,10 +2,8 @@ import { BibliographicSubjectCreatorType } from './BibliographicSubjectCreatorTy
 import { CoscradEnum } from './CoscradEnum';
 import { CoscradUserRole } from './CoscradUserRole';
 import { EdgeConnectionMemberRole } from './EdgeConnectionMemberRole';
-import { MIMEType } from './MIMEType';
 
 const lookupTable: { [K in CoscradEnum]: Record<string, string> } = {
-    [CoscradEnum.MIMEType]: MIMEType,
     [CoscradEnum.CoscradUserRole]: CoscradUserRole,
     [CoscradEnum.BibliographicSubjectCreatorType]: BibliographicSubjectCreatorType,
     [CoscradEnum.EdgeConnectionMemberRole]: EdgeConnectionMemberRole,

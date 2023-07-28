@@ -14,7 +14,7 @@ import {
     Year,
 } from '../lib/decorators';
 import { TypeDecoratorOptions } from '../lib/decorators/types/TypeDecoratorOptions';
-import { BibliographicSubjectCreatorType, CoscradEnum, MIMEType } from '../lib/enums';
+import { BibliographicSubjectCreatorType, CoscradEnum } from '../lib/enums';
 import { CoscradUserRole } from '../lib/enums/CoscradUserRole';
 
 const buildDummyLabelAndDescription = (name: string): { label: string; description: string } => ({
@@ -101,9 +101,6 @@ export class Widget {
 
     @RawDataObject({ isOptional, ...buildDummyLabelAndDescription('optionalRawData') })
     optionalRawData = undefined;
-
-    @Enum(CoscradEnum.MIMEType, { ...buildDummyLabelAndDescription('mimeType') })
-    mimeType = MIMEType.mp3;
 
     @Enum(CoscradEnum.CoscradUserRole, { ...buildDummyLabelAndDescription('role') })
     role = CoscradUserRole.viewer;
@@ -193,8 +190,6 @@ export const buildValidWidgetDto = (): Widget => ({
     rawDataObject: { foo: 72 },
 
     optionalRawData: undefined,
-
-    mimeType: MIMEType.mp3,
 
     role: CoscradUserRole.viewer,
 

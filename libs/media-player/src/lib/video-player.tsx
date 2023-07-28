@@ -1,9 +1,9 @@
 import { styled } from '@mui/material';
 
 export enum VideoMIMEType {
-    mp4 = 'video/mp4',
-    ogg = 'video/ogg',
-    webm = 'video/webm',
+    videoMp4 = 'video/mp4',
+    videoOgg = 'video/ogg',
+    videoWebm = 'video/webm',
 }
 
 const isVideoMIMEType = (input: unknown): input is VideoMIMEType =>
