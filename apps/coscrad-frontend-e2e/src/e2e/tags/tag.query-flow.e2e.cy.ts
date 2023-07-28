@@ -1,9 +1,63 @@
+import { AggregateType } from '@coscrad/api-interfaces';
+import { buildDummyAggregateCompositeIdentifier } from '../../support/utilities';
+
 describe('Tags index-to-detail flow', () => {
     const textForTermAttachedToNote = 'Engl-term-2';
 
+    const termCompositeIdentifier = buildDummyAggregateCompositeIdentifier(AggregateType.term, 1);
+
     const tagLabelToFind = 'animals';
 
-    const tagIdToFind = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002`;
+    const tagCompositeIdentifier = buildDummyAggregateCompositeIdentifier(AggregateType.tag, 2);
+
+    const { id: tagIdToFind } = tagCompositeIdentifier;
+
+    const nameOfSpatialFeature = 'Name of Point with ID: 102';
+
+    const spatialFeatureCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
+        AggregateType.spatialFeature,
+        3
+    );
+
+    before(() => {
+        cy.clearDatabase();
+
+        cy.executeCommandStreamByName('users:create-admin');
+
+        cy.seedTestUuids(10);
+
+        cy.seedDataWithCommand(`CREATE_TAG`, {
+            aggregateCompositeIdentifier: tagCompositeIdentifier,
+        });
+
+        cy.seedDataWithCommand(`CREATE_TERM`, {
+            aggregateCompositeIdentifier: termCompositeIdentifier,
+            text: textForTermAttachedToNote,
+        });
+
+        cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+            aggregateCompositeIdentifier: termCompositeIdentifier,
+        });
+
+        cy.seedDataWithCommand(`TAG_RESOURCE_OR_NOTE`, {
+            aggregateCompositeIdentifier: tagCompositeIdentifier,
+            taggedMemberCompositeIdentifier: termCompositeIdentifier,
+        });
+
+        cy.seedDataWithCommand(`CREATE_POINT`, {
+            aggregateCompositeIdentifier: spatialFeatureCompositeIdentifier,
+            name: nameOfSpatialFeature,
+        });
+
+        cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+            aggregateCompositeIdentifier: spatialFeatureCompositeIdentifier,
+        });
+
+        cy.seedDataWithCommand(`TAG_RESOURCE_OR_NOTE`, {
+            aggregateCompositeIdentifier: tagCompositeIdentifier,
+            taggedMemberCompositeIdentifier: spatialFeatureCompositeIdentifier,
+        });
+    });
 
     beforeEach(() => {
         cy.visit('/Tags');
@@ -48,7 +102,7 @@ describe('Tags index-to-detail flow', () => {
         });
 
         it('should contain the name of the spatial feature that has this tag', () => {
-            cy.contains('Name of Point with ID: 102');
+            cy.contains(nameOfSpatialFeature);
         });
     });
 });

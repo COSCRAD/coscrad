@@ -4,6 +4,7 @@ import { buildMediaItemTestCommandFsas } from './build-media-item-test-command-f
 import { buildPlaylistTestCommandFsas } from './build-playlist-test-command-fsas';
 import { buildSongTestCommandFsas } from './build-song-test-command-fsas';
 import { buildSpatialFeatureTestCommandFsas } from './build-spatial-feature-test-command-fsas';
+import { buildTagTestCommandFsas } from './build-tag-test-command-fsas';
 import { buildTermTestCommandFsas } from './build-term-test-command-fsas';
 import { buildEdgeConnectionTestCommandFsas } from './bulid-edge-connection-test-command-fsas';
 
@@ -18,4 +19,6 @@ export const buildTestCommandFsaMap = () =>
         ...buildMediaItemTestCommandFsas(),
         // Edge Connections
         ...buildEdgeConnectionTestCommandFsas(),
+        // System Aggregates
+        ...buildTagTestCommandFsas(),
     ].reduce((fsaMap, nextFsa) => fsaMap.set(nextFsa.type, nextFsa), new Map<string, CommandFSA>());
