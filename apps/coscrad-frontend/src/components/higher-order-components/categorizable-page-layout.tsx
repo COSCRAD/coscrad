@@ -18,8 +18,6 @@ import {
     styled,
 } from '@mui/material';
 import { ReactNode, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
 import { CommandPanel } from '../commands';
 
 interface CategorizablePageLayoutProps {
@@ -75,24 +73,14 @@ export const CategorizablePageLayout = ({
     });
 
     /**
-     * This is a first step to closing the panel when a connected resource in the open panel has been
-     * clicked.
+     * HACK: We need to figure out why this component isn't rerendered every
+     * time you navigate to a new categorizable page
      */
-    const [focusResourceId, setFocusResourceId] = useState(id);
-
-    const paramsFromLocation = useParams();
-
-    const currentIdFromLocation = paramsFromLocation.hasOwnProperty('id')
-        ? useIdFromLocation()
-        : focusResourceId;
-
     useEffect(() => {
-        if (currentIdFromLocation !== focusResourceId) {
-            setFocusResourceId(currentIdFromLocation);
-
-            setDrawerState({ openPanelLocation: null });
-        }
-    }, [focusResourceId, currentIdFromLocation]);
+        setDrawerState({
+            openPanelLocation: null,
+        });
+    }, [id]);
 
     const toggleDrawer = (anchor: AnchorLocation) => {
         const isOpen = isPanelOpen(anchor, drawerState);
