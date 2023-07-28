@@ -293,8 +293,20 @@ Song {
     "allowedUserIds": [],
   },
   "startMilliseconds": 0,
-  "title": "Song title in language",
-  "titleEnglish": "Mary had a little lamb",
+  "title": MultilingualText {
+    "items": [
+      MultilingualTextItem {
+        "languageCode": "clc",
+        "role": "original",
+        "text": "Song title in language",
+      },
+      MultilingualTextItem {
+        "languageCode": "en",
+        "role": "free translation",
+        "text": "Mary had a little lamb (English)",
+      },
+    ],
+  },
   "type": "song",
 }
 `;

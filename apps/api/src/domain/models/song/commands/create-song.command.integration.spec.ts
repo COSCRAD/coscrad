@@ -1,3 +1,4 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpIntegrationTest';
@@ -8,8 +9,6 @@ import { NotFound } from '../../../../lib/types/not-found';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../types/DTO';
-import InvariantValidationError from '../../../domainModelValidators/errors/InvariantValidationError';
-import MissingSongTitleError from '../../../domainModelValidators/errors/song/MissingSongTitleError';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { assertCommandFailsDueToTypeError } from '../../../models/__tests__/command-helpers/assert-command-payload-type-error';
 import { AggregateId } from '../../../types/AggregateId';
@@ -24,7 +23,6 @@ import { CommandAssertionDependencies } from '../../__tests__/command-helpers/ty
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../__tests__/utilities/dummySystemUserId';
 import { dummyUuid } from '../../__tests__/utilities/dummyUuid';
-import CommandExecutionError from '../../shared/common-command-errors/CommandExecutionError';
 import { Song } from '../song.entity';
 import { CreateSong } from './create-song.command';
 
@@ -35,8 +33,7 @@ const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateSon
     payload: {
         aggregateCompositeIdentifier: { id, type: AggregateType.song },
         title: 'test-song-name (language)',
-        titleEnglish: 'test-song-name (English)',
-        lyrics: 'la la la',
+        languageCodeForTitle: LanguageCode.Chilcotin,
         audioURL: 'https://www.mysound.org/song.mp3',
     },
 });
@@ -216,39 +213,6 @@ describe('CreateSong', () => {
                 buildCommandFSA: (_: AggregateId) => buildInvalidFSA(bogusId),
                 initialState,
                 // TODO Tighten up the error check
-            });
-        });
-    });
-
-    describe('when the song to create does not satisfy invariant validation rules', () => {
-        describe('when creating a song with no title in any language', () => {
-            it('should return the expected error', async () => {
-                await assertCreateCommandError(assertionHelperDependencies, {
-                    systemUserId: dummySystemUserId,
-                    buildCommandFSA: (id: AggregateId) =>
-                        buildInvalidFSA(id, {
-                            title: undefined,
-                            titleEnglish: undefined,
-                        }),
-                    initialState,
-                    checkError: (error: InternalError, id) => {
-                        const expectedError = new InvariantValidationError(
-                            { type: ResourceType.song, id },
-                            [new MissingSongTitleError()]
-                        );
-
-                        const wrappedError = new CommandExecutionError([expectedError]);
-
-                        // We probably want a `checkInerErrors` helper
-                        expect(error).toEqual(wrappedError);
-
-                        expect(error.innerErrors).toEqual(wrappedError.innerErrors);
-
-                        expect(error.innerErrors[0].innerErrors).toEqual(
-                            wrappedError.innerErrors[0].innerErrors
-                        );
-                    },
-                });
             });
         });
     });

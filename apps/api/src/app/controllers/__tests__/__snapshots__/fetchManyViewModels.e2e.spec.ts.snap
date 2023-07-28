@@ -1431,7 +1431,7 @@ exports[`When fetching multiple resources GET /resources/songs when all of the r
           {
             "languageCode": "en",
             "role": "free translation",
-            "text": "Mary had a little lamb",
+            "text": "Mary had a little lamb (English)",
           },
         ],
       },
@@ -1541,7 +1541,7 @@ exports[`When fetching multiple resources GET /resources/songs when some of the 
           {
             "languageCode": "en",
             "role": "free translation",
-            "text": "Mary had a little lamb",
+            "text": "Mary had a little lamb (English)",
           },
         ],
       },

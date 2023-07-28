@@ -1,6 +1,7 @@
-import { ICommandBase } from '@coscrad/api-interfaces';
+import { ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString, RawDataObject, URL, UUID } from '@coscrad/data-types';
+import { LanguageCodeEnum } from '../../../common/entities/multilingual-text';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../types/AggregateType';
 import { AggregateTypeProperty } from '../../shared/common-commands';
@@ -51,13 +52,19 @@ export class CreateSong implements ICommandBase {
     })
     readonly title?: string;
 
-    // TODO Remove this in favor of a translation flow
-    @NonEmptyString({
-        isOptional: true,
-        label: 'title (colonial language)',
-        description: "song's title in the colonial language",
+    @LanguageCodeEnum({
+        label: 'language for title',
+        description: 'the language in which you are naming this song',
     })
-    readonly titleEnglish?: string;
+    readonly languageCodeForTitle: LanguageCode;
+
+    // // TODO Remove this in favor of a translation flow
+    // @NonEmptyString({
+    //     isOptional: true,
+    //     label: 'title (colonial language)',
+    //     description: "song's title in the colonial language",
+    // })
+    // readonly titleEnglish?: string;
 
     /**
      * TODO This property is being removed in favor of edge connections to a
@@ -71,13 +78,6 @@ export class CreateSong implements ICommandBase {
     //     description: 'acknowledgement of all contributors who worked on this song',
     // })
     // readonly contributions: ContributorAndRole[];
-
-    @NonEmptyString({
-        isOptional: true,
-        label: 'lyrics',
-        description: "plain text representation of this song's lyrics",
-    })
-    readonly lyrics?: string;
 
     @URL({
         label: 'audio link',

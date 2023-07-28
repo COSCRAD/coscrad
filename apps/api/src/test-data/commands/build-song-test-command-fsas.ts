@@ -16,8 +16,7 @@ const createSong: CommandFSA<CreateSong> = {
     payload: {
         aggregateCompositeIdentifier: { id, type },
         title: 'test-song-name (language)',
-        titleEnglish: 'test-song-name (English)',
-        lyrics: 'la la la',
+        languageCodeForTitle: LanguageCode.English,
         audioURL: 'https://www.mysound.org/song.mp3',
     },
 };

@@ -1463,8 +1463,20 @@
                     "allowedUserIds": [],
                     "allowedGroupIds": []
                 },
-                "title": "Song title in language",
-                "titleEnglish": "Mary had a little lamb",
+                "title": {
+                    "items": [
+                        {
+                            "languageCode": "clc",
+                            "role": "original",
+                            "text": "Song title in language"
+                        },
+                        {
+                            "languageCode": "en",
+                            "role": "free translation",
+                            "text": "Mary had a little lamb (English)"
+                        }
+                    ]
+                },
                 "contributions": [
                     {
                         "contributorId": "1",
@@ -1495,8 +1507,20 @@
                     ],
                     "allowedGroupIds": []
                 },
-                "title": "Unpublished Song Title (lang)",
-                "titleEnglish": "Unpublished Song Title (Engl)",
+                "title": {
+                    "items": [
+                        {
+                            "languageCode": "clc",
+                            "role": "original",
+                            "text": "Unpublished Song Title (lang)"
+                        },
+                        {
+                            "languageCode": "en",
+                            "role": "free translation",
+                            "text": "Unpublished Song Title (Engl)"
+                        }
+                    ]
+                },
                 "contributions": [
                     {
                         "contributorId": "33",
