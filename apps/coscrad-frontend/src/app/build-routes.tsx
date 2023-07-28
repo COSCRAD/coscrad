@@ -6,6 +6,7 @@ import { AggregatePage } from '../components/higher-order-components/aggregate-p
 import { Home } from '../components/home/home';
 import { ListenLivePage } from '../components/listen-live-page/listen-live-page';
 import { NotFoundPresenter } from '../components/not-found';
+import { NoteDetailPageContainer } from '../components/notes/note-detail-page.container';
 import { NoteIndexContainer } from '../components/notes/note-index.container';
 import { ResourceInfoContainer } from '../components/resource-info/resource-info.container';
 import { TagDetailPresenter } from '../components/tags/tag-detail.presenter';
@@ -64,6 +65,13 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
                 path: notesRoute,
                 label: noteIndexToDetailConfig?.labelOverrides?.label || 'Notes',
                 element: <NoteIndexContainer />,
+            }),
+        ],
+        [
+            !isNullOrUndefined(noteIndexToDetailConfig) && shouldEnableWebOfKnowledgeForResources,
+            () => ({
+                path: `${notesRoute}/:id`,
+                element: <NoteDetailPageContainer />,
             }),
         ],
         [

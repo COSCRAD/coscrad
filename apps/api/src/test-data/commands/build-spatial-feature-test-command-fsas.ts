@@ -14,7 +14,7 @@ const createPointPayload: CreatePoint = {
         id,
     },
     lattitude: 52.1417,
-    longitude: 122.1417,
+    longitude: -122.1417,
     name: 'Cool Point',
     description: 'This is just test data',
     imageUrl: `https://www.coscrad.org/ADDME.jpg`,
