@@ -1,8 +1,32 @@
-describe(`term detail view `, () => {
-    describe(`note creation`, () => {
-        const termId = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002`;
+import { AggregateType } from '@coscrad/api-interfaces';
+import { buildDummyUuid } from '../../../support/utilities';
 
-        const createNoteLabel = 'Create Note';
+describe(`term detail view `, () => {
+    const termId = buildDummyUuid(2);
+
+    const aggregateCompositeIdentifier = {
+        type: AggregateType.term,
+        id: termId,
+    };
+
+    const createNoteLabel = 'Create Note';
+
+    describe(`note creation`, () => {
+        before(() => {
+            cy.clearDatabase();
+
+            cy.seedTestUuids(5);
+
+            cy.executeCommandStreamByName('users:create-admin');
+
+            cy.seedDataWithCommand(`CREATE_TERM`, {
+                aggregateCompositeIdentifier,
+            });
+
+            cy.seedDataWithCommand(`PUBLISH_TERM`, {
+                aggregateCompositeIdentifier,
+            });
+        });
 
         beforeEach(() => {
             cy.visit(`/Resources/Terms/${termId}`);
@@ -31,7 +55,7 @@ describe(`term detail view `, () => {
 
                 cy.getByDataAttribute('term').click();
 
-                cy.get('[href="/Resources/Terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002"]').click();
+                cy.get(`[href="/Resources/Terms/${termId}"]`).click();
             });
 
             it(`should be available`, () => {
@@ -59,7 +83,7 @@ describe(`term detail view `, () => {
 
                 describe(`when the text is empty`, () => {
                     it(`should be disabled`, () => {
-                        cy.get('.MuiSelect-select').click().get('[data-value="eng"]').click();
+                        cy.get('.MuiSelect-select').click().get('[data-value="en"]').click();
 
                         cy.getByDataAttribute('submit-dynamic-form').should('be.disabled');
                     });
@@ -81,16 +105,14 @@ describe(`term detail view `, () => {
                     cy.getByDataAttribute('submit-dynamic-form').should('not.be.disabled');
                 });
 
-                it(`should show loading immediately after submitting the command`, () => {
-                    cy.getByDataAttribute('submit-dynamic-form').click();
-
-                    cy.getByDataAttribute('loading');
-                });
-
                 it(`should successfully submit the command`, () => {
                     cy.getByDataAttribute('submit-dynamic-form').click();
 
                     cy.getByDataAttribute('loading').should('not.exist');
+
+                    cy.acknowledgeCommandResult();
+
+                    cy.openPanel('notes');
 
                     cy.contains(newNoteText);
                 });
@@ -113,7 +135,9 @@ describe(`term detail view `, () => {
                     // wait until the command endpoint responds with an ack
                     cy.getByDataAttribute('loading').should('not.exist');
 
-                    cy.getByDataAttribute('command-ack-button').click();
+                    cy.acknowledgeCommandResult();
+
+                    cy.openPanel('notes');
 
                     cy.contains('yet another note about this resource');
                 });

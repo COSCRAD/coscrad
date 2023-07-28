@@ -1,7 +1,27 @@
-const termId = '9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001';
-const termCompositeIdentifier = `term/${termId}`;
+import { AggregateType } from '@coscrad/api-interfaces';
+import { buildDummyAggregateCompositeIdentifier } from '../../support/utilities';
+
+const termCompositeIdentifier = buildDummyAggregateCompositeIdentifier(AggregateType.term, 1);
+
+const { id: termId } = termCompositeIdentifier;
+
+const formattedTermCompositeIdentifier = `term/${termId}`;
 
 describe('IdInfoIcon', () => {
+    before(() => {
+        cy.clearDatabase();
+
+        cy.seedTestUuids(1);
+
+        cy.seedDataWithCommand(`CREATE_TERM`, {
+            aggregateCompositeIdentifier: termCompositeIdentifier,
+        });
+
+        cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+            aggregateCompositeIdentifier: termCompositeIdentifier,
+        });
+    });
+
     beforeEach(() => {
         cy.visit(`/Resources/Terms/${termId}`);
 
@@ -35,6 +55,6 @@ describe('IdInfoIcon', () => {
 
         cy.contains('Copy Composite Id', { matchCase: false }).click();
 
-        cy.assertValueCopiedToClipboard(termCompositeIdentifier);
+        cy.assertValueCopiedToClipboard(formattedTermCompositeIdentifier);
     });
 });

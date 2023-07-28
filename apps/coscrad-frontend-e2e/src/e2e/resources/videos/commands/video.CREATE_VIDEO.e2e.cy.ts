@@ -1,4 +1,13 @@
+import { AggregateType } from '@coscrad/api-interfaces';
+import { buildDummyAggregateCompositeIdentifier } from '../../../../support/utilities';
+
 describe(`the video flow`, () => {
+    before(() => {
+        cy.clearDatabase();
+
+        cy.executeCommandStreamByName('users:create-admin');
+    });
+
     const baseRoute = `/Resources/Videos/`;
 
     describe(`when the user is not logged in`, () => {
@@ -43,19 +52,36 @@ describe(`the video flow`, () => {
             describe(`when the command is valid`, () => {
                 const videoNameText = 'Haida text for video name';
 
+                const mediaItemAggregateCompositeIdentifier =
+                    buildDummyAggregateCompositeIdentifier(AggregateType.mediaItem, 2);
+
+                const { id: mediaItemId } = mediaItemAggregateCompositeIdentifier;
+
+                before(() => {
+                    cy.seedTestUuids(5);
+
+                    cy.seedDataWithCommand(`CREATE_MEDIA_ITEM`, {
+                        aggregateCompositeIdentifier: mediaItemAggregateCompositeIdentifier,
+                    });
+
+                    cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+                        aggregateCompositeIdentifier: mediaItemAggregateCompositeIdentifier,
+                    });
+                });
+
                 beforeEach(() => {
                     cy.contains(`Create Video`).click();
 
                     cy.getByDataAttribute('languageCodeForName_select')
                         .click()
-                        .get('[data-value="clc"')
+                        .get('[data-value="hai"')
                         .click();
 
                     cy.getByDataAttribute('text_name').click().type(videoNameText);
 
                     cy.get('#mui-component-select-mediaItemId')
                         .click()
-                        .get('[data-value="9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002"]')
+                        .get(`[data-value="${mediaItemId}"]`)
                         .click();
 
                     cy.get(`input[name=lengthMilliseconds]`).click().type('30000');
@@ -69,6 +95,12 @@ describe(`the video flow`, () => {
                     cy.getByDataAttribute('loading').should('not.exist');
 
                     cy.contains(videoNameText);
+                });
+
+                it(`should not yet be publicly visible`, () => {
+                    cy.visit(`/Resources/Videos/`);
+
+                    cy.contains(videoNameText).should('not.exist');
                 });
             });
         });
