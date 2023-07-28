@@ -7,6 +7,7 @@ import { ArangoCollectionId } from '../../database/collection-references/ArangoC
 import { ArangoDatabaseDocument } from '../../database/utilities/mapEntityDTOToDatabaseDTO';
 import { ICoscradMigration } from '../coscrad-migration.interface';
 import { ICoscradQueryRunner } from '../coscrad-query-runner.interface';
+import { Migration } from '../decorators';
 
 type SongDocument = ArangoDatabaseDocument<DTO<Song>>;
 
@@ -32,6 +33,10 @@ const extract = (
     multilingualTextDto.items.find(({ languageCode }) => languageCode === languageCodeToExtract)
         ?.text || null;
 
+@Migration({
+    description: `convert song titles from bilingual to multilingual`,
+    dateAuthored: `20230728`,
+})
 export class MigrateBilingualSongs implements ICoscradMigration {
     sequenceNumber = 4;
 

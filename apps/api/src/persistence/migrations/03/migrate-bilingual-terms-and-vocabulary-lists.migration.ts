@@ -8,6 +8,7 @@ import { ArangoCollectionId } from '../../database/collection-references/ArangoC
 import { ArangoDatabaseDocument } from '../../database/utilities/mapEntityDTOToDatabaseDTO';
 import { ICoscradMigration } from '../coscrad-migration.interface';
 import { ICoscradQueryRunner } from '../coscrad-query-runner.interface';
+import { Migration } from '../decorators';
 
 type TermDocument = ArangoDatabaseDocument<DTO<Term>>;
 
@@ -40,6 +41,10 @@ const extract = (
     multilingualTextDto.items.find(({ languageCode }) => languageCode === languageCodeToExtract)
         ?.text || null;
 
+@Migration({
+    description: `convert bilingual terms and vocabulary lists to multilingual`,
+    dateAuthored: `20230727`,
+})
 export class MigrateBilingualTermsAndVocabularyLists implements ICoscradMigration {
     sequenceNumber = 3;
 
