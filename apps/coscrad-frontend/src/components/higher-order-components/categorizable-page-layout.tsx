@@ -95,7 +95,7 @@ export const CategorizablePageLayout = ({
     const [isBottomDrawerExpanded, setIsBottomDrawerExpanded] = useState(false);
 
     return (
-        <>
+        <div>
             {children}
             <Box sx={{ textAlign: 'right', pr: 8, mb: 8 }}>
                 <Tooltip title="Open Notes Panel">
@@ -203,7 +203,7 @@ export const CategorizablePageLayout = ({
                 <Divider variant="fullWidth" sx={{ mb: 3 }} />
                 <DrawerContentStack>{selfNotesList}</DrawerContentStack>
             </Drawer>
-            {!isNullOrUndefined(CommandPanel) ? <>{commandPanel}</> : null}
-        </>
+            {!isNullOrUndefined(CommandPanel) ? commandPanel : null}
+        </div>
     );
 };

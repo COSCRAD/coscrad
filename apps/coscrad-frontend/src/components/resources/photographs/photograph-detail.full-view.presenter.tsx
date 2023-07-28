@@ -4,10 +4,10 @@ import {
     IPhotographViewModel,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
-import { ResourceNamePresenter } from 'apps/coscrad-frontend/src/utils/generic-components/presenters/resource-name-presenter';
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { ImageFullPageWidth } from '../../../utils/generic-components/presenters/image-full-page-width';
+import { ResourceNamePresenter } from '../../../utils/generic-components/presenters/resource-name-presenter';
 
 export const PhotographDetailFullViewPresenter = ({
     id,

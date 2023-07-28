@@ -8,10 +8,10 @@ import { SelfConnectionNote } from '../../../notes/hooks/use-loadable-self-notes
 /**
  * TODO[https://www.pivotaltracker.com/story/show/185592121] augment the DefaultTheme
  */
-const Item = styled(Box)(({ theme }) => ({
+const Item = styled(Box)({
     padding: 0,
     marginBottom: '15px',
-}));
+});
 
 export const SelfNotePresenter = ({ text, id, context }: SelfConnectionNote): JSX.Element => (
     <Item data-testid={buildDataAttributeForAggregateDetailComponent(AggregateType.note, id)}>

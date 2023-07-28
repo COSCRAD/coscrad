@@ -1,7 +1,6 @@
 import { ResourceType } from '@coscrad/api-interfaces';
 import { getConfig } from '../../../config';
 import { testContainerComponentErrorHandling } from '../../../utils/test-utils/common-test-cases/test-container-component-error-handling';
-import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
 import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
 import { buildCategorizableDetailPageRendererForTest } from '../test-utils';
 import { buildDummySongs } from './test-utils/build-dummy-songs';
@@ -19,11 +18,6 @@ const songToFind = dummySongs[0];
 const { id: idToFind } = songToFind;
 
 const endpoint = `${getConfig().apiUrl}/resources/songs`;
-
-const dummyIndexResponse = buildMockIndexResponse(
-    dummySongs.map((song) => [song, []]),
-    []
-);
 
 const act = buildCategorizableDetailPageRendererForTest(ResourceType.song);
 

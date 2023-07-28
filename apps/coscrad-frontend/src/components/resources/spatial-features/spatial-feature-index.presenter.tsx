@@ -31,25 +31,21 @@ export const SpatialFeatureIndexPresenter = ({
     const compositeIdentifier = { type: ResourceType.spatialFeature, id: selectedSpatialFeatureId };
 
     return (
-        <>
-            <CategorizablePageLayout
-                compositeIdentifier={compositeIdentifier}
-                selfNotesList={
-                    <SelfNotesPanelContainer compositeIdentifier={compositeIdentifier} />
-                }
-                connectedResourcesList={
-                    <ConnectedResourcesPanel compositeIdentifier={compositeIdentifier} />
-                }
-            >
-                <MapComponent
-                    spatialFeatures={spatialFeatures}
-                    initialCentre={initialCentre}
-                    initialZoom={initialZoom}
-                    onSpatialFeatureSelected={(id: string) => setSelectedSpatialFeatureId(id)}
-                    DetailPresenter={DetailPresenter}
-                    selectedSpatialFeatureId={selectedSpatialFeatureId}
-                />
-            </CategorizablePageLayout>
-        </>
+        <CategorizablePageLayout
+            compositeIdentifier={compositeIdentifier}
+            selfNotesList={<SelfNotesPanelContainer compositeIdentifier={compositeIdentifier} />}
+            connectedResourcesList={
+                <ConnectedResourcesPanel compositeIdentifier={compositeIdentifier} />
+            }
+        >
+            <MapComponent
+                spatialFeatures={spatialFeatures}
+                initialCentre={initialCentre}
+                initialZoom={initialZoom}
+                onSpatialFeatureSelected={(id: string) => setSelectedSpatialFeatureId(id)}
+                DetailPresenter={DetailPresenter}
+                selectedSpatialFeatureId={selectedSpatialFeatureId}
+            />
+        </CategorizablePageLayout>
     );
 };
