@@ -49,7 +49,7 @@ describe(`the video flow`, () => {
                 cy.contains(`Create Video`);
             });
 
-            describe.only(`when the command is valid`, () => {
+            describe(`when the command is valid`, () => {
                 const videoNameText = 'Haida text for video name';
 
                 const mediaItemAggregateCompositeIdentifier =

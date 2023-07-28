@@ -9,7 +9,7 @@ describe(`Term index-to-detail flow`, () => {
 
     const textForTerm = 'She is singing (lang)';
 
-    const { id: basicTermId } = basicTermCompositeIdentifier; // `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513`;
+    const { id: basicTermId } = basicTermCompositeIdentifier;
 
     before(() => {
         cy.clearDatabase();
@@ -71,7 +71,7 @@ describe(`Term index-to-detail flow`, () => {
             2
         );
 
-        const { id: idForTermToView } = compositeIdentifierOfTermToView; // `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002`;
+        const { id: idForTermToView } = compositeIdentifierOfTermToView;
 
         const noteText =
             'This first 4 letters of this term form a syllable that indicates this is a plant ';

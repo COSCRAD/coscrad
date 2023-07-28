@@ -97,7 +97,6 @@ describe('Tags index-to-detail flow', () => {
         });
 
         it('should contain the text for the term that has this tag', () => {
-            // We might want to use a data attribute here instead so we don't assume anything about presentation
             cy.contains(textForTermAttachedToNote);
         });
 
