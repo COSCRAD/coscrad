@@ -30,6 +30,8 @@ declare namespace Cypress {
 
         acknowledgeCommandResult(): void;
 
+        openPanel(panelType: 'notes' | 'connections'): void;
+
         getCommandFormSubmissionButton(): Chainable<Subject>;
 
         getLoading(): Chainable<Subject>;
@@ -164,13 +166,11 @@ Cypress.Commands.add(
             `\\"`
         )}"`;
 
-        cy.exec(command);
-
-        // .then((result) => {
-        //     cy.wrap(result).its('code').should('eq', 0);
-
-        //     cy.wrap(`${result}`);
-        // });
+        cy.exec(command).then((_result) => {
+            if (command.includes(`PUBLISH_RESOURCE`))
+                /* eslint-disable-next-line */
+                debugger;
+        });
     }
 );
 
@@ -191,3 +191,17 @@ Cypress.Commands.add(`getAggregateDetailView`, (aggregateType: string, id: strin
 });
 
 Cypress.Commands.add(`getLoading`, () => cy.getByDataAttribute(`loading`));
+
+Cypress.Commands.add(`openPanel`, (panelType: 'notes' | 'connections') => {
+    if (panelType === 'notes') {
+        cy.getByDataAttribute(`open-notes-panel-button`).click();
+        return;
+    }
+
+    if (panelType === 'connections') {
+        cy.getByDataAttribute(`open-connected-resources-panel-button`).click();
+        return;
+    }
+
+    throw new Error(`Failed to open panel of unknown type: ${panelType}`);
+});

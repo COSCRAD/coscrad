@@ -1,9 +1,42 @@
+import { AggregateType } from '@coscrad/api-interfaces';
+import { BibliographicSubjectCreatorType } from '@coscrad/data-types';
+import { buildDummyAggregateCompositeIdentifier } from '../../support/utilities';
+
 /**
- * TODO: move this to component test in Jest
+ * TODO: move this to a Cypress Component test
  */
 describe('CommaSeparatedList', () => {
+    const aggregateCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
+        AggregateType.bibliographicReference,
+        1
+    );
+
+    before(() => {
+        cy.clearDatabase();
+
+        cy.seedTestUuids(1);
+
+        cy.seedDataWithCommand(`CREATE_BOOK_BIBLIOGRAPHIC_REFERENCE`, {
+            aggregateCompositeIdentifier,
+            creators: [
+                {
+                    name: 'Alana Duvernay',
+                    type: BibliographicSubjectCreatorType.author,
+                },
+                {
+                    name: 'James Smith',
+                    type: BibliographicSubjectCreatorType.author,
+                },
+            ],
+        });
+
+        cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+            aggregateCompositeIdentifier,
+        });
+    });
+
     beforeEach(() => {
-        cy.visit('/Resources/BibliographicReferences/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001');
+        cy.visit('/Resources/BibliographicReferences/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001');
     });
 
     it('Should display the creators for the BookBibliographicReference', () => {

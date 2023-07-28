@@ -1,13 +1,41 @@
 import { AggregateType } from '@coscrad/api-interfaces';
+import { buildDummyAggregateCompositeIdentifier } from '../../support/utilities';
 
 describe(`tagging a term`, () => {
     const termBaseRoute = `/Resources/Terms/`;
 
-    const termId = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002`;
+    const termAggregateCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
+        AggregateType.term,
+        2
+    );
 
-    const tagId = '9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004';
+    const { id: termId } = termAggregateCompositeIdentifier;
+
+    const tagCompositeIdentifier = buildDummyAggregateCompositeIdentifier(AggregateType.tag, 4);
+
+    const { id: tagId } = tagCompositeIdentifier;
 
     const tagResourceLabel = `Tag Resource or Note`;
+
+    before(() => {
+        cy.clearDatabase();
+
+        cy.executeCommandStreamByName('users:create-admin');
+
+        cy.seedTestUuids(10);
+
+        cy.seedDataWithCommand(`CREATE_TERM`, {
+            aggregateCompositeIdentifier: termAggregateCompositeIdentifier,
+        });
+
+        cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+            aggregateCompositeIdentifier: termAggregateCompositeIdentifier,
+        });
+
+        cy.seedDataWithCommand(`CREATE_TAG`, {
+            aggregateCompositeIdentifier: tagCompositeIdentifier,
+        });
+    });
 
     describe(`when tagging a term`, () => {
         beforeEach(() => {
@@ -43,6 +71,7 @@ describe(`tagging a term`, () => {
                 it(`should succeed`, () => {
                     cy.contains(tagResourceLabel).click();
 
+                    // TODO do not reference MUI here
                     cy.get('.MuiSelect-select').click().get(`[data-value="${tagId}"]`).click();
 
                     cy.getByDataAttribute('submit-dynamic-form').click();
