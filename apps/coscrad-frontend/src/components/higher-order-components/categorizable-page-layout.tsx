@@ -17,7 +17,7 @@ import {
     Typography,
     styled,
 } from '@mui/material';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { CommandPanel } from '../commands';
 
 interface CategorizablePageLayoutProps {
@@ -72,6 +72,16 @@ export const CategorizablePageLayout = ({
         openPanelLocation: null,
     });
 
+    /**
+     * HACK: We need to figure out why this component isn't rerendered every
+     * time you navigate to a new categorizable page
+     */
+    useEffect(() => {
+        setDrawerState({
+            openPanelLocation: null,
+        });
+    }, [id]);
+
     const toggleDrawer = (anchor: AnchorLocation) => {
         const isOpen = isPanelOpen(anchor, drawerState);
 
@@ -85,7 +95,7 @@ export const CategorizablePageLayout = ({
     const [isBottomDrawerExpanded, setIsBottomDrawerExpanded] = useState(false);
 
     return (
-        <>
+        <div>
             {children}
             <Box sx={{ textAlign: 'right', pr: 8, mb: 8 }}>
                 <Tooltip title="Open Notes Panel">
@@ -193,7 +203,7 @@ export const CategorizablePageLayout = ({
                 <Divider variant="fullWidth" sx={{ mb: 3 }} />
                 <DrawerContentStack>{selfNotesList}</DrawerContentStack>
             </Drawer>
-            {!isNullOrUndefined(CommandPanel) ? <>{commandPanel}</> : null}
-        </>
+            {!isNullOrUndefined(CommandPanel) ? commandPanel : null}
+        </div>
     );
 };

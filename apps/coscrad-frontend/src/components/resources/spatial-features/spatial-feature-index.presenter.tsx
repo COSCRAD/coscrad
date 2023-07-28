@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { SpatialFeatureIndexState } from '../../../store/slices/resources';
 import { ConnectedResourcesPanel } from '../../../store/slices/resources/shared/connected-resources';
 import { SelfNotesPanelContainer } from '../../../store/slices/resources/shared/notes-for-resource';
+import { CategorizablePageLayout } from '../../higher-order-components/categorizable-page-layout';
 import { ICoscradMap, SpatialFeatureDetailPresenter } from './map';
 import { Position2D } from './types';
 
@@ -27,8 +28,16 @@ export const SpatialFeatureIndexPresenter = ({
 }: SpatialFeatureIndexPresenterProps) => {
     const [selectedSpatialFeatureId, setSelectedSpatialFeatureId] = useState<string>(null);
 
+    const compositeIdentifier = { type: ResourceType.spatialFeature, id: selectedSpatialFeatureId };
+
     return (
-        <>
+        <CategorizablePageLayout
+            compositeIdentifier={compositeIdentifier}
+            selfNotesList={<SelfNotesPanelContainer compositeIdentifier={compositeIdentifier} />}
+            connectedResourcesList={
+                <ConnectedResourcesPanel compositeIdentifier={compositeIdentifier} />
+            }
+        >
             <MapComponent
                 spatialFeatures={spatialFeatures}
                 initialCentre={initialCentre}
@@ -37,21 +46,6 @@ export const SpatialFeatureIndexPresenter = ({
                 DetailPresenter={DetailPresenter}
                 selectedSpatialFeatureId={selectedSpatialFeatureId}
             />
-
-            <>
-                <ConnectedResourcesPanel
-                    compositeIdentifier={{
-                        type: ResourceType.spatialFeature,
-                        id: selectedSpatialFeatureId,
-                    }}
-                />
-                <SelfNotesPanelContainer
-                    compositeIdentifier={{
-                        type: ResourceType.spatialFeature,
-                        id: selectedSpatialFeatureId,
-                    }}
-                />
-            </>
-        </>
+        </CategorizablePageLayout>
     );
 };

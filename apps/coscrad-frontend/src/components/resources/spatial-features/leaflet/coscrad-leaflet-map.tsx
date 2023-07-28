@@ -1,3 +1,4 @@
+import { styled } from '@mui/material';
 import { LatLngExpression, Map } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef } from 'react';
@@ -5,6 +6,16 @@ import { MapContainer, TileLayer } from 'react-leaflet';
 import { INITIAL_CENTRE, INITIAL_ZOOM } from '../constants';
 import { CoscradMapProps, ICoscradMap } from '../map';
 import { buildSpatialFeatureMarker } from './spatial-feature-marker';
+
+const CoscradMapContainer = styled(MapContainer)({
+    left: '50%',
+    marginLeft: '-50vw',
+    marginRight: '-50vw',
+    maxWidth: '100vw',
+    position: 'relative',
+    right: '50%',
+    width: '100vw',
+});
 
 export const CoscradLeafletMap: ICoscradMap = ({
     spatialFeatures,
@@ -33,8 +44,11 @@ export const CoscradLeafletMap: ICoscradMap = ({
     const SpatialFeatureMarker = buildSpatialFeatureMarker(spatialFeatureDetailPresenter);
 
     return (
-        <MapContainer
-            style={{ height: '600px' }}
+        <CoscradMapContainer
+            sx={{
+                mt: { xs: '-3%', md: '-3.5%', qhd: '-5.5%', uhd: '-8%' },
+                height: { xs: '80vh' },
+            }}
             center={initialMapCentreCoordinates || INITIAL_CENTRE}
             zoom={initialZoom || INITIAL_ZOOM}
             // Inject through API?
@@ -59,6 +73,6 @@ export const CoscradLeafletMap: ICoscradMap = ({
                     }}
                 />
             ))}
-        </MapContainer>
+        </CoscradMapContainer>
     );
 };

@@ -20,7 +20,7 @@ import {
     CategorizableIndexPresenter,
     CategorizableIndexPresenterFactory,
 } from './categorizable-index-presenter-factory.interface';
-import { thumbnailCategorizableDetailPresenterFactory } from './thumbnail-categorizable-detail-presenter-factory';
+import { fullViewCategorizablePresenterFactory } from './full-view-categorizable-presenter-factory';
 
 /**
  * TODO Find a better way to inject the dependencies
@@ -30,9 +30,7 @@ const ConcreteSpatialFeaturePresenter = (
 ): JSX.Element => (
     <SpatialFeatureIndexPresenter
         MapComponent={CoscradLeafletMap}
-        DetailPresenter={thumbnailCategorizableDetailPresenterFactory(
-            CategorizableType.spatialFeature
-        )}
+        DetailPresenter={fullViewCategorizablePresenterFactory(CategorizableType.spatialFeature)}
         {...result}
     />
 );

@@ -15,10 +15,10 @@ export interface SelectedCategorizablesPresenterProps<T extends IBaseViewModel =
     pluralLabelForCategorizableType: string;
 }
 
-const Item = styled(Box)(({ theme }) => ({
+const Item = styled(Box)({
     padding: 0,
     marginBottom: '15px',
-}));
+});
 
 export const SelectedCategorizablesPresenter = <T extends IBaseViewModel>({
     viewModels,

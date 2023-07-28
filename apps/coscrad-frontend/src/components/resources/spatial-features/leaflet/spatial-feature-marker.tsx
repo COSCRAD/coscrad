@@ -1,5 +1,6 @@
 import { GeometricFeatureType, ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { styled } from '@mui/material';
 import { Icon as LeafletIcon, Marker as LeafletMarker } from 'leaflet';
 import { PropsWithChildren, useEffect, useRef } from 'react';
 import {
@@ -93,6 +94,10 @@ interface Props {
     customEffects: (id: string, marker: any) => void;
 }
 
+const CoscradLeafletPopup = styled(LeafletPopup)({
+    minWidth: '300px',
+});
+
 /**
  * Note that we refer to any element that renders a spatial feature on a map
  * as a `Marker`. This is not exactly in keeping with Leaflet's terminology.
@@ -140,10 +145,10 @@ export const buildSpatialFeatureMarker =
                 handleClick={handleClick}
                 elRef={markerRef}
             >
-                <LeafletPopup>
+                <CoscradLeafletPopup>
                     <div className="spatialMarker" data-testid={spatialFeature.id} />
                     <DetailPresenter {...spatialFeature} />
-                </LeafletPopup>
+                </CoscradLeafletPopup>
             </Presenter>
         );
     };
