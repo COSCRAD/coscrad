@@ -161,7 +161,7 @@ describe(`Song Index-to-detail Query Flow`, () => {
                      * clearly shows the character on the screen, and yet it is
                      * not found. Further,
                      */
-                    describe.only(`when searching by special character`, () => {
+                    describe(`when searching by special character`, () => {
                         const keyBindings: [string, string][] = [
                             ['s[', 'ŝ'],
                             ['w[', 'ŵ'],
