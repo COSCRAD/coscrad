@@ -1,6 +1,6 @@
 import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
-import { NestedDataType, NonEmptyString, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
-import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
+import { NestedDataType, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
@@ -8,9 +8,7 @@ import { isNotFound } from '../../../lib/types/not-found';
 import { DTO } from '../../../types/DTO';
 import { DeepPartial } from '../../../types/DeepPartial';
 import { ResultOrError } from '../../../types/ResultOrError';
-import { buildMultilingualTextFromBilingualText } from '../../common/build-multilingual-text-from-bilingual-text';
 import { MultilingualText, MultilingualTextItem } from '../../common/entities/multilingual-text';
-import MissingSongTitleError from '../../domainModelValidators/errors/song/MissingSongTitleError';
 import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../types/ResourceType';
 import { TimeRangeContext } from '../context/time-range-context/time-range-context.entity';
@@ -27,19 +25,25 @@ const isOptional = true;
 export class Song extends Resource implements ITimeBoundable {
     readonly type = ResourceType.song;
 
-    @NonEmptyString({
-        isOptional,
-        label: 'title',
-        description: 'the title of the song in the language',
-    })
-    readonly title?: string;
+    // @NonEmptyString({
+    //     isOptional,
+    //     label: 'title',
+    //     description: 'the title of the song in the language',
+    // })
+    // readonly title?: string;
 
-    @NonEmptyString({
-        isOptional,
-        label: 'title (colonial language)',
-        description: 'the title of the song in the colonial language',
+    // @NonEmptyString({
+    //     isOptional,
+    //     label: 'title (colonial language)',
+    //     description: 'the title of the song in the colonial language',
+    // })
+    // readonly titleEnglish?: string;
+
+    @NestedDataType(MultilingualText, {
+        label: 'title',
+        description: 'the title of the song',
     })
-    readonly titleEnglish?: string;
+    readonly title: MultilingualText;
 
     // @NestedDataType(ContributorAndRole, {
     //     isArray: true,
@@ -80,7 +84,6 @@ export class Song extends Resource implements ITimeBoundable {
 
         const {
             title,
-            titleEnglish,
             contributions: contributorAndRoles,
             lyrics,
             audioURL,
@@ -88,9 +91,7 @@ export class Song extends Resource implements ITimeBoundable {
             startMilliseconds,
         } = dto;
 
-        this.title = title;
-
-        this.titleEnglish = titleEnglish;
+        this.title = new MultilingualText(title);
 
         this.contributions = (contributorAndRoles || []).map(
             (contributorAndRoleDTO) => new ContributorAndRole(contributorAndRoleDTO)
@@ -105,20 +106,8 @@ export class Song extends Resource implements ITimeBoundable {
         this.startMilliseconds = startMilliseconds;
     }
 
-    /**
-     * TODO [migration] make `title` a `MultilingualText` and remove `titleEnglish`.
-     */
     getName(): MultilingualText {
-        return buildMultilingualTextFromBilingualText(
-            {
-                text: this.title,
-                languageCode: LanguageCode.Chilcotin,
-            },
-            {
-                text: this.titleEnglish,
-                languageCode: LanguageCode.English,
-            }
-        );
+        return this.title.clone();
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {
@@ -128,7 +117,7 @@ export class Song extends Resource implements ITimeBoundable {
     protected validateComplexInvariants(): InternalError[] {
         const allErrors: InternalError[] = [];
 
-        const { startMilliseconds, lengthMilliseconds, title, titleEnglish } = this;
+        const { startMilliseconds, lengthMilliseconds, title } = this;
 
         if (startMilliseconds > lengthMilliseconds)
             allErrors.push(
@@ -137,10 +126,13 @@ export class Song extends Resource implements ITimeBoundable {
                 )
             );
 
-        if (!isNonEmptyString(title) && !isNonEmptyString(titleEnglish))
-            allErrors.push(new MissingSongTitleError());
+        const titleValidationResult = title.validateComplexInvariants();
 
-        return allErrors;
+        const titleValidationErrors = isInternalError(titleValidationResult)
+            ? [titleValidationResult]
+            : [];
+
+        return allErrors.concat(titleValidationErrors);
     }
 
     protected getExternalReferences(): AggregateCompositeIdentifier[] {

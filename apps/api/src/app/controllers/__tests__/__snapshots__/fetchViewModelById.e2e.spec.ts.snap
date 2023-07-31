@@ -379,7 +379,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
       {
         "languageCode": "en",
         "role": "free translation",
-        "text": "Mary had a little lamb",
+        "text": "Mary had a little lamb (English)",
       },
     ],
   },

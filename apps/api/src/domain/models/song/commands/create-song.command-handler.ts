@@ -8,6 +8,7 @@ import { isOK } from '../../../../lib/types/ok';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../persistence/constants/persistenceConstants';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { Valid } from '../../../domainModelValidators/Valid';
 import getInstanceFactoryForResource from '../../../factories/getInstanceFactoryForResource';
 import { EVENT, IIdManager } from '../../../interfaces/id-manager.interface';
@@ -45,15 +46,12 @@ export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
     async createOrFetchWriteContext({
         aggregateCompositeIdentifier: { id },
         title,
-        titleEnglish,
-
+        languageCodeForTitle,
         audioURL,
     }: CreateSong): Promise<ResultOrError<Song>> {
         const songDTO: DTO<Song> = {
             id,
-            title,
-            titleEnglish,
-            // TODO remove lyrics from the create command
+            title: buildMultilingualTextWithSingleItem(title, languageCodeForTitle),
             audioURL,
             published: false,
             startMilliseconds: 0,
