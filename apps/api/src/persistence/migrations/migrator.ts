@@ -1,7 +1,6 @@
 import { writeFileSync } from 'fs';
 import { ICoscradLogger } from '../../coscrad-cli/logging';
 import { isNullOrUndefined } from '../../domain/utilities/validation/is-null-or-undefined';
-import { InternalError } from '../../lib/errors/InternalError';
 import { Ctor } from '../../lib/types/Ctor';
 import { DTO } from '../../types/DTO';
 import { ArangoQueryRunner } from '../database/arango-query-runner';
@@ -103,13 +102,24 @@ export class Migrator {
     ): Promise<void> {
         const migrations = await this.getAvailableMigrations(queryRunner);
 
-        if (migrations.length > 1) {
-            throw new InternalError(
-                `Not Implemented: Running multiple migrations at once is not yet supported`
-            );
-        }
+        const sortedMigrations = migrations.sort(
+            (
+                [
+                    _,
+                    {
+                        migration: { sequenceNumber: sNA },
+                    },
+                ],
+                [
+                    __,
+                    {
+                        migration: { sequenceNumber: sNB },
+                    },
+                ]
+            ) => sNA - sNB
+        );
 
-        for (const [migrationName, { migration, metadata }] of migrations) {
+        for (const [migrationName, { migration, metadata }] of sortedMigrations) {
             logger.log(
                 `running migration #${migration.sequenceNumber}: ${migrationName} (${migration.name}) [${metadata.dateAuthored}]`
             );

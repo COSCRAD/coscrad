@@ -1,4 +1,5 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
+import { buildMultilingualTextFromBilingualText } from '../domain/common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../domain/common/build-multilingual-text-with-single-item';
 import { Song } from '../domain/models/song/song.entity';
 import { ResourceType } from '../domain/types/ResourceType';
@@ -18,8 +19,16 @@ const songDtos: DTO<Omit<Song, 'id'>>[] = [
         //         role: MultilingualTextItemRole.freeTranslation,
         //     })
         // ),
-        title: 'Song title in language',
-        titleEnglish: 'Mary had a little lamb',
+        title: buildMultilingualTextFromBilingualText(
+            {
+                text: 'Song title in language',
+                languageCode: LanguageCode.Chilcotin,
+            },
+            {
+                text: `Mary had a little lamb (English)`,
+                languageCode: LanguageCode.English,
+            }
+        ),
         lyrics: buildMultilingualTextWithSingleItem(
             'Mary had a little lamb, little lamb.',
             LanguageCode.English
@@ -48,8 +57,16 @@ const songDtos: DTO<Omit<Song, 'id'>>[] = [
         //         role: MultilingualTextItemRole.freeTranslation,
         //     })
         // ),
-        title: `Unpublished Song Title (lang)`,
-        titleEnglish: 'Unpublished Song Title (Engl)',
+        title: buildMultilingualTextFromBilingualText(
+            {
+                text: `Unpublished Song Title (lang)`,
+                languageCode: LanguageCode.Chilcotin,
+            },
+            {
+                text: 'Unpublished Song Title (Engl)',
+                languageCode: LanguageCode.English,
+            }
+        ),
         lyrics: buildMultilingualTextWithSingleItem(
             "Ain't gonna see the light of day, light of day, light of day",
             LanguageCode.English

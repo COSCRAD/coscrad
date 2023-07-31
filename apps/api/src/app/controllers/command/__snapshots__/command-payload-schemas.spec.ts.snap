@@ -145,12 +145,44 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isOptional": false,
         "label": "audio link",
       },
-      "lyrics": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "plain text representation of this song's lyrics",
+      "languageCodeForTitle": {
+        "complexDataType": "ENUM",
+        "description": "the language in which you are naming this song",
+        "enumLabel": "language code",
+        "enumName": "LanguageCode",
         "isArray": false,
-        "isOptional": true,
-        "label": "lyrics",
+        "isOptional": false,
+        "label": "language for title",
+        "labelsAndValues": [
+          {
+            "label": "Chilcotin",
+            "value": "clc",
+          },
+          {
+            "label": "Haida",
+            "value": "hai",
+          },
+          {
+            "label": "English",
+            "value": "en",
+          },
+          {
+            "label": "French",
+            "value": "fra",
+          },
+          {
+            "label": "Chinook",
+            "value": "chn",
+          },
+          {
+            "label": "Zapotec",
+            "value": "zap",
+          },
+          {
+            "label": "Spanish",
+            "value": "spa",
+          },
+        ],
       },
       "rawData": {
         "coscradDataType": "RAW_DATA",
@@ -165,13 +197,6 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": true,
         "label": "title",
-      },
-      "titleEnglish": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "song's title in the colonial language",
-        "isArray": false,
-        "isOptional": true,
-        "label": "title (colonial language)",
       },
     },
     "type": "CREATE_SONG",
