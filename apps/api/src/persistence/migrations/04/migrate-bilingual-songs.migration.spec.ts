@@ -91,7 +91,7 @@ describe(`MigrateBilingualTermsAndVocabularyLists`, () => {
         /**
          * It's a bit awkward that we need this because we are not working at
          * the repositories level of abstraction. However, we have added test
-         * setup and teardown logic at this level for the purpose of commadn and
+         * setup and teardown logic at this level for the purpose of command and
          * query integration tests. So instead of rewriting this logic on a
          * `TestDatabaseProvider`, we will just leverage this existing logic for
          * test teardown.

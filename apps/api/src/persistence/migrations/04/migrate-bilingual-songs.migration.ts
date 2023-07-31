@@ -40,7 +40,7 @@ const extract = (
 export class MigrateBilingualSongs implements ICoscradMigration {
     sequenceNumber = 4;
 
-    name = `MigrateBilignualSongs`;
+    name = `MigrateBilingualSongs`;
 
     async up(queryRunner: ICoscradQueryRunner): Promise<void> {
         // migrate songs

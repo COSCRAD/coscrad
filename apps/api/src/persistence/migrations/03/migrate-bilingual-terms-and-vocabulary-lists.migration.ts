@@ -48,7 +48,7 @@ const extract = (
 export class MigrateBilingualTermsAndVocabularyLists implements ICoscradMigration {
     sequenceNumber = 3;
 
-    name = `MigrateBilignualTermsAndVocabularyLists`;
+    name = `MigrateBilingualTermsAndVocabularyLists`;
 
     async up(queryRunner: ICoscradQueryRunner): Promise<void> {
         // migrate terms
