@@ -429,15 +429,19 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "value": "audio/x-wav",
       },
       {
+        "label": "audioOgg",
+        "value": "audio/ogg",
+      },
+      {
         "label": "mp4",
         "value": "video/mp4",
       },
       {
-        "label": "ogg",
+        "label": "videoOgg",
         "value": "video/ogg",
       },
       {
-        "label": "webm",
+        "label": "videoWebm",
         "value": "video/webm",
       },
     ],

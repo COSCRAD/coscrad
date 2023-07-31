@@ -3,7 +3,7 @@ import {
     ITermViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { MediaPlayer } from '@coscrad/media-player';
+import { AudioPlayer } from '@coscrad/media-player';
 import {
     ResourceDetailThumbnailPresenter,
     SingleOptionalPropertyPresenter,
@@ -19,7 +19,7 @@ export const TermDetailThumbnailPresenter = ({
         <ResourceDetailThumbnailPresenter id={id} name={name} type={ResourceType.term}>
             <SingleOptionalPropertyPresenter display="Contributor" value={contributor} />
             <div id="media-player">
-                <MediaPlayer listenMessage="Play!" audioUrl={audioURL} />
+                <AudioPlayer audioUrl={audioURL} />
             </div>
         </ResourceDetailThumbnailPresenter>
     );
