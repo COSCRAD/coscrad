@@ -3,35 +3,11 @@ import { BibliographicSubjectCreatorType } from './BibliographicSubjectCreatorTy
 import { CoscradEnum } from './CoscradEnum';
 import { CoscradUserRole } from './CoscradUserRole';
 import { EdgeConnectionMemberRole } from './EdgeConnectionMemberRole';
-import { MIMEType } from './MIMEType';
 import { EnumMetadata } from './types/EnumMetadata';
 
 const complexDataType = ComplexCoscradDataType.enum;
 
 const enumNameToMetadata: { [K in CoscradEnum]: EnumMetadata } = {
-    [CoscradEnum.MIMEType]: {
-        complexDataType: complexDataType,
-        enumName: CoscradEnum.MIMEType,
-        enumLabel: 'MIME Type',
-        labelsAndValues: [
-            {
-                label: 'mp3',
-                value: MIMEType.mp3,
-            },
-            {
-                label: 'mp4',
-                value: MIMEType.mp4,
-            },
-            {
-                label: 'wav',
-                value: MIMEType.wav,
-            },
-            {
-                label: 'mp4',
-                value: MIMEType.mp4,
-            },
-        ],
-    },
     [CoscradEnum.CoscradUserRole]: {
         complexDataType: complexDataType,
         enumName: CoscradEnum.CoscradUserRole,
