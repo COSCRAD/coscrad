@@ -3,6 +3,7 @@ import clonePlainObjectWithoutProperty from '../../../lib/utilities/clonePlainOb
 import { ArangoCollectionId } from '../../database/collection-references/ArangoCollectionId';
 import { ICoscradMigration } from '../coscrad-migration.interface';
 import { ICoscradQueryRunner } from '../coscrad-query-runner.interface';
+import { Migration } from '../decorators';
 
 const OLD_ENGLISH_LANGUAGE_CODE = 'eng';
 
@@ -16,6 +17,10 @@ const collectionsToUpdate: ArangoCollectionId[] = [
     ArangoCollectionId.terms,
 ];
 
+@Migration({
+    description: `update English language code from eng to en`,
+    dateAuthored: `20230726`,
+})
 export class UpdateEnglishLanguageCode implements ICoscradMigration {
     readonly sequenceNumber = 2;
 

@@ -15,8 +15,8 @@ import { ArangoCollectionId } from '../persistence/database/collection-reference
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
 import { ArangoDatabaseDocument } from '../persistence/database/utilities/mapEntityDTOToDatabaseDTO';
 import { BASE_DIGITAL_ASSET_URL } from '../persistence/migrations/01/remove-base-digital-asset-url.migration';
-import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { CoscradCliModule } from './coscrad-cli.module';
 import { COSCRAD_LOGGER_TOKEN } from './logging';
 import { buildMockLogger } from './logging/__tests__';
@@ -133,7 +133,11 @@ describe(`**${cliCommandName}**`, () => {
 
             await CommandTestFactory.run(commandInstance, [cliCommandName]);
 
-            expect(mockLogger.log.mock.calls[2][0].toLowerCase().includes(`searching`)).toBe(true);
+            const mergedLogMessages = mockLogger.log.mock.calls
+                .map((callStringArgs) => callStringArgs.join(''))
+                .join('; ');
+
+            expect(mergedLogMessages.toLowerCase().includes(`searching`)).toBe(true);
 
             const finalDocument = await databaseProvider
                 .getDatabaseForCollection(ArangoCollectionId.photographs)
