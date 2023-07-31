@@ -59,15 +59,19 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "value": "audio/x-wav",
           },
           {
+            "label": "audioOgg",
+            "value": "audio/ogg",
+          },
+          {
             "label": "mp4",
             "value": "video/mp4",
           },
           {
-            "label": "ogg",
+            "label": "videoOgg",
             "value": "video/ogg",
           },
           {
-            "label": "webm",
+            "label": "videoWebm",
             "value": "video/webm",
           },
         ],

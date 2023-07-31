@@ -435,15 +435,19 @@ exports[`GET /resources should return the expected result 1`] = `
             "value": "audio/x-wav",
           },
           {
+            "label": "audioOgg",
+            "value": "audio/ogg",
+          },
+          {
             "label": "mp4",
             "value": "video/mp4",
           },
           {
-            "label": "ogg",
+            "label": "videoOgg",
             "value": "video/ogg",
           },
           {
-            "label": "webm",
+            "label": "videoWebm",
             "value": "video/webm",
           },
         ],
@@ -595,15 +599,19 @@ exports[`GET /resources should return the expected result 1`] = `
             "value": "audio/x-wav",
           },
           {
+            "label": "audioOgg",
+            "value": "audio/ogg",
+          },
+          {
             "label": "mp4",
             "value": "video/mp4",
           },
           {
-            "label": "ogg",
+            "label": "videoOgg",
             "value": "video/ogg",
           },
           {
-            "label": "webm",
+            "label": "videoWebm",
             "value": "video/webm",
           },
         ],
@@ -1844,15 +1852,19 @@ exports[`GET /resources should return the expected result 1`] = `
             "value": "audio/x-wav",
           },
           {
+            "label": "audioOgg",
+            "value": "audio/ogg",
+          },
+          {
             "label": "mp4",
             "value": "video/mp4",
           },
           {
-            "label": "ogg",
+            "label": "videoOgg",
             "value": "video/ogg",
           },
           {
-            "label": "webm",
+            "label": "videoWebm",
             "value": "video/webm",
           },
         ],
