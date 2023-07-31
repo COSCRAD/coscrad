@@ -67,15 +67,19 @@ exports[`buildCommandForm should return the expected result 1`] = `
           "value": "audio/x-wav",
         },
         {
+          "display": "audioOgg",
+          "value": "audio/ogg",
+        },
+        {
           "display": "mp4",
           "value": "video/mp4",
         },
         {
-          "display": "ogg",
+          "display": "videoOgg",
           "value": "video/ogg",
         },
         {
-          "display": "webm",
+          "display": "videoWebm",
           "value": "video/webm",
         },
       ],
