@@ -2,25 +2,28 @@ import { AggregateType } from '@coscrad/api-interfaces';
 import { buildDummyAggregateCompositeIdentifier } from '../../../support/utilities';
 
 describe(`open connected resources panel for resource`, () => {
-    const transcribedAudioCompositeIdentifier = buildDummyAggregateCompositeIdentifier(AggregateType.audioItem,110)
+    const transcribedAudioCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
+        AggregateType.audioItem,
+        1
+    );
 
-    const {id: transcribedAudioId} = transcribedAudioCompositeIdentifier;
+    const { id: transcribedAudioId } = transcribedAudioCompositeIdentifier;
 
-    
-    before(
-        () =>{
-            cy.clearDatabase();
+    before(() => {
+        cy.clearDatabase();
 
-            cy.seedTestUuids(10);
+        cy.seedTestUuids(10);
 
-            cy.seedDataWithCommand(`CREATE_AUDIO_ITEM`,{
-                aggregateCompositeIdentifier: transcribedAudioCompositeIdentifier
-            })
-        }
-    )
+        cy.seedDataWithCommand(`CREATE_AUDIO_ITEM`, {
+            aggregateCompositeIdentifier: transcribedAudioCompositeIdentifier,
+        });
+
+        cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+            aggregateCompositeIdentifier: transcribedAudioCompositeIdentifier,
+        });
+    });
 
     const transcribedAudioBaseRoute = `/Resources/AudioItems/`;
-
 
     describe(`when the transcribed audio detail full view has loaded`, () => {
         beforeEach(() => {
