@@ -1,4 +1,5 @@
 import { AggregateType } from '@coscrad/api-interfaces';
+import { buildDummyAggregateCompositeIdentifier } from '../../../support/utilities';
 
 describe(`term detail flow`, () => {
     describe(`connect resources with note`, () => {
@@ -6,9 +7,57 @@ describe(`term detail flow`, () => {
 
         const newNoteText = 'This is an interesting note.';
 
-        const connectedVideoId = '9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223';
+        const videoCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
+            AggregateType.video,
+            3
+        );
 
-        const termId = '9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002';
+        const { id: connectedVideoId } = videoCompositeIdentifier;
+
+        const termCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
+            AggregateType.term,
+            2
+        );
+
+        const mediaItemCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
+            AggregateType.mediaItem,
+            4
+        );
+
+        const { id: termId } = termCompositeIdentifier;
+
+        before(() => {
+            cy.clearDatabase();
+
+            cy.executeCommandStreamByName('users:create-admin');
+
+            cy.seedTestUuids(10);
+
+            cy.seedDataWithCommand(`CREATE_TERM`, {
+                aggregateCompositeIdentifier: termCompositeIdentifier,
+            });
+
+            cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+                aggregateCompositeIdentifier: termCompositeIdentifier,
+            });
+
+            cy.seedDataWithCommand(`CREATE_MEDIA_ITEM`, {
+                aggregateCompositeIdentifier: mediaItemCompositeIdentifier,
+            });
+
+            cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+                aggregateCompositeIdentifier: mediaItemCompositeIdentifier,
+            });
+
+            cy.seedDataWithCommand(`CREATE_VIDEO`, {
+                aggregateCompositeIdentifier: videoCompositeIdentifier,
+                mediaItemId: mediaItemCompositeIdentifier.id,
+            });
+
+            cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+                aggregateCompositeIdentifier: videoCompositeIdentifier,
+            });
+        });
 
         /**
          * Note that this isn't that important right now based on the way
@@ -134,6 +183,8 @@ describe(`term detail flow`, () => {
                     cy.getByDataAttribute('submit-dynamic-form').click();
 
                     cy.acknowledgeCommandResult();
+
+                    cy.openPanel('connections');
 
                     cy.getAggregateDetailView(AggregateType.video, connectedVideoId);
                 });
