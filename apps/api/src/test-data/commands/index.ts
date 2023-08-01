@@ -7,6 +7,7 @@ import { buildSongTestCommandFsas } from './build-song-test-command-fsas';
 import { buildSpatialFeatureTestCommandFsas } from './build-spatial-feature-test-command-fsas';
 import { buildTagTestCommandFsas } from './build-tag-test-command-fsas';
 import { buildTermTestCommandFsas } from './build-term-test-command-fsas';
+import { buildVideoTestCommandFsas } from './build-video-test-command-fsas';
 import { buildEdgeConnectionTestCommandFsas } from './bulid-edge-connection-test-command-fsas';
 
 export const buildTestCommandFsaMap = () =>
@@ -19,6 +20,7 @@ export const buildTestCommandFsaMap = () =>
         ...buildPlaylistTestCommandFsas(),
         ...buildMediaItemTestCommandFsas(),
         ...buildBibliographicReferenceTestCommandFsas(),
+        ...buildVideoTestCommandFsas(),
         // Edge Connections
         ...buildEdgeConnectionTestCommandFsas(),
         // System Aggregates
