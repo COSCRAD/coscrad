@@ -1,9 +1,10 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandFSA } from '../../app/controllers/command/command-fsa/command-fsa.entity';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
-import { AddLyricsForSong, TranslateSongLyrics } from '../../domain/models/song/commands';
+import { AddLyricsForSong, TranslateSongLyrics, TranslateSongTitle } from '../../domain/models/song/commands';
 import { CreateSong } from '../../domain/models/song/commands/create-song.command';
 import { TRANSLATE_SONG_LYRICS } from '../../domain/models/song/commands/translate-song-lyrics/constants';
+import { TRANSLATE_SONG_TITLE } from '../../domain/models/song/commands/translate-song-title/consants';
 import { AggregateType } from '../../domain/types/AggregateType';
 
 const id = buildDummyUuid(1);
@@ -42,4 +43,13 @@ const translateSongLyrics: CommandFSA<TranslateSongLyrics> = {
     },
 };
 
-export const buildSongTestCommandFsas = () => [createSong, addLyricsForSong, translateSongLyrics];
+const translateSongTitle: CommandFSA<TranslateSongTitle> = {
+    type: TRANSLATE_SONG_TITLE,
+    payload: {
+        aggregateCompositeIdentifier: {id, type},
+        translation: 'title translation to chilcotin',
+        languageCode: LanguageCode.Chilcotin,
+    }
+}
+
+export const buildSongTestCommandFsas = () => [createSong, addLyricsForSong, translateSongLyrics, translateSongTitle];
