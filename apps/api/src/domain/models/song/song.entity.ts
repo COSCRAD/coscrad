@@ -164,6 +164,11 @@ export class Song extends Resource implements ITimeBoundable {
         } as DeepPartial<DTO<this>>);
     }
 
+    translateTitle(_translation: string, _languageCode: LanguageCode): ResultOrError<Song>{
+        // return error if there is already a translation in languageCode
+        throw new Error('not implmented')
+    }
+
     translateLyrics(text: string, languageCode: LanguageCode): ResultOrError<Song> {
         if (!this.hasLyrics()) return new NoLyricsToTranslateError(this);
 
