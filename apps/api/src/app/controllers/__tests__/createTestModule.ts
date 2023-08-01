@@ -75,6 +75,8 @@ import {
     AddLyricsForSongCommandHandler,
     TranslateSongLyrics,
     TranslateSongLyricsCommandHandler,
+    TranslateSongTitle,
+    TranslateSongTitleCommandHandler,
 } from '../../../domain/models/song/commands';
 import { CreateSong } from '../../../domain/models/song/commands/create-song.command';
 import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
@@ -448,6 +450,8 @@ export default async (
             ConnectResourcesWithNoteCommandHandler,
             TranslateSongLyrics,
             TranslateSongLyricsCommandHandler,
+            TranslateSongTitle,
+            TranslateSongTitleCommandHandler,
             CreateTerm,
             CreateTermCommandHandler,
             TranslateTerm,

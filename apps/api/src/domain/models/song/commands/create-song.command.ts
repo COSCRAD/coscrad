@@ -50,7 +50,7 @@ export class CreateSong implements ICommandBase {
         label: 'title',
         description: "song's title in the language",
     })
-    readonly title?: string;
+    readonly title: string;
 
     @LanguageCodeEnum({
         label: 'language for title',

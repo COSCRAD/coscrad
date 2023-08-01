@@ -21,8 +21,10 @@ import {
     MultilingualTextItem,
 } from '../../../../common/entities/multilingual-text';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
+import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
+import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
@@ -109,11 +111,11 @@ describe(commandType, () => {
 
                     const song = searchResult as Song;
 
-                    const doesSongHaveTranslation = !isNotFound(
+                    const doSongLyricsHaveTranslation = !isNotFound(
                         song.lyrics.getTranslation(languageCode)
                     );
 
-                    expect(doesSongHaveTranslation).toBe(true);
+                    expect(doSongLyricsHaveTranslation).toBe(true);
 
                     assertEventRecordPersisted(song, `SONG_LYRICS_TRANSLATED`, dummySystemUserId);
                 },
@@ -193,6 +195,22 @@ describe(commandType, () => {
                     },
                 });
             });
+        });
+
+        describe('when the command payload type is invalid', () => {
+            generateCommandFuzzTestCases(TranslateSongLyrics).forEach(
+                ({ description, propertyName, invalidValue }) => {
+                    describe(`when the property ${propertyName} has the invalid value: ${invalidValue} (${description})`, () => {
+                        it('should fail with the appropriate error', async () => {
+                            await assertCommandFailsDueToTypeError(
+                                commandAssertionDependencies,
+                                { propertyName, invalidValue },
+                                buildValidCommandFSA()
+                            );
+                        });
+                    });
+                }
+            );
         });
     });
 });
