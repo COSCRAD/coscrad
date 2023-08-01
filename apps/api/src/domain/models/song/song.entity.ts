@@ -16,6 +16,11 @@ import { ITimeBoundable } from '../interfaces/ITimeBoundable';
 import { Resource } from '../resource.entity';
 import validateTimeRangeContextForModel from '../shared/contextValidators/validateTimeRangeContextForModel';
 import { ContributorAndRole } from './ContributorAndRole';
+import {
+    ADD_LYRICS_FOR_SONG,
+    TRANSLATE_SONG_LYRICS,
+} from './commands/translate-song-lyrics/constants';
+import { TRANSLATE_SONG_TITLE } from './commands/translate-song-title/consants';
 import { CannotAddDuplicateSetOfLyricsForSongError, NoLyricsToTranslateError } from './errors';
 import { SongLyricsHaveAlreadyBeenTranslatedToGivenLanguageError } from './errors/SongLyricsAlreadyHaveBeenTranslatedToGivenLanguageError';
 
@@ -111,7 +116,9 @@ export class Song extends Resource implements ITimeBoundable {
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {
-        return [];
+        const lyricsCommands = this.hasLyrics() ? [TRANSLATE_SONG_LYRICS] : [ADD_LYRICS_FOR_SONG];
+
+        return [TRANSLATE_SONG_TITLE, ...lyricsCommands];
     }
 
     protected validateComplexInvariants(): InternalError[] {
@@ -162,6 +169,23 @@ export class Song extends Resource implements ITimeBoundable {
                 ],
             }),
         } as DeepPartial<DTO<this>>);
+    }
+
+    translateTitle(translation: string, languageCode: LanguageCode): ResultOrError<Song> {
+        // return error if there is already a translation in languageCode
+        const newTitle = this.title.translate(
+            new MultilingualTextItem({
+                text: translation,
+                languageCode,
+                role: MultilingualTextItemRole.freeTranslation,
+            })
+        );
+
+        if (isInternalError(newTitle)) return newTitle;
+
+        return this.safeClone<Song>({
+            title: newTitle,
+        });
     }
 
     translateLyrics(text: string, languageCode: LanguageCode): ResultOrError<Song> {

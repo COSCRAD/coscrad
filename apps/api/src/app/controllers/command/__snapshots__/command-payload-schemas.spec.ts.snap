@@ -2904,6 +2904,90 @@ exports[`command payload schemas Command payload schema should match the snapsho
     "type": "TRANSLATE_SONG_LYRICS",
   },
   {
+    "description": "Translate existing song title to a different language",
+    "label": "Translate Title",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique ID for this song",
+        "isArray": false,
+        "isOptional": false,
+        "label": "composite identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "must be: song",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "song",
+                "value": "song",
+              },
+            ],
+          },
+        },
+      },
+      "languageCode": {
+        "complexDataType": "ENUM",
+        "description": "the language in which the title is being translated",
+        "enumLabel": "language code",
+        "enumName": "LanguageCode",
+        "isArray": false,
+        "isOptional": false,
+        "label": "language",
+        "labelsAndValues": [
+          {
+            "label": "Chilcotin",
+            "value": "clc",
+          },
+          {
+            "label": "Haida",
+            "value": "hai",
+          },
+          {
+            "label": "English",
+            "value": "en",
+          },
+          {
+            "label": "French",
+            "value": "fra",
+          },
+          {
+            "label": "Chinook",
+            "value": "chn",
+          },
+          {
+            "label": "Zapotec",
+            "value": "zap",
+          },
+          {
+            "label": "Spanish",
+            "value": "spa",
+          },
+        ],
+      },
+      "translation": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "translation for the title",
+        "isArray": false,
+        "isOptional": false,
+        "label": "translation",
+      },
+    },
+    "type": "TRANSLATE_SONG_TITLE",
+  },
+  {
     "description": "Create a new term in the language",
     "label": "Create Term",
     "schema": {
