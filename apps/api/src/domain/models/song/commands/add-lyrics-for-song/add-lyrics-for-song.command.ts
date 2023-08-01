@@ -3,9 +3,10 @@ import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { LanguageCodeEnum } from '../../../../../domain/common/entities/multilingual-text';
 import { SongCompositeId } from '../create-song.command';
+import { ADD_LYRICS_FOR_SONG } from '../translate-song-lyrics/constants';
 
 @Command({
-    type: 'ADD_LYRICS_FOR_SONG',
+    type: ADD_LYRICS_FOR_SONG,
     label: 'Add Lyrics for existing Song',
     description: 'add lyrics for an existing song',
 })

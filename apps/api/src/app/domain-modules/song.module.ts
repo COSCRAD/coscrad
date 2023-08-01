@@ -5,6 +5,8 @@ import {
     AddLyricsForSongCommandHandler,
     TranslateSongLyrics,
     TranslateSongLyricsCommandHandler,
+    TranslateSongTitle,
+    TranslateSongTitleCommandHandler,
 } from '../../domain/models/song/commands';
 import { CreateSong } from '../../domain/models/song/commands/create-song.command';
 import { CreateSongCommandHandler } from '../../domain/models/song/commands/create-song.command-handler';
@@ -23,8 +25,9 @@ import { SongController } from '../controllers/resources/song.controller';
         CreateSongCommandHandler,
         AddLyricsForSongCommandHandler,
         TranslateSongLyricsCommandHandler,
+        TranslateSongTitleCommandHandler,
         // Data Classes
-        ...[CreateSong, AddLyricsForSong, TranslateSongLyrics].map((ctor) => ({
+        ...[CreateSong, AddLyricsForSong, TranslateSongLyrics, TranslateSongTitle].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
         })),
