@@ -1,4 +1,4 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { CommandFSA } from '../../app/controllers/command/command-fsa/command-fsa.entity';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import {
@@ -11,10 +11,11 @@ import {
     ADD_LINE_ITEM_TO_TRANSCRIPT,
     ADD_PARTICIPANT_TO_TRANSCRIPT,
     CREATE_TRANSCRIPT,
+    IMPORT_LINE_ITEMS_TO_TRANSCRIPT,
 } from '../../domain/models/audio-item/commands/transcripts/constants';
+import { ImportLineItemsToTranscript } from '../../domain/models/audio-item/commands/transcripts/import-line-items-to-transcript';
 import { TRANSLATE_LINE_ITEM } from '../../domain/models/audio-item/commands/transcripts/translate-line-item/constants';
 import { CreateVideo } from '../../domain/models/video';
-import { AggregateType } from '../../domain/types/AggregateType';
 
 const id = buildDummyUuid(91);
 
@@ -70,10 +71,48 @@ const translateLineItem: CommandFSA<TranslateLineItem> = {
     },
 };
 
+const [startTime, endTime] = [0, 1200000];
+
+const audioLength = endTime - startTime;
+
+const numberOfTimestampsToGenerate = 10;
+
+const epsilon = 0.0001;
+
+const allTimestamps = Array(numberOfTimestampsToGenerate)
+    .fill(0)
+    .map((_, index) => [
+        startTime + epsilon + (index * audioLength) / numberOfTimestampsToGenerate,
+        startTime + ((index + 1) * audioLength) / numberOfTimestampsToGenerate - epsilon,
+    ]) as [number, number][];
+
+const buildDummyText = ([inPoint, outPoint]: [number, number]) =>
+    `text for line item with time range: [${inPoint}, ${outPoint}]`;
+
+const buildLineItemForTimestamp = ([inPointMilliseconds, outPointMilliseconds]: [
+    number,
+    number
+]) => ({
+    inPointMilliseconds,
+    outPointMilliseconds,
+    text: buildDummyText([inPointMilliseconds, outPointMilliseconds]),
+    languageCode: LanguageCode.Chilcotin,
+    speakerInitials: 'LTJ',
+});
+
+const importLineItemsToTranscript: CommandFSA<ImportLineItemsToTranscript> = {
+    type: IMPORT_LINE_ITEMS_TO_TRANSCRIPT,
+    payload: {
+        aggregateCompositeIdentifier: { id, type },
+        lineItems: allTimestamps.map(buildLineItemForTimestamp),
+    },
+};
+
 export const buildVideoTestCommandFsas = () => [
     createVideo,
     createTranscript,
     addParticipantToTranscript,
     addLineItemToTranscript,
     translateLineItem,
+    importLineItemsToTranscript,
 ];

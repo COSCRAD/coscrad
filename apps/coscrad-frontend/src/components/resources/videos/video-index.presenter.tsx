@@ -34,7 +34,7 @@ export const VideoIndexPresenter = ({ entities: videos }: VideoIndexState): JSX.
             tableData={videos}
             cellRenderersDefinition={cellRenderersDefinition}
             heading={'Videos'}
-            filterableProperties={['text']}
+            filterableProperties={['transcript']}
         />
     );
 };

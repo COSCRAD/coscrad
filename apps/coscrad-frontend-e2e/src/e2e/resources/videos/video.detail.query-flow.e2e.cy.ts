@@ -1,17 +1,21 @@
-import { AggregateType } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import { buildDummyAggregateCompositeIdentifier, buildDummyUuid } from '../../../support/utilities';
 
 const videoTitleInLanguage = `Video Title`;
 
-const buildId = (id: string) => `9b1deb4d-3b7d-4bad-9bdd-2b0d7b100${id}`;
+const basicVideoAggregateCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
+    AggregateType.video,
+    1
+);
 
-const buildAggregateCompositeIdentifier = (id: string) => ({
-    type: AggregateType.video,
-    id: buildId(id),
-});
+const { id: basicVideoId } = basicVideoAggregateCompositeIdentifier;
 
-const videoAggregateCompositeIdentifier = buildAggregateCompositeIdentifier('001');
+const mediaItemCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
+    AggregateType.mediaItem,
+    21
+);
 
-const videoDetailRoute = `/Resources/Videos/${videoAggregateCompositeIdentifier}`;
+const videoDetailRoute = `/Resources/Videos/${basicVideoId}`;
 
 const validUrl =
     'https://coscrad.org/wp-content/uploads/2023/05/Rexy-and-The-Egg-_3D-Dinosaur-Animation_-_-3D-Animation-_-Maya-3D.mp4';
@@ -20,16 +24,25 @@ describe(`the video detail page`, () => {
     before(() => {
         cy.clearDatabase();
 
-        cy.seedTestUuids(10);
+        cy.seedTestUuids(50);
 
-        cy.seedDataWithCommand(`CREATE_VIDEO`, {
-            title: videoTitleInLanguage,
-            aggregateCompositeIdentifier: videoAggregateCompositeIdentifier,
-            videourl: validUrl,
+        cy.seedDataWithCommand('CREATE_MEDIA_ITEM', {
+            aggregateCompositeIdentifier: mediaItemCompositeIdentifier,
+            url: validUrl,
         });
 
         cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
-            aggregateCompositeIdentifier: videoAggregateCompositeIdentifier,
+            aggregateCompositeIdentifier: mediaItemCompositeIdentifier,
+        });
+
+        cy.seedDataWithCommand(`CREATE_VIDEO`, {
+            name: videoTitleInLanguage,
+            aggregateCompositeIdentifier: basicVideoAggregateCompositeIdentifier,
+            mediaItemId: mediaItemCompositeIdentifier.id,
+        });
+
+        cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+            aggregateCompositeIdentifier: basicVideoAggregateCompositeIdentifier,
         });
     });
 
@@ -39,7 +52,7 @@ describe(`the video detail page`, () => {
 
     describe(`when visiting the detail route with a bogus ID`, () => {
         beforeEach(() => {
-            cy.visit(`/Resources/Videos/${buildId('987')}`);
+            cy.visit(`/Resources/Videos/${buildDummyUuid(987)}`);
 
             cy.getByDataAttribute('not-found');
         });
@@ -51,7 +64,44 @@ describe(`the video detail page`, () => {
         });
     });
 
-    describe(`when the video has all properties`, () => {
+    describe.only(`when the video has all properties`, () => {
+        const speakerInitials = 'JB';
+
+        const speakerName = 'Justin Bambrick';
+
+        const lineItems = Array(10)
+            .fill(null)
+            .map((_, index) => ({
+                inPointMilliseconds: index,
+                outPointMilliseconds: index + 1 - 0.1,
+                text: `This is text for line item #${index}`,
+                languageCode: LanguageCode.Chilcotin,
+                speakerInitials,
+            }));
+
+        before(() => {
+            cy.seedDataWithCommand(`CREATE_TRANSCRIPT`, {
+                aggregateCompositeIdentifier: basicVideoAggregateCompositeIdentifier,
+            });
+
+            cy.seedDataWithCommand(`ADD_PARTICIPANT_TO_TRANSCRIPT`, {
+                aggregateCompositeIdentifier: basicVideoAggregateCompositeIdentifier,
+                initials: speakerInitials,
+                name: speakerName,
+            });
+
+            cy.seedDataWithCommand(`ADD_PARTICIPANT_TO_TRANSCRIPT`, {
+                aggregateCompositeIdentifier: basicVideoAggregateCompositeIdentifier,
+                initials: 'AP',
+                name: 'Aaron Plahn',
+            });
+
+            cy.seedDataWithCommand(`IMPORT_LINE_ITEMS_TO_TRANSCRIPT`, {
+                aggregateCompositeIdentifier: basicVideoAggregateCompositeIdentifier,
+                lineItems,
+            });
+        });
+
         beforeEach(() => {
             // TODO troubleshoot this
             cy.spy(window.HTMLVideoElement.prototype, 'play');
@@ -68,6 +118,32 @@ describe(`the video detail page`, () => {
         it(`should expose the copy ID button`, () => {
             cy.getByDataAttribute(`copy-id`);
         });
+
+        it(`should list the participants`, () => {
+            cy.contains(speakerName);
+        });
+
+        lineItems.forEach(
+            ({ inPointMilliseconds, outPointMilliseconds, text, speakerInitials }, index) => {
+                describe(`line item #${index}`, () => {
+                    it(`should display the in point`, () => {
+                        cy.contains(inPointMilliseconds);
+                    });
+
+                    it(`should display the out point`, () => {
+                        cy.contains(outPointMilliseconds);
+                    });
+
+                    it(`should display the text`, () => {
+                        cy.contains(text);
+                    });
+
+                    it(`should display speaker initials`, () => {
+                        cy.contains(speakerInitials);
+                    });
+                });
+            }
+        );
 
         // TODO verify this
         it.skip(`should play the video`, () => {
@@ -99,10 +175,10 @@ describe(`the video detail page`, () => {
                     beforeEach(() => {
                         cy.seedDataWithCommand(`CREATE_NOTE_ABOUT_RESOURCE`, {
                             aggregateCompositeIdentifier: {
-                                id: buildId(`002`),
+                                id: buildDummyUuid(2),
                                 type: AggregateType.note,
                             },
-                            resourceCompositeIdentifier: videoAggregateCompositeIdentifier,
+                            resourceCompositeIdentifier: basicVideoAggregateCompositeIdentifier,
                             text: noteText,
                         });
 
@@ -134,7 +210,7 @@ describe(`the video detail page`, () => {
 
                 const termCompositeIdentifier = {
                     type: AggregateType.term,
-                    id: buildId(`003`),
+                    id: buildDummyUuid(3),
                 };
 
                 beforeEach(() => {
@@ -153,9 +229,9 @@ describe(`the video detail page`, () => {
                     cy.seedDataWithCommand(`CONNECT_RESOURCES_WITH_NOTE`, {
                         aggregateCompositeIdentifier: {
                             type: AggregateType.note,
-                            id: buildId(`004`),
+                            id: buildDummyUuid(4),
                         },
-                        fromMemberCompositeIdentifier: videoAggregateCompositeIdentifier,
+                        fromMemberCompositeIdentifier: basicVideoAggregateCompositeIdentifier,
                         toMemberCompositeIdentifier: termCompositeIdentifier,
                         text: connectingNoteText,
                     });
@@ -185,7 +261,7 @@ describe(`the video detail page`, () => {
 
     // TODO test this case
     describe.skip(`when the videoUrl is invalid`, () => {
-        const compositeIdForVideoWithInvalidAudioUrl = buildAggregateCompositeIdentifier('005');
+        const compositeIdForVideoWithInvalidAudioUrl = buildDummyUuid(5);
 
         const bogusUrl = `https://www.coscrad.org/i-do-not-exist.mp4`;
 

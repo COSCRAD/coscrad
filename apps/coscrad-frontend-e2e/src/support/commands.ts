@@ -167,7 +167,7 @@ Cypress.Commands.add(
         )}"`;
 
         cy.exec(command).then((_result) => {
-            if (command.includes(`CREATE_TRAN`))
+            if (command.includes(`IMPORT_L`))
                 /* eslint-disable-next-line */
                 debugger;
         });

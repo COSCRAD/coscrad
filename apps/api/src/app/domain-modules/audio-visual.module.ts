@@ -13,6 +13,10 @@ import {
     TranslateLineItemCommandHandler,
 } from '../../domain/models/audio-item/commands';
 import {
+    ImportLineItemsToTranscript,
+    ImportLineItemsToTranscriptCommandHandler,
+} from '../../domain/models/audio-item/commands/transcripts/import-line-items-to-transcript';
+import {
     CreateVideo,
     CreateVideoCommandHandler,
     TranslateVideoName,
@@ -47,6 +51,8 @@ import { VideoController } from '../controllers/resources/video.controller';
         AddParticipantToTranscriptCommandHandler,
         TranslateLineItem,
         TranslateLineItemCommandHandler,
+        ImportLineItemsToTranscript,
+        ImportLineItemsToTranscriptCommandHandler,
     ],
 })
 export class AudioVisualModule {}
