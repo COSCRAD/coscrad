@@ -1,5 +1,23 @@
-import { AggregateType, CategorizableType, ICategoryTreeViewModel } from '@coscrad/api-interfaces';
-import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
+import {
+    AggregateCompositeIdentifier,
+    AggregateType,
+    CategorizableType,
+    ICategoryTreeViewModel,
+} from '@coscrad/api-interfaces';
+import {
+    ChevronRight as ChevronRightIcon,
+    ExpandLess as ExpandLessIcon,
+    ExpandMore as ExpandMoreIcon,
+} from '@mui/icons-material';
+import {
+    Collapse,
+    List,
+    ListItemButton,
+    ListItemIcon,
+    ListItemText,
+    Typography,
+} from '@mui/material';
+import { useState } from 'react';
 import { buildDataAttributeForAggregateDetailComponent } from '../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 import { CategorizablesOfMultipleTypeContainer } from '../higher-order-components';
@@ -15,11 +33,18 @@ const wrapTree = ({
         data-testid={buildDataAttributeForAggregateDetailComponent(AggregateType.category, id)}
         key={buildDataAttributeForAggregateDetailComponent(AggregateType.category, id)}
     >
-        <Accordion>
-            <AccordionSummary>{label}</AccordionSummary>
-            <AccordionDetails>
-                {/* TODO Pass the state in as props */}
-                {/* TODO Use `SelectedCategorizablesOfMultipleTypesPresenter` as in `Notes` and `Tags` flow */}
+        <List>
+            <ListItemButton sx={{ pl: 4 }}>
+                {children.length > 0 && (
+                    <ListItemIcon>
+                        <ChevronRightIcon />
+                    </ListItemIcon>
+                )}
+
+                <ListItemText primary={label} />
+                {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            </ListItemButton>
+            <Collapse in={open} timeout="auto" unmountOnExit>
                 <CategorizablesOfMultipleTypeContainer
                     members={members}
                     detailPresenterFactory={thumbnailCategorizableDetailPresenterFactory}
@@ -28,10 +53,16 @@ const wrapTree = ({
                     // recurse on the children
                     children.map(wrapTree)
                 }
-            </AccordionDetails>
-        </Accordion>
+            </Collapse>
+        </List>
     </div>
 );
+
+type TreeNodeId = AggregateCompositeIdentifier;
+
+type UXState = {
+    openBranches: TreeNodeId[] | null;
+};
 
 /**
  * Note that this same presenter can also be used to present a sub-tree, thanks
@@ -39,12 +70,18 @@ const wrapTree = ({
  */
 export const CategoryTreePresenter: FunctionalComponent<ICategoryTreeViewModel> = (
     tree: ICategoryTreeViewModel<CategorizableType>
-) => (
-    <>
-        <div style={{ height: 0 }} data-testid="categoryTree">
-            &nbsp;
-        </div>
-        <Typography variant="h2">Tree of Knowledge</Typography>
-        {wrapTree(tree)}
-    </>
-);
+) => {
+    const [openBranchesState, setOpenBranchesState] = useState<UXState>({
+        openBranches: null,
+    });
+
+    return (
+        <>
+            <div style={{ height: 0 }} data-testid="categoryTree">
+                &nbsp;
+            </div>
+            <Typography variant="h2">Tree of Knowledge</Typography>
+            {wrapTree(tree, openBranchesState)}
+        </>
+    );
+};
