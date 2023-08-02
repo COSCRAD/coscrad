@@ -1,5 +1,4 @@
-import { ReactNode, createContext, useState } from 'react';
-import { FunctionalComponent } from '../../utils/types/functional-component';
+import { createContext } from 'react';
 
 export type TreeNodeId = string;
 
@@ -14,25 +13,9 @@ export type UpdateCategoryTreeUXState = {
 
 export const CategoryTreeUXStateContext = createContext<UpdateCategoryTreeUXState>({
     categoryTreeUXState: { openBranches: [] },
-    setCategoryTreeUXState: () => {},
+    setCategoryTreeUXState: () => {
+        throw new Error(
+            `You must provide a state update method for the context when building a CategoryTreeUxStateContext Provider`
+        );
+    },
 });
-
-type CategoryTreeUXStateProviderProps = {
-    children: ReactNode;
-};
-
-export const CategoryTreeContextProvider: FunctionalComponent<CategoryTreeUXStateProviderProps> = ({
-    children,
-}: CategoryTreeUXStateProviderProps) => {
-    const [categoryTreeUXState, setCategoryTreeUXState] = useState<CategoryTreeUXState>({
-        openBranches: [],
-    });
-
-    const value = { categoryTreeUXState, setCategoryTreeUXState };
-
-    return (
-        <CategoryTreeUXStateContext.Provider value={value}>
-            {children}
-        </CategoryTreeUXStateContext.Provider>
-    );
-};

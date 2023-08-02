@@ -11,7 +11,7 @@ import {
     ListItemText,
     Typography,
 } from '@mui/material';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { buildDataAttributeForAggregateDetailComponent } from '../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 import { CategorizablesOfMultipleTypeContainer } from '../higher-order-components';
@@ -23,15 +23,15 @@ import {
     UpdateCategoryTreeUXState,
 } from './category-tree-context-provider';
 
-const isBranchopen = (treeNodeId: TreeNodeId, { openBranches }: CategoryTreeUXState) =>
+const isBranchOpen = (treeNodeId: TreeNodeId, { openBranches }: CategoryTreeUXState) =>
     openBranches.includes(treeNodeId);
 
-const wrapTree = ({
+const WrapTree: FunctionalComponent<ICategoryTreeViewModel<CategorizableType>> = ({
     id,
     label,
     children,
     members,
-}: ICategoryTreeViewModel<CategorizableType>): JSX.Element => {
+}) => {
     const { categoryTreeUXState, setCategoryTreeUXState } = useContext<UpdateCategoryTreeUXState>(
         CategoryTreeUXStateContext
     );
@@ -64,7 +64,7 @@ const wrapTree = ({
             <List>
                 <ListItemButton sx={{ pl: 4 }} onClick={() => handleClick(id)}>
                     {children.length > 0 &&
-                        (isBranchopen(id, categoryTreeUXState) ? (
+                        (isBranchOpen(id, categoryTreeUXState) ? (
                             <ListItemIcon>
                                 <ExpandMoreIcon />
                             </ListItemIcon>
@@ -76,14 +76,14 @@ const wrapTree = ({
 
                     <ListItemText primary={label} />
                 </ListItemButton>
-                <Collapse in={isBranchopen(id, categoryTreeUXState)} timeout="auto" unmountOnExit>
+                <Collapse in={isBranchOpen(id, categoryTreeUXState)} timeout="auto" unmountOnExit>
                     <CategorizablesOfMultipleTypeContainer
                         members={members}
                         detailPresenterFactory={thumbnailCategorizableDetailPresenterFactory}
                     />
                     {
                         // recurse on the children
-                        children.map(wrapTree)
+                        children.map(WrapTree)
                     }
                 </Collapse>
             </List>
@@ -98,13 +98,19 @@ const wrapTree = ({
 export const CategoryTreePresenter: FunctionalComponent<ICategoryTreeViewModel> = (
     tree: ICategoryTreeViewModel<CategorizableType>
 ) => {
+    const [categoryTreeUXState, setCategoryTreeUXState] = useState<CategoryTreeUXState>({
+        openBranches: [],
+    });
+
+    const value = { categoryTreeUXState, setCategoryTreeUXState };
+
     return (
-        <>
+        <CategoryTreeUXStateContext.Provider value={value}>
             <div style={{ height: 0 }} data-testid="categoryTree">
                 &nbsp;
             </div>
             <Typography variant="h2">Tree of Knowledge</Typography>
-            {wrapTree(tree)}
-        </>
+            {WrapTree(tree)}
+        </CategoryTreeUXStateContext.Provider>
     );
 };
