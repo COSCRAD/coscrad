@@ -44,17 +44,6 @@ export const MultilingualTextPresenter = ({
                             </Tooltip>
                         )}
                     </Typography>
-                    {isNullOrUndefined(textItemWithDefaultLanguage) ? null : (
-                        <Tooltip
-                            title={`${getLabelForLanguage(
-                                textItemWithDefaultLanguage.languageCode
-                            )}, '${textItemWithDefaultLanguage.role}'`}
-                        >
-                            <IconButton>
-                                <LanguageIcon />
-                            </IconButton>
-                        </Tooltip>
-                    )}
                 </AccordionSummary>
                 {translations.map(({ languageCode, text, role }) => (
                     <TranslatedLanguageTextPresenter
