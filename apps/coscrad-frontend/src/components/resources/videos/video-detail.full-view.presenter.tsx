@@ -10,7 +10,7 @@ import { convertMillisecondsToSeconds } from '../utils/math';
 
 export const VideoDetailFullViewPresenter = ({
     lengthMilliseconds,
-    text: plainText,
+    transcript,
     name,
     id,
     videoUrl,
@@ -23,6 +23,6 @@ export const VideoDetailFullViewPresenter = ({
         <VideoPlayer videoUrl={videoUrl} />
         {/* TODO[https://www.pivotaltracker.com/story/show/184666073] Create a transcript presenter */}
         <h3>Transcript:</h3>
-        <p>{plainText}</p>
+        <p>{JSON.stringify(transcript)}</p>
     </ResourceDetailFullViewPresenter>
 );
