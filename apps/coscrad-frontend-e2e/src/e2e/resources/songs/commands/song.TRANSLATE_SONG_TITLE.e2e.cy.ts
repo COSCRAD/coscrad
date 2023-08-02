@@ -87,25 +87,40 @@ describe(`when translating a song's title`, () => {
         });
 
         describe(`when the form is complete`, () => {
-            describe(`when the command is valid`, () => {
-                it(`should add the translation`, () => {
-                    cy.contains(commandLabel).click();
+            it(`should add the translation`, () => {
+                cy.contains(commandLabel).click();
 
-                    cy.getByDataAttribute('text_translation').click().type(translationText);
+                cy.getByDataAttribute('text_translation').click().type(translationText);
 
-                    cy.getByDataAttribute('languageCode_select')
-                        .click()
-                        .get(`[data-value="${translationLanguageCode}"`)
-                        .click();
+                cy.getByDataAttribute('languageCode_select')
+                    .click()
+                    .get(`[data-value="${translationLanguageCode}"`)
+                    .click();
 
-                    cy.getCommandFormSubmissionButton().click();
+                cy.getCommandFormSubmissionButton().click();
 
-                    cy.acknowledgeCommandResult();
+                cy.acknowledgeCommandResult();
 
-                    cy.getByDataAttribute('ExpandMoreIcon').click();
+                cy.getByDataAttribute('ExpandMoreIcon').click();
 
-                    cy.contains(translationText);
-                });
+                cy.contains(translationText);
+            });
+
+            it(`should prevent duplicate translations`, () => {
+                cy.contains(commandLabel).click();
+
+                cy.getByDataAttribute('text_translation').click().type(`duplicate translation`);
+
+                cy.getByDataAttribute('languageCode_select')
+                    .click()
+                    .get(`[data-value="${translationLanguageCode}"`)
+                    .click();
+
+                cy.getCommandFormSubmissionButton().click();
+
+                cy.contains('error', { matchCase: false });
+
+                cy.contains('duplicate translation');
             });
         });
     });
