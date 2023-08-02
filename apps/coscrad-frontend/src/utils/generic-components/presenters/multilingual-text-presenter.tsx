@@ -25,7 +25,7 @@ export const MultilingualTextPresenter = ({
     const translations = items?.filter((items) => items.languageCode !== defaultLanguageCode);
 
     return (
-        <Box width={'fit-content'}>
+        <Box width={'fit-content'} data-testid="multilingual-text-display">
             <Accordion elevation={0}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     <Typography variant="h4" margin={'auto 0'}>
