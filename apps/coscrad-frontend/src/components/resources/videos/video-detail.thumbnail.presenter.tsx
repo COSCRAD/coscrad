@@ -12,7 +12,7 @@ import { convertMillisecondsToSeconds } from '../utils/math';
 export const VideoDetailThumbnailPresenter = ({
     id,
     lengthMilliseconds,
-    text: plainText,
+    transcript: text,
     name,
     videoUrl,
 }: ICategorizableDetailQueryResult<IVideoViewModel>): JSX.Element => {
@@ -24,7 +24,7 @@ export const VideoDetailThumbnailPresenter = ({
             />
             <VideoPlayer videoUrl={videoUrl} />
             <Typography variant="h3">Transcript:</Typography>
-            <Typography>{plainText}</Typography>
+            <Typography>{JSON.stringify(text)}</Typography>
         </ResourceDetailThumbnailPresenter>
     );
 };
