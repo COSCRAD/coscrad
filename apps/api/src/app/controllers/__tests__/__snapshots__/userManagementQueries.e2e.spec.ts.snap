@@ -1082,6 +1082,10 @@ exports[`User Management Queries when the system user issuing the command is aut
                 "message": "Must be a valid \${propertyLabel}",
                 "name": "IS_ENUM",
               },
+              {
+                "message": "Required",
+                "name": "defined value",
+              },
             ],
             "description": "the role that will be granted to this user",
             "label": "User Role",
@@ -1153,6 +1157,10 @@ exports[`User Management Queries when the system user issuing the command is aut
                     "message": "Must be a valid \${propertyLabel}",
                     "name": "IS_ENUM",
                   },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
+                  },
                 ],
                 "description": "the role that will be granted to this user",
                 "label": "User Role",
@@ -1219,6 +1227,10 @@ exports[`User Management Queries when the system user issuing the command is aut
                     "message": "Must be a valid \${propertyLabel}",
                     "name": "IS_ENUM",
                   },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
+                  },
                 ],
                 "description": "the role that will be granted to this user",
                 "label": "User Role",
@@ -1284,6 +1296,10 @@ exports[`User Management Queries when the system user issuing the command is aut
                   {
                     "message": "Must be a valid \${propertyLabel}",
                     "name": "IS_ENUM",
+                  },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
                   },
                 ],
                 "description": "the role that will be granted to this user",
@@ -1604,6 +1620,10 @@ exports[`User Management Queries when the system user issuing the command is aut
                 "message": "Must be a valid \${propertyLabel}",
                 "name": "IS_ENUM",
               },
+              {
+                "message": "Required",
+                "name": "defined value",
+              },
             ],
             "description": "the role that will be granted to this user",
             "label": "User Role",
@@ -1675,6 +1695,10 @@ exports[`User Management Queries when the system user issuing the command is aut
                     "message": "Must be a valid \${propertyLabel}",
                     "name": "IS_ENUM",
                   },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
+                  },
                 ],
                 "description": "the role that will be granted to this user",
                 "label": "User Role",
@@ -1741,6 +1765,10 @@ exports[`User Management Queries when the system user issuing the command is aut
                     "message": "Must be a valid \${propertyLabel}",
                     "name": "IS_ENUM",
                   },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
+                  },
                 ],
                 "description": "the role that will be granted to this user",
                 "label": "User Role",
@@ -1806,6 +1834,10 @@ exports[`User Management Queries when the system user issuing the command is aut
                   {
                     "message": "Must be a valid \${propertyLabel}",
                     "name": "IS_ENUM",
+                  },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
                   },
                 ],
                 "description": "the role that will be granted to this user",

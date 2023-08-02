@@ -49,6 +49,10 @@ exports[`buildCommandForm should return the expected result 1`] = `
           "message": "Must be a valid \${propertyLabel}",
           "name": "IS_ENUM",
         },
+        {
+          "message": "Required",
+          "name": "defined value",
+        },
       ],
       "description": "technical specification of the type of media item",
       "label": "MIME Type",

@@ -7,7 +7,7 @@ import {
     getConstraintNamesForCoscradDataType,
     isSimpleCoscradPropertyTypeDefinition,
 } from '@coscrad/data-types';
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { CoscradConstraint, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { InternalError } from '../../lib/errors/InternalError';
 
 // TODO Move this to a higher level- possibly called CommandPayloadPropertyMeta
@@ -115,6 +115,14 @@ export const buildFormFieldForCommandPayloadProp = (
                     name: 'IS_ENUM',
                     message: 'Must be a valid ${propertyLabel}',
                 },
+                ...(propertyTypeDefinition.isOptional
+                    ? []
+                    : [
+                          {
+                              name: CoscradConstraint.isRequired,
+                              message: 'Required',
+                          },
+                      ]),
             ],
         };
     }
