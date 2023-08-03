@@ -90,6 +90,14 @@ export class Transcript extends BaseDomainModel implements ITranscript {
         );
     }
 
+    countLineItems(): number {
+        return this.items.length;
+    }
+
+    hasLineItems(): boolean {
+        return this.countLineItems() > 0;
+    }
+
     /**
      * TODO Every entity (even nested entities that are not the aggregate root)
      * should be able to validate its own invariants. This would allow us

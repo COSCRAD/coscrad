@@ -12,6 +12,7 @@ import {
     ADD_PARTICIPANT_TO_TRANSCRIPT,
     CREATE_TRANSCRIPT,
 } from '../commands/transcripts/constants';
+import { TRANSLATE_LINE_ITEM } from '../commands/transcripts/translate-line-item/constants';
 import { CannotOverwriteTranscriptError, TranscriptLineItemOutOfBoundsError } from '../errors';
 import { CannotAddParticipantBeforeCreatingTranscriptError } from '../errors/CannotAddParticipantBeforeCreatingTranscript.error';
 import { LineItemNotFoundError } from '../errors/line-item-not-found.error';
@@ -203,8 +204,11 @@ export function Transcribable<TBase extends Constructor<ITranscribableBase>>(Bas
         /**
          * Could this be a problem if we are using several mixins? Be careful
          * when applying a second mixin to a domain class.
+         *
+         * This should really be `getTranscriptCommmands` !
          */
         getResourceSpecificAvailableCommands(): string[] {
+            // Doesn't this pattern defeat the purpose of the mixin?
             const availableCommandIds: string[] = super.getResourceSpecificAvailableCommands();
 
             if (!this.hasTranscript()) availableCommandIds.push(CREATE_TRANSCRIPT);
@@ -214,6 +218,9 @@ export function Transcribable<TBase extends Constructor<ITranscribableBase>>(Bas
             // You can't add a line item without a participant to refer to (by initials)
             if (this.countTranscriptParticipants() > 0)
                 availableCommandIds.push(ADD_LINE_ITEM_TO_TRANSCRIPT);
+
+            if (this.hasTranscript() && this.transcript.hasLineItems())
+                availableCommandIds.push(TRANSLATE_LINE_ITEM);
 
             return availableCommandIds;
         }
