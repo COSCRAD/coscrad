@@ -4,7 +4,6 @@ import { InternalError, isInternalError } from '../../../../lib/errors/InternalE
 import { DTO } from '../../../../types/DTO';
 import { DeepPartial } from '../../../../types/DeepPartial';
 import { ResultOrError } from '../../../../types/ResultOrError';
-import formatTimeRange from '../../../../view-models/presentation/formatTimeRange';
 import { CannotAddDuplicateTranslationError } from '../../../common/entities/errors';
 import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import { ResourceCompositeIdentifier } from '../../../types/ResourceCompositeIdentifier';
@@ -15,6 +14,7 @@ import {
 } from '../commands/transcripts/constants';
 import { CannotOverwriteTranscriptError, TranscriptLineItemOutOfBoundsError } from '../errors';
 import { CannotAddParticipantBeforeCreatingTranscriptError } from '../errors/CannotAddParticipantBeforeCreatingTranscript.error';
+import { LineItemNotFoundError } from '../errors/line-item-not-found.error';
 import { TranscriptItem } from './transcript-item.entity';
 import { TranscriptParticipant } from './transcript-participant';
 import { Transcript } from './transcript.entity';
@@ -128,12 +128,10 @@ export function Transcribable<TBase extends Constructor<ITranscribableBase>>(Bas
                     outPointMillisecondsForTranslation
                 )
             )
-                return new InternalError(
-                    `There is no line item with time stamps: ${formatTimeRange({
-                        inPointMilliseconds: inPointMillisecondsForTranslation,
-                        outPointMilliseconds: outPointMillisecondsForTranslation,
-                    })}`
-                );
+                return new LineItemNotFoundError({
+                    inPointMilliseconds: inPointMillisecondsForTranslation,
+                    outPointMilliseconds: outPointMillisecondsForTranslation,
+                });
 
             const existingLineItem = this.transcript.getLineItem(
                 inPointMillisecondsForTranslation,

@@ -3,12 +3,16 @@ import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { CommandFSA } from '../../../../../../app/controllers/command/command-fsa/command-fsa.entity';
+import assertErrorAsExpected from '../../../../../../lib/__tests__/assertErrorAsExpected';
+import { InternalError } from '../../../../../../lib/errors/InternalError';
+import { NotFound } from '../../../../../../lib/types/not-found';
 import { clonePlainObjectWithOverrides } from '../../../../../../lib/utilities/clonePlainObjectWithOverrides';
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestCommandFsaMap } from '../../../../../../test-data/commands';
 import getValidAggregateInstanceForTest from '../../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextWithSingleItem } from '../../../../../common/build-multilingual-text-with-single-item';
+import { CannotAddDuplicateTranslationError } from '../../../../../common/entities/errors';
 import {
     MultilingualText,
     MultilingualTextItem,
@@ -19,17 +23,21 @@ import { DeluxeInMemoryStore } from '../../../../../types/DeluxeInMemoryStore';
 import { assertCommandError } from '../../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandFailsDueToTypeError } from '../../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCommandSuccess } from '../../../../__tests__/command-helpers/assert-command-success';
+import { assertEventRecordPersisted } from '../../../../__tests__/command-helpers/assert-event-record-persisted';
 import { DummyCommandFsaFactory } from '../../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { generateCommandFuzzTestCases } from '../../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUserId';
+import AggregateNotFoundError from '../../../../shared/common-command-errors/AggregateNotFoundError';
+import CommandExecutionError from '../../../../shared/common-command-errors/CommandExecutionError';
 import { AudioVisualCompositeIdentifier } from '../../../entities/audio-item-composite-identifier';
 import { AudioItem } from '../../../entities/audio-item.entity';
 import { TranscriptItem } from '../../../entities/transcript-item.entity';
 import { TranscriptParticipant } from '../../../entities/transcript-participant';
 import { Transcript } from '../../../entities/transcript.entity';
 import { Video } from '../../../entities/video.entity';
+import { LineItemNotFoundError } from '../../../errors/line-item-not-found.error';
 import { TranslateLineItem } from './translate-line-item.command';
 
 const commandType = `TRANSLATE_LINE_ITEM`;
@@ -150,6 +158,34 @@ describe(commandType, () => {
                             [existingTranscribibleResource.type]: [existingTranscribibleResource],
                         }).fetchFullSnapshotInLegacyFormat(),
                         buildValidCommandFSA: () => buildValidFsa(existingTranscribibleResource),
+                        checkStateOnSuccess: async ({
+                            aggregateCompositeIdentifier: { id },
+                            translation,
+                        }: TranslateLineItem) => {
+                            const searchResult = await testRepositoryProvider
+                                .forResource(existingTranscribibleResource.type)
+                                .fetchById(id);
+
+                            expect(searchResult).not.toBe(NotFound);
+
+                            expect(searchResult).not.toBeInstanceOf(InternalError);
+
+                            const resource = searchResult as AudioItem | Video;
+
+                            const plainTextTranscript = resource.transcript.toString();
+
+                            const plainTextThatDoesNotIncludeNewLineItem = [
+                                plainTextTranscript,
+                            ].filter((text) => !text.includes(translation));
+
+                            expect(plainTextThatDoesNotIncludeNewLineItem).toEqual([]);
+
+                            assertEventRecordPersisted(
+                                resource,
+                                `LINE_ITEM_TRANSLATED`,
+                                dummySystemUserId
+                            );
+                        },
                     });
                 });
             });
@@ -171,12 +207,29 @@ describe(commandType, () => {
                                 {}
                             ).fetchFullSnapshotInLegacyFormat(),
                             buildCommandFSA: () => buildValidFsa(existingTranscribibleResource),
+                            checkError: (error) => {
+                                assertErrorAsExpected(
+                                    error,
+                                    new CommandExecutionError([
+                                        new AggregateNotFoundError(existingTranscribibleResource),
+                                    ])
+                                );
+                            },
                         });
                     });
                 });
 
                 describe(`when the line item already has text in this language`, () => {
                     it(`should fail with the expected errors`, async () => {
+                        const existingMultilingualText = buildMultilingualTextWithSingleItem(
+                            'I already have text in this language',
+                            translationLanguageCode
+                        );
+
+                        const fsa = buildValidFsa(existingTranscribibleResource);
+
+                        const { payload } = fsa;
+
                         await assertCommandError(assertionHelperDependencies, {
                             systemUserId: dummySystemUserId,
                             initialState: new DeluxeInMemoryStore({
@@ -185,51 +238,100 @@ describe(commandType, () => {
                                         transcript: existingTranscribibleResource.transcript.clone({
                                             items: [
                                                 new TranscriptItem({
-                                                    inPointMilliseconds: 0,
-                                                    outPointMilliseconds: 0.001,
+                                                    inPointMilliseconds:
+                                                        payload.inPointMilliseconds,
+                                                    outPointMilliseconds:
+                                                        payload.outPointMilliseconds,
                                                     speakerInitials: targetSpeakerInitials,
-                                                    text: buildMultilingualTextWithSingleItem(
-                                                        'I already have text in this language',
-                                                        translationLanguageCode
-                                                    ),
+                                                    text: existingMultilingualText,
                                                 }),
                                             ],
                                         }),
                                     }),
                                 ],
                             }).fetchFullSnapshotInLegacyFormat(),
-                            buildCommandFSA: () => buildValidFsa(existingTranscribibleResource),
+                            buildCommandFSA: () => fsa,
+                            checkError: (error) => {
+                                assertErrorAsExpected(
+                                    error,
+                                    new CommandExecutionError([
+                                        new CannotAddDuplicateTranslationError(
+                                            new MultilingualTextItem({
+                                                text: payload.translation,
+                                                languageCode: payload.languageCode,
+                                                role: MultilingualTextItemRole.freeTranslation,
+                                            }),
+                                            existingMultilingualText
+                                        ),
+                                    ])
+                                );
+                            },
                         });
                     });
                 });
 
                 describe(`when the in point does not match an existing line item`, () => {
+                    const inPointMilliseconds = existingLineItem.getTimeBounds()[0] + 0.0345;
+
+                    const outPointMilliseconds = existingLineItem.getTimeBounds()[0];
+
                     it(`should fail with the expected errors`, async () => {
                         await assertCommandError(assertionHelperDependencies, {
                             systemUserId: dummySystemUserId,
                             initialState: new DeluxeInMemoryStore({
-                                [existingAudioItem.type]: [existingAudioItem],
+                                [existingTranscribibleResource.type]: [
+                                    existingTranscribibleResource,
+                                ],
                             }).fetchFullSnapshotInLegacyFormat(),
                             buildCommandFSA: () =>
                                 commandFsaFactory.build(undefined, {
-                                    inPointMilliseconds: existingLineItem.getTimeBounds[0] + 0.0345,
+                                    inPointMilliseconds,
+                                    outPointMilliseconds,
                                 }),
+                            checkError: (error) => {
+                                assertErrorAsExpected(
+                                    error,
+                                    new CommandExecutionError([
+                                        new LineItemNotFoundError({
+                                            inPointMilliseconds,
+                                            outPointMilliseconds,
+                                        }),
+                                    ])
+                                );
+                            },
                         });
                     });
                 });
 
                 describe(`when the out point does not match an existing line item`, () => {
+                    const inPointMilliseconds = existingLineItem.getTimeBounds()[0];
+
+                    const outPointMilliseconds = existingLineItem.getTimeBounds()[0] - 0.0345;
+
                     it(`should fail with the expected errors`, async () => {
                         await assertCommandError(assertionHelperDependencies, {
                             systemUserId: dummySystemUserId,
                             initialState: new DeluxeInMemoryStore({
-                                [existingAudioItem.type]: [existingAudioItem],
+                                [existingTranscribibleResource.type]: [
+                                    existingTranscribibleResource,
+                                ],
                             }).fetchFullSnapshotInLegacyFormat(),
                             buildCommandFSA: () =>
                                 commandFsaFactory.build(undefined, {
-                                    outPointMilliseconds:
-                                        existingLineItem.getTimeBounds[1] - 0.0345,
+                                    inPointMilliseconds,
+                                    outPointMilliseconds,
                                 }),
+                            checkError: (error) => {
+                                assertErrorAsExpected(
+                                    error,
+                                    new CommandExecutionError([
+                                        new LineItemNotFoundError({
+                                            inPointMilliseconds,
+                                            outPointMilliseconds,
+                                        }),
+                                    ])
+                                );
+                            },
                         });
                     });
                 });
