@@ -8,6 +8,7 @@ import TestRepositoryProvider from '../../../../../../persistence/repositories/_
 import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestCommandFsaMap } from '../../../../../../test-data/commands';
 import getValidAggregateInstanceForTest from '../../../../../__tests__/utilities/getValidAggregateInstanceForTest';
+import { buildMultilingualTextWithSingleItem } from '../../../../../common/build-multilingual-text-with-single-item';
 import {
     MultilingualText,
     MultilingualTextItem,
@@ -15,6 +16,7 @@ import {
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
 import { AggregateType } from '../../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../../types/DeluxeInMemoryStore';
+import { assertCommandError } from '../../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../../__tests__/command-helpers/assert-command-success';
 import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUserId';
@@ -132,6 +134,46 @@ describe(commandType, () => {
                     [existingAudioItem.type]: [existingAudioItem],
                 }).fetchFullSnapshotInLegacyFormat(),
                 buildValidCommandFSA: () => buildValidFsa(existingAudioItem),
+            });
+        });
+    });
+
+    describe(`when the command is invalid`, () => {
+        describe(`when the audio-visual resource does not exist`, () => {
+            it(`should fail with the expected error`, async () => {
+                await assertCommandError(assertionHelperDependencies, {
+                    systemUserId: dummySystemUserId,
+                    initialState: new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat(),
+                    buildCommandFSA: () => buildValidFsa(existingAudioItem),
+                });
+            });
+        });
+
+        describe(`when the line item already has text in this language`, () => {
+            it(`should fail with the expected errors`, async () => {
+                await assertCommandError(assertionHelperDependencies, {
+                    systemUserId: dummySystemUserId,
+                    initialState: new DeluxeInMemoryStore({
+                        [existingAudioItem.type]: [
+                            existingAudioItem.clone({
+                                transcript: existingAudioItem.transcript.clone({
+                                    items: [
+                                        new TranscriptItem({
+                                            inPointMilliseconds: 0,
+                                            outPointMilliseconds: 0.001,
+                                            speakerInitials: targetSpeakerInitials,
+                                            text: buildMultilingualTextWithSingleItem(
+                                                'I already have text in this language',
+                                                translationLanguageCode
+                                            ),
+                                        }),
+                                    ],
+                                }),
+                            }),
+                        ],
+                    }).fetchFullSnapshotInLegacyFormat(),
+                    buildCommandFSA: () => buildValidFsa(existingAudioItem),
+                });
             });
         });
     });
