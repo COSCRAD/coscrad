@@ -1,6 +1,7 @@
 import { ITranscript } from '@coscrad/api-interfaces';
 import { NestedDataType } from '@coscrad/data-types';
 import { isNumberWithinRange } from '@coscrad/validation-constraints';
+import { isDeepStrictEqual } from 'util';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound, isNotFound } from '../../../../lib/types/not-found';
@@ -57,6 +58,36 @@ export class Transcript extends BaseDomainModel implements ITranscript {
             this.participants = participants.map((p) => new TranscriptParticipant(p));
 
         if (Array.isArray(items)) this.items = items.map((item) => new TranscriptItem(item));
+    }
+
+    hasLineItem(inPointMillisecondsToFind: number, outPointMillisecondsToFind: number): boolean {
+        return this.items.some(({ inPointMilliseconds, outPointMilliseconds }) =>
+            isDeepStrictEqual(
+                { inPointMilliseconds, outPointMilliseconds },
+                {
+                    inPointMilliseconds: inPointMillisecondsToFind,
+                    outPointMilliseconds: outPointMillisecondsToFind,
+                }
+            )
+        );
+    }
+
+    getLineItem(
+        inPointMillisecondsToFind: number,
+        outPointMillisecondsToFind: number
+    ): Maybe<TranscriptItem> {
+        if (!this.hasLineItem(inPointMillisecondsToFind, outPointMillisecondsToFind))
+            return NotFound;
+
+        return this.items.find(({ inPointMilliseconds, outPointMilliseconds }) =>
+            isDeepStrictEqual(
+                { inPointMilliseconds, outPointMilliseconds },
+                {
+                    inPointMilliseconds: inPointMillisecondsToFind,
+                    outPointMilliseconds: outPointMillisecondsToFind,
+                }
+            )
+        );
     }
 
     /**

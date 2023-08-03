@@ -1,8 +1,12 @@
+import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { isNullOrUndefined, isNumberWithinRange } from '@coscrad/validation-constraints';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import { DeepPartial } from '../../../../types/DeepPartial';
 import { ResultOrError } from '../../../../types/ResultOrError';
+import formatTimeRange from '../../../../view-models/presentation/formatTimeRange';
+import { CannotAddDuplicateTranslationError } from '../../../common/entities/errors';
+import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import { ResourceCompositeIdentifier } from '../../../types/ResourceCompositeIdentifier';
 import {
     ADD_LINE_ITEM_TO_TRANSCRIPT,
@@ -45,6 +49,13 @@ export interface ITranscribable {
     ): ResultOrError<ITranscribableBase>;
 
     addLineItemToTranscript(newItemDto: DTO<TranscriptItem>): ResultOrError<ITranscribableBase>;
+
+    translateLineItem(
+        inPointMillisecondsForTranslation: number,
+        outPointMillisecondsForTranslation: number,
+        translation: string,
+        languageCode: LanguageCode
+    ): ResultOrError<ITranscribableBase>;
 
     importLineItemsToTranscript(
         newItemDtos: DTO<TranscriptItem>[]
@@ -102,6 +113,56 @@ export function Transcribable<TBase extends Constructor<ITranscribableBase>>(Bas
 
             return this.safeClone({
                 transcript: updatedTranscript,
+            } as DeepPartial<DTO<this>>);
+        }
+
+        translateLineItem(
+            inPointMillisecondsForTranslation: number,
+            outPointMillisecondsForTranslation: number,
+            translation: string,
+            languageCode: LanguageCode
+        ): ResultOrError<this> {
+            if (
+                !this.transcript.hasLineItem(
+                    inPointMillisecondsForTranslation,
+                    outPointMillisecondsForTranslation
+                )
+            )
+                return new InternalError(
+                    `There is no line item with time stamps: ${formatTimeRange({
+                        inPointMilliseconds: inPointMillisecondsForTranslation,
+                        outPointMilliseconds: outPointMillisecondsForTranslation,
+                    })}`
+                );
+
+            const existingLineItem = this.transcript.getLineItem(
+                inPointMillisecondsForTranslation,
+                outPointMillisecondsForTranslation
+            ) as TranscriptItem;
+
+            const newTextItem = new MultilingualTextItem({
+                text: translation,
+                languageCode,
+                role: MultilingualTextItemRole.freeTranslation,
+            });
+
+            if (existingLineItem.text.has(languageCode))
+                return new CannotAddDuplicateTranslationError(newTextItem, existingLineItem.text);
+
+            const textUpdateResult = existingLineItem.text.translate(newTextItem);
+
+            if (isInternalError(textUpdateResult)) return textUpdateResult;
+
+            const newLineItem = existingLineItem.clone({
+                text: textUpdateResult,
+            });
+
+            return this.safeClone({
+                transcript: this.transcript.clone({
+                    items: this.transcript.items.map((item) =>
+                        item.isColocatedWith(existingLineItem) ? newLineItem : item
+                    ),
+                }),
             } as DeepPartial<DTO<this>>);
         }
 
