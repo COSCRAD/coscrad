@@ -74,21 +74,25 @@ const existingAudioItem = getValidAggregateInstanceForTest(AggregateType.audioIt
     transcript: existingTranscript,
 });
 
+const existingVideoItem = getValidAggregateInstanceForTest(AggregateType.video).clone({
+    transcript: existingTranscript,
+});
+
 const translation = `this is what was said (in English)`;
 
 const translationLanguageCode = LanguageCode.English;
 
 const buildValidFsa = (
-    existingTranscribableResource: AudioItem | Video
+    existingTranscribibleResource: AudioItem | Video
 ): CommandFSA<TranslateLineItem> =>
     clonePlainObjectWithOverrides(dummyFsa, {
         payload: {
             aggregateCompositeIdentifier:
-                existingTranscribableResource.getCompositeIdentifier() as AudioVisualCompositeIdentifier,
+                existingTranscribibleResource.getCompositeIdentifier() as AudioVisualCompositeIdentifier,
             inPointMilliseconds:
-                existingTranscribableResource.transcript.items[0].inPointMilliseconds,
+                existingTranscribibleResource.transcript.items[0].inPointMilliseconds,
             outPointMilliseconds:
-                existingTranscribableResource.transcript.items[0].outPointMilliseconds,
+                existingTranscribibleResource.transcript.items[0].outPointMilliseconds,
             translation,
             languageCode: translationLanguageCode,
         },
@@ -130,87 +134,104 @@ describe(commandType, () => {
         await testRepositoryProvider.testTeardown();
     });
 
+    const existingTranscribibleResources = [existingAudioItem, existingVideoItem];
+
+    const buildTranscribileResourceDescription = (
+        existingTranscribibleResource: AudioItem | Video
+    ) => `when transcribing a: ${existingTranscribibleResource.type}`;
+
     describe(`when the command is valid`, () => {
-        it(`should succeed with the expected database updates`, async () => {
-            await assertCommandSuccess(assertionHelperDependencies, {
-                systemUserId: dummySystemUserId,
-                initialState: new DeluxeInMemoryStore({
-                    [existingAudioItem.type]: [existingAudioItem],
-                }).fetchFullSnapshotInLegacyFormat(),
-                buildValidCommandFSA: () => buildValidFsa(existingAudioItem),
+        existingTranscribibleResources.forEach((existingTranscribibleResource) => {
+            describe(buildTranscribileResourceDescription(existingTranscribibleResource), () => {
+                it(`should succeed with the expected database updates`, async () => {
+                    await assertCommandSuccess(assertionHelperDependencies, {
+                        systemUserId: dummySystemUserId,
+                        initialState: new DeluxeInMemoryStore({
+                            [existingTranscribibleResource.type]: [existingTranscribibleResource],
+                        }).fetchFullSnapshotInLegacyFormat(),
+                        buildValidCommandFSA: () => buildValidFsa(existingTranscribibleResource),
+                    });
+                });
             });
         });
     });
 
     describe(`when the command is invalid`, () => {
-        const commandFsaFactory = new DummyCommandFsaFactory(() =>
-            buildValidFsa(existingAudioItem)
-        );
+        existingTranscribibleResources.forEach((existingTranscribibleResource) => {
+            const commandFsaFactory = new DummyCommandFsaFactory(() =>
+                buildValidFsa(existingTranscribibleResource)
+            );
 
-        describe(`when the audio-visual resource does not exist`, () => {
-            it(`should fail with the expected error`, async () => {
-                await assertCommandError(assertionHelperDependencies, {
-                    systemUserId: dummySystemUserId,
-                    initialState: new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat(),
-                    buildCommandFSA: () => buildValidFsa(existingAudioItem),
+            describe(buildTranscribileResourceDescription(existingTranscribibleResource), () => {
+                describe(`when the audio-visual resource does not exist`, () => {
+                    it(`should fail with the expected error`, async () => {
+                        await assertCommandError(assertionHelperDependencies, {
+                            systemUserId: dummySystemUserId,
+                            initialState: new DeluxeInMemoryStore(
+                                {}
+                            ).fetchFullSnapshotInLegacyFormat(),
+                            buildCommandFSA: () => buildValidFsa(existingTranscribibleResource),
+                        });
+                    });
                 });
-            });
-        });
 
-        describe(`when the line item already has text in this language`, () => {
-            it(`should fail with the expected errors`, async () => {
-                await assertCommandError(assertionHelperDependencies, {
-                    systemUserId: dummySystemUserId,
-                    initialState: new DeluxeInMemoryStore({
-                        [existingAudioItem.type]: [
-                            existingAudioItem.clone({
-                                transcript: existingAudioItem.transcript.clone({
-                                    items: [
-                                        new TranscriptItem({
-                                            inPointMilliseconds: 0,
-                                            outPointMilliseconds: 0.001,
-                                            speakerInitials: targetSpeakerInitials,
-                                            text: buildMultilingualTextWithSingleItem(
-                                                'I already have text in this language',
-                                                translationLanguageCode
-                                            ),
+                describe(`when the line item already has text in this language`, () => {
+                    it(`should fail with the expected errors`, async () => {
+                        await assertCommandError(assertionHelperDependencies, {
+                            systemUserId: dummySystemUserId,
+                            initialState: new DeluxeInMemoryStore({
+                                [existingTranscribibleResource.type]: [
+                                    existingTranscribibleResource.clone({
+                                        transcript: existingTranscribibleResource.transcript.clone({
+                                            items: [
+                                                new TranscriptItem({
+                                                    inPointMilliseconds: 0,
+                                                    outPointMilliseconds: 0.001,
+                                                    speakerInitials: targetSpeakerInitials,
+                                                    text: buildMultilingualTextWithSingleItem(
+                                                        'I already have text in this language',
+                                                        translationLanguageCode
+                                                    ),
+                                                }),
+                                            ],
                                         }),
-                                    ],
+                                    }),
+                                ],
+                            }).fetchFullSnapshotInLegacyFormat(),
+                            buildCommandFSA: () => buildValidFsa(existingTranscribibleResource),
+                        });
+                    });
+                });
+
+                describe(`when the in point does not match an existing line item`, () => {
+                    it(`should fail with the expected errors`, async () => {
+                        await assertCommandError(assertionHelperDependencies, {
+                            systemUserId: dummySystemUserId,
+                            initialState: new DeluxeInMemoryStore({
+                                [existingAudioItem.type]: [existingAudioItem],
+                            }).fetchFullSnapshotInLegacyFormat(),
+                            buildCommandFSA: () =>
+                                commandFsaFactory.build(undefined, {
+                                    inPointMilliseconds: existingLineItem.getTimeBounds[0] + 0.0345,
                                 }),
-                            }),
-                        ],
-                    }).fetchFullSnapshotInLegacyFormat(),
-                    buildCommandFSA: () => buildValidFsa(existingAudioItem),
+                        });
+                    });
                 });
-            });
-        });
 
-        describe(`when the in point does not match an existing line item`, () => {
-            it(`should fail with the expected errors`, async () => {
-                await assertCommandError(assertionHelperDependencies, {
-                    systemUserId: dummySystemUserId,
-                    initialState: new DeluxeInMemoryStore({
-                        [existingAudioItem.type]: [existingAudioItem],
-                    }).fetchFullSnapshotInLegacyFormat(),
-                    buildCommandFSA: () =>
-                        commandFsaFactory.build(undefined, {
-                            inPointMilliseconds: existingLineItem.getTimeBounds[0] + 0.0345,
-                        }),
-                });
-            });
-        });
-
-        describe(`when the out point does not match an existing line item`, () => {
-            it(`should fail with the expected errors`, async () => {
-                await assertCommandError(assertionHelperDependencies, {
-                    systemUserId: dummySystemUserId,
-                    initialState: new DeluxeInMemoryStore({
-                        [existingAudioItem.type]: [existingAudioItem],
-                    }).fetchFullSnapshotInLegacyFormat(),
-                    buildCommandFSA: () =>
-                        commandFsaFactory.build(undefined, {
-                            outPointMilliseconds: existingLineItem.getTimeBounds[1] - 0.0345,
-                        }),
+                describe(`when the out point does not match an existing line item`, () => {
+                    it(`should fail with the expected errors`, async () => {
+                        await assertCommandError(assertionHelperDependencies, {
+                            systemUserId: dummySystemUserId,
+                            initialState: new DeluxeInMemoryStore({
+                                [existingAudioItem.type]: [existingAudioItem],
+                            }).fetchFullSnapshotInLegacyFormat(),
+                            buildCommandFSA: () =>
+                                commandFsaFactory.build(undefined, {
+                                    outPointMilliseconds:
+                                        existingLineItem.getTimeBounds[1] - 0.0345,
+                                }),
+                        });
+                    });
                 });
             });
         });
@@ -251,9 +272,7 @@ describe(commandType, () => {
                             await assertCommandFailsDueToTypeError(
                                 assertionHelperDependencies,
                                 { propertyName, invalidValue },
-                                commandFsaFactory.build(buildDummyUuid(789), {
-                                    [propertyName]: invalidValue,
-                                })
+                                buildValidFsa(existingAudioItem)
                             );
                         });
                     });
