@@ -8,7 +8,6 @@ export type CategorizableTypeAndSelectedIds = { [K in CategorizableType]?: strin
 interface CategorizablesOfMultipleTypeContainerProps<T> {
     members: CategorizableCompositeIdentifier[];
     detailPresenterFactory: ICategorizableDetailPresenterFactory<T>;
-    heading?: string;
 }
 
 /**
@@ -46,10 +45,8 @@ const collectResourceTypesAndSelectedIds = (members: CategorizableCompositeIdent
 export const CategorizablesOfMultipleTypeContainer = <T,>({
     members,
     detailPresenterFactory,
-    heading,
 }: CategorizablesOfMultipleTypeContainerProps<T>): JSX.Element => (
-    <div>
-        <h3>{heading || 'Selected Resources'}</h3>
+    <>
         {Object.entries(collectResourceTypesAndSelectedIds(members)).map(
             ([categorizableType, selectedIds]: [CategorizableType, string[]]) => (
                 <SelectedCategorizablesOfSingleTypeContainer
@@ -63,5 +60,5 @@ export const CategorizablesOfMultipleTypeContainer = <T,>({
                 />
             )
         )}
-    </div>
+    </>
 );
