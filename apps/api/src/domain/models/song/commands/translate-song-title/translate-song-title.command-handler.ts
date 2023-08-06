@@ -55,7 +55,7 @@ export class TranslateSongTitleCommandHandler extends BaseUpdateCommandHandler<S
         return song.translateTitle(translation, languageCode);
     }
 
-    protected buildEvent(command: ICommand, eventId: string, userId: string): BaseEvent {
-        return new SongTitleTranslated(command, eventId, userId)
+    protected buildEvent(command: TranslateSongTitle, eventId: string, userId: string): BaseEvent {
+        return new SongTitleTranslated(command, eventId, userId);
     }
 }

@@ -1457,7 +1457,23 @@
             {
                 "type": "song",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-                "eventHistory": [],
+                "eventHistory": [
+                    {
+                        "payload": {
+                            "aggregateCompositeIdentifier": {
+                                "type": "song",
+                                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
+                            },
+                            "title": "Song title in language",
+                            "languageCodeForTitle": "clc",
+                            "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav"
+                        },
+                        "meta": {
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009"
+                        },
+                        "type": "SONG_CREATED"
+                    }
+                ],
                 "published": true,
                 "queryAccessControlList": {
                     "allowedUserIds": [],
@@ -1499,7 +1515,23 @@
             {
                 "type": "song",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-                "eventHistory": [],
+                "eventHistory": [
+                    {
+                        "payload": {
+                            "aggregateCompositeIdentifier": {
+                                "type": "song",
+                                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002"
+                            },
+                            "title": "Unpublished Song Title (lang)",
+                            "languageCodeForTitle": "clc",
+                            "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav"
+                        },
+                        "meta": {
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009"
+                        },
+                        "type": "SONG_CREATED"
+                    }
+                ],
                 "published": false,
                 "queryAccessControlList": {
                     "allowedUserIds": [

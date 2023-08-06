@@ -1,5 +1,5 @@
 import { AggregateType } from '@coscrad/api-interfaces';
-import { CommandHandler, ICommand } from '@coscrad/commands';
+import { CommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
 import { buildMultilingualTextWithSingleItem } from '../../../../../../domain/common/build-multilingual-text-with-single-item';
 import { Valid } from '../../../../../../domain/domainModelValidators/Valid';
@@ -61,7 +61,11 @@ export class ImportLineItemsToTranscriptCommandHandler extends BaseUpdateCommand
         ) as unknown as TranscribableResource;
     }
 
-    protected buildEvent(command: ICommand, eventId: string, userId: string): BaseEvent {
+    protected buildEvent(
+        command: ImportLineItemsToTranscript,
+        eventId: string,
+        userId: string
+    ): BaseEvent {
         return new LineItemsImportedToTranscript(command, eventId, userId);
     }
 }

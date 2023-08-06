@@ -1,11 +1,17 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
+import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
+import { dummySystemUserId } from '../../../domain/models/__tests__/utilities/dummySystemUserId';
 import { Resource } from '../../../domain/models/resource.entity';
+import { ResourcePublished } from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../domain/types/DeluxeInMemoryStore';
 import { InMemorySnapshotOfResources, ResourceType } from '../../../domain/types/ResourceType';
-import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { clonePlainObjectWithOverrides } from '../../../lib/utilities/clonePlainObjectWithOverrides';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { IEventRepository } from '../../../persistence/repositories/arango-command-repository-for-aggregate';
+import { ArangoEventRepository } from '../../../persistence/repositories/arango-event-repository';
 import buildTestData from '../../../test-data/buildTestData';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import buildViewModelPathForResourceType from '../utilities/buildIndexPathForResourceType';
@@ -17,6 +23,8 @@ describe('When fetching multiple resources', () => {
     let app: INestApplication;
 
     let testRepositoryProvider: TestRepositoryProvider;
+
+    let eventRepository: IEventRepository;
 
     const testData = buildTestData();
 
@@ -40,9 +48,12 @@ describe('When fetching multiple resources', () => {
         ({ app, testRepositoryProvider } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
         }));
+
+        eventRepository = app.get(ArangoEventRepository);
     });
 
-    Object.values(ResourceType).forEach((resourceType) => {
+    Object.values(ResourceType)
+    .forEach((resourceType) => {
         const endpointUnderTest = `/${buildViewModelPathForResourceType(resourceType)}`;
 
         describe(`GET ${endpointUnderTest}`, () => {
@@ -58,6 +69,29 @@ describe('When fetching multiple resources', () => {
                 beforeEach(async () => {
                     await testRepositoryProvider.addResourcesOfManyTypes(
                         testDataWithAllResourcesPublished
+                    );
+
+                    const songIds = testDataWithAllResourcesPublished.song
+                        .map((song) => song.getCompositeIdentifier())
+                        .map(({ id }) => id);
+
+                    // TODO Make this a more natural part of the test setup
+                    const songPublishedEvents = songIds.map(
+                        (id, index) =>
+                            new ResourcePublished(
+                                {
+                                    aggregateCompositeIdentifier: {
+                                        id,
+                                        type: AggregateType.song,
+                                    },
+                                },
+                                buildDummyUuid(100 + index),
+                                dummySystemUserId
+                            )
+                    );
+
+                    await Promise.all(
+                        songPublishedEvents.map((event) => eventRepository.appendEvent(event))
                     );
 
                     await testRepositoryProvider.getTagRepository().createMany(tagTestData);
@@ -95,6 +129,19 @@ describe('When fetching multiple resources', () => {
                         instance.clone({
                             id: `UNPUBLISHED-00${index + 1}`,
                             published: false,
+                            // TODO Seed state via commands or events
+                            eventHistory:
+                                instance.type === AggregateType.song
+                                    ? [
+                                          clonePlainObjectWithOverrides(instance.eventHistory[0], {
+                                              payload: {
+                                                  aggregateCompositeIdentifier: {
+                                                      id: `UNPUBLISHED-00${index + 1}`,
+                                                  },
+                                              },
+                                          }),
+                                      ]
+                                    : [],
                         })
                     );
 
@@ -110,6 +157,31 @@ describe('When fetching multiple resources', () => {
                             },
                             [AggregateType.tag]: tagTestData,
                         }).fetchFullSnapshotInLegacyFormat()
+                    );
+
+                    // Why are there 2 creation events for some songs in the test setup?
+
+                    const publishedSongIds = publishedResourcesToAdd
+                        .map((song) => song.getCompositeIdentifier())
+                        .map(({ id }) => id);
+
+                    // TODO Make this a more natural part of the test setup
+                    const songPublishedEvents = publishedSongIds.map(
+                        (id, index) =>
+                            new ResourcePublished(
+                                {
+                                    aggregateCompositeIdentifier: {
+                                        id,
+                                        type: AggregateType.song,
+                                    },
+                                },
+                                buildDummyUuid(100 + index),
+                                dummySystemUserId
+                            )
+                    );
+
+                    await Promise.all(
+                        songPublishedEvents.map((event) => eventRepository.appendEvent(event))
                     );
                 });
 

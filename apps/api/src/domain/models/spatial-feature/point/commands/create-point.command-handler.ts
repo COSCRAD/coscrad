@@ -1,5 +1,5 @@
 import { AggregateType, GeometricFeatureType, ResourceType } from '@coscrad/api-interfaces';
-import { CommandHandler, ICommand } from '@coscrad/commands';
+import { CommandHandler } from '@coscrad/commands';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { Valid } from '../../../../domainModelValidators/Valid';
@@ -56,7 +56,7 @@ export class CreatePointCommandHandler extends BaseCreateCommandHandler<Point> {
         return point.validateExternalState(externalState);
     }
 
-    protected buildEvent(command: ICommand, eventId: string, userId: string): BaseEvent {
+    protected buildEvent(command: CreatePoint, eventId: string, userId: string): BaseEvent {
         return new PointCreated(command, eventId, userId);
     }
 }

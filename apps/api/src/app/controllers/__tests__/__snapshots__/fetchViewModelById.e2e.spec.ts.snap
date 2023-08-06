@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/audioItems/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
+exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/audioItems/:id when the resource is published when an resource with the id exists should return the expected response 1`] = `
 {
   "actions": [],
   "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
@@ -22,7 +22,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
 }
 `;
 
-exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/bibliographicReferences/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
+exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/bibliographicReferences/:id when the resource is published when an resource with the id exists should return the expected response 1`] = `
 {
   "actions": [],
   "data": {
@@ -104,7 +104,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
 }
 `;
 
-exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/books/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
+exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/books/:id when the resource is published when an resource with the id exists should return the expected response 1`] = `
 {
   "actions": [],
   "author": "John Doeburg",
@@ -185,7 +185,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
 }
 `;
 
-exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/mediaItems/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
+exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/mediaItems/:id when the resource is published when an resource with the id exists should return the expected response 1`] = `
 {
   "actions": [],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -250,7 +250,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
 }
 `;
 
-exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/photographs/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
+exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/photographs/:id when the resource is published when an resource with the id exists should return the expected response 1`] = `
 {
   "actions": [],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
@@ -301,7 +301,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
 }
 `;
 
-exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/playlists/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
+exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/playlists/:id when the resource is published when an resource with the id exists should return the expected response 1`] = `
 {
   "actions": [],
   "episodes": [
@@ -354,81 +354,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
 }
 `;
 
-exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/songs/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
-{
-  "actions": [],
-  "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
-  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-  "lengthMilliseconds": 3500,
-  "lyrics": {
-    "items": [
-      {
-        "languageCode": "en",
-        "role": "original",
-        "text": "Mary had a little lamb, little lamb.",
-      },
-    ],
-  },
-  "name": {
-    "items": [
-      {
-        "languageCode": "clc",
-        "role": "original",
-        "text": "Song title in language",
-      },
-      {
-        "languageCode": "en",
-        "role": "free translation",
-        "text": "Mary had a little lamb (English)",
-      },
-    ],
-  },
-  "startMilliseconds": 0,
-  "tags": [
-    {
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
-      "label": "legends",
-      "members": [
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-          "type": "vocabularyList",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101",
-          "type": "spatialFeature",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112001",
-          "type": "note",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-          "type": "note",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-          "type": "mediaItem",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-          "type": "song",
-        },
-      ],
-      "name": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "legends",
-          },
-        ],
-      },
-    },
-  ],
-}
-`;
-
-exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/spatialFeatures/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
+exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/spatialFeatures/:id when the resource is published when an resource with the id exists should return the expected response 1`] = `
 {
   "actions": [],
   "geometry": {
@@ -505,7 +431,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
 }
 `;
 
-exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/terms/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
+exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/terms/:id when the resource is published when an resource with the id exists should return the expected response 1`] = `
 {
   "actions": [],
   "contributor": "",
@@ -576,7 +502,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
 }
 `;
 
-exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/videos/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
+exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/videos/:id when the resource is published when an resource with the id exists should return the expected response 1`] = `
 {
   "actions": [],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
@@ -598,7 +524,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
 }
 `;
 
-exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/vocabularyLists/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
+exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/vocabularyLists/:id when the resource is published when an resource with the id exists should return the expected response 1`] = `
 {
   "actions": [],
   "entries": [

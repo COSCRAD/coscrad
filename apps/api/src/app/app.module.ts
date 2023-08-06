@@ -2,6 +2,7 @@ import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthorizationModule } from '../authorization/authorization.module';
+import { EventModule } from '../domain/common';
 import { IdGenerationModule } from '../lib/id-generation/id-generation.module';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
 import { PersistenceModule } from '../persistence/persistence.module';
@@ -41,6 +42,7 @@ import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
         AuthorizationModule,
         PersistenceModule.forRootAsync(),
         CommandModule,
+        EventModule,
         IdGenerationModule,
         UserManagementModule,
         TagModule,

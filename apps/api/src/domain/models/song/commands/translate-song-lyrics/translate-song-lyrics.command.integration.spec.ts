@@ -1,37 +1,32 @@
-import {
-    AggregateType,
-    FluxStandardAction,
-    LanguageCode,
-    MultilingualTextItemRole,
-} from '@coscrad/api-interfaces';
-import { CommandHandlerService } from '@coscrad/commands';
+import { AggregateType, FluxStandardAction, LanguageCode } from '@coscrad/api-interfaces';
+import { Ack, CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
-import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
-import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { isNotFound } from '../../../../../lib/types/not-found';
+import { clonePlainObjectWithOverrides } from '../../../../../lib/utilities/clonePlainObjectWithOverrides';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { buildTestCommandFsaMap } from '../../../../../test-data/commands';
 import { DTO } from '../../../../../types/DTO';
 import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
-import {
-    MultilingualText,
-    MultilingualTextItem,
-} from '../../../../common/entities/multilingual-text';
+import { AggregateId } from '../../../../types/AggregateId';
+import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
-import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
 import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { NoLyricsToTranslateError } from '../../errors';
 import { SongLyricsHaveAlreadyBeenTranslatedToGivenLanguageError } from '../../errors/SongLyricsAlreadyHaveBeenTranslatedToGivenLanguageError';
 import { Song } from '../../song.entity';
+import { AddLyricsForSong } from '../add-lyrics-for-song';
+import { ADD_LYRICS_FOR_SONG } from './constants';
 import { TranslateSongLyrics } from './translate-song-lyrics.command';
 
 const commandType = 'TRANSLATE_SONG_LYRICS';
@@ -44,18 +39,19 @@ const translationLanguageCode = LanguageCode.English;
 
 const existingLyrics = buildMultilingualTextWithSingleItem('falalala', existingLyricsLanguage);
 
-const existingSong = getValidAggregateInstanceForTest(AggregateType.song).clone({
-    lyrics: existingLyrics,
-});
-
-const buildValidCommandFSA = (): FluxStandardAction<DTO<TranslateSongLyrics>> => ({
+const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<TranslateSongLyrics>> => ({
     type: commandType,
     payload: {
-        aggregateCompositeIdentifier: existingSong.getCompositeIdentifier(),
+        aggregateCompositeIdentifier: {
+            type: AggregateType.song,
+            id,
+        },
         translation,
         languageCode: translationLanguageCode,
     },
 });
+
+const dummyCreateSongFsa = buildTestCommandFsaMap().get(`CREATE_SONG`);
 
 describe(commandType, () => {
     let app: INestApplication;
@@ -88,53 +84,89 @@ describe(commandType, () => {
     });
 
     beforeEach(async () => {
-        await testRepositoryProvider.deleteAllResourcesOfGivenType(AggregateType.song);
+        await testRepositoryProvider.testSetup();
     });
 
     describe(`when the command is valid`, () => {
         it(`should succeed with the expected updates to the database`, async () => {
-            await assertCommandSuccess(commandAssertionDependencies, {
-                systemUserId: dummySystemUserId,
-                initialState: new DeluxeInMemoryStore({
-                    [AggregateType.song]: [existingSong],
-                }).fetchFullSnapshotInLegacyFormat(),
-                buildValidCommandFSA,
-                checkStateOnSuccess: async ({
-                    aggregateCompositeIdentifier: { id: songId },
-                    languageCode,
-                }: TranslateSongLyrics) => {
-                    const searchResult = await testRepositoryProvider
-                        .forResource(AggregateType.song)
-                        .fetchById(songId);
+            // Arrange
+            const generatedId = await idManager.generate();
 
-                    expect(searchResult).toBeInstanceOf(Song);
-
-                    const song = searchResult as Song;
-
-                    const doSongLyricsHaveTranslation = !isNotFound(
-                        song.lyrics.getTranslation(languageCode)
-                    );
-
-                    expect(doSongLyricsHaveTranslation).toBe(true);
-
-                    assertEventRecordPersisted(song, `SONG_LYRICS_TRANSLATED`, dummySystemUserId);
-                },
+            const createSongFsa = clonePlainObjectWithOverrides(dummyCreateSongFsa, {
+                payload: { aggregateCompositeIdentifier: { id: generatedId } },
             });
+
+            const commandMeta = { userId: dummySystemUserId };
+
+            const createResult = await commandHandlerService.execute(createSongFsa, commandMeta);
+
+            expect(createResult).toBe(Ack);
+
+            const addLyricsCommand: AddLyricsForSong = {
+                aggregateCompositeIdentifier: {
+                    type: AggregateType.song,
+                    id: generatedId,
+                },
+                lyrics: existingLyrics.getOriginalTextItem().text,
+                languageCode: existingLyricsLanguage,
+            };
+
+            const addLyricsResult = await commandHandlerService.execute(
+                {
+                    type: ADD_LYRICS_FOR_SONG,
+                    payload: addLyricsCommand,
+                },
+                commandMeta
+            );
+
+            expect(addLyricsResult).toBe(Ack);
+
+            // TODO rename
+            const validFsa = buildValidCommandFSA(generatedId);
+
+            // Act
+            const result = await commandHandlerService.execute(validFsa, commandMeta);
+
+            // Assert
+            // verify command status
+            expect(result).toBe(Ack);
+
+            // check state on success
+            const searchResult = await testRepositoryProvider
+                .forResource(AggregateType.song)
+                .fetchById(validFsa.payload.aggregateCompositeIdentifier.id);
+
+            expect(searchResult).toBeInstanceOf(Song);
+
+            const song = searchResult as Song;
+
+            const doSongLyricsHaveTranslation = !isNotFound(
+                song.lyrics.getTranslation(translationLanguageCode)
+            );
+
+            expect(doSongLyricsHaveTranslation).toBe(true);
+
+            assertEventRecordPersisted(song, `SONG_LYRICS_TRANSLATED`, dummySystemUserId);
         });
     });
 
     describe(`when the command is invalid`, () => {
         describe(`when the song with the given composite identifier does not exist`, () => {
             it(`should fail with the expected errors`, async () => {
+                const unknownId = buildDummyUuid(123);
+
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     initialState: new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat(),
-                    buildCommandFSA: buildValidCommandFSA,
+                    buildCommandFSA: () => buildValidCommandFSA(unknownId),
                     checkError: (error) => {
                         assertErrorAsExpected(
                             error,
                             new CommandExecutionError([
-                                new AggregateNotFoundError(existingSong.getCompositeIdentifier()),
+                                new AggregateNotFoundError({
+                                    type: AggregateType.song,
+                                    id: unknownId,
+                                }),
                             ])
                         );
                     },
@@ -144,20 +176,32 @@ describe(commandType, () => {
 
         describe(`when the song does not have any lyrics to translate`, () => {
             it(`should fail with the expected errors`, async () => {
+                const newId = await idManager.generate();
+
+                const validCommandFsa = buildValidCommandFSA(newId);
+
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
-                    initialState: new DeluxeInMemoryStore({
-                        [AggregateType.song]: [
-                            existingSong.clone({
-                                lyrics: undefined,
-                            }),
-                        ],
-                    }).fetchFullSnapshotInLegacyFormat(),
-                    buildCommandFSA: buildValidCommandFSA,
+                    // Create the song without adding any lyrics
+                    seedInitialState: async () => {
+                        const createSongFsa = clonePlainObjectWithOverrides(dummyCreateSongFsa, {
+                            payload: { aggregateCompositeIdentifier: { id: newId } },
+                        });
+
+                        const commandMeta = { userId: dummySystemUserId };
+
+                        const createResult = await commandHandlerService.execute(
+                            createSongFsa,
+                            commandMeta
+                        );
+
+                        expect(createResult).toBe(Ack);
+                    },
+                    buildCommandFSA: () => validCommandFsa,
                     checkError: (error) => {
                         assertErrorAsExpected(
                             error,
-                            new CommandExecutionError([new NoLyricsToTranslateError(existingSong)])
+                            new CommandExecutionError([new NoLyricsToTranslateError(newId)])
                         );
                     },
                 });
@@ -166,28 +210,62 @@ describe(commandType, () => {
 
         describe(`when the song already has a translation in the given language`, () => {
             it(`should fail with the expected errors`, async () => {
+                const newId = await idManager.generate();
+
+                const commandFsa = buildValidCommandFSA(newId);
+
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
-                    initialState: new DeluxeInMemoryStore({
-                        [AggregateType.song]: [
-                            existingSong.clone({
-                                lyrics: existingLyrics.translate(
-                                    new MultilingualTextItem({
-                                        text: translation,
-                                        languageCode: translationLanguageCode,
-                                        role: MultilingualTextItemRole.freeTranslation,
-                                    })
-                                ) as MultilingualText,
-                            }),
-                        ],
-                    }).fetchFullSnapshotInLegacyFormat(),
-                    buildCommandFSA: buildValidCommandFSA,
+                    seedInitialState: async () => {
+                        const createSongFsa = clonePlainObjectWithOverrides(dummyCreateSongFsa, {
+                            payload: { aggregateCompositeIdentifier: { id: newId } },
+                        });
+
+                        const commandMeta = { userId: dummySystemUserId };
+
+                        // create the song
+                        const createResult = await commandHandlerService.execute(
+                            createSongFsa,
+                            commandMeta
+                        );
+
+                        expect(createResult).toBe(Ack);
+
+                        const addLyricsCommand: AddLyricsForSong = {
+                            aggregateCompositeIdentifier: {
+                                type: AggregateType.song,
+                                id: newId,
+                            },
+                            lyrics: existingLyrics.getOriginalTextItem().text,
+                            languageCode: existingLyricsLanguage,
+                        };
+
+                        // add song lyrics
+                        const addLyricsResult = await commandHandlerService.execute(
+                            {
+                                type: ADD_LYRICS_FOR_SONG,
+                                payload: addLyricsCommand,
+                            },
+                            commandMeta
+                        );
+
+                        expect(addLyricsResult).toBe(Ack);
+
+                        // translate lyrics for the first time
+                        const firstTranslateLyricsResult = await commandHandlerService.execute(
+                            commandFsa,
+                            commandMeta
+                        );
+
+                        expect(firstTranslateLyricsResult).toBe(Ack);
+                    },
+                    buildCommandFSA: () => commandFsa,
                     checkError: (error) => {
                         assertErrorAsExpected(
                             error,
                             new CommandExecutionError([
                                 new SongLyricsHaveAlreadyBeenTranslatedToGivenLanguageError(
-                                    existingSong,
+                                    newId,
                                     translationLanguageCode
                                 ),
                             ])
@@ -205,7 +283,7 @@ describe(commandType, () => {
                             await assertCommandFailsDueToTypeError(
                                 commandAssertionDependencies,
                                 { propertyName, invalidValue },
-                                buildValidCommandFSA()
+                                buildValidCommandFSA(buildDummyUuid(34))
                             );
                         });
                     });
