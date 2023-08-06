@@ -1,5 +1,6 @@
 import { isDeepStrictEqual } from 'util';
 import createTestModule from '../../../app/controllers/__tests__/createTestModule';
+import { CoscradEventFactory } from '../../../domain/common';
 import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { Photograph } from '../../../domain/models/photograph/entities/photograph.entity';
 import { Term } from '../../../domain/models/term/entities/term.entity';
@@ -68,7 +69,11 @@ describe.skip(`RemoveBaseDigitalAssetUrl`, () => {
              * `TestDatabaseProvider`, we will just leverage this existing logic for
              * test teardown.
              */
-            testRepositoryProvider = new TestRepositoryProvider(testDatabaseProvider);
+            testRepositoryProvider = new TestRepositoryProvider(
+                testDatabaseProvider,
+                // We don't need the event factory for this test
+                new CoscradEventFactory([])
+            );
 
             testQueryRunner = new ArangoQueryRunner(testDatabaseProvider);
         });

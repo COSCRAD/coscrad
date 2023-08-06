@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
+import { CoscradEventFactory } from '../../domain/common';
 import getInstanceFactoryForResource from '../../domain/factories/getInstanceFactoryForResource';
 import buildInstanceFactory from '../../domain/factories/utilities/buildInstanceFactory';
 import { EdgeConnection } from '../../domain/models/context/edge-connection.entity';
 import { Resource } from '../../domain/models/resource.entity';
+import { Song } from '../../domain/models/song/song.entity';
 import { Tag } from '../../domain/models/tag/tag.entity';
 import { CoscradUserGroup } from '../../domain/models/user-management/group/entities/coscrad-user-group.entity';
 import { ICategoryRepository } from '../../domain/repositories/interfaces/category-repository.interface';
@@ -17,13 +19,22 @@ import mapArangoEdgeDocumentToEdgeConnectionDTO from '../database/utilities/mapA
 import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEdgeConnectionDTOToArangoEdgeDocument from '../database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
 import mapEntityDTOToDatabaseDTO from '../database/utilities/mapEntityDTOToDatabaseDTO';
-import { ArangoCoscradUserRepository } from './arango-coscrad-user-repository';
-import { ArangoRepositoryForAggregate } from './arango-repository-for-aggregate';
 import ArangoCategoryRepository from './ArangoCategoryRepository';
+import { ArangoSongCommandRepository } from './arango-command-repository-for-aggregate';
+import { ArangoCoscradUserRepository } from './arango-coscrad-user-repository';
+import { ArangoEventRepository } from './arango-event-repository';
+import { ArangoRepositoryForAggregate } from './arango-repository-for-aggregate';
 
 @Injectable()
 export class ArangoRepositoryProvider implements IRepositoryProvider {
-    constructor(protected databaseProvider: ArangoDatabaseProvider) {}
+    private readonly eventRepository: ArangoEventRepository;
+
+    constructor(
+        protected databaseProvider: ArangoDatabaseProvider,
+        coscradEventFactory: CoscradEventFactory
+    ) {
+        this.eventRepository = new ArangoEventRepository(databaseProvider, coscradEventFactory);
+    }
 
     getEdgeConnectionRepository() {
         return new ArangoRepositoryForAggregate<EdgeConnection>(
@@ -64,12 +75,21 @@ export class ArangoRepositoryProvider implements IRepositoryProvider {
     }
 
     forResource<TResource extends Resource>(resourceType: ResourceType) {
-        return new ArangoRepositoryForAggregate<TResource>(
+        const snapshotRepository = new ArangoRepositoryForAggregate<TResource>(
             this.databaseProvider,
             getArangoCollectionIDFromResourceType(resourceType),
             getInstanceFactoryForResource(resourceType),
             mapDatabaseDTOToEntityDTO,
             mapEntityDTOToDatabaseDTO
         );
+
+        if (resourceType === ResourceType.song) {
+            return new ArangoSongCommandRepository(
+                this.eventRepository,
+                snapshotRepository as unknown as IRepositoryForAggregate<Song>
+            ) as unknown as ArangoRepositoryForAggregate<TResource>;
+        }
+
+        return snapshotRepository;
     }
 }

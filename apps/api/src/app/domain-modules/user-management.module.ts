@@ -6,6 +6,7 @@ import {
 } from '../../domain/models/shared/common-commands';
 import { GrantResourceReadAccessToUser } from '../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command';
 import { GrantResourceReadAccessToUserCommandHandler } from '../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command-handler';
+import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import {
     AddUserToGroup,
     AddUserToGroupCommandHandler,
@@ -45,6 +46,11 @@ import { CoscradUserController } from '../controllers/coscrad-user.controller';
         GrantResourceReadAccessToUserCommandHandler,
         PublishResource,
         PublishResourceCommandHandler,
+        // Events
+        ...[ResourcePublished].map((ctor) => ({
+            provide: ctor,
+            useValue: ctor,
+        })),
     ],
 })
 export class UserManagementModule {}

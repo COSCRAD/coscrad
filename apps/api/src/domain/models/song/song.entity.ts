@@ -1,26 +1,45 @@
-import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import {
+    AGGREGATE_COMPOSITE_IDENTIFIER,
+    AggregateType,
+    ICommandBase,
+    LanguageCode,
+    MultilingualTextItemRole,
+} from '@coscrad/api-interfaces';
 import { NestedDataType, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
-import { isNotFound } from '../../../lib/types/not-found';
+import { Maybe } from '../../../lib/types/maybe';
+import { NotFound, isNotFound } from '../../../lib/types/not-found';
 import { DTO } from '../../../types/DTO';
 import { DeepPartial } from '../../../types/DeepPartial';
 import { ResultOrError } from '../../../types/ResultOrError';
+import formatAggregateCompositeIdentifier from '../../../view-models/presentation/formatAggregateCompositeIdentifier';
+import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText, MultilingualTextItem } from '../../common/entities/multilingual-text';
 import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
+import { AggregateId } from '../../types/AggregateId';
 import { ResourceType } from '../../types/ResourceType';
 import { TimeRangeContext } from '../context/time-range-context/time-range-context.entity';
 import { ITimeBoundable } from '../interfaces/ITimeBoundable';
 import { Resource } from '../resource.entity';
 import validateTimeRangeContextForModel from '../shared/contextValidators/validateTimeRangeContextForModel';
+import { BaseEvent } from '../shared/events/base-event.entity';
 import { ContributorAndRole } from './ContributorAndRole';
+import { AddLyricsForSong, TranslateSongLyrics, TranslateSongTitle } from './commands';
+import { CreateSong } from './commands/create-song.command';
 import {
     ADD_LYRICS_FOR_SONG,
+    LYRICS_ADDED_FOR_SONG,
+    SONG_LYRICS_TRANSLATED,
     TRANSLATE_SONG_LYRICS,
 } from './commands/translate-song-lyrics/constants';
-import { TRANSLATE_SONG_TITLE } from './commands/translate-song-title/consants';
+import {
+    SONG_TITLE_TRANSLATED,
+    TRANSLATE_SONG_TITLE,
+} from './commands/translate-song-title/consants';
 import { CannotAddDuplicateSetOfLyricsForSongError, NoLyricsToTranslateError } from './errors';
 import { SongLyricsHaveAlreadyBeenTranslatedToGivenLanguageError } from './errors/SongLyricsAlreadyHaveBeenTranslatedToGivenLanguageError';
 
@@ -142,6 +161,89 @@ export class Song extends Resource implements ITimeBoundable {
         return allErrors.concat(titleValidationErrors);
     }
 
+    // TODO consider making this any iterable of BaseEvents
+    static fromEventHistory(
+        eventStream: BaseEvent[],
+        idOfSongToCreate: AggregateId
+    ): Maybe<ResultOrError<Song>> {
+        // TODO ensure events are temporally sorted first
+        const eventsForThisSong = eventStream.filter(({ payload }) =>
+            isDeepStrictEqual((payload as ICommandBase)[AGGREGATE_COMPOSITE_IDENTIFIER], {
+                type: AggregateType.song,
+                id: idOfSongToCreate,
+            })
+        );
+
+        if (eventsForThisSong.length === 0) return NotFound;
+
+        const [creationEvent, ...updateEvents] = eventsForThisSong;
+
+        if (creationEvent.type !== `SONG_CREATED`) {
+            throw new InternalError(
+                `The first event for ${formatAggregateCompositeIdentifier({
+                    type: AggregateType.song,
+                    id: idOfSongToCreate,
+                })} should have been of type SONG_CREATED, but found: ${creationEvent?.type}`
+            );
+        }
+
+        // Note that the event payload is currently just a record of the successful command payload. In the future, we need separate types \ mapping layer.
+        const {
+            title,
+            languageCodeForTitle,
+            aggregateCompositeIdentifier: { id, type },
+            audioURL,
+        } = creationEvent.payload as CreateSong;
+
+        const initialInstance = new Song({
+            type,
+            id,
+            audioURL,
+            published: false,
+            title: buildMultilingualTextWithSingleItem(title, languageCodeForTitle),
+            eventHistory: [creationEvent],
+            startMilliseconds: 0,
+            // TODO this should be on the create command or else we need a "Register song length" command
+            // TODO Make `audioURL` a `mediaItemId`
+            lengthMilliseconds: 0,
+        });
+
+        const newSong = updateEvents.reduce(
+            // TODO Ensure the eventStream is sorted
+            (song, event) => {
+                // If application of any event failed, short circuit
+                if (isInternalError(song)) return song;
+
+                if (event.type === SONG_TITLE_TRANSLATED) {
+                    const { translation, languageCode } = event.payload as TranslateSongTitle;
+
+                    // TODO Wrap in the add event behaviour so we don't need to repeat it and risk forgetting it
+                    return song.addEventToHistory(event).translateTitle(translation, languageCode);
+                }
+
+                if (event.type === LYRICS_ADDED_FOR_SONG) {
+                    const { lyrics, languageCode } = event.payload as AddLyricsForSong;
+
+                    return song.addEventToHistory(event).addLyrics(lyrics, languageCode);
+                }
+
+                if (event.type === SONG_LYRICS_TRANSLATED) {
+                    const { translation, languageCode } = event.payload as TranslateSongLyrics;
+
+                    return song.addEventToHistory(event).translateLyrics(translation, languageCode);
+                }
+
+                if (event.type === `RESOURCE_PUBLISHED`) {
+                    return song.addEventToHistory(event).publish();
+                }
+            },
+            initialInstance
+        );
+
+        // TODO Validate invariants as in the factories? Or leave this to the repositories?
+        return newSong;
+    }
+
     protected getExternalReferences(): AggregateCompositeIdentifier[] {
         return [];
     }
@@ -189,10 +291,13 @@ export class Song extends Resource implements ITimeBoundable {
     }
 
     translateLyrics(text: string, languageCode: LanguageCode): ResultOrError<Song> {
-        if (!this.hasLyrics()) return new NoLyricsToTranslateError(this);
+        if (!this.hasLyrics()) return new NoLyricsToTranslateError(this.id);
 
         if (this.hasTranslation(languageCode))
-            return new SongLyricsHaveAlreadyBeenTranslatedToGivenLanguageError(this, languageCode);
+            return new SongLyricsHaveAlreadyBeenTranslatedToGivenLanguageError(
+                this.id,
+                languageCode
+            );
 
         const newLyrics = this.lyrics.translate(
             new MultilingualTextItem({

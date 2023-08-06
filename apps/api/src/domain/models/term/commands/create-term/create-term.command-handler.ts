@@ -46,7 +46,7 @@ export class CreateTermCommandHandler extends BaseCreateCommandHandler<Term> {
         return term.validateExternalState(state);
     }
 
-    protected buildEvent(command: ICommand, eventId: string, userId: string): BaseEvent {
+    protected buildEvent(command: CreateTerm, eventId: string, userId: string): BaseEvent {
         return new TermCreated(command, eventId, userId);
     }
 }

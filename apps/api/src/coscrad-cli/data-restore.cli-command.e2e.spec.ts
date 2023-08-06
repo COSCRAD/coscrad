@@ -3,6 +3,7 @@ import { existsSync, mkdirSync, unlinkSync, writeFileSync } from 'fs';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
+import { CoscradEventFactory } from '../domain/common';
 import { AggregateType } from '../domain/types/AggregateType';
 import { DeluxeInMemoryStore } from '../domain/types/DeluxeInMemoryStore';
 import { isNullOrUndefined } from '../domain/utilities/validation/is-null-or-undefined';
@@ -11,10 +12,10 @@ import { ArangoQueryRunner } from '../persistence/database/arango-query-runner';
 import { ArangoDocumentCollectionId } from '../persistence/database/collection-references/ArangoDocumentCollectionId';
 import { ArangoEdgeCollectionId } from '../persistence/database/collection-references/ArangoEdgeCollectionId';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
+import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoDataExporter } from '../persistence/repositories/arango-data-exporter';
 import { DomainDataExporter } from '../persistence/repositories/domain-data-exporter';
-import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestDataInFlatFormat from '../test-data/buildTestDataInFlatFormat';
 import convertInMemorySnapshotToDatabaseFormat from '../test-data/utilities/convertInMemorySnapshotToDatabaseFormat';
 import { CoscradCliModule } from './coscrad-cli.module';
@@ -48,7 +49,11 @@ describe(`CLI Command: **data-restore**`, () => {
 
         databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
 
-        testRepositoryProvider = new TestRepositoryProvider(databaseProvider);
+        testRepositoryProvider = new TestRepositoryProvider(
+            databaseProvider,
+            // We don't need the event factory for this test
+            new CoscradEventFactory([])
+        );
 
         commandInstance = await CommandTestFactory.createTestingCommand({
             imports: [CoscradCliModule],

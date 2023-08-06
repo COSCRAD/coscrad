@@ -3,15 +3,13 @@ import { CoscradUserRole } from '@coscrad/data-types';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { InternalError } from '../../../../../../lib/errors/InternalError';
-import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestData from '../../../../../../test-data/buildTestData';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
 import { AggregateType } from '../../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../../types/DeluxeInMemoryStore';
 import buildEmptyInMemorySnapshot from '../../../../../utilities/buildEmptyInMemorySnapshot';
-import AggregateNotFoundError from '../../../../shared/common-command-errors/AggregateNotFoundError';
-import CommandExecutionError from '../../../../shared/common-command-errors/CommandExecutionError';
 import { assertCommandError } from '../../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandFailsDueToTypeError } from '../../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCommandSuccess } from '../../../../__tests__/command-helpers/assert-command-success';
@@ -19,6 +17,8 @@ import { generateCommandFuzzTestCases } from '../../../../__tests__/command-help
 import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUserId';
+import AggregateNotFoundError from '../../../../shared/common-command-errors/AggregateNotFoundError';
+import CommandExecutionError from '../../../../shared/common-command-errors/CommandExecutionError';
 import { GrantUserRole } from './grant-user-role.command';
 
 const commandType = 'GRANT_USER_ROLE';

@@ -2,14 +2,15 @@ import { TestingModule } from '@nestjs/testing';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
+import { CoscradEventFactory } from '../domain/common';
 import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
 import { ArangoCollectionId } from '../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
 import { ICoscradMigration, Migration, Migrator } from '../persistence/migrations';
 import { ArangoMigrationRecord } from '../persistence/migrations/arango-migration-record';
-import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { CoscradCliModule } from './coscrad-cli.module';
 import { COSCRAD_LOGGER_TOKEN } from './logging';
 import { buildMockLogger } from './logging/__tests__';
@@ -117,7 +118,11 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
 
         const databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
 
-        testRepositoryProvider = new TestRepositoryProvider(databaseProvider);
+        testRepositoryProvider = new TestRepositoryProvider(
+            databaseProvider,
+            // We don't need the event factory for this test
+            new CoscradEventFactory([])
+        );
 
         commandInstance = await CommandTestFactory.createTestingCommand({
             imports: [CoscradCliModule],

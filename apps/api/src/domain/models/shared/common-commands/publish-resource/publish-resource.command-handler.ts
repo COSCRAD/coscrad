@@ -51,7 +51,7 @@ export class PublishResourceCommandHandler extends BaseCommandHandler<Resource> 
         return instance.publish();
     }
 
-    protected buildEvent(command: ICommand, eventId: string, userId: string): BaseEvent {
+    protected buildEvent(command: PublishResource, eventId: string, userId: string): BaseEvent {
         return new ResourcePublished(command, eventId, userId);
     }
 

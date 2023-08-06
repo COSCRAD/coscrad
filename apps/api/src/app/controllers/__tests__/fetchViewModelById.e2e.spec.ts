@@ -4,8 +4,8 @@ import { Resource } from '../../../domain/models/resource.entity';
 import idEquals from '../../../domain/models/shared/functional/idEquals';
 import { InMemorySnapshotOfResources, ResourceType } from '../../../domain/types/ResourceType';
 import { isInternalError } from '../../../lib/errors/InternalError';
-import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestData from '../../../test-data/buildTestData';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import buildViewModelPathForResourceType from '../utilities/buildIndexPathForResourceType';
@@ -24,15 +24,21 @@ describe('GET  (fetch view models)', () => {
 
     const resourceTestData = testData.resources;
 
+    const eventSourcedResourceTypes = [ResourceType.song];
+
     const testDataWithAllResourcesPublished = Object.entries(resourceTestData).reduce(
-        (accumulatedData: InMemorySnapshotOfResources, [Re, instances]) => ({
-            ...accumulatedData,
-            [Re]: instances.map((instance) =>
-                instance.clone({
-                    published: true,
-                })
-            ),
-        }),
+        (accumulatedData: InMemorySnapshotOfResources, [resourceType, instances]) =>
+            // We seed state differently for event-sourced aggregates
+            eventSourcedResourceTypes.includes(resourceType as ResourceType)
+                ? accumulatedData
+                : {
+                      ...accumulatedData,
+                      [resourceType]: instances.map((instance) =>
+                          instance.clone({
+                              published: true,
+                          })
+                      ),
+                  },
         {}
     );
 
@@ -42,108 +48,109 @@ describe('GET  (fetch view models)', () => {
         }));
     });
 
-    Object.values(ResourceType).forEach((resourceType) => {
-        const endpointUnderTest = `/${buildViewModelPathForResourceType(resourceType)}`;
+    Object.values(ResourceType)
+        // TODO [https://www.pivotaltracker.com/story/show/185903292] Support event-sourced resources in this test
+        .filter((rt) => !eventSourcedResourceTypes.includes(rt))
+        .forEach((resourceType) => {
+            const endpointUnderTest = `/${buildViewModelPathForResourceType(resourceType)}`;
 
-        const buildFullPathFromId = (id: string): string => `${endpointUnderTest}/${id}`;
+            const buildFullPathFromId = (id: string): string => `${endpointUnderTest}/${id}`;
 
-        describe(`When querying for a single View Model by ID`, () => {
-            beforeEach(async () => {
-                await testRepositoryProvider.testSetup();
-            });
-
-            afterEach(async () => {
-                await testRepositoryProvider.testTeardown();
-            });
-            describe(`GET ${endpointUnderTest}/:id`, () => {
-                describe('when the resource is published', () => {
-                    describe('when no resource with the id exists', () => {
-                        beforeEach(async () => {
-                            await testRepositoryProvider.addResourcesOfManyTypes(
-                                testDataWithAllResourcesPublished
-                            );
-
-                            await testRepositoryProvider.getTagRepository().createMany(tagTestData);
-                        });
-
-                        it(`should return not found`, () => {
-                            return request(app.getHttpServer())
-                                .get(`${buildFullPathFromId('bogus-id')}`)
-                                .expect(httpStatusCodes.notFound);
-                        });
-                    });
-
-                    describe('when an resource with the id is found', () => {
-                        beforeEach(async () => {
-                            await testRepositoryProvider.addResourcesOfManyTypes(
-                                testDataWithAllResourcesPublished
-                            );
-
-                            await testRepositoryProvider.getTagRepository().createMany(tagTestData);
-                        });
-
-                        it('should return the expected response', async () => {
-                            const resourceToFind =
-                                testDataWithAllResourcesPublished[resourceType][0];
-
-                            const res = await request(app.getHttpServer()).get(
-                                `${buildFullPathFromId(resourceToFind.id)}`
-                            );
-
-                            expect(res.status).toBe(httpStatusCodes.ok);
-
-                            expect(res.body.id).toBe(resourceToFind.id);
-
-                            expect(res.body).toMatchSnapshot();
-                        });
-                    });
+            describe(`When querying for a single View Model by ID`, () => {
+                beforeEach(async () => {
+                    await testRepositoryProvider.testSetup();
                 });
 
-                describe('when an resource with the id is unpublished', () => {
-                    const unpublishedId = 'unpublished-01';
+                afterEach(async () => {
+                    await testRepositoryProvider.testTeardown();
+                });
+                describe(`GET ${endpointUnderTest}/:id`, () => {
+                    describe('when the resource is published', () => {
+                        describe('when no resource with the id exists', () => {
+                            // note that there is no data seeded in a beforeEach \ beforeAll
 
-                    beforeEach(async () => {
-                        await testRepositoryProvider.addResourcesOfManyTypes(resourceTestData);
-
-                        const unpublishedInstance = resourceTestData[resourceType][0].clone({
-                            published: false,
-                            id: unpublishedId,
+                            it(`should return not found`, () => {
+                                return request(app.getHttpServer())
+                                    .get(`${buildFullPathFromId('bogus-id')}`)
+                                    .expect(httpStatusCodes.notFound);
+                            });
                         });
 
-                        await testRepositoryProvider.addResourcesOfSingleType(resourceType, [
-                            unpublishedInstance,
-                        ]);
-                    });
-
-                    it('should return not found', async () => {
-                        const publishedAndUnpublishedInstancesFromRepo =
-                            await testRepositoryProvider
-                                .forResource(resourceType)
-                                .fetchMany()
-                                .then((result) =>
-                                    result.filter(
-                                        (singleInstance): singleInstance is Resource =>
-                                            !isInternalError(singleInstance)
-                                    )
+                        describe('when an resource with the id exists', () => {
+                            beforeEach(async () => {
+                                await testRepositoryProvider.addResourcesOfManyTypes(
+                                    testDataWithAllResourcesPublished
                                 );
 
-                        /**
-                         * Given 404 is not a very specific symptom, let's be sure the
-                         * unpubished resource was in the db to start with
-                         */
-                        const isUnpublishedresourceIdInDB =
-                            publishedAndUnpublishedInstancesFromRepo.some(idEquals(unpublishedId));
+                                await testRepositoryProvider
+                                    .getTagRepository()
+                                    .createMany(tagTestData);
+                            });
 
-                        expect(isUnpublishedresourceIdInDB).toBe(true);
+                            it('should return the expected response', async () => {
+                                const resourceToFind =
+                                    testDataWithAllResourcesPublished[resourceType][0];
 
-                        return request(app.getHttpServer())
-                            .get(`${buildFullPathFromId(unpublishedId)}`)
-                            .expect(httpStatusCodes.notFound);
+                                const res = await request(app.getHttpServer()).get(
+                                    `${buildFullPathFromId(resourceToFind.id)}`
+                                );
+
+                                expect(res.status).toBe(httpStatusCodes.ok);
+
+                                expect(res.body.id).toBe(resourceToFind.id);
+
+                                expect(res.body).toMatchSnapshot();
+                            });
+                        });
+                    });
+
+                    describe('when an resource with the id is unpublished', () => {
+                        const unpublishedId = 'unpublished-01';
+
+                        beforeEach(async () => {
+                            await testRepositoryProvider.addResourcesOfManyTypes(resourceTestData);
+
+                            const unpublishedInstance = resourceTestData[resourceType][0].clone({
+                                published: false,
+                                id: unpublishedId,
+                            });
+
+                            await testRepositoryProvider.addResourcesOfSingleType(resourceType, [
+                                unpublishedInstance,
+                            ]);
+                        });
+
+                        it('should return not found', async () => {
+                            const publishedAndUnpublishedInstancesFromRepo =
+                                await testRepositoryProvider
+                                    .forResource(resourceType)
+                                    .fetchMany()
+                                    .then((result) =>
+                                        result.filter(
+                                            (singleInstance): singleInstance is Resource =>
+                                                !isInternalError(singleInstance)
+                                        )
+                                    );
+
+                            /**
+                             * Given 404 is not a very specific symptom, let's be sure the
+                             * unpubished resource was in the db to start with
+                             */
+                            const isUnpublishedresourceIdInDB =
+                                publishedAndUnpublishedInstancesFromRepo.some(
+                                    idEquals(unpublishedId)
+                                );
+
+                            expect(isUnpublishedresourceIdInDB).toBe(true);
+
+                            return request(app.getHttpServer())
+                                .get(`${buildFullPathFromId(unpublishedId)}`)
+                                .expect(httpStatusCodes.notFound);
+                        });
                     });
                 });
             });
         });
-    });
 
     afterAll(async () => {
         await app.close();

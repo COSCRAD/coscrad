@@ -3,7 +3,7 @@ import {
     EdgeConnectionType,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
-import { CommandHandler, ICommand } from '@coscrad/commands';
+import { CommandHandler } from '@coscrad/commands';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { DTO } from '../../../../../types/DTO';
@@ -101,7 +101,11 @@ export class ConnectResourcesWithNoteCommandHandler extends BaseCreateCommandHan
         return instance.validateExternalState(state);
     }
 
-    protected buildEvent(command: ICommand, eventId: string, userId: string): BaseEvent {
+    protected buildEvent(
+        command: ConnectResourcesWithNote,
+        eventId: string,
+        userId: string
+    ): BaseEvent {
         return new ResourcesConnectedWithNote(command, eventId, userId);
     }
 }

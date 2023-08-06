@@ -3,6 +3,7 @@ import { existsSync, mkdirSync, unlinkSync } from 'fs';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
+import { CoscradEventFactory } from '../domain/common';
 import { DeluxeInMemoryStore } from '../domain/types/DeluxeInMemoryStore';
 import { IdManagementService } from '../lib/id-generation/id-management.service';
 import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
@@ -42,7 +43,11 @@ describe('CLI Command: **data-dump**', () => {
 
         databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
 
-        testRepositoryProvider = new TestRepositoryProvider(databaseProvider);
+        testRepositoryProvider = new TestRepositoryProvider(
+            databaseProvider,
+            // We don't need the event factory for this test
+            new CoscradEventFactory([])
+        );
 
         commandInstance = await CommandTestFactory.createTestingCommand({
             imports: [CoscradCliModule],
