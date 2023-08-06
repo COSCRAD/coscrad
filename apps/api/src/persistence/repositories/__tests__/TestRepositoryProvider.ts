@@ -1,3 +1,4 @@
+import { CoscradEventFactory } from '../../../domain/common';
 import { Category } from '../../../domain/models/categories/entities/category.entity';
 import { Resource } from '../../../domain/models/resource.entity';
 import {
@@ -15,8 +16,11 @@ import mapEntityDTOToDatabaseDTO from '../../database/utilities/mapEntityDTOToDa
 import { ArangoRepositoryProvider } from '../arango-repository.provider';
 
 export default class TestRepositoryProvider extends ArangoRepositoryProvider {
-    constructor(databaseProvider: ArangoDatabaseProvider) {
-        super(databaseProvider);
+    constructor(
+        databaseProvider: ArangoDatabaseProvider,
+        coscradEventFactory: CoscradEventFactory
+    ) {
+        super(databaseProvider, coscradEventFactory);
     }
 
     // TODO We should correlate entity type with TEntity here

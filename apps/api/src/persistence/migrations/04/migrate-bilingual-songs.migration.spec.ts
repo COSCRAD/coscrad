@@ -2,6 +2,7 @@ import { LanguageCode } from '@coscrad/api-interfaces';
 import { isString } from '@coscrad/validation-constraints';
 import createTestModule from '../../../app/controllers/__tests__/createTestModule';
 import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
+import { CoscradEventFactory } from '../../../domain/common';
 import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { Song } from '../../../domain/models/song/song.entity';
 import { AggregateType } from '../../../domain/types/AggregateType';
@@ -96,7 +97,11 @@ describe(`MigrateBilingualTermsAndVocabularyLists`, () => {
          * `TestDatabaseProvider`, we will just leverage this existing logic for
          * test teardown.
          */
-        testRepositoryProvider = new TestRepositoryProvider(testDatabaseProvider);
+        testRepositoryProvider = new TestRepositoryProvider(
+            testDatabaseProvider,
+            // We don't need the event factory for this test
+            new CoscradEventFactory([])
+        );
 
         testQueryRunner = new ArangoQueryRunner(testDatabaseProvider);
     });

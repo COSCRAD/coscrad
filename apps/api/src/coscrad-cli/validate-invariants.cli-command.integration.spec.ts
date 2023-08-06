@@ -3,6 +3,7 @@ import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
 import getValidAggregateInstanceForTest from '../domain/__tests__/utilities/getValidAggregateInstanceForTest';
+import { CoscradEventFactory } from '../domain/common';
 import { MultilingualText } from '../domain/common/entities/multilingual-text';
 import { Valid } from '../domain/domainModelValidators/Valid';
 import { buildFakeTimersConfig } from '../domain/models/__tests__/utilities/buildFakeTimersConfig';
@@ -43,7 +44,11 @@ describe(`**${cliCommandName}**`, () => {
 
         databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
 
-        testRepositoryProvider = new TestRepositoryProvider(databaseProvider);
+        testRepositoryProvider = new TestRepositoryProvider(
+            databaseProvider,
+            // We don't need the event factory for this test
+            new CoscradEventFactory([])
+        );
 
         commandInstance = await CommandTestFactory.createTestingCommand({
             imports: [CoscradCliModule],

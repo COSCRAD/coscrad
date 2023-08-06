@@ -4,9 +4,10 @@ import {
     LanguageCode,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { CommandHandlerService } from '@coscrad/commands';
+import { Ack, CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
+import { CommandFSA } from '../../../../../app/controllers/command/command-fsa/command-fsa.entity';
 import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
@@ -15,7 +16,6 @@ import { NotFound } from '../../../../../lib/types/not-found';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../../types/DTO';
-import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
@@ -25,6 +25,7 @@ import AggregateNotFoundError from '../../../shared/common-command-errors/Aggreg
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { CannotAddDuplicateSetOfLyricsForSongError } from '../../errors';
 import { Song } from '../../song.entity';
+import { ADD_LYRICS_FOR_SONG } from '../translate-song-lyrics/constants';
 import { AddLyricsForSong } from './add-lyrics-for-song.command';
 
 const commandType = 'ADD_LYRICS_FOR_SONG';
@@ -61,6 +62,8 @@ describe(commandType, () => {
 
     let commandAssertionDependencies: CommandAssertionDependencies;
 
+    // let eventRepository: ArangoEventRepository;
+
     beforeAll(async () => {
         ({ testRepositoryProvider, commandHandlerService, idManager, app } =
             await setUpIntegrationTest({
@@ -74,14 +77,12 @@ describe(commandType, () => {
             idManager,
             commandHandlerService,
         };
+
+        // eventRepository = app.get(ArangoEventRepository);
     });
 
     afterAll(async () => {
         await app.close();
-    });
-
-    beforeAll(async () => {
-        await testRepositoryProvider.testSetup();
     });
 
     beforeEach(async () => {
@@ -118,28 +119,59 @@ describe(commandType, () => {
     describe(`When the command is invalid`, () => {
         describe(`when the song already has lyrics`, () => {
             it(`should fail with the expected errors`, async () => {
-                await assertCommandError(commandAssertionDependencies, {
-                    systemUserId: dummySystemUserId,
-                    initialState: new DeluxeInMemoryStore({
-                        [AggregateType.song]: [
-                            existingSong.clone({
-                                lyrics: buildMultilingualTextWithSingleItem(
-                                    'existing lyrics',
-                                    LanguageCode.Chilcotin
-                                ),
-                            }),
-                        ],
-                    }).fetchFullSnapshotInLegacyFormat(),
-                    buildCommandFSA: buildValidCommandFSA,
-                    checkError: (error) => {
-                        assertErrorAsExpected(
-                            error,
-                            new CommandExecutionError([
-                                new CannotAddDuplicateSetOfLyricsForSongError(existingSong),
-                            ])
-                        );
+                const existingLyrics = 'existing lyrics';
+
+                const lyricsLanguageCode = LanguageCode.Chilcotin;
+
+                // const eventHistory = existingSong.eventHistory.concat(
+                //     new LyricsAddedForSong(
+                //         {
+                //             aggregateCompositeIdentifier: existingSong.getCompositeIdentifier(),
+                //         },
+                //         buildDummyUuid(235),
+                //         dummySystemUserId,
+                //         // makeSure this is later than the create event
+                //         dummyDateNow
+                //     )
+                // );
+
+                // Arrange
+                await testRepositoryProvider.addFullSnapshot(
+                    new DeluxeInMemoryStore({
+                        [AggregateType.song]: [existingSong],
+                    }).fetchFullSnapshotInLegacyFormat()
+                );
+
+                const addLyricsFsa: CommandFSA<AddLyricsForSong> = {
+                    type: ADD_LYRICS_FOR_SONG,
+                    payload: {
+                        aggregateCompositeIdentifier: existingSong.getCompositeIdentifier(),
+                        lyrics: existingLyrics,
+                        languageCode: lyricsLanguageCode,
                     },
+                };
+
+                // Add lyrics that will cause a collision
+                const addFirstLyricsResult = await commandHandlerService.execute(addLyricsFsa, {
+                    userId: dummySystemUserId,
                 });
+
+                expect(addFirstLyricsResult).toBe(Ack);
+
+                // Act
+                const attemptToAddDuplicateLyricsResult = await commandHandlerService.execute(
+                    addLyricsFsa,
+                    {
+                        userId: dummySystemUserId,
+                    }
+                );
+
+                assertErrorAsExpected(
+                    attemptToAddDuplicateLyricsResult,
+                    new CommandExecutionError([
+                        new CannotAddDuplicateSetOfLyricsForSongError(existingSong),
+                    ])
+                );
             });
         });
 

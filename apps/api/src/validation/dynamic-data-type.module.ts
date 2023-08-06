@@ -10,6 +10,7 @@ const EmptyDtoProvider = {
 
 @Module({
     imports: [DiscoveryModule],
+    // Is EmptyDtoProvider still needed?
     providers: [DynamicDataTypeFinderService, EmptyDtoProvider],
     exports: [DynamicDataTypeFinderService, EmptyDtoProvider],
 })

@@ -1,5 +1,6 @@
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
+import { CoscradEventFactory } from '../../../domain/common';
 import { IIdManager } from '../../../domain/interfaces/id-manager.interface';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { InternalError } from '../../../lib/errors/InternalError';
@@ -38,7 +39,12 @@ export default async (
 
     const databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
 
-    const testRepositoryProvider = new TestRepositoryProvider(databaseProvider);
+    const coscradEventFactory = moduleRef.get(CoscradEventFactory);
+
+    const testRepositoryProvider = new TestRepositoryProvider(
+        databaseProvider,
+        coscradEventFactory
+    );
 
     const app = moduleRef.createNestApplication();
 

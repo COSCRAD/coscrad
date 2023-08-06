@@ -8,6 +8,7 @@ const NonResourceCollectionId = {
     migrations: 'migrations',
     users: 'users',
     groups: 'groups',
+    events: 'events',
 } as const;
 
 /**
