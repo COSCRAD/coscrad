@@ -1,4 +1,9 @@
-import { AggregateType, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    ICommandBase,
+    LanguageCode,
+    MultilingualTextItemRole,
+} from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
@@ -24,10 +29,13 @@ import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-
 import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
 import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { dummyDateNow } from '../../../__tests__/utilities/dummyDateNow';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { Song } from '../../song.entity';
+import { SongCreated } from '../song-created.event';
 import { TranslateSongTitle } from './translate-song-title.command';
 
 const commandType = 'TRANSLATE_SONG_TITLE';
@@ -36,8 +44,26 @@ const originalTitleText = 'original title';
 
 const existingTitle = buildMultilingualTextWithSingleItem(originalTitleText, LanguageCode.English);
 
-const existingSong = getValidAggregateInstanceForTest(AggregateType.song).clone({
+const dummySong = getValidAggregateInstanceForTest(AggregateType.song);
+
+// TODO Seed state from a command stream instead
+const existingSong = dummySong.clone({
     title: existingTitle,
+    eventHistory: [
+        // TODO make sure the dates are consistent
+        new SongCreated(
+            {
+                aggregateCompositeIdentifier: dummySong.getCompositeIdentifier(),
+                title: existingTitle.getOriginalTextItem().text,
+                languageCodeForTitle: existingTitle.getOriginalTextItem().languageCode,
+                audioURL: dummySong.audioURL,
+                // TODO Make BaseEvent generic ?
+            } as ICommandBase,
+            buildDummyUuid(111),
+            dummySystemUserId,
+            dummyDateNow
+        ),
+    ],
 });
 
 const dummyFsa = buildTestCommandFsaMap().get(commandType) as CommandFSA<TranslateSongTitle>;
@@ -87,7 +113,7 @@ describe(commandType, () => {
     });
 
     beforeEach(async () => {
-        await testRepositoryProvider.deleteAllResourcesOfGivenType(AggregateType.song);
+        await testRepositoryProvider.testSetup();
     });
 
     describe(`when the command is valid`, () => {
@@ -133,33 +159,40 @@ describe(commandType, () => {
             const existingMultilingualText = existingTitle.translate(
                 existingItem
             ) as MultilingualText;
+
             it('should fail with the expected error', async () => {
-                await assertCommandError(commandAssertionDependencies, {
-                    systemUserId: dummySystemUserId,
-                    initialState: new DeluxeInMemoryStore({
+                await testRepositoryProvider.addFullSnapshot(
+                    new DeluxeInMemoryStore({
                         [AggregateType.song]: [
                             existingSong.clone({
                                 title: existingMultilingualText,
                             }),
                         ],
-                    }).fetchFullSnapshotInLegacyFormat(),
-                    buildCommandFSA: buildValidCommandFSA,
-                    checkError: (error) => {
-                        assertErrorAsExpected(
-                            error,
-                            new CommandExecutionError([
-                                new CannotAddDuplicateTranslationError(
-                                    new MultilingualTextItem({
-                                        text: translationText,
-                                        languageCode: translationLanguageCode,
-                                        role: MultilingualTextItemRole.freeTranslation,
-                                    }),
-                                    existingMultilingualText
-                                ),
-                            ])
-                        );
-                    },
+                    }).fetchFullSnapshotInLegacyFormat()
+                );
+
+                // Translate the song once
+                await commandHandlerService.execute(buildValidCommandFSA(), {
+                    userId: dummySystemUserId,
                 });
+
+                const result = await commandHandlerService.execute(buildValidCommandFSA(), {
+                    userId: dummySystemUserId,
+                });
+
+                assertErrorAsExpected(
+                    result,
+                    new CommandExecutionError([
+                        new CannotAddDuplicateTranslationError(
+                            new MultilingualTextItem({
+                                text: translationText,
+                                languageCode: translationLanguageCode,
+                                role: MultilingualTextItemRole.freeTranslation,
+                            }),
+                            existingMultilingualText
+                        ),
+                    ])
+                );
             });
         });
 

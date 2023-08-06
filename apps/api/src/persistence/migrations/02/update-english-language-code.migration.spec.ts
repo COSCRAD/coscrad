@@ -2,6 +2,7 @@ import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces'
 import { doesDeepAnyPropertyEqual } from '@coscrad/validation-constraints';
 import createTestModule from '../../../app/controllers/__tests__/createTestModule';
 import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
+import { CoscradEventFactory } from '../../../domain/common';
 import { AudioItem } from '../../../domain/models/audio-item/entities/audio-item.entity';
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { HasAggregateId } from '../../../domain/types/HasAggregateId';
@@ -39,7 +40,11 @@ describe(`UpdateEnglishLanguageCode`, () => {
          * `TestDatabaseProvider`, we will just leverage this existing logic for
          * test teardown.
          */
-        testRepositoryProvider = new TestRepositoryProvider(testDatabaseProvider);
+        testRepositoryProvider = new TestRepositoryProvider(
+            testDatabaseProvider,
+            // We don't need the event factory for this test
+            new CoscradEventFactory([])
+        );
 
         testQueryRunner = new ArangoQueryRunner(testDatabaseProvider);
     });

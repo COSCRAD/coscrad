@@ -89,8 +89,12 @@ describe('GRANT_RESOURCE_READ_ACCESS_TO_USER', () => {
         await testRepositoryProvider.testTeardown();
     });
 
+    const eventSourcedResourceTypes = [ResourceType.song];
+
     describe('when the command is valid', () => {
         Object.values(ResourceType)
+            // TODO [https://www.pivotaltracker.com/story/show/185903292] Support event-sourced resources in this test
+            .filter((rt) => !eventSourcedResourceTypes.includes(rt))
             .map(getValidAggregateInstanceForTest)
 
             .forEach((resource) => {

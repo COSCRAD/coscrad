@@ -1,5 +1,6 @@
 import { DynamicModule, Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CoscradEventFactory, EventModule } from '../domain/common';
 import { ID_RESPOSITORY_TOKEN } from '../lib/id-generation/interfaces/id-repository.interface';
 import { REPOSITORY_PROVIDER_TOKEN } from './constants/persistenceConstants';
 import { ArangoConnectionProvider } from './database/arango-connection.provider';
@@ -36,14 +37,18 @@ export class PersistenceModule {
 
         const repositoryProvider = {
             provide: REPOSITORY_PROVIDER_TOKEN,
-            useFactory: async (arangoConnectionProvider: ArangoConnectionProvider) => {
+            useFactory: async (
+                arangoConnectionProvider: ArangoConnectionProvider,
+                coscradEventFactory: CoscradEventFactory
+            ) => {
                 const repositoryProvider = new ArangoRepositoryProvider(
-                    new ArangoDatabaseProvider(arangoConnectionProvider)
+                    new ArangoDatabaseProvider(arangoConnectionProvider),
+                    coscradEventFactory
                 );
 
                 return repositoryProvider;
             },
-            inject: [ArangoConnectionProvider],
+            inject: [ArangoConnectionProvider, CoscradEventFactory],
         };
 
         const idRepositoryProvider = {
@@ -76,7 +81,7 @@ export class PersistenceModule {
 
         return {
             module: PersistenceModule,
-            imports: [ConfigModule],
+            imports: [ConfigModule, EventModule.forRootAsync()],
             providers: [
                 arangoConnectionProvider,
                 repositoryProvider,

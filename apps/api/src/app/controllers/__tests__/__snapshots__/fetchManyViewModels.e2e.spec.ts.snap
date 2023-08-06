@@ -1411,27 +1411,13 @@ exports[`When fetching multiple resources GET /resources/songs when all of the r
       "actions": [],
       "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "lengthMilliseconds": 3500,
-      "lyrics": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "Mary had a little lamb, little lamb.",
-          },
-        ],
-      },
+      "lengthMilliseconds": 0,
       "name": {
         "items": [
           {
             "languageCode": "clc",
             "role": "original",
             "text": "Song title in language",
-          },
-          {
-            "languageCode": "en",
-            "role": "free translation",
-            "text": "Mary had a little lamb (English)",
           },
         ],
       },
@@ -1482,27 +1468,13 @@ exports[`When fetching multiple resources GET /resources/songs when all of the r
       "actions": [],
       "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-      "lengthMilliseconds": 33000,
-      "lyrics": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "Ain't gonna see the light of day, light of day, light of day",
-          },
-        ],
-      },
+      "lengthMilliseconds": 0,
       "name": {
         "items": [
           {
             "languageCode": "clc",
             "role": "original",
             "text": "Unpublished Song Title (lang)",
-          },
-          {
-            "languageCode": "en",
-            "role": "free translation",
-            "text": "Unpublished Song Title (Engl)",
           },
         ],
       },
@@ -1521,27 +1493,13 @@ exports[`When fetching multiple resources GET /resources/songs when some of the 
       "actions": [],
       "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "lengthMilliseconds": 3500,
-      "lyrics": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "Mary had a little lamb, little lamb.",
-          },
-        ],
-      },
+      "lengthMilliseconds": 0,
       "name": {
         "items": [
           {
             "languageCode": "clc",
             "role": "original",
             "text": "Song title in language",
-          },
-          {
-            "languageCode": "en",
-            "role": "free translation",
-            "text": "Mary had a little lamb (English)",
           },
         ],
       },
@@ -1592,27 +1550,13 @@ exports[`When fetching multiple resources GET /resources/songs when some of the 
       "actions": [],
       "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-      "lengthMilliseconds": 33000,
-      "lyrics": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "Ain't gonna see the light of day, light of day, light of day",
-          },
-        ],
-      },
+      "lengthMilliseconds": 0,
       "name": {
         "items": [
           {
             "languageCode": "clc",
             "role": "original",
             "text": "Unpublished Song Title (lang)",
-          },
-          {
-            "languageCode": "en",
-            "role": "free translation",
-            "text": "Unpublished Song Title (Engl)",
           },
         ],
       },

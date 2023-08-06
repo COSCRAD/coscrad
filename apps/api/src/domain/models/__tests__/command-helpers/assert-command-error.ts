@@ -4,25 +4,50 @@ import { InternalError, isInternalError } from '../../../../lib/errors/InternalE
 import { AggregateId } from '../../../types/AggregateId';
 import { CommandAssertionDependencies } from '../command-helpers/types/CommandAssertionDependencies';
 
-type TestCase = {
+type BaseTestCase = {
     buildCommandFSA: () => CommandFSA;
-    initialState: InMemorySnapshot;
     systemUserId: AggregateId;
     checkError?: (error: InternalError) => void;
 };
+
+type AssertionDependencies = Omit<CommandAssertionDependencies, 'idManager'>;
+
+type StateBasedTestCase = {
+    initialState: InMemorySnapshot;
+} & BaseTestCase;
+
+type TestCaseV2 = {
+    seedInitialState: () => Promise<void>;
+} & BaseTestCase;
+
+const isTestCaseV2 = (input: StateBasedTestCase | TestCaseV2): input is TestCaseV2 =>
+    typeof (input as TestCaseV2).seedInitialState === 'function';
 
 /**
  * This helper is not to be used with `CREATE_X` commands. Use `assertCreateCommandError`,
  * which allows for ID generation.
  */
-export const assertCommandError = async (
-    dependencies: Omit<CommandAssertionDependencies, 'idManager'>,
-    { buildCommandFSA: buildCommandFSA, initialState: state, checkError, systemUserId }: TestCase
-) => {
+export async function assertCommandError(dependencies: AssertionDependencies, testCase: TestCaseV2);
+export async function assertCommandError(
+    dependencies: AssertionDependencies,
+    testCase: StateBasedTestCase
+);
+export async function assertCommandError(
+    dependencies: AssertionDependencies,
+    testCase: StateBasedTestCase | TestCaseV2
+) {
     const { testRepositoryProvider, commandHandlerService } = dependencies;
 
+    const { buildCommandFSA: buildCommandFSA, checkError, systemUserId } = testCase;
+
+    const resolvedSeedInitialState = isTestCaseV2(testCase)
+        ? testCase.seedInitialState
+        : async () => {
+              await testRepositoryProvider.addFullSnapshot(testCase.initialState);
+          };
+
     // Arrange
-    await testRepositoryProvider.addFullSnapshot(state);
+    await resolvedSeedInitialState();
 
     const commandFSA = buildCommandFSA();
 
@@ -37,4 +62,4 @@ export const assertCommandError = async (
     }
 
     if (checkError) checkError(result);
-};
+}

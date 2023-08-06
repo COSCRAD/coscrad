@@ -1,4 +1,5 @@
 import { CommandModule } from '@coscrad/commands';
+import { Union } from '@coscrad/data-types';
 import { ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { Test } from '@nestjs/testing';
@@ -7,6 +8,8 @@ import { MockJwtAdminAuthGuard } from '../../../authorization/mock-jwt-admin-aut
 import { MockJwtAuthGuard } from '../../../authorization/mock-jwt-auth-guard';
 import { MockJwtStrategy } from '../../../authorization/mock-jwt.strategy';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
+import { CoscradEventFactory } from '../../../domain/common';
+import { COSCRAD_EVENT_UNION } from '../../../domain/common/events/constants';
 import { ID_MANAGER_TOKEN } from '../../../domain/interfaces/id-manager.interface';
 import {
     AddLineItemToTranscript,
@@ -72,9 +75,15 @@ import {
 } from '../../../domain/models/shared/common-commands';
 import { GrantResourceReadAccessToUser } from '../../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command';
 import { GrantResourceReadAccessToUserCommandHandler } from '../../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command-handler';
+import { ResourcePublished } from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event';
+import { BaseEvent } from '../../../domain/models/shared/events/base-event.entity';
 import {
     AddLyricsForSong,
     AddLyricsForSongCommandHandler,
+    LyricsAddedForSong,
+    SongCreated,
+    SongLyricsTranslated,
+    SongTitleTranslated,
     TranslateSongLyrics,
     TranslateSongLyricsCommandHandler,
     TranslateSongTitle,
@@ -147,6 +156,7 @@ import { Ctor } from '../../../lib/types/Ctor';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
+import { ArangoEventRepository } from '../../../persistence/repositories/arango-event-repository';
 import { ArangoIdRepository } from '../../../persistence/repositories/arango-id-repository';
 import { ArangoRepositoryProvider } from '../../../persistence/repositories/arango-repository.provider';
 import { DTO } from '../../../types/DTO';
@@ -187,6 +197,23 @@ type CreateTestModuleOptions = {
 // If not specified, there will be no test user attached to requests
 const optionDefaults = { shouldMockIdGenerator: false };
 
+// TODO Remove this hack
+class UsesCoscradEventUnion {
+    @Union(COSCRAD_EVENT_UNION, 'type', {
+        label: 'event',
+        description: 'this hack makes COSCRAD_EVENT_UNION known to Dynamic Data Types module',
+    })
+    event: BaseEvent;
+}
+
+/**
+ * This is a hack. We should rework our dynamic union types system instead.
+ */
+export const buildUsesCoscradEventUnionProvider = () => ({
+    provide: UsesCoscradEventUnion,
+    useValue: UsesCoscradEventUnion,
+});
+
 export const buildAllDataClassProviders = () =>
     [
         // Classes with dynamic union data types
@@ -210,6 +237,15 @@ export const buildAllDataClassProviders = () =>
         PointContext,
         FreeMultilineContext,
         IdentityContext,
+        // Hack
+        UsesCoscradEventUnion,
+
+        // Events
+        SongCreated,
+        SongTitleTranslated,
+        LyricsAddedForSong,
+        SongLyricsTranslated,
+        ResourcePublished,
     ].map((ctor: Ctor<unknown>) => ({
         provide: ctor,
         useValue: ctor,
@@ -252,13 +288,36 @@ export default async (
                 inject: [ConfigService],
             },
             {
+                provide: CoscradEventFactory,
+                useFactory: () =>
+                    new CoscradEventFactory(
+                        buildAllDataClassProviders().map(({ useValue }) => useValue)
+                    ),
+            },
+            {
+                provide: ArangoEventRepository,
+                useFactory: (
+                    arangoConnectionProvider: ArangoConnectionProvider,
+                    coscradEventFactory: CoscradEventFactory
+                ) =>
+                    new ArangoEventRepository(
+                        new ArangoDatabaseProvider(arangoConnectionProvider),
+                        coscradEventFactory
+                    ),
+                inject: [ArangoConnectionProvider, CoscradEventFactory],
+            },
+            {
                 provide: REPOSITORY_PROVIDER_TOKEN,
-                useFactory: (arangoConnectionProvider: ArangoConnectionProvider) => {
+                useFactory: (
+                    arangoConnectionProvider: ArangoConnectionProvider,
+                    coscradEventFactory: CoscradEventFactory
+                ) => {
                     return new ArangoRepositoryProvider(
-                        new ArangoDatabaseProvider(arangoConnectionProvider)
+                        new ArangoDatabaseProvider(arangoConnectionProvider),
+                        coscradEventFactory
                     );
                 },
-                inject: [ArangoConnectionProvider],
+                inject: [ArangoConnectionProvider, CoscradEventFactory],
             },
             {
                 provide: EdgeConnectionQueryService,

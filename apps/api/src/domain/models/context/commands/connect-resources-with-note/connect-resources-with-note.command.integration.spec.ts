@@ -56,9 +56,17 @@ const initialStateWithAllResourcesButNoConnections = new DeluxeInMemoryStore({
     [AggregateType.note]: [],
 }).fetchFullSnapshotInLegacyFormat();
 
-const allDualEdgeConnections = (testDualConnections as EdgeConnection[]).filter(
-    ({ connectionType }) => connectionType === EdgeConnectionType.dual
-);
+const eventSourcedResourceTypes = [AggregateType.song];
+
+const allDualEdgeConnections = (testDualConnections as EdgeConnection[])
+    // TODO [https://www.pivotaltracker.com/story/show/185903292] Support event-sourced resources in this test
+    .filter(
+        ({ members }) =>
+            !members.some(({ compositeIdentifier }) =>
+                eventSourcedResourceTypes.includes(compositeIdentifier.type)
+            )
+    )
+    .filter(({ connectionType }) => connectionType === EdgeConnectionType.dual);
 
 const existingTerm = getValidAggregateInstanceForTest(AggregateType.term);
 

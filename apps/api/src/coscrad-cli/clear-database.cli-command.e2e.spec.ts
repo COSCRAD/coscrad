@@ -2,6 +2,7 @@ import { TestingModule } from '@nestjs/testing';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
+import { CoscradEventFactory } from '../domain/common';
 import { DeluxeInMemoryStore } from '../domain/types/DeluxeInMemoryStore';
 import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
 import { ArangoCollectionId } from '../persistence/database/collection-references/ArangoCollectionId';
@@ -32,7 +33,11 @@ describe(`CLI Command: **clear-database**`, () => {
 
         databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
 
-        testRepositoryProvider = new TestRepositoryProvider(databaseProvider);
+        testRepositoryProvider = new TestRepositoryProvider(
+            databaseProvider,
+            // We don't need the event factory for this test
+            new CoscradEventFactory([])
+        );
 
         commandInstance = await CommandTestFactory.createTestingCommand({
             imports: [CoscradCliModule],
@@ -70,6 +75,10 @@ describe(`CLI Command: **clear-database**`, () => {
         await databaseProvider
             .getDatabaseForCollection(ArangoCollectionId.uuids)
             .create({ _key: '2' });
+
+        await databaseProvider
+            .getDatabaseForCollection(ArangoCollectionId.events)
+            .create({ _key: '3' });
     });
 
     describe(`when the environment variable $DATA_MODE is set to: _CYPRESS_`, () => {

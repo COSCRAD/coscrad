@@ -274,7 +274,23 @@ Song {
       "role": "performer",
     },
   ],
-  "eventHistory": [],
+  "eventHistory": [
+    {
+      "meta": {
+        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
+      },
+      "payload": {
+        "aggregateCompositeIdentifier": {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          "type": "song",
+        },
+        "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
+        "languageCodeForTitle": "clc",
+        "title": "Song title in language",
+      },
+      "type": "SONG_CREATED",
+    },
+  ],
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "lengthMilliseconds": 3500,

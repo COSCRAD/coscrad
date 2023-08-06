@@ -1,14 +1,15 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import formatAggregateCompositeIdentifier from '../../../../view-models/presentation/formatAggregateCompositeIdentifier';
-import { Song } from '../song.entity';
+import { AggregateId } from '../../../types/AggregateId';
 
 export class SongLyricsHaveAlreadyBeenTranslatedToGivenLanguageError extends InternalError {
-    constructor(song: Song, languageCode: LanguageCode) {
+    constructor(songId: AggregateId, languageCode: LanguageCode) {
         super(
-            `${formatAggregateCompositeIdentifier(
-                song
-            )} already has lyrics in the language: ${languageCode}`
+            `${formatAggregateCompositeIdentifier({
+                type: AggregateType.song,
+                id: songId,
+            })} already has lyrics in the language: ${languageCode}`
         );
     }
 }

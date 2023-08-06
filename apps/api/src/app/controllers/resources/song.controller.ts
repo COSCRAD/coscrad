@@ -29,6 +29,12 @@ export class SongController {
     @UseGuards(OptionalJwtAuthGuard)
     @Get('')
     async fetchMany(@Request() req) {
-        return this.songQueryService.fetchMany(req.user || undefined);
+        try {
+            const result = await this.songQueryService.fetchMany(req.user || undefined);
+
+            return result;
+        } catch (error) {
+            throw new Error(error?.message || 'something went wrong');
+        }
     }
 }

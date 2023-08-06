@@ -12,12 +12,12 @@ export class DynamicDataTypeFinderService {
     constructor(private readonly discoverService: DiscoveryService) {}
 
     async bootstrapDynamicTypes() {
-        const unionProviders = await this.findCtorsForUnions();
+        const unionProviders = await this.getAllDataClassCtors();
 
         bootstrapDynamicTypes(unionProviders);
     }
 
-    private async findCtorsForUnions() {
+    public async getAllDataClassCtors() {
         const dataTypeProviders = await this.discoverService.providers(
             (provider) => !provider.injectType && isClass(provider.instance)
         );
