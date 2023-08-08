@@ -1,4 +1,5 @@
 import {
+    AggregateType,
     CategorizableType,
     ICategoryTreeViewModel,
     ICompositeIdentifier,
@@ -19,6 +20,7 @@ import {
     ListItemText,
 } from '@mui/material';
 import { useContext, useState } from 'react';
+import { buildDataAttributeForAggregateDetailComponent } from '../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { CategorizablesOfMultipleTypeContainer } from '../higher-order-components';
 import { thumbnailCategorizableDetailPresenterFactory } from '../resources/factories/thumbnail-categorizable-detail-presenter-factory';
 import { CategoryTreeUXContext } from './category-tree-ui-context';
@@ -42,17 +44,22 @@ export const CategoryTreeNode = ({ id, label, children, members, wrapTree }: Tre
 
     const handleClick = () => {
         const newCategoryTreeNodeDepth = categoryTreeNodeDepth + 1;
-        console.log({ newCategoryTreeNodeDepth });
 
         setCategoryTreeNodeDepth(newCategoryTreeNodeDepth);
-        console.log({ categoryTreeNodeDepth });
 
         setOpen(!open);
     };
 
     return (
         <>
-            <ListItemButton sx={{ pl: 4 }} onClick={() => handleClick()}>
+            <ListItemButton
+                data-testid={buildDataAttributeForAggregateDetailComponent(
+                    AggregateType.category,
+                    id
+                )}
+                sx={{ pl: 4 }}
+                onClick={() => handleClick()}
+            >
                 {!isNullOrUndefined(children) &&
                     (open ? (
                         <ListItemIcon>
@@ -63,7 +70,6 @@ export const CategoryTreeNode = ({ id, label, children, members, wrapTree }: Tre
                             <ChevronRightIcon />
                         </ListItemIcon>
                     ))}
-
                 <ListItemText primary={label} />
             </ListItemButton>
             <Collapse in={open} timeout="auto" unmountOnExit>
