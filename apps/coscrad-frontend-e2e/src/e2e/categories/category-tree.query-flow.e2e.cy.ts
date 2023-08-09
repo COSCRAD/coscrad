@@ -26,25 +26,22 @@ describe('Categories Tree (Tree of Knowledge) flow', () => {
     });
 
     describe('once the root node is open, the tree', () => {
-        it('should display the first sub node with id ', () => {
+        beforeEach(() => {
             cy.getByDataAttribute(rootNodeCompositeIdentifier).click();
+        });
 
-            cy.getByDataAttribute(firstNodeCompositeIdentifier);
+        it('should display the first sub node with id ', () => {
+            cy.getByDataAttribute(firstNodeCompositeIdentifier).should('be.visible');
+        });
+
+        describe('walking the tree category nodes', () => {
+            it('should find category the tree node with sequence id 7', () => {
+                treeWalkNodeIds.forEach((nodeIdSequenceNumber) => {
+                    const nodeCompositeIdentifier = `${dummyCompositeIdPrefix}${nodeIdSequenceNumber}`;
+
+                    cy.getByDataAttribute(nodeCompositeIdentifier).click();
+                });
+            });
         });
     });
-
-    // describe('walking the tree category nodes', () => {
-    //     it('should find category the tree node with sequence id 7', () => {
-    //         cy.getByDataAttribute(rootNodeCompositeIdentifier).click({ multiple: true });
-
-    //         treeWalkNodeIds.forEach((nodeIdSequenceNumber) => {
-    //             const { id, type } = buildDummyAggregateCompositeIdentifier(
-    //                 AggregateType.category,
-    //                 nodeIdSequenceNumber
-    //             );
-
-    //             cy.getByDataAttribute(`${type}/${id}`).click({ multiple: true });
-    //         });
-    //     });
-    // });
 });
