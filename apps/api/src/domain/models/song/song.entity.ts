@@ -11,7 +11,8 @@ import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
-import { isNotFound } from '../../../lib/types/not-found';
+import { Maybe } from '../../../lib/types/maybe';
+import { NotFound, isNotFound } from '../../../lib/types/not-found';
 import { DTO } from '../../../types/DTO';
 import { DeepPartial } from '../../../types/DeepPartial';
 import { ResultOrError } from '../../../types/ResultOrError';
@@ -163,7 +164,7 @@ export class Song extends Resource implements ITimeBoundable {
     static fromEventHistory(
         eventStream: BaseEvent[],
         idOfSongToCreate: AggregateId
-    ): ResultOrError<Song> {
+    ): Maybe<ResultOrError<Song>> {
         // TODO ensure events are temporally sorted first
         const [creationEvent, ...updateEvents] = eventStream.filter(({ payload }) =>
             isDeepStrictEqual((payload as ICommandBase)[AGGREGATE_COMPOSITE_IDENTIFIER], {
@@ -173,11 +174,7 @@ export class Song extends Resource implements ITimeBoundable {
         );
 
         if (creationEvent.type !== `SONG_CREATED`) {
-            throw new Error(
-                `Invalid creation event for song. The first recieved event was: ${JSON.stringify(
-                    creationEvent
-                )}`
-            );
+            return NotFound;
         }
 
         // Note that the event payload is currently just a record of the successful command payload. In the future, we need separate types \ mapping layer.

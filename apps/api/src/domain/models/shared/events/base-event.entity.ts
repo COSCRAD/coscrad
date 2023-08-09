@@ -1,4 +1,4 @@
-import { ICommand } from '@coscrad/commands';
+import { ICommandBase } from '@coscrad/api-interfaces';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { AggregateId } from '../../../types/AggregateId';
 import BaseDomainModel from '../../BaseDomainModel';
@@ -7,17 +7,24 @@ import { EventRecordMetadata } from './types/EventRecordMetadata';
 export abstract class BaseEvent extends BaseDomainModel {
     abstract type: string;
 
+    // this is new
+    id: AggregateId;
+
     meta: EventRecordMetadata;
 
-    payload: ICommand;
+    payload: ICommandBase;
 
-    constructor(command: ICommand, eventId: AggregateId, systemUserId: AggregateId) {
+    constructor(command: ICommandBase, eventId: AggregateId, systemUserId: AggregateId) {
         super();
 
         this.payload = cloneToPlainObject(command);
 
+        // this is new
+        this.id = eventId;
+
         this.meta = {
             dateCreated: Date.now(),
+            // TODO we may want to remove this redundant property (requires migration for existing events)
             id: eventId,
             userId: systemUserId,
         };
