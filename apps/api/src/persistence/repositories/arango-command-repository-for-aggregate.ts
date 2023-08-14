@@ -1,4 +1,5 @@
 import { AGGREGATE_COMPOSITE_IDENTIFIER, ICommandBase } from '@coscrad/api-interfaces';
+import { Inject } from '@nestjs/common';
 import { BaseEvent } from '../../domain/models/shared/events/base-event.entity';
 import { Song } from '../../domain/models/song/song.entity';
 import { IRepositoryForAggregate } from '../../domain/repositories/interfaces/repository-for-aggregate.interface';
@@ -12,6 +13,7 @@ import { isNotFound } from '../../lib/types/not-found';
 import { DTO } from '../../types/DTO';
 import { ResultOrError } from '../../types/ResultOrError';
 import formatAggregateCompositeIdentifier from '../../view-models/presentation/formatAggregateCompositeIdentifier';
+import { ArangoEventRepository } from './arango-event-repository';
 
 type AggregateContextIdentifier =
     | AggregateCompositeIdentifier
@@ -29,7 +31,7 @@ export class ArangoSongCommandRepository implements IRepositoryForAggregate<Song
     private readonly aggregateType = AggregateType.song;
 
     constructor(
-        private readonly eventRepository: IEventRepository,
+        @Inject(ArangoEventRepository) private readonly eventRepository: IEventRepository,
         private readonly snapshotRepositoryForAggregate: IRepositoryForAggregate<Song>
     ) {}
 
