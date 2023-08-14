@@ -3,6 +3,7 @@ import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpIntegrationTest';
 import getValidAggregateInstanceForTest from '../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
+import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpected';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { NotAvailable } from '../../../../lib/types/not-available';
 import { NotFound } from '../../../../lib/types/not-found';
@@ -23,6 +24,8 @@ import { CommandAssertionDependencies } from '../../__tests__/command-helpers/ty
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../__tests__/utilities/dummySystemUserId';
 import { dummyUuid } from '../../__tests__/utilities/dummyUuid';
+import CommandExecutionError from '../../shared/common-command-errors/CommandExecutionError';
+import UuidNotGeneratedInternallyError from '../../shared/common-command-errors/UuidNotGeneratedInternallyError';
 import { Song } from '../song.entity';
 import { CreateSong } from './create-song.command';
 
@@ -212,7 +215,12 @@ describe('CreateSong', () => {
                 systemUserId: dummySystemUserId,
                 buildCommandFSA: (_: AggregateId) => buildInvalidFSA(bogusId),
                 initialState,
-                // TODO Tighten up the error check
+                checkError: (error: InternalError) => {
+                    assertErrorAsExpected(
+                        error,
+                        new CommandExecutionError([new UuidNotGeneratedInternallyError(bogusId)])
+                    );
+                },
             });
         });
     });

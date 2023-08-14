@@ -3,7 +3,7 @@ import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpect
 import { InternalError } from '../../../../lib/errors/InternalError';
 import buildInvariantValidationErrorFactoryFunction from '../../../__tests__/utilities/buildInvariantValidationErrorFactoryFunction';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
-import VocabularyListHasNoEntriesError from '../../../domainModelValidators/errors/vocabularyList/VocabularyListHasNoEntriesError';
+import VocabularyListWithNoEntriesCannotBePublishedError from '../../../domainModelValidators/errors/vocabularyList/vocabulary-list-with-no-entries-cannot-be-published.error';
 import { MultilingualTextHasNoOriginalError } from '../../../models/audio-item/errors/multilingual-text-has-no-original.error';
 import { AggregateType } from '../../../types/AggregateType';
 import buildNullAndUndefinedAggregateFactoryInvalidTestCases from './common/buildNullAndUndefinedAggregateFactoryInvalidTestCases';
@@ -47,12 +47,13 @@ export const buildVocabularyListAggregateFactoryTestSet = (): FactoryTestSuiteFo
             description: 'vocabulary list has no entries',
             dto: validInstance.clone({
                 entries: [],
+                published: true,
             }),
             checkError: (result) =>
                 assertErrorAsExpected(
                     result,
                     buildTopLevelError(validDto.id, [
-                        new VocabularyListHasNoEntriesError(validDto.id),
+                        new VocabularyListWithNoEntriesCannotBePublishedError(validDto.id),
                     ])
                 ),
         },
