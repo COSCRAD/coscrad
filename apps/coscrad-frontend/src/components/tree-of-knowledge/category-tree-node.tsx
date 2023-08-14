@@ -75,7 +75,12 @@ export const CategoryTreeNode = ({ id, label, children, members, wrapTree }: Tre
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List sx={{ pl: 4 }} component="div" disablePadding>
                     {members.length > 0 && (
-                        <Accordion>
+                        <Accordion
+                            data-testid={`resources-for-${buildDataAttributeForAggregateDetailComponent(
+                                AggregateType.category,
+                                id
+                            )}`}
+                        >
                             <AccordionSummary>Resources in this Category</AccordionSummary>
                             <AccordionDetails>
                                 <CategorizablesOfMultipleTypeContainer

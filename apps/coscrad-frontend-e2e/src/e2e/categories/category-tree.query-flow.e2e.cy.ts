@@ -7,6 +7,10 @@ describe('Categories Tree (Tree of Knowledge) flow', () => {
 
     const firstNodeCompositeIdentifier = `${dummyCompositeIdPrefix}1`;
 
+    const nestedNodeCompositeIdentifier = `${dummyCompositeIdPrefix}7`;
+
+    const accordionTestId = `resources-for-${nestedNodeCompositeIdentifier}`;
+
     const treeWalkNodeIds = [1, 2, 5, 7];
 
     beforeEach(() => {
@@ -30,16 +34,30 @@ describe('Categories Tree (Tree of Knowledge) flow', () => {
             cy.getByDataAttribute(rootNodeCompositeIdentifier).click();
         });
 
-        it('should display the first sub node with id ', () => {
+        it(`should display the first sub node with category id ${firstNodeCompositeIdentifier}`, () => {
             cy.getByDataAttribute(firstNodeCompositeIdentifier).should('be.visible');
         });
 
         describe('walking the tree category nodes', () => {
-            it('should find category the tree node with sequence id 7', () => {
+            it(`should find category the tree node with category id ${nestedNodeCompositeIdentifier}`, () => {
                 treeWalkNodeIds.forEach((nodeIdSequenceNumber) => {
                     const nodeCompositeIdentifier = `${dummyCompositeIdPrefix}${nodeIdSequenceNumber}`;
 
                     cy.getByDataAttribute(nodeCompositeIdentifier).click();
+                });
+            });
+
+            it(`should open the accordion of a categorized resource for nested category id ${nestedNodeCompositeIdentifier}`, () => {
+                treeWalkNodeIds.forEach((nodeIdSequenceNumber) => {
+                    const nodeCompositeIdentifier = `${dummyCompositeIdPrefix}${nodeIdSequenceNumber}`;
+
+                    cy.getByDataAttribute(nodeCompositeIdentifier).click();
+
+                    if (nodeCompositeIdentifier === nestedNodeCompositeIdentifier) {
+                        cy.getByDataAttribute(accordionTestId).should('be.visible');
+
+                        cy.getByDataAttribute(accordionTestId).click();
+                    }
                 });
             });
         });
