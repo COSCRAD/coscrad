@@ -10,12 +10,8 @@ export const CategoryTreeUXProvider = ({ children }): JSX.Element => {
     const [categoryTreeNodeDepth, setCategoryTreeNodeDepth] = useState<CategoryTreeNodeDepth>(1);
 
     return (
-        <>
-            <CategoryTreeUXContext.Provider
-                value={{ categoryTreeNodeDepth, setCategoryTreeNodeDepth }}
-            >
-                {children}
-            </CategoryTreeUXContext.Provider>
-        </>
+        <CategoryTreeUXContext.Provider value={{ categoryTreeNodeDepth, setCategoryTreeNodeDepth }}>
+            {children}
+        </CategoryTreeUXContext.Provider>
     );
 };
