@@ -127,7 +127,9 @@ export class VocabularyList extends Resource {
             ? []
             : [externalReferenceValidationResult];
 
-        const allErrors = [...nameCollisionErrors, ...externalReferenceErrors];
+        const idErrors = this.validateIdIsUnique(snapshot);
+
+        const allErrors = [...nameCollisionErrors, ...idErrors, ...externalReferenceErrors];
 
         return allErrors.length > 0 ? new InvalidExternalStateError(nameCollisionErrors) : Valid;
     }

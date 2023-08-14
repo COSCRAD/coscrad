@@ -3235,5 +3235,89 @@ exports[`command payload schemas Command payload schema should match the snapsho
     },
     "type": "CREATE_POINT",
   },
+  {
+    "description": "creates a new vocabulary list",
+    "label": "create vocabulary list",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "must be: vocabularyList",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "vocabularyList",
+                "value": "vocabularyList",
+              },
+            ],
+          },
+        },
+      },
+      "languageCodeForName": {
+        "complexDataType": "ENUM",
+        "description": "the language in which you are naming the vocabulary list",
+        "enumLabel": "language code",
+        "enumName": "LanguageCode",
+        "isArray": false,
+        "isOptional": false,
+        "label": "language code for the name",
+        "labelsAndValues": [
+          {
+            "label": "Chilcotin",
+            "value": "clc",
+          },
+          {
+            "label": "Haida",
+            "value": "hai",
+          },
+          {
+            "label": "English",
+            "value": "en",
+          },
+          {
+            "label": "French",
+            "value": "fra",
+          },
+          {
+            "label": "Chinook",
+            "value": "chn",
+          },
+          {
+            "label": "Zapotec",
+            "value": "zap",
+          },
+          {
+            "label": "Spanish",
+            "value": "spa",
+          },
+        ],
+      },
+      "name": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "name of the vocabulary list",
+        "isArray": false,
+        "isOptional": false,
+        "label": "name",
+      },
+    },
+    "type": "CREATE_VOCABULARY_LIST",
+  },
 ]
 `;
