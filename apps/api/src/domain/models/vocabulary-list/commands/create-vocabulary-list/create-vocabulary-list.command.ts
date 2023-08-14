@@ -4,6 +4,7 @@ import { NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
 import { LanguageCodeEnum } from '../../../../../domain/common/entities/multilingual-text';
 import { AggregateCompositeIdentifier } from '../../../../../domain/types/AggregateCompositeIdentifier';
 import { AggregateTypeProperty } from '../../../shared/common-commands';
+import { CREATE_VOCABULARY_LIST } from './constants';
 
 export class VocabularyListCompositeId {
     @AggregateTypeProperty([AggregateType.vocabularyList])
@@ -17,7 +18,7 @@ export class VocabularyListCompositeId {
 }
 
 @Command({
-    type: 'CREATE_VOCABULARY_LIST',
+    type: CREATE_VOCABULARY_LIST,
     label: 'create vocabulary list',
     description: 'creates a new vocabulary list',
 })

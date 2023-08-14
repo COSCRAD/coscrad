@@ -1,18 +1,22 @@
 import { NestedDataType } from '@coscrad/data-types';
+import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
+import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { Valid, isValid } from '../../../domainModelValidators/Valid';
-import VocabularyListHasNoEntriesError from '../../../domainModelValidators/errors/vocabularyList/VocabularyListHasNoEntriesError';
+import VocabularyListWithNoEntriesCannotBePublishedError from '../../../domainModelValidators/errors/vocabularyList/vocabulary-list-with-no-entries-cannot-be-published.error';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../types/AggregateType';
-import { ResourceType } from '../../../types/ResourceType';
+import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import { TextFieldContext } from '../../context/text-field-context/text-field-context.entity';
 import { Resource } from '../../resource.entity';
+import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
+import { DuplicateVocabularyListNameError } from '../errors';
 import { VocabularyListEntry } from '../vocabulary-list-entry.entity';
 import { VocabularyListVariable } from './vocabulary-list-variable.entity';
 
@@ -20,23 +24,6 @@ import { VocabularyListVariable } from './vocabulary-list-variable.entity';
 export class VocabularyList extends Resource {
     readonly type = ResourceType.vocabularyList;
 
-    // @NonEmptyString({
-    //     isOptional,
-    //     label: 'name (language)',
-    //     description: 'name of the vocabulary list in the language',
-    // })
-    // readonly name?: string;
-
-    // @NonEmptyString({
-    //     isOptional,
-    //     label: 'name (colonial language)',
-    //     description: 'name of the vocabulary list in the colonial language',
-    // })
-    // readonly nameEnglish?: string;
-
-    /**
-     * TODO This change requires a migration.
-     */
     @NestedDataType(MultilingualText, {
         label: 'name',
         description: 'the name of the vocabulary list',
@@ -101,8 +88,10 @@ export class VocabularyList extends Resource {
 
         if (!isValid(nameValidationResult)) allErrors.push(nameValidationResult);
 
-        if (!Array.isArray(entries) || !entries.length)
-            allErrors.push(new VocabularyListHasNoEntriesError(id));
+        if (!Array.isArray(entries) || !entries.length) {
+            if (this.published)
+                allErrors.push(new VocabularyListWithNoEntriesCannotBePublishedError(id));
+        }
 
         return allErrors;
     }
@@ -112,6 +101,35 @@ export class VocabularyList extends Resource {
             type: AggregateType.term,
             id: termId,
         }));
+    }
+
+    public validateExternalState(snapshot: InMemorySnapshot): ValidationResult {
+        const {
+            resources: { vocabularyList: otherVocabularyLists },
+        } = snapshot;
+
+        const vocabularyListsWithTheSameName = otherVocabularyLists.filter(({ name }) =>
+            isDeepStrictEqual(this.name.getOriginalTextItem(), name.getOriginalTextItem())
+        );
+
+        const nameCollisionErrors = vocabularyListsWithTheSameName.map(
+            (existingVocabularyList) =>
+                new DuplicateVocabularyListNameError(
+                    this.getCompositeIdentifier(),
+                    existingVocabularyList.getCompositeIdentifier(),
+                    existingVocabularyList.name.getOriginalTextItem()
+                )
+        );
+
+        const externalReferenceValidationResult = this.validateExternalReferences(snapshot);
+
+        const externalReferenceErrors = isValid(externalReferenceValidationResult)
+            ? []
+            : [externalReferenceValidationResult];
+
+        const allErrors = [...nameCollisionErrors, ...externalReferenceErrors];
+
+        return allErrors.length > 0 ? new InvalidExternalStateError(nameCollisionErrors) : Valid;
     }
 
     validateTextFieldContext(context: TextFieldContext): Valid | InternalError {

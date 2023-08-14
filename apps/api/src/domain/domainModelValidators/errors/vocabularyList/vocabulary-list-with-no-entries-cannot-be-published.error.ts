@@ -1,11 +1,11 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
 
-export default class VocabularyListHasNoEntriesError extends InternalError {
+export default class VocabularyListWithNoEntriesCannotBePublishedError extends InternalError {
     constructor(vocabularyListId?: string) {
         const message = [
-            `Vocabulary list`,
+            `You cannot publish vocabulary list `,
             vocabularyListId ? `with ID ${vocabularyListId}` : ``,
-            `has no entries`,
+            `as it has no entries`,
         ].join(' ');
 
         super(message);
