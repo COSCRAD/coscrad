@@ -110,6 +110,10 @@ import { RegisterUser } from '../../../domain/models/user-management/user/comman
 import { RegisterUserCommandHandler } from '../../../domain/models/user-management/user/commands/register-user/register-user.command-handler';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { CreateVideo, CreateVideoCommandHandler } from '../../../domain/models/video';
+import {
+    CreateVocabularyList,
+    CreateVocabularyListCommandHandler,
+} from '../../../domain/models/vocabulary-list/commands/create-vocabulary-list';
 import { AudioItemQueryService } from '../../../domain/services/query-services/audio-item-query.service';
 import { BibliographicReferenceQueryService } from '../../../domain/services/query-services/bibliographic-reference-query.service';
 import { BookQueryService } from '../../../domain/services/query-services/book-query.service';
@@ -458,6 +462,8 @@ export default async (
             TranslateTermCommandHandler,
             CreatePoint,
             CreatePointCommandHandler,
+            CreateVocabularyList,
+            CreateVocabularyListCommandHandler,
         ],
 
         controllers: [
