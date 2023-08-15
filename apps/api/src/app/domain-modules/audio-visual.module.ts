@@ -3,11 +3,14 @@ import { Module } from '@nestjs/common';
 import {
     AddLineItemToTranscript,
     AddLineItemtoTranscriptCommandHandler,
+    AddParticipantToTranscript,
     AddParticipantToTranscriptCommandHandler,
     CreateAudioItem,
     CreateAudioItemCommandHandler,
     CreateTranscript,
     CreateTranscriptCommandHandler,
+    TranslateLineItem,
+    TranslateLineItemCommandHandler,
 } from '../../domain/models/audio-item/commands';
 import { CreateVideo, CreateVideoCommandHandler } from '../../domain/models/video';
 import { AudioItemQueryService } from '../../domain/services/query-services/audio-item-query.service';
@@ -33,8 +36,10 @@ import { VideoController } from '../controllers/resources/video.controller';
         CreateTranscriptCommandHandler,
         AddLineItemToTranscript,
         AddLineItemtoTranscriptCommandHandler,
-        AddLineItemtoTranscriptCommandHandler,
+        AddParticipantToTranscript,
         AddParticipantToTranscriptCommandHandler,
+        TranslateLineItem,
+        TranslateLineItemCommandHandler,
     ],
 })
 export class AudioVisualModule {}
