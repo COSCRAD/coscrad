@@ -23,7 +23,7 @@ import { ITranscribable } from '../../../entities/transcribable.mixin';
 import { AddLineItemToTranscript } from './add-line-item-to-transcript.command';
 import { LineItemAddedToTranscript } from './line-item-added-to-transcript.event';
 
-type TranscribableResource = ITranscribable & Resource;
+export type TranscribableResource = ITranscribable & Resource;
 
 @CommandHandler(AddLineItemToTranscript)
 export class AddLineItemtoTranscriptCommandHandler extends BaseCommandHandler<TranscribableResource> {
