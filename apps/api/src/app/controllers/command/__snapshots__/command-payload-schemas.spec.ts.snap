@@ -3319,5 +3319,107 @@ exports[`command payload schemas Command payload schema should match the snapsho
     },
     "type": "CREATE_VOCABULARY_LIST",
   },
+  {
+    "description": "Translate a line item's transcript into another language (typically English)",
+    "label": "Translate Line Item",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "the audio visual resource's ID (generated)",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "the resource type of the audiovisual item",
+            "enumLabel": "Audiovisual Resource Type",
+            "enumName": "AudiovisualResourceType",
+            "isArray": false,
+            "isOptional": false,
+            "label": "Audiovisual Resource Type",
+            "labelsAndValues": [
+              {
+                "label": "video",
+                "value": "video",
+              },
+              {
+                "label": "audio item",
+                "value": "audioItem",
+              },
+            ],
+          },
+        },
+      },
+      "inPointMilliseconds": {
+        "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+        "description": "the opening timestamp in milliseconds",
+        "isArray": false,
+        "isOptional": false,
+        "label": "in point (ms)",
+      },
+      "languageCode": {
+        "complexDataType": "ENUM",
+        "description": "the language in which you are translating this line item's text",
+        "enumLabel": "language code",
+        "enumName": "LanguageCode",
+        "isArray": false,
+        "isOptional": false,
+        "label": "language",
+        "labelsAndValues": [
+          {
+            "label": "Chilcotin",
+            "value": "clc",
+          },
+          {
+            "label": "Haida",
+            "value": "hai",
+          },
+          {
+            "label": "English",
+            "value": "en",
+          },
+          {
+            "label": "French",
+            "value": "fra",
+          },
+          {
+            "label": "Chinook",
+            "value": "chn",
+          },
+          {
+            "label": "Zapotec",
+            "value": "zap",
+          },
+          {
+            "label": "Spanish",
+            "value": "spa",
+          },
+        ],
+      },
+      "outPointMilliseconds": {
+        "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+        "description": "the closing timestamp in milliseconds",
+        "isArray": false,
+        "isOptional": false,
+        "label": "out point (ms)",
+      },
+      "translation": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "translation for this line item's text",
+        "isArray": false,
+        "isOptional": false,
+        "label": "translation",
+      },
+    },
+    "type": "TRANSLATE_LINE_ITEM",
+  },
 ]
 `;
