@@ -79,14 +79,11 @@ export class Transcript extends BaseDomainModel implements ITranscript {
         if (!this.hasLineItem(inPointMillisecondsToFind, outPointMillisecondsToFind))
             return NotFound;
 
-        return this.items.find(({ inPointMilliseconds, outPointMilliseconds }) =>
-            isDeepStrictEqual(
-                { inPointMilliseconds, outPointMilliseconds },
-                {
-                    inPointMilliseconds: inPointMillisecondsToFind,
-                    outPointMilliseconds: outPointMillisecondsToFind,
-                }
-            )
+        return this.items.find((item) =>
+            item.isColocatedWith({
+                inPointMilliseconds: inPointMillisecondsToFind,
+                outPointMilliseconds: outPointMillisecondsToFind,
+            })
         );
     }
 
