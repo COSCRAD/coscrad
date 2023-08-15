@@ -1,16 +1,21 @@
+import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { isNullOrUndefined, isNumberWithinRange } from '@coscrad/validation-constraints';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import { DeepPartial } from '../../../../types/DeepPartial';
 import { ResultOrError } from '../../../../types/ResultOrError';
+import { CannotAddDuplicateTranslationError } from '../../../common/entities/errors';
+import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import { ResourceCompositeIdentifier } from '../../../types/ResourceCompositeIdentifier';
 import {
     ADD_LINE_ITEM_TO_TRANSCRIPT,
     ADD_PARTICIPANT_TO_TRANSCRIPT,
     CREATE_TRANSCRIPT,
 } from '../commands/transcripts/constants';
+import { TRANSLATE_LINE_ITEM } from '../commands/transcripts/translate-line-item/constants';
 import { CannotOverwriteTranscriptError, TranscriptLineItemOutOfBoundsError } from '../errors';
 import { CannotAddParticipantBeforeCreatingTranscriptError } from '../errors/CannotAddParticipantBeforeCreatingTranscript.error';
+import { LineItemNotFoundError } from '../errors/line-item-not-found.error';
 import { TranscriptItem } from './transcript-item.entity';
 import { TranscriptParticipant } from './transcript-participant';
 import { Transcript } from './transcript.entity';
@@ -45,6 +50,13 @@ export interface ITranscribable {
     ): ResultOrError<ITranscribableBase>;
 
     addLineItemToTranscript(newItemDto: DTO<TranscriptItem>): ResultOrError<ITranscribableBase>;
+
+    translateLineItem(
+        inPointMillisecondsForTranslation: number,
+        outPointMillisecondsForTranslation: number,
+        translation: string,
+        languageCode: LanguageCode
+    ): ResultOrError<ITranscribableBase>;
 
     importLineItemsToTranscript(
         newItemDtos: DTO<TranscriptItem>[]
@@ -105,6 +117,54 @@ export function Transcribable<TBase extends Constructor<ITranscribableBase>>(Bas
             } as DeepPartial<DTO<this>>);
         }
 
+        translateLineItem(
+            inPointMillisecondsForTranslation: number,
+            outPointMillisecondsForTranslation: number,
+            translation: string,
+            languageCode: LanguageCode
+        ): ResultOrError<this> {
+            if (
+                !this.transcript.hasLineItem(
+                    inPointMillisecondsForTranslation,
+                    outPointMillisecondsForTranslation
+                )
+            )
+                return new LineItemNotFoundError({
+                    inPointMilliseconds: inPointMillisecondsForTranslation,
+                    outPointMilliseconds: outPointMillisecondsForTranslation,
+                });
+
+            const existingLineItem = this.transcript.getLineItem(
+                inPointMillisecondsForTranslation,
+                outPointMillisecondsForTranslation
+            ) as TranscriptItem;
+
+            const newTextItem = new MultilingualTextItem({
+                text: translation,
+                languageCode,
+                role: MultilingualTextItemRole.freeTranslation,
+            });
+
+            if (existingLineItem.text.has(languageCode))
+                return new CannotAddDuplicateTranslationError(newTextItem, existingLineItem.text);
+
+            const textUpdateResult = existingLineItem.text.translate(newTextItem);
+
+            if (isInternalError(textUpdateResult)) return textUpdateResult;
+
+            const newLineItem = existingLineItem.clone({
+                text: textUpdateResult,
+            });
+
+            return this.safeClone({
+                transcript: this.transcript.clone({
+                    items: this.transcript.items.map((item) =>
+                        item.isColocatedWith(existingLineItem) ? newLineItem : item
+                    ),
+                }),
+            } as DeepPartial<DTO<this>>);
+        }
+
         importLineItemsToTranscript(
             newItemDtos: DTO<TranscriptItem>[]
         ): ResultOrError<ITranscribableBase> {
@@ -144,8 +204,11 @@ export function Transcribable<TBase extends Constructor<ITranscribableBase>>(Bas
         /**
          * Could this be a problem if we are using several mixins? Be careful
          * when applying a second mixin to a domain class.
+         *
+         * This should really be `getTranscriptCommmands` !
          */
         getResourceSpecificAvailableCommands(): string[] {
+            // Doesn't this pattern defeat the purpose of the mixin?
             const availableCommandIds: string[] = super.getResourceSpecificAvailableCommands();
 
             if (!this.hasTranscript()) availableCommandIds.push(CREATE_TRANSCRIPT);
@@ -155,6 +218,9 @@ export function Transcribable<TBase extends Constructor<ITranscribableBase>>(Bas
             // You can't add a line item without a participant to refer to (by initials)
             if (this.countTranscriptParticipants() > 0)
                 availableCommandIds.push(ADD_LINE_ITEM_TO_TRANSCRIPT);
+
+            if (this.hasTranscript() && this.transcript.hasLineItems())
+                availableCommandIds.push(TRANSLATE_LINE_ITEM);
 
             return availableCommandIds;
         }

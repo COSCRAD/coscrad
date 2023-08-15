@@ -88,6 +88,16 @@ export class TranscriptItem extends BaseDomainModel implements ITranscriptItem {
         );
     }
 
+    isColocatedWith({
+        inPointMilliseconds,
+        outPointMilliseconds,
+    }: Pick<TranscriptItem, 'inPointMilliseconds' | 'outPointMilliseconds'>) {
+        return (
+            this.inPointMilliseconds === inPointMilliseconds &&
+            this.outPointMilliseconds === outPointMilliseconds
+        );
+    }
+
     toString() {
         const {
             inPointMilliseconds: inPoint,

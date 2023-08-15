@@ -15,6 +15,8 @@ import {
     CreateAudioItemCommandHandler,
     CreateTranscript,
     CreateTranscriptCommandHandler,
+    TranslateLineItem,
+    TranslateLineItemCommandHandler,
 } from '../../../domain/models/audio-item/commands';
 import {
     AddParticipantToTranscript,
@@ -464,6 +466,8 @@ export default async (
             CreatePointCommandHandler,
             CreateVocabularyList,
             CreateVocabularyListCommandHandler,
+            TranslateLineItem,
+            TranslateLineItemCommandHandler,
         ],
 
         controllers: [
