@@ -11,7 +11,7 @@ const wrapTree = ({
     members,
 }: ICategoryTreeViewModel<CategorizableType>): JSX.Element => {
     return (
-        <CategoryTreeNode id={id} label={label} members={members} wrapTree={wrapTree}>
+        <CategoryTreeNode key={id} id={id} label={label} members={members} wrapTree={wrapTree}>
             {children}
         </CategoryTreeNode>
     );
