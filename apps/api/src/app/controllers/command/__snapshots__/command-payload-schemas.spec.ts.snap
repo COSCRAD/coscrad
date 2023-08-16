@@ -3237,7 +3237,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
   },
   {
     "description": "creates a new vocabulary list",
-    "label": "create vocabulary list",
+    "label": "Create Vocabulary List",
     "schema": {
       "aggregateCompositeIdentifier": {
         "complexDataType": "NESTED_TYPE",

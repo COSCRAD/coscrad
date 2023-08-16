@@ -16,12 +16,14 @@ import { TextFieldContext } from '../../context/text-field-context/text-field-co
 import { Resource } from '../../resource.entity';
 import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
-import { CREATE_VOCABULARY_LIST } from '../commands/create-vocabulary-list';
 import { DuplicateVocabularyListNameError } from '../errors';
 import { VocabularyListEntry } from '../vocabulary-list-entry.entity';
 import { VocabularyListVariable } from './vocabulary-list-variable.entity';
 
-@RegisterIndexScopedCommands([CREATE_VOCABULARY_LIST])
+/**
+ * TODO Use the constant here
+ */
+@RegisterIndexScopedCommands([`CREATE_VOCABULARY_LIST`])
 export class VocabularyList extends Resource {
     readonly type = ResourceType.vocabularyList;
 
