@@ -12,7 +12,7 @@ export class UnionFactory<T = unknown, UProduct = unknown> {
 
     private readonly discriminantPath: string;
 
-    constructor(allCtorCandidates: Ctor<T>[], private readonly unionName: string) {
+    constructor(allCtorCandidates: Ctor<T>[], unionName: string) {
         const unionMap = buildUnionTypesMap<T>(allCtorCandidates);
 
         if (!unionMap.has(unionName)) {
