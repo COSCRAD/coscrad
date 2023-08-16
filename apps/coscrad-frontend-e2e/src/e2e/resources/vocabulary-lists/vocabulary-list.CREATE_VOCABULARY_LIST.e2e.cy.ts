@@ -63,5 +63,23 @@ describe(`CREATE_VOCABULARY_LIST`, () => {
                 cy.contains(name);
             });
         });
+
+        describe(`when the form is incomplete`, () => {
+            stepNames.forEach((stepNameToSkip) => {
+                describe(`when skipping step: ${stepNameToSkip}`, () => {
+                    beforeEach(() => {
+                        const stepsToApply = stepNames.filter(
+                            (stepName) => stepName !== stepNameToSkip
+                        );
+
+                        steps.apply(stepsToApply);
+                    });
+
+                    it(`should prevent form submission`, () => {
+                        cy.getCommandFormSubmissionButton().should('be.disabled');
+                    });
+                });
+            });
+        });
     });
 });
