@@ -21,7 +21,9 @@ import { VocabularyListEntry } from '../vocabulary-list-entry.entity';
 import { VocabularyListVariable } from './vocabulary-list-variable.entity';
 
 /**
- * TODO Use the constant here
+ * TODO Use the constant here. Diagnose why doing so creates a circular build
+ * dependency. It seems that `getAggregateCtorFromAggregateType` is the culprit.
+ * It may be time to register aggregate ctors dynamically.
  */
 @RegisterIndexScopedCommands([`CREATE_VOCABULARY_LIST`])
 export class VocabularyList extends Resource {
