@@ -52,7 +52,7 @@ export class TranslateSongLyricsCommandHandler extends BaseUpdateCommandHandler<
         return song.translateLyrics(translation, languageCode);
     }
 
-    protected buildEvent(command: ICommand, eventId: string, userId: string): BaseEvent {
+    protected buildEvent(command: TranslateSongLyrics, eventId: string, userId: string): BaseEvent {
         return new SongLyricsTranslated(command, eventId, userId);
     }
 }

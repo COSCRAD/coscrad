@@ -55,7 +55,15 @@ export class ArangoEventRepository implements IEventRepository {
     }
 
     async appendEvent(event: BaseEvent): Promise<void> {
+        const databaseDocumentWithoutId = mapEntityDTOToDatabaseDTO(event);
+
+        const databaseDocument = {
+            ...databaseDocumentWithoutId,
+            // this is a getter and will not be set by our above mapping layer
+            id: event.id,
+        };
+
         // TODO Why not event.toDTO() ?
-        await this.arangoEventDatabase.create(mapEntityDTOToDatabaseDTO(event));
+        await this.arangoEventDatabase.create(databaseDocument);
     }
 }

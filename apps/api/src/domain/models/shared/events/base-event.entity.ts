@@ -7,9 +7,6 @@ import { EventRecordMetadata } from './types/EventRecordMetadata';
 export abstract class BaseEvent extends BaseDomainModel {
     abstract type: string;
 
-    // this is new
-    id: AggregateId;
-
     meta: EventRecordMetadata;
 
     payload: ICommandBase;
@@ -19,14 +16,15 @@ export abstract class BaseEvent extends BaseDomainModel {
 
         this.payload = cloneToPlainObject(command);
 
-        // this is new
-        this.id = eventId;
-
         this.meta = {
             dateCreated: Date.now(),
             // TODO we may want to remove this redundant property (requires migration for existing events)
             id: eventId,
             userId: systemUserId,
         };
+    }
+
+    public get id(): AggregateId {
+        return this.meta.id;
     }
 }

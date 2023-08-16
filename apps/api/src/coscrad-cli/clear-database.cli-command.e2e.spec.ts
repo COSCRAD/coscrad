@@ -70,6 +70,10 @@ describe(`CLI Command: **clear-database**`, () => {
         await databaseProvider
             .getDatabaseForCollection(ArangoCollectionId.uuids)
             .create({ _key: '2' });
+
+        await databaseProvider
+            .getDatabaseForCollection(ArangoCollectionId.events)
+            .create({ _key: '3' });
     });
 
     describe(`when the environment variable $DATA_MODE is set to: _CYPRESS_`, () => {
