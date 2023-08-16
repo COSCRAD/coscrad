@@ -1,3 +1,8 @@
+type NodesToVisit = {
+    idSequenceNumber: number;
+    categoryLabel: string;
+};
+
 describe('Categories Tree (Tree of Knowledge) flow', () => {
     const pageLabel = 'Tree of Knowledge';
 
@@ -7,29 +12,32 @@ describe('Categories Tree (Tree of Knowledge) flow', () => {
 
     const firstNodeCompositeIdentifier = `${dummyCompositeIdPrefix}1`;
 
+    const firstNodeCategoryLabel = 'animals';
+
     const nestedNodeCompositeIdentifier = `${dummyCompositeIdPrefix}7`;
 
     const accordionTestId = `resources-for-${nestedNodeCompositeIdentifier}`;
 
-    const treeWalkNodeIds = [1, 2, 5, 7];
+    const categorizedResourceMetadataText = 'Susie McRealart';
+
+    const nodesToVisit: NodesToVisit[] = [
+        { idSequenceNumber: 1, categoryLabel: 'animals' },
+        { idSequenceNumber: 2, categoryLabel: 'mammals' },
+        { idSequenceNumber: 5, categoryLabel: 'felines' },
+        { idSequenceNumber: 7, categoryLabel: 'domestic cats' },
+    ];
 
     beforeEach(() => {
         cy.visit('/TreeOfKnowledge');
     });
 
     describe('the tree of knowledge', () => {
-        it(`should display the label ${pageLabel}`, () => {
+        it(`should display the label "${pageLabel}"`, () => {
             cy.contains(pageLabel);
         });
     });
 
-    describe('the tree root node', () => {
-        it('should open', () => {
-            cy.getByDataAttribute(rootNodeCompositeIdentifier).click();
-        });
-    });
-
-    describe('once the root node is open, the tree', () => {
+    describe('when the root node is open', () => {
         beforeEach(() => {
             cy.getByDataAttribute(rootNodeCompositeIdentifier).click();
         });
@@ -38,26 +46,64 @@ describe('Categories Tree (Tree of Knowledge) flow', () => {
             cy.getByDataAttribute(firstNodeCompositeIdentifier).should('be.visible');
         });
 
-        describe('walking the tree category nodes', () => {
-            it(`should find category the tree node with category id ${nestedNodeCompositeIdentifier}`, () => {
-                treeWalkNodeIds.forEach((nodeIdSequenceNumber) => {
-                    const nodeCompositeIdentifier = `${dummyCompositeIdPrefix}${nodeIdSequenceNumber}`;
+        it(`should display the first sub node category text "${firstNodeCategoryLabel}"`, () => {
+            cy.getByDataAttribute(firstNodeCompositeIdentifier).contains(firstNodeCategoryLabel);
+        });
+
+        describe('when the first branch of the tree is fully expanded', () => {
+            beforeEach(() => {
+                nodesToVisit.forEach(({ idSequenceNumber }: NodesToVisit) => {
+                    const nodeCompositeIdentifier = `${dummyCompositeIdPrefix}${idSequenceNumber}`;
 
                     cy.getByDataAttribute(nodeCompositeIdentifier).click();
                 });
+
+                cy.getByDataAttribute(accordionTestId).click();
             });
 
-            it(`should open the accordion of a categorized resource for nested category id ${nestedNodeCompositeIdentifier}`, () => {
-                treeWalkNodeIds.forEach((nodeIdSequenceNumber) => {
-                    const nodeCompositeIdentifier = `${dummyCompositeIdPrefix}${nodeIdSequenceNumber}`;
+            describe(`the first node`, () => {
+                const { idSequenceNumber, categoryLabel } = nodesToVisit[0];
 
-                    cy.getByDataAttribute(nodeCompositeIdentifier).click();
+                const firstNodeId = `${dummyCompositeIdPrefix}${idSequenceNumber}`;
 
-                    if (nodeCompositeIdentifier === nestedNodeCompositeIdentifier) {
-                        cy.getByDataAttribute(accordionTestId).should('be.visible');
+                it(`should have the id "${firstNodeId}" and category label "${categoryLabel}"`, () => {
+                    cy.getByDataAttribute(firstNodeId).should('be.visible');
 
-                        cy.getByDataAttribute(accordionTestId).click();
-                    }
+                    cy.getByDataAttribute(firstNodeId).contains(categoryLabel);
+                });
+            });
+
+            describe(`the third node`, () => {
+                const { idSequenceNumber, categoryLabel } = nodesToVisit[2];
+
+                const firstNodeId = `${dummyCompositeIdPrefix}${idSequenceNumber}`;
+
+                it(`should have the id "${firstNodeId}" and category label "${categoryLabel}"`, () => {
+                    cy.getByDataAttribute(firstNodeId).should('be.visible');
+
+                    cy.getByDataAttribute(firstNodeId).contains(categoryLabel);
+                });
+            });
+
+            describe(`the fourth node`, () => {
+                const { idSequenceNumber, categoryLabel } = nodesToVisit[3];
+
+                const firstNodeId = `${dummyCompositeIdPrefix}${idSequenceNumber}`;
+
+                it(`should have the id "${firstNodeId}" and category label "${categoryLabel}"`, () => {
+                    cy.getByDataAttribute(firstNodeId).should('be.visible');
+
+                    cy.getByDataAttribute(firstNodeId).contains(categoryLabel);
+                });
+
+                it(`should have categorized resources`, () => {
+                    cy.getByDataAttribute(accordionTestId).should('be.visible');
+                });
+
+                it(`should have categorized resources containing the text "${categorizedResourceMetadataText}"`, () => {
+                    cy.getByDataAttribute(accordionTestId).contains(
+                        categorizedResourceMetadataText
+                    );
                 });
             });
         });

@@ -39,7 +39,8 @@ interface TreeNodeProps {
 }
 
 export const CategoryTreeNode = ({ id, label, children, members, wrapTree }: TreeNodeProps) => {
-    const [open, setOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+
     const { categoryTreeNodeDepth, setCategoryTreeNodeDepth } = useContext(CategoryTreeUXContext);
 
     const handleClick = () => {
@@ -47,8 +48,10 @@ export const CategoryTreeNode = ({ id, label, children, members, wrapTree }: Tre
 
         setCategoryTreeNodeDepth(newCategoryTreeNodeDepth);
 
-        setOpen(!open);
+        setIsOpen(!isOpen);
     };
+
+    const ExpandArrowIcon = () => (isOpen ? <ExpandMoreIcon /> : <ChevronRightIcon />);
 
     return (
         <>
@@ -60,19 +63,14 @@ export const CategoryTreeNode = ({ id, label, children, members, wrapTree }: Tre
                 sx={{ pl: 4 }}
                 onClick={() => handleClick()}
             >
-                {!isNullOrUndefined(children) &&
-                    (open ? (
-                        <ListItemIcon>
-                            <ExpandMoreIcon />
-                        </ListItemIcon>
-                    ) : (
-                        <ListItemIcon>
-                            <ChevronRightIcon />
-                        </ListItemIcon>
-                    ))}
+                {!isNullOrUndefined(children) && (
+                    <ListItemIcon>
+                        <ExpandArrowIcon />
+                    </ListItemIcon>
+                )}
                 <ListItemText primary={label} />
             </ListItemButton>
-            <Collapse in={open} timeout="auto" unmountOnExit>
+            <Collapse in={isOpen} timeout="auto" unmountOnExit>
                 <List sx={{ pl: 4 }} component="div" disablePadding>
                     {members.length > 0 && (
                         <Accordion
