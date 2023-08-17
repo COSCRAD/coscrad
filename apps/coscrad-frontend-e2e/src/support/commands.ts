@@ -167,7 +167,7 @@ Cypress.Commands.add(
         )}"`;
 
         cy.exec(command).then((_result) => {
-            if (command.includes(`PUBLISH_RESOURCE`))
+            if (command.includes(`CREATE_TRAN`))
                 /* eslint-disable-next-line */
                 debugger;
         });
