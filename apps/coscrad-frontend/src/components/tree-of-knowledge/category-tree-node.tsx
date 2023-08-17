@@ -19,11 +19,10 @@ import {
     ListItemIcon,
     ListItemText,
 } from '@mui/material';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { buildDataAttributeForAggregateDetailComponent } from '../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { CategorizablesOfMultipleTypeContainer } from '../higher-order-components';
 import { thumbnailCategorizableDetailPresenterFactory } from '../resources/factories/thumbnail-categorizable-detail-presenter-factory';
-import { CategoryTreeUXContext } from './category-tree-ui-context';
 
 interface TreeNodeProps {
     id: string;
@@ -41,13 +40,7 @@ interface TreeNodeProps {
 export const CategoryTreeNode = ({ id, label, children, members, wrapTree }: TreeNodeProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const { categoryTreeNodeDepth, setCategoryTreeNodeDepth } = useContext(CategoryTreeUXContext);
-
     const handleClick = () => {
-        const newCategoryTreeNodeDepth = categoryTreeNodeDepth + 1;
-
-        setCategoryTreeNodeDepth(newCategoryTreeNodeDepth);
-
         setIsOpen(!isOpen);
     };
 

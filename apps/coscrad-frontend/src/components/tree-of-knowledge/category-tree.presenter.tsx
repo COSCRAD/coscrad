@@ -2,7 +2,6 @@ import { CategorizableType, ICategoryTreeViewModel } from '@coscrad/api-interfac
 import { List, Typography } from '@mui/material';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 import { CategoryTreeNode } from './category-tree-node';
-import { CategoryTreeUXProvider } from './category-tree-ui-context';
 
 const wrapTree = ({
     id,
@@ -28,9 +27,7 @@ export const CategoryTreePresenter: FunctionalComponent<ICategoryTreeViewModel> 
         <>
             <div data-testid="categoryTree" />
             <Typography variant="h2">Tree of Knowledge</Typography>
-            <CategoryTreeUXProvider>
-                <List>{wrapTree(tree)}</List>
-            </CategoryTreeUXProvider>
+            <List>{wrapTree(tree)}</List>
         </>
     );
 };
