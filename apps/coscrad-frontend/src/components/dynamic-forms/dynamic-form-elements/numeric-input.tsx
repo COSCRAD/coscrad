@@ -16,6 +16,7 @@ export const NumericInput = ({
     return (
         <FormGroup>
             <TextField
+                data-testid={`numeric_${name}`}
                 inputProps={{ type: 'number' }}
                 name={name}
                 label={label}
