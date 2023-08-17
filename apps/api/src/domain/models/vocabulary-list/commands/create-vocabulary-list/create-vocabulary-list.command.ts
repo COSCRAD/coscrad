@@ -19,7 +19,7 @@ export class VocabularyListCompositeId {
 
 @Command({
     type: CREATE_VOCABULARY_LIST,
-    label: 'create vocabulary list',
+    label: 'Create Vocabulary List',
     description: 'creates a new vocabulary list',
 })
 export class CreateVocabularyList implements ICommandBase {
