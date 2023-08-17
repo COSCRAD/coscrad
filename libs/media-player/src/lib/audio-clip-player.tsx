@@ -1,11 +1,9 @@
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import BugReportIcon from '@mui/icons-material/BugReport';
 import LinkOffIcon from '@mui/icons-material/LinkOff';
 import { Box, CircularProgress, IconButton, Tooltip } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { DefaultPlayButton } from './default-clip-player-button';
-
-const isNullOrUndefined = (input: unknown): input is null | undefined =>
-    input === null || typeof input === 'undefined';
 
 interface IPlayButtonProps {
     onButtonClick: () => void;
