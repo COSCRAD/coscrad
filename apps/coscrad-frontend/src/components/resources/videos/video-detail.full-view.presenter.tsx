@@ -15,14 +15,15 @@ export const VideoDetailFullViewPresenter = ({
     name,
     id,
     videoUrl,
-}: ICategorizableDetailQueryResult<IVideoViewModel>): JSX.Element => (
-    <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.video}>
-        <SinglePropertyPresenter
-            display="Duration"
-            value={convertMillisecondsToSeconds(lengthMilliseconds)}
-        />
-        <VideoPrototypePlayer videoUrl={videoUrl} />
-        {/* <VideoPlayer videoUrl={videoUrl} /> */}
-        <TranscriptPresenter transcript={transcript} />
-    </ResourceDetailFullViewPresenter>
-);
+}: ICategorizableDetailQueryResult<IVideoViewModel>): JSX.Element => {
+    return (
+        <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.video}>
+            <SinglePropertyPresenter
+                display="Duration"
+                value={convertMillisecondsToSeconds(lengthMilliseconds)}
+            />
+            <VideoPrototypePlayer videoUrl={videoUrl} transcript={transcript} />
+            <TranscriptPresenter transcript={transcript} />
+        </ResourceDetailFullViewPresenter>
+    );
+};
