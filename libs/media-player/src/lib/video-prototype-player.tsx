@@ -1,12 +1,19 @@
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Box, Button, Typography } from '@mui/material';
+import { Pause as PauseIcon, PlayArrow as PlayArrowIcon } from '@mui/icons-material/';
+import { Box, Button, LinearProgress, Typography, styled } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
+
+const Video = styled('video')({
+    flexShrink: 1,
+    height: '100%',
+    objectFit: 'cover',
+});
 
 interface VideoPrototypePlayerProps {
     videoUrl: string;
 }
 
-enum VideoState {
+enum VideoLoadedState {
     loading = 'loading',
     error = 'error',
     canPlay = 'canPlay',
@@ -15,11 +22,13 @@ enum VideoState {
 }
 
 export const VideoPrototypePlayer = ({ videoUrl }: VideoPrototypePlayerProps) => {
-    const [videoState, setVideoState] = useState<VideoState>(VideoState.loading);
+    const videoRef = useRef<HTMLVideoElement>(null);
+
+    const [videoState, setVideoState] = useState<VideoLoadedState>(VideoLoadedState.loading);
 
     const [isPlaying, setIsPlaying] = useState(false);
 
-    const videoRef = useRef<HTMLVideoElement>(null);
+    const [progress, setProgress] = useState(0);
 
     const togglePlay = () => {
         if (isNullOrUndefined(videoRef.current)) return;
@@ -32,18 +41,30 @@ export const VideoPrototypePlayer = ({ videoUrl }: VideoPrototypePlayerProps) =>
         setIsPlaying(!isPlaying);
     };
 
+    const handleProgress = () => {
+        if (isNullOrUndefined(videoRef.current)) return;
+
+        const duration = videoRef.current.duration;
+
+        const currentTime = videoRef.current.currentTime;
+
+        const progress = (currentTime / duration) * 100;
+
+        setProgress(progress);
+    };
+
     useEffect(() => {
         if (isNullOrUndefined(videoUrl)) {
-            setVideoState(VideoState.isMissingAudioLink);
+            setVideoState(VideoLoadedState.isMissingAudioLink);
             return;
         }
 
         const onCanPlay = () => {
-            setVideoState(VideoState.canPlay);
+            setVideoState(VideoLoadedState.canPlay);
         };
 
         const onError = () => {
-            setVideoState(VideoState.error);
+            setVideoState(VideoLoadedState.error);
         };
 
         /**
@@ -64,11 +85,19 @@ export const VideoPrototypePlayer = ({ videoUrl }: VideoPrototypePlayerProps) =>
             <Typography variant="body1" sx={{ mb: 1 }}>
                 VideoPrototypePlayer State: {videoState}
             </Typography>
-            <video ref={videoRef} controls>
+            <Video
+                ref={videoRef}
+                onTimeUpdate={handleProgress}
+                width="100%"
+                disablePictureInPicture
+            >
                 <source src={videoUrl} />
-            </video>
-            <Box>
-                <Button onClick={togglePlay}>{isPlaying ? 'Pause' : 'Play'}</Button>
+            </Video>
+            <Box sx={{ mb: 2 }}>
+                <LinearProgress variant="determinate" value={progress} />
+                <Button onClick={togglePlay}>
+                    {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+                </Button>
             </Box>
         </div>
     );
