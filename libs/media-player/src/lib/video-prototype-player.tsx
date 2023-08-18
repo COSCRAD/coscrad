@@ -1,3 +1,4 @@
+import { ITranscript } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Pause as PauseIcon, PlayArrow as PlayArrowIcon } from '@mui/icons-material/';
 import { Box, Button, LinearProgress, Typography, styled } from '@mui/material';
@@ -11,6 +12,7 @@ const Video = styled('video')({
 
 interface VideoPrototypePlayerProps {
     videoUrl: string;
+    transcript?: ITranscript;
 }
 
 enum VideoLoadedState {
@@ -21,7 +23,7 @@ enum VideoLoadedState {
     null = 'null',
 }
 
-export const VideoPrototypePlayer = ({ videoUrl }: VideoPrototypePlayerProps) => {
+export const VideoPrototypePlayer = ({ videoUrl, transcript }: VideoPrototypePlayerProps) => {
     const videoRef = useRef<HTMLVideoElement>(null);
 
     const [videoState, setVideoState] = useState<VideoLoadedState>(VideoLoadedState.loading);
@@ -81,8 +83,8 @@ export const VideoPrototypePlayer = ({ videoUrl }: VideoPrototypePlayerProps) =>
     });
 
     return (
-        <div>
-            <Typography variant="body1" sx={{ mb: 1 }}>
+        <Box>
+            <Typography variant="h6" sx={{ mb: 1 }}>
                 VideoPrototypePlayer State: {videoState}
             </Typography>
             <Video
@@ -99,6 +101,9 @@ export const VideoPrototypePlayer = ({ videoUrl }: VideoPrototypePlayerProps) =>
                     {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
                 </Button>
             </Box>
-        </div>
+            <Typography variant="h6" sx={{ mb: 1 }}>
+                <pre>Subtitle Stream: {JSON.stringify(transcript, null, 2)}</pre>
+            </Typography>
+        </Box>
     );
 };
