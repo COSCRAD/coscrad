@@ -3,6 +3,7 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Pause as PauseIcon, PlayArrow as PlayArrowIcon } from '@mui/icons-material/';
 import { Box, Button, LinearProgress, Typography, styled } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
+import { TimecodedTranscriptPresenter } from './timecoded-transcript-presenter';
 
 const Video = styled('video')({
     flexShrink: 1,
@@ -12,7 +13,7 @@ const Video = styled('video')({
 
 interface VideoPrototypePlayerProps {
     videoUrl: string;
-    transcript?: ITranscript;
+    transcript: ITranscript;
 }
 
 enum VideoLoadedState {
@@ -23,12 +24,17 @@ enum VideoLoadedState {
     null = 'null',
 }
 
-export const VideoPrototypePlayer = ({ videoUrl, transcript }: VideoPrototypePlayerProps) => {
+export const VideoPrototypePlayer = ({
+    videoUrl,
+    transcript,
+}: VideoPrototypePlayerProps): JSX.Element => {
     const videoRef = useRef<HTMLVideoElement>(null);
 
     const [videoState, setVideoState] = useState<VideoLoadedState>(VideoLoadedState.loading);
 
     const [isPlaying, setIsPlaying] = useState(false);
+
+    const [currentTimeCode, setCurrentTimecode] = useState(0);
 
     const [progress, setProgress] = useState(0);
 
@@ -49,6 +55,8 @@ export const VideoPrototypePlayer = ({ videoUrl, transcript }: VideoPrototypePla
         const duration = videoRef.current.duration;
 
         const currentTime = videoRef.current.currentTime;
+
+        setCurrentTimecode(currentTime);
 
         const progress = (currentTime / duration) * 100;
 
@@ -101,6 +109,10 @@ export const VideoPrototypePlayer = ({ videoUrl, transcript }: VideoPrototypePla
                     {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
                 </Button>
             </Box>
+            <TimecodedTranscriptPresenter
+                transcript={transcript}
+                mediaCurrentTime={currentTimeCode}
+            />
             <Typography variant="h6" sx={{ mb: 1 }}>
                 <pre>Subtitle Stream: {JSON.stringify(transcript, null, 2)}</pre>
             </Typography>
