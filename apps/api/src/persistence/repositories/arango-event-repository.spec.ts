@@ -1,10 +1,15 @@
+import { Union, bootstrapDynamicTypes } from '@coscrad/data-types';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildMockConfigServiceSpec from '../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../app/config/buildConfigFilePath';
 import { Environment } from '../../app/config/constants/Environment';
+import { SongModule } from '../../app/domain-modules/song.module';
+import { CoscradEventFactory } from '../../domain/common/events/coscrad-event-factory';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
+import { buildFakeTimersConfig } from '../../domain/models/__tests__/utilities/buildFakeTimersConfig';
 import { dummySystemUserId } from '../../domain/models/__tests__/utilities/dummySystemUserId';
+import { BaseEvent } from '../../domain/models/shared/events/base-event.entity';
 import { SongCreated } from '../../domain/models/song/commands/song-created.event';
 import { AggregateType } from '../../domain/types/AggregateType';
 import { InternalError } from '../../lib/errors/InternalError';
@@ -16,6 +21,17 @@ import generateDatabaseNameForTestSuite from './__tests__/generateDatabaseNameFo
 import { IEventRepository } from './arango-command-repository-for-aggregate';
 import { ArangoEventRepository } from './arango-event-repository';
 
+const fakeTimersConfig = buildFakeTimersConfig();
+
+// TODO remove this hack
+class UsesCoscradEventUnion {
+    @Union('COSCRAD_EVENT_UNION', 'type', {
+        label: 'major hack',
+        description: 'this is currently required for bootstrapDynamicTypes to work',
+    })
+    event: BaseEvent;
+}
+
 const databaseName = generateDatabaseNameForTestSuite();
 
 describe(`Arango Event Repository`, () => {
@@ -23,17 +39,26 @@ describe(`Arango Event Repository`, () => {
 
     let arangoEventRepository: IEventRepository;
 
+    let coscradEventFactory: CoscradEventFactory;
+
     beforeAll(async () => {
+        const allCtors = [SongCreated, UsesCoscradEventUnion];
+
+        bootstrapDynamicTypes(allCtors);
+
         const testingModule = await Test.createTestingModule({
-            imports: [PersistenceModule.forRootAsync()],
+            imports: [PersistenceModule.forRootAsync(), SongModule],
             providers: [
                 ConfigService,
-                // doesn't the persistence module already do this?
-                //     {
-                //     provide: ArangoDatabaseProvider,
-                //     useFactory: (arangoConnectionProvider: ArangoConnectionProvider) => new ArangoDatabaseProvider(arangoConnectionProvider),
-                //     inject: [ArangoConnectionProvider]
-                // }
+                {
+                    provide: UsesCoscradEventUnion,
+                    useValue: UsesCoscradEventUnion,
+                },
+                {
+                    provide: CoscradEventFactory,
+                    useFactory: () => new CoscradEventFactory(allCtors),
+                },
+
                 ArangoEventRepository,
             ],
         })
@@ -54,10 +79,12 @@ describe(`Arango Event Repository`, () => {
         arangoEventRepository = testingModule.get(ArangoEventRepository);
 
         arangoDatabaseProvider = testingModule.get(ArangoDatabaseProvider);
+
+        jest.useFakeTimers(fakeTimersConfig);
     });
 
     beforeEach(async () => {
-        await new TestRepositoryProvider(arangoDatabaseProvider).testSetup();
+        await new TestRepositoryProvider(arangoDatabaseProvider, coscradEventFactory).testSetup();
     });
 
     describe(`appendEvent`, () => {

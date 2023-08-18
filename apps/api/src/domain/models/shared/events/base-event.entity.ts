@@ -11,13 +11,18 @@ export abstract class BaseEvent extends BaseDomainModel {
 
     payload: ICommandBase;
 
-    constructor(command: ICommandBase, eventId: AggregateId, systemUserId: AggregateId) {
+    constructor(
+        command: ICommandBase,
+        eventId: AggregateId,
+        systemUserId: AggregateId,
+        timestamp?: number
+    ) {
         super();
 
         this.payload = cloneToPlainObject(command);
 
         this.meta = {
-            dateCreated: Date.now(),
+            dateCreated: timestamp || Date.now(),
             // TODO we may want to remove this redundant property (requires migration for existing events)
             id: eventId,
             userId: systemUserId,

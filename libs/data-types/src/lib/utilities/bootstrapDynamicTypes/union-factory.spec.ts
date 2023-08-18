@@ -42,7 +42,7 @@ describe(`UnionFactory`, () => {
                         THING_UNION
                     );
 
-                    const instance = factory.build(dto);
+                    const instance = factory.build(dto.type, dto);
 
                     expect(instance).toBeInstanceOf(UnionMemberCtor);
                 });
@@ -52,7 +52,8 @@ describe(`UnionFactory`, () => {
 
     describe(`when there is no union with the given name`, () => {
         it(`should throw`, () => {
-            const act = () => new UnionFactory([], THING_UNION).build(thingOneDto);
+            const act = () =>
+                new UnionFactory([], THING_UNION).build(thingOneDto.type, thingOneDto);
 
             expect(act).toThrow();
         });
@@ -66,7 +67,7 @@ describe(`UnionFactory`, () => {
             );
 
             const act = () =>
-                factory.build({
+                factory.build('ninety-five', {
                     type: 'ninety-five',
                 });
 

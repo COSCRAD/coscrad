@@ -7,6 +7,7 @@ import { MockJwtAdminAuthGuard } from '../../../authorization/mock-jwt-admin-aut
 import { MockJwtAuthGuard } from '../../../authorization/mock-jwt-auth-guard';
 import { MockJwtStrategy } from '../../../authorization/mock-jwt.strategy';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
+import { CoscradEventFactory } from '../../../domain/common';
 import { ID_MANAGER_TOKEN } from '../../../domain/interfaces/id-manager.interface';
 import {
     AddLineItemToTranscript,
@@ -238,12 +239,16 @@ export default async (
             },
             {
                 provide: REPOSITORY_PROVIDER_TOKEN,
-                useFactory: (arangoConnectionProvider: ArangoConnectionProvider) => {
+                useFactory: (
+                    arangoConnectionProvider: ArangoConnectionProvider,
+                    coscradEventFactory: CoscradEventFactory
+                ) => {
                     return new ArangoRepositoryProvider(
-                        new ArangoDatabaseProvider(arangoConnectionProvider)
+                        new ArangoDatabaseProvider(arangoConnectionProvider),
+                        coscradEventFactory
                     );
                 },
-                inject: [ArangoConnectionProvider],
+                inject: [ArangoConnectionProvider, CoscradEventFactory],
             },
             {
                 provide: EdgeConnectionQueryService,

@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { CoscradEventFactory } from '../../domain/common/events/coscrad-event-factory';
 import { BaseEvent } from '../../domain/models/shared/events/base-event.entity';
 import { AggregateCompositeIdentifier } from '../../domain/types/AggregateCompositeIdentifier';
 import { isNullOrUndefined } from '../../domain/utilities/validation/is-null-or-undefined';
@@ -13,7 +14,10 @@ import { IEventRepository } from './arango-command-repository-for-aggregate';
 export class ArangoEventRepository implements IEventRepository {
     private readonly arangoEventDatabase: ArangoDatabaseForCollection<BaseEvent>;
 
-    constructor(databaseProvider: ArangoDatabaseProvider) {
+    constructor(
+        databaseProvider: ArangoDatabaseProvider,
+        private readonly coscradEventFactory: CoscradEventFactory
+    ) {
         this.arangoEventDatabase = databaseProvider.getDatabaseForCollection(
             ArangoCollectionId.events
         );
@@ -51,7 +55,7 @@ export class ArangoEventRepository implements IEventRepository {
             .map(mapDatabaseDocumentToAggregateDTO);
 
         // TODO Either add an event factory, or return only the DTO
-        return filteredEvents as BaseEvent[];
+        return filteredEvents.map((eventDocument) => this.coscradEventFactory.build(eventDocument));
     }
 
     async appendEvent(event: BaseEvent): Promise<void> {

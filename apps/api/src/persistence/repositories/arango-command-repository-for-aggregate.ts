@@ -37,7 +37,7 @@ export class ArangoSongCommandRepository implements IRepositoryForAggregate<Song
 
     async fetchById(id: AggregateId): Promise<Maybe<ResultOrError<Song>>> {
         const eventStream = await this.eventRepository.fetchEvents({
-            type: AggregateType.song,
+            type: this.aggregateType,
             id,
         });
 
@@ -87,6 +87,11 @@ export class ArangoSongCommandRepository implements IRepositoryForAggregate<Song
             );
         }
 
+        // Events are appended in order, but should we sort here by date to be certain?
+        const latestEvent = eventHistory.at(-1);
+
+        await this.eventRepository.appendEvent(latestEvent);
+
         await this.snapshotRepositoryForAggregate.create(entity);
     }
 
@@ -114,7 +119,7 @@ export class ArangoSongCommandRepository implements IRepositoryForAggregate<Song
      * directly.
      */
     async update(updatedEntity: Song): Promise<void> {
-        // Should the event history be an array of instances?
+        // Should the event history be an array of instances? << DO this!
         const mostRecentEvent = updatedEntity.eventHistory.at(-1);
 
         await this.eventRepository.appendEvent(mostRecentEvent);

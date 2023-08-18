@@ -14,6 +14,12 @@ export class CoscradEventFactory {
     }
 
     build<T extends BaseEvent = BaseEvent>(eventDocument: DTO<BaseEvent>): T {
-        return this.unionFactory.build(eventDocument) as T;
+        return this.unionFactory.build(
+            eventDocument.type,
+            eventDocument.payload,
+            eventDocument.meta.id,
+            eventDocument.meta.userId,
+            eventDocument.meta.dateCreated
+        ) as T;
     }
 }

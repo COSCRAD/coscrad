@@ -10,6 +10,7 @@ import {
 } from '../../domain/models/song/commands';
 import { CreateSong } from '../../domain/models/song/commands/create-song.command';
 import { CreateSongCommandHandler } from '../../domain/models/song/commands/create-song.command-handler';
+import { SongCreated } from '../../domain/models/song/commands/song-created.event';
 import { SongQueryService } from '../../domain/services/query-services/song-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { PersistenceModule } from '../../persistence/persistence.module';
@@ -27,7 +28,16 @@ import { SongController } from '../controllers/resources/song.controller';
         TranslateSongLyricsCommandHandler,
         TranslateSongTitleCommandHandler,
         // Data Classes
-        ...[CreateSong, AddLyricsForSong, TranslateSongLyrics, TranslateSongTitle].map((ctor) => ({
+        ...[
+            // Commands
+            CreateSong,
+            AddLyricsForSong,
+            TranslateSongLyrics,
+            TranslateSongTitle,
+            // Events
+            SongCreated,
+            // TODO Add remaining song events
+        ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
         })),
