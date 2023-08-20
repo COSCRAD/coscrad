@@ -1668,8 +1668,8 @@
                     ],
                     "items": [
                         {
-                            "inPointMilliseconds": 12000,
-                            "outPointMilliseconds": 15550,
+                            "inPointMilliseconds": 3000,
+                            "outPointMilliseconds": 6850,
                             "text": {
                                 "items": [
                                     {
@@ -1682,8 +1682,8 @@
                             "speakerInitials": "DM"
                         },
                         {
-                            "inPointMilliseconds": 18300,
-                            "outPointMilliseconds": 19240,
+                            "inPointMilliseconds": 9100,
+                            "outPointMilliseconds": 12340,
                             "text": {
                                 "items": [
                                     {

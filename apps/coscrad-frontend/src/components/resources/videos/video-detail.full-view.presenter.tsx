@@ -6,7 +6,6 @@ import {
 import { VideoPrototypePlayer } from '@coscrad/media-player';
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
-import { TranscriptPresenter } from '../../transcripts/transcript-presenter';
 import { convertMillisecondsToSeconds } from '../utils/math';
 
 export const VideoDetailFullViewPresenter = ({
@@ -23,7 +22,6 @@ export const VideoDetailFullViewPresenter = ({
                 value={convertMillisecondsToSeconds(lengthMilliseconds)}
             />
             <VideoPrototypePlayer videoUrl={videoUrl} transcript={transcript} />
-            <TranscriptPresenter transcript={transcript} />
         </ResourceDetailFullViewPresenter>
     );
 };

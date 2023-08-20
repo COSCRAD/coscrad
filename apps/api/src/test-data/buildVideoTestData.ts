@@ -25,14 +25,14 @@ const partialDtos: DTO<Omit<Video, 'type'>>[] = [
             ],
             items: [
                 {
-                    inPointMilliseconds: 12000,
-                    outPointMilliseconds: 15550,
+                    inPointMilliseconds: 3000,
+                    outPointMilliseconds: 6850,
                     text: 'This is how.',
                     speakerInitials: 'DM',
                 },
                 {
-                    inPointMilliseconds: 18300,
-                    outPointMilliseconds: 19240,
+                    inPointMilliseconds: 9100,
+                    outPointMilliseconds: 12340,
                     text: 'It is done',
                     speakerInitials: 'DM',
                 },

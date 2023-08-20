@@ -1,8 +1,17 @@
+import { Typography } from '@mui/material';
+
 interface TranscriptLinePresenterProps {
-    mediaCurrentTime: number;
-    transcriptLines: 
+    speakerInitials: string;
+    text: string;
 }
 
-export const TranscriptLinePresenter = (): JSX.Element => {
-    return <div></div>
-}
+export const TranscriptLinePresenter = ({
+    speakerInitials,
+    text,
+}: TranscriptLinePresenterProps): JSX.Element => {
+    return (
+        <Typography component="span" variant="body1">
+            {speakerInitials}: {text}
+        </Typography>
+    );
+};
