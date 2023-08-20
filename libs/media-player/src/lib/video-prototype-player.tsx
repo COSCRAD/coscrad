@@ -1,8 +1,13 @@
-import { ITranscript } from '@coscrad/api-interfaces';
+import { ITranscript, LanguageCode } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Pause as PauseIcon, PlayArrow as PlayArrowIcon } from '@mui/icons-material/';
+import {
+    Pause as PauseIcon,
+    PlayArrow as PlayArrowIcon,
+    RestartAlt as RestartIcon,
+} from '@mui/icons-material/';
 import { Box, Button, LinearProgress, Typography, styled } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
+import { MediaCurrentTimeFormatted } from './timecode-formatted';
 import { TimecodedTranscriptPresenter } from './timecoded-transcript-presenter';
 
 const Video = styled('video')({
@@ -10,6 +15,12 @@ const Video = styled('video')({
     height: '100%',
     objectFit: 'cover',
 });
+
+const VideoControls = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+}));
 
 interface VideoPrototypePlayerProps {
     videoUrl: string;
@@ -30,23 +41,44 @@ export const VideoPrototypePlayer = ({
 }: VideoPrototypePlayerProps): JSX.Element => {
     const videoRef = useRef<HTMLVideoElement>(null);
 
-    const [videoState, setVideoState] = useState<VideoLoadedState>(VideoLoadedState.loading);
+    const [videoLoadedState, setVideoLoadedState] = useState<VideoLoadedState>(
+        VideoLoadedState.loading
+    );
 
     const [isPlaying, setIsPlaying] = useState(false);
 
-    const [currentTimeCode, setCurrentTimecode] = useState(0);
+    const [mediaCurrentTime, setMediaCurrentTime] = useState(0);
 
     const [progress, setProgress] = useState(0);
+
+    const [transcriptLanguageCode, setTranscriptLanguageCode] = useState<LanguageCode>(
+        LanguageCode.English
+    );
 
     const togglePlay = () => {
         if (isNullOrUndefined(videoRef.current)) return;
 
+        if (videoLoadedState === VideoLoadedState.loading) {
+            // Video not yet loaded
+        }
         if (isPlaying) {
             videoRef.current.pause();
         } else {
             videoRef.current.play();
         }
         setIsPlaying(!isPlaying);
+    };
+
+    const seek = (time: number) => {
+        if (isNullOrUndefined(videoRef.current)) return;
+
+        videoRef.current.pause();
+
+        setIsPlaying(false);
+
+        videoRef.current.currentTime = time;
+
+        setMediaCurrentTime(videoRef.current.currentTime);
     };
 
     const handleProgress = () => {
@@ -56,7 +88,7 @@ export const VideoPrototypePlayer = ({
 
         const currentTime = videoRef.current.currentTime;
 
-        setCurrentTimecode(currentTime);
+        setMediaCurrentTime(currentTime);
 
         const progress = (currentTime / duration) * 100;
 
@@ -65,16 +97,16 @@ export const VideoPrototypePlayer = ({
 
     useEffect(() => {
         if (isNullOrUndefined(videoUrl)) {
-            setVideoState(VideoLoadedState.isMissingAudioLink);
+            setVideoLoadedState(VideoLoadedState.isMissingAudioLink);
             return;
         }
 
         const onCanPlay = () => {
-            setVideoState(VideoLoadedState.canPlay);
+            setVideoLoadedState(VideoLoadedState.canPlay);
         };
 
         const onError = () => {
-            setVideoState(VideoLoadedState.error);
+            setVideoLoadedState(VideoLoadedState.error);
         };
 
         /**
@@ -92,9 +124,6 @@ export const VideoPrototypePlayer = ({
 
     return (
         <Box>
-            <Typography variant="h6" sx={{ mb: 1 }}>
-                VideoPrototypePlayer State: {videoState}
-            </Typography>
             <Video
                 ref={videoRef}
                 onTimeUpdate={handleProgress}
@@ -104,18 +133,41 @@ export const VideoPrototypePlayer = ({
                 <source src={videoUrl} />
             </Video>
             <Box sx={{ mb: 2 }}>
-                <LinearProgress variant="determinate" value={progress} />
-                <Button onClick={togglePlay}>
-                    {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
-                </Button>
+                <LinearProgress
+                    variant="determinate"
+                    value={progress}
+                    onClick={() => {
+                        seek(14);
+                    }}
+                />
+                <VideoControls>
+                    <Box>
+                        {progress > 0 && (
+                            <Button
+                                onClick={() => {
+                                    seek(0);
+                                }}
+                            >
+                                <RestartIcon />
+                            </Button>
+                        )}
+                        <Button onClick={togglePlay}>
+                            {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+                        </Button>
+                        <TimecodedTranscriptPresenter
+                            transcript={transcript}
+                            mediaCurrentTime={mediaCurrentTime}
+                            selectedTranscriptLanguageCode={transcriptLanguageCode}
+                        />
+                    </Box>
+                    <Box>
+                        <MediaCurrentTimeFormatted mediaCurrentTime={mediaCurrentTime} />
+                    </Box>
+                </VideoControls>
+                <Typography variant="body1" sx={{ mb: 1 }}>
+                    currentTime: {mediaCurrentTime} &nbsp; State: {videoLoadedState}
+                </Typography>
             </Box>
-            <TimecodedTranscriptPresenter
-                transcript={transcript}
-                mediaCurrentTime={currentTimeCode}
-            />
-            <Typography variant="h6" sx={{ mb: 1 }}>
-                <pre>Subtitle Stream: {JSON.stringify(transcript, null, 2)}</pre>
-            </Typography>
         </Box>
     );
 };
