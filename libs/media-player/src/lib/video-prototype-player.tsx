@@ -81,6 +81,14 @@ export const VideoPrototypePlayer = ({
         setMediaCurrentTime(videoRef.current.currentTime);
     };
 
+    const seekProgress = (event: React.MouseEvent<HTMLSpanElement>) => {
+        const selectedXInSpan = Math.round(
+            ((event.clientX - event.currentTarget.offsetLeft) / event.currentTarget.offsetWidth) *
+                100
+        );
+        console.log({ clientX: selectedXInSpan });
+    };
+
     const handleProgress = () => {
         if (isNullOrUndefined(videoRef.current)) return;
 
@@ -136,8 +144,9 @@ export const VideoPrototypePlayer = ({
                 <LinearProgress
                     variant="determinate"
                     value={progress}
-                    onClick={() => {
-                        seek(14);
+                    sx={{ height: '10px' }}
+                    onClick={(event) => {
+                        seekProgress(event);
                     }}
                 />
                 <VideoControls>
