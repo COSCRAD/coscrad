@@ -1,8 +1,7 @@
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildConfigFilePath from '../../app/config/buildConfigFilePath';
 import { Environment } from '../../app/config/constants/Environment';
-import { PersistenceModule } from '../persistence.module';
 import { ArangoConnectionProvider } from './arango-connection.provider';
 
 /**
@@ -22,7 +21,14 @@ describe('Arango Connection Provider', () => {
                     envFilePath: buildConfigFilePath(Environment.test),
                     cache: false,
                 }),
-                PersistenceModule.forRootAsync(),
+            ],
+            providers: [
+                {
+                    provide: ArangoConnectionProvider,
+                    useFactory: (configService: ConfigService) =>
+                        new ArangoConnectionProvider(configService),
+                    inject: [ConfigService],
+                },
             ],
         }).compile();
 
