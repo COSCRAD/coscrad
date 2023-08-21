@@ -1,17 +1,19 @@
 import { NestedDataType } from '@coscrad/data-types';
 import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { InternalError } from '../../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
-import { MultilingualText } from '../../../common/entities/multilingual-text';
+import { ResultOrError } from '../../../../types/ResultOrError';
+import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import { Valid, isValid } from '../../../domainModelValidators/Valid';
 import VocabularyListWithNoEntriesCannotBePublishedError from '../../../domainModelValidators/errors/vocabularyList/vocabulary-list-with-no-entries-cannot-be-published.error';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../types/AggregateType';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
+import { DuplicateLanguageInMultilingualTextError } from '../../audio-item/errors/duplicate-language-in-multilingual-text.error';
 import { TextFieldContext } from '../../context/text-field-context/text-field-context.entity';
 import { Resource } from '../../resource.entity';
 import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
@@ -76,6 +78,19 @@ export class VocabularyList extends Resource {
 
     getName(): MultilingualText {
         return this.name.clone();
+    }
+
+    translateName(textItem: MultilingualTextItem): ResultOrError<VocabularyList> {
+        if (this.name.items.some(({ languageCode }) => languageCode === textItem.languageCode))
+            return new DuplicateLanguageInMultilingualTextError(textItem.languageCode);
+
+        const nameUpdateResult = this.name.translate(textItem);
+
+        if (isInternalError(nameUpdateResult)) return nameUpdateResult;
+
+        return this.safeClone<VocabularyList>({
+            name: nameUpdateResult,
+        });
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {
