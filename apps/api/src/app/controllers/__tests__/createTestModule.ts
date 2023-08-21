@@ -1,4 +1,5 @@
 import { CommandModule } from '@coscrad/commands';
+import { Union } from '@coscrad/data-types';
 import { ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { Test } from '@nestjs/testing';
@@ -8,6 +9,7 @@ import { MockJwtAuthGuard } from '../../../authorization/mock-jwt-auth-guard';
 import { MockJwtStrategy } from '../../../authorization/mock-jwt.strategy';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
 import { CoscradEventFactory } from '../../../domain/common';
+import { COSCRAD_EVENT_UNION } from '../../../domain/common/events/constants';
 import { ID_MANAGER_TOKEN } from '../../../domain/interfaces/id-manager.interface';
 import {
     AddLineItemToTranscript,
@@ -71,6 +73,7 @@ import {
 } from '../../../domain/models/shared/common-commands';
 import { GrantResourceReadAccessToUser } from '../../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command';
 import { GrantResourceReadAccessToUserCommandHandler } from '../../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command-handler';
+import { BaseEvent } from '../../../domain/models/shared/events/base-event.entity';
 import {
     AddLyricsForSong,
     AddLyricsForSongCommandHandler,
@@ -81,6 +84,7 @@ import {
 } from '../../../domain/models/song/commands';
 import { CreateSong } from '../../../domain/models/song/commands/create-song.command';
 import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
+import { SongCreated } from '../../../domain/models/song/commands/song-created.event';
 import {
     CreatePoint,
     CreatePointCommandHandler,
@@ -173,6 +177,15 @@ type CreateTestModuleOptions = {
 // If not specified, there will be no test user attached to requests
 const optionDefaults = { shouldMockIdGenerator: false };
 
+// TODO Remove this hack
+class UsesCoscradEventUnion {
+    @Union(COSCRAD_EVENT_UNION, 'type', {
+        label: 'event',
+        description: 'this hack makes COSCRAD_EVENT_UNION known to Dynamic Data Types module',
+    })
+    event: BaseEvent;
+}
+
 export const buildAllDataClassProviders = () =>
     [
         // Classes with dynamic union data types
@@ -196,6 +209,11 @@ export const buildAllDataClassProviders = () =>
         PointContext,
         FreeMultilineContext,
         IdentityContext,
+        // Hack
+        UsesCoscradEventUnion,
+
+        // Events
+        SongCreated,
     ].map((ctor: Ctor<unknown>) => ({
         provide: ctor,
         useValue: ctor,
@@ -236,6 +254,13 @@ export default async (
                     return provider;
                 },
                 inject: [ConfigService],
+            },
+            {
+                provide: CoscradEventFactory,
+                useFactory: () =>
+                    new CoscradEventFactory(
+                        buildAllDataClassProviders().map(({ useValue }) => useValue)
+                    ),
             },
             {
                 provide: REPOSITORY_PROVIDER_TOKEN,
