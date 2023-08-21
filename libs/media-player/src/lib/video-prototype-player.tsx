@@ -3,9 +3,9 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import {
     Pause as PauseIcon,
     PlayArrow as PlayArrowIcon,
-    RestartAlt as RestartIcon,
+    Replay as ReplayIcon,
 } from '@mui/icons-material/';
-import { Box, Button, LinearProgress, Typography, styled } from '@mui/material';
+import { Box, IconButton, LinearProgress, Tooltip, Typography, styled } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { MediaCurrentTimeFormatted } from './timecode-formatted';
 import { TimecodedTranscriptPresenter } from './timecoded-transcript-presenter';
@@ -27,7 +27,7 @@ interface VideoPrototypePlayerProps {
     transcript: ITranscript;
 }
 
-enum VideoLoadedState {
+enum VideoVerifiedState {
     loading = 'loading',
     error = 'error',
     canPlay = 'canPlay',
@@ -39,10 +39,14 @@ export const VideoPrototypePlayer = ({
     videoUrl,
     transcript,
 }: VideoPrototypePlayerProps): JSX.Element => {
+    // Temporary url
+    // videoUrl =
+    //     'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4';
+
     const videoRef = useRef<HTMLVideoElement>(null);
 
-    const [videoLoadedState, setVideoLoadedState] = useState<VideoLoadedState>(
-        VideoLoadedState.loading
+    const [videoVerifiedState, setVideoVerifiedState] = useState<VideoVerifiedState>(
+        VideoVerifiedState.loading
     );
 
     const [isPlaying, setIsPlaying] = useState(false);
@@ -51,20 +55,20 @@ export const VideoPrototypePlayer = ({
 
     const [progress, setProgress] = useState(0);
 
+    const [buffer, setBuffer] = useState(0);
+
     const [transcriptLanguageCode, setTranscriptLanguageCode] = useState<LanguageCode>(
         LanguageCode.English
     );
 
     const togglePlay = () => {
-        if (isNullOrUndefined(videoRef.current)) return;
-
-        if (videoLoadedState === VideoLoadedState.loading) {
+        if (videoVerifiedState === VideoVerifiedState.loading) {
             // Video not yet loaded
         }
         if (isPlaying) {
-            videoRef.current.pause();
+            videoRef.current!.pause();
         } else {
-            videoRef.current.play();
+            videoRef.current!.play();
         }
         setIsPlaying(!isPlaying);
     };
@@ -74,15 +78,8 @@ export const VideoPrototypePlayer = ({
     };
 
     const seekInProgressBar = (event: React.MouseEvent<HTMLSpanElement>) => {
-        console.log(
-            `(${event.clientX - event.currentTarget.offsetLeft}) / ${
-                event.currentTarget.offsetWidth
-            }`
-        );
-
         const percentProgressSelected =
             (event.clientX - event.currentTarget.offsetLeft) / event.currentTarget.offsetWidth;
-        console.log({ clientX: percentProgressSelected });
 
         const newMediaTime = percentProgressSelected * videoRef.current!.duration;
 
@@ -91,18 +88,18 @@ export const VideoPrototypePlayer = ({
         updateProgressBarAndMediaCurrentTime(newMediaTime);
     };
 
-    const handleProgress = () => {
-        // const duration = videoRef.current!.duration;
+    const restartMedia = () => {
+        seekInMedia(0);
 
+        if (isPlaying) {
+            togglePlay();
+        }
+    };
+
+    const handlePlayProgress = () => {
         const currentTime = videoRef.current!.currentTime;
 
         updateProgressBarAndMediaCurrentTime(currentTime);
-
-        // setMediaCurrentTime(currentTime);
-
-        // const progress = (currentTime / duration) * 100;
-
-        // setProgress(progress);
     };
 
     const updateProgressBarAndMediaCurrentTime = (time: number) => {
@@ -117,17 +114,34 @@ export const VideoPrototypePlayer = ({
 
     useEffect(() => {
         if (isNullOrUndefined(videoUrl)) {
-            setVideoLoadedState(VideoLoadedState.isMissingAudioLink);
+            setVideoVerifiedState(VideoVerifiedState.isMissingAudioLink);
             return;
         }
 
         const onCanPlay = () => {
-            setVideoLoadedState(VideoLoadedState.canPlay);
+            setVideoVerifiedState(VideoVerifiedState.canPlay);
         };
 
         const onError = () => {
-            setVideoLoadedState(VideoLoadedState.error);
+            setVideoVerifiedState(VideoVerifiedState.error);
         };
+
+        videoRef.current!.addEventListener('progress', () => {
+            const bufferedVideo = videoRef.current!.buffered;
+
+            const bufferedVideoLength = bufferedVideo.length;
+
+            if (bufferedVideoLength > 0) {
+                console.log({ start: bufferedVideo.start(0), end: bufferedVideo.end(0) });
+            }
+
+            const bufferedEnd =
+                bufferedVideoLength > 0 ? bufferedVideo.end(bufferedVideoLength - 1) : 0;
+
+            const videoDuration = videoRef.current!.duration;
+
+            setBuffer((bufferedEnd / videoDuration) * 100);
+        });
 
         /**
          * This video instance will never be played. We are using it to test whether
@@ -146,7 +160,8 @@ export const VideoPrototypePlayer = ({
         <Box>
             <Video
                 ref={videoRef}
-                onTimeUpdate={handleProgress}
+                onTimeUpdate={handlePlayProgress}
+                onClick={togglePlay}
                 width="100%"
                 disablePictureInPicture
             >
@@ -154,8 +169,9 @@ export const VideoPrototypePlayer = ({
             </Video>
             <Box sx={{ mb: 2 }}>
                 <LinearProgress
-                    variant="determinate"
+                    variant="buffer"
                     value={progress}
+                    valueBuffer={buffer}
                     sx={{ height: '10px' }}
                     onClick={(event) => {
                         seekInProgressBar(event);
@@ -163,18 +179,21 @@ export const VideoPrototypePlayer = ({
                 />
                 <VideoControls>
                     <Box>
-                        {progress > 0 && (
-                            <Button
-                                onClick={() => {
-                                    seekInMedia(0);
-                                }}
-                            >
-                                <RestartIcon />
-                            </Button>
-                        )}
-                        <Button onClick={togglePlay}>
-                            {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
-                        </Button>
+                        {/* Note: the tooltip on the disabled button generates an error.  There's a 
+                            discussion (https://github.com/mui/material-ui/issues/8416) that still seems
+                            to be unresolved.  This: https://github.com/mui/material-ui/issues/8416#issuecomment-1294989582
+                            seems correct for UI design, that tooltips should appear regardless of a button's disabled status 
+                        */}
+                        <Tooltip title="Restart Media">
+                            <IconButton onClick={restartMedia} disabled={progress === 0}>
+                                <ReplayIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title={isPlaying ? 'Pause Media' : 'Play Media'}>
+                            <IconButton onClick={togglePlay}>
+                                {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+                            </IconButton>
+                        </Tooltip>
                         <TimecodedTranscriptPresenter
                             transcript={transcript}
                             mediaCurrentTime={mediaCurrentTimeForPresentation}
@@ -188,7 +207,8 @@ export const VideoPrototypePlayer = ({
                     </Box>
                 </VideoControls>
                 <Typography variant="body1" sx={{ mb: 1 }}>
-                    currentTime: {mediaCurrentTimeForPresentation} &nbsp; State: {videoLoadedState}
+                    currentTime: {mediaCurrentTimeForPresentation} &nbsp; Verified State:{' '}
+                    {videoVerifiedState}
                 </Typography>
             </Box>
         </Box>
