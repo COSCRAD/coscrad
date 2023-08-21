@@ -47,7 +47,7 @@ export const VideoPrototypePlayer = ({
 
     const [isPlaying, setIsPlaying] = useState(false);
 
-    const [mediaCurrentTime, setMediaCurrentTime] = useState(0);
+    const [mediaCurrentTimeForPresentation, setMediaCurrentTimeForPresentation] = useState(0);
 
     const [progress, setProgress] = useState(0);
 
@@ -69,36 +69,48 @@ export const VideoPrototypePlayer = ({
         setIsPlaying(!isPlaying);
     };
 
-    const seek = (time: number) => {
-        if (isNullOrUndefined(videoRef.current)) return;
-
-        videoRef.current.pause();
-
-        setIsPlaying(false);
-
-        videoRef.current.currentTime = time;
-
-        setMediaCurrentTime(videoRef.current.currentTime);
+    const seekInMedia = (time: number) => {
+        videoRef.current!.currentTime = time;
     };
 
-    const seekProgress = (event: React.MouseEvent<HTMLSpanElement>) => {
-        const selectedXInSpan = Math.round(
-            ((event.clientX - event.currentTarget.offsetLeft) / event.currentTarget.offsetWidth) *
-                100
+    const seekInProgressBar = (event: React.MouseEvent<HTMLSpanElement>) => {
+        console.log(
+            `(${event.clientX - event.currentTarget.offsetLeft}) / ${
+                event.currentTarget.offsetWidth
+            }`
         );
-        console.log({ clientX: selectedXInSpan });
+
+        const percentProgressSelected =
+            (event.clientX - event.currentTarget.offsetLeft) / event.currentTarget.offsetWidth;
+        console.log({ clientX: percentProgressSelected });
+
+        const newMediaTime = percentProgressSelected * videoRef.current!.duration;
+
+        seekInMedia(newMediaTime);
+
+        updateProgressBarAndMediaCurrentTime(newMediaTime);
     };
 
     const handleProgress = () => {
-        if (isNullOrUndefined(videoRef.current)) return;
+        // const duration = videoRef.current!.duration;
 
-        const duration = videoRef.current.duration;
+        const currentTime = videoRef.current!.currentTime;
 
-        const currentTime = videoRef.current.currentTime;
+        updateProgressBarAndMediaCurrentTime(currentTime);
 
-        setMediaCurrentTime(currentTime);
+        // setMediaCurrentTime(currentTime);
 
-        const progress = (currentTime / duration) * 100;
+        // const progress = (currentTime / duration) * 100;
+
+        // setProgress(progress);
+    };
+
+    const updateProgressBarAndMediaCurrentTime = (time: number) => {
+        const duration = videoRef.current!.duration;
+
+        setMediaCurrentTimeForPresentation(time);
+
+        const progress = (time / duration) * 100;
 
         setProgress(progress);
     };
@@ -146,7 +158,7 @@ export const VideoPrototypePlayer = ({
                     value={progress}
                     sx={{ height: '10px' }}
                     onClick={(event) => {
-                        seekProgress(event);
+                        seekInProgressBar(event);
                     }}
                 />
                 <VideoControls>
@@ -154,7 +166,7 @@ export const VideoPrototypePlayer = ({
                         {progress > 0 && (
                             <Button
                                 onClick={() => {
-                                    seek(0);
+                                    seekInMedia(0);
                                 }}
                             >
                                 <RestartIcon />
@@ -165,16 +177,18 @@ export const VideoPrototypePlayer = ({
                         </Button>
                         <TimecodedTranscriptPresenter
                             transcript={transcript}
-                            mediaCurrentTime={mediaCurrentTime}
+                            mediaCurrentTime={mediaCurrentTimeForPresentation}
                             selectedTranscriptLanguageCode={transcriptLanguageCode}
                         />
                     </Box>
                     <Box>
-                        <MediaCurrentTimeFormatted mediaCurrentTime={mediaCurrentTime} />
+                        <MediaCurrentTimeFormatted
+                            mediaCurrentTime={mediaCurrentTimeForPresentation}
+                        />
                     </Box>
                 </VideoControls>
                 <Typography variant="body1" sx={{ mb: 1 }}>
-                    currentTime: {mediaCurrentTime} &nbsp; State: {videoLoadedState}
+                    currentTime: {mediaCurrentTimeForPresentation} &nbsp; State: {videoLoadedState}
                 </Typography>
             </Box>
         </Box>
