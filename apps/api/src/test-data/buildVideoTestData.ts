@@ -14,7 +14,7 @@ const partialDtos: DTO<Omit<Video, 'type'>>[] = [
         id: '223',
         name: buildSingleLanguageText('The Demonstration', LanguageCode.English),
         mediaItemId: mediaItems[1].id,
-        lengthMilliseconds: 20000,
+        lengthMilliseconds: 423740.952,
         published: true,
         transcript: new Transcript({
             participants: [

@@ -19,7 +19,7 @@ export const VideoDetailFullViewPresenter = ({
         <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.video}>
             <SinglePropertyPresenter
                 display="Duration"
-                value={convertMillisecondsToSeconds(lengthMilliseconds)}
+                value={`${convertMillisecondsToSeconds(lengthMilliseconds)} Sec`}
             />
             <VideoPrototypePlayer videoUrl={videoUrl} transcript={transcript} />
         </ResourceDetailFullViewPresenter>
