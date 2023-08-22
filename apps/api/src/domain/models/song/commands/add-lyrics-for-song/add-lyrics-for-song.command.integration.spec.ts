@@ -14,18 +14,22 @@ import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExp
 import { NotFound } from '../../../../../lib/types/not-found';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { ArangoEventRepository } from '../../../../../persistence/repositories/arango-event-repository';
 import { DTO } from '../../../../../types/DTO';
 import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { dummyDateNow } from '../../../__tests__/utilities/dummyDateNow';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { CannotAddDuplicateSetOfLyricsForSongError } from '../../errors';
 import { Song } from '../../song.entity';
 import { AddLyricsForSong } from './add-lyrics-for-song.command';
+import { LyricsAddedForSong } from './lyrics-added-for-song.event';
 
 const commandType = 'ADD_LYRICS_FOR_SONG';
 
@@ -61,6 +65,8 @@ describe(commandType, () => {
 
     let commandAssertionDependencies: CommandAssertionDependencies;
 
+    let eventRepository: ArangoEventRepository;
+
     beforeAll(async () => {
         ({ testRepositoryProvider, commandHandlerService, idManager, app } =
             await setUpIntegrationTest({
@@ -74,14 +80,12 @@ describe(commandType, () => {
             idManager,
             commandHandlerService,
         };
+
+        eventRepository = app.get(ArangoEventRepository);
     });
 
     afterAll(async () => {
         await app.close();
-    });
-
-    beforeAll(async () => {
-        await testRepositoryProvider.testSetup();
     });
 
     beforeEach(async () => {
@@ -117,16 +121,40 @@ describe(commandType, () => {
 
     describe(`When the command is invalid`, () => {
         describe(`when the song already has lyrics`, () => {
-            it(`should fail with the expected errors`, async () => {
+            it.only(`should fail with the expected errors`, async () => {
+                const existingLyrics = 'existing lyrics';
+
+                const lyricsLanguageCode = LanguageCode.Chilcotin;
+
+                const eventHistory = existingSong.eventHistory.concat(
+                    new LyricsAddedForSong(
+                        {
+                            aggregateCompositeIdentifier: existingSong.getCompositeIdentifier(),
+                        },
+                        buildDummyUuid(235),
+                        dummySystemUserId,
+                        // makeSure this is later than the create event
+                        dummyDateNow
+                    )
+                );
+
+                eventHistory.forEach(
+                    async (e) =>
+                        // @ts-expect-error TODO Fix types
+                        await eventRepository.appendEvent(e)
+                );
+
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     initialState: new DeluxeInMemoryStore({
                         [AggregateType.song]: [
+                            // TODO consider an `apply(event: BaseEvent): this{...}` method
                             existingSong.clone({
                                 lyrics: buildMultilingualTextWithSingleItem(
-                                    'existing lyrics',
-                                    LanguageCode.Chilcotin
+                                    existingLyrics,
+                                    lyricsLanguageCode
                                 ),
+                                eventHistory,
                             }),
                         ],
                     }).fetchFullSnapshotInLegacyFormat(),

@@ -174,6 +174,7 @@ export class Song extends Resource implements ITimeBoundable {
         );
 
         if (creationEvent.type !== `SONG_CREATED`) {
+            // TODO throw error
             return NotFound;
         }
 

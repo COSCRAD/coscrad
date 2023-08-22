@@ -82,6 +82,7 @@ import {
     TranslateSongTitle,
     TranslateSongTitleCommandHandler,
 } from '../../../domain/models/song/commands';
+import { LyricsAddedForSong } from '../../../domain/models/song/commands/add-lyrics-for-song/lyrics-added-for-song.event';
 import { CreateSong } from '../../../domain/models/song/commands/create-song.command';
 import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
 import { SongCreated } from '../../../domain/models/song/commands/song-created.event';
@@ -137,6 +138,7 @@ import { Ctor } from '../../../lib/types/Ctor';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
+import { ArangoEventRepository } from '../../../persistence/repositories/arango-event-repository';
 import { ArangoIdRepository } from '../../../persistence/repositories/arango-id-repository';
 import { ArangoRepositoryProvider } from '../../../persistence/repositories/arango-repository.provider';
 import { DTO } from '../../../types/DTO';
@@ -186,6 +188,14 @@ class UsesCoscradEventUnion {
     event: BaseEvent;
 }
 
+/**
+ * This is a hack. We should rework our dynamic union types system instead.
+ */
+export const buildUsesCoscradEventUnionProvider = () => ({
+    provide: UsesCoscradEventUnion,
+    useValue: UsesCoscradEventUnion,
+});
+
 export const buildAllDataClassProviders = () =>
     [
         // Classes with dynamic union data types
@@ -214,6 +224,7 @@ export const buildAllDataClassProviders = () =>
 
         // Events
         SongCreated,
+        LyricsAddedForSong,
     ].map((ctor: Ctor<unknown>) => ({
         provide: ctor,
         useValue: ctor,
@@ -261,6 +272,18 @@ export default async (
                     new CoscradEventFactory(
                         buildAllDataClassProviders().map(({ useValue }) => useValue)
                     ),
+            },
+            {
+                provide: ArangoEventRepository,
+                useFactory: (
+                    arangoConnectionProvider: ArangoConnectionProvider,
+                    coscradEventFactory: CoscradEventFactory
+                ) =>
+                    new ArangoEventRepository(
+                        new ArangoDatabaseProvider(arangoConnectionProvider),
+                        coscradEventFactory
+                    ),
+                inject: [ArangoConnectionProvider, CoscradEventFactory],
             },
             {
                 provide: REPOSITORY_PROVIDER_TOKEN,

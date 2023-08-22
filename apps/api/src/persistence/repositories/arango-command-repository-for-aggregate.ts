@@ -79,6 +79,12 @@ export class ArangoSongCommandRepository implements IRepositoryForAggregate<Song
     async create(entity: Song) {
         const { eventHistory } = entity;
 
+        if (eventHistory.length > 1) {
+            throw new InternalError(
+                `A newly created aggregate root must have exactly 1 event in its history, but found: ${eventHistory.length}`
+            );
+        }
+
         if (eventHistory.length < 1) {
             throw new InternalError(
                 `failed to event source ${formatAggregateCompositeIdentifier(
@@ -88,7 +94,7 @@ export class ArangoSongCommandRepository implements IRepositoryForAggregate<Song
         }
 
         // Events are appended in order, but should we sort here by date to be certain?
-        const latestEvent = eventHistory.at(-1);
+        const latestEvent = eventHistory[eventHistory.length - 1];
 
         await this.eventRepository.appendEvent(latestEvent);
 
@@ -105,8 +111,6 @@ export class ArangoSongCommandRepository implements IRepositoryForAggregate<Song
         if (entities.length === 0) return;
 
         await Promise.all(entities.map((entity) => this.create(entity)));
-
-        await this.snapshotRepositoryForAggregate.createMany(entities);
     }
 
     /**
@@ -120,7 +124,11 @@ export class ArangoSongCommandRepository implements IRepositoryForAggregate<Song
      */
     async update(updatedEntity: Song): Promise<void> {
         // Should the event history be an array of instances? << DO this!
-        const mostRecentEvent = updatedEntity.eventHistory.at(-1);
+
+        const { eventHistory = [] } = updatedEntity;
+
+        // Should the event history be an array of instances? << DO this!
+        const mostRecentEvent = eventHistory[eventHistory.length - 1];
 
         await this.eventRepository.appendEvent(mostRecentEvent);
 

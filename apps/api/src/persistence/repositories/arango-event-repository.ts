@@ -29,7 +29,9 @@ export class ArangoEventRepository implements IEventRepository {
             | AggregateCompositeIdentifier
             | Pick<AggregateCompositeIdentifier, 'type'>
     ): Promise<BaseEvent[]> {
-        const allEvents = await this.arangoEventDatabase.fetchMany();
+        const allEventDocuments = await this.arangoEventDatabase.fetchMany();
+
+        const allEventDtos = allEventDocuments.map(mapDatabaseDocumentToAggregateDTO);
 
         /**
          * TODO Ideally, we would use the `Specification` API and do this
@@ -37,22 +39,20 @@ export class ArangoEventRepository implements IEventRepository {
          * respect to Arango, so there's not a lot of value in building in complex
          * query support for this right now.
          */
-        const filteredEvents = allEvents
-            .filter(
-                ({
-                    payload: {
-                        aggregateCompositeIdentifier: { type, id },
-                    },
-                }) => {
-                    if (type !== aggregateContextIdentifier.type) return false;
+        const filteredEvents = allEventDtos.filter(
+            ({
+                payload: {
+                    aggregateCompositeIdentifier: { type, id },
+                },
+            }) => {
+                if (type !== aggregateContextIdentifier.type) return false;
 
-                    const { id: contextId } =
-                        aggregateContextIdentifier as AggregateCompositeIdentifier;
+                const { id: contextId } =
+                    aggregateContextIdentifier as AggregateCompositeIdentifier;
 
-                    return isNullOrUndefined(id) || id === contextId;
-                }
-            )
-            .map(mapDatabaseDocumentToAggregateDTO);
+                return isNullOrUndefined(id) || id === contextId;
+            }
+        );
 
         // TODO Either add an event factory, or return only the DTO
         return filteredEvents.map((eventDocument) => this.coscradEventFactory.build(eventDocument));
@@ -63,8 +63,7 @@ export class ArangoEventRepository implements IEventRepository {
 
         const databaseDocument = {
             ...databaseDocumentWithoutId,
-            // this is a getter and will not be set by our above mapping layer
-            id: event.id,
+            id: event.meta.id,
         };
 
         // TODO Why not event.toDTO() ?
