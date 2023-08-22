@@ -39,10 +39,6 @@ export const VideoPrototypePlayer = ({
     videoUrl,
     transcript,
 }: VideoPrototypePlayerProps): JSX.Element => {
-    // Temporary url
-    // videoUrl =
-    //     'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4';
-
     const videoRef = useRef<HTMLVideoElement>(null);
 
     const [videoVerifiedState, setVideoVerifiedState] = useState<VideoVerifiedState>(
@@ -56,6 +52,10 @@ export const VideoPrototypePlayer = ({
     const [progress, setProgress] = useState(0);
 
     const [buffer, setBuffer] = useState(0);
+
+    const [inPoint, setInPoint] = useState(0);
+
+    const [outPoint, setOutPoint] = useState(0);
 
     const [transcriptLanguageCode, setTranscriptLanguageCode] = useState<LanguageCode>(
         LanguageCode.English
@@ -112,6 +112,14 @@ export const VideoPrototypePlayer = ({
         setProgress(progress);
     };
 
+    const markInPoint = () => {
+        setInPoint(videoRef.current!.currentTime);
+    };
+
+    const markOutPoint = () => {
+        setOutPoint(videoRef.current!.currentTime);
+    };
+
     useEffect(() => {
         if (isNullOrUndefined(videoUrl)) {
             setVideoVerifiedState(VideoVerifiedState.isMissingAudioLink);
@@ -126,23 +134,6 @@ export const VideoPrototypePlayer = ({
             setVideoVerifiedState(VideoVerifiedState.error);
         };
 
-        videoRef.current!.addEventListener('progress', () => {
-            const bufferedVideo = videoRef.current!.buffered;
-
-            const bufferedVideoLength = bufferedVideo.length;
-
-            if (bufferedVideoLength > 0) {
-                console.log({ start: bufferedVideo.start(0), end: bufferedVideo.end(0) });
-            }
-
-            const bufferedEnd =
-                bufferedVideoLength > 0 ? bufferedVideo.end(bufferedVideoLength - 1) : 0;
-
-            const videoDuration = videoRef.current!.duration;
-
-            setBuffer((bufferedEnd / videoDuration) * 100);
-        });
-
         /**
          * This video instance will never be played. We are using it to test whether
          * the URL is valid.
@@ -154,7 +145,37 @@ export const VideoPrototypePlayer = ({
         testVideo.addEventListener('canplaythrough', onCanPlay);
 
         testVideo.addEventListener('error', onError);
-    });
+
+        videoRef.current!.addEventListener('progress', () => {
+            const bufferedVideo = videoRef.current!.buffered;
+
+            const bufferedVideoLength = bufferedVideo.length;
+
+            const bufferedEnd =
+                bufferedVideoLength > 0 ? bufferedVideo.end(bufferedVideoLength - 1) : 0;
+
+            const videoDuration = videoRef.current!.duration;
+
+            setBuffer((bufferedEnd / videoDuration) * 100);
+        });
+
+        document.addEventListener('keydown', (event) => {
+            const keys = ['i', 'o', 'j', 'k'];
+
+            const wasAnyKeyPressed = keys.some((key) => event.key === key);
+
+            if (wasAnyKeyPressed) {
+                switch (event.key) {
+                    case 'i':
+                        markInPoint();
+                        break;
+                    case 'o':
+                        markOutPoint();
+                        break;
+                }
+            }
+        });
+    }, [videoRef]);
 
     return (
         <Box>
@@ -168,6 +189,8 @@ export const VideoPrototypePlayer = ({
                 <source src={videoUrl} />
             </Video>
             <Box sx={{ mb: 2 }}>
+                {/* With the buffer variant you get an annoying blinking dash bar
+                    we may want to make our own simpler one. */}
                 <LinearProgress
                     variant="buffer"
                     value={progress}
@@ -206,9 +229,8 @@ export const VideoPrototypePlayer = ({
                         />
                     </Box>
                 </VideoControls>
-                <Typography variant="body1" sx={{ mb: 1 }}>
-                    currentTime: {mediaCurrentTimeForPresentation} &nbsp; Verified State:{' '}
-                    {videoVerifiedState}
+                <Typography variant="body2">
+                    InPoint: {inPoint} &nbsp; OutPoint: {outPoint}
                 </Typography>
             </Box>
         </Box>
