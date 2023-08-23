@@ -287,10 +287,13 @@ export class Song extends Resource implements ITimeBoundable {
     }
 
     translateLyrics(text: string, languageCode: LanguageCode): ResultOrError<Song> {
-        if (!this.hasLyrics()) return new NoLyricsToTranslateError(this);
+        if (!this.hasLyrics()) return new NoLyricsToTranslateError(this.id);
 
         if (this.hasTranslation(languageCode))
-            return new SongLyricsHaveAlreadyBeenTranslatedToGivenLanguageError(this, languageCode);
+            return new SongLyricsHaveAlreadyBeenTranslatedToGivenLanguageError(
+                this.id,
+                languageCode
+            );
 
         const newLyrics = this.lyrics.translate(
             new MultilingualTextItem({
