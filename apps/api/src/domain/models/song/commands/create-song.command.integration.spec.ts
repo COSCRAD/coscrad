@@ -2,7 +2,6 @@ import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpIntegrationTest';
-import getValidAggregateInstanceForTest from '../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { NotAvailable } from '../../../../lib/types/not-available';
 import { NotFound } from '../../../../lib/types/not-found';
@@ -183,18 +182,12 @@ describe('CreateSong', () => {
 
                 const validCommandFSA = buildValidCommandFSA(newId);
 
-                await testRepositoryProvider.addFullSnapshot(
-                    buildInMemorySnapshot({
-                        resources: {
-                            [ResourceType.song]: [
-                                getValidAggregateInstanceForTest(ResourceType.song).clone({
-                                    id: newId,
-                                }),
-                            ],
-                        },
-                    })
-                );
+                // add the song for the first time
+                await commandHandlerService.execute(validCommandFSA, {
+                    userId: dummySystemUserId,
+                });
 
+                // attempt to add a second song with the same ID
                 const result = await commandHandlerService.execute(validCommandFSA, {
                     userId: dummySystemUserId,
                 });
