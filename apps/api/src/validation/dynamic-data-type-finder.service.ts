@@ -18,8 +18,6 @@ export class DynamicDataTypeFinderService {
     }
 
     public async getAllDataClassCtors() {
-        console.log('I fail');
-
         const dataTypeProviders = await this.discoverService.providers(
             (provider) => !provider.injectType && isClass(provider.instance)
         );

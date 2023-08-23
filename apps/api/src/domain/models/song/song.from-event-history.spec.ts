@@ -3,9 +3,9 @@
  * successful command FSA.
  */
 
-import { LanguageCode } from '@coscrad/api-interfaces';
+import { AGGREGATE_COMPOSITE_IDENTIFIER, LanguageCode } from '@coscrad/api-interfaces';
 import { CommandFSA } from '../../../app/controllers/command/command-fsa/command-fsa.entity';
-import { isNotFound } from '../../../lib/types/not-found';
+import { NotFound, isNotFound } from '../../../lib/types/not-found';
 import { clonePlainObjectWithOverrides } from '../../../lib/utilities/clonePlainObjectWithOverrides';
 import { buildTestCommandFsaMap } from '../../../test-data/commands';
 import { MultilingualTextItem } from '../../common/entities/multilingual-text';
@@ -103,77 +103,95 @@ const songLyricsTranslated = new SongLyricsTranslated(
     dummySystemUserId
 );
 
-describe(`when there are events for the given aggregate root`, () => {
-    describe(`when there is only a creation event`, () => {
-        const eventStream = [songCreated];
+describe(`Song.fromEventHistory`, () => {
+    describe(`when there are events for the given aggregate root`, () => {
+        describe(`when there is only a creation event`, () => {
+            const eventStream = [songCreated];
 
-        it(`should succeed`, () => {
-            const songBuildResult = Song.fromEventHistory(eventStream, id);
+            it(`should succeed`, () => {
+                const songBuildResult = Song.fromEventHistory(eventStream, id);
 
-            expect(songBuildResult).toBeInstanceOf(Song);
+                expect(songBuildResult).toBeInstanceOf(Song);
 
-            const song = songBuildResult as Song;
+                const song = songBuildResult as Song;
 
-            const builtSongTitle = song.title.getTranslation(languageCodeForTitle);
+                const builtSongTitle = song.title.getTranslation(languageCodeForTitle);
 
-            if (isNotFound(builtSongTitle)) {
-                throw new Error(`Song title not found!`);
-            }
+                if (isNotFound(builtSongTitle)) {
+                    throw new Error(`Song title not found!`);
+                }
 
-            expect(builtSongTitle.text).toBe(songTitle);
+                expect(builtSongTitle.text).toBe(songTitle);
+            });
+        });
+
+        describe(`when there is a translation for the title`, () => {
+            const eventStream = [songCreated, songTitleTranslated];
+
+            it(`should have the correct title`, () => {
+                const song = Song.fromEventHistory(eventStream, id) as Song;
+
+                expect(
+                    (song.title.getTranslation(translationLanguageCode) as MultilingualTextItem)
+                        .text
+                ).toBe(songTitleTranslation);
+            });
+        });
+
+        describe(`when lyrics have been added`, () => {
+            const eventStream = [songCreated, songTitleTranslated, lyricsAddedForSong];
+
+            it(`should have the lyrics`, () => {
+                const song = Song.fromEventHistory(eventStream, id) as Song;
+
+                expect(song.hasLyrics()).toBe(true);
+
+                expect(song.lyrics.getOriginalTextItem().text).toBe(textForLyrics);
+            });
+        });
+
+        describe(`when the lyrics have been translated`, () => {
+            const eventStream = [
+                songCreated,
+                songTitleTranslated,
+                lyricsAddedForSong,
+                songLyricsTranslated,
+            ];
+
+            it(`should have translations for the lyrics`, () => {
+                const song = Song.fromEventHistory(eventStream, id) as Song;
+
+                expect(
+                    (song.lyrics.getTranslation(translationLanguageCode) as MultilingualTextItem)
+                        .text
+                ).toBe(translationForLyrics);
+            });
         });
     });
 
-    describe(`when there is a translation for the title`, () => {
+    describe(`when the first event is not a creation event for the given aggregate root`, () => {
+        const eventStream = [songTitleTranslated];
+
+        it(`should throw`, () => {
+            const attemptToBuildSong = () =>
+                Song.fromEventHistory(
+                    eventStream,
+                    songTitleTranslated.payload[AGGREGATE_COMPOSITE_IDENTIFIER].id
+                );
+
+            expect(attemptToBuildSong).toThrow();
+        });
+    });
+
+    describe(`when there are no events for the given Song`, () => {
         const eventStream = [songCreated, songTitleTranslated];
 
-        it(`should have the correct title`, () => {
-            const song = Song.fromEventHistory(eventStream, id) as Song;
+        const bogusId = buildDummyUuid(456);
 
-            expect(
-                (song.title.getTranslation(translationLanguageCode) as MultilingualTextItem).text
-            ).toBe(songTitleTranslation);
+        it(`should return NotFound`, () => {
+            const songBuildResult = Song.fromEventHistory(eventStream, bogusId);
+
+            expect(songBuildResult).toBe(NotFound);
         });
-    });
-
-    describe(`when lyrics have been added`, () => {
-        const eventStream = [songCreated, songTitleTranslated, lyricsAddedForSong];
-
-        it(`should have the lyrics`, () => {
-            const song = Song.fromEventHistory(eventStream, id) as Song;
-
-            expect(song.hasLyrics()).toBe(true);
-
-            expect(song.lyrics.getOriginalTextItem().text).toBe(textForLyrics);
-        });
-    });
-
-    describe(`when the lyrics have been translated`, () => {
-        const eventStream = [
-            songCreated,
-            songTitleTranslated,
-            lyricsAddedForSong,
-            songLyricsTranslated,
-        ];
-
-        it(`should have translations for the lyrics`, () => {
-            const song = Song.fromEventHistory(eventStream, id) as Song;
-
-            expect(
-                (song.lyrics.getTranslation(translationLanguageCode) as MultilingualTextItem).text
-            ).toBe(translationForLyrics);
-        });
-    });
-});
-
-describe(`when there are no events for the given aggregate root`, () => {
-    const eventStream = [songCreated, songTitleTranslated];
-
-    const bogusId = buildDummyUuid(456);
-
-    it(`should throw`, () => {
-        const attemptToBuildSong = () => Song.fromEventHistory(eventStream, bogusId);
-
-        expect(attemptToBuildSong).toThrow();
     });
 });
