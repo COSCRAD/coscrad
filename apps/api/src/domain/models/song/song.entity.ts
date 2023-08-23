@@ -16,6 +16,7 @@ import { NotFound, isNotFound } from '../../../lib/types/not-found';
 import { DTO } from '../../../types/DTO';
 import { DeepPartial } from '../../../types/DeepPartial';
 import { ResultOrError } from '../../../types/ResultOrError';
+import formatAggregateCompositeIdentifier from '../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText, MultilingualTextItem } from '../../common/entities/multilingual-text';
 import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
@@ -166,16 +167,24 @@ export class Song extends Resource implements ITimeBoundable {
         idOfSongToCreate: AggregateId
     ): Maybe<ResultOrError<Song>> {
         // TODO ensure events are temporally sorted first
-        const [creationEvent, ...updateEvents] = eventStream.filter(({ payload }) =>
+        const eventsForThisSong = eventStream.filter(({ payload }) =>
             isDeepStrictEqual((payload as ICommandBase)[AGGREGATE_COMPOSITE_IDENTIFIER], {
                 type: AggregateType.song,
                 id: idOfSongToCreate,
             })
         );
 
+        if (eventsForThisSong.length === 0) return NotFound;
+
+        const [creationEvent, ...updateEvents] = eventsForThisSong;
+
         if (creationEvent.type !== `SONG_CREATED`) {
-            // TODO throw error
-            return NotFound;
+            throw new InternalError(
+                `The first event for ${formatAggregateCompositeIdentifier({
+                    type: AggregateType.song,
+                    id: idOfSongToCreate,
+                })} should have been of type SONG_CREATED, but found: ${creationEvent?.type}`
+            );
         }
 
         // Note that the event payload is currently just a record of the successful command payload. In the future, we need separate types \ mapping layer.
@@ -208,19 +217,20 @@ export class Song extends Resource implements ITimeBoundable {
                 if (event.type === SONG_TITLE_TRANSLATED) {
                     const { translation, languageCode } = event.payload as TranslateSongTitle;
 
-                    return song.translateTitle(translation, languageCode);
+                    // TODO Wrap in the add event behaviour so we don't need to repeat it and risk forgetting it
+                    return song.addEventToHistory(event).translateTitle(translation, languageCode);
                 }
 
                 if (event.type === LYRICS_ADDED_FOR_SONG) {
                     const { lyrics, languageCode } = event.payload as AddLyricsForSong;
 
-                    return song.addLyrics(lyrics, languageCode);
+                    return song.addEventToHistory(event).addLyrics(lyrics, languageCode);
                 }
 
                 if (event.type === SONG_LYRICS_TRANSLATED) {
                     const { translation, languageCode } = event.payload as TranslateSongLyrics;
 
-                    return song.translateLyrics(translation, languageCode);
+                    return song.addEventToHistory(event).translateLyrics(translation, languageCode);
                 }
             },
             initialInstance

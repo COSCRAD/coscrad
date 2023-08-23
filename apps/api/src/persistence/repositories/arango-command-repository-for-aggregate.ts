@@ -94,6 +94,7 @@ export class ArangoSongCommandRepository implements IRepositoryForAggregate<Song
         }
 
         // Events are appended in order, but should we sort here by date to be certain?
+        // note the index here will always be 0 based on the above checks
         const latestEvent = eventHistory[eventHistory.length - 1];
 
         await this.eventRepository.appendEvent(latestEvent);
