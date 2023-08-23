@@ -77,15 +77,17 @@ import { BaseEvent } from '../../../domain/models/shared/events/base-event.entit
 import {
     AddLyricsForSong,
     AddLyricsForSongCommandHandler,
+    LyricsAddedForSong,
+    SongCreated,
+    SongLyricsTranslated,
+    SongTitleTranslated,
     TranslateSongLyrics,
     TranslateSongLyricsCommandHandler,
     TranslateSongTitle,
     TranslateSongTitleCommandHandler,
 } from '../../../domain/models/song/commands';
-import { LyricsAddedForSong } from '../../../domain/models/song/commands/add-lyrics-for-song/lyrics-added-for-song.event';
 import { CreateSong } from '../../../domain/models/song/commands/create-song.command';
 import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
-import { SongCreated } from '../../../domain/models/song/commands/song-created.event';
 import {
     CreatePoint,
     CreatePointCommandHandler,
@@ -224,7 +226,9 @@ export const buildAllDataClassProviders = () =>
 
         // Events
         SongCreated,
+        SongTitleTranslated,
         LyricsAddedForSong,
+        SongLyricsTranslated,
     ].map((ctor: Ctor<unknown>) => ({
         provide: ctor,
         useValue: ctor,

@@ -3,6 +3,8 @@ import { Module } from '@nestjs/common';
 import {
     AddLyricsForSong,
     AddLyricsForSongCommandHandler,
+    SongLyricsTranslated,
+    SongTitleTranslated,
     TranslateSongLyrics,
     TranslateSongLyricsCommandHandler,
     TranslateSongTitle,
@@ -37,7 +39,9 @@ import { SongController } from '../controllers/resources/song.controller';
             TranslateSongTitle,
             // Events
             SongCreated,
+            SongTitleTranslated,
             LyricsAddedForSong,
+            SongLyricsTranslated,
             // TODO Add remaining song events
         ].map((ctor) => ({
             provide: ctor,
