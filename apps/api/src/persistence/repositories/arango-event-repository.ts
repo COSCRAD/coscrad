@@ -50,7 +50,11 @@ export class ArangoEventRepository implements IEventRepository {
                 const { id: contextId } =
                     aggregateContextIdentifier as AggregateCompositeIdentifier;
 
-                return isNullOrUndefined(id) || id === contextId;
+                const didUserSpecifyIdFilter = !isNullOrUndefined(contextId);
+
+                if (!didUserSpecifyIdFilter) return true;
+
+                return id === contextId;
             }
         );
 

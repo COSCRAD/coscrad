@@ -73,6 +73,7 @@ import {
 } from '../../../domain/models/shared/common-commands';
 import { GrantResourceReadAccessToUser } from '../../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command';
 import { GrantResourceReadAccessToUserCommandHandler } from '../../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command-handler';
+import { ResourcePublished } from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import { BaseEvent } from '../../../domain/models/shared/events/base-event.entity';
 import {
     AddLyricsForSong,
@@ -229,6 +230,7 @@ export const buildAllDataClassProviders = () =>
         SongTitleTranslated,
         LyricsAddedForSong,
         SongLyricsTranslated,
+        ResourcePublished,
     ].map((ctor: Ctor<unknown>) => ({
         provide: ctor,
         useValue: ctor,

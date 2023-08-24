@@ -232,6 +232,10 @@ export class Song extends Resource implements ITimeBoundable {
 
                     return song.addEventToHistory(event).translateLyrics(translation, languageCode);
                 }
+
+                if (event.type === `RESOURCE_PUBLISHED`) {
+                    return song.addEventToHistory(event).publish();
+                }
             },
             initialInstance
         );
