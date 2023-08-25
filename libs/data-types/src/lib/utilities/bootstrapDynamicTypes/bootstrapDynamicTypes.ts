@@ -2,6 +2,8 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { COSCRAD_DATA_TYPE_METADATA } from '../../constants';
 import { CoscradPropertyTypeDefinition, isSimpleCoscradPropertyTypeDefinition } from '../../types';
 import getCoscradDataSchema from '../getCoscradDataSchema';
+import { Ctor } from '../getCoscradDataSchemaFromPrototype';
+import { buildUnionTypesMap } from './buildUnionTypesMap';
 import { leveragesUniontype } from './leveragesUnionType';
 import { resolveMemberSchemasForUnion } from './resolveMemberSchemasForUnion';
 
@@ -41,10 +43,21 @@ const mixUnionMemberSchemasIntoTypeDefinitionForClass = (
             if (complexDataType === 'UNION_TYPE') {
                 const { unionName } = propertyTypeDefinition;
 
+                const unionTypesMap = buildUnionTypesMap(allCtorCandidates as Ctor<unknown>[]);
+
+                if (!unionTypesMap.has(unionName)) {
+                    throw new Error(
+                        `Failed to resolve discriminant path for unknown union: ${unionName}`
+                    );
+                }
+
+                const { discriminantPath } = unionTypesMap.get(unionName);
+
                 return {
                     ...acc,
                     [propertyKey]: {
                         ...propertyTypeDefinition,
+                        discriminantPath,
                         schemaDefinitions: resolveMemberSchemasForUnion(
                             allCtorCandidates,
                             unionName

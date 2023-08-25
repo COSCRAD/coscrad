@@ -11,6 +11,7 @@ import {
     ReferenceTo,
     Union,
     UnionMember,
+    UnionType,
     Year,
 } from '../lib/decorators';
 import { TypeDecoratorOptions } from '../lib/decorators/types/TypeDecoratorOptions';
@@ -34,7 +35,10 @@ export class Whatsit {
 
 export const THING_UNION = 'THING_UNION';
 
-export const ThingUnion = (options: TypeDecoratorOptions) => Union(THING_UNION, 'type', options);
+export const ThingUnionType = (options: TypeDecoratorOptions) => UnionType(THING_UNION, options);
+
+@Union(THING_UNION, 'type')
+export class ThingUnion {}
 
 @UnionMember(THING_UNION, 'one')
 export class ThingDataOne {
@@ -128,7 +132,7 @@ export class Widget {
     @ISBN({ isOptional, ...buildDummyLabelAndDescription('optionalISBN') })
     optionalISBN = `979-3-16-148410-0`;
 
-    @ThingUnion({ ...buildDummyLabelAndDescription('data') })
+    @ThingUnionType({ ...buildDummyLabelAndDescription('data') })
     data: ThingDataOne | ThingDataTwo = {
         type: 'one',
 
@@ -153,7 +157,7 @@ export class Widget {
 }
 
 export const bootstrapWidgetDataTypes = (): void => {
-    bootstrapDynamicTypes([Widget, ThingDataOne, ThingDataTwo, Whatsit]);
+    bootstrapDynamicTypes([Widget, ThingDataOne, ThingDataTwo, Whatsit, ThingUnion]);
 };
 
 export const buildValidWidgetDto = (): Widget => ({

@@ -117,33 +117,6 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "isOptional": true,
     "label": "label for property: maybeANumber",
   },
-  "mimeType": {
-    "complexDataType": "ENUM",
-    "description": "description of property: mimeType",
-    "enumLabel": "MIME Type",
-    "enumName": "MIME_TYPE",
-    "isArray": false,
-    "isOptional": false,
-    "label": "label for property: mimeType",
-    "labelsAndValues": [
-      {
-        "label": "mp3",
-        "value": "audio/mpeg",
-      },
-      {
-        "label": "mp4",
-        "value": "video/mp4",
-      },
-      {
-        "label": "wav",
-        "value": "audio/x-wav",
-      },
-      {
-        "label": "mp4",
-        "value": "video/mp4",
-      },
-    ],
-  },
   "muchness": {
     "coscradDataType": "FINITE_NUMBER",
     "description": "description of property: muchness",

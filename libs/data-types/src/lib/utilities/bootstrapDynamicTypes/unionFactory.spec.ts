@@ -2,10 +2,12 @@ import {
     THING_UNION,
     ThingDataOne,
     ThingDataTwo,
+    ThingUnion,
     Widget,
     bootstrapWidgetDataTypes,
 } from '../../../test/widget';
-import { UnionFactory } from './union-factory';
+import { Ctor } from '../getCoscradDataSchemaFromPrototype';
+import { UnionFactory } from './unionFactory';
 
 const thingOneDto = {
     // this is the discriminant for a `ThingDataOne`
@@ -14,7 +16,7 @@ const thingOneDto = {
     strength: 67.3,
 };
 
-const allCtors = [Widget, ThingDataOne, ThingDataTwo];
+const allCtors = [Widget, ThingDataOne, ThingDataTwo, ThingUnion];
 
 describe(`UnionFactory`, () => {
     beforeAll(() => {
@@ -38,7 +40,7 @@ describe(`UnionFactory`, () => {
             describe(`when the discriminant is: ${dto.type}`, () => {
                 it(`should build an instance`, () => {
                     const factory = new UnionFactory<unknown, ThingDataOne | ThingDataTwo>(
-                        allCtors,
+                        allCtors as Ctor<unknown>[],
                         THING_UNION
                     );
 
@@ -62,7 +64,7 @@ describe(`UnionFactory`, () => {
     describe(`when the dto has an invalid discriminant value`, () => {
         it(`should throw`, () => {
             const factory = new UnionFactory<unknown, ThingDataOne | ThingDataTwo>(
-                allCtors,
+                allCtors as Ctor<unknown>[],
                 THING_UNION
             );
 
