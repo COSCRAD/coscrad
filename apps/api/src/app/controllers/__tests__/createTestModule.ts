@@ -116,6 +116,10 @@ import {
     CreateVocabularyList,
     CreateVocabularyListCommandHandler,
 } from '../../../domain/models/vocabulary-list/commands/create-vocabulary-list';
+import {
+    TranslateVocabularyListName,
+    TranslateVocabularyListNameCommandHandler,
+} from '../../../domain/models/vocabulary-list/commands/translate-vocabulary-list-name';
 import { AudioItemQueryService } from '../../../domain/services/query-services/audio-item-query.service';
 import { BibliographicReferenceQueryService } from '../../../domain/services/query-services/bibliographic-reference-query.service';
 import { BookQueryService } from '../../../domain/services/query-services/book-query.service';
@@ -468,6 +472,8 @@ export default async (
             CreateVocabularyListCommandHandler,
             TranslateLineItem,
             TranslateLineItemCommandHandler,
+            TranslateVocabularyListName,
+            TranslateVocabularyListNameCommandHandler,
         ],
 
         controllers: [

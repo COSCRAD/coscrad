@@ -3,9 +3,10 @@ import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { LanguageCodeEnum } from '../../../../../domain/common/entities/multilingual-text';
 import { VocabularyListCompositeId } from '../create-vocabulary-list';
+import { TRANSLATE_VOCABULARY_LIST_NAME } from './constants';
 
 @Command({
-    type: 'TRANSLATE_VOCABULARY_LIST_NAME',
+    type: TRANSLATE_VOCABULARY_LIST_NAME,
     label: 'translate vocabulary list name',
     description: 'translating vocabulary list name',
 })

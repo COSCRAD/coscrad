@@ -1,12 +1,18 @@
-import { CommandHandler } from '@coscrad/commands';
+import { CommandHandler, ICommand } from '@coscrad/commands';
+import {
+    MultilingualTextItem,
+    MultilingualTextItemRole,
+} from '../../../../../domain/common/entities/multilingual-text';
 import { Valid } from '../../../../../domain/domainModelValidators/Valid';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../../domain/types/ResourceType';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
+import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { VocabularyList } from '../../entities/vocabulary-list.entity';
 import { TranslateVocabularyListName } from './translate-vocabulary-list-name.command';
+import { VocabularyListTranslated } from './vocabulary-list-name-translated.event';
 
 @CommandHandler(TranslateVocabularyListName)
 export class TranslateVocabularyListNameCommandHandler extends BaseUpdateCommandHandler<VocabularyList> {
@@ -25,8 +31,18 @@ export class TranslateVocabularyListNameCommandHandler extends BaseUpdateCommand
 
     protected actOnInstance(
         VocabularyList: VocabularyList,
-        command: TranslateVocabularyListName
+        { text, languageCode }: TranslateVocabularyListName
     ): ResultOrError<VocabularyList> {
-        return VocabularyList.translateName();
+        return VocabularyList.translateName(
+            new MultilingualTextItem({
+                text,
+                languageCode,
+                role: MultilingualTextItemRole.freeTranslation,
+            })
+        );
+    }
+
+    protected buildEvent(command: ICommand, eventId: string, userId: string): BaseEvent {
+        return new VocabularyListTranslated(command, eventId, userId);
     }
 }
