@@ -1,6 +1,6 @@
 import { DynamicModule, Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { CoscradEventFactory } from '../domain/common';
+import { CoscradEventFactory, EventModule } from '../domain/common';
 import { ID_RESPOSITORY_TOKEN } from '../lib/id-generation/interfaces/id-repository.interface';
 import { REPOSITORY_PROVIDER_TOKEN } from './constants/persistenceConstants';
 import { ArangoConnectionProvider } from './database/arango-connection.provider';
@@ -81,7 +81,7 @@ export class PersistenceModule {
 
         return {
             module: PersistenceModule,
-            imports: [ConfigModule],
+            imports: [ConfigModule, EventModule.forRootAsync()],
             providers: [
                 arangoConnectionProvider,
                 repositoryProvider,

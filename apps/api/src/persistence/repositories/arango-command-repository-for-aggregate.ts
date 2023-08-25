@@ -26,6 +26,8 @@ export interface IEventRepository {
     appendEvent(event: DTO<BaseEvent>): Promise<void>;
 }
 
+// TODO [https://www.pivotaltracker.com/story/show/185903292]  Include a test for each aggregate's repository
+
 // THIS IS A PROTOTYPE, WE WOULD ABSTRACT OVER THE AGGREGATE TYPE
 export class ArangoSongCommandRepository implements IRepositoryForAggregate<Song> {
     private readonly aggregateType = AggregateType.song;

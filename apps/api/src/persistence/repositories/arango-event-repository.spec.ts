@@ -1,10 +1,12 @@
-import { Union, bootstrapDynamicTypes } from '@coscrad/data-types';
+import { Union } from '@coscrad/data-types';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildMockConfigServiceSpec from '../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../app/config/buildConfigFilePath';
 import { Environment } from '../../app/config/constants/Environment';
 import { SongModule } from '../../app/domain-modules/song.module';
+import { EventModule } from '../../domain/common';
 import { CoscradEventFactory } from '../../domain/common/events/coscrad-event-factory';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { buildFakeTimersConfig } from '../../domain/models/__tests__/utilities/buildFakeTimersConfig';
@@ -24,6 +26,7 @@ import { ArangoEventRepository } from './arango-event-repository';
 const fakeTimersConfig = buildFakeTimersConfig();
 
 // TODO remove this hack
+@Injectable()
 class UsesCoscradEventUnion {
     @Union('COSCRAD_EVENT_UNION', 'type', {
         label: 'major hack',
@@ -42,23 +45,15 @@ describe(`Arango Event Repository`, () => {
     let coscradEventFactory: CoscradEventFactory;
 
     beforeAll(async () => {
-        const allCtors = [SongCreated, UsesCoscradEventUnion];
-
-        bootstrapDynamicTypes(allCtors);
-
         const testingModule = await Test.createTestingModule({
-            imports: [PersistenceModule.forRootAsync(), SongModule],
+            // TODO Remove UsesCoscradEventUnion
+            imports: [SongModule, EventModule.forRootAsync(), PersistenceModule.forRootAsync()],
             providers: [
-                ConfigService,
                 {
                     provide: UsesCoscradEventUnion,
                     useValue: UsesCoscradEventUnion,
                 },
-                {
-                    provide: CoscradEventFactory,
-                    useFactory: () => new CoscradEventFactory(allCtors),
-                },
-
+                ConfigService,
                 ArangoEventRepository,
             ],
         })
