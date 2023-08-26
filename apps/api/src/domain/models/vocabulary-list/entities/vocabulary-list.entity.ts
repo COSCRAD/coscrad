@@ -18,17 +18,13 @@ import { TextFieldContext } from '../../context/text-field-context/text-field-co
 import { Resource } from '../../resource.entity';
 import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
+import { CREATE_VOCABULARY_LIST } from '../commands/create-vocabulary-list';
 import { TRANSLATE_VOCABULARY_LIST_NAME } from '../commands/translate-vocabulary-list-name/constants';
 import { DuplicateVocabularyListNameError } from '../errors';
 import { VocabularyListEntry } from '../vocabulary-list-entry.entity';
 import { VocabularyListVariable } from './vocabulary-list-variable.entity';
 
-/**
- * TODO Use the constant here. Diagnose why doing so creates a circular build
- * dependency. It seems that `getAggregateCtorFromAggregateType` is the culprit.
- * It may be time to register aggregate ctors dynamically.
- */
-@RegisterIndexScopedCommands([`CREATE_VOCABULARY_LIST`])
+@RegisterIndexScopedCommands([CREATE_VOCABULARY_LIST])
 export class VocabularyList extends Resource {
     readonly type = ResourceType.vocabularyList;
 
