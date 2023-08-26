@@ -7,8 +7,8 @@ import { TRANSLATE_VOCABULARY_LIST_NAME } from './constants';
 
 @Command({
     type: TRANSLATE_VOCABULARY_LIST_NAME,
-    label: 'translate vocabulary list name',
-    description: 'translating vocabulary list name',
+    label: 'Translate Vocabulary List Name',
+    description: `Translate the name of a vocabulary list to another language`,
 })
 export class TranslateVocabularyListName implements ICommandBase {
     @NestedDataType(VocabularyListCompositeId, {
