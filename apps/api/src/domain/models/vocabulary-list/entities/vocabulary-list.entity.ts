@@ -18,6 +18,7 @@ import { TextFieldContext } from '../../context/text-field-context/text-field-co
 import { Resource } from '../../resource.entity';
 import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
+import { TRANSLATE_VOCABULARY_LIST_NAME } from '../commands/translate-vocabulary-list-name/constants';
 import { DuplicateVocabularyListNameError } from '../errors';
 import { VocabularyListEntry } from '../vocabulary-list-entry.entity';
 import { VocabularyListVariable } from './vocabulary-list-variable.entity';
@@ -94,7 +95,7 @@ export class VocabularyList extends Resource {
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {
-        return [];
+        return [TRANSLATE_VOCABULARY_LIST_NAME];
     }
 
     protected validateComplexInvariants(): InternalError[] {

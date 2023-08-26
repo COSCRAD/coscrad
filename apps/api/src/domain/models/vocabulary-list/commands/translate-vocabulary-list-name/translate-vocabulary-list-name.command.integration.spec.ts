@@ -15,14 +15,22 @@ import {
 } from '../../../../../domain/common/entities/multilingual-text';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
+import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { NotFound } from '../../../../../lib/types/not-found';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../../types/DTO';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
+import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
+import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
+import { DuplicateLanguageInMultilingualTextError } from '../../../audio-item/errors/duplicate-language-in-multilingual-text.error';
+import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
+import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
+import { VocabularyList } from '../../entities/vocabulary-list.entity';
 import { TranslateVocabularyListName } from './translate-vocabulary-list-name.command';
 
 const commandType = 'TRANSLATE_VOCABULARY_LIST_NAME';
@@ -110,6 +118,16 @@ describe(commandType, () => {
                         .fetchById(vocabularyListId);
 
                     expect(vocabularyListSearchResult).not.toBe(NotFound);
+
+                    const vocabularyList = vocabularyListSearchResult as VocabularyList;
+
+                    const englishVocabularyListNameTranslation = vocabularyList.name.getTranslation(
+                        LanguageCode.English
+                    );
+
+                    expect(
+                        (englishVocabularyListNameTranslation as MultilingualTextItem).text
+                    ).toBe(englishName);
                 },
             });
         });
@@ -121,9 +139,88 @@ describe(commandType, () => {
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     buildCommandFSA: buildValidCommandFSA,
-                    initialState: new DeluxeInMemoryStore({}),
+                    initialState: new DeluxeInMemoryStore({
+                        [AggregateType.vocabularyList]: [
+                            existingVocabularyList.clone({
+                                name: existingVocabularyList.name.clone({
+                                    items: [
+                                        existingVocabularyList.name.items[0].clone({
+                                            languageCode: LanguageCode.English,
+                                        }),
+                                    ],
+                                }),
+                            }),
+                        ],
+                    }).fetchFullSnapshotInLegacyFormat(),
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new DuplicateLanguageInMultilingualTextError(LanguageCode.English),
+                            ])
+                        );
+                    },
                 });
             });
+        });
+
+        describe(`when the vocabulary list does not exist`, () => {
+            it(`should fail with the expected error`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    buildCommandFSA: buildValidCommandFSA,
+                    initialState: new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat(),
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new AggregateNotFoundError({
+                                    type: AggregateType.vocabularyList,
+                                    id: validCommandFSA.payload.aggregateCompositeIdentifier.id,
+                                }),
+                            ])
+                        );
+                    },
+                });
+            });
+        });
+
+        describe(`when the command payload has an invalid type`, () => {
+            describe(`when the aggregate type is invalid`, () => {
+                Object.values(AggregateType)
+                    .filter((aggregateType) => aggregateType !== AggregateType.vocabularyList)
+                    .forEach((aggregateType) => {
+                        describe(`when the type is: ${aggregateType}`, () => {
+                            it(`should fail with the expected errors`, async () => {
+                                await assertCommandFailsDueToTypeError(
+                                    commandAssertionDependencies,
+                                    {
+                                        propertyName: 'aggregateCompositeIdentifier',
+                                        invalidValue: {
+                                            type: aggregateType,
+                                            id: buildDummyUuid(567),
+                                        },
+                                    },
+                                    validCommandFSA
+                                );
+                            });
+                        });
+                    });
+            });
+
+            generateCommandFuzzTestCases(TranslateVocabularyListName).forEach(
+                ({ description, propertyName, invalidValue }) => {
+                    describe(`when the property ${propertyName} has the invalid value: ${invalidValue} (${description})`, () => {
+                        it('should fail with the appropriate error', async () => {
+                            await assertCommandFailsDueToTypeError(
+                                commandAssertionDependencies,
+                                { propertyName, invalidValue },
+                                buildValidCommandFSA()
+                            );
+                        });
+                    });
+                }
+            );
         });
     });
 });

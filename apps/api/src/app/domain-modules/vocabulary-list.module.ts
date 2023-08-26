@@ -4,6 +4,11 @@ import {
     CreateVocabularyList,
     CreateVocabularyListCommandHandler,
 } from '../../domain/models/vocabulary-list/commands/create-vocabulary-list';
+import {
+    TranslateVocabularyListName,
+    TranslateVocabularyListNameCommandHandler,
+} from '../../domain/models/vocabulary-list/commands/translate-vocabulary-list-name';
+import { VocabularyListNameTranslated } from '../../domain/models/vocabulary-list/commands/translate-vocabulary-list-name/vocabulary-list-name-translated.event';
 import { VocabularyListQueryService } from '../../domain/services/query-services/vocabulary-list-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { PersistenceModule } from '../../persistence/persistence.module';
@@ -17,11 +22,14 @@ import { VocabularyListController } from '../controllers/resources/vocabulary-li
         CommandInfoService,
         VocabularyListQueryService,
         CreateVocabularyListCommandHandler,
+        TranslateVocabularyListNameCommandHandler,
         // Data Classes
-        ...[CreateVocabularyList].map((ctor) => ({
-            provide: ctor,
-            useValue: ctor,
-        })),
+        ...[CreateVocabularyList, TranslateVocabularyListName, VocabularyListNameTranslated].map(
+            (ctor) => ({
+                provide: ctor,
+                useValue: ctor,
+            })
+        ),
     ],
 })
 export class VocabularyListModule {}

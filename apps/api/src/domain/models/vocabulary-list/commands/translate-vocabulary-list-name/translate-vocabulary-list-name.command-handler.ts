@@ -12,7 +12,7 @@ import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { VocabularyList } from '../../entities/vocabulary-list.entity';
 import { TranslateVocabularyListName } from './translate-vocabulary-list-name.command';
-import { VocabularyListTranslated } from './vocabulary-list-name-translated.event';
+import { VocabularyListNameTranslated } from './vocabulary-list-name-translated.event';
 
 @CommandHandler(TranslateVocabularyListName)
 export class TranslateVocabularyListNameCommandHandler extends BaseUpdateCommandHandler<VocabularyList> {
@@ -43,6 +43,6 @@ export class TranslateVocabularyListNameCommandHandler extends BaseUpdateCommand
     }
 
     protected buildEvent(command: ICommand, eventId: string, userId: string): BaseEvent {
-        return new VocabularyListTranslated(command, eventId, userId);
+        return new VocabularyListNameTranslated(command, eventId, userId);
     }
 }

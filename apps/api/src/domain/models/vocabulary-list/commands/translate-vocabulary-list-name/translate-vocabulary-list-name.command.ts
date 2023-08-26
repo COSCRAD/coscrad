@@ -24,8 +24,8 @@ export class TranslateVocabularyListName implements ICommandBase {
     readonly languageCode: LanguageCode;
 
     @NonEmptyString({
-        label: 'text',
-        description: 'text for the translated name',
+        label: 'translation',
+        description: 'text for the translation of the name',
     })
     readonly text: string;
 }
