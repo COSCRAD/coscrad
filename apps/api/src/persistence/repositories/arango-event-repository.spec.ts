@@ -1,21 +1,19 @@
-import { Union } from '@coscrad/data-types';
-import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildMockConfigServiceSpec from '../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../app/config/buildConfigFilePath';
 import { Environment } from '../../app/config/constants/Environment';
 import { SongModule } from '../../app/domain-modules/song.module';
-import { EventModule } from '../../domain/common';
+import { CoscradEventUnion, EventModule } from '../../domain/common';
 import { CoscradEventFactory } from '../../domain/common/events/coscrad-event-factory';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { buildFakeTimersConfig } from '../../domain/models/__tests__/utilities/buildFakeTimersConfig';
 import { dummySystemUserId } from '../../domain/models/__tests__/utilities/dummySystemUserId';
-import { BaseEvent } from '../../domain/models/shared/events/base-event.entity';
 import { SongCreated } from '../../domain/models/song/commands/song-created.event';
 import { AggregateType } from '../../domain/types/AggregateType';
 import { InternalError } from '../../lib/errors/InternalError';
 import { buildTestCommandFsaMap } from '../../test-data/commands';
+import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../../validation';
 import { ArangoDatabaseProvider } from '../database/database.provider';
 import { PersistenceModule } from '../persistence.module';
 import TestRepositoryProvider from './__tests__/TestRepositoryProvider';
@@ -24,16 +22,6 @@ import { IEventRepository } from './arango-command-repository-for-aggregate';
 import { ArangoEventRepository } from './arango-event-repository';
 
 const fakeTimersConfig = buildFakeTimersConfig();
-
-// TODO remove this hack
-@Injectable()
-class UsesCoscradEventUnion {
-    @Union('COSCRAD_EVENT_UNION', 'type', {
-        label: 'major hack',
-        description: 'this is currently required for bootstrapDynamicTypes to work',
-    })
-    event: BaseEvent;
-}
 
 const databaseName = generateDatabaseNameForTestSuite();
 
@@ -46,12 +34,16 @@ describe(`Arango Event Repository`, () => {
 
     beforeAll(async () => {
         const testingModule = await Test.createTestingModule({
-            // TODO Remove UsesCoscradEventUnion
-            imports: [SongModule, EventModule.forRootAsync(), PersistenceModule.forRootAsync()],
+            imports: [
+                SongModule,
+                EventModule.forRootAsync(),
+                PersistenceModule.forRootAsync(),
+                DynamicDataTypeModule,
+            ],
             providers: [
                 {
-                    provide: UsesCoscradEventUnion,
-                    useValue: UsesCoscradEventUnion,
+                    provide: CoscradEventUnion,
+                    useValue: CoscradEventUnion,
                 },
                 ConfigService,
                 ArangoEventRepository,
@@ -74,6 +66,8 @@ describe(`Arango Event Repository`, () => {
         arangoEventRepository = testingModule.get(ArangoEventRepository);
 
         arangoDatabaseProvider = testingModule.get(ArangoDatabaseProvider);
+
+        await testingModule.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
 
         jest.useFakeTimers(fakeTimersConfig);
     });

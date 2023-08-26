@@ -24,6 +24,7 @@ import {
     CreateNoteAboutResource,
     CreateNoteAboutResourceCommandHandler,
 } from '../../domain/models/context/commands';
+import { EdgeConnectionContextUnion } from '../../domain/models/context/edge-connection-context-union';
 
 @Module({
     imports: [PersistenceModule, CommandModule, IdGenerationModule],
@@ -37,6 +38,7 @@ import {
             NoteViewModel,
             EdgeConnectionMember,
             // context models
+            EdgeConnectionContextUnion,
             GeneralContext,
             FreeMultilineContext,
             TimeRangeContext,

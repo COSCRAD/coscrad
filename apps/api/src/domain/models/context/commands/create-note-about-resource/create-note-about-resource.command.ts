@@ -9,7 +9,7 @@ import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
 import { LanguageCodeEnum } from '../../../../common/entities/multilingual-text';
 import { AggregateTypeProperty } from '../../../shared/common-commands';
-import { ContextUnion } from '../../edge-connection-context-union';
+import { ContextUnionType } from '../../edge-connection-context-union';
 
 export class ResourceCompositeIdentifier {
     @AggregateTypeProperty(Object.values(ResourceType))
@@ -56,7 +56,7 @@ export class CreateNoteAboutResource implements ICommandBase {
     })
     readonly resourceCompositeIdentifier: ResourceCompositeIdentifier;
 
-    @ContextUnion({
+    @ContextUnionType({
         label: 'context for resource',
         description: 'contextualizes the note for the resource',
     })
