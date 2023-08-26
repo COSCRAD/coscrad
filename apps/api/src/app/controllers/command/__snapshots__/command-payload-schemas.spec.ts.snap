@@ -3322,8 +3322,6 @@ exports[`command payload schemas Command payload schema should match the snapsho
   {
     "description": "Translate a line item's transcript into another language (typically English)",
     "label": "Translate Line Item",
-    "description": "Translate the name of a vocabulary list to another language",
-    "label": "Translate Vocabulary List Name",
     "schema": {
       "aggregateCompositeIdentifier": {
         "complexDataType": "NESTED_TYPE",
@@ -3335,7 +3333,6 @@ exports[`command payload schemas Command payload schema should match the snapsho
           "id": {
             "coscradDataType": "UUID",
             "description": "the audio visual resource's ID (generated)",
-            "description": "unique identifier",
             "isArray": false,
             "isOptional": false,
             "label": "ID",
@@ -3356,16 +3353,6 @@ exports[`command payload schemas Command payload schema should match the snapsho
               {
                 "label": "audio item",
                 "value": "audioItem",
-            "description": "must be: vocabularyList",
-            "enumLabel": "type",
-            "enumName": "type",
-            "isArray": false,
-            "isOptional": false,
-            "label": "type",
-            "labelsAndValues": [
-              {
-                "label": "vocabularyList",
-                "value": "vocabularyList",
               },
             ],
           },
@@ -3381,15 +3368,11 @@ exports[`command payload schemas Command payload schema should match the snapsho
       "languageCode": {
         "complexDataType": "ENUM",
         "description": "the language in which you are translating this line item's text",
-      "languageCode": {
-        "complexDataType": "ENUM",
-        "description": "the language in which you are naming the new vocabulary list name",
         "enumLabel": "language code",
         "enumName": "LanguageCode",
         "isArray": false,
         "isOptional": false,
         "label": "language",
-        "label": "language code",
         "labelsAndValues": [
           {
             "label": "Chilcotin",
@@ -3431,6 +3414,87 @@ exports[`command payload schemas Command payload schema should match the snapsho
       "translation": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "translation for this line item's text",
+        "isArray": false,
+        "isOptional": false,
+        "label": "translation",
+      },
+    },
+    "type": "TRANSLATE_LINE_ITEM",
+  },
+  {
+    "description": "Translate the name of a vocabulary list to another language",
+    "label": "Translate Vocabulary List Name",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "must be: vocabularyList",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "vocabularyList",
+                "value": "vocabularyList",
+              },
+            ],
+          },
+        },
+      },
+      "languageCode": {
+        "complexDataType": "ENUM",
+        "description": "the language in which you are naming the new vocabulary list name",
+        "enumLabel": "language code",
+        "enumName": "LanguageCode",
+        "isArray": false,
+        "isOptional": false,
+        "label": "language code",
+        "labelsAndValues": [
+          {
+            "label": "Chilcotin",
+            "value": "clc",
+          },
+          {
+            "label": "Haida",
+            "value": "hai",
+          },
+          {
+            "label": "English",
+            "value": "en",
+          },
+          {
+            "label": "French",
+            "value": "fra",
+          },
+          {
+            "label": "Chinook",
+            "value": "chn",
+          },
+          {
+            "label": "Zapotec",
+            "value": "zap",
+          },
+          {
+            "label": "Spanish",
+            "value": "spa",
+          },
+        ],
+      },
       "text": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "text for the translation of the name",
@@ -3439,7 +3503,6 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "label": "translation",
       },
     },
-    "type": "TRANSLATE_LINE_ITEM",
     "type": "TRANSLATE_VOCABULARY_LIST_NAME",
   },
 ]
