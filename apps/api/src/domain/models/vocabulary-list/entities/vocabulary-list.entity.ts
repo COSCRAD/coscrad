@@ -24,7 +24,7 @@ import { DuplicateVocabularyListNameError } from '../errors';
 import { VocabularyListEntry } from '../vocabulary-list-entry.entity';
 import { VocabularyListVariable } from './vocabulary-list-variable.entity';
 
-@RegisterIndexScopedCommands([CREATE_VOCABULARY_LIST])
+@RegisterIndexScopedCommands([`CREATE_VOCABULARY_LIST`])
 export class VocabularyList extends Resource {
     readonly type = ResourceType.vocabularyList;
 
