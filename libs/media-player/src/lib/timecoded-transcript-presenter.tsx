@@ -38,7 +38,9 @@ export const TimecodedTranscriptPresenter = ({
         })[0];
 
         return (
+            // <FadeInOutContent>
             <TranscriptLinePresenter speakerInitials={speakerInitials} text={textInLanguage.text} />
+            // </FadeInOutContent>
         );
     } else {
         return <></>;

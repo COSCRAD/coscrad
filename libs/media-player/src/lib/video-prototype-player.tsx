@@ -5,9 +5,9 @@ import {
     PlayArrow as PlayArrowIcon,
     Replay as ReplayIcon,
 } from '@mui/icons-material/';
-import { Box, IconButton, LinearProgress, Tooltip, Typography, styled } from '@mui/material';
+import { Box, IconButton, LinearProgress, Tooltip, styled } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
-import { TimeCodeFormatted } from './timecode-formatted';
+import { FormattedCurrentTime } from './formatted-currenttime';
 import { TimecodedTranscriptPresenter } from './timecoded-transcript-presenter';
 
 const Video = styled('video')({
@@ -59,22 +59,6 @@ export const VideoPrototypePlayer = ({
         progress: 0,
     });
 
-    const [videoVerifiedState, setVideoVerifiedState] = useState<VideoVerifiedState>(
-        VideoVerifiedState.loading
-    );
-
-    const [isPlaying, setIsPlaying] = useState(false);
-
-    const [mediaCurrentTimeForPresentation, setMediaCurrentTimeForPresentation] = useState(0);
-
-    const [progress, setProgress] = useState(0);
-
-    const [buffer, setBuffer] = useState(0);
-
-    const [inPoint, setInPoint] = useState(0);
-
-    const [outPoint, setOutPoint] = useState(0);
-
     const [transcriptLanguageCode, setTranscriptLanguageCode] = useState<LanguageCode>(
         LanguageCode.English
     );
@@ -91,8 +75,18 @@ export const VideoPrototypePlayer = ({
         setMediaState({ ...mediaState, isPlaying: !mediaState.isPlaying });
     };
 
+    const handlePlayProgress = () => {
+        const currentTime = videoRef.current!.currentTime;
+
+        const progress = (currentTime / mediaState.duration) * 100;
+
+        setMediaState({ ...mediaState, progress: progress, currentTime: currentTime });
+    };
+
     const seekInMedia = (time: number) => {
         videoRef.current!.currentTime = time;
+
+        setMediaState({ ...mediaState, currentTime: videoRef.current!.currentTime });
     };
 
     const seekInProgressBar = (event: React.MouseEvent<HTMLSpanElement>) => {
@@ -103,53 +97,29 @@ export const VideoPrototypePlayer = ({
 
         seekInMedia(newMediaTime);
 
-        updateProgressBarAndMediaCurrentTime(newMediaTime);
+        handlePlayProgress();
     };
 
     const restartMedia = () => {
         seekInMedia(0);
 
-        if (isPlaying) {
+        if (mediaState.isPlaying) {
             togglePlay();
         }
     };
 
-    const handlePlayProgress = () => {
-        const currentTime = videoRef.current!.currentTime;
-
-        updateProgressBarAndMediaCurrentTime(currentTime);
-    };
-
-    const updateProgressBarAndMediaCurrentTime = (time: number) => {
-        const duration = videoRef.current!.duration;
-
-        setMediaCurrentTimeForPresentation(time);
-
-        const progress = (time / duration) * 100;
-
-        setProgress(progress);
-    };
-
-    const markInPoint = () => {
-        setInPoint(videoRef.current!.currentTime);
-    };
-
-    const markOutPoint = () => {
-        setOutPoint(videoRef.current!.currentTime);
-    };
-
     useEffect(() => {
         if (isNullOrUndefined(videoUrl)) {
-            setVideoVerifiedState(VideoVerifiedState.isMissingAudioLink);
+            setMediaState({ ...mediaState, loadStatus: VideoVerifiedState.isMissingAudioLink });
             return;
         }
 
         const onCanPlay = () => {
-            setVideoVerifiedState(VideoVerifiedState.canPlay);
+            setMediaState({ ...mediaState, loadStatus: VideoVerifiedState.canPlay });
         };
 
         const onError = () => {
-            setVideoVerifiedState(VideoVerifiedState.error);
+            setMediaState({ ...mediaState, loadStatus: VideoVerifiedState.error });
         };
 
         /**
@@ -164,38 +134,29 @@ export const VideoPrototypePlayer = ({
 
         testVideo.addEventListener('error', onError);
 
-        mediaState.duration = videoRef.current!.duration;
+        videoRef.current!.addEventListener('loadedmetadata', () => {
+            const videoDuration = videoRef.current!.duration;
+
+            setMediaState({ ...mediaState, duration: videoDuration });
+        });
 
         videoRef.current!.addEventListener('progress', () => {
-            const bufferedVideo = videoRef.current!.buffered;
+            const bufferedTimeRanges = videoRef.current!.buffered;
 
-            const bufferedVideoLength = bufferedVideo.length;
+            const bufferedTimeRangesLength = bufferedTimeRanges.length;
 
             const bufferedEnd =
-                bufferedVideoLength > 0 ? bufferedVideo.end(bufferedVideoLength - 1) : 0;
+                bufferedTimeRangesLength > 0
+                    ? bufferedTimeRanges.end(bufferedTimeRangesLength - 1)
+                    : 0;
 
             const videoDuration = videoRef.current!.duration;
 
-            setBuffer((bufferedEnd / videoDuration) * 100);
+            const updatedBuffer = (bufferedEnd / videoDuration) * 100;
+
+            setMediaState({ ...mediaState, buffer: updatedBuffer });
         });
-
-        document.addEventListener('keydown', (event) => {
-            const keys = ['i', 'o', 'j', 'k'];
-
-            const wasAnyKeyPressed = keys.some((key) => event.key === key);
-
-            if (wasAnyKeyPressed) {
-                switch (event.key) {
-                    case 'i':
-                        markInPoint();
-                        break;
-                    case 'o':
-                        markOutPoint();
-                        break;
-                }
-            }
-        });
-    }, [videoRef]);
+    }, [videoRef, mediaState]);
 
     return (
         <Box>
@@ -213,8 +174,8 @@ export const VideoPrototypePlayer = ({
                     we may want to make our own simpler one. */}
                 <LinearProgress
                     variant="buffer"
-                    value={progress}
-                    valueBuffer={buffer}
+                    value={mediaState.progress}
+                    valueBuffer={mediaState.buffer}
                     sx={{ height: '10px' }}
                     onClick={(event) => {
                         seekInProgressBar(event);
@@ -228,7 +189,7 @@ export const VideoPrototypePlayer = ({
                             seems correct for UI design, that tooltips should appear regardless of a button's disabled status 
                         */}
                         <Tooltip title="Restart Media">
-                            <IconButton onClick={restartMedia} disabled={progress === 0}>
+                            <IconButton onClick={restartMedia} disabled={mediaState.progress === 0}>
                                 <ReplayIcon />
                             </IconButton>
                         </Tooltip>
@@ -244,14 +205,11 @@ export const VideoPrototypePlayer = ({
                         />
                     </Box>
                     <Box>
-                        <TimeCodeFormatted timeCode={mediaCurrentTimeForPresentation} />
+                        <FormattedCurrentTime currentTimeInSeconds={mediaState.currentTime} />
                         {` / `}
-                        <TimeCodeFormatted timeCode={mediaState.duration} />
+                        <FormattedCurrentTime currentTimeInSeconds={mediaState.duration} />
                     </Box>
                 </VideoControls>
-                <Typography variant="body2">
-                    InPoint: {inPoint} &nbsp; OutPoint: {outPoint}
-                </Typography>
             </Box>
         </Box>
     );
