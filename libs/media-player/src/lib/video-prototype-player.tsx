@@ -7,7 +7,7 @@ import {
 } from '@mui/icons-material/';
 import { Box, IconButton, LinearProgress, Tooltip, Typography, styled } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
-import { MediaCurrentTimeFormatted } from './timecode-formatted';
+import { TimeCodeFormatted } from './timecode-formatted';
 import { TimecodedTranscriptPresenter } from './timecoded-transcript-presenter';
 
 const Video = styled('video')({
@@ -35,11 +35,29 @@ enum VideoVerifiedState {
     null = 'null',
 }
 
+type MediaState = {
+    loadStatus: VideoVerifiedState;
+    duration: number;
+    buffer: number;
+    isPlaying: boolean;
+    currentTime: number;
+    progress: number;
+};
+
 export const VideoPrototypePlayer = ({
     videoUrl,
     transcript,
 }: VideoPrototypePlayerProps): JSX.Element => {
     const videoRef = useRef<HTMLVideoElement>(null);
+
+    const [mediaState, setMediaState] = useState<MediaState>({
+        loadStatus: VideoVerifiedState.loading,
+        duration: 0,
+        buffer: 0,
+        isPlaying: false,
+        currentTime: 0,
+        progress: 0,
+    });
 
     const [videoVerifiedState, setVideoVerifiedState] = useState<VideoVerifiedState>(
         VideoVerifiedState.loading
@@ -62,15 +80,15 @@ export const VideoPrototypePlayer = ({
     );
 
     const togglePlay = () => {
-        if (videoVerifiedState === VideoVerifiedState.loading) {
+        if (mediaState.loadStatus === VideoVerifiedState.loading) {
             // Video not yet loaded
         }
-        if (isPlaying) {
+        if (mediaState.isPlaying) {
             videoRef.current!.pause();
         } else {
             videoRef.current!.play();
         }
-        setIsPlaying(!isPlaying);
+        setMediaState({ ...mediaState, isPlaying: !mediaState.isPlaying });
     };
 
     const seekInMedia = (time: number) => {
@@ -146,6 +164,8 @@ export const VideoPrototypePlayer = ({
 
         testVideo.addEventListener('error', onError);
 
+        mediaState.duration = videoRef.current!.duration;
+
         videoRef.current!.addEventListener('progress', () => {
             const bufferedVideo = videoRef.current!.buffered;
 
@@ -212,21 +232,21 @@ export const VideoPrototypePlayer = ({
                                 <ReplayIcon />
                             </IconButton>
                         </Tooltip>
-                        <Tooltip title={isPlaying ? 'Pause Media' : 'Play Media'}>
+                        <Tooltip title={mediaState.isPlaying ? 'Pause Media' : 'Play Media'}>
                             <IconButton onClick={togglePlay}>
-                                {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+                                {mediaState.isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
                             </IconButton>
                         </Tooltip>
                         <TimecodedTranscriptPresenter
                             transcript={transcript}
-                            mediaCurrentTime={mediaCurrentTimeForPresentation}
+                            mediaCurrentTime={mediaState.currentTime}
                             selectedTranscriptLanguageCode={transcriptLanguageCode}
                         />
                     </Box>
                     <Box>
-                        <MediaCurrentTimeFormatted
-                            mediaCurrentTime={mediaCurrentTimeForPresentation}
-                        />
+                        <TimeCodeFormatted timeCode={mediaCurrentTimeForPresentation} />
+                        {` / `}
+                        <TimeCodeFormatted timeCode={mediaState.duration} />
                     </Box>
                 </VideoControls>
                 <Typography variant="body2">
