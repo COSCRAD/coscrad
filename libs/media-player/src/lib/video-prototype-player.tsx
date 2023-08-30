@@ -54,11 +54,13 @@ export type Subtitle = {
 interface VideoPrototypePlayerProps {
     videoUrl: string;
     subtitles: Subtitle[];
+    onTimeUpdateHandler?: (currentTime: number) => void;
 }
 
 export const VideoPrototypePlayer = ({
     videoUrl,
     subtitles,
+    onTimeUpdateHandler,
 }: VideoPrototypePlayerProps): JSX.Element => {
     const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -93,6 +95,8 @@ export const VideoPrototypePlayer = ({
         const progress = (currentTime / mediaState.duration) * 100;
 
         setMediaState({ ...mediaState, progress: progress, currentTime: currentTime });
+
+        onTimeUpdateHandler!(currentTime);
     };
 
     const seekInMedia = (time: number) => {
