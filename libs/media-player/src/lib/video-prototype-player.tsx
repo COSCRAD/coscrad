@@ -1,4 +1,3 @@
-import { ITranscript, LanguageCode } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import {
     Pause as PauseIcon,
@@ -8,7 +7,8 @@ import {
 import { Box, IconButton, LinearProgress, Tooltip, styled } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { FormattedCurrentTime } from './formatted-currenttime';
-import { TimecodedTranscriptPresenter } from './timecoded-transcript-presenter';
+import { LanguageCode } from './language-code.enum';
+import { SubtitlesByTime } from './subtitles-by-time';
 
 const Video = styled('video')({
     flexShrink: 1,
@@ -21,11 +21,6 @@ const VideoControls = styled(Box)(({ theme }) => ({
     alignItems: 'center',
     justifyContent: 'space-between',
 }));
-
-interface VideoPrototypePlayerProps {
-    videoUrl: string;
-    transcript: ITranscript;
-}
 
 enum VideoVerifiedState {
     loading = 'loading',
@@ -44,9 +39,26 @@ type MediaState = {
     progress: number;
 };
 
+type MultiLingualTextItem = {
+    languageCode: LanguageCode;
+    text: string;
+};
+
+export type Subtitle = {
+    inPointMilliseconds: number;
+    outPointMilliseconds: number;
+    textVersions: MultiLingualTextItem[];
+    speakerInitials: string;
+};
+
+interface VideoPrototypePlayerProps {
+    videoUrl: string;
+    subtitles: Subtitle[];
+}
+
 export const VideoPrototypePlayer = ({
     videoUrl,
-    transcript,
+    subtitles,
 }: VideoPrototypePlayerProps): JSX.Element => {
     const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -198,10 +210,10 @@ export const VideoPrototypePlayer = ({
                                 {mediaState.isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
                             </IconButton>
                         </Tooltip>
-                        <TimecodedTranscriptPresenter
-                            transcript={transcript}
-                            mediaCurrentTime={mediaState.currentTime}
-                            selectedTranscriptLanguageCode={transcriptLanguageCode}
+                        <SubtitlesByTime
+                            subtitles={subtitles}
+                            currentTime={mediaState.currentTime}
+                            selectedLanguageCodeForSubtitles={transcriptLanguageCode}
                         />
                     </Box>
                     <Box>
