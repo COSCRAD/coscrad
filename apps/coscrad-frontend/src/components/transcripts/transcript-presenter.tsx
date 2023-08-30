@@ -1,11 +1,23 @@
-import { SubtitlesRounded } from '@mui/icons-material';
+import { ITranscript } from '@coscrad/api-interfaces';
+import { SubtitlesRounded as SubtitlesRoundedIcon } from '@mui/icons-material';
 import { Box, Card, CardContent, CardHeader, Divider, Typography } from '@mui/material';
+import { TranscriptLinePresenter } from './transcript-line-presenter';
 
-export const TranscriptPresenter = ({ transcript }): JSX.Element => {
+interface TranscriptPresenterProps {
+    transcript: ITranscript;
+    currentTime: number;
+}
+
+export const TranscriptPresenter = ({
+    transcript,
+    currentTime,
+}: TranscriptPresenterProps): JSX.Element => {
+    const { participants, items } = transcript;
+
     return (
         <Card elevation={0}>
             <CardHeader
-                avatar={<SubtitlesRounded color="primary" />}
+                avatar={<SubtitlesRoundedIcon color="primary" />}
                 title={
                     <Typography variant="h4" margin={'auto 0'}>
                         Transcript
@@ -13,28 +25,21 @@ export const TranscriptPresenter = ({ transcript }): JSX.Element => {
                 }
             />
             <CardContent>
-                {transcript.participants.map((item) => (
-                    <Box>
+                {participants.map(({ name, initials }) => (
+                    <Box key={`${name}-${initials}`}>
                         <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
                             Participants:&nbsp;
                         </Typography>
-                        {item.name} ({item.initials})
+                        {name} ({initials})
                     </Box>
                 ))}
                 <Divider sx={{ marginY: 2 }} />
-                {transcript.items.map((item) => (
-                    <Box display={'flex'}>
-                        <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                            {item.speakerInitials} [{item.inPointMilliseconds}-
-                            {item.outPointMilliseconds}
-                            ]:&nbsp;
-                        </Typography>
-                        <Typography variant="body1">
-                            {item.text.items.map((item) => (
-                                <Box component={'span'}>"{item.text}"</Box>
-                            ))}
-                        </Typography>
-                    </Box>
+                {items.map((transcriptLine) => (
+                    <TranscriptLinePresenter
+                        key={`${transcriptLine.inPointMilliseconds}-${transcriptLine.speakerInitials}`}
+                        transcriptLine={transcriptLine}
+                        currentTime={currentTime}
+                    />
                 ))}
             </CardContent>
         </Card>

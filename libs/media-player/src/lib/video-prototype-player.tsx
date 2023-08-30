@@ -37,6 +37,7 @@ type MediaState = {
     isPlaying: boolean;
     currentTime: number;
     progress: number;
+    playWithSubtitles: boolean;
 };
 
 type MultiLingualTextItem = {
@@ -71,6 +72,7 @@ export const VideoPrototypePlayer = ({
         isPlaying: false,
         currentTime: 0,
         progress: 0,
+        playWithSubtitles: isNullOrUndefined(onTimeUpdateHandler) ? true : false,
     });
 
     const [transcriptLanguageCode, setTranscriptLanguageCode] = useState<LanguageCode>(
@@ -96,7 +98,9 @@ export const VideoPrototypePlayer = ({
 
         setMediaState({ ...mediaState, progress: progress, currentTime: currentTime });
 
-        onTimeUpdateHandler!(currentTime);
+        if (!mediaState.playWithSubtitles) {
+            onTimeUpdateHandler!(currentTime);
+        }
     };
 
     const seekInMedia = (time: number) => {
@@ -138,6 +142,45 @@ export const VideoPrototypePlayer = ({
             setMediaState({ ...mediaState, loadStatus: VideoVerifiedState.error });
         };
 
+        if (!videoRef.current) return;
+
+        const videoElement = videoRef.current;
+
+        const onLoadedMetadata = () => {
+            const videoDuration = videoElement.duration;
+
+            setMediaState({ ...mediaState, duration: videoDuration });
+        };
+
+        const onProgress = () => {
+            if (!videoElement.buffered) return;
+
+            const bufferedTimeRanges = videoElement.buffered;
+
+            const bufferedTimeRangesLength = bufferedTimeRanges.length;
+
+            const bufferedEnd =
+                bufferedTimeRangesLength > 0
+                    ? bufferedTimeRanges.end(bufferedTimeRangesLength - 1)
+                    : 0;
+
+            const videoDuration = videoElement.duration;
+
+            const updatedBuffer = (bufferedEnd / videoDuration) * 100;
+
+            console.log({ updatedBuffer });
+
+            console.log({ mediaStateBuffer: mediaState.buffer });
+
+            setMediaState({ ...mediaState, buffer: updatedBuffer });
+
+            console.log({ mediaStateBufferPost: mediaState.buffer });
+        };
+
+        videoElement.addEventListener('loadedmetadata', onLoadedMetadata);
+
+        videoElement.addEventListener('progress', onProgress);
+
         /**
          * This video instance will never be played. We are using it to test whether
          * the URL is valid.
@@ -150,29 +193,14 @@ export const VideoPrototypePlayer = ({
 
         testVideo.addEventListener('error', onError);
 
-        videoRef.current!.addEventListener('loadedmetadata', () => {
-            const videoDuration = videoRef.current!.duration;
+        return () => {
+            testVideo.remove();
 
-            setMediaState({ ...mediaState, duration: videoDuration });
-        });
+            videoElement.removeEventListener('loadedmetadata', onLoadedMetadata);
 
-        videoRef.current!.addEventListener('progress', () => {
-            const bufferedTimeRanges = videoRef.current!.buffered;
-
-            const bufferedTimeRangesLength = bufferedTimeRanges.length;
-
-            const bufferedEnd =
-                bufferedTimeRangesLength > 0
-                    ? bufferedTimeRanges.end(bufferedTimeRangesLength - 1)
-                    : 0;
-
-            const videoDuration = videoRef.current!.duration;
-
-            const updatedBuffer = (bufferedEnd / videoDuration) * 100;
-
-            setMediaState({ ...mediaState, buffer: updatedBuffer });
-        });
-    }, [videoRef, mediaState]);
+            videoElement.removeEventListener('progress', onProgress);
+        };
+    }, [videoRef.current, mediaState]);
 
     return (
         <Box>
@@ -214,16 +242,20 @@ export const VideoPrototypePlayer = ({
                                 {mediaState.isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
                             </IconButton>
                         </Tooltip>
-                        <SubtitlesByTime
-                            subtitles={subtitles}
-                            currentTime={mediaState.currentTime}
-                            selectedLanguageCodeForSubtitles={transcriptLanguageCode}
-                        />
+                        {mediaState.playWithSubtitles && (
+                            <SubtitlesByTime
+                                subtitles={subtitles}
+                                currentTime={mediaState.currentTime}
+                                selectedLanguageCodeForSubtitles={transcriptLanguageCode}
+                            />
+                        )}
                     </Box>
                     <Box>
                         <FormattedCurrentTime currentTimeInSeconds={mediaState.currentTime} />
                         {` / `}
                         <FormattedCurrentTime currentTimeInSeconds={mediaState.duration} />
+                        {` || `}
+                        {mediaState.buffer}
                     </Box>
                 </VideoControls>
             </Box>
