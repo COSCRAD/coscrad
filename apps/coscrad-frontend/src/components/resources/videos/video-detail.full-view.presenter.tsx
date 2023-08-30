@@ -57,7 +57,7 @@ export const VideoDetailFullViewPresenter = ({
             <VideoPrototypePlayer
                 videoUrl={videoUrl}
                 subtitles={subtitles}
-                // onTimeUpdateHandler={timeUpdateHandler}
+                onTimeUpdateHandler={timeUpdateHandler}
             />
             <TranscriptPresenter transcript={transcript} currentTime={currentTime} />
         </ResourceDetailFullViewPresenter>

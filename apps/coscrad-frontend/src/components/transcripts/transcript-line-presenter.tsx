@@ -1,6 +1,6 @@
 import { ITranscriptItem } from '@coscrad/api-interfaces';
 import { Box, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 
 enum FontColor {
     black = 'black',
@@ -16,31 +16,50 @@ export const TranscriptLinePresenter = ({
     transcriptLine,
     currentTime,
 }: TranscriptLinePresenterProps) => {
-    const [fontColor, setFontColor] = useState(FontColor.black);
+    // const [fontColor, setFontColor] = useState(FontColor.black);
 
     const { inPointMilliseconds, outPointMilliseconds, speakerInitials, text } = transcriptLine;
 
     const { items: textItems } = text;
 
-    useEffect(() => {
+    // useEffect(() => {
+    //     console.log(
+    //         `${currentTime} >= ${inPointMilliseconds} && ${currentTime} <= ${outPointMilliseconds}`
+    //     );
+
+    //     if (currentTime >= inPointMilliseconds && currentTime <= outPointMilliseconds) {
+    //         setFontColor(FontColor.red);
+    //         console.log({ fontColor });
+    //     }
+    // }, [currentTime, fontColor, inPointMilliseconds, outPointMilliseconds]);
+
+    const fontColor = useMemo(() => {
+        console.log(
+            `${currentTime} >= ${inPointMilliseconds} && ${currentTime} <= ${outPointMilliseconds}`
+        );
+
         if (currentTime >= inPointMilliseconds && currentTime <= outPointMilliseconds) {
-            setFontColor(FontColor.red);
+            console.log('red');
+
+            return FontColor.red;
+        } else {
+            console.log('black');
+
+            return FontColor.black;
         }
     }, [currentTime]);
 
     return (
-        <Box display={'flex'} sx={{ color: fontColor }}>
-            <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+        <Box display={'flex'} sx={{ color: fontColor, mb: 0.5 }}>
+            <Typography variant="body1" sx={{ fontWeight: 'bold', mr: 1 }}>
                 {speakerInitials} [{inPointMilliseconds}-{outPointMilliseconds}
-                ]:&nbsp;
+                ]:
             </Typography>
-            <Typography variant="body1">
-                {textItems.map(({ text, languageCode }) => (
-                    <Box key={languageCode} component={'span'}>
-                        "{text}"
-                    </Box>
-                ))}
-            </Typography>
+            {textItems.map(({ text, languageCode }) => (
+                <Typography key={languageCode} variant="body1">
+                    "{text}"
+                </Typography>
+            ))}
         </Box>
     );
 };

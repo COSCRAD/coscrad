@@ -4,7 +4,7 @@ import {
     PlayArrow as PlayArrowIcon,
     Replay as ReplayIcon,
 } from '@mui/icons-material/';
-import { Box, IconButton, LinearProgress, Tooltip, styled } from '@mui/material';
+import { Box, IconButton, LinearProgress, Tooltip, Typography, styled } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { FormattedCurrentTime } from './formatted-currenttime';
 import { LanguageCode } from './language-code.enum';
@@ -134,25 +134,41 @@ export const VideoPrototypePlayer = ({
             return;
         }
 
-        const onCanPlay = () => {
-            setMediaState({ ...mediaState, loadStatus: VideoVerifiedState.canPlay });
-        };
-
-        const onError = () => {
-            setMediaState({ ...mediaState, loadStatus: VideoVerifiedState.error });
-        };
-
         if (!videoRef.current) return;
 
         const videoElement = videoRef.current;
 
+        const onLoadedData = () => {
+            console.log('loadeddata');
+
+            if (videoElement.readyState >= 2) {
+                setMediaState({ ...mediaState, loadStatus: VideoVerifiedState.canPlay });
+            }
+        };
+
+        const onCanPlay = () => {
+            console.log('canplaythrough');
+
+            setMediaState({ ...mediaState, loadStatus: VideoVerifiedState.canPlay });
+        };
+
+        const onError = () => {
+            console.log('error');
+
+            setMediaState({ ...mediaState, loadStatus: VideoVerifiedState.error });
+        };
+
         const onLoadedMetadata = () => {
+            console.log('loadedmetadata');
+
             const videoDuration = videoElement.duration;
 
             setMediaState({ ...mediaState, duration: videoDuration });
         };
 
         const onProgress = () => {
+            console.log('progress');
+
             if (!videoElement.buffered) return;
 
             const bufferedTimeRanges = videoElement.buffered;
@@ -168,38 +184,16 @@ export const VideoPrototypePlayer = ({
 
             const updatedBuffer = (bufferedEnd / videoDuration) * 100;
 
-            console.log({ updatedBuffer });
-
-            console.log({ mediaStateBuffer: mediaState.buffer });
-
             setMediaState({ ...mediaState, buffer: updatedBuffer });
-
-            console.log({ mediaStateBufferPost: mediaState.buffer });
         };
+
+        videoElement.addEventListener('loadeddata', onLoadedData);
+
+        videoElement.addEventListener('error', onError);
 
         videoElement.addEventListener('loadedmetadata', onLoadedMetadata);
 
         videoElement.addEventListener('progress', onProgress);
-
-        /**
-         * This video instance will never be played. We are using it to test whether
-         * the URL is valid.
-         */
-        const testVideo = document.createElement('video');
-
-        testVideo.src = videoUrl;
-
-        testVideo.addEventListener('canplaythrough', onCanPlay);
-
-        testVideo.addEventListener('error', onError);
-
-        return () => {
-            testVideo.remove();
-
-            videoElement.removeEventListener('loadedmetadata', onLoadedMetadata);
-
-            videoElement.removeEventListener('progress', onProgress);
-        };
     }, [videoRef.current, mediaState]);
 
     return (
@@ -238,7 +232,10 @@ export const VideoPrototypePlayer = ({
                             </IconButton>
                         </Tooltip>
                         <Tooltip title={mediaState.isPlaying ? 'Pause Media' : 'Play Media'}>
-                            <IconButton onClick={togglePlay}>
+                            <IconButton
+                                onClick={togglePlay}
+                                disabled={mediaState.loadStatus === VideoVerifiedState.loading}
+                            >
                                 {mediaState.isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
                             </IconButton>
                         </Tooltip>
@@ -254,10 +251,11 @@ export const VideoPrototypePlayer = ({
                         <FormattedCurrentTime currentTimeInSeconds={mediaState.currentTime} />
                         {` / `}
                         <FormattedCurrentTime currentTimeInSeconds={mediaState.duration} />
-                        {` || `}
-                        {mediaState.buffer}
                     </Box>
                 </VideoControls>
+                <Typography component="div" variant="h5">
+                    Loading status: {mediaState.loadStatus}
+                </Typography>
             </Box>
         </Box>
     );
