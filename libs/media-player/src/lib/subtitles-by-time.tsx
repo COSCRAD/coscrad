@@ -37,11 +37,9 @@ export const SubtitlesByTime = ({
         })[0];
 
         return (
-            // <FadeInOutContent>
             <Typography component="span" variant="body1">
                 {speakerInitials}: {textInLanguage.text}
             </Typography>
-            // </FadeInOutContent>
         );
     } else {
         return <></>;
