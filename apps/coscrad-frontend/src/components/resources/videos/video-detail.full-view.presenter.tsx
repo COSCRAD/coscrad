@@ -4,8 +4,10 @@ import {
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { VideoPrototypePlayer } from '@coscrad/media-player';
+import { useMemo, useState } from 'react';
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
+import { TranscriptPresenter } from '../../transcripts/transcript-presenter';
 import { convertMillisecondsToSeconds } from '../utils/math';
 
 export const VideoDetailFullViewPresenter = ({
@@ -15,13 +17,15 @@ export const VideoDetailFullViewPresenter = ({
     id,
     videoUrl,
 }: ICategorizableDetailQueryResult<IVideoViewModel>): JSX.Element => {
+    const [currentTime, setCurrentTime] = useState(0);
+
     const { items } = transcript;
 
     /**
      * Simulation of the subtitle model for the basic user view of the video player
      */
-    const subtitles = items.map(
-        ({ inPointMilliseconds, outPointMilliseconds, text, speakerInitials }) => {
+    const subtitles = useMemo(() => {
+        return items.map(({ inPointMilliseconds, outPointMilliseconds, text, speakerInitials }) => {
             const { items } = text;
 
             const textVersions = items.map(({ languageCode, text }) => {
@@ -37,11 +41,11 @@ export const VideoDetailFullViewPresenter = ({
                 textVersions: textVersions,
                 speakerInitials,
             };
-        }
-    );
+        });
+    }, [items]);
 
     const timeUpdateHandler = (currentTime) => {
-        console.log({ currentTime });
+        setCurrentTime(currentTime);
     };
 
     return (
@@ -53,8 +57,9 @@ export const VideoDetailFullViewPresenter = ({
             <VideoPrototypePlayer
                 videoUrl={videoUrl}
                 subtitles={subtitles}
-                onTimeUpdateHandler={timeUpdateHandler}
+                // onTimeUpdateHandler={timeUpdateHandler}
             />
+            <TranscriptPresenter transcript={transcript} currentTime={currentTime} />
         </ResourceDetailFullViewPresenter>
     );
 };
