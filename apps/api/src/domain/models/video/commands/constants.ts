@@ -1,1 +1,3 @@
 export const CREATE_VIDEO = 'CREATE_VIDEO';
+
+export const TRANSLATE_VIDEO_NAME = 'TRANSLATE_VIDEO_NAME';
