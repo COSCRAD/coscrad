@@ -145,7 +145,7 @@ import { ArangoEventRepository } from '../../../persistence/repositories/arango-
 import { ArangoIdRepository } from '../../../persistence/repositories/arango-id-repository';
 import { ArangoRepositoryProvider } from '../../../persistence/repositories/arango-repository.provider';
 import { DTO } from '../../../types/DTO';
-import { DynamicDataTypeModule } from '../../../validation';
+import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../../../validation';
 import { BibliographicReferenceViewModel } from '../../../view-models/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
 import { NoteViewModel } from '../../../view-models/edgeConnectionViewModels/note.view-model';
 import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMockConfigService';
@@ -260,10 +260,9 @@ export default async (
             },
             {
                 provide: CoscradEventFactory,
-                useFactory: () =>
-                    new CoscradEventFactory(
-                        buildAllDataClassProviders().map(({ useValue }) => useValue)
-                    ),
+                useFactory: (dynamicDataTypeFinderService: DynamicDataTypeFinderService) =>
+                    new CoscradEventFactory(dynamicDataTypeFinderService),
+                inject: [DynamicDataTypeFinderService],
             },
             {
                 provide: ArangoEventRepository,

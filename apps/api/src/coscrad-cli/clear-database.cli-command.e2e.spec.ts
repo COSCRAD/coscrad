@@ -1,15 +1,21 @@
-import { TestingModule } from '@nestjs/testing';
+import { ConfigService } from '@nestjs/config';
+import { Test, TestingModule } from '@nestjs/testing';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
-import createTestModule from '../app/controllers/__tests__/createTestModule';
-import { CoscradEventFactory } from '../domain/common';
+import buildMockConfigService from '../app/config/__tests__/utilities/buildMockConfigService';
+import buildConfigFilePath from '../app/config/buildConfigFilePath';
+import { Environment } from '../app/config/constants/Environment';
+import { CoscradEventFactory, CoscradEventUnion } from '../domain/common';
 import { DeluxeInMemoryStore } from '../domain/types/DeluxeInMemoryStore';
 import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
 import { ArangoCollectionId } from '../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
+import { PersistenceModule } from '../persistence/persistence.module';
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { ArangoRepositoryProvider } from '../persistence/repositories/arango-repository.provider';
 import buildTestDataInFlatFormat from '../test-data/buildTestDataInFlatFormat';
+import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../validation';
 import { CoscradCliModule } from './coscrad-cli.module';
 
 const originalEnv = process.env;
@@ -24,28 +30,51 @@ describe(`CLI Command: **clear-database**`, () => {
     let databaseProvider: ArangoDatabaseProvider;
 
     beforeAll(async () => {
-        const testAppModule = await createTestModule({
-            ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
-        });
+        const mockConfigService = buildMockConfigService(
+            {
+                ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+            },
+            buildConfigFilePath(Environment.test)
+        );
+
+        const testAppModule = await Test.createTestingModule({
+            providers: [
+                {
+                    provide: ConfigService,
+                    useValue: mockConfigService,
+                },
+                {
+                    provide: CoscradEventUnion,
+                    useValue: CoscradEventUnion,
+                },
+            ],
+            imports: [DynamicDataTypeModule, PersistenceModule.forRootAsync()],
+        }).compile();
+
+        await testAppModule.init();
+
+        await testAppModule.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
 
         const arangoConnectionProvider =
             testAppModule.get<ArangoConnectionProvider>(ArangoConnectionProvider);
 
         databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
 
-        testRepositoryProvider = new TestRepositoryProvider(
-            databaseProvider,
-            // We don't need the event factory for this test
-            new CoscradEventFactory([])
-        );
+        const coscradEventFactory = testAppModule.get(CoscradEventFactory);
+
+        testRepositoryProvider = new TestRepositoryProvider(databaseProvider, coscradEventFactory);
 
         commandInstance = await CommandTestFactory.createTestingCommand({
             imports: [CoscradCliModule],
         })
             .overrideProvider(AppModule)
             .useValue(testAppModule)
+            .overrideProvider(CoscradEventFactory)
+            .useValue(coscradEventFactory)
             .overrideProvider(ArangoDatabaseProvider)
             .useValue(databaseProvider)
+            .overrideProvider(ArangoRepositoryProvider)
+            .useValue(new ArangoRepositoryProvider(databaseProvider, coscradEventFactory))
             .compile();
 
         process.env.NODE_ENV = 'e2e';

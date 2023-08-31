@@ -55,6 +55,8 @@ describe(`**${cliCommandName}**`, () => {
             ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
         });
 
+        await testAppModule.init();
+
         const arangoConnectionProvider =
             testAppModule.get<ArangoConnectionProvider>(ArangoConnectionProvider);
 

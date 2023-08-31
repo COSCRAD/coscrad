@@ -73,6 +73,8 @@ describe.skip(`run migrations`, () => {
             ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
         });
 
+        await testAppModule.init();
+
         const arangoConnectionProvider =
             testAppModule.get<ArangoConnectionProvider>(ArangoConnectionProvider);
 

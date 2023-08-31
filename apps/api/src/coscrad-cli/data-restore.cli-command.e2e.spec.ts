@@ -18,6 +18,7 @@ import { ArangoDataExporter } from '../persistence/repositories/arango-data-expo
 import { DomainDataExporter } from '../persistence/repositories/domain-data-exporter';
 import buildTestDataInFlatFormat from '../test-data/buildTestDataInFlatFormat';
 import convertInMemorySnapshotToDatabaseFormat from '../test-data/utilities/convertInMemorySnapshotToDatabaseFormat';
+import { DynamicDataTypeFinderService } from '../validation';
 import { CoscradCliModule } from './coscrad-cli.module';
 
 const originalEnv = process.env;
@@ -44,6 +45,12 @@ describe(`CLI Command: **data-restore**`, () => {
             ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
         });
 
+        await testAppModule.init();
+
+        const dynamicDataTypeFinderService = testAppModule.get(DynamicDataTypeFinderService);
+
+        await dynamicDataTypeFinderService.bootstrapDynamicTypes();
+
         const arangoConnectionProvider =
             testAppModule.get<ArangoConnectionProvider>(ArangoConnectionProvider);
 
@@ -51,8 +58,7 @@ describe(`CLI Command: **data-restore**`, () => {
 
         testRepositoryProvider = new TestRepositoryProvider(
             databaseProvider,
-            // We don't need the event factory for this test
-            new CoscradEventFactory([])
+            new CoscradEventFactory(dynamicDataTypeFinderService)
         );
 
         commandInstance = await CommandTestFactory.createTestingCommand({

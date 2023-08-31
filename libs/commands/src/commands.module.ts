@@ -16,7 +16,7 @@ export class CommandModule implements OnApplicationBootstrap {
         private readonly commandHanlderService: CommandHandlerService
     ) {}
 
-    async onApplicationBootstrap() {
+    async onModuleInit() {
         const commandAndHandlerPairs = await this.finderService.find();
 
         commandAndHandlerPairs.forEach(([Command, CommandHandler]) => {

@@ -36,7 +36,7 @@ describe(`Arango Event Repository`, () => {
         const testingModule = await Test.createTestingModule({
             imports: [
                 SongModule,
-                EventModule.forRootAsync(),
+                EventModule,
                 PersistenceModule.forRootAsync(),
                 DynamicDataTypeModule,
             ],

@@ -7,7 +7,7 @@ import { AggregateId } from '../domain/types/AggregateId';
 import { AggregateType } from '../domain/types/AggregateType';
 import { DeluxeInMemoryStore } from '../domain/types/DeluxeInMemoryStore';
 import assertTestInstancesOfTypeAreComprehensive from '../test-data/__tests__/assertTestInstancesOfTypeAreComprehensive';
-import { DynamicDataTypeModule } from '../validation';
+import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../validation';
 import formatAggregateCompositeIdentifier from '../view-models/presentation/formatAggregateCompositeIdentifier';
 import formatAggregateType from '../view-models/presentation/formatAggregateType';
 import assertEdgeConnectionContextStateIsValid from './__tests__/assertEdgeConnectionContextStateIsValid';
@@ -22,6 +22,8 @@ describe('buildTestData', () => {
         }).compile();
 
         await testModule.init();
+
+        await testModule.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
     });
 
     const testData = buildTestData();

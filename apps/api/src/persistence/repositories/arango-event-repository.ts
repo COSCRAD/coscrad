@@ -59,7 +59,11 @@ export class ArangoEventRepository implements IEventRepository {
         );
 
         // TODO Either add an event factory, or return only the DTO
-        return filteredEvents.map((eventDocument) => this.coscradEventFactory.build(eventDocument));
+        const eventInstances = await Promise.all(
+            filteredEvents.map((eventDocument) => this.coscradEventFactory.build(eventDocument))
+        );
+
+        return eventInstances;
     }
 
     async appendEvent(event: BaseEvent): Promise<void> {
