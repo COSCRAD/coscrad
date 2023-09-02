@@ -8,7 +8,7 @@ import { TRANSLATE_VIDEO_NAME } from '../constants';
 @Command({
     type: TRANSLATE_VIDEO_NAME,
     label: 'Translate Video Name',
-    description: 'Translate the name of a video to another language',
+    description: 'Translate the name of a video to an additional language',
 })
 export class TranslateVideoName implements ICommandBase {
     @NestedDataType(VideoCompositeIdentifier, {

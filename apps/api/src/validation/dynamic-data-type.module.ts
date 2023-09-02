@@ -16,7 +16,7 @@ const EmptyDtoProvider = {
 export class DynamicDataTypeModule implements OnApplicationBootstrap {
     constructor(private readonly dataTypeFinderService: DynamicDataTypeFinderService) {}
 
-    async onApplicationBootstrap() {
+    async onModuleInit() {
         /**
          * This is necessary to ensure that all the union member schemas are
          * available on `UnionPropertyType` definitions so that we can validate

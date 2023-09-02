@@ -111,7 +111,12 @@ import { GrantUserRoleCommandHandler } from '../../../domain/models/user-managem
 import { RegisterUser } from '../../../domain/models/user-management/user/commands/register-user/register-user.command';
 import { RegisterUserCommandHandler } from '../../../domain/models/user-management/user/commands/register-user/register-user.command-handler';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
-import { CreateVideo, CreateVideoCommandHandler } from '../../../domain/models/video';
+import {
+    CreateVideo,
+    CreateVideoCommandHandler,
+    TranslateVideoName,
+    TranslateVideoNameCommandHandler,
+} from '../../../domain/models/video';
 import {
     CreateVocabularyList,
     CreateVocabularyListCommandHandler,
@@ -474,6 +479,8 @@ export default async (
             TranslateLineItemCommandHandler,
             TranslateVocabularyListName,
             TranslateVocabularyListNameCommandHandler,
+            TranslateVideoName,
+            TranslateVideoNameCommandHandler,
         ],
 
         controllers: [

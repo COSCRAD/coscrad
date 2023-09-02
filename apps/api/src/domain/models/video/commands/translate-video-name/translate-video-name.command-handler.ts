@@ -24,10 +24,10 @@ export class TranslateVideoNameCommandHandler extends BaseUpdateCommandHandler<V
     }
 
     protected actOnInstance(
-        Video: Video,
+        video: Video,
         { text, languageCode }: TranslateVideoName
     ): ResultOrError<Video> {
-        return Video(text, languageCode);
+        return video.translateName(text, languageCode);
     }
 
     protected buildEvent(command: ICommand, eventId: string, userId: string): BaseEvent {
