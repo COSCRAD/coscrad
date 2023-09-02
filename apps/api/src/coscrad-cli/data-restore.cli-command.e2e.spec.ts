@@ -204,12 +204,16 @@ describe(`CLI Command: **data-restore**`, () => {
                     []
                 );
 
+                const eventSourcedAggregateTypes = [AggregateType.song];
+
                 /**
+                 * TODO [https://www.pivotaltracker.com/story/show/185903292] Support event-sourced models here
+                 *
                  * The test data is comprehensive, so checking that there is at
                  * least one instnace of each aggregate in the post-restore state
                  * is a good sanity check.
                  */
-                expect(aggregatesNotInSnapshot).toEqual([]);
+                expect(aggregatesNotInSnapshot).toEqual(eventSourcedAggregateTypes);
             });
         });
     });

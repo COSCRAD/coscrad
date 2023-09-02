@@ -229,6 +229,7 @@ export default async (
         ...userOptions,
     };
 
+    // shouldn't we just call this on the data finder service when we initialize the test module?
     bootstrapDynamicTypes(dataClassProviders);
 
     const testModule = await Test.createTestingModule({
