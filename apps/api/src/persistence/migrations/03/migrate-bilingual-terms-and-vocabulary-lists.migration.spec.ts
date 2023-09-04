@@ -126,7 +126,8 @@ const languageCodeEquals =
     ({ languageCode }: { languageCode: LanguageCode }) =>
         languageCodeToFind === languageCode;
 
-describe(`MigrateBilingualTermsAndVocabularyLists`, () => {
+// This migration has already been applied
+describe.skip(`MigrateBilingualTermsAndVocabularyLists`, () => {
     let testDatabaseProvider: ArangoDatabaseProvider;
 
     let testQueryRunner: ArangoQueryRunner;
