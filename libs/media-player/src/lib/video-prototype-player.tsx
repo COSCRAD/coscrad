@@ -1,5 +1,9 @@
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { PlayArrow as PlayArrowIcon, Replay as ReplayIcon } from '@mui/icons-material/';
+import {
+    Pause as PauseIcon,
+    PlayArrow as PlayArrowIcon,
+    Replay as ReplayIcon,
+} from '@mui/icons-material/';
 import { Box, IconButton, LinearProgress, Tooltip, Typography, styled } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { FormattedCurrentTime } from './formatted-currenttime';
@@ -22,6 +26,7 @@ enum VideoVerifiedState {
     loading = 'loading',
     error = 'error',
     canPlay = 'canPlay',
+    canPlayThrough = 'canPlayThrough',
     isMissingAudioLink = 'isMissingAudioLink',
     null = 'null',
 }
@@ -84,7 +89,6 @@ export const VideoPrototypePlayer = ({
         if (mediaState.loadStatus === VideoVerifiedState.loading) {
             console.log('video not yet loaded');
         }
-        // Check if is paused rather than isPlaying
         if (videoRef.current!.paused) {
             videoRef.current!.play();
         } else {
@@ -99,7 +103,11 @@ export const VideoPrototypePlayer = ({
     const handlePlayProgress = () => {
         const currentTime = videoRef.current!.currentTime;
 
-        const progress = (currentTime / mediaState.duration) * 100;
+        const duration = videoRef.current!.duration;
+
+        if (currentTime <= 0) return;
+
+        const progress = (currentTime / duration) * 100;
 
         setMediaState({ ...mediaState, progress: progress, currentTime: currentTime });
 
@@ -146,15 +154,16 @@ export const VideoPrototypePlayer = ({
         const onLoadedData = () => {
             console.log('loadeddata');
 
-            if (videoElement.readyState >= 2) {
+            if (videoElement.readyState >= 3) {
                 setMediaState({ ...mediaState, loadStatus: VideoVerifiedState.canPlay });
+                videoElement.addEventListener('canplaythrough', onCanPlayThrough);
             }
         };
 
-        const onCanPlay = () => {
+        const onCanPlayThrough = () => {
             console.log('canplaythrough');
 
-            setMediaState({ ...mediaState, loadStatus: VideoVerifiedState.canPlay });
+            setMediaState({ ...mediaState, loadStatus: VideoVerifiedState.canPlayThrough });
         };
 
         const onError = () => {
@@ -171,14 +180,18 @@ export const VideoPrototypePlayer = ({
             setMediaState({ ...mediaState, duration: videoDuration });
         };
 
-        const onPlay = () => {
-            console.log('onPlay');
-            // setMediaState({ ...mediaState, isPlaying: true });
+        const onPlaying = () => {
+            console.log('onPlaying');
+            if (!mediaState.isPlaying) {
+                setMediaState({ ...mediaState, isPlaying: true });
+            }
         };
 
         const onPause = () => {
             console.log('onPause');
-            // setMediaState({ ...mediaState, isPlaying: false });
+            if (mediaState.isPlaying) {
+                setMediaState({ ...mediaState, isPlaying: false });
+            }
         };
 
         const onProgress = () => {
@@ -202,17 +215,31 @@ export const VideoPrototypePlayer = ({
             setMediaState({ ...mediaState, buffer: updatedBuffer });
         };
 
-        videoElement.addEventListener('loadeddata', onLoadedData);
-
         videoElement.addEventListener('error', onError);
+
+        videoElement.addEventListener('loadeddata', onLoadedData);
 
         videoElement.addEventListener('loadedmetadata', onLoadedMetadata);
 
-        // videoElement.addEventListener('play', onPlay);
+        videoElement.addEventListener('playing', onPlaying);
 
-        // videoElement.addEventListener('pause', onPause);
+        videoElement.addEventListener('pause', onPause);
 
         videoElement.addEventListener('progress', onProgress);
+
+        return () => {
+            videoElement.removeEventListener('loadeddata', onLoadedData);
+
+            videoElement.removeEventListener('canplaythrough', onCanPlayThrough);
+
+            videoElement.removeEventListener('loadeddata', onLoadedData);
+
+            videoElement.removeEventListener('playing', onPlaying);
+
+            videoElement.removeEventListener('pause', onPause);
+
+            videoElement.removeEventListener('progress', onProgress);
+        };
     }, [videoRef.current, mediaState]);
 
     return (
@@ -255,8 +282,8 @@ export const VideoPrototypePlayer = ({
                                 onClick={playPauseMedia}
                                 disabled={mediaState.loadStatus === VideoVerifiedState.loading}
                             >
-                                {/* {mediaState.isPlaying ? <PauseIcon /> : <PlayArrowIcon />} */}
-                                <PlayArrowIcon />
+                                {mediaState.isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+                                {/* <PlayArrowIcon /> */}
                             </IconButton>
                         </Tooltip>
                         {mediaState.shouldPlayWithSubtitles && (
