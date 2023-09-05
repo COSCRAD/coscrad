@@ -9,14 +9,13 @@ import getCommandTypeFromMetadata from './services/utilities/getCommandTypeFromM
     imports: [DiscoveryModule],
     exports: [CommandHandlerService],
 })
-// remove me
 export class CommandModule implements OnApplicationBootstrap {
     constructor(
         private readonly finderService: CommandFinderService,
         private readonly commandHanlderService: CommandHandlerService
     ) {}
 
-    async onModuleInit() {
+    async onApplicationBootstrap() {
         const commandAndHandlerPairs = await this.finderService.find();
 
         commandAndHandlerPairs.forEach(([Command, CommandHandler]) => {
