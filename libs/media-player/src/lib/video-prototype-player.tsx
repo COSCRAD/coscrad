@@ -1,9 +1,5 @@
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import {
-    Pause as PauseIcon,
-    PlayArrow as PlayArrowIcon,
-    Replay as ReplayIcon,
-} from '@mui/icons-material/';
+import { PlayArrow as PlayArrowIcon, Replay as ReplayIcon } from '@mui/icons-material/';
 import { Box, IconButton, LinearProgress, Tooltip, Typography, styled } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { FormattedCurrentTime } from './formatted-currenttime';
@@ -37,7 +33,8 @@ type MediaState = {
     isPlaying: boolean;
     currentTime: number;
     progress: number;
-    playWithSubtitles: boolean;
+    // TODO: Does this belong here?
+    shouldPlayWithSubtitles: boolean;
 };
 
 type MultiLingualTextItem = {
@@ -45,6 +42,10 @@ type MultiLingualTextItem = {
     text: string;
 };
 
+/**
+ * TODO: pass in a callback that takes in the current time and
+ * returns a react component to overlay on the video component
+ */
 export type Subtitle = {
     inPointMilliseconds: number;
     outPointMilliseconds: number;
@@ -55,13 +56,13 @@ export type Subtitle = {
 interface VideoPrototypePlayerProps {
     videoUrl: string;
     subtitles: Subtitle[];
-    onTimeUpdateHandler?: (currentTime: number) => void;
+    onTimeUpdate?: (currentTime: number) => void;
 }
 
 export const VideoPrototypePlayer = ({
     videoUrl,
     subtitles,
-    onTimeUpdateHandler,
+    onTimeUpdate,
 }: VideoPrototypePlayerProps): JSX.Element => {
     const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -72,23 +73,27 @@ export const VideoPrototypePlayer = ({
         isPlaying: false,
         currentTime: 0,
         progress: 0,
-        playWithSubtitles: isNullOrUndefined(onTimeUpdateHandler) ? true : false,
+        shouldPlayWithSubtitles: isNullOrUndefined(onTimeUpdate) ? true : false,
     });
 
     const [transcriptLanguageCode, setTranscriptLanguageCode] = useState<LanguageCode>(
         LanguageCode.English
     );
 
-    const togglePlay = () => {
+    const playPauseMedia = () => {
         if (mediaState.loadStatus === VideoVerifiedState.loading) {
-            // Video not yet loaded
+            console.log('video not yet loaded');
         }
-        if (mediaState.isPlaying) {
-            videoRef.current!.pause();
-        } else {
+        // Check if is paused rather than isPlaying
+        if (videoRef.current!.paused) {
             videoRef.current!.play();
+        } else {
+            videoRef.current!.pause();
         }
-        setMediaState({ ...mediaState, isPlaying: !mediaState.isPlaying });
+        // TODO: use event handler to listen to play state of video ref
+        // set event handler on .pause as well
+        // TODO: get rid of mediaState.isPlaying?
+        // setMediaState({ ...mediaState, isPlaying: !mediaState.isPlaying });
     };
 
     const handlePlayProgress = () => {
@@ -98,8 +103,8 @@ export const VideoPrototypePlayer = ({
 
         setMediaState({ ...mediaState, progress: progress, currentTime: currentTime });
 
-        if (!mediaState.playWithSubtitles) {
-            onTimeUpdateHandler!(currentTime);
+        if (!mediaState.shouldPlayWithSubtitles) {
+            onTimeUpdate!(currentTime);
         }
     };
 
@@ -124,7 +129,7 @@ export const VideoPrototypePlayer = ({
         seekInMedia(0);
 
         if (mediaState.isPlaying) {
-            togglePlay();
+            playPauseMedia();
         }
     };
 
@@ -166,6 +171,16 @@ export const VideoPrototypePlayer = ({
             setMediaState({ ...mediaState, duration: videoDuration });
         };
 
+        const onPlay = () => {
+            console.log('onPlay');
+            // setMediaState({ ...mediaState, isPlaying: true });
+        };
+
+        const onPause = () => {
+            console.log('onPause');
+            // setMediaState({ ...mediaState, isPlaying: false });
+        };
+
         const onProgress = () => {
             console.log('progress');
 
@@ -193,6 +208,10 @@ export const VideoPrototypePlayer = ({
 
         videoElement.addEventListener('loadedmetadata', onLoadedMetadata);
 
+        // videoElement.addEventListener('play', onPlay);
+
+        // videoElement.addEventListener('pause', onPause);
+
         videoElement.addEventListener('progress', onProgress);
     }, [videoRef.current, mediaState]);
 
@@ -201,7 +220,7 @@ export const VideoPrototypePlayer = ({
             <Video
                 ref={videoRef}
                 onTimeUpdate={handlePlayProgress}
-                onClick={togglePlay}
+                onClick={playPauseMedia}
                 width="100%"
                 disablePictureInPicture
             >
@@ -231,15 +250,16 @@ export const VideoPrototypePlayer = ({
                                 <ReplayIcon />
                             </IconButton>
                         </Tooltip>
-                        <Tooltip title={mediaState.isPlaying ? 'Pause Media' : 'Play Media'}>
+                        <Tooltip title="Play / Pause Media">
                             <IconButton
-                                onClick={togglePlay}
+                                onClick={playPauseMedia}
                                 disabled={mediaState.loadStatus === VideoVerifiedState.loading}
                             >
-                                {mediaState.isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+                                {/* {mediaState.isPlaying ? <PauseIcon /> : <PlayArrowIcon />} */}
+                                <PlayArrowIcon />
                             </IconButton>
                         </Tooltip>
-                        {mediaState.playWithSubtitles && (
+                        {mediaState.shouldPlayWithSubtitles && (
                             <SubtitlesByTime
                                 subtitles={subtitles}
                                 currentTime={mediaState.currentTime}

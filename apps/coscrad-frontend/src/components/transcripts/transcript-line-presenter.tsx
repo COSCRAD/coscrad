@@ -1,6 +1,6 @@
 import { ITranscriptItem } from '@coscrad/api-interfaces';
 import { Box, Typography } from '@mui/material';
-import { useMemo } from 'react';
+import { useEffect } from 'react';
 
 enum FontColor {
     black = 'black',
@@ -22,35 +22,35 @@ export const TranscriptLinePresenter = ({
 
     const { items: textItems } = text;
 
-    // useEffect(() => {
-    //     console.log(
-    //         `${currentTime} >= ${inPointMilliseconds} && ${currentTime} <= ${outPointMilliseconds}`
-    //     );
-
-    //     if (currentTime >= inPointMilliseconds && currentTime <= outPointMilliseconds) {
-    //         setFontColor(FontColor.red);
-    //         console.log({ fontColor });
-    //     }
-    // }, [currentTime, fontColor, inPointMilliseconds, outPointMilliseconds]);
-
-    const fontColor = useMemo(() => {
+    useEffect(() => {
         console.log(
             `${currentTime} >= ${inPointMilliseconds} && ${currentTime} <= ${outPointMilliseconds}`
         );
 
         if (currentTime >= inPointMilliseconds && currentTime <= outPointMilliseconds) {
+            // setFontColor(FontColor.red);
             console.log('red');
-
-            return FontColor.red;
-        } else {
-            console.log('black');
-
-            return FontColor.black;
         }
-    }, [currentTime]);
+    }, [currentTime, inPointMilliseconds, outPointMilliseconds]);
+
+    // const fontColor = useMemo(() => {
+    //     console.log(
+    //         `${currentTime} >= ${inPointMilliseconds} && ${currentTime} <= ${outPointMilliseconds}`
+    //     );
+
+    //     if (currentTime >= inPointMilliseconds && currentTime <= outPointMilliseconds) {
+    //         console.log('red');
+
+    //         return FontColor.red;
+    //     } else {
+    //         console.log('black');
+
+    //         return FontColor.black;
+    //     }
+    // }, [currentTime, inPointMilliseconds, outPointMilliseconds]);
 
     return (
-        <Box display={'flex'} sx={{ color: fontColor, mb: 0.5 }}>
+        <Box display={'flex'}>
             <Typography variant="body1" sx={{ fontWeight: 'bold', mr: 1 }}>
                 {speakerInitials} [{inPointMilliseconds}-{outPointMilliseconds}
                 ]:

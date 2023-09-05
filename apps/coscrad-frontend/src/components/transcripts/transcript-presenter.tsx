@@ -34,6 +34,11 @@ export const TranscriptPresenter = ({
                     </Box>
                 ))}
                 <Divider sx={{ marginY: 2 }} />
+                {/**
+                 * check "why did I rerender?"
+                 * TODO: model timestate in parent as discrete set of intervals and
+                 * only re-render when an interval boundary is crossed
+                 */}
                 {items.map((transcriptLine) => (
                     <TranscriptLinePresenter
                         key={`${transcriptLine.inPointMilliseconds}-${transcriptLine.speakerInitials}`}
