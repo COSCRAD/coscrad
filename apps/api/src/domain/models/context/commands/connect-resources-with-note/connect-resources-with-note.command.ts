@@ -2,7 +2,7 @@ import { ICommandBase, IEdgeConnectionContext, LanguageCode } from '@coscrad/api
 import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { LanguageCodeEnum } from '../../../../common/entities/multilingual-text';
-import { ContextUnion } from '../../edge-connection-context-union';
+import { ContextUnionType } from '../../edge-connection-context-union';
 import {
     EdgeConnectionCompositeIdentifier,
     ResourceCompositeIdentifier,
@@ -32,7 +32,7 @@ export class ConnectResourcesWithNote implements ICommandBase {
     })
     readonly toMemberCompositeIdentifier: ResourceCompositeIdentifier;
 
-    @ContextUnion({
+    @ContextUnionType({
         label: 'to member context',
         description: 'context for the resource to which you are making a connection',
     })
@@ -45,7 +45,7 @@ export class ConnectResourcesWithNote implements ICommandBase {
     })
     readonly fromMemberCompositeIdentifier: ResourceCompositeIdentifier;
 
-    @ContextUnion({
+    @ContextUnionType({
         label: 'from member context',
         description: 'context for the resource from which you are making a connection',
     })

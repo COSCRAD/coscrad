@@ -9,7 +9,7 @@
 import { Test } from '@nestjs/testing';
 import { buildAllDataClassProviders } from '../../../../../app/controllers/__tests__/createTestModule';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
-import { DynamicDataTypeModule } from '../../../../../validation';
+import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../../../../../validation';
 import { EdgeConnection } from '../../../../models/context/edge-connection.entity';
 import { Valid } from '../../../Valid';
 import buildEdgeConnectionValidatorTestCases from './buildEdgeConnectionValidatorTestCases';
@@ -22,6 +22,8 @@ buildEdgeConnectionValidatorTestCases().forEach(({ validCases, invalidCases }) =
         }).compile();
 
         await testModule.init();
+
+        await testModule.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
     });
 
     validCases.forEach(({ description, dto }, index) => {

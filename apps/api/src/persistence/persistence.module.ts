@@ -81,7 +81,7 @@ export class PersistenceModule {
 
         return {
             module: PersistenceModule,
-            imports: [ConfigModule, EventModule.forRootAsync()],
+            imports: [ConfigModule, EventModule],
             providers: [
                 arangoConnectionProvider,
                 repositoryProvider,

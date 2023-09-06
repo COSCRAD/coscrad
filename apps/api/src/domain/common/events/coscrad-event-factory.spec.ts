@@ -1,9 +1,10 @@
-import { Union, bootstrapDynamicTypes } from '@coscrad/data-types';
+import { bootstrapDynamicTypes } from '@coscrad/data-types';
 import buildDummyUuid from '../../models/__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../models/__tests__/utilities/dummySystemUserId';
 import { BaseEvent } from '../../models/shared/events/base-event.entity';
 import { AggregateType } from '../../types/AggregateType';
 import { CoscradEventFactory } from './coscrad-event-factory';
+import { CoscradEventUnion } from './coscrad-event-union';
 import { CoscradEvent } from './coscrad-event.decorator';
 
 @CoscradEvent('WIDGET_CREATED')
@@ -25,16 +26,14 @@ class WidgetRelocated extends BaseEvent {
     type = 'WIDGET_RELOCATED';
 }
 
-// This is a problem. Let's fix our Union decorators API
-class HasEvent {
-    @Union('COSCRAD_EVENT_UNION', 'type', {
-        label: 'the event',
-        description: 'holds an event instance',
-    })
-    theEvent: BaseEvent;
-}
+const allCtors = [WidgetCreated, WidgetRelocated, CoscradEventUnion];
 
-const allCtors = [WidgetCreated, WidgetRelocated, HasEvent];
+const mockDataFinderService = {
+    bootstrapDynamicTypes: async () => {
+        throw new Error(`Not Implemented`);
+    },
+    getAllDataClassCtors: async () => allCtors,
+};
 
 describe(`CoscradEventFactory`, () => {
     beforeAll(() => {
@@ -51,10 +50,11 @@ describe(`CoscradEventFactory`, () => {
                 dummySystemUserId
             ).toDTO();
 
-            it(`should build an event instance`, () => {
-                const coscradEventFactory = new CoscradEventFactory(allCtors);
+            it(`should build an event instance`, async () => {
+                // @ts-expect-error TODO Use Jest mocks for this
+                const coscradEventFactory = new CoscradEventFactory(mockDataFinderService);
 
-                const instance = coscradEventFactory.build(widgetCreatedDto);
+                const instance = await coscradEventFactory.build(widgetCreatedDto);
 
                 expect(instance).toBeInstanceOf(BaseEvent);
 

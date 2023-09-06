@@ -61,6 +61,10 @@ describe.skip(`RemoveBaseDigitalAssetUrl`, () => {
 
             testDatabaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
 
+            const coscradEventFactory = testModule.get(CoscradEventFactory);
+
+            const databaseProvider = testModule.get(ArangoDatabaseProvider);
+
             /**
              * It's a bit awkward that we need this because we are not working at
              * the repositories level of abstraction. However, we have added test
@@ -70,9 +74,8 @@ describe.skip(`RemoveBaseDigitalAssetUrl`, () => {
              * test teardown.
              */
             testRepositoryProvider = new TestRepositoryProvider(
-                testDatabaseProvider,
-                // We don't need the event factory for this test
-                new CoscradEventFactory([])
+                databaseProvider,
+                coscradEventFactory
             );
 
             testQueryRunner = new ArangoQueryRunner(testDatabaseProvider);

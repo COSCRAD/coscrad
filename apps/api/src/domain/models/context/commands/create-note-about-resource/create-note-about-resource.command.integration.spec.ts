@@ -6,6 +6,7 @@ import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUp
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestData from '../../../../../test-data/buildTestData';
+import { DynamicDataTypeFinderService } from '../../../../../validation';
 import formatAggregateType from '../../../../../view-models/presentation/formatAggregateType';
 import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
@@ -196,6 +197,8 @@ describe(commandType, () => {
             await setUpIntegrationTest({
                 ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
             }));
+
+        await app.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
 
         assertionHelperDependencies = {
             testRepositoryProvider,
