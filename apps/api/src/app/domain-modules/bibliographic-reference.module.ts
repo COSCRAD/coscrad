@@ -9,6 +9,7 @@ import { CourtCaseBibliographicReferenceData } from '../../domain/models/bibliog
 import { CreateJournalArticleBibliographicReference } from '../../domain/models/bibliographic-reference/journal-article-bibliographic-reference/commands/create-journal-article-bibliographic-reference.command';
 import { CreateJournalArticleBibliographicReferenceCommandHandler } from '../../domain/models/bibliographic-reference/journal-article-bibliographic-reference/commands/create-journal-article-bibliographic-reference.command-handler';
 import JournalArticleBibliographicReferenceData from '../../domain/models/bibliographic-reference/journal-article-bibliographic-reference/entities/journal-article-bibliographic-reference-data.entity';
+import { BibliographicReferenceDataUnionType } from '../../domain/models/bibliographic-reference/shared/bibliographic-reference-union-data-member.decorator';
 import { BibliographicReferenceQueryService } from '../../domain/services/query-services/bibliographic-reference-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { PersistenceModule } from '../../persistence/persistence.module';
@@ -32,6 +33,7 @@ import { BibliographicReferenceController } from '../controllers/resources/bibli
         CourtCaseBibliographicReferenceData,
         // Data Classes
         ...[
+            BibliographicReferenceDataUnionType,
             BibliographicReferenceViewModel,
             BookBibliographicReferenceData,
             JournalArticleBibliographicReferenceData,

@@ -1,9 +1,11 @@
+import { ThingUnion } from '../../../test/widget';
 import {
     NestedDataType,
     NonEmptyString,
     NonNegativeFiniteNumber,
     Union,
     UnionMember,
+    UnionType,
 } from '../../decorators';
 import { TypeDecoratorOptions } from '../../decorators/types/TypeDecoratorOptions';
 import getCoscradDataSchema from '../getCoscradDataSchema';
@@ -48,10 +50,13 @@ class Undecorated {
     bar: string;
 }
 
-const MachineUnion = (options: TypeDecoratorOptions) => Union(MACHINE_UNION, 'type', options);
+@Union(MACHINE_UNION, 'type')
+class MachineUnion {}
+
+const MachineUnionType = (options: TypeDecoratorOptions) => UnionType(MACHINE_UNION, options);
 
 class FactoryRoom {
-    @MachineUnion({
+    @MachineUnionType({
         label: 'machine',
         description: 'the machine that is in this factory room',
     })
@@ -59,7 +64,7 @@ class FactoryRoom {
 }
 
 class ProductionLine {
-    @MachineUnion({
+    @MachineUnionType({
         label: 'machines',
         description: `all machines that are part of this line, in order`,
     })
@@ -82,12 +87,18 @@ const expectDataSchemaToMatchSnapshot = (ctor: unknown) => {
 
 describe(`bootstrapDynamicTypes`, () => {
     describe(`when several union members have been registered`, () => {
-        describe.only(`when the input is valid`, () => {
+        describe(`when the input is valid`, () => {
             describe(`when only one class property has been decorated`, () => {
                 it.only(`should append the data-schema to the metadata`, () => {
                     const initialDataSchema = getCoscradDataSchema(FactoryRoom);
 
-                    bootstrapDynamicTypes([Whatsit, Widget, FactoryRoom, Undecorated]);
+                    bootstrapDynamicTypes([
+                        Whatsit,
+                        Widget,
+                        FactoryRoom,
+                        Undecorated,
+                        MachineUnion,
+                    ]);
 
                     expectDataSchemaToMatchSnapshot(FactoryRoom);
 
@@ -101,7 +112,7 @@ describe(`bootstrapDynamicTypes`, () => {
                 it(`should append the data-schema to the metadata`, () => {
                     bootstrapDynamicTypes(
                         // FactoryRoom and ProductionLine both leverage a union decorator for the same union
-                        [Whatsit, Widget, Undecorated, FactoryRoom, ProductionLine]
+                        [Whatsit, Widget, Undecorated, FactoryRoom, ProductionLine, ThingUnion]
                     );
 
                     expectDataSchemaToMatchSnapshot(FactoryRoom);
@@ -112,9 +123,10 @@ describe(`bootstrapDynamicTypes`, () => {
 
             describe(`when there is a nested property that leverages a union type`, () => {
                 it(`should append the data-schema to the metadata`, () => {
-                    const unionMap = bootstrapDynamicTypes(
+                    bootstrapDynamicTypes(
                         // FactoryRoom and ProductionLine both leverage a union decorator for the same union
                         [
+                            ThingUnion,
                             Whatsit,
                             Widget,
                             // Undecorated,
@@ -134,7 +146,7 @@ describe(`bootstrapDynamicTypes`, () => {
         const LONELY_UNION = 'LONELY_HEARTS_CLUB';
 
         class LonelyUnionUser {
-            @Union(LONELY_UNION, 'type', {
+            @UnionType(LONELY_UNION, {
                 label: 'foo',
                 description: `bar can be as lonely as foo, it's the loneliest var in the village hoo`,
             })
@@ -143,50 +155,21 @@ describe(`bootstrapDynamicTypes`, () => {
 
         it(`should throw`, () => {
             const act = () =>
-                bootstrapDynamicTypes([Whatsit, Widget, FactoryRoom, Undecorated, LonelyUnionUser]);
+                bootstrapDynamicTypes([
+                    ThingUnion,
+                    Whatsit,
+                    Widget,
+                    FactoryRoom,
+                    Undecorated,
+                    LonelyUnionUser,
+                ]);
 
             expect(act).toThrow();
         });
     });
 
-    describe(`when the same union has been registered twice with inconsistent discriminant paths`, () => {
-        const DUPLICATED_UNION = 'DUPLICATED_UNION';
-
-        class Woo {
-            @Union(DUPLICATED_UNION, 'type', buildOptions('foo'))
-            foo: unknown;
-        }
-
-        class Boo {
-            @Union(DUPLICATED_UNION, 'inconsistentDiscriminantFieldName', buildOptions('baz'))
-            baz: unknown;
-        }
-
-        @UnionMember(DUPLICATED_UNION, 'A')
-        class UnionMemberA {
-            inconsistentDiscriminantFieldName = 'A';
-        }
-
-        @UnionMember(DUPLICATED_UNION, 'B')
-        class UnionMemberB {
-            type = 'B';
-        }
-
-        it(`should throw`, () => {
-            const act = () =>
-                bootstrapDynamicTypes([
-                    Whatsit,
-                    Widget,
-                    FactoryRoom,
-                    Undecorated,
-                    Woo,
-                    Boo,
-                    UnionMemberA,
-                    UnionMemberB,
-                ]);
-
-            expect(act).toThrow();
-        });
+    describe(`when two unions have been defined with the same name`, () => {
+        it.todo(`should have a test`);
     });
 
     describe(`when two union members have registered the same discriminant value`, () => {
@@ -201,7 +184,14 @@ describe(`bootstrapDynamicTypes`, () => {
 
         it(`should throw`, () => {
             const act = () =>
-                bootstrapDynamicTypes([Whatsit, Widget, FactoryRoom, Undecorated, WidgetWannabe]);
+                bootstrapDynamicTypes([
+                    ThingUnion,
+                    Whatsit,
+                    Widget,
+                    FactoryRoom,
+                    Undecorated,
+                    WidgetWannabe,
+                ]);
 
             expect(act).toThrow();
         });
