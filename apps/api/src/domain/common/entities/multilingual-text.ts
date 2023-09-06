@@ -159,7 +159,9 @@ export class MultilingualText extends BaseDomainModel implements IMultilingualTe
         return this.items.find(({ role }) => role === MultilingualTextItemRole.original).clone();
     }
 
-    translate(item: MultilingualTextItem): ResultOrError<this> {
+    translate(itemDto: DTO<MultilingualTextItem>): ResultOrError<this> {
+        const item = new MultilingualTextItem(itemDto);
+
         if (this.has(item.languageCode)) return new CannotAddDuplicateTranslationError(item, this);
 
         // TODO make this return an error if there is a conflict with existing items

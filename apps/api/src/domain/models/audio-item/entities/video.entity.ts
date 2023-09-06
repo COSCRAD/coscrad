@@ -1,3 +1,4 @@
+import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import {
     MIMEType,
     NestedDataType,
@@ -9,7 +10,9 @@ import { RegisterIndexScopedCommands } from '../../../../app/controllers/command
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
 import { DTO } from '../../../../types/DTO';
-import { MultilingualText } from '../../../common/entities/multilingual-text';
+import { DeepPartial } from '../../../../types/DeepPartial';
+import { ResultOrError } from '../../../../types/ResultOrError';
+import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
@@ -20,7 +23,7 @@ import InvalidExternalReferenceByAggregateError from '../../categories/errors/In
 import { TimeRangeContext } from '../../context/time-range-context/time-range-context.entity';
 import { Resource } from '../../resource.entity';
 import validateTimeRangeContextForModel from '../../shared/contextValidators/validateTimeRangeContextForModel';
-import { CREATE_VIDEO } from '../../video/commands/constants';
+import { CREATE_VIDEO, TRANSLATE_VIDEO_NAME } from '../../video/commands/constants';
 import { InvalidMIMETypeForAudiovisualResourceError } from '../commands/errors';
 import { CoscradTimeStamp } from './audio-item.entity';
 import {
@@ -119,6 +122,25 @@ export class VideoBase extends Resource {
         ];
     }
 
+    translateName(translation: string, languageCode: LanguageCode): ResultOrError<this> {
+        // TODO update the .translate API on MultilingualText
+        const nameUpdateResult = this.name.translate(
+            new MultilingualTextItem({
+                role: MultilingualTextItemRole.freeTranslation,
+                text: translation,
+                languageCode,
+            })
+        );
+
+        if (isInternalError(nameUpdateResult)) {
+            return nameUpdateResult;
+        }
+
+        return this.safeClone({
+            name: nameUpdateResult,
+        } as DeepPartial<DTO<this>>);
+    }
+
     override validateExternalReferences({
         resources: { mediaItem: mediaItems },
     }: InMemorySnapshot): ValidationResult {
@@ -167,7 +189,7 @@ export class VideoBase extends Resource {
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {
-        const availableCommandIds: string[] = [];
+        const availableCommandIds: string[] = [TRANSLATE_VIDEO_NAME];
 
         return availableCommandIds;
     }
