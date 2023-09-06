@@ -23,12 +23,22 @@ export const VideoPlayer = ({ videoUrl, mimeType }: VideoPlayerProps) => {
     return (
         <StyledVideoPlayer controls>
             {isVideoMIMEType(mimeType) ? (
-                <source style={{ padding: 0 }} src={videoUrl} type={mimeType} />
+                <source
+                    data-testid="video-player"
+                    style={{ padding: 0 }}
+                    src={videoUrl}
+                    type={mimeType}
+                />
             ) : (
                 <>
                     {/* Fallbacks for each media type */}
                     {Object.values(VideoMIMEType).map((mimeType) => (
-                        <source style={{ padding: 0 }} src={videoUrl} type={mimeType} />
+                        <source
+                            data-testid="video-player"
+                            style={{ padding: 0 }}
+                            src={videoUrl}
+                            type={mimeType}
+                        />
                     ))}
                 </>
             )}

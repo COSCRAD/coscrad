@@ -57,7 +57,7 @@ describe.skip(`Video Index-to-detail Query Flow`, () => {
         describe(`the search filter`, () => {
             const videoTitleWithQDash = `Q-Bert's Jam`;
 
-            const searchScopes = [`allProperties`, `name`];
+            const searchScopes = [`allProperties`, `name`, `lengthMilliseconds`];
 
             before(() => {
                 cy.seedDataWithCommand(`CREATE_VIDEO`, {

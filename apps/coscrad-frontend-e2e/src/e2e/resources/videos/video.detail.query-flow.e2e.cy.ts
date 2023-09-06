@@ -215,7 +215,6 @@ describe(`the video detail page`, () => {
 
                 beforeEach(() => {
                     // create the connected term
-                    // TODO We'll need to update this when there's a proper translation flow
                     cy.seedDataWithCommand(`CREATE_TERM`, {
                         aggregateCompositeIdentifier: termCompositeIdentifier,
                         text: termText,
