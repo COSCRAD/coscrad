@@ -1,6 +1,5 @@
 import { ITranscriptItem } from '@coscrad/api-interfaces';
 import { Box, Typography } from '@mui/material';
-import { useEffect } from 'react';
 
 enum FontColor {
     black = 'black',
@@ -9,29 +8,25 @@ enum FontColor {
 
 interface TranscriptLinePresenterProps {
     transcriptLine: ITranscriptItem;
-    currentTime: number;
 }
 
-export const TranscriptLinePresenter = ({
-    transcriptLine,
-    currentTime,
-}: TranscriptLinePresenterProps) => {
+export const TranscriptLinePresenter = ({ transcriptLine }: TranscriptLinePresenterProps) => {
     // const [fontColor, setFontColor] = useState(FontColor.black);
 
     const { inPointMilliseconds, outPointMilliseconds, speakerInitials, text } = transcriptLine;
 
     const { items: textItems } = text;
 
-    useEffect(() => {
-        console.log(
-            `${currentTime} >= ${inPointMilliseconds} && ${currentTime} <= ${outPointMilliseconds}`
-        );
+    // useEffect(() => {
+    //     console.log(
+    //         `${currentTime} >= ${inPointMilliseconds} && ${currentTime} <= ${outPointMilliseconds}`
+    //     );
 
-        if (currentTime >= inPointMilliseconds && currentTime <= outPointMilliseconds) {
-            // setFontColor(FontColor.red);
-            console.log('red');
-        }
-    }, [currentTime, inPointMilliseconds, outPointMilliseconds]);
+    //     if (currentTime >= inPointMilliseconds && currentTime <= outPointMilliseconds) {
+    //         // setFontColor(FontColor.red);
+    //         console.log('red');
+    //     }
+    // }, [currentTime, inPointMilliseconds, outPointMilliseconds]);
 
     // const fontColor = useMemo(() => {
     //     console.log(
