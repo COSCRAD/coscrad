@@ -37,7 +37,7 @@ import formatAggregateCompositeIdentifier from '../../../view-models/presentatio
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../common/entities/multilingual-text';
 import AggregateNotFoundError from '../shared/common-command-errors/AggregateNotFoundError';
-import { ContextUnion } from './edge-connection-context-union';
+import { ContextUnionType } from './edge-connection-context-union';
 
 export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnectionContext>
     extends BaseDomainModel
@@ -49,7 +49,7 @@ export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnecti
     })
     readonly compositeIdentifier: ResourceCompositeIdentifier;
 
-    @ContextUnion({
+    @ContextUnionType({
         label: 'context',
         description: 'contextualizes the note or connection for this member',
     })

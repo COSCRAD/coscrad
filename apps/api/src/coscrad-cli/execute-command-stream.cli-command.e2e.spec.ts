@@ -33,16 +33,16 @@ describe(`CLI Command: ${cliCommandName}`, () => {
             ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
         });
 
+        await testAppModule.init();
+
         const arangoConnectionProvider =
             testAppModule.get<ArangoConnectionProvider>(ArangoConnectionProvider);
 
         databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
 
-        testRepositoryProvider = new TestRepositoryProvider(
-            databaseProvider,
-            // We don't need the event factory for this test
-            new CoscradEventFactory([])
-        );
+        const coscradEventFactory = testAppModule.get(CoscradEventFactory);
+
+        testRepositoryProvider = new TestRepositoryProvider(databaseProvider, coscradEventFactory);
 
         commandInstance = await CommandTestFactory.createTestingCommand({
             imports: [CoscradCliModule],

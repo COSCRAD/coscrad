@@ -1,4 +1,4 @@
-import { ThingDataOne, ThingDataTwo, ThingUnion } from '../../../test/widget';
+import { ThingDataOne, ThingDataTwo, ThingUnionType } from '../../../test/widget';
 import { NestedDataType, NonEmptyString, NonNegativeFiniteNumber } from '../../decorators';
 import getCoscradDataSchema from '../getCoscradDataSchema';
 import { leveragesUniontype } from './leveragesUnionType';
@@ -34,7 +34,7 @@ describe(`leverages union type`, () => {
             })
             name: string;
 
-            @ThingUnion({
+            @ThingUnionType({
                 description: 'machine',
                 label: 'machine',
             })

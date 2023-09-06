@@ -4,7 +4,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { ApiProperty } from '@nestjs/swagger';
 import { IBibliographicReference } from '../../../../domain/models/bibliographic-reference/interfaces/bibliographic-reference.interface';
-import { BibliographicReferenceDataUnion } from '../../../../domain/models/bibliographic-reference/shared/bibliographic-reference-union-data-member.decorator';
+import { BibliographicReferenceDataUnionType } from '../../../../domain/models/bibliographic-reference/shared/bibliographic-reference-union-data-member.decorator';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { BaseViewModel } from '../base.view-model';
 
@@ -14,7 +14,7 @@ export class BibliographicReferenceViewModel
 {
     // TODO expose data types to swagger
     @ApiProperty()
-    @BibliographicReferenceDataUnion({
+    @BibliographicReferenceDataUnionType({
         label: 'reference data',
         description: 'citation information for this bibliographic reference',
     })

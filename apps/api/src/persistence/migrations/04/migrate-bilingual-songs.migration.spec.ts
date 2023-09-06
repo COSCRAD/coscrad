@@ -89,6 +89,8 @@ describe(`MigrateBilingualTermsAndVocabularyLists`, () => {
 
         testDatabaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
 
+        const coscradEventFactory = testModule.get(CoscradEventFactory);
+
         /**
          * It's a bit awkward that we need this because we are not working at
          * the repositories level of abstraction. However, we have added test
@@ -99,8 +101,7 @@ describe(`MigrateBilingualTermsAndVocabularyLists`, () => {
          */
         testRepositoryProvider = new TestRepositoryProvider(
             testDatabaseProvider,
-            // We don't need the event factory for this test
-            new CoscradEventFactory([])
+            coscradEventFactory
         );
 
         testQueryRunner = new ArangoQueryRunner(testDatabaseProvider);

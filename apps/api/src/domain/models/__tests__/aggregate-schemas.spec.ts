@@ -1,4 +1,5 @@
-import { getCoscradDataSchema } from '@coscrad/data-types';
+import { bootstrapDynamicTypes, getCoscradDataSchema } from '@coscrad/data-types';
+import { buildAllDataClassProviders } from '../../../app/controllers/__tests__/createTestModule';
 import formatAggregateType from '../../../view-models/presentation/formatAggregateType';
 import { getAggregateCtor } from '../../factories/utilities/getAggregateCtor';
 import { isDiscriminatedUnionResourceType } from '../../factories/utilities/isDiscriminatedUnionResourceType';
@@ -18,6 +19,11 @@ const buildDescription = (aggregateType: AggregateType, subtype?: SubtypesUnion)
 type AggregateTypeAndSubtype = [AggregateType, null | SubtypesUnion];
 
 describe(`Coscrad Data Schemas for aggregate root domain models`, () => {
+    beforeAll(() => {
+        // TODO Should we import the app module here?
+        bootstrapDynamicTypes(buildAllDataClassProviders().map(({ useValue }) => useValue));
+    });
+
     Object.values(AggregateType)
         .flatMap((aggregateType: AggregateType): AggregateTypeAndSubtype[] => {
             if (isDiscriminatedUnionResourceType(aggregateType)) {

@@ -1,15 +1,16 @@
-import { ThingDataOne, ThingDataTwo, Widget } from '../../../test/widget';
+import { ThingDataOne, ThingDataTwo, ThingUnion, Widget } from '../../../test/widget';
 import {
     NestedDataType,
     NonNegativeFiniteNumber,
+    UUID,
     Union,
     UnionMember,
-    UUID,
+    UnionType,
 } from '../../decorators';
 import { UnionLeveragesAnotherException } from './exceptions';
 import {
-    resolveMemberSchemasForUnion,
     UnionMemberSchemaDefinition,
+    resolveMemberSchemasForUnion,
 } from './resolveMemberSchemasForUnion';
 
 const assertMembersResolved = (
@@ -34,7 +35,7 @@ describe(`resolveMemberSchemasForUnion`, () => {
     describe(`when there are multiple union members with no nesting`, () => {
         it(`should resolve the members`, () => {
             const result = resolveMemberSchemasForUnion(
-                [Widget, ThingDataOne, ThingDataTwo],
+                [Widget, ThingDataOne, ThingDataTwo, ThingUnion],
                 'THING_UNION'
             );
 
@@ -71,7 +72,7 @@ describe(`resolveMemberSchemasForUnion`, () => {
             })
             locationId: string;
 
-            @Union('THING_UNION', 'type', {
+            @UnionType('THING_UNION', {
                 description: 'the machines in this tool room',
                 label: 'machines',
             })
@@ -80,7 +81,15 @@ describe(`resolveMemberSchemasForUnion`, () => {
 
         it('should resolve the members', () => {
             const result = resolveMemberSchemasForUnion(
-                [Widget, ThingDataOne, ThingDataTwo, ThingDataThree, Thing3Rating, ToolRoom],
+                [
+                    Widget,
+                    ThingDataOne,
+                    ThingDataTwo,
+                    ThingDataThree,
+                    Thing3Rating,
+                    ToolRoom,
+                    ThingUnion,
+                ],
                 'THING_UNION'
             );
 
@@ -101,6 +110,9 @@ describe(`resolveMemberSchemasForUnion`, () => {
 
         const SHAPE_UNION = 'SHAPE_UNION';
 
+        @Union(SHAPE_UNION, shapeDiscriminantPath)
+        class _ShapeUnion {}
+
         @UnionMember(SHAPE_UNION, 'square')
         class Square {
             type = 'square';
@@ -118,7 +130,7 @@ describe(`resolveMemberSchemasForUnion`, () => {
             })
             durability: number;
 
-            @Union(SHAPE_UNION, shapeDiscriminantPath, {
+            @UnionType(SHAPE_UNION, {
                 label: 'shape',
                 description: 'shape of this thing',
             })
@@ -145,7 +157,7 @@ describe(`resolveMemberSchemasForUnion`, () => {
             })
             locationId: string;
 
-            @Union('THING_UNION', 'type', {
+            @UnionType('THING_UNION', {
                 description: 'the machines in this tool room',
                 label: 'machines',
             })
@@ -164,6 +176,7 @@ describe(`resolveMemberSchemasForUnion`, () => {
                         ToolRoom,
                         Circle,
                         Square,
+                        ThingUnion,
                     ],
                     'THING_UNION'
                 );
@@ -176,6 +189,9 @@ describe(`resolveMemberSchemasForUnion`, () => {
         const shapeDiscriminantPath = 'type';
 
         const SHAPE_UNION = 'SHAPE_UNION';
+
+        @Union(SHAPE_UNION, shapeDiscriminantPath)
+        class ShapeUnion {}
 
         @UnionMember(SHAPE_UNION, 'square')
         class Square {
@@ -207,7 +223,7 @@ describe(`resolveMemberSchemasForUnion`, () => {
             })
             rating: Thing3Rating;
 
-            @Union(SHAPE_UNION, shapeDiscriminantPath, {
+            @UnionType(SHAPE_UNION, {
                 label: 'shape',
                 description: 'shape of this thing',
             })
@@ -221,7 +237,7 @@ describe(`resolveMemberSchemasForUnion`, () => {
             })
             locationId: string;
 
-            @Union('THING_UNION', 'type', {
+            @UnionType('THING_UNION', {
                 description: 'the machines in this tool room',
                 label: 'machines',
             })
@@ -231,6 +247,7 @@ describe(`resolveMemberSchemasForUnion`, () => {
         it('should throw (not yet supported)', () => {
             const result = resolveMemberSchemasForUnion(
                 [
+                    ShapeUnion,
                     Widget,
                     ThingDataOne,
                     ThingDataTwo,
@@ -239,6 +256,7 @@ describe(`resolveMemberSchemasForUnion`, () => {
                     ToolRoom,
                     Circle,
                     Square,
+                    ThingUnion,
                 ],
                 'THING_UNION'
             );
@@ -252,11 +270,14 @@ describe(`resolveMemberSchemasForUnion`, () => {
 
         const SHAPE_UNION = 'SHAPE_UNION';
 
+        @Union(SHAPE_UNION, shapeDiscriminantPath)
+        class ShapeUnion {}
+
         @UnionMember(SHAPE_UNION, 'square')
         class Square {
             type = 'square';
 
-            @Union('THING_UNION', 'type', {
+            @UnionType('THING_UNION', {
                 label: 'thing',
                 description: 'thing- circular union reference to parent',
             })
@@ -275,7 +296,7 @@ describe(`resolveMemberSchemasForUnion`, () => {
             })
             durability: number;
 
-            @Union(SHAPE_UNION, shapeDiscriminantPath, {
+            @UnionType(SHAPE_UNION, {
                 label: 'shape',
                 description: 'shape of this thing',
             })
@@ -302,7 +323,7 @@ describe(`resolveMemberSchemasForUnion`, () => {
             })
             locationId: string;
 
-            @Union('THING_UNION', 'type', {
+            @UnionType('THING_UNION', {
                 description: 'the machines in this tool room',
                 label: 'machines',
             })
@@ -313,7 +334,9 @@ describe(`resolveMemberSchemasForUnion`, () => {
             const act = () =>
                 resolveMemberSchemasForUnion(
                     [
+                        ShapeUnion,
                         Widget,
+                        ThingUnion,
                         ThingDataOne,
                         ThingDataTwo,
                         ThingDataThree,
