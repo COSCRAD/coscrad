@@ -8,7 +8,7 @@ import { Video } from '../../../audio-item/entities/video.entity';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { TranslateVideoName } from './translate-video-name.command';
-import { videoNameTranslated } from './video-name-translated.event';
+import { VideoNameTranslated } from './video-name-translated.event';
 
 @CommandHandler(TranslateVideoName)
 export class TranslateVideoNameCommandHandler extends BaseUpdateCommandHandler<Video> {
@@ -31,6 +31,6 @@ export class TranslateVideoNameCommandHandler extends BaseUpdateCommandHandler<V
     }
 
     protected buildEvent(command: ICommand, eventId: string, userId: string): BaseEvent {
-        return new videoNameTranslated(command, eventId, userId);
+        return new VideoNameTranslated(command, eventId, userId);
     }
 }

@@ -18,6 +18,7 @@ import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
+import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
@@ -26,6 +27,8 @@ import { Video } from '../../../audio-item/entities/video.entity';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { TranslateVideoName } from './translate-video-name.command';
+
+const commandType = `TRANSLATE_VIDEO_NAME`;
 
 const languageCodeForExistingVideoName = LanguageCode.Haida;
 
@@ -48,8 +51,6 @@ const aggregateCompositeIdentifier = existingVideo.getCompositeIdentifier();
 const textForTranslation = 'this is the translation of the video name';
 
 const languageCodeForTranslation = LanguageCode.English;
-
-const commandType = `TRANSLATE_VIDEO_NAME`;
 
 const validFsa: CommandFSA<TranslateVideoName> = {
     type: commandType,
@@ -146,7 +147,35 @@ describe(commandType, () => {
             });
         });
 
-        // TODO test when the original text has this language
+        describe(`when the original text is in the target translation language`, () => {
+            it(`should fail with the expected errors`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    initialState: new DeluxeInMemoryStore({
+                        [AggregateType.video]: [existingVideo],
+                    }).fetchFullSnapshotInLegacyFormat(),
+                    buildCommandFSA: () =>
+                        new DummyCommandFsaFactory(() => validFsa).build(null, {
+                            languageCode: languageCodeForExistingVideoName,
+                        }),
+                    checkError: (error) => {
+                        const newItem = new MultilingualTextItem({
+                            text: validFsa.payload.text,
+                            role: MultilingualTextItemRole.freeTranslation,
+                            languageCode: languageCodeForExistingVideoName,
+                        });
+
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new CannotAddDuplicateTranslationError(newItem, existingVideo.name),
+                            ])
+                        );
+                    },
+                });
+            });
+        });
+
         describe(`when there is already existing text in the translation language`, () => {
             it(`should fail with the expected errors`, async () => {
                 const existingVideoWithTranslationInTargetLanguage = existingVideo.translateName(
