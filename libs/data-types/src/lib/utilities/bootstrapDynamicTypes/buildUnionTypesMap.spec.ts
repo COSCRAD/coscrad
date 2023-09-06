@@ -5,6 +5,7 @@ import {
     NonNegativeFiniteNumber,
     Union,
     UnionMember,
+    UnionType,
 } from '../../decorators';
 import { TypeDecoratorOptions } from '../../decorators/types/TypeDecoratorOptions';
 import { Ctor } from '../getCoscradDataSchemaFromPrototype';
@@ -48,10 +49,13 @@ class Undecorated {
     bar: string;
 }
 
-const MachineUnion = (options: TypeDecoratorOptions) => Union(MACHINE_UNION, 'type', options);
+const MachineUnionType = (options: TypeDecoratorOptions) => UnionType(MACHINE_UNION, options);
+
+@Union(MACHINE_UNION, 'type')
+class MachineUnion {}
 
 class FactoryRoom {
-    @MachineUnion({
+    @MachineUnionType({
         label: 'machine',
         description: 'the machine that is in this factory room',
     })
@@ -59,7 +63,7 @@ class FactoryRoom {
 }
 
 class ProductionLine {
-    @MachineUnion({
+    @MachineUnionType({
         label: 'machines',
         description: `all machines that are part of this line, in order`,
     })
@@ -99,6 +103,7 @@ describe(`buildUnionTypesMap`, () => {
             describe(`when only one class property has been decorated`, () => {
                 it(`should append the data-schema to the metadata`, () => {
                     const unionMap = buildUnionTypesMap([
+                        MachineUnion,
                         Whatsit,
                         Widget,
                         FactoryRoom,
@@ -123,6 +128,7 @@ describe(`buildUnionTypesMap`, () => {
                     const unionMap = buildUnionTypesMap(
                         // FactoryRoom and ProductionLine both leverage a union decorator for the same union
                         [
+                            MachineUnion,
                             Whatsit,
                             Widget,
                             Undecorated,
@@ -149,6 +155,7 @@ describe(`buildUnionTypesMap`, () => {
                     const unionMap = buildUnionTypesMap(
                         // FactoryRoom and ProductionLine both leverage a union decorator for the same union
                         [
+                            MachineUnion,
                             Whatsit,
                             Widget,
                             // Undecorated,
@@ -176,8 +183,11 @@ describe(`buildUnionTypesMap`, () => {
     describe(`when no union members have been registered`, () => {
         const LONELY_UNION = 'LONELY_HEARTS_CLUB';
 
+        @Union(LONELY_UNION, 'discriminantPropertyName')
+        class LonelyUnion {}
+
         class LonelyUnionUser {
-            @Union(LONELY_UNION, 'type', {
+            @UnionType(LONELY_UNION, {
                 label: 'foo',
                 description: `bar can be as lonely as foo, it's the loneliest var in the village hoo`,
             })
@@ -187,6 +197,7 @@ describe(`buildUnionTypesMap`, () => {
         it(`should throw`, () => {
             const act = () =>
                 buildUnionTypesMap([
+                    LonelyUnion,
                     Whatsit,
                     Widget,
                     FactoryRoom,
@@ -198,17 +209,22 @@ describe(`buildUnionTypesMap`, () => {
         });
     });
 
-    describe(`when the same union has been registered twice with inconsistent discriminant paths`, () => {
+    describe(`when the same union has been registered twice`, () => {
         const DUPLICATED_UNION = 'DUPLICATED_UNION';
 
-        class Woo {
-            @Union(DUPLICATED_UNION, 'type', buildOptions('foo'))
-            foo: unknown;
-        }
+        /**
+         * TODO Can we design away this possibility? Can we use reflection to
+         * get the class name and make it the union name?
+         */
+        @Union(DUPLICATED_UNION, 'path1')
+        class DuplicatedUnion1 {}
 
-        class Boo {
-            @Union(DUPLICATED_UNION, 'inconsistentDiscriminantFieldName', buildOptions('baz'))
-            baz: unknown;
+        @Union(DUPLICATED_UNION, 'path2')
+        class DuplicatedUnion2 {}
+
+        class Woo {
+            @UnionType(DUPLICATED_UNION, buildOptions('foo'))
+            foo: unknown;
         }
 
         @UnionMember(DUPLICATED_UNION, 'A')
@@ -224,12 +240,13 @@ describe(`buildUnionTypesMap`, () => {
         it(`should throw`, () => {
             const act = () =>
                 buildUnionTypesMap([
+                    DuplicatedUnion1,
+                    DuplicatedUnion2,
                     Whatsit,
                     Widget,
                     FactoryRoom,
                     Undecorated,
                     Woo,
-                    Boo,
                     UnionMemberA,
                     UnionMemberB,
                 ] as Ctor<unknown>[]);
@@ -238,10 +255,10 @@ describe(`buildUnionTypesMap`, () => {
         });
     });
 
-    describe(`when two union members have registered the same discriminant value`, () => {
+    describe(`when two unions have the same name but a different discriminantPath`, () => {
         // Duplicates Widget discriminant value
-        @UnionMember(MACHINE_UNION, 'widget')
-        class WidgetWannabe {
+        @Union(MACHINE_UNION, 'inconsistentPropertyPath')
+        class DuplicateMachineUnion {
             type = 'widget';
 
             @NonEmptyString(buildOptions('name'))
@@ -251,11 +268,12 @@ describe(`buildUnionTypesMap`, () => {
         it(`should throw`, () => {
             const act = () =>
                 buildUnionTypesMap([
+                    MachineUnion,
                     Whatsit,
                     Widget,
                     FactoryRoom,
                     Undecorated,
-                    WidgetWannabe,
+                    DuplicateMachineUnion,
                 ] as Ctor<unknown>[]);
 
             expect(act).toThrow();

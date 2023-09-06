@@ -17,6 +17,7 @@ import { ArangoDatabaseProvider } from '../persistence/database/database.provide
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestDataInFlatFormat from '../test-data/buildTestDataInFlatFormat';
+import { DynamicDataTypeFinderService } from '../validation';
 import { CoscradCliModule } from './coscrad-cli.module';
 import { COSCRAD_LOGGER_TOKEN } from './logging';
 import { buildMockLogger } from './logging/__tests__';
@@ -39,16 +40,16 @@ describe(`**${cliCommandName}**`, () => {
             ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
         });
 
+        await testAppModule.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
+
         const arangoConnectionProvider =
             testAppModule.get<ArangoConnectionProvider>(ArangoConnectionProvider);
 
         databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
 
-        testRepositoryProvider = new TestRepositoryProvider(
-            databaseProvider,
-            // We don't need the event factory for this test
-            new CoscradEventFactory([])
-        );
+        const coscradEventFactory = testAppModule.get(CoscradEventFactory);
+
+        testRepositoryProvider = new TestRepositoryProvider(databaseProvider, coscradEventFactory);
 
         commandInstance = await CommandTestFactory.createTestingCommand({
             imports: [CoscradCliModule],

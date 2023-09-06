@@ -6,9 +6,10 @@ import { Resource } from '../../../domain/models/resource.entity';
 import { isAggregateCompositeIdentifier } from '../../../domain/types/AggregateCompositeIdentifier';
 import { InMemorySnapshot, ResourceType } from '../../../domain/types/ResourceType';
 import { InternalError } from '../../../lib/errors/InternalError';
-import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestData from '../../../test-data/buildTestData';
+import { DynamicDataTypeFinderService } from '../../../validation';
 import formatResourceCompositeIdentifier from '../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from './setUpIntegrationTest';
@@ -47,6 +48,9 @@ describe('When querying for edge connections', () => {
         ({ app, testRepositoryProvider } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
         }));
+
+        // TODO this should happen in `setupIntegrationTest`
+        await app.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
 
         await testRepositoryProvider.testSetup();
 

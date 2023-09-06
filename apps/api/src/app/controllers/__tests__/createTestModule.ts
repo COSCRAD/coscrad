@@ -1,5 +1,5 @@
 import { CommandModule } from '@coscrad/commands';
-import { Union } from '@coscrad/data-types';
+import { bootstrapDynamicTypes } from '@coscrad/data-types';
 import { ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { Test } from '@nestjs/testing';
@@ -8,8 +8,7 @@ import { MockJwtAdminAuthGuard } from '../../../authorization/mock-jwt-admin-aut
 import { MockJwtAuthGuard } from '../../../authorization/mock-jwt-auth-guard';
 import { MockJwtStrategy } from '../../../authorization/mock-jwt.strategy';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
-import { CoscradEventFactory } from '../../../domain/common';
-import { COSCRAD_EVENT_UNION } from '../../../domain/common/events/constants';
+import { CoscradEventFactory, CoscradEventUnion } from '../../../domain/common';
 import { ID_MANAGER_TOKEN } from '../../../domain/interfaces/id-manager.interface';
 import {
     AddLineItemToTranscript,
@@ -36,6 +35,7 @@ import { CourtCaseBibliographicReferenceData } from '../../../domain/models/bibl
 import { CreateJournalArticleBibliographicReference } from '../../../domain/models/bibliographic-reference/journal-article-bibliographic-reference/commands/create-journal-article-bibliographic-reference.command';
 import { CreateJournalArticleBibliographicReferenceCommandHandler } from '../../../domain/models/bibliographic-reference/journal-article-bibliographic-reference/commands/create-journal-article-bibliographic-reference.command-handler';
 import JournalArticleBibliographicReferenceData from '../../../domain/models/bibliographic-reference/journal-article-bibliographic-reference/entities/journal-article-bibliographic-reference-data.entity';
+import { BibliographicReferenceDataUnion } from '../../../domain/models/bibliographic-reference/shared';
 import {
     CreateNoteAboutResource,
     CreateNoteAboutResourceCommandHandler,
@@ -44,6 +44,7 @@ import {
     ConnectResourcesWithNote,
     ConnectResourcesWithNoteCommandHandler,
 } from '../../../domain/models/context/commands/connect-resources-with-note';
+import { EdgeConnectionContextUnion } from '../../../domain/models/context/edge-connection-context-union';
 import {
     EdgeConnection,
     EdgeConnectionMember,
@@ -74,7 +75,6 @@ import {
 import { GrantResourceReadAccessToUser } from '../../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command';
 import { GrantResourceReadAccessToUserCommandHandler } from '../../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command-handler';
 import { ResourcePublished } from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event';
-import { BaseEvent } from '../../../domain/models/shared/events/base-event.entity';
 import {
     AddLyricsForSong,
     AddLyricsForSongCommandHandler,
@@ -145,7 +145,7 @@ import { ArangoEventRepository } from '../../../persistence/repositories/arango-
 import { ArangoIdRepository } from '../../../persistence/repositories/arango-id-repository';
 import { ArangoRepositoryProvider } from '../../../persistence/repositories/arango-repository.provider';
 import { DTO } from '../../../types/DTO';
-import { DynamicDataTypeModule } from '../../../validation';
+import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../../../validation';
 import { BibliographicReferenceViewModel } from '../../../view-models/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
 import { NoteViewModel } from '../../../view-models/edgeConnectionViewModels/note.view-model';
 import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMockConfigService';
@@ -182,27 +182,11 @@ type CreateTestModuleOptions = {
 // If not specified, there will be no test user attached to requests
 const optionDefaults = { shouldMockIdGenerator: false };
 
-// TODO Remove this hack
-class UsesCoscradEventUnion {
-    @Union(COSCRAD_EVENT_UNION, 'type', {
-        label: 'event',
-        description: 'this hack makes COSCRAD_EVENT_UNION known to Dynamic Data Types module',
-    })
-    event: BaseEvent;
-}
-
-/**
- * This is a hack. We should rework our dynamic union types system instead.
- */
-export const buildUsesCoscradEventUnionProvider = () => ({
-    provide: UsesCoscradEventUnion,
-    useValue: UsesCoscradEventUnion,
-});
-
 export const buildAllDataClassProviders = () =>
     [
         // Classes with dynamic union data types
         // Bibliographic References
+        BibliographicReferenceDataUnion,
         BibliographicReferenceViewModel,
         CourtCaseBibliographicReferenceData,
         JournalArticleBibliographicReferenceData,
@@ -213,8 +197,8 @@ export const buildAllDataClassProviders = () =>
         NoteViewModel,
         ConnectResourcesWithNote,
         CreateNoteAboutResource,
-
         // Context Union
+        EdgeConnectionContextUnion,
         GeneralContext,
         PageRangeContext,
         TimeRangeContext,
@@ -222,10 +206,8 @@ export const buildAllDataClassProviders = () =>
         PointContext,
         FreeMultilineContext,
         IdentityContext,
-        // Hack
-        UsesCoscradEventUnion,
-
         // Events
+        CoscradEventUnion,
         SongCreated,
         SongTitleTranslated,
         LyricsAddedForSong,
@@ -236,6 +218,8 @@ export const buildAllDataClassProviders = () =>
         useValue: ctor,
     }));
 
+const dataClassProviders = buildAllDataClassProviders();
+
 export default async (
     configOverrides: Partial<DTO<EnvironmentVariables>>,
     userOptions: Partial<CreateTestModuleOptions> = optionDefaults
@@ -244,6 +228,9 @@ export default async (
         ...optionDefaults,
         ...userOptions,
     };
+
+    // shouldn't we just call this on the data finder service when we initialize the test module?
+    bootstrapDynamicTypes(dataClassProviders);
 
     const testModule = await Test.createTestingModule({
         imports: [
@@ -274,10 +261,9 @@ export default async (
             },
             {
                 provide: CoscradEventFactory,
-                useFactory: () =>
-                    new CoscradEventFactory(
-                        buildAllDataClassProviders().map(({ useValue }) => useValue)
-                    ),
+                useFactory: (dynamicDataTypeFinderService: DynamicDataTypeFinderService) =>
+                    new CoscradEventFactory(dynamicDataTypeFinderService),
+                inject: [DynamicDataTypeFinderService],
             },
             {
                 provide: ArangoEventRepository,
@@ -450,7 +436,7 @@ export default async (
                 provide: JwtStrategy,
                 useFactory: () => new MockJwtStrategy(testUserWithGroups),
             },
-            ...buildAllDataClassProviders(),
+            ...dataClassProviders,
             /**
              * TODO [https://www.pivotaltracker.com/story/show/182576828]
              *

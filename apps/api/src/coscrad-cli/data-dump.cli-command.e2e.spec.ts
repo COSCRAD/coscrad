@@ -3,7 +3,6 @@ import { existsSync, mkdirSync, unlinkSync } from 'fs';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
-import { CoscradEventFactory } from '../domain/common';
 import { DeluxeInMemoryStore } from '../domain/types/DeluxeInMemoryStore';
 import { IdManagementService } from '../lib/id-generation/id-management.service';
 import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
@@ -16,6 +15,7 @@ import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRe
 import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoIdRepository } from '../persistence/repositories/arango-id-repository';
 import buildTestDataInFlatFormat from '../test-data/buildTestDataInFlatFormat';
+import { DynamicDataTypeFinderService } from '../validation';
 import { CoscradCliModule } from './coscrad-cli.module';
 
 const cliCommandName = 'data-dump';
@@ -38,6 +38,8 @@ describe('CLI Command: **data-dump**', () => {
             ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
         });
 
+        await testAppModule.init();
+
         const arangoConnectionProvider =
             testAppModule.get<ArangoConnectionProvider>(ArangoConnectionProvider);
 
@@ -45,8 +47,7 @@ describe('CLI Command: **data-dump**', () => {
 
         testRepositoryProvider = new TestRepositoryProvider(
             databaseProvider,
-            // We don't need the event factory for this test
-            new CoscradEventFactory([])
+            testAppModule.get(DynamicDataTypeFinderService)
         );
 
         commandInstance = await CommandTestFactory.createTestingCommand({
