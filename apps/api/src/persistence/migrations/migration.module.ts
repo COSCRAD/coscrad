@@ -25,7 +25,7 @@ export class MigrationModule implements OnApplicationBootstrap {
         private readonly migrator: Migrator
     ) {}
 
-    async onModuleInit() {
+    async onApplicationBootstrap() {
         const migrationCtorsAndMetadata = await this.finderService.find();
 
         migrationCtorsAndMetadata.forEach(({ metadata, migrationCtor }) => {
