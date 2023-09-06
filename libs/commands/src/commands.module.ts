@@ -9,7 +9,6 @@ import getCommandTypeFromMetadata from './services/utilities/getCommandTypeFromM
     imports: [DiscoveryModule],
     exports: [CommandHandlerService],
 })
-// remove me
 export class CommandModule implements OnApplicationBootstrap {
     constructor(
         private readonly finderService: CommandFinderService,

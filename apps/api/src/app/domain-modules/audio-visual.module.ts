@@ -12,7 +12,12 @@ import {
     TranslateLineItem,
     TranslateLineItemCommandHandler,
 } from '../../domain/models/audio-item/commands';
-import { CreateVideo, CreateVideoCommandHandler } from '../../domain/models/video';
+import {
+    CreateVideo,
+    CreateVideoCommandHandler,
+    TranslateVideoName,
+    TranslateVideoNameCommandHandler,
+} from '../../domain/models/video';
 import { AudioItemQueryService } from '../../domain/services/query-services/audio-item-query.service';
 import { VideoQueryService } from '../../domain/services/query-services/video-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
@@ -30,6 +35,8 @@ import { VideoController } from '../controllers/resources/video.controller';
         VideoQueryService,
         CreateVideo,
         CreateVideoCommandHandler,
+        TranslateVideoName,
+        TranslateVideoNameCommandHandler,
         CreateAudioItem,
         CreateAudioItemCommandHandler,
         CreateTranscript,
