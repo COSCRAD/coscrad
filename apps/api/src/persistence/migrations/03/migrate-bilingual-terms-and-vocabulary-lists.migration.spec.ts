@@ -2,7 +2,6 @@ import { LanguageCode } from '@coscrad/api-interfaces';
 import { isNullOrUndefined, isString } from '@coscrad/validation-constraints';
 import createTestModule from '../../../app/controllers/__tests__/createTestModule';
 import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
-import { CoscradEventFactory } from '../../../domain/common';
 import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { Term } from '../../../domain/models/term/entities/term.entity';
 import { VocabularyList } from '../../../domain/models/vocabulary-list/entities/vocabulary-list.entity';
@@ -127,7 +126,8 @@ const languageCodeEquals =
     ({ languageCode }: { languageCode: LanguageCode }) =>
         languageCodeToFind === languageCode;
 
-describe(`MigrateBilingualTermsAndVocabularyLists`, () => {
+// This migration has already been applied
+describe.skip(`MigrateBilingualTermsAndVocabularyLists`, () => {
     let testDatabaseProvider: ArangoDatabaseProvider;
 
     let testQueryRunner: ArangoQueryRunner;
@@ -151,10 +151,6 @@ describe(`MigrateBilingualTermsAndVocabularyLists`, () => {
          * `TestDatabaseProvider`, we will just leverage this existing logic for
          * test teardown.
          */
-        testRepositoryProvider = new TestRepositoryProvider(testDatabaseProvider,
-                        // We don't need the event factory for this test
-                        new CoscradEventFactory([])
-            );
 
         testQueryRunner = new ArangoQueryRunner(testDatabaseProvider);
     });

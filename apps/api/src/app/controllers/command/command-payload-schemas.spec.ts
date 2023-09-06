@@ -1,4 +1,5 @@
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { DynamicDataTypeFinderService } from '../../../validation';
 import createTestModule from '../__tests__/createTestModule';
 import { CommandInfoService } from './services/command-info-service';
 
@@ -9,6 +10,10 @@ describe('command payload schemas', () => {
         const testModule = await createTestModule({
             ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
         });
+
+        await testModule.init();
+
+        await testModule.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
 
         commandInfoService = testModule.get<CommandInfoService>(CommandInfoService);
     });

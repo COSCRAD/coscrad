@@ -5,6 +5,7 @@ import {
     NonNegativeFiniteNumber,
     Union,
     UnionMember,
+    UnionType,
 } from '@coscrad/data-types';
 import { Test } from '@nestjs/testing';
 import { DynamicDataTypeFinderService } from './dynamic-data-type-finder.service';
@@ -14,6 +15,9 @@ describe('DynamicDataTypeFinderService', () => {
     let dynamicDataTypeFinderService: DynamicDataTypeFinderService;
 
     const DUMMY_CONTEXT_UNION = 'DUMMY_CONTEXT_UNION';
+
+    @Union(DUMMY_CONTEXT_UNION, 'type')
+    class DummyContextUnion {}
 
     @UnionMember(DUMMY_CONTEXT_UNION, 'one')
     class Context1 {
@@ -44,7 +48,7 @@ describe('DynamicDataTypeFinderService', () => {
         })
         id: string;
 
-        @Union(DUMMY_CONTEXT_UNION, 'type', {
+        @UnionType(DUMMY_CONTEXT_UNION, {
             label: 'context',
             description: 'contextualizes the connection within the resource context',
         })
@@ -63,7 +67,13 @@ describe('DynamicDataTypeFinderService', () => {
     beforeAll(async () => {
         const testModule = await Test.createTestingModule({
             imports: [DynamicDataTypeModule],
-            providers: [EdgeConnection, EdgeConnectionMember, Context1, Context2].map((ctor) => ({
+            providers: [
+                DummyContextUnion,
+                EdgeConnection,
+                EdgeConnectionMember,
+                Context1,
+                Context2,
+            ].map((ctor) => ({
                 provide: ctor,
                 useValue: ctor,
             })),

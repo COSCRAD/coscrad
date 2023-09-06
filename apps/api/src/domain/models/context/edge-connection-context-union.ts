@@ -1,4 +1,4 @@
-import { Union } from '@coscrad/data-types';
+import { Union, UnionType } from '@coscrad/data-types';
 
 export const EDGE_CONNECTION_CONTEXT_UNION = 'EDGE_CONNECTION_CONTEXT_UNION';
 
@@ -7,5 +7,8 @@ export const EDGE_CONNECTION_CONTEXT_UNION = 'EDGE_CONNECTION_CONTEXT_UNION';
  * each use. But we fix the union name and discriminant path, as we want these
  * to be cohesive.
  */
-export const ContextUnion = ({ label, description }: { label: string; description: string }) =>
-    Union(EDGE_CONNECTION_CONTEXT_UNION, 'type', { label, description });
+export const ContextUnionType = ({ label, description }: { label: string; description: string }) =>
+    UnionType(EDGE_CONNECTION_CONTEXT_UNION, { label, description });
+
+@Union(EDGE_CONNECTION_CONTEXT_UNION, 'type')
+export class EdgeConnectionContextUnion {}

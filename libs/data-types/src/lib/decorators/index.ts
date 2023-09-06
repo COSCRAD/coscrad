@@ -16,5 +16,6 @@ export * from './URL';
 export * from './UUID';
 export * from './Union';
 export * from './UnionMember';
+export * from './UnionType';
 export * from './Year';
 export * from './types';

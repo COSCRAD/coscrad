@@ -68,9 +68,11 @@ export const buildUnionTypesMap = <T = unknown>(allCtorCandidates: Ctor<T>[]): U
             throw new Error(msg);
         }
 
-        const discriminantValuesAndCtors = allCtorCandidates
+        const ctorsWithUnionMemberMetadata = allCtorCandidates
             .map(getUnionMemberMetadata)
-            .filter(isUnionMemberMetadata)
+            .filter(isUnionMemberMetadata);
+
+        const discriminantValuesAndCtors = ctorsWithUnionMemberMetadata
             .filter(({ unionName }) => nameOfUnionToValidate === unionName)
             .map(({ ctor, discriminant: discriminantValue }) => [ctor, discriminantValue]);
 

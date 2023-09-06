@@ -9,6 +9,7 @@ import { NotFound } from '../../../../../lib/types/not-found';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestDataInFlatFormat from '../../../../../test-data/buildTestDataInFlatFormat';
+import { DynamicDataTypeFinderService } from '../../../../../validation';
 import formatAggregateCompositeIdentifier from '../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import InvariantValidationError from '../../../../domainModelValidators/errors/InvariantValidationError';
@@ -215,6 +216,8 @@ describe(commandType, () => {
             await setUpIntegrationTest({
                 ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
             }));
+
+        await app.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
 
         assertionHelperDependencies = {
             testRepositoryProvider,
