@@ -1,4 +1,4 @@
-import { CommandHandler, ICommand } from '@coscrad/commands';
+import { CommandHandler } from '@coscrad/commands';
 import {
     MultilingualTextItem,
     MultilingualTextItemRole,
@@ -42,7 +42,11 @@ export class TranslateVocabularyListNameCommandHandler extends BaseUpdateCommand
         );
     }
 
-    protected buildEvent(command: ICommand, eventId: string, userId: string): BaseEvent {
+    protected buildEvent(
+        command: TranslateVocabularyListName,
+        eventId: string,
+        userId: string
+    ): BaseEvent {
         return new VocabularyListNameTranslated(command, eventId, userId);
     }
 }

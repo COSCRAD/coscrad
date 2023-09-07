@@ -23,7 +23,6 @@ export abstract class BaseEvent extends BaseDomainModel {
 
         this.meta = {
             dateCreated: timestamp || Date.now(),
-            // TODO we may want to remove this redundant property (requires migration for existing events)
             id: eventId,
             userId: systemUserId,
         };

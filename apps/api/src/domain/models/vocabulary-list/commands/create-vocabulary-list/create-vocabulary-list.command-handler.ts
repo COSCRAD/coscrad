@@ -1,5 +1,5 @@
 import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
-import { CommandHandler, ICommand } from '@coscrad/commands';
+import { CommandHandler } from '@coscrad/commands';
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { Valid } from '../../../../../domain/domainModelValidators/Valid';
 import getInstanceFactoryForResource from '../../../../../domain/factories/getInstanceFactoryForResource';
@@ -56,7 +56,11 @@ export class CreateVocabularyListCommandHandler extends BaseCreateCommandHandler
         return instance.validateExternalState(state);
     }
 
-    protected buildEvent(command: ICommand, eventId: string, userId: string): BaseEvent {
+    protected buildEvent(
+        command: CreateVocabularyList,
+        eventId: string,
+        userId: string
+    ): BaseEvent {
         return new vocabularyListCreated(command, eventId, userId);
     }
 }

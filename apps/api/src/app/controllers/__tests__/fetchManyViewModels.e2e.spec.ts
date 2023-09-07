@@ -52,8 +52,7 @@ describe('When fetching multiple resources', () => {
         eventRepository = app.get(ArangoEventRepository);
     });
 
-    Object.values(ResourceType)
-    .forEach((resourceType) => {
+    Object.values(ResourceType).forEach((resourceType) => {
         const endpointUnderTest = `/${buildViewModelPathForResourceType(resourceType)}`;
 
         describe(`GET ${endpointUnderTest}`, () => {
@@ -159,13 +158,11 @@ describe('When fetching multiple resources', () => {
                         }).fetchFullSnapshotInLegacyFormat()
                     );
 
-                    // Why are there 2 creation events for some songs in the test setup?
-
                     const publishedSongIds = publishedResourcesToAdd
                         .map((song) => song.getCompositeIdentifier())
                         .map(({ id }) => id);
 
-                    // TODO Make this a more natural part of the test setup
+                    // TODO [https://www.pivotaltracker.com/story/show/185903292] Make this a more natural part of the test setup
                     const songPublishedEvents = publishedSongIds.map(
                         (id, index) =>
                             new ResourcePublished(
