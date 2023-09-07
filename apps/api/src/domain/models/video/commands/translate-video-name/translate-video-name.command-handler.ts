@@ -1,4 +1,4 @@
-import { CommandHandler, ICommand } from '@coscrad/commands';
+import { CommandHandler } from '@coscrad/commands';
 import { Valid } from '../../../../../domain/domainModelValidators/Valid';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../../domain/types/ResourceType';
@@ -30,7 +30,7 @@ export class TranslateVideoNameCommandHandler extends BaseUpdateCommandHandler<V
         return video.translateName(text, languageCode);
     }
 
-    protected buildEvent(command: ICommand, eventId: string, userId: string): BaseEvent {
+    protected buildEvent(command: TranslateVideoName, eventId: string, userId: string): BaseEvent {
         return new VideoNameTranslated(command, eventId, userId);
     }
 }

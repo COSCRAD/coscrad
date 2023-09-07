@@ -9,8 +9,6 @@ import validateAllCoordinatesInLinearStructure from '../../spatial-feature/valid
 import { EdgeConnectionContext } from '../context.entity';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 
-export const EMPTY_DTO_INJECTION_TOKEN = 'EMPTY_DTO';
-
 export class Point2DForContext {
     @NonNegativeFiniteNumber({
         isArray: true,

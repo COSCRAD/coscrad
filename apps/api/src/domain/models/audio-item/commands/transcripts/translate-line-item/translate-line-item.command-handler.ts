@@ -35,7 +35,7 @@ export class TranslateLineItemCommandHandler extends BaseUpdateCommandHandler<Tr
         return Valid;
     }
 
-    protected buildEvent(command: ICommand, eventId: string, userId: string): BaseEvent {
+    protected buildEvent(command: TranslateLineItem, eventId: string, userId: string): BaseEvent {
         return new LineItemTranslated(command, eventId, userId);
     }
 }

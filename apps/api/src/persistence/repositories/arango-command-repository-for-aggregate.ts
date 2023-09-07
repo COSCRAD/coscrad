@@ -91,7 +91,7 @@ export class ArangoSongCommandRepository implements IRepositoryForAggregate<Song
             throw new InternalError(
                 `failed to event source ${formatAggregateCompositeIdentifier(
                     entity.getCompositeIdentifier()
-                )} as it has no even thistory`
+                )} as it has no event history`
             );
         }
 
@@ -127,11 +127,15 @@ export class ArangoSongCommandRepository implements IRepositoryForAggregate<Song
      */
     async update(updatedEntity: Song): Promise<void> {
         // Should the event history be an array of instances? << DO this!
-
         const { eventHistory = [] } = updatedEntity;
 
+        // TODO presort when hydrating the event history from DB
+        const sortedEventHistory = eventHistory.sort(
+            (eventA, eventB) => eventA.meta.dateCreated - eventB.meta.dateCreated
+        );
+
         // Should the event history be an array of instances? << DO this!
-        const mostRecentEvent = eventHistory[eventHistory.length - 1];
+        const mostRecentEvent = sortedEventHistory[sortedEventHistory.length - 1];
 
         await this.eventRepository.appendEvent(mostRecentEvent);
 

@@ -4,21 +4,21 @@ import { InternalError, isInternalError } from '../../../../lib/errors/InternalE
 import { AggregateId } from '../../../types/AggregateId';
 import { CommandAssertionDependencies } from '../command-helpers/types/CommandAssertionDependencies';
 
-type BaseTestCase = {
+interface BaseTestCase {
     buildCommandFSA: () => CommandFSA;
     systemUserId: AggregateId;
     checkError?: (error: InternalError) => void;
-};
+}
 
 type AssertionDependencies = Omit<CommandAssertionDependencies, 'idManager'>;
 
-type StateBasedTestCase = {
+interface StateBasedTestCase extends BaseTestCase {
     initialState: InMemorySnapshot;
-} & BaseTestCase;
+}
 
-type TestCaseV2 = {
+interface TestCaseV2 extends BaseTestCase {
     seedInitialState: () => Promise<void>;
-} & BaseTestCase;
+}
 
 const isTestCaseV2 = (input: StateBasedTestCase | TestCaseV2): input is TestCaseV2 =>
     typeof (input as TestCaseV2).seedInitialState === 'function';
@@ -27,15 +27,23 @@ const isTestCaseV2 = (input: StateBasedTestCase | TestCaseV2): input is TestCase
  * This helper is not to be used with `CREATE_X` commands. Use `assertCreateCommandError`,
  * which allows for ID generation.
  */
-export async function assertCommandError(dependencies: AssertionDependencies, testCase: TestCaseV2);
+export async function assertCommandError(
+    dependencies: AssertionDependencies,
+    testCase: TestCaseV2
+): Promise<void>;
+
+/**
+ * @deprecated Use `seedInitialState` instead of `initialState`
+ */
 export async function assertCommandError(
     dependencies: AssertionDependencies,
     testCase: StateBasedTestCase
-);
+): Promise<void>;
+
 export async function assertCommandError(
     dependencies: AssertionDependencies,
     testCase: StateBasedTestCase | TestCaseV2
-) {
+): Promise<void> {
     const { testRepositoryProvider, commandHandlerService } = dependencies;
 
     const { buildCommandFSA: buildCommandFSA, checkError, systemUserId } = testCase;
