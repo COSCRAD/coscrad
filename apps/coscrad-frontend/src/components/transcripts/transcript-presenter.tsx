@@ -9,11 +9,21 @@ interface TranscriptPresenterProps {
     currentTime: number;
 }
 
+const compareNumbers = (a, b) => {
+    return a - b;
+};
+
 export const TranscriptPresenter = ({
     transcript,
     currentTime,
 }: TranscriptPresenterProps): JSX.Element => {
     const { participants, items } = transcript;
+
+    items.sort(compareNumbers);
+
+    const onHighlight = () => {
+        return null;
+    };
 
     const transcriptIntervalLookupTable = useMemo(() => {
         items.reduce(
@@ -28,6 +38,7 @@ export const TranscriptPresenter = ({
                             speakerInitials: speakerInitials,
                             text: text,
                         }}
+                        onHighlight={onHighlight}
                     />
                 ),
             new Map()
