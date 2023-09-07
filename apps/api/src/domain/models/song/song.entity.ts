@@ -161,7 +161,6 @@ export class Song extends Resource implements ITimeBoundable {
         return allErrors.concat(titleValidationErrors);
     }
 
-    // TODO consider making this any iterable of BaseEvents
     static fromEventHistory(
         eventStream: BaseEvent[],
         idOfSongToCreate: AggregateId

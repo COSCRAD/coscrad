@@ -23,7 +23,12 @@ export class ArangoEventRepository implements IEventRepository {
         );
     }
 
-    // Todo Should the following simply be an `EventFilter`? or a `Specification`?
+    /**
+     * @param aggregateContextIdentifier `type`- the type of aggregate whose events we should fetch. `id` (optional) - the specific aggregate of this type
+     * @returns Asynchronously returns **chronologically ordred** events for aggregates of the requested type and (optionally) ID
+     *
+     * TODO Should the following simply be an `EventFilter`? or a `Specification`?
+     */
     async fetchEvents(
         aggregateContextIdentifier:
             | AggregateCompositeIdentifier
@@ -60,7 +65,10 @@ export class ArangoEventRepository implements IEventRepository {
 
         // TODO Either add an event factory, or return only the DTO
         const eventInstances = await Promise.all(
-            filteredEvents.map((eventDocument) => this.coscradEventFactory.build(eventDocument))
+            filteredEvents
+                // The event repository has the responsibility of sorting events chronologically for once and for all
+                .sort((eventA, eventB) => eventA.meta.dateCreated - eventB.meta.dateCreated)
+                .map((eventDocument) => this.coscradEventFactory.build(eventDocument))
         );
 
         return eventInstances;
