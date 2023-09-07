@@ -91,7 +91,7 @@ export class ArangoSongCommandRepository implements IRepositoryForAggregate<Song
             throw new InternalError(
                 `failed to event source ${formatAggregateCompositeIdentifier(
                     entity.getCompositeIdentifier()
-                )} as it has no even thistory`
+                )} as it has no event history`
             );
         }
 
