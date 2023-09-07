@@ -12,6 +12,7 @@ const isVideoMIMEType = (input: unknown): input is VideoMIMEType =>
 interface VideoPlayerProps {
     videoUrl: string;
     mimeType?: VideoMIMEType;
+    index?: unknown;
 }
 
 const StyledVideoPlayer = styled('video')`
@@ -19,7 +20,7 @@ const StyledVideoPlayer = styled('video')`
     width: 100%;
 `;
 
-export const VideoPlayer = ({ videoUrl, mimeType }: VideoPlayerProps) => {
+export const VideoPlayer = ({ videoUrl, mimeType, index }: VideoPlayerProps) => {
     return (
         <StyledVideoPlayer controls>
             {isVideoMIMEType(mimeType) ? (
@@ -27,16 +28,18 @@ export const VideoPlayer = ({ videoUrl, mimeType }: VideoPlayerProps) => {
                     data-testid="video-player"
                     style={{ padding: 0 }}
                     src={videoUrl}
+                    key={`${videoUrl}-${index}`}
                     type={mimeType}
                 />
             ) : (
                 <>
                     {/* Fallbacks for each media type */}
-                    {Object.values(VideoMIMEType).map((mimeType) => (
+                    {Object.values(VideoMIMEType).map((mimeType, index) => (
                         <source
                             data-testid="video-player"
                             style={{ padding: 0 }}
                             src={videoUrl}
+                            key={`${videoUrl}-${index}`}
                             type={mimeType}
                         />
                     ))}

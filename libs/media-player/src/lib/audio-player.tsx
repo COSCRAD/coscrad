@@ -25,11 +25,11 @@ export const AudioPlayer = ({ audioUrl, mimeType }: AudioPlayerProps) => {
     return (
         <StyledAudioPlayer controls>
             {isAudioMIMEType(mimeType) ? (
-                <source data-testid="audio-player" src={audioUrl} type={mimeType} />
+                <source key={audioUrl} src={audioUrl} type={mimeType} />
             ) : (
                 <>
-                    {Object.values(AudioMIMEType).map((mimeType) => (
-                        <source data-testid="audio-player" src={audioUrl} type={mimeType} />
+                    {Object.values(AudioMIMEType).map((mimeType, index) => (
+                        <source key={`${audioUrl}-${index}`} src={audioUrl} type={mimeType} />
                     ))}
                 </>
             )}

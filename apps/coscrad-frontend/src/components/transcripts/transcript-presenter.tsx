@@ -1,3 +1,5 @@
+import { ITranscriptItem, ITranscriptParticipant } from '@coscrad/api-interfaces';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { SubtitlesRounded } from '@mui/icons-material';
 import { Box, Card, CardContent, CardHeader, Divider, Typography } from '@mui/material';
 
@@ -13,29 +15,35 @@ export const TranscriptPresenter = ({ transcript }): JSX.Element => {
                 }
             />
             <CardContent>
-                {transcript.participants.map((item) => (
-                    <Box>
-                        <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                            Participants:&nbsp;
-                        </Typography>
-                        {item.name} ({item.initials})
-                    </Box>
-                ))}
+                {isNullOrUndefined(transcript)
+                    ? null
+                    : transcript.participants.map((item: ITranscriptParticipant) => (
+                          <Box>
+                              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                                  Participants:&nbsp;
+                              </Typography>
+                              {item.name} ({item.initials})
+                          </Box>
+                      ))}
+
                 <Divider sx={{ marginY: 2 }} />
-                {transcript.items.map((item) => (
-                    <Box display={'flex'}>
-                        <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                            {item.speakerInitials} [{item.inPointMilliseconds}-
-                            {item.outPointMilliseconds}
-                            ]:&nbsp;
-                        </Typography>
-                        <Typography variant="body1">
-                            {item.text.items.map((item) => (
-                                <Box component={'span'}>"{item.text}"</Box>
-                            ))}
-                        </Typography>
-                    </Box>
-                ))}
+
+                {isNullOrUndefined(transcript)
+                    ? null
+                    : transcript.items.map((item: ITranscriptItem) => (
+                          <Box display={'flex'}>
+                              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                                  {item.speakerInitials} [{item.inPointMilliseconds}-
+                                  {item.outPointMilliseconds}
+                                  ]:&nbsp;
+                              </Typography>
+                              <Typography variant="body1">
+                                  {item.text.items.map((item) => (
+                                      <Box component={'span'}>"{item.text}"</Box>
+                                  ))}
+                              </Typography>
+                          </Box>
+                      ))}
             </CardContent>
         </Card>
     );
