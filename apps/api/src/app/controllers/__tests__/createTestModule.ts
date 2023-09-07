@@ -49,10 +49,7 @@ import {
     EdgeConnection,
     EdgeConnectionMember,
 } from '../../../domain/models/context/edge-connection.entity';
-import {
-    EMPTY_DTO_INJECTION_TOKEN,
-    FreeMultilineContext,
-} from '../../../domain/models/context/free-multiline-context/free-multiline-context.entity';
+import { FreeMultilineContext } from '../../../domain/models/context/free-multiline-context/free-multiline-context.entity';
 import { GeneralContext } from '../../../domain/models/context/general-context/general-context.entity';
 import { IdentityContext } from '../../../domain/models/context/identity-context.entity/identity-context.entity';
 import { PageRangeContext } from '../../../domain/models/context/page-range-context/page-range.context.entity';
@@ -528,8 +525,6 @@ export default async (
             AdminController,
         ],
     })
-        .overrideProvider(EMPTY_DTO_INJECTION_TOKEN)
-        .useValue(null)
         .overrideGuard(OptionalJwtAuthGuard)
         .useValue(new MockJwtAuthGuard(testUserWithGroups, true))
         .overrideGuard(AdminJwtGuard)
