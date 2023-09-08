@@ -30,7 +30,7 @@ export const SelectedCategorizablesPresenter = <T extends IBaseViewModel>({
 
     return (
         <Stack sx={{ width: '93%' }} key={pluralLabelForCategorizableType}>
-            <Typography variant="h4">{pluralLabelForCategorizableType}</Typography>
+            <Typography variant="h6">{pluralLabelForCategorizableType}</Typography>
             {viewModels.map((viewModel, index) => (
                 <Item key={index}>
                     {viewModel === NOT_FOUND ? <NotFoundPresenter /> : <Presenter {...viewModel} />}

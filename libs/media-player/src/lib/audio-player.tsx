@@ -29,7 +29,7 @@ export const AudioPlayer = ({ audioUrl, mimeType }: AudioPlayerProps) => {
             ) : (
                 <>
                     {Object.values(AudioMIMEType).map((mimeType) => (
-                        <source src={audioUrl} type={mimeType} />
+                        <source key={`${audioUrl}-${mimeType}`} src={audioUrl} type={mimeType} />
                     ))}
                 </>
             )}
