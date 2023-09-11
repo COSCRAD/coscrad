@@ -711,12 +711,162 @@ exports[`GET /resources should return the expected result 1`] = `
           },
         },
       },
-      "text": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "a plain-text representation of the transcript",
+      "transcript": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "transcript for this video",
         "isArray": false,
         "isOptional": false,
-        "label": "plain text",
+        "label": "transcript",
+        "schema": {
+          "items": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "time stamps with text and speaker labels",
+            "isArray": true,
+            "isOptional": true,
+            "label": "items",
+            "schema": {
+              "inPointMilliseconds": {
+                "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+                "description": "starting time stamp (ms)",
+                "isArray": false,
+                "isOptional": false,
+                "label": "in point",
+              },
+              "outPointMilliseconds": {
+                "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+                "description": "ending time stamp (ms)",
+                "isArray": false,
+                "isOptional": false,
+                "label": "out point",
+              },
+              "speakerInitials": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "the label for the current timestamped item",
+                "isArray": false,
+                "isOptional": false,
+                "label": "label",
+              },
+              "text": {
+                "complexDataType": "NESTED_TYPE",
+                "description": "multi-lingual text transcription \\ translation for this item",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text",
+                "schema": {
+                  "items": {
+                    "complexDataType": "NESTED_TYPE",
+                    "description": "one item for each provided language",
+                    "isArray": true,
+                    "isOptional": false,
+                    "label": "items",
+                    "schema": {
+                      "languageCode": {
+                        "complexDataType": "ENUM",
+                        "description": "an official identifier of the language",
+                        "enumLabel": "Language_Code",
+                        "enumName": "LangaugeCode",
+                        "isArray": false,
+                        "isOptional": false,
+                        "label": "language code",
+                        "labelsAndValues": [
+                          {
+                            "label": "Chilcotin",
+                            "value": "clc",
+                          },
+                          {
+                            "label": "Haida",
+                            "value": "hai",
+                          },
+                          {
+                            "label": "English",
+                            "value": "en",
+                          },
+                          {
+                            "label": "French",
+                            "value": "fra",
+                          },
+                          {
+                            "label": "Chinook",
+                            "value": "chn",
+                          },
+                          {
+                            "label": "Zapotec",
+                            "value": "zap",
+                          },
+                          {
+                            "label": "Spanish",
+                            "value": "spa",
+                          },
+                        ],
+                      },
+                      "role": {
+                        "complexDataType": "ENUM",
+                        "description": "role of this text in the translation process",
+                        "enumLabel": "text item role",
+                        "enumName": "Multilingual Text Item Role",
+                        "isArray": false,
+                        "isOptional": false,
+                        "label": "text item role",
+                        "labelsAndValues": [
+                          {
+                            "label": "original",
+                            "value": "original",
+                          },
+                          {
+                            "label": "glossed to",
+                            "value": "glossed to",
+                          },
+                          {
+                            "label": "prompt",
+                            "value": "prompt",
+                          },
+                          {
+                            "label": "free translation",
+                            "value": "free translation",
+                          },
+                          {
+                            "label": "literal translation",
+                            "value": "literal translation",
+                          },
+                        ],
+                      },
+                      "text": {
+                        "coscradDataType": "NON_EMPTY_STRING",
+                        "description": "plain text in the given language",
+                        "isArray": false,
+                        "isOptional": false,
+                        "label": "text",
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          "participants": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "a list of participants and their initials",
+            "isArray": true,
+            "isOptional": true,
+            "label": "participants",
+            "schema": {
+              "initials": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "the initials or text identifier for this speaker",
+                "isArray": false,
+                "isOptional": false,
+                "label": "speaker initials",
+              },
+              "name": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "the participant's name",
+                "isArray": false,
+                "isOptional": false,
+                "label": "name",
+              },
+            },
+          },
+        },
       },
       "videoUrl": {
         "coscradDataType": "URL",
