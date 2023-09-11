@@ -1,13 +1,13 @@
 import { ITranscriptItem, ITranscriptParticipant } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { SubtitlesRounded } from '@mui/icons-material';
+import { SubtitlesRounded as SubtitlesRoundedIcon } from '@mui/icons-material';
 import { Box, Card, CardContent, CardHeader, Divider, Typography } from '@mui/material';
 
 export const TranscriptPresenter = ({ transcript }): JSX.Element => {
     return (
         <Card elevation={0}>
             <CardHeader
-                avatar={<SubtitlesRounded color="primary" />}
+                avatar={<SubtitlesRoundedIcon color="primary" />}
                 title={
                     <Typography variant="h4" margin={'auto 0'}>
                         Transcript

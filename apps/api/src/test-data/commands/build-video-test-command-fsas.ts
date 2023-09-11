@@ -15,7 +15,8 @@ import {
 } from '../../domain/models/audio-item/commands/transcripts/constants';
 import { ImportLineItemsToTranscript } from '../../domain/models/audio-item/commands/transcripts/import-line-items-to-transcript';
 import { TRANSLATE_LINE_ITEM } from '../../domain/models/audio-item/commands/transcripts/translate-line-item/constants';
-import { CreateVideo } from '../../domain/models/video';
+import { CreateVideo, TranslateVideoName } from '../../domain/models/video';
+import { TRANSLATE_VIDEO_NAME } from '../../domain/models/video/commands/constants';
 
 const id = buildDummyUuid(91);
 
@@ -29,6 +30,15 @@ const createVideo: CommandFSA<CreateVideo> = {
         languageCodeForName: LanguageCode.Haida,
         mediaItemId: buildDummyUuid(41),
         lengthMilliseconds: 12345,
+    },
+};
+
+const translateVideoName: CommandFSA<TranslateVideoName> = {
+    type: TRANSLATE_VIDEO_NAME,
+    payload: {
+        aggregateCompositeIdentifier: { id, type },
+        languageCode: LanguageCode.English,
+        text: 'translation of video name into English',
     },
 };
 
@@ -110,6 +120,8 @@ const importLineItemsToTranscript: CommandFSA<ImportLineItemsToTranscript> = {
 
 export const buildVideoTestCommandFsas = () => [
     createVideo,
+    translateVideoName,
+    // Transcription Command FSAs
     createTranscript,
     addParticipantToTranscript,
     addLineItemToTranscript,
