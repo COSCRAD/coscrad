@@ -35,6 +35,8 @@ declare namespace Cypress {
         getCommandFormSubmissionButton(): Chainable<Subject>;
 
         getLoading(): Chainable<Subject>;
+
+        filterTable(searchScope: string, searchText: string): void;
     }
 }
 
@@ -167,7 +169,7 @@ Cypress.Commands.add(
         )}"`;
 
         cy.exec(command).then((_result) => {
-            if (command.includes(`IMPORT_L`))
+            if (command.includes(`FOOBARBAZ`))
                 /* eslint-disable-next-line */
                 debugger;
         });
@@ -204,4 +206,13 @@ Cypress.Commands.add(`openPanel`, (panelType: 'notes' | 'connections') => {
     }
 
     throw new Error(`Failed to open panel of unknown type: ${panelType}`);
+});
+
+Cypress.Commands.add(`filterTable`, (searchScope: string, searchText: string) => {
+    cy.getByDataAttribute('select_index_search_scope')
+        .click()
+        .get(`[data-value="${searchScope}"]`)
+        .click();
+
+    cy.getByDataAttribute(`index_search_bar`).click().type(searchText);
 });
