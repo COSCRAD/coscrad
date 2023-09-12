@@ -4,8 +4,9 @@ import {
     PlayArrow as PlayArrowIcon,
     Replay as ReplayIcon,
 } from '@mui/icons-material/';
-import { Box, IconButton, LinearProgress, Tooltip, Typography, styled } from '@mui/material';
+import { Box, IconButton, Tooltip, Typography, styled } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
+import { CoscradLinearProgressBar } from './coscrad-linear-progress-bar';
 import { FormattedCurrentTime } from './formatted-currenttime';
 import { LanguageCode } from './language-code.enum';
 import { SubtitlesByTime } from './subtitles-by-time';
@@ -109,6 +110,8 @@ export const VideoPrototypePlayer = ({
 
         const progress = (currentTime / duration) * 100;
 
+        console.log(`${currentTime} / ${duration} = ${progress}`);
+
         setMediaState({ ...mediaState, progress: progress, currentTime: currentTime });
 
         if (!mediaState.shouldPlayWithSubtitles) {
@@ -122,11 +125,12 @@ export const VideoPrototypePlayer = ({
         setMediaState({ ...mediaState, currentTime: videoRef.current!.currentTime });
     };
 
-    const seekInProgressBar = (event: React.MouseEvent<HTMLSpanElement>) => {
-        const percentProgressSelected =
-            (event.clientX - event.currentTarget.offsetLeft) / event.currentTarget.offsetWidth;
+    const seekInProgressBar = (progressSelected: number) => {
+        const newMediaTime = progressSelected * videoRef.current!.duration;
 
-        const newMediaTime = percentProgressSelected * videoRef.current!.duration;
+        console.log(`Seek: ${progressSelected} * ${videoRef.current!.duration} = ${newMediaTime}`);
+
+        console.log({ newMediaTime: newMediaTime });
 
         seekInMedia(newMediaTime);
 
@@ -173,9 +177,8 @@ export const VideoPrototypePlayer = ({
         };
 
         const onLoadedMetadata = () => {
-            console.log('loadedmetadata');
-
             const videoDuration = videoElement.duration;
+            console.log(`loadedmetadata duration: ${videoDuration}`);
 
             setMediaState({ ...mediaState, duration: videoDuration });
         };
@@ -202,6 +205,8 @@ export const VideoPrototypePlayer = ({
             const bufferedTimeRanges = videoElement.buffered;
 
             const bufferedTimeRangesLength = bufferedTimeRanges.length;
+
+            console.log({ countBuffer: bufferedTimeRangesLength });
 
             const bufferedEnd =
                 bufferedTimeRangesLength > 0
@@ -256,7 +261,7 @@ export const VideoPrototypePlayer = ({
             <Box sx={{ mb: 2 }}>
                 {/* With the buffer variant you get an annoying blinking dash bar
                     we may want to make our own simpler one. */}
-                <LinearProgress
+                {/* <LinearProgress
                     variant="buffer"
                     value={mediaState.progress}
                     valueBuffer={mediaState.buffer}
@@ -264,6 +269,11 @@ export const VideoPrototypePlayer = ({
                     onClick={(event) => {
                         seekInProgressBar(event);
                     }}
+                /> */}
+                <CoscradLinearProgressBar
+                    buffer={mediaState.buffer}
+                    progress={mediaState.progress}
+                    seekInProgressBar={seekInProgressBar}
                 />
                 <VideoControls>
                     <Box>
@@ -302,6 +312,12 @@ export const VideoPrototypePlayer = ({
                 </VideoControls>
                 <Typography component="div" variant="h5">
                     Loading status: {mediaState.loadStatus}
+                </Typography>
+                <Typography component="div" variant="h5">
+                    Progress: {mediaState.progress}
+                </Typography>
+                <Typography component="div" variant="h5">
+                    Buffer: {mediaState.buffer}
                 </Typography>
             </Box>
         </Box>

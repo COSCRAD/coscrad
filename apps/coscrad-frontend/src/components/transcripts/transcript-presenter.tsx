@@ -1,8 +1,6 @@
 import { ITranscript } from '@coscrad/api-interfaces';
 import { SubtitlesRounded as SubtitlesRoundedIcon } from '@mui/icons-material';
 import { Box, Card, CardContent, CardHeader, Divider, Typography } from '@mui/material';
-import { useMemo } from 'react';
-import { TranscriptLinePresenter } from './transcript-line-presenter';
 
 interface TranscriptPresenterProps {
     transcript: ITranscript;
@@ -19,31 +17,31 @@ export const TranscriptPresenter = ({
 }: TranscriptPresenterProps): JSX.Element => {
     const { participants, items } = transcript;
 
-    items.sort(compareNumbers);
+    // items.sort(compareNumbers);
 
-    const onHighlight = () => {
-        return null;
-    };
+    // const onHighlight = () => {
+    //     return null;
+    // };
 
-    const transcriptIntervalLookupTable = useMemo(() => {
-        items.reduce(
-            (accMap, { inPointMilliseconds, outPointMilliseconds, speakerInitials, text }) =>
-                accMap.set(
-                    inPointMilliseconds,
-                    <TranscriptLinePresenter
-                        key={`${inPointMilliseconds}-${speakerInitials}`}
-                        transcriptLine={{
-                            inPointMilliseconds: inPointMilliseconds,
-                            outPointMilliseconds: outPointMilliseconds,
-                            speakerInitials: speakerInitials,
-                            text: text,
-                        }}
-                        onHighlight={onHighlight}
-                    />
-                ),
-            new Map()
-        );
-    }, []);
+    // const transcriptIntervalLookupTable = useMemo(() => {
+    //     items.reduce(
+    //         (accMap, { inPointMilliseconds, outPointMilliseconds, speakerInitials, text }) =>
+    //             accMap.set(
+    //                 inPointMilliseconds,
+    //                 <TranscriptLinePresenter
+    //                     key={`${inPointMilliseconds}-${speakerInitials}`}
+    //                     transcriptLine={{
+    //                         inPointMilliseconds: inPointMilliseconds,
+    //                         outPointMilliseconds: outPointMilliseconds,
+    //                         speakerInitials: speakerInitials,
+    //                         text: text,
+    //                     }}
+    //                     onHighlight={onHighlight}
+    //                 />
+    //             ),
+    //         new Map()
+    //     );
+    // }, []);
 
     return (
         <Card elevation={0}>
