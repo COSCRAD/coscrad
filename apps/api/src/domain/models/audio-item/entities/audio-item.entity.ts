@@ -1,3 +1,4 @@
+import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import {
     MIMEType,
     NestedDataType,
@@ -103,6 +104,21 @@ class AudioItemBase extends Resource implements IRadioPublishableResource {
 
     getName(): MultilingualText {
         return this.name;
+    }
+
+    translateName(translationText: string, languageCode: LanguageCode): ResultOrError<AudioItem> {
+        const textItem: DTO<MultilingualTextItem> = {
+            text: translationText,
+            languageCode,
+            role: MultilingualTextItemRole.freeTranslation,
+        };
+
+        if (this.name.items.some(({ languageCode }) => languageCode === textItem.languageCode))
+            return new DuplicateLanguageInMultilingualTextError(textItem.languageCode);
+
+        const nameUpdateResult = this.name.translate(textItem);
+
+        if (isInternalError(nameUpdateResult)) return nameUpdateResult;
     }
 
     protected validateComplexInvariants(): InternalError[] {
