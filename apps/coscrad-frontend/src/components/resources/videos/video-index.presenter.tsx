@@ -63,7 +63,13 @@ export const VideoIndexPresenter = ({ entities: videos }: VideoIndexState): JSX.
     const doesSearchTextMatchTextItemCaseInsensitive = (
         textItem: IMultilingualTextItem,
         searchText: string
-    ) => doesTextIncludeCaseInsensitive(textItem.text, searchText);
+    ) => {
+        if (isNullOrUndefined(textItem)) return false;
+
+        const { text } = textItem;
+
+        return doesTextIncludeCaseInsensitive(text, searchText);
+    };
 
     const matchers: Matchers<VideoTableRow> = {
         name: doesSearchTextMatchTextItemCaseInsensitive,

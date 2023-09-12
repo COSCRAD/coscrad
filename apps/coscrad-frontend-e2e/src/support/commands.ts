@@ -214,5 +214,9 @@ Cypress.Commands.add(`filterTable`, (searchScope: string, searchText: string) =>
         .get(`[data-value="${searchScope}"]`)
         .click();
 
-    cy.getByDataAttribute(`index_search_bar`).click().type(searchText);
+    /**
+     * cy.type(...) requires a non-empty string, but we want to accommodate
+     * leaving the search field empty in this abstraction.
+     */
+    if (searchText?.length > 0) cy.getByDataAttribute(`index_search_bar`).click().type(searchText);
 });
