@@ -1,6 +1,6 @@
 import {
     IMultilingualText,
-    IMultlingualTextItem,
+    IMultilingualTextItem,
     LanguageCode,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
@@ -43,7 +43,7 @@ export const LanguageCodeEnum = (options: TypeDecoratorOptions) =>
         options
     );
 
-export class MultilingualTextItem extends BaseDomainModel implements IMultlingualTextItem {
+export class MultilingualTextItem extends BaseDomainModel implements IMultilingualTextItem {
     @ExternalEnum(
         {
             labelsAndValues: Object.entries(LanguageCode).map(([label, value]) => ({
