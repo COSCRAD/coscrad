@@ -1,6 +1,7 @@
 import { IBaseViewModel } from '../../base.view-model.interface';
 import { MIMEType } from '../media-items';
 import { IMultilingualText } from './multilingual-text.interface';
+import { ITranscript } from './transcript.interface';
 
 export interface IVideoViewModel extends IBaseViewModel {
     name: IMultilingualText;
@@ -11,8 +12,5 @@ export interface IVideoViewModel extends IBaseViewModel {
 
     lengthMilliseconds: number;
 
-    /**
-     * TODO Make this an ITranscript
-     */
-    text: string;
+    transcript: ITranscript;
 }

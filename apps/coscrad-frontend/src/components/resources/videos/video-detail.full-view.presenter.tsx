@@ -3,24 +3,25 @@ import {
     IVideoViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
+import { VideoPlayer } from '@coscrad/media-player';
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
+import { TranscriptPresenter } from '../../transcripts/transcript-presenter';
 import { convertMillisecondsToSeconds } from '../utils/math';
 
 export const VideoDetailFullViewPresenter = ({
     lengthMilliseconds,
-    text: plainText,
+    transcript,
     name,
     id,
+    videoUrl,
 }: ICategorizableDetailQueryResult<IVideoViewModel>): JSX.Element => (
     <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.video}>
         <SinglePropertyPresenter
             display="Duration"
             value={convertMillisecondsToSeconds(lengthMilliseconds)}
         />
-        {/* TODO[https://www.pivotaltracker.com/story/show/184530937] Support video playback via the media player lib  */}
-        {/* TODO[https://www.pivotaltracker.com/story/show/184666073] Create a transcript presenter */}
-        <h3>Transcript:</h3>
-        <p>{plainText}</p>
+        <VideoPlayer videoUrl={videoUrl} />
+        <TranscriptPresenter transcript={transcript} />
     </ResourceDetailFullViewPresenter>
 );

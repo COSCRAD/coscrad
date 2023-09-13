@@ -2952,8 +2952,44 @@ exports[`When fetching multiple resources GET /resources/videos when all of the 
         ],
       },
       "tags": [],
-      "text": "[12000] [DM] This is how. {en} (role: original) [15550]
-[18300] [DM] It is done {en} (role: original) [19240]",
+      "transcript": {
+        "items": [
+          {
+            "inPointMilliseconds": 12000,
+            "outPointMilliseconds": 15550,
+            "speakerInitials": "DM",
+            "text": {
+              "items": [
+                {
+                  "languageCode": "en",
+                  "role": "original",
+                  "text": "This is how.",
+                },
+              ],
+            },
+          },
+          {
+            "inPointMilliseconds": 18300,
+            "outPointMilliseconds": 19240,
+            "speakerInitials": "DM",
+            "text": {
+              "items": [
+                {
+                  "languageCode": "en",
+                  "role": "original",
+                  "text": "It is done",
+                },
+              ],
+            },
+          },
+        ],
+        "participants": [
+          {
+            "initials": "DM",
+            "name": "Dee Monstrator",
+          },
+        ],
+      },
       "videoUrl": "https://coscrad.org/wp-content/uploads/2023/05/Rexy-and-The-Egg-_3D-Dinosaur-Animation_-_-3D-Animation-_-Maya-3D.mp4",
     },
   ],
@@ -2979,8 +3015,44 @@ exports[`When fetching multiple resources GET /resources/videos when some of the
         ],
       },
       "tags": [],
-      "text": "[12000] [DM] This is how. {en} (role: original) [15550]
-[18300] [DM] It is done {en} (role: original) [19240]",
+      "transcript": {
+        "items": [
+          {
+            "inPointMilliseconds": 12000,
+            "outPointMilliseconds": 15550,
+            "speakerInitials": "DM",
+            "text": {
+              "items": [
+                {
+                  "languageCode": "en",
+                  "role": "original",
+                  "text": "This is how.",
+                },
+              ],
+            },
+          },
+          {
+            "inPointMilliseconds": 18300,
+            "outPointMilliseconds": 19240,
+            "speakerInitials": "DM",
+            "text": {
+              "items": [
+                {
+                  "languageCode": "en",
+                  "role": "original",
+                  "text": "It is done",
+                },
+              ],
+            },
+          },
+        ],
+        "participants": [
+          {
+            "initials": "DM",
+            "name": "Dee Monstrator",
+          },
+        ],
+      },
       "videoUrl": "https://coscrad.org/wp-content/uploads/2023/05/Rexy-and-The-Egg-_3D-Dinosaur-Animation_-_-3D-Animation-_-Maya-3D.mp4",
     },
   ],

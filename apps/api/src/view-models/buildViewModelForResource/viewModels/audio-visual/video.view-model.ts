@@ -1,15 +1,11 @@
 import { IVideoViewModel, MIMEType } from '@coscrad/api-interfaces';
-import {
-    ExternalEnum,
-    NestedDataType,
-    NonEmptyString,
-    NonNegativeFiniteNumber,
-    URL,
-} from '@coscrad/data-types';
+import { ExternalEnum, NestedDataType, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { MultilingualText } from '../../../../domain/common/entities/multilingual-text';
+import { Transcript } from '../../../../domain/models/audio-item/entities/transcript.entity';
 import { Video } from '../../../../domain/models/audio-item/entities/video.entity';
 import { MediaItem } from '../../../../domain/models/media-item/entities/media-item.entity';
+import { isNullOrUndefined } from '../../../../domain/utilities/validation/is-null-or-undefined';
 import { BaseViewModel } from '../base.view-model';
 
 export class VideoViewModel extends BaseViewModel implements IVideoViewModel {
@@ -61,11 +57,11 @@ export class VideoViewModel extends BaseViewModel implements IVideoViewModel {
      * TODO [https://www.pivotaltracker.com/story/show/184522235] Expose full
      * transcript in view model.
      */
-    @NonEmptyString({
-        label: 'plain text',
-        description: 'a plain-text representation of the transcript',
+    @NestedDataType(Transcript, {
+        label: 'transcript',
+        description: 'transcript for this video',
     })
-    readonly text: string;
+    readonly transcript: Transcript;
 
     constructor(video: Video, allMediaItems: MediaItem[]) {
         super(video);
@@ -74,8 +70,7 @@ export class VideoViewModel extends BaseViewModel implements IVideoViewModel {
 
         this.lengthMilliseconds = lengthMilliseconds;
 
-        // TODO Send back the full data structure for rich presentation on the client
-        this.text = transcript?.toString() || '';
+        this.transcript = isNullOrUndefined(transcript) ? null : new Transcript(transcript.toDTO());
 
         const { url, mimeType } = allMediaItems.find(({ id }) => id === mediaItemId);
 
