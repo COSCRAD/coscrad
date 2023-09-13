@@ -1,5 +1,4 @@
 import { Box, styled } from '@mui/material';
-import { useEffect } from 'react';
 
 const LinearProgressBarContainer = styled('div')({
     height: '10px',
@@ -32,8 +31,6 @@ export const CoscradLinearProgressBar = ({
 
         seekInProgressBar(progressSelected);
     };
-
-    useEffect(() => {});
 
     return (
         <LinearProgressBarContainer onClick={(event) => handleSeekInProgressBar(event)}>

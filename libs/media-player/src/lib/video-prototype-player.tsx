@@ -1,5 +1,7 @@
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import {
+    ArrowLeft as ArrowLeftIcon,
+    ArrowRight as ArrowRightIcon,
     Pause as PauseIcon,
     PlayArrow as PlayArrowIcon,
     Replay as ReplayIcon,
@@ -10,6 +12,10 @@ import { CoscradLinearProgressBar } from './coscrad-linear-progress-bar';
 import { FormattedCurrentTime } from './formatted-currenttime';
 import { LanguageCode } from './language-code.enum';
 import { SubtitlesByTime } from './subtitles-by-time';
+
+const calculatePercentProgress = (currentTime: number, duration: number) => {
+    return (currentTime / duration) * 100;
+};
 
 const Video = styled('video')({
     flexShrink: 1,
@@ -41,6 +47,11 @@ type MediaState = {
     progress: number;
     // TODO: Does this belong here?
     shouldPlayWithSubtitles: boolean;
+};
+
+type TimeRange = {
+    inPointMilliseconds: number;
+    outPointMilliseconds?: number;
 };
 
 type MultiLingualTextItem = {
@@ -82,6 +93,10 @@ export const VideoPrototypePlayer = ({
         shouldPlayWithSubtitles: isNullOrUndefined(onTimeUpdate) ? true : false,
     });
 
+    const [inPointMilliseconds, setInPointMilliseconds] = useState<number | null>(null);
+
+    const [outPointMilliseconds, setOutPointMilliseconds] = useState<number | null>(null);
+
     const [transcriptLanguageCode, setTranscriptLanguageCode] = useState<LanguageCode>(
         LanguageCode.English
     );
@@ -95,10 +110,6 @@ export const VideoPrototypePlayer = ({
         } else {
             videoRef.current!.pause();
         }
-        // TODO: use event handler to listen to play state of video ref
-        // set event handler on .pause as well
-        // TODO: get rid of mediaState.isPlaying?
-        // setMediaState({ ...mediaState, isPlaying: !mediaState.isPlaying });
     };
 
     const handlePlayProgress = () => {
@@ -106,9 +117,7 @@ export const VideoPrototypePlayer = ({
 
         const duration = videoRef.current!.duration;
 
-        if (currentTime <= 0) return;
-
-        const progress = (currentTime / duration) * 100;
+        const progress = calculatePercentProgress(currentTime, duration);
 
         setMediaState({ ...mediaState, progress: progress, currentTime: currentTime });
 
@@ -118,17 +127,26 @@ export const VideoPrototypePlayer = ({
     };
 
     const seekInMedia = (time: number) => {
+        console.log(`seekInMedia`);
+
         videoRef.current!.currentTime = time;
 
-        setMediaState({ ...mediaState, currentTime: videoRef.current!.currentTime });
+        const progress = calculatePercentProgress(
+            videoRef.current!.currentTime,
+            videoRef.current!.duration
+        );
+
+        setMediaState({
+            ...mediaState,
+            progress: progress,
+            currentTime: videoRef.current!.currentTime,
+        });
     };
 
     const seekInProgressBar = (progressSelected: number) => {
         const newMediaTime = progressSelected * videoRef.current!.duration;
 
         seekInMedia(newMediaTime);
-
-        handlePlayProgress();
     };
 
     const restartMedia = () => {
@@ -137,6 +155,13 @@ export const VideoPrototypePlayer = ({
         if (mediaState.isPlaying) {
             playPauseMedia();
         }
+    };
+
+    const markInPoint = () => {
+        setInPointMilliseconds(videoRef.current!.currentTime);
+    };
+    const markOutPoint = () => {
+        setOutPointMilliseconds(videoRef.current!.currentTime);
     };
 
     useEffect(() => {
@@ -153,7 +178,12 @@ export const VideoPrototypePlayer = ({
             console.log('loadeddata');
 
             if (videoElement.readyState >= 3) {
-                setMediaState({ ...mediaState, loadStatus: VideoVerifiedState.canPlay });
+                setMediaState({
+                    ...mediaState,
+                    loadStatus: VideoVerifiedState.canPlay,
+                    duration: videoElement.duration,
+                });
+
                 videoElement.addEventListener('canplaythrough', onCanPlayThrough);
             }
         };
@@ -170,13 +200,6 @@ export const VideoPrototypePlayer = ({
             setMediaState({ ...mediaState, loadStatus: VideoVerifiedState.error });
         };
 
-        const onLoadedMetadata = () => {
-            const videoDuration = videoElement.duration;
-            console.log(`loadedmetadata duration: ${videoDuration}`);
-
-            setMediaState({ ...mediaState, duration: videoDuration });
-        };
-
         const onPlaying = () => {
             console.log('onPlaying');
             if (!mediaState.isPlaying) {
@@ -191,16 +214,14 @@ export const VideoPrototypePlayer = ({
             }
         };
 
-        const onProgress = () => {
-            console.log('progress');
+        const onProgressBuffer = () => {
+            console.log('progress buffer');
 
             if (!videoElement.buffered) return;
 
             const bufferedTimeRanges = videoElement.buffered;
 
             const bufferedTimeRangesLength = bufferedTimeRanges.length;
-
-            // console.log({ countBuffer: bufferedTimeRangesLength });
 
             const bufferedEnd =
                 bufferedTimeRangesLength > 0
@@ -218,26 +239,22 @@ export const VideoPrototypePlayer = ({
 
         videoElement.addEventListener('loadeddata', onLoadedData);
 
-        videoElement.addEventListener('loadedmetadata', onLoadedMetadata);
-
         videoElement.addEventListener('playing', onPlaying);
 
         videoElement.addEventListener('pause', onPause);
 
-        videoElement.addEventListener('progress', onProgress);
+        videoElement.addEventListener('progress', onProgressBuffer);
 
         return () => {
             videoElement.removeEventListener('loadeddata', onLoadedData);
 
             videoElement.removeEventListener('canplaythrough', onCanPlayThrough);
 
-            videoElement.removeEventListener('loadeddata', onLoadedData);
-
             videoElement.removeEventListener('playing', onPlaying);
 
             videoElement.removeEventListener('pause', onPause);
 
-            videoElement.removeEventListener('progress', onProgress);
+            videoElement.removeEventListener('progress', onProgressBuffer);
         };
     }, [videoRef.current, mediaState]);
 
@@ -253,17 +270,6 @@ export const VideoPrototypePlayer = ({
                 <source src={videoUrl} />
             </Video>
             <Box sx={{ mb: 2 }}>
-                {/* With the buffer variant you get an annoying blinking dash bar
-                    we may want to make our own simpler one. */}
-                {/* <LinearProgress
-                    variant="buffer"
-                    value={mediaState.progress}
-                    valueBuffer={mediaState.buffer}
-                    sx={{ height: '10px' }}
-                    onClick={(event) => {
-                        seekInProgressBar(event);
-                    }}
-                /> */}
                 <CoscradLinearProgressBar
                     buffer={mediaState.buffer}
                     progress={mediaState.progress}
@@ -287,7 +293,22 @@ export const VideoPrototypePlayer = ({
                                 disabled={mediaState.loadStatus === VideoVerifiedState.loading}
                             >
                                 {mediaState.isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
-                                {/* <PlayArrowIcon /> */}
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Mark In Point">
+                            <IconButton
+                                onClick={markInPoint}
+                                disabled={mediaState.loadStatus === VideoVerifiedState.loading}
+                            >
+                                <ArrowRightIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Mark Out Point">
+                            <IconButton
+                                onClick={markOutPoint}
+                                disabled={mediaState.loadStatus === VideoVerifiedState.loading}
+                            >
+                                <ArrowLeftIcon />
                             </IconButton>
                         </Tooltip>
                         {mediaState.shouldPlayWithSubtitles && (
@@ -312,6 +333,12 @@ export const VideoPrototypePlayer = ({
                 </Typography>
                 <Typography component="div" variant="h5">
                     Buffer: {mediaState.buffer}
+                </Typography>
+                <Typography component="div" variant="h5">
+                    In Point: {inPointMilliseconds}
+                </Typography>
+                <Typography component="div" variant="h5">
+                    Out Point: {outPointMilliseconds}
                 </Typography>
             </Box>
         </Box>
