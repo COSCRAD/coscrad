@@ -4,6 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import 'reflect-metadata';
 import { AppModule } from './app/app.module';
+import { DynamicDataTypeFinderService } from './validation';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule, { cors: true });
@@ -27,6 +28,8 @@ async function bootstrap() {
     const documentation = SwaggerModule.createDocument(app, swaggerConfig);
 
     SwaggerModule.setup('api/docs', app, documentation);
+
+    await app.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
 
     await app.listen(port, () => {
         Logger.log('Listening at http://localhost:' + port + '/' + globalPrefix);

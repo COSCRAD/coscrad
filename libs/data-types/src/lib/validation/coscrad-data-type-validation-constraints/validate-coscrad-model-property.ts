@@ -101,8 +101,14 @@ export const validateCoscradModelProperty = (
         }
 
         if (complexDataType === ComplexCoscradDataType.union) {
-            const { schemaDefinitions, discriminantPath } =
+            const { schemaDefinitions, discriminantPath, unionName } =
                 propertyTypeDefinition as ICoscradUnionDataTypeDefinition;
+
+            if (isNullOrUndefined(discriminantPath)) {
+                throw new Error(
+                    `Failed to validate union: ${unionName} with missing discriminant path`
+                );
+            }
 
             if (discriminantPath.includes('.')) {
                 throw new Error(
