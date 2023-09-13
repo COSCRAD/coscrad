@@ -322,8 +322,6 @@ describe(`Video Index-to-detail Query Flow`, () => {
                         cy.contains(thirdVideoName).should('not.exist');
                     });
                 });
-
-                // TODO Test that filtering works with special characters
             });
         });
     });
