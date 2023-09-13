@@ -26,15 +26,9 @@ export const CoscradLinearProgressBar = ({
 }: CoscradLinearProgressBarProps) => {
     // Consider breaking out progress bar colours as customizable theme palettes
 
-    console.log(`${progress}%`);
-
     const handleSeekInProgressBar = (event: React.MouseEvent<HTMLSpanElement>) => {
         const progressSelected =
             (event.clientX - event.currentTarget.offsetLeft) / event.currentTarget.offsetWidth;
-
-        console.log(
-            `(${event.clientX} - ${event.currentTarget.offsetLeft}) / ${event.currentTarget.offsetWidth} = ${progressSelected}`
-        );
 
         seekInProgressBar(progressSelected);
     };

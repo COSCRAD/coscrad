@@ -110,8 +110,6 @@ export const VideoPrototypePlayer = ({
 
         const progress = (currentTime / duration) * 100;
 
-        console.log(`${currentTime} / ${duration} = ${progress}`);
-
         setMediaState({ ...mediaState, progress: progress, currentTime: currentTime });
 
         if (!mediaState.shouldPlayWithSubtitles) {
@@ -127,10 +125,6 @@ export const VideoPrototypePlayer = ({
 
     const seekInProgressBar = (progressSelected: number) => {
         const newMediaTime = progressSelected * videoRef.current!.duration;
-
-        console.log(`Seek: ${progressSelected} * ${videoRef.current!.duration} = ${newMediaTime}`);
-
-        console.log({ newMediaTime: newMediaTime });
 
         seekInMedia(newMediaTime);
 
@@ -206,7 +200,7 @@ export const VideoPrototypePlayer = ({
 
             const bufferedTimeRangesLength = bufferedTimeRanges.length;
 
-            console.log({ countBuffer: bufferedTimeRangesLength });
+            // console.log({ countBuffer: bufferedTimeRangesLength });
 
             const bufferedEnd =
                 bufferedTimeRangesLength > 0
