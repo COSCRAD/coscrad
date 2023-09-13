@@ -60,11 +60,16 @@ describe(`the video detail page`, () => {
 
     describe(`when the video is missing optional properties`, () => {
         it(`should display the video title`, () => {
+            /**
+             * At this point, we haven't added the optional transcript or name
+             * translation. This is a sanity check that when all optional properties
+             * are omitted we don't hit some kind of null-check errors.
+             */
             cy.contains(videoTitleInLanguage);
         });
     });
 
-    describe.only(`when the video has all properties`, () => {
+    describe(`when the video has all properties`, () => {
         const speakerInitials = 'JB';
 
         const speakerName = 'Justin Bambrick';
@@ -171,28 +176,31 @@ describe(`the video detail page`, () => {
             describe(`when there is a note`, () => {
                 const noteText = `This is about dinosaurs.`;
 
+                const noteCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
+                    AggregateType.note,
+                    40
+                );
+
                 describe(`with general context`, () => {
-                    beforeEach(() => {
-                        cy.seedDataWithCommand(`CREATE_NOTE_ABOUT_RESOURCE`, {
-                            aggregateCompositeIdentifier: {
-                                id: buildDummyUuid(2),
-                                type: AggregateType.note,
-                            },
+                    before(() => {
+                        cy.seedDataWithCommand('CREATE_NOTE_ABOUT_RESOURCE', {
+                            aggregateCompositeIdentifier: noteCompositeIdentifier,
                             resourceCompositeIdentifier: basicVideoAggregateCompositeIdentifier,
                             text: noteText,
+                            languageCode: LanguageCode.English,
                         });
 
                         cy.visit(videoDetailRoute);
                     });
 
                     it(`should display the note`, () => {
-                        cy.getByDataAttribute(`open-notes-panel-button`).click();
+                        cy.openPanel('notes');
 
                         cy.contains(noteText);
                     });
 
                     it(`should close the notes panel on demand`, () => {
-                        cy.getByDataAttribute(`open-notes-panel-button`).click();
+                        cy.openPanel('notes');
 
                         cy.contains(noteText);
 
@@ -258,7 +266,7 @@ describe(`the video detail page`, () => {
         });
     });
 
-    // TODO test this case
+    // TODO test this case when we are working on the disabled button tooltip story
     describe.skip(`when the videoUrl is invalid`, () => {
         const compositeIdForVideoWithInvalidAudioUrl = buildDummyUuid(5);
 
