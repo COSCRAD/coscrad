@@ -1,6 +1,6 @@
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Typography, styled } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { styled } from '@mui/material';
+import { useEffect, useRef, useState } from 'react';
 
 const LinearProgressBarContainer = styled('div')({
     height: '10px',
@@ -15,11 +15,13 @@ const LinearProgressBar = styled('div')({
 });
 
 const RangeBar = styled('div')({
-    // top: '-20px',
+    top: '-20px',
     height: '10px',
     width: '0px',
     backgroundColor: 'black',
+    borderLeft: '4px solid red',
     position: 'relative',
+    visibility: 'hidden',
     zIndex: 500,
 });
 
@@ -47,6 +49,8 @@ export const CoscradLinearProgressBar = ({
         width: '',
     });
 
+    const rangeBarRef = useRef<HTMLDivElement>(null);
+
     const handleSeekInProgressBar = (event: React.MouseEvent<HTMLSpanElement>) => {
         const progressSelected =
             (event.clientX - event.currentTarget.offsetLeft) / event.currentTarget.offsetWidth;
@@ -64,6 +68,8 @@ export const CoscradLinearProgressBar = ({
 
             setRangeBar({ start: `${start}%`, width: `${width}%` });
 
+            rangeBarRef.current!.style.borderRight = '4px solid red';
+
             return;
         }
 
@@ -73,7 +79,9 @@ export const CoscradLinearProgressBar = ({
 
         console.log(`start: ${start}% = in: ${inPointMilliseconds} / dur: ${mediaDuration}`);
 
-        setRangeBar({ start: `${start}%`, width: `2px` });
+        setRangeBar({ start: `${start}%`, width: `3px` });
+
+        rangeBarRef.current!.style.visibility = 'visible';
     }, [inPointMilliseconds, outPointMilliseconds]);
 
     return (
@@ -86,10 +94,10 @@ export const CoscradLinearProgressBar = ({
                     backgroundColor: 'primary.main',
                 }}
             />
-            <RangeBar sx={{ left: rangeBar.start, width: rangeBar.width }} />
-            <Typography variant="body1">
+            <RangeBar ref={rangeBarRef} sx={{ left: rangeBar.start, width: rangeBar.width }} />
+            {/* <Typography variant="body1">
                 Start: {rangeBar.start}, Width: {rangeBar.width}
-            </Typography>
+            </Typography> */}
         </LinearProgressBarContainer>
     );
 };
