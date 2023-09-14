@@ -228,6 +228,8 @@ describe(commandType, () => {
 
     afterAll(async () => {
         await app.close();
+
+        global.gc && global.gc();
     });
 
     beforeEach(async () => {

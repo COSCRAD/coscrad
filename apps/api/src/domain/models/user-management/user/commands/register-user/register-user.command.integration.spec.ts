@@ -88,6 +88,8 @@ describe('RegisterUser', () => {
             idManager,
             commandHandlerService,
         };
+
+        console.log('start here');
     });
 
     afterAll(async () => {
@@ -214,6 +216,8 @@ describe('RegisterUser', () => {
                                     },
                                     buildValidCommandFSA(buildDummyUuid(12))
                                 );
+
+                                console.log('done');
                             });
                         });
                     });
