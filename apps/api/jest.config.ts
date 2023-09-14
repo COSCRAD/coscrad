@@ -14,5 +14,5 @@ export default {
         '^.+\\.(js|jsx)$': 'babel-jest',
     },
     moduleFileExtensions: ['ts', 'js', 'html'],
-    setupFiles: ['./jest-setup.ts'],
+    setupFilesAfterEnv: ['./jest.setup.ts'],
 };
