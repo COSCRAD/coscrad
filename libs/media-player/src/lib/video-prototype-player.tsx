@@ -175,7 +175,9 @@ export const VideoPrototypePlayer = ({
         const videoElement = videoRef.current;
 
         const onLoadedData = () => {
-            console.log('loadeddata');
+            console.log(
+                `loadeddata: ready: ${videoElement.readyState} dur: ${videoElement.duration}`
+            );
 
             if (videoElement.readyState >= 3) {
                 setMediaState({
@@ -273,6 +275,9 @@ export const VideoPrototypePlayer = ({
                 <CoscradLinearProgressBar
                     buffer={mediaState.buffer}
                     progress={mediaState.progress}
+                    inPointMilliseconds={inPointMilliseconds}
+                    outPointMilliseconds={outPointMilliseconds}
+                    mediaDuration={mediaState.duration}
                     seekInProgressBar={seekInProgressBar}
                 />
                 <VideoControls>
