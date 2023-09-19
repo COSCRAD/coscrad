@@ -2,6 +2,7 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import {
     ArrowLeft as ArrowLeftIcon,
     ArrowRight as ArrowRightIcon,
+    Clear as ClearIcon,
     Pause as PauseIcon,
     PlayArrow as PlayArrowIcon,
     Replay as ReplayIcon,
@@ -29,6 +30,13 @@ const VideoControls = styled(Box)(({ theme }) => ({
     justifyContent: 'space-between',
 }));
 
+const SubtitlesOverlay = styled('div')({
+    top: '-50px',
+    left: '12%',
+    position: 'relative',
+    zIndex: 600,
+});
+
 enum VideoVerifiedState {
     loading = 'loading',
     error = 'error',
@@ -47,11 +55,6 @@ type MediaState = {
     progress: number;
     // TODO: Does this belong here?
     shouldPlayWithSubtitles: boolean;
-};
-
-type TimeRange = {
-    inPointMilliseconds: number;
-    outPointMilliseconds?: number;
 };
 
 type MultiLingualTextItem = {
@@ -105,10 +108,19 @@ export const VideoPrototypePlayer = ({
         if (mediaState.loadStatus === VideoVerifiedState.loading) {
             console.log('video not yet loaded');
         }
-        if (videoRef.current!.paused) {
-            videoRef.current!.play();
+
+        if (!videoRef.current) return;
+
+        const videoElement = videoRef.current;
+
+        if (mediaState.duration <= 0 && videoElement.duration > 0) {
+            setMediaState({ ...mediaState, duration: videoElement.duration });
+        }
+
+        if (videoElement.paused) {
+            videoElement.play();
         } else {
-            videoRef.current!.pause();
+            videoElement.pause();
         }
     };
 
@@ -160,8 +172,14 @@ export const VideoPrototypePlayer = ({
     const markInPoint = () => {
         setInPointMilliseconds(videoRef.current!.currentTime);
     };
+
     const markOutPoint = () => {
         setOutPointMilliseconds(videoRef.current!.currentTime);
+    };
+
+    const clearMarkers = () => {
+        setInPointMilliseconds(null);
+        setOutPointMilliseconds(null);
     };
 
     useEffect(() => {
@@ -175,11 +193,9 @@ export const VideoPrototypePlayer = ({
         const videoElement = videoRef.current;
 
         const onLoadedData = () => {
-            console.log(
-                `loadeddata: ready: ${videoElement.readyState} dur: ${videoElement.duration}`
-            );
+            console.log(`loadeddata: ready: ${videoElement.readyState}`);
 
-            if (videoElement.readyState >= 3) {
+            if (videoElement.readyState >= 2) {
                 setMediaState({
                     ...mediaState,
                     loadStatus: VideoVerifiedState.canPlay,
@@ -187,6 +203,17 @@ export const VideoPrototypePlayer = ({
                 });
 
                 videoElement.addEventListener('canplaythrough', onCanPlayThrough);
+            }
+        };
+
+        const onLoadedMetadata = () => {
+            console.log(`onLoadedMetadata duration: ${videoElement.duration}`);
+
+            if (videoElement.duration > 0) {
+                setMediaState({
+                    ...mediaState,
+                    duration: videoElement.duration,
+                });
             }
         };
 
@@ -241,6 +268,8 @@ export const VideoPrototypePlayer = ({
 
         videoElement.addEventListener('loadeddata', onLoadedData);
 
+        videoElement.addEventListener('loadedmetadata', onLoadedMetadata);
+
         videoElement.addEventListener('playing', onPlaying);
 
         videoElement.addEventListener('pause', onPause);
@@ -249,6 +278,8 @@ export const VideoPrototypePlayer = ({
 
         return () => {
             videoElement.removeEventListener('loadeddata', onLoadedData);
+
+            videoElement.removeEventListener('loadedmetadata', onLoadedMetadata);
 
             videoElement.removeEventListener('canplaythrough', onCanPlayThrough);
 
@@ -271,7 +302,17 @@ export const VideoPrototypePlayer = ({
             >
                 <source src={videoUrl} />
             </Video>
-            <Box sx={{ mb: 2 }}>
+            <SubtitlesOverlay>
+                {mediaState.shouldPlayWithSubtitles ? (
+                    <SubtitlesByTime
+                        subtitles={subtitles}
+                        currentTime={mediaState.currentTime}
+                        selectedLanguageCodeForSubtitles={transcriptLanguageCode}
+                    />
+                ) : null}
+            </SubtitlesOverlay>
+
+            <Box sx={{ mb: 2, top: '-25px', position: 'relative' }}>
                 <CoscradLinearProgressBar
                     buffer={mediaState.buffer}
                     progress={mediaState.progress}
@@ -316,13 +357,17 @@ export const VideoPrototypePlayer = ({
                                 <ArrowLeftIcon />
                             </IconButton>
                         </Tooltip>
-                        {mediaState.shouldPlayWithSubtitles && (
-                            <SubtitlesByTime
-                                subtitles={subtitles}
-                                currentTime={mediaState.currentTime}
-                                selectedLanguageCodeForSubtitles={transcriptLanguageCode}
-                            />
-                        )}
+                        <Tooltip title="Clear Markers">
+                            <IconButton
+                                onClick={clearMarkers}
+                                disabled={
+                                    mediaState.loadStatus === VideoVerifiedState.loading ||
+                                    isNullOrUndefined(inPointMilliseconds)
+                                }
+                            >
+                                <ClearIcon />
+                            </IconButton>
+                        </Tooltip>
                     </Box>
                     <Box>
                         <FormattedCurrentTime currentTimeInSeconds={mediaState.currentTime} />

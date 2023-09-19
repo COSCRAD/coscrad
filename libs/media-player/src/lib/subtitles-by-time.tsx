@@ -1,7 +1,12 @@
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Typography } from '@mui/material';
+import { styled } from '@mui/material';
 import { LanguageCode } from './language-code.enum';
 import { Subtitle } from './video-prototype-player';
+
+const StyledSubtitle = styled('span')({
+    color: 'yellow',
+    fontSize: '1.6em',
+});
 
 interface SubtitlesByTimeProps {
     subtitles: Subtitle[];
@@ -37,11 +42,11 @@ export const SubtitlesByTime = ({
         })[0];
 
         return (
-            <Typography component="span" variant="body1">
+            <StyledSubtitle>
                 {speakerInitials}: {textInLanguage.text}
-            </Typography>
+            </StyledSubtitle>
         );
     } else {
-        return <></>;
+        return <StyledSubtitle>&nbsp;</StyledSubtitle>;
     }
 };

@@ -3,23 +3,27 @@ import { styled } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 
 const LinearProgressBarContainer = styled('div')({
-    height: '10px',
+    height: '30px',
     width: '100%',
     backgroundColor: '#ccc',
+    borderRadius: '5px',
 });
 
 const LinearProgressBar = styled('div')({
-    height: '10px',
+    height: '30px',
     width: '0%',
     position: 'relative',
+    borderRadius: '5px',
 });
 
 const RangeBar = styled('div')({
-    top: '-20px',
-    height: '10px',
+    top: '-60px',
+    height: '30px',
     width: '0px',
     backgroundColor: 'black',
     borderLeft: '4px solid red',
+    borderRadius: '5px',
+    opacity: '0.6',
     position: 'relative',
     visibility: 'hidden',
     zIndex: 500,
@@ -58,28 +62,44 @@ export const CoscradLinearProgressBar = ({
         seekInProgressBar(progressSelected);
     };
 
+    const clearRangeBar = () => {
+        if (!isNullOrUndefined(rangeBarRef.current))
+            rangeBarRef.current.style.visibility = 'hidden';
+
+        setRangeBar({
+            start: '',
+            width: '',
+        });
+    };
+
     useEffect(() => {
         if (!isNullOrUndefined(inPointMilliseconds) && !isNullOrUndefined(outPointMilliseconds)) {
             const start = (inPointMilliseconds / mediaDuration) * 100;
 
-            // console.log(`start: ${start} = in: ${inPointMilliseconds} / dur: ${mediaDuration}`);
+            const end = (outPointMilliseconds / mediaDuration) * 100;
 
-            const width = ((outPointMilliseconds - inPointMilliseconds) / mediaDuration) * 100;
+            const width = end - start;
 
-            setRangeBar({ start: `${start}%`, width: `${width}%` });
+            setRangeBar({ ...rangeBar, width: `${width}%` });
+
+            console.log(`start: ${start} width: ${width} progress: ${progress} end: ${end}`);
 
             rangeBarRef.current!.style.borderRight = '4px solid red';
 
             return;
         }
 
-        if (isNullOrUndefined(inPointMilliseconds)) return;
+        if (isNullOrUndefined(inPointMilliseconds)) {
+            clearRangeBar();
+
+            return;
+        }
 
         const start = (inPointMilliseconds / mediaDuration) * 100;
 
         console.log(`start: ${start}% = in: ${inPointMilliseconds} / dur: ${mediaDuration}`);
 
-        setRangeBar({ start: `${start}%`, width: `3px` });
+        setRangeBar({ start: `${start}%`, width: `2px` });
 
         rangeBarRef.current!.style.visibility = 'visible';
     }, [inPointMilliseconds, outPointMilliseconds]);
@@ -89,7 +109,7 @@ export const CoscradLinearProgressBar = ({
             <LinearProgressBar sx={{ width: `${buffer}%`, backgroundColor: 'info.main' }} />
             <LinearProgressBar
                 sx={{
-                    top: '-10px',
+                    top: '-30px',
                     width: `${progress}%`,
                     backgroundColor: 'primary.main',
                 }}
