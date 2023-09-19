@@ -33,4 +33,8 @@ export class ArangoDatabaseProvider {
 
         return new ArangoDatabaseForCollection<TEntity>(this.#arangoInstance, collectionName);
     };
+
+    close() {
+        this.#databaseConnection.close();
+    }
 }
