@@ -13,6 +13,7 @@ import { IIdManager } from '../../../../../domain/interfaces/id-manager.interfac
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { NotFound } from '../../../../../lib/types/not-found';
+import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../../types/DTO';
@@ -54,6 +55,8 @@ const buildValidCommandFSA = (): FluxStandardAction<DTO<AddLyricsForSong>> => va
 describe(commandType, () => {
     let app: INestApplication;
 
+    let databaseProvider: ArangoDatabaseProvider;
+
     let testRepositoryProvider: TestRepositoryProvider;
 
     let commandHandlerService: CommandHandlerService;
@@ -62,10 +65,8 @@ describe(commandType, () => {
 
     let commandAssertionDependencies: CommandAssertionDependencies;
 
-    // let eventRepository: ArangoEventRepository;
-
     beforeAll(async () => {
-        ({ testRepositoryProvider, commandHandlerService, idManager, app } =
+        ({ testRepositoryProvider, commandHandlerService, idManager, app, databaseProvider } =
             await setUpIntegrationTest({
                 ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
             }).catch((error) => {
@@ -81,12 +82,14 @@ describe(commandType, () => {
         // eventRepository = app.get(ArangoEventRepository);
     });
 
-    afterAll(async () => {
-        await app.close();
-    });
-
     beforeEach(async () => {
         await testRepositoryProvider.testSetup();
+    });
+
+    afterAll(async () => {
+        await app.close();
+
+        databaseProvider.close();
     });
 
     describe('When the command is valid', () => {

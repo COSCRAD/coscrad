@@ -5,6 +5,7 @@ import { assertExternalStateError } from '../../../../../../domain/models/__test
 import { buildFakeTimersConfig } from '../../../../../../domain/models/__tests__/utilities/buildFakeTimersConfig';
 import { InternalError } from '../../../../../../lib/errors/InternalError';
 import { NotAvailable } from '../../../../../../lib/types/not-available';
+import { ArangoDatabaseProvider } from '../../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../../../types/DTO';
@@ -63,12 +64,14 @@ describe('CreateGroup', () => {
 
     let app: INestApplication;
 
+    let databaseProvider: ArangoDatabaseProvider;
+
     let idManager: IIdManager;
 
     let commandAssertionDependencies: CommandAssertionDependencies;
 
     beforeAll(async () => {
-        ({ testRepositoryProvider, commandHandlerService, idManager, app } =
+        ({ testRepositoryProvider, commandHandlerService, idManager, app, databaseProvider } =
             await setUpIntegrationTest(
                 {
                     ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
@@ -85,10 +88,6 @@ describe('CreateGroup', () => {
         jest.useFakeTimers(buildFakeTimersConfig());
     });
 
-    afterAll(async () => {
-        await app.close();
-    });
-
     beforeEach(async () => {
         await testRepositoryProvider.testSetup();
     });
@@ -96,6 +95,13 @@ describe('CreateGroup', () => {
     afterEach(async () => {
         await testRepositoryProvider.testTeardown();
     });
+
+    afterAll(async () => {
+        await app.close();
+
+        databaseProvider.close();
+    });
+
     describe('when the command is valid', () => {
         it('should succeed', async () => {
             await assertCreateCommandSuccess(commandAssertionDependencies, {

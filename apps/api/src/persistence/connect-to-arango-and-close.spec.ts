@@ -1,6 +1,10 @@
 import { Database } from 'arangojs';
 
-describe(`Arango JS Connection`, () => {
+/**
+ * We keep this test as a reminder to close your connection in the
+ * `afterAll` when hitting the live database in a test.
+ */
+describe.skip(`Arango JS Connection`, () => {
     let database: Database;
 
     beforeAll(async () => {
@@ -16,10 +20,6 @@ describe(`Arango JS Connection`, () => {
     });
 
     afterAll(() => {
-        /**
-         * We keep this test as a reminder to close your connection in the
-         * `afterAll` when hitting the live database in a test.
-         */
         database.close();
     });
 

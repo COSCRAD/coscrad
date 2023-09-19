@@ -112,16 +112,18 @@ describe(`The command: ${commandType}`, () => {
         idRepository = new ArangoIdRepository(databaseProvider);
     });
 
-    afterAll(async () => {
-        await app.close();
-    });
-
     beforeEach(async () => {
         await testRepositoryProvider.testSetup();
     });
 
     afterEach(async () => {
         await testRepositoryProvider.testTeardown();
+    });
+
+    afterAll(async () => {
+        await app.close();
+
+        databaseProvider.close();
     });
 
     describe('when the command is valid', () => {

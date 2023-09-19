@@ -1,7 +1,9 @@
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
+import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { InternalError } from '../../../../../lib/errors/InternalError';
+import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../../types/DTO';
@@ -63,7 +65,11 @@ const buildValidCommandFSA = (
 const dummyFSAFactory = new DummyCommandFsaFactory(buildValidCommandFSA);
 
 describe(`The command: ${commandType}`, () => {
+    let app: INestApplication;
+
     let testRepositoryProvider: TestRepositoryProvider;
+
+    let databaseProvider: ArangoDatabaseProvider;
 
     let commandHandlerService: CommandHandlerService;
 
@@ -72,9 +78,10 @@ describe(`The command: ${commandType}`, () => {
     let assertionHelperDependencies: CommandAssertionDependencies;
 
     beforeAll(async () => {
-        ({ testRepositoryProvider, commandHandlerService, idManager } = await setUpIntegrationTest({
-            ARANGO_DB_NAME: testDatabaseName,
-        }));
+        ({ testRepositoryProvider, commandHandlerService, idManager, databaseProvider, app } =
+            await setUpIntegrationTest({
+                ARANGO_DB_NAME: testDatabaseName,
+            }));
 
         assertionHelperDependencies = {
             testRepositoryProvider,
@@ -89,6 +96,12 @@ describe(`The command: ${commandType}`, () => {
 
     afterEach(async () => {
         await testRepositoryProvider.testTeardown();
+    });
+
+    afterAll(async () => {
+        await app.close();
+
+        databaseProvider.close();
     });
 
     describe('when the command is valid', () => {

@@ -6,6 +6,7 @@ import { CommandFSA } from '../../../../../app/controllers/command/command-fsa/c
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { clonePlainObjectWithOverrides } from '../../../../../lib/utilities/clonePlainObjectWithOverrides';
+import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestCommandFsaMap } from '../../../../../test-data/commands';
@@ -66,12 +67,14 @@ describe(commandType, () => {
 
     let app: INestApplication;
 
+    let databaseProvider: ArangoDatabaseProvider;
+
     let idManager: IIdManager;
 
     let assertionHelperDependencies: CommandAssertionDependencies;
 
     beforeAll(async () => {
-        ({ testRepositoryProvider, commandHandlerService, idManager, app } =
+        ({ testRepositoryProvider, commandHandlerService, idManager, app, databaseProvider } =
             await setUpIntegrationTest({
                 ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
             }));
@@ -85,6 +88,8 @@ describe(commandType, () => {
 
     afterAll(async () => {
         await app.close();
+
+        databaseProvider.close();
     });
 
     beforeEach(async () => {

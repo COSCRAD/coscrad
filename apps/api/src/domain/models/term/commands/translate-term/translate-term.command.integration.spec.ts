@@ -7,6 +7,7 @@ import { IIdManager } from '../../../../../domain/interfaces/id-manager.interfac
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { NotFound } from '../../../../../lib/types/not-found';
 import { clonePlainObjectWithOverrides } from '../../../../../lib/utilities/clonePlainObjectWithOverrides';
+import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestCommandFsaMap } from '../../../../../test-data/commands';
@@ -60,6 +61,8 @@ const validInitialState = new DeluxeInMemoryStore({
 describe(commandType, () => {
     let app: INestApplication;
 
+    let databaseProvider: ArangoDatabaseProvider;
+
     let testRepositoryProvider: TestRepositoryProvider;
 
     let commandHandlerService: CommandHandlerService;
@@ -69,7 +72,7 @@ describe(commandType, () => {
     let commandAssertionDependencies: CommandAssertionDependencies;
 
     beforeAll(async () => {
-        ({ testRepositoryProvider, commandHandlerService, idManager, app } =
+        ({ testRepositoryProvider, commandHandlerService, idManager, app, databaseProvider } =
             await setUpIntegrationTest({
                 ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
             }).catch((error) => {
@@ -83,12 +86,14 @@ describe(commandType, () => {
         };
     });
 
-    afterAll(async () => {
-        await app.close();
-    });
-
     beforeEach(async () => {
         await testRepositoryProvider.testSetup();
+    });
+
+    afterAll(async () => {
+        await app.close();
+
+        databaseProvider.close();
     });
 
     describe(`when the command is valid`, () => {
