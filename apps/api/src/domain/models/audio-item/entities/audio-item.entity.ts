@@ -10,6 +10,7 @@ import { RegisterIndexScopedCommands } from '../../../../app/controllers/command
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
 import { DTO } from '../../../../types/DTO';
+import { ResultOrError } from '../../../../types/ResultOrError';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
@@ -106,19 +107,12 @@ class AudioItemBase extends Resource implements IRadioPublishableResource {
         return this.name;
     }
 
-    translateName(translationText: string, languageCode: LanguageCode): ResultOrError<AudioItem> {
-        const textItem: DTO<MultilingualTextItem> = {
-            text: translationText,
+    translateName(text: string, languageCode: LanguageCode): ResultOrError<this> {
+        return this.translateMultilingualTextProperty('name', {
+            text,
             languageCode,
             role: MultilingualTextItemRole.freeTranslation,
-        };
-
-        if (this.name.items.some(({ languageCode }) => languageCode === textItem.languageCode))
-            return new DuplicateLanguageInMultilingualTextError(textItem.languageCode);
-
-        const nameUpdateResult = this.name.translate(textItem);
-
-        if (isInternalError(nameUpdateResult)) return nameUpdateResult;
+        });
     }
 
     protected validateComplexInvariants(): InternalError[] {
