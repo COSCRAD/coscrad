@@ -8,6 +8,7 @@ import { AggregateType } from '../../../domain/types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../domain/types/DeluxeInMemoryStore';
 import { InMemorySnapshotOfResources, ResourceType } from '../../../domain/types/ResourceType';
 import { clonePlainObjectWithOverrides } from '../../../lib/utilities/clonePlainObjectWithOverrides';
+import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { IEventRepository } from '../../../persistence/repositories/arango-command-repository-for-aggregate';
@@ -23,6 +24,8 @@ describe('When fetching multiple resources', () => {
     let app: INestApplication;
 
     let testRepositoryProvider: TestRepositoryProvider;
+
+    let databaseProvider: ArangoDatabaseProvider;
 
     let eventRepository: IEventRepository;
 
@@ -45,7 +48,7 @@ describe('When fetching multiple resources', () => {
     );
 
     beforeAll(async () => {
-        ({ app, testRepositoryProvider } = await setUpIntegrationTest({
+        ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
         }));
 
@@ -200,5 +203,7 @@ describe('When fetching multiple resources', () => {
 
     afterAll(async () => {
         await app.close();
+
+        databaseProvider.close();
     });
 });

@@ -1,6 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { ResourceType } from '../../../domain/types/ResourceType';
+import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DynamicDataTypeFinderService } from '../../../validation';
 import { AggregateInfo } from '../../../view-models/resourceDescriptions/types/AggregateInfo';
@@ -11,8 +12,10 @@ describe('GET /resources', () => {
 
     let app: INestApplication;
 
+    let databaseProvider: ArangoDatabaseProvider;
+
     beforeAll(async () => {
-        ({ app } = await setUpIntegrationTest({
+        ({ app, databaseProvider } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
             GLOBAL_PREFIX: 'testApiPrefix',
         }));
@@ -48,5 +51,7 @@ describe('GET /resources', () => {
 
     afterAll(async () => {
         await app.close();
+
+        databaseProvider.close();
     });
 });

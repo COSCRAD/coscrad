@@ -11,9 +11,9 @@ import { NotFound } from '../../../lib/types/not-found';
 import { OK } from '../../../lib/types/ok';
 import { ArangoCollectionId } from '../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
-import { ArangoIdRepository } from '../../../persistence/repositories/arango-id-repository';
-import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { ArangoIdRepository } from '../../../persistence/repositories/arango-id-repository';
 import setUpIntegrationTest from './setUpIntegrationTest';
 
 describe('When generating a new ID (POST /ids)', () => {
@@ -41,6 +41,8 @@ describe('When generating a new ID (POST /ids)', () => {
 
     afterAll(async () => {
         await app.close();
+
+        databaseProvider.close();
     });
 
     describe(`before generating any IDs`, () => {

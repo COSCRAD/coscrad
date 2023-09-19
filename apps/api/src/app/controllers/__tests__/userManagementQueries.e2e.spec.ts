@@ -1,11 +1,12 @@
 import { CoscradUserRole } from '@coscrad/data-types';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { dummySystemUserId } from '../../../domain/models/__tests__/utilities/dummySystemUserId';
+import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import buildInMemorySnapshot from '../../../domain/utilities/buildInMemorySnapshot';
-import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestData from '../../../test-data/buildTestData';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from './setUpIntegrationTest';
@@ -57,14 +58,19 @@ describe('User Management Queries', () => {
         let app: INestApplication;
 
         let testRepositoryProvider: TestRepositoryProvider;
+
+        let databaseProvider: ArangoDatabaseProvider;
+
         beforeAll(async () => {
-            ({ app, testRepositoryProvider } = await setUpIntegrationTest({
+            ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest({
                 ARANGO_DB_NAME: testDatabaseName,
             }));
         });
 
         afterAll(async () => {
             await app.close();
+
+            databaseProvider.close();
         });
 
         beforeEach(async () => {
@@ -98,8 +104,11 @@ describe('User Management Queries', () => {
                 let app: INestApplication;
 
                 let testRepositoryProvider: TestRepositoryProvider;
+
+                let databaseProvider: ArangoDatabaseProvider;
+
                 beforeAll(async () => {
-                    ({ app, testRepositoryProvider } = await setUpIntegrationTest(
+                    ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
                         {
                             ARANGO_DB_NAME: testDatabaseName,
                         },
@@ -111,6 +120,8 @@ describe('User Management Queries', () => {
 
                 afterAll(async () => {
                     await app.close();
+
+                    databaseProvider.close();
                 });
 
                 beforeEach(async () => {
@@ -228,8 +239,11 @@ describe('User Management Queries', () => {
                 let app: INestApplication;
 
                 let testRepositoryProvider: TestRepositoryProvider;
+
+                let databaseProvider: ArangoDatabaseProvider;
+
                 beforeAll(async () => {
-                    ({ app, testRepositoryProvider } = await setUpIntegrationTest(
+                    ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
                         {
                             ARANGO_DB_NAME: testDatabaseName,
                         },
@@ -241,6 +255,8 @@ describe('User Management Queries', () => {
 
                 afterAll(async () => {
                     await app.close();
+
+                    databaseProvider.close();
                 });
 
                 beforeEach(async () => {
