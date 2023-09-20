@@ -9,6 +9,7 @@ import { CoscradUserWithGroups } from '../../../domain/models/user-management/us
 import { AggregateId } from '../../../domain/types/AggregateId';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import buildInMemorySnapshot from '../../../domain/utilities/buildInMemorySnapshot';
+import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestData from '../../../test-data/buildTestData';
@@ -144,21 +145,26 @@ describe('Access Control List and Role Based filtering in resource queries', () 
                 describe('when the user is authenticated, and not a project or COSCRAD admin', () => {
                     let app: INestApplication;
 
+                    let databaseProvider: ArangoDatabaseProvider;
+
                     let testRepositoryProvider: TestRepositoryProvider;
 
                     beforeAll(async () => {
-                        ({ app, testRepositoryProvider } = await setUpIntegrationTest(
-                            {
-                                ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
-                            },
-                            {
-                                testUserWithGroups: dummyUserWithGroups,
-                            }
-                        ));
+                        ({ app, testRepositoryProvider, databaseProvider } =
+                            await setUpIntegrationTest(
+                                {
+                                    ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+                                },
+                                {
+                                    testUserWithGroups: dummyUserWithGroups,
+                                }
+                            ));
                     });
 
                     afterAll(async () => {
                         await app.close();
+
+                        databaseProvider.close();
                     });
 
                     beforeEach(async () => {
@@ -261,6 +267,8 @@ describe('Access Control List and Role Based filtering in resource queries', () 
                     describe(description, () => {
                         let app: INestApplication;
 
+                        let databaseProvider: ArangoDatabaseProvider;
+
                         let testRepositoryProvider: TestRepositoryProvider;
 
                         const dummyAdminUser = dummyUser.clone({
@@ -273,14 +281,15 @@ describe('Access Control List and Role Based filtering in resource queries', () 
                         );
 
                         beforeAll(async () => {
-                            ({ app, testRepositoryProvider } = await setUpIntegrationTest(
-                                {
-                                    ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
-                                },
-                                {
-                                    testUserWithGroups: dummyAdminUserWithGroups,
-                                }
-                            ));
+                            ({ app, testRepositoryProvider, databaseProvider } =
+                                await setUpIntegrationTest(
+                                    {
+                                        ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+                                    },
+                                    {
+                                        testUserWithGroups: dummyAdminUserWithGroups,
+                                    }
+                                ));
                         });
 
                         beforeEach(async () => {
@@ -300,6 +309,8 @@ describe('Access Control List and Role Based filtering in resource queries', () 
 
                         afterAll(async () => {
                             await app.close();
+
+                            databaseProvider.close();
                         });
 
                         describe('when querying for many resources (fetch many)', () => {
@@ -337,19 +348,24 @@ describe('Access Control List and Role Based filtering in resource queries', () 
                 describe('when the user is not authenticated (public request)', () => {
                     let app: INestApplication;
 
+                    let databaseProvider: ArangoDatabaseProvider;
+
                     let testRepositoryProvider: TestRepositoryProvider;
 
                     beforeAll(async () => {
-                        ({ app, testRepositoryProvider } = await setUpIntegrationTest(
-                            {
-                                ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
-                            }
-                            // no test user will be on the request
-                        ));
+                        ({ app, testRepositoryProvider, databaseProvider } =
+                            await setUpIntegrationTest(
+                                {
+                                    ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+                                }
+                                // no test user will be on the request
+                            ));
                     });
 
                     afterAll(async () => {
                         await app.close();
+
+                        databaseProvider.close();
                     });
 
                     beforeEach(async () => {

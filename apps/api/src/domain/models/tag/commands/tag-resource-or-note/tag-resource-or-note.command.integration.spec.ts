@@ -42,6 +42,8 @@ describe(commandType, () => {
 
     afterAll(async () => {
         await commandAssertionDependencies.app.close();
+
+        commandAssertionDependencies.databaseProvider.close();
     });
 
     beforeEach(async () => {

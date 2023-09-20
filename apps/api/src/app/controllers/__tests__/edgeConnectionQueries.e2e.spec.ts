@@ -6,6 +6,7 @@ import { Resource } from '../../../domain/models/resource.entity';
 import { isAggregateCompositeIdentifier } from '../../../domain/types/AggregateCompositeIdentifier';
 import { InMemorySnapshot, ResourceType } from '../../../domain/types/ResourceType';
 import { InternalError } from '../../../lib/errors/InternalError';
+import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestData from '../../../test-data/buildTestData';
@@ -20,6 +21,8 @@ describe('When querying for edge connections', () => {
     let app: INestApplication;
 
     let testRepositoryProvider: TestRepositoryProvider;
+
+    let databaseProvider: ArangoDatabaseProvider;
 
     const rawSnapshot = buildTestData();
 
@@ -45,7 +48,7 @@ describe('When querying for edge connections', () => {
     const { note: connections } = buildTestData();
 
     beforeAll(async () => {
-        ({ app, testRepositoryProvider } = await setUpIntegrationTest({
+        ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
         }));
 
@@ -55,6 +58,12 @@ describe('When querying for edge connections', () => {
         await testRepositoryProvider.testSetup();
 
         await testRepositoryProvider.addFullSnapshot(fullSnapshot);
+    });
+
+    afterAll(async () => {
+        await app.close();
+
+        databaseProvider.close();
     });
 
     describe(`GET /connections/`, () => {

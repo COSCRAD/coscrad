@@ -1,7 +1,8 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestData from '../../../test-data/buildTestData';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from './setUpIntegrationTest';
@@ -13,16 +14,20 @@ describe('When fetching the category tree (/treeOfKnowledge)', () => {
 
     let testRepositoryProvider: TestRepositoryProvider;
 
+    let databaseProvider: ArangoDatabaseProvider;
+
     const testData = buildTestData().category;
 
     beforeAll(async () => {
-        ({ app, testRepositoryProvider } = await setUpIntegrationTest({
+        ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
         }));
     });
 
     afterAll(async () => {
         await app.close();
+
+        databaseProvider.close();
     });
 
     beforeEach(async () => {

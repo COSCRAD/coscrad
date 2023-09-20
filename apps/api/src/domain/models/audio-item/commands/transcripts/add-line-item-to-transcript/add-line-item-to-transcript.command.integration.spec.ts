@@ -8,6 +8,7 @@ import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import assertErrorAsExpected from '../../../../../../lib/__tests__/assertErrorAsExpected';
+import { ArangoDatabaseProvider } from '../../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import formatAggregateType from '../../../../../../view-models/presentation/formatAggregateType';
@@ -53,12 +54,14 @@ describe(commandType, () => {
 
     let app: INestApplication;
 
+    let databaseProvider: ArangoDatabaseProvider;
+
     let idManager: IIdManager;
 
     let assertionHelperDependencies: CommandAssertionDependencies;
 
     beforeAll(async () => {
-        ({ testRepositoryProvider, commandHandlerService, idManager, app } =
+        ({ testRepositoryProvider, commandHandlerService, idManager, app, databaseProvider } =
             await setUpIntegrationTest({
                 ARANGO_DB_NAME: testDatabaseName,
             }));
@@ -70,16 +73,18 @@ describe(commandType, () => {
         };
     });
 
-    afterAll(async () => {
-        await app.close();
-    });
-
     beforeEach(async () => {
         await testRepositoryProvider.testSetup();
     });
 
     afterEach(async () => {
         await testRepositoryProvider.testTeardown();
+    });
+
+    afterAll(async () => {
+        await app.close();
+
+        databaseProvider.close();
     });
 
     validAudiovisualItems.forEach((validInstance) => {

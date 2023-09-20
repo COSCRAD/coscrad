@@ -5,6 +5,7 @@ import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUp
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { NotFound } from '../../../../../lib/types/not-found';
+import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestDataInFlatFormat from '../../../../../test-data/buildTestDataInFlatFormat';
@@ -60,6 +61,8 @@ const dummyFsaFactory = new DummyCommandFsaFactory(buildValidCommandFSA);
 describe('RELABEL_TAG', () => {
     let app: INestApplication;
 
+    let databaseProvider: ArangoDatabaseProvider;
+
     let testRepositoryProvider: TestRepositoryProvider;
 
     let commandHandlerService: CommandHandlerService;
@@ -69,7 +72,7 @@ describe('RELABEL_TAG', () => {
     let commandAssertionDependencies: CommandAssertionDependencies;
 
     beforeAll(async () => {
-        ({ testRepositoryProvider, commandHandlerService, idManager, app } =
+        ({ testRepositoryProvider, commandHandlerService, idManager, app, databaseProvider } =
             await setUpIntegrationTest({
                 ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
             }).catch((error) => {
@@ -83,16 +86,18 @@ describe('RELABEL_TAG', () => {
         };
     });
 
-    afterAll(async () => {
-        await app.close();
-    });
-
     beforeEach(async () => {
         await testRepositoryProvider.testSetup();
     });
 
     afterEach(async () => {
         await testRepositoryProvider.testTeardown();
+    });
+
+    afterAll(async () => {
+        await app.close();
+
+        databaseProvider.close();
     });
 
     describe('when the command is valid', () => {

@@ -3,6 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { InternalError, isInternalError } from '../../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../../lib/types/not-found';
+import { ArangoDatabaseProvider } from '../../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestData from '../../../../../../test-data/buildTestData';
@@ -62,6 +63,8 @@ const buildInvalidFSA = (id, payloadOverrides) =>
 describe('AddUserToGroup', () => {
     let app: INestApplication;
 
+    let databaseProvider: ArangoDatabaseProvider;
+
     let testRepositoryProvider: TestRepositoryProvider;
 
     let commandHandlerService: CommandHandlerService;
@@ -71,7 +74,7 @@ describe('AddUserToGroup', () => {
     let commandAssertionDependencies: CommandAssertionDependencies;
 
     beforeAll(async () => {
-        ({ testRepositoryProvider, commandHandlerService, idManager, app } =
+        ({ testRepositoryProvider, commandHandlerService, idManager, app, databaseProvider } =
             await setUpIntegrationTest({
                 ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
             }).catch((error) => {
@@ -85,16 +88,18 @@ describe('AddUserToGroup', () => {
         };
     });
 
-    afterAll(async () => {
-        await app.close();
-    });
-
     beforeEach(async () => {
         await testRepositoryProvider.testSetup();
     });
 
     afterEach(async () => {
         await testRepositoryProvider.testTeardown();
+    });
+
+    afterAll(async () => {
+        await app.close();
+
+        databaseProvider.close();
     });
 
     describe('when the command is valid', () => {

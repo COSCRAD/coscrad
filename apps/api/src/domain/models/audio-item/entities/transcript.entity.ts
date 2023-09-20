@@ -189,8 +189,6 @@ export class Transcript extends BaseDomainModel implements ITranscript {
         if (lineItemInvariantValidationErrors.length > 0)
             return new InvalidTranscriptError(lineItemInvariantValidationErrors);
 
-        new InternalError(`Encountered an invalid transcript`, lineItemInvariantValidationErrors);
-
         const overlappingLineItems = this.getOverlappingLineItems();
 
         const overlappingLineItemErrors = overlappingLineItems.map(

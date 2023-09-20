@@ -32,13 +32,9 @@ const buildFullHostURL = (
     port: Port = '443'
 ): string => `${scheme}://${domain}${isPortRequired(scheme, port) ? `:${port}` : ''}`;
 
-type AdminDatabaseConnectionOptions = {
-    shouldConnectToSystemDatabase: boolean;
-};
-
 @Injectable()
 export class ArangoConnectionProvider {
-    #connection: ArangoConnection;
+    private readonly connection: ArangoConnection;
 
     #databaseConfiguration: ArangoDatabaseConfiguration;
 
@@ -49,8 +45,10 @@ export class ArangoConnectionProvider {
     }
 
     constructor(private configService: ConfigService) {
+        const ARANGO_DB_NAME = this.configService.get<string>('ARANGO_DB_NAME');
+
         this.setDatabaseConfiguration({
-            dbName: this.configService.get<string>('ARANGO_DB_NAME'),
+            dbName: ARANGO_DB_NAME,
             dbRootPass: this.configService.get<string>('ARANGO_DB_ROOT_PASSWORD'),
             dbUser: this.configService.get<string>('ARANGO_DB_USER'),
             dbPass: this.configService.get<string>('ARANGO_DB_USER_PASSWORD'),
@@ -61,9 +59,11 @@ export class ArangoConnectionProvider {
             ),
         });
 
-        const systemDB = this.#getAdminDBConnection({
-            shouldConnectToSystemDatabase: true,
+        const systemDB = new Database({
+            url: this.databaseConfiguration.dbHostUrl,
         });
+
+        systemDB.useBasicAuth('root', this.databaseConfiguration.dbRootPass);
 
         // TODO why is `useDatabase` deprecated? can we use myDB.database("db_name")?
         const dbInstance = systemDB.database(this.databaseConfiguration.dbName);
@@ -72,7 +72,7 @@ export class ArangoConnectionProvider {
             this.databaseConfiguration.dbPass
         );
 
-        this.#connection = dbInstance;
+        this.connection = dbInstance;
     }
 
     /**
@@ -100,7 +100,7 @@ export class ArangoConnectionProvider {
         if (!this.isInitialized)
             throw new DatabaseNotYetInitializedError('get an Arango connection');
 
-        return this.#connection;
+        return this.connection;
     }
 
     public setDatabaseConfiguration(config: DTO<ArangoDatabaseConfiguration>) {
@@ -109,27 +109,8 @@ export class ArangoConnectionProvider {
         });
     }
 
-    #getAdminDBConnection({
-        shouldConnectToSystemDatabase,
-    }: AdminDatabaseConnectionOptions): Database {
-        const adminInstance = new Database({
-            url: this.databaseConfiguration.dbHostUrl,
-        });
-
-        adminInstance.useBasicAuth('root', this.databaseConfiguration.dbRootPass);
-
-        if (shouldConnectToSystemDatabase) {
-            return adminInstance;
-        }
-
-        // TODO why is `useDatabase` deprecated? can we use myDB.database("db_name")?
-        const dbInstance = adminInstance.database(this.databaseConfiguration.dbName);
-
-        return dbInstance;
-    }
-
     async #doesCollectionExist(collectionName: string): Promise<boolean> {
-        const allCollections = await this.#connection
+        const allCollections = await this.connection
             .listCollections()
             .then((allCollectionMetadata) => allCollectionMetadata.map(({ name }) => name));
 
@@ -141,15 +122,29 @@ export class ArangoConnectionProvider {
     async #createDatabaseIfNotExists(): Promise<void> {
         const databaseName = this.databaseConfiguration.dbName;
 
-        if (await this.#doesDatabaseExist(databaseName)) return;
+        if (isNullOrUndefined(databaseName)) return;
+
+        let adminInstance = new Database({
+            url: this.databaseConfiguration.dbHostUrl,
+        });
+
+        adminInstance.useBasicAuth('root', this.databaseConfiguration.dbRootPass);
+
+        const doesDatabaseExist = await adminInstance
+            .listDatabases()
+            .then((allDatabaseNames) => allDatabaseNames.includes(databaseName));
+
+        if (doesDatabaseExist) return;
 
         const { dbUser } = this.#databaseConfiguration;
 
-        await this.#getAdminDBConnection({
-            shouldConnectToSystemDatabase: true,
-        }).createDatabase(databaseName, {
+        await adminInstance.createDatabase(databaseName, {
             users: [{ username: dbUser }, { username: 'root' }],
         });
+
+        adminInstance.close();
+
+        adminInstance = null;
     }
 
     async #createAllMissingCollections(): Promise<void> {
@@ -166,7 +161,7 @@ export class ArangoConnectionProvider {
         if (doesCollectionExist) return;
 
         if (collectionName === ArangoCollectionId.uuids) {
-            await this.#connection.createCollection(
+            await this.connection.createCollection(
                 collectionName
                 /**
                  * TODO Control the offset \ increment
@@ -223,21 +218,9 @@ export class ArangoConnectionProvider {
          * cleanup the references
          */
         if (isArangoEdgeCollectionCollectionID(collectionName)) {
-            await this.#connection.createEdgeCollection(collectionName);
+            await this.connection.createEdgeCollection(collectionName);
         } else {
-            await this.#connection.createCollection(collectionName);
+            await this.connection.createCollection(collectionName);
         }
     }
-
-    #doesDatabaseExist = async (databaseName: string) => {
-        if (isNullOrUndefined(databaseName)) return false;
-
-        const doesDatabaseExist = await this.#getAdminDBConnection({
-            shouldConnectToSystemDatabase: true,
-        })
-            .listDatabases()
-            .then((allDatabaseNames) => allDatabaseNames.includes(databaseName));
-
-        return doesDatabaseExist;
-    };
 }

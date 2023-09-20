@@ -3,6 +3,7 @@ import { CoscradUserRole } from '@coscrad/data-types';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { assertExternalStateError } from '../../../../../../domain/models/__tests__/command-helpers/assert-external-state-error';
+import { ArangoDatabaseProvider } from '../../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../../../types/DTO';
@@ -73,12 +74,14 @@ describe('RegisterUser', () => {
 
     let app: INestApplication;
 
+    let databaseProvider: ArangoDatabaseProvider;
+
     let idManager: IIdManager;
 
     let commandAssertionDependencies: CommandAssertionDependencies;
 
     beforeAll(async () => {
-        ({ testRepositoryProvider, commandHandlerService, idManager, app } =
+        ({ testRepositoryProvider, commandHandlerService, idManager, app, databaseProvider } =
             await setUpIntegrationTest({
                 ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
             }));
@@ -88,10 +91,8 @@ describe('RegisterUser', () => {
             idManager,
             commandHandlerService,
         };
-    });
 
-    afterAll(async () => {
-        await app.close();
+        console.log('start here');
     });
 
     beforeEach(async () => {
@@ -100,6 +101,12 @@ describe('RegisterUser', () => {
 
     afterEach(async () => {
         await testRepositoryProvider.testTeardown();
+    });
+
+    afterAll(async () => {
+        await app.close();
+
+        databaseProvider.close();
     });
 
     describe('when the command is valid', () => {
@@ -214,6 +221,8 @@ describe('RegisterUser', () => {
                                     },
                                     buildValidCommandFSA(buildDummyUuid(12))
                                 );
+
+                                console.log('done');
                             });
                         });
                     });
