@@ -7,30 +7,34 @@ import { ArangoCollectionId } from './collection-references/ArangoCollectionId';
 
 @Injectable()
 export class ArangoDatabaseProvider {
-    readonly #databaseConnection: ArangoConnection;
+    private readonly databaseConnection: ArangoConnection;
 
-    #arangoInstance: ArangoDatabase;
+    private arangoInstance: ArangoDatabase;
 
     constructor(arangoConnectionProvider: ArangoConnectionProvider) {
-        this.#databaseConnection = arangoConnectionProvider.getConnection();
+        this.databaseConnection = arangoConnectionProvider.getConnection();
     }
 
     getDBInstance = (): ArangoDatabase => {
-        if (!this.#arangoInstance)
+        if (!this.arangoInstance)
             // TODO inject this in the constructor
-            this.#arangoInstance = new ArangoDatabase(this.#databaseConnection);
+            this.arangoInstance = new ArangoDatabase(this.databaseConnection);
 
-        return this.#arangoInstance;
+        return this.arangoInstance;
     };
 
     // TODO [type-safety] Can we correlate entity `DTOs` with `collection IDs`?
     getDatabaseForCollection = <TEntity extends HasAggregateId>(
         collectionName: ArangoCollectionId
     ): ArangoDatabaseForCollection<TEntity> => {
-        if (!this.#arangoInstance)
+        if (!this.arangoInstance)
             // TODO should we inject this?
-            this.#arangoInstance = new ArangoDatabase(this.#databaseConnection);
+            this.arangoInstance = new ArangoDatabase(this.databaseConnection);
 
-        return new ArangoDatabaseForCollection<TEntity>(this.#arangoInstance, collectionName);
+        return new ArangoDatabaseForCollection<TEntity>(this.arangoInstance, collectionName);
     };
+
+    close() {
+        this.databaseConnection.close();
+    }
 }

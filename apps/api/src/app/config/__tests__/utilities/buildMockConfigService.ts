@@ -1,12 +1,12 @@
-import * as dotenv from 'dotenv';
-import * as fs from 'fs';
+import { parse } from 'dotenv';
+import { readFileSync } from 'fs';
 import { DTO } from '../../../../types/DTO';
 import { EnvironmentVariables } from '../../env.validation';
 
 type ConfigOverrides = Partial<DTO<EnvironmentVariables>>;
 
 export default (configOverrides: ConfigOverrides, envFilePath: string) => {
-    const realConfig = dotenv.parse(fs.readFileSync(envFilePath));
+    const realConfig = parse(readFileSync(envFilePath));
 
     // TODO Fall back to real environment variables in a more extensible way
     const mockedConfig = {

@@ -13,6 +13,7 @@ import { CoscradUserWithGroups } from '../../../domain/models/user-management/us
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import buildInMemorySnapshot from '../../../domain/utilities/buildInMemorySnapshot';
+import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestData from '../../../test-data/buildTestData';
@@ -54,12 +55,14 @@ describe('The Command Controller', () => {
 
     let app: INestApplication;
 
+    let databaseProvider: ArangoDatabaseProvider;
+
     let commandHandlerService: CommandHandlerService;
 
     let idManager: IIdManager;
 
     beforeAll(async () => {
-        ({ testRepositoryProvider, app, commandHandlerService, idManager } =
+        ({ testRepositoryProvider, app, commandHandlerService, idManager, databaseProvider } =
             await setUpIntegrationTest(
                 {
                     ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
@@ -89,6 +92,10 @@ describe('The Command Controller', () => {
 
     afterEach(async () => {
         await testRepositoryProvider.testTeardown();
+    });
+
+    afterAll(() => {
+        databaseProvider.close();
     });
 
     describe('when the command type is invalid', () => {

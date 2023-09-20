@@ -2,15 +2,16 @@ import { FluxStandardAction } from '@coscrad/commands';
 import { CoscradUserRole } from '@coscrad/data-types';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
+import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
+import { dummyUuid } from '../../../domain/models/__tests__/utilities/dummyUuid';
 import { PublishResource } from '../../../domain/models/shared/common-commands';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
-import { dummyUuid } from '../../../domain/models/__tests__/utilities/dummyUuid';
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import buildInMemorySnapshot from '../../../domain/utilities/buildInMemorySnapshot';
-import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
-import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestData from '../../../test-data/buildTestData';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from '../__tests__/setUpIntegrationTest';
@@ -27,6 +28,8 @@ describe('Role Based Access Control for commands', () => {
     let testRepositoryProvider: TestRepositoryProvider;
 
     let app: INestApplication;
+
+    let databaseProvider: ArangoDatabaseProvider;
 
     const existingSong = getValidAggregateInstanceForTest(ResourceType.song).clone({
         id: dummyUuid,
@@ -52,7 +55,7 @@ describe('Role Based Access Control for commands', () => {
         const testUserWithGroups = new CoscradUserWithGroups(ordinaryUser, [userGroup]);
 
         beforeAll(async () => {
-            ({ testRepositoryProvider, app } = await setUpIntegrationTest(
+            ({ testRepositoryProvider, app, databaseProvider } = await setUpIntegrationTest(
                 {
                     ARANGO_DB_NAME: databaseName,
                 },
@@ -76,6 +79,8 @@ describe('Role Based Access Control for commands', () => {
             await app.close();
 
             await testRepositoryProvider.testTeardown();
+
+            databaseProvider.close();
         });
         it('should return an unauthroized error', async () => {
             await request(app.getHttpServer())

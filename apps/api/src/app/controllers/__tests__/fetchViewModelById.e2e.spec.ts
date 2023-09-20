@@ -4,6 +4,7 @@ import { Resource } from '../../../domain/models/resource.entity';
 import idEquals from '../../../domain/models/shared/functional/idEquals';
 import { InMemorySnapshotOfResources, ResourceType } from '../../../domain/types/ResourceType';
 import { isInternalError } from '../../../lib/errors/InternalError';
+import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestData from '../../../test-data/buildTestData';
@@ -17,6 +18,8 @@ describe('GET  (fetch view models)', () => {
     let app: INestApplication;
 
     let testRepositoryProvider: TestRepositoryProvider;
+
+    let databaseProvider: ArangoDatabaseProvider;
 
     const testData = buildTestData();
 
@@ -43,7 +46,7 @@ describe('GET  (fetch view models)', () => {
     );
 
     beforeAll(async () => {
-        ({ app, testRepositoryProvider } = await setUpIntegrationTest({
+        ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
         }));
     });
@@ -154,5 +157,7 @@ describe('GET  (fetch view models)', () => {
 
     afterAll(async () => {
         await app.close();
+
+        databaseProvider.close();
     });
 });

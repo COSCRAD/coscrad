@@ -34,17 +34,17 @@ const interpretQueryOperatorForAQL = (operator: QueryOperator): string => {
 };
 
 export class ArangoDatabase {
-    #db: Database;
+    private readonly db: Database;
 
     constructor(database: Database) {
         if (!isArangoDatabase(database))
             throw new Error('Cannot create an Arango Database from an invalid database connection');
 
-        this.#db = database;
+        this.db = database;
     }
 
     getDatabaseName(): string {
-        return this.#db.name;
+        return this.db.name;
     }
 
     fetchById = async <TDatabaseDTO extends DatabaseDTO<HasAggregateId>>(
@@ -111,7 +111,7 @@ export class ArangoDatabase {
             bindVars,
         };
 
-        const cursor = await this.#db.query(aqlQuery);
+        const cursor = await this.db.query(aqlQuery);
 
         if (cursor.count === 0) return [];
 
@@ -153,7 +153,7 @@ export class ArangoDatabase {
             '@collectionName': collectionName,
         };
 
-        await this.#db.query({
+        await this.db.query({
             query,
             bindVars,
         });
@@ -186,7 +186,7 @@ export class ArangoDatabase {
          */
         const MAX_NUMBER_OF_RETRIES = 10;
 
-        await this.#db.query(
+        await this.db.query(
             {
                 query,
                 bindVars,
@@ -237,7 +237,7 @@ export class ArangoDatabase {
             '@collectionName': collectionName,
         };
 
-        await this.#db
+        await this.db
             .query({
                 query,
                 bindVars,
@@ -263,7 +263,7 @@ export class ArangoDatabase {
             '@collectionName': collectionName,
         };
 
-        await this.#db
+        await this.db
             .query({
                 query,
                 bindVars,
@@ -301,7 +301,7 @@ export class ArangoDatabase {
             '@collectionName': collectionName,
         };
 
-        await this.#db
+        await this.db
             .query({
                 query,
                 bindVars,
@@ -335,7 +335,7 @@ export class ArangoDatabase {
             '@collectionName': collectionName,
         };
 
-        await this.#db.query({ query, bindVars }).catch((error) => {
+        await this.db.query({ query, bindVars }).catch((error) => {
             throw new Error(`failed to delete all in collection: ${collectionName}. ${error}`);
         });
     };
@@ -344,7 +344,7 @@ export class ArangoDatabase {
         typeof document._key === 'string' ? document._key : NotFound;
 
     #doesCollectionExist = async (collectionName: string): Promise<boolean> =>
-        this.#db
+        this.db
             .collections()
             .then((collections) =>
                 collections.some((collection) => collection.name === collectionName)

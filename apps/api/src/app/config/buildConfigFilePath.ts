@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+import { existsSync } from 'fs';
 import { InternalError } from '../../lib/errors/InternalError';
 import { Environment } from './constants/Environment';
 
@@ -14,7 +14,7 @@ export default (envFilePrefix: string): string => {
         ? `${process.cwd()}/${envFilePrefix}.env`
         : `${process.cwd()}/apps/api/src/app/config/${envFilePrefix}.env`;
 
-    if (!fs.existsSync(path)) {
+    if (!existsSync(path)) {
         throw new InternalError(`Invalid .env file path: ${path}`);
     }
 
