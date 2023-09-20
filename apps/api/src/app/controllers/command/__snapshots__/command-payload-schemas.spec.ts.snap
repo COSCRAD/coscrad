@@ -3589,5 +3589,89 @@ exports[`command payload schemas Command payload schema should match the snapsho
     },
     "type": "TRANSLATE_VIDEO_NAME",
   },
+  {
+    "description": "Translate the name of a audio item to another language",
+    "label": "Translate Audio Item Name",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "the audio item ID (generated)",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "must be: audioItem",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "audioItem",
+                "value": "audioItem",
+              },
+            ],
+          },
+        },
+      },
+      "languageCode": {
+        "complexDataType": "ENUM",
+        "description": "the language in which you are translating the new audio item name",
+        "enumLabel": "language code",
+        "enumName": "LanguageCode",
+        "isArray": false,
+        "isOptional": false,
+        "label": "language",
+        "labelsAndValues": [
+          {
+            "label": "Chilcotin",
+            "value": "clc",
+          },
+          {
+            "label": "Haida",
+            "value": "hai",
+          },
+          {
+            "label": "English",
+            "value": "en",
+          },
+          {
+            "label": "French",
+            "value": "fra",
+          },
+          {
+            "label": "Chinook",
+            "value": "chn",
+          },
+          {
+            "label": "Zapotec",
+            "value": "zap",
+          },
+          {
+            "label": "Spanish",
+            "value": "spa",
+          },
+        ],
+      },
+      "text": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "text for the translation of the name",
+        "isArray": false,
+        "isOptional": false,
+        "label": "translation",
+      },
+    },
+    "type": "TRANSLATE_AUDIO_ITEM_NAME",
+  },
 ]
 `;

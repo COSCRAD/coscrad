@@ -10,9 +10,8 @@ import { RegisterIndexScopedCommands } from '../../../../app/controllers/command
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
 import { DTO } from '../../../../types/DTO';
-import { DeepPartial } from '../../../../types/DeepPartial';
 import { ResultOrError } from '../../../../types/ResultOrError';
-import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
+import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
@@ -122,23 +121,12 @@ export class VideoBase extends Resource {
         ];
     }
 
-    translateName(translation: string, languageCode: LanguageCode): ResultOrError<this> {
-        // TODO update the .translate API on MultilingualText
-        const nameUpdateResult = this.name.translate(
-            new MultilingualTextItem({
-                role: MultilingualTextItemRole.freeTranslation,
-                text: translation,
-                languageCode,
-            })
-        );
-
-        if (isInternalError(nameUpdateResult)) {
-            return nameUpdateResult;
-        }
-
-        return this.safeClone({
-            name: nameUpdateResult,
-        } as DeepPartial<DTO<this>>);
+    translateName(text: string, languageCode: LanguageCode): ResultOrError<this> {
+        return this.translateMultilingualTextProperty('name', {
+            text,
+            languageCode,
+            role: MultilingualTextItemRole.freeTranslation,
+        });
     }
 
     override validateExternalReferences({

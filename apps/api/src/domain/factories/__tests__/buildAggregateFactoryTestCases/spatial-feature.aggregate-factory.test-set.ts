@@ -11,9 +11,9 @@ import buildValidCasesForSubtypes from './common/buildValidCasesForSubtypes';
 
 const aggregateType = AggregateType.spatialFeature;
 
-const validPoint = getValidSpatialFeatureInstanceForTest(GeometricFeatureType.point);
+const validPoint = getValidSpatialFeatureInstanceForTest(GeometricFeatureType.point) as Point;
 
-const validLine = getValidSpatialFeatureInstanceForTest(GeometricFeatureType.line);
+const validLine = getValidSpatialFeatureInstanceForTest(GeometricFeatureType.line) as Line;
 
 const validCases: AggregateFactoryValidTestCase<typeof aggregateType>[] =
     buildValidCasesForSubtypes(

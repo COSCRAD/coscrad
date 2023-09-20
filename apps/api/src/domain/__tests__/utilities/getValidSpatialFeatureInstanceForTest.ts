@@ -12,7 +12,7 @@ export const getValidSpatialFeatureInstanceForTest = <
     TGeometricFeatureType extends GeometricFeatureType
 >(
     geometryType: TGeometricFeatureType
-): GeometricFeatureTypeToSpatialFeatureInstance[TGeometricFeatureType] => {
+): ISpatialFeature => {
     // Find the first `Spatial Feature` model with this geometry type from the test data
     const searchResult = new DeluxeInMemoryStore(buildTestDataInFlatFormat())
         .fetchAllOfType(AggregateType.spatialFeature)
