@@ -9,6 +9,8 @@ import {
     CreateAudioItemCommandHandler,
     CreateTranscript,
     CreateTranscriptCommandHandler,
+    TranslateAudioItemName,
+    TranslateAudioItemNameCommandHandler,
     TranslateLineItem,
     TranslateLineItemCommandHandler,
 } from '../../domain/models/audio-item/commands';
@@ -43,6 +45,8 @@ import { VideoController } from '../controllers/resources/video.controller';
         TranslateVideoNameCommandHandler,
         CreateAudioItem,
         CreateAudioItemCommandHandler,
+        TranslateAudioItemName,
+        TranslateAudioItemNameCommandHandler,
         CreateTranscript,
         CreateTranscriptCommandHandler,
         AddLineItemToTranscript,

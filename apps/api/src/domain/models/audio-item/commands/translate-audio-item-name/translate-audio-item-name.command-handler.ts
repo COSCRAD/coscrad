@@ -1,4 +1,4 @@
-import { CommandHandler, ICommand } from '@coscrad/commands';
+import { CommandHandler } from '@coscrad/commands';
 import { Valid } from '../../../../../domain/domainModelValidators/Valid';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../../domain/types/ResourceType';
@@ -32,7 +32,11 @@ export class TranslateAudioItemNameCommandHandler extends BaseUpdateCommandHandl
         return audioItem.translateName(text, languageCode);
     }
 
-    protected buildEvent(command: ICommand, eventId: string, userId: string): BaseEvent {
+    protected buildEvent(
+        command: TranslateAudioItemName,
+        eventId: string,
+        userId: string
+    ): BaseEvent {
         return new AudioItemNameTranslated(command, eventId, userId);
     }
 }

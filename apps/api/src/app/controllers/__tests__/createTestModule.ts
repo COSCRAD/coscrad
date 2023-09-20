@@ -17,6 +17,8 @@ import {
     CreateAudioItemCommandHandler,
     CreateTranscript,
     CreateTranscriptCommandHandler,
+    TranslateAudioItemName,
+    TranslateAudioItemNameCommandHandler,
     TranslateLineItem,
     TranslateLineItemCommandHandler,
 } from '../../../domain/models/audio-item/commands';
@@ -523,6 +525,8 @@ export default async (
             TranslateVocabularyListNameCommandHandler,
             TranslateVideoName,
             TranslateVideoNameCommandHandler,
+            TranslateAudioItemName,
+            TranslateAudioItemNameCommandHandler,
         ],
 
         controllers: [
