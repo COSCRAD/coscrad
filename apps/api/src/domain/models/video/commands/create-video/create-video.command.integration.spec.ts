@@ -98,7 +98,7 @@ describe(commandType, () => {
     afterAll(async () => {
         await app.close();
 
-        databaseProvider;
+        databaseProvider.close();
     });
 
     describe('when the command is valid', () => {
