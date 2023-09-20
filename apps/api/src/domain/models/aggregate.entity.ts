@@ -5,7 +5,7 @@ import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../types/DTO';
 import { DeepPartial } from '../../types/DeepPartial';
 import { ResultOrError } from '../../types/ResultOrError';
-import { MultilingualText } from '../common/entities/multilingual-text';
+import { MultilingualText, MultilingualTextItem } from '../common/entities/multilingual-text';
 import { Valid, isValid } from '../domainModelValidators/Valid';
 import InvariantValidationError from '../domainModelValidators/errors/InvariantValidationError';
 import validateSimpleInvariants from '../domainModelValidators/utilities/validateSimpleInvariants';
@@ -149,6 +149,28 @@ export abstract class Aggregate extends BaseDomainModel implements HasAggregateI
      * aggregate view.
      */
     abstract getName(): MultilingualText;
+
+    // TODO add typesafety for `propertyName`
+    protected translateMultilingualTextProperty(
+        propertyName: string,
+        translationInfo: DTO<MultilingualTextItem>
+    ): ResultOrError<this> {
+        const propertyValue = this[propertyName];
+
+        if (!(propertyValue instanceof MultilingualText)) {
+            throw new InternalError(
+                `Failed to translate property: ${propertyValue}, as it is not of type MultilingualText`
+            );
+        }
+
+        const valueUpdateResult = propertyValue.translate(translationInfo);
+
+        if (isInternalError(valueUpdateResult)) return valueUpdateResult;
+
+        return this.safeClone({
+            [propertyName]: valueUpdateResult,
+        } as unknown as DeepPartial<DTO<this>>);
+    }
 
     /**
      * This method should be implemented on each aggregate class to return an array

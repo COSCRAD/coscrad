@@ -298,18 +298,10 @@ export class Song extends Resource implements ITimeBoundable {
                 languageCode
             );
 
-        const newLyrics = this.lyrics.translate(
-            new MultilingualTextItem({
-                text,
-                languageCode,
-                role: MultilingualTextItemRole.freeTranslation,
-            })
-        );
-
-        if (isInternalError(newLyrics)) return newLyrics;
-
-        return this.safeClone<Song>({
-            lyrics: newLyrics,
+        return this.translateMultilingualTextProperty('lyrics', {
+            text,
+            languageCode,
+            role: MultilingualTextItemRole.freeTranslation,
         });
     }
 
