@@ -109,10 +109,6 @@ describe(`CLI Command: **data-restore**`, () => {
         await testRepositoryProvider.testTeardown();
     });
 
-    afterAll(() => {
-        global.gc && global.gc();
-    });
-
     describe(`when the command is valid`, () => {
         beforeEach(async () => {
             process.env.DATA_MODE = 'import';
