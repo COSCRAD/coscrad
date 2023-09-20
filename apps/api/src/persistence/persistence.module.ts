@@ -1,4 +1,4 @@
-import { DynamicModule, Global, Module } from '@nestjs/common';
+import { DynamicModule, Global, Module, OnApplicationShutdown } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CoscradEventFactory, EventModule } from '../domain/common';
 import { ID_RESPOSITORY_TOKEN } from '../lib/id-generation/interfaces/id-repository.interface';
@@ -13,7 +13,14 @@ import { DomainDataExporter } from './repositories/domain-data-exporter';
 
 @Global()
 @Module({})
-export class PersistenceModule {
+export class PersistenceModule implements OnApplicationShutdown {
+    constructor(private readonly databaseProvider: ArangoDatabaseProvider) {}
+
+    onApplicationShutdown(_signal?: string) {
+        // Avoid memory leaks
+        this.databaseProvider.close();
+    }
+
     static forRootAsync(): DynamicModule {
         const arangoConnectionProvider = {
             provide: ArangoConnectionProvider,
