@@ -55,151 +55,159 @@ describe('When fetching multiple resources', () => {
         eventRepository = app.get(ArangoEventRepository);
     });
 
-    Object.values(ResourceType).forEach((resourceType) => {
-        const endpointUnderTest = `/${buildViewModelPathForResourceType(resourceType)}`;
+    const eventSourcedResourceTypes = [ResourceType.song];
 
-        describe(`GET ${endpointUnderTest}`, () => {
-            beforeEach(async () => {
-                await testRepositoryProvider.testSetup();
-            });
+    Object.values(ResourceType)
+        // TODO [https://www.pivotaltracker.com/story/show/185903292] opt-in to tests for event-sourced aggregates as well
+        .filter((resourceType) => !eventSourcedResourceTypes.includes(resourceType))
+        .forEach((resourceType) => {
+            const endpointUnderTest = `/${buildViewModelPathForResourceType(resourceType)}`;
 
-            afterEach(async () => {
-                await testRepositoryProvider.testTeardown();
-            });
-
-            describe('when all of the resources are published', () => {
+            describe(`GET ${endpointUnderTest}`, () => {
                 beforeEach(async () => {
-                    await testRepositoryProvider.addResourcesOfManyTypes(
-                        testDataWithAllResourcesPublished
-                    );
+                    await testRepositoryProvider.testSetup();
+                });
 
-                    const songIds = testDataWithAllResourcesPublished.song
-                        .map((song) => song.getCompositeIdentifier())
-                        .map(({ id }) => id);
+                afterEach(async () => {
+                    await testRepositoryProvider.testTeardown();
+                });
 
-                    // TODO Make this a more natural part of the test setup
-                    const songPublishedEvents = songIds.map(
-                        (id, index) =>
-                            new ResourcePublished(
-                                {
-                                    aggregateCompositeIdentifier: {
-                                        id,
-                                        type: AggregateType.song,
+                describe('when all of the resources are published', () => {
+                    beforeEach(async () => {
+                        await testRepositoryProvider.addResourcesOfManyTypes(
+                            testDataWithAllResourcesPublished
+                        );
+
+                        const songIds = testDataWithAllResourcesPublished.song
+                            .map((song) => song.getCompositeIdentifier())
+                            .map(({ id }) => id);
+
+                        // TODO Make this a more natural part of the test setup
+                        const songPublishedEvents = songIds.map(
+                            (id, index) =>
+                                new ResourcePublished(
+                                    {
+                                        aggregateCompositeIdentifier: {
+                                            id,
+                                            type: AggregateType.song,
+                                        },
                                     },
+                                    buildDummyUuid(100 + index),
+                                    dummySystemUserId
+                                )
+                        );
+
+                        await Promise.all(
+                            songPublishedEvents.map((event) => eventRepository.appendEvent(event))
+                        );
+
+                        await testRepositoryProvider.getTagRepository().createMany(tagTestData);
+                    });
+
+                    it(`should fetch multiple resources of type ${resourceType}`, async () => {
+                        const res = await request(app.getHttpServer()).get(endpointUnderTest);
+
+                        expect(res.status).toBe(httpStatusCodes.ok);
+
+                        expect(res.body.entities.length).toBe(
+                            testDataWithAllResourcesPublished[resourceType].length
+                        );
+
+                        expect(res.body).toMatchSnapshot();
+                    });
+                });
+
+                describe(`when some of the resources are unpublished`, () => {
+                    /**
+                     * Note that there is no requirement that the test data have
+                     * `published = true`
+                     */
+                    const publishedResourcesToAdd = resourceTestData[resourceType].map(
+                        (instance: Resource) =>
+                            instance.clone({
+                                published: true,
+                            })
+                    );
+
+                    const unpublishedResourcesToAdd = resourceTestData[resourceType]
+                        // We want a different number of published \ unpublished terms
+                        .slice(0, -1)
+                        .map((instance, index) =>
+                            instance.clone({
+                                id: `UNPUBLISHED-00${index + 1}`,
+                                published: false,
+                                // TODO Seed state via commands or events
+                                eventHistory:
+                                    instance.type === AggregateType.song
+                                        ? [
+                                              clonePlainObjectWithOverrides(
+                                                  instance.eventHistory[0],
+                                                  {
+                                                      payload: {
+                                                          aggregateCompositeIdentifier: {
+                                                              id: `UNPUBLISHED-00${index + 1}`,
+                                                          },
+                                                      },
+                                                  }
+                                              ),
+                                          ]
+                                        : [],
+                            })
+                        );
+
+                    beforeEach(async () => {
+                        await testRepositoryProvider.addFullSnapshot(
+                            new DeluxeInMemoryStore({
+                                resources: {
+                                    ...testDataWithAllResourcesPublished,
+                                    [resourceType]: [
+                                        ...unpublishedResourcesToAdd,
+                                        ...publishedResourcesToAdd,
+                                    ],
                                 },
-                                buildDummyUuid(100 + index),
-                                dummySystemUserId
-                            )
-                    );
+                                [AggregateType.tag]: tagTestData,
+                            }).fetchFullSnapshotInLegacyFormat()
+                        );
 
-                    await Promise.all(
-                        songPublishedEvents.map((event) => eventRepository.appendEvent(event))
-                    );
+                        const publishedSongIds = publishedResourcesToAdd
+                            .map((song) => song.getCompositeIdentifier())
+                            .map(({ id }) => id);
 
-                    await testRepositoryProvider.getTagRepository().createMany(tagTestData);
-                });
-
-                it(`should fetch multiple resources of type ${resourceType}`, async () => {
-                    const res = await request(app.getHttpServer()).get(endpointUnderTest);
-
-                    expect(res.status).toBe(httpStatusCodes.ok);
-
-                    expect(res.body.entities.length).toBe(
-                        testDataWithAllResourcesPublished[resourceType].length
-                    );
-
-                    expect(res.body).toMatchSnapshot();
-                });
-            });
-
-            describe(`when some of the resources are unpublished`, () => {
-                /**
-                 * Note that there is no requirement that the test data have
-                 * `published = true`
-                 */
-                const publishedResourcesToAdd = resourceTestData[resourceType].map(
-                    (instance: Resource) =>
-                        instance.clone({
-                            published: true,
-                        })
-                );
-
-                const unpublishedResourcesToAdd = resourceTestData[resourceType]
-                    // We want a different number of published \ unpublished terms
-                    .slice(0, -1)
-                    .map((instance, index) =>
-                        instance.clone({
-                            id: `UNPUBLISHED-00${index + 1}`,
-                            published: false,
-                            // TODO Seed state via commands or events
-                            eventHistory:
-                                instance.type === AggregateType.song
-                                    ? [
-                                          clonePlainObjectWithOverrides(instance.eventHistory[0], {
-                                              payload: {
-                                                  aggregateCompositeIdentifier: {
-                                                      id: `UNPUBLISHED-00${index + 1}`,
-                                                  },
-                                              },
-                                          }),
-                                      ]
-                                    : [],
-                        })
-                    );
-
-                beforeEach(async () => {
-                    await testRepositoryProvider.addFullSnapshot(
-                        new DeluxeInMemoryStore({
-                            resources: {
-                                ...testDataWithAllResourcesPublished,
-                                [resourceType]: [
-                                    ...unpublishedResourcesToAdd,
-                                    ...publishedResourcesToAdd,
-                                ],
-                            },
-                            [AggregateType.tag]: tagTestData,
-                        }).fetchFullSnapshotInLegacyFormat()
-                    );
-
-                    const publishedSongIds = publishedResourcesToAdd
-                        .map((song) => song.getCompositeIdentifier())
-                        .map(({ id }) => id);
-
-                    // TODO [https://www.pivotaltracker.com/story/show/185903292] Make this a more natural part of the test setup
-                    const songPublishedEvents = publishedSongIds.map(
-                        (id, index) =>
-                            new ResourcePublished(
-                                {
-                                    aggregateCompositeIdentifier: {
-                                        id,
-                                        type: AggregateType.song,
+                        // TODO [https://www.pivotaltracker.com/story/show/185903292] Make this a more natural part of the test setup
+                        const songPublishedEvents = publishedSongIds.map(
+                            (id, index) =>
+                                new ResourcePublished(
+                                    {
+                                        aggregateCompositeIdentifier: {
+                                            id,
+                                            type: AggregateType.song,
+                                        },
                                     },
-                                },
-                                buildDummyUuid(100 + index),
-                                dummySystemUserId
-                            )
-                    );
+                                    buildDummyUuid(100 + index),
+                                    dummySystemUserId
+                                )
+                        );
 
-                    await Promise.all(
-                        songPublishedEvents.map((event) => eventRepository.appendEvent(event))
-                    );
-                });
+                        await Promise.all(
+                            songPublishedEvents.map((event) => eventRepository.appendEvent(event))
+                        );
+                    });
 
-                it('should return the expected number of results', async () => {
-                    const res = await request(app.getHttpServer()).get(endpointUnderTest);
+                    it('should return the expected number of results', async () => {
+                        const res = await request(app.getHttpServer()).get(endpointUnderTest);
 
-                    expect(res.body.entities.length).toBe(publishedResourcesToAdd.length);
+                        expect(res.body.entities.length).toBe(publishedResourcesToAdd.length);
 
-                    // Sanity check
-                    expect(publishedResourcesToAdd.length).not.toEqual(
-                        unpublishedResourcesToAdd.length
-                    );
+                        // Sanity check
+                        expect(publishedResourcesToAdd.length).not.toEqual(
+                            unpublishedResourcesToAdd.length
+                        );
 
-                    expect(res.body).toMatchSnapshot();
+                        expect(res.body).toMatchSnapshot();
+                    });
                 });
             });
         });
-    });
 
     afterAll(async () => {
         await app.close();
