@@ -30,7 +30,7 @@ const lookupTable: { [K in CoscradDataType]: FormFieldType } = {
     // Eventually, we want this to be a dynamic selection
     [CoscradDataType.UUID]: FormFieldType.textField,
     [CoscradDataType.Year]: FormFieldType.yearPicker,
-    [CoscradDataType.BOOLEAN]: FormFieldType.switch,
+    [CoscradDataType.Boolean]: FormFieldType.switch,
     [CoscradDataType.String]: FormFieldType.textField,
     // TODO Remove the following
     [CoscradDataType.FixedValue]: FormFieldType.textField,

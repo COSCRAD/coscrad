@@ -14,7 +14,7 @@ import {
     UnionType,
     Year,
 } from '../lib/decorators';
-import { Boolean } from '../lib/decorators/Boolean';
+import { BooleanDataType } from '../lib/decorators/Boolean';
 import { TypeDecoratorOptions } from '../lib/decorators/types/TypeDecoratorOptions';
 import { BibliographicSubjectCreatorType, CoscradEnum } from '../lib/enums';
 import { CoscradUserRole } from '../lib/enums/CoscradUserRole';
@@ -152,7 +152,7 @@ export class Widget {
     @NonEmptyString({ isArray: true, ...buildDummyLabelAndDescription('siblingWidgetIds') })
     siblingWidgetIds = ['1', '2', '33'];
 
-    @Boolean(buildDummyLabelAndDescription('isActive'))
+    @BooleanDataType(buildDummyLabelAndDescription('isActive'))
     isActive = true;
 
     constructor(dto: Widget) {
