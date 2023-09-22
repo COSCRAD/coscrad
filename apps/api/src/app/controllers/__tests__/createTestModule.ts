@@ -103,6 +103,8 @@ import {
     TagResourceOrNoteCommandHandler,
 } from '../../../domain/models/tag/commands';
 import {
+    CreatePromptTerm,
+    CreatePromptTermCommandHandler,
     CreateTerm,
     CreateTermCommandHandler,
     TranslateTerm,
@@ -513,6 +515,8 @@ export default async (
             TranslateSongTitleCommandHandler,
             CreateTerm,
             CreateTermCommandHandler,
+            CreatePromptTerm,
+            CreatePromptTermCommandHandler,
             TranslateTerm,
             TranslateTermCommandHandler,
             CreatePoint,
