@@ -57,11 +57,18 @@ export class Term extends Resource {
     })
     readonly text: MultilingualText;
 
+    /**
+     * Note  that eventually, we will track contributions as follows. Every
+     * command can be executed `onBehalfOfContributorWithId`. If this is specified,
+     * the corresponding event will be attributed to the contributor with this ID.
+     * Otherwise, it will be attributed to the system user.
+     */
     @NonEmptyString({
+        isOptional: true,
         label: 'contributor ID',
         description: 'reference to the contributor for this term',
     })
-    readonly contributorId: AggregateId;
+    readonly contributorId?: AggregateId;
 
     /**
      * TODO Make this a mediaItemId
@@ -73,6 +80,9 @@ export class Term extends Resource {
     })
     readonly audioFilename?: string;
 
+    /**
+     * TODO - This should be done via a tag or a note. Remove this property.
+     */
     @NonEmptyString({
         isOptional,
         label: 'Source Project',
