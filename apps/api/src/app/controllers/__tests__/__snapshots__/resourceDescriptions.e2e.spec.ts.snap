@@ -100,16 +100,16 @@ exports[`GET /resources should return the expected result 1`] = `
                     "value": "glossed to",
                   },
                   {
-                    "label": "prompt",
-                    "value": "prompt",
-                  },
-                  {
                     "label": "free translation",
                     "value": "free translation",
                   },
                   {
                     "label": "literal translation",
                     "value": "literal translation",
+                  },
+                  {
+                    "label": "elicited from a prompt",
+                    "value": "elicited from a prompt",
                   },
                 ],
               },
@@ -246,16 +246,16 @@ exports[`GET /resources should return the expected result 1`] = `
                             "value": "glossed to",
                           },
                           {
-                            "label": "prompt",
-                            "value": "prompt",
-                          },
-                          {
                             "label": "free translation",
                             "value": "free translation",
                           },
                           {
                             "label": "literal translation",
                             "value": "literal translation",
+                          },
+                          {
+                            "label": "elicited from a prompt",
+                            "value": "elicited from a prompt",
                           },
                         ],
                       },
@@ -359,16 +359,16 @@ exports[`GET /resources should return the expected result 1`] = `
                     "value": "glossed to",
                   },
                   {
-                    "label": "prompt",
-                    "value": "prompt",
-                  },
-                  {
                     "label": "free translation",
                     "value": "free translation",
                   },
                   {
                     "label": "literal translation",
                     "value": "literal translation",
+                  },
+                  {
+                    "label": "elicited from a prompt",
+                    "value": "elicited from a prompt",
                   },
                 ],
               },
@@ -523,16 +523,16 @@ exports[`GET /resources should return the expected result 1`] = `
                     "value": "glossed to",
                   },
                   {
-                    "label": "prompt",
-                    "value": "prompt",
-                  },
-                  {
                     "label": "free translation",
                     "value": "free translation",
                   },
                   {
                     "label": "literal translation",
                     "value": "literal translation",
+                  },
+                  {
+                    "label": "elicited from a prompt",
+                    "value": "elicited from a prompt",
                   },
                 ],
               },
@@ -687,16 +687,16 @@ exports[`GET /resources should return the expected result 1`] = `
                     "value": "glossed to",
                   },
                   {
-                    "label": "prompt",
-                    "value": "prompt",
-                  },
-                  {
                     "label": "free translation",
                     "value": "free translation",
                   },
                   {
                     "label": "literal translation",
                     "value": "literal translation",
+                  },
+                  {
+                    "label": "elicited from a prompt",
+                    "value": "elicited from a prompt",
                   },
                 ],
               },
@@ -817,16 +817,16 @@ exports[`GET /resources should return the expected result 1`] = `
                             "value": "glossed to",
                           },
                           {
-                            "label": "prompt",
-                            "value": "prompt",
-                          },
-                          {
                             "label": "free translation",
                             "value": "free translation",
                           },
                           {
                             "label": "literal translation",
                             "value": "literal translation",
+                          },
+                          {
+                            "label": "elicited from a prompt",
+                            "value": "elicited from a prompt",
                           },
                         ],
                       },
@@ -969,16 +969,16 @@ exports[`GET /resources should return the expected result 1`] = `
                     "value": "glossed to",
                   },
                   {
-                    "label": "prompt",
-                    "value": "prompt",
-                  },
-                  {
                     "label": "free translation",
                     "value": "free translation",
                   },
                   {
                     "label": "literal translation",
                     "value": "literal translation",
+                  },
+                  {
+                    "label": "elicited from a prompt",
+                    "value": "elicited from a prompt",
                   },
                 ],
               },
@@ -1108,16 +1108,16 @@ exports[`GET /resources should return the expected result 1`] = `
                     "value": "glossed to",
                   },
                   {
-                    "label": "prompt",
-                    "value": "prompt",
-                  },
-                  {
                     "label": "free translation",
                     "value": "free translation",
                   },
                   {
                     "label": "literal translation",
                     "value": "literal translation",
+                  },
+                  {
+                    "label": "elicited from a prompt",
+                    "value": "elicited from a prompt",
                   },
                 ],
               },
@@ -1226,16 +1226,16 @@ exports[`GET /resources should return the expected result 1`] = `
                     "value": "glossed to",
                   },
                   {
-                    "label": "prompt",
-                    "value": "prompt",
-                  },
-                  {
                     "label": "free translation",
                     "value": "free translation",
                   },
                   {
                     "label": "literal translation",
                     "value": "literal translation",
+                  },
+                  {
+                    "label": "elicited from a prompt",
+                    "value": "elicited from a prompt",
                   },
                 ],
               },
@@ -1588,16 +1588,16 @@ exports[`GET /resources should return the expected result 1`] = `
                     "value": "glossed to",
                   },
                   {
-                    "label": "prompt",
-                    "value": "prompt",
-                  },
-                  {
                     "label": "free translation",
                     "value": "free translation",
                   },
                   {
                     "label": "literal translation",
                     "value": "literal translation",
+                  },
+                  {
+                    "label": "elicited from a prompt",
+                    "value": "elicited from a prompt",
                   },
                 ],
               },
@@ -1713,16 +1713,16 @@ exports[`GET /resources should return the expected result 1`] = `
                     "value": "glossed to",
                   },
                   {
-                    "label": "prompt",
-                    "value": "prompt",
-                  },
-                  {
                     "label": "free translation",
                     "value": "free translation",
                   },
                   {
                     "label": "literal translation",
                     "value": "literal translation",
+                  },
+                  {
+                    "label": "elicited from a prompt",
+                    "value": "elicited from a prompt",
                   },
                 ],
               },
@@ -1808,16 +1808,16 @@ exports[`GET /resources should return the expected result 1`] = `
                     "value": "glossed to",
                   },
                   {
-                    "label": "prompt",
-                    "value": "prompt",
-                  },
-                  {
                     "label": "free translation",
                     "value": "free translation",
                   },
                   {
                     "label": "literal translation",
                     "value": "literal translation",
+                  },
+                  {
+                    "label": "elicited from a prompt",
+                    "value": "elicited from a prompt",
                   },
                 ],
               },
@@ -1933,16 +1933,16 @@ exports[`GET /resources should return the expected result 1`] = `
                     "value": "glossed to",
                   },
                   {
-                    "label": "prompt",
-                    "value": "prompt",
-                  },
-                  {
                     "label": "free translation",
                     "value": "free translation",
                   },
                   {
                     "label": "literal translation",
                     "value": "literal translation",
+                  },
+                  {
+                    "label": "elicited from a prompt",
+                    "value": "elicited from a prompt",
                   },
                 ],
               },
@@ -2090,16 +2090,16 @@ exports[`GET /resources should return the expected result 1`] = `
                     "value": "glossed to",
                   },
                   {
-                    "label": "prompt",
-                    "value": "prompt",
-                  },
-                  {
                     "label": "free translation",
                     "value": "free translation",
                   },
                   {
                     "label": "literal translation",
                     "value": "literal translation",
+                  },
+                  {
+                    "label": "elicited from a prompt",
+                    "value": "elicited from a prompt",
                   },
                 ],
               },
