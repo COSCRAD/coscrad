@@ -66,6 +66,9 @@ You'll need Node v18.12.0. It is recommended that you install node using [nvm](h
 
 You'll also need an instance of [ArangoDB](https://www.arangodb.com/).
 
+We recommend that you use `yarn` as a package manager, as it provides better support
+for managing peer dependencies.
+
 We provide an optional shell script for spinning up an ArangoDB instance. This will only work if you have docker installed on your development machine. Alternatively, you could run an ArangoDB instance on a VirtualBox VM, a local physical machine, in the cloud, or via one of Arango's enterprise hosting solutions.
 
 ### Getting Started
@@ -80,7 +83,7 @@ cd into the repo's directory
 
 Install the dependencies
 
-> > npm ci --legacy-peer-deps
+> > yarn install --frozen-lockfile
 
 ## Workflow
 
