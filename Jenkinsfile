@@ -42,8 +42,13 @@ pipeline {
                     sh 'node -v'
                     echo 'npm version'
                     sh 'npm -v'
+
+                    echo 'installing yarn'
+                    sh 'npm i -g yarn'
+                    echo 'yarn version'
+                    sh 'yarn -v'
                     echo 'Installing dependencies'
-                    sh 'npm ci --legacy-peer-deps'
+                    sh 'yarn install --frozen-lockfile'
 
                     echo 'Running lint on all COSCRAD projects'
                     sh 'npm run lint:coscrad'
@@ -109,7 +114,13 @@ pipeline {
                         echo 'Running staging build'
                         echo "NODE ENV: ${NODE_ENV}"
                         echo 'Installing dependencies'
-                        sh 'npm ci --legacy-peer-deps'
+
+                        echo 'installing yarn'
+                        sh 'npm i -g yarn'
+                        echo 'yarn version'
+                        sh 'yarn -v'
+                        echo 'Installing dependencies'
+                        sh 'yarn install --frozen-lockfile'
                     }
                 }
                 stage('build front-end for COSCRAD sandbox') {
