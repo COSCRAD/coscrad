@@ -1297,7 +1297,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "coscradDataType": "BOOLEAN",
     "description": "flag for whether or not this is a prompt term",
     "isArray": false,
-    "isOptional": false,
+    "isOptional": true,
     "label": "is prompt term",
   },
   "sourceProject": {

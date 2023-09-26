@@ -29,10 +29,12 @@ export class Term extends Resource {
     readonly type: ResourceType = ResourceType.term;
 
     @BooleanDataType({
+        // TODO Write a migration and make this prop required on incoming DTOs
+        isOptional: true,
         label: 'is prompt term',
         description: 'flag for whether or not this is a prompt term',
     })
-    readonly isPromptTerm: boolean;
+    readonly isPromptTerm?: boolean;
 
     // @NonEmptyString({
     //     isOptional,
@@ -108,7 +110,7 @@ export class Term extends Resource {
         this.sourceProject = sourceProject;
 
         // we default to false for pre existing data
-        this.isPromptTerm = typeof isPromptTerm === 'boolean' ? isPromptTerm : false;
+        this.isPromptTerm = isNullOrUndefined(isPromptTerm) ? false : isPromptTerm;
     }
 
     getName(): MultilingualText {
