@@ -1,7 +1,8 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandFSA } from '../../app/controllers/command/command-fsa/command-fsa.entity';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
-import { CreateTerm, TranslateTerm } from '../../domain/models/term/commands';
+import { CreatePromptTerm, CreateTerm, TranslateTerm } from '../../domain/models/term/commands';
+import { CREATE_PROMPT_TERM } from '../../domain/models/term/commands/create-prompt-term/constants';
 import { CREATE_TERM } from '../../domain/models/term/commands/create-term/constants';
 import { TRANSLATE_TERM } from '../../domain/models/term/commands/translate-term/constants';
 import { AggregateType } from '../../domain/types/AggregateType';
@@ -23,6 +24,17 @@ const createTerm: CommandFSA<CreateTerm> = {
     },
 };
 
+const createPromptTerm: CommandFSA<CreatePromptTerm> = {
+    type: CREATE_PROMPT_TERM,
+    payload: {
+        aggregateCompositeIdentifier: {
+            id,
+            type,
+        },
+        text: '(How do you say: ) elbow',
+    },
+};
+
 const translateTerm: CommandFSA<TranslateTerm> = {
     type: TRANSLATE_TERM,
     payload: {
@@ -35,4 +47,4 @@ const translateTerm: CommandFSA<TranslateTerm> = {
     },
 };
 
-export const buildTermTestCommandFsas = () => [createTerm, translateTerm];
+export const buildTermTestCommandFsas = () => [createTerm, translateTerm, createPromptTerm];

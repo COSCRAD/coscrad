@@ -16,7 +16,7 @@ export enum CoscradDataType {
     Year = 'YEAR',
     PositiveInteger = 'POSITIVE_INTEGER',
     ISBN = 'ISBN',
-    BOOLEAN = 'BOOLEAN',
+    Boolean = 'BOOLEAN',
     // TODO How does this fit within the constraint-based validation scheme?
     FixedValue = 'FIXED_VALUE',
 }

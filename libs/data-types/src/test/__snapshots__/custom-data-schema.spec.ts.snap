@@ -96,6 +96,13 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "isOptional": false,
     "label": "label for property: id",
   },
+  "isActive": {
+    "coscradDataType": "BOOLEAN",
+    "description": "description of property: isActive",
+    "isArray": false,
+    "isOptional": false,
+    "label": "label for property: isActive",
+  },
   "locationId": {
     "coscradDataType": "UUID",
     "description": "description of property: locationId",

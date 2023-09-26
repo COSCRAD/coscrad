@@ -16,7 +16,7 @@
 export enum MultilingualTextItemRole {
     original = 'original',
     glossedTo = 'glossed to',
-    prompt = 'prompt', // e.g., "How do you say?"
     freeTranslation = 'free translation',
     literalTranslation = 'literal translation',
+    elicitedFromPrompt = 'elicited from a prompt',
 }

@@ -3079,6 +3079,58 @@ exports[`command payload schemas Command payload schema should match the snapsho
     "type": "CREATE_TERM",
   },
   {
+    "description": "Create a new Prompt Term in the language",
+    "label": "Create Prompt Term",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier for the new term",
+        "isArray": false,
+        "isOptional": false,
+        "label": "composite ID (generated)",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "must be: term",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "term",
+                "value": "term",
+              },
+            ],
+          },
+        },
+      },
+      "contributorId": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "The ID of the konwledge kepper who contributed the term",
+        "isArray": false,
+        "isOptional": true,
+        "label": "contributor ID",
+      },
+      "text": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "text for the term (in the language)",
+        "isArray": false,
+        "isOptional": false,
+        "label": "text",
+      },
+    },
+    "type": "CREATE_PROMPT_TERM",
+  },
+  {
     "description": "Translate an existing term (typically from the language to English)",
     "label": "Translate Term",
     "schema": {

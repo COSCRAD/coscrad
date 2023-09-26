@@ -458,7 +458,8 @@
                         }
                     ]
                 },
-                "contributorId": "John Doe"
+                "contributorId": "John Doe",
+                "isPromptTerm": false
             },
             {
                 "type": "term",
@@ -483,7 +484,8 @@
                         }
                     ]
                 },
-                "contributorId": "John Doe"
+                "contributorId": "John Doe",
+                "isPromptTerm": false
             },
             {
                 "type": "term",
@@ -503,7 +505,8 @@
                         }
                     ]
                 },
-                "contributorId": "Jane Deer"
+                "contributorId": "Jane Deer",
+                "isPromptTerm": false
             },
             {
                 "type": "term",
@@ -525,7 +528,8 @@
                         }
                     ]
                 },
-                "contributorId": "This will be removed soon"
+                "contributorId": "This will be removed soon",
+                "isPromptTerm": false
             },
             {
                 "type": "term",
@@ -551,7 +555,8 @@
                     ]
                 },
                 "contributorId": "Sarah Smith",
-                "audioFilename": "https://coscrad.org/wp-content/uploads/2023/06/511.mp3"
+                "audioFilename": "https://coscrad.org/wp-content/uploads/2023/06/511.mp3",
+                "isPromptTerm": false
             },
             {
                 "type": "term",
@@ -577,7 +582,8 @@
                     ]
                 },
                 "contributorId": "Sarah Smith",
-                "audioFilename": "https://coscrad.org/wp-content/uploads/2023/06/512.mp3"
+                "audioFilename": "https://coscrad.org/wp-content/uploads/2023/06/512.mp3",
+                "isPromptTerm": false
             },
             {
                 "type": "term",
@@ -603,7 +609,8 @@
                     ]
                 },
                 "contributorId": "Sarah Smith",
-                "audioFilename": "https://coscrad.org/wp-content/uploads/2023/06/513.mp3"
+                "audioFilename": "https://coscrad.org/wp-content/uploads/2023/06/513.mp3",
+                "isPromptTerm": false
             },
             {
                 "type": "term",
@@ -629,7 +636,8 @@
                     ]
                 },
                 "contributorId": "Sarah Smith",
-                "audioFilename": "https://coscrad.org/wp-content/uploads/2023/06/501.mp3"
+                "audioFilename": "https://coscrad.org/wp-content/uploads/2023/06/501.mp3",
+                "isPromptTerm": false
             },
             {
                 "type": "term",
@@ -655,7 +663,8 @@
                     ]
                 },
                 "contributorId": "Sarah Smith",
-                "audioFilename": "https://coscrad.org/wp-content/uploads/2023/06/502.mp3"
+                "audioFilename": "https://coscrad.org/wp-content/uploads/2023/06/502.mp3",
+                "isPromptTerm": false
             }
         ],
         "vocabulary_lists": [

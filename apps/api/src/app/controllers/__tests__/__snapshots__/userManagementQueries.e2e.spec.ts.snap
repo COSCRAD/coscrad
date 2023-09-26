@@ -100,16 +100,16 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                     "value": "glossed to",
                   },
                   {
-                    "label": "prompt",
-                    "value": "prompt",
-                  },
-                  {
                     "label": "free translation",
                     "value": "free translation",
                   },
                   {
                     "label": "literal translation",
                     "value": "literal translation",
+                  },
+                  {
+                    "label": "elicited from a prompt",
+                    "value": "elicited from a prompt",
                   },
                 ],
               },
@@ -232,16 +232,16 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                         "value": "glossed to",
                       },
                       {
-                        "label": "prompt",
-                        "value": "prompt",
-                      },
-                      {
                         "label": "free translation",
                         "value": "free translation",
                       },
                       {
                         "label": "literal translation",
                         "value": "literal translation",
+                      },
+                      {
+                        "label": "elicited from a prompt",
+                        "value": "elicited from a prompt",
                       },
                     ],
                   },
@@ -350,16 +350,16 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                     "value": "glossed to",
                   },
                   {
-                    "label": "prompt",
-                    "value": "prompt",
-                  },
-                  {
                     "label": "free translation",
                     "value": "free translation",
                   },
                   {
                     "label": "literal translation",
                     "value": "literal translation",
+                  },
+                  {
+                    "label": "elicited from a prompt",
+                    "value": "elicited from a prompt",
                   },
                 ],
               },
@@ -461,16 +461,16 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                     "value": "glossed to",
                   },
                   {
-                    "label": "prompt",
-                    "value": "prompt",
-                  },
-                  {
                     "label": "free translation",
                     "value": "free translation",
                   },
                   {
                     "label": "literal translation",
                     "value": "literal translation",
+                  },
+                  {
+                    "label": "elicited from a prompt",
+                    "value": "elicited from a prompt",
                   },
                 ],
               },
@@ -655,16 +655,16 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                     "value": "glossed to",
                   },
                   {
-                    "label": "prompt",
-                    "value": "prompt",
-                  },
-                  {
                     "label": "free translation",
                     "value": "free translation",
                   },
                   {
                     "label": "literal translation",
                     "value": "literal translation",
+                  },
+                  {
+                    "label": "elicited from a prompt",
+                    "value": "elicited from a prompt",
                   },
                 ],
               },
@@ -764,16 +764,16 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                         "value": "glossed to",
                       },
                       {
-                        "label": "prompt",
-                        "value": "prompt",
-                      },
-                      {
                         "label": "free translation",
                         "value": "free translation",
                       },
                       {
                         "label": "literal translation",
                         "value": "literal translation",
+                      },
+                      {
+                        "label": "elicited from a prompt",
+                        "value": "elicited from a prompt",
                       },
                     ],
                   },
