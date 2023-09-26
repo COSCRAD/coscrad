@@ -1,5 +1,5 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
-import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
+import { BooleanDataType, NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
@@ -18,14 +18,23 @@ import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-unde
 import { TextFieldContext } from '../../context/text-field-context/text-field-context.entity';
 import { Resource } from '../../resource.entity';
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
+import { CREATE_PROMPT_TERM } from '../commands/create-prompt-term/constants';
 import { CREATE_TERM } from '../commands/create-term/constants';
 import { TRANSLATE_TERM } from '../commands/translate-term/constants';
 
 const isOptional = true;
 
-@RegisterIndexScopedCommands([CREATE_TERM])
+@RegisterIndexScopedCommands([CREATE_TERM, CREATE_PROMPT_TERM])
 export class Term extends Resource {
     readonly type: ResourceType = ResourceType.term;
+
+    @BooleanDataType({
+        // TODO Write a migration and make this prop required on incoming DTOs
+        isOptional: true,
+        label: 'is prompt term',
+        description: 'flag for whether or not this is a prompt term',
+    })
+    readonly isPromptTerm?: boolean;
 
     // @NonEmptyString({
     //     isOptional,
@@ -50,11 +59,18 @@ export class Term extends Resource {
     })
     readonly text: MultilingualText;
 
+    /**
+     * Note  that eventually, we will track contributions as follows. Every
+     * command can be executed `onBehalfOfContributorWithId`. If this is specified,
+     * the corresponding event will be attributed to the contributor with this ID.
+     * Otherwise, it will be attributed to the system user.
+     */
     @NonEmptyString({
+        isOptional: true,
         label: 'contributor ID',
         description: 'reference to the contributor for this term',
     })
-    readonly contributorId: AggregateId;
+    readonly contributorId?: AggregateId;
 
     /**
      * TODO Make this a mediaItemId
@@ -66,6 +82,9 @@ export class Term extends Resource {
     })
     readonly audioFilename?: string;
 
+    /**
+     * TODO - This should be done via a tag or a note. Remove this property.
+     */
     @NonEmptyString({
         isOptional,
         label: 'Source Project',
@@ -80,7 +99,7 @@ export class Term extends Resource {
         // This should only happen in the validation context
         if (isNullOrUndefined(dto)) return;
 
-        const { contributorId, audioFilename, sourceProject, text } = dto;
+        const { contributorId, audioFilename, sourceProject, text, isPromptTerm } = dto;
 
         this.text = new MultilingualText(text);
 
@@ -89,6 +108,9 @@ export class Term extends Resource {
         this.audioFilename = audioFilename;
 
         this.sourceProject = sourceProject;
+
+        // we default to false for pre existing data
+        this.isPromptTerm = isNullOrUndefined(isPromptTerm) ? false : isPromptTerm;
     }
 
     getName(): MultilingualText {

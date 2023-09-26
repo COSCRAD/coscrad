@@ -6,7 +6,7 @@ type CoscradDataTypeToTypeScriptType = {
         id: string;
         type: string;
     };
-    [CoscradDataType.BOOLEAN]: boolean;
+    [CoscradDataType.Boolean]: boolean;
     [CoscradDataType.CompositeIdentifier]: { type: string; id: string };
     [CoscradDataType.ISBN]: string;
     [CoscradDataType.NonEmptyString]: string;

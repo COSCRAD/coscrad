@@ -1,6 +1,8 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
 import {
+    CreatePromptTerm,
+    CreatePromptTermCommandHandler,
     CreateTerm,
     CreateTermCommandHandler,
     TranslateTerm,
@@ -19,9 +21,10 @@ import { TermController } from '../controllers/resources/term.controller';
         CommandInfoService,
         TermQueryService,
         CreateTermCommandHandler,
+        CreatePromptTermCommandHandler,
         TranslateTermCommandHandler,
         // Data Classes
-        ...[CreateTerm, TranslateTerm].map((ctor) => ({
+        ...[CreateTerm, CreatePromptTerm, TranslateTerm].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
         })),

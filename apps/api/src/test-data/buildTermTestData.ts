@@ -74,6 +74,7 @@ export const buildTermsForVocabularyList = (): Term[] =>
             published: true,
             text: buildBilingualText(partialDto.term, partialDto.termEnglish),
             type: ResourceType.term,
+            isPromptTerm: false,
         }))
         .map((dto) => new Term(dto))
         .map(convertAggregatesIdToUuid);
@@ -116,7 +117,7 @@ export default (): Term[] => [
             },
         },
     ]
-        .map((dto) => new Term({ ...dto, type: ResourceType.term }))
+        .map((dto) => new Term({ ...dto, type: ResourceType.term, isPromptTerm: false }))
         .map(convertAggregatesIdToUuid),
     ...buildTermsForVocabularyList(),
 ];

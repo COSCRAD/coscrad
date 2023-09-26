@@ -1,3 +1,4 @@
+export * from './Boolean';
 export * from './CompositeIdentifier';
 export * from './Enum';
 export * from './ExternalEnum';

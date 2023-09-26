@@ -762,16 +762,16 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "value": "glossed to",
               },
               {
-                "label": "prompt",
-                "value": "prompt",
-              },
-              {
                 "label": "free translation",
                 "value": "free translation",
               },
               {
                 "label": "literal translation",
                 "value": "literal translation",
+              },
+              {
+                "label": "elicited from a prompt",
+                "value": "elicited from a prompt",
               },
             ],
           },
@@ -958,16 +958,16 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "value": "glossed to",
               },
               {
-                "label": "prompt",
-                "value": "prompt",
-              },
-              {
                 "label": "free translation",
                 "value": "free translation",
               },
               {
                 "label": "literal translation",
                 "value": "literal translation",
+              },
+              {
+                "label": "elicited from a prompt",
+                "value": "elicited from a prompt",
               },
             ],
           },
@@ -1079,16 +1079,16 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "value": "glossed to",
               },
               {
-                "label": "prompt",
-                "value": "prompt",
-              },
-              {
                 "label": "free translation",
                 "value": "free translation",
               },
               {
                 "label": "literal translation",
                 "value": "literal translation",
+              },
+              {
+                "label": "elicited from a prompt",
+                "value": "elicited from a prompt",
               },
             ],
           },
@@ -1181,16 +1181,16 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "value": "glossed to",
               },
               {
-                "label": "prompt",
-                "value": "prompt",
-              },
-              {
                 "label": "free translation",
                 "value": "free translation",
               },
               {
                 "label": "literal translation",
                 "value": "literal translation",
+              },
+              {
+                "label": "elicited from a prompt",
+                "value": "elicited from a prompt",
               },
             ],
           },
@@ -1283,7 +1283,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "reference to the contributor for this term",
     "isArray": false,
-    "isOptional": false,
+    "isOptional": true,
     "label": "contributor ID",
   },
   "id": {
@@ -1292,6 +1292,13 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "ID",
+  },
+  "isPromptTerm": {
+    "coscradDataType": "BOOLEAN",
+    "description": "flag for whether or not this is a prompt term",
+    "isArray": false,
+    "isOptional": true,
+    "label": "is prompt term",
   },
   "sourceProject": {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -1371,16 +1378,16 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "value": "glossed to",
               },
               {
-                "label": "prompt",
-                "value": "prompt",
-              },
-              {
                 "label": "free translation",
                 "value": "free translation",
               },
               {
                 "label": "literal translation",
                 "value": "literal translation",
+              },
+              {
+                "label": "elicited from a prompt",
+                "value": "elicited from a prompt",
               },
             ],
           },
@@ -1492,16 +1499,16 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "value": "glossed to",
               },
               {
-                "label": "prompt",
-                "value": "prompt",
-              },
-              {
                 "label": "free translation",
                 "value": "free translation",
               },
               {
                 "label": "literal translation",
                 "value": "literal translation",
+              },
+              {
+                "label": "elicited from a prompt",
+                "value": "elicited from a prompt",
               },
             ],
           },
@@ -1622,16 +1629,16 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                         "value": "glossed to",
                       },
                       {
-                        "label": "prompt",
-                        "value": "prompt",
-                      },
-                      {
                         "label": "free translation",
                         "value": "free translation",
                       },
                       {
                         "label": "literal translation",
                         "value": "literal translation",
+                      },
+                      {
+                        "label": "elicited from a prompt",
+                        "value": "elicited from a prompt",
                       },
                     ],
                   },
@@ -1891,16 +1898,16 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "value": "glossed to",
               },
               {
-                "label": "prompt",
-                "value": "prompt",
-              },
-              {
                 "label": "free translation",
                 "value": "free translation",
               },
               {
                 "label": "literal translation",
                 "value": "literal translation",
+              },
+              {
+                "label": "elicited from a prompt",
+                "value": "elicited from a prompt",
               },
             ],
           },
@@ -2021,16 +2028,16 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                         "value": "glossed to",
                       },
                       {
-                        "label": "prompt",
-                        "value": "prompt",
-                      },
-                      {
                         "label": "free translation",
                         "value": "free translation",
                       },
                       {
                         "label": "literal translation",
                         "value": "literal translation",
+                      },
+                      {
+                        "label": "elicited from a prompt",
+                        "value": "elicited from a prompt",
                       },
                     ],
                   },
@@ -2171,16 +2178,16 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "value": "glossed to",
               },
               {
-                "label": "prompt",
-                "value": "prompt",
-              },
-              {
                 "label": "free translation",
                 "value": "free translation",
               },
               {
                 "label": "literal translation",
                 "value": "literal translation",
+              },
+              {
+                "label": "elicited from a prompt",
+                "value": "elicited from a prompt",
               },
             ],
           },
