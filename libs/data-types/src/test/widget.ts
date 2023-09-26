@@ -14,6 +14,7 @@ import {
     UnionType,
     Year,
 } from '../lib/decorators';
+import { BooleanDataType } from '../lib/decorators/Boolean';
 import { TypeDecoratorOptions } from '../lib/decorators/types/TypeDecoratorOptions';
 import { BibliographicSubjectCreatorType, CoscradEnum } from '../lib/enums';
 import { CoscradUserRole } from '../lib/enums/CoscradUserRole';
@@ -151,6 +152,9 @@ export class Widget {
     @NonEmptyString({ isArray: true, ...buildDummyLabelAndDescription('siblingWidgetIds') })
     siblingWidgetIds = ['1', '2', '33'];
 
+    @BooleanDataType(buildDummyLabelAndDescription('isActive'))
+    isActive = true;
+
     constructor(dto: Widget) {
         Object.assign(this, dto);
     }
@@ -221,4 +225,6 @@ export const buildValidWidgetDto = (): Widget => ({
     parentWidgetId: '55',
 
     siblingWidgetIds: ['4', '33'],
+
+    isActive: false,
 });

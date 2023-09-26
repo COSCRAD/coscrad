@@ -72,7 +72,7 @@ const dataTypeToValidFuzz: DataTypeToFuzz = {
     [CoscradDataType.Year]: ['year', 'positiveInteger', 'zero'],
     [CoscradDataType.PositiveInteger]: ['year', 'positiveInteger'],
     [CoscradDataType.ISBN]: ['isbn10', 'isbn13'],
-    [CoscradDataType.BOOLEAN]: ['true', 'false'],
+    [CoscradDataType.Boolean]: ['true', 'false'],
     [CoscradDataType.String]: ['emptyString', 'arbitraryString', 'uuid', 'isbn10', 'isbn13'],
     // TODO Add valid example here
     [CoscradDataType.FixedValue]: [],

@@ -278,16 +278,16 @@ exports[`When querying for edge connections GET /connections/ should return the 
                   "value": "glossed to",
                 },
                 {
-                  "label": "prompt",
-                  "value": "prompt",
-                },
-                {
                   "label": "free translation",
                   "value": "free translation",
                 },
                 {
                   "label": "literal translation",
                   "value": "literal translation",
+                },
+                {
+                  "label": "elicited from a prompt",
+                  "value": "elicited from a prompt",
                 },
               ],
             },
@@ -373,16 +373,16 @@ exports[`When querying for edge connections GET /connections/ should return the 
                   "value": "glossed to",
                 },
                 {
-                  "label": "prompt",
-                  "value": "prompt",
-                },
-                {
                   "label": "free translation",
                   "value": "free translation",
                 },
                 {
                   "label": "literal translation",
                   "value": "literal translation",
+                },
+                {
+                  "label": "elicited from a prompt",
+                  "value": "elicited from a prompt",
                 },
               ],
             },
