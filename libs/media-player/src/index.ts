@@ -6,3 +6,4 @@ export * from './lib/audio-player';
 export * from './lib/default-clip-player-button';
 export * from './lib/shared/as-formatted-media-timecode-string';
 export * from './lib/video-player';
+export * from './lib/video-prototype-player';

@@ -46,7 +46,7 @@ export class CreateVideo implements ICommandBase {
     @ReferenceTo(AggregateType.mediaItem)
     @UUID({
         label: 'media item ID',
-        description: `the ID of the audio item's media item`,
+        description: `the ID of the video item's media item`,
     })
     readonly mediaItemId: AggregateId;
 

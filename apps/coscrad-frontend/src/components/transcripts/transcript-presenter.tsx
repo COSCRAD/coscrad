@@ -7,9 +7,17 @@ import { TranscriptItemsPresenter } from './transcript-items-presenter';
 
 interface TranscriptPresenterProps {
     transcript: ITranscript;
+    currentTime: number;
 }
 
-export const TranscriptPresenter = ({ transcript }: TranscriptPresenterProps): JSX.Element => {
+const compareNumbers = (a, b) => {
+    return a - b;
+};
+
+export const TranscriptPresenter = ({
+    transcript,
+    currentTime,
+}: TranscriptPresenterProps): JSX.Element => {
     if (isNullOrUndefined(transcript)) {
         return null;
     }
@@ -20,6 +28,32 @@ export const TranscriptPresenter = ({ transcript }: TranscriptPresenterProps): J
     if (participants.length === 0) return null;
 
     // We know at this point that we have at least one participant
+
+    // items.sort(compareNumbers);
+
+    // const onHighlight = () => {
+    //     return null;
+    // };
+
+    // const transcriptIntervalLookupTable = useMemo(() => {
+    //     items.reduce(
+    //         (accMap, { inPointMilliseconds, outPointMilliseconds, speakerInitials, text }) =>
+    //             accMap.set(
+    //                 inPointMilliseconds,
+    //                 <TranscriptLinePresenter
+    //                     key={`${inPointMilliseconds}-${speakerInitials}`}
+    //                     transcriptLine={{
+    //                         inPointMilliseconds: inPointMilliseconds,
+    //                         outPointMilliseconds: outPointMilliseconds,
+    //                         speakerInitials: speakerInitials,
+    //                         text: text,
+    //                     }}
+    //                     onHighlight={onHighlight}
+    //                 />
+    //             ),
+    //         new Map()
+    //     );
+    // }, []);
 
     return (
         <Card elevation={0}>
