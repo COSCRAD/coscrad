@@ -87,7 +87,9 @@ export const CoscradLinearProgressBar = ({
 
             setRangeBar({ ...rangeBar, width: `${width}%` });
 
-            console.log(`start: ${start} width: ${width} progress: ${progress} end: ${end}`);
+            console.log(
+                `Outpoint - start: ${start} width: ${width} progress: ${progress} end: ${end}`
+            );
 
             rangeBarRef.current!.style.borderRight = '1px solid red';
         }
@@ -100,7 +102,9 @@ export const CoscradLinearProgressBar = ({
 
         const start = (inPointMilliseconds / mediaDuration) * 100;
 
-        console.log(`start: ${start}% = in: ${inPointMilliseconds} / dur: ${mediaDuration}`);
+        console.log(
+            `Inpoint - start: ${start}% = in: ${inPointMilliseconds} / dur: ${mediaDuration}`
+        );
 
         setRangeBar({ start: `${start}%`, width: `2px` });
 
