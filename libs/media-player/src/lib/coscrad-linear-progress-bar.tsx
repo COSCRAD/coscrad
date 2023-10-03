@@ -78,22 +78,6 @@ export const CoscradLinearProgressBar = ({
     };
 
     useEffect(() => {
-        if (!isNullOrUndefined(inPointMilliseconds) && !isNullOrUndefined(outPointMilliseconds)) {
-            const start = (inPointMilliseconds / mediaDuration) * 100;
-
-            const end = (outPointMilliseconds / mediaDuration) * 100;
-
-            const width = end - start;
-
-            setRangeBar({ ...rangeBar, width: `${width}%` });
-
-            console.log(
-                `Outpoint - start: ${start} width: ${width} progress: ${progress} end: ${end}`
-            );
-
-            rangeBarRef.current!.style.borderRight = '1px solid red';
-        }
-
         if (isNullOrUndefined(inPointMilliseconds)) {
             clearRangeBar();
 
@@ -106,7 +90,22 @@ export const CoscradLinearProgressBar = ({
             `Inpoint - start: ${start}% = in: ${inPointMilliseconds} / dur: ${mediaDuration}`
         );
 
-        setRangeBar({ start: `${start}%`, width: `2px` });
+        if (isNullOrUndefined(outPointMilliseconds))
+            setRangeBar({ start: `${start}%`, width: `2px` });
+
+        if (!isNullOrUndefined(outPointMilliseconds)) {
+            const end = (outPointMilliseconds / mediaDuration) * 100;
+
+            const width = end - start;
+
+            setRangeBar({ ...rangeBar, width: `${width}%` });
+
+            console.log(
+                `Outpoint - start: ${start} width: ${width} progress: ${progress} end: ${end}`
+            );
+
+            rangeBarRef.current!.style.borderRight = '1px solid red';
+        }
 
         rangeBarRef.current!.style.visibility = 'visible';
     }, [inPointMilliseconds, outPointMilliseconds]);
