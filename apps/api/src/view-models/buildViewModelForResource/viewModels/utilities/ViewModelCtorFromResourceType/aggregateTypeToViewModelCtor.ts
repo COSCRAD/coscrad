@@ -11,6 +11,7 @@ import { BookViewModel } from '../../book.view-model';
 import { CategoryTreeViewModel } from '../../category-tree.view-model';
 import { CoscradUserGroupViewModel } from '../../coscrad-user-group.view-model';
 import { CoscradUserViewModel } from '../../coscrad-user.view-model';
+import { DigitalTextViewModel } from '../../digital-text.view-model';
 import { MediaItemViewModel } from '../../media-item.view-model';
 import { PhotographViewModel } from '../../photograph.view-model';
 import { PlaylistViewModel } from '../../playlist.view-model';
@@ -23,6 +24,7 @@ import { VocabularyListViewModel } from '../../vocabulary-list.view-model';
 export const aggregateTypeToViewModelCtor: { [K in AggregateType]: Ctor<BaseViewModel> } = {
     [ResourceType.bibliographicReference]: BibliographicReferenceViewModel,
     [ResourceType.book]: BookViewModel,
+    [ResourceType.digitalText]: DigitalTextViewModel,
     [ResourceType.mediaItem]: MediaItemViewModel,
     [ResourceType.photograph]: PhotographViewModel,
     [ResourceType.song]: SongViewModel,

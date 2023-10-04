@@ -12,6 +12,7 @@ const resourceTypeToArangoCollectionID: {
     [ResourceType.vocabularyList]: ArangoResourceCollectionId.vocabulary_lists,
     [ResourceType.audioItem]: ArangoResourceCollectionId.audio_items,
     [ResourceType.book]: ArangoResourceCollectionId.books,
+    [ResourceType.digitalText]: ArangoResourceCollectionId.digital_text,
     [ResourceType.photograph]: ArangoResourceCollectionId.photographs,
     [ResourceType.spatialFeature]: ArangoResourceCollectionId.spatial_features,
     [ResourceType.bibliographicReference]: ArangoResourceCollectionId.bibliographic_references,

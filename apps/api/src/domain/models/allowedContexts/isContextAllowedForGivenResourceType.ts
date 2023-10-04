@@ -17,6 +17,7 @@ import { EdgeConnectionContextType } from '../context/types/EdgeConnectionContex
  *
  */
 const resourceTypeToAllowedContextTypes: Record<ResourceType, string[]> = {
+    [ResourceType.digitalText]: [EdgeConnectionContextType.general],
     [ResourceType.book]: [
         EdgeConnectionContextType.general,
         EdgeConnectionContextType.identity,
