@@ -39,7 +39,7 @@ import {
 import {
     SONG_TITLE_TRANSLATED,
     TRANSLATE_SONG_TITLE,
-} from './commands/translate-song-title/consants';
+} from './commands/translate-song-title/constants';
 import { CannotAddDuplicateSetOfLyricsForSongError, NoLyricsToTranslateError } from './errors';
 import { SongLyricsHaveAlreadyBeenTranslatedToGivenLanguageError } from './errors/SongLyricsAlreadyHaveBeenTranslatedToGivenLanguageError';
 

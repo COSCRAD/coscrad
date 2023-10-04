@@ -6,6 +6,7 @@ import { Video } from '../../models/audio-item/entities/video.entity';
 import { Book } from '../../models/book/entities/book.entity';
 import { Category } from '../../models/categories/entities/category.entity';
 import { EdgeConnection } from '../../models/context/edge-connection.entity';
+import { DigitalText } from '../../models/digital-text/digital-text.entity';
 import { MediaItem } from '../../models/media-item/entities/media-item.entity';
 import { Photograph } from '../../models/photograph/entities/photograph.entity';
 import { Playlist } from '../../models/playlist';
@@ -35,6 +36,7 @@ export const aggregateTypeToAggregateCtor: {
     [AggregateType.note]: EdgeConnection,
     [AggregateType.photograph]: Photograph,
     [AggregateType.song]: Song,
+    [AggregateType.digitalText]: DigitalText,
     [AggregateType.term]: Term,
     // These casts are due to the mixin. Note the subtle difference between value (Ctor) and type (Instance type)
     [AggregateType.audioItem]: AudioItem as unknown as DomainModelCtor<AudioItem>,
