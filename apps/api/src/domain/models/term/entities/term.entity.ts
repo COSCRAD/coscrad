@@ -133,6 +133,22 @@ export class Term extends Resource {
         });
     }
 
+    elicitFromPrompt(text: string, languageCode: LanguageCode): ResultOrError<Term> {
+        const textUpdateResult = this.text.translate(
+            new MultilingualTextItem({
+                role: MultilingualTextItemRole.elicitedFromPrompt,
+                languageCode,
+                text,
+            })
+        );
+
+        if (isInternalError(textUpdateResult)) return textUpdateResult;
+
+        return this.safeClone<Term>({
+            text: textUpdateResult,
+        });
+    }
+
     protected getResourceSpecificAvailableCommands(): string[] {
         return [TRANSLATE_TERM];
     }

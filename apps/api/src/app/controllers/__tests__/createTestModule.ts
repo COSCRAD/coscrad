@@ -108,6 +108,8 @@ import {
     CreatePromptTermCommandHandler,
     CreateTerm,
     CreateTermCommandHandler,
+    ElicitTermFromPrompt,
+    ElicitTermFromPromptCommandHandler,
     TranslateTerm,
     TranslateTermCommandHandler,
 } from '../../../domain/models/term/commands';
@@ -545,6 +547,8 @@ export default async (
             CreateTermCommandHandler,
             CreatePromptTerm,
             CreatePromptTermCommandHandler,
+            ElicitTermFromPrompt,
+            ElicitTermFromPromptCommandHandler,
             TranslateTerm,
             TranslateTermCommandHandler,
             CreatePoint,
