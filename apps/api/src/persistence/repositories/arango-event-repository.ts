@@ -8,7 +8,7 @@ import { ArangoCollectionId } from '../database/collection-references/ArangoColl
 import { ArangoDatabaseProvider } from '../database/database.provider';
 import mapDatabaseDocumentToAggregateDTO from '../database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDTO from '../database/utilities/mapEntityDTOToDatabaseDTO';
-import { IEventRepository } from './arango-command-repository-for-aggregate';
+import { IEventRepository } from './arango-song-command-repository';
 
 @Injectable()
 export class ArangoEventRepository implements IEventRepository {

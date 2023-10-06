@@ -44,4 +44,32 @@ export class DigitalText extends Resource {
     protected getExternalReferences(): AggregateCompositeIdentifier[] {
         return [];
     }
+
+    // static fromEventHistory(
+    //     eventStream: BaseEvent[],
+    //     idOfDigitalTextToCreate: AggregateId
+    // ): Maybe<ResultOrError<DigitalText>> {
+    //     const eventsForThisDigitalText = eventStream.filter(({ payload }) =>
+    //         isDeepStrictEqual((payload as ICommandBase)[AGGREGATE_COMPOSITE_IDENTIFIER], {
+    //             type: AggregateType.digitalText,
+    //             id: idOfDigitalTextToCreate,
+    //         })
+    //     );
+    //     if (eventsForThisDigitalText.length === 0) return NotFound;
+
+    //     const [creationEvent, ...updateEvents] = eventsForThisDigitalText;
+
+    //     if (creationEvent.type !== `DIGITAL_TEXT_CREATED`) {
+    //         throw new InternalError(
+    //             `The first event for ${formatAggregateCompositeIdentifier({
+    //                 type: AggregateType.digitalText,
+    //                 id: idOfDigitalTextToCreate,
+    //             })} should have been of type DIGITAL_TEXT_CREATED, but found: ${
+    //                 creationEvent?.type
+    //             }`
+    //         );
+    //     }
+
+    //     const { title } = creationEvent.payload as CreateDigitalText;
+    // }
 }

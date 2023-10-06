@@ -20,10 +20,10 @@ import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDocument
 import mapEdgeConnectionDTOToArangoEdgeDocument from '../database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
 import mapEntityDTOToDatabaseDTO from '../database/utilities/mapEntityDTOToDatabaseDTO';
 import ArangoCategoryRepository from './ArangoCategoryRepository';
-import { ArangoSongCommandRepository } from './arango-command-repository-for-aggregate';
 import { ArangoCoscradUserRepository } from './arango-coscrad-user-repository';
 import { ArangoEventRepository } from './arango-event-repository';
 import { ArangoRepositoryForAggregate } from './arango-repository-for-aggregate';
+import { ArangoSongCommandRepository } from './arango-song-command-repository';
 
 @Injectable()
 export class ArangoRepositoryProvider implements IRepositoryProvider {

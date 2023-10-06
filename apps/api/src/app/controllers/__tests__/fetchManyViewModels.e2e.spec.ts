@@ -1,4 +1,5 @@
 import { INestApplication } from '@nestjs/common';
+import { IEventRepository } from 'apps/api/src/persistence/repositories/arango-command-repository-for-aggregate';
 import * as request from 'supertest';
 import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../domain/models/__tests__/utilities/dummySystemUserId';
@@ -11,7 +12,6 @@ import { clonePlainObjectWithOverrides } from '../../../lib/utilities/clonePlain
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { IEventRepository } from '../../../persistence/repositories/arango-command-repository-for-aggregate';
 import { ArangoEventRepository } from '../../../persistence/repositories/arango-event-repository';
 import buildTestData from '../../../test-data/buildTestData';
 import httpStatusCodes from '../../constants/httpStatusCodes';
