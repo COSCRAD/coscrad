@@ -183,6 +183,49 @@ Book {
 }
 `;
 
+exports[`Aggregate factories when attempting to build an instance of type: digitalText from a DTO when the DTO is valid valid digital text should succeed 1`] = `
+DigitalText {
+  "eventHistory": [
+    {
+      "meta": {
+        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
+      },
+      "payload": {
+        "aggregateCompositeIdentifier": {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          "type": "digitalText",
+        },
+        "languageCodeForTitle": "hai",
+        "title": "Court Case Digital Text title in language",
+      },
+      "type": "DIGITAL_TEXT_CREATED",
+    },
+  ],
+  "getCompositeIdentifier": [Function],
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+  "published": true,
+  "queryAccessControlList": AccessControlList {
+    "allowedGroupIds": [],
+    "allowedUserIds": [],
+  },
+  "title": MultilingualText {
+    "items": [
+      MultilingualTextItem {
+        "languageCode": "hai",
+        "role": "original",
+        "text": "Court Case Digital Text title in language",
+      },
+      MultilingualTextItem {
+        "languageCode": "en",
+        "role": "free translation",
+        "text": "Court Case Digital Text title (English)",
+      },
+    ],
+  },
+  "type": "digitalText",
+}
+`;
+
 exports[`Aggregate factories when attempting to build an instance of type: mediaItem from a DTO when the DTO is valid valid media item should succeed 1`] = `
 MediaItem {
   "contributorAndRoles": [

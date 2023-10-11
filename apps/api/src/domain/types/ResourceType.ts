@@ -16,6 +16,7 @@ import { VocabularyList } from '../models/vocabulary-list/entities/vocabulary-li
 
 import { ResourceType } from '@coscrad/api-interfaces';
 import { Video } from '../models/audio-item/entities/video.entity';
+import { DigitalText } from '../models/digital-text/digital-text.entity';
 import { Playlist } from '../models/playlist';
 
 export { ResourceType };
@@ -39,6 +40,7 @@ export type ResourceTypeToResourceModel = {
     photograph: Photograph;
     spatialFeature: ISpatialFeature;
     bibliographicReference: IBibliographicReference;
+    digitalText: DigitalText;
     song: Song;
     mediaItem: MediaItem;
     playlist: Playlist;

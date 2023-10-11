@@ -3,7 +3,7 @@ import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { LanguageCodeEnum } from '../../../../../domain/common/entities/multilingual-text';
 import { SongCompositeId } from '../create-song.command';
-import { TRANSLATE_SONG_TITLE } from './consants';
+import { TRANSLATE_SONG_TITLE } from './constants';
 
 @Command({
     type: TRANSLATE_SONG_TITLE,

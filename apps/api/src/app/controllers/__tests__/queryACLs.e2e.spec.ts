@@ -80,12 +80,17 @@ const checkThatDetailQueryDoesNotFind = async (
 
 const fullSnapshotOfResources = buildTestData().resources;
 
-const eventSourcedResourceTypes = [ResourceType.song];
+const resourceTypesThatHaveStandaloneQueryTests = [
+    ResourceType.digitalText,
+
+    // TODO write standalone query test
+    ResourceType.song,
+];
 
 describe('Access Control List and Role Based filtering in resource queries', () => {
     Object.values(ResourceType)
         // TODO [https://www.pivotaltracker.com/story/show/185903292] Support event-sourced resources in this test
-        .filter((rt) => !eventSourcedResourceTypes.includes(rt))
+        .filter((rt) => !resourceTypesThatHaveStandaloneQueryTests.includes(rt))
         .forEach((resourceType) => {
             const endpointUnderTest = `/${buildViewModelPathForResourceType(resourceType)}`;
 
