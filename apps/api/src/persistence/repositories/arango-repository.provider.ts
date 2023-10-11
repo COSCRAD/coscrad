@@ -74,11 +74,13 @@ export class ArangoRepositoryProvider implements IRepositoryProvider {
         );
     }
 
+    // TODO: explain why this isn't forAggregate()
     forResource<TResource extends Resource>(resourceType: ResourceType) {
         const snapshotRepository = new ArangoRepositoryForAggregate<TResource>(
             this.databaseProvider,
             getArangoCollectionIDFromResourceType(resourceType),
             getInstanceFactoryForResource(resourceType),
+            // TODO: rename following functions to be arango specific
             mapDatabaseDTOToEntityDTO,
             mapEntityDTOToDatabaseDTO
         );

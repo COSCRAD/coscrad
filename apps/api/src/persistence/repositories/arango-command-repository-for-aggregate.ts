@@ -30,11 +30,10 @@ export interface IEventRepository {
 
 // THIS IS A PROTOTYPE, WE WOULD ABSTRACT OVER THE AGGREGATE TYPE
 export class ArangoSongCommandRepository implements IRepositoryForAggregate<Song> {
-    private readonly aggregateType = AggregateType.song;
-
     constructor(
         @Inject(ArangoEventRepository) private readonly eventRepository: IEventRepository,
-        private readonly snapshotRepositoryForAggregate: IRepositoryForAggregate<Song>
+        private readonly snapshotRepositoryForAggregate: IRepositoryForAggregate<Song>,
+        private readonly aggregateType: AggregateType
     ) {}
 
     async fetchById(id: AggregateId): Promise<Maybe<ResultOrError<Song>>> {
@@ -43,12 +42,14 @@ export class ArangoSongCommandRepository implements IRepositoryForAggregate<Song
             id,
         });
 
+        // Specific to Song
+
         return Song.fromEventHistory(eventStream, id);
     }
 
     async fetchMany(specification?: ISpecification<Song>): Promise<ResultOrError<Song>[]> {
         const eventStream = await this.eventRepository.fetchEvents({
-            type: AggregateType.song,
+            type: this.aggregateType,
         });
 
         if (specification) {
@@ -65,6 +66,7 @@ export class ArangoSongCommandRepository implements IRepositoryForAggregate<Song
             ),
         ];
 
+        // Specific to Song
         const allSongs = uniqueIds
             .map((id) => Song.fromEventHistory(eventStream, id))
             .filter((result): result is ResultOrError<Song> => !isNotFound(result));
@@ -79,6 +81,8 @@ export class ArangoSongCommandRepository implements IRepositoryForAggregate<Song
     }
 
     async create(entity: Song) {
+        throw new InternalError(`You should use the event repository append method`);
+
         const { eventHistory } = entity;
 
         if (eventHistory.length > 1) {
@@ -110,7 +114,11 @@ export class ArangoSongCommandRepository implements IRepositoryForAggregate<Song
      * would be to write many events and then expose a method on the
      * `Snapshot Repository` to refresh the cache (i.e., event source from scratch).
      */
+
+    // Specific to Song - type only
     async createMany(entities: Song[]) {
+        throw new InternalError(`You should use the event repository append method`);
+
         if (entities.length === 0) return;
 
         await Promise.all(entities.map((entity) => this.create(entity)));
@@ -125,6 +133,8 @@ export class ArangoSongCommandRepository implements IRepositoryForAggregate<Song
      * do not expose to the client the ability to merge updates to the database
      * directly.
      */
+
+    // Specific to Song - type only
     async update(updatedEntity: Song): Promise<void> {
         // Should the event history be an array of instances? << DO this!
         const { eventHistory = [] } = updatedEntity;
