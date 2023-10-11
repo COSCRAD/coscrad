@@ -1834,6 +1834,10 @@ exports[`When querying for edge connections GET /connections/notes should return
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
               "type": "video",
             },
+            {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+              "type": "digitalText",
+            },
           ],
           "name": {
             "items": [
@@ -1889,14 +1893,10 @@ exports[`When querying for edge connections GET /connections/notes should return
         {
           "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-            "type": "song",
+            "type": "digitalText",
           },
           "context": {
-            "timeRange": {
-              "inPointMilliseconds": 300,
-              "outPointMilliseconds": 500,
-            },
-            "type": "timeRange",
+            "type": "general",
           },
           "role": "self",
         },
@@ -1908,7 +1908,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "A note about song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "text": "A note about digitalText/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           },
         ],
       },
@@ -1917,7 +1917,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "this is a song",
+            "text": "digital representation of a journal article",
           },
         ],
       },
@@ -1958,6 +1958,10 @@ exports[`When querying for edge connections GET /connections/notes should return
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
               "type": "note",
             },
+            {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+              "type": "digitalText",
+            },
           ],
           "name": {
             "items": [
@@ -1970,6 +1974,46 @@ exports[`When querying for edge connections GET /connections/notes should return
           },
         },
       ],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "song",
+          },
+          "context": {
+            "timeRange": {
+              "inPointMilliseconds": 300,
+              "outPointMilliseconds": 500,
+            },
+            "type": "timeRange",
+          },
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110010",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "A note about song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          },
+        ],
+      },
+      "note": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "this is a song",
+          },
+        ],
+      },
+      "tags": [],
     },
     {
       "actions": [],
@@ -1990,7 +2034,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110010",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
       "name": {
         "items": [
           {
@@ -2006,42 +2050,6 @@ exports[`When querying for edge connections GET /connections/notes should return
             "languageCode": "en",
             "role": "original",
             "text": "important clip from the show",
-          },
-        ],
-      },
-      "tags": [],
-    },
-    {
-      "actions": [],
-      "connectedResources": [
-        {
-          "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-            "type": "bibliographicReference",
-          },
-          "context": {
-            "type": "general",
-          },
-          "role": "self",
-        },
-      ],
-      "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
-      "name": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "A note about bibliographicReference/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-          },
-        ],
-      },
-      "note": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "this book is hard to track down",
           },
         ],
       },
@@ -2082,6 +2090,10 @@ exports[`When querying for edge connections GET /connections/notes should return
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
               "type": "note",
             },
+            {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+              "type": "digitalText",
+            },
           ],
           "name": {
             "items": [
@@ -2094,6 +2106,42 @@ exports[`When querying for edge connections GET /connections/notes should return
           },
         },
       ],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "bibliographicReference",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "A note about bibliographicReference/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          },
+        ],
+      },
+      "note": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "this book is hard to track down",
+          },
+        ],
+      },
+      "tags": [],
     },
     {
       "actions": [],
@@ -2114,7 +2162,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013",
       "name": {
         "items": [
           {
@@ -2150,7 +2198,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
       "name": {
         "items": [
           {
@@ -2186,7 +2234,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
       "name": {
         "items": [
           {
@@ -2222,7 +2270,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
       "name": {
         "items": [
           {
@@ -2258,7 +2306,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
       "name": {
         "items": [
           {
@@ -2294,7 +2342,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
       "name": {
         "items": [
           {
@@ -2330,7 +2378,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110019",
       "name": {
         "items": [
           {
@@ -2366,7 +2414,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110019",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110020",
       "name": {
         "items": [
           {
@@ -2402,7 +2450,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110020",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110021",
       "name": {
         "items": [
           {
@@ -2438,7 +2486,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110021",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110022",
       "name": {
         "items": [
           {
@@ -2852,6 +2900,10 @@ exports[`When querying for edge connections GET /connections/notes should return
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
               "type": "video",
             },
+            {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+              "type": "digitalText",
+            },
           ],
           "name": {
             "items": [
@@ -2881,14 +2933,10 @@ exports[`When querying for edge connections GET /connections/notes should return
         {
           "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-            "type": "song",
+            "type": "digitalText",
           },
           "context": {
-            "timeRange": {
-              "inPointMilliseconds": 300,
-              "outPointMilliseconds": 500,
-            },
-            "type": "timeRange",
+            "type": "general",
           },
           "role": "from",
         },
@@ -2900,7 +2948,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "A connection from song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to spatialFeature/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
+            "text": "A connection from digitalText/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to spatialFeature/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
           },
         ],
       },
@@ -2909,7 +2957,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "That is why spatialFeature/300 is related to song/1",
+            "text": "That is why spatialFeature/300 is related to digitalText/1",
           },
         ],
       },
@@ -2950,6 +2998,10 @@ exports[`When querying for edge connections GET /connections/notes should return
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
               "type": "note",
             },
+            {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+              "type": "digitalText",
+            },
           ],
           "name": {
             "items": [
@@ -2962,6 +3014,56 @@ exports[`When querying for edge connections GET /connections/notes should return
           },
         },
       ],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "digitalText",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "to",
+        },
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "song",
+          },
+          "context": {
+            "timeRange": {
+              "inPointMilliseconds": 300,
+              "outPointMilliseconds": 500,
+            },
+            "type": "timeRange",
+          },
+          "role": "from",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112006",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "A connection from song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to digitalText/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          },
+        ],
+      },
+      "note": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "That is why digitalText/1 is related to song/1",
+          },
+        ],
+      },
+      "tags": [],
     },
     {
       "actions": [],
@@ -2996,7 +3098,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "dual",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112006",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112007",
       "name": {
         "items": [
           {
@@ -3046,7 +3148,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "dual",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112007",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112008",
       "name": {
         "items": [
           {
@@ -3098,7 +3200,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "dual",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112008",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112009",
       "name": {
         "items": [
           {
@@ -3933,6 +4035,52 @@ exports[`When querying for edge connections GET /connections/notes should return
             "languageCode": "en",
             "role": "original",
             "text": "this media item is mentioned in the text",
+          },
+        ],
+      },
+      "tags": [],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "digitalText",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "to",
+        },
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "type": "song",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "from",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113111",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "A connection from song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002 to digitalText/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          },
+        ],
+      },
+      "note": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "this song is mentioned in the digital representation of a text",
           },
         ],
       },

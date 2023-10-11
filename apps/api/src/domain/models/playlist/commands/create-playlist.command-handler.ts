@@ -29,6 +29,7 @@ export class CreatePlayListCommandHandler extends BaseCreateCommandHandler<Playl
 
     protected repositoryForCommandsTargetAggregate: IRepositoryForAggregate<Playlist>;
 
+    // TODO: double check if this is still needed
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN)
         protected readonly repositoryProvider: IRepositoryProvider,

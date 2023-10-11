@@ -38,6 +38,10 @@
                     {
                         "type": "note",
                         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011"
+                    },
+                    {
+                        "type": "digitalText",
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
                     }
                 ]
             },
@@ -74,6 +78,10 @@
                     {
                         "type": "video",
                         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223"
+                    },
+                    {
+                        "type": "digitalText",
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002"
                     }
                 ]
             },
@@ -225,6 +233,10 @@
                     {
                         "type": "term",
                         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002"
+                    },
+                    {
+                        "type": "digitalText",
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002"
                     }
                 ],
                 "type": "category"
@@ -232,7 +244,12 @@
             {
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
                 "label": "felines",
-                "members": [],
+                "members": [
+                    {
+                        "type": "digitalText",
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
+                    }
+                ],
                 "type": "category"
             },
             {
@@ -1462,6 +1479,83 @@
                 }
             }
         ],
+        "digital_texts": [
+            {
+                "type": "digitalText",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "eventHistory": [
+                    {
+                        "payload": {
+                            "aggregateCompositeIdentifier": {
+                                "type": "digitalText",
+                                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
+                            },
+                            "title": "Court Case Digital Text title in language",
+                            "languageCodeForTitle": "hai"
+                        },
+                        "meta": {
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009"
+                        },
+                        "type": "DIGITAL_TEXT_CREATED"
+                    }
+                ],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "title": {
+                    "items": [
+                        {
+                            "languageCode": "hai",
+                            "role": "original",
+                            "text": "Court Case Digital Text title in language"
+                        },
+                        {
+                            "languageCode": "en",
+                            "role": "free translation",
+                            "text": "Court Case Digital Text title (English)"
+                        }
+                    ]
+                }
+            },
+            {
+                "type": "digitalText",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "eventHistory": [
+                    {
+                        "payload": {
+                            "aggregateCompositeIdentifier": {
+                                "type": "digitalText",
+                                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002"
+                            },
+                            "title": "Digital Text number two title",
+                            "languageCodeForTitle": "en"
+                        },
+                        "meta": {
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009"
+                        },
+                        "type": "DIGITAL_TEXT_CREATED"
+                    }
+                ],
+                "published": false,
+                "queryAccessControlList": {
+                    "allowedUserIds": [
+                        "1"
+                    ],
+                    "allowedGroupIds": []
+                },
+                "title": {
+                    "items": [
+                        {
+                            "languageCode": "en",
+                            "role": "original",
+                            "text": "Digital Text number two title"
+                        }
+                    ]
+                }
+            }
+        ],
         "songs": [
             {
                 "type": "song",
@@ -2039,10 +2133,35 @@
                 }
             },
             {
+                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "type": "note",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "en",
+                            "role": "original",
+                            "text": "digital representation of a journal article"
+                        }
+                    ]
+                }
+            },
+            {
                 "_to": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110010",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2071,7 +2190,7 @@
                 "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110010",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2100,7 +2219,7 @@
                 "_to": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2125,7 +2244,7 @@
                 "_to": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
                 "_from": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2154,7 +2273,7 @@
                 "_to": "playlists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
                 "_from": "playlists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2179,7 +2298,7 @@
                 "_to": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "_from": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2204,7 +2323,7 @@
                 "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2229,7 +2348,7 @@
                 "_to": "vocabulary_lists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "_from": "vocabulary_lists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2254,7 +2373,7 @@
                 "_to": "audio_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
                 "_from": "audio_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2279,7 +2398,7 @@
                 "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110019",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2304,7 +2423,7 @@
                 "_to": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110019",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110020",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2329,7 +2448,7 @@
                 "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110020",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110021",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2354,7 +2473,7 @@
                 "_to": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
                 "_from": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110021",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110022",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2564,9 +2683,40 @@
             },
             {
                 "_to": "spatial_features/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
-                "_from": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "general"
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "en",
+                            "role": "original",
+                            "text": "That is why spatialFeature/300 is related to digitalText/1"
+                        }
+                    ]
+                }
+            },
+            {
+                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_from": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "type": "note",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112006",
                 "eventHistory": [],
                 "connectionType": "dual",
                 "members": [
@@ -2592,7 +2742,7 @@
                         {
                             "languageCode": "en",
                             "role": "original",
-                            "text": "That is why spatialFeature/300 is related to song/1"
+                            "text": "That is why digitalText/1 is related to song/1"
                         }
                     ]
                 }
@@ -2601,7 +2751,7 @@
                 "_to": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112006",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112007",
                 "eventHistory": [],
                 "connectionType": "dual",
                 "members": [
@@ -2640,7 +2790,7 @@
                 "_to": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
                 "_from": "playlists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112007",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112008",
                 "eventHistory": [],
                 "connectionType": "dual",
                 "members": [
@@ -2675,7 +2825,7 @@
                 "_to": "playlists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
                 "_from": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112008",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112009",
                 "eventHistory": [],
                 "connectionType": "dual",
                 "members": [
@@ -3268,6 +3418,37 @@
                             "languageCode": "en",
                             "role": "original",
                             "text": "this media item is mentioned in the text"
+                        }
+                    ]
+                }
+            },
+            {
+                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_from": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "type": "note",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113111",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "general"
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "en",
+                            "role": "original",
+                            "text": "this song is mentioned in the digital representation of a text"
                         }
                     ]
                 }

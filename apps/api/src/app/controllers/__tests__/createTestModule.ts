@@ -60,6 +60,12 @@ import { PageRangeContext } from '../../../domain/models/context/page-range-cont
 import { PointContext } from '../../../domain/models/context/point-context/point-context.entity';
 import { TextFieldContext } from '../../../domain/models/context/text-field-context/text-field-context.entity';
 import { TimeRangeContext } from '../../../domain/models/context/time-range-context/time-range-context.entity';
+import {
+    CreateDigitalText,
+    CreateDigitalTextCommandHandler,
+    DigitalTextCreated,
+} from '../../../domain/models/digital-text/commands';
+import { DigitalText } from '../../../domain/models/digital-text/digital-text.entity';
 import { CreateMediaItem } from '../../../domain/models/media-item/commands/create-media-item.command';
 import { CreateMediaItemCommandHandler } from '../../../domain/models/media-item/commands/create-media-item.command-handler';
 import {
@@ -79,6 +85,8 @@ import { ResourcePublished } from '../../../domain/models/shared/common-commands
 import {
     AddLyricsForSong,
     AddLyricsForSongCommandHandler,
+    CreateSong,
+    CreateSongCommandHandler,
     LyricsAddedForSong,
     SongCreated,
     SongLyricsTranslated,
@@ -88,8 +96,6 @@ import {
     TranslateSongTitle,
     TranslateSongTitleCommandHandler,
 } from '../../../domain/models/song/commands';
-import { CreateSong } from '../../../domain/models/song/commands/create-song.command';
-import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
 import { Song } from '../../../domain/models/song/song.entity';
 import {
     CreatePoint,
@@ -230,12 +236,14 @@ export const buildAllDataClassProviders = () =>
         IdentityContext,
         // Events
         CoscradEventUnion,
+        DigitalTextCreated,
         SongCreated,
         SongTitleTranslated,
         LyricsAddedForSong,
         SongLyricsTranslated,
         ResourcePublished,
         // Aggregate Root Domain Models
+        DigitalText,
         Song,
     ].map((ctor: Ctor<unknown>) => ({
         provide: ctor,
@@ -503,6 +511,8 @@ export default async (
             CreateCourtCaseBibliographicReferenceCommandHandler,
             CreateJournalArticleBibliographicReference,
             CreateJournalArticleBibliographicReferenceCommandHandler,
+            CreateDigitalText,
+            CreateDigitalTextCommandHandler,
             RegisterUser,
             RegisterUserCommandHandler,
             CreateGroup,

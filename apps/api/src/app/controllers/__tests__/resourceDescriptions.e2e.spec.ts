@@ -4,6 +4,7 @@ import { ResourceType } from '../../../domain/types/ResourceType';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DynamicDataTypeFinderService } from '../../../validation';
+import { ResourceTypesWhoseViewsAreSourcedFromSnapshots } from '../../../view-models/buildViewModelForResource/viewModels/utilities/ViewModelCtorFromResourceType';
 import { AggregateInfo } from '../../../view-models/resourceDescriptions/types/AggregateInfo';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from './setUpIntegrationTest';
@@ -35,10 +36,15 @@ describe('GET /resources', () => {
         const body = result.body as AggregateInfo[];
 
         // TODO [optimization]: avoid loop within loop here
-        const isThereAnEntryForEveryResourceType = Object.values(ResourceType).every(
-            (resourceType) =>
+        const isThereAnEntryForEveryResourceType = Object.values(ResourceType)
+            .filter(
+                //  TODO Remove this constraint
+                (resourceType): resourceType is ResourceTypesWhoseViewsAreSourcedFromSnapshots =>
+                    resourceType !== ResourceType.digitalText
+            )
+            .every((resourceType) =>
                 body.some(({ type: responseResourceType }) => resourceType === responseResourceType)
-        );
+            );
 
         expect(isThereAnEntryForEveryResourceType).toBe(true);
     });
