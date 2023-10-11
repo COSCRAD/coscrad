@@ -55,11 +55,16 @@ describe('When fetching multiple resources', () => {
         eventRepository = app.get(ArangoEventRepository);
     });
 
-    const eventSourcedResourceTypes = [ResourceType.song];
+    const resourceTypesThatHaveStandaloneQueryTests = [
+        AggregateType.digitalText,
+
+        // TODO add standalone query test for song
+        AggregateType.song,
+    ];
 
     Object.values(ResourceType)
         // TODO [https://www.pivotaltracker.com/story/show/185903292] opt-in to tests for event-sourced aggregates as well
-        .filter((resourceType) => !eventSourcedResourceTypes.includes(resourceType))
+        .filter((resourceType) => !resourceTypesThatHaveStandaloneQueryTests.includes(resourceType))
         .forEach((resourceType) => {
             const endpointUnderTest = `/${buildViewModelPathForResourceType(resourceType)}`;
 

@@ -48,7 +48,7 @@ export class CreateSong implements ICommandBase {
     @NonEmptyString({
         isOptional: true,
         label: 'title',
-        description: "song's title in the language",
+        description: "song's title in the given language",
     })
     readonly title: string;
 

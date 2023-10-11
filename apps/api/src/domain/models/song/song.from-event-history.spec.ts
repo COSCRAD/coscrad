@@ -24,7 +24,7 @@ import {
     ADD_LYRICS_FOR_SONG,
     TRANSLATE_SONG_LYRICS,
 } from './commands/translate-song-lyrics/constants';
-import { TRANSLATE_SONG_TITLE } from './commands/translate-song-title/consants';
+import { TRANSLATE_SONG_TITLE } from './commands/translate-song-title/constants';
 import { SongTitleTranslated } from './commands/translate-song-title/song-title-translated.event';
 import { Song } from './song.entity';
 

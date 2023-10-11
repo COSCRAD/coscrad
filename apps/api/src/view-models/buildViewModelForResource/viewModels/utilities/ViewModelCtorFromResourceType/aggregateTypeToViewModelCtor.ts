@@ -20,7 +20,19 @@ import { TagViewModel } from '../../tag.view-model';
 import { TermViewModel } from '../../term.view-model';
 import { VocabularyListViewModel } from '../../vocabulary-list.view-model';
 
-export const aggregateTypeToViewModelCtor: { [K in AggregateType]: Ctor<BaseViewModel> } = {
+export type AggregateTypesWhoseViewsAreSourcedFromSnapshots = Exclude<
+    AggregateType,
+    typeof AggregateType.digitalText
+>;
+
+export type ResourceTypesWhoseViewsAreSourcedFromSnapshots = Exclude<
+    ResourceType,
+    typeof ResourceType.digitalText
+>;
+
+export const aggregateTypeToViewModelCtor: {
+    [K in AggregateTypesWhoseViewsAreSourcedFromSnapshots]: Ctor<BaseViewModel>;
+} = {
     [ResourceType.bibliographicReference]: BibliographicReferenceViewModel,
     [ResourceType.book]: BookViewModel,
     [ResourceType.mediaItem]: MediaItemViewModel,

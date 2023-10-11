@@ -5,6 +5,7 @@ import buildAudioItemTestData from './buildAudioItemTestData';
 import buildBibliographicReferenceTestData from './buildBibliographicReferenceTestData';
 import buildBookTestData from './buildBookTestData';
 import buildCategoryTestData from './buildCategoryTestData';
+import buildDigitalTextTestData from './buildDigitalTextTestData';
 import buildEdgeConnectionTestData from './buildEdgeConnectionTestData';
 import buildMediaItemTestData from './buildMediaItemTestData';
 import buildPhotographTestData from './buildPhotographTestData';
@@ -28,6 +29,7 @@ export default (): PartialSnapshot => ({
     [ResourceType.photograph]: buildPhotographTestData(),
     [ResourceType.spatialFeature]: buildSpatialFeatureTestData(),
     [ResourceType.bibliographicReference]: buildBibliographicReferenceTestData(),
+    [ResourceType.digitalText]: buildDigitalTextTestData(),
     [ResourceType.song]: buildSongTestData(),
     [ResourceType.mediaItem]: buildMediaItemTestData(),
     [ResourceType.playlist]: buildPlayListTestData(),
