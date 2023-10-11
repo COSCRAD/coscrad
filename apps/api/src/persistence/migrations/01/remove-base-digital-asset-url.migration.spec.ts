@@ -1,3 +1,4 @@
+import { DynamicDataTypeFinderService } from 'apps/api/src/validation';
 import { isDeepStrictEqual } from 'util';
 import createTestModule from '../../../app/controllers/__tests__/createTestModule';
 import { CoscradEventFactory } from '../../../domain/common';
@@ -75,7 +76,8 @@ describe.skip(`RemoveBaseDigitalAssetUrl`, () => {
              */
             testRepositoryProvider = new TestRepositoryProvider(
                 databaseProvider,
-                coscradEventFactory
+                coscradEventFactory,
+                testModule.get(DynamicDataTypeFinderService)
             );
 
             testQueryRunner = new ArangoQueryRunner(testDatabaseProvider);

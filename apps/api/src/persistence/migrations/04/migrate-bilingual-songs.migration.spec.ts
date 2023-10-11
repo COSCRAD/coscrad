@@ -1,5 +1,6 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { isString } from '@coscrad/validation-constraints';
+import { DynamicDataTypeFinderService } from 'apps/api/src/validation';
 import createTestModule from '../../../app/controllers/__tests__/createTestModule';
 import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { CoscradEventFactory } from '../../../domain/common';
@@ -101,7 +102,8 @@ describe(`MigrateBilingualTermsAndVocabularyLists`, () => {
          */
         testRepositoryProvider = new TestRepositoryProvider(
             testDatabaseProvider,
-            coscradEventFactory
+            coscradEventFactory,
+            testModule.get(DynamicDataTypeFinderService)
         );
 
         testQueryRunner = new ArangoQueryRunner(testDatabaseProvider);

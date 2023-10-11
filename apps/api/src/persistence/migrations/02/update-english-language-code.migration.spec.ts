@@ -1,5 +1,6 @@
 import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { doesDeepAnyPropertyEqual } from '@coscrad/validation-constraints';
+import { DynamicDataTypeFinderService } from 'apps/api/src/validation';
 import createTestModule from '../../../app/controllers/__tests__/createTestModule';
 import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { CoscradEventFactory } from '../../../domain/common';
@@ -44,7 +45,8 @@ describe(`UpdateEnglishLanguageCode`, () => {
          */
         testRepositoryProvider = new TestRepositoryProvider(
             testDatabaseProvider,
-            coscradEventFactory
+            coscradEventFactory,
+            testModule.get(DynamicDataTypeFinderService)
         );
 
         testQueryRunner = new ArangoQueryRunner(testDatabaseProvider);
