@@ -27,12 +27,17 @@ describe('GET  (fetch view models)', () => {
 
     const resourceTestData = testData.resources;
 
-    const eventSourcedResourceTypes = [ResourceType.song];
+    const resourceTypesThatHaveStandaloneQueryTests = [
+        ResourceType.digitalText,
+
+        //TODO write standalone query test
+        ResourceType.song,
+    ];
 
     const testDataWithAllResourcesPublished = Object.entries(resourceTestData).reduce(
         (accumulatedData: InMemorySnapshotOfResources, [resourceType, instances]) =>
             // We seed state differently for event-sourced aggregates
-            eventSourcedResourceTypes.includes(resourceType as ResourceType)
+            resourceTypesThatHaveStandaloneQueryTests.includes(resourceType as ResourceType)
                 ? accumulatedData
                 : {
                       ...accumulatedData,
@@ -53,7 +58,7 @@ describe('GET  (fetch view models)', () => {
 
     Object.values(ResourceType)
         // TODO [https://www.pivotaltracker.com/story/show/185903292] Support event-sourced resources in this test
-        .filter((rt) => !eventSourcedResourceTypes.includes(rt))
+        .filter((rt) => !resourceTypesThatHaveStandaloneQueryTests.includes(rt))
         .forEach((resourceType) => {
             const endpointUnderTest = `/${buildViewModelPathForResourceType(resourceType)}`;
 

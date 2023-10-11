@@ -4,21 +4,60 @@ import { InMemorySnapshot } from '../../../types/ResourceType';
 import { CommandAssertionDependencies } from './types/CommandAssertionDependencies';
 import { FSAFactoryFunction } from './types/FSAFactoryFunction';
 
-type TestCase = {
+interface BaseTestCase {
     buildCommandFSA: FSAFactoryFunction;
-    initialState: InMemorySnapshot;
     systemUserId: AggregateId;
     checkError?: (error: InternalError, id?: AggregateId) => void;
-};
+}
 
-export const assertCreateCommandError = async (
+interface StateBasedTestCase extends BaseTestCase {
+    initialState: InMemorySnapshot;
+}
+
+/**
+ * When we moved from using snapshots in the db to using
+ * events as a source of truth, we needed a new way to
+ * seed data from events (or else commands- which may fail).
+ * We decided at that point to make the API of all command
+ * assertion test helpers more robust by using full  inversion-of-control.
+ * This version represents that transition.
+ */
+interface TestCaseV2 extends BaseTestCase {
+    seedInitialState: () => Promise<void>;
+}
+
+const isTestCaseV2 = (input: StateBasedTestCase | TestCaseV2): input is TestCaseV2 =>
+    typeof (input as TestCaseV2).seedInitialState === 'function';
+
+/**
+ * @deprecated use `seedInitialState: () => Promise<void>` instead
+ */
+export async function assertCreateCommandError(
     dependencies: CommandAssertionDependencies,
-    { buildCommandFSA: buildCommandFSA, initialState: state, checkError, systemUserId }: TestCase
-) => {
+    testCase: StateBasedTestCase
+): Promise<void>;
+
+export async function assertCreateCommandError(
+    dependencies: CommandAssertionDependencies,
+    testCase: TestCaseV2
+): Promise<void>;
+
+export async function assertCreateCommandError(
+    dependencies: CommandAssertionDependencies,
+    testCase: StateBasedTestCase | TestCaseV2
+) {
+    const { buildCommandFSA: buildCommandFSA, checkError, systemUserId } = testCase;
+
+    const resolvedSeedInitialState = isTestCaseV2(testCase)
+        ? testCase.seedInitialState
+        : async () => {
+              await testRepositoryProvider.addFullSnapshot(testCase.initialState);
+          };
+
     const { testRepositoryProvider, commandHandlerService, idManager } = dependencies;
 
     // Arrange
-    await testRepositoryProvider.addFullSnapshot(state);
+    await resolvedSeedInitialState();
 
     const newId = await idManager.generate();
 
@@ -35,4 +74,4 @@ export const assertCreateCommandError = async (
     }
 
     if (checkError) checkError(result, newId);
-};
+}

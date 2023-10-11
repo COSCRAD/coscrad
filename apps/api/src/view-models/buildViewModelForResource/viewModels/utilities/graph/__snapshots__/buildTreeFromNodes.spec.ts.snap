@@ -57,6 +57,10 @@ exports[`buildTreeFromNodes when given a valid tree should return the expected r
                   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                   "type": "term",
                 },
+                {
+                  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                  "type": "digitalText",
+                },
               ],
               "name": MultilingualText {
                 "items": [
@@ -112,7 +116,12 @@ exports[`buildTreeFromNodes when given a valid tree should return the expected r
               ],
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
               "label": "felines",
-              "members": [],
+              "members": [
+                {
+                  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                  "type": "digitalText",
+                },
+              ],
               "name": MultilingualText {
                 "items": [
                   MultilingualTextItem {

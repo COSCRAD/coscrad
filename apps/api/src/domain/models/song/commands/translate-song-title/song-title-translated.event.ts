@@ -1,6 +1,6 @@
 import { CoscradEvent } from '../../../../common';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
-import { SONG_TITLE_TRANSLATED } from './consants';
+import { SONG_TITLE_TRANSLATED } from './constants';
 
 // TODO Can we get the event type via reflection?
 @CoscradEvent(SONG_TITLE_TRANSLATED)

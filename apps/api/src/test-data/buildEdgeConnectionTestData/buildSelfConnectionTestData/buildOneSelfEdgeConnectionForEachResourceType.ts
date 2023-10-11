@@ -216,6 +216,22 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
         ],
     },
     {
+        note: buildMultilingualTextWithSingleItem(
+            'digital representation of a journal article',
+            LanguageCode.English
+        ),
+        members: [
+            {
+                role,
+                compositeIdentifier: {
+                    id: '1',
+                    type: ResourceType.digitalText,
+                },
+                context: new GeneralContext(),
+            },
+        ],
+    },
+    {
         note: buildMultilingualTextWithSingleItem('this is a song', LanguageCode.English),
         members: [
             {

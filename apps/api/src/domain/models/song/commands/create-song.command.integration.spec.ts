@@ -23,7 +23,6 @@ import { generateCommandFuzzTestCases } from '../../__tests__/command-helpers/ge
 import { CommandAssertionDependencies } from '../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../__tests__/utilities/dummySystemUserId';
-import { dummyUuid } from '../../__tests__/utilities/dummyUuid';
 import CommandExecutionError from '../../shared/common-command-errors/CommandExecutionError';
 import UuidNotGeneratedInternallyError from '../../shared/common-command-errors/UuidNotGeneratedInternallyError';
 import { Song } from '../song.entity';
@@ -125,22 +124,6 @@ describe('CreateSong', () => {
                 },
             });
         });
-    });
-
-    describe('when the payload has an invalid type', () => {
-        generateCommandFuzzTestCases(CreateSong).forEach(
-            ({ description, propertyName, invalidValue }) => {
-                describe(`when the property: ${propertyName} has the invalid value:${invalidValue} (${description}`, () => {
-                    it('should fail with the appropriate error', async () => {
-                        await assertCommandFailsDueToTypeError(
-                            assertionHelperDependencies,
-                            { propertyName, invalidValue },
-                            buildValidCommandFSA(dummyUuid)
-                        );
-                    });
-                });
-            }
-        );
     });
 
     describe('when the payload has an invalid type', () => {
