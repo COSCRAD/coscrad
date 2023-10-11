@@ -45,6 +45,10 @@ const allTagsDTOs: Omit<DTO<Tag>, 'type'>[] = [
                 type: CategorizableType.note,
                 id: '11',
             },
+            {
+                type: CategorizableType.digitalText,
+                id: '1',
+            },
         ],
     },
     {
@@ -78,6 +82,10 @@ const allTagsDTOs: Omit<DTO<Tag>, 'type'>[] = [
             {
                 type: CategorizableType.video,
                 id: '223',
+            },
+            {
+                type: CategorizableType.digitalText,
+                id: '2',
             },
         ],
     },

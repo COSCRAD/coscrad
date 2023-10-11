@@ -19,6 +19,7 @@ import { ResourceDescriptionController } from './controllers/resources/resource-
 import { AudioVisualModule } from './domain-modules/audio-visual.module';
 import { BibliographicReferenceModule } from './domain-modules/bibliographic-reference.module';
 import { BookModule } from './domain-modules/book.module';
+import { DigitalTextModule } from './domain-modules/digital-text.module';
 import { EdgeConnectionModule } from './domain-modules/edge-connection.module';
 import { MediaItemModule } from './domain-modules/media-item.module';
 import { PhotographModule } from './domain-modules/photograph.module';
@@ -55,6 +56,7 @@ import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
         AudioVisualModule,
         PhotographModule,
         BibliographicReferenceModule,
+        DigitalTextModule,
         SpatialFeatureModule,
         PlaylistModule,
         DynamicDataTypeModule,

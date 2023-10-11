@@ -293,6 +293,31 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
             },
         ],
     },
+    {
+        id: '3111',
+        note: buildMultilingualTextWithSingleItem(
+            'this song is mentioned in the digital representation of a text',
+            LanguageCode.English
+        ),
+        members: [
+            {
+                role: EdgeConnectionMemberRole.to,
+                compositeIdentifier: {
+                    type: ResourceType.digitalText,
+                    id: '1',
+                },
+                context: new GeneralContext(),
+            },
+            {
+                role: EdgeConnectionMemberRole.from,
+                compositeIdentifier: {
+                    type: ResourceType.song,
+                    id: '2',
+                },
+                context: new GeneralContext(),
+            },
+        ],
+    },
 ];
 
 /**

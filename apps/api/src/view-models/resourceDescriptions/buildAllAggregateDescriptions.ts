@@ -45,6 +45,10 @@ const resourceDescriptions: Pick<AggregateInfo, 'type' | 'description'>[] = [
         description:
             'A bibliographic reference is a reference to, but not a digital representation of, a research resource.',
     },
+    // {
+    //     type: ResourceType.digitalText,
+    //     description: 'A digital text is the digital representation of a text-based resource.',
+    // },
     {
         type: ResourceType.song,
         description:
@@ -89,6 +93,19 @@ const resourceDescriptions: Pick<AggregateInfo, 'type' | 'description'>[] = [
  * open to modification lookup tables. We could annotate the view model
  * class with `@ViewModel(resourceType)` then explore the IoC containers to find
  * all view model schemas at run time.
+ *
+ * This is indeed the direction we are going. We will register each aggregate view
+ * as @ViewModel(aggregateType,{
+ *     description,
+ *     labels: {
+ *      singular,
+ *      plural
+ * },
+ * })
+ *
+ * The annotation will also add a reference to the ViewModel ctor so we can pull
+ * the schema later (after dynamic types have been bootstrapped in case there are
+ * union member annotations).
  */
 export const buildAllAggregateDescriptions = (): Omit<AggregateInfo, 'link'>[] =>
     resourceDescriptions.map(({ type: resourceType, description }) => ({

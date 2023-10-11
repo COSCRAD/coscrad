@@ -657,6 +657,90 @@ exports[`command payload schemas Command payload schema should match the snapsho
     "type": "CREATE_JOURNAL_ARTICLE_BIBLIOGRAPHIC_REFERENCE",
   },
   {
+    "description": "Creates a new digital text",
+    "label": "Create Digital Text",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "must be: digitalText",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "digitalText",
+                "value": "digitalText",
+              },
+            ],
+          },
+        },
+      },
+      "languageCodeForTitle": {
+        "complexDataType": "ENUM",
+        "description": "the language in which you are titling the digital text",
+        "enumLabel": "language code",
+        "enumName": "LanguageCode",
+        "isArray": false,
+        "isOptional": false,
+        "label": "language for title",
+        "labelsAndValues": [
+          {
+            "label": "Chilcotin",
+            "value": "clc",
+          },
+          {
+            "label": "Haida",
+            "value": "hai",
+          },
+          {
+            "label": "English",
+            "value": "en",
+          },
+          {
+            "label": "French",
+            "value": "fra",
+          },
+          {
+            "label": "Chinook",
+            "value": "chn",
+          },
+          {
+            "label": "Zapotec",
+            "value": "zap",
+          },
+          {
+            "label": "Spanish",
+            "value": "spa",
+          },
+        ],
+      },
+      "title": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "digital text's title in the language",
+        "isArray": false,
+        "isOptional": false,
+        "label": "title",
+      },
+    },
+    "type": "CREATE_DIGITAL_TEXT",
+  },
+  {
     "description": "Register a new COSCRAD user after the user has been registered with the auth provider",
     "label": "Register User",
     "schema": {
@@ -968,6 +1052,10 @@ exports[`command payload schemas Command payload schema should match the snapsho
                 "value": "bibliographicReference",
               },
               {
+                "label": "Digital Text",
+                "value": "digitalText",
+              },
+              {
                 "label": "Song",
                 "value": "song",
               },
@@ -1165,6 +1253,10 @@ exports[`command payload schemas Command payload schema should match the snapsho
               {
                 "label": "Bibliographic Reference",
                 "value": "bibliographicReference",
+              },
+              {
+                "label": "Digital Text",
+                "value": "digitalText",
               },
               {
                 "label": "Song",
@@ -2066,7 +2158,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "One of: term, vocabularyList, audioItem, book, photograph, spatialFeature, bibliographicReference, song, mediaItem, video, playlist",
+            "description": "One of: term, vocabularyList, audioItem, book, photograph, spatialFeature, bibliographicReference, digitalText, song, mediaItem, video, playlist",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -2100,6 +2192,10 @@ exports[`command payload schemas Command payload schema should match the snapsho
               {
                 "label": "bibliographicReference",
                 "value": "bibliographicReference",
+              },
+              {
+                "label": "digitalText",
+                "value": "digitalText",
               },
               {
                 "label": "song",
@@ -2336,7 +2432,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "One of: term, vocabularyList, audioItem, book, photograph, spatialFeature, bibliographicReference, song, mediaItem, video, playlist",
+            "description": "One of: term, vocabularyList, audioItem, book, photograph, spatialFeature, bibliographicReference, digitalText, song, mediaItem, video, playlist",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -2370,6 +2466,10 @@ exports[`command payload schemas Command payload schema should match the snapsho
               {
                 "label": "bibliographicReference",
                 "value": "bibliographicReference",
+              },
+              {
+                "label": "digitalText",
+                "value": "digitalText",
               },
               {
                 "label": "song",
@@ -2607,7 +2707,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "One of: term, vocabularyList, audioItem, book, photograph, spatialFeature, bibliographicReference, song, mediaItem, video, playlist",
+            "description": "One of: term, vocabularyList, audioItem, book, photograph, spatialFeature, bibliographicReference, digitalText, song, mediaItem, video, playlist",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -2641,6 +2741,10 @@ exports[`command payload schemas Command payload schema should match the snapsho
               {
                 "label": "bibliographicReference",
                 "value": "bibliographicReference",
+              },
+              {
+                "label": "digitalText",
+                "value": "digitalText",
               },
               {
                 "label": "song",

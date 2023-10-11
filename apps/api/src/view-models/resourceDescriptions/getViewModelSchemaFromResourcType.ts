@@ -1,6 +1,7 @@
 import { getCoscradDataSchema } from '@coscrad/data-types';
-import { AggregateType } from '../../domain/types/AggregateType';
+import { AggregateTypesWhoseViewsAreSourcedFromSnapshots } from '../buildViewModelForResource/viewModels/utilities/ViewModelCtorFromResourceType';
 import { getViewModelCtorFromAggregateType } from '../buildViewModelForResource/viewModels/utilities/ViewModelCtorFromResourceType/getViewModelCtorFromAggregateType';
 
-export const getViewModelSchemaFromAggregateType = (aggregateType: AggregateType) =>
-    getCoscradDataSchema(getViewModelCtorFromAggregateType(aggregateType));
+export const getViewModelSchemaFromAggregateType = (
+    aggregateType: AggregateTypesWhoseViewsAreSourcedFromSnapshots
+) => getCoscradDataSchema(getViewModelCtorFromAggregateType(aggregateType));
