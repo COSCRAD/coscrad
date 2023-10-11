@@ -90,6 +90,7 @@ import {
 } from '../../../domain/models/song/commands';
 import { CreateSong } from '../../../domain/models/song/commands/create-song.command';
 import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
+import { Song } from '../../../domain/models/song/song.entity';
 import {
     CreatePoint,
     CreatePointCommandHandler,
@@ -229,6 +230,8 @@ export const buildAllDataClassProviders = () =>
         LyricsAddedForSong,
         SongLyricsTranslated,
         ResourcePublished,
+        // Aggregate Root Domain Models
+        Song,
     ].map((ctor: Ctor<unknown>) => ({
         provide: ctor,
         useValue: ctor,
@@ -297,14 +300,20 @@ export default async (
                 provide: REPOSITORY_PROVIDER_TOKEN,
                 useFactory: (
                     arangoConnectionProvider: ArangoConnectionProvider,
-                    coscradEventFactory: CoscradEventFactory
+                    coscradEventFactory: CoscradEventFactory,
+                    dynamicDataTypeFinderService: DynamicDataTypeFinderService
                 ) => {
                     return new ArangoRepositoryProvider(
                         new ArangoDatabaseProvider(arangoConnectionProvider),
-                        coscradEventFactory
+                        coscradEventFactory,
+                        dynamicDataTypeFinderService
                     );
                 },
-                inject: [ArangoConnectionProvider, CoscradEventFactory],
+                inject: [
+                    ArangoConnectionProvider,
+                    CoscradEventFactory,
+                    DynamicDataTypeFinderService,
+                ],
             },
             {
                 provide: EdgeConnectionQueryService,

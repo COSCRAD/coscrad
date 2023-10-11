@@ -18,7 +18,7 @@ import { ArangoDatabaseProvider } from '../database/database.provider';
 import { PersistenceModule } from '../persistence.module';
 import TestRepositoryProvider from './__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from './__tests__/generateDatabaseNameForTestSuite';
-import { IEventRepository } from './arango-command-repository-for-aggregate';
+import { IEventRepository } from './arango-command-repository-for-aggregate-root';
 import { ArangoEventRepository } from './arango-event-repository';
 
 const fakeTimersConfig = buildFakeTimersConfig();

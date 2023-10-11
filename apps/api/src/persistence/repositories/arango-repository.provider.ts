@@ -4,14 +4,15 @@ import getInstanceFactoryForResource from '../../domain/factories/getInstanceFac
 import buildInstanceFactory from '../../domain/factories/utilities/buildInstanceFactory';
 import { EdgeConnection } from '../../domain/models/context/edge-connection.entity';
 import { Resource } from '../../domain/models/resource.entity';
-import { Song } from '../../domain/models/song/song.entity';
 import { Tag } from '../../domain/models/tag/tag.entity';
 import { CoscradUserGroup } from '../../domain/models/user-management/group/entities/coscrad-user-group.entity';
 import { ICategoryRepository } from '../../domain/repositories/interfaces/category-repository.interface';
 import { IRepositoryForAggregate } from '../../domain/repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../domain/repositories/interfaces/repository-provider.interface';
 import { IUserRepository } from '../../domain/repositories/interfaces/user-repository.interface';
+import { AggregateType } from '../../domain/types/AggregateType';
 import { ResourceType } from '../../domain/types/ResourceType';
+import { DynamicDataTypeFinderService } from '../../validation';
 import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
 import { getArangoCollectionIDFromResourceType } from '../database/collection-references/getArangoCollectionIDFromResourceType';
 import { ArangoDatabaseProvider } from '../database/database.provider';
@@ -20,7 +21,7 @@ import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDocument
 import mapEdgeConnectionDTOToArangoEdgeDocument from '../database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
 import mapEntityDTOToDatabaseDTO from '../database/utilities/mapEntityDTOToDatabaseDTO';
 import ArangoCategoryRepository from './ArangoCategoryRepository';
-import { ArangoSongCommandRepository } from './arango-command-repository-for-aggregate';
+import { ArangoCommandRepositoryForAggregateRoot } from './arango-command-repository-for-aggregate-root';
 import { ArangoCoscradUserRepository } from './arango-coscrad-user-repository';
 import { ArangoEventRepository } from './arango-event-repository';
 import { ArangoRepositoryForAggregate } from './arango-repository-for-aggregate';
@@ -31,7 +32,9 @@ export class ArangoRepositoryProvider implements IRepositoryProvider {
 
     constructor(
         protected databaseProvider: ArangoDatabaseProvider,
-        coscradEventFactory: CoscradEventFactory
+        // TODO should this be private
+        coscradEventFactory: CoscradEventFactory,
+        private readonly dynamicDataTypeFinderService: DynamicDataTypeFinderService
     ) {
         this.eventRepository = new ArangoEventRepository(databaseProvider, coscradEventFactory);
     }
@@ -85,10 +88,15 @@ export class ArangoRepositoryProvider implements IRepositoryProvider {
             mapEntityDTOToDatabaseDTO
         );
 
-        if (resourceType === ResourceType.song) {
-            return new ArangoSongCommandRepository(
+        // TODO "strangle out the old snapshot approach and remove this check"
+        const eventSourcedAggregateTypes = [AggregateType.song];
+
+        if (eventSourcedAggregateTypes.includes(resourceType)) {
+            return new ArangoCommandRepositoryForAggregateRoot(
                 this.eventRepository,
-                snapshotRepository as unknown as IRepositoryForAggregate<Song>
+                snapshotRepository as unknown as IRepositoryForAggregate<TResource>,
+                resourceType,
+                this.dynamicDataTypeFinderService
             ) as unknown as ArangoRepositoryForAggregate<TResource>;
         }
 

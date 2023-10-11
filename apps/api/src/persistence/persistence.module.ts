@@ -2,6 +2,7 @@ import { DynamicModule, Global, Module, OnApplicationShutdown } from '@nestjs/co
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CoscradEventFactory, EventModule } from '../domain/common';
 import { ID_RESPOSITORY_TOKEN } from '../lib/id-generation/interfaces/id-repository.interface';
+import { DynamicDataTypeFinderService } from '../validation';
 import { REPOSITORY_PROVIDER_TOKEN } from './constants/persistenceConstants';
 import { ArangoConnectionProvider } from './database/arango-connection.provider';
 import { ArangoQueryRunner } from './database/arango-query-runner';
@@ -46,16 +47,18 @@ export class PersistenceModule implements OnApplicationShutdown {
             provide: REPOSITORY_PROVIDER_TOKEN,
             useFactory: async (
                 arangoConnectionProvider: ArangoConnectionProvider,
-                coscradEventFactory: CoscradEventFactory
+                coscradEventFactory: CoscradEventFactory,
+                dynamicDataTypeFinderService: DynamicDataTypeFinderService
             ) => {
                 const repositoryProvider = new ArangoRepositoryProvider(
                     new ArangoDatabaseProvider(arangoConnectionProvider),
-                    coscradEventFactory
+                    coscradEventFactory,
+                    dynamicDataTypeFinderService
                 );
 
                 return repositoryProvider;
             },
-            inject: [ArangoConnectionProvider, CoscradEventFactory],
+            inject: [ArangoConnectionProvider, CoscradEventFactory, DynamicDataTypeFinderService],
         };
 
         const idRepositoryProvider = {
