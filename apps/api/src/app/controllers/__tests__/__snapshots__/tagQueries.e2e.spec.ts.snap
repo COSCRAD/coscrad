@@ -38,6 +38,10 @@ exports[`Tag Queries when fetching a tag by ID when there is a tag with the give
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
       "type": "note",
     },
+    {
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "type": "digitalText",
+    },
   ],
   "name": {
     "items": [
@@ -91,6 +95,10 @@ exports[`Tag Queries when fetching all tags should return the expected result 1`
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
           "type": "note",
         },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          "type": "digitalText",
+        },
       ],
       "name": {
         "items": [
@@ -134,6 +142,10 @@ exports[`Tag Queries when fetching all tags should return the expected result 1`
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
           "type": "video",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+          "type": "digitalText",
         },
       ],
       "name": {

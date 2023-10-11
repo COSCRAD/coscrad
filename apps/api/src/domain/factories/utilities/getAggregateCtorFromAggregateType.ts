@@ -6,6 +6,7 @@ import { Video } from '../../models/audio-item/entities/video.entity';
 import { Book } from '../../models/book/entities/book.entity';
 import { Category } from '../../models/categories/entities/category.entity';
 import { EdgeConnection } from '../../models/context/edge-connection.entity';
+import { DigitalText } from '../../models/digital-text/digital-text.entity';
 import { MediaItem } from '../../models/media-item/entities/media-item.entity';
 import { Photograph } from '../../models/photograph/entities/photograph.entity';
 import { Playlist } from '../../models/playlist';
@@ -34,6 +35,7 @@ export const aggregateTypeToAggregateCtor: {
     [AggregateType.mediaItem]: MediaItem,
     [AggregateType.note]: EdgeConnection,
     [AggregateType.photograph]: Photograph,
+    [AggregateType.digitalText]: DigitalText,
     [AggregateType.song]: Song,
     [AggregateType.term]: Term,
     // These casts are due to the mixin. Note the subtle difference between value (Ctor) and type (Instance type)
@@ -44,6 +46,10 @@ export const aggregateTypeToAggregateCtor: {
     [AggregateType.category]: Category,
 };
 
+/**
+ * TODO Do this dynamically using reflection. We need to fully opt in to the
+ * `@AggregateRoot(aggregateType)` decorator first
+ */
 export default <T extends AggregateType>(
     aggregateType: T
 ): DomainModelCtor<AggregateTypeToAggregateInstance[T]> => {

@@ -1,4 +1,4 @@
 import { IAggregateInfo } from '@coscrad/api-interfaces';
-import { AggregateType } from '../../../domain/types/AggregateType';
+import { AggregateTypesWhoseViewsAreSourcedFromSnapshots } from '../../buildViewModelForResource/viewModels/utilities/ViewModelCtorFromResourceType';
 
-export type AggregateInfo = IAggregateInfo<AggregateType>;
+export type AggregateInfo = IAggregateInfo<AggregateTypesWhoseViewsAreSourcedFromSnapshots>;

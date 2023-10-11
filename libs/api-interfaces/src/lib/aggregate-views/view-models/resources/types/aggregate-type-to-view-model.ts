@@ -8,6 +8,7 @@ import { IVideoViewModel } from '../audio-item';
 import { IAudioItemViewModel } from '../audio-item/audio-item.view-model.interface';
 import { IBibliographicReferenceViewModel } from '../bibliographic-reference';
 import { IBookViewModel } from '../book';
+import { IDigitalTextViewModel } from '../digital-text.view-model.interface';
 import { IMediaItemViewModel } from '../media-items';
 import { IPhotographViewModel } from '../photograph.view-model.interface';
 import { IPlayListViewModel } from '../playlist';
@@ -19,6 +20,7 @@ import { IVocabularyListViewModel } from '../vocabulary-list';
 export type AggregateTypeToViewModel = {
     // Resources
     [AggregateType.bibliographicReference]: IBibliographicReferenceViewModel;
+    [AggregateType.digitalText]: IDigitalTextViewModel;
     [AggregateType.book]: IBookViewModel;
     [AggregateType.mediaItem]: IMediaItemViewModel;
     [AggregateType.photograph]: IPhotographViewModel;

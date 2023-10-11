@@ -65,13 +65,22 @@ export default (): Category[] => {
                     type: CategorizableType.term,
                     id: '2',
                 },
+                {
+                    type: CategorizableType.digitalText,
+                    id: '2',
+                },
             ],
             childrenIDs: ['8', '10'],
         },
         {
             id: '5',
             label: 'felines',
-            members: [],
+            members: [
+                {
+                    type: CategorizableType.digitalText,
+                    id: '1',
+                },
+            ],
             childrenIDs: ['6', '7'],
         },
         {

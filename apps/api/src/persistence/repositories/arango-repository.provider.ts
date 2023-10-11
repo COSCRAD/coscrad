@@ -89,7 +89,7 @@ export class ArangoRepositoryProvider implements IRepositoryProvider {
         );
 
         // TODO "strangle out the old snapshot approach and remove this check"
-        const eventSourcedAggregateTypes = [AggregateType.song];
+        const eventSourcedAggregateTypes = [AggregateType.song, AggregateType.digitalText];
 
         if (eventSourcedAggregateTypes.includes(resourceType)) {
             return new ArangoCommandRepositoryForAggregateRoot(

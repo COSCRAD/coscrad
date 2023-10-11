@@ -6,6 +6,7 @@ import { DTO } from '../../../../types/DTO';
 import { buildAudioItemFactoryTestSet } from './audio-item.aggregate-factory.test-set';
 import { buildBibliographicReferenceFactoryTestSet } from './bibliographic-reference.aggregate-factory.test-set';
 import { buildBookAggregateFactoryTestSet } from './book.aggregate-factory.test-set';
+import { buildDigitalTextFactoryTestSet } from './digital-text.aggregate-factory.test-set';
 import { buildMediaItemFactoryTestSet } from './media-item.aggregate-factory.test-set';
 import { buildPhotographFactoryTestSet } from './photograph.aggregate-factory.test-set';
 import { buildPlaylistFactoryTestSet } from './playlist.aggregate-factory.test-set';
@@ -34,6 +35,7 @@ export type FactoryTestSuiteForAggregate<TAggregateType extends AggregateType = 
 
 export default (): FactoryTestSuiteForAggregate[] => [
     buildBibliographicReferenceFactoryTestSet(),
+    buildDigitalTextFactoryTestSet(),
     buildBookAggregateFactoryTestSet(),
     buildMediaItemFactoryTestSet(),
     buildPhotographFactoryTestSet(),
