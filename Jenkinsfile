@@ -15,7 +15,7 @@ pipeline {
                 label 'jenkins-build-agent'
             }
             when {
-                branch 'packer-test'
+                branch 'PR-*'
             }
             steps {
                 echo 'packer version:'
