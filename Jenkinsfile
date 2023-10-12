@@ -19,7 +19,7 @@ pipeline {
             }
             steps {
                 echo 'packer version:'
-                packer --version
+                sh 'packer --version'
             }
         }
         stage('ci') {
