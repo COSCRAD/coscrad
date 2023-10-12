@@ -32,13 +32,15 @@ describe(`Arango Event Repository`, () => {
 
     let coscradEventFactory: CoscradEventFactory;
 
+    let dynamicDataTypeFinderService: DynamicDataTypeFinderService;
+
     beforeAll(async () => {
         const testingModule = await Test.createTestingModule({
             imports: [
+                DynamicDataTypeModule,
                 SongModule,
                 EventModule,
                 PersistenceModule.forRootAsync(),
-                DynamicDataTypeModule,
             ],
             providers: [
                 {
@@ -67,13 +69,19 @@ describe(`Arango Event Repository`, () => {
 
         arangoDatabaseProvider = testingModule.get(ArangoDatabaseProvider);
 
-        await testingModule.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
+        dynamicDataTypeFinderService = testingModule.get(DynamicDataTypeFinderService);
+
+        await dynamicDataTypeFinderService.bootstrapDynamicTypes();
 
         jest.useFakeTimers(fakeTimersConfig);
     });
 
     beforeEach(async () => {
-        await new TestRepositoryProvider(arangoDatabaseProvider, coscradEventFactory).testSetup();
+        await new TestRepositoryProvider(
+            arangoDatabaseProvider,
+            coscradEventFactory,
+            dynamicDataTypeFinderService
+        ).testSetup();
     });
 
     describe(`appendEvent`, () => {

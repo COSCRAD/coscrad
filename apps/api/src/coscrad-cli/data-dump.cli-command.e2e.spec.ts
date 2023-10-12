@@ -15,7 +15,6 @@ import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRe
 import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoIdRepository } from '../persistence/repositories/arango-id-repository';
 import buildTestDataInFlatFormat from '../test-data/buildTestDataInFlatFormat';
-import { DynamicDataTypeFinderService } from '../validation';
 import { CoscradCliModule } from './coscrad-cli.module';
 
 const cliCommandName = 'data-dump';
@@ -45,10 +44,7 @@ describe('CLI Command: **data-dump**', () => {
 
         databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
 
-        testRepositoryProvider = new TestRepositoryProvider(
-            databaseProvider,
-            testAppModule.get(DynamicDataTypeFinderService)
-        );
+        testRepositoryProvider = testAppModule.get(TestRepositoryProvider);
 
         commandInstance = await CommandTestFactory.createTestingCommand({
             imports: [CoscradCliModule],

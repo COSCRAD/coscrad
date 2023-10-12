@@ -5,7 +5,6 @@ import { CommandTestFactory } from 'nest-commander-testing';
 import { isDeepStrictEqual } from 'util';
 import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
-import { CoscradEventFactory } from '../domain/common';
 import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
 import { buildFakeTimersConfig } from '../domain/models/__tests__/utilities/buildFakeTimersConfig';
 import { ResourceType } from '../domain/types/ResourceType';
@@ -62,9 +61,7 @@ describe(`**${cliCommandName}**`, () => {
 
         databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
 
-        const coscradEventFactory = testAppModule.get(CoscradEventFactory);
-
-        testRepositoryProvider = new TestRepositoryProvider(databaseProvider, coscradEventFactory);
+        testRepositoryProvider = testAppModule.get(TestRepositoryProvider);
 
         commandInstance = await CommandTestFactory.createTestingCommand({
             imports: [CoscradCliModule],

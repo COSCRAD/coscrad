@@ -1,6 +1,5 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { isString } from '@coscrad/validation-constraints';
-import { DynamicDataTypeFinderService } from 'apps/api/src/validation';
 import createTestModule from '../../../app/controllers/__tests__/createTestModule';
 import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { CoscradEventFactory } from '../../../domain/common';
@@ -11,6 +10,7 @@ import { InternalError } from '../../../lib/errors/InternalError';
 import { NotFound } from '../../../lib/types/not-found';
 import clonePlainObjectWithoutProperty from '../../../lib/utilities/clonePlainObjectWithoutProperty';
 import { DTO } from '../../../types/DTO';
+import { DynamicDataTypeFinderService } from '../../../validation';
 import { ArangoConnectionProvider } from '../../database/arango-connection.provider';
 import { ArangoQueryRunner } from '../../database/arango-query-runner';
 import { ArangoCollectionId } from '../../database/collection-references/ArangoCollectionId';

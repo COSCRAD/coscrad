@@ -2,7 +2,6 @@ import { TestingModule } from '@nestjs/testing';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
-import { CoscradEventFactory } from '../domain/common';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
 import { MockIdManagementService } from '../lib/id-generation/mock-id-management.service';
 import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
@@ -46,9 +45,7 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
 
         databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
 
-        const coscradEventFactory = testAppModule.get(CoscradEventFactory);
-
-        testRepositoryProvider = new TestRepositoryProvider(databaseProvider, coscradEventFactory);
+        testRepositoryProvider = testAppModule.get(TestRepositoryProvider);
 
         idManager = new MockIdManagementService(new ArangoIdRepository(databaseProvider));
 

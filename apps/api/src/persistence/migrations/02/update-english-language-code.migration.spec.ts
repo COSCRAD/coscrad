@@ -1,6 +1,5 @@
 import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { doesDeepAnyPropertyEqual } from '@coscrad/validation-constraints';
-import { DynamicDataTypeFinderService } from 'apps/api/src/validation';
 import createTestModule from '../../../app/controllers/__tests__/createTestModule';
 import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { CoscradEventFactory } from '../../../domain/common';
@@ -8,6 +7,7 @@ import { AudioItem } from '../../../domain/models/audio-item/entities/audio-item
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { HasAggregateId } from '../../../domain/types/HasAggregateId';
 import { DTO } from '../../../types/DTO';
+import { DynamicDataTypeFinderService } from '../../../validation';
 import { ArangoConnectionProvider } from '../../database/arango-connection.provider';
 import { ArangoQueryRunner } from '../../database/arango-query-runner';
 import { ArangoCollectionId } from '../../database/collection-references/ArangoCollectionId';

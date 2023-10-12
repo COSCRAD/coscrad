@@ -2,7 +2,7 @@ import { DynamicModule, Global, Module, OnApplicationShutdown } from '@nestjs/co
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CoscradEventFactory, EventModule } from '../domain/common';
 import { ID_RESPOSITORY_TOKEN } from '../lib/id-generation/interfaces/id-repository.interface';
-import { DynamicDataTypeFinderService } from '../validation';
+import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../validation';
 import { REPOSITORY_PROVIDER_TOKEN } from './constants/persistenceConstants';
 import { ArangoConnectionProvider } from './database/arango-connection.provider';
 import { ArangoQueryRunner } from './database/arango-query-runner';
@@ -91,7 +91,7 @@ export class PersistenceModule implements OnApplicationShutdown {
 
         return {
             module: PersistenceModule,
-            imports: [ConfigModule, EventModule],
+            imports: [ConfigModule, EventModule, DynamicDataTypeModule],
             providers: [
                 arangoConnectionProvider,
                 repositoryProvider,
