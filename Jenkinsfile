@@ -10,6 +10,18 @@ pipeline {
         disableConcurrentBuilds()
     }
     stages {
+        stage('test-packer') {
+            agent {
+                label 'jenkins-build-agent'
+            }
+            when {
+                branch 'packer-test'
+            }
+            steps {
+                echo 'packer version:'
+                packer --version
+            }
+        }
         stage('ci') {
             agent {
                 label 'jenkins-build-agent'
