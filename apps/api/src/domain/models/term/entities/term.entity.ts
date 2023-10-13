@@ -21,6 +21,7 @@ import validateTextFieldContextForModel from '../../shared/contextValidators/val
 import { CREATE_PROMPT_TERM } from '../commands/create-prompt-term/constants';
 import { CREATE_TERM } from '../commands/create-term/constants';
 import { TRANSLATE_TERM } from '../commands/translate-term/constants';
+import { CannotElicitTermWithoutPromptError, PromptLanguageMustBeUniqueError } from '../errors';
 
 const isOptional = true;
 
@@ -134,6 +135,13 @@ export class Term extends Resource {
     }
 
     elicitFromPrompt(text: string, languageCode: LanguageCode): ResultOrError<Term> {
+        if (!this.isPromptTerm) return new CannotElicitTermWithoutPromptError(this.id);
+
+        const { languageCode: promptLanguagecode } = this.text.getOriginalTextItem();
+
+        if (languageCode === promptLanguagecode)
+            return new PromptLanguageMustBeUniqueError(this.id, languageCode);
+
         const textUpdateResult = this.text.translate(
             new MultilingualTextItem({
                 role: MultilingualTextItemRole.elicitedFromPrompt,

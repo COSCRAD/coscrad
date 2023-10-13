@@ -8,7 +8,7 @@ import { ELICIT_TERM_FROM_PROMPT } from './constants';
 @Command({
     type: ELICIT_TERM_FROM_PROMPT,
     label: 'Elicit Term From Prompt',
-    description: 'elicit a term from the prompt',
+    description: 'provide a translation of an existing (English) prompt',
 })
 export class ElicitTermFromPrompt implements ICommandBase {
     @NestedDataType(TermCompositeIdentifier, {

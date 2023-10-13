@@ -16,13 +16,16 @@ import TestRepositoryProvider from '../../../../../persistence/repositories/__te
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestCommandFsaMap } from '../../../../../test-data/commands';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
+import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
+import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { Term } from '../../entities/term.entity';
+import { CannotElicitTermWithoutPromptError, PromptLanguageMustBeUniqueError } from '../../errors';
 import { ELICIT_TERM_FROM_PROMPT, TERM_ELICITED_FROM_PROMPT } from './constants';
 import { ElicitTermFromPrompt } from './elicit-term-from-prompt.command';
 
@@ -30,6 +33,7 @@ const commandType = ElicitTermFromPrompt;
 const originalLanguageCode = LanguageCode.English;
 
 const existingTerm = getValidAggregateInstanceForTest(AggregateType.term).clone({
+    isPromptTerm: true,
     text: buildMultilingualTextWithSingleItem(`existing text in english`, originalLanguageCode),
 });
 
@@ -127,7 +131,10 @@ describe(commandType, () => {
             it(`should fail with the expected errors`, async () => {
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
-                    initialState: new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat(),
+                    seedInitialState: async () => {
+                        // empty database to start => there is no existing term
+                        await Promise.resolve();
+                    },
                     buildCommandFSA: buildValidCommandFSA,
                     checkError: (error) => {
                         assertErrorAsExpected(
@@ -138,6 +145,111 @@ describe(commandType, () => {
                         );
                     },
                 });
+            });
+        });
+
+        describe(`when the existing term is not a prompt term`, () => {
+            it(`should fail with the expected errors`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        const initialState = new DeluxeInMemoryStore({
+                            [AggregateType.term]: [
+                                existingTerm.clone({
+                                    isPromptTerm: false,
+                                    text: buildMultilingualTextWithSingleItem(
+                                        'I am eating more cookies.',
+                                        LanguageCode.Chinook
+                                    ),
+                                }),
+                            ],
+                        }).fetchFullSnapshotInLegacyFormat();
+
+                        await testRepositoryProvider.addFullSnapshot(initialState);
+                    },
+                    buildCommandFSA: () => validFsa,
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new CannotElicitTermWithoutPromptError(
+                                    validFsa.payload.aggregateCompositeIdentifier.id
+                                ),
+                            ])
+                        );
+                    },
+                });
+            });
+        });
+
+        describe(`when the prompt and elicited term are both in the same langauge`, () => {
+            it(`should fail with the expected errors`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        const initialState = new DeluxeInMemoryStore({
+                            [AggregateType.term]: [existingTerm],
+                        }).fetchFullSnapshotInLegacyFormat();
+
+                        await testRepositoryProvider.addFullSnapshot(initialState);
+                    },
+                    buildCommandFSA: () =>
+                        clonePlainObjectWithOverrides(validFsa, {
+                            payload: {
+                                // same as prompt
+                                languageCode: LanguageCode.English,
+                            },
+                        }),
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new PromptLanguageMustBeUniqueError(
+                                    validFsa.payload.aggregateCompositeIdentifier.id,
+                                    LanguageCode.English
+                                ),
+                            ])
+                        );
+                    },
+                });
+            });
+        });
+
+        describe(`when the payload has an invalid type`, () => {
+            describe(`when the aggregate type is not term`, () => {
+                Object.values(AggregateType)
+                    .filter((aggregateType) => aggregateType !== AggregateType.term)
+                    .forEach((invalidType) => {
+                        describe(`when aggregateType is ${invalidType}`, () => {
+                            it(`should fail with a type error`, async () => {
+                                await assertCommandFailsDueToTypeError(
+                                    commandAssertionDependencies,
+                                    {
+                                        propertyName: `aggregateCompositeIdentifier`,
+                                        invalidValue: {
+                                            type: invalidType,
+                                            id: existingTerm.id,
+                                        },
+                                    },
+                                    validFsa
+                                );
+                            });
+                        });
+                    });
+
+                generateCommandFuzzTestCases(ElicitTermFromPrompt).forEach(
+                    ({ description, propertyName, invalidValue }) => {
+                        describe(`when the property: ${propertyName} has the invalid value:${invalidValue} (${description}`, () => {
+                            it('should fail with the appropriate error', async () => {
+                                await assertCommandFailsDueToTypeError(
+                                    commandAssertionDependencies,
+                                    { propertyName, invalidValue },
+                                    buildValidCommandFSA()
+                                );
+                            });
+                        });
+                    }
+                );
             });
         });
     });
