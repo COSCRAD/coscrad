@@ -19,6 +19,7 @@ import { ResultOrError } from '../../../types/ResultOrError';
 import formatAggregateCompositeIdentifier from '../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText, MultilingualTextItem } from '../../common/entities/multilingual-text';
+import { AggregateRoot } from '../../decorators';
 import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../types/AggregateId';
 import { ResourceType } from '../../types/ResourceType';
@@ -45,6 +46,7 @@ import { SongLyricsHaveAlreadyBeenTranslatedToGivenLanguageError } from './error
 
 const isOptional = true;
 
+@AggregateRoot(AggregateType.song)
 @RegisterIndexScopedCommands(['CREATE_SONG'])
 export class Song extends Resource implements ITimeBoundable {
     readonly type = ResourceType.song;

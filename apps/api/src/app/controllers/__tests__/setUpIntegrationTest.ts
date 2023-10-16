@@ -8,6 +8,7 @@ import { ArangoConnectionProvider } from '../../../persistence/database/arango-c
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { DTO } from '../../../types/DTO';
+import { DynamicDataTypeFinderService } from '../../../validation';
 import { EnvironmentVariables } from '../../config/env.validation';
 import createTestModule from './createTestModule';
 
@@ -43,7 +44,8 @@ export default async (
 
     const testRepositoryProvider = new TestRepositoryProvider(
         databaseProvider,
-        coscradEventFactory
+        coscradEventFactory,
+        moduleRef.get(DynamicDataTypeFinderService)
     );
 
     const app = moduleRef.createNestApplication();

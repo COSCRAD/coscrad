@@ -90,6 +90,7 @@ import {
 } from '../../../domain/models/song/commands';
 import { CreateSong } from '../../../domain/models/song/commands/create-song.command';
 import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
+import { Song } from '../../../domain/models/song/song.entity';
 import {
     CreatePoint,
     CreatePointCommandHandler,
@@ -157,6 +158,7 @@ import { Ctor } from '../../../lib/types/Ctor';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
+import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { ArangoEventRepository } from '../../../persistence/repositories/arango-event-repository';
 import { ArangoIdRepository } from '../../../persistence/repositories/arango-id-repository';
 import { ArangoRepositoryProvider } from '../../../persistence/repositories/arango-repository.provider';
@@ -229,6 +231,8 @@ export const buildAllDataClassProviders = () =>
         LyricsAddedForSong,
         SongLyricsTranslated,
         ResourcePublished,
+        // Aggregate Root Domain Models
+        Song,
     ].map((ctor: Ctor<unknown>) => ({
         provide: ctor,
         useValue: ctor,
@@ -297,14 +301,20 @@ export default async (
                 provide: REPOSITORY_PROVIDER_TOKEN,
                 useFactory: (
                     arangoConnectionProvider: ArangoConnectionProvider,
-                    coscradEventFactory: CoscradEventFactory
+                    coscradEventFactory: CoscradEventFactory,
+                    dynamicDataTypeFinderService: DynamicDataTypeFinderService
                 ) => {
                     return new ArangoRepositoryProvider(
                         new ArangoDatabaseProvider(arangoConnectionProvider),
-                        coscradEventFactory
+                        coscradEventFactory,
+                        dynamicDataTypeFinderService
                     );
                 },
-                inject: [ArangoConnectionProvider, CoscradEventFactory],
+                inject: [
+                    ArangoConnectionProvider,
+                    CoscradEventFactory,
+                    DynamicDataTypeFinderService,
+                ],
             },
             {
                 provide: EdgeConnectionQueryService,
@@ -451,6 +461,24 @@ export default async (
             {
                 provide: JwtStrategy,
                 useFactory: () => new MockJwtStrategy(testUserWithGroups),
+            },
+            {
+                provide: TestRepositoryProvider,
+                useFactory: (
+                    arangoConnectionProvider,
+                    coscradEventFactory,
+                    dynamicDataTypeFinderService
+                ) =>
+                    new TestRepositoryProvider(
+                        new ArangoDatabaseProvider(arangoConnectionProvider),
+                        coscradEventFactory,
+                        dynamicDataTypeFinderService
+                    ),
+                inject: [
+                    ArangoConnectionProvider,
+                    CoscradEventFactory,
+                    DynamicDataTypeFinderService,
+                ],
             },
             ...dataClassProviders,
             /**
