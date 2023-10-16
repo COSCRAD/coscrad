@@ -11,7 +11,7 @@ import { clonePlainObjectWithOverrides } from '../../../lib/utilities/clonePlain
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { IEventRepository } from '../../../persistence/repositories/arango-command-repository-for-aggregate';
+import { IEventRepository } from '../../../persistence/repositories/arango-command-repository-for-aggregate-root';
 import { ArangoEventRepository } from '../../../persistence/repositories/arango-event-repository';
 import buildTestData from '../../../test-data/buildTestData';
 import httpStatusCodes from '../../constants/httpStatusCodes';

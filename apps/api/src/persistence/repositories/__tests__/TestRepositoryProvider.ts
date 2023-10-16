@@ -6,6 +6,7 @@ import {
     InMemorySnapshotOfResources,
     ResourceType,
 } from '../../../domain/types/ResourceType';
+import { DynamicDataTypeFinderService } from '../../../validation';
 import { ArangoCollectionId } from '../../database/collection-references/ArangoCollectionId';
 import { getAllArangoDocumentCollectionIDs } from '../../database/collection-references/ArangoDocumentCollectionId';
 import { getAllArangoEdgeCollectionIDs } from '../../database/collection-references/ArangoEdgeCollectionId';
@@ -18,9 +19,10 @@ import { ArangoRepositoryProvider } from '../arango-repository.provider';
 export default class TestRepositoryProvider extends ArangoRepositoryProvider {
     constructor(
         databaseProvider: ArangoDatabaseProvider,
-        coscradEventFactory: CoscradEventFactory
+        coscradEventFactory: CoscradEventFactory,
+        dynamicDataTypeFinderService: DynamicDataTypeFinderService
     ) {
-        super(databaseProvider, coscradEventFactory);
+        super(databaseProvider, coscradEventFactory, dynamicDataTypeFinderService);
     }
 
     // TODO We should correlate entity type with TEntity here

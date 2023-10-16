@@ -10,6 +10,7 @@ import { InternalError } from '../../../lib/errors/InternalError';
 import { NotFound } from '../../../lib/types/not-found';
 import clonePlainObjectWithoutProperty from '../../../lib/utilities/clonePlainObjectWithoutProperty';
 import { DTO } from '../../../types/DTO';
+import { DynamicDataTypeFinderService } from '../../../validation';
 import { ArangoConnectionProvider } from '../../database/arango-connection.provider';
 import { ArangoQueryRunner } from '../../database/arango-query-runner';
 import { ArangoCollectionId } from '../../database/collection-references/ArangoCollectionId';
@@ -101,7 +102,8 @@ describe(`MigrateBilingualTermsAndVocabularyLists`, () => {
          */
         testRepositoryProvider = new TestRepositoryProvider(
             testDatabaseProvider,
-            coscradEventFactory
+            coscradEventFactory,
+            testModule.get(DynamicDataTypeFinderService)
         );
 
         testQueryRunner = new ArangoQueryRunner(testDatabaseProvider);

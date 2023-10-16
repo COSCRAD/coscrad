@@ -7,6 +7,7 @@ import { AudioItem } from '../../../domain/models/audio-item/entities/audio-item
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { HasAggregateId } from '../../../domain/types/HasAggregateId';
 import { DTO } from '../../../types/DTO';
+import { DynamicDataTypeFinderService } from '../../../validation';
 import { ArangoConnectionProvider } from '../../database/arango-connection.provider';
 import { ArangoQueryRunner } from '../../database/arango-query-runner';
 import { ArangoCollectionId } from '../../database/collection-references/ArangoCollectionId';
@@ -44,7 +45,8 @@ describe(`UpdateEnglishLanguageCode`, () => {
          */
         testRepositoryProvider = new TestRepositoryProvider(
             testDatabaseProvider,
-            coscradEventFactory
+            coscradEventFactory,
+            testModule.get(DynamicDataTypeFinderService)
         );
 
         testQueryRunner = new ArangoQueryRunner(testDatabaseProvider);

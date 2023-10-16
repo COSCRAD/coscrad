@@ -1,23 +1,31 @@
 import { AGGREGATE_COMPOSITE_IDENTIFIER, ICommandBase } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
+import { AggregateTypeMetadata, getAggregateTypeForTarget } from '../../domain/decorators';
+import { Aggregate } from '../../domain/models/aggregate.entity';
 import { BaseEvent } from '../../domain/models/shared/events/base-event.entity';
-import { Song } from '../../domain/models/song/song.entity';
 import { IRepositoryForAggregate } from '../../domain/repositories/interfaces/repository-for-aggregate.interface';
 import { ISpecification } from '../../domain/repositories/interfaces/specification.interface';
 import { AggregateCompositeIdentifier } from '../../domain/types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../domain/types/AggregateId';
 import { AggregateType } from '../../domain/types/AggregateType';
+import { isNullOrUndefined } from '../../domain/utilities/validation/is-null-or-undefined';
 import { InternalError } from '../../lib/errors/InternalError';
+import { DomainModelCtor } from '../../lib/types/DomainModelCtor';
 import { Maybe } from '../../lib/types/maybe';
 import { isNotFound } from '../../lib/types/not-found';
 import { DTO } from '../../types/DTO';
 import { ResultOrError } from '../../types/ResultOrError';
+import { DynamicDataTypeFinderService } from '../../validation';
 import formatAggregateCompositeIdentifier from '../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { ArangoEventRepository } from './arango-event-repository';
 
 type AggregateContextIdentifier =
     | AggregateCompositeIdentifier
     | Pick<AggregateCompositeIdentifier, 'type'>;
+
+interface IEventSourceable<TAggregate extends Aggregate = Aggregate> {
+    fromEventHistory: (eventStream: BaseEvent[], id: AggregateId) => ResultOrError<TAggregate>;
+}
 
 export interface IEventRepository {
     fetchEvents(aggregateContextIdentifier: AggregateContextIdentifier): Promise<BaseEvent[]>;
@@ -28,27 +36,33 @@ export interface IEventRepository {
 
 // TODO [https://www.pivotaltracker.com/story/show/185903292]  Include a test for each aggregate's repository
 
-// THIS IS A PROTOTYPE, WE WOULD ABSTRACT OVER THE AGGREGATE TYPE
-export class ArangoSongCommandRepository implements IRepositoryForAggregate<Song> {
-    private readonly aggregateType = AggregateType.song;
-
+export class ArangoCommandRepositoryForAggregateRoot<TAggregate extends Aggregate = Aggregate>
+    implements IRepositoryForAggregate<TAggregate>
+{
     constructor(
         @Inject(ArangoEventRepository) private readonly eventRepository: IEventRepository,
-        private readonly snapshotRepositoryForAggregate: IRepositoryForAggregate<Song>
+        private readonly snapshotRepositoryForAggregate: IRepositoryForAggregate<TAggregate>,
+        private readonly aggregateType: AggregateType,
+        private readonly dataTypeFinderService: DynamicDataTypeFinderService
     ) {}
 
-    async fetchById(id: AggregateId): Promise<Maybe<ResultOrError<Song>>> {
+    async fetchById(id: AggregateId): Promise<Maybe<ResultOrError<TAggregate>>> {
         const eventStream = await this.eventRepository.fetchEvents({
             type: this.aggregateType,
             id,
         });
 
-        return Song.fromEventHistory(eventStream, id);
+        const Ctor = await this.getAggregateRootCtor<TAggregate>();
+
+        // types specific to TAggregate
+        return Ctor.fromEventHistory(eventStream, id);
     }
 
-    async fetchMany(specification?: ISpecification<Song>): Promise<ResultOrError<Song>[]> {
+    async fetchMany(
+        specification?: ISpecification<TAggregate>
+    ): Promise<ResultOrError<TAggregate>[]> {
         const eventStream = await this.eventRepository.fetchEvents({
-            type: AggregateType.song,
+            type: this.aggregateType,
         });
 
         if (specification) {
@@ -65,20 +79,25 @@ export class ArangoSongCommandRepository implements IRepositoryForAggregate<Song
             ),
         ];
 
-        const allSongs = uniqueIds
-            .map((id) => Song.fromEventHistory(eventStream, id))
-            .filter((result): result is ResultOrError<Song> => !isNotFound(result));
+        const Ctor = await this.getAggregateRootCtor();
 
-        return allSongs;
+        // Specific to TAggregate
+        const allTAggregates = uniqueIds
+            .map((id) => Ctor.fromEventHistory(eventStream, id))
+            .filter((result): result is ResultOrError<TAggregate> => !isNotFound(result));
+
+        return allTAggregates;
     }
 
-    async getCount(specification?: ISpecification<Song>): Promise<number> {
-        const allSongs = await this.fetchMany(specification);
+    async getCount(specification?: ISpecification<TAggregate>): Promise<number> {
+        const allTAggregates = await this.fetchMany(specification);
 
-        return allSongs.length;
+        return allTAggregates.length;
     }
 
-    async create(entity: Song) {
+    async create(entity: TAggregate) {
+        // throw new InternalError(`You should use the event repository append method`);
+
         const { eventHistory } = entity;
 
         if (eventHistory.length > 1) {
@@ -110,7 +129,11 @@ export class ArangoSongCommandRepository implements IRepositoryForAggregate<Song
      * would be to write many events and then expose a method on the
      * `Snapshot Repository` to refresh the cache (i.e., event source from scratch).
      */
-    async createMany(entities: Song[]) {
+
+    // Specific to TAggregate - type only
+    async createMany(entities: TAggregate[]) {
+        // throw new InternalError(`You should use the event repository append method`);
+
         if (entities.length === 0) return;
 
         await Promise.all(entities.map((entity) => this.create(entity)));
@@ -125,7 +148,9 @@ export class ArangoSongCommandRepository implements IRepositoryForAggregate<Song
      * do not expose to the client the ability to merge updates to the database
      * directly.
      */
-    async update(updatedEntity: Song): Promise<void> {
+
+    // Specific to TAggregate - type only
+    async update(updatedEntity: TAggregate): Promise<void> {
         // Should the event history be an array of instances? << DO this!
         const { eventHistory = [] } = updatedEntity;
 
@@ -140,5 +165,41 @@ export class ArangoSongCommandRepository implements IRepositoryForAggregate<Song
         await this.eventRepository.appendEvent(mostRecentEvent);
 
         await this.snapshotRepositoryForAggregate.update(updatedEntity);
+    }
+
+    // TODO refactor this- we probably should do this once at bootstrap
+    private async getAggregateRootCtor<TAggregate extends Aggregate = Aggregate>(): Promise<
+        IEventSourceable<TAggregate>
+    > {
+        // fetch all known class constructor values (commands, domain classes, etc.) from IoC containers
+        const allCtors = await this.dataTypeFinderService.getAllDataClassCtors();
+
+        const allAggregateRootCtors = allCtors.filter(
+            (target) => !isNotFound(getAggregateTypeForTarget(target))
+        );
+
+        const aggregateTypeToCtor = allAggregateRootCtors.reduce(
+            (lookupTable: Record<string, DomainModelCtor>, ctor) => {
+                // TODO assert this above on the first call
+                const { aggregateType } = getAggregateTypeForTarget(ctor) as AggregateTypeMetadata;
+
+                return {
+                    ...lookupTable,
+                    [aggregateType]: ctor as DomainModelCtor,
+                };
+            },
+            {}
+        );
+
+        // TODO Use dynamic annotation \ reflection to get this
+        const Ctor = aggregateTypeToCtor[this.aggregateType];
+
+        if (isNullOrUndefined(Ctor)) {
+            throw new InternalError(
+                `Failed to find a domain model class for aggregate type: ${this.aggregateType}`
+            );
+        }
+
+        return Ctor as unknown as IEventSourceable<TAggregate>;
     }
 }

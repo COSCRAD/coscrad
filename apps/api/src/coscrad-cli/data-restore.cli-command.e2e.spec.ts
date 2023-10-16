@@ -3,7 +3,6 @@ import { existsSync, mkdirSync, unlinkSync, writeFileSync } from 'fs';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
-import { CoscradEventFactory } from '../domain/common';
 import { AggregateType } from '../domain/types/AggregateType';
 import { DeluxeInMemoryStore } from '../domain/types/DeluxeInMemoryStore';
 import { isNullOrUndefined } from '../domain/utilities/validation/is-null-or-undefined';
@@ -56,10 +55,7 @@ describe(`CLI Command: **data-restore**`, () => {
 
         databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
 
-        testRepositoryProvider = new TestRepositoryProvider(
-            databaseProvider,
-            new CoscradEventFactory(dynamicDataTypeFinderService)
-        );
+        testRepositoryProvider = testAppModule.get(TestRepositoryProvider);
 
         commandInstance = await CommandTestFactory.createTestingCommand({
             imports: [CoscradCliModule],

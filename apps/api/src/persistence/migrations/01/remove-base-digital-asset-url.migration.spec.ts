@@ -9,6 +9,7 @@ import { isNullOrUndefined } from '../../../domain/utilities/validation/is-null-
 import { InternalError } from '../../../lib/errors/InternalError';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../types/DTO';
+import { DynamicDataTypeFinderService } from '../../../validation';
 import { ArangoConnectionProvider } from '../../database/arango-connection.provider';
 import { ArangoQueryRunner } from '../../database/arango-query-runner';
 import { ArangoCollectionId } from '../../database/collection-references/ArangoCollectionId';
@@ -75,7 +76,8 @@ describe.skip(`RemoveBaseDigitalAssetUrl`, () => {
              */
             testRepositoryProvider = new TestRepositoryProvider(
                 databaseProvider,
-                coscradEventFactory
+                coscradEventFactory,
+                testModule.get(DynamicDataTypeFinderService)
             );
 
             testQueryRunner = new ArangoQueryRunner(testDatabaseProvider);
