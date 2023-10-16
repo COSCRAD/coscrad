@@ -53,7 +53,9 @@ describe(`CLI Command: **clear-database**`, () => {
 
         await testAppModule.init();
 
-        await testAppModule.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
+        const dynamicDataTypeFinderService = testAppModule.get(DynamicDataTypeFinderService);
+
+        await dynamicDataTypeFinderService.bootstrapDynamicTypes();
 
         const arangoConnectionProvider =
             testAppModule.get<ArangoConnectionProvider>(ArangoConnectionProvider);
@@ -62,7 +64,11 @@ describe(`CLI Command: **clear-database**`, () => {
 
         const coscradEventFactory = testAppModule.get(CoscradEventFactory);
 
-        testRepositoryProvider = new TestRepositoryProvider(databaseProvider, coscradEventFactory);
+        testRepositoryProvider = new TestRepositoryProvider(
+            databaseProvider,
+            coscradEventFactory,
+            dynamicDataTypeFinderService
+        );
 
         commandInstance = await CommandTestFactory.createTestingCommand({
             imports: [CoscradCliModule],
@@ -74,7 +80,13 @@ describe(`CLI Command: **clear-database**`, () => {
             .overrideProvider(ArangoDatabaseProvider)
             .useValue(databaseProvider)
             .overrideProvider(ArangoRepositoryProvider)
-            .useValue(new ArangoRepositoryProvider(databaseProvider, coscradEventFactory))
+            .useValue(
+                new ArangoRepositoryProvider(
+                    databaseProvider,
+                    coscradEventFactory,
+                    dynamicDataTypeFinderService
+                )
+            )
             .compile();
 
         process.env.NODE_ENV = 'e2e';

@@ -18,7 +18,7 @@ import { ArangoDatabaseProvider } from '../database/database.provider';
 import { PersistenceModule } from '../persistence.module';
 import TestRepositoryProvider from './__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from './__tests__/generateDatabaseNameForTestSuite';
-import { IEventRepository } from './arango-command-repository-for-aggregate';
+import { IEventRepository } from './arango-command-repository-for-aggregate-root';
 import { ArangoEventRepository } from './arango-event-repository';
 
 const fakeTimersConfig = buildFakeTimersConfig();
@@ -32,13 +32,15 @@ describe(`Arango Event Repository`, () => {
 
     let coscradEventFactory: CoscradEventFactory;
 
+    let dynamicDataTypeFinderService: DynamicDataTypeFinderService;
+
     beforeAll(async () => {
         const testingModule = await Test.createTestingModule({
             imports: [
+                DynamicDataTypeModule,
                 SongModule,
                 EventModule,
                 PersistenceModule.forRootAsync(),
-                DynamicDataTypeModule,
             ],
             providers: [
                 {
@@ -67,13 +69,19 @@ describe(`Arango Event Repository`, () => {
 
         arangoDatabaseProvider = testingModule.get(ArangoDatabaseProvider);
 
-        await testingModule.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
+        dynamicDataTypeFinderService = testingModule.get(DynamicDataTypeFinderService);
+
+        await dynamicDataTypeFinderService.bootstrapDynamicTypes();
 
         jest.useFakeTimers(fakeTimersConfig);
     });
 
     beforeEach(async () => {
-        await new TestRepositoryProvider(arangoDatabaseProvider, coscradEventFactory).testSetup();
+        await new TestRepositoryProvider(
+            arangoDatabaseProvider,
+            coscradEventFactory,
+            dynamicDataTypeFinderService
+        ).testSetup();
     });
 
     describe(`appendEvent`, () => {

@@ -2,7 +2,6 @@ import { TestingModule } from '@nestjs/testing';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
-import { CoscradEventFactory } from '../domain/common';
 import { ResourceType } from '../domain/types/ResourceType';
 import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
@@ -24,6 +23,7 @@ describe(`CLI Command: ${cliCommandName}`, () => {
 
     let testRepositoryProvider: TestRepositoryProvider;
 
+    /* eslint-disable @typescript-eslint/no-unused-vars */
     let databaseProvider: ArangoDatabaseProvider;
 
     const mockLogger = buildMockLogger({ isEnabled: true });
@@ -40,9 +40,7 @@ describe(`CLI Command: ${cliCommandName}`, () => {
 
         databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
 
-        const coscradEventFactory = testAppModule.get(CoscradEventFactory);
-
-        testRepositoryProvider = new TestRepositoryProvider(databaseProvider, coscradEventFactory);
+        testRepositoryProvider = testAppModule.get(TestRepositoryProvider);
 
         commandInstance = await CommandTestFactory.createTestingCommand({
             imports: [CoscradCliModule],
