@@ -5,6 +5,8 @@ import {
     CreatePromptTermCommandHandler,
     CreateTerm,
     CreateTermCommandHandler,
+    ElicitTermFromPrompt,
+    ElicitTermFromPromptCommandHandler,
     TranslateTerm,
     TranslateTermCommandHandler,
 } from '../../domain/models/term/commands';
@@ -23,8 +25,9 @@ import { TermController } from '../controllers/resources/term.controller';
         CreateTermCommandHandler,
         CreatePromptTermCommandHandler,
         TranslateTermCommandHandler,
+        ElicitTermFromPromptCommandHandler,
         // Data Classes
-        ...[CreateTerm, CreatePromptTerm, TranslateTerm].map((ctor) => ({
+        ...[CreateTerm, CreatePromptTerm, TranslateTerm, ElicitTermFromPrompt].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
         })),

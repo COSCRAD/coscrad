@@ -1,9 +1,15 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandFSA } from '../../app/controllers/command/command-fsa/command-fsa.entity';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
-import { CreatePromptTerm, CreateTerm, TranslateTerm } from '../../domain/models/term/commands';
+import {
+    CreatePromptTerm,
+    CreateTerm,
+    ElicitTermFromPrompt,
+    TranslateTerm,
+} from '../../domain/models/term/commands';
 import { CREATE_PROMPT_TERM } from '../../domain/models/term/commands/create-prompt-term/constants';
 import { CREATE_TERM } from '../../domain/models/term/commands/create-term/constants';
+import { ELICIT_TERM_FROM_PROMPT } from '../../domain/models/term/commands/elicit-term-from-prompt/constants';
 import { TRANSLATE_TERM } from '../../domain/models/term/commands/translate-term/constants';
 import { AggregateType } from '../../domain/types/AggregateType';
 
@@ -47,4 +53,21 @@ const translateTerm: CommandFSA<TranslateTerm> = {
     },
 };
 
-export const buildTermTestCommandFsas = () => [createTerm, translateTerm, createPromptTerm];
+const elicitTermFromPrompt: CommandFSA<ElicitTermFromPrompt> = {
+    type: ELICIT_TERM_FROM_PROMPT,
+    payload: {
+        aggregateCompositeIdentifier: {
+            id,
+            type,
+        },
+        text: 'text for term from prompt',
+        languageCode: LanguageCode.Chilcotin,
+    },
+};
+
+export const buildTermTestCommandFsas = () => [
+    createTerm,
+    translateTerm,
+    createPromptTerm,
+    elicitTermFromPrompt,
+];

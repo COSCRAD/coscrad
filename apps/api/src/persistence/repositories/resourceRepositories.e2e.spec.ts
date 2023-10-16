@@ -9,7 +9,20 @@ import buildTestData from '../../test-data/buildTestData';
 import TestRepositoryProvider from './__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from './__tests__/generateDatabaseNameForTestSuite';
 
-describe('Repository provider > repositoryForEntity', () => {
+/**
+ * Note that historically we persisted state at the level of snapshots. This
+ * test gave us a quick sanity check that every resource repository was working.
+ *
+ * We are moving towards properly event sourcing our domain by storing only
+ * events in the command database. This leads to a change in the implementation
+ * of our repositories. Going forward, we have decided to have a single smoke-test \
+ * sanity check for each aggregate root (including resource) repository.
+ *
+ * Eventually, all existing resources will become event sourced in this way.
+ * In the meantime, we skip this test as our command integration tests give us
+ * very good coverage of the repositories anyway.
+ */
+describe.skip('Repository provider > repositoryForEntity', () => {
     const testDatabaseName = generateDatabaseNameForTestSuite();
 
     const testData = buildTestData().resources;
