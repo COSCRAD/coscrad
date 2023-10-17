@@ -22,6 +22,7 @@ import { AudioItemAddedToPlaylist } from './audio-item-added-to-playlist.event';
 
 @CommandHandler(AddAudioItemToPlaylist)
 export class AddAudioItemToPlaylistCommandHandler extends BaseUpdateCommandHandler<Playlist> {
+    // TODO do we still need this?
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN)
         protected readonly repositoryProvider: IRepositoryProvider,

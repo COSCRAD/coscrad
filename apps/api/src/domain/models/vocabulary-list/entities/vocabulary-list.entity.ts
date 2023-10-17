@@ -6,10 +6,12 @@ import { ValidationResult } from '../../../../lib/errors/types/ValidationResult'
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
+import formatAggregateCompositeIdentifier from '../../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import { Valid, isValid } from '../../../domainModelValidators/Valid';
 import VocabularyListWithNoEntriesCannotBePublishedError from '../../../domainModelValidators/errors/vocabularyList/vocabulary-list-with-no-entries-cannot-be-published.error';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
+import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
@@ -76,6 +78,10 @@ export class VocabularyList extends Resource {
         return this.name.clone();
     }
 
+    hasEntryForTerm(termId: AggregateId): boolean {
+        return this.entries.some((entry) => termId === entry.termId);
+    }
+
     translateName(textItem: MultilingualTextItem): ResultOrError<VocabularyList> {
         if (this.name.items.some(({ languageCode }) => languageCode === textItem.languageCode))
             return new DuplicateLanguageInMultilingualTextError(textItem.languageCode);
@@ -86,6 +92,29 @@ export class VocabularyList extends Resource {
 
         return this.safeClone<VocabularyList>({
             name: nameUpdateResult,
+        });
+    }
+
+    addEntry(termId: AggregateId): ResultOrError<VocabularyList> {
+        const isTermAlreadyInList = this.entries.some((entry) => entry.termId === termId);
+
+        if (isTermAlreadyInList)
+            return new InternalError(
+                `you cannot add ${formatAggregateCompositeIdentifier({
+                    id: termId,
+                    type: AggregateType.term,
+                })} to ${formatAggregateCompositeIdentifier(
+                    this.getCompositeIdentifier()
+                )}, as there is already an entry for this term`
+            );
+
+        const newEntry = new VocabularyListEntry({
+            termId,
+            variableValues: {},
+        });
+
+        return this.safeClone<VocabularyList>({
+            entries: this.entries.concat(newEntry),
         });
     }
 

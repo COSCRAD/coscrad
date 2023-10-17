@@ -131,13 +131,13 @@ import {
     TranslateVideoNameCommandHandler,
 } from '../../../domain/models/video';
 import {
+    AddTermToVocabularyList,
+    AddTermtoVocabularyListCommandHandler,
     CreateVocabularyList,
     CreateVocabularyListCommandHandler,
-} from '../../../domain/models/vocabulary-list/commands/create-vocabulary-list';
-import {
     TranslateVocabularyListName,
     TranslateVocabularyListNameCommandHandler,
-} from '../../../domain/models/vocabulary-list/commands/translate-vocabulary-list-name';
+} from '../../../domain/models/vocabulary-list/commands';
 import { AudioItemQueryService } from '../../../domain/services/query-services/audio-item-query.service';
 import { BibliographicReferenceQueryService } from '../../../domain/services/query-services/bibliographic-reference-query.service';
 import { BookQueryService } from '../../../domain/services/query-services/book-query.service';
@@ -559,6 +559,8 @@ export default async (
             TranslateLineItemCommandHandler,
             TranslateVocabularyListName,
             TranslateVocabularyListNameCommandHandler,
+            AddTermToVocabularyList,
+            AddTermtoVocabularyListCommandHandler,
             TranslateVideoName,
             TranslateVideoNameCommandHandler,
             TranslateAudioItemName,
