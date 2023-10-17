@@ -11,4 +11,12 @@ export interface ISimpleCoscradPropertyTypeDefinition<TDataTypeEnum extends stri
      * dynamic selection options for command forms, for example.
      */
     referenceTo?: string;
+    /**
+     * If specified, the client should bind the value of the given property
+     * from its own view state when building an object that satisfies the
+     * given schema. This typically happens when populating command forms and
+     * using the view (in an abastract sense) as a form element to populate
+     * some of the payload.
+     */
+    bindToViewProperty?: string;
 }

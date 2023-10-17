@@ -64,7 +64,7 @@ export const buildFormFieldForCommandPayloadProp = (
     nameLabelAndDescription: NameLabelAndDescription
 ): IFormField => {
     if (isSimpleCoscradPropertyTypeDefinition(propertyTypeDefinition)) {
-        const { coscradDataType, referenceTo } = propertyTypeDefinition;
+        const { coscradDataType, referenceTo, bindToViewProperty } = propertyTypeDefinition;
 
         if (typeof referenceTo === 'string') {
             if (!isAggregateType(referenceTo)) {
@@ -80,6 +80,34 @@ export const buildFormFieldForCommandPayloadProp = (
                     propertyTypeDefinition
                 ),
                 options: { aggregateType: referenceTo },
+            };
+        }
+
+        /**
+         * In some cases, we use a front-end view as a form element. In that case,
+         * we simply want to bind to the view state, which is built up via
+         * user interaction.
+         */
+        if (typeof bindToViewProperty === 'string') {
+            const { name, label, description } = nameLabelAndDescription;
+
+            if (bindToViewProperty.length === 0) {
+                throw new InternalError(`Cannot bind property ${label} to empty view property`);
+            }
+
+            return {
+                type: FormFieldType.populatedFromView,
+                name,
+                label,
+                description,
+                /**
+                 * Populating property values from the model is by design safe
+                 * so long as the property naturally aligns with the validation
+                 * that will be done. Concretely, if we bind an `inPointMilliseconds`
+                 * property to the state of a video's timeline, it will not be possible
+                 * to specify a time point that is out of range.
+                 */
+                constraints: [],
             };
         }
 

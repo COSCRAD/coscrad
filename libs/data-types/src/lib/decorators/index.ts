@@ -1,3 +1,4 @@
+export * from './BindToViewState';
 export * from './Boolean';
 export * from './CompositeIdentifier';
 export * from './Enum';
