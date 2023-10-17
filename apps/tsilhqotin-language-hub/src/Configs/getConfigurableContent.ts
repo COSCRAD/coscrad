@@ -1,9 +1,6 @@
 import { GlobalConfig } from './global.config';
 import rawData from './global.config.json';
 
-const combineErrorMessages = (errors: Error[]): string =>
-    errors.map(({ message }) => message).join('\n');
-
 /**
  * This function
  * - reads the raw config data
