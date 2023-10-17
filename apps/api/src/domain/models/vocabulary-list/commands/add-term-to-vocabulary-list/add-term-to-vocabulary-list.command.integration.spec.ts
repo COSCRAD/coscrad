@@ -108,4 +108,28 @@ describe(commandType, () => {
             });
         });
     });
+
+    describe(`when the command is invalid`, () => {
+        describe(`when the term does not exist`, () => {
+            it.todo(`should have a test`);
+        });
+
+        describe(`when the vocabulary list does not exist`, () => {
+            it.todo(`should have a test`);
+        });
+
+        describe(`when the term is already in the vocabulary list`, () => {
+            it.todo(`should have a test`);
+        });
+
+        describe(`when the payload has an invalid type`, () => {
+            describe(`when the aggreagate type is not vocabulary list`, () => {
+                it.todo(`should have a test`);
+            });
+
+            describe(`fuzz test`, () => {
+                it.todo(`should have a test`);
+            });
+        });
+    });
 });
