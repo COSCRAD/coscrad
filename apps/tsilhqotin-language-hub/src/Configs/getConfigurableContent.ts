@@ -1,6 +1,5 @@
 import { GlobalConfig } from './global.config';
 import rawData from './global.config.json';
-import { validateGlobalConfig } from './validateGlobalConfig';
 
 const combineErrorMessages = (errors: Error[]): string =>
     errors.map(({ message }) => message).join('\n');
@@ -16,16 +15,10 @@ const combineErrorMessages = (errors: Error[]): string =>
  * though you are simply fetching the content config.
  */
 export const getConfigurableContent = () => {
-    const validationErrors = validateGlobalConfig(rawData);
-
-    if (validationErrors.length > 0) {
-        // Fail fast
-        throw new Error(
-            `Invalid content config encountered. \n Errors: ${combineErrorMessages(
-                validationErrors
-            )}`
-        );
-    }
+    /**
+     * Note that we used to validate the content config when it was JSON. This is no
+     * longer necessary, as it is now a TypeScript file.
+     */
 
     // Since the validation was successful, we assert the type of the result.
     return rawData as unknown as GlobalConfig;
