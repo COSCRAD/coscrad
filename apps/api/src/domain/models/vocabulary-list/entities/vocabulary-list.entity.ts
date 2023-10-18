@@ -6,7 +6,6 @@ import { ValidationResult } from '../../../../lib/errors/types/ValidationResult'
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
-import formatAggregateCompositeIdentifier from '../../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import { Valid, isValid } from '../../../domainModelValidators/Valid';
 import VocabularyListWithNoEntriesCannotBePublishedError from '../../../domainModelValidators/errors/vocabularyList/vocabulary-list-with-no-entries-cannot-be-published.error';
@@ -20,8 +19,12 @@ import { TextFieldContext } from '../../context/text-field-context/text-field-co
 import { Resource } from '../../resource.entity';
 import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
+import { ADD_TERM_TO_VOCABULARY_LIST } from '../commands/add-term-to-vocabulary-list/constants';
 import { TRANSLATE_VOCABULARY_LIST_NAME } from '../commands/translate-vocabulary-list-name/constants';
-import { DuplicateVocabularyListNameError } from '../errors';
+import {
+    CannotAddMultipleEntriesForSingleTermError,
+    DuplicateVocabularyListNameError,
+} from '../errors';
 import { VocabularyListEntry } from '../vocabulary-list-entry.entity';
 import { VocabularyListVariable } from './vocabulary-list-variable.entity';
 
@@ -99,14 +102,7 @@ export class VocabularyList extends Resource {
         const isTermAlreadyInList = this.entries.some((entry) => entry.termId === termId);
 
         if (isTermAlreadyInList)
-            return new InternalError(
-                `you cannot add ${formatAggregateCompositeIdentifier({
-                    id: termId,
-                    type: AggregateType.term,
-                })} to ${formatAggregateCompositeIdentifier(
-                    this.getCompositeIdentifier()
-                )}, as there is already an entry for this term`
-            );
+            return new CannotAddMultipleEntriesForSingleTermError(termId, this.id);
 
         const newEntry = new VocabularyListEntry({
             termId,
@@ -119,7 +115,7 @@ export class VocabularyList extends Resource {
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {
-        return [TRANSLATE_VOCABULARY_LIST_NAME];
+        return [TRANSLATE_VOCABULARY_LIST_NAME, ADD_TERM_TO_VOCABULARY_LIST];
     }
 
     protected validateComplexInvariants(): InternalError[] {

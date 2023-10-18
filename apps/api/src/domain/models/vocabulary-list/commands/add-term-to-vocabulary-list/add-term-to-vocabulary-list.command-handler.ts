@@ -1,11 +1,15 @@
-import { CommandHandler, ICommand } from '@coscrad/commands';
+import { AggregateType } from '@coscrad/api-interfaces';
+import { CommandHandler } from '@coscrad/commands';
 import { Valid } from '../../../../../domain/domainModelValidators/Valid';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../../domain/types/ResourceType';
-import { InternalError } from '../../../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
+import { isNotFound } from '../../../../../lib/types/not-found';
 import { ResultOrError } from '../../../../../types/ResultOrError';
+import formatAggregateCompositeIdentifier from '../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { Term } from '../../../term/entities/term.entity';
 import { VocabularyList } from '../../entities/vocabulary-list.entity';
 import { AddTermToVocabularyList } from './add-term-to-vocabulary-list.command';
 import { TermAddedToVocabularyList } from './term-added-to-vocabulary-list.event';
@@ -19,15 +23,36 @@ export class AddTermtoVocabularyListCommandHandler extends BaseUpdateCommandHand
         return vocabularyListToUpdate.addEntry(termId);
     }
 
-    protected fetchRequiredExternalState(_command?: ICommand): Promise<InMemorySnapshot> {
-        return Promise.resolve(new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat());
+    protected async fetchRequiredExternalState({
+        termId,
+    }: AddTermToVocabularyList): Promise<InMemorySnapshot> {
+        const termSearchResult = await this.repositoryProvider
+            .forResource<Term>(AggregateType.term)
+            .fetchById(termId);
+
+        if (isInternalError(termSearchResult)) {
+            throw new InternalError(
+                `Encountered invalid existing data for ${formatAggregateCompositeIdentifier({
+                    type: AggregateType.term,
+                    id: termId,
+                })}`
+            );
+        }
+
+        const allTerms: Term[] = isNotFound(termSearchResult) ? [] : [termSearchResult];
+
+        return Promise.resolve(
+            new DeluxeInMemoryStore({
+                [AggregateType.term]: allTerms,
+            }).fetchFullSnapshotInLegacyFormat()
+        );
     }
 
     protected validateExternalState(
-        _state: InMemorySnapshot,
-        _instance: VocabularyList
+        snapshot: InMemorySnapshot,
+        vocabularyList: VocabularyList
     ): InternalError | Valid {
-        return Valid;
+        return vocabularyList.validateExternalState(snapshot);
     }
 
     protected buildEvent(
