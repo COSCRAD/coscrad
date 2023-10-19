@@ -1,4 +1,4 @@
-import { IFormField, IFormFieldConstraint } from '@coscrad/api-interfaces';
+import { FormFieldType, IFormField, IFormFieldConstraint } from '@coscrad/api-interfaces';
 import {
     CoscradConstraint,
     isBoolean,
@@ -60,27 +60,29 @@ export const DynamicForm = ({
                 <Divider />
 
                 <Stack spacing={1}>
-                    {fields.map((field) => {
-                        return (
-                            <Tooltip title={field.description} arrow placement="right">
-                                <div key={field.name}>
-                                    {/* TODO Remove the following once we actually make use of the validation */}
-                                    <ConstraintValidationResultPresenter
-                                        errorMessages={fieldNameToErrorMessages.get(field.name)}
-                                    />
-                                    <DynamicFormElement
-                                        formField={field}
-                                        key={field.name}
-                                        onElementChange={onFieldUpdate}
-                                        currentValue={formState[field.name]}
-                                        required={field.constraints.some(
-                                            ({ name }) => name === CoscradConstraint.isRequired
-                                        )}
-                                    />
-                                </div>
-                            </Tooltip>
-                        );
-                    })}
+                    {fields
+                        .filter((field) => field.type !== FormFieldType.populatedFromView)
+                        .map((field) => {
+                            return (
+                                <Tooltip title={field.description} arrow placement="right">
+                                    <div key={field.name}>
+                                        {/* TODO Remove the following once we actually make use of the validation */}
+                                        <ConstraintValidationResultPresenter
+                                            errorMessages={fieldNameToErrorMessages.get(field.name)}
+                                        />
+                                        <DynamicFormElement
+                                            formField={field}
+                                            key={field.name}
+                                            onElementChange={onFieldUpdate}
+                                            currentValue={formState[field.name]}
+                                            required={field.constraints.some(
+                                                ({ name }) => name === CoscradConstraint.isRequired
+                                            )}
+                                        />
+                                    </div>
+                                </Tooltip>
+                            );
+                        })}
                 </Stack>
                 {isBoolean(isValid) && isValid
                     ? null

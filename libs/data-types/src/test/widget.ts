@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import { bootstrapDynamicTypes, NonEmptyString, URL, UUID } from '../index';
 import {
+    BindToViewState,
     Enum,
     FiniteNumber,
     ISBN,
@@ -155,6 +156,10 @@ export class Widget {
     @BooleanDataType(buildDummyLabelAndDescription('isActive'))
     isActive = true;
 
+    @BindToViewState(`selectedPoint`)
+    @NonNegativeFiniteNumber(buildDummyLabelAndDescription('rivetPoint'))
+    rivetPoint = 66.74; // presumably this is less than the `width` in the toy model
+
     constructor(dto: Widget) {
         Object.assign(this, dto);
     }
@@ -227,4 +232,6 @@ export const buildValidWidgetDto = (): Widget => ({
     siblingWidgetIds: ['4', '33'],
 
     isActive: false,
+
+    rivetPoint: 20.123,
 });
