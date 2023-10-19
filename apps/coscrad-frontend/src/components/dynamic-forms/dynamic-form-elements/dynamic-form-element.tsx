@@ -111,6 +111,11 @@ export const DynamicFormElement = ({
         );
     }
 
+    // TODO Can we update the type of this function's parameters instead to exclude this possiblity?
+    if (type === FormFieldType.populatedFromView) {
+        throw new Error(`Not Implemented: Support for binding a view to a form field`);
+    }
+
     const exhaustiveCheck: never = type;
 
     return (

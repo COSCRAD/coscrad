@@ -204,6 +204,14 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "isOptional": false,
     "label": "label for property: requiredISBN",
   },
+  "rivetPoint": {
+    "bindToViewProperty": "selectedPoint",
+    "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+    "description": "description of property: rivetPoint",
+    "isArray": false,
+    "isOptional": false,
+    "label": "label for property: rivetPoint",
+  },
   "role": {
     "complexDataType": "ENUM",
     "description": "description of property: role",
