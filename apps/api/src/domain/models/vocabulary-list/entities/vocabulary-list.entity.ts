@@ -10,6 +10,7 @@ import { MultilingualText, MultilingualTextItem } from '../../../common/entities
 import { Valid, isValid } from '../../../domainModelValidators/Valid';
 import VocabularyListWithNoEntriesCannotBePublishedError from '../../../domainModelValidators/errors/vocabularyList/vocabulary-list-with-no-entries-cannot-be-published.error';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
+import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
@@ -18,8 +19,12 @@ import { TextFieldContext } from '../../context/text-field-context/text-field-co
 import { Resource } from '../../resource.entity';
 import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
+import { ADD_TERM_TO_VOCABULARY_LIST } from '../commands/add-term-to-vocabulary-list/constants';
 import { TRANSLATE_VOCABULARY_LIST_NAME } from '../commands/translate-vocabulary-list-name/constants';
-import { DuplicateVocabularyListNameError } from '../errors';
+import {
+    CannotAddMultipleEntriesForSingleTermError,
+    DuplicateVocabularyListNameError,
+} from '../errors';
 import { VocabularyListEntry } from '../vocabulary-list-entry.entity';
 import { VocabularyListVariable } from './vocabulary-list-variable.entity';
 
@@ -76,6 +81,10 @@ export class VocabularyList extends Resource {
         return this.name.clone();
     }
 
+    hasEntryForTerm(termId: AggregateId): boolean {
+        return this.entries.some((entry) => termId === entry.termId);
+    }
+
     translateName(textItem: MultilingualTextItem): ResultOrError<VocabularyList> {
         if (this.name.items.some(({ languageCode }) => languageCode === textItem.languageCode))
             return new DuplicateLanguageInMultilingualTextError(textItem.languageCode);
@@ -89,8 +98,22 @@ export class VocabularyList extends Resource {
         });
     }
 
+    addEntry(termId: AggregateId): ResultOrError<VocabularyList> {
+        if (this.hasEntryForTerm(termId))
+            return new CannotAddMultipleEntriesForSingleTermError(termId, this.id);
+
+        const newEntry = new VocabularyListEntry({
+            termId,
+            variableValues: {},
+        });
+
+        return this.safeClone<VocabularyList>({
+            entries: this.entries.concat(newEntry),
+        });
+    }
+
     protected getResourceSpecificAvailableCommands(): string[] {
-        return [TRANSLATE_VOCABULARY_LIST_NAME];
+        return [TRANSLATE_VOCABULARY_LIST_NAME, ADD_TERM_TO_VOCABULARY_LIST];
     }
 
     protected validateComplexInvariants(): InternalError[] {

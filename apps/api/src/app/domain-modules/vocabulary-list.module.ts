@@ -1,13 +1,14 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
 import {
+    AddTermToVocabularyList,
+    AddTermtoVocabularyListCommandHandler,
     CreateVocabularyList,
     CreateVocabularyListCommandHandler,
-} from '../../domain/models/vocabulary-list/commands/create-vocabulary-list';
-import {
     TranslateVocabularyListName,
     TranslateVocabularyListNameCommandHandler,
-} from '../../domain/models/vocabulary-list/commands/translate-vocabulary-list-name';
+} from '../../domain/models/vocabulary-list/commands';
+
 import { VocabularyListNameTranslated } from '../../domain/models/vocabulary-list/commands/translate-vocabulary-list-name/vocabulary-list-name-translated.event';
 import { VocabularyListQueryService } from '../../domain/services/query-services/vocabulary-list-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
@@ -23,13 +24,17 @@ import { VocabularyListController } from '../controllers/resources/vocabulary-li
         VocabularyListQueryService,
         CreateVocabularyListCommandHandler,
         TranslateVocabularyListNameCommandHandler,
+        AddTermtoVocabularyListCommandHandler,
         // Data Classes
-        ...[CreateVocabularyList, TranslateVocabularyListName, VocabularyListNameTranslated].map(
-            (ctor) => ({
-                provide: ctor,
-                useValue: ctor,
-            })
-        ),
+        ...[
+            CreateVocabularyList,
+            TranslateVocabularyListName,
+            VocabularyListNameTranslated,
+            AddTermToVocabularyList,
+        ].map((ctor) => ({
+            provide: ctor,
+            useValue: ctor,
+        })),
     ],
 })
 export class VocabularyListModule {}
