@@ -3642,6 +3642,52 @@ exports[`command payload schemas Command payload schema should match the snapsho
     "type": "TRANSLATE_VOCABULARY_LIST_NAME",
   },
   {
+    "description": "add a term to the vocabulary list",
+    "label": "add term to vocabulary list",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "must be: vocabularyList",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "vocabularyList",
+                "value": "vocabularyList",
+              },
+            ],
+          },
+        },
+      },
+      "termId": {
+        "coscradDataType": "UUID",
+        "description": "the ID of the term you are adding to this vocabulary list",
+        "isArray": false,
+        "isOptional": false,
+        "label": "term ID",
+        "referenceTo": "term",
+      },
+    },
+    "type": "ADD_TERM_TO_VOCABULARY_LIST",
+  },
+  {
     "description": "Translate the name of a video to an additional language",
     "label": "Translate Video Name",
     "schema": {
