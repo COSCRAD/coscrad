@@ -13,7 +13,6 @@ import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeI
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
-import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import { DuplicateLanguageInMultilingualTextError } from '../../audio-item/errors/duplicate-language-in-multilingual-text.error';
 import { TextFieldContext } from '../../context/text-field-context/text-field-context.entity';
 import { Resource } from '../../resource.entity';
@@ -23,10 +22,17 @@ import { ADD_TERM_TO_VOCABULARY_LIST } from '../commands/add-term-to-vocabulary-
 import { TRANSLATE_VOCABULARY_LIST_NAME } from '../commands/translate-vocabulary-list-name/constants';
 import {
     CannotAddMultipleEntriesForSingleTermError,
+    CannotHaveTwoFilterPropertiesWithTheSameNameError,
     DuplicateVocabularyListNameError,
 } from '../errors';
 import { VocabularyListEntry } from '../vocabulary-list-entry.entity';
 import { VocabularyListVariable } from './vocabulary-list-variable.entity';
+
+// TODO break out this type
+type LabelAndValue<T = string> = {
+    label: string;
+    value: T;
+};
 
 @RegisterIndexScopedCommands([`CREATE_VOCABULARY_LIST`])
 export class VocabularyList extends Resource {
@@ -47,6 +53,9 @@ export class VocabularyList extends Resource {
     })
     readonly entries: VocabularyListEntry[];
 
+    /**
+     * TODO rename this `property filters`
+     */
     @NestedDataType(VocabularyListVariable, {
         isArray: true,
         // i.e. can be empty
@@ -70,10 +79,11 @@ export class VocabularyList extends Resource {
             : null;
 
         /**
+         * TODO Add this
          * Missing invariant- each variable must have a unique name.
          */
         this.variables = Array.isArray(variables)
-            ? variables.map((v) => (isNullOrUndefined(v) ? v : cloneToPlainObject(v)))
+            ? variables.map((v) => new VocabularyListVariable(v))
             : null;
     }
 
@@ -83,6 +93,11 @@ export class VocabularyList extends Resource {
 
     hasEntryForTerm(termId: AggregateId): boolean {
         return this.entries.some((entry) => termId === entry.termId);
+    }
+
+    hasFilterPropertyNamed(name: string): boolean {
+        // TODO rename `variables` to `filterProperties`
+        return this.variables.some((filterProperty) => filterProperty.name === name);
     }
 
     translateName(textItem: MultilingualTextItem): ResultOrError<VocabularyList> {
@@ -112,6 +127,33 @@ export class VocabularyList extends Resource {
         });
     }
 
+    // TODO should type be an enum?
+    registerFilterProperty(
+        name: string,
+        type: string,
+        allowedValuesWithLabels: LabelAndValue[]
+    ): ResultOrError<VocabularyList> {
+        if (this.hasFilterPropertyNamed(name)) {
+            return new CannotHaveTwoFilterPropertiesWithTheSameNameError(name, this.id);
+        }
+
+        const newVocabularyList = this.safeClone<VocabularyList>({
+            variables: [
+                // TODO use a constructor for VocabularyListVariable here
+                ...this.variables
+                    .map((variable) => variable.toDTO())
+                    .concat({
+                        name,
+                        type,
+                        validValues: cloneToPlainObject(allowedValuesWithLabels),
+                    } as DTO<VocabularyListVariable>)
+                    .map((dto) => new VocabularyListVariable(dto)),
+            ],
+        });
+
+        return newVocabularyList;
+    }
+
     protected getResourceSpecificAvailableCommands(): string[] {
         return [TRANSLATE_VOCABULARY_LIST_NAME, ADD_TERM_TO_VOCABULARY_LIST];
     }
@@ -131,6 +173,13 @@ export class VocabularyList extends Resource {
             if (this.published)
                 allErrors.push(new VocabularyListWithNoEntriesCannotBePublishedError(id));
         }
+
+        // We `flatmap` because each validation call per variable returns an array of errors
+        const filterPropertyValidationResult = this.variables.flatMap((variable) =>
+            variable.validateComplexInvariants()
+        );
+
+        allErrors.push(...filterPropertyValidationResult);
 
         return allErrors;
     }

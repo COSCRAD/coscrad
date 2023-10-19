@@ -36,7 +36,7 @@ const buildEntryForTerm = (term: Term): VocabularyListEntry => {
 
 const entries = terms.map(buildEntryForTerm);
 
-const formFieldForPositive: VocabularyListVariable = {
+const formFieldForPositive: DTO<VocabularyListVariable> = {
     name: 'positive',
     type: DropboxOrCheckbox.checkbox,
     validValues: [
@@ -51,7 +51,7 @@ const formFieldForPositive: VocabularyListVariable = {
     ],
 };
 
-const formFieldForPerson: VocabularyListVariable = {
+const formFieldForPerson: DTO<VocabularyListVariable> = {
     name: 'person',
     type: DropboxOrCheckbox.dropbox,
     validValues: [
