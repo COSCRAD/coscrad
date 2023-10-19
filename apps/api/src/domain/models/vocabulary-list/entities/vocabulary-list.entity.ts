@@ -99,9 +99,7 @@ export class VocabularyList extends Resource {
     }
 
     addEntry(termId: AggregateId): ResultOrError<VocabularyList> {
-        const isTermAlreadyInList = this.entries.some((entry) => entry.termId === termId);
-
-        if (isTermAlreadyInList)
+        if (this.hasEntryForTerm(termId))
             return new CannotAddMultipleEntriesForSingleTermError(termId, this.id);
 
         const newEntry = new VocabularyListEntry({
