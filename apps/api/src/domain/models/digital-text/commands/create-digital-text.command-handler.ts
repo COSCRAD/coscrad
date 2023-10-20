@@ -22,6 +22,9 @@ export class CreateDigitalTextCommandHandler extends BaseCreateCommandHandler<Di
         aggregateCompositeIdentifier: { id },
     }: CreateDigitalText): ResultOrError<DigitalText> {
         const createDto: DTO<DigitalText> = {
+            type: AggregateType.digitalText,
+            id,
+            published: false,
             title: new MultilingualText({
                 items: [
                     new MultilingualTextItem({
@@ -31,9 +34,8 @@ export class CreateDigitalTextCommandHandler extends BaseCreateCommandHandler<Di
                     }),
                 ],
             }),
-            id,
-            type: AggregateType.digitalText,
-            published: false,
+            // You must run a subsequent command to add pages
+            pages: [],
         };
 
         // TODO: consider using our new aggregate root decorator to build this

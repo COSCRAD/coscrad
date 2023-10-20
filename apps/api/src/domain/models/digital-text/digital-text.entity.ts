@@ -23,7 +23,10 @@ import InvalidExternalStateError from '../shared/common-command-errors/InvalidEx
 import { BaseEvent } from '../shared/events/base-event.entity';
 import { CreateDigitalText } from './commands';
 import { CREATE_DIGITAL_TEXT, DIGITAL_TEXT_CREATED } from './constants';
+import DigitalTextPage from './digital-text-page.entity';
 import { DuplicateDigitalTextTitleError } from './errors';
+import { CannotAddPageWithDuplicateIdentifierError } from './errors/CannotAddPageWithDuplicateIdentifierError';
+import { PageIdentifier } from './page-identifier';
 
 @AggregateRoot(AggregateType.digitalText)
 @RegisterIndexScopedCommands([CREATE_DIGITAL_TEXT])
@@ -36,14 +39,26 @@ export class DigitalText extends Resource {
     })
     readonly title: MultilingualText;
 
+    @NestedDataType(DigitalTextPage, {
+        isOptional: true,
+        isArray: true,
+        label: 'digital text pages',
+        description: "a digital representation of the digital text's pages",
+    })
+    pages: DigitalTextPage[];
+
     constructor(dto: DTO<DigitalText>) {
         super({ ...dto, type: ResourceType.digitalText });
 
         if (!dto) return;
 
-        const { title } = dto;
+        const { title, pages: pageDTOs } = dto;
 
         this.title = new MultilingualText(title);
+
+        this.pages = Array.isArray(pageDTOs)
+            ? pageDTOs.map((pageDTO) => new DigitalTextPage(pageDTO))
+            : undefined;
     }
 
     getName(): MultilingualText {
@@ -95,6 +110,7 @@ export class DigitalText extends Resource {
             id,
             published: false,
             title: buildMultilingualTextWithSingleItem(title, languageCodeForTitle),
+            pages: [],
             eventHistory: [creationEvent],
         });
 
@@ -138,5 +154,33 @@ export class DigitalText extends Resource {
         const allErrors = [...idCollisionErrors, ...duplicateNameErrors];
 
         return allErrors.length > 0 ? new InvalidExternalStateError(allErrors) : Valid;
+    }
+
+    addPage(pageIdentifier: PageIdentifier): ResultOrError<DigitalText> {
+        if (this.hasPage(pageIdentifier))
+            return new CannotAddPageWithDuplicateIdentifierError(this.id, pageIdentifier);
+
+        return this.safeClone<DigitalText>({
+            pages: [
+                ...this.pages,
+                new DigitalTextPage({
+                    identifier: pageIdentifier,
+                }),
+            ],
+        });
+    }
+
+    hasPages(pageIdentifiers: PageIdentifier[]): boolean;
+
+    hasPages(): boolean;
+
+    hasPages(pageIdentifiers?: PageIdentifier[]): boolean {
+        if (!Array.isArray(pageIdentifiers)) return this.pages.length > 0;
+
+        return pageIdentifiers.every((pageIdentifier) => this.hasPage(pageIdentifier));
+    }
+
+    hasPage(pageIdentifier: PageIdentifier): boolean {
+        return this.pages.some(({ identifier }) => identifier === pageIdentifier);
     }
 }
