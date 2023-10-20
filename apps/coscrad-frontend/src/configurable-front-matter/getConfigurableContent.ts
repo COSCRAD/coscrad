@@ -1,14 +1,11 @@
 import { ConfigurableContent } from './data/configurable-content-schema';
 import { contentConfig } from './data/content.config';
-import { InvalidContentConfigurationException } from './errorHandling/exceptions/invalid-content-configuration.exception';
-import { validateConfigurableContent } from './validation/validate-configurable-content';
 
 export const getConfigurableContent = (): ConfigurableContent => {
-    const validationResult = validateConfigurableContent(contentConfig);
-
-    if (validationResult.length > 0) {
-        throw new InvalidContentConfigurationException(validationResult);
-    }
+    /**
+     * Note that we used to validate the content config when it was JSON. This is no
+     * longer necessary, as it is now a TypeScript file.
+     */
 
     return contentConfig as unknown as ConfigurableContent;
 };
