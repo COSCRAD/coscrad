@@ -17,6 +17,5 @@ export const getConfigurableContent = () => {
      * longer necessary, as it is now a TypeScript file.
      */
 
-    // Since the validation was successful, we assert the type of the result.
     return rawData as unknown as GlobalConfig;
 };
