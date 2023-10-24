@@ -21,11 +21,16 @@ import { Snapshot } from '../../types/Snapshot';
 import { Resource } from '../resource.entity';
 import InvalidExternalStateError from '../shared/common-command-errors/InvalidExternalStateError';
 import { BaseEvent } from '../shared/events/base-event.entity';
-import { CreateDigitalText } from './commands';
-import { ADD_PAGE_FOR_DIGITAL_TEXT, CREATE_DIGITAL_TEXT, DIGITAL_TEXT_CREATED } from './constants';
+import { AddPageForDigitalText, CreateDigitalText } from './commands';
+import {
+    ADD_PAGE_FOR_DIGITAL_TEXT,
+    CREATE_DIGITAL_TEXT,
+    DIGITAL_TEXT_CREATED,
+    PAGE_ADDED_FOR_DIGITAL_TEXT,
+} from './constants';
 import DigitalTextPage from './digital-text-page.entity';
 import { DuplicateDigitalTextTitleError } from './errors';
-import { CannotAddPageWithDuplicateIdentifierError } from './errors/CannotAddPageWithDuplicateIdentifierError';
+import { CannotAddPageWithDuplicateIdentifierError } from './errors/cannot-add-page-with-duplicate-identifier.error';
 import { PageIdentifier } from './page-identifier';
 
 @AggregateRoot(AggregateType.digitalText)
@@ -77,6 +82,10 @@ export class DigitalText extends Resource {
         eventStream: BaseEvent[],
         idOfDigitalTextToCreate: AggregateId
     ): Maybe<ResultOrError<DigitalText>> {
+        if (eventStream.some(({ type }) => type === `RESOURCE_READ_ACCESS_GRANTED_TO_USER`)) {
+            throw new InternalError(`We need to support event sourcing for ACLs`);
+        }
+
         const eventsForThisDigitalText = eventStream.filter(({ payload }) =>
             isDeepStrictEqual((payload as ICommandBase)[AGGREGATE_COMPOSITE_IDENTIFIER], {
                 type: AggregateType.digitalText,
@@ -120,6 +129,17 @@ export class DigitalText extends Resource {
             if (event.type === `RESOURCE_PUBLISHED`) {
                 return digitalText.addEventToHistory(event).publish();
             }
+
+            if (event.type === PAGE_ADDED_FOR_DIGITAL_TEXT) {
+                // TODO: add generic to BaseEvent
+                const { identifier } = event.payload as AddPageForDigitalText;
+
+                return digitalText.addEventToHistory(event).addPage(identifier);
+            }
+
+            // This event was not handled
+            // TODO: should we throw here?
+            return digitalText;
         }, initialInstance);
 
         return newDigitalText;
