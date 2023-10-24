@@ -21,5 +21,5 @@ export class AddPageForDigitalText implements ICommandBase {
         label: 'page identifier',
         description: 'the identifier for the page in a paginated digital text',
     })
-    readonly pageIdentifier: PageIdentifier;
+    readonly identifier: PageIdentifier;
 }

@@ -22,7 +22,7 @@ import { Resource } from '../resource.entity';
 import InvalidExternalStateError from '../shared/common-command-errors/InvalidExternalStateError';
 import { BaseEvent } from '../shared/events/base-event.entity';
 import { CreateDigitalText } from './commands';
-import { CREATE_DIGITAL_TEXT, DIGITAL_TEXT_CREATED } from './constants';
+import { ADD_PAGE_FOR_DIGITAL_TEXT, CREATE_DIGITAL_TEXT, DIGITAL_TEXT_CREATED } from './constants';
 import DigitalTextPage from './digital-text-page.entity';
 import { DuplicateDigitalTextTitleError } from './errors';
 import { CannotAddPageWithDuplicateIdentifierError } from './errors/CannotAddPageWithDuplicateIdentifierError';
@@ -66,7 +66,7 @@ export class DigitalText extends Resource {
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {
-        return [];
+        return [ADD_PAGE_FOR_DIGITAL_TEXT];
     }
 
     protected validateComplexInvariants(): InternalError[] {

@@ -17,7 +17,7 @@ import { AddPageForDigitalText } from './add-page-for-digital-text.command';
 import { PageAddedForDigitalText } from './page-added-for-digital-text.event';
 
 @CommandHandler(AddPageForDigitalText)
-export class AddPageCommandHandler extends BaseUpdateCommandHandler<DigitalText> {
+export class AddPageForDigitalTextCommandHandler extends BaseUpdateCommandHandler<DigitalText> {
     protected readonly aggregateType: AggregateType = AggregateType.digitalText;
 
     protected readonly repositoryForCommandsTargetAggregate: IRepositoryForAggregate<DigitalText>;
@@ -47,7 +47,7 @@ export class AddPageCommandHandler extends BaseUpdateCommandHandler<DigitalText>
 
     protected actOnInstance(
         digitalText: DigitalText,
-        { pageIdentifier }: AddPageForDigitalText
+        { identifier: pageIdentifier }: AddPageForDigitalText
     ): ResultOrError<DigitalText> {
         return digitalText.addPage(pageIdentifier);
     }

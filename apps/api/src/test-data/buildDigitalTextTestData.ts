@@ -27,11 +27,13 @@ const digitalTextDtos: DTO<Omit<DigitalText, 'id'>>[] = [
                 languageCode: LanguageCode.English,
             }
         ),
+        pages: [],
         published: true,
     },
     {
         type: ResourceType.digitalText,
         title: buildMultilingualTextWithSingleItem('Digital Text number two title'),
+        pages: [],
         published: false,
         queryAccessControlList: {
             allowedUserIds: ['1'],

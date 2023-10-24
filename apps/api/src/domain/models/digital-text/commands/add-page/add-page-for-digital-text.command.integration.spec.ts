@@ -20,20 +20,35 @@ import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserI
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { ADD_PAGE_FOR_DIGITAL_TEXT, PAGE_ADDED_FOR_DIGITAL_TEXT } from '../../constants';
+import DigitalTextPage from '../../digital-text-page.entity';
 import { DigitalText } from '../../digital-text.entity';
+import { CannotAddPageWithDuplicateIdentifierError } from '../../errors/cannot-add-page-with-duplicate-identifier.error';
 import { AddPageForDigitalText } from './add-page-for-digital-text.command';
 
 const commandType = ADD_PAGE_FOR_DIGITAL_TEXT;
 
-const existingDigitalText = getValidAggregateInstanceForTest(AggregateType.digitalText).clone({
-    pages: undefined,
+const existingDigitalText = getValidAggregateInstanceForTest(AggregateType.digitalText).clone();
+
+const duplicatedPageIdentifier = '12';
+
+const newPageIdentifier = 'V';
+
+const pageWithUniqueIdentifier = new DigitalTextPage({
+    identifier: newPageIdentifier,
 });
 
-const newPageIdentifier = '12';
+const existingDigitalTextWithPages = existingDigitalText.clone({
+    pages: [
+        new DigitalTextPage({
+            identifier: duplicatedPageIdentifier,
+        }),
+        pageWithUniqueIdentifier,
+    ],
+});
 
 const validPayload: AddPageForDigitalText = {
     aggregateCompositeIdentifier: existingDigitalText.getCompositeIdentifier(),
-    pageIdentifier: newPageIdentifier,
+    identifier: duplicatedPageIdentifier,
 };
 
 const validCommandFSA = {
@@ -82,39 +97,57 @@ describe(commandType, () => {
     });
 
     describe('When the command is valid', () => {
-        it('should succeed', async () => {
-            await assertCommandSuccess(commandAssertionDependencies, {
-                systemUserId: dummySystemUserId,
-                buildValidCommandFSA,
-                initialState: new DeluxeInMemoryStore({
-                    [AggregateType.digitalText]: [existingDigitalText],
-                }).fetchFullSnapshotInLegacyFormat(),
-                checkStateOnSuccess: async ({
-                    aggregateCompositeIdentifier: { id: DigitalTextId },
-                }: AddPageForDigitalText) => {
-                    const digitalTextSearchResult = await testRepositoryProvider
-                        .forResource(ResourceType.digitalText)
-                        .fetchById(DigitalTextId);
+        describe(`when the existing digital text has no pages`, () => {
+            it('should succeed', async () => {
+                await assertCommandSuccess(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    buildValidCommandFSA,
+                    initialState: new DeluxeInMemoryStore({
+                        [AggregateType.digitalText]: [existingDigitalText],
+                    }).fetchFullSnapshotInLegacyFormat(),
+                    checkStateOnSuccess: async ({
+                        aggregateCompositeIdentifier: { id: digitalTextId },
+                    }: AddPageForDigitalText) => {
+                        const digitalTextSearchResult = await testRepositoryProvider
+                            .forResource(ResourceType.digitalText)
+                            .fetchById(digitalTextId);
 
-                    expect(digitalTextSearchResult).not.toBe(NotFound);
+                        expect(digitalTextSearchResult).not.toBe(NotFound);
 
-                    const digitalText = digitalTextSearchResult as DigitalText;
+                        const digitalText = digitalTextSearchResult as DigitalText;
 
-                    expect(digitalText.hasPages()).toBe(true);
+                        expect(digitalText.hasPages()).toBe(true);
 
-                    assertEventRecordPersisted(
-                        digitalText,
-                        PAGE_ADDED_FOR_DIGITAL_TEXT,
-                        dummySystemUserId
-                    );
-                },
+                        assertEventRecordPersisted(
+                            digitalText,
+                            PAGE_ADDED_FOR_DIGITAL_TEXT,
+                            dummySystemUserId
+                        );
+                    },
+                });
+            });
+        });
+
+        describe(`when the existing digital text already has pages`, () => {
+            it(`should succeed`, async () => {
+                await assertCommandSuccess(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    buildValidCommandFSA,
+                    initialState: new DeluxeInMemoryStore({
+                        [AggregateType.digitalText]: [
+                            existingDigitalText.clone({
+                                pages: [pageWithUniqueIdentifier],
+                            }),
+                        ],
+                    }).fetchFullSnapshotInLegacyFormat(),
+                });
             });
         });
     });
 
     describe('when the command is invalid', () => {
         describe('when the digital text with the given composite identifier does not exist', () => {
-            describe('should fail with the expected errors', async () => {
+            it('should fail with the expected errors', async () => {
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     initialState: new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat(),
@@ -134,7 +167,26 @@ describe(commandType, () => {
         });
 
         describe('when there is already a page with the given identifier', () => {
-            it.todo('should fail with expected errors');
+            it('should fail with expected errors', async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    initialState: new DeluxeInMemoryStore({
+                        [AggregateType.digitalText]: [existingDigitalTextWithPages],
+                    }).fetchFullSnapshotInLegacyFormat(),
+                    buildCommandFSA: buildValidCommandFSA,
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new CannotAddPageWithDuplicateIdentifierError(
+                                    existingDigitalText.id,
+                                    duplicatedPageIdentifier
+                                ),
+                            ])
+                        );
+                    },
+                });
+            });
         });
     });
 });

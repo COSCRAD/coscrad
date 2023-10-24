@@ -1,23 +1,16 @@
-/**
- * Unit test DigitalText.addPage
- * - build an existing text
- * - attempt to add a new page (valid and invalid cases)
- * - valid - check that state is updates
- * - invalid - check that error results
- * - test for empty string
- * - fuzz test
- *
- */
-
+import assertErrorAsExpected from '../../../lib/__tests__/assertErrorAsExpected';
+import { InternalError } from '../../../lib/errors/InternalError';
 import getValidAggregateInstanceForTest from '../../__tests__/utilities/getValidAggregateInstanceForTest';
+import InvariantValidationError from '../../domainModelValidators/errors/InvariantValidationError';
 import { AggregateType } from '../../types/AggregateType';
-import { AddPageForDigitalText } from './commands/add-page/add-page-for-digital-text.command';
-import { ADD_PAGE_FOR_DIGITAL_TEXT } from './constants';
 import DigitalTextPage from './digital-text-page.entity';
+import { DigitalText } from './digital-text.entity';
+import { CannotAddPageWithDuplicateIdentifierError } from './errors/cannot-add-page-with-duplicate-identifier.error';
+import { PageIdentifier } from './page-identifier';
 
-const commandType = ADD_PAGE_FOR_DIGITAL_TEXT;
-
-const existingDigitalText = getValidAggregateInstanceForTest(AggregateType.digitalText).clone({
+const existingDigitalTextWithPages = getValidAggregateInstanceForTest(
+    AggregateType.digitalText
+).clone({
     pages: [
         new DigitalTextPage({
             identifier: 'IV',
@@ -28,32 +21,42 @@ const existingDigitalText = getValidAggregateInstanceForTest(AggregateType.digit
     ],
 });
 
-const newDuplicatePageIdentifier = 'IV';
+const newDuplicatePageIdentifier: PageIdentifier = 'IV';
 
-const newValidPageIdentifier = '23';
+const newValidPageIdentifier: PageIdentifier = '23';
 
-const validPayload: AddPageForDigitalText = {
-    aggregateCompositeIdentifier: existingDigitalText.getCompositeIdentifier(),
-    pageIdentifier: newValidPageIdentifier,
-};
-
-const validCommandFSA = {
-    type: commandType,
-    payload: validPayload,
-};
-
-const inValidPayload: AddPageForDigitalText = {
-    aggregateCompositeIdentifier: existingDigitalText.getCompositeIdentifier(),
-    pageIdentifier: newDuplicatePageIdentifier,
-};
-
-const InValidCommandFSA = {
-    type: commandType,
-    payload: inValidPayload,
-};
-
-describe(commandType, () => {
+describe('When a new page is added to an existing digital text', () => {
     describe(`When there is no duplicate page identifier`, () => {
-        it.todo(`should succeed`);
+        it(`should succeed`, () => {
+            const result = existingDigitalTextWithPages.addPage(newValidPageIdentifier);
+
+            expect(result).not.toBe(InternalError);
+
+            const digitalTextWithPageAdded = result as DigitalText;
+
+            expect(digitalTextWithPageAdded.hasPage(newValidPageIdentifier)).toBe(true);
+        });
+    });
+
+    describe(`When there is a duplicate page identifier`, () => {
+        it(`should return the expected error`, () => {
+            const result = existingDigitalTextWithPages.addPage(newDuplicatePageIdentifier);
+
+            const expectedError = new CannotAddPageWithDuplicateIdentifierError(
+                existingDigitalTextWithPages.id,
+                newDuplicatePageIdentifier
+            );
+
+            assertErrorAsExpected(result, expectedError);
+        });
+    });
+
+    describe(`When the page identifier is an empty string`, () => {
+        const result = existingDigitalTextWithPages.addPage('');
+
+        assertErrorAsExpected(
+            result,
+            new InvariantValidationError(existingDigitalTextWithPages.getCompositeIdentifier(), [])
+        );
     });
 });
