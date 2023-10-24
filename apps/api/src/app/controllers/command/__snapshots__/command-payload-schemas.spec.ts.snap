@@ -197,7 +197,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
       },
       "title": {
         "coscradDataType": "NON_EMPTY_STRING",
-        "description": "song's title in the language",
+        "description": "song's title in the given language",
         "isArray": false,
         "isOptional": true,
         "label": "title",
@@ -732,13 +732,58 @@ exports[`command payload schemas Command payload schema should match the snapsho
       },
       "title": {
         "coscradDataType": "NON_EMPTY_STRING",
-        "description": "digital text's title in the language",
+        "description": "digital text's title in the given language",
         "isArray": false,
         "isOptional": false,
         "label": "title",
       },
     },
     "type": "CREATE_DIGITAL_TEXT",
+  },
+  {
+    "description": "Add a page identifier to a digital text",
+    "label": "Add page to digital text",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "must be: digitalText",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "digitalText",
+                "value": "digitalText",
+              },
+            ],
+          },
+        },
+      },
+      "identifier": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the identifier for the page (i.e., the "page number")",
+        "isArray": false,
+        "isOptional": false,
+        "label": "page identifier",
+      },
+    },
+    "type": "ADD_PAGE_FOR_DIGITAL_TEXT",
   },
   {
     "description": "Register a new COSCRAD user after the user has been registered with the auth provider",

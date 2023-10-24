@@ -400,6 +400,22 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isOptional": false,
     "label": "ID",
   },
+  "pages": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "a digital representation of the digital text's pages",
+    "isArray": true,
+    "isOptional": true,
+    "label": "digital text pages",
+    "schema": {
+      "identifier": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "text identifier for the page",
+        "isArray": false,
+        "isOptional": false,
+        "label": "identifier",
+      },
+    },
+  },
   "title": {
     "complexDataType": "NESTED_TYPE",
     "description": "the title of the digital text",
