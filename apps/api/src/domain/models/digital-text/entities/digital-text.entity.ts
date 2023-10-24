@@ -1,37 +1,37 @@
 import { AGGREGATE_COMPOSITE_IDENTIFIER, ICommandBase } from '@coscrad/api-interfaces';
 import { NestedDataType } from '@coscrad/data-types';
 import { isDeepStrictEqual } from 'util';
-import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
-import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
-import { Maybe } from '../../../lib/types/maybe';
-import { NotFound } from '../../../lib/types/not-found';
-import { DTO } from '../../../types/DTO';
-import { ResultOrError } from '../../../types/ResultOrError';
-import formatAggregateCompositeIdentifier from '../../../view-models/presentation/formatAggregateCompositeIdentifier';
-import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
-import { MultilingualText } from '../../common/entities/multilingual-text';
-import { AggregateRoot } from '../../decorators';
-import { Valid, isValid } from '../../domainModelValidators/Valid';
-import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
-import { AggregateId } from '../../types/AggregateId';
-import { AggregateType } from '../../types/AggregateType';
-import { ResourceType } from '../../types/ResourceType';
-import { Snapshot } from '../../types/Snapshot';
-import { Resource } from '../resource.entity';
-import InvalidExternalStateError from '../shared/common-command-errors/InvalidExternalStateError';
-import { BaseEvent } from '../shared/events/base-event.entity';
-import { AddPageForDigitalText, CreateDigitalText } from './commands';
+import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
+import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
+import { Maybe } from '../../../../lib/types/maybe';
+import { NotFound } from '../../../../lib/types/not-found';
+import { DTO } from '../../../../types/DTO';
+import { ResultOrError } from '../../../../types/ResultOrError';
+import formatAggregateCompositeIdentifier from '../../../../view-models/presentation/formatAggregateCompositeIdentifier';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../../common/entities/multilingual-text';
+import { AggregateRoot } from '../../../decorators';
+import { Valid, isValid } from '../../../domainModelValidators/Valid';
+import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
+import { AggregateId } from '../../../types/AggregateId';
+import { AggregateType } from '../../../types/AggregateType';
+import { ResourceType } from '../../../types/ResourceType';
+import { Snapshot } from '../../../types/Snapshot';
+import { Resource } from '../../resource.entity';
+import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
+import { BaseEvent } from '../../shared/events/base-event.entity';
+import { DigitalTextCreated, PageAddedForDigitalText } from '../commands';
 import {
     ADD_PAGE_FOR_DIGITAL_TEXT,
     CREATE_DIGITAL_TEXT,
     DIGITAL_TEXT_CREATED,
     PAGE_ADDED_FOR_DIGITAL_TEXT,
-} from './constants';
+} from '../constants';
+import { DuplicateDigitalTextTitleError } from '../errors';
+import { CannotAddPageWithDuplicateIdentifierError } from '../errors/cannot-add-page-with-duplicate-identifier.error';
 import DigitalTextPage from './digital-text-page.entity';
-import { DuplicateDigitalTextTitleError } from './errors';
-import { CannotAddPageWithDuplicateIdentifierError } from './errors/cannot-add-page-with-duplicate-identifier.error';
-import { PageIdentifier } from './page-identifier';
+import { PageIdentifier } from './types/page-identifier';
 
 @AggregateRoot(AggregateType.digitalText)
 @RegisterIndexScopedCommands([CREATE_DIGITAL_TEXT])
@@ -109,10 +109,12 @@ export class DigitalText extends Resource {
         }
 
         const {
-            title,
-            languageCodeForTitle,
-            aggregateCompositeIdentifier: { id, type },
-        } = creationEvent.payload as CreateDigitalText;
+            payload: {
+                title,
+                languageCodeForTitle,
+                aggregateCompositeIdentifier: { id, type },
+            },
+        } = creationEvent as DigitalTextCreated;
 
         const initialInstance = new DigitalText({
             type,
@@ -131,8 +133,9 @@ export class DigitalText extends Resource {
             }
 
             if (event.type === PAGE_ADDED_FOR_DIGITAL_TEXT) {
-                // TODO: add generic to BaseEvent
-                const { identifier } = event.payload as AddPageForDigitalText;
+                const {
+                    payload: { identifier },
+                } = event as PageAddedForDigitalText;
 
                 return digitalText.addEventToHistory(event).addPage(identifier);
             }
@@ -190,8 +193,19 @@ export class DigitalText extends Resource {
         });
     }
 
+    /**
+     *
+     * @param pageIdentifiers list of all page identifiers that must be included
+     * in this `DigitalText`'s pages
+     *
+     * @returns `true` if every `page identifier` in the list corresponds to some
+     * page in this `DigitalText`.
+     */
     hasPages(pageIdentifiers: PageIdentifier[]): boolean;
 
+    /**
+     * @returns `true` if this book has one or more pages
+     */
     hasPages(): boolean;
 
     hasPages(pageIdentifiers?: PageIdentifier[]): boolean {

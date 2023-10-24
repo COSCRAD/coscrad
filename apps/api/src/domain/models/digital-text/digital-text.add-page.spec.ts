@@ -3,10 +3,9 @@ import { InternalError } from '../../../lib/errors/InternalError';
 import getValidAggregateInstanceForTest from '../../__tests__/utilities/getValidAggregateInstanceForTest';
 import InvariantValidationError from '../../domainModelValidators/errors/InvariantValidationError';
 import { AggregateType } from '../../types/AggregateType';
-import DigitalTextPage from './digital-text-page.entity';
-import { DigitalText } from './digital-text.entity';
+import { DigitalText, PageIdentifier } from './entities';
+import DigitalTextPage from './entities/digital-text-page.entity';
 import { CannotAddPageWithDuplicateIdentifierError } from './errors/cannot-add-page-with-duplicate-identifier.error';
-import { PageIdentifier } from './page-identifier';
 
 const existingDigitalTextWithPages = getValidAggregateInstanceForTest(
     AggregateType.digitalText
@@ -51,6 +50,10 @@ describe('When a new page is added to an existing digital text', () => {
         });
     });
 
+    /**
+     * Note that this is just a sanity check that invariant validation "has our back"
+     * on ill-formed.
+     */
     describe(`When the page identifier is an empty string`, () => {
         const result = existingDigitalTextWithPages.addPage('');
 

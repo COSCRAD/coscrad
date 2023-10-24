@@ -10,7 +10,7 @@ import { DeluxeInMemoryStore } from '../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import { BaseCreateCommandHandler } from '../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../shared/events/base-event.entity';
-import { DigitalText } from '../digital-text.entity';
+import { DigitalText } from '../entities/digital-text.entity';
 import { CreateDigitalText } from './create-digital-text.command';
 import { DigitalTextCreated } from './digital-text-created.event';
 

@@ -20,7 +20,7 @@ import {
     PageAddedForDigitalText,
 } from './commands';
 import { ADD_PAGE_FOR_DIGITAL_TEXT } from './constants';
-import { DigitalText } from './digital-text.entity';
+import { DigitalText } from './entities/digital-text.entity';
 
 const id = buildDummyUuid(153);
 

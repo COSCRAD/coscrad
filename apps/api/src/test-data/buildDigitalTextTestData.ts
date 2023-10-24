@@ -3,7 +3,7 @@ import { buildMultilingualTextFromBilingualText } from '../domain/common/build-m
 import { buildMultilingualTextWithSingleItem } from '../domain/common/build-multilingual-text-with-single-item';
 import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
 import { CreateDigitalText, DigitalTextCreated } from '../domain/models/digital-text/commands';
-import { DigitalText } from '../domain/models/digital-text/digital-text.entity';
+import { DigitalText } from '../domain/models/digital-text/entities/digital-text.entity';
 import { ResourceType } from '../domain/types/ResourceType';
 import { clonePlainObjectWithOverrides } from '../lib/utilities/clonePlainObjectWithOverrides';
 import { DTO } from '../types/DTO';

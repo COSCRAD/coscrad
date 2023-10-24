@@ -2,7 +2,7 @@ import { InternalError } from '../../../../lib/errors/InternalError';
 import formatAggregateCompositeIdentifier from '../../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
-import { PageIdentifier } from '../../book/entities/types/PageIdentifier';
+import { PageIdentifier } from '../entities';
 
 export class CannotAddPageWithDuplicateIdentifierError extends InternalError {
     constructor(digitalTextId: AggregateId, pageIdentifier: PageIdentifier) {

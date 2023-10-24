@@ -2,53 +2,76 @@ import { FluxStandardAction, ResourceType } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
+import { CommandFSA } from '../../../../../app/controllers/command/command-fsa/command-fsa.entity';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { NotFound } from '../../../../../lib/types/not-found';
+import { clonePlainObjectWithOverrides } from '../../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { ArangoEventRepository } from '../../../../../persistence/repositories/arango-event-repository';
+import { buildTestCommandFsaMap } from '../../../../../test-data/commands';
 import { DTO } from '../../../../../types/DTO';
-import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateType } from '../../../../types/AggregateType';
-import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
-import { ADD_PAGE_FOR_DIGITAL_TEXT, PAGE_ADDED_FOR_DIGITAL_TEXT } from '../../constants';
-import DigitalTextPage from '../../digital-text-page.entity';
-import { DigitalText } from '../../digital-text.entity';
+import { CREATE_DIGITAL_TEXT } from '../../constants';
+import { DigitalText } from '../../entities/digital-text.entity';
 import { CannotAddPageWithDuplicateIdentifierError } from '../../errors/cannot-add-page-with-duplicate-identifier.error';
+import { CreateDigitalText } from '../create-digital-text.command';
+import { DigitalTextCreated } from '../digital-text-created.event';
 import { AddPageForDigitalText } from './add-page-for-digital-text.command';
+import { PageAddedForDigitalText } from './page-added-for-digital-text.event';
 
-const commandType = ADD_PAGE_FOR_DIGITAL_TEXT;
+const commandType = `ADD_PAGE_FOR_DIGITAL_TEXT`;
 
-const existingDigitalText = getValidAggregateInstanceForTest(AggregateType.digitalText).clone();
+const dummyCreateDigitalTextFsa = buildTestCommandFsaMap().get(
+    CREATE_DIGITAL_TEXT
+) as CommandFSA<CreateDigitalText>;
 
-const duplicatedPageIdentifier = '12';
+const digitalTextId = buildDummyUuid(1);
+
+const createExistingDigitalTextFsa = clonePlainObjectWithOverrides(dummyCreateDigitalTextFsa, {
+    payload: {
+        aggregateCompositeIdentifier: { id: digitalTextId },
+    },
+});
+
+const creationEventForExistingDigitalText = new DigitalTextCreated(
+    createExistingDigitalTextFsa.payload,
+    buildDummyUuid(2),
+    dummySystemUserId
+);
+
+const existingPageIdentifier = '12';
 
 const newPageIdentifier = 'V';
 
-const pageWithUniqueIdentifier = new DigitalTextPage({
-    identifier: newPageIdentifier,
-});
+const addPageCommand: AddPageForDigitalText = {
+    aggregateCompositeIdentifier: { id: digitalTextId, type: AggregateType.digitalText },
+    identifier: existingPageIdentifier,
+};
 
-const existingDigitalTextWithPages = existingDigitalText.clone({
-    pages: [
-        new DigitalTextPage({
-            identifier: duplicatedPageIdentifier,
-        }),
-        pageWithUniqueIdentifier,
-    ],
-});
+const existingPageAddedEvent = new PageAddedForDigitalText(
+    addPageCommand,
+    buildDummyUuid(3),
+    dummySystemUserId
+    // TODO use timestamps
+);
 
 const validPayload: AddPageForDigitalText = {
-    aggregateCompositeIdentifier: existingDigitalText.getCompositeIdentifier(),
-    identifier: duplicatedPageIdentifier,
+    aggregateCompositeIdentifier: {
+        type: AggregateType.digitalText,
+        id: digitalTextId,
+    },
+    identifier: newPageIdentifier,
 };
 
 const validCommandFSA = {
@@ -102,9 +125,11 @@ describe(commandType, () => {
                 await assertCommandSuccess(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     buildValidCommandFSA,
-                    initialState: new DeluxeInMemoryStore({
-                        [AggregateType.digitalText]: [existingDigitalText],
-                    }).fetchFullSnapshotInLegacyFormat(),
+                    seedInitialState: async () => {
+                        await app
+                            .get(ArangoEventRepository)
+                            .appendEvent(creationEventForExistingDigitalText);
+                    },
                     checkStateOnSuccess: async ({
                         aggregateCompositeIdentifier: { id: digitalTextId },
                     }: AddPageForDigitalText) => {
@@ -120,7 +145,7 @@ describe(commandType, () => {
 
                         assertEventRecordPersisted(
                             digitalText,
-                            PAGE_ADDED_FOR_DIGITAL_TEXT,
+                            `PAGE_ADDED_FOR_DIGITAL_TEXT`,
                             dummySystemUserId
                         );
                     },
@@ -133,13 +158,14 @@ describe(commandType, () => {
                 await assertCommandSuccess(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     buildValidCommandFSA,
-                    initialState: new DeluxeInMemoryStore({
-                        [AggregateType.digitalText]: [
-                            existingDigitalText.clone({
-                                pages: [pageWithUniqueIdentifier],
-                            }),
-                        ],
-                    }).fetchFullSnapshotInLegacyFormat(),
+                    seedInitialState: async () => {
+                        await app
+                            .get(ArangoEventRepository)
+                            .appendEvents([
+                                creationEventForExistingDigitalText,
+                                existingPageAddedEvent,
+                            ]);
+                    },
                 });
             });
         });
@@ -150,15 +176,19 @@ describe(commandType, () => {
             it('should fail with the expected errors', async () => {
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
-                    initialState: new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat(),
+                    seedInitialState: async () => {
+                        // Seed nothing
+                        Promise.resolve();
+                    },
                     buildCommandFSA: buildValidCommandFSA,
                     checkError: (error) => {
                         assertErrorAsExpected(
                             error,
                             new CommandExecutionError([
-                                new AggregateNotFoundError(
-                                    existingDigitalText.getCompositeIdentifier()
-                                ),
+                                new AggregateNotFoundError({
+                                    id: digitalTextId,
+                                    type: AggregateType.digitalText,
+                                }),
                             ])
                         );
                     },
@@ -170,17 +200,27 @@ describe(commandType, () => {
             it('should fail with expected errors', async () => {
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
-                    initialState: new DeluxeInMemoryStore({
-                        [AggregateType.digitalText]: [existingDigitalTextWithPages],
-                    }).fetchFullSnapshotInLegacyFormat(),
-                    buildCommandFSA: buildValidCommandFSA,
+                    seedInitialState: async () => {
+                        await app
+                            .get(ArangoEventRepository)
+                            .appendEvents([
+                                creationEventForExistingDigitalText,
+                                existingPageAddedEvent,
+                            ]);
+                    },
+                    buildCommandFSA: () =>
+                        clonePlainObjectWithOverrides(buildValidCommandFSA(), {
+                            payload: {
+                                identifier: existingPageIdentifier,
+                            },
+                        }),
                     checkError: (error) => {
                         assertErrorAsExpected(
                             error,
                             new CommandExecutionError([
                                 new CannotAddPageWithDuplicateIdentifierError(
-                                    existingDigitalText.id,
-                                    duplicatedPageIdentifier
+                                    digitalTextId,
+                                    existingPageIdentifier
                                 ),
                             ])
                         );

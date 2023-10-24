@@ -1,8 +1,8 @@
 import { ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
-import { PageIdentifier } from '../../../book/entities/types/PageIdentifier';
 import { ADD_PAGE_FOR_DIGITAL_TEXT } from '../../constants';
+import { PageIdentifier } from '../../entities';
 import { DigitalTextCompositeId } from '../create-digital-text.command';
 
 @Command({
@@ -19,7 +19,7 @@ export class AddPageForDigitalText implements ICommandBase {
 
     @NonEmptyString({
         label: 'page identifier',
-        description: 'the identifier for the page in a paginated digital text',
+        description: 'the identifier for the page (i.e., the "page number")',
     })
     readonly identifier: PageIdentifier;
 }
