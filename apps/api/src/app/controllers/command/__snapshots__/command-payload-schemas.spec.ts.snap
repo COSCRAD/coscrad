@@ -3642,6 +3642,77 @@ exports[`command payload schemas Command payload schema should match the snapsho
     "type": "TRANSLATE_VOCABULARY_LIST_NAME",
   },
   {
+    "description": "Register a Vocabulary List Filter Property",
+    "label": "Register Vocabulary List Filter Property",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unqiue identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "must be: vocabularyList",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "vocabularyList",
+                "value": "vocabularyList",
+              },
+            ],
+          },
+        },
+      },
+      "allowedValuesAndLabels": {
+        "coscradDataType": "RAW_DATA",
+        "description": "set of all valid values allowed for this filter property",
+        "isArray": true,
+        "isOptional": false,
+        "label": "allowed values and labels",
+      },
+      "name": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "name of the vocabulary list",
+        "isArray": false,
+        "isOptional": false,
+        "label": "name",
+      },
+      "type": {
+        "complexDataType": "ENUM",
+        "description": "either a selection or a switch (true / false)",
+        "enumLabel": "filter property type",
+        "enumName": "FilterPropertyType",
+        "isArray": false,
+        "isOptional": false,
+        "label": "filter property type",
+        "labelsAndValues": [
+          {
+            "label": "selection (pick one of several text values)",
+            "value": "selection",
+          },
+          {
+            "label": "checkbox (either true or false)",
+            "value": "checkbox",
+          },
+        ],
+      },
+    },
+    "type": "REGISTER_VOCABULARY_LIST_FILTER_PROPERTY",
+  },
+  {
     "description": "add a term to the vocabulary list",
     "label": "add term to vocabulary list",
     "schema": {
