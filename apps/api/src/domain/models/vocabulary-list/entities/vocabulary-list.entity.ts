@@ -26,7 +26,7 @@ import {
     DuplicateVocabularyListNameError,
 } from '../errors';
 import { VocabularyListEntry } from '../vocabulary-list-entry.entity';
-import { VocabularyListVariable } from './vocabulary-list-variable.entity';
+import { VocabularyListFilterProperty } from './vocabulary-list-variable.entity';
 
 // TODO break out this type
 type LabelAndValue<T = string> = {
@@ -56,14 +56,14 @@ export class VocabularyList extends Resource {
     /**
      * TODO rename this `property filters`
      */
-    @NestedDataType(VocabularyListVariable, {
+    @NestedDataType(VocabularyListFilterProperty, {
         isArray: true,
         // i.e. can be empty
         isOptional: true,
         label: 'filters',
         description: 'defines a dynamic form that can be used to filter the entries',
     })
-    readonly variables: VocabularyListVariable[];
+    readonly variables: VocabularyListFilterProperty[];
 
     constructor(dto: DTO<VocabularyList>) {
         super({ ...dto, type: ResourceType.vocabularyList });
@@ -83,7 +83,7 @@ export class VocabularyList extends Resource {
          * Missing invariant- each variable must have a unique name.
          */
         this.variables = Array.isArray(variables)
-            ? variables.map((v) => new VocabularyListVariable(v))
+            ? variables.map((v) => new VocabularyListFilterProperty(v))
             : null;
     }
 
@@ -131,7 +131,7 @@ export class VocabularyList extends Resource {
     registerFilterProperty(
         name: string,
         type: string,
-        allowedValuesWithLabels: LabelAndValue[]
+        allowedValuesWithLabels: LabelAndValue<string | boolean>[]
     ): ResultOrError<VocabularyList> {
         if (this.hasFilterPropertyNamed(name)) {
             return new CannotHaveTwoFilterPropertiesWithTheSameNameError(name, this.id);
@@ -146,8 +146,8 @@ export class VocabularyList extends Resource {
                         name,
                         type,
                         validValues: cloneToPlainObject(allowedValuesWithLabels),
-                    } as DTO<VocabularyListVariable>)
-                    .map((dto) => new VocabularyListVariable(dto)),
+                    } as DTO<VocabularyListFilterProperty>)
+                    .map((dto) => new VocabularyListFilterProperty(dto)),
             ],
         });
 

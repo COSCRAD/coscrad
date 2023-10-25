@@ -3,7 +3,7 @@ import { DTO } from '../../../../types/DTO';
 import { DropboxOrCheckbox } from '../types/dropbox-or-checkbox';
 import { InvalidValueForCheckboxFilterPropertyError } from './invalid-value-for-checkbox-filter-property.error';
 import { InvalidValueForSelectFilterPropertyError } from './invalid-value-for-select-filter-property.error';
-import { VocabularyListVariable } from './vocabulary-list-variable.entity';
+import { VocabularyListFilterProperty } from './vocabulary-list-variable.entity';
 
 const validValuesForSelect = [
     {
@@ -32,7 +32,7 @@ const validValuesForCheckbox = [
 ];
 
 describe('VocabularyListVariable.validateComplexInvariants', () => {
-    const validDto: DTO<VocabularyListVariable> = {
+    const validDto: DTO<VocabularyListFilterProperty> = {
         name: 'aspect',
         type: DropboxOrCheckbox.dropbox,
         validValues: validValuesForSelect,
@@ -40,7 +40,7 @@ describe('VocabularyListVariable.validateComplexInvariants', () => {
 
     describe(`when the input is valid`, () => {
         it(`should return no errors`, () => {
-            const validationResult = new VocabularyListVariable(
+            const validationResult = new VocabularyListFilterProperty(
                 validDto
             ).validateComplexInvariants();
 
@@ -51,7 +51,7 @@ describe('VocabularyListVariable.validateComplexInvariants', () => {
     describe(`when the input is invalid`, () => {
         describe(`when there is a non-string value for a dropdown filter property`, () => {
             it(`should return the appropriate error`, () => {
-                const invalidDto: DTO<VocabularyListVariable<boolean | string>> = {
+                const invalidDto: DTO<VocabularyListFilterProperty<boolean | string>> = {
                     ...validDto,
                     validValues: [
                         ...validValuesForSelect,
@@ -63,7 +63,9 @@ describe('VocabularyListVariable.validateComplexInvariants', () => {
                     ],
                 };
 
-                const result = new VocabularyListVariable(invalidDto).validateComplexInvariants();
+                const result = new VocabularyListFilterProperty(
+                    invalidDto
+                ).validateComplexInvariants();
 
                 expect(result.length).toBeGreaterThan(0);
 
@@ -85,13 +87,15 @@ describe('VocabularyListVariable.validateComplexInvariants', () => {
             };
 
             it(`should return the appropriate error`, () => {
-                const invalidDto: DTO<VocabularyListVariable<boolean | string>> = {
+                const invalidDto: DTO<VocabularyListFilterProperty<boolean | string>> = {
                     ...validDto,
                     type: DropboxOrCheckbox.checkbox,
                     validValues: [validValuesForCheckbox[0], invalidValueAndDisplay],
                 };
 
-                const result = new VocabularyListVariable(invalidDto).validateComplexInvariants();
+                const result = new VocabularyListFilterProperty(
+                    invalidDto
+                ).validateComplexInvariants();
 
                 expect(result.length).toBeGreaterThan(0);
 

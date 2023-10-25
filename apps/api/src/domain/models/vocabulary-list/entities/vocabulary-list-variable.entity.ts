@@ -19,7 +19,7 @@ import { ValueAndDisplay } from './value-and-display.entity';
  */
 // TODO Rename this `VocabularyListFilterProperty` or just `FilterProperty`
 // Note that this nested entity class is shared with the view layer as well as domain layer
-export class VocabularyListVariable<
+export class VocabularyListFilterProperty<
         TVariableType extends VocabularyListVariableValue = VocabularyListVariableValue
     >
     extends BaseDomainModel
@@ -49,7 +49,7 @@ export class VocabularyListVariable<
     // TODO Add data-type decorator and make an actual class for this
     validValues: ValueAndDisplay<TVariableType>[];
 
-    constructor(dto: DTO<VocabularyListVariable>) {
+    constructor(dto: DTO<VocabularyListFilterProperty>) {
         super();
 
         if (!dto) return;

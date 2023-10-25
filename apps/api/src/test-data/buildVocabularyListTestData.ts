@@ -2,7 +2,7 @@ import { LanguageCode } from '@coscrad/api-interfaces';
 import { buildMultilingualTextFromBilingualText } from '../domain/common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../domain/common/build-multilingual-text-with-single-item';
 import { Term } from '../domain/models/term/entities/term.entity';
-import { VocabularyListVariable } from '../domain/models/vocabulary-list/entities/vocabulary-list-variable.entity';
+import { VocabularyListFilterProperty } from '../domain/models/vocabulary-list/entities/vocabulary-list-variable.entity';
 import { VocabularyList } from '../domain/models/vocabulary-list/entities/vocabulary-list.entity';
 import { DropboxOrCheckbox } from '../domain/models/vocabulary-list/types/dropbox-or-checkbox';
 import { VocabularyListEntry } from '../domain/models/vocabulary-list/vocabulary-list-entry.entity';
@@ -36,7 +36,7 @@ const buildEntryForTerm = (term: Term): VocabularyListEntry => {
 
 const entries = terms.map(buildEntryForTerm);
 
-const formFieldForPositive: DTO<VocabularyListVariable> = {
+const formFieldForPositive: DTO<VocabularyListFilterProperty> = {
     name: 'positive',
     type: DropboxOrCheckbox.checkbox,
     validValues: [
@@ -51,7 +51,7 @@ const formFieldForPositive: DTO<VocabularyListVariable> = {
     ],
 };
 
-const formFieldForPerson: DTO<VocabularyListVariable> = {
+const formFieldForPerson: DTO<VocabularyListFilterProperty> = {
     name: 'person',
     type: DropboxOrCheckbox.dropbox,
     validValues: [
