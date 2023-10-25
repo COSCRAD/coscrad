@@ -14,12 +14,12 @@ import { GrantResourceReadAccessToUser } from '../shared/common-commands/grant-u
 import { ResourceReadAccessGrantedToUser } from '../shared/common-commands/grant-user-read-access/resource-read-access-granted-to-user.event';
 import { BaseEvent } from '../shared/events/base-event.entity';
 import {
-    AddPageForDigitalText,
+    AddPageToDigitalText,
     CreateDigitalText,
     DigitalTextCreated,
-    PageAddedForDigitalText,
+    PageAddedToDigitalText,
 } from './commands';
-import { ADD_PAGE_FOR_DIGITAL_TEXT } from './constants';
+import { ADD_PAGE_TO_DIGITAL_TEXT } from './constants';
 import { DigitalText } from './entities/digital-text.entity';
 
 const id = buildDummyUuid(153);
@@ -49,8 +49,8 @@ const digitalTextCreated = new DigitalTextCreated(
 
 const dummyPageIdentifier = '21';
 
-const addPageForDigitalText = clonePlainObjectWithOverrides(
-    testFsaMap.get(ADD_PAGE_FOR_DIGITAL_TEXT) as CommandFSA<AddPageForDigitalText>,
+const addPageToDigitalText = clonePlainObjectWithOverrides(
+    testFsaMap.get(ADD_PAGE_TO_DIGITAL_TEXT) as CommandFSA<AddPageToDigitalText>,
     {
         payload: {
             aggregateCompositeIdentifier: { id },
@@ -59,8 +59,8 @@ const addPageForDigitalText = clonePlainObjectWithOverrides(
     }
 );
 
-const pageAddedForDigitalText = new PageAddedForDigitalText(
-    addPageForDigitalText.payload,
+const pageAddedForDigitalText = new PageAddedToDigitalText(
+    addPageToDigitalText.payload,
     buildDummyUuid(155),
     dummySystemUserId
 );

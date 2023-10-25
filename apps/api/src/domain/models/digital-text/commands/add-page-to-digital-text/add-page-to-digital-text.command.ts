@@ -1,16 +1,16 @@
 import { ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
-import { ADD_PAGE_FOR_DIGITAL_TEXT } from '../../constants';
+import { ADD_PAGE_TO_DIGITAL_TEXT } from '../../constants';
 import { PageIdentifier } from '../../entities';
 import { DigitalTextCompositeId } from '../create-digital-text.command';
 
 @Command({
-    type: ADD_PAGE_FOR_DIGITAL_TEXT,
+    type: ADD_PAGE_TO_DIGITAL_TEXT,
     description: `Add a page identifier to a digital text`,
     label: `Add page to digital text`,
 })
-export class AddPageForDigitalText implements ICommandBase {
+export class AddPageToDigitalText implements ICommandBase {
     @NestedDataType(DigitalTextCompositeId, {
         label: 'Composite Identifier',
         description: 'system-wide unique identifier',

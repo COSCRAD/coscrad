@@ -21,12 +21,12 @@ import { Snapshot } from '../../../types/Snapshot';
 import { Resource } from '../../resource.entity';
 import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
 import { BaseEvent } from '../../shared/events/base-event.entity';
-import { DigitalTextCreated, PageAddedForDigitalText } from '../commands';
+import { DigitalTextCreated, PageAddedToDigitalText } from '../commands';
 import {
-    ADD_PAGE_FOR_DIGITAL_TEXT,
+    ADD_PAGE_TO_DIGITAL_TEXT,
     CREATE_DIGITAL_TEXT,
     DIGITAL_TEXT_CREATED,
-    PAGE_ADDED_FOR_DIGITAL_TEXT,
+    PAGE_ADDED_TO_DIGITAL_TEXT,
 } from '../constants';
 import { DuplicateDigitalTextTitleError } from '../errors';
 import { CannotAddPageWithDuplicateIdentifierError } from '../errors/cannot-add-page-with-duplicate-identifier.error';
@@ -71,7 +71,7 @@ export class DigitalText extends Resource {
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {
-        return [ADD_PAGE_FOR_DIGITAL_TEXT];
+        return [ADD_PAGE_TO_DIGITAL_TEXT];
     }
 
     protected validateComplexInvariants(): InternalError[] {
@@ -132,10 +132,10 @@ export class DigitalText extends Resource {
                 return digitalText.addEventToHistory(event).publish();
             }
 
-            if (event.type === PAGE_ADDED_FOR_DIGITAL_TEXT) {
+            if (event.type === PAGE_ADDED_TO_DIGITAL_TEXT) {
                 const {
                     payload: { identifier },
-                } = event as PageAddedForDigitalText;
+                } = event as PageAddedToDigitalText;
 
                 return digitalText.addEventToHistory(event).addPage(identifier);
             }

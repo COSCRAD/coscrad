@@ -61,13 +61,13 @@ import { PointContext } from '../../../domain/models/context/point-context/point
 import { TextFieldContext } from '../../../domain/models/context/text-field-context/text-field-context.entity';
 import { TimeRangeContext } from '../../../domain/models/context/time-range-context/time-range-context.entity';
 import {
-    AddPageForDigitalTextCommandHandler,
+    AddPageToDigitalTextCommandHandler,
     CreateDigitalText,
     CreateDigitalTextCommandHandler,
     DigitalTextCreated,
-    PageAddedForDigitalText,
+    PageAddedToDigitalText,
 } from '../../../domain/models/digital-text/commands';
-import { AddPageForDigitalText } from '../../../domain/models/digital-text/commands/add-page/add-page-for-digital-text.command';
+import { AddPageToDigitalText } from '../../../domain/models/digital-text/commands/add-page-to-digital-text/add-page-to-digital-text.command';
 import { DigitalText } from '../../../domain/models/digital-text/entities/digital-text.entity';
 import { CreateMediaItem } from '../../../domain/models/media-item/commands/create-media-item.command';
 import { CreateMediaItemCommandHandler } from '../../../domain/models/media-item/commands/create-media-item.command-handler';
@@ -238,7 +238,7 @@ export const buildAllDataClassProviders = () =>
         // Events
         CoscradEventUnion,
         DigitalTextCreated,
-        PageAddedForDigitalText,
+        PageAddedToDigitalText,
         SongCreated,
         SongTitleTranslated,
         LyricsAddedForSong,
@@ -515,8 +515,8 @@ export default async (
             CreateJournalArticleBibliographicReferenceCommandHandler,
             CreateDigitalText,
             CreateDigitalTextCommandHandler,
-            AddPageForDigitalText,
-            AddPageForDigitalTextCommandHandler,
+            AddPageToDigitalText,
+            AddPageToDigitalTextCommandHandler,
             RegisterUser,
             RegisterUserCommandHandler,
             CreateGroup,

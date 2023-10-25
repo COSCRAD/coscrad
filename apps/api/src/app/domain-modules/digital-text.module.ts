@@ -1,9 +1,9 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
 import {
-    AddPageForDigitalText,
-    AddPageForDigitalTextCommandHandler,
-    PageAddedForDigitalText,
+    AddPageToDigitalText,
+    AddPageToDigitalTextCommandHandler,
+    PageAddedToDigitalText,
 } from '../../domain/models/digital-text/commands';
 import { CreateDigitalText } from '../../domain/models/digital-text/commands/create-digital-text.command';
 import { CreateDigitalTextCommandHandler } from '../../domain/models/digital-text/commands/create-digital-text.command-handler';
@@ -18,16 +18,16 @@ import { CommandInfoService } from '../controllers/command/services/command-info
     providers: [
         CommandInfoService,
         CreateDigitalTextCommandHandler,
-        AddPageForDigitalTextCommandHandler,
+        AddPageToDigitalTextCommandHandler,
         ...[
             // Domain Model
             DigitalText,
             // Commands
             CreateDigitalText,
-            AddPageForDigitalText,
+            AddPageToDigitalText,
             // Events
             DigitalTextCreated,
-            PageAddedForDigitalText,
+            PageAddedToDigitalText,
         ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,

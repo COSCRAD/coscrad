@@ -27,10 +27,10 @@ import { DigitalText } from '../../entities/digital-text.entity';
 import { CannotAddPageWithDuplicateIdentifierError } from '../../errors/cannot-add-page-with-duplicate-identifier.error';
 import { CreateDigitalText } from '../create-digital-text.command';
 import { DigitalTextCreated } from '../digital-text-created.event';
-import { AddPageForDigitalText } from './add-page-for-digital-text.command';
-import { PageAddedForDigitalText } from './page-added-for-digital-text.event';
+import { AddPageToDigitalText } from './add-page-to-digital-text.command';
+import { PageAddedToDigitalText } from './page-added-to-digital-text.event';
 
-const commandType = `ADD_PAGE_FOR_DIGITAL_TEXT`;
+const commandType = `ADD_PAGE_TO_DIGITAL_TEXT`;
 
 const dummyCreateDigitalTextFsa = buildTestCommandFsaMap().get(
     CREATE_DIGITAL_TEXT
@@ -54,19 +54,19 @@ const existingPageIdentifier = '12';
 
 const newPageIdentifier = 'V';
 
-const addPageCommand: AddPageForDigitalText = {
+const addPageCommand: AddPageToDigitalText = {
     aggregateCompositeIdentifier: { id: digitalTextId, type: AggregateType.digitalText },
     identifier: existingPageIdentifier,
 };
 
-const existingPageAddedEvent = new PageAddedForDigitalText(
+const existingPageAddedEvent = new PageAddedToDigitalText(
     addPageCommand,
     buildDummyUuid(3),
     dummySystemUserId
     // TODO use timestamps
 );
 
-const validPayload: AddPageForDigitalText = {
+const validPayload: AddPageToDigitalText = {
     aggregateCompositeIdentifier: {
         type: AggregateType.digitalText,
         id: digitalTextId,
@@ -79,7 +79,7 @@ const validCommandFSA = {
     payload: validPayload,
 };
 
-const buildValidCommandFSA = (): FluxStandardAction<DTO<AddPageForDigitalText>> => validCommandFSA;
+const buildValidCommandFSA = (): FluxStandardAction<DTO<AddPageToDigitalText>> => validCommandFSA;
 
 describe(commandType, () => {
     let app: INestApplication;
@@ -132,7 +132,7 @@ describe(commandType, () => {
                     },
                     checkStateOnSuccess: async ({
                         aggregateCompositeIdentifier: { id: digitalTextId },
-                    }: AddPageForDigitalText) => {
+                    }: AddPageToDigitalText) => {
                         const digitalTextSearchResult = await testRepositoryProvider
                             .forResource(ResourceType.digitalText)
                             .fetchById(digitalTextId);
@@ -145,7 +145,7 @@ describe(commandType, () => {
 
                         assertEventRecordPersisted(
                             digitalText,
-                            `PAGE_ADDED_FOR_DIGITAL_TEXT`,
+                            `PAGE_ADDED_TO_DIGITAL_TEXT`,
                             dummySystemUserId
                         );
                     },

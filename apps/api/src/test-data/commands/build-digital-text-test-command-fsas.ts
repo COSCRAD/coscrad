@@ -1,12 +1,9 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandFSA } from '../../app/controllers/command/command-fsa/command-fsa.entity';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
+import { AddPageToDigitalText, CreateDigitalText } from '../../domain/models/digital-text/commands';
 import {
-    AddPageForDigitalText,
-    CreateDigitalText,
-} from '../../domain/models/digital-text/commands';
-import {
-    ADD_PAGE_FOR_DIGITAL_TEXT,
+    ADD_PAGE_TO_DIGITAL_TEXT,
     CREATE_DIGITAL_TEXT,
 } from '../../domain/models/digital-text/constants';
 import { AggregateType } from '../../domain/types/AggregateType';
@@ -24,12 +21,12 @@ const createDigitalText: CommandFSA<CreateDigitalText> = {
     },
 };
 
-const addPageForDigitalText: CommandFSA<AddPageForDigitalText> = {
-    type: ADD_PAGE_FOR_DIGITAL_TEXT,
+const addPageToDigitalText: CommandFSA<AddPageToDigitalText> = {
+    type: ADD_PAGE_TO_DIGITAL_TEXT,
     payload: {
         aggregateCompositeIdentifier: { id, type },
         identifier: '21',
     },
 };
 
-export const buildDigitalTextCommandFsas = () => [createDigitalText, addPageForDigitalText];
+export const buildDigitalTextCommandFsas = () => [createDigitalText, addPageToDigitalText];

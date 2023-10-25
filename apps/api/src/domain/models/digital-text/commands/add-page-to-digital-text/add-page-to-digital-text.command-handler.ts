@@ -7,11 +7,11 @@ import { InMemorySnapshot } from '../../../../types/ResourceType';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { DigitalText } from '../../entities/digital-text.entity';
-import { AddPageForDigitalText } from './add-page-for-digital-text.command';
-import { PageAddedForDigitalText } from './page-added-for-digital-text.event';
+import { AddPageToDigitalText } from './add-page-to-digital-text.command';
+import { PageAddedToDigitalText } from './page-added-to-digital-text.event';
 
-@CommandHandler(AddPageForDigitalText)
-export class AddPageForDigitalTextCommandHandler extends BaseUpdateCommandHandler<DigitalText> {
+@CommandHandler(AddPageToDigitalText)
+export class AddPageToDigitalTextCommandHandler extends BaseUpdateCommandHandler<DigitalText> {
     protected fetchRequiredExternalState(_command?: ICommand): Promise<InMemorySnapshot> {
         return Promise.resolve(new DeluxeInMemoryStore().fetchFullSnapshotInLegacyFormat());
     }
@@ -25,16 +25,16 @@ export class AddPageForDigitalTextCommandHandler extends BaseUpdateCommandHandle
 
     protected actOnInstance(
         digitalText: DigitalText,
-        { identifier: pageIdentifier }: AddPageForDigitalText
+        { identifier: pageIdentifier }: AddPageToDigitalText
     ): ResultOrError<DigitalText> {
         return digitalText.addPage(pageIdentifier);
     }
 
     protected buildEvent(
-        command: AddPageForDigitalText,
+        command: AddPageToDigitalText,
         eventId: string,
         userId: string
     ): BaseEvent {
-        return new PageAddedForDigitalText(command, eventId, userId);
+        return new PageAddedToDigitalText(command, eventId, userId);
     }
 }
