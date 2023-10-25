@@ -10,7 +10,7 @@ import { DeluxeInMemoryStore } from '../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import { BaseCreateCommandHandler } from '../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../shared/events/base-event.entity';
-import { DigitalText } from '../digital-text.entity';
+import { DigitalText } from '../entities/digital-text.entity';
 import { CreateDigitalText } from './create-digital-text.command';
 import { DigitalTextCreated } from './digital-text-created.event';
 
@@ -22,6 +22,9 @@ export class CreateDigitalTextCommandHandler extends BaseCreateCommandHandler<Di
         aggregateCompositeIdentifier: { id },
     }: CreateDigitalText): ResultOrError<DigitalText> {
         const createDto: DTO<DigitalText> = {
+            type: AggregateType.digitalText,
+            id,
+            published: false,
             title: new MultilingualText({
                 items: [
                     new MultilingualTextItem({
@@ -31,9 +34,8 @@ export class CreateDigitalTextCommandHandler extends BaseCreateCommandHandler<Di
                     }),
                 ],
             }),
-            id,
-            type: AggregateType.digitalText,
-            published: false,
+            // You must run a subsequent command to add pages
+            pages: [],
         };
 
         // TODO: consider using our new aggregate root decorator to build this

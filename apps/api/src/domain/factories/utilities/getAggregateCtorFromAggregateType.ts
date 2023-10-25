@@ -6,7 +6,7 @@ import { Video } from '../../models/audio-item/entities/video.entity';
 import { Book } from '../../models/book/entities/book.entity';
 import { Category } from '../../models/categories/entities/category.entity';
 import { EdgeConnection } from '../../models/context/edge-connection.entity';
-import { DigitalText } from '../../models/digital-text/digital-text.entity';
+import { DigitalText } from '../../models/digital-text/entities/digital-text.entity';
 import { MediaItem } from '../../models/media-item/entities/media-item.entity';
 import { Photograph } from '../../models/photograph/entities/photograph.entity';
 import { Playlist } from '../../models/playlist';

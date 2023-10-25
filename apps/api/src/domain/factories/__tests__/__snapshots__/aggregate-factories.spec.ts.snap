@@ -203,6 +203,7 @@ DigitalText {
   ],
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+  "pages": [],
   "published": true,
   "queryAccessControlList": AccessControlList {
     "allowedGroupIds": [],

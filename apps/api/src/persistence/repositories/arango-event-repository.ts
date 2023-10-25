@@ -85,4 +85,13 @@ export class ArangoEventRepository implements IEventRepository {
         // TODO Why not event.toDTO() ?
         await this.arangoEventDatabase.create(databaseDocument);
     }
+
+    async appendEvents(events: BaseEvent[]): Promise<void> {
+        const documents = events.map(mapEntityDTOToDatabaseDTO).map((docWithoutId) => ({
+            ...docWithoutId,
+            id: docWithoutId.meta.id,
+        }));
+
+        await this.arangoEventDatabase.createMany(documents);
+    }
 }
