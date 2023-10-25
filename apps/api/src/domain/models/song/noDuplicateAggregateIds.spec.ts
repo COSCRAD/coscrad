@@ -50,18 +50,18 @@ Object.values(AggregateType).forEach((aggregateType) => {
      * For this reason, we are skipping this test.
      */
     describe.skip(`An aggregate of the type: ${aggregateType}`, () => {
-        const existingAggreagte = getValidAggregateInstanceForTest(aggregateType).clone({
+        const existingAggregate = getValidAggregateInstanceForTest(aggregateType).clone({
             id: dummyUuid,
         });
 
-        const dummyAggregate = existingAggreagte.clone({
+        const dummyAggregate = existingAggregate.clone({
             // Let's find a more elegant way to do this if there is a second exceptional case
             ...(overridesMap.has(aggregateType) ? overridesMap.get(aggregateType) : {}),
         });
 
         // TODO We need to add this to the existing snapshot from buildTestData
         const partialSnapshot: PartialSnapshot = {
-            [aggregateType]: [existingAggreagte],
+            [aggregateType]: [existingAggregate],
         };
 
         const testData = buildTestDataInFlatFormat();

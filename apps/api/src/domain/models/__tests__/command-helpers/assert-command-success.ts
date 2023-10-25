@@ -28,13 +28,26 @@ const isTestCaseV2 = (input: StateBasedTestCase | TestCaseV2): input is TestCase
     typeof (input as TestCaseV2).seedInitialState === 'function';
 
 /**
+ * @deprecated use `seedInitialState` instead of `initialState`
+ */
+export async function assertCommandSuccess(
+    dependencies: Omit<CommandAssertionDependencies, 'idManager'>,
+    testCase: StateBasedTestCase
+): Promise<void>;
+
+export async function assertCommandSuccess(
+    dependencies: Omit<CommandAssertionDependencies, 'idManager'>,
+    testCase: TestCaseV2
+): Promise<void>;
+
+/**
  * This helper is not to be used with `CREATE_X` commands. Use `assertCreateCommandError`,
  * which allows for ID generation.
  */
-export const assertCommandSuccess = async (
+export async function assertCommandSuccess(
     dependencies: Omit<CommandAssertionDependencies, 'idManager'>,
     testCase: StateBasedTestCase | TestCaseV2
-) => {
+): Promise<void> {
     const { buildValidCommandFSA: buildCommandFSA, checkStateOnSuccess, systemUserId } = testCase;
 
     const { testRepositoryProvider, commandHandlerService } = dependencies;
@@ -57,4 +70,4 @@ export const assertCommandSuccess = async (
     expect(result).toBe(Ack);
 
     if (checkStateOnSuccess) await checkStateOnSuccess(commandFSA.payload);
-};
+}
