@@ -2,7 +2,7 @@ import { Ack, CommandHandler, ICommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
-import { isOK, OK } from '../../../../../lib/types/ok';
+import { OK, isOK } from '../../../../../lib/types/ok';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import formatAggregateCompositeIdentifier from '../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { isValid } from '../../../../domainModelValidators/Valid';
@@ -39,10 +39,7 @@ export class GrantResourceReadAccessToUserCommandHandler implements ICommandHand
 
         if (!isValid(typeValidationResult)) return typeValidationResult;
 
-        const {
-            aggregateCompositeIdentifier: { id: userId },
-            resourceCompositeIdentifier,
-        } = command;
+        const { aggregateCompositeIdentifier: resourceCompositeIdentifier, userId } = command;
 
         const { type: resourceType, id } = resourceCompositeIdentifier;
 

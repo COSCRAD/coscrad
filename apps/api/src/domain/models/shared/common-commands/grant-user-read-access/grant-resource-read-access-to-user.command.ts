@@ -1,11 +1,8 @@
 import { AggregateType, ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { CompositeIdentifier, NestedDataType } from '@coscrad/data-types';
-import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
-import { isAggregateId } from '../../../../types/AggregateId';
-import { ResourceCompositeIdentifier } from '../../../../types/ResourceCompositeIdentifier';
-import { ResourceType } from '../../../../types/ResourceType';
-import { UserCompositeIdentifier } from '../../../user-management/user/commands/user-composite-identifier';
+import { NestedDataType, ReferenceTo, UUID } from '@coscrad/data-types';
+import { AggregateId } from '../../../../types/AggregateId';
+import { ResourceCompositeIdentifier } from '../../../context/commands';
 
 @Command({
     type: 'GRANT_RESOURCE_READ_ACCESS_TO_USER',
@@ -13,16 +10,16 @@ import { UserCompositeIdentifier } from '../../../user-management/user/commands/
     description: 'Allow a user to view (but not edit) a given resource',
 })
 export class GrantResourceReadAccessToUser implements ICommandBase {
-    @NestedDataType(UserCompositeIdentifier, {
+    @NestedDataType(ResourceCompositeIdentifier, {
         label: 'Composite Identifier',
         description: 'system-wide unique identifier',
     })
-    readonly aggregateCompositeIdentifier: AggregateCompositeIdentifier<typeof AggregateType.user>;
+    readonly aggregateCompositeIdentifier: ResourceCompositeIdentifier;
 
-    @CompositeIdentifier(ResourceType, isAggregateId, {
-        label: 'resource composite identifier',
-        description:
-            'the composite identifier of the resource to which the user will receive access',
+    @ReferenceTo(AggregateType.user)
+    @UUID({
+        label: `userId`,
+        description: `the ID of the user who will be given permission to view this resource`,
     })
-    readonly resourceCompositeIdentifier: ResourceCompositeIdentifier;
+    readonly userId: AggregateId;
 }
