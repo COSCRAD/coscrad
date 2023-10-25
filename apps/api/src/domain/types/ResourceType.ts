@@ -16,7 +16,7 @@ import { VocabularyList } from '../models/vocabulary-list/entities/vocabulary-li
 
 import { ResourceType } from '@coscrad/api-interfaces';
 import { Video } from '../models/audio-item/entities/video.entity';
-import { DigitalText } from '../models/digital-text/digital-text.entity';
+import { DigitalText } from '../models/digital-text/entities/digital-text.entity';
 import { Playlist } from '../models/playlist';
 
 export { ResourceType };

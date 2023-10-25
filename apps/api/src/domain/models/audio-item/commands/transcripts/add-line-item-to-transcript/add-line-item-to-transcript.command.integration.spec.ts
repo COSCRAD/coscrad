@@ -167,7 +167,7 @@ describe(commandType, () => {
                     );
                 });
 
-                describe(`when the refrenced ${formatAggregateType(
+                describe(`when the referenced ${formatAggregateType(
                     validInstance.type
                 )} does not exist`, () => {
                     it('should fail with the expected error', async () => {

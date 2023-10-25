@@ -33,7 +33,7 @@ import {
 import CommandExecutionError from '../../shared/common-command-errors/CommandExecutionError';
 import UuidNotGeneratedInternallyError from '../../shared/common-command-errors/UuidNotGeneratedInternallyError';
 import { CREATE_DIGITAL_TEXT, DIGITAL_TEXT_CREATED } from '../constants';
-import { DigitalText } from '../digital-text.entity';
+import { DigitalText } from '../entities/digital-text.entity';
 import { CreateDigitalText } from './create-digital-text.command';
 import { DigitalTextCreated } from './digital-text-created.event';
 

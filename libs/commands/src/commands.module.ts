@@ -12,7 +12,7 @@ import getCommandTypeFromMetadata from './services/utilities/getCommandTypeFromM
 export class CommandModule implements OnApplicationBootstrap {
     constructor(
         private readonly finderService: CommandFinderService,
-        private readonly commandHanlderService: CommandHandlerService
+        private readonly commandHandlerService: CommandHandlerService
     ) {}
 
     async onApplicationBootstrap() {
@@ -25,7 +25,7 @@ export class CommandModule implements OnApplicationBootstrap {
                 throw new EmptyCommandTypeException();
             }
 
-            this.commandHanlderService.registerHandler(type, CommandHandler);
+            this.commandHandlerService.registerHandler(type, CommandHandler);
         });
     }
 }
