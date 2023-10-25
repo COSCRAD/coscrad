@@ -25,6 +25,7 @@ import {
     CannotHaveTwoFilterPropertiesWithTheSameNameError,
     DuplicateVocabularyListNameError,
 } from '../errors';
+import { DropboxOrCheckbox } from '../types/dropbox-or-checkbox';
 import { VocabularyListEntry } from '../vocabulary-list-entry.entity';
 import { VocabularyListFilterProperty } from './vocabulary-list-variable.entity';
 
@@ -130,7 +131,7 @@ export class VocabularyList extends Resource {
     // TODO should type be an enum?
     registerFilterProperty(
         name: string,
-        type: string,
+        type: DropboxOrCheckbox,
         allowedValuesWithLabels: LabelAndValue<string | boolean>[]
     ): ResultOrError<VocabularyList> {
         if (this.hasFilterPropertyNamed(name)) {

@@ -20,7 +20,10 @@ import { RegisterVocabularyListFilterProperty } from './index';
 const commandType = REGISTER_VOCABULARY_LIST_FILTER_PROPERTY;
 
 const existingVocabularyList = getValidAggregateInstanceForTest(AggregateType.vocabularyList).clone(
-    {}
+    {
+        // ensure that there are no filter properties to start with
+        variables: [],
+    }
 );
 
 const dummyFsa = buildTestCommandFsaMap().get(

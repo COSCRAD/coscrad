@@ -7,7 +7,11 @@ import { ResultOrError } from '../../../../../types/ResultOrError';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { VocabularyList } from '../../entities/vocabulary-list.entity';
-import { RegisterVocabularyListFilterProperty } from './register-vocabulary-list-filter-property.command';
+import { DropboxOrCheckbox } from '../../types/dropbox-or-checkbox';
+import {
+    FilterPropertyType,
+    RegisterVocabularyListFilterProperty,
+} from './register-vocabulary-list-filter-property.command';
 import { VocabularyListFilterPropertyRegistered } from './vocabulary-list-filter-property-registered';
 
 @CommandHandler(RegisterVocabularyListFilterProperty)
@@ -29,7 +33,16 @@ export class RegisterVocabularyListFilterPropertyCommandHandler extends BaseUpda
         instance: VocabularyList,
         { name, type, allowedValuesAndLabels }: RegisterVocabularyListFilterProperty
     ): ResultOrError<VocabularyList> {
-        return instance.registerFilterProperty(name, type, allowedValuesAndLabels);
+        /**
+         * This is necessary until a migration \ event versioning occurs so we can
+         * rename the properties on existing data.
+         */
+        const mappedType =
+            type === FilterPropertyType.selection
+                ? DropboxOrCheckbox.dropbox
+                : DropboxOrCheckbox.checkbox;
+
+        return instance.registerFilterProperty(name, mappedType, allowedValuesAndLabels);
     }
 
     protected buildEvent(

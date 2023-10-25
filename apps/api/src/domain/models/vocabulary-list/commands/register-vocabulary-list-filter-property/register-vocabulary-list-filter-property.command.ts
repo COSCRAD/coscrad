@@ -1,6 +1,6 @@
 import { ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { ExternalEnum, NestedDataType, NonEmptyString } from '@coscrad/data-types';
+import { ExternalEnum, NestedDataType, NonEmptyString, RawDataObject } from '@coscrad/data-types';
 import { VocabularyListCompositeId } from '../create-vocabulary-list';
 import { REGISTER_VOCABULARY_LIST_FILTER_PROPERTY } from './constants';
 
@@ -60,7 +60,17 @@ export class RegisterVocabularyListFilterProperty implements ICommandBase {
     )
     readonly type: FilterPropertyType;
 
-    @NestedDataType(ValueAndLabel, {
+    /**
+     * TODO We'd like to constrain this property to be either a ValueAndLabel<string>
+     * or ValueAndLabel<boolean>. However, it's not natural to introduce a type discriminant
+     * for a value object class, and we have no machinery for validating against \
+     * tracking the schema for an implicitly discriminated union.
+     *
+     * Note that we have complex invariant validation rules that constrain the
+     * types of the allowedValuesAndLabels.value to aline with the
+     * VocabularListFilterPropertyType (selection <-> string, checkbox <-> boolean)
+     */
+    @RawDataObject({
         isArray: true,
         isOptional: false,
         label: `allowed values and labels`,
