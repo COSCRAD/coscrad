@@ -12,10 +12,11 @@ import TestRepositoryProvider from '../../../../../persistence/repositories/__te
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestCommandFsaMap } from '../../../../../test-data/commands';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
+import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import { REGISTER_VOCABULARY_LIST_FILTER_PROPERTY } from './constants';
-import { RegisterVocabularyListFilterProperty } from './index';
+import { FilterPropertyType, RegisterVocabularyListFilterProperty } from './index';
 
 const commandType = REGISTER_VOCABULARY_LIST_FILTER_PROPERTY;
 
@@ -35,6 +36,8 @@ const validFsa = clonePlainObjectWithOverrides(dummyFsa, {
         aggregateCompositeIdentifier: existingVocabularyList.getCompositeIdentifier(),
     },
 });
+
+const commandFsaFactory = new DummyCommandFsaFactory(() => validFsa);
 
 const validInitialState = new DeluxeInMemoryStore({
     [AggregateType.vocabularyList]: [existingVocabularyList],
@@ -79,11 +82,55 @@ describe(commandType, () => {
     });
 
     describe(`when the command is valid`, () => {
-        it(`should succeed`, async () => {
-            await assertCommandSuccess(commandAssertionDependencies, {
-                systemUserId: dummySystemUserId,
-                initialState: validInitialState,
-                buildValidCommandFSA: () => validFsa,
+        describe(`when registering a selection filter property`, () => {
+            it(`should succeed`, async () => {
+                await assertCommandSuccess(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    initialState: validInitialState,
+                    buildValidCommandFSA: () =>
+                        commandFsaFactory.build(undefined, {
+                            type: FilterPropertyType.selection,
+                            name: 'possessor',
+                            allowedValuesAndLabels: [
+                                {
+                                    value: '1',
+                                    label: 'my',
+                                },
+                                {
+                                    value: '2',
+                                    label: 'your',
+                                },
+                                {
+                                    value: '3',
+                                    label: 'her',
+                                },
+                            ],
+                        }),
+                });
+            });
+        });
+
+        describe(`when registering a checkbox filter property`, () => {
+            it(`should succeed`, async () => {
+                await assertCommandSuccess(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    initialState: validInitialState,
+                    buildValidCommandFSA: () =>
+                        commandFsaFactory.build(undefined, {
+                            type: FilterPropertyType.checkbox,
+                            name: 'affirmitive',
+                            allowedValuesAndLabels: [
+                                {
+                                    value: true,
+                                    label: 'positive',
+                                },
+                                {
+                                    value: false,
+                                    label: 'negative',
+                                },
+                            ],
+                        }),
+                });
             });
         });
     });
