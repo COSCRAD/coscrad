@@ -1,6 +1,6 @@
 import { FixedValue, NonEmptyString, UnionMember } from '@coscrad/data-types';
 import { DTO } from '../../../../types/DTO';
-import { PageIdentifier } from '../../book/entities/types/PageIdentifier';
+import { PageIdentifier } from '../../digital-text/entities';
 import { EdgeConnectionContext } from '../context.entity';
 import { EDGE_CONNECTION_CONTEXT_UNION } from '../edge-connection-context-union';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
