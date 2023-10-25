@@ -8,6 +8,9 @@ import { DTO } from '../../../../types/DTO';
 import BaseDomainModel from '../../BaseDomainModel';
 import { DropboxOrCheckbox } from '../../vocabulary-list/types/dropbox-or-checkbox';
 import { VocabularyListVariableValue } from '../../vocabulary-list/types/vocabulary-list-variable-value';
+import { DuplicateValueForVocabularyListFilterPropertyValueError } from '../errors';
+import { CheckboxMustHaveExactlyTwoAllowedValuesError } from '../errors/checkbox-must-have-exactly-two-allowed-values.error';
+import { DuplicateLabelForVocabularyListFilterPropertyValueError } from '../errors/duplicate-label-for-vocabulary-list-filter-property-value.error';
 import { InvalidValueForCheckboxFilterPropertyError } from './invalid-value-for-checkbox-filter-property.error';
 import { InvalidValueForSelectFilterPropertyError } from './invalid-value-for-select-filter-property.error';
 import { ValueAndDisplay } from './value-and-display.entity';
@@ -66,6 +69,56 @@ export class VocabularyListFilterProperty<
     }
 
     validateComplexInvariants(): InternalError[] {
+        /**
+         * Here we filter out the duplicated labels.
+         */
+        const labelCounts = this.validValues.reduce(
+            (acc, { display }) =>
+                acc.has(display) ? acc.set(display, acc.get(display) + 1) : acc.set(display, 1),
+            new Map<string, number>()
+        );
+
+        const duplicateLabels = this.validValues.filter(
+            ({ display }) => labelCounts.get(display) > 1
+        );
+
+        const labelDuplicationErrors = duplicateLabels.map(
+            ({ display: label, value }) =>
+                new DuplicateLabelForVocabularyListFilterPropertyValueError(this.name, label, value)
+        );
+
+        /**
+         * Here we filter out the duplicated values.
+         */
+        const valueCounts = this.validValues.reduce((acc, { value }) => {
+            const key = `${value}`;
+            return acc.has(key) ? acc.set(key, acc.get(key) + 1) : acc.set(key, 1);
+        }, new Map<string, number>());
+
+        const duplicateValues = this.validValues.filter(
+            ({ value }) => valueCounts.get(`${value}`) > 1
+        );
+
+        const valueDuplicationErrors = duplicateValues.map(
+            ({ display: label, value }) =>
+                new DuplicateValueForVocabularyListFilterPropertyValueError(this.name, label, value)
+        );
+
+        const typeSpecificInvariantErrors = this.validateTypeSpecificInvariants();
+
+        return [
+            ...labelDuplicationErrors,
+            ...valueDuplicationErrors,
+            ...typeSpecificInvariantErrors,
+        ];
+    }
+
+    /**
+     *
+     * @returns `InternalError[]` with all errors due to invariant rules that
+     * require the `validValues` to be consistent with the filter property's `type`
+     */
+    private validateTypeSpecificInvariants(): InternalError[] {
         // TODO rename this `VocabularyListFilterPropertyType.select`
         if (this.type === DropboxOrCheckbox.dropbox) {
             const invalidValues = this.validValues.filter(({ value }) => !isNonEmptyString(value));
@@ -77,15 +130,28 @@ export class VocabularyListFilterProperty<
         }
 
         if (this.type === DropboxOrCheckbox.checkbox) {
-            const invalidValues = this.validValues.filter(({ value }) => !isBoolean(value));
+            const nonBooleanValues = this.validValues.filter(({ value }) => !isBoolean(value));
 
-            return invalidValues.map(
+            const nonBooleanValueErrors = nonBooleanValues.map(
                 (invalidValueAndDisplay) =>
                     new InvalidValueForCheckboxFilterPropertyError(
                         invalidValueAndDisplay,
                         this.name
                     )
             );
+
+            // TODO We may want a `ValidValues` class for this.
+            const invalidNumberOfValuesErrors =
+                this.validValues.length == 2
+                    ? []
+                    : [
+                          new CheckboxMustHaveExactlyTwoAllowedValuesError(
+                              this.name,
+                              this.validValues
+                          ),
+                      ];
+
+            return [...nonBooleanValueErrors, ...invalidNumberOfValuesErrors];
         }
 
         return [

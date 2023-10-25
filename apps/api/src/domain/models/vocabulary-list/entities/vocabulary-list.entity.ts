@@ -3,7 +3,6 @@ import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
-import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
@@ -146,7 +145,10 @@ export class VocabularyList extends Resource {
                     .concat({
                         name,
                         type,
-                        validValues: cloneToPlainObject(allowedValuesWithLabels),
+                        validValues: allowedValuesWithLabels.map(({ label, value }) => ({
+                            value,
+                            display: label,
+                        })),
                     } as DTO<VocabularyListFilterProperty>)
                     .map((dto) => new VocabularyListFilterProperty(dto)),
             ],
