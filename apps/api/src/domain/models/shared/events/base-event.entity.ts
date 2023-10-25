@@ -4,12 +4,15 @@ import { AggregateId } from '../../../types/AggregateId';
 import BaseDomainModel from '../../BaseDomainModel';
 import { EventRecordMetadata } from './types/EventRecordMetadata';
 
-export abstract class BaseEvent extends BaseDomainModel {
+export abstract class BaseEvent<
+    // TODO Declare an IEventBase with `aggregateCompositeIdentifier` on it
+    TPayload extends ICommandBase = ICommandBase
+> extends BaseDomainModel {
     abstract type: string;
 
     meta: EventRecordMetadata;
 
-    payload: ICommandBase;
+    payload: TPayload;
 
     constructor(
         command: ICommandBase,
