@@ -164,7 +164,7 @@ export class ArangoCommandRepositoryForAggregateRoot<TAggregate extends Aggregat
 
         await this.eventRepository.appendEvent(mostRecentEvent);
 
-        await this.snapshotRepositoryForAggregate.update(updatedEntity);
+        // await this.snapshotRepositoryForAggregate.update(updatedEntity);
     }
 
     // TODO refactor this- we probably should do this once at bootstrap

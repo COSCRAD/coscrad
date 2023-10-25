@@ -1517,7 +1517,8 @@
                             "text": "Court Case Digital Text title (English)"
                         }
                     ]
-                }
+                },
+                "pages": []
             },
             {
                 "type": "digitalText",
@@ -1553,7 +1554,8 @@
                             "text": "Digital Text number two title"
                         }
                     ]
-                }
+                },
+                "pages": []
             }
         ],
         "songs": [

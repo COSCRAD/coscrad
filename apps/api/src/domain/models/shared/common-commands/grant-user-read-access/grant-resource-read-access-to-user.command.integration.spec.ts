@@ -89,7 +89,8 @@ describe('GRANT_RESOURCE_READ_ACCESS_TO_USER', () => {
         await testRepositoryProvider.testTeardown();
     });
 
-    const eventSourcedResourceTypes = [ResourceType.song];
+    // TODO: add standalone test for these resources
+    const eventSourcedResourceTypes = [ResourceType.song, ResourceType.digitalText];
 
     describe('when the command is valid', () => {
         Object.values(ResourceType)
