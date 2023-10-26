@@ -20,6 +20,7 @@ import { ResourceType } from '../../../types/ResourceType';
 import { Snapshot } from '../../../types/Snapshot';
 import { Resource } from '../../resource.entity';
 import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
+import { ResourceReadAccessGrantedToUser } from '../../shared/common-commands/grant-user-read-access/resource-read-access-granted-to-user.event';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import { DigitalTextCreated, PageAddedToDigitalText } from '../commands';
 import {
@@ -76,76 +77,6 @@ export class DigitalText extends Resource {
 
     protected validateComplexInvariants(): InternalError[] {
         return [];
-    }
-
-    static fromEventHistory(
-        eventStream: BaseEvent[],
-        idOfDigitalTextToCreate: AggregateId
-    ): Maybe<ResultOrError<DigitalText>> {
-        if (eventStream.some(({ type }) => type === `RESOURCE_READ_ACCESS_GRANTED_TO_USER`)) {
-            throw new InternalError(`We need to support event sourcing for ACLs`);
-        }
-
-        const eventsForThisDigitalText = eventStream.filter(({ payload }) =>
-            isDeepStrictEqual((payload as ICommandBase)[AGGREGATE_COMPOSITE_IDENTIFIER], {
-                type: AggregateType.digitalText,
-                id: idOfDigitalTextToCreate,
-            })
-        );
-
-        if (eventsForThisDigitalText.length === 0) return NotFound;
-
-        const [creationEvent, ...updateEvents] = eventsForThisDigitalText;
-
-        if (creationEvent.type !== DIGITAL_TEXT_CREATED) {
-            throw new InternalError(
-                `The first event for ${formatAggregateCompositeIdentifier({
-                    type: AggregateType.digitalText,
-                    id: idOfDigitalTextToCreate,
-                })} should have been of type ${DIGITAL_TEXT_CREATED}, but found: ${
-                    creationEvent?.type
-                }`
-            );
-        }
-
-        const {
-            payload: {
-                title,
-                languageCodeForTitle,
-                aggregateCompositeIdentifier: { id, type },
-            },
-        } = creationEvent as DigitalTextCreated;
-
-        const initialInstance = new DigitalText({
-            type,
-            id,
-            published: false,
-            title: buildMultilingualTextWithSingleItem(title, languageCodeForTitle),
-            pages: [],
-            eventHistory: [creationEvent],
-        });
-
-        const newDigitalText = updateEvents.reduce((digitalText, event) => {
-            if (isInternalError(digitalText)) return digitalText;
-
-            if (event.type === `RESOURCE_PUBLISHED`) {
-                return digitalText.addEventToHistory(event).publish();
-            }
-
-            if (event.type === PAGE_ADDED_TO_DIGITAL_TEXT) {
-                const {
-                    payload: { identifier },
-                } = event as PageAddedToDigitalText;
-
-                return digitalText.addEventToHistory(event).addPage(identifier);
-            }
-
-            // This event was not handled
-            // TODO: should we throw here?
-            return digitalText;
-        }, initialInstance);
-
-        return newDigitalText;
     }
 
     protected getExternalReferences(): AggregateCompositeIdentifier[] {
@@ -216,5 +147,79 @@ export class DigitalText extends Resource {
 
     hasPage(pageIdentifier: PageIdentifier): boolean {
         return this.pages.some(({ identifier }) => identifier === pageIdentifier);
+    }
+
+    static fromEventHistory(
+        eventStream: BaseEvent[],
+        idOfDigitalTextToCreate: AggregateId
+    ): Maybe<ResultOrError<DigitalText>> {
+        const eventsForThisDigitalText = eventStream.filter(({ payload }) =>
+            isDeepStrictEqual((payload as ICommandBase)[AGGREGATE_COMPOSITE_IDENTIFIER], {
+                type: AggregateType.digitalText,
+                id: idOfDigitalTextToCreate,
+            })
+        );
+
+        if (eventsForThisDigitalText.length === 0) return NotFound;
+
+        const [creationEvent, ...updateEvents] = eventsForThisDigitalText;
+
+        if (creationEvent.type !== DIGITAL_TEXT_CREATED) {
+            throw new InternalError(
+                `The first event for ${formatAggregateCompositeIdentifier({
+                    type: AggregateType.digitalText,
+                    id: idOfDigitalTextToCreate,
+                })} should have been of type ${DIGITAL_TEXT_CREATED}, but found: ${
+                    creationEvent?.type
+                }`
+            );
+        }
+
+        const {
+            payload: {
+                title,
+                languageCodeForTitle,
+                aggregateCompositeIdentifier: { id, type },
+            },
+        } = creationEvent as DigitalTextCreated;
+
+        const initialInstance = new DigitalText({
+            type,
+            id,
+            published: false,
+            title: buildMultilingualTextWithSingleItem(title, languageCodeForTitle),
+            pages: [],
+            eventHistory: [creationEvent],
+        });
+
+        const newDigitalText = updateEvents.reduce((digitalText, event) => {
+            if (isInternalError(digitalText)) return digitalText;
+
+            if (event.type === `RESOURCE_PUBLISHED`) {
+                return digitalText.addEventToHistory(event).publish();
+            }
+
+            if (event.type === PAGE_ADDED_TO_DIGITAL_TEXT) {
+                const {
+                    payload: { identifier },
+                } = event as PageAddedToDigitalText;
+
+                return digitalText.addEventToHistory(event).addPage(identifier);
+            }
+
+            if (event.type === `RESOURCE_READ_ACCESS_GRANTED_TO_USER`) {
+                const {
+                    payload: { userId },
+                } = event as ResourceReadAccessGrantedToUser;
+
+                return digitalText.addEventToHistory(event).grantReadAccessToUser(userId);
+            }
+
+            // This event was not handled
+            // TODO: should we throw here?
+            return digitalText;
+        }, initialInstance);
+
+        return newDigitalText;
     }
 }

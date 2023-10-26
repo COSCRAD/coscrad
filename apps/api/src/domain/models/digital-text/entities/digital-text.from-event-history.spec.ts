@@ -3,24 +3,24 @@ import {
     LanguageCode,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { CommandFSA } from '../../../app/controllers/command/command-fsa/command-fsa.entity';
-import { NotFound, isNotFound } from '../../../lib/types/not-found';
-import { clonePlainObjectWithOverrides } from '../../../lib/utilities/clonePlainObjectWithOverrides';
-import { buildTestCommandFsaMap } from '../../../test-data/commands';
-import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
-import { dummyDateNow } from '../__tests__/utilities/dummyDateNow';
-import { dummySystemUserId } from '../__tests__/utilities/dummySystemUserId';
-import { GrantResourceReadAccessToUser } from '../shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command';
-import { ResourceReadAccessGrantedToUser } from '../shared/common-commands/grant-user-read-access/resource-read-access-granted-to-user.event';
-import { BaseEvent } from '../shared/events/base-event.entity';
+import { CommandFSA } from '../../../../app/controllers/command/command-fsa/command-fsa.entity';
+import { NotFound, isNotFound } from '../../../../lib/types/not-found';
+import { clonePlainObjectWithOverrides } from '../../../../lib/utilities/clonePlainObjectWithOverrides';
+import { buildTestCommandFsaMap } from '../../../../test-data/commands';
+import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import { dummyDateNow } from '../../__tests__/utilities/dummyDateNow';
+import { dummySystemUserId } from '../../__tests__/utilities/dummySystemUserId';
+import { GrantResourceReadAccessToUser } from '../../shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command';
+import { ResourceReadAccessGrantedToUser } from '../../shared/common-commands/grant-user-read-access/resource-read-access-granted-to-user.event';
+import { BaseEvent } from '../../shared/events/base-event.entity';
 import {
     AddPageToDigitalText,
     CreateDigitalText,
     DigitalTextCreated,
     PageAddedToDigitalText,
-} from './commands';
-import { ADD_PAGE_TO_DIGITAL_TEXT } from './constants';
-import { DigitalText } from './entities/digital-text.entity';
+} from '../commands';
+import { ADD_PAGE_TO_DIGITAL_TEXT } from '../constants';
+import { DigitalText } from './digital-text.entity';
 
 const id = buildDummyUuid(153);
 
@@ -80,9 +80,8 @@ const grantReadAccessToUserForDigitalText = clonePlainObjectWithOverrides(
     ) as CommandFSA<GrantResourceReadAccessToUser>,
     {
         payload: {
-            // TODO: change this when you fix the command
-            aggregateCompositeIdentifier: { id: idForUserWithAccessToDigitalText },
-            resourceCompositeIdentifier: { type: ResourceType.digitalText, id },
+            aggregateCompositeIdentifier: { type: ResourceType.digitalText, id },
+            userId: idForUserWithAccessToDigitalText,
         },
     }
 );
