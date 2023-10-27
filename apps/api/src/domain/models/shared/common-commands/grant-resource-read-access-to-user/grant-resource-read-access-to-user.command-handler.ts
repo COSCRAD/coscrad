@@ -16,6 +16,7 @@ import validateCommandPayloadType from '../../command-handlers/utilities/validat
 import AggregateNotFoundError from '../../common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../common-command-errors/CommandExecutionError';
 import { EventRecordMetadata } from '../../events/types/EventRecordMetadata';
+import { GRANT_RESOURCE_READ_ACCESS_TO_USER } from '../constants';
 import { GrantResourceReadAccessToUser } from './grant-resource-read-access-to-user.command';
 import { ResourceReadAccessGrantedToUser } from './resource-read-access-granted-to-user.event';
 
@@ -50,7 +51,7 @@ export class GrantResourceReadAccessToUserCommandHandler implements ICommandHand
 
         if (isInternalError(userSearchResult)) {
             throw new InternalError(
-                `Failed to fetch existing user when handling GRANT_RESOURCE_READ_ACCESS_TO_USER`,
+                `Failed to fetch existing user when handling ${GRANT_RESOURCE_READ_ACCESS_TO_USER}`,
                 [userSearchResult]
             );
         }
@@ -59,7 +60,7 @@ export class GrantResourceReadAccessToUserCommandHandler implements ICommandHand
             throw new InternalError(
                 `Failed to fetch resource: ${formatAggregateCompositeIdentifier(
                     resourceCompositeIdentifier
-                )} when handling GRANT_RESOURCE_READ_ACCESS_TO_USER`
+                )} when handling ${GRANT_RESOURCE_READ_ACCESS_TO_USER}`
             );
         }
 

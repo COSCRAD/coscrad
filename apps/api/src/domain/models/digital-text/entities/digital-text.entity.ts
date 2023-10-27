@@ -20,7 +20,7 @@ import { ResourceType } from '../../../types/ResourceType';
 import { Snapshot } from '../../../types/Snapshot';
 import { Resource } from '../../resource.entity';
 import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
-import { ResourceReadAccessGrantedToUser } from '../../shared/common-commands/grant-user-read-access/resource-read-access-granted-to-user.event';
+import { ResourceReadAccessGrantedToUser } from '../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import { DigitalTextCreated, PageAddedToDigitalText } from '../commands';
 import {

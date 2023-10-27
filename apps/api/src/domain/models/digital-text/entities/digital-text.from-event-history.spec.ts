@@ -10,8 +10,10 @@ import { buildTestCommandFsaMap } from '../../../../test-data/commands';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../__tests__/utilities/dummyDateNow';
 import { dummySystemUserId } from '../../__tests__/utilities/dummySystemUserId';
-import { GrantResourceReadAccessToUser } from '../../shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command';
-import { ResourceReadAccessGrantedToUser } from '../../shared/common-commands/grant-user-read-access/resource-read-access-granted-to-user.event';
+import {
+    GrantResourceReadAccessToUser,
+    ResourceReadAccessGrantedToUser,
+} from '../../shared/common-commands';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import {
     AddPageToDigitalText,
