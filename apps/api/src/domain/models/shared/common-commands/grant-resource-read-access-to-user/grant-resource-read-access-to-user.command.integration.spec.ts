@@ -1,13 +1,13 @@
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
-import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { NotFound } from '../../../../../lib/types/not-found';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestData from '../../../../../test-data/buildTestData';
 import formatAggregateCompositeIdentifier from '../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
+import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateType } from '../../../../types/AggregateType';
 import { ResourceType } from '../../../../types/ResourceType';
@@ -40,8 +40,8 @@ const initialState = buildInMemorySnapshot({
 const validFSA: FluxStandardAction<GrantResourceReadAccessToUser> = {
     type: commandType,
     payload: {
-        aggregateCompositeIdentifier: { id: existingUser.id, type: AggregateType.user },
-        resourceCompositeIdentifier: existingBook.getCompositeIdentifier(),
+        aggregateCompositeIdentifier: existingBook.getCompositeIdentifier(),
+        userId: existingUser.id,
     },
 };
 
@@ -106,13 +106,13 @@ describe('GRANT_RESOURCE_READ_ACCESS_TO_USER', () => {
                         await assertCommandSuccess(commandAssertionDependencies, {
                             buildValidCommandFSA: () =>
                                 fsaFactory.build(undefined, {
-                                    resourceCompositeIdentifier: resource.getCompositeIdentifier(),
+                                    aggregateCompositeIdentifier: resource.getCompositeIdentifier(),
                                 }),
                             initialState,
                             systemUserId: dummyAdminUserId,
                             checkStateOnSuccess: async ({
-                                aggregateCompositeIdentifier: { id: userId },
-                                resourceCompositeIdentifier: { type, id },
+                                aggregateCompositeIdentifier: { type, id },
+                                userId,
                             }: GrantResourceReadAccessToUser) => {
                                 const updatedResourceSearchResult = await testRepositoryProvider
                                     .forResource(type)
@@ -179,7 +179,9 @@ describe('GRANT_RESOURCE_READ_ACCESS_TO_USER', () => {
                         expect(error).toBeInstanceOf(CommandExecutionError);
 
                         expect(error.innerErrors[0]).toEqual(
-                            new AggregateNotFoundError(validFSA.payload.resourceCompositeIdentifier)
+                            new AggregateNotFoundError(
+                                validFSA.payload.aggregateCompositeIdentifier
+                            )
                         );
                     },
                 });
@@ -210,7 +212,7 @@ describe('GRANT_RESOURCE_READ_ACCESS_TO_USER', () => {
                         expect(error.innerErrors[0]).toEqual(
                             new UserAlreadyHasReadAccessError(
                                 validFSA.payload.aggregateCompositeIdentifier.id,
-                                validFSA.payload.resourceCompositeIdentifier
+                                validFSA.payload.aggregateCompositeIdentifier
                             )
                         );
                     },

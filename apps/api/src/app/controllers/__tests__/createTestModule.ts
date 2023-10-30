@@ -79,11 +79,11 @@ import {
     TranslatePlaylistNameCommandHandler,
 } from '../../../domain/models/playlist/commands';
 import {
+    GrantResourceReadAccessToUser,
+    GrantResourceReadAccessToUserCommandHandler,
     PublishResource,
     PublishResourceCommandHandler,
 } from '../../../domain/models/shared/common-commands';
-import { GrantResourceReadAccessToUser } from '../../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command';
-import { GrantResourceReadAccessToUserCommandHandler } from '../../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command-handler';
 import { ResourcePublished } from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import {
     AddLyricsForSong,
