@@ -2,8 +2,8 @@ import { Controller, Get } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ApiTags } from '@nestjs/swagger';
 import { isResourceType } from '../../../domain/types/ResourceType';
-import { buildAllAggregateDescriptions } from '../../../view-models/resourceDescriptions/buildAllAggregateDescriptions';
-import { AggregateInfo } from '../../../view-models/resourceDescriptions/types/AggregateInfo';
+import { buildAllAggregateDescriptions } from '../../../queries/resourceDescriptions/buildAllAggregateDescriptions';
+import { AggregateInfo } from '../../../queries/resourceDescriptions/types/AggregateInfo';
 import { mixLinkIntoViewModelDescription } from '../utilities';
 import { RESOURCES_ROUTE_PREFIX } from './constants';
 

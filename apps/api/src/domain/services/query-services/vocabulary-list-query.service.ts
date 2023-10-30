@@ -3,7 +3,7 @@ import { CommandInfoService } from '../../../app/controllers/command/services/co
 import { isInternalError } from '../../../lib/errors/InternalError';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
-import { VocabularyListViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
+import { VocabularyListViewModel } from '../../../queries/buildViewModelForResource/viewModels';
 import BaseDomainModel from '../../models/BaseDomainModel';
 import { Tag } from '../../models/tag/tag.entity';
 import { Term } from '../../models/term/entities/term.entity';

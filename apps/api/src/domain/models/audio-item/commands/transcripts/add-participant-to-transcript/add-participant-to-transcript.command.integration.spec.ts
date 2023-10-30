@@ -6,7 +6,7 @@ import { NotFound } from '../../../../../../lib/types/not-found';
 import { ArangoDatabaseProvider } from '../../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import formatAggregateType from '../../../../../../view-models/presentation/formatAggregateType';
+import formatAggregateType from '../../../../../../queries/presentation/formatAggregateType';
 import getValidAggregateInstanceForTest from '../../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
 import { AggregateCompositeIdentifier } from '../../../../../types/AggregateCompositeIdentifier';

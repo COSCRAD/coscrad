@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ApiTags } from '@nestjs/swagger';
 import { isCategorizableType } from '../../domain/types/CategorizableType';
-import { buildAllAggregateDescriptions } from '../../view-models/resourceDescriptions';
+import { buildAllAggregateDescriptions } from '../../queries/resourceDescriptions';
 import { ADMIN_BASE_ROUTE, SWAGGER_TAG_ADMIN } from './constants';
 import { mixLinkIntoViewModelDescription } from './utilities';
 

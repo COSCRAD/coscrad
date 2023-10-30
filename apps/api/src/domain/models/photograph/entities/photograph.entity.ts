@@ -3,8 +3,8 @@ import { RegisterIndexScopedCommands } from '../../../../app/controllers/command
 import { InternalError } from '../../../../lib/errors/InternalError';
 import findAllPointsInLineNotWithinBounds from '../../../../lib/validation/geometry/findAllPointsInLineNotWithinBounds';
 import isPointWithinBounds from '../../../../lib/validation/geometry/isPointWithinBounds';
+import formatPosition2D from '../../../../queries/presentation/formatPosition2D';
 import { DTO } from '../../../../types/DTO';
-import formatPosition2D from '../../../../view-models/presentation/formatPosition2D';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { Valid } from '../../../domainModelValidators/Valid';

@@ -1,6 +1,6 @@
 import { InternalError } from '../../../lib/errors/InternalError';
+import formatAggregateType from '../../../queries/presentation/formatAggregateType';
 import { DTO } from '../../../types/DTO';
-import formatAggregateType from '../../../view-models/presentation/formatAggregateType';
 import { Aggregate } from '../../models/aggregate.entity';
 import { isResourceType, ResourceType } from '../../types/ResourceType';
 import getInstanceFactoryForResource from '../getInstanceFactoryForResource';

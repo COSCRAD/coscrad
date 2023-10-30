@@ -1,5 +1,5 @@
 import { IBaseViewModel } from '../../base.view-model.interface';
-import { IMultilingualText } from '../audio-item';
+import { IMultilingualText } from '../common';
 import { IPlaylistEpisode } from './playlist-episode.interface';
 
 export interface IPlayListViewModel extends IBaseViewModel {

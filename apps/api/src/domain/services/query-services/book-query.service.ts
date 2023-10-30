@@ -1,6 +1,6 @@
 import { IBookViewModel } from '@coscrad/api-interfaces';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
-import { BookViewModel } from '../../../view-models/buildViewModelForResource/viewModels/book.view-model';
+import { BookViewModel } from '../../../queries/buildViewModelForResource/viewModels/book.view-model';
 import BaseDomainModel from '../../models/BaseDomainModel';
 import { Book } from '../../models/book/entities/book.entity';
 import { ResourceType } from '../../types/ResourceType';

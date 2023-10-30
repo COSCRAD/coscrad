@@ -13,10 +13,10 @@ import { InternalError, isInternalError } from '../../../lib/errors/InternalErro
 import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
 import { Maybe } from '../../../lib/types/maybe';
 import { NotFound, isNotFound } from '../../../lib/types/not-found';
+import formatAggregateCompositeIdentifier from '../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { DTO } from '../../../types/DTO';
 import { DeepPartial } from '../../../types/DeepPartial';
 import { ResultOrError } from '../../../types/ResultOrError';
-import formatAggregateCompositeIdentifier from '../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText, MultilingualTextItem } from '../../common/entities/multilingual-text';
 import { AggregateRoot } from '../../decorators';

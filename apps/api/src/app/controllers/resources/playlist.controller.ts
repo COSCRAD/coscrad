@@ -11,7 +11,7 @@ import {
 import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
 import { PlaylistQueryService } from '../../../domain/services/query-services/playlist-query.service';
-import { PlaylistViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
+import { PlaylistViewModel } from '../../../queries/buildViewModelForResource/viewModels';
 import { QueryResponseTransformInterceptor } from '../response-mapping';
 import {
     CoscradInternalErrorFilter,

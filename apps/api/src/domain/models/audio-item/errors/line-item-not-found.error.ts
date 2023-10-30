@@ -1,5 +1,5 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
-import formatTimeRange from '../../../../view-models/presentation/formatTimeRange';
+import formatTimeRange from '../../../../queries/presentation/formatTimeRange';
 
 export class LineItemNotFoundError extends InternalError {
     constructor({

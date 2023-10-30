@@ -1,6 +1,6 @@
 import { bootstrapDynamicTypes, getCoscradDataSchema } from '@coscrad/data-types';
 import { buildAllDataClassProviders } from '../../../app/controllers/__tests__/createTestModule';
-import formatAggregateType from '../../../view-models/presentation/formatAggregateType';
+import formatAggregateType from '../../../queries/presentation/formatAggregateType';
 import { getAggregateCtor } from '../../factories/utilities/getAggregateCtor';
 import { isDiscriminatedUnionResourceType } from '../../factories/utilities/isDiscriminatedUnionResourceType';
 import { AggregateType } from '../../types/AggregateType';

@@ -1,6 +1,6 @@
 import { ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
-import { SpatialFeatureViewModel } from '../../../view-models/buildViewModelForResource/viewModels/spatial-data/spatial-feature.view-model';
+import { SpatialFeatureViewModel } from '../../../queries/buildViewModelForResource/viewModels/spatial-data/spatial-feature.view-model';
 import BaseDomainModel from '../../models/BaseDomainModel';
 import { ISpatialFeature } from '../../models/spatial-feature/interfaces/spatial-feature.interface';
 import { Line } from '../../models/spatial-feature/line/entities/line.entity';

@@ -10,15 +10,18 @@ import { CreateDigitalTextCommandHandler } from '../../domain/models/digital-tex
 import { DigitalTextCreated } from '../../domain/models/digital-text/commands/digital-text-created.event';
 import { DigitalText } from '../../domain/models/digital-text/entities/digital-text.entity';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
-import { PersistenceModule } from '../../persistence/persistence.module';
+import { DigitalTextQueryService } from '../../queries/digital-text';
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
+import { DigitalTextQueryController } from '../controllers/resources/digital-text.controller';
 
 @Module({
-    imports: [PersistenceModule, CommandModule, IdGenerationModule],
+    imports: [CommandModule, IdGenerationModule],
+    controllers: [DigitalTextQueryController],
     providers: [
         CommandInfoService,
         CreateDigitalTextCommandHandler,
         AddPageToDigitalTextCommandHandler,
+        DigitalTextQueryService,
         ...[
             // Domain Model
             DigitalText,

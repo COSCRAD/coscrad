@@ -1,6 +1,6 @@
 import { AggregateFactoryValidTestCase, FactoryTestSuiteForAggregate } from '.';
 import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpected';
-import { formatGeometricFeatureType } from '../../../../view-models/presentation/formatGeometricFeatureType';
+import { formatGeometricFeatureType } from '../../../../queries/presentation/formatGeometricFeatureType';
 import buildInvariantValidationErrorFactoryFunction from '../../../__tests__/utilities/buildInvariantValidationErrorFactoryFunction';
 import { getValidSpatialFeatureInstanceForTest } from '../../../__tests__/utilities/getValidSpatialFeatureInstanceForTest';
 import { Line } from '../../../models/spatial-feature/line/entities/line.entity';

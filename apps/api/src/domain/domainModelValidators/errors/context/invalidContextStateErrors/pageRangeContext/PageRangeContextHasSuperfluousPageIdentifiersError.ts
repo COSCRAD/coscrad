@@ -1,6 +1,6 @@
 import { InternalError } from '../../../../../../lib/errors/InternalError';
-import formatResourceCompositeIdentifier from '../../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
-import formatListOfPageIdentifiers from '../../../../../../view-models/presentation/formatListOfPageIdentifiers';
+import formatResourceCompositeIdentifier from '../../../../../../queries/presentation/formatAggregateCompositeIdentifier';
+import formatListOfPageIdentifiers from '../../../../../../queries/presentation/formatListOfPageIdentifiers';
 import { PageIdentifier } from '../../../../../models/book/entities/types/PageIdentifier';
 import { AggregateCompositeIdentifier } from '../../../../../types/AggregateCompositeIdentifier';
 

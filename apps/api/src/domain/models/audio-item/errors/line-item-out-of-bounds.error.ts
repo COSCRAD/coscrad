@@ -1,5 +1,5 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
-import formatPosition2D from '../../../../view-models/presentation/formatPosition2D';
+import formatPosition2D from '../../../../queries/presentation/formatPosition2D';
 import { TranscriptItem } from '../entities/transcript-item.entity';
 
 export class TranscriptLineItemOutOfBoundsError extends InternalError {
