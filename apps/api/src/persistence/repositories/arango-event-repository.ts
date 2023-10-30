@@ -30,7 +30,7 @@ export class ArangoEventRepository implements IEventRepository {
      * TODO Should the following simply be an `EventFilter`? or a `Specification`?
      */
     async fetchEvents(
-        aggregateContextIdentifier:
+        aggregateContextIdentifier?:
             | AggregateCompositeIdentifier
             | Pick<AggregateCompositeIdentifier, 'type'>
     ): Promise<BaseEvent[]> {
@@ -44,28 +44,36 @@ export class ArangoEventRepository implements IEventRepository {
          * respect to Arango, so there's not a lot of value in building in complex
          * query support for this right now.
          */
-        const filteredEvents = allEventDtos.filter(
-            ({
-                payload: {
-                    aggregateCompositeIdentifier: { type, id },
-                },
-            }) => {
-                if (type !== aggregateContextIdentifier.type) return false;
+        const filteredEventDtos = aggregateContextIdentifier
+            ? allEventDtos.filter(
+                  ({
+                      payload: {
+                          aggregateCompositeIdentifier: { type, id },
+                      },
+                  }) => {
+                      if (type !== aggregateContextIdentifier.type) return false;
 
-                const { id: contextId } =
-                    aggregateContextIdentifier as AggregateCompositeIdentifier;
+                      const { id: contextId } =
+                          aggregateContextIdentifier as AggregateCompositeIdentifier;
 
-                const didUserSpecifyIdFilter = !isNullOrUndefined(contextId);
+                      const didUserSpecifyIdFilter = !isNullOrUndefined(contextId);
 
-                if (!didUserSpecifyIdFilter) return true;
+                      if (!didUserSpecifyIdFilter) return true;
 
-                return id === contextId;
-            }
-        );
+                      return id === contextId;
+                  }
+              )
+            : /**
+               * Currently, we leverage the event repository for the query
+               * layer as well. Eventually, we will sync a separate query DB
+               * by publishing events on a messaging queue. In the meantime, we
+               * expose the ability to fetch all events so as to perform "joins"
+               * via event sourcing.
+               */
+              allEventDtos;
 
-        // TODO Either add an event factory, or return only the DTO
         const eventInstances = await Promise.all(
-            filteredEvents
+            filteredEventDtos
                 // The event repository has the responsibility of sorting events chronologically for once and for all
                 .sort((eventA, eventB) => eventA.meta.dateCreated - eventB.meta.dateCreated)
                 .map((eventDocument) => this.coscradEventFactory.build(eventDocument))

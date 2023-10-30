@@ -13,10 +13,10 @@ import { InternalError } from '../../lib/errors/InternalError';
 import { DomainModelCtor } from '../../lib/types/DomainModelCtor';
 import { Maybe } from '../../lib/types/maybe';
 import { isNotFound } from '../../lib/types/not-found';
+import formatAggregateCompositeIdentifier from '../../queries/presentation/formatAggregateCompositeIdentifier';
 import { DTO } from '../../types/DTO';
 import { ResultOrError } from '../../types/ResultOrError';
 import { DynamicDataTypeFinderService } from '../../validation';
-import formatAggregateCompositeIdentifier from '../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { ArangoEventRepository } from './arango-event-repository';
 
 type AggregateContextIdentifier =

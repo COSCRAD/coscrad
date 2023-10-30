@@ -3,10 +3,9 @@ import { Command } from '@coscrad/commands';
 import { NestedDataType, ReferenceTo, UUID } from '@coscrad/data-types';
 import { AggregateId } from '../../../../types/AggregateId';
 import { ResourceCompositeIdentifier } from '../../../context/commands';
-import { GRANT_RESOURCE_READ_ACCESS_TO_USER } from '../constants';
 
 @Command({
-    type: GRANT_RESOURCE_READ_ACCESS_TO_USER,
+    type: `GRANT_RESOURCE_READ_ACCESS_TO_USER`,
     label: 'Grant Read Access to User',
     description: 'Allow a user to view (but not edit) a given resource',
 })

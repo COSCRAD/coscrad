@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
-import { TermViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
+import { TermViewModel } from '../../../queries/buildViewModelForResource/viewModels';
 import BaseDomainModel from '../../models/BaseDomainModel';
 import { Term } from '../../models/term/entities/term.entity';
 import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';

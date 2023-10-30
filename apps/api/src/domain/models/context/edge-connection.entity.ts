@@ -33,7 +33,7 @@ import {
     IEdgeConnectionMember,
 } from '@coscrad/api-interfaces';
 import { Injectable } from '@nestjs/common';
-import formatAggregateCompositeIdentifier from '../../../view-models/presentation/formatAggregateCompositeIdentifier';
+import formatAggregateCompositeIdentifier from '../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../common/entities/multilingual-text';
 import AggregateNotFoundError from '../shared/common-command-errors/AggregateNotFoundError';

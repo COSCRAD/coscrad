@@ -1,13 +1,13 @@
 import { ICommandBase } from '@coscrad/api-interfaces';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
+import { DTO } from '../../../../types/DTO';
 import { AggregateId } from '../../../types/AggregateId';
-import BaseDomainModel from '../../BaseDomainModel';
 import { EventRecordMetadata } from './types/EventRecordMetadata';
 
 export abstract class BaseEvent<
     // TODO Declare an IEventBase with `aggregateCompositeIdentifier` on it
     TPayload extends ICommandBase = ICommandBase
-> extends BaseDomainModel {
+> {
     abstract type: string;
 
     meta: EventRecordMetadata;
@@ -15,13 +15,11 @@ export abstract class BaseEvent<
     payload: TPayload;
 
     constructor(
-        command: ICommandBase,
+        command: TPayload,
         eventId: AggregateId,
         systemUserId: AggregateId,
         timestamp?: number
     ) {
-        super();
-
         this.payload = cloneToPlainObject(command);
 
         this.meta = {
@@ -33,5 +31,10 @@ export abstract class BaseEvent<
 
     public get id(): AggregateId {
         return this.meta.id;
+    }
+
+    public toDTO<T extends BaseEvent>(this: T): DTO<this> {
+        // note that getters do not survive conversion to a plain object
+        return cloneToPlainObject({ ...this, id: this.id });
     }
 }

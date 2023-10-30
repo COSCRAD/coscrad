@@ -1,6 +1,6 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
-import formatAggregateCompositeIdentifier from '../../../../view-models/presentation/formatAggregateCompositeIdentifier';
-import formatArrayAsList from '../../../../view-models/presentation/shared/formatArrayAsList';
+import formatAggregateCompositeIdentifier from '../../../../queries/presentation/formatAggregateCompositeIdentifier';
+import formatArrayAsList from '../../../../queries/presentation/shared/formatArrayAsList';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 
 export default class InvalidExternalReferenceByAggregateError extends InternalError {

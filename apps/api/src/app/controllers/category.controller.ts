@@ -5,7 +5,7 @@ import { IRepositoryProvider } from '../../domain/repositories/interfaces/reposi
 import { isInternalError } from '../../lib/errors/InternalError';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../persistence/constants/persistenceConstants';
-import { CategoryTreeViewModel } from '../../view-models/buildViewModelForResource/viewModels/category-tree.view-model';
+import { CategoryTreeViewModel } from '../../queries/buildViewModelForResource/viewModels/category-tree.view-model';
 import httpStatusCodes from '../constants/httpStatusCodes';
 import { CATEGORY_TREE_INDEX_ROUTE } from './constants';
 

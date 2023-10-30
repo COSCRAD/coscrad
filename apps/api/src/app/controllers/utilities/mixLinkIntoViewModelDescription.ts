@@ -1,4 +1,4 @@
-import { AggregateInfo } from '../../../view-models/resourceDescriptions/types/AggregateInfo';
+import { AggregateInfo } from '../../../queries/resourceDescriptions/types/AggregateInfo';
 import { buildIndexPathForAggregate } from './buildIndexPathForAggregate';
 
 /**

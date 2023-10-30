@@ -1,6 +1,6 @@
 import { InternalError } from '../../../../../../lib/errors/InternalError';
-import formatResourceCompositeIdentifier from '../../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
-import formatCharacterRange from '../../../../../../view-models/presentation/formatCharacterRange';
+import formatResourceCompositeIdentifier from '../../../../../../queries/presentation/formatAggregateCompositeIdentifier';
+import formatCharacterRange from '../../../../../../queries/presentation/formatCharacterRange';
 import { Resource } from '../../../../../models/resource.entity';
 
 // TODO we should really alias [number,number] already!

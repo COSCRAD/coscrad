@@ -1,22 +1,25 @@
-import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
+import { AggregateType, ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { CommandHandlerService, CommandMetadataBase } from '@coscrad/commands';
 import { ClassSchema, getCoscradDataSchema } from '@coscrad/data-types';
 import { Injectable } from '@nestjs/common';
-import { Aggregate } from '../../../../domain/models/aggregate.entity';
+import { AggregateId } from '../../../../domain/types/AggregateId';
 import { isNullOrUndefined } from '../../../../domain/utilities/validation/is-null-or-undefined';
 import { DomainModelCtor } from '../../../../lib/types/DomainModelCtor';
-import { buildCommandForm } from '../../../../view-models/dynamicForms';
+import { buildCommandForm } from '../../../../queries/dynamicForms';
 import { INDEX_SCOPED_COMMANDS } from '../command-info/constants';
 
 type CommandTypeFilter = (commandType: string) => boolean;
 
 const buildCommandTypeFilter = (
-    context?: DomainModelCtor | DetailScopedCommandWriteContext
+    context?: DomainModelCtor | DetailScopedCommandWriteContext | IndexScopedViewContext
 ): CommandTypeFilter => {
     if (isNullOrUndefined(context)) return (_: string) => true;
 
     if (isCommandWriteContext(context))
         return (commandType: string) => context.getAvailableCommands().includes(commandType);
+
+    if (isCommandViewIndexContext(context))
+        return (commandType: string) => context.getIndexScopedCommands().includes(commandType);
 
     return (commandType: string) =>
         // DO NOT DEFAULT TO [] here. Failing to decorate the Resource class should break things!
@@ -29,14 +32,31 @@ type CommandInfo = CommandMetadataBase & {
     schema: ClassSchema;
 };
 
-export type DetailScopedCommandWriteContext = Aggregate;
+export type DetailScopedCommandWriteContext = {
+    getAvailableCommands(): string[];
+
+    getCompositeIdentifier(): {
+        type: AggregateType;
+        id: AggregateId;
+    };
+};
 
 type IndexScopedCommandWriteContext = DomainModelCtor;
+
+type IndexScopedViewContext = {
+    getIndexScopedCommands(): string[];
+};
+
+export const isCommandViewIndexContext = (input: unknown): input is IndexScopedViewContext =>
+    typeof (input as IndexScopedViewContext).getIndexScopedCommands === 'function';
 
 export const isCommandWriteContext = (input: unknown): input is DetailScopedCommandWriteContext =>
     typeof (input as DetailScopedCommandWriteContext).getAvailableCommands === 'function';
 
-export type CommandContext = IndexScopedCommandWriteContext | DetailScopedCommandWriteContext;
+export type CommandContext =
+    | IndexScopedCommandWriteContext
+    | DetailScopedCommandWriteContext
+    | IndexScopedViewContext;
 
 @Injectable()
 export class CommandInfoService {
@@ -54,6 +74,8 @@ export class CommandInfoService {
     // TODO Unit test the filtering logic
     getCommandForms(): ICommandFormAndLabels[];
     getCommandForms(context: DomainModelCtor): ICommandFormAndLabels[];
+    // note that we are moving towards this override
+    getCommandForms(context: IndexScopedViewContext): ICommandFormAndLabels[];
     getCommandForms(context: DetailScopedCommandWriteContext): ICommandFormAndLabels[];
     getCommandForms(context: CommandContext): ICommandFormAndLabels[];
     getCommandForms(context?: CommandContext): ICommandFormAndLabels[] {

@@ -1,7 +1,7 @@
 import { AggregateFactoryValidTestCase } from '../../';
 import { ResourceType } from '../../../../../../domain/types/ResourceType';
-import formatAggregateType from '../../../../../../view-models/presentation/formatAggregateType';
-import { Formatter } from '../../../../../../view-models/presentation/types/Formatter';
+import formatAggregateType from '../../../../../../queries/presentation/formatAggregateType';
+import { Formatter } from '../../../../../../queries/presentation/types/Formatter';
 import { AggregateTypeToAggregateInstance } from '../../../../../types/AggregateType';
 import { GetValidInstanceForSubtype } from './types/GetValidInstanceForSubtype';
 

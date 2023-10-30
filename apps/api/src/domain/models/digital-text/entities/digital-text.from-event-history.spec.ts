@@ -69,14 +69,7 @@ const pageAddedForDigitalText = new PageAddedToDigitalText(
 
 const idForUserWithAccessToDigitalText = buildDummyUuid(45);
 
-/**
- * TODO: note that the aggregate composite identifier should be for the resource
- * and not the user.
- *
- * We need to fix the grantResourceReadAccessToUser command
- */
 const grantReadAccessToUserForDigitalText = clonePlainObjectWithOverrides(
-    // TODO: export constant for the following command type
     testFsaMap.get(
         'GRANT_RESOURCE_READ_ACCESS_TO_USER'
     ) as CommandFSA<GrantResourceReadAccessToUser>,

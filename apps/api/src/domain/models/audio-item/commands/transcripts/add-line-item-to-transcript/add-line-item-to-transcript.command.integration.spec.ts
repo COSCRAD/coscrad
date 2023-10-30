@@ -11,7 +11,7 @@ import assertErrorAsExpected from '../../../../../../lib/__tests__/assertErrorAs
 import { ArangoDatabaseProvider } from '../../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import formatAggregateType from '../../../../../../view-models/presentation/formatAggregateType';
+import formatAggregateType from '../../../../../../queries/presentation/formatAggregateType';
 import getValidAggregateInstanceForTest from '../../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextWithSingleItem } from '../../../../../common/build-multilingual-text-with-single-item';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
