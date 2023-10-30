@@ -16,7 +16,10 @@ const uuidVersionToRegExp = {
  * Here is the RFC standard:
  * https://www.rfc-editor.org/rfc/rfc4122.html
  */
-export const isUUID = (input: unknown, version: keyof typeof uuidVersionToRegExp = 'all') => {
+export const isUUID = (
+    input: unknown,
+    version: keyof typeof uuidVersionToRegExp = 'all'
+): input is string => {
     if (!isString(input)) return false;
 
     const pattern = uuidVersionToRegExp[version];

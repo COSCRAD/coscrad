@@ -3,7 +3,7 @@ import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
 import { VocabularyListQueryService } from '../../../domain/services/query-services/vocabulary-list-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
-import { VocabularyListViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
+import { VocabularyListViewModel } from '../../../queries/buildViewModelForResource/viewModels';
 import buildViewModelPathForResourceType from '../utilities/buildIndexPathForResourceType';
 import buildByIdApiParamMetadata from './common/buildByIdApiParamMetadata';
 import sendInternalResultAsHttpResponse from './common/sendInternalResultAsHttpResponse';

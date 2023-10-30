@@ -1,5 +1,5 @@
 import { IBaseViewModel } from '../base.view-model.interface';
-import { IMultilingualText } from './audio-item';
+import { IMultilingualText } from './common';
 
 export interface ISongViewModel extends IBaseViewModel {
     // We'll want to replace the following two props with a single `MultilingualText`

@@ -13,12 +13,12 @@ import mixTagsIntoViewModel from '../../../app/controllers/utilities/mixTagsInto
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { Maybe } from '../../../lib/types/maybe';
-import { isNotFound, NotFound } from '../../../lib/types/not-found';
+import { NotFound, isNotFound } from '../../../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
+import { TagViewModel } from '../../../queries/buildViewModelForResource/viewModels';
+import { BaseViewModel } from '../../../queries/buildViewModelForResource/viewModels/base.view-model';
+import formatResourceType from '../../../queries/presentation/formatAggregateType';
 import { ResultOrError } from '../../../types/ResultOrError';
-import { TagViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
-import { BaseViewModel } from '../../../view-models/buildViewModelForResource/viewModels/base.view-model';
-import formatResourceType from '../../../view-models/presentation/formatAggregateType';
 import { Resource } from '../../models/resource.entity';
 import { validAggregateOrThrow } from '../../models/shared/functional';
 import { Tag } from '../../models/tag/tag.entity';
@@ -74,6 +74,7 @@ export abstract class ResourceQueryService<
             .fetchMany(specification);
     }
 
+    // TODO Rename this!
     protected foo: AggregateTypeToAggregateInstance;
 
     abstract buildViewModel(

@@ -2,8 +2,8 @@ import { ICategoryTreeViewModel } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
+import { CategoryTreeViewModel } from '../../../queries/buildViewModelForResource/viewModels/category-tree.view-model';
 import { ResultOrError } from '../../../types/ResultOrError';
-import { CategoryTreeViewModel } from '../../../view-models/buildViewModelForResource/viewModels/category-tree.view-model';
 import { Category } from '../../models/categories/entities/category.entity';
 import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
 

@@ -1,6 +1,6 @@
 import { AggregateType } from '@coscrad/api-interfaces';
 import { InternalError } from '../../../../lib/errors/InternalError';
-import formatAggregateCompositeIdentifier from '../../../../view-models/presentation/formatAggregateCompositeIdentifier';
+import formatAggregateCompositeIdentifier from '../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
 
 export class CannotElicitTermWithoutPromptError extends InternalError {

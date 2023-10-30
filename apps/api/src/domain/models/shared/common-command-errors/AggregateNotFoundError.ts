@@ -1,6 +1,6 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
-import formatAggregateCompositeIdentifier from '../../../../view-models/presentation/formatAggregateCompositeIdentifier';
-import formatAggregateType from '../../../../view-models/presentation/formatAggregateType';
+import formatAggregateCompositeIdentifier from '../../../../queries/presentation/formatAggregateCompositeIdentifier';
+import formatAggregateType from '../../../../queries/presentation/formatAggregateType';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { isResourceType } from '../../../types/ResourceType';
 

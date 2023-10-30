@@ -5,8 +5,8 @@ import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryS
 import { InMemorySnapshot } from '../../../../../domain/types/ResourceType';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
+import formatAggregateCompositeIdentifier from '../../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { ResultOrError } from '../../../../../types/ResultOrError';
-import formatAggregateCompositeIdentifier from '../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { Term } from '../../../term/entities/term.entity';

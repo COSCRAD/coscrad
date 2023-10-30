@@ -3,7 +3,7 @@ import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
 import { SpatialFeatureQueryService } from '../../../domain/services/query-services/spatial-feature-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
-import { SpatialFeatureViewModel } from '../../../view-models/buildViewModelForResource/viewModels/spatial-data/spatial-feature.view-model';
+import { SpatialFeatureViewModel } from '../../../queries/buildViewModelForResource/viewModels/spatial-data/spatial-feature.view-model';
 import buildViewModelPathForResourceType from '../utilities/buildIndexPathForResourceType';
 import buildByIdApiParamMetadata from './common/buildByIdApiParamMetadata';
 import sendInternalResultAsHttpResponse from './common/sendInternalResultAsHttpResponse';

@@ -4,7 +4,7 @@ import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-g
 import { AudioItemQueryService } from '../../../domain/services/query-services/audio-item-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { isNotFound } from '../../../lib/types/not-found';
-import { AudioItemViewModel } from '../../../view-models/buildViewModelForResource/viewModels/audio-visual/audio-item.view-model';
+import { AudioItemViewModel } from '../../../queries/buildViewModelForResource/viewModels/audio-visual/audio-item.view-model';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import { AdminJwtGuard } from '../command/command.controller';
 import buildViewModelPathForResourceType from '../utilities/buildIndexPathForResourceType';

@@ -4,7 +4,7 @@ import { InternalError, isInternalError } from '../../../../../lib/errors/Intern
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { OK, isOK } from '../../../../../lib/types/ok';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
-import formatAggregateCompositeIdentifier from '../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
+import formatAggregateCompositeIdentifier from '../../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { isValid } from '../../../../domainModelValidators/Valid';
 import { EVENT, IIdManager } from '../../../../interfaces/id-manager.interface';
 import { IRepositoryProvider } from '../../../../repositories/interfaces/repository-provider.interface';
@@ -60,7 +60,7 @@ export class GrantResourceReadAccessToUserCommandHandler implements ICommandHand
             throw new InternalError(
                 `Failed to fetch resource: ${formatAggregateCompositeIdentifier(
                     resourceCompositeIdentifier
-                )} when handling ${GRANT_RESOURCE_READ_ACCESS_TO_USER}`
+                )} when handling ${`GRANT_RESOURCE_READ_ACCESS_TO_USER`}`
             );
         }
 
