@@ -1,5 +1,5 @@
 import { InternalError } from '../../../../../lib/errors/InternalError';
-import formatResourceCompositeIdentifier from '../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
+import formatResourceCompositeIdentifier from '../../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import {
     EdgeConnectionMember,
     EdgeConnectionType,

@@ -1,6 +1,6 @@
 import { IBibliographicReferenceViewModel } from '@coscrad/api-interfaces';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
-import { BibliographicReferenceViewModel } from '../../../view-models/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
+import { BibliographicReferenceViewModel } from '../../../queries/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
 import BaseDomainModel from '../../models/BaseDomainModel';
 import { BookBibliographicReference } from '../../models/bibliographic-reference/book-bibliographic-reference/entities/book-bibliographic-reference.entity';
 import { CourtCaseBibliographicReference } from '../../models/bibliographic-reference/court-case-bibliographic-reference/entities/court-case-bibliographic-reference.entity';

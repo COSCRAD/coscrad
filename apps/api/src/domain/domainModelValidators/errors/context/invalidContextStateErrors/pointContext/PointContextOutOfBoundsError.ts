@@ -1,7 +1,7 @@
 import { InternalError } from '../../../../../../lib/errors/InternalError';
-import formatResourceCompositeIdentifier from '../../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
-import formatBounds2D from '../../../../../../view-models/presentation/formatBounds2D';
-import formatPosition2D from '../../../../../../view-models/presentation/formatPosition2D';
+import formatResourceCompositeIdentifier from '../../../../../../queries/presentation/formatAggregateCompositeIdentifier';
+import formatBounds2D from '../../../../../../queries/presentation/formatBounds2D';
+import formatPosition2D from '../../../../../../queries/presentation/formatPosition2D';
 import { Position2D } from '../../../../../models/spatial-feature/types/Coordinates/Position2D';
 import { AggregateCompositeIdentifier } from '../../../../../types/AggregateCompositeIdentifier';
 

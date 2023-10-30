@@ -3,7 +3,7 @@ import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
 import { SongQueryService } from '../../../domain/services/query-services/song-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
-import { SongViewModel } from '../../../view-models/buildViewModelForResource/viewModels/song.view-model';
+import { SongViewModel } from '../../../queries/buildViewModelForResource/viewModels/song.view-model';
 import buildViewModelPathForResourceType from '../utilities/buildIndexPathForResourceType';
 import buildByIdApiParamMetadata from './common/buildByIdApiParamMetadata';
 import sendInternalResultAsHttpResponse from './common/sendInternalResultAsHttpResponse';

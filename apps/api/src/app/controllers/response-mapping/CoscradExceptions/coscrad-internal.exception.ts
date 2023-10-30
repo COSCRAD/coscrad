@@ -4,6 +4,8 @@ import httpStatusCodes from '../../../constants/httpStatusCodes';
 
 export class CoscradInternalException extends HttpException {
     constructor(internalError: InternalError) {
-        super(internalError.toString(), httpStatusCodes.internalError);
+        const msg = internalError.toString();
+
+        super(msg, httpStatusCodes.internalError);
     }
 }

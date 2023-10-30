@@ -11,11 +11,11 @@ import {
 } from '../../../app/controllers/command/services/command-info-service';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { Maybe } from '../../../lib/types/maybe';
-import { isNotFound, NotFound } from '../../../lib/types/not-found';
+import { NotFound, isNotFound } from '../../../lib/types/not-found';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
+import { TagViewModel } from '../../../queries/buildViewModelForResource/viewModels';
 import { ResultOrError } from '../../../types/ResultOrError';
-import { TagViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
 import { Tag } from '../../models/tag/tag.entity';
 import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';
 import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';

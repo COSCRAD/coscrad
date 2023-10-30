@@ -13,8 +13,8 @@ import { BibliographicReferenceDataUnion } from '../../domain/models/bibliograph
 import { BibliographicReferenceQueryService } from '../../domain/services/query-services/bibliographic-reference-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { PersistenceModule } from '../../persistence/persistence.module';
+import { BibliographicReferenceViewModel } from '../../queries/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
 import { DynamicDataTypeModule } from '../../validation';
-import { BibliographicReferenceViewModel } from '../../view-models/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
 import { BibliographicReferenceController } from '../controllers/resources/bibliographic-reference.controller';
 

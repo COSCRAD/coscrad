@@ -4,7 +4,7 @@ import idEquals from '../../domain/models/shared/functional/idEquals';
 import { DeluxeInMemoryStore } from '../../domain/types/DeluxeInMemoryStore';
 import { Snapshot } from '../../domain/types/Snapshot';
 import { InternalError } from '../../lib/errors/InternalError';
-import formatAggregateCompositeIdentifier from '../../view-models/presentation/formatAggregateCompositeIdentifier';
+import formatAggregateCompositeIdentifier from '../../queries/presentation/formatAggregateCompositeIdentifier';
 
 export default (snapshot: Snapshot, connection: EdgeConnection) => {
     const deluxeInMemoryStore = new DeluxeInMemoryStore(snapshot);

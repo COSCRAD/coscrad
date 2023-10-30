@@ -3,7 +3,7 @@ import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
 import { MediaItemQueryService } from '../../../domain/services/query-services/media-item-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
-import { MediaItemViewModel } from '../../../view-models/buildViewModelForResource/viewModels/media-item.view-model';
+import { MediaItemViewModel } from '../../../queries/buildViewModelForResource/viewModels/media-item.view-model';
 import { InternalErrorFilter } from '../command/exception-handling/exception-filters/internal-error.filter';
 import buildViewModelPathForResourceType from '../utilities/buildIndexPathForResourceType';
 import buildByIdApiParamMetadata from './common/buildByIdApiParamMetadata';

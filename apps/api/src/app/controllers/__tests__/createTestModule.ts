@@ -83,6 +83,7 @@ import {
     GrantResourceReadAccessToUserCommandHandler,
     PublishResource,
     PublishResourceCommandHandler,
+    ResourceReadAccessGrantedToUser,
 } from '../../../domain/models/shared/common-commands';
 import { ResourcePublished } from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import {
@@ -112,6 +113,8 @@ import {
     TagResourceOrNote,
     TagResourceOrNoteCommandHandler,
 } from '../../../domain/models/tag/commands';
+import { TagCreated } from '../../../domain/models/tag/commands/create-tag/tag-created.event';
+import { ResourceOrNoteTagged } from '../../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
 import {
     CreatePromptTerm,
     CreatePromptTermCommandHandler,
@@ -173,10 +176,11 @@ import TestRepositoryProvider from '../../../persistence/repositories/__tests__/
 import { ArangoEventRepository } from '../../../persistence/repositories/arango-event-repository';
 import { ArangoIdRepository } from '../../../persistence/repositories/arango-id-repository';
 import { ArangoRepositoryProvider } from '../../../persistence/repositories/arango-repository.provider';
+import { BibliographicReferenceViewModel } from '../../../queries/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
+import { DigitalTextQueryService } from '../../../queries/digital-text';
+import { NoteViewModel } from '../../../queries/edgeConnectionViewModels/note.view-model';
 import { DTO } from '../../../types/DTO';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../../../validation';
-import { BibliographicReferenceViewModel } from '../../../view-models/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
-import { NoteViewModel } from '../../../view-models/edgeConnectionViewModels/note.view-model';
 import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../config/buildConfigFilePath';
 import { Environment } from '../../config/constants/Environment';
@@ -192,6 +196,7 @@ import { IdGenerationController } from '../id-generation/id-generation.controlle
 import { AudioItemController } from '../resources/audio-item.controller';
 import { BibliographicReferenceController } from '../resources/bibliographic-reference.controller';
 import { BookController } from '../resources/book.controller';
+import { DigitalTextQueryController } from '../resources/digital-text.controller';
 import { MediaItemController } from '../resources/media-item.controller';
 import { PhotographController } from '../resources/photograph.controller';
 import { PlaylistController } from '../resources/playlist.controller';
@@ -237,6 +242,7 @@ export const buildAllDataClassProviders = () =>
         IdentityContext,
         // Events
         CoscradEventUnion,
+        ResourceReadAccessGrantedToUser,
         DigitalTextCreated,
         PageAddedToDigitalText,
         SongCreated,
@@ -244,6 +250,8 @@ export const buildAllDataClassProviders = () =>
         LyricsAddedForSong,
         SongLyricsTranslated,
         ResourcePublished,
+        TagCreated,
+        ResourceOrNoteTagged,
         // Aggregate Root Domain Models
         DigitalText,
         Song,
@@ -457,6 +465,15 @@ export default async (
                 inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService],
             },
             {
+                provide: DigitalTextQueryService,
+                useFactory: (
+                    eventRepository: ArangoEventRepository,
+                    commandInfoService: CommandInfoService
+                ) => new DigitalTextQueryService(eventRepository, commandInfoService),
+
+                inject: [ArangoEventRepository, CommandInfoService],
+            },
+            {
                 provide: ID_MANAGER_TOKEN,
                 useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
                     shouldMockIdGenerator
@@ -581,6 +598,8 @@ export default async (
             TranslateVideoNameCommandHandler,
             TranslateAudioItemName,
             TranslateAudioItemNameCommandHandler,
+            AddPageToDigitalText,
+            AddPageToDigitalTextCommandHandler,
         ],
 
         controllers: [
@@ -604,6 +623,7 @@ export default async (
             IdGenerationController,
             CoscradUserController,
             AdminController,
+            DigitalTextQueryController,
         ],
     })
         .overrideGuard(OptionalJwtAuthGuard)
