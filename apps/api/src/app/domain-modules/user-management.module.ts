@@ -1,11 +1,11 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
 import {
+    GrantResourceReadAccessToUser,
+    GrantResourceReadAccessToUserCommandHandler,
     PublishResource,
     PublishResourceCommandHandler,
 } from '../../domain/models/shared/common-commands';
-import { GrantResourceReadAccessToUser } from '../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command';
-import { GrantResourceReadAccessToUserCommandHandler } from '../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command-handler';
 import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import {
     AddUserToGroup,
