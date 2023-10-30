@@ -5,7 +5,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { ExternalEnum, NestedDataType, UUID } from '@coscrad/data-types';
-import formatAggregateType from '../../../../../view-models/presentation/formatAggregateType';
+import formatAggregateType from '../../../../../queries/presentation/formatAggregateType';
 import { AggregateId } from '../../../../types/AggregateId';
 import { TagCompositeIdentifier } from '../tag-composite-identifier';
 

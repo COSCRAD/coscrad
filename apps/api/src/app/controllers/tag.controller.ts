@@ -4,7 +4,7 @@ import { OptionalJwtAuthGuard } from '../../authorization/optional-jwt-auth-guar
 import { TagQueryService } from '../../domain/services/query-services/tag-query.service';
 import { isAggregateId } from '../../domain/types/AggregateId';
 import { InternalError } from '../../lib/errors/InternalError';
-import { TagViewModel } from '../../view-models/buildViewModelForResource/viewModels';
+import { TagViewModel } from '../../queries/buildViewModelForResource/viewModels';
 import httpStatusCodes from '../constants/httpStatusCodes';
 import buildByIdApiParamMetadata from './resources/common/buildByIdApiParamMetadata';
 import sendInternalResultAsHttpResponse from './resources/common/sendInternalResultAsHttpResponse';

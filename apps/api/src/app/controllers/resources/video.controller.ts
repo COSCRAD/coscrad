@@ -4,7 +4,7 @@ import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-g
 import { VideoQueryService } from '../../../domain/services/query-services/video-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { isNotFound } from '../../../lib/types/not-found';
-import { VideoViewModel } from '../../../view-models/buildViewModelForResource/viewModels/audio-visual/video.view-model';
+import { VideoViewModel } from '../../../queries/buildViewModelForResource/viewModels/audio-visual/video.view-model';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import { AdminJwtGuard } from '../command/command.controller';
 import buildViewModelPathForResourceType from '../utilities/buildIndexPathForResourceType';

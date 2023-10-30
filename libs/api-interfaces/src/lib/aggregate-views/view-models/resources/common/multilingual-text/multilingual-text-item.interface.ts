@@ -1,4 +1,4 @@
-import { LanguageCode } from '../../multilingual-text';
+import { LanguageCode } from '../../../multilingual-text';
 import { MultilingualTextItemRole } from './multilingual-text-item-role.enum';
 
 export interface IMultilingualTextItem {

@@ -1,0 +1,507 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`When querying for a digital text when the user is a project admin detail queries (fetch by ID) should allow the user to access the private resource 1`] = `
+{
+  "actions": [
+    {
+      "description": "Add a page identifier to a digital text",
+      "form": {
+        "fields": [
+          {
+            "constraints": [
+              {
+                "message": "must be a non-empty string",
+                "name": "non-empty string",
+              },
+              {
+                "message": "must be a defined value",
+                "name": "defined value",
+              },
+            ],
+            "description": "the identifier for the page (i.e., the "page number")",
+            "label": "page identifier",
+            "name": "identifier",
+            "type": "TEXT_FIELD",
+          },
+        ],
+        "prepopulatedFields": {
+          "aggregateCompositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
+            "type": "digitalText",
+          },
+        },
+      },
+      "label": "Add page to digital text",
+      "type": "ADD_PAGE_TO_DIGITAL_TEXT",
+    },
+    {
+      "description": "Allow a user to view (but not edit) a given resource",
+      "form": {
+        "fields": [
+          {
+            "constraints": [
+              {
+                "message": "must be a UUID",
+                "name": "UUID",
+              },
+              {
+                "message": "must be a defined value",
+                "name": "defined value",
+              },
+            ],
+            "description": "the ID of the user who will be given permission to view this resource",
+            "label": "userId",
+            "name": "userId",
+            "options": {
+              "aggregateType": "user",
+            },
+            "type": "DYNAMIC_SELECT",
+          },
+        ],
+        "prepopulatedFields": {
+          "aggregateCompositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
+            "type": "digitalText",
+          },
+        },
+      },
+      "label": "Grant Read Access to User",
+      "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+    },
+    {
+      "description": "Make a resource visible to the public",
+      "form": {
+        "fields": [],
+        "prepopulatedFields": {
+          "aggregateCompositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
+            "type": "digitalText",
+          },
+        },
+      },
+      "label": "Publish Resource",
+      "type": "PUBLISH_RESOURCE",
+    },
+  ],
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
+  "isPublished": false,
+  "name": {
+    "items": [
+      {
+        "languageCode": "en",
+        "role": "original",
+        "text": "A Day in the Life",
+      },
+    ],
+  },
+  "tags": [],
+  "title": {
+    "items": [
+      {
+        "languageCode": "en",
+        "role": "original",
+        "text": "A Day in the Life",
+      },
+    ],
+  },
+  "type": "digitalText",
+}
+`;
+
+exports[`When querying for a digital text when the user is a project admin index queries (fetch many) should allow the user to access private resources 1`] = `
+{
+  "entities": [
+    {
+      "actions": [
+        {
+          "description": "Add a page identifier to a digital text",
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
+                    "message": "must be a non-empty string",
+                    "name": "non-empty string",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the identifier for the page (i.e., the "page number")",
+                "label": "page identifier",
+                "name": "identifier",
+                "type": "TEXT_FIELD",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+                "type": "digitalText",
+              },
+            },
+          },
+          "label": "Add page to digital text",
+          "type": "ADD_PAGE_TO_DIGITAL_TEXT",
+        },
+        {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
+                    "message": "must be a UUID",
+                    "name": "UUID",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the ID of the user who will be given permission to view this resource",
+                "label": "userId",
+                "name": "userId",
+                "options": {
+                  "aggregateType": "user",
+                },
+                "type": "DYNAMIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+                "type": "digitalText",
+              },
+            },
+          },
+          "label": "Grant Read Access to User",
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+      "isPublished": true,
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "A Day in the Life",
+          },
+        ],
+      },
+      "tags": [],
+      "title": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "A Day in the Life",
+          },
+        ],
+      },
+      "type": "digitalText",
+    },
+    {
+      "actions": [
+        {
+          "description": "Add a page identifier to a digital text",
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
+                    "message": "must be a non-empty string",
+                    "name": "non-empty string",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the identifier for the page (i.e., the "page number")",
+                "label": "page identifier",
+                "name": "identifier",
+                "type": "TEXT_FIELD",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
+                "type": "digitalText",
+              },
+            },
+          },
+          "label": "Add page to digital text",
+          "type": "ADD_PAGE_TO_DIGITAL_TEXT",
+        },
+        {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
+                    "message": "must be a UUID",
+                    "name": "UUID",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the ID of the user who will be given permission to view this resource",
+                "label": "userId",
+                "name": "userId",
+                "options": {
+                  "aggregateType": "user",
+                },
+                "type": "DYNAMIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
+                "type": "digitalText",
+              },
+            },
+          },
+          "label": "Grant Read Access to User",
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+        {
+          "description": "Make a resource visible to the public",
+          "form": {
+            "fields": [],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
+                "type": "digitalText",
+              },
+            },
+          },
+          "label": "Publish Resource",
+          "type": "PUBLISH_RESOURCE",
+        },
+      ],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
+      "isPublished": false,
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "A Day in the Life",
+          },
+        ],
+      },
+      "tags": [],
+      "title": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "A Day in the Life",
+          },
+        ],
+      },
+      "type": "digitalText",
+    },
+    {
+      "actions": [
+        {
+          "description": "Add a page identifier to a digital text",
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
+                    "message": "must be a non-empty string",
+                    "name": "non-empty string",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the identifier for the page (i.e., the "page number")",
+                "label": "page identifier",
+                "name": "identifier",
+                "type": "TEXT_FIELD",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+                "type": "digitalText",
+              },
+            },
+          },
+          "label": "Add page to digital text",
+          "type": "ADD_PAGE_TO_DIGITAL_TEXT",
+        },
+        {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
+                    "message": "must be a UUID",
+                    "name": "UUID",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the ID of the user who will be given permission to view this resource",
+                "label": "userId",
+                "name": "userId",
+                "options": {
+                  "aggregateType": "user",
+                },
+                "type": "DYNAMIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+                "type": "digitalText",
+              },
+            },
+          },
+          "label": "Grant Read Access to User",
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+        {
+          "description": "Make a resource visible to the public",
+          "form": {
+            "fields": [],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+                "type": "digitalText",
+              },
+            },
+          },
+          "label": "Publish Resource",
+          "type": "PUBLISH_RESOURCE",
+        },
+      ],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+      "isPublished": false,
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "A Day in the Life",
+          },
+        ],
+      },
+      "tags": [
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100555",
+          "label": "animals",
+          "members": [],
+          "name": {
+            "items": [
+              {
+                "languageCode": "en",
+                "role": "original",
+                "text": "animals",
+              },
+            ],
+          },
+          "type": "tag",
+        },
+      ],
+      "title": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "A Day in the Life",
+          },
+        ],
+      },
+      "type": "digitalText",
+    },
+  ],
+  "indexScopedActions": [
+    {
+      "description": "Creates a new digital text",
+      "form": {
+        "fields": [
+          {
+            "constraints": [
+              {
+                "message": "must be a non-empty string",
+                "name": "non-empty string",
+              },
+              {
+                "message": "must be a defined value",
+                "name": "defined value",
+              },
+            ],
+            "description": "digital text's title in the given language",
+            "label": "title",
+            "name": "title",
+            "type": "TEXT_FIELD",
+          },
+          {
+            "constraints": [
+              {
+                "message": "Must be a valid \${propertyLabel}",
+                "name": "IS_ENUM",
+              },
+              {
+                "message": "Required",
+                "name": "defined value",
+              },
+            ],
+            "description": "the language in which you are titling the digital text",
+            "label": "language code",
+            "name": "languageCodeForTitle",
+            "options": [
+              {
+                "display": "Chilcotin",
+                "value": "clc",
+              },
+              {
+                "display": "Haida",
+                "value": "hai",
+              },
+              {
+                "display": "English",
+                "value": "en",
+              },
+              {
+                "display": "French",
+                "value": "fra",
+              },
+              {
+                "display": "Chinook",
+                "value": "chn",
+              },
+              {
+                "display": "Zapotec",
+                "value": "zap",
+              },
+              {
+                "display": "Spanish",
+                "value": "spa",
+              },
+            ],
+            "type": "STATIC_SELECT",
+          },
+        ],
+        "prepopulatedFields": {},
+      },
+      "label": "Create Digital Text",
+      "type": "CREATE_DIGITAL_TEXT",
+    },
+  ],
+}
+`;

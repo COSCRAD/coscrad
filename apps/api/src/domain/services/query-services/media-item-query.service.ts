@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
-import { MediaItemViewModel } from '../../../view-models/buildViewModelForResource/viewModels/media-item.view-model';
+import { MediaItemViewModel } from '../../../queries/buildViewModelForResource/viewModels/media-item.view-model';
 import BaseDomainModel from '../../models/BaseDomainModel';
 import { MediaItem } from '../../models/media-item/entities/media-item.entity';
 import { ResourceType } from '../../types/ResourceType';

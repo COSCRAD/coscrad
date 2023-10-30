@@ -1,5 +1,5 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
-import formatAggregateCompositeIdentifier from '../../../../view-models/presentation/formatAggregateCompositeIdentifier';
+import formatAggregateCompositeIdentifier from '../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import { VocabularyListCompositeId } from '../commands/create-vocabulary-list';
 

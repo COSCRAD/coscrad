@@ -1,4 +1,4 @@
-import { IMultilingualText } from './multilingual-text.interface';
+import { IMultilingualText } from '../common';
 
 export interface ITranscriptItem {
     inPointMilliseconds: number;

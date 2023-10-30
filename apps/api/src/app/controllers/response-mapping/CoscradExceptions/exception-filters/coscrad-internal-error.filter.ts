@@ -1,8 +1,10 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
+import { InternalError } from '../../../../../lib/errors/InternalError';
 import httpStatusCodes from '../../../../constants/httpStatusCodes';
 import { CoscradInternalException } from '../coscrad-internal.exception';
 
 @Catch(CoscradInternalException)
+@Catch(InternalError)
 export class CoscradInternalErrorFilter implements ExceptionFilter {
     catch(exception: CoscradInternalException, host: ArgumentsHost) {
         const ctx = host.switchToHttp();

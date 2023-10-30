@@ -1,5 +1,6 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
+import { Line } from '../../domain/models/spatial-feature/line/entities/line.entity';
 import {
     CreatePoint,
     CreatePointCommandHandler,
@@ -19,7 +20,7 @@ import { SpatialFeatureController } from '../controllers/resources/spatial-featu
         SpatialFeatureQueryService,
         CreatePointCommandHandler,
         // Data Classes
-        ...[CreatePoint].map((ctor) => ({
+        ...[CreatePoint, Line].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
         })),

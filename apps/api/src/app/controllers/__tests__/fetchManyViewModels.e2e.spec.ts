@@ -18,6 +18,22 @@ import httpStatusCodes from '../../constants/httpStatusCodes';
 import buildViewModelPathForResourceType from '../utilities/buildIndexPathForResourceType';
 import setUpIntegrationTest from './setUpIntegrationTest';
 
+/**
+ * TODO Rename this test `resource-queries.fetch-many.e2e.spec.ts`
+ *
+ * We eventually would like to write a one-off test for each resource type.
+ * Further, we may want to move these query tests to a separate directory
+ * or even project.
+ *
+ * We may want to move the test server out of process. I.e., we may want
+ * to start the back-end independently and then query a live local instance
+ * of the back-end. This may reduce performance costs of these tests, especially
+ * known memory leaks in network bound test libraries.
+ *
+ * These are end-to-end tests of the back-end, in the sense
+ * that they go from the API to the database. They are not end-to-end in
+ * the sense of a Cypress test.
+ */
 describe('When fetching multiple resources', () => {
     const testDatabaseName = generateDatabaseNameForTestSuite();
 

@@ -15,7 +15,6 @@ import { EdgeConnectionContextType } from './context/types/EdgeConnectionContext
 import ResourceAlreadyPublishedError from './ResourceAlreadyPublishedError';
 import { AccessControlList } from './shared/access-control/access-control-list.entity';
 import UserAlreadyHasReadAccessError from './shared/common-command-errors/invalid-state-transition-errors/UserAlreadyHasReadAccessError';
-import { GRANT_RESOURCE_READ_ACCESS_TO_USER } from './shared/common-commands';
 
 export abstract class Resource extends Aggregate {
     readonly type: ResourceType;
@@ -100,10 +99,10 @@ export abstract class Resource extends Aggregate {
     /**
      * The following returns a list of command types for all commands generic
      * to any resource type that are currently available based on the resource
-     * isntance's state.
+     * instance's state.
      */
     private getAvailableGenericCommands(): string[] {
-        const alwaysAvailable = [GRANT_RESOURCE_READ_ACCESS_TO_USER];
+        const alwaysAvailable = [`GRANT_RESOURCE_READ_ACCESS_TO_USER`];
 
         return [...alwaysAvailable, ...(this.published ? [] : ['PUBLISH_RESOURCE'])];
     }

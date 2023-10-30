@@ -24,7 +24,6 @@ import { PlaylistEpisode } from '../../playlist/entities/playlist-episode.entity
 import { Resource } from '../../resource.entity';
 import AggregateNotFoundError from '../../shared/common-command-errors/AggregateNotFoundError';
 import validateTimeRangeContextForModel from '../../shared/contextValidators/validateTimeRangeContextForModel';
-import { CREATE_AUDIO_ITEM, TRANSLATE_AUDIO_ITEM_NAME } from '../commands';
 import { InvalidMIMETypeForAudiovisualResourceError } from '../commands/errors';
 import {
     Constructor,
@@ -42,7 +41,7 @@ export interface IRadioPublishableResource {
     buildEpisodes: (snapshot: InMemorySnapshot) => PlaylistEpisode[];
 }
 
-@RegisterIndexScopedCommands([CREATE_AUDIO_ITEM])
+@RegisterIndexScopedCommands([`CREATE_AUDIO_ITEM`])
 class AudioItemBase extends Resource implements IRadioPublishableResource {
     readonly type = ResourceType.audioItem;
 
@@ -210,7 +209,7 @@ class AudioItemBase extends Resource implements IRadioPublishableResource {
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {
-        const availableCommandIds: string[] = [TRANSLATE_AUDIO_ITEM_NAME];
+        const availableCommandIds: string[] = [`TRANSLATE_AUDIO_ITEM_NAME`];
 
         return availableCommandIds;
     }

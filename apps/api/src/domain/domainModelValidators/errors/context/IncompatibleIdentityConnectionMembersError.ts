@@ -1,5 +1,5 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
-import formatAggregateType from '../../../../view-models/presentation/formatAggregateType';
+import formatAggregateType from '../../../../queries/presentation/formatAggregateType';
 import { ResourceType } from '../../../types/ResourceType';
 
 type FromResourceOfTypeToResourceOfType = {

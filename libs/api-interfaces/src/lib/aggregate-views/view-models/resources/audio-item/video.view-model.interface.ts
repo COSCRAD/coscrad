@@ -1,6 +1,6 @@
 import { IBaseViewModel } from '../../base.view-model.interface';
+import { IMultilingualText } from '../common';
 import { MIMEType } from '../media-items';
-import { IMultilingualText } from './multilingual-text.interface';
 import { ITranscript } from './transcript.interface';
 
 export interface IVideoViewModel extends IBaseViewModel {

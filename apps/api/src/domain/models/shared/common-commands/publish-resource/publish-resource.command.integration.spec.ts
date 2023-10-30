@@ -5,8 +5,8 @@ import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExp
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import formatAggregateType from '../../../../../queries/presentation/formatAggregateType';
 import { DTO } from '../../../../../types/DTO';
-import formatAggregateType from '../../../../../view-models/presentation/formatAggregateType';
 import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateType } from '../../../../types/AggregateType';

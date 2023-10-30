@@ -17,6 +17,7 @@ export default class BaseDomainModel {
     }
 
     // This allows us to use our instances as immutable data structures
+    // One problem with this is that it assumes too much about the parameters the constructor takes
     clone<T extends BaseDomainModel>(this: T, overrides?: DeepPartial<DTO<T>>): T {
         return new (this.constructor as ModelConstructor<T>)({
             ...this.toDTO(),

@@ -1,5 +1,5 @@
 import { InternalError } from '../../../../../lib/errors/InternalError';
-import formatAggregateCompositeIdentifier from '../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
+import formatAggregateCompositeIdentifier from '../../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { CategorizableCompositeIdentifier } from '../../../categories/types/ResourceOrNoteCompositeIdentifier';
 
 export class DuplicateTagError extends InternalError {

@@ -1,8 +1,8 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
+import formatAggregateType from '../../../../queries/presentation/formatAggregateType';
 import { DTO } from '../../../../types/DTO';
-import formatAggregateType from '../../../../view-models/presentation/formatAggregateType';
-import NullOrUndefinedAggregateDTOError from '../../../domainModelValidators/errors/NullOrUndefinedAggregateDTOError';
 import { isValid } from '../../../domainModelValidators/Valid';
+import NullOrUndefinedAggregateDTOError from '../../../domainModelValidators/errors/NullOrUndefinedAggregateDTOError';
 import { IBibliographicReference } from '../../../models/bibliographic-reference/interfaces/bibliographic-reference.interface';
 import { isBibliographicReferenceType } from '../../../models/bibliographic-reference/types/BibliographicReferenceType';
 import { AggregateType } from '../../../types/AggregateType';
