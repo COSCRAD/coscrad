@@ -1,11 +1,11 @@
-import assertErrorAsExpected from '../../../lib/__tests__/assertErrorAsExpected';
-import { InternalError } from '../../../lib/errors/InternalError';
-import getValidAggregateInstanceForTest from '../../__tests__/utilities/getValidAggregateInstanceForTest';
-import InvariantValidationError from '../../domainModelValidators/errors/InvariantValidationError';
-import { AggregateType } from '../../types/AggregateType';
-import { DigitalText, PageIdentifier } from './entities';
-import DigitalTextPage from './entities/digital-text-page.entity';
-import { CannotAddPageWithDuplicateIdentifierError } from './errors/cannot-add-page-with-duplicate-identifier.error';
+import { DigitalText, PageIdentifier } from '.';
+import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpected';
+import { InternalError } from '../../../../lib/errors/InternalError';
+import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
+import InvariantValidationError from '../../../domainModelValidators/errors/InvariantValidationError';
+import { AggregateType } from '../../../types/AggregateType';
+import { CannotAddPageWithDuplicateIdentifierError } from '../errors/cannot-add-page-with-duplicate-identifier.error';
+import DigitalTextPage from './digital-text-page.entity';
 
 const existingDigitalTextWithPages = getValidAggregateInstanceForTest(
     AggregateType.digitalText
