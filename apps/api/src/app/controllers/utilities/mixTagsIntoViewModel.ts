@@ -1,8 +1,8 @@
 import { isDeepStrictEqual } from 'util';
 import { Tag } from '../../../domain/models/tag/tag.entity';
 import { CategorizableType } from '../../../domain/types/CategorizableType';
-import { TagViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
-import { BaseViewModel } from '../../../view-models/buildViewModelForResource/viewModels/base.view-model';
+import { TagViewModel } from '../../../queries/buildViewModelForResource/viewModels';
+import { BaseViewModel } from '../../../queries/buildViewModelForResource/viewModels/base.view-model';
 
 export default <TViewModel extends BaseViewModel = BaseViewModel>(
     viewModel: BaseViewModel,

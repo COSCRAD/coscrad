@@ -15,8 +15,8 @@ import { mixLinkIntoViewModelDescription } from '../../../app/controllers/utilit
 import mixTagsIntoViewModel from '../../../app/controllers/utilities/mixTagsIntoViewModel';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
-import { NoteViewModel } from '../../../view-models/edgeConnectionViewModels/note.view-model';
-import { buildAllAggregateDescriptions } from '../../../view-models/resourceDescriptions';
+import { NoteViewModel } from '../../../queries/edgeConnectionViewModels/note.view-model';
+import { buildAllAggregateDescriptions } from '../../../queries/resourceDescriptions';
 import { EdgeConnection } from '../../models/context/edge-connection.entity';
 import { validAggregateOrThrow } from '../../models/shared/functional';
 import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';

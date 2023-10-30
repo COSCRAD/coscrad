@@ -2,7 +2,7 @@ import { CommandHandler } from '@coscrad/commands';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { DomainModelCtor } from '../../../../../lib/types/DomainModelCtor';
 import { isNotFound } from '../../../../../lib/types/not-found';
-import formatAggregateCompositeIdentifier from '../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
+import formatAggregateCompositeIdentifier from '../../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import {
     MultilingualText,
     MultilingualTextItem,

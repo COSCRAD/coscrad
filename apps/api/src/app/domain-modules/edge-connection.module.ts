@@ -14,7 +14,7 @@ import { TimeRangeContext } from '../../domain/models/context/time-range-context
 import { EdgeConnectionQueryService } from '../../domain/services/query-services/edge-connection-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { PersistenceModule } from '../../persistence/persistence.module';
-import { NoteViewModel } from '../../view-models/edgeConnectionViewModels/note.view-model';
+import { NoteViewModel } from '../../queries/edgeConnectionViewModels/note.view-model';
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
 import { EdgeConnectionController } from '../controllers/edgeConnection.controller';
 

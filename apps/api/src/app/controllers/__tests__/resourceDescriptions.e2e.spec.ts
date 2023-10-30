@@ -3,9 +3,9 @@ import * as request from 'supertest';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { ResourceTypesWhoseViewsAreSourcedFromSnapshots } from '../../../queries/buildViewModelForResource/viewModels/utilities/ViewModelCtorFromResourceType';
+import { AggregateInfo } from '../../../queries/resourceDescriptions/types/AggregateInfo';
 import { DynamicDataTypeFinderService } from '../../../validation';
-import { ResourceTypesWhoseViewsAreSourcedFromSnapshots } from '../../../view-models/buildViewModelForResource/viewModels/utilities/ViewModelCtorFromResourceType';
-import { AggregateInfo } from '../../../view-models/resourceDescriptions/types/AggregateInfo';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from './setUpIntegrationTest';
 describe('GET /resources', () => {

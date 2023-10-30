@@ -12,9 +12,9 @@ import buildInMemorySnapshot from '../../../domain/utilities/buildInMemorySnapsh
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { BaseViewModel } from '../../../queries/buildViewModelForResource/viewModels/base.view-model';
+import formatAggregateType from '../../../queries/presentation/formatAggregateType';
 import buildTestData from '../../../test-data/buildTestData';
-import { BaseViewModel } from '../../../view-models/buildViewModelForResource/viewModels/base.view-model';
-import formatAggregateType from '../../../view-models/presentation/formatAggregateType';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import buildViewModelPathForResourceType from '../utilities/buildIndexPathForResourceType';
 import setUpIntegrationTest from './setUpIntegrationTest';

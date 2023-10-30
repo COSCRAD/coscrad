@@ -783,7 +783,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "label": "page identifier",
       },
     },
-    "type": "ADD_PAGE_FOR_DIGITAL_TEXT",
+    "type": "ADD_PAGE_TO_DIGITAL_TEXT",
   },
   {
     "description": "Register a new COSCRAD user after the user has been registered with the auth provider",
@@ -1016,7 +1016,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "must be: user",
+            "description": "One of: term, vocabularyList, audioItem, book, photograph, spatialFeature, bibliographicReference, digitalText, song, mediaItem, video, playlist",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -1024,19 +1024,64 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "type",
             "labelsAndValues": [
               {
-                "label": "user",
-                "value": "user",
+                "label": "term",
+                "value": "term",
+              },
+              {
+                "label": "vocabularyList",
+                "value": "vocabularyList",
+              },
+              {
+                "label": "audioItem",
+                "value": "audioItem",
+              },
+              {
+                "label": "book",
+                "value": "book",
+              },
+              {
+                "label": "photograph",
+                "value": "photograph",
+              },
+              {
+                "label": "spatialFeature",
+                "value": "spatialFeature",
+              },
+              {
+                "label": "bibliographicReference",
+                "value": "bibliographicReference",
+              },
+              {
+                "label": "digitalText",
+                "value": "digitalText",
+              },
+              {
+                "label": "song",
+                "value": "song",
+              },
+              {
+                "label": "mediaItem",
+                "value": "mediaItem",
+              },
+              {
+                "label": "video",
+                "value": "video",
+              },
+              {
+                "label": "playlist",
+                "value": "playlist",
               },
             ],
           },
         },
       },
-      "resourceCompositeIdentifier": {
-        "coscradDataType": "COMPOSITE_IDENTIFIER",
-        "description": "the composite identifier of the resource to which the user will receive access",
+      "userId": {
+        "coscradDataType": "UUID",
+        "description": "the ID of the user who will be given permission to view this resource",
         "isArray": false,
         "isOptional": false,
-        "label": "resource composite identifier",
+        "label": "userId",
+        "referenceTo": "user",
       },
     },
     "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",

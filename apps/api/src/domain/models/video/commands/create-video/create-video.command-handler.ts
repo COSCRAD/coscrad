@@ -1,9 +1,9 @@
 import { CommandHandler } from '@coscrad/commands';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
+import formatAggregateCompositeIdentifier from '../../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
-import formatAggregateCompositeIdentifier from '../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import {
     MultilingualText,
     MultilingualTextItem,

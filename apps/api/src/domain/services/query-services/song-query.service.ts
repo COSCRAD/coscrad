@@ -1,7 +1,7 @@
 import { ISongViewModel } from '@coscrad/api-interfaces';
 import { Injectable } from '@nestjs/common';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
-import { SongViewModel } from '../../../view-models/buildViewModelForResource/viewModels/song.view-model';
+import { SongViewModel } from '../../../queries/buildViewModelForResource/viewModels/song.view-model';
 import BaseDomainModel from '../../models/BaseDomainModel';
 import { Song } from '../../models/song/song.entity';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';

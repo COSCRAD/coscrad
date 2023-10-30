@@ -25,6 +25,6 @@ export class TagViewModel extends BaseViewModel implements ITagViewModel {
         this.label = label;
 
         // Avoid shared references- composite IDs are plain objects not instances in our system
-        this.members = cloneToPlainObject(members);
+        this.members = Array.isArray(members) ? cloneToPlainObject(members) : [];
     }
 }
