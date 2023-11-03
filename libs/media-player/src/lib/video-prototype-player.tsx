@@ -18,6 +18,19 @@ const calculatePercentProgress = (currentTime: number, duration: number) => {
     return (currentTime / duration) * 100;
 };
 
+const getUpdatedBuffer = (videoTarget: HTMLVideoElement) => {
+    const { buffered: bufferedTimeRanges, duration } = videoTarget;
+
+    const bufferedTimeRangesLength = bufferedTimeRanges.length;
+
+    const bufferedEnd =
+        bufferedTimeRangesLength > 0 ? bufferedTimeRanges.end(bufferedTimeRangesLength - 1) : 0;
+
+    const updatedBuffer = (bufferedEnd / duration) * 100;
+
+    return updatedBuffer;
+};
+
 const Video = styled('video')({
     flexShrink: 1,
     height: '100%',
@@ -105,6 +118,20 @@ export const VideoPrototypePlayer = ({
     );
 
     const onLoadedData = (event: SyntheticEvent<HTMLVideoElement, Event>) => {
+        /**
+         * The problem of not accessing the video duration must have to do with
+         * react rendering because the duration is always logged to the console, but
+         * this MDN article also refers to some sketchiness:
+         * https://developer.mozilla.org/en-US/docs/Web/Guide/Audio_and_video_delivery/cross_browser_video_player#progress
+         * "Unfortunately in some mobile browsers, when loadedmetadata is raised —
+         * if it even is raised — video.duration may not have the correct value,
+         * or even any value at all. So something else needs to be done. More on
+         * that below."
+         *
+         * This is only in reference to `loadedmetadata` on mobile, but perhaps
+         * there are other impacts.
+         */
+
         const videoTarget = event.target as HTMLVideoElement;
 
         const { readyState, duration } = videoTarget;
@@ -147,18 +174,20 @@ export const VideoPrototypePlayer = ({
     const onProgressBuffer = (event: SyntheticEvent<HTMLVideoElement, Event>) => {
         console.log('progress buffer');
 
+        if (mediaState.currentTime > 0) return;
+
         const videoTarget = event.target as HTMLVideoElement;
 
-        const { buffered, duration } = videoTarget;
+        const updatedBuffer = getUpdatedBuffer(videoTarget);
 
-        const bufferedTimeRanges = buffered;
+        // const { buffered: bufferedTimeRanges, duration } = videoTarget;
 
-        const bufferedTimeRangesLength = bufferedTimeRanges.length;
+        // const bufferedTimeRangesLength = bufferedTimeRanges.length;
 
-        const bufferedEnd =
-            bufferedTimeRangesLength > 0 ? bufferedTimeRanges.end(bufferedTimeRangesLength - 1) : 0;
+        // const bufferedEnd =
+        //     bufferedTimeRangesLength > 0 ? bufferedTimeRanges.end(bufferedTimeRangesLength - 1) : 0;
 
-        const updatedBuffer = (bufferedEnd / duration) * 100;
+        // const updatedBuffer = (bufferedEnd / duration) * 100;
 
         setMediaState({ ...mediaState, buffer: updatedBuffer });
     };
@@ -180,13 +209,20 @@ export const VideoPrototypePlayer = ({
     };
 
     const handlePlayProgress = () => {
-        const currentTime = videoRef.current!.currentTime;
+        const videoTarget = videoRef.current!;
 
-        const duration = videoRef.current!.duration;
+        const { currentTime, duration } = videoTarget;
 
         const progress = calculatePercentProgress(currentTime, duration);
 
-        setMediaState({ ...mediaState, progress: progress, currentTime: currentTime });
+        const updatedBuffer = getUpdatedBuffer(videoTarget);
+
+        setMediaState({
+            ...mediaState,
+            progress: progress,
+            currentTime: currentTime,
+            buffer: updatedBuffer,
+        });
 
         if (!mediaState.shouldPlayWithSubtitles) {
             onTimeUpdate!(currentTime);
