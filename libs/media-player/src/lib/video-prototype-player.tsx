@@ -3,16 +3,25 @@ import {
     ArrowLeft as ArrowLeftIcon,
     ArrowRight as ArrowRightIcon,
     Clear as ClearIcon,
+    Expand as ExpandMoreIcon,
     Pause as PauseIcon,
     PlayArrow as PlayArrowIcon,
     Replay as ReplayIcon,
 } from '@mui/icons-material/';
-import { Box, IconButton, Tooltip, Typography, styled } from '@mui/material';
+import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+    Box,
+    IconButton,
+    Tooltip,
+    Typography,
+    styled,
+} from '@mui/material';
 import { SyntheticEvent, useRef, useState } from 'react';
-import { CoscradLinearProgressBar } from './coscrad-linear-progress-bar';
+import { CoscradMediaEditor } from './coscrad-media-editor';
 import { FormattedCurrentTime } from './formatted-currenttime';
 import { LanguageCode } from './language-code.enum';
-import { SubtitlesByTime } from './subtitles-by-time';
 
 const calculatePercentProgress = (currentTime: number, duration: number) => {
     return (currentTime / duration) * 100;
@@ -148,7 +157,19 @@ export const VideoPrototypePlayer = ({
     const onCanPlayThrough = () => {
         console.log('canplaythrough');
 
-        setMediaState({ ...mediaState, loadStatus: VideoVerifiedState.canPlayThrough });
+        if (mediaState.duration === 0) {
+            const videoTarget = videoRef.current!;
+
+            const { duration } = videoTarget;
+
+            setMediaState({
+                ...mediaState,
+                loadStatus: VideoVerifiedState.canPlayThrough,
+                duration: duration,
+            });
+        } else {
+            setMediaState({ ...mediaState, loadStatus: VideoVerifiedState.canPlayThrough });
+        }
     };
 
     const onError = () => {
@@ -287,10 +308,11 @@ export const VideoPrototypePlayer = ({
                 onProgress={onProgressBuffer}
                 width="100%"
                 disablePictureInPicture
+                controls
             >
                 <source src={videoUrl} />
             </Video>
-            <SubtitlesOverlay>
+            {/* <SubtitlesOverlay>
                 {mediaState.shouldPlayWithSubtitles ? (
                     <SubtitlesByTime
                         subtitles={subtitles}
@@ -298,10 +320,18 @@ export const VideoPrototypePlayer = ({
                         selectedLanguageCodeForSubtitles={transcriptLanguageCode}
                     />
                 ) : null}
-            </SubtitlesOverlay>
+            </SubtitlesOverlay> */}
 
-            <Box sx={{ mb: 2, top: '-25px', position: 'relative' }}>
-                <CoscradLinearProgressBar
+            <Box sx={{ mb: 2, position: 'relative' }}>
+                {/* <CoscradLinearProgressBar
+                    buffer={mediaState.buffer}
+                    progress={mediaState.progress}
+                    inPointMilliseconds={inPointMilliseconds}
+                    outPointMilliseconds={outPointMilliseconds}
+                    mediaDuration={mediaState.duration}
+                    seekInProgressBar={seekInProgressBar}
+                /> */}
+                <CoscradMediaEditor
                     buffer={mediaState.buffer}
                     progress={mediaState.progress}
                     inPointMilliseconds={inPointMilliseconds}
@@ -363,24 +393,35 @@ export const VideoPrototypePlayer = ({
                         <FormattedCurrentTime currentTimeInSeconds={mediaState.duration} />
                     </Box>
                 </VideoControls>
-                <Typography component="div" variant="h5">
-                    Loading status: {mediaState.loadStatus}
-                </Typography>
-                <Typography component="div" variant="h5">
-                    Playhead: {mediaState.currentTime}
-                </Typography>
-                <Typography component="div" variant="h5">
-                    Progress: {mediaState.progress}
-                </Typography>
-                <Typography component="div" variant="h5">
-                    Buffer: {mediaState.buffer}
-                </Typography>
-                <Typography component="div" variant="h5">
-                    In Point: {inPointMilliseconds}
-                </Typography>
-                <Typography component="div" variant="h5">
-                    Out Point: {outPointMilliseconds}
-                </Typography>
+                <Accordion>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography>Debug</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Typography component="div" variant="h5">
+                            Loading status: {mediaState.loadStatus}
+                        </Typography>
+                        <Typography component="div" variant="h5">
+                            Playhead: {mediaState.currentTime}
+                        </Typography>
+                        <Typography component="div" variant="h5">
+                            Progress: {mediaState.progress}
+                        </Typography>
+                        <Typography component="div" variant="h5">
+                            Buffer: {mediaState.buffer}
+                        </Typography>
+                        <Typography component="div" variant="h5">
+                            In Point: {inPointMilliseconds}
+                        </Typography>
+                        <Typography component="div" variant="h5">
+                            Out Point: {outPointMilliseconds}
+                        </Typography>
+                    </AccordionDetails>
+                </Accordion>
             </Box>
         </Box>
     );

@@ -25,5 +25,6 @@ export const FormattedCurrentTime = ({
         .map((time) => asTwoDigitString(time))
         .join(':');
 
+    // eslint-disable-next-line
     return <>{formattedCurrentTime}</>;
 };
