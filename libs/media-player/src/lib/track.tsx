@@ -19,15 +19,17 @@ const WaveForm = styled('div')({
 });
 
 interface TrackProps {
-    width: string;
-    height: string;
+    width: number;
+    height: number;
     trackColor: string;
 }
 
 export const Track = ({ width, height, trackColor }: TrackProps): JSX.Element => {
     return (
-        <TrackContainer sx={{ width: width, height: height, backgroundColor: trackColor }}>
-            <WaveForm />
+        <TrackContainer
+            sx={{ width: `${width}px`, height: `${height}px`, backgroundColor: trackColor }}
+        >
+            {/* <WaveForm /> */}
         </TrackContainer>
     );
 };

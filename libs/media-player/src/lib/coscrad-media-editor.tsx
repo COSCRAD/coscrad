@@ -1,12 +1,14 @@
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { styled } from '@mui/material';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Timeline } from './timeline';
+import { TimelineRuler } from './timeline';
 import { Track } from './track';
 
 const PROGRESS_BAR_HEIGHT = 30;
 
 const EDITOR_SOUND_BAR_HEIGHT = 30;
+
+const TIMELINE_RULER_BAR_HEIGHT = 30;
 
 const PARTICIPANTS = 2;
 
@@ -25,20 +27,44 @@ const RangeBar = styled('div')({
 const SoundEditor = styled('div')({
     width: '100%',
     overflowX: 'scroll',
+    padding: '0 10px',
+    position: 'relative',
+    boxSizing: 'border-box',
+    backgroundColor: '#ccc',
 });
 
-const SoundTracksContainer = styled('div')({
+const ScrolledTracksContainer = styled('div')({
     backgroundColor: '#ccc',
-    padding: '7px 2px',
+    padding: '7px 0px',
     display: 'block',
     position: 'relative',
 });
+
+const TimelineRulerContainer = styled('div')({
+    marginBottom: '3px',
+    borderBottom: '1px solid #4914db',
+    boxSizing: 'border-box',
+    position: 'relative',
+});
+
+// This doesn't work, but may have some hints to smoothing playhead movement
+// const movePlayhead = keyframes`
+//     0 %  { left: 0; },
+//     25 %  { left: 25%; },
+//     50 %  { left: 50%; },
+//     75 %  { left: 75%; },
+//     100 %  { left: 100%; }
+// `;
 
 const EditorPlayhead = styled('div')({
     height: `${EDITOR_SOUND_BAR_HEIGHT}px`,
     width: '1px',
     backgroundColor: 'red',
     position: 'absolute',
+    // animationName: `${movePlayhead}`,
+    // animationDuration: '2s',
+    // animationTimingFunction: 'ease-in',
+    // animationIterationCount: 'infinite',
     zIndex: 500,
 });
 
@@ -64,10 +90,18 @@ export const CoscradMediaEditor = ({
     /* eslint-disable @typescript-eslint/no-non-null-assertion */
     /* TODO: resolve non-null-assertion lint issue */
 
+    const tracksRef = useRef<HTMLDivElement>(null);
+
     const [rangeBar, setRangeBar] = useState({
         start: '',
         width: '',
     });
+
+    const zoomFactor = 20;
+
+    const scrolledTrackLength = mediaDuration * zoomFactor;
+
+    const trackHeight = EDITOR_SOUND_BAR_HEIGHT + 2;
 
     const rangeBarRef = useRef<HTMLDivElement>(null);
 
@@ -93,7 +127,7 @@ export const CoscradMediaEditor = ({
     };
 
     const timeline = useMemo(() => {
-        return <Timeline duration={mediaDuration} />;
+        return <TimelineRuler duration={mediaDuration} zoomFactor={zoomFactor} />;
     }, [mediaDuration]);
 
     useEffect(() => {
@@ -132,30 +166,31 @@ export const CoscradMediaEditor = ({
     return (
         <SoundEditor>
             {/* Set container height by length of participants array */}
-            <SoundTracksContainer
+            <ScrolledTracksContainer
+                ref={tracksRef}
                 sx={{
-                    height: `${PARTICIPANTS * EDITOR_SOUND_BAR_HEIGHT + 10}px`,
-                    width: `${mediaDuration * 4}px`,
+                    height: `${
+                        PARTICIPANTS * EDITOR_SOUND_BAR_HEIGHT + TIMELINE_RULER_BAR_HEIGHT + 10
+                    }px`,
+                    width: `${mediaDuration * zoomFactor}px`,
                 }}
             >
                 <EditorPlayhead
                     sx={{
-                        height: `${PARTICIPANTS * EDITOR_SOUND_BAR_HEIGHT + 8}px`,
+                        height: `${
+                            PARTICIPANTS * EDITOR_SOUND_BAR_HEIGHT + TIMELINE_RULER_BAR_HEIGHT + 8
+                        }px`,
                         left: `${progress}%`,
                     }}
                 />
-                {mediaDuration > 0 ? timeline : null}
-                <Track
-                    width={`${mediaDuration * 4}px`}
-                    height={`${EDITOR_SOUND_BAR_HEIGHT + 2}px`}
-                    trackColor={'#7ab1b7'}
-                />
-                <Track
-                    width={`${mediaDuration * 4}px`}
-                    height={`${EDITOR_SOUND_BAR_HEIGHT + 2}px`}
-                    trackColor={'#b77aad'}
-                />
-            </SoundTracksContainer>
+                <TimelineRulerContainer
+                    sx={{ width: scrolledTrackLength, height: `${TIMELINE_RULER_BAR_HEIGHT}px` }}
+                >
+                    {mediaDuration > 0 ? timeline : null}
+                </TimelineRulerContainer>
+                <Track width={scrolledTrackLength} height={trackHeight} trackColor={'#7ab1b7'} />
+                <Track width={scrolledTrackLength} height={trackHeight} trackColor={'#b77aad'} />
+            </ScrolledTracksContainer>
         </SoundEditor>
     );
 };

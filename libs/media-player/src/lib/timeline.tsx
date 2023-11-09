@@ -1,35 +1,20 @@
-import { styled } from '@mui/material';
-
-const TimelineContainer = styled('div')({
-    position: 'relative',
-    marginBottom: '2px',
-    boxSizing: 'border-box',
-});
-
-const TimeSegment = styled('div')({
-    width: '1px',
-    backgroundColor: '#000',
-    position: 'absolute',
-});
+import { RulerTick } from './ruler-tick';
 
 interface TimelineProps {
     duration: number;
+    zoomFactor: number;
 }
 
-export const Timeline = ({ duration }: TimelineProps): JSX.Element => {
+export const TimelineRuler = ({ duration, zoomFactor }: TimelineProps): JSX.Element => {
     const timelineLength = Math.ceil(duration);
 
-    console.log({ timelineLength });
-
-    const timeSegments: number[] = [...Array(timelineLength).keys()];
-
-    console.log({ timeSegments });
+    const rulerTicks: number[] = [...Array(timelineLength).keys()];
 
     return (
-        <TimelineContainer>
-            {timeSegments.map((_, index) => (
-                <TimeSegment key={index} sx={{ height: '10px', left: `${index + 4}px` }} />
+        <>
+            {rulerTicks.map((_, index) => (
+                <RulerTick key={index} index={index} zoomFactor={zoomFactor} />
             ))}
-        </TimelineContainer>
+        </>
     );
 };
