@@ -24,6 +24,7 @@ import {
     CannotHaveTwoFilterPropertiesWithTheSameNameError,
     DuplicateVocabularyListNameError,
 } from '../errors';
+import { VocabularyListFilterPropertyMustHaveAtLeastOneAllowedValueError } from '../errors/vocabulary-list-filter-property-must-have-at-least-one-allowed-value.error';
 import { DropboxOrCheckbox } from '../types/dropbox-or-checkbox';
 import { VocabularyListEntry } from '../vocabulary-list-entry.entity';
 import { VocabularyListFilterProperty } from './vocabulary-list-variable.entity';
@@ -133,6 +134,14 @@ export class VocabularyList extends Resource {
         type: DropboxOrCheckbox,
         allowedValuesWithLabels: LabelAndValue<string | boolean>[]
     ): ResultOrError<VocabularyList> {
+        // TODO add unit test for this
+        if (allowedValuesWithLabels.length === 0) {
+            return new VocabularyListFilterPropertyMustHaveAtLeastOneAllowedValueError(
+                this.id,
+                name
+            );
+        }
+
         if (this.hasFilterPropertyNamed(name)) {
             return new CannotHaveTwoFilterPropertiesWithTheSameNameError(name, this.id);
         }

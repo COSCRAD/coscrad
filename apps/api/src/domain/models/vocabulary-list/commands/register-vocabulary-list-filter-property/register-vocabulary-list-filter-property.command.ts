@@ -72,6 +72,7 @@ export class RegisterVocabularyListFilterProperty implements ICommandBase {
      */
     @RawDataObject({
         isArray: true,
+        // TODO shouldn't this force the array to be non empty?
         isOptional: false,
         label: `allowed values and labels`,
         description: `set of all valid values allowed for this filter property`,

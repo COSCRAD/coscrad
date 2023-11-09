@@ -14,10 +14,14 @@ import generateDatabaseNameForTestSuite from '../../../../../persistence/reposit
 import { buildTestCommandFsaMap } from '../../../../../test-data/commands';
 import InvariantValidationError from '../../../../domainModelValidators/errors/InvariantValidationError';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
+import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
+import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
+import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { InvalidValueForCheckboxFilterPropertyError } from '../../entities/invalid-value-for-checkbox-filter-property.error';
 import { InvalidValueForSelectFilterPropertyError } from '../../entities/invalid-value-for-select-filter-property.error';
@@ -27,6 +31,7 @@ import {
     DuplicateValueForVocabularyListFilterPropertyValueError,
 } from '../../errors';
 import { DuplicateLabelForVocabularyListFilterPropertyValueError } from '../../errors/duplicate-label-for-vocabulary-list-filter-property-value.error';
+import { VocabularyListFilterPropertyMustHaveAtLeastOneAllowedValueError } from '../../errors/vocabulary-list-filter-property-must-have-at-least-one-allowed-value.error';
 import { REGISTER_VOCABULARY_LIST_FILTER_PROPERTY } from './constants';
 import { FilterPropertyType, RegisterVocabularyListFilterProperty } from './index';
 
@@ -149,7 +154,25 @@ describe(commandType, () => {
 
     describe(`when the command is invalid`, () => {
         describe(`when the vocabulary list does not exist`, () => {
-            it.todo(`should fail with the expected errors`);
+            it(`should fail with the expected errors`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    buildCommandFSA: () => validFsa,
+                    seedInitialState: async () => {
+                        await Promise.resolve();
+                    },
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new AggregateNotFoundError(
+                                    existingVocabularyList.getCompositeIdentifier()
+                                ),
+                            ])
+                        );
+                    },
+                });
+            });
         });
 
         describe(`when there is already a filter property with the given name`, () => {
@@ -229,8 +252,33 @@ describe(commandType, () => {
 
         describe(`when the filter property type is selection`, () => {
             describe(`when no allowed values and labels are provided`, () => {
+                const nameOfPropertyWithNoValues = 'empty';
+
                 // `allowedValuesAndLabels=[]` on the payload
-                it.todo(`should fail with the expected errors`);
+                it(`should fail with the expected errors`, async () => {
+                    await assertCommandError(commandAssertionDependencies, {
+                        systemUserId: dummySystemUserId,
+                        seedInitialState: async () => {
+                            await testRepositoryProvider.addFullSnapshot(validInitialState);
+                        },
+                        buildCommandFSA: () =>
+                            commandFsaFactory.build(undefined, {
+                                name: nameOfPropertyWithNoValues,
+                                allowedValuesAndLabels: [],
+                            }),
+                        checkError: (error) => {
+                            assertErrorAsExpected(
+                                error,
+                                new CommandExecutionError([
+                                    new VocabularyListFilterPropertyMustHaveAtLeastOneAllowedValueError(
+                                        existingVocabularyList.id,
+                                        nameOfPropertyWithNoValues
+                                    ),
+                                ])
+                            );
+                        },
+                    });
+                });
             });
 
             describe(`when one of the values is a boolean (instead of a string)`, () => {
@@ -498,25 +546,150 @@ describe(commandType, () => {
                  * The following tests are similar to the corresponding tests for selection filter properties above.
                  */
                 describe(`when a label is repeated`, () => {
-                    it.todo(`should fail with the expected errors`);
+                    it(`should fail with the expected errors`, async () => {
+                        const duplicateLabel = 'foo';
+
+                        const nameOfPropertyWithReusedLabel = 'myprop';
+
+                        await assertCommandError(commandAssertionDependencies, {
+                            systemUserId: dummySystemUserId,
+                            seedInitialState: async () => {
+                                await testRepositoryProvider.addFullSnapshot(validInitialState);
+                            },
+                            buildCommandFSA: () =>
+                                commandFsaFactory.build(undefined, {
+                                    type: FilterPropertyType.checkbox,
+                                    name: nameOfPropertyWithReusedLabel,
+                                    allowedValuesAndLabels: [
+                                        {
+                                            label: duplicateLabel,
+                                            value: true,
+                                        },
+                                        {
+                                            label: duplicateLabel,
+                                            value: false,
+                                        },
+                                    ],
+                                }),
+
+                            checkError: (error) => {
+                                assertErrorAsExpected(
+                                    error,
+                                    new CommandExecutionError([
+                                        new InvariantValidationError(
+                                            existingVocabularyList.getCompositeIdentifier(),
+                                            [
+                                                new DuplicateLabelForVocabularyListFilterPropertyValueError(
+                                                    nameOfPropertyWithReusedLabel,
+                                                    duplicateLabel,
+                                                    true
+                                                ),
+                                                new DuplicateLabelForVocabularyListFilterPropertyValueError(
+                                                    nameOfPropertyWithReusedLabel,
+                                                    duplicateLabel,
+                                                    false
+                                                ),
+                                            ]
+                                        ),
+                                    ])
+                                );
+                            },
+                        });
+                    });
                 });
 
                 describe(`when a value is repeated`, () => {
-                    it.todo(`should fail with the expected errors`);
+                    it(`should fail with the expected errors`, async () => {
+                        const duplicateValue = true;
+
+                        const nameOfPropertyWithReusedLabel = 'myprop';
+
+                        await assertCommandError(commandAssertionDependencies, {
+                            systemUserId: dummySystemUserId,
+                            seedInitialState: async () => {
+                                await testRepositoryProvider.addFullSnapshot(validInitialState);
+                            },
+                            buildCommandFSA: () =>
+                                commandFsaFactory.build(undefined, {
+                                    type: FilterPropertyType.checkbox,
+                                    name: nameOfPropertyWithReusedLabel,
+                                    allowedValuesAndLabels: [
+                                        {
+                                            label: 'labelA',
+                                            value: duplicateValue,
+                                        },
+                                        {
+                                            label: 'labelB',
+                                            value: duplicateValue,
+                                        },
+                                    ],
+                                }),
+
+                            checkError: (error) => {
+                                assertErrorAsExpected(
+                                    error,
+                                    new CommandExecutionError([
+                                        new InvariantValidationError(
+                                            existingVocabularyList.getCompositeIdentifier(),
+                                            [
+                                                new DuplicateValueForVocabularyListFilterPropertyValueError(
+                                                    nameOfPropertyWithReusedLabel,
+                                                    'labelA',
+                                                    duplicateValue
+                                                ),
+                                                new DuplicateValueForVocabularyListFilterPropertyValueError(
+                                                    nameOfPropertyWithReusedLabel,
+                                                    'labelB',
+                                                    duplicateValue
+                                                ),
+                                            ]
+                                        ),
+                                    ])
+                                );
+                            },
+                        });
+                    });
                 });
             });
         });
 
-        /**
-         * These are the same as always.
-         */
         describe(`when the command payload type is invalid`, () => {
-            describe(`when the aggregate type is not vocabularyList`, () => {
-                it.todo(`should fail with the expected errors`);
+            describe(`when the aggregate type is invalid`, () => {
+                Object.values(AggregateType)
+                    .filter((aggregateType) => aggregateType !== AggregateType.vocabularyList)
+                    .forEach((aggregateType) => {
+                        describe(`when the type is: ${aggregateType}`, () => {
+                            it(`should fail with the expected errors`, async () => {
+                                await assertCommandFailsDueToTypeError(
+                                    commandAssertionDependencies,
+                                    {
+                                        propertyName: 'aggregateCompositeIdentifier',
+                                        invalidValue: {
+                                            type: aggregateType,
+                                            id: buildDummyUuid(567),
+                                        },
+                                    },
+                                    validFsa
+                                );
+                            });
+                        });
+                    });
             });
 
             describe(`fuzz test`, () => {
-                it.todo(`should have a test`);
+                generateCommandFuzzTestCases(RegisterVocabularyListFilterProperty).forEach(
+                    ({ description, propertyName, invalidValue }) => {
+                        describe(`when the property ${propertyName} has the invalid value: ${invalidValue} (${description})`, () => {
+                            it('should fail with the appropriate error', async () => {
+                                await assertCommandFailsDueToTypeError(
+                                    commandAssertionDependencies,
+                                    { propertyName, invalidValue },
+                                    validFsa
+                                );
+                            });
+                        });
+                    }
+                );
             });
         });
     });
