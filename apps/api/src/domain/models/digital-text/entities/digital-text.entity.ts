@@ -1,4 +1,8 @@
-import { AGGREGATE_COMPOSITE_IDENTIFIER, ICommandBase } from '@coscrad/api-interfaces';
+import {
+    AGGREGATE_COMPOSITE_IDENTIFIER,
+    ICommandBase,
+    LanguageCode,
+} from '@coscrad/api-interfaces';
 import { NestedDataType } from '@coscrad/data-types';
 import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
@@ -29,8 +33,10 @@ import {
     DIGITAL_TEXT_CREATED,
     PAGE_ADDED_TO_DIGITAL_TEXT,
 } from '../constants';
-import { DuplicateDigitalTextTitleError } from '../errors';
+import { FailedToUpdateDigitalTextPageError } from '../errors';
+import { CannotAddContentToMissingPageError } from '../errors/cannot-add-content-to-missing-page.error';
 import { CannotAddPageWithDuplicateIdentifierError } from '../errors/cannot-add-page-with-duplicate-identifier.error';
+import { DuplicateDigitalTextTitleError } from '../errors/duplicate-digital-text-title.error';
 import DigitalTextPage from './digital-text-page.entity';
 import { PageIdentifier } from './types/page-identifier';
 
@@ -124,6 +130,38 @@ export class DigitalText extends Resource {
         });
     }
 
+    addContentToPage(
+        pageIdentifier: PageIdentifier,
+        text: string,
+        languageCode: LanguageCode
+    ): ResultOrError<DigitalText> {
+        if (!this.hasPage(pageIdentifier)) {
+            return new FailedToUpdateDigitalTextPageError(pageIdentifier, this.id, [
+                new CannotAddContentToMissingPageError(pageIdentifier, this.id),
+            ]);
+        }
+
+        // Note that we already have asserted that the page exists, so `NotFound` is not a posisblity here
+        const pageUpdateResult = (this.getPage(pageIdentifier) as DigitalTextPage).addContent(
+            text,
+            languageCode
+        );
+
+        if (isInternalError(pageUpdateResult)) {
+            return new FailedToUpdateDigitalTextPageError(pageIdentifier, this.id, [
+                pageUpdateResult,
+            ]);
+        }
+
+        const updatedPages = this.pages.map((page) =>
+            page.identifier === pageIdentifier ? pageUpdateResult : page.clone({})
+        );
+
+        return this.safeClone<DigitalText>({
+            pages: updatedPages,
+        });
+    }
+
     /**
      *
      * @param pageIdentifiers list of all page identifiers that must be included
@@ -147,6 +185,13 @@ export class DigitalText extends Resource {
 
     hasPage(pageIdentifier: PageIdentifier): boolean {
         return this.pages.some(({ identifier }) => identifier === pageIdentifier);
+    }
+
+    getPage(pageIdentifier: PageIdentifier): Maybe<DigitalTextPage> {
+        if (!this.hasPage(pageIdentifier)) return NotFound;
+
+        // We avoid shared references by cloning
+        return this.pages.find(({ identifier }) => identifier === pageIdentifier).clone({});
     }
 
     static fromEventHistory(

@@ -1,34 +1,41 @@
 import { ICommandBase } from '@coscrad/api-interfaces';
-import { ICommand } from '@coscrad/commands';
+import { CommandHandler, ICommand } from '@coscrad/commands';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { Valid } from '../../../../domainModelValidators/Valid';
+import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../types/ResourceType';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { DigitalText } from '../../entities';
+import { AddContentToDigitalTextPage } from './add-content-to-digital-text-page.command';
+import { ContentAddedToDigitalTextPage } from './content-added-to-digital-text-page.event';
 
+@CommandHandler(AddContentToDigitalTextPage)
 export class AddContentToDigitalTextPageCommandHandler extends BaseUpdateCommandHandler<DigitalText> {
     protected fetchRequiredExternalState(_command?: ICommand): Promise<InMemorySnapshot> {
-        throw new Error('Method not implemented.');
+        return Promise.resolve(new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat());
     }
+
     protected actOnInstance(
-        _instance: DigitalText,
-        _command: ICommand
+        digitalText: DigitalText,
+        { pageIdentifier, text, languageCode }: AddContentToDigitalTextPage
     ): ResultOrError<DigitalText> {
-        throw new Error('Method not implemented.');
+        return digitalText.addContentToPage(pageIdentifier, text, languageCode);
     }
+
     protected validateExternalState(
         _state: InMemorySnapshot,
         _instance: DigitalText
     ): InternalError | Valid {
-        throw new Error('Method not implemented.');
+        return Valid;
     }
+
     protected buildEvent(
-        _command: ICommand,
-        _eventId: string,
-        _userId: string
+        command: AddContentToDigitalTextPage,
+        eventId: string,
+        userId: string
     ): BaseEvent<ICommandBase> {
-        throw new Error('Method not implemented.');
+        return new ContentAddedToDigitalTextPage(command, eventId, userId);
     }
 }

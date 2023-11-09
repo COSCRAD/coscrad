@@ -67,6 +67,10 @@ import {
     DigitalTextCreated,
     PageAddedToDigitalText,
 } from '../../../domain/models/digital-text/commands';
+import {
+    AddContentToDigitalTextPage,
+    AddContentToDigitalTextPageCommandHandler,
+} from '../../../domain/models/digital-text/commands/add-content-to-digital-text-page';
 import { AddPageToDigitalText } from '../../../domain/models/digital-text/commands/add-page-to-digital-text/add-page-to-digital-text.command';
 import { DigitalText } from '../../../domain/models/digital-text/entities/digital-text.entity';
 import { CreateMediaItem } from '../../../domain/models/media-item/commands/create-media-item.command';
@@ -605,6 +609,8 @@ export default async (
             TranslateAudioItemNameCommandHandler,
             AddPageToDigitalText,
             AddPageToDigitalTextCommandHandler,
+            AddContentToDigitalTextPage,
+            AddContentToDigitalTextPageCommandHandler,
         ],
 
         controllers: [
