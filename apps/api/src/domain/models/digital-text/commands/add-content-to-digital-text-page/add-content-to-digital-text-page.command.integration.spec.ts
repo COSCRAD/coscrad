@@ -109,4 +109,29 @@ describe(commandType, () => {
             });
         });
     });
+
+    describe(`when the digital text does not exist`, () => {
+        it.todo(`should fail with the expected errors`);
+    });
+
+    describe(`when the page does not exist`, () => {
+        it.todo(`should fail with the expected errors`);
+    });
+
+    describe(`when the page already has content`, () => {
+        it.todo(`should fail with the expected errors`);
+    });
+
+    /**
+     * TODO Consider moving this to a different (non netowrk) level
+     */
+    describe(`when the command payload type is invalid`, () => {
+        describe(`when the aggregate type is not digital text`, () => {
+            it.todo(`should fail with the expected errors`);
+        });
+
+        describe(`fuzz test`, () => {
+            it.todo(`should have a test`);
+        });
+    });
 });
