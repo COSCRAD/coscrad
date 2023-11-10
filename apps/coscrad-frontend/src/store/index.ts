@@ -8,34 +8,34 @@ import { ID_GENERATION } from './slices/id-generation/constants';
 import { noteReducer, NOTES } from './slices/notes';
 
 import {
+    AUDIO_ITEMS,
+    audioItemReducer,
+    BIBLIOGRAPHIC_REFERENCES,
     bibliographicReferenceReducer,
+    bookReducer,
+    BOOKS,
+    DIGITAL_TEXTS,
+    DigitalTextReducer,
+    MEDIA_ITEMS,
+    mediaItemReducer,
+    photographReducer,
+    PHOTOGRAPHS,
+    PlaylistReducer,
+    PLAYLISTS,
+    RESOURCE_INFO,
+    resourceInfoReducer,
+    songReducer,
+    SONGS,
+    SPATIAL_FEATURES,
     spatialFeatureReducer,
     termReducer,
+    TERMS,
+    videoReducer,
+    VIDEOS,
     VOCABULARY_LISTS,
     vocabularyListReducer,
 } from './slices/resources';
-import { audioItemReducer } from './slices/resources/audio-item';
-import { AUDIO_ITEMS } from './slices/resources/audio-item/constants';
-import { BIBLIOGRAPHIC_REFERENCES } from './slices/resources/bibliographic-references/constants';
-import { bookReducer, BOOKS } from './slices/resources/books';
-import { DIGITAL_TEXTS } from './slices/resources/digital-texts/constants';
-import { DigitalTextReducer } from './slices/resources/digital-texts/digital-text-slice';
-import { MEDIA_ITEMS, mediaItemReducer } from './slices/resources/media-items';
-import { photographReducer } from './slices/resources/photographs';
-import { PHOTOGRAPHS } from './slices/resources/photographs/constants';
-import { PLAYLISTS } from './slices/resources/playlists';
-import { PlaylistReducer } from './slices/resources/playlists/playlist-slice';
-import {
-    RESOURCE_INFO,
-    resourceInfoReducer,
-} from './slices/resources/resource-info/resource-info-slice';
-import { songReducer, SONGS } from './slices/resources/songs';
-import { SPATIAL_FEATURES } from './slices/resources/spatial-features/constants';
-import { TERMS } from './slices/resources/terms/constants';
-import { videoReducer } from './slices/resources/video';
-import { VIDEOS } from './slices/resources/video/constants';
-import { tagReducer } from './slices/tagSlice';
-import { TAGS } from './slices/tagSlice/constants';
+import { tagReducer, TAGS } from './slices/tagSlice';
 
 export const rootReducer = combineReducers({
     [AUTH]: authReducer,

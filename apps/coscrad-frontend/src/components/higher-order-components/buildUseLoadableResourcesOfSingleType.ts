@@ -7,18 +7,19 @@ import {
 import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { useLoadableNotes } from '../../store/slices/notes/hooks';
 import {
+    useLoadableAudioItems,
     useLoadableBibliographicReferences,
+    useLoadableBooks,
+    useLoadableDigitalTexts,
+    useLoadableMediaItems,
+    useLoadablePhotographs,
+    useLoadablePlaylists,
     useLoadableSongs,
     useLoadableSpatialFeatures,
     useLoadableTerms,
+    useLoadableVideos,
+    useLoadableVocabularyLists,
 } from '../../store/slices/resources';
-import { useLoadableAudioItems } from '../../store/slices/resources/audio-item/hooks/use-loadable-audio-items';
-import { useLoadableBooks } from '../../store/slices/resources/books';
-import { useLoadableMediaItems } from '../../store/slices/resources/media-items';
-import { useLoadablePhotographs } from '../../store/slices/resources/photographs/hooks';
-import { useLoadablePlaylists } from '../../store/slices/resources/playlists/hooks';
-import { useLoadableVideos } from '../../store/slices/resources/video/hooks';
-import { useLoadableVocabularyLists } from '../../store/slices/resources/vocabulary-lists/hooks';
 
 type UseLoadableResourcesOfSingleType<T extends IBaseViewModel> = () => ILoadable<
     ICategorizableIndexQueryResult<T>
@@ -28,6 +29,7 @@ const lookupTable: {
     [K in CategorizableType]: UseLoadableResourcesOfSingleType<AggregateTypeToViewModel[K]>;
 } = {
     [CategorizableType.bibliographicReference]: useLoadableBibliographicReferences,
+    [CategorizableType.digitalText]: useLoadableDigitalTexts,
     [CategorizableType.book]: useLoadableBooks,
     [CategorizableType.mediaItem]: useLoadableMediaItems,
     [CategorizableType.photograph]: useLoadablePhotographs,
