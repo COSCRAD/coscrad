@@ -6,6 +6,10 @@ import {
     DigitalTextCreated,
     PageAddedToDigitalText,
 } from '../../domain/models/digital-text/commands';
+import {
+    ContentAddedToDigitalTextPage,
+    ContentAddedToDigitalTextPagePayload,
+} from '../../domain/models/digital-text/commands/add-content-to-digital-text-page';
 import { ResourceReadAccessGrantedToUser } from '../../domain/models/shared/common-commands';
 import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import { TagCreated } from '../../domain/models/tag/commands/create-tag/tag-created.event';
@@ -138,11 +142,33 @@ const buildReourceOrNoteTaggedEvent = (
     payloadOverrides: DeepPartial<ResourceOrNoteTagged['payload']>
 ) =>
     new ResourceOrNoteTagged(
+        // TODO Why is this empty?
         clonePlainObjectWithOverrides({} as ResourceOrNoteTagged['payload'], payloadOverrides),
         buildDummyUuid(8),
         dummySystemUserId,
         dateManager.next()
     );
+
+const buildContentAddedToDigitalTextPage = (
+    payloadOverrides: DeepPartial<ContentAddedToDigitalTextPagePayload>
+) => {
+    const defaultPayload: ContentAddedToDigitalTextPagePayload = {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.digitalText,
+            id: buildDummyUuid(124),
+        },
+        text: 'Hear ye, hear ye, I shall tell a great epic of years gone by!',
+        languageCode: LanguageCode.English,
+        pageIdentifier: 'X',
+    };
+
+    return new ContentAddedToDigitalTextPage(
+        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        buildDummyUuid(9),
+        dummySystemUserId,
+        dateManager.next()
+    );
+};
 
 export type EventBuilder<T extends BaseEvent> = (payloadOverrides: EventPayloadOverrides<T>) => T;
 
@@ -156,6 +182,8 @@ export class TestEventStream {
 
         /**
          * TODO Consider injecting the builder as a dependency to the constructor.
+         *
+         * TODO Find a pattern for doing this in separate files.
          */
         this.registerBuilder('DIGITAL_TEXT_CREATED', buildDigitalTextCreatedEvent)
             .registerBuilder('PAGE_ADDED_TO_DIGITAL_TEXT', buildPageAddedEvent)
@@ -165,7 +193,11 @@ export class TestEventStream {
             )
             .registerBuilder('RESOURCE_PUBLISHED', buildResourcePublishedEvent)
             .registerBuilder('RESOURCE_OR_NOTE_TAGGED', buildReourceOrNoteTaggedEvent)
-            .registerBuilder('TAG_CREATED', buildTagCreatedEvent);
+            .registerBuilder('TAG_CREATED', buildTagCreatedEvent)
+            .registerBuilder(
+                'CONTENT_ADDED_TO_DIGITAL_TEXT_PAGE',
+                buildContentAddedToDigitalTextPage
+            );
     }
 
     andThen<T extends BaseEvent>(
