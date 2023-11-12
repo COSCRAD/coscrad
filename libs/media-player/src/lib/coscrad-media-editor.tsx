@@ -8,6 +8,8 @@ const PROGRESS_BAR_HEIGHT = 30;
 
 const EDITOR_SOUND_BAR_HEIGHT = 30;
 
+const EDITOR_X_PADDING = 10;
+
 const TIMELINE_RULER_BAR_HEIGHT = 30;
 
 const PARTICIPANTS = 2;
@@ -27,14 +29,13 @@ const RangeBar = styled('div')({
 const SoundEditor = styled('div')({
     width: '100%',
     overflowX: 'scroll',
-    padding: '0 10px',
+    padding: `0 ${EDITOR_X_PADDING}px`,
     position: 'relative',
     boxSizing: 'border-box',
-    backgroundColor: '#ccc',
+    backgroundColor: '#424242',
 });
 
 const ScrolledTracksContainer = styled('div')({
-    backgroundColor: '#ccc',
     padding: '7px 0px',
     display: 'block',
     position: 'relative',
@@ -70,7 +71,7 @@ const EditorPlayhead = styled('div')({
 
 interface CoscradLinearProgressBarProps {
     buffer: number;
-    progress: number;
+    playProgress: number;
     inPointMilliseconds: number | null;
     outPointMilliseconds: number | null;
     mediaDuration: number;
@@ -79,7 +80,7 @@ interface CoscradLinearProgressBarProps {
 
 export const CoscradMediaEditor = ({
     buffer,
-    progress,
+    playProgress,
     inPointMilliseconds,
     outPointMilliseconds,
     mediaDuration,
@@ -90,14 +91,18 @@ export const CoscradMediaEditor = ({
     /* eslint-disable @typescript-eslint/no-non-null-assertion */
     /* TODO: resolve non-null-assertion lint issue */
 
+    const soundEditorRef = useRef<HTMLDivElement>(null);
+
     const tracksRef = useRef<HTMLDivElement>(null);
+
+    const playheadRef = useRef<HTMLDivElement>(null);
 
     const [rangeBar, setRangeBar] = useState({
         start: '',
         width: '',
     });
 
-    const zoomFactor = 20;
+    const zoomFactor = 10;
 
     const scrolledTrackLength = mediaDuration * zoomFactor;
 
@@ -154,7 +159,7 @@ export const CoscradMediaEditor = ({
             setRangeBar({ ...rangeBar, width: `${width}%` });
 
             console.log(
-                `Outpoint - start: ${start} width: ${width} progress: ${progress} end: ${end}`
+                `Outpoint - start: ${start} width: ${width} progress: ${playProgress} end: ${end}`
             );
 
             rangeBarRef.current!.style.borderRight = '1px solid red';
@@ -163,8 +168,36 @@ export const CoscradMediaEditor = ({
         rangeBarRef.current!.style.visibility = 'visible';
     }, [inPointMilliseconds, outPointMilliseconds]);
 
+    useEffect(() => {
+        const editorWidth = soundEditorRef.current!.getBoundingClientRect().width;
+
+        const editorPadding = 2 * EDITOR_X_PADDING;
+
+        console.log({ editorWidth });
+
+        const editorMidPoint = (editorWidth - editorPadding) / 2;
+
+        const playheadPosition = playheadRef.current!.offsetLeft;
+
+        if (playheadPosition >= editorMidPoint) {
+            const scrollLeft = playheadPosition - editorMidPoint;
+
+            soundEditorRef.current!.scrollTo({
+                top: 0,
+                left: scrollLeft,
+                behavior: 'smooth',
+            });
+        } else {
+            soundEditorRef.current!.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: 'smooth',
+            });
+        }
+    }, [playProgress, scrolledTrackLength]);
+
     return (
-        <SoundEditor>
+        <SoundEditor ref={soundEditorRef}>
             {/* Set container height by length of participants array */}
             <ScrolledTracksContainer
                 ref={tracksRef}
@@ -172,24 +205,28 @@ export const CoscradMediaEditor = ({
                     height: `${
                         PARTICIPANTS * EDITOR_SOUND_BAR_HEIGHT + TIMELINE_RULER_BAR_HEIGHT + 10
                     }px`,
-                    width: `${mediaDuration * zoomFactor}px`,
+                    width: `${scrolledTrackLength}px`,
                 }}
             >
                 <EditorPlayhead
+                    ref={playheadRef}
                     sx={{
                         height: `${
                             PARTICIPANTS * EDITOR_SOUND_BAR_HEIGHT + TIMELINE_RULER_BAR_HEIGHT + 8
                         }px`,
-                        left: `${progress}%`,
+                        left: `${playProgress}%`,
                     }}
                 />
                 <TimelineRulerContainer
-                    sx={{ width: scrolledTrackLength, height: `${TIMELINE_RULER_BAR_HEIGHT}px` }}
+                    sx={{
+                        width: scrolledTrackLength,
+                        height: `${TIMELINE_RULER_BAR_HEIGHT}px`,
+                    }}
                 >
                     {mediaDuration > 0 ? timeline : null}
                 </TimelineRulerContainer>
-                <Track width={scrolledTrackLength} height={trackHeight} trackColor={'#7ab1b7'} />
-                <Track width={scrolledTrackLength} height={trackHeight} trackColor={'#b77aad'} />
+                <Track width={scrolledTrackLength} height={trackHeight} trackColor={'#5d868a'} />
+                <Track width={scrolledTrackLength} height={trackHeight} trackColor={'#916a8a'} />
             </ScrolledTracksContainer>
         </SoundEditor>
     );

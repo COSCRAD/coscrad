@@ -7,17 +7,19 @@ const REGULAR_TICK_HEIGHT = 10;
 
 const NUMBER_PADDING_FROM_TICK = 4;
 
+const RULER_TICKS_AND_NUMBERS_COLOR = '#fdec5e';
+
 const StyledRulerTick = styled('div')({
     width: '1px',
     minHeight: '5px',
-    backgroundColor: '#4914db',
+    backgroundColor: RULER_TICKS_AND_NUMBERS_COLOR,
     position: 'absolute',
     bottom: 0,
     zIndex: 600,
 });
 
 const StyledRulerNumber = styled('div')({
-    color: '#4914db',
+    color: RULER_TICKS_AND_NUMBERS_COLOR,
     fontSize: '12px',
     marginBottom: '3px',
     position: 'absolute',

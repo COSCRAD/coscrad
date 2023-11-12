@@ -74,7 +74,7 @@ type MediaState = {
     buffer: number;
     isPlaying: boolean;
     currentTime: number;
-    progress: number;
+    playProgress: number;
     // TODO: Does this belong here?
     shouldPlayWithSubtitles: boolean;
 };
@@ -114,7 +114,7 @@ export const VideoPrototypePlayer = ({
         buffer: 0,
         isPlaying: false,
         currentTime: 0,
-        progress: 0,
+        playProgress: 0,
         shouldPlayWithSubtitles: isNullOrUndefined(onTimeUpdate) ? true : false,
     });
 
@@ -234,13 +234,13 @@ export const VideoPrototypePlayer = ({
 
         const { currentTime, duration } = videoTarget;
 
-        const progress = calculatePercentProgress(currentTime, duration);
+        const playProgress = calculatePercentProgress(currentTime, duration);
 
         const updatedBuffer = getUpdatedBuffer(videoTarget);
 
         setMediaState({
             ...mediaState,
-            progress: progress,
+            playProgress: playProgress,
             currentTime: currentTime,
             buffer: updatedBuffer,
         });
@@ -262,7 +262,7 @@ export const VideoPrototypePlayer = ({
 
         setMediaState({
             ...mediaState,
-            progress: progress,
+            playProgress: progress,
             currentTime: videoRef.current!.currentTime,
         });
     };
@@ -308,7 +308,7 @@ export const VideoPrototypePlayer = ({
                 onProgress={onProgressBuffer}
                 width="100%"
                 disablePictureInPicture
-                controls
+                muted
             >
                 <source src={videoUrl} />
             </Video>
@@ -333,7 +333,7 @@ export const VideoPrototypePlayer = ({
                 /> */}
                 <CoscradMediaEditor
                     buffer={mediaState.buffer}
-                    progress={mediaState.progress}
+                    playProgress={mediaState.playProgress}
                     inPointMilliseconds={inPointMilliseconds}
                     outPointMilliseconds={outPointMilliseconds}
                     mediaDuration={mediaState.duration}
@@ -347,7 +347,10 @@ export const VideoPrototypePlayer = ({
                             seems correct for UI design, that tooltips should appear regardless of a button's disabled status 
                         */}
                         <Tooltip title="Restart Media">
-                            <IconButton onClick={restartMedia} disabled={mediaState.progress === 0}>
+                            <IconButton
+                                onClick={restartMedia}
+                                disabled={mediaState.playProgress === 0}
+                            >
                                 <ReplayIcon />
                             </IconButton>
                         </Tooltip>
@@ -409,7 +412,7 @@ export const VideoPrototypePlayer = ({
                             Playhead: {mediaState.currentTime}
                         </Typography>
                         <Typography component="div" variant="h5">
-                            Progress: {mediaState.progress}
+                            Progress: {mediaState.playProgress}
                         </Typography>
                         <Typography component="div" variant="h5">
                             Buffer: {mediaState.buffer}
