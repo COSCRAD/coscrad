@@ -2,18 +2,21 @@ import { AggregateType } from '@coscrad/api-interfaces';
 import { AppDispatch } from '../..';
 import { fetchCategoryTree } from '../categories';
 import { fetchNotes } from '../notes/thunks';
-import { fetchBibliographicReferences, fetchTerms } from '../resources';
-import { fetchAudioItems } from '../resources/audio-item/thunks/fetch-audio-items';
-import { fetchBooks } from '../resources/books/thunks';
-import { fetchMediaItems } from '../resources/media-items/thunks';
-import { fetchPhotographs } from '../resources/photographs/thunks';
-import { fetchPlaylists } from '../resources/playlists/thunks';
-import { fetchSongs } from '../resources/songs/thunks';
-import { fetchSpatialFeatures } from '../resources/spatial-features/thunks';
-import { fetchVideos } from '../resources/video/thunks';
-import { fetchVocabularyLists } from '../resources/vocabulary-lists/thunks';
-import { fetchTags } from '../tagSlice/thunks';
-
+import {
+    fetchAudioItems,
+    fetchBibliographicReferences,
+    fetchBooks,
+    fetchDigitalTexts,
+    fetchMediaItems,
+    fetchPhotographs,
+    fetchPlaylists,
+    fetchSongs,
+    fetchSpatialFeatures,
+    fetchTerms,
+    fetchVideos,
+    fetchVocabularyLists,
+} from '../resources';
+import { fetchTags } from '../tagSlice';
 /**
  * TODO Find a pattern that is closed to modification.
  */
@@ -22,6 +25,9 @@ export const fetchFreshState = (dispatch: AppDispatch, aggregateType: AggregateT
         case AggregateType.bibliographicReference:
             dispatch(fetchBibliographicReferences());
             break;
+
+        case AggregateType.digitalText:
+            dispatch(fetchDigitalTexts());
 
         case AggregateType.book:
             dispatch(fetchBooks());
