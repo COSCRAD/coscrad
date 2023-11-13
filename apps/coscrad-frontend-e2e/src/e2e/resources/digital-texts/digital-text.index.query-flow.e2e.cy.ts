@@ -1,4 +1,5 @@
 import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import { buildDummyUuid } from '../../../support/utilities';
 
 const dummyDigitalTextTitle = 'Court Procedings of the Supreme Court';
 
@@ -12,10 +13,58 @@ const aggregateCompositeIdentifier = buildAggregateCompositeIdentifier('002');
 const { id: digitalTextId } = aggregateCompositeIdentifier;
 
 describe('Digital Text Index-to-detail Query Flow', () => {
+    const seedDummyDigitalText = ({
+        id,
+        title,
+        languageCodeForTitle,
+    }: {
+        id: string;
+        title: string;
+        languageCodeForTitle: LanguageCode;
+    }) => {
+        const aggregateCompositeIdentifier = {
+            type: AggregateType.digitalText,
+            id,
+        };
+
+        cy.seedDataWithCommand(`CREATE_DIGITAL_TEXT`, {
+            aggregateCompositeIdentifier,
+            title,
+            languageCodeForTitle,
+        });
+
+        /**
+         * Consider creating many pages and some without pages.
+         */
+        cy.seedDataWithCommand(`ADD_PAGE_TO_DIGITAL_TEXT`, {
+            aggregateCompositeIdentifier,
+            identifier: `P1`,
+        });
+
+        //   TODO ADD_CONTENT_TO_DIGITAL_TEXT_PAGE
+
+        cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+            aggregateCompositeIdentifier,
+        });
+    };
+
+    const seedManyDigitalTextsInLanguage = (numberToBuild: number, languageCode: LanguageCode) => {
+        // We save some space for manually executed CLI commands to seed data
+        const ID_OFFSET = 50;
+
+        new Array(numberToBuild).fill('').forEach((_, index) =>
+            seedDummyDigitalText({
+                id: buildDummyUuid(ID_OFFSET + index),
+                title: `Title of Digital Text: ${index}`,
+                languageCodeForTitle: languageCode,
+            })
+        );
+    };
+
     before(() => {
         cy.clearDatabase();
 
-        cy.seedTestUuids(10);
+        cy.seedTestUuids(900);
 
         cy.executeCommandStreamByName('users: create-admin');
 
@@ -28,6 +77,10 @@ describe('Digital Text Index-to-detail Query Flow', () => {
         cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
             aggregateCompositeIdentifier,
         });
+
+        seedManyDigitalTextsInLanguage(60, LanguageCode.English);
+
+        seedManyDigitalTextsInLanguage(45, LanguageCode.Haida);
     });
 
     describe(`the index page`, () => {
