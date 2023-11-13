@@ -21,7 +21,11 @@ export class AddContentToDigitalTextPageCommandHandler extends BaseUpdateCommand
         digitalText: DigitalText,
         { pageIdentifier, text, languageCode }: AddContentToDigitalTextPage
     ): ResultOrError<DigitalText> {
-        return digitalText.addContentToPage(pageIdentifier, text, languageCode);
+        const updatedInstance = digitalText.addContentToPage(pageIdentifier, text, languageCode);
+
+        updatedInstance;
+
+        return updatedInstance;
     }
 
     protected validateExternalState(

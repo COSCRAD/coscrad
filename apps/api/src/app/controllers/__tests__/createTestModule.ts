@@ -70,6 +70,7 @@ import {
 import {
     AddContentToDigitalTextPage,
     AddContentToDigitalTextPageCommandHandler,
+    ContentAddedToDigitalTextPage,
 } from '../../../domain/models/digital-text/commands/add-content-to-digital-text-page';
 import { AddPageToDigitalText } from '../../../domain/models/digital-text/commands/add-page-to-digital-text/add-page-to-digital-text.command';
 import { DigitalText } from '../../../domain/models/digital-text/entities/digital-text.entity';
@@ -250,6 +251,7 @@ export const buildAllDataClassProviders = () =>
         ResourceReadAccessGrantedToUser,
         DigitalTextCreated,
         PageAddedToDigitalText,
+        ContentAddedToDigitalTextPage,
         SongCreated,
         SongTitleTranslated,
         LyricsAddedForSong,

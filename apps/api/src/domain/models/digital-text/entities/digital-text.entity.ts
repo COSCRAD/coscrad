@@ -27,6 +27,7 @@ import InvalidExternalStateError from '../../shared/common-command-errors/Invali
 import { ResourceReadAccessGrantedToUser } from '../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import { DigitalTextCreated, PageAddedToDigitalText } from '../commands';
+import { ContentAddedToDigitalTextPage } from '../commands/add-content-to-digital-text-page';
 import {
     ADD_PAGE_TO_DIGITAL_TEXT,
     CREATE_DIGITAL_TEXT,
@@ -157,9 +158,11 @@ export class DigitalText extends Resource {
             page.identifier === pageIdentifier ? pageUpdateResult : page.clone({})
         );
 
-        return this.safeClone<DigitalText>({
+        const updateResult = this.safeClone<DigitalText>({
             pages: updatedPages,
         });
+
+        return updateResult;
     }
 
     /**
@@ -178,6 +181,10 @@ export class DigitalText extends Resource {
     hasPages(): boolean;
 
     hasPages(pageIdentifiers?: PageIdentifier[]): boolean {
+        /**
+         * If the user did not specify a specific range of pages, we interpret
+         * the query as "does this digital text have any pages at all?"
+         */
         if (!Array.isArray(pageIdentifiers)) return this.pages.length > 0;
 
         return pageIdentifiers.every((pageIdentifier) => this.hasPage(pageIdentifier));
@@ -250,6 +257,16 @@ export class DigitalText extends Resource {
                 } = event as PageAddedToDigitalText;
 
                 return digitalText.addEventToHistory(event).addPage(identifier);
+            }
+
+            if (event.type === 'CONTENT_ADDED_TO_DIGITAL_TEXT_PAGE') {
+                const {
+                    payload: { pageIdentifier, text, languageCode },
+                } = event as ContentAddedToDigitalTextPage;
+
+                return digitalText
+                    .addEventToHistory(event)
+                    .addContentToPage(pageIdentifier, text, languageCode);
             }
 
             if (event.type === `RESOURCE_READ_ACCESS_GRANTED_TO_USER`) {

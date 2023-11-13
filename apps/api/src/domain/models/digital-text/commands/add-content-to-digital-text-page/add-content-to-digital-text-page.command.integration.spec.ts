@@ -1,9 +1,16 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
+import {
+    AGGREGATE_COMPOSITE_IDENTIFIER,
+    AggregateType,
+    LanguageCode,
+} from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
+import { isDeepStrictEqual } from 'util';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { CommandFSA } from '../../../../../app/controllers/command/command-fsa/command-fsa.entity';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
+import { InternalError } from '../../../../../lib/errors/InternalError';
+import { NotFound } from '../../../../../lib/types/not-found';
 import { clonePlainObjectWithOverrides } from '../../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
@@ -12,6 +19,7 @@ import { ArangoEventRepository } from '../../../../../persistence/repositories/a
 import { buildTestCommandFsaMap } from '../../../../../test-data/commands';
 import { TestEventStream } from '../../../../../test-data/events/test-event-stream';
 import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../../../common/entities/multilingual-text';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
@@ -21,13 +29,21 @@ import { CommandAssertionDependencies } from '../../../__tests__/command-helpers
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
-import { CannotAddContentToMissingPageError, CannotOverwritePageContentError } from '../../errors';
+import { DigitalText } from '../../entities';
+import DigitalTextPage from '../../entities/digital-text-page.entity';
+import {
+    CannotAddContentToMissingPageError,
+    CannotOverwritePageContentError,
+    FailedToUpdateDigitalTextPageError,
+} from '../../errors';
 import { PageAddedToDigitalText } from '../add-page-to-digital-text/page-added-to-digital-text.event';
 import { DigitalTextCreated } from '../digital-text-created.event';
 import { AddContentToDigitalTextPage } from './add-content-to-digital-text-page.command';
 import { ContentAddedToDigitalTextPage } from './content-added-to-digital-text-page.event';
 
 const commandType = 'ADD_CONTENT_TO_DIGITAL_TEXT_PAGE';
+
+const contentAddedEventType = 'CONTENT_ADDED_TO_DIGITAL_TEXT_PAGE';
 
 const dummyFsa = buildTestCommandFsaMap().get(
     commandType
@@ -106,9 +122,9 @@ describe(commandType, () => {
         });
 
     describe('when the command is valid', () => {
-        it(`should succeed with the expected updates`, async () => {
+        it.only(`should succeed with the expected updates`, async () => {
             const eventHistory = eventStreamForDigitalTextWithPage.as({
-                id: dummyFsa.payload.aggregateCompositeIdentifier.id,
+                id: digitalTextId,
             });
 
             await assertCommandSuccess(commandAssertionDependencies, {
@@ -116,7 +132,60 @@ describe(commandType, () => {
                 seedInitialState: async () => {
                     await app.get(ArangoEventRepository).appendEvents(eventHistory);
                 },
-                buildValidCommandFSA: () => commandFsaFactory.build(),
+                buildValidCommandFSA: () =>
+                    commandFsaFactory.build(undefined, {
+                        aggregateCompositeIdentifier: {
+                            id: digitalTextId,
+                        },
+                    }),
+                checkStateOnSuccess: async () => {
+                    const searchResult = await testRepositoryProvider
+                        .forResource<DigitalText>(AggregateType.digitalText)
+                        .fetchById(digitalTextId);
+
+                    expect(searchResult).not.toBe(NotFound);
+
+                    expect(searchResult).not.toBeInstanceOf(InternalError);
+
+                    const updatedDigitalText = searchResult as DigitalText;
+
+                    const pageSearchResult = updatedDigitalText.getPage(existingPageIdentifier);
+
+                    expect(pageSearchResult).toBeInstanceOf(DigitalTextPage); // and not an error
+
+                    const updatedPage = pageSearchResult as DigitalTextPage;
+
+                    expect(updatedPage.hasContent()).toBe(true);
+
+                    const content = updatedPage.getContent() as MultilingualText; // and not `NotFound`
+
+                    const { text: foundText, languageCode: foundLanguageCode } =
+                        content.getOriginalTextItem();
+
+                    expect(foundText).toBe(text);
+
+                    expect(foundLanguageCode).toBe(languageCode);
+
+                    const allEvents = await app.get(ArangoEventRepository).fetchEvents();
+
+                    const searchResultForEvent = allEvents.find(
+                        (event) =>
+                            event.type === contentAddedEventType &&
+                            isDeepStrictEqual(event.payload[AGGREGATE_COMPOSITE_IDENTIFIER], {
+                                type: AggregateType.digitalText,
+                                id: digitalTextId,
+                            })
+                    );
+
+                    expect(searchResultForEvent).toBeTruthy();
+
+                    // TODO Update `assertEventRecordPersisted`
+                    //  assertEventRecordPersisted(
+                    //     updatedDigitalText,
+                    //     'CONTENT_ADDED_TO_DIGITAL_TEXT_PAGE',
+                    //     dummySystemUserId
+                    // );
+                },
             });
         });
     });
@@ -160,9 +229,15 @@ describe(commandType, () => {
                     assertErrorAsExpected(
                         error,
                         new CommandExecutionError([
-                            new CannotAddContentToMissingPageError(
+                            new FailedToUpdateDigitalTextPageError(
                                 existingPageIdentifier,
-                                digitalTextId
+                                digitalTextId,
+                                [
+                                    new CannotAddContentToMissingPageError(
+                                        existingPageIdentifier,
+                                        digitalTextId
+                                    ),
+                                ]
                             ),
                         ])
                     );
@@ -179,7 +254,8 @@ describe(commandType, () => {
                     await app.get(ArangoEventRepository).appendEvents(
                         eventStreamForDigitalTextWithPage
                             .andThen<ContentAddedToDigitalTextPage>({
-                                type: 'ADD_CONTENT_TO_DIGITAL_TEXT_PAGE',
+                                // TODO Why is there no type safety for this one? It works elsewhere.
+                                type: contentAddedEventType,
                                 payload: {},
                             })
                             .as({ id: digitalTextId })

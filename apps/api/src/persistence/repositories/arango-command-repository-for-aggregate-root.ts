@@ -28,7 +28,7 @@ interface IEventSourceable<TAggregate extends Aggregate = Aggregate> {
 }
 
 export interface IEventRepository {
-    fetchEvents(aggregateContextIdentifier: AggregateContextIdentifier): Promise<BaseEvent[]>;
+    fetchEvents(aggregateContextIdentifier?: AggregateContextIdentifier): Promise<BaseEvent[]>;
 
     // TODO Should the event be an instance or DTO?
     appendEvent(event: DTO<BaseEvent>): Promise<void>;
@@ -47,6 +47,9 @@ export class ArangoCommandRepositoryForAggregateRoot<TAggregate extends Aggregat
     ) {}
 
     async fetchById(id: AggregateId): Promise<Maybe<ResultOrError<TAggregate>>> {
+        // TODO REMOVE THIS
+        const _allEvents = await this.eventRepository.fetchEvents();
+
         const eventStream = await this.eventRepository.fetchEvents({
             type: this.aggregateType,
             id,
@@ -163,8 +166,6 @@ export class ArangoCommandRepositoryForAggregateRoot<TAggregate extends Aggregat
         const mostRecentEvent = sortedEventHistory[sortedEventHistory.length - 1];
 
         await this.eventRepository.appendEvent(mostRecentEvent);
-
-        // await this.snapshotRepositoryForAggregate.update(updatedEntity);
     }
 
     // TODO refactor this- we probably should do this once at bootstrap
