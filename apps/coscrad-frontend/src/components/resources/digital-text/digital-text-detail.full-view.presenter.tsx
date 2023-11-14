@@ -4,6 +4,12 @@ import { ResourceNamePresenter } from '../../../utils/generic-components/present
 export const DigitalTextDetailFullViewPresenter = ({
     id,
     title,
+    pages,
 }: ICategorizableDetailQueryResult<IDigitalTextViewModel>): JSX.Element => {
-    return <ResourceNamePresenter name={title} variant="h2" />;
+    return (
+        <>
+            <ResourceNamePresenter name={title} variant="h2" />
+            {/* {pages.length > 0 ? <PagesPresenter pages={pages} /> : null} */}
+        </>
+    );
 };

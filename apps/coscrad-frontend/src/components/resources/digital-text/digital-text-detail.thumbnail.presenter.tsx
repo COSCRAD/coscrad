@@ -10,10 +10,8 @@ export const DigitalTextDetailThumbnailPresenter = ({
     title,
 }: ICategorizableDetailQueryResult<IDigitalTextViewModel>): JSX.Element => {
     return (
-        <ResourceDetailThumbnailPresenter
-            id={id}
-            name={title}
-            type={ResourceType.digitalText}
-        ></ResourceDetailThumbnailPresenter>
+        <ResourceDetailThumbnailPresenter id={id} name={title} type={ResourceType.digitalText}>
+            hello
+        </ResourceDetailThumbnailPresenter>
     );
 };
