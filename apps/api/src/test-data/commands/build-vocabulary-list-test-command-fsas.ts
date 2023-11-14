@@ -3,6 +3,9 @@ import { CommandFSA } from '../../app/controllers/command/command-fsa/command-fs
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import {
     AddTermToVocabularyList,
+    FilterPropertyType,
+    REGISTER_VOCABULARY_LIST_FILTER_PROPERTY,
+    RegisterVocabularyListFilterProperty,
     TranslateVocabularyListName,
 } from '../../domain/models/vocabulary-list/commands';
 import { ADD_TERM_TO_VOCABULARY_LIST } from '../../domain/models/vocabulary-list/commands/add-term-to-vocabulary-list/constants';
@@ -52,8 +55,31 @@ const addTermToVocabularyList: CommandFSA<AddTermToVocabularyList> = {
     },
 };
 
+const registerVocabularyListFilterProperty: CommandFSA<RegisterVocabularyListFilterProperty> = {
+    type: REGISTER_VOCABULARY_LIST_FILTER_PROPERTY,
+    payload: {
+        aggregateCompositeIdentifier: {
+            type,
+            id,
+        },
+        name: 'person',
+        type: FilterPropertyType.selection,
+        allowedValuesAndLabels: [
+            {
+                label: 'I',
+                value: '1',
+            },
+            {
+                label: 'you',
+                value: '2',
+            },
+        ],
+    },
+};
+
 export const buildVocabularyListTestCommandFsas = () => [
     createVocabularyList,
     translateVocabularyListName,
     addTermToVocabularyList,
+    registerVocabularyListFilterProperty,
 ];

@@ -135,6 +135,8 @@ import {
     AddTermtoVocabularyListCommandHandler,
     CreateVocabularyList,
     CreateVocabularyListCommandHandler,
+    RegisterVocabularyListFilterProperty,
+    RegisterVocabularyListFilterPropertyCommandHandler,
     TranslateVocabularyListName,
     TranslateVocabularyListNameCommandHandler,
 } from '../../../domain/models/vocabulary-list/commands';
@@ -559,6 +561,8 @@ export default async (
             TranslateLineItemCommandHandler,
             TranslateVocabularyListName,
             TranslateVocabularyListNameCommandHandler,
+            RegisterVocabularyListFilterProperty,
+            RegisterVocabularyListFilterPropertyCommandHandler,
             AddTermToVocabularyList,
             AddTermtoVocabularyListCommandHandler,
             TranslateVideoName,
