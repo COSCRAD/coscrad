@@ -19,6 +19,7 @@ import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { Resource } from '../../../resource.entity';
+import { Term } from '../../../term/entities/term.entity';
 import AggregateNotFoundError from '../../common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../common-command-errors/CommandExecutionError';
 import UserAlreadyHasReadAccessError from '../../common-command-errors/invalid-state-transition-errors/UserAlreadyHasReadAccessError';
@@ -28,9 +29,11 @@ const commandType = 'GRANT_RESOURCE_READ_ACCESS_TO_USER';
 
 const { user: users, resources } = buildTestData();
 
-const existingUser = users[0].clone({ id: buildDummyUuid() });
+const userId = buildDummyUuid();
 
-const existingBook = resources.book[0];
+const existingUser = users[0].clone({ id: userId, authProviderUserId: `auth0|${userId}` });
+
+const existingTerm = resources.term[0];
 
 const initialState = buildInMemorySnapshot({
     user: [existingUser],
@@ -40,7 +43,7 @@ const initialState = buildInMemorySnapshot({
 const validFSA: FluxStandardAction<GrantResourceReadAccessToUser> = {
     type: commandType,
     payload: {
-        aggregateCompositeIdentifier: existingBook.getCompositeIdentifier(),
+        aggregateCompositeIdentifier: existingTerm.getCompositeIdentifier(),
         userId: existingUser.id,
     },
 };
@@ -158,7 +161,7 @@ describe('GRANT_RESOURCE_READ_ACCESS_TO_USER', () => {
                         expect(error.innerErrors[0]).toEqual(
                             new AggregateNotFoundError({
                                 type: AggregateType.user,
-                                id: validFSA.payload.aggregateCompositeIdentifier.id,
+                                id: validFSA.payload.userId,
                             })
                         );
                     },
@@ -190,20 +193,21 @@ describe('GRANT_RESOURCE_READ_ACCESS_TO_USER', () => {
 
         describe('when the user already has read access to the resource', () => {
             it('should fail', async () => {
+                const existingTermWithAccessToResource = existingTerm.grantReadAccessToUser(
+                    existingUser.id
+                ) as Term;
+
                 await assertCommandError(commandAssertionDependencies, {
-                    buildCommandFSA: buildValidCommandFSA,
+                    buildCommandFSA: () =>
+                        fsaFactory.build(undefined, {
+                            aggregateCompositeIdentifier: existingTerm.getCompositeIdentifier(),
+                            userId: existingUser.id,
+                        }),
                     systemUserId: dummyAdminUserId,
                     initialState: buildInMemorySnapshot({
                         user: [existingUser],
                         resources: {
-                            book: [
-                                existingBook.clone({
-                                    queryAccessControlList:
-                                        existingBook.queryAccessControlList.allowUser(
-                                            validFSA.payload.aggregateCompositeIdentifier.id
-                                        ),
-                                }),
-                            ],
+                            term: [existingTermWithAccessToResource],
                         },
                     }),
                     checkError: (error: InternalError) => {
@@ -211,7 +215,7 @@ describe('GRANT_RESOURCE_READ_ACCESS_TO_USER', () => {
 
                         expect(error.innerErrors[0]).toEqual(
                             new UserAlreadyHasReadAccessError(
-                                validFSA.payload.aggregateCompositeIdentifier.id,
+                                validFSA.payload.userId,
                                 validFSA.payload.aggregateCompositeIdentifier
                             )
                         );

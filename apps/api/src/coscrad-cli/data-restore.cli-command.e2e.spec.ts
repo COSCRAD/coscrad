@@ -200,7 +200,7 @@ describe(`CLI Command: **data-restore**`, () => {
                     []
                 );
 
-                const eventSourcedAggregateTypes = [AggregateType.song];
+                const eventSourcedAggregateTypes = [AggregateType.digitalText, AggregateType.song];
 
                 /**
                  * TODO [https://www.pivotaltracker.com/story/show/185903292] Support event-sourced models here
