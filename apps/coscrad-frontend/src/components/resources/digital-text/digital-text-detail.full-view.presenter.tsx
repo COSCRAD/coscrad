@@ -1,16 +1,19 @@
-import { ICategorizableDetailQueryResult, IDigitalTextViewModel } from '@coscrad/api-interfaces';
-import { ResourceNamePresenter } from '../../../utils/generic-components/presenters/resource-name-presenter';
+import {
+    ICategorizableDetailQueryResult,
+    IDigitalTextViewModel,
+    ResourceType,
+} from '@coscrad/api-interfaces';
+import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components';
 import { PagesPresenter } from './pages-presenter';
 
 export const DigitalTextDetailFullViewPresenter = ({
     id,
-    title,
+    title: name,
     pages,
 }: ICategorizableDetailQueryResult<IDigitalTextViewModel>): JSX.Element => {
     return (
-        <>
-            <ResourceNamePresenter name={title} variant="h2" />
+        <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.digitalText}>
             {pages.length > 0 ? <PagesPresenter pages={pages} /> : null}
-        </>
+        </ResourceDetailFullViewPresenter>
     );
 };

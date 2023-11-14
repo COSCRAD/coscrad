@@ -28,6 +28,7 @@ export const fetchFreshState = (dispatch: AppDispatch, aggregateType: AggregateT
 
         case AggregateType.digitalText:
             dispatch(fetchDigitalTexts());
+            break;
 
         case AggregateType.book:
             dispatch(fetchBooks());
