@@ -1,5 +1,6 @@
 import { ICategorizableDetailQueryResult, IDigitalTextViewModel } from '@coscrad/api-interfaces';
 import { ResourceNamePresenter } from '../../../utils/generic-components/presenters/resource-name-presenter';
+import { PagesPresenter } from './pages-presenter';
 
 export const DigitalTextDetailFullViewPresenter = ({
     id,
@@ -9,7 +10,7 @@ export const DigitalTextDetailFullViewPresenter = ({
     return (
         <>
             <ResourceNamePresenter name={title} variant="h2" />
-            {/* {pages.length > 0 ? <PagesPresenter pages={pages} /> : null} */}
+            {pages.length > 0 ? <PagesPresenter pages={pages} /> : null}
         </>
     );
 };
