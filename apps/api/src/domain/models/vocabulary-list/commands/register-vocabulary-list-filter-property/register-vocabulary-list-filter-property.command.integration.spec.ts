@@ -653,6 +653,9 @@ describe(commandType, () => {
             });
         });
 
+        /**
+         * TODO Move this to a standalone test that doesn't use the network.
+         */
         describe(`when the command payload type is invalid`, () => {
             describe(`when the aggregate type is invalid`, () => {
                 Object.values(AggregateType)

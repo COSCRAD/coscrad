@@ -82,10 +82,6 @@ export class VocabularyList extends Resource {
             ? entries.map((entryDto) => new VocabularyListEntry(entryDto))
             : null;
 
-        /**
-         * TODO Add this
-         * Missing invariant- each variable must have a unique name.
-         */
         this.variables = Array.isArray(variables)
             ? variables.map((v) => new VocabularyListFilterProperty(v))
             : null;
@@ -157,7 +153,6 @@ export class VocabularyList extends Resource {
 
         const newVocabularyList = this.safeClone<VocabularyList>({
             variables: [
-                // TODO use a constructor for VocabularyListVariable here
                 ...this.variables
                     .map((variable) => variable.toDTO())
                     .concat({

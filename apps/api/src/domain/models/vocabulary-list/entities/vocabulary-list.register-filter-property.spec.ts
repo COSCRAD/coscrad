@@ -1,7 +1,6 @@
 import { isDeepStrictEqual } from 'util';
 import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpected';
 import { InternalError } from '../../../../lib/errors/InternalError';
-import { NotFound } from '../../../../lib/types/not-found';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { AggregateType } from '../../../types/AggregateType';
 import { CannotHaveTwoFilterPropertiesWithTheSameNameError } from '../errors';
@@ -47,20 +46,20 @@ describe(`VocabularyList.registerFilterProperty`, () => {
 
             const updatedVocabularyList = vocabularyListUpdateResult as VocabularyList;
 
-            // todo move this logic to a query method on the model \ nested entity
             const newFilterPropertySearchResult =
                 updatedVocabularyList.getFilterPropertyByName(filterPropertyName);
-
-            expect(newFilterPropertySearchResult).not.toBe(NotFound);
 
             const { type, validValues } =
                 newFilterPropertySearchResult as VocabularyListFilterProperty;
 
             const missingAllowedValues = validValues.filter(
                 (validValue) =>
-                    !allowedValuesWithLabels.some((newValidValue) =>
-                        isDeepStrictEqual(newValidValue, validValue)
-                    )
+                    !allowedValuesWithLabels
+                        .map(
+                            // TODO remove this gotcha! and use a consistent API across the board
+                            ({ label, value }) => ({ value, display: label })
+                        )
+                        .some((newValidValue) => isDeepStrictEqual(newValidValue, validValue))
             );
 
             it(`should return a new reference to a vocabulary list`, () => {
@@ -130,8 +129,11 @@ describe(`VocabularyList.registerFilterProperty`, () => {
                 const result = basicVocabularyList.registerFilterProperty(
                     'aspect',
                     DropboxOrCheckbox.checkbox,
-                    // @ts-expect-error TODO fix the types here
-                    invalidValuesForCheckbox
+                    invalidValuesForCheckbox.map(({ value, display }) => ({
+                        value,
+                        // TODO make the API consistent across the board
+                        label: display,
+                    }))
                 );
 
                 expect(result).toBeInstanceOf(InternalError);
