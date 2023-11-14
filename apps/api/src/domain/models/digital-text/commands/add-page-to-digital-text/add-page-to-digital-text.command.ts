@@ -8,7 +8,7 @@ import { DigitalTextCompositeId } from '../create-digital-text.command';
 @Command({
     type: ADD_PAGE_TO_DIGITAL_TEXT,
     description: `Add a page identifier to a digital text`,
-    label: `Add page to digital text`,
+    label: `Add Page to Digital Text`,
 })
 export class AddPageToDigitalText implements ICommandBase {
     @NestedDataType(DigitalTextCompositeId, {

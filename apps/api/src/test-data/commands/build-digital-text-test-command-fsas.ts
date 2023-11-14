@@ -2,6 +2,7 @@ import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandFSA } from '../../app/controllers/command/command-fsa/command-fsa.entity';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { AddPageToDigitalText, CreateDigitalText } from '../../domain/models/digital-text/commands';
+import { AddContentToDigitalTextPage } from '../../domain/models/digital-text/commands/add-content-to-digital-text-page';
 import {
     ADD_PAGE_TO_DIGITAL_TEXT,
     CREATE_DIGITAL_TEXT,
@@ -29,4 +30,18 @@ const addPageToDigitalText: CommandFSA<AddPageToDigitalText> = {
     },
 };
 
-export const buildDigitalTextCommandFsas = () => [createDigitalText, addPageToDigitalText];
+const addContentToDigitalTextPage: CommandFSA<AddContentToDigitalTextPage> = {
+    type: 'ADD_CONTENT_TO_DIGITAL_TEXT_PAGE',
+    payload: {
+        aggregateCompositeIdentifier: { id, type },
+        pageIdentifier: '21',
+        languageCode: LanguageCode.English,
+        text: 'Twas many and many a year ago...',
+    },
+};
+
+export const buildDigitalTextCommandFsas = () => [
+    createDigitalText,
+    addPageToDigitalText,
+    addContentToDigitalTextPage,
+];
