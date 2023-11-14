@@ -2,12 +2,14 @@ import { DynamicModule, Global, Module, OnApplicationShutdown } from '@nestjs/co
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CoscradEventFactory, EventModule } from '../domain/common';
 import { ID_RESPOSITORY_TOKEN } from '../lib/id-generation/interfaces/id-repository.interface';
+import { DigitalTextQueryRepository } from '../queries/digital-text/digital-text.query-repository';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../validation';
 import { REPOSITORY_PROVIDER_TOKEN } from './constants/persistenceConstants';
 import { ArangoConnectionProvider } from './database/arango-connection.provider';
 import { ArangoQueryRunner } from './database/arango-query-runner';
 import { ArangoDatabaseProvider } from './database/database.provider';
 import { ArangoDataExporter } from './repositories/arango-data-exporter';
+import { ArangoEventRepository } from './repositories/arango-event-repository';
 import { ArangoIdRepository } from './repositories/arango-id-repository';
 import { ArangoRepositoryProvider } from './repositories/arango-repository.provider';
 import { DomainDataExporter } from './repositories/domain-data-exporter';
@@ -89,6 +91,18 @@ export class PersistenceModule implements OnApplicationShutdown {
             inject: [REPOSITORY_PROVIDER_TOKEN],
         };
 
+        const queryRepositoryProvider = {
+            provide: DigitalTextQueryRepository,
+            useFactory: (
+                databaseProvider: ArangoDatabaseProvider,
+                coscradEventFactory: CoscradEventFactory
+            ) =>
+                new DigitalTextQueryRepository(
+                    new ArangoEventRepository(databaseProvider, coscradEventFactory)
+                ),
+            inject: [ArangoDatabaseProvider, CoscradEventFactory],
+        };
+
         return {
             module: PersistenceModule,
             imports: [ConfigModule, EventModule, DynamicDataTypeModule],
@@ -100,6 +114,7 @@ export class PersistenceModule implements OnApplicationShutdown {
                 arangoQueryRunnerProvider,
                 arangoDataExporterProvider,
                 domainDataExporterProvider,
+                queryRepositoryProvider,
             ],
             exports: [
                 arangoConnectionProvider,
