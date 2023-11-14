@@ -180,6 +180,7 @@ import { ArangoIdRepository } from '../../../persistence/repositories/arango-id-
 import { ArangoRepositoryProvider } from '../../../persistence/repositories/arango-repository.provider';
 import { BibliographicReferenceViewModel } from '../../../queries/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
 import { DigitalTextQueryService } from '../../../queries/digital-text';
+import { DigitalTextQueryRepository } from '../../../queries/digital-text/digital-text.query-repository';
 import { NoteViewModel } from '../../../queries/edgeConnectionViewModels/note.view-model';
 import { DTO } from '../../../types/DTO';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../../../validation';
@@ -471,7 +472,11 @@ export default async (
                 useFactory: (
                     eventRepository: ArangoEventRepository,
                     commandInfoService: CommandInfoService
-                ) => new DigitalTextQueryService(eventRepository, commandInfoService),
+                ) =>
+                    new DigitalTextQueryService(
+                        new DigitalTextQueryRepository(eventRepository),
+                        commandInfoService
+                    ),
 
                 inject: [ArangoEventRepository, CommandInfoService],
             },
