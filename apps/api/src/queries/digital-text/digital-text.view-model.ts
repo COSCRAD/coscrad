@@ -5,7 +5,12 @@ import {
 } from '@coscrad/api-interfaces';
 import { buildMultilingualTextWithSingleItem } from '../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../domain/common/entities/multilingual-text';
-import { DigitalTextCreatedPayload } from '../../domain/models/digital-text/commands';
+import {
+    DigitalTextCreatedPayload,
+    PageAddedToDigitalTextPayload,
+} from '../../domain/models/digital-text/commands';
+import { ContentAddedToDigitalTextPagePayload } from '../../domain/models/digital-text/commands/add-content-to-digital-text-page';
+import DigitalTextPage from '../../domain/models/digital-text/entities/digital-text-page.entity';
 import { AccessControlList } from '../../domain/models/shared/access-control/access-control-list.entity';
 import { ResourceReadAccessGrantedToUserPayload } from '../../domain/models/shared/common-commands';
 import { TagCreated } from '../../domain/models/tag/commands/create-tag/tag-created.event';
@@ -31,6 +36,8 @@ export class DigitalTextViewModel
     public isPublished = false;
 
     public tags: EventSourcedTagViewModel[] = [];
+
+    public pages: DigitalTextPage[] = [];
 
     constructor(public readonly id: string) {}
 
@@ -77,6 +84,36 @@ export class DigitalTextViewModel
 
                 return this;
             }
+
+            if (event.type === 'PAGE_ADDED_TO_DIGITAL_TEXT') {
+                const { identifier } = payload as PageAddedToDigitalTextPayload;
+
+                this.pages.push(
+                    new DigitalTextPage({
+                        identifier,
+                    })
+                );
+
+                return this;
+            }
+
+            if (event.type === 'CONTENT_ADDED_TO_DIGITAL_TEXT_PAGE') {
+                const { pageIdentifier, text, languageCode } =
+                    payload as ContentAddedToDigitalTextPagePayload;
+
+                this.pages = this.pages.map((page) =>
+                    page.identifier === pageIdentifier
+                        ? new DigitalTextPage({
+                              identifier: pageIdentifier,
+                              content: buildMultilingualTextWithSingleItem(text, languageCode),
+                          })
+                        : page
+                );
+
+                return this;
+            }
+
+            // The below are generic events and need to be shared across resources
 
             if (eventType === 'RESOURCE_PUBLISHED') {
                 this.isPublished = true;

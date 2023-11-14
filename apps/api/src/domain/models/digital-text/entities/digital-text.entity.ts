@@ -1,4 +1,8 @@
-import { AGGREGATE_COMPOSITE_IDENTIFIER, ICommandBase } from '@coscrad/api-interfaces';
+import {
+    AGGREGATE_COMPOSITE_IDENTIFIER,
+    ICommandBase,
+    LanguageCode,
+} from '@coscrad/api-interfaces';
 import { NestedDataType } from '@coscrad/data-types';
 import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
@@ -23,14 +27,17 @@ import InvalidExternalStateError from '../../shared/common-command-errors/Invali
 import { ResourceReadAccessGrantedToUser } from '../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import { DigitalTextCreated, PageAddedToDigitalText } from '../commands';
+import { ContentAddedToDigitalTextPage } from '../commands/add-content-to-digital-text-page';
 import {
     ADD_PAGE_TO_DIGITAL_TEXT,
     CREATE_DIGITAL_TEXT,
     DIGITAL_TEXT_CREATED,
     PAGE_ADDED_TO_DIGITAL_TEXT,
 } from '../constants';
-import { DuplicateDigitalTextTitleError } from '../errors';
+import { FailedToUpdateDigitalTextPageError } from '../errors';
+import { CannotAddContentToMissingPageError } from '../errors/cannot-add-content-to-missing-page.error';
 import { CannotAddPageWithDuplicateIdentifierError } from '../errors/cannot-add-page-with-duplicate-identifier.error';
+import { DuplicateDigitalTextTitleError } from '../errors/duplicate-digital-text-title.error';
 import DigitalTextPage from './digital-text-page.entity';
 import { PageIdentifier } from './types/page-identifier';
 
@@ -124,6 +131,40 @@ export class DigitalText extends Resource {
         });
     }
 
+    addContentToPage(
+        pageIdentifier: PageIdentifier,
+        text: string,
+        languageCode: LanguageCode
+    ): ResultOrError<DigitalText> {
+        if (!this.hasPage(pageIdentifier)) {
+            return new FailedToUpdateDigitalTextPageError(pageIdentifier, this.id, [
+                new CannotAddContentToMissingPageError(pageIdentifier, this.id),
+            ]);
+        }
+
+        // Note that we already have asserted that the page exists, so `NotFound` is not a posisblity here
+        const pageUpdateResult = (this.getPage(pageIdentifier) as DigitalTextPage).addContent(
+            text,
+            languageCode
+        );
+
+        if (isInternalError(pageUpdateResult)) {
+            return new FailedToUpdateDigitalTextPageError(pageIdentifier, this.id, [
+                pageUpdateResult,
+            ]);
+        }
+
+        const updatedPages = this.pages.map((page) =>
+            page.identifier === pageIdentifier ? pageUpdateResult : page.clone({})
+        );
+
+        const updateResult = this.safeClone<DigitalText>({
+            pages: updatedPages,
+        });
+
+        return updateResult;
+    }
+
     /**
      *
      * @param pageIdentifiers list of all page identifiers that must be included
@@ -140,6 +181,10 @@ export class DigitalText extends Resource {
     hasPages(): boolean;
 
     hasPages(pageIdentifiers?: PageIdentifier[]): boolean {
+        /**
+         * If the user did not specify a specific range of pages, we interpret
+         * the query as "does this digital text have any pages at all?"
+         */
         if (!Array.isArray(pageIdentifiers)) return this.pages.length > 0;
 
         return pageIdentifiers.every((pageIdentifier) => this.hasPage(pageIdentifier));
@@ -147,6 +192,13 @@ export class DigitalText extends Resource {
 
     hasPage(pageIdentifier: PageIdentifier): boolean {
         return this.pages.some(({ identifier }) => identifier === pageIdentifier);
+    }
+
+    getPage(pageIdentifier: PageIdentifier): Maybe<DigitalTextPage> {
+        if (!this.hasPage(pageIdentifier)) return NotFound;
+
+        // We avoid shared references by cloning
+        return this.pages.find(({ identifier }) => identifier === pageIdentifier).clone({});
     }
 
     static fromEventHistory(
@@ -205,6 +257,16 @@ export class DigitalText extends Resource {
                 } = event as PageAddedToDigitalText;
 
                 return digitalText.addEventToHistory(event).addPage(identifier);
+            }
+
+            if (event.type === 'CONTENT_ADDED_TO_DIGITAL_TEXT_PAGE') {
+                const {
+                    payload: { pageIdentifier, text, languageCode },
+                } = event as ContentAddedToDigitalTextPage;
+
+                return digitalText
+                    .addEventToHistory(event)
+                    .addContentToPage(pageIdentifier, text, languageCode);
             }
 
             if (event.type === `RESOURCE_READ_ACCESS_GRANTED_TO_USER`) {
