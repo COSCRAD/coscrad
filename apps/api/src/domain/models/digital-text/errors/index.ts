@@ -1,11 +1,5 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
-import { InternalError } from '../../../../lib/errors/InternalError';
-
-export class DuplicateDigitalTextTitleError extends InternalError {
-    constructor(title: string, languageCode: LanguageCode) {
-        // TODO format the language code
-        const msg = `You cannot create a digital text with the title: ${title} (${languageCode}), as there is already a digital text with that title in that language`;
-
-        super(msg);
-    }
-}
+export * from './cannot-add-content-to-missing-page.error';
+export * from './cannot-add-page-with-duplicate-identifier.error';
+export * from './cannot-overwrite-page-content.error';
+export * from './duplicate-digital-text-title.error';
+export * from './failed-to-update-digital-text-page.error';

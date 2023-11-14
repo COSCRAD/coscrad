@@ -742,7 +742,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
   },
   {
     "description": "Add a page identifier to a digital text",
-    "label": "Add page to digital text",
+    "label": "Add Page to Digital Text",
     "schema": {
       "aggregateCompositeIdentifier": {
         "complexDataType": "NESTED_TYPE",
@@ -4119,6 +4119,100 @@ exports[`command payload schemas Command payload schema should match the snapsho
       },
     },
     "type": "TRANSLATE_AUDIO_ITEM_NAME",
+  },
+  {
+    "description": "Add content to an empty page",
+    "label": "Add Content to Page",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "must be: digitalText",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "digitalText",
+                "value": "digitalText",
+              },
+            ],
+          },
+        },
+      },
+      "languageCode": {
+        "bindToViewProperty": "newPageContentLanguageCode",
+        "complexDataType": "ENUM",
+        "description": "language for text content",
+        "enumLabel": "language code",
+        "enumName": "LanguageCode",
+        "isArray": false,
+        "isOptional": false,
+        "label": "language",
+        "labelsAndValues": [
+          {
+            "label": "Chilcotin",
+            "value": "clc",
+          },
+          {
+            "label": "Haida",
+            "value": "hai",
+          },
+          {
+            "label": "English",
+            "value": "en",
+          },
+          {
+            "label": "French",
+            "value": "fra",
+          },
+          {
+            "label": "Chinook",
+            "value": "chn",
+          },
+          {
+            "label": "Zapotec",
+            "value": "zap",
+          },
+          {
+            "label": "Spanish",
+            "value": "spa",
+          },
+        ],
+      },
+      "pageIdentifier": {
+        "bindToViewProperty": "currentPage",
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "identifier for a digital text page",
+        "isArray": false,
+        "isOptional": false,
+        "label": "page identifier",
+      },
+      "text": {
+        "bindToViewProperty": "newPageContent",
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "text content for the current page",
+        "isArray": false,
+        "isOptional": false,
+        "label": "text content",
+      },
+    },
+    "type": "ADD_CONTENT_TO_DIGITAL_TEXT_PAGE",
   },
 ]
 `;
