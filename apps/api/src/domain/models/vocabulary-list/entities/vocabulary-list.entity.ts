@@ -3,6 +3,8 @@ import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
+import { Maybe } from '../../../../lib/types/maybe';
+import { NotFound } from '../../../../lib/types/not-found';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
@@ -12,6 +14,7 @@ import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeI
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
+import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import { DuplicateLanguageInMultilingualTextError } from '../../audio-item/errors/duplicate-language-in-multilingual-text.error';
 import { TextFieldContext } from '../../context/text-field-context/text-field-context.entity';
 import { Resource } from '../../resource.entity';
@@ -99,6 +102,12 @@ export class VocabularyList extends Resource {
     hasFilterPropertyNamed(name: string): boolean {
         // TODO rename `variables` to `filterProperties`
         return this.variables.some((filterProperty) => filterProperty.name === name);
+    }
+
+    getFilterPropertyByName(name: string): Maybe<VocabularyListFilterProperty> {
+        const searchResult = this.variables.find((FilterProperty) => FilterProperty.name === name);
+
+        return isNullOrUndefined(searchResult) ? NotFound : searchResult;
     }
 
     translateName(textItem: MultilingualTextItem): ResultOrError<VocabularyList> {

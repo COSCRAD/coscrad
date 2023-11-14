@@ -1,10 +1,12 @@
 import { isDeepStrictEqual } from 'util';
 import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpected';
 import { InternalError } from '../../../../lib/errors/InternalError';
+import { NotFound } from '../../../../lib/types/not-found';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { AggregateType } from '../../../types/AggregateType';
 import { CannotHaveTwoFilterPropertiesWithTheSameNameError } from '../errors';
 import { DropboxOrCheckbox } from '../types/dropbox-or-checkbox';
+import { VocabularyListFilterProperty } from './vocabulary-list-variable.entity';
 import { VocabularyList } from './vocabulary-list.entity';
 
 const filterPropertyName = 'person';
@@ -46,11 +48,13 @@ describe(`VocabularyList.registerFilterProperty`, () => {
             const updatedVocabularyList = vocabularyListUpdateResult as VocabularyList;
 
             // todo move this logic to a query method on the model \ nested entity
-            const newFilterPropertySearchResult = updatedVocabularyList.variables?.find(
-                ({ name }) => name === filterPropertyName
-            );
+            const newFilterPropertySearchResult =
+                updatedVocabularyList.getFilterPropertyByName(filterPropertyName);
 
-            const { type, validValues } = newFilterPropertySearchResult;
+            expect(newFilterPropertySearchResult).not.toBe(NotFound);
+
+            const { type, validValues } =
+                newFilterPropertySearchResult as VocabularyListFilterProperty;
 
             const missingAllowedValues = validValues.filter(
                 (validValue) =>
