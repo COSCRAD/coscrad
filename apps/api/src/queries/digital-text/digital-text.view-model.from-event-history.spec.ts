@@ -1,6 +1,11 @@
 import { AggregateType, CoscradUserRole, LanguageCode } from '@coscrad/api-interfaces';
+import { MultilingualText } from '../../domain/common/entities/multilingual-text';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
-import { DigitalTextCreated } from '../../domain/models/digital-text/commands';
+import {
+    DigitalTextCreated,
+    PageAddedToDigitalText,
+} from '../../domain/models/digital-text/commands';
+import { ContentAddedToDigitalTextPage } from '../../domain/models/digital-text/commands/add-content-to-digital-text-page';
 import { ResourceReadAccessGrantedToUser } from '../../domain/models/shared/common-commands';
 import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import { TagCreated } from '../../domain/models/tag/commands/create-tag/tag-created.event';
@@ -39,7 +44,30 @@ describe(`DigitalTextViewModel.fromEventHistory`, () => {
         payload: {},
     });
 
+    const dummyPageIdentifier = 'IX';
+
+    const pageAddedToDigitalText = digitalTextPublished.andThen<PageAddedToDigitalText>({
+        type: 'PAGE_ADDED_TO_DIGITAL_TEXT',
+        payload: {
+            identifier: dummyPageIdentifier,
+        },
+    });
+
     const dummyUserId = buildDummyUuid(124);
+
+    const dummyPageTextContent = 'Foo to the bar Mr. Baz!';
+
+    const languageCodeForTextContent = LanguageCode.English;
+
+    const contentAddedToDigitalTextPage =
+        pageAddedToDigitalText.andThen<ContentAddedToDigitalTextPage>({
+            type: 'CONTENT_ADDED_TO_DIGITAL_TEXT_PAGE',
+            payload: {
+                pageIdentifier: dummyPageIdentifier,
+                text: dummyPageTextContent,
+                languageCode: languageCodeForTextContent,
+            },
+        });
 
     const buildQueryUser = (userId: string, roles: CoscradUserRole[]): CoscradUserWithGroups =>
         new CoscradUserWithGroups(
@@ -129,12 +157,44 @@ describe(`DigitalTextViewModel.fromEventHistory`, () => {
     });
 
     describe(`when the digital text has been published`, () => {
-        it(`should be explicitly marked as published`, () => {
-            const eventHistory = digitalTextPublished.as(aggregateCompositeIdentifier);
+        describe(`when no pages have been added`, () => {
+            it(`should be explicitly marked as published`, () => {
+                const eventHistory = digitalTextPublished.as(aggregateCompositeIdentifier);
 
-            const result = new DigitalTextViewModel(digitalTextId).applyStream(eventHistory);
+                const result = new DigitalTextViewModel(digitalTextId).applyStream(eventHistory);
 
-            expect(result.isPublished).toBe(true);
+                expect(result.isPublished).toBe(true);
+            });
+        });
+
+        describe(`when pages have been added`, () => {
+            describe(`when a single page has been added with no content`, () => {
+                const eventHistory = pageAddedToDigitalText.as(aggregateCompositeIdentifier);
+
+                const result = new DigitalTextViewModel(digitalTextId).applyStream(eventHistory);
+
+                expect(result.pages).toHaveLength(1);
+            });
+
+            describe.only(`when content has been added for a page`, () => {
+                const eventHistory = contentAddedToDigitalTextPage.as(aggregateCompositeIdentifier);
+
+                const result = new DigitalTextViewModel(digitalTextId).applyStream(eventHistory);
+
+                const targetPage = result.pages[0];
+
+                const pageContentSearchResult = targetPage.getContent();
+
+                expect(pageContentSearchResult).toBeInstanceOf(MultilingualText);
+
+                const { text, languageCode } = (
+                    pageContentSearchResult as MultilingualText
+                ).getOriginalTextItem();
+
+                expect(text).toBe(dummyPageTextContent);
+
+                expect(languageCode).toBe(languageCodeForTextContent);
+            });
         });
     });
 

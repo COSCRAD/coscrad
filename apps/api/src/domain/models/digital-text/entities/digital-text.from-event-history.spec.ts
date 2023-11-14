@@ -7,6 +7,7 @@ import { CommandFSA } from '../../../../app/controllers/command/command-fsa/comm
 import { NotFound, isNotFound } from '../../../../lib/types/not-found';
 import { clonePlainObjectWithOverrides } from '../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { buildTestCommandFsaMap } from '../../../../test-data/commands';
+import { MultilingualText } from '../../../common/entities/multilingual-text';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../__tests__/utilities/dummyDateNow';
 import { dummySystemUserId } from '../../__tests__/utilities/dummySystemUserId';
@@ -21,7 +22,12 @@ import {
     DigitalTextCreated,
     PageAddedToDigitalText,
 } from '../commands';
+import {
+    AddContentToDigitalTextPage,
+    ContentAddedToDigitalTextPage,
+} from '../commands/add-content-to-digital-text-page';
 import { ADD_PAGE_TO_DIGITAL_TEXT } from '../constants';
+import DigitalTextPage from './digital-text-page.entity';
 import { DigitalText } from './digital-text.entity';
 
 const id = buildDummyUuid(153);
@@ -87,6 +93,29 @@ const digitalTextReadAccessGrantedToUser = new ResourceReadAccessGrantedToUser(
     dummySystemUserId
 );
 
+const dummyAddContentFsa = testFsaMap.get(
+    'ADD_CONTENT_TO_DIGITAL_TEXT_PAGE'
+) as CommandFSA<AddContentToDigitalTextPage>;
+
+const originalTextContent = 'Twas many and many a year ago, in a kingdom by the beach!';
+
+const originalLanguageCodeForContent = LanguageCode.English;
+
+// TODO Use `TestEventStream` helper for this test
+const addContentCommand = clonePlainObjectWithOverrides(dummyAddContentFsa.payload, {
+    aggregateCompositeIdentifier: {
+        id,
+    },
+    text: originalTextContent,
+    languageCode: originalLanguageCodeForContent,
+});
+
+const contentAddedToDigitalTextPage = new ContentAddedToDigitalTextPage(
+    addContentCommand,
+    buildDummyUuid(580),
+    dummySystemUserId
+);
+
 describe(`DigitalText.fromEventHistory`, () => {
     describe(`when there are events for the given aggregate root`, () => {
         describe(`when there is only a creation event`, () => {
@@ -124,6 +153,35 @@ describe(`DigitalText.fromEventHistory`, () => {
 
                 expect(doesDigitalTextHavePageWithDummyIdentifier).toBe(true);
             });
+        });
+
+        describe(`when content has been added to a page`, () => {
+            const eventStream = [
+                digitalTextCreated,
+                pageAddedForDigitalText,
+                contentAddedToDigitalTextPage,
+            ];
+
+            const digitalTextBuildResult = DigitalText.fromEventHistory(eventStream, id);
+
+            // We should have an assertWithTypeGuard helper!!!
+            expect(digitalTextBuildResult).toBeInstanceOf(DigitalText);
+
+            const pageSearchResult = (digitalTextBuildResult as DigitalText).getPage(
+                pageAddedForDigitalText.payload.identifier
+            );
+
+            expect(pageSearchResult).toBeInstanceOf(DigitalTextPage);
+
+            const pageContent = (
+                pageSearchResult as DigitalTextPage
+            ).getContent() as MultilingualText;
+
+            const { text, languageCode } = pageContent.getOriginalTextItem();
+
+            expect(text).toBe(originalTextContent);
+
+            expect(languageCode).toBe(originalLanguageCodeForContent);
         });
 
         describe(`when a user has not been granted read access to an unpublished digital text`, () => {

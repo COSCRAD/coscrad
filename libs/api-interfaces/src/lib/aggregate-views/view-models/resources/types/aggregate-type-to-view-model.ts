@@ -8,7 +8,7 @@ import { IVideoViewModel } from '../audio-item';
 import { IAudioItemViewModel } from '../audio-item/audio-item.view-model.interface';
 import { IBibliographicReferenceViewModel } from '../bibliographic-reference';
 import { IBookViewModel } from '../book';
-import { IDigitalTextViewModel } from '../digital-text.view-model.interface';
+import { IDigitalTextViewModel } from '../digital-text/digital-text.view-model.interface';
 import { IMediaItemViewModel } from '../media-items';
 import { IPhotographViewModel } from '../photograph.view-model.interface';
 import { IPlayListViewModel } from '../playlist';
