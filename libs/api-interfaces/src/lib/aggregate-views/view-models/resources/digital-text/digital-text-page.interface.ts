@@ -1,4 +1,4 @@
-import { IMultilingualText } from '../audio-item';
+import { IMultilingualText } from '../common';
 
 export interface IDigitalTextPage {
     identifier: string;

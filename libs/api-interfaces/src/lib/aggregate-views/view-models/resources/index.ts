@@ -3,7 +3,6 @@ export * from './bibliographic-reference';
 export * from './book';
 export * from './common';
 export * from './digital-text';
-export * from './digital-text.view-model.interface';
 export * from './digital-text/digital-text.view-model.interface';
 export * from './media-items';
 export * from './photograph.view-model.interface';
