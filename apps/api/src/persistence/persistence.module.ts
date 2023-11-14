@@ -124,6 +124,7 @@ export class PersistenceModule implements OnApplicationShutdown {
                 arangoQueryRunnerProvider,
                 arangoDataExporterProvider,
                 domainDataExporterProvider,
+                queryRepositoryProvider,
             ],
             global: true,
         };
