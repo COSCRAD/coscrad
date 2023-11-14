@@ -1,6 +1,8 @@
 import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { buildDummyUuid } from '../../../support/utilities';
 
+const ID_OFFSET = 50;
+
 const dummyDigitalTextTitle = 'Court Procedings of the Supreme Court';
 
 const buildAggregateCompositeIdentifier = (id: string) => ({
@@ -48,14 +50,17 @@ describe('Digital Text Index-to-detail Query Flow', () => {
         });
     };
 
-    const seedManyDigitalTextsInLanguage = (numberToBuild: number, languageCode: LanguageCode) => {
+    const seedManyDigitalTextsInLanguage = (
+        numberToBuild: number,
+        offSet: number,
+        languageCode: LanguageCode
+    ) => {
         // We save some space for manually executed CLI commands to seed data
-        const ID_OFFSET = 50;
 
         new Array(numberToBuild).fill('').forEach((_, index) =>
             seedDummyDigitalText({
-                id: buildDummyUuid(ID_OFFSET + index),
-                title: `Title of Digital Text: ${index}`,
+                id: buildDummyUuid(offSet + index),
+                title: `Title of Digital Text: ${index + offSet}`,
                 languageCodeForTitle: languageCode,
             })
         );
@@ -78,9 +83,17 @@ describe('Digital Text Index-to-detail Query Flow', () => {
             aggregateCompositeIdentifier,
         });
 
-        seedManyDigitalTextsInLanguage(60, LanguageCode.English);
+        const NUMBER_OF_ENGLISH_TEXTS = 10;
 
-        seedManyDigitalTextsInLanguage(45, LanguageCode.Haida);
+        const NUMBER_OF_HAIDA_TEXTS = 15;
+
+        seedManyDigitalTextsInLanguage(NUMBER_OF_ENGLISH_TEXTS, ID_OFFSET, LanguageCode.English);
+
+        seedManyDigitalTextsInLanguage(
+            NUMBER_OF_HAIDA_TEXTS,
+            ID_OFFSET + NUMBER_OF_ENGLISH_TEXTS,
+            LanguageCode.Haida
+        );
     });
 
     describe(`the index page`, () => {
