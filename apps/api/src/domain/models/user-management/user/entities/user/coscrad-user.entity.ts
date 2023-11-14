@@ -11,7 +11,7 @@ import { DTO } from '../../../../../../types/DTO';
 import { ResultOrError } from '../../../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../../../common/entities/multilingual-text';
-import { isValid, Valid } from '../../../../../domainModelValidators/Valid';
+import { Valid, isValid } from '../../../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../../../types/AggregateType';
 import { InMemorySnapshot } from '../../../../../types/ResourceType';

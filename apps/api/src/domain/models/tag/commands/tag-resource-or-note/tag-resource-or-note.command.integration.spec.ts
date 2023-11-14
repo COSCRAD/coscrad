@@ -63,7 +63,10 @@ describe(commandType, () => {
         members: [],
     });
 
-    const eventSourcedCategorizableTypes: CategorizableType[] = [ResourceType.song];
+    const eventSourcedCategorizableTypes: CategorizableType[] = [
+        ResourceType.song,
+        ResourceType.digitalText,
+    ];
 
     Object.values(CategorizableType)
         // TODO [https://www.pivotaltracker.com/story/show/185903292] Support event-sourced resources in this test
