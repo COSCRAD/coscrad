@@ -31,7 +31,7 @@ exports[`When querying for a digital text when the user is a project admin detai
           },
         },
       },
-      "label": "Add page to digital text",
+      "label": "Add Page to Digital Text",
       "type": "ADD_PAGE_TO_DIGITAL_TEXT",
     },
     {
@@ -94,6 +94,12 @@ exports[`When querying for a digital text when the user is a project admin detai
       },
     ],
   },
+  "pages": [
+    {
+      "content": null,
+      "identifier": "IX",
+    },
+  ],
   "tags": [],
   "title": {
     "items": [
@@ -141,7 +147,7 @@ exports[`When querying for a digital text when the user is a project admin index
               },
             },
           },
-          "label": "Add page to digital text",
+          "label": "Add Page to Digital Text",
           "type": "ADD_PAGE_TO_DIGITAL_TEXT",
         },
         {
@@ -190,6 +196,12 @@ exports[`When querying for a digital text when the user is a project admin index
           },
         ],
       },
+      "pages": [
+        {
+          "content": null,
+          "identifier": "IX",
+        },
+      ],
       "tags": [],
       "title": {
         "items": [
@@ -232,7 +244,7 @@ exports[`When querying for a digital text when the user is a project admin index
               },
             },
           },
-          "label": "Add page to digital text",
+          "label": "Add Page to Digital Text",
           "type": "ADD_PAGE_TO_DIGITAL_TEXT",
         },
         {
@@ -295,6 +307,12 @@ exports[`When querying for a digital text when the user is a project admin index
           },
         ],
       },
+      "pages": [
+        {
+          "content": null,
+          "identifier": "IX",
+        },
+      ],
       "tags": [],
       "title": {
         "items": [
@@ -337,7 +355,7 @@ exports[`When querying for a digital text when the user is a project admin index
               },
             },
           },
-          "label": "Add page to digital text",
+          "label": "Add Page to Digital Text",
           "type": "ADD_PAGE_TO_DIGITAL_TEXT",
         },
         {
@@ -400,6 +418,12 @@ exports[`When querying for a digital text when the user is a project admin index
           },
         ],
       },
+      "pages": [
+        {
+          "content": null,
+          "identifier": "IX",
+        },
+      ],
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100555",
