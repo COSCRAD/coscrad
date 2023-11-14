@@ -136,10 +136,5 @@ describe(`DigitalText.addContentToPage`, () => {
                 );
             });
         });
-
-        // TODO Think about whether we really need this
-        describe(`when one of the arguments is null or undefined`, () => {
-            it.todo(`should return the appropriate error`);
-        });
     });
 });

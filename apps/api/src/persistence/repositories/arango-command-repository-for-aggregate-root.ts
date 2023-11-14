@@ -47,9 +47,6 @@ export class ArangoCommandRepositoryForAggregateRoot<TAggregate extends Aggregat
     ) {}
 
     async fetchById(id: AggregateId): Promise<Maybe<ResultOrError<TAggregate>>> {
-        // TODO REMOVE THIS
-        const _allEvents = await this.eventRepository.fetchEvents();
-
         const eventStream = await this.eventRepository.fetchEvents({
             type: this.aggregateType,
             id,

@@ -13,7 +13,10 @@ import {
 import { ResourceReadAccessGrantedToUser } from '../../domain/models/shared/common-commands';
 import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import { TagCreated } from '../../domain/models/tag/commands/create-tag/tag-created.event';
-import { ResourceOrNoteTagged } from '../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
+import {
+    ResourceOrNoteTagged,
+    ResourceOrNoteTaggedPayload,
+} from '../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
 import { AggregateId } from '../../domain/types/AggregateId';
 import { AggregateType } from '../../domain/types/AggregateType';
 import { InternalError } from '../../lib/errors/InternalError';
@@ -140,14 +143,26 @@ const buildTagCreatedEvent = (payloadOverrides: DeepPartial<TagCreated['payload'
 
 const buildReourceOrNoteTaggedEvent = (
     payloadOverrides: DeepPartial<ResourceOrNoteTagged['payload']>
-) =>
-    new ResourceOrNoteTagged(
+) => {
+    const defaultPayload: ResourceOrNoteTaggedPayload = {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.tag,
+            id: buildDummyUuid(8),
+        },
+        taggedMemberCompositeIdentifier: {
+            type: AggregateType.song,
+            id: buildDummyUuid(9),
+        },
+    };
+
+    return new ResourceOrNoteTagged(
         // TODO Why is this empty?
-        clonePlainObjectWithOverrides({} as ResourceOrNoteTagged['payload'], payloadOverrides),
+        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
         buildDummyUuid(8),
         dummySystemUserId,
         dateManager.next()
     );
+};
 
 const buildContentAddedToDigitalTextPage = (
     payloadOverrides: DeepPartial<ContentAddedToDigitalTextPagePayload>

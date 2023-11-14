@@ -54,12 +54,5 @@ export abstract class BaseUpdateCommandHandler<
         await this.getRepositoryForCommand(command).update(
             instanceToPersistWithUpdatedEventHistory
         );
-
-        // TODO remove this
-        const update = await this.getRepositoryForCommand(command).fetchById(
-            command.aggregateCompositeIdentifier.id
-        );
-
-        update;
     }
 }
