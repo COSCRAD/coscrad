@@ -5,7 +5,6 @@ import {
     IIndexQueryResult,
 } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
-import { isDeepStrictEqual } from 'util';
 
 import { CommandInfoService } from '../../app/controllers/command/services/command-info-service';
 import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
@@ -13,9 +12,10 @@ import { AggregateCompositeIdentifier } from '../../domain/types/AggregateCompos
 import { AggregateId } from '../../domain/types/AggregateId';
 import { AggregateType } from '../../domain/types/AggregateType';
 import { Maybe } from '../../lib/types/maybe';
-import { NotFound } from '../../lib/types/not-found';
+import { NotFound, isNotFound } from '../../lib/types/not-found';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
-import { ArangoEventRepository } from '../../persistence/repositories/arango-event-repository';
+import { IAggregateRootQueryRepository } from '../interfaces';
+import { DigitalTextQueryRepository } from './digital-text.query-repository';
 import { DigitalTextViewModel } from './digital-text.view-model';
 
 type IndexScopedCommandContext = {
@@ -38,7 +38,9 @@ export class DigitalTextQueryService {
      * query models in a second database, achieving full CQRS-ES (big optimization).
      */
     constructor(
-        private readonly eventRepository: ArangoEventRepository,
+        // TODO Use a string injection token here. Consider using a provider when generalizing the implementation over aggregate type.
+        @Inject(DigitalTextQueryRepository)
+        protected readonly queryRepository: IAggregateRootQueryRepository<IDigitalTextViewModel>,
         @Inject(CommandInfoService) protected readonly commandInfoService: CommandInfoService
     ) {}
 
@@ -46,29 +48,19 @@ export class DigitalTextQueryService {
         id: string,
         userWithGroups?: CoscradUserWithGroups
     ): Promise<Maybe<IDetailQueryResult<IDigitalTextViewModel>>> {
-        const fullEventHistory = await this.eventRepository.fetchEvents();
+        //  TODO Use the repository to fetch this
+        const hydratedViewModel = await this.queryRepository.fetchById(id);
 
-        const eventHistoryForThisDigitalText = fullEventHistory.filter(
-            ({ payload: { aggregateCompositeIdentifier } }) =>
-                isDeepStrictEqual(aggregateCompositeIdentifier, this.buildCompositeIdentifier(id))
-        );
-
-        if (eventHistoryForThisDigitalText.length === 0) return NotFound;
-
-        /**
-         * Note that we require the entire event history in order to denormalize
-         * the query models. We may want to determine things like
-         * - which tags apply to this resource
-         * - which other resources is this resource connected to
-         * - which categories apply to this resource
-         */
-        const hydratedViewModel = new DigitalTextViewModel(id).applyStream(fullEventHistory);
+        if (isNotFound(hydratedViewModel)) return NotFound;
 
         if (this.isVisibleToUser(hydratedViewModel, userWithGroups)) {
             // TODO should we remove any fields?
             const withActions = {
                 ...cloneToPlainObject(hydratedViewModel),
-                actions: this.fetchUserActions(userWithGroups, [hydratedViewModel]),
+                actions: this.fetchUserActions(userWithGroups, [
+                    // Is there a more graceful way to handle the type mismatch?
+                    hydratedViewModel as unknown as CommandContext,
+                ]),
             };
 
             return withActions;
@@ -80,29 +72,11 @@ export class DigitalTextQueryService {
     public async fetchMany(
         userWithGroups?: CoscradUserWithGroups
     ): Promise<IIndexQueryResult<IDigitalTextViewModel>> {
-        const fullEventHistory = await this.eventRepository.fetchEvents();
+        const allViewModels = await this.queryRepository.fetchMany();
 
-        const allIdsWithDuplicates = fullEventHistory
-            .filter(
-                (event) =>
-                    event?.payload?.aggregateCompositeIdentifier?.type === AggregateType.digitalText
-            )
-            .map(
-                ({
-                    payload: {
-                        aggregateCompositeIdentifier: { id },
-                    },
-                }) => id
-            );
-
-        const digitalTextIds = [...new Set(allIdsWithDuplicates)];
-
-        const availableEntityViewModels = digitalTextIds
-            .map((id) => new DigitalTextViewModel(id).applyStream(fullEventHistory))
-            .filter(
-                (digitalText) =>
-                    digitalText.isPublished || digitalText.hasReadAccess(userWithGroups)
-            );
+        const availableEntityViewModels = allViewModels.filter(
+            (digitalText) => digitalText.isPublished || digitalText.hasReadAccess(userWithGroups)
+        );
 
         const commandContext = DigitalTextViewModel;
 
@@ -110,7 +84,9 @@ export class DigitalTextQueryService {
             // Here we mix-in the detail-scoped actions.
             entities: availableEntityViewModels.map((entityViewModel) => ({
                 ...cloneToPlainObject(entityViewModel),
-                actions: this.fetchUserActions(userWithGroups, [entityViewModel]),
+                actions: this.fetchUserActions(userWithGroups, [
+                    entityViewModel as unknown as CommandContext,
+                ]),
             })),
             indexScopedActions: this.fetchUserActions(userWithGroups, [commandContext]),
         };
