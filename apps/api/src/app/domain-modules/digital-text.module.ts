@@ -1,5 +1,6 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
+import { CoscradEventFactory } from '../../domain/common';
 import {
     AddPageToDigitalText,
     AddPageToDigitalTextCommandHandler,
@@ -14,7 +15,9 @@ import { CreateDigitalTextCommandHandler } from '../../domain/models/digital-tex
 import { DigitalTextCreated } from '../../domain/models/digital-text/commands/digital-text-created.event';
 import { DigitalText } from '../../domain/models/digital-text/entities/digital-text.entity';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
+import { ArangoEventRepository } from '../../persistence/repositories/arango-event-repository';
 import { DigitalTextQueryService } from '../../queries/digital-text';
+import { DynamicDataTypeFinderService } from '../../validation';
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
 import { DigitalTextQueryController } from '../controllers/resources/digital-text.controller';
 
@@ -23,6 +26,9 @@ import { DigitalTextQueryController } from '../controllers/resources/digital-tex
     controllers: [DigitalTextQueryController],
     providers: [
         CommandInfoService,
+        ArangoEventRepository,
+        DynamicDataTypeFinderService,
+        CoscradEventFactory,
         CreateDigitalTextCommandHandler,
         AddPageToDigitalTextCommandHandler,
         DigitalTextQueryService,

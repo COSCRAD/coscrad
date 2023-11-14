@@ -1,21 +1,22 @@
 import { AggregateType } from '@coscrad/api-interfaces';
 import { useLoadableCategoryTree } from '../../store/slices/categories/hooks/use-loadable-category-tree';
 import { IMaybeLoadable } from '../../store/slices/interfaces/maybe-loadable.interface';
-import { useLoadableNoteById } from '../../store/slices/notes/hooks';
+import { useLoadableNoteById } from '../../store/slices/notes';
 import {
+    useLoadableAudioItemById,
     useLoadableBibliographicReferenceById,
+    useLoadableBookById,
+    useLoadableDigitalTextsById,
+    useLoadableMediaItemById,
+    useLoadablePhotographById,
+    useLoadablePlaylistsById,
     useLoadableSongById,
     useLoadableSpatialFeatureById,
     useLoadableTermById,
+    useLoadableVideoById,
+    useLoadableVocabularyListById,
 } from '../../store/slices/resources';
-import { useLoadableAudioItemById } from '../../store/slices/resources/audio-item/hooks/use-loadable-audio-item-by-id';
-import { useLoadableBookById } from '../../store/slices/resources/books';
-import { useLoadableMediaItemById } from '../../store/slices/resources/media-items';
-import { useLoadablePhotographById } from '../../store/slices/resources/photographs/hooks';
-import { useLoadablePlaylistsById } from '../../store/slices/resources/playlists/hooks/use-Loadable-Playlist-By-Id';
-import { useLoadableVideoById } from '../../store/slices/resources/video/hooks';
-import { useLoadableVocabularyListById } from '../../store/slices/resources/vocabulary-lists/hooks/useLoadableVocabularyListById';
-import { useLoadableTagById } from '../../store/slices/tagSlice/hooks/use-loadable-tag-by-id';
+import { useLoadableTagById } from '../../store/slices/tagSlice';
 
 type UseLoadableById = (id: string) => IMaybeLoadable<unknown>;
 
@@ -29,6 +30,7 @@ type UseLoadableById = (id: string) => IMaybeLoadable<unknown>;
 const lookupTable: { [K in Exclude<AggregateType, 'user' | 'userGroup'>]: UseLoadableById } = {
     // Resources
     [AggregateType.bibliographicReference]: useLoadableBibliographicReferenceById,
+    [AggregateType.digitalText]: useLoadableDigitalTextsById,
     [AggregateType.book]: useLoadableBookById,
     [AggregateType.mediaItem]: useLoadableMediaItemById,
     [AggregateType.photograph]: useLoadablePhotographById,

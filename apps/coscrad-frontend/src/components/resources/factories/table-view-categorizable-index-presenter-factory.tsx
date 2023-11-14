@@ -7,6 +7,7 @@ import { NoteIndexPresenter } from '../../notes/note-index.presenter';
 import { TranscribedAudioIndexPresenter } from '../audio-item/audio-item-index.presenter';
 import { BibliographicReferenceIndexPresenter } from '../bibliographic-references/bibliographic-reference-index.presenter';
 import { BookIndexPresenter } from '../books/book-index.presenter';
+import { DigitalTextIndexPresenter } from '../digital-text/digital-text-index.presenter';
 import { MediaItemIndexPresenter } from '../media-items/media-item-index.presenter';
 import { PhotographIndexPresenter } from '../photographs/photograph-index.presenter';
 import { PlaylistIndexPresenter } from '../playlists/playlist-index.presenter';
@@ -51,6 +52,9 @@ export const tableViewCategorizableIndexPresenterFactory: CategorizableIndexPres
     switch (categorizableType) {
         case CategorizableType.bibliographicReference:
             return BibliographicReferenceIndexPresenter as unknown as CategorizableIndexPresenter<T>;
+
+        case CategorizableType.digitalText:
+            return DigitalTextIndexPresenter as unknown as CategorizableIndexPresenter<T>;
 
         case CategorizableType.book:
             return BookIndexPresenter as unknown as CategorizableIndexPresenter<T>;

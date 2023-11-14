@@ -15,6 +15,7 @@ import { AudioItemDetailThumbnailPresenter } from '../audio-item/audio-item-deta
 import { BibliographicReferenceDetailThumbnailPresenter } from '../bibliographic-references/bibliographic-reference-detail-thumbnail-presenters';
 import { BookDetailThumbnailPresenter } from '../books';
 import { BookInfo } from '../books/book-info';
+import { DigitalTextDetailThumbnailPresenter } from '../digital-text/digital-text-detail.thumbnail.presenter';
 import { MediaItemDetailThumbnailPresenter } from '../media-items/media-item-detail.thumbnail.presenter';
 import { PhotographDetailThumbnailPresenter } from '../photographs/photograph-detail.thumbnail.presenter';
 import { PlaylistDetailThumbnailPresenter } from '../playlists/playlist-detail.thumbnail.presenter';
@@ -27,6 +28,7 @@ import { VocabularyListDetailThumbnailPresenter } from '../vocabulary-lists/voca
 // TODO Define thumbnail specific presenters
 const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
     [CategorizableType.bibliographicReference]: BibliographicReferenceDetailThumbnailPresenter,
+    [CategorizableType.digitalText]: DigitalTextDetailThumbnailPresenter,
     [CategorizableType.mediaItem]: MediaItemDetailThumbnailPresenter,
     [CategorizableType.book]: BookDetailThumbnailPresenter,
     [CategorizableType.mediaItem]: MediaItemDetailThumbnailPresenter,
