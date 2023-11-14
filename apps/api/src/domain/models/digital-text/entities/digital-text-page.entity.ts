@@ -1,4 +1,4 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
+import { IDigitalTextPage, LanguageCode } from '@coscrad/api-interfaces';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
@@ -11,7 +11,7 @@ import BaseDomainModel from '../../BaseDomainModel';
 import { CannotOverwritePageContentError } from '../errors/cannot-overwrite-page-content.error';
 import { PageIdentifier } from './types/page-identifier';
 
-export default class DigitalTextPage extends BaseDomainModel {
+export default class DigitalTextPage extends BaseDomainModel implements IDigitalTextPage {
     @NonEmptyString({
         label: 'identifier',
         description: 'text identifier for the page',
