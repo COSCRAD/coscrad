@@ -106,7 +106,7 @@ export class TranscriptItem extends BaseDomainModel implements ITranscriptItem {
             speakerInitials,
         } = this;
 
-        // todo remove ? chaining
+        // TODO remove ? chaining
         return `[${inPoint}] [${speakerInitials}] ${text?.toString()} [${outPoint}]`;
     }
 

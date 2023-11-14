@@ -605,7 +605,7 @@ VocabularyList {
   },
   "type": "vocabularyList",
   "variables": [
-    {
+    VocabularyListFilterProperty {
       "name": "positive",
       "type": "checkbox",
       "validValues": [
@@ -619,7 +619,7 @@ VocabularyList {
         },
       ],
     },
-    {
+    VocabularyListFilterProperty {
       "name": "person",
       "type": "dropbox",
       "validValues": [

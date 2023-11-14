@@ -10,7 +10,7 @@ import { NestedDataType } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
 import { Term } from '../../../domain/models/term/entities/term.entity';
-import { VocabularyListVariable } from '../../../domain/models/vocabulary-list/entities/vocabulary-list-variable.entity';
+import { VocabularyListFilterProperty } from '../../../domain/models/vocabulary-list/entities/vocabulary-list-variable.entity';
 import { VocabularyList } from '../../../domain/models/vocabulary-list/entities/vocabulary-list.entity';
 import { VocabularyListVariableValue } from '../../../domain/models/vocabulary-list/types/vocabulary-list-variable-value';
 import { VocabularyListEntry } from '../../../domain/models/vocabulary-list/vocabulary-list-entry.entity';
@@ -48,7 +48,7 @@ const convertVocabularyListVaraibleToFormElement = ({
     type: variableType,
     name,
     validValues,
-}: VocabularyListVariable): IFormField => ({
+}: VocabularyListFilterProperty): IFormField => ({
     type:
         variableType === DropboxOrCheckbox.checkbox
             ? FormFieldType.switch
