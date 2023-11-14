@@ -5,6 +5,8 @@ import {
     AddTermtoVocabularyListCommandHandler,
     CreateVocabularyList,
     CreateVocabularyListCommandHandler,
+    RegisterVocabularyListFilterProperty,
+    RegisterVocabularyListFilterPropertyCommandHandler,
     TranslateVocabularyListName,
     TranslateVocabularyListNameCommandHandler,
 } from '../../domain/models/vocabulary-list/commands';
@@ -25,12 +27,14 @@ import { VocabularyListController } from '../controllers/resources/vocabulary-li
         CreateVocabularyListCommandHandler,
         TranslateVocabularyListNameCommandHandler,
         AddTermtoVocabularyListCommandHandler,
+        RegisterVocabularyListFilterPropertyCommandHandler,
         // Data Classes
         ...[
             CreateVocabularyList,
             TranslateVocabularyListName,
             VocabularyListNameTranslated,
             AddTermToVocabularyList,
+            RegisterVocabularyListFilterProperty,
         ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,

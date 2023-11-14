@@ -3,7 +3,8 @@ import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
-import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
+import { Maybe } from '../../../../lib/types/maybe';
+import { NotFound } from '../../../../lib/types/not-found';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
@@ -23,10 +24,19 @@ import { ADD_TERM_TO_VOCABULARY_LIST } from '../commands/add-term-to-vocabulary-
 import { TRANSLATE_VOCABULARY_LIST_NAME } from '../commands/translate-vocabulary-list-name/constants';
 import {
     CannotAddMultipleEntriesForSingleTermError,
+    CannotHaveTwoFilterPropertiesWithTheSameNameError,
     DuplicateVocabularyListNameError,
 } from '../errors';
+import { VocabularyListFilterPropertyMustHaveAtLeastOneAllowedValueError } from '../errors/vocabulary-list-filter-property-must-have-at-least-one-allowed-value.error';
+import { DropboxOrCheckbox } from '../types/dropbox-or-checkbox';
 import { VocabularyListEntry } from '../vocabulary-list-entry.entity';
-import { VocabularyListVariable } from './vocabulary-list-variable.entity';
+import { VocabularyListFilterProperty } from './vocabulary-list-variable.entity';
+
+// TODO break out this type
+type LabelAndValue<T = string> = {
+    label: string;
+    value: T;
+};
 
 @RegisterIndexScopedCommands([`CREATE_VOCABULARY_LIST`])
 export class VocabularyList extends Resource {
@@ -47,14 +57,17 @@ export class VocabularyList extends Resource {
     })
     readonly entries: VocabularyListEntry[];
 
-    @NestedDataType(VocabularyListVariable, {
+    /**
+     * TODO rename this `property filters`
+     */
+    @NestedDataType(VocabularyListFilterProperty, {
         isArray: true,
         // i.e. can be empty
         isOptional: true,
         label: 'filters',
         description: 'defines a dynamic form that can be used to filter the entries',
     })
-    readonly variables: VocabularyListVariable[];
+    readonly variables: VocabularyListFilterProperty[];
 
     constructor(dto: DTO<VocabularyList>) {
         super({ ...dto, type: ResourceType.vocabularyList });
@@ -69,11 +82,8 @@ export class VocabularyList extends Resource {
             ? entries.map((entryDto) => new VocabularyListEntry(entryDto))
             : null;
 
-        /**
-         * Missing invariant- each variable must have a unique name.
-         */
         this.variables = Array.isArray(variables)
-            ? variables.map((v) => (isNullOrUndefined(v) ? v : cloneToPlainObject(v)))
+            ? variables.map((v) => new VocabularyListFilterProperty(v))
             : null;
     }
 
@@ -83,6 +93,17 @@ export class VocabularyList extends Resource {
 
     hasEntryForTerm(termId: AggregateId): boolean {
         return this.entries.some((entry) => termId === entry.termId);
+    }
+
+    hasFilterPropertyNamed(name: string): boolean {
+        // TODO rename `variables` to `filterProperties`
+        return this.variables.some((filterProperty) => filterProperty.name === name);
+    }
+
+    getFilterPropertyByName(name: string): Maybe<VocabularyListFilterProperty> {
+        const searchResult = this.variables.find((FilterProperty) => FilterProperty.name === name);
+
+        return isNullOrUndefined(searchResult) ? NotFound : searchResult;
     }
 
     translateName(textItem: MultilingualTextItem): ResultOrError<VocabularyList> {
@@ -112,6 +133,43 @@ export class VocabularyList extends Resource {
         });
     }
 
+    // TODO should type be an enum?
+    registerFilterProperty(
+        name: string,
+        type: DropboxOrCheckbox,
+        allowedValuesWithLabels: LabelAndValue<string | boolean>[]
+    ): ResultOrError<VocabularyList> {
+        // TODO add unit test for this
+        if (allowedValuesWithLabels.length === 0) {
+            return new VocabularyListFilterPropertyMustHaveAtLeastOneAllowedValueError(
+                this.id,
+                name
+            );
+        }
+
+        if (this.hasFilterPropertyNamed(name)) {
+            return new CannotHaveTwoFilterPropertiesWithTheSameNameError(name, this.id);
+        }
+
+        const newVocabularyList = this.safeClone<VocabularyList>({
+            variables: [
+                ...this.variables
+                    .map((variable) => variable.toDTO())
+                    .concat({
+                        name,
+                        type,
+                        validValues: allowedValuesWithLabels.map(({ label, value }) => ({
+                            value,
+                            display: label,
+                        })),
+                    } as DTO<VocabularyListFilterProperty>)
+                    .map((dto) => new VocabularyListFilterProperty(dto)),
+            ],
+        });
+
+        return newVocabularyList;
+    }
+
     protected getResourceSpecificAvailableCommands(): string[] {
         return [TRANSLATE_VOCABULARY_LIST_NAME, ADD_TERM_TO_VOCABULARY_LIST];
     }
@@ -131,6 +189,13 @@ export class VocabularyList extends Resource {
             if (this.published)
                 allErrors.push(new VocabularyListWithNoEntriesCannotBePublishedError(id));
         }
+
+        // We `flatmap` because each validation call per variable returns an array of errors
+        const filterPropertyValidationResult = this.variables.flatMap((variable) =>
+            variable.validateComplexInvariants()
+        );
+
+        allErrors.push(...filterPropertyValidationResult);
 
         return allErrors;
     }
