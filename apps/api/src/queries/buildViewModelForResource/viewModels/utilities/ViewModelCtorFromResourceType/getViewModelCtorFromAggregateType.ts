@@ -1,14 +1,10 @@
+import { AggregateType } from '../../../../../domain/types/AggregateType';
 import { isNullOrUndefined } from '../../../../../domain/utilities/validation/is-null-or-undefined';
 import { InternalError } from '../../../../../lib/errors/InternalError';
-import {
-    AggregateTypesWhoseViewsAreSourcedFromSnapshots,
-    aggregateTypeToViewModelCtor,
-} from './aggregateTypeToViewModelCtor';
+import { aggregateTypeToViewModelCtor } from './aggregateTypeToViewModelCtor';
 import { AggregateTypeToViewModelCtor } from './types';
 
-export const getViewModelCtorFromAggregateType = <
-    T extends AggregateTypesWhoseViewsAreSourcedFromSnapshots
->(
+export const getViewModelCtorFromAggregateType = <T extends AggregateType>(
     resourceType: T
 ): AggregateTypeToViewModelCtor[T] => {
     const lookupResult = aggregateTypeToViewModelCtor[resourceType];

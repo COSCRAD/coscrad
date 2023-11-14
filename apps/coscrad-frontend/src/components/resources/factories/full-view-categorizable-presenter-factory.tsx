@@ -12,6 +12,7 @@ import { AudioItemDetailFullViewPresenter } from '../audio-item/audio-item-detai
 import { BibliographicReferenceDetailPresenter } from '../bibliographic-references/bibliographic-reference-detail.presenter';
 import { BookInfo } from '../books/book-info';
 import { BookReader } from '../books/pages';
+import { DigitalTextDetailFullViewPresenter } from '../digital-text/digital-text-detail.full-view.presenter';
 import { MediaItemDetailFullViewPresenter } from '../media-items/media-item-detail.full-view.presenter';
 import { PhotographDetailFullViewPresenter } from '../photographs/photograph-detail.full-view.presenter';
 import { PlaylistDetailFullViewPresenter } from '../playlists/playlist-detail.full-view.presenter';
@@ -26,6 +27,7 @@ import { VocabularyListDetailFullViewPresenter } from '../vocabulary-lists/vocab
  */
 const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
     [CategorizableType.bibliographicReference]: BibliographicReferenceDetailPresenter,
+    [CategorizableType.digitalText]: DigitalTextDetailFullViewPresenter,
     [CategorizableType.mediaItem]: MediaItemDetailFullViewPresenter,
     [CategorizableType.photograph]: PhotographDetailFullViewPresenter,
     [CategorizableType.song]: SongDetailFullViewPresenter,

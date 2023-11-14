@@ -8,6 +8,7 @@ type CategorizableTypeAndPluralLabel = { [K in CategorizableType]: string };
 const categorizableTypeAndPluralLabel: CategorizableTypeAndPluralLabel = {
     // Resources
     [CategorizableType.bibliographicReference]: 'Bibliographic References',
+    [CategorizableType.digitalText]: 'Digital Texts',
     [CategorizableType.book]: 'Books',
     [CategorizableType.mediaItem]: 'Media Items',
     [CategorizableType.photograph]: 'Photographs',
