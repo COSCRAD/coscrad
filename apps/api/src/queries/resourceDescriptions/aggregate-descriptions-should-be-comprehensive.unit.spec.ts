@@ -1,5 +1,4 @@
 import { AggregateType } from '../../domain/types/AggregateType';
-import { AggregateTypesWhoseViewsAreSourcedFromSnapshots } from '../buildViewModelForResource/viewModels/utilities/ViewModelCtorFromResourceType';
 import formatAggregateType from '../presentation/formatAggregateType';
 import { buildAllAggregateDescriptions } from './buildAllAggregateDescriptions';
 
@@ -16,29 +15,22 @@ import { buildAllAggregateDescriptions } from './buildAllAggregateDescriptions';
 describe('buildAllAggregateDescriptions', () => {
     const aggregateTypesWithADescription = buildAllAggregateDescriptions().map(({ type }) => type);
 
-    const doesAggregateTypeHaveADescription = (
-        aggregateType: AggregateTypesWhoseViewsAreSourcedFromSnapshots
-    ) => aggregateTypesWithADescription.includes(aggregateType);
+    const doesAggregateTypeHaveADescription = (aggregateType: AggregateType) =>
+        aggregateTypesWithADescription.includes(aggregateType);
 
-    Object.values(AggregateType)
-        .filter(
-            (aggregateType): aggregateType is AggregateTypesWhoseViewsAreSourcedFromSnapshots =>
-                aggregateType !== AggregateType.digitalText
-        )
-        .forEach((aggregateType) =>
-            describe(`Aggregate type: ${formatAggregateType(aggregateType)}`, () => {
-                it('should have a corresponding description', () => {
-                    expect(doesAggregateTypeHaveADescription(aggregateType)).toBe(true);
-                });
+    Object.values(AggregateType).forEach((aggregateType) =>
+        describe(`Aggregate type: ${formatAggregateType(aggregateType)}`, () => {
+            it('should have a corresponding description', () => {
+                expect(doesAggregateTypeHaveADescription(aggregateType)).toBe(true);
+            });
 
-                it('should have only one description', () => {
-                    const numberOfDescriptionsForThisAggregate =
-                        aggregateTypesWithADescription.filter(
-                            (type) => type === aggregateType
-                        ).length;
+            it('should have only one description', () => {
+                const numberOfDescriptionsForThisAggregate = aggregateTypesWithADescription.filter(
+                    (type) => type === aggregateType
+                ).length;
 
-                    expect(numberOfDescriptionsForThisAggregate).toBe(1);
-                });
-            })
-        );
+                expect(numberOfDescriptionsForThisAggregate).toBe(1);
+            });
+        })
+    );
 });

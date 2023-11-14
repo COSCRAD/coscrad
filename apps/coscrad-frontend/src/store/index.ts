@@ -2,38 +2,40 @@ import { combineReducers, configureStore, PreloadedState } from '@reduxjs/toolki
 import { AUTH, authReducer } from './slices/auth';
 import { categoryTreeReducer } from './slices/categories';
 import { CATEGORY_TREE } from './slices/categories/constants';
-import { commandStatusReducer, COMMAND_STATUS } from './slices/command-status';
+import { COMMAND_STATUS, commandStatusReducer } from './slices/command-status';
 import { idGenerationReducer } from './slices/id-generation';
 import { ID_GENERATION } from './slices/id-generation/constants';
 import { noteReducer, NOTES } from './slices/notes';
 
 import {
+    AUDIO_ITEMS,
+    audioItemReducer,
+    BIBLIOGRAPHIC_REFERENCES,
     bibliographicReferenceReducer,
+    bookReducer,
+    BOOKS,
+    DIGITAL_TEXTS,
+    DigitalTextReducer,
+    MEDIA_ITEMS,
+    mediaItemReducer,
+    photographReducer,
+    PHOTOGRAPHS,
+    PlaylistReducer,
+    PLAYLISTS,
+    RESOURCE_INFO,
+    resourceInfoReducer,
+    songReducer,
+    SONGS,
+    SPATIAL_FEATURES,
     spatialFeatureReducer,
     termReducer,
-    vocabularyListReducer,
+    TERMS,
+    videoReducer,
+    VIDEOS,
     VOCABULARY_LISTS,
+    vocabularyListReducer,
 } from './slices/resources';
-import { audioItemReducer } from './slices/resources/audio-item';
-import { AUDIO_ITEMS } from './slices/resources/audio-item/constants';
-import { BIBLIOGRAPHIC_REFERENCES } from './slices/resources/bibliographic-references/constants';
-import { bookReducer, BOOKS } from './slices/resources/books';
-import { mediaItemReducer, MEDIA_ITEMS } from './slices/resources/media-items';
-import { photographReducer } from './slices/resources/photographs';
-import { PHOTOGRAPHS } from './slices/resources/photographs/constants';
-import { PLAYLISTS } from './slices/resources/playlists';
-import { PlaylistReducer } from './slices/resources/playlists/playlist-slice';
-import {
-    resourceInfoReducer,
-    RESOURCE_INFO,
-} from './slices/resources/resource-info/resource-info-slice';
-import { songReducer, SONGS } from './slices/resources/songs';
-import { SPATIAL_FEATURES } from './slices/resources/spatial-features/constants';
-import { TERMS } from './slices/resources/terms/constants';
-import { videoReducer } from './slices/resources/video';
-import { VIDEOS } from './slices/resources/video/constants';
-import { tagReducer } from './slices/tagSlice';
-import { TAGS } from './slices/tagSlice/constants';
+import { tagReducer, TAGS } from './slices/tagSlice';
 
 export const rootReducer = combineReducers({
     [AUTH]: authReducer,
@@ -50,6 +52,7 @@ export const rootReducer = combineReducers({
     // For consistency, consider pluralizing the following identifiers (constants from each slice)
     [VOCABULARY_LISTS]: vocabularyListReducer,
     [BIBLIOGRAPHIC_REFERENCES]: bibliographicReferenceReducer,
+    [DIGITAL_TEXTS]: DigitalTextReducer,
     [SPATIAL_FEATURES]: spatialFeatureReducer,
     [SONGS]: songReducer,
     [BOOKS]: bookReducer,

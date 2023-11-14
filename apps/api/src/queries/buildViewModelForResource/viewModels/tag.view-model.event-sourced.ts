@@ -4,7 +4,7 @@ import {
     ITagViewModel,
     LanguageCode,
 } from '@coscrad/api-interfaces';
-import { FromDomainModel } from '@coscrad/data-types';
+import { FromDomainModel, NestedDataType } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
@@ -37,6 +37,10 @@ export class EventSourcedTagViewModel implements ITagViewModel {
     @FromDomainModel(Tag)
     members: CategorizableCompositeIdentifier[] = [];
 
+    @NestedDataType(MultilingualText, {
+        label: 'name',
+        description: 'name',
+    })
     name: MultilingualText;
 
     constructor(id: AggregateId) {

@@ -2,6 +2,7 @@ import { AggregateType } from '../../../../../domain/types/AggregateType';
 import { CategorizableType } from '../../../../../domain/types/CategorizableType';
 import { ResourceType } from '../../../../../domain/types/ResourceType';
 import { Ctor } from '../../../../../lib/types/Ctor';
+import { DigitalTextViewModel } from '../../../../digital-text';
 import { NoteViewModel } from '../../../../edgeConnectionViewModels/note.view-model';
 import { AudioItemViewModel } from '../../audio-visual/audio-item.view-model';
 import { VideoViewModel } from '../../audio-visual/video.view-model';
@@ -20,20 +21,11 @@ import { TagViewModel } from '../../tag.view-model';
 import { TermViewModel } from '../../term.view-model';
 import { VocabularyListViewModel } from '../../vocabulary-list.view-model';
 
-export type AggregateTypesWhoseViewsAreSourcedFromSnapshots = Exclude<
-    AggregateType,
-    typeof AggregateType.digitalText
->;
-
-export type ResourceTypesWhoseViewsAreSourcedFromSnapshots = Exclude<
-    ResourceType,
-    typeof ResourceType.digitalText
->;
-
 export const aggregateTypeToViewModelCtor: {
-    [K in AggregateTypesWhoseViewsAreSourcedFromSnapshots]: Ctor<BaseViewModel>;
+    [K in AggregateType]: Ctor<BaseViewModel>;
 } = {
     [ResourceType.bibliographicReference]: BibliographicReferenceViewModel,
+    [ResourceType.digitalText]: DigitalTextViewModel,
     [ResourceType.book]: BookViewModel,
     [ResourceType.mediaItem]: MediaItemViewModel,
     [ResourceType.photograph]: PhotographViewModel,

@@ -3,6 +3,7 @@ import {
     Audiotrack as AudiotrackIcon,
     AutoStories as AutoStoriesIcon,
     CollectionsBookmark as CollectionsBookmarkIcon,
+    Description as DescriptionIcon,
     Language as LanguageIcon,
     List as ListIcon,
     Photo as PhotoIcon,
@@ -38,6 +39,7 @@ interface ResourcePreviewImageProps {
 const lookupTable: { [K in ResourceType]: JSX.Element } = {
     [ResourceType.audioItem]: <VolumeUpIcon fontSize="inherit" />,
     [ResourceType.bibliographicReference]: <CollectionsBookmarkIcon fontSize="inherit" />,
+    [ResourceType.digitalText]: <DescriptionIcon fontSize="inherit" />,
     [ResourceType.book]: <AutoStoriesIcon fontSize="inherit" />,
     [ResourceType.mediaItem]: <SubscriptionsIcon fontSize="inherit" />,
     [ResourceType.photograph]: <PhotoIcon fontSize="inherit" />,

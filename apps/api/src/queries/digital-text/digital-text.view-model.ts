@@ -3,6 +3,7 @@ import {
     AggregateType,
     IDigitalTextViewModel,
 } from '@coscrad/api-interfaces';
+import { BooleanDataType, FromDomainModel, NestedDataType } from '@coscrad/data-types';
 import { buildMultilingualTextWithSingleItem } from '../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../domain/common/entities/multilingual-text';
 import {
@@ -10,6 +11,7 @@ import {
     PageAddedToDigitalTextPayload,
 } from '../../domain/models/digital-text/commands';
 import { ContentAddedToDigitalTextPagePayload } from '../../domain/models/digital-text/commands/add-content-to-digital-text-page';
+import { DigitalText } from '../../domain/models/digital-text/entities';
 import DigitalTextPage from '../../domain/models/digital-text/entities/digital-text-page.entity';
 import { AccessControlList } from '../../domain/models/shared/access-control/access-control-list.entity';
 import { ResourceReadAccessGrantedToUserPayload } from '../../domain/models/shared/common-commands';
@@ -29,14 +31,32 @@ export class DigitalTextViewModel
 
     public readonly type = AggregateType.digitalText;
 
+    @FromDomainModel(DigitalText)
     public title: MultilingualText;
 
+    @NestedDataType(MultilingualText, {
+        label: 'name',
+        description: 'name',
+    })
     public name: MultilingualText;
 
+    @BooleanDataType({
+        label: 'isPublished',
+        description: 'a flag that indicates whether this resource is published',
+    })
     public isPublished = false;
 
+    @NestedDataType(EventSourcedTagViewModel, {
+        label: 'tags',
+        description: 'tags that apply to this resource',
+        isArray: true,
+    })
     public tags: EventSourcedTagViewModel[] = [];
 
+    @NestedDataType(DigitalTextPage, {
+        label: 'pages',
+        description: 'digital representation of the pages in this digital text',
+    })
     public pages: DigitalTextPage[] = [];
 
     constructor(public readonly id: string) {}
