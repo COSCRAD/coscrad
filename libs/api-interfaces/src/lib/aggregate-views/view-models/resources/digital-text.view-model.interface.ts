@@ -10,4 +10,7 @@ export interface IDigitalTextViewModel extends IBaseViewModel {
     isPublished: boolean;
 
     tags: ITagViewModel[];
+
+    // TODO Is this really something we want to require at this level?
+    hasReadAccess(userWithGroups: unknown): boolean;
 }
