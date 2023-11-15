@@ -1,4 +1,4 @@
-import { IMultilingualText } from '@coscrad/api-interfaces';
+import { IMultilingualText, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import LanguageIcon from '@mui/icons-material/Language';
@@ -22,27 +22,30 @@ export const MultilingualTextPresenter = ({
     const textItemWithDefaultLanguage =
         items?.find((item) => item.languageCode === defaultLanguageCode) || null;
 
+    const mainText = isNullOrUndefined(textItemWithDefaultLanguage)
+        ? items?.find((item) => item.role === MultilingualTextItemRole.original)
+        : textItemWithDefaultLanguage;
+
     const translations = items?.filter((items) => items.languageCode !== defaultLanguageCode);
 
     return (
         <Box width={'fit-content'} data-testid="multilingual-text-display">
             <Accordion elevation={0}>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    data-testid="multilingual-text-main-text-item"
+                >
                     <Typography variant="h4" margin={'auto 0'}>
-                        {isNullOrUndefined(textItemWithDefaultLanguage)
-                            ? 'Translations'
-                            : textItemWithDefaultLanguage.text}
-                        {isNullOrUndefined(textItemWithDefaultLanguage) ? null : (
-                            <Tooltip
-                                title={`${getLabelForLanguage(
-                                    textItemWithDefaultLanguage.languageCode
-                                )}, '${textItemWithDefaultLanguage.role}'`}
-                            >
-                                <IconButton>
-                                    <LanguageIcon />
-                                </IconButton>
-                            </Tooltip>
-                        )}
+                        {mainText.text}
+                        <Tooltip
+                            title={`${getLabelForLanguage(mainText.languageCode)}, '${
+                                mainText.role
+                            }'`}
+                        >
+                            <IconButton>
+                                <LanguageIcon />
+                            </IconButton>
+                        </Tooltip>
                     </Typography>
                 </AccordionSummary>
                 {translations.map(({ languageCode, text, role }) => (
