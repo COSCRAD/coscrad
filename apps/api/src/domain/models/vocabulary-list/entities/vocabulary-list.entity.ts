@@ -27,8 +27,12 @@ import {
     CannotAddMultipleEntriesForSingleTermError,
     CannotHaveTwoFilterPropertiesWithTheSameNameError,
     DuplicateVocabularyListNameError,
+    FailedToAnalyzeVocabularyListEntryError,
 } from '../errors';
+import { InvalidVocabularyListFilterPropertyValueError } from '../errors/invalid-vocabulary-list-filter-property-value.error';
+import { VocabularyListEntryNotFoundError } from '../errors/vocabulary-list-entry-not-found.error';
 import { VocabularyListFilterPropertyMustHaveAtLeastOneAllowedValueError } from '../errors/vocabulary-list-filter-property-must-have-at-least-one-allowed-value.error';
+import { VocabularyListFilterPropertyNotFoundError } from '../errors/vocabulary-list-filter-property-not-found.error';
 import { DropboxOrCheckbox } from '../types/dropbox-or-checkbox';
 import { VocabularyListEntry } from '../vocabulary-list-entry.entity';
 import { VocabularyListFilterProperty } from './vocabulary-list-variable.entity';
@@ -144,15 +148,36 @@ export class VocabularyList extends Resource {
         // if(isNotFound(filterProperty) return new CustomErrorToo())
 
         // if(!filterProperty.isAllowedValue(propertyValue)) return new CustomErrorToo()
-        const existingEntry = this.entries.find((entry) => entry.termId === termId);
-        // TODO remove the cast
-        const updatedEntry = existingEntry.analyze(
-            propertyName,
-            propertyValue
-        ) as VocabularyListEntry;
+        const entrySearchResult = this.entries.find((entry) => entry.termId === termId);
+
+        if (isNullOrUndefined(entrySearchResult)) {
+            return new VocabularyListEntryNotFoundError(termId, this.id);
+        }
+
+        const filterPropertySearchResult = this.variables.find(({ name }) => name === propertyName);
+
+        if (isNullOrUndefined(filterPropertySearchResult)) {
+            return new VocabularyListFilterPropertyNotFoundError(propertyName, this.id);
+        }
+
+        if (!filterPropertySearchResult.isAllowedValue(propertyValue)) {
+            return new InvalidVocabularyListFilterPropertyValueError(
+                propertyName,
+                propertyValue,
+                this.id
+            );
+        }
+
+        const entryUpdateResult = entrySearchResult.analyze(propertyName, propertyValue);
+
+        if (isInternalError(entryUpdateResult)) {
+            return new FailedToAnalyzeVocabularyListEntryError(termId, this.id, [
+                entryUpdateResult,
+            ]);
+        }
 
         const updatedEntries = this.entries.map((entry) =>
-            entry.termId === termId ? updatedEntry : entry.clone({})
+            entry.termId === termId ? entryUpdateResult : entry.clone({})
         );
 
         return this.clone<VocabularyList>({
