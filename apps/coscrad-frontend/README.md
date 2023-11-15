@@ -39,9 +39,9 @@ To run the front-end and back-end concurrently from a single command, run
 
 Note that you will need to have the backend configured in the `api` application, including a working instance of ArangoDB that is linked in your `.env.` See the [docs for `api`](../api/README.md) for more information.
 
-### Redux Plugin
+### Redux DevTools Browser Plugin
 
-To inspect the front-end data stored in Redux, use Redux DevTools in [Chrome](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd), [Edge](https://microsoftedge.microsoft.com/addons/detail/redux-devtools/nnkgneoiohoecpdiaponcejilbhhikei), or [Firefox](https://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/).
+To inspect the in-memory front-end state stored in Redux, use Redux DevTools in [Chrome](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd), [Edge](https://microsoftedge.microsoft.com/addons/detail/redux-devtools/nnkgneoiohoecpdiaponcejilbhhikei), or [Firefox](https://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/).
 
 See [Redux DevTools](https://github.com/reduxjs/redux-devtools)
 
