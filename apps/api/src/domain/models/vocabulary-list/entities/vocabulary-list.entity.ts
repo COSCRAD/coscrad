@@ -21,6 +21,7 @@ import { Resource } from '../../resource.entity';
 import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
 import { ADD_TERM_TO_VOCABULARY_LIST } from '../commands/add-term-to-vocabulary-list/constants';
+import { ANALYZE_TERM_IN_VOCABULARY_LIST } from '../commands/analyze-term-in-vocabulary-list/constants';
 import { TRANSLATE_VOCABULARY_LIST_NAME } from '../commands/translate-vocabulary-list-name/constants';
 import {
     CannotAddMultipleEntriesForSingleTermError,
@@ -133,6 +134,32 @@ export class VocabularyList extends Resource {
         });
     }
 
+    analyzeEntry(
+        termId: AggregateId,
+        propertyName: string,
+        propertyValue: string | boolean
+    ): ResultOrError<VocabularyList> {
+        // const filterProperty = this.getFilterProperty(propertyName);
+
+        // if(isNotFound(filterProperty) return new CustomErrorToo())
+
+        // if(!filterProperty.isAllowedValue(propertyValue)) return new CustomErrorToo()
+        const existingEntry = this.entries.find((entry) => entry.termId === termId);
+        // TODO remove the cast
+        const updatedEntry = existingEntry.analyze(
+            propertyName,
+            propertyValue
+        ) as VocabularyListEntry;
+
+        const updatedEntries = this.entries.map((entry) =>
+            entry.termId === termId ? updatedEntry : entry.clone({})
+        );
+
+        return this.clone<VocabularyList>({
+            entries: updatedEntries,
+        });
+    }
+
     // TODO should type be an enum?
     registerFilterProperty(
         name: string,
@@ -171,7 +198,11 @@ export class VocabularyList extends Resource {
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {
-        return [TRANSLATE_VOCABULARY_LIST_NAME, ADD_TERM_TO_VOCABULARY_LIST];
+        return [
+            TRANSLATE_VOCABULARY_LIST_NAME,
+            ADD_TERM_TO_VOCABULARY_LIST,
+            ANALYZE_TERM_IN_VOCABULARY_LIST,
+        ];
     }
 
     protected validateComplexInvariants(): InternalError[] {

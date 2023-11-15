@@ -2,6 +2,7 @@ import { NonEmptyString } from '@coscrad/data-types';
 import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../types/DTO';
+import { ResultOrError } from '../../../types/ResultOrError';
 import { AggregateId } from '../../types/AggregateId';
 import BaseDomainModel from '../BaseDomainModel';
 import { VocabularyListVariableValue } from './types/vocabulary-list-variable-value';
@@ -30,5 +31,19 @@ export class VocabularyListEntry extends BaseDomainModel {
         this.variableValues = isNonEmptyObject(variableValues)
             ? cloneToPlainObject(variableValues)
             : null;
+    }
+
+    analyze(
+        propertyName: string,
+        value: VocabularyListVariableValue
+    ): ResultOrError<VocabularyListEntry> {
+        const updatedVariableValues = {
+            ...this.variableValues,
+            [propertyName]: value,
+        };
+
+        return this.clone<VocabularyListEntry>({
+            variableValues: updatedVariableValues,
+        });
     }
 }
