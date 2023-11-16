@@ -2,7 +2,15 @@ import { IMultilingualText, MultilingualTextItemRole } from '@coscrad/api-interf
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import LanguageIcon from '@mui/icons-material/Language';
-import { Accordion, AccordionSummary, Box, IconButton, Tooltip, Typography } from '@mui/material';
+import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+    Box,
+    IconButton,
+    Tooltip,
+    Typography,
+} from '@mui/material';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import { getLabelForLanguage } from './text-presenters/get-label-for-language';
@@ -22,7 +30,7 @@ export const MultilingualTextPresenter = ({
     const textItemWithDefaultLanguage =
         items?.find((item) => item.languageCode === defaultLanguageCode) || null;
 
-    const mainText = isNullOrUndefined(textItemWithDefaultLanguage)
+    const primaryMultilingualTextItem = isNullOrUndefined(textItemWithDefaultLanguage)
         ? items?.find((item) => item.role === MultilingualTextItemRole.original)
         : textItemWithDefaultLanguage;
 
@@ -36,11 +44,11 @@ export const MultilingualTextPresenter = ({
                     data-testid="multilingual-text-main-text-item"
                 >
                     <Typography variant="h4" margin={'auto 0'}>
-                        {mainText.text}
+                        {primaryMultilingualTextItem.text}
                         <Tooltip
-                            title={`${getLabelForLanguage(mainText.languageCode)}, '${
-                                mainText.role
-                            }'`}
+                            title={`${getLabelForLanguage(
+                                primaryMultilingualTextItem.languageCode
+                            )}, '${primaryMultilingualTextItem.role}'`}
                         >
                             <IconButton>
                                 <LanguageIcon />
@@ -48,14 +56,16 @@ export const MultilingualTextPresenter = ({
                         </Tooltip>
                     </Typography>
                 </AccordionSummary>
-                {translations.map(({ languageCode, text, role }) => (
-                    <TranslatedLanguageTextPresenter
-                        key={`${languageCode}-${role}`}
-                        languageCode={languageCode}
-                        text={text}
-                        role={role}
-                    />
-                ))}
+                <AccordionDetails data-testid="multilingual-text-translations">
+                    {translations.map(({ languageCode, text, role }) => (
+                        <TranslatedLanguageTextPresenter
+                            key={`${languageCode}-${role}`}
+                            languageCode={languageCode}
+                            text={text}
+                            role={role}
+                        />
+                    ))}
+                </AccordionDetails>
             </Accordion>
         </Box>
     );
