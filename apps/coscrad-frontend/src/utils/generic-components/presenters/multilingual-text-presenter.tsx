@@ -1,9 +1,11 @@
-import { IMultilingualText, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import { IMultilingualText } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material/';
 import { Accordion, AccordionDetails, AccordionSummary, Box } from '@mui/material';
 import { useContext } from 'react';
+import { findOriginalTextItem } from '../../../components/notes/shared/find-original-text-item';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
+import { findTextItemByLanguageCode } from './find-text-item-by-language-code';
 import { MultilingualTextItemPresenter } from './multilingual-text-item-presenter';
 
 export interface MultilingualTextPresenterProps {
@@ -17,11 +19,10 @@ export const MultilingualTextPresenter = ({
 
     const { items } = text;
 
-    const textItemWithDefaultLanguage =
-        items?.find((item) => item.languageCode === defaultLanguageCode) || null;
+    const textItemWithDefaultLanguage = findTextItemByLanguageCode(text, defaultLanguageCode);
 
     const primaryMultilingualTextItem = isNullOrUndefined(textItemWithDefaultLanguage)
-        ? items?.find((item) => item.role === MultilingualTextItemRole.original)
+        ? { ...findOriginalTextItem({ items }), role: 'original' }
         : textItemWithDefaultLanguage;
 
     const translations = items?.filter((items) => items.languageCode !== defaultLanguageCode);

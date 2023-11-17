@@ -1,5 +1,5 @@
 import { IMultilingualTextItem } from '@coscrad/api-interfaces';
-import LanguageIcon from '@mui/icons-material/Language';
+import { Language as LanguageIcon } from '@mui/icons-material';
 import { IconButton, Tooltip, Typography } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
 import { getLabelForLanguage } from './text-presenters/get-label-for-language';
