@@ -1,4 +1,4 @@
-import { styled } from '@mui/material';
+import { Typography, styled } from '@mui/material';
 
 const WAVE_FORM_URL = 'https://guujaaw.info/images/audio-wave-form.png';
 
@@ -19,16 +19,28 @@ const WaveForm = styled('div')({
 });
 
 interface TrackProps {
+    participantInitials: string;
     width: number;
     height: number;
     trackColor: string;
 }
 
-export const Track = ({ width, height, trackColor }: TrackProps): JSX.Element => {
+export const Track = ({
+    participantInitials,
+    width,
+    height,
+    trackColor,
+}: TrackProps): JSX.Element => {
     return (
         <TrackContainer
-            sx={{ width: `${width}px`, height: `${height}px`, backgroundColor: trackColor }}
+            sx={{
+                width: `${width}px`,
+                height: `${height}px`,
+                padding: '5px',
+                backgroundColor: trackColor,
+            }}
         >
+            <Typography>{participantInitials}</Typography>
             {/* <WaveForm /> */}
         </TrackContainer>
     );

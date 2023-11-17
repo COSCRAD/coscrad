@@ -4,6 +4,8 @@ import {
     ArrowRight as ArrowRightIcon,
     Clear as ClearIcon,
     Expand as ExpandMoreIcon,
+    FullscreenExit as FullscreenExitIcon,
+    Fullscreen as FullscreenIcon,
     Pause as PauseIcon,
     PlayArrow as PlayArrowIcon,
     Replay as ReplayIcon,
@@ -18,10 +20,11 @@ import {
     Typography,
     styled,
 } from '@mui/material';
-import { SyntheticEvent, useRef, useState } from 'react';
+import { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { CoscradMediaEditor } from './coscrad-media-editor';
 import { FormattedCurrentTime } from './formatted-currenttime';
 import { LanguageCode } from './language-code.enum';
+import { ITranscript } from './video-prototype-interfaces/transcript-interface';
 
 const calculatePercentProgress = (currentTime: number, duration: number) => {
     return (currentTime / duration) * 100;
@@ -97,16 +100,18 @@ export type Subtitle = {
 
 interface VideoPrototypePlayerProps {
     videoUrl: string;
-    subtitles: Subtitle[];
+    transcript: ITranscript;
     onTimeUpdate?: (currentTime: number) => void;
 }
 
 export const VideoPrototypePlayer = ({
     videoUrl,
-    subtitles,
+    transcript,
     onTimeUpdate,
 }: VideoPrototypePlayerProps): JSX.Element => {
     const videoRef = useRef<HTMLVideoElement>(null);
+
+    const fullscreenRef = useRef<HTMLDivElement>(null);
 
     const [mediaState, setMediaState] = useState<MediaState>({
         loadStatus: VideoVerifiedState.loading,
@@ -126,6 +131,8 @@ export const VideoPrototypePlayer = ({
         LanguageCode.English
     );
 
+    const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+
     const onLoadedData = (event: SyntheticEvent<HTMLVideoElement, Event>) => {
         /**
          * The problem of not accessing the video duration must have to do with
@@ -144,8 +151,6 @@ export const VideoPrototypePlayer = ({
         const videoTarget = event.target as HTMLVideoElement;
 
         const { readyState, duration } = videoTarget;
-
-        console.log(`loadeddata: readyState: ${readyState}, duration: ${duration}`);
 
         setMediaState(() => ({
             ...mediaState,
@@ -294,25 +299,46 @@ export const VideoPrototypePlayer = ({
         setOutPointMilliseconds(null);
     };
 
+    const toggleFullscreen = () => {
+        if (!document.fullscreenElement) {
+            fullscreenRef.current!.requestFullscreen();
+        } else if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+    };
+
+    const onFullScreenChange = () => {
+        setIsFullscreen(Boolean(document.fullscreenElement));
+    };
+
+    useEffect(() => {
+        document.addEventListener('fullscreenchange', onFullScreenChange);
+
+        return () => document.removeEventListener('fullscreenchange', onFullScreenChange);
+    });
+
     return (
-        <Box>
-            <Video
-                ref={videoRef}
-                onTimeUpdate={handlePlayProgress}
-                onClick={playPauseMedia}
-                onError={onError}
-                onLoadedData={onLoadedData}
-                onCanPlayThrough={onCanPlayThrough}
-                onPlaying={onPlaying}
-                onPause={onPause}
-                onProgress={onProgressBuffer}
-                width="100%"
-                disablePictureInPicture
-                muted
-            >
-                <source src={videoUrl} />
-            </Video>
-            {/* <SubtitlesOverlay>
+        <div ref={fullscreenRef}>
+            <Box>
+                <Video
+                    ref={videoRef}
+                    sx={{
+                        width: `${isFullscreen ? '50%' : '100%'}`,
+                    }}
+                    onTimeUpdate={handlePlayProgress}
+                    onClick={playPauseMedia}
+                    onError={onError}
+                    onLoadedData={onLoadedData}
+                    onCanPlayThrough={onCanPlayThrough}
+                    onPlaying={onPlaying}
+                    onPause={onPause}
+                    onProgress={onProgressBuffer}
+                    disablePictureInPicture
+                    muted
+                >
+                    <source src={videoUrl} />
+                </Video>
+                {/* <SubtitlesOverlay>
                 {mediaState.shouldPlayWithSubtitles ? (
                     <SubtitlesByTime
                         subtitles={subtitles}
@@ -322,8 +348,8 @@ export const VideoPrototypePlayer = ({
                 ) : null}
             </SubtitlesOverlay> */}
 
-            <Box sx={{ mb: 2, position: 'relative' }}>
-                {/* <CoscradLinearProgressBar
+                <Box sx={{ mb: 2, position: 'relative' }}>
+                    {/* <CoscradLinearProgressBar
                     buffer={mediaState.buffer}
                     progress={mediaState.progress}
                     inPointMilliseconds={inPointMilliseconds}
@@ -331,101 +357,111 @@ export const VideoPrototypePlayer = ({
                     mediaDuration={mediaState.duration}
                     seekInProgressBar={seekInProgressBar}
                 /> */}
-                <CoscradMediaEditor
-                    buffer={mediaState.buffer}
-                    playProgress={mediaState.playProgress}
-                    inPointMilliseconds={inPointMilliseconds}
-                    outPointMilliseconds={outPointMilliseconds}
-                    mediaDuration={mediaState.duration}
-                    seekInProgressBar={seekInProgressBar}
-                />
-                <VideoControls>
-                    <Box>
-                        {/* Note: the tooltip on the disabled button generates an error.  There's a 
+                    <CoscradMediaEditor
+                        buffer={mediaState.buffer}
+                        playProgress={mediaState.playProgress}
+                        inPointMilliseconds={inPointMilliseconds}
+                        outPointMilliseconds={outPointMilliseconds}
+                        mediaDuration={mediaState.duration}
+                        seekInProgressBar={seekInProgressBar}
+                        transcript={transcript}
+                    />
+                    <VideoControls>
+                        <Box>
+                            {/* Note: the tooltip on the disabled button generates an error.  There's a 
                             discussion (https://github.com/mui/material-ui/issues/8416) that still seems
                             to be unresolved.  This: https://github.com/mui/material-ui/issues/8416#issuecomment-1294989582
                             seems correct for UI design, that tooltips should appear regardless of a button's disabled status 
                         */}
-                        <Tooltip title="Restart Media">
-                            <IconButton
-                                onClick={restartMedia}
-                                disabled={mediaState.playProgress === 0}
-                            >
-                                <ReplayIcon />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Play / Pause Media">
-                            <IconButton
-                                onClick={playPauseMedia}
-                                disabled={mediaState.loadStatus === VideoVerifiedState.loading}
-                            >
-                                {mediaState.isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Mark In Point">
-                            <IconButton
-                                onClick={markInPoint}
-                                disabled={mediaState.loadStatus === VideoVerifiedState.loading}
-                            >
-                                <ArrowRightIcon />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Mark Out Point">
-                            <IconButton
-                                onClick={markOutPoint}
-                                disabled={mediaState.loadStatus === VideoVerifiedState.loading}
-                            >
-                                <ArrowLeftIcon />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Clear Markers">
-                            <IconButton
-                                onClick={clearMarkers}
-                                disabled={
-                                    mediaState.loadStatus === VideoVerifiedState.loading ||
-                                    isNullOrUndefined(inPointMilliseconds)
-                                }
-                            >
-                                <ClearIcon />
-                            </IconButton>
-                        </Tooltip>
-                    </Box>
-                    <Box>
-                        <FormattedCurrentTime currentTimeInSeconds={mediaState.currentTime} />
-                        {` / `}
-                        <FormattedCurrentTime currentTimeInSeconds={mediaState.duration} />
-                    </Box>
-                </VideoControls>
-                <Accordion>
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1a-content"
-                        id="panel1a-header"
-                    >
-                        <Typography>Debug</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <Typography component="div" variant="h5">
-                            Loading status: {mediaState.loadStatus}
-                        </Typography>
-                        <Typography component="div" variant="h5">
-                            Playhead: {mediaState.currentTime}
-                        </Typography>
-                        <Typography component="div" variant="h5">
-                            Progress: {mediaState.playProgress}
-                        </Typography>
-                        <Typography component="div" variant="h5">
-                            Buffer: {mediaState.buffer}
-                        </Typography>
-                        <Typography component="div" variant="h5">
-                            In Point: {inPointMilliseconds}
-                        </Typography>
-                        <Typography component="div" variant="h5">
-                            Out Point: {outPointMilliseconds}
-                        </Typography>
-                    </AccordionDetails>
-                </Accordion>
+                            <Tooltip title="Restart Media">
+                                <IconButton
+                                    onClick={restartMedia}
+                                    disabled={mediaState.playProgress === 0}
+                                >
+                                    <ReplayIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Play / Pause Media">
+                                <IconButton
+                                    onClick={playPauseMedia}
+                                    disabled={mediaState.loadStatus === VideoVerifiedState.loading}
+                                >
+                                    {mediaState.isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Mark In Point">
+                                <IconButton
+                                    onClick={markInPoint}
+                                    disabled={mediaState.loadStatus === VideoVerifiedState.loading}
+                                >
+                                    <ArrowRightIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Mark Out Point">
+                                <IconButton
+                                    onClick={markOutPoint}
+                                    disabled={mediaState.loadStatus === VideoVerifiedState.loading}
+                                >
+                                    <ArrowLeftIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Clear Markers">
+                                <IconButton
+                                    onClick={clearMarkers}
+                                    disabled={
+                                        mediaState.loadStatus === VideoVerifiedState.loading ||
+                                        isNullOrUndefined(inPointMilliseconds)
+                                    }
+                                >
+                                    <ClearIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Toggle Full Screen">
+                                <IconButton onClick={toggleFullscreen}>
+                                    {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
+                                </IconButton>
+                            </Tooltip>
+                        </Box>
+                        <Box>
+                            <FormattedCurrentTime currentTimeInSeconds={mediaState.currentTime} />
+                            {` / `}
+                            <FormattedCurrentTime currentTimeInSeconds={mediaState.duration} />
+                        </Box>
+                    </VideoControls>
+                    <Accordion>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header"
+                        >
+                            <Typography>Debug</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Typography component="div" variant="h5">
+                                Full Screen: {JSON.stringify(isFullscreen)}
+                            </Typography>
+                            <Typography component="div" variant="h5">
+                                Loading status: {mediaState.loadStatus}
+                            </Typography>
+                            <Typography component="div" variant="h5">
+                                Playhead: {mediaState.currentTime}
+                            </Typography>
+                            <Typography component="div" variant="h5">
+                                Progress: {mediaState.playProgress}
+                            </Typography>
+                            <Typography component="div" variant="h5">
+                                Buffer: {mediaState.buffer}
+                            </Typography>
+                            <Typography component="div" variant="h5">
+                                In Point: {inPointMilliseconds}
+                            </Typography>
+                            <Typography component="div" variant="h5">
+                                Out Point: {outPointMilliseconds}
+                            </Typography>
+                        </AccordionDetails>
+                    </Accordion>
+                </Box>
             </Box>
-        </Box>
+        </div>
     );
 };

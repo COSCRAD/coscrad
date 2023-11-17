@@ -3,6 +3,9 @@ import { styled } from '@mui/material';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { TimelineRuler } from './timeline';
 import { Track } from './track';
+import { ITranscript } from './video-prototype-interfaces/transcript-interface';
+
+const ZOOM_FACTOR = 40;
 
 const PROGRESS_BAR_HEIGHT = 30;
 
@@ -12,7 +15,7 @@ const EDITOR_X_PADDING = 10;
 
 const TIMELINE_RULER_BAR_HEIGHT = 30;
 
-const PARTICIPANTS = 2;
+const TRACK_COLORS = ['#5d868a', '#916a8a'];
 
 const RangeBar = styled('div')({
     top: `-${PROGRESS_BAR_HEIGHT * 2}px`,
@@ -76,6 +79,7 @@ interface CoscradLinearProgressBarProps {
     outPointMilliseconds: number | null;
     mediaDuration: number;
     seekInProgressBar: (progressSelected: number) => void;
+    transcript: ITranscript;
 }
 
 export const CoscradMediaEditor = ({
@@ -85,6 +89,7 @@ export const CoscradMediaEditor = ({
     outPointMilliseconds,
     mediaDuration,
     seekInProgressBar,
+    transcript,
 }: CoscradLinearProgressBarProps) => {
     // Consider breaking out progress bar colours as customizable theme palettes
 
@@ -102,13 +107,15 @@ export const CoscradMediaEditor = ({
         width: '',
     });
 
-    const zoomFactor = 10;
-
-    const scrolledTrackLength = mediaDuration * zoomFactor;
+    const scrolledTrackLength = mediaDuration * ZOOM_FACTOR;
 
     const trackHeight = EDITOR_SOUND_BAR_HEIGHT + 2;
 
     const rangeBarRef = useRef<HTMLDivElement>(null);
+
+    const { participants, items } = transcript;
+
+    const numberOfParticipants = participants.length;
 
     const handleSeekInProgressBar = (event: React.MouseEvent<HTMLSpanElement>) => {
         const progressBarElement = event.currentTarget;
@@ -132,7 +139,7 @@ export const CoscradMediaEditor = ({
     };
 
     const timeline = useMemo(() => {
-        return <TimelineRuler duration={mediaDuration} zoomFactor={zoomFactor} />;
+        return <TimelineRuler duration={mediaDuration} zoomFactor={ZOOM_FACTOR} />;
     }, [mediaDuration]);
 
     useEffect(() => {
@@ -198,12 +205,13 @@ export const CoscradMediaEditor = ({
 
     return (
         <SoundEditor ref={soundEditorRef}>
-            {/* Set container height by length of participants array */}
             <ScrolledTracksContainer
                 ref={tracksRef}
                 sx={{
                     height: `${
-                        PARTICIPANTS * EDITOR_SOUND_BAR_HEIGHT + TIMELINE_RULER_BAR_HEIGHT + 10
+                        numberOfParticipants * EDITOR_SOUND_BAR_HEIGHT +
+                        TIMELINE_RULER_BAR_HEIGHT +
+                        10
                     }px`,
                     width: `${scrolledTrackLength}px`,
                 }}
@@ -212,7 +220,9 @@ export const CoscradMediaEditor = ({
                     ref={playheadRef}
                     sx={{
                         height: `${
-                            PARTICIPANTS * EDITOR_SOUND_BAR_HEIGHT + TIMELINE_RULER_BAR_HEIGHT + 8
+                            numberOfParticipants * EDITOR_SOUND_BAR_HEIGHT +
+                            TIMELINE_RULER_BAR_HEIGHT +
+                            8
                         }px`,
                         left: `${playProgress}%`,
                     }}
@@ -225,8 +235,14 @@ export const CoscradMediaEditor = ({
                 >
                     {mediaDuration > 0 ? timeline : null}
                 </TimelineRulerContainer>
-                <Track width={scrolledTrackLength} height={trackHeight} trackColor={'#5d868a'} />
-                <Track width={scrolledTrackLength} height={trackHeight} trackColor={'#916a8a'} />
+                {participants.map(({ initials }, index) => (
+                    <Track
+                        participantInitials={initials}
+                        width={scrolledTrackLength}
+                        height={trackHeight}
+                        trackColor={TRACK_COLORS[index]}
+                    />
+                ))}
             </ScrolledTracksContainer>
         </SoundEditor>
     );
