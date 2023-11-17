@@ -1,20 +1,10 @@
 import { IMultilingualText, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import LanguageIcon from '@mui/icons-material/Language';
-import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
-    Box,
-    IconButton,
-    Tooltip,
-    Typography,
-} from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Box } from '@mui/material';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
-import { getLabelForLanguage } from './text-presenters/get-label-for-language';
-import { TranslatedLanguageTextPresenter } from './text-presenters/translated-text-presenter';
+import { MultilingualTextItemPresenter } from './multilingual-text-item-presenter';
 
 export interface MultilingualTextPresenterProps {
     text: IMultilingualText;
@@ -43,27 +33,14 @@ export const MultilingualTextPresenter = ({
                     expandIcon={<ExpandMoreIcon />}
                     data-testid="multilingual-text-main-text-item"
                 >
-                    <Typography variant="h4" margin={'auto 0'}>
-                        {primaryMultilingualTextItem.text}
-                        <Tooltip
-                            title={`${getLabelForLanguage(
-                                primaryMultilingualTextItem.languageCode
-                            )}, '${primaryMultilingualTextItem.role}'`}
-                        >
-                            <IconButton>
-                                <LanguageIcon />
-                            </IconButton>
-                        </Tooltip>
-                    </Typography>
+                    <MultilingualTextItemPresenter
+                        variant="h4"
+                        item={primaryMultilingualTextItem}
+                    />
                 </AccordionSummary>
                 <AccordionDetails data-testid="multilingual-text-translations">
-                    {translations.map(({ languageCode, text, role }) => (
-                        <TranslatedLanguageTextPresenter
-                            key={`${languageCode}-${role}`}
-                            languageCode={languageCode}
-                            text={text}
-                            role={role}
-                        />
+                    {translations.map((item) => (
+                        <MultilingualTextItemPresenter variant="body1" item={item} />
                     ))}
                 </AccordionDetails>
             </Accordion>
