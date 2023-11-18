@@ -1,11 +1,12 @@
 import {
+    IMultilingualText,
     IMultilingualTextItem,
     LanguageCode,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
-import { findOriginalTextItem } from './find-original-text-item';
+import { getOriginalTextItem } from './get-original-text-item';
 
-describe(`findOriginalTextItem`, () => {
+describe(`getOriginalTextItem`, () => {
     const originalText = 'original text';
 
     const originalItemLanguageCode = LanguageCode.English;
@@ -22,11 +23,17 @@ describe(`findOriginalTextItem`, () => {
         languageCode: LanguageCode.Haida,
     };
 
+    const multilingualText: IMultilingualText = {
+        items: [originalTextItem],
+    };
+
+    const multilingualTextWithTranslation = {
+        items: [originalTextItem, translationTextItem],
+    };
+
     describe(`when there is only original text`, () => {
         it(`should find the text item`, () => {
-            const result = findOriginalTextItem({
-                items: [originalTextItem],
-            });
+            const result = getOriginalTextItem(multilingualText);
 
             const { languageCode, text } = result;
 
@@ -38,9 +45,7 @@ describe(`findOriginalTextItem`, () => {
 
     describe(`when there is also a translation`, () => {
         it(`should find the text item`, () => {
-            const result = findOriginalTextItem({
-                items: [originalTextItem, translationTextItem],
-            });
+            const result = getOriginalTextItem(multilingualTextWithTranslation);
 
             const { languageCode, text } = result;
 
@@ -56,7 +61,7 @@ describe(`findOriginalTextItem`, () => {
      */
     describe(`when there are no items`, () => {
         it(`should find the text item`, () => {
-            const result = findOriginalTextItem({
+            const result = getOriginalTextItem({
                 items: [],
             });
 
