@@ -100,6 +100,10 @@ export class VocabularyList extends Resource {
         return this.entries.some((entry) => termId === entry.termId);
     }
 
+    getEntryForTerm(termId: AggregateId): Maybe<VocabularyListEntry> {
+        return this.entries.find((entry) => termId === entry.termId) || NotFound;
+    }
+
     hasFilterPropertyNamed(name: string): boolean {
         // TODO rename `variables` to `filterProperties`
         return this.variables.some((filterProperty) => filterProperty.name === name);
@@ -143,11 +147,6 @@ export class VocabularyList extends Resource {
         propertyName: string,
         propertyValue: string | boolean
     ): ResultOrError<VocabularyList> {
-        // const filterProperty = this.getFilterProperty(propertyName);
-
-        // if(isNotFound(filterProperty) return new CustomErrorToo())
-
-        // if(!filterProperty.isAllowedValue(propertyValue)) return new CustomErrorToo()
         const entrySearchResult = this.entries.find((entry) => entry.termId === termId);
 
         if (isNullOrUndefined(entrySearchResult)) {
