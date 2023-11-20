@@ -18,6 +18,7 @@ import { ResourceReadAccessGrantedToUserPayload } from '../../domain/models/shar
 import { TagCreated } from '../../domain/models/tag/commands/create-tag/tag-created.event';
 import { ResourceOrNoteTaggedPayload } from '../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
 import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
+import { isNullOrUndefined } from '../../domain/utilities/validation/is-null-or-undefined';
 import { EventSourcedTagViewModel } from '../buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { BaseEvent } from '../event-sourcing';
 import { ApplyEvent } from '../event-sourcing/apply-event.interface';
@@ -191,14 +192,27 @@ export class DigitalTextViewModel
                     aggregateCompositeIdentifier: taggedMemberCompositeIdentifier,
                 })
             ) {
-                this.tags = [
-                    ...this.tags,
-                    this.#allTags.find(({ id }) => id === tagId).apply(event),
-                ];
+                const searchResult = this.#allTags.find(({ id }) => id === tagId);
+
+                /**
+                 * This is a safeguard so things do not blow up in the event
+                 * of a system error. Do we want to throw instead?
+                 */
+                if (isNullOrUndefined(searchResult)) {
+                    console.log({
+                        missingTagInDigitalTextList: tagId,
+                    });
+
+                    return this;
+                }
+
+                this.tags = [...this.tags, searchResult.apply(event)];
+
+                return this;
             }
+
             return this;
         }
-
         /**
          * TODO Event source notes and edge connections for this digital text.
          */

@@ -2,27 +2,41 @@ import {
     AggregateType,
     ICategorizableDetailQueryResult,
     IDigitalTextViewModel,
+    LanguageCode,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { Button } from '@mui/material';
+import { isNonEmptyString } from '@coscrad/validation-constraints';
+import { Button, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useAppDispatch } from '../../../app/hooks';
 import { executeCommand } from '../../../store/slices/command-status';
-import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components';
+import {
+    CommaSeparatedList,
+    ResourceDetailFullViewPresenter,
+} from '../../../utils/generic-components';
 import { cyclicDecrement, cyclicIncrement } from '../../../utils/math';
+import { ImmersiveCreateNoteForm } from './immersive-create-note-form';
 import { NewPageForm } from './new-page-form';
+import { PublicationForm } from './page-publication-form';
 import { PagesPresenter } from './pages-presenter';
 
 export const DigitalTextDetailFullViewPresenter = ({
     id,
     title: name,
     pages,
+    isPublished,
+    tags,
 }: ICategorizableDetailQueryResult<IDigitalTextViewModel>): JSX.Element => {
     const dispatch = useAppDispatch();
 
     const [currentIndex, setCurrentIndex] = useState<number>(0);
 
     const selectedPageIdentifier = pages.length > 0 ? pages[currentIndex].identifier : undefined;
+
+    const aggregateCompositeIdentifier = {
+        type: AggregateType.digitalText,
+        id,
+    };
 
     return (
         <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.digitalText}>
@@ -70,11 +84,60 @@ export const DigitalTextDetailFullViewPresenter = ({
                         executeCommand({
                             type: 'ADD_PAGE_TO_DIGITAL_TEXT',
                             payload: {
+                                aggregateCompositeIdentifier,
+                                identifier: pageIdentifier,
+                            },
+                        })
+                    );
+                }}
+            />
+            {!isPublished ? (
+                <PublicationForm
+                    onSubmitForPublication={() => {
+                        dispatch(
+                            executeCommand({
+                                type: 'PUBLISH_RESOURCE',
+                                payload: {
+                                    aggregateCompositeIdentifier: aggregateCompositeIdentifier,
+                                },
+                            })
+                        );
+                    }}
+                />
+            ) : (
+                <Typography variant="body2">Published</Typography>
+            )}
+            <br />
+            {/* TODO Include tags */}
+            Tags:{' '}
+            <CommaSeparatedList>
+                {tags.map(({ label }) => (
+                    <div>{label}</div>
+                ))}
+            </CommaSeparatedList>
+            <br />
+            <ImmersiveCreateNoteForm
+                onSubmit={(text, noteId) => {
+                    dispatch(
+                        executeCommand({
+                            type: 'CREATE_NOTE_ABOUT_RESOURCE',
+                            payload: {
                                 aggregateCompositeIdentifier: {
+                                    type: AggregateType.note,
+                                    id: noteId,
+                                },
+                                resourceCompositeIdentifier: {
                                     type: AggregateType.digitalText,
                                     id,
                                 },
-                                identifier: pageIdentifier,
+                                text,
+                                languageCode: LanguageCode.English,
+                                resourceContext: isNonEmptyString(selectedPageIdentifier)
+                                    ? {
+                                          type: 'pageRange',
+                                          pageIdentifiers: [selectedPageIdentifier],
+                                      }
+                                    : { type: 'general' },
                             },
                         })
                     );

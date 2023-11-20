@@ -24,14 +24,13 @@ export const PagePresenter = ({
     page,
     isSelected,
     onSubmitNewContent,
-    isAdmin = false,
+    isAdmin: _isAdmin = false,
 }: PagePresenterProps): JSX.Element => {
     const { identifier, content } = page;
 
     const hasContent = !isNullOrUndefined(content);
 
-    // TODO Is this working?
-    const shouldShowAddContentForm = !hasContent && isAdmin;
+    const shouldShowAddContentForm = !hasContent; // && isAdmin
 
     return (
         <StyledMuiPage>
@@ -40,9 +39,9 @@ export const PagePresenter = ({
                 {isSelected ? '**' : ''}
                 {identifier}
             </Typography>
-            {shouldShowAddContentForm ? null : (
+            {shouldShowAddContentForm ? (
                 <PageContentForm onSubmitNewContent={onSubmitNewContent} />
-            )}
+            ) : null}
         </StyledMuiPage>
     );
 };

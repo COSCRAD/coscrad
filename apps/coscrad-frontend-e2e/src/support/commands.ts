@@ -96,6 +96,7 @@ Cypress.Commands.add('login', () => {
 
     cy.getByDataAttribute('login-button').click();
 
+    // TODO Split all chains on top of click and fix the lint error
     cy.get('#username').click().type(Cypress.env('username'));
 
     cy.get('#password').click().type(Cypress.env('password'));

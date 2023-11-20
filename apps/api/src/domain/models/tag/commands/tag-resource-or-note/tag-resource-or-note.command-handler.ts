@@ -1,8 +1,11 @@
+import { AggregateType } from '@coscrad/api-interfaces';
 import { CommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
+import { IEventRepository } from '../../../../../persistence/repositories/arango-command-repository-for-aggregate-root';
+import { ArangoEventRepository } from '../../../../../persistence/repositories/arango-event-repository';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { Valid, isValid } from '../../../../domainModelValidators/Valid';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
@@ -22,7 +25,10 @@ export class TagResourceOrNoteCommandHandler extends BaseUpdateCommandHandler<Ta
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN)
         protected readonly repositoryProvider: IRepositoryProvider,
-        @Inject('ID_MANAGER') protected readonly idManager: IIdManager
+        @Inject('ID_MANAGER') protected readonly idManager: IIdManager,
+
+        // TODO Make Tags fully event sourced
+        @Inject(ArangoEventRepository) protected readonly eventRepository: IEventRepository
     ) {
         super(repositoryProvider, idManager);
     }
@@ -108,5 +114,30 @@ export class TagResourceOrNoteCommandHandler extends BaseUpdateCommandHandler<Ta
 
     protected buildEvent(command: TagResourceOrNote, eventId: string, userId: string): BaseEvent {
         return new ResourceOrNoteTagged(command, eventId, userId);
+    }
+
+    protected override async persist(
+        instance: Tag,
+        command: TagResourceOrNote,
+        systemUserId: string
+    ): Promise<void> {
+        /**
+         * TODO We need to clean this up when we make Tags fully event sourced.
+         *
+         * super.persist currently only persists the snapshot for tags.
+         */
+        await super.persist(instance, command, systemUserId);
+
+        // We shouldn't do this
+        const newId = await this.idManager.generate();
+
+        /**
+         * We do this first because it's better to have an unuseable UUID
+         * that is technically available then to write a record with this UUID
+         * and leave the ID available.
+         */
+        this.idManager.use({ id: newId, type: AggregateType.tag });
+
+        await this.eventRepository.appendEvent(this.buildEvent(command, newId, systemUserId));
     }
 }
