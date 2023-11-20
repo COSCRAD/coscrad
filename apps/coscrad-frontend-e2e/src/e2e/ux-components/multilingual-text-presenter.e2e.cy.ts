@@ -78,9 +78,9 @@ describe('Multilingual Text Presenter', () => {
 
         describe(`with no translations`, () => {
             it('should display the English text as the primary item', () => {
-                cy.getByDataAttribute('multilingual-text-main-text-item').contains(
-                    videoNameInEnglish
-                );
+                cy.getByDataAttribute(
+                    'multilingual-text-main-text-item-without-translations'
+                ).contains(videoNameInEnglish);
             });
         });
 
@@ -94,9 +94,9 @@ describe('Multilingual Text Presenter', () => {
             });
 
             it(`should display the default language as the primary item`, () => {
-                cy.getByDataAttribute('multilingual-text-main-text-item').contains(
-                    videoNameTranslationInDefaultLanguage
-                );
+                cy.getByDataAttribute(
+                    'multilingual-text-main-text-item-with-translations'
+                ).contains(videoNameTranslationInDefaultLanguage);
             });
 
             it(`should display the English translation in the translation items`, () => {
@@ -128,25 +128,25 @@ describe('Multilingual Text Presenter', () => {
 
         describe(`with no English translation`, () => {
             it(`should display the default language text as the primary item`, () => {
-                cy.getByDataAttribute('multilingual-text-main-text-item').contains(
-                    videoNameInLanguage
-                );
-            });
-        });
-
-        before(() => {
-            cy.seedDataWithCommand(`TRANSLATE_VIDEO_NAME`, {
-                aggregateCompositeIdentifier: videoWithLanguageNameAggregateCompositeIdentifier,
-                languageCode: LanguageCode.English,
-                text: videoNameInEnglishTranslation,
+                cy.getByDataAttribute(
+                    'multilingual-text-main-text-item-without-translations'
+                ).contains(videoNameInLanguage);
             });
         });
 
         describe(`with an English translation`, () => {
+            before(() => {
+                cy.seedDataWithCommand(`TRANSLATE_VIDEO_NAME`, {
+                    aggregateCompositeIdentifier: videoWithLanguageNameAggregateCompositeIdentifier,
+                    languageCode: LanguageCode.English,
+                    text: videoNameInEnglishTranslation,
+                });
+            });
+
             it(`should display the default language text as the primary item`, () => {
-                cy.getByDataAttribute('multilingual-text-main-text-item').contains(
-                    videoNameInLanguage
-                );
+                cy.getByDataAttribute(
+                    'multilingual-text-main-text-item-with-translations'
+                ).contains(videoNameInLanguage);
             });
 
             it(`should display the English translation in the translation items`, () => {
