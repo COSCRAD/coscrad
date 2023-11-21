@@ -19,6 +19,7 @@ type CoscradDataTypeToTypeScriptType = {
     [CoscradDataType.String]: string;
     [CoscradDataType.FixedValue]: unknown;
     [CoscradDataType.FiniteNumber]: number;
+    [CoscradDataType.PageNumber]: string;
 };
 
 // is this still used? Well is it?

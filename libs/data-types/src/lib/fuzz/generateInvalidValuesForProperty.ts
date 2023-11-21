@@ -9,6 +9,14 @@ type ValueAndDescription<T = unknown> = {
 
 const fuzzData = {
     emptyString: '',
+    whiteSpaceOnlyString: '   ',
+    stringWithThreeChars: 'XII',
+    leadingWhiteSpaceString: ' A1',
+    trailingWhiteSpaceString: 'B2 ',
+    stringWithInteriorSpace: 'A 2',
+    stringWithTab: '12\t',
+    stringWithNewLine: '3\n',
+    stringWithTenChars: '0123456789',
     positiveInteger: 99,
     negativeInteger: -33,
     positiveDecimal: 33.3,
@@ -44,8 +52,9 @@ const dataTypeToValidFuzz: DataTypeToFuzz = {
         'uuid',
         'isbn10',
         'isbn13',
-        'emptyObject',
+        'stringWithThreeChars',
     ],
+    [CoscradDataType.PageNumber]: ['stringWithThreeChars'],
     [CoscradDataType.FiniteNumber]: [
         'positiveInteger',
         'positiveDecimal',

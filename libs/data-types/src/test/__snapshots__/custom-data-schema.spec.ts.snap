@@ -159,6 +159,13 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "isOptional": true,
     "label": "label for property: optionalRawData",
   },
+  "pageNumber": {
+    "coscradDataType": "PAGE_NUMBER",
+    "description": "description of property: pageNumber",
+    "isArray": false,
+    "isOptional": false,
+    "label": "label for property: pageNumber",
+  },
   "parentWidgetId": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "description of property: parentWidgetId",

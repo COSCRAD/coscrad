@@ -10,6 +10,7 @@ const lookupTable: { [K in CoscradDataType]: CoscradConstraint[] } = {
         CoscradConstraint.isNonNegative,
         CoscradConstraint.isFiniteNumber,
     ],
+    [CoscradDataType.PageNumber]: [CoscradConstraint.isPageNumber],
     [CoscradDataType.FiniteNumber]: [CoscradConstraint.isFiniteNumber],
     [CoscradDataType.PositiveInteger]: [CoscradConstraint.isInteger, CoscradConstraint.isPositive],
     [CoscradDataType.RawData]: [CoscradConstraint.isObject],

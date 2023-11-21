@@ -122,7 +122,7 @@ describe(commandType, () => {
         });
 
     describe('when the command is valid', () => {
-        it.only(`should succeed with the expected updates`, async () => {
+        it(`should succeed with the expected updates`, async () => {
             const eventHistory = eventStreamForDigitalTextWithPage.as({
                 id: digitalTextId,
             });
