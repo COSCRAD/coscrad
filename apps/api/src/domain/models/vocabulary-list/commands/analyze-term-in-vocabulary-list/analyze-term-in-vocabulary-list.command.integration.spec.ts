@@ -45,6 +45,11 @@ const selectFilterPropertyName = 'aspect';
 
 const allowedValueForSelectFilterProperty = '1';
 
+// TODO check spelling
+const checkboxFilterPropertyName = 'usitative';
+
+const valueForCheckboxProperty = false;
+
 const anotherAllowedValueForSelectFilterProperty = '2';
 
 const selectFilterProperty = new VocabularyListFilterProperty({
@@ -62,11 +67,26 @@ const selectFilterProperty = new VocabularyListFilterProperty({
     ],
 });
 
+const checkboxFilterProperty = new VocabularyListFilterProperty({
+    name: checkboxFilterPropertyName,
+    type: DropboxOrCheckbox.checkbox,
+    validValues: [
+        {
+            value: true,
+            display: 'usually',
+        },
+        {
+            value: false,
+            display: 'standard form',
+        },
+    ],
+});
+
 const existingVocabularyList = getValidAggregateInstanceForTest(AggregateType.vocabularyList).clone(
     {
         published: false,
         entries: [existingEntry],
-        variables: [selectFilterProperty],
+        variables: [selectFilterProperty, checkboxFilterProperty],
     }
 );
 
@@ -74,14 +94,34 @@ const dummyFsa = buildTestCommandFsaMap().get(
     commandType
 ) as CommandFSA<AnalyzeTermInVocabularyList>;
 
-const validFsa = clonePlainObjectWithOverrides(dummyFsa, {
+const dummyFsaWithEmptyPropertyDefinitions = {
+    ...dummyFsa,
     payload: {
-        aggregateCompositeIdentifier: existingVocabularyList.getCompositeIdentifier(),
-        termId: existingTerm.id,
-        propertyName: selectFilterPropertyName,
-        propertyValue: allowedValueForSelectFilterProperty,
+        ...dummyFsa.payload,
+        /**
+         * `clonePlainObjectWithOverrides` will interpret an object-valued
+         * override prop as a request to override only the specified keys,
+         * leaving other keys. This causes troubles when we want to completely override
+         * the object, which really only happens when we model with dynamic keys.
+         *
+         * While this is a con for using dynamic keys, the latter present the
+         * path of least resistance for the current, critical feature.
+         */
+        propertyValues: {},
     },
-});
+};
+
+const validFsa = {
+    ...clonePlainObjectWithOverrides(dummyFsaWithEmptyPropertyDefinitions, {
+        payload: {
+            aggregateCompositeIdentifier: existingVocabularyList.getCompositeIdentifier(),
+            termId: existingTerm.id,
+            propertyValues: {
+                [selectFilterPropertyName]: allowedValueForSelectFilterProperty,
+            },
+        },
+    }),
+};
 
 const fsaFactory = new DummyCommandFsaFactory(() => validFsa);
 
@@ -124,35 +164,80 @@ describe(commandType, () => {
     });
 
     describe('when the command is valid', () => {
-        it(`should succeed`, async () => {
-            await assertCommandSuccess(commandAssertionDependencies, {
-                systemUserId: dummySystemUserId,
-                buildValidCommandFSA: () => validFsa,
-                initialState: new DeluxeInMemoryStore({
-                    [AggregateType.vocabularyList]: [existingVocabularyList],
-                }).fetchFullSnapshotInLegacyFormat(),
-                checkStateOnSuccess: async () => {
-                    const searchResult = await testRepositoryProvider
-                        .forResource(ResourceType.vocabularyList)
-                        .fetchById(existingVocabularyList.id);
+        describe(`when analyzing a term with respect to a select filter property`, () => {
+            it(`should succeed`, async () => {
+                await assertCommandSuccess(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    buildValidCommandFSA: () => validFsa,
+                    initialState: new DeluxeInMemoryStore({
+                        [AggregateType.vocabularyList]: [existingVocabularyList],
+                    }).fetchFullSnapshotInLegacyFormat(),
+                    checkStateOnSuccess: async () => {
+                        const searchResult = await testRepositoryProvider
+                            .forResource(ResourceType.vocabularyList)
+                            .fetchById(existingVocabularyList.id);
 
-                    expect(searchResult).toBeInstanceOf(VocabularyList);
+                        expect(searchResult).toBeInstanceOf(VocabularyList);
 
-                    const updatedVocabularyList = searchResult as VocabularyList;
+                        const updatedVocabularyList = searchResult as VocabularyList;
 
-                    const updatedEntry = updatedVocabularyList.getEntryForTerm(
-                        existingTerm.id
-                    ) as VocabularyListEntry;
+                        const updatedEntry = updatedVocabularyList.getEntryForTerm(
+                            existingTerm.id
+                        ) as VocabularyListEntry;
 
-                    expect(
-                        updatedEntry.doesMatch(
-                            selectFilterPropertyName,
-                            allowedValueForSelectFilterProperty
-                        )
-                    ).toBe(true);
+                        expect(
+                            updatedEntry.doesMatch(
+                                selectFilterPropertyName,
+                                allowedValueForSelectFilterProperty
+                            )
+                        ).toBe(true);
 
-                    // TODO assert that the command is persisted
-                },
+                        // TODO assert that the command is persisted
+                    },
+                });
+            });
+        });
+
+        describe(`when analyzing a term with respect to a checkbox filter property`, () => {
+            it(`should succeed`, async () => {
+                await assertCommandSuccess(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider.addFullSnapshot(
+                            new DeluxeInMemoryStore({
+                                [AggregateType.vocabularyList]: [existingVocabularyList],
+                            }).fetchFullSnapshotInLegacyFormat()
+                        );
+                    },
+                    buildValidCommandFSA: () =>
+                        fsaFactory.build(undefined, {
+                            propertyValues: {
+                                [checkboxFilterPropertyName]: valueForCheckboxProperty,
+                                [selectFilterPropertyName]: allowedValueForSelectFilterProperty,
+                            },
+                        }),
+                });
+            });
+        });
+
+        describe(`when analyzing a term with respect to multiple properties at once`, () => {
+            it(`should succeed`, async () => {
+                await assertCommandSuccess(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider.addFullSnapshot(
+                            new DeluxeInMemoryStore({
+                                [AggregateType.vocabularyList]: [existingVocabularyList],
+                            }).fetchFullSnapshotInLegacyFormat()
+                        );
+                    },
+                    buildValidCommandFSA: () =>
+                        fsaFactory.build(undefined, {
+                            propertyValues: {
+                                [checkboxFilterPropertyName]: valueForCheckboxProperty,
+                            },
+                        }),
+                });
             });
         });
     });
@@ -229,7 +314,9 @@ describe(commandType, () => {
                     },
                     buildCommandFSA: () =>
                         fsaFactory.build(undefined, {
-                            propertyName: missingPropertyName,
+                            propertyValues: {
+                                [missingPropertyName]: allowedValueForSelectFilterProperty,
+                            },
                         }),
                     checkError: (error) => {
                         assertErrorAsExpected(
@@ -261,7 +348,9 @@ describe(commandType, () => {
                     },
                     buildCommandFSA: () =>
                         fsaFactory.build(undefined, {
-                            propertyValue: invalidValueForFilterProperty,
+                            propertyValues: {
+                                [selectFilterPropertyName]: invalidValueForFilterProperty,
+                            },
                         }),
                     checkError: (error) => {
                         assertErrorAsExpected(
@@ -297,7 +386,10 @@ describe(commandType, () => {
                         // Analyze the term once with a different property value
                         await commandHandlerService.execute(
                             fsaFactory.build(undefined, {
-                                propertyValue: anotherAllowedValueForSelectFilterProperty,
+                                propertyValues: {
+                                    [selectFilterPropertyName]:
+                                        anotherAllowedValueForSelectFilterProperty,
+                                },
                             }),
                             // Note that we have to be explicit here since we are doing this in `seedInitialState`
                             {

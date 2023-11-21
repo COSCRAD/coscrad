@@ -87,8 +87,9 @@ const analyzeTermInVocabularyList: CommandFSA<AnalyzeTermInVocabularyList> = {
             id,
         },
         termId: buildDummyUuid(55),
-        propertyName: 'dummy-property-name',
-        propertyValue: 'dummy-property-value',
+        propertyValues: {
+            dummyPropertyName: 'dummy-property-value',
+        },
     },
 };
 

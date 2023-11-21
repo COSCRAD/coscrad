@@ -1,12 +1,6 @@
 import { AggregateType, ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import {
-    NestedDataType,
-    NonEmptyString,
-    RawDataObject,
-    ReferenceTo,
-    UUID,
-} from '@coscrad/data-types';
+import { NestedDataType, RawDataObject, ReferenceTo, UUID } from '@coscrad/data-types';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { VocabularyListCompositeId } from '../create-vocabulary-list';
 import { ANALYZE_TERM_IN_VOCABULARY_LIST } from './constants';
@@ -30,24 +24,11 @@ export class AnalyzeTermInVocabularyList implements ICommandBase {
     })
     readonly termId: AggregateId;
 
-    @NonEmptyString({
-        label: `filter property name`,
-        description: `the name of the filter property for which you are providing a value`,
-    })
-    readonly propertyName: string;
-
-    @NonEmptyString({
-        label: `filter property value`,
-        description: `the value of the filter property that matches this entry`,
-    })
-    // TODO support boolean
-    readonly propertyValue: boolean | string;
-
     @RawDataObject({
         label: 'property names and values',
         description: 'a record (dictionary) of filter property names and values',
     })
-    readonly propertyDefinition: Record<string, boolean | string>;
+    readonly propertyValues: Record<string, boolean | string>;
 }
 
 /**

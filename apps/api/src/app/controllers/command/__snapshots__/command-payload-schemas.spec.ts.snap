@@ -3953,6 +3953,59 @@ exports[`command payload schemas Command payload schema should match the snapsho
     "type": "ADD_TERM_TO_VOCABULARY_LIST",
   },
   {
+    "description": "analyze a term in a vocabulary list",
+    "label": "analyze term in a vocabulary list",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "must be: vocabularyList",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "vocabularyList",
+                "value": "vocabularyList",
+              },
+            ],
+          },
+        },
+      },
+      "propertyValues": {
+        "coscradDataType": "RAW_DATA",
+        "description": "a record (dictionary) of filter property names and values",
+        "isArray": false,
+        "isOptional": false,
+        "label": "property names and values",
+      },
+      "termId": {
+        "coscradDataType": "UUID",
+        "description": "the ID of the term you are analyzing in the vocabulary list",
+        "isArray": false,
+        "isOptional": false,
+        "label": "term ID",
+        "referenceTo": "term",
+      },
+    },
+    "type": "ANALYZE_TERM_IN_VOCABULARY_LIST",
+  },
+  {
     "description": "Translate the name of a video to an additional language",
     "label": "Translate Video Name",
     "schema": {
