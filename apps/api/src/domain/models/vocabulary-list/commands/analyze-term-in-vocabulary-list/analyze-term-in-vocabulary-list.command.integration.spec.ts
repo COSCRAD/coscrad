@@ -16,11 +16,19 @@ import { assertCommandError } from '../../../__tests__/command-helpers/assert-co
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { VocabularyListFilterProperty } from '../../entities/vocabulary-list-variable.entity';
 import { VocabularyList } from '../../entities/vocabulary-list.entity';
+import {
+    CannotOverwriteFilterPropertyValueForVocabularyListEntryError,
+    FailedToAnalyzeVocabularyListEntryError,
+} from '../../errors';
+import { InvalidVocabularyListFilterPropertyValueError } from '../../errors/invalid-vocabulary-list-filter-property-value.error';
+import { VocabularyListEntryNotFoundError } from '../../errors/vocabulary-list-entry-not-found.error';
+import { VocabularyListFilterPropertyNotFoundError } from '../../errors/vocabulary-list-filter-property-not-found.error';
 import { VocabularyListEntry } from '../../vocabulary-list-entry.entity';
 import { AnalyzeTermInVocabularyList } from './analyze-term-in-vocabulary-list.command';
 
@@ -37,6 +45,8 @@ const selectFilterPropertyName = 'aspect';
 
 const allowedValueForSelectFilterProperty = '1';
 
+const anotherAllowedValueForSelectFilterProperty = '2';
+
 const selectFilterProperty = new VocabularyListFilterProperty({
     name: selectFilterPropertyName,
     type: DropboxOrCheckbox.dropbox,
@@ -44,6 +54,10 @@ const selectFilterProperty = new VocabularyListFilterProperty({
         {
             value: allowedValueForSelectFilterProperty,
             display: 'progressive',
+        },
+        {
+            value: anotherAllowedValueForSelectFilterProperty,
+            display: 'perfective',
         },
     ],
 });
@@ -160,6 +174,153 @@ describe(commandType, () => {
                             new CommandExecutionError([
                                 new AggregateNotFoundError(
                                     existingVocabularyList.getCompositeIdentifier()
+                                ),
+                            ])
+                        );
+                    },
+                });
+            });
+        });
+
+        describe(`when there is no entry for the given term`, () => {
+            const missingTermId = buildDummyUuid(689);
+
+            it(`should return the expected error`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider.addFullSnapshot(
+                            new DeluxeInMemoryStore({
+                                [ResourceType.vocabularyList]: [existingVocabularyList],
+                            }).fetchFullSnapshotInLegacyFormat()
+                        );
+                    },
+                    buildCommandFSA: () =>
+                        fsaFactory.build(undefined, {
+                            termId: missingTermId,
+                        }),
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new VocabularyListEntryNotFoundError(
+                                    missingTermId,
+                                    existingVocabularyList.id
+                                ),
+                            ])
+                        );
+                    },
+                });
+            });
+        });
+
+        describe(`when there is no registered filter property with the given name`, () => {
+            const missingPropertyName = 'bogus-prop';
+
+            it(`should return the expected error`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider.addFullSnapshot(
+                            new DeluxeInMemoryStore({
+                                [ResourceType.vocabularyList]: [existingVocabularyList],
+                            }).fetchFullSnapshotInLegacyFormat()
+                        );
+                    },
+                    buildCommandFSA: () =>
+                        fsaFactory.build(undefined, {
+                            propertyName: missingPropertyName,
+                        }),
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new VocabularyListFilterPropertyNotFoundError(
+                                    missingPropertyName,
+                                    existingVocabularyList.id
+                                ),
+                            ])
+                        );
+                    },
+                });
+            });
+        });
+
+        describe(`when the provided value is not one of the allowed values for the given filter property`, () => {
+            const invalidValueForFilterProperty = 'boogus-value';
+
+            it(`should return the exptected error`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider.addFullSnapshot(
+                            new DeluxeInMemoryStore({
+                                [ResourceType.vocabularyList]: [existingVocabularyList],
+                            }).fetchFullSnapshotInLegacyFormat()
+                        );
+                    },
+                    buildCommandFSA: () =>
+                        fsaFactory.build(undefined, {
+                            propertyValue: invalidValueForFilterProperty,
+                        }),
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new InvalidVocabularyListFilterPropertyValueError(
+                                    selectFilterPropertyName,
+                                    invalidValueForFilterProperty,
+                                    existingVocabularyList.id
+                                ),
+                            ])
+                        );
+                    },
+                });
+            });
+        });
+
+        describe(`when the term has already been analyzed (i.e., already has a value) for this filter property`, () => {
+            /**
+             * Note that we may allow updating the value for an entry's property
+             * later, but for now it is not an intended use case.
+             */
+            it(`should return the expected error`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider.addFullSnapshot(
+                            new DeluxeInMemoryStore({
+                                [ResourceType.vocabularyList]: [existingVocabularyList],
+                            }).fetchFullSnapshotInLegacyFormat()
+                        );
+
+                        // Analyze the term once with a different property value
+                        await commandHandlerService.execute(
+                            fsaFactory.build(undefined, {
+                                propertyValue: anotherAllowedValueForSelectFilterProperty,
+                            }),
+                            // Note that we have to be explicit here since we are doing this in `seedInitialState`
+                            {
+                                userId: dummySystemUserId,
+                            }
+                        );
+                    },
+                    // attempt to analyze a second time
+                    buildCommandFSA: () => fsaFactory.build(undefined, {}),
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new FailedToAnalyzeVocabularyListEntryError(
+                                    existingTerm.id,
+                                    existingVocabularyList.id,
+                                    [
+                                        new CannotOverwriteFilterPropertyValueForVocabularyListEntryError(
+                                            selectFilterPropertyName,
+                                            allowedValueForSelectFilterProperty,
+                                            anotherAllowedValueForSelectFilterProperty
+                                        ),
+                                    ]
                                 ),
                             ])
                         );
