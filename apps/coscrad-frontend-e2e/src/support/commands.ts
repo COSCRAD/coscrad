@@ -97,9 +97,13 @@ Cypress.Commands.add('login', () => {
     cy.getByDataAttribute('login-button').click();
 
     // TODO Split all chains on top of click and fix the lint error
-    cy.get('#username').click().type(Cypress.env('username'));
+    cy.get('#username').click();
 
-    cy.get('#password').click().type(Cypress.env('password'));
+    cy.get('#username').type(Cypress.env('username'));
+
+    cy.get('#password').click();
+
+    cy.get('#password').type(Cypress.env('password'));
 
     // TODO why doesn't cy.contains("Continue") work?
     cy.getByDataAttribute('true', 'action-button-primary').click();
@@ -210,14 +214,17 @@ Cypress.Commands.add(`openPanel`, (panelType: 'notes' | 'connections') => {
 });
 
 Cypress.Commands.add(`filterTable`, (searchScope: string, searchText: string) => {
-    cy.getByDataAttribute('select_index_search_scope')
-        .click()
-        .get(`[data-value="${searchScope}"]`)
-        .click();
+    cy.getByDataAttribute('select_index_search_scope').click();
+
+    cy.getByDataAttribute('select_index_search_scope').get(`[data-value="${searchScope}"]`).click();
 
     /**
      * cy.type(...) requires a non-empty string, but we want to accommodate
      * leaving the search field empty in this abstraction.
      */
-    if (searchText?.length > 0) cy.getByDataAttribute(`index_search_bar`).click().type(searchText);
+    if (searchText?.length > 0) {
+        cy.getByDataAttribute(`index_search_bar`).click();
+
+        cy.getByDataAttribute(`index_search_bar`).type(searchText);
+    }
 });

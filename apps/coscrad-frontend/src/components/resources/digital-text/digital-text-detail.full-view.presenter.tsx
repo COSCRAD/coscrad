@@ -33,6 +33,8 @@ export const DigitalTextDetailFullViewPresenter = ({
 
     const selectedPageIdentifier = pages.length > 0 ? pages[currentIndex].identifier : undefined;
 
+    const allExistingPageIdentifiers = pages.map(({ identifier }) => identifier);
+
     const aggregateCompositeIdentifier = {
         type: AggregateType.digitalText,
         id,
@@ -41,6 +43,7 @@ export const DigitalTextDetailFullViewPresenter = ({
     return (
         <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.digitalText}>
             {pages.length > 0 ? (
+                // TODO Offer multiple views here
                 <PagesPresenter
                     pages={pages}
                     currentPageIdentifier={selectedPageIdentifier}
@@ -79,6 +82,7 @@ export const DigitalTextDetailFullViewPresenter = ({
             {/* TODO I am a back-end developer */}
             <br />
             <NewPageForm
+                existingPageIdentifiers={allExistingPageIdentifiers}
                 onSubmitPageIdentifier={(pageIdentifier) => {
                     dispatch(
                         executeCommand({
