@@ -3519,6 +3519,13 @@
   dependencies:
     "@types/ms" "*"
 
+"@types/detox@^18.1.0":
+  version "18.1.0"
+  resolved "https://registry.yarnpkg.com/@types/detox/-/detox-18.1.0.tgz#5d204f08c8db3a03827f9146b043fc2421327753"
+  integrity sha512-CpR+ziJgDOQhMwTt9fNciZhM9LxqyDRa49DKH0aplcSn26UU2WKSd1Tn1lNBrNCkMD8QNzFg+PYdGRFWrqK3Wg==
+  dependencies:
+    detox "*"
+
 "@types/eslint-scope@^3.7.3":
   version "3.7.5"
   resolved "https://registry.yarnpkg.com/@types/eslint-scope/-/eslint-scope-3.7.5.tgz#e28b09dbb1d9d35fdfa8a884225f00440dfc5a3e"
@@ -6424,7 +6431,7 @@ detect-node@^2.0.4:
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.1.0.tgz#c9c70775a49c3d03bc2c06d9a73be550f978f8b1"
   integrity sha512-T0NIuQpnTvFDATNuHN5roPwSBG83rFsuO+MXXH9/3N1eFbn4wcPjttvjMLEPWJ0RGUYgQE7cGgS3tNxbqCGM7g==
 
-detox@^20.13.5:
+detox@*, detox@^20.13.5:
   version "20.13.5"
   resolved "https://registry.yarnpkg.com/detox/-/detox-20.13.5.tgz#5093916d9dfbca75b63ac27915c4e728967c5ef0"
   integrity sha512-V0t1QuRI5rsiXEPBakjjjGGo8Y5kLi4KXhLrcvnpO8id6m7UtObj91wj+4cCnMRX2eSohXu9wR+HbD6IKcO9sA==
