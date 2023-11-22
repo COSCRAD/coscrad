@@ -1,12 +1,13 @@
-import { Typography, styled } from '@mui/material';
+import { styled } from '@mui/material';
 
 const WAVE_FORM_URL = 'https://guujaaw.info/images/audio-wave-form.png';
 
-const TrackContainer = styled('div')({
+const TrackBox = styled('div')({
     position: 'relative',
-    borderRadius: '5px',
     marginBottom: '2px',
     boxSizing: 'border-box',
+    padding: '5px',
+    borderBottom: '2px dotted #ccc',
 });
 
 const WaveForm = styled('div')({
@@ -18,30 +19,27 @@ const WaveForm = styled('div')({
     display: 'block',
 });
 
+const Initials = styled('div')({
+    position: 'absolute',
+    color: '#fff',
+});
+
 interface TrackProps {
     participantInitials: string;
     width: number;
     height: number;
-    trackColor: string;
 }
 
-export const Track = ({
-    participantInitials,
-    width,
-    height,
-    trackColor,
-}: TrackProps): JSX.Element => {
+export const Track = ({ participantInitials, width, height }: TrackProps): JSX.Element => {
     return (
-        <TrackContainer
+        <TrackBox
             sx={{
                 width: `${width}px`,
                 height: `${height}px`,
-                padding: '5px',
-                backgroundColor: trackColor,
             }}
         >
-            <Typography>{participantInitials}</Typography>
-            {/* <WaveForm /> */}
-        </TrackContainer>
+            <Initials>{participantInitials}</Initials>
+            <WaveForm />
+        </TrackBox>
     );
 };

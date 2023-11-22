@@ -44,7 +44,7 @@ const ScrolledTracksContainer = styled('div')({
     position: 'relative',
 });
 
-const TimelineRulerContainer = styled('div')({
+const TimelineRulerBox = styled('div')({
     marginBottom: '3px',
     borderBottom: '1px solid #4914db',
     boxSizing: 'border-box',
@@ -117,6 +117,10 @@ export const CoscradMediaEditor = ({
 
     const numberOfParticipants = participants.length;
 
+    const timeline = useMemo(() => {
+        return <TimelineRuler duration={mediaDuration} zoomFactor={ZOOM_FACTOR} />;
+    }, [mediaDuration]);
+
     const handleSeekInProgressBar = (event: React.MouseEvent<HTMLSpanElement>) => {
         const progressBarElement = event.currentTarget;
 
@@ -137,10 +141,6 @@ export const CoscradMediaEditor = ({
             width: '',
         });
     };
-
-    const timeline = useMemo(() => {
-        return <TimelineRuler duration={mediaDuration} zoomFactor={ZOOM_FACTOR} />;
-    }, [mediaDuration]);
 
     useEffect(() => {
         if (isNullOrUndefined(inPointMilliseconds)) {
@@ -227,20 +227,19 @@ export const CoscradMediaEditor = ({
                         left: `${playProgress}%`,
                     }}
                 />
-                <TimelineRulerContainer
+                <TimelineRulerBox
                     sx={{
                         width: scrolledTrackLength,
                         height: `${TIMELINE_RULER_BAR_HEIGHT}px`,
                     }}
                 >
                     {mediaDuration > 0 ? timeline : null}
-                </TimelineRulerContainer>
-                {participants.map(({ initials }, index) => (
+                </TimelineRulerBox>
+                {participants.map(({ initials }) => (
                     <Track
                         participantInitials={initials}
                         width={scrolledTrackLength}
                         height={trackHeight}
-                        trackColor={TRACK_COLORS[index]}
                     />
                 ))}
             </ScrolledTracksContainer>
