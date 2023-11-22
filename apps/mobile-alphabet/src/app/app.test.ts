@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom';
 import { device } from 'detox';
 
 describe('Credits', () => {
@@ -6,6 +7,6 @@ describe('Credits', () => {
     });
 
     it('should display Credits', async () => {
-        await expect(element(by.text('Credits'))).toBe;
+        expect(element(by.text('Credits'))).toBeVisible();
     });
 });
