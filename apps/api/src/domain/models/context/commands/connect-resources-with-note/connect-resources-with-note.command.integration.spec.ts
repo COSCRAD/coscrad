@@ -58,7 +58,7 @@ const initialStateWithAllResourcesButNoConnections = new DeluxeInMemoryStore({
     [AggregateType.note]: [],
 }).fetchFullSnapshotInLegacyFormat();
 
-const eventSourcedResourceTypes = [AggregateType.song];
+const eventSourcedResourceTypes = [AggregateType.song, AggregateType.digitalText];
 
 const allDualEdgeConnections = (testDualConnections as EdgeConnection[])
     // TODO [https://www.pivotaltracker.com/story/show/185903292] Support event-sourced resources in this test

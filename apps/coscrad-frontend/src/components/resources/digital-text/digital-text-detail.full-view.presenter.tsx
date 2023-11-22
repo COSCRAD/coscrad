@@ -111,8 +111,7 @@ export const DigitalTextDetailFullViewPresenter = ({
                 <Typography variant="body2">Published</Typography>
             )}
             <br />
-            {/* TODO Include tags */}
-            Tags:{' '}
+            {/* TODO [https://www.pivotaltracker.com/story/show/186539279] Include tags once we make tags event sourced */}
             <CommaSeparatedList>
                 {tags.map(({ label }) => (
                     <div>{label}</div>

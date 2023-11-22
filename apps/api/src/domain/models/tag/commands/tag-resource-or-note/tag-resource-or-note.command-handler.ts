@@ -1,4 +1,3 @@
-import { AggregateType } from '@coscrad/api-interfaces';
 import { CommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
 import { InternalError } from '../../../../../lib/errors/InternalError';
@@ -114,30 +113,5 @@ export class TagResourceOrNoteCommandHandler extends BaseUpdateCommandHandler<Ta
 
     protected buildEvent(command: TagResourceOrNote, eventId: string, userId: string): BaseEvent {
         return new ResourceOrNoteTagged(command, eventId, userId);
-    }
-
-    protected override async persist(
-        instance: Tag,
-        command: TagResourceOrNote,
-        systemUserId: string
-    ): Promise<void> {
-        /**
-         * TODO We need to clean this up when we make Tags fully event sourced.
-         *
-         * super.persist currently only persists the snapshot for tags.
-         */
-        await super.persist(instance, command, systemUserId);
-
-        // We shouldn't do this
-        const newId = await this.idManager.generate();
-
-        /**
-         * We do this first because it's better to have an unuseable UUID
-         * that is technically available then to write a record with this UUID
-         * and leave the ID available.
-         */
-        this.idManager.use({ id: newId, type: AggregateType.tag });
-
-        await this.eventRepository.appendEvent(this.buildEvent(command, newId, systemUserId));
     }
 }

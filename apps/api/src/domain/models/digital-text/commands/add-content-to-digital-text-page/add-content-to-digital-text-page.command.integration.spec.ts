@@ -248,6 +248,8 @@ describe(commandType, () => {
 
     describe(`when the page already has content`, () => {
         it(`should fail with the expected errors`, async () => {
+            const existingTextContent = 'beat you to it!';
+
             await assertCreateCommandError(commandAssertionDependencies, {
                 systemUserId: dummySystemUserId,
                 seedInitialState: async () => {
@@ -256,7 +258,10 @@ describe(commandType, () => {
                             .andThen<ContentAddedToDigitalTextPage>({
                                 // TODO Why is there no type safety for this one? It works elsewhere.
                                 type: contentAddedEventType,
-                                payload: {},
+                                payload: {
+                                    pageIdentifier: existingPageIdentifier,
+                                    text: existingTextContent,
+                                },
                             })
                             .as({ id: digitalTextId })
                     );
@@ -266,9 +271,18 @@ describe(commandType, () => {
                     assertErrorAsExpected(
                         error,
                         new CommandExecutionError([
-                            new CannotOverwritePageContentError(
+                            new FailedToUpdateDigitalTextPageError(
                                 existingPageIdentifier,
-                                buildMultilingualTextWithSingleItem(text, languageCode)
+                                digitalTextId,
+                                [
+                                    new CannotOverwritePageContentError(
+                                        existingPageIdentifier,
+                                        buildMultilingualTextWithSingleItem(
+                                            existingTextContent,
+                                            languageCode
+                                        )
+                                    ),
+                                ]
                             ),
                         ])
                     );

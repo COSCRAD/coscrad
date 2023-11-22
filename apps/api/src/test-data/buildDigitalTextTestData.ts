@@ -2,11 +2,7 @@ import { AggregateType, LanguageCode, MultilingualTextItemRole } from '@coscrad/
 import { buildMultilingualTextFromBilingualText } from '../domain/common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../domain/common/build-multilingual-text-with-single-item';
 import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
-import {
-    CreateDigitalText,
-    DigitalTextCreated,
-    PageAddedToDigitalText,
-} from '../domain/models/digital-text/commands';
+import { CreateDigitalText, DigitalTextCreated } from '../domain/models/digital-text/commands';
 import { DigitalText } from '../domain/models/digital-text/entities/digital-text.entity';
 import { ResourceType } from '../domain/types/ResourceType';
 import { InternalError, isInternalError } from '../lib/errors/InternalError';
@@ -82,20 +78,7 @@ export default (): DigitalText[] =>
             dummyDateNow
         );
 
-        const pageAddedEvent = new PageAddedToDigitalText(
-            {
-                aggregateCompositeIdentifier: {
-                    type: AggregateType.digitalText,
-                    id: digitalTextId,
-                },
-                identifier: '1',
-            },
-            buildDummyUuid(1000 + index),
-            buildDummyUuid(685),
-            dummyDateNow + 1 // TODO Use dummy date manager
-        );
-
-        const eventHistory = [creationEvent, pageAddedEvent];
+        const eventHistory = [creationEvent];
 
         const result = DigitalText.fromEventHistory(eventHistory, digitalTextId);
 
