@@ -10,7 +10,7 @@ import { Ack } from '../types';
 export const executeCommand = createAsyncThunk(
     `${COMMAND_STATUS}/EXECUTE_COMMAND`,
     async (commandFSA: FluxStandardAction<unknown, string>, thunkApi) => {
-        const { getState } = thunkApi;
+        const { getState, dispatch } = thunkApi;
 
         const token = selectAuthToken(getState() as RootState);
 
@@ -29,6 +29,13 @@ export const executeCommand = createAsyncThunk(
                 message: responseJson,
             } as IHttpErrorInfo);
         }
+
+        /**
+         * We may want a more sophisticated pattern for acquiring generated IDs
+         * from the ID generation service. For example, we may want to obtain
+         * several IDs to queue up.
+         */
+        // dispatch(acquireId());
 
         // The command succeeded
         return Ack;
