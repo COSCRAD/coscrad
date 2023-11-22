@@ -4,9 +4,9 @@ import {
     LanguageCode,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
-import { getOriginalTextItem } from './get-original-text-item';
+import { isOriginalTextItem } from './is-original-text-item';
 
-describe(`getOriginalTextItem`, () => {
+describe(`isOriginalTextItem`, () => {
     const originalText = 'original text';
 
     const originalItemLanguageCode = LanguageCode.English;
@@ -33,7 +33,7 @@ describe(`getOriginalTextItem`, () => {
 
     describe(`when there is only original text`, () => {
         it(`should find the text item`, () => {
-            const result = getOriginalTextItem(multilingualText);
+            const result = multilingualText.items.find((item) => isOriginalTextItem(item));
 
             const { languageCode, text } = result;
 
@@ -45,7 +45,9 @@ describe(`getOriginalTextItem`, () => {
 
     describe(`when there is also a translation`, () => {
         it(`should find the text item`, () => {
-            const result = getOriginalTextItem(multilingualTextWithTranslation);
+            const result = multilingualTextWithTranslation.items.find((item) =>
+                isOriginalTextItem(item)
+            );
 
             const { languageCode, text } = result;
 
@@ -60,10 +62,10 @@ describe(`getOriginalTextItem`, () => {
      * the invariants. But we test for this for completeness.
      */
     describe(`when there are no items`, () => {
-        it(`should find the text item`, () => {
-            const result = getOriginalTextItem({
-                items: [],
-            });
+        it(`should return undefined`, () => {
+            const emptyMultiLingualText = { items: [] };
+
+            const result = emptyMultiLingualText.items.find((item) => isOriginalTextItem(item));
 
             expect(result).toBe(undefined);
         });
