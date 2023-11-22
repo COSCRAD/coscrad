@@ -12,6 +12,7 @@ export const LanguageSelect = ({ onSelectLanguage }: LanguageSelectProps) => {
 
     return (
         <Select
+            data-testid={`select:language`}
             onChange={(e) => {
                 onSelectLanguage(e.target.value as LanguageCode);
             }}

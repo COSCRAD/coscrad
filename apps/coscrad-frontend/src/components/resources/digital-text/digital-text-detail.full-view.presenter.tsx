@@ -2,7 +2,6 @@ import {
     AggregateType,
     ICategorizableDetailQueryResult,
     IDigitalTextViewModel,
-    LanguageCode,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
@@ -121,7 +120,7 @@ export const DigitalTextDetailFullViewPresenter = ({
             </CommaSeparatedList>
             <br />
             <ImmersiveCreateNoteForm
-                onSubmit={(text, noteId) => {
+                onSubmit={(text, languageCode, noteId) => {
                     dispatch(
                         executeCommand({
                             type: 'CREATE_NOTE_ABOUT_RESOURCE',
@@ -135,7 +134,7 @@ export const DigitalTextDetailFullViewPresenter = ({
                                     id,
                                 },
                                 text,
-                                languageCode: LanguageCode.English,
+                                languageCode,
                                 resourceContext: isNonEmptyString(selectedPageIdentifier)
                                     ? {
                                           type: 'pageRange',
