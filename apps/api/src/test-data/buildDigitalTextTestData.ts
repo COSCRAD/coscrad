@@ -1,16 +1,20 @@
-import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { buildMultilingualTextFromBilingualText } from '../domain/common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../domain/common/build-multilingual-text-with-single-item';
 import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
-import { CreateDigitalText, DigitalTextCreated } from '../domain/models/digital-text/commands';
+import {
+    CreateDigitalText,
+    DigitalTextCreated,
+    PageAddedToDigitalText,
+} from '../domain/models/digital-text/commands';
 import { DigitalText } from '../domain/models/digital-text/entities/digital-text.entity';
 import { ResourceType } from '../domain/types/ResourceType';
+import { InternalError, isInternalError } from '../lib/errors/InternalError';
+import { isNotFound } from '../lib/types/not-found';
 import { clonePlainObjectWithOverrides } from '../lib/utilities/clonePlainObjectWithOverrides';
+import formatAggregateCompositeIdentifier from '../queries/presentation/formatAggregateCompositeIdentifier';
 import { DTO } from '../types/DTO';
-import {
-    convertAggregatesIdToUuid,
-    convertSequenceNumberToUuid,
-} from './utilities/convertSequentialIdToUuid';
+import { convertSequenceNumberToUuid } from './utilities/convertSequentialIdToUuid';
 
 const dummyDateNow = 1664237194999;
 
@@ -52,31 +56,65 @@ const createDigitalTextCommands: CreateDigitalText[] = digitalTextDtos.map(({ ti
         .languageCode,
 }));
 
+/**
+ * HACK This is a quick and dirty attempt to fit our new event-sourced model
+ * into the old snapshot state-based test data creation paradigm. Very soon we
+ * will move to event sourcing all resources. At this point, we should abandon
+ * the old approach in favor of seeding test data with event or command streams
+ * only.
+ */
 export default (): DigitalText[] =>
-    digitalTextDtos
-        .map((partialDTO, index) => {
-            const commandPayload = createDigitalTextCommands[index];
+    digitalTextDtos.map((_partialDTO, index) => {
+        const commandPayload = createDigitalTextCommands[index];
 
-            const commandPayloadWithUuid = clonePlainObjectWithOverrides(commandPayload, {
+        const digitalTextId = convertSequenceNumberToUuid(index + 1);
+
+        const commandPayloadWithUuid = clonePlainObjectWithOverrides(commandPayload, {
+            aggregateCompositeIdentifier: {
+                id: digitalTextId,
+            },
+        });
+
+        const creationEvent = new DigitalTextCreated(
+            commandPayloadWithUuid,
+            buildDummyUuid(950 + index),
+            buildDummyUuid(685),
+            dummyDateNow
+        );
+
+        const pageAddedEvent = new PageAddedToDigitalText(
+            {
                 aggregateCompositeIdentifier: {
-                    id: convertSequenceNumberToUuid(
-                        parseInt(commandPayload.aggregateCompositeIdentifier.id)
-                    ),
+                    type: AggregateType.digitalText,
+                    id: digitalTextId,
                 },
-            });
+                identifier: '1',
+            },
+            buildDummyUuid(1000 + index),
+            buildDummyUuid(685),
+            dummyDateNow + 1 // TODO Use dummy date manager
+        );
 
-            const creationEvent = new DigitalTextCreated(
-                commandPayloadWithUuid,
-                buildDummyUuid(950 + index),
-                buildDummyUuid(685),
-                dummyDateNow
+        const eventHistory = [creationEvent, pageAddedEvent];
+
+        const result = DigitalText.fromEventHistory(eventHistory, digitalTextId);
+
+        if (isInternalError(result)) {
+            throw new InternalError(`Failed to build test digital text from event history`, [
+                result,
+            ]);
+        }
+
+        if (isNotFound(result)) {
+            throw new InternalError(
+                `No creation event for ${formatAggregateCompositeIdentifier({
+                    type: AggregateType.digitalText,
+                    id: digitalTextId,
+                })} was found in the event history: ${eventHistory
+                    .map((event) => JSON.stringify(event.toDTO()))
+                    .join('\n')}`
             );
+        }
 
-            return new DigitalText({
-                ...partialDTO,
-                id: `${index + 1}`,
-                type: ResourceType.digitalText,
-                eventHistory: [creationEvent],
-            });
-        })
-        .map(convertAggregatesIdToUuid);
+        return result;
+    });

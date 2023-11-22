@@ -44,6 +44,22 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
             {
                 role,
                 compositeIdentifier: {
+                    id: '1',
+                    type: ResourceType.digitalText,
+                },
+                context: new PageRangeContext({
+                    type: EdgeConnectionContextType.pageRange,
+                    pageIdentifiers: ['1'],
+                }).toDTO(),
+            },
+        ],
+    },
+    {
+        note: buildMultilingualTextWithSingleItem('This page is about bears', LanguageCode.English),
+        members: [
+            {
+                role,
+                compositeIdentifier: {
                     id: '24',
                     type: ResourceType.book,
                 },

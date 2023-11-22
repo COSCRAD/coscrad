@@ -40,7 +40,8 @@ describe('buildTestData', () => {
         });
     });
 
-    Object.values(AggregateType).forEach((aggregateType) => {
+    Object.values(AggregateType)
+    .forEach((aggregateType) => {
         describe(`The test instances for ${formatAggregateType(aggregateType)}`, () => {
             it('should be comprehensive', () => {
                 assertTestInstancesOfTypeAreComprehensive(aggregateType, testData);
