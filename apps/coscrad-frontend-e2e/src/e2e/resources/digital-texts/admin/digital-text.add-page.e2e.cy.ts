@@ -65,7 +65,7 @@ describe(`digital text detail- admin- add page`, () => {
 
         // This is a matter of UX, the back-end validates this independently
 
-        describe(`when the string contains intgerior white space`, () => {
+        describe(`when the string contains interior white space`, () => {
             it.only(`should prevent submission`, () => {
                 cy.getByDataAttribute('text:add-page-to-digital-text').click();
 
@@ -143,6 +143,8 @@ describe(`digital text detail- admin- add page`, () => {
             });
 
             describe(`when adding a unique second page`, () => {
+                const newPageIdentifier = '1';
+
                 it(`should succeed`, () => {
                     cy.getByDataAttribute('text:add-page-to-digital-text').click();
 
@@ -157,8 +159,6 @@ describe(`digital text detail- admin- add page`, () => {
                     cy.getByDataAttribute(`digital-text.page:${newPageIdentifier}`);
                 });
             });
-
-            const newPageIdentifier = '1';
         });
     });
 });

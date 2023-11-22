@@ -18,7 +18,8 @@ import { buildMultilingualTextWithSingleItem } from '../../../common/build-multi
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { AggregateRoot } from '../../../decorators';
 import { Valid, isValid } from '../../../domainModelValidators/Valid';
-import PageRangeContextHasSuperfluousPageIdentifiersError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext/PageRangeContextHasSuperfluousPageIdentifiersError';
+import { EmptyPageRangeContextError } from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext';
+import PageRangeContextHasSuperfluousPageIdentifiersError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext/page-range-context-has-superfluous-page-identifiers.error';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
@@ -211,6 +212,11 @@ export class DigitalText extends Resource {
 
         // We may want to rename the pages property in the PageRangeContext
         const { pageIdentifiers: contextPageIdentifiers } = context;
+
+        // TODO Consider making this an invariant for the PageRangeContext
+        if (contextPageIdentifiers.length === 0) {
+            return new EmptyPageRangeContextError();
+        }
 
         const missingPages = contextPageIdentifiers.reduce(
             (accumulatedList, contextPageIdentifier) =>
