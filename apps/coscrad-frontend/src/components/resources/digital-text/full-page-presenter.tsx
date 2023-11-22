@@ -13,19 +13,19 @@ const StyledMuiPage = styled('div')({
     border: '2px solid #05803b',
 });
 
-interface PagePresenterProps {
+interface FullPagePresenterProps {
     page: IDigitalTextPage;
     isSelected: boolean;
     onSubmitNewContent: (state: TextAndLanguage) => void;
     isAdmin?: boolean;
 }
 
-export const PagePresenter = ({
+export const FullPagePresenter = ({
     page,
     isSelected,
     onSubmitNewContent,
     isAdmin: _isAdmin = false,
-}: PagePresenterProps): JSX.Element => {
+}: FullPagePresenterProps): JSX.Element => {
     const { identifier, content } = page;
 
     const hasContent = !isNullOrUndefined(content);

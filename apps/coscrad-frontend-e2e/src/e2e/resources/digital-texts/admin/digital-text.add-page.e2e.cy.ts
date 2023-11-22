@@ -22,7 +22,7 @@ describe(`digital text detail- admin- add page`, () => {
         cy.seedTestUuids(100);
     });
 
-    describe(`when the digital text does not have pages`, () => {
+    describe(`when adding a page`, () => {
         before(() => {
             cy.seedDataWithCommand(`CREATE_DIGITAL_TEXT`, {
                 aggregateCompositeIdentifier: compositeIdentifierForDigitalTextWithoutAPage,
