@@ -282,7 +282,7 @@ export class DigitalTextViewModel
             new DigitalTextPage({
                 identifier: pageIdentifier,
             }),
-        ].sort();
+        ].sort((a, b) => a.identifier.localeCompare(b.identifier));
 
         this.pages = updatedPages;
 
