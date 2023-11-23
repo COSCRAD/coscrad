@@ -27,7 +27,7 @@ export class ImportLineItemsToTranscriptCommandHandler extends BaseUpdateCommand
     protected aggregateType: typeof AggregateType.audioItem | typeof AggregateType.video;
 
     protected repositoryForCommandsTargetAggregate: IRepositoryForAggregate<TranscribableResource>;
-
+    // TODO is this needed?
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN)
         protected readonly repositoryProvider: IRepositoryProvider,

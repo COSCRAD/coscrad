@@ -22,6 +22,7 @@ import {
     DuplicateTranscriptParticipantNameError,
 } from '../errors';
 import { TranscriptParticipantInitialsNotRegisteredError } from '../errors/transcript-participant-initials-not-registered.error';
+import { LineItemTranslation } from './transcribable.mixin';
 import { TranscriptItem } from './transcript-item.entity';
 import { TranscriptParticipant } from './transcript-participant';
 
@@ -171,6 +172,14 @@ export class Transcript extends BaseDomainModel implements ITranscript {
         const newItems = this.items.concat(items.map((item) => item.clone()));
 
         return this.clone({ items: newItems } as DeepPartial<DTO<this>>);
+    }
+
+    importTranslations(translationItems: LineItemTranslation[]): ResultOrError<this> {
+        return this.clone({
+            items: this.items.map(() => {
+                throw new Error('not implemented');
+            }),
+        } as unknown as DeepPartial<DTO<this>>);
     }
 
     countParticipants(): number {
