@@ -276,7 +276,7 @@ export class DigitalTextViewModel
     }
 
     private addPage<T extends DigitalTextViewModel>(this: T, pageIdentifier: PageIdentifier): T {
-        // TODO  Insert the page identifier in place instead
+        // TODO  Insert the page identifier in place instead.
         const updatedPages = [
             ...this.pages,
             new DigitalTextPage({
