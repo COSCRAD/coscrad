@@ -23,10 +23,7 @@ import { Transcript } from './transcript.entity';
 /* eslint-disable-next-line */
 export type Constructor<T extends {} = {}> = new (...args: any[]) => T;
 
-export type LineItemTranslation = Pick<
-    TranscriptItem,
-    'inPointMilliseconds' | 'speakerInitials'
-> & {
+export type LineItemTranslation = Pick<TranscriptItem, 'inPointMilliseconds'> & {
     text: string;
     languageCode: LanguageCode;
 };
@@ -207,11 +204,17 @@ export function Transcribable<TBase extends Constructor<ITranscribableBase>>(Bas
             } as DeepPartial<DTO<this>>);
         }
 
-        importTranslationsForTranscript<T extends ITranscribableBase>(
-            this: T,
-            _translationItemDtos: LineItemTranslation[]
-        ): ResultOrError<T> {
-            throw new Error('not implemented');
+        importTranslationsForTranscript(
+            translationItemDtos: LineItemTranslation[]
+        ): ResultOrError<ITranscribable & ITranscribableBase> {
+            // TODO Discriminate error (use TDD!)
+            const newTranscript = this.transcript.importTranslations(
+                translationItemDtos
+            ) as Transcript;
+
+            return this.safeClone<ITranscribable & ITranscribableBase>({
+                transcript: newTranscript,
+            });
         }
 
         countTranscriptParticipants(): number {

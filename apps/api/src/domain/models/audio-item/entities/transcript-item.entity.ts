@@ -1,10 +1,11 @@
-import { ITranscriptItem } from '@coscrad/api-interfaces';
+import { ITranscriptItem, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { NestedDataType, NonEmptyString, NonNegativeFiniteNumber } from '@coscrad/data-types';
 import { isNumberWithinRange } from '@coscrad/validation-constraints';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
 import { DTO } from '../../../../types/DTO';
+import { DeepPartial } from '../../../../types/DeepPartial';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { Valid } from '../../../domainModelValidators/Valid';
@@ -59,6 +60,22 @@ export class TranscriptItem extends BaseDomainModel implements ITranscriptItem {
         if (data) this.text = new MultilingualText(data);
 
         this.speakerInitials = label;
+    }
+
+    translate<T extends TranscriptItem>(
+        this: T,
+        text: string,
+        languageCode: LanguageCode
+    ): ResultOrError<TranscriptItem> {
+        const updatedText = this.text.translate({
+            languageCode,
+            text,
+            role: MultilingualTextItemRole.freeTranslation,
+        });
+
+        return this.clone<T>({
+            text: updatedText as MultilingualText,
+        } as DeepPartial<DTO<T>>);
     }
 
     hasData(): boolean {

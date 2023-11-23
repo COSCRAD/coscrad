@@ -1,6 +1,6 @@
 import { ITranscript } from '@coscrad/api-interfaces';
 import { NestedDataType } from '@coscrad/data-types';
-import { isNumberWithinRange } from '@coscrad/validation-constraints';
+import { isNullOrUndefined, isNumberWithinRange } from '@coscrad/validation-constraints';
 import { isDeepStrictEqual } from 'util';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
@@ -176,8 +176,15 @@ export class Transcript extends BaseDomainModel implements ITranscript {
 
     importTranslations(translationItems: LineItemTranslation[]): ResultOrError<this> {
         return this.clone({
-            items: this.items.map(() => {
-                throw new Error('not implemented');
+            items: this.items.map((item) => {
+                const searchResult = translationItems.find(
+                    ({ inPointMilliseconds }) => item.inPointMilliseconds === inPointMilliseconds
+                );
+
+                const { text, languageCode } = searchResult;
+
+                // TODO check for errors here
+                return isNullOrUndefined(searchResult) ? item : item.translate(text, languageCode);
             }),
         } as unknown as DeepPartial<DTO<this>>);
     }
