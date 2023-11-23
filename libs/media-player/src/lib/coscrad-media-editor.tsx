@@ -7,7 +7,7 @@ import {
     TIMELINE_RULER_BAR_HEIGHT,
     ZOOM_FACTOR,
 } from './editor-constants';
-import { TimelineRuler } from './timeline';
+import { TimelineRuler } from './timeline-ruler';
 import { Track } from './track';
 import { ITranscript } from './video-prototype-interfaces/transcript-interface';
 
@@ -184,8 +184,6 @@ export const CoscradMediaEditor = ({
 
         const editorPadding = 2 * EDITOR_X_PADDING;
 
-        console.log({ editorWidth });
-
         const editorMidPoint = (editorWidth - editorPadding) / 2;
 
         const playheadPosition = playheadRef.current!.offsetLeft;
@@ -219,6 +217,7 @@ export const CoscradMediaEditor = ({
                 >
                     {participants.map(({ initials }) => (
                         <Initials
+                            key={initials}
                             sx={{
                                 height: `${trackHeight + 2}px`,
                             }}
@@ -264,6 +263,9 @@ export const CoscradMediaEditor = ({
                                     key={initials}
                                     width={scrolledTrackLength}
                                     height={trackHeight}
+                                    mediaDuration={mediaDuration}
+                                    participantInitials={initials}
+                                    transcriptItems={items}
                                 />
                             ))}
                         </ScrolledTracksBox>

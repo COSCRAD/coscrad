@@ -1,5 +1,6 @@
 import { styled } from '@mui/material';
 import { RangeBar } from './range-bar';
+import { ITranscriptItem } from './video-prototype-interfaces/transcript-item.interface';
 
 const WAVE_FORM_URL = 'https://guujaaw.info/images/audio-wave-form.png';
 
@@ -22,9 +23,18 @@ const WaveForm = styled('div')({
 interface TrackProps {
     width: number;
     height: number;
+    mediaDuration: number;
+    participantInitials: string;
+    transcriptItems: ITranscriptItem[];
 }
 
-export const Track = ({ width, height }: TrackProps): JSX.Element => {
+export const Track = ({
+    width,
+    height,
+    mediaDuration,
+    participantInitials,
+    transcriptItems,
+}: TrackProps): JSX.Element => {
     return (
         <TrackBox
             sx={{
@@ -32,7 +42,16 @@ export const Track = ({ width, height }: TrackProps): JSX.Element => {
                 height: `${height}px`,
             }}
         >
-            <RangeBar />
+            {transcriptItems
+                .filter(({ speakerInitials }) => speakerInitials === participantInitials)
+                .map(({ inPointMilliseconds, outPointMilliseconds }) => (
+                    <RangeBar
+                        key={inPointMilliseconds}
+                        mediaDuration={mediaDuration}
+                        inPointMilliseconds={inPointMilliseconds}
+                        outPointMilliseconds={outPointMilliseconds}
+                    />
+                ))}
             <WaveForm />
         </TrackBox>
     );
