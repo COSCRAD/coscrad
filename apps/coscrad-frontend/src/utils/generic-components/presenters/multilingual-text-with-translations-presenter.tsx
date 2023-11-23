@@ -17,11 +17,23 @@ export const MultilingualTextWithTranslations = ({
             expandIcon={<ExpandMoreIcon />}
             data-testid="multilingual-text-main-text-item-with-translations"
         >
-            <MultilingualTextItemPresenter isHeading={true} item={primaryMultilingualTextItem} />
+            <MultilingualTextItemPresenter
+                key={primaryMultilingualTextItem.languageCode}
+                isHeading={false}
+                text={primaryMultilingualTextItem.text}
+                languageCode={primaryMultilingualTextItem.languageCode}
+                role={primaryMultilingualTextItem.role}
+            />
         </AccordionSummary>
         <AccordionDetails data-testid="multilingual-text-translations">
-            {translations.map((item) => (
-                <MultilingualTextItemPresenter isHeading={false} item={item} />
+            {translations.map(({ text, languageCode, role }) => (
+                <MultilingualTextItemPresenter
+                    key={languageCode}
+                    isHeading={false}
+                    text={text}
+                    languageCode={languageCode}
+                    role={role}
+                />
             ))}
         </AccordionDetails>
     </Accordion>

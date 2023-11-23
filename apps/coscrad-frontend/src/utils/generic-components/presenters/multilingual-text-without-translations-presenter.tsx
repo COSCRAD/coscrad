@@ -12,11 +12,21 @@ interface MultilingualTextWithoutTranslationsProps {
 
 export const MultilingualTextWithoutTranslations = ({
     primaryMultilingualTextItem,
-}: MultilingualTextWithoutTranslationsProps): JSX.Element => (
-    <MultilingualTextHeaderBox
-        elevation={0}
-        data-testid="multilingual-text-main-text-item-without-translations"
-    >
-        <MultilingualTextItemPresenter isHeading={true} item={primaryMultilingualTextItem} />
-    </MultilingualTextHeaderBox>
-);
+}: MultilingualTextWithoutTranslationsProps): JSX.Element => {
+    const { text, languageCode, role } = primaryMultilingualTextItem;
+
+    return (
+        <MultilingualTextHeaderBox
+            elevation={0}
+            data-testid="multilingual-text-main-text-item-without-translations"
+        >
+            <MultilingualTextItemPresenter
+                key={languageCode}
+                isHeading={false}
+                text={text}
+                languageCode={languageCode}
+                role={role}
+            />
+        </MultilingualTextHeaderBox>
+    );
+};

@@ -18,7 +18,7 @@ export const TranscriptPresenter = ({ transcript }): JSX.Element => {
                 {isNullOrUndefined(transcript)
                     ? null
                     : transcript.participants.map((item: ITranscriptParticipant) => (
-                          <Box>
+                          <Box key={item.name.replace(' ', '-')}>
                               <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
                                   Participants:&nbsp;
                               </Typography>
@@ -31,15 +31,21 @@ export const TranscriptPresenter = ({ transcript }): JSX.Element => {
                 {isNullOrUndefined(transcript)
                     ? null
                     : transcript.items.map((item: ITranscriptItem) => (
-                          <Box display={'flex'}>
+                          <Box
+                              key={`${item.speakerInitials}-${item.inPointMilliseconds}`}
+                              display={'flex'}
+                          >
                               <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
                                   {item.speakerInitials} [{item.inPointMilliseconds}-
                                   {item.outPointMilliseconds}
                                   ]:&nbsp;
                               </Typography>
                               <Typography variant="body1">
+                                  {/* TODO: sort out how multilingual text should work here */}
                                   {item.text.items.map((item) => (
-                                      <Box component={'span'}>"{item.text}"</Box>
+                                      <Box key={item.role} component={'span'}>
+                                          "{item.text}"
+                                      </Box>
                                   ))}
                               </Typography>
                           </Box>
