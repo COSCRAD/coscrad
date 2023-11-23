@@ -17,17 +17,17 @@ const TIMELINE_RULER_BAR_HEIGHT = 30;
 
 const TRACK_COLORS = ['#5d868a', '#916a8a'];
 
-const RangeBar = styled('div')({
-    top: `-${PROGRESS_BAR_HEIGHT * 2}px`,
-    height: `${PROGRESS_BAR_HEIGHT}px`,
-    width: '0px',
-    backgroundColor: 'black',
-    borderLeft: '1px solid red',
-    borderRadius: '0px',
-    position: 'relative',
-    visibility: 'hidden',
-    zIndex: 500,
-});
+// const RangeBar = styled('div')({
+//     top: `-${PROGRESS_BAR_HEIGHT * 2}px`,
+//     height: `${PROGRESS_BAR_HEIGHT}px`,
+//     width: '0px',
+//     backgroundColor: 'black',
+//     borderLeft: '1px solid red',
+//     borderRadius: '0px',
+//     position: 'relative',
+//     visibility: 'hidden',
+//     zIndex: 500,
+// });
 
 const SoundEditor = styled('div')({
     width: '100%',

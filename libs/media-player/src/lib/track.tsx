@@ -1,4 +1,6 @@
 import { styled } from '@mui/material';
+import { useState } from 'react';
+import { RangeBar } from './range-bar';
 
 const WAVE_FORM_URL = 'https://guujaaw.info/images/audio-wave-form.png';
 
@@ -31,6 +33,8 @@ interface TrackProps {
 }
 
 export const Track = ({ participantInitials, width, height }: TrackProps): JSX.Element => {
+    const [activeTrack, setActiveTrack] = useState();
+
     return (
         <TrackBox
             sx={{
@@ -38,6 +42,7 @@ export const Track = ({ participantInitials, width, height }: TrackProps): JSX.E
                 height: `${height}px`,
             }}
         >
+            <RangeBar />
             <Initials>{participantInitials}</Initials>
             <WaveForm />
         </TrackBox>
