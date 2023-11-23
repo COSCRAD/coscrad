@@ -1,21 +1,15 @@
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { styled } from '@mui/material';
+import { Grid, styled } from '@mui/material';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+    EDITOR_SOUND_BAR_HEIGHT,
+    EDITOR_X_PADDING,
+    TIMELINE_RULER_BAR_HEIGHT,
+    ZOOM_FACTOR,
+} from './editor-constants';
 import { TimelineRuler } from './timeline';
 import { Track } from './track';
 import { ITranscript } from './video-prototype-interfaces/transcript-interface';
-
-const ZOOM_FACTOR = 40;
-
-const PROGRESS_BAR_HEIGHT = 30;
-
-const EDITOR_SOUND_BAR_HEIGHT = 30;
-
-const EDITOR_X_PADDING = 10;
-
-const TIMELINE_RULER_BAR_HEIGHT = 30;
-
-const TRACK_COLORS = ['#5d868a', '#916a8a'];
 
 // const RangeBar = styled('div')({
 //     top: `-${PROGRESS_BAR_HEIGHT * 2}px`,
@@ -31,15 +25,25 @@ const TRACK_COLORS = ['#5d868a', '#916a8a'];
 
 const SoundEditor = styled('div')({
     width: '100%',
-    overflowX: 'scroll',
-    padding: `0 ${EDITOR_X_PADDING}px`,
     position: 'relative',
     boxSizing: 'border-box',
     backgroundColor: '#424242',
 });
 
-const ScrolledTracksContainer = styled('div')({
-    padding: '7px 0px',
+const Initials = styled('div')({
+    position: 'relative',
+    padding: '4px 4px',
+    color: '#fff',
+    boxSizing: 'border-box',
+    borderBottom: '2px dotted #ccc',
+});
+
+const ScrollingBox = styled('div')({
+    overflowX: 'scroll',
+    position: 'relative',
+});
+
+const ScrolledTracksBox = styled('div')({
     display: 'block',
     position: 'relative',
 });
@@ -205,44 +209,67 @@ export const CoscradMediaEditor = ({
 
     return (
         <SoundEditor ref={soundEditorRef}>
-            <ScrolledTracksContainer
-                ref={tracksRef}
-                sx={{
-                    height: `${
-                        numberOfParticipants * EDITOR_SOUND_BAR_HEIGHT +
-                        TIMELINE_RULER_BAR_HEIGHT +
-                        10
-                    }px`,
-                    width: `${scrolledTrackLength}px`,
-                }}
-            >
-                <EditorPlayhead
-                    ref={playheadRef}
+            <Grid container spacing={0}>
+                <Grid
                     sx={{
-                        height: `${
-                            numberOfParticipants * EDITOR_SOUND_BAR_HEIGHT +
-                            TIMELINE_RULER_BAR_HEIGHT +
-                            8
-                        }px`,
-                        left: `${playProgress}%`,
+                        paddingTop: `${TIMELINE_RULER_BAR_HEIGHT + 2}px`,
                     }}
-                />
-                <TimelineRulerBox
-                    sx={{
-                        width: scrolledTrackLength,
-                        height: `${TIMELINE_RULER_BAR_HEIGHT}px`,
-                    }}
+                    item
+                    xs={0.8}
                 >
-                    {mediaDuration > 0 ? timeline : null}
-                </TimelineRulerBox>
-                {participants.map(({ initials }) => (
-                    <Track
-                        participantInitials={initials}
-                        width={scrolledTrackLength}
-                        height={trackHeight}
-                    />
-                ))}
-            </ScrolledTracksContainer>
+                    {participants.map(({ initials }) => (
+                        <Initials
+                            sx={{
+                                height: `${trackHeight + 2}px`,
+                            }}
+                        >
+                            {initials}
+                        </Initials>
+                    ))}
+                </Grid>
+                <Grid item xs={11.2}>
+                    <ScrollingBox>
+                        <ScrolledTracksBox
+                            ref={tracksRef}
+                            sx={{
+                                height: `${
+                                    numberOfParticipants * EDITOR_SOUND_BAR_HEIGHT +
+                                    TIMELINE_RULER_BAR_HEIGHT +
+                                    10
+                                }px`,
+                                width: `${scrolledTrackLength}px`,
+                            }}
+                        >
+                            <EditorPlayhead
+                                ref={playheadRef}
+                                sx={{
+                                    height: `${
+                                        numberOfParticipants * EDITOR_SOUND_BAR_HEIGHT +
+                                        TIMELINE_RULER_BAR_HEIGHT +
+                                        8
+                                    }px`,
+                                    left: `${playProgress}%`,
+                                }}
+                            />
+                            <TimelineRulerBox
+                                sx={{
+                                    width: scrolledTrackLength,
+                                    height: `${TIMELINE_RULER_BAR_HEIGHT}px`,
+                                }}
+                            >
+                                {mediaDuration > 0 ? timeline : null}
+                            </TimelineRulerBox>
+                            {participants.map(({ initials }) => (
+                                <Track
+                                    key={initials}
+                                    width={scrolledTrackLength}
+                                    height={trackHeight}
+                                />
+                            ))}
+                        </ScrolledTracksBox>
+                    </ScrollingBox>
+                </Grid>
+            </Grid>
         </SoundEditor>
     );
 };

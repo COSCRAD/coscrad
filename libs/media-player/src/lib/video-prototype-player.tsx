@@ -26,7 +26,7 @@ import { FormattedCurrentTime } from './formatted-currenttime';
 import { LanguageCode } from './language-code.enum';
 import { ITranscript } from './video-prototype-interfaces/transcript-interface';
 
-const calculatePercentProgress = (currentTime: number, duration: number) => {
+export const calculatePercentProgress = (currentTime: number, duration: number) => {
     return (currentTime / duration) * 100;
 };
 
@@ -49,11 +49,11 @@ const Video = styled('video')({
     objectFit: 'cover',
 });
 
-const VideoControls = styled(Box)(({ theme }) => ({
+const VideoControls = styled(Box)({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-}));
+});
 
 const SubtitlesOverlay = styled('div')({
     top: '-50px',
