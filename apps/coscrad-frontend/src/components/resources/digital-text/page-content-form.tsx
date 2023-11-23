@@ -38,7 +38,6 @@ export const PageContentForm = ({ onSubmitNewContent }: PageContentFormProps) =>
                 onClick={() => {
                     onSubmitNewContent({
                         text,
-                        // TODO Make this selectable from a form as well
                         languageCode: selectedLanguageCode,
                     });
                 }}

@@ -80,7 +80,19 @@ export default (): DigitalText[] =>
 
         const eventHistory = [creationEvent];
 
-        const result = DigitalText.fromEventHistory(eventHistory, digitalTextId);
+        /**
+         * **HACK**
+         * We only put one event in here as we cannot use the `TestRepositoryProvider.create`
+         * with more than one event. That means the event for adding the
+         * page identifier is missing. We need to make all test data fully
+         * event sourcecd soon to remove this hack.
+         */
+        const initialDigitalText = DigitalText.fromEventHistory(eventHistory, digitalTextId);
+
+        const result =
+            initialDigitalText instanceof DigitalText
+                ? initialDigitalText.addPage('1')
+                : initialDigitalText;
 
         if (isInternalError(result)) {
             throw new InternalError(`Failed to build test digital text from event history`, [

@@ -1499,22 +1499,6 @@
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100685"
                         },
                         "type": "DIGITAL_TEXT_CREATED"
-                    },
-                    {
-                        "payload": {
-                            "aggregateCompositeIdentifier": {
-                                "type": "digitalText",
-                                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
-                            },
-                            "identifier": "1"
-                        },
-                        "meta": {
-                            "dateCreated": 1664237195000,
-                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b101000",
-                            "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100685"
-                        },
-                        "type": "PAGE_ADDED_TO_DIGITAL_TEXT",
-                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b101000"
                     }
                 ],
                 "published": false,
@@ -1557,22 +1541,6 @@
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100685"
                         },
                         "type": "DIGITAL_TEXT_CREATED"
-                    },
-                    {
-                        "payload": {
-                            "aggregateCompositeIdentifier": {
-                                "type": "digitalText",
-                                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002"
-                            },
-                            "identifier": "1"
-                        },
-                        "meta": {
-                            "dateCreated": 1664237195000,
-                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b101001",
-                            "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100685"
-                        },
-                        "type": "PAGE_ADDED_TO_DIGITAL_TEXT",
-                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b101001"
                     }
                 ],
                 "published": false,
@@ -1952,10 +1920,35 @@
         ],
         "resource_edge_connections": [
             {
+                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "type": "note",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "en",
+                            "role": "original",
+                            "text": "This is a general note about this digital text"
+                        }
+                    ]
+                }
+            },
+            {
                 "_to": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "_from": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1966,9 +1959,9 @@
                             "target": "text",
                             "charRange": [
                                 0,
-                                3
+                                1
                             ],
-                            "languageCode": "clc"
+                            "languageCode": "en"
                         }
                     }
                 ],
@@ -1977,7 +1970,7 @@
                         {
                             "languageCode": "en",
                             "role": "original",
-                            "text": "This first 4 letters of this term form a syllable that indicates this is a plant "
+                            "text": "This is a general note about this term"
                         }
                     ]
                 }
@@ -1986,7 +1979,7 @@
                 "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2014,7 +2007,7 @@
                 "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2042,7 +2035,7 @@
                 "_to": "vocabulary_lists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "_from": "vocabulary_lists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2073,7 +2066,7 @@
                 "_to": "spatial_features/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
                 "_from": "spatial_features/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2098,7 +2091,7 @@
                 "_to": "audio_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
                 "_from": "audio_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2127,7 +2120,7 @@
                 "_to": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "_from": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2152,7 +2145,7 @@
                 "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2180,7 +2173,7 @@
                 "_to": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110010",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2205,7 +2198,7 @@
                 "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110010",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2230,7 +2223,7 @@
                 "_to": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2259,7 +2252,7 @@
                 "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2288,7 +2281,7 @@
                 "_to": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2313,7 +2306,7 @@
                 "_to": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
                 "_from": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2342,7 +2335,7 @@
                 "_to": "playlists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
                 "_from": "playlists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2367,7 +2360,7 @@
                 "_to": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "_from": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2383,7 +2376,7 @@
                         {
                             "languageCode": "en",
                             "role": "original",
-                            "text": "This first 4 letters of this term form a syllable that indicates this is a plant "
+                            "text": "This is a general note about this term"
                         }
                     ]
                 }
@@ -2392,7 +2385,7 @@
                 "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2417,7 +2410,7 @@
                 "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110019",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2442,7 +2435,7 @@
                 "_to": "vocabulary_lists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "_from": "vocabulary_lists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110019",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110020",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2467,7 +2460,7 @@
                 "_to": "audio_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
                 "_from": "audio_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110020",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110021",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2492,7 +2485,7 @@
                 "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110021",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110022",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2517,7 +2510,7 @@
                 "_to": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110022",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2542,7 +2535,7 @@
                 "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2567,7 +2560,7 @@
                 "_to": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
                 "_from": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2603,9 +2596,9 @@
                             "target": "text",
                             "charRange": [
                                 0,
-                                3
+                                1
                             ],
-                            "languageCode": "clc"
+                            "languageCode": "en"
                         }
                     },
                     {
@@ -2942,9 +2935,9 @@
                             "target": "text",
                             "charRange": [
                                 0,
-                                3
+                                1
                             ],
-                            "languageCode": "clc"
+                            "languageCode": "en"
                         }
                     }
                 ],
@@ -3184,6 +3177,37 @@
                             "languageCode": "en",
                             "role": "original",
                             "text": "here is the digital version of the book!"
+                        }
+                    ]
+                }
+            },
+            {
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_to": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "type": "note",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113003",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "general"
+                        }
+                    },
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "en",
+                            "role": "original",
+                            "text": "here is the digital version of the digital text!"
                         }
                     ]
                 }

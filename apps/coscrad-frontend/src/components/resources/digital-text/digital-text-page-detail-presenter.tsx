@@ -20,7 +20,7 @@ interface FullPagePresenterProps {
     isAdmin?: boolean;
 }
 
-export const FullPagePresenter = ({
+export const DigitalTextPageDetailPresenter = ({
     page,
     isSelected,
     onSubmitNewContent,
@@ -32,6 +32,9 @@ export const FullPagePresenter = ({
 
     const shouldShowAddContentForm = !hasContent; // && isAdmin
 
+    /**
+     * TODO [https://www.pivotaltracker.com/story/show/186539815] Use a more standard \ idiomatic approach to forms.
+     */
     return (
         <StyledMuiPage data-testid={`digital-text.page:${identifier}`}>
             {hasContent ? <MultilingualTextPresenter text={content} /> : null}

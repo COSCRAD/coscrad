@@ -11,7 +11,7 @@ import {
     PageAddedToDigitalTextPayload,
 } from '../../domain/models/digital-text/commands';
 import { ContentAddedToDigitalTextPagePayload } from '../../domain/models/digital-text/commands/add-content-to-digital-text-page';
-import { DigitalText } from '../../domain/models/digital-text/entities';
+import { DigitalText, PageIdentifier } from '../../domain/models/digital-text/entities';
 import DigitalTextPage from '../../domain/models/digital-text/entities/digital-text-page.entity';
 import { AccessControlList } from '../../domain/models/shared/access-control/access-control-list.entity';
 import { ResourceReadAccessGrantedToUserPayload } from '../../domain/models/shared/common-commands';
@@ -62,6 +62,40 @@ export class DigitalTextViewModel
 
     constructor(public readonly id: string) {}
 
+    /**
+     * TODO We should establish an alternative approach where the views are updated
+     * (eventually as documents in a second database) and the event sourcing
+     * occurs via dedicated event handlers that may update one or more views (
+     * including "canonical" views for each aggregate root and other views, like
+     * full text search or custom reports).
+     *
+     * ```ts
+     * @EventHandler(`CONTENT_ADDED_TO_DIGITAL_TEXT_PAGE`)
+     * class HandleContentAddedToDigitalTextPage{
+     *   // ...
+     *    async handle({text,languageCode,pageIdentifier, aggregateCompositeIdentifier}: ContentAddedToDigitalTextPage): Promise<void>{
+     *         const digitalTextRepository = this.queryRepositoryProvider.forView(CanonicalViews.digitalText)
+     *
+     *        const digitalTextView = await digitalTextRepository.fetchById(aggregateCompositeIdentifier.id);
+     *
+     *        const updatedDigitalText = digitalTextView.addContentToPage(pageIdentifier,text,langaugeCode);
+     *
+     *        // maybe we want the delta here only
+     *        await this.digitalTextRepository.update(updatedDigitalText);
+     *
+     *         await this.queryRepositoryProvider.getSearchRepository().index(aggregateCompositeIdentifier,{
+     *              languageCode,
+     *              tokens: tokenize(text),
+     *     })
+     *
+     *        // then update Notes \ connections
+     *
+     *      // then update tags
+     *    }
+     * }
+     * ```
+     *
+     */
     apply(event: BaseEvent): this {
         const { payload } = event;
 
@@ -109,13 +143,8 @@ export class DigitalTextViewModel
             if (event.type === 'PAGE_ADDED_TO_DIGITAL_TEXT') {
                 const { identifier } = payload as PageAddedToDigitalTextPayload;
 
-                this.pages.push(
-                    new DigitalTextPage({
-                        identifier,
-                    })
-                );
-
-                return this;
+                // note that this eagerly sorts the pages
+                return this.addPage(identifier);
             }
 
             if (event.type === 'CONTENT_ADDED_TO_DIGITAL_TEXT_PAGE') {
@@ -199,10 +228,6 @@ export class DigitalTextViewModel
                  * of a system error. Do we want to throw instead?
                  */
                 if (isNullOrUndefined(searchResult)) {
-                    console.log({
-                        missingTagInDigitalTextList: tagId,
-                    });
-
                     return this;
                 }
 
@@ -248,6 +273,20 @@ export class DigitalTextViewModel
             this.#accessControlList.canUser(userId) ||
             groups.some(({ id: userGroupId }) => this.#accessControlList.canGroup(userGroupId))
         );
+    }
+
+    private addPage<T extends DigitalTextViewModel>(this: T, pageIdentifier: PageIdentifier): T {
+        // TODO  Insert the page identifier in place instead
+        const updatedPages = [
+            ...this.pages,
+            new DigitalTextPage({
+                identifier: pageIdentifier,
+            }),
+        ].sort();
+
+        this.pages = updatedPages;
+
+        return this;
     }
 
     /**

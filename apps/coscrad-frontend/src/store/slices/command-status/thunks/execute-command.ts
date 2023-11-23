@@ -10,7 +10,7 @@ import { Ack } from '../types';
 export const executeCommand = createAsyncThunk(
     `${COMMAND_STATUS}/EXECUTE_COMMAND`,
     async (commandFSA: FluxStandardAction<unknown, string>, thunkApi) => {
-        const { getState, dispatch } = thunkApi;
+        const { getState } = thunkApi;
 
         const token = selectAuthToken(getState() as RootState);
 

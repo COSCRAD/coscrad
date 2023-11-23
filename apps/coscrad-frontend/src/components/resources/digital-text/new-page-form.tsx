@@ -13,19 +13,20 @@ export const NewPageForm = ({
 }: NewPageFormProps) => {
     const [pageIdentifier, setPageIdentifier] = useState<string>('');
 
-    // remove leading and trailing white space
-    const parsedPageIdentifier = pageIdentifier.trim();
+    const disallowedCharacters = [' ', '\t', '\n'];
 
     // TODO Ensure the back-end handles this with an explicit test case
-    const hasValidFormat = parsedPageIdentifier.indexOf(' ') === -1;
+    const hasValidFormat = !disallowedCharacters.some(
+        (invalidChar) => pageIdentifier.indexOf(invalidChar) !== -1
+    );
 
     /**
-     * TODO Expose validation errors to the user
+     * TODO [https://www.pivotaltracker.com/story/show/186539848] Expose validation errors to the user
      */
     const isDisabled =
         !hasValidFormat ||
-        !isNonEmptyString(parsedPageIdentifier) ||
-        existingPageIdentifiers.includes(parsedPageIdentifier);
+        !isNonEmptyString(pageIdentifier) ||
+        existingPageIdentifiers.includes(pageIdentifier);
 
     return (
         <Stack>

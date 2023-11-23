@@ -99,32 +99,30 @@ const aggregateTypeToComprehensiveAssertionFunction: {
             const resourceTypeContextTypeCombosWithoutInstanceForThisRole = Object.values(
                 ResourceType
             )
-                // TODO Remove this
-                .filter((rt) => rt !== ResourceType.digitalText)
-                .flatMap((resourceType) =>
-                    Object.values(EdgeConnectionContextType)
-                        .filter(
-                            // the rules for whether an identity context is allowed also depend on to \ from roles so we won't enforce these to
-                            (contextType) => contextType !== EdgeConnectionContextType.identity
+            .flatMap((resourceType) =>
+                Object.values(EdgeConnectionContextType)
+                    .filter(
+                        // the rules for whether an identity context is allowed also depend on to \ from roles so we won't enforce these to
+                        (contextType) => contextType !== EdgeConnectionContextType.identity
+                    )
+                    .filter((contextType) =>
+                        isContextAllowedForGivenResourceType(contextType, resourceType)
+                    )
+                    .flatMap((contextType) =>
+                        doesMemberWithResourceTypeContextTypeAndRoleExist(
+                            resourceType,
+                            contextType,
+                            role
                         )
-                        .filter((contextType) =>
-                            isContextAllowedForGivenResourceType(contextType, resourceType)
-                        )
-                        .flatMap((contextType) =>
-                            doesMemberWithResourceTypeContextTypeAndRoleExist(
-                                resourceType,
-                                contextType,
-                                role
-                            )
-                                ? []
-                                : [
-                                      {
-                                          resourceType,
-                                          contextType,
-                                      },
-                                  ]
-                        )
-                );
+                            ? []
+                            : [
+                                  {
+                                      resourceType,
+                                      contextType,
+                                  },
+                              ]
+                    )
+            );
 
             // This format ensures the role is visible if the test fails
             const result = {

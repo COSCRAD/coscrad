@@ -1,7 +1,7 @@
 import { IDigitalTextPage } from '@coscrad/api-interfaces';
 import { Box, FormControlLabel, FormGroup, Switch, Typography, styled } from '@mui/material';
 import { useState } from 'react';
-import { FullPagePresenter } from './full-page-presenter';
+import { DigitalTextPageDetailPresenter } from './digital-text-page-detail-presenter';
 import { TextAndLanguage } from './page-content-form';
 import { PageIcon } from './page-icon';
 
@@ -45,7 +45,7 @@ export const PagesPresenter = ({
             </Typography>
             <StyledPages>
                 {viewType === PagesViewType.singleSelected ? (
-                    <FullPagePresenter
+                    <DigitalTextPageDetailPresenter
                         page={currentPage}
                         isSelected={currentPageIdentifier === currentPage.identifier}
                         // Note that we inject the page identifier here

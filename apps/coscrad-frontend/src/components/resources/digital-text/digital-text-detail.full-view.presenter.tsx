@@ -42,7 +42,6 @@ export const DigitalTextDetailFullViewPresenter = ({
     return (
         <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.digitalText}>
             {pages.length > 0 ? (
-                // TODO Offer multiple views here
                 <PagesPresenter
                     pages={pages}
                     currentPageIdentifier={selectedPageIdentifier}
