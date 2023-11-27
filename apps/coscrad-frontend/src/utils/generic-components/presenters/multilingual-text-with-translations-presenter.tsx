@@ -19,7 +19,7 @@ export const MultilingualTextWithTranslations = ({
         >
             <MultilingualTextItemPresenter
                 key={primaryMultilingualTextItem.languageCode}
-                isHeading={false}
+                isHeading={true}
                 text={primaryMultilingualTextItem.text}
                 languageCode={primaryMultilingualTextItem.languageCode}
                 role={primaryMultilingualTextItem.role}

@@ -4,6 +4,7 @@ import {
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { VideoPlayer } from '@coscrad/media-player';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 import { TranscriptPresenter } from '../../transcripts/transcript-presenter';
@@ -22,6 +23,6 @@ export const VideoDetailFullViewPresenter = ({
             value={convertMillisecondsToSeconds(lengthMilliseconds)}
         />
         <VideoPlayer videoUrl={videoUrl} />
-        <TranscriptPresenter transcript={transcript} />
+        {isNullOrUndefined(transcript) ? null : <TranscriptPresenter transcript={transcript} />}
     </ResourceDetailFullViewPresenter>
 );
