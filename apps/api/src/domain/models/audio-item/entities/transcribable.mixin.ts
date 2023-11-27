@@ -16,6 +16,7 @@ import { TRANSLATE_LINE_ITEM } from '../commands/transcripts/translate-line-item
 import { CannotOverwriteTranscriptError, TranscriptLineItemOutOfBoundsError } from '../errors';
 import { CannotAddParticipantBeforeCreatingTranscriptError } from '../errors/CannotAddParticipantBeforeCreatingTranscript.error';
 import { LineItemNotFoundError } from '../errors/line-item-not-found.error';
+import { TranscriptDoesNotExistError } from './transcript-errors';
 import { TranscriptItem } from './transcript-item.entity';
 import { TranscriptParticipant } from './transcript-participant';
 import { Transcript } from './transcript.entity';
@@ -195,6 +196,8 @@ export function Transcribable<TBase extends Constructor<ITranscribableBase>>(Bas
                     outOfBoundsErrors
                 );
 
+            // Shouldn't we null check Transcript here?
+
             const transcriptUpdateResult = this.transcript.importLineItems(newItems);
 
             if (isInternalError(transcriptUpdateResult)) return transcriptUpdateResult;
@@ -207,13 +210,15 @@ export function Transcribable<TBase extends Constructor<ITranscribableBase>>(Bas
         importTranslationsForTranscript(
             translationItemDtos: LineItemTranslation[]
         ): ResultOrError<ITranscribable & ITranscribableBase> {
-            // TODO Discriminate error (use TDD!)
-            const newTranscript = this.transcript.importTranslations(
-                translationItemDtos
-            ) as Transcript;
+            if (!this.hasTranscript())
+                return new TranscriptDoesNotExistError(this.getCompositeIdentifier());
+
+            const transcriptUpdateResult = this.transcript.importTranslations(translationItemDtos);
+
+            if (isInternalError(transcriptUpdateResult)) return transcriptUpdateResult;
 
             return this.safeClone<ITranscribable & ITranscribableBase>({
-                transcript: newTranscript,
+                transcript: transcriptUpdateResult,
             });
         }
 

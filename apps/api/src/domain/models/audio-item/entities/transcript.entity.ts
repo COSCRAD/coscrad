@@ -175,18 +175,23 @@ export class Transcript extends BaseDomainModel implements ITranscript {
     }
 
     importTranslations(translationItems: LineItemTranslation[]): ResultOrError<this> {
-        return this.clone({
-            items: this.items.map((item) => {
-                const searchResult = translationItems.find(
-                    ({ inPointMilliseconds }) => item.inPointMilliseconds === inPointMilliseconds
-                );
+        const itemUpdateResults = this.items.map((item) => {
+            const searchResult = translationItems.find(
+                ({ inPointMilliseconds }) => item.inPointMilliseconds === inPointMilliseconds
+            );
 
-                const { text, languageCode } = searchResult;
+            const { text, languageCode } = searchResult;
 
-                // TODO check for errors here
-                return isNullOrUndefined(searchResult) ? item : item.translate(text, languageCode);
-            }),
-        } as unknown as DeepPartial<DTO<this>>);
+            return isNullOrUndefined(searchResult) ? item : item.translate(text, languageCode);
+        });
+
+        const allErrors = itemUpdateResults.filter(isInternalError);
+
+        return allErrors.length > 0
+            ? new FailedToImportLineItemsToTranscriptError(allErrors)
+            : this.clone({
+                  items: itemUpdateResults,
+              } as unknown as DeepPartial<DTO<this>>);
     }
 
     countParticipants(): number {

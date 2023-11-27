@@ -106,10 +106,12 @@ describe('AudioItem.importTranslationsForTranscript', () => {
                     }))
                 );
 
-            assertErrorAsExpected(
-                result,
-                new InternalError(`Blake, change me to a custom error class instance!`)
-            );
+            it(`should return the expected error`, () => {
+                assertErrorAsExpected(
+                    result,
+                    new InternalError(`Blake, change me to a custom error class instance!`)
+                );
+            });
         });
 
         ['', '   '].forEach((invalidText) => {
@@ -126,10 +128,12 @@ describe('AudioItem.importTranslationsForTranscript', () => {
                     },
                 ]);
 
-            assertErrorAsExpected(
-                result,
-                new InternalError(`Blake, change me to a custom error class instance!`)
-            );
+            it(`should fail with the expected error`, () => {
+                assertErrorAsExpected(
+                    result,
+                    new InternalError(`Blake, change me to a custom error class instance!`)
+                );
+            });
         });
     });
 });
