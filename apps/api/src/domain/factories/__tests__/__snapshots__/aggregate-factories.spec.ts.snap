@@ -188,7 +188,9 @@ DigitalText {
   "eventHistory": [
     {
       "meta": {
-        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
+        "dateCreated": 1664237194999,
+        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100950",
+        "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100685",
       },
       "payload": {
         "aggregateCompositeIdentifier": {
@@ -203,8 +205,13 @@ DigitalText {
   ],
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-  "pages": [],
-  "published": true,
+  "pages": [
+    DigitalTextPage {
+      "content": null,
+      "identifier": "1",
+    },
+  ],
+  "published": false,
   "queryAccessControlList": AccessControlList {
     "allowedGroupIds": [],
     "allowedUserIds": [],
@@ -215,11 +222,6 @@ DigitalText {
         "languageCode": "hai",
         "role": "original",
         "text": "Court Case Digital Text title in language",
-      },
-      MultilingualTextItem {
-        "languageCode": "en",
-        "role": "free translation",
-        "text": "Court Case Digital Text title (English)",
       },
     ],
   },

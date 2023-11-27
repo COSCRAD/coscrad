@@ -503,7 +503,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         },
       },
       "identifier": {
-        "coscradDataType": "NON_EMPTY_STRING",
+        "coscradDataType": "PAGE_NUMBER",
         "description": "text identifier for the page",
         "isArray": false,
         "isOptional": false,
