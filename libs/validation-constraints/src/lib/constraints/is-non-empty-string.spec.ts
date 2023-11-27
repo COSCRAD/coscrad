@@ -13,6 +13,7 @@ const validValues = ['Hello World', `I am so ${foo}`, '44.4444', 'Again-'.repeat
 
 const invalidValues = [
     '', // empty strings are not allowed
+    '   ', // white space only strings are also not allowed
     () => `I'm not a string!`,
     function leftOut() {
         return `How could you think I am a string?`;

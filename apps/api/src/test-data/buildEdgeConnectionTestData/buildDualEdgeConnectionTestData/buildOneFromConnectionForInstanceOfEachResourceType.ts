@@ -5,6 +5,7 @@ import {
     EdgeConnectionMemberRole,
     EdgeConnectionType,
 } from '../../../domain/models/context/edge-connection.entity';
+import { GeneralContext } from '../../../domain/models/context/general-context/general-context.entity';
 import { IdentityContext } from '../../../domain/models/context/identity-context.entity/identity-context.entity';
 import { TextFieldContext } from '../../../domain/models/context/text-field-context/text-field-context.entity';
 import { TimeRangeContext } from '../../../domain/models/context/time-range-context/time-range-context.entity';
@@ -73,6 +74,31 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
                     id: '24',
                 },
                 context: new IdentityContext(),
+            },
+        ],
+    },
+    {
+        id: '3003',
+        note: buildMultilingualTextWithSingleItem(
+            'here is the digital version of the digital text!',
+            LanguageCode.English
+        ),
+        members: [
+            {
+                role: EdgeConnectionMemberRole.from,
+                compositeIdentifier: {
+                    type: ResourceType.digitalText,
+                    id: '1',
+                },
+                context: new GeneralContext(),
+            },
+            {
+                role: EdgeConnectionMemberRole.to,
+                compositeIdentifier: {
+                    type: ResourceType.bibliographicReference,
+                    id: '1',
+                },
+                context: new GeneralContext(),
             },
         ],
     },

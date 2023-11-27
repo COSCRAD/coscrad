@@ -1,4 +1,4 @@
-import PageRangeContextHasSuperfluousPageIdentifiersError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext/PageRangeContextHasSuperfluousPageIdentifiersError';
+import PageRangeContextHasSuperfluousPageIdentifiersError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext/page-range-context-has-superfluous-page-identifiers.error';
 import { ResourceType } from '../../../types/ResourceType';
 import { PageRangeContext } from '../../context/page-range-context/page-range.context.entity';
 import { EdgeConnectionContextType } from '../../context/types/EdgeConnectionContextType';

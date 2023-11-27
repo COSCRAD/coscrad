@@ -19,6 +19,7 @@ type NameLabelAndDescription = {
 
 const lookupTable: { [K in CoscradDataType]: FormFieldType } = {
     [CoscradDataType.NonEmptyString]: FormFieldType.textField,
+    [CoscradDataType.PageNumber]: FormFieldType.textField,
     [CoscradDataType.FiniteNumber]: FormFieldType.numericInput,
     [CoscradDataType.NonNegativeFiniteNumber]: FormFieldType.numericInput,
     // Eventually, we want this to be a dynamic selection

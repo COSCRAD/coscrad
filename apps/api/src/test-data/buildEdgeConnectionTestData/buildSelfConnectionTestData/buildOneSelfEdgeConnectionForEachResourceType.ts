@@ -19,7 +19,23 @@ const role = EdgeConnectionMemberRole.self;
 const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionType'>[] = [
     {
         note: buildMultilingualTextWithSingleItem(
-            'This first 4 letters of this term form a syllable that indicates this is a plant ',
+            'This is a general note about this digital text',
+            LanguageCode.English
+        ),
+        members: [
+            {
+                role,
+                compositeIdentifier: {
+                    id: '2',
+                    type: ResourceType.digitalText,
+                },
+                context: new GeneralContext(),
+            },
+        ],
+    },
+    {
+        note: buildMultilingualTextWithSingleItem(
+            'This is a general note about this term',
             LanguageCode.English
         ),
         members: [
@@ -31,9 +47,25 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
                 },
                 context: new TextFieldContext({
                     type: EdgeConnectionContextType.textField,
+                    languageCode: LanguageCode.English,
                     target: 'text',
-                    languageCode: LanguageCode.Chilcotin,
-                    charRange: [0, 3],
+                    charRange: [0, 1],
+                }),
+            },
+        ],
+    },
+    {
+        note: buildMultilingualTextWithSingleItem('This page is about bears', LanguageCode.English),
+        members: [
+            {
+                role,
+                compositeIdentifier: {
+                    id: '1',
+                    type: ResourceType.digitalText,
+                },
+                context: new PageRangeContext({
+                    type: EdgeConnectionContextType.pageRange,
+                    pageIdentifiers: ['1'],
                 }).toDTO(),
             },
         ],

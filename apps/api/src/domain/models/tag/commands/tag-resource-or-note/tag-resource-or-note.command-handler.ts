@@ -3,6 +3,8 @@ import { Inject } from '@nestjs/common';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
+import { IEventRepository } from '../../../../../persistence/repositories/arango-command-repository-for-aggregate-root';
+import { ArangoEventRepository } from '../../../../../persistence/repositories/arango-event-repository';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { Valid, isValid } from '../../../../domainModelValidators/Valid';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
@@ -22,7 +24,10 @@ export class TagResourceOrNoteCommandHandler extends BaseUpdateCommandHandler<Ta
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN)
         protected readonly repositoryProvider: IRepositoryProvider,
-        @Inject('ID_MANAGER') protected readonly idManager: IIdManager
+        @Inject('ID_MANAGER') protected readonly idManager: IIdManager,
+
+        // TODO Make Tags fully event sourced
+        @Inject(ArangoEventRepository) protected readonly eventRepository: IEventRepository
     ) {
         super(repositoryProvider, idManager);
     }

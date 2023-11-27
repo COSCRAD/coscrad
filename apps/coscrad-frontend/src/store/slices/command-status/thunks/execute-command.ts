@@ -30,6 +30,13 @@ export const executeCommand = createAsyncThunk(
             } as IHttpErrorInfo);
         }
 
+        /**
+         * We may want a more sophisticated pattern for acquiring generated IDs
+         * from the ID generation service. For example, we may want to obtain
+         * several IDs to queue up.
+         */
+        // dispatch(acquireId());
+
         // The command succeeded
         return Ack;
     }

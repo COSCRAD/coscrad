@@ -18,4 +18,5 @@ export enum CoscradConstraint {
     isRequired = 'defined value',
     isString = 'string',
     isMultilingualText = 'isMultilingualText',
+    isPageNumber = 'isPageNumber',
 }
