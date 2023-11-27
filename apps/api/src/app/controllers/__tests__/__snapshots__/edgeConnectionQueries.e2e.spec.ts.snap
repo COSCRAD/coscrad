@@ -1435,16 +1435,10 @@ exports[`When querying for edge connections GET /connections/notes should return
         {
           "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-            "type": "term",
+            "type": "digitalText",
           },
           "context": {
-            "charRange": [
-              0,
-              3,
-            ],
-            "languageCode": "clc",
-            "target": "text",
-            "type": "textField",
+            "type": "general",
           },
           "role": "self",
         },
@@ -1456,7 +1450,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "A note about term/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "text": "A note about digitalText/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           },
         ],
       },
@@ -1465,7 +1459,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "This first 4 letters of this term form a syllable that indicates this is a plant ",
+            "text": "This is a general note about this digital text",
           },
         ],
       },
@@ -1516,6 +1510,115 @@ exports[`When querying for edge connections GET /connections/notes should return
       "connectedResources": [
         {
           "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "type": "term",
+          },
+          "context": {
+            "charRange": [
+              0,
+              1,
+            ],
+            "languageCode": "en",
+            "target": "text",
+            "type": "textField",
+          },
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "A note about term/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+          },
+        ],
+      },
+      "note": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "This is a general note about this term",
+          },
+        ],
+      },
+      "tags": [],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "digitalText",
+          },
+          "context": {
+            "pageIdentifiers": [
+              "1",
+            ],
+            "type": "pageRange",
+          },
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "A note about digitalText/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          },
+        ],
+      },
+      "note": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "This page is about bears",
+          },
+        ],
+      },
+      "tags": [
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
+          "label": "songs",
+          "members": [
+            {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+              "type": "photograph",
+            },
+            {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112002",
+              "type": "note",
+            },
+            {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+              "type": "note",
+            },
+          ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "en",
+                "role": "original",
+                "text": "songs",
+              },
+            ],
+          },
+        },
+      ],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
             "type": "book",
           },
@@ -1529,7 +1632,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
       "name": {
         "items": [
           {
@@ -1571,7 +1674,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
       "name": {
         "items": [
           {
@@ -1587,110 +1690,6 @@ exports[`When querying for edge connections GET /connections/notes should return
             "languageCode": "hai",
             "role": "original",
             "text": "This is the first letter of the list name",
-          },
-        ],
-      },
-      "tags": [
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
-          "label": "songs",
-          "members": [
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-              "type": "photograph",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112002",
-              "type": "note",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-              "type": "note",
-            },
-          ],
-          "name": {
-            "items": [
-              {
-                "languageCode": "en",
-                "role": "original",
-                "text": "songs",
-              },
-            ],
-          },
-        },
-      ],
-    },
-    {
-      "actions": [],
-      "connectedResources": [
-        {
-          "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
-            "type": "spatialFeature",
-          },
-          "context": {
-            "type": "general",
-          },
-          "role": "self",
-        },
-      ],
-      "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
-      "name": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "A note about spatialFeature/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
-          },
-        ],
-      },
-      "note": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "there is a placename for this point at the base of the mountain",
-          },
-        ],
-      },
-      "tags": [],
-    },
-    {
-      "actions": [],
-      "connectedResources": [
-        {
-          "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
-            "type": "audioItem",
-          },
-          "context": {
-            "timeRange": {
-              "inPointMilliseconds": 11000,
-              "outPointMilliseconds": 12950,
-            },
-            "type": "timeRange",
-          },
-          "role": "self",
-        },
-      ],
-      "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
-      "name": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "A note about audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
-          },
-        ],
-      },
-      "note": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "this clip talks about songs",
           },
         ],
       },
@@ -1733,8 +1732,8 @@ exports[`When querying for edge connections GET /connections/notes should return
       "connectedResources": [
         {
           "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-            "type": "photograph",
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
+            "type": "spatialFeature",
           },
           "context": {
             "type": "general",
@@ -1749,7 +1748,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "A note about photograph/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "text": "A note about spatialFeature/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
           },
         ],
       },
@@ -1758,7 +1757,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "this is the stem of the flower",
+            "text": "there is a placename for this point at the base of the mountain",
           },
         ],
       },
@@ -1769,14 +1768,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       "connectedResources": [
         {
           "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
-            "type": "book",
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+            "type": "audioItem",
           },
           "context": {
-            "pageIdentifiers": [
-              "ix",
-            ],
-            "type": "pageRange",
+            "timeRange": {
+              "inPointMilliseconds": 11000,
+              "outPointMilliseconds": 12950,
+            },
+            "type": "timeRange",
           },
           "role": "self",
         },
@@ -1788,7 +1788,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "A note about book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+            "text": "A note about audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
           },
         ],
       },
@@ -1797,7 +1797,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "this section is the best part of an illustrated book about birds",
+            "text": "this clip talks about songs",
           },
         ],
       },
@@ -1856,6 +1856,133 @@ exports[`When querying for edge connections GET /connections/notes should return
       "connectedResources": [
         {
           "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "type": "photograph",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "A note about photograph/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+          },
+        ],
+      },
+      "note": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "this is the stem of the flower",
+          },
+        ],
+      },
+      "tags": [],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+            "type": "book",
+          },
+          "context": {
+            "pageIdentifiers": [
+              "ix",
+            ],
+            "type": "pageRange",
+          },
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "A note about book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+          },
+        ],
+      },
+      "note": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "this section is the best part of an illustrated book about birds",
+          },
+        ],
+      },
+      "tags": [
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          "label": "plants",
+          "members": [
+            {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+              "type": "term",
+            },
+            {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+              "type": "book",
+            },
+            {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+              "type": "book",
+            },
+            {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+              "type": "vocabularyList",
+            },
+            {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
+              "type": "spatialFeature",
+            },
+            {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
+              "type": "note",
+            },
+            {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
+              "type": "note",
+            },
+            {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
+              "type": "note",
+            },
+            {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+              "type": "digitalText",
+            },
+          ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "en",
+                "role": "original",
+                "text": "plants",
+              },
+            ],
+          },
+        },
+      ],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "bibliographicReference",
           },
@@ -1866,7 +1993,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110010",
       "name": {
         "items": [
           {
@@ -1902,7 +2029,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
       "name": {
         "items": [
           {
@@ -1994,7 +2121,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110010",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012",
       "name": {
         "items": [
           {
@@ -2034,7 +2161,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013",
       "name": {
         "items": [
           {
@@ -2053,59 +2180,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           },
         ],
       },
-      "tags": [
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-          "label": "plants",
-          "members": [
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-              "type": "term",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
-              "type": "book",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
-              "type": "book",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-              "type": "vocabularyList",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
-              "type": "spatialFeature",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
-              "type": "note",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
-              "type": "note",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
-              "type": "note",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-              "type": "digitalText",
-            },
-          ],
-          "name": {
-            "items": [
-              {
-                "languageCode": "en",
-                "role": "original",
-                "text": "plants",
-              },
-            ],
-          },
-        },
-      ],
+      "tags": [],
     },
     {
       "actions": [],
@@ -2122,7 +2197,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
       "name": {
         "items": [
           {
@@ -2162,7 +2237,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
       "name": {
         "items": [
           {
@@ -2198,7 +2273,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
       "name": {
         "items": [
           {
@@ -2234,7 +2309,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
       "name": {
         "items": [
           {
@@ -2249,7 +2324,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "This first 4 letters of this term form a syllable that indicates this is a plant ",
+            "text": "This is a general note about this term",
           },
         ],
       },
@@ -2260,80 +2335,8 @@ exports[`When querying for edge connections GET /connections/notes should return
       "connectedResources": [
         {
           "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
-            "type": "book",
-          },
-          "context": {
-            "type": "general",
-          },
-          "role": "self",
-        },
-      ],
-      "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
-      "name": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "A note about book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
-          },
-        ],
-      },
-      "note": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "This page is about bears",
-          },
-        ],
-      },
-      "tags": [],
-    },
-    {
-      "actions": [],
-      "connectedResources": [
-        {
-          "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-            "type": "vocabularyList",
-          },
-          "context": {
-            "type": "general",
-          },
-          "role": "self",
-        },
-      ],
-      "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
-      "name": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "A note about vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-          },
-        ],
-      },
-      "note": {
-        "items": [
-          {
-            "languageCode": "hai",
-            "role": "original",
-            "text": "This is the first letter of the list name",
-          },
-        ],
-      },
-      "tags": [],
-    },
-    {
-      "actions": [],
-      "connectedResources": [
-        {
-          "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
-            "type": "audioItem",
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "digitalText",
           },
           "context": {
             "type": "general",
@@ -2348,7 +2351,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "A note about audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+            "text": "A note about digitalText/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           },
         ],
       },
@@ -2357,7 +2360,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "this clip talks about songs",
+            "text": "This page is about bears",
           },
         ],
       },
@@ -2393,6 +2396,114 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
+            "text": "This page is about bears",
+          },
+        ],
+      },
+      "tags": [],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "type": "vocabularyList",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110020",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "A note about vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+          },
+        ],
+      },
+      "note": {
+        "items": [
+          {
+            "languageCode": "hai",
+            "role": "original",
+            "text": "This is the first letter of the list name",
+          },
+        ],
+      },
+      "tags": [],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+            "type": "audioItem",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110021",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "A note about audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+          },
+        ],
+      },
+      "note": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "this clip talks about songs",
+          },
+        ],
+      },
+      "tags": [],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+            "type": "book",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110022",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "A note about book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+          },
+        ],
+      },
+      "note": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
             "text": "this section is the best part of an illustrated book about birds",
           },
         ],
@@ -2414,7 +2525,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110020",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
       "name": {
         "items": [
           {
@@ -2450,7 +2561,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110021",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
       "name": {
         "items": [
           {
@@ -2486,7 +2597,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110022",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
       "name": {
         "items": [
           {
@@ -2518,9 +2629,9 @@ exports[`When querying for edge connections GET /connections/notes should return
           "context": {
             "charRange": [
               0,
-              3,
+              1,
             ],
-            "languageCode": "clc",
+            "languageCode": "en",
             "target": "text",
             "type": "textField",
           },
@@ -2936,7 +3047,10 @@ exports[`When querying for edge connections GET /connections/notes should return
             "type": "digitalText",
           },
           "context": {
-            "type": "general",
+            "pageIdentifiers": [
+              "1",
+            ],
+            "type": "pageRange",
           },
           "role": "from",
         },
@@ -3024,7 +3138,10 @@ exports[`When querying for edge connections GET /connections/notes should return
             "type": "digitalText",
           },
           "context": {
-            "type": "general",
+            "pageIdentifiers": [
+              "1",
+            ],
+            "type": "pageRange",
           },
           "role": "to",
         },
@@ -3190,9 +3307,9 @@ exports[`When querying for edge connections GET /connections/notes should return
           "context": {
             "charRange": [
               0,
-              3,
+              1,
             ],
-            "languageCode": "clc",
+            "languageCode": "en",
             "target": "text",
             "type": "textField",
           },
@@ -3551,6 +3668,52 @@ exports[`When querying for edge connections GET /connections/notes should return
             "languageCode": "en",
             "role": "original",
             "text": "here is the digital version of the book!",
+          },
+        ],
+      },
+      "tags": [],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "digitalText",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "from",
+        },
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "bibliographicReference",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "to",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113003",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "A connection from digitalText/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to bibliographicReference/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          },
+        ],
+      },
+      "note": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "here is the digital version of the digital text!",
           },
         ],
       },

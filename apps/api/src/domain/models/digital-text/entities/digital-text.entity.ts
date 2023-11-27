@@ -4,6 +4,7 @@ import {
     LanguageCode,
 } from '@coscrad/api-interfaces';
 import { NestedDataType } from '@coscrad/data-types';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
@@ -17,11 +18,14 @@ import { buildMultilingualTextWithSingleItem } from '../../../common/build-multi
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { AggregateRoot } from '../../../decorators';
 import { Valid, isValid } from '../../../domainModelValidators/Valid';
+import { EmptyPageRangeContextError } from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext';
+import PageRangeContextHasSuperfluousPageIdentifiersError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext/page-range-context-has-superfluous-page-identifiers.error';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
 import { Snapshot } from '../../../types/Snapshot';
+import { PageRangeContext } from '../../context/page-range-context/page-range.context.entity';
 import { Resource } from '../../resource.entity';
 import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
 import { ResourceReadAccessGrantedToUser } from '../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event';
@@ -199,6 +203,36 @@ export class DigitalText extends Resource {
 
         // We avoid shared references by cloning
         return this.pages.find(({ identifier }) => identifier === pageIdentifier).clone({});
+    }
+
+    protected validatePageRangeContext(context: PageRangeContext): Valid | InternalError {
+        // TODO Is this really necessary?
+        if (isNullOrUndefined(context))
+            return new InternalError(`Page Range Context is undefined for book: ${this.id}`);
+
+        // We may want to rename the pages property in the PageRangeContext
+        const { pageIdentifiers: contextPageIdentifiers } = context;
+
+        // TODO Consider making this an invariant for the PageRangeContext
+        if (contextPageIdentifiers.length === 0) {
+            return new EmptyPageRangeContextError();
+        }
+
+        const missingPages = contextPageIdentifiers.reduce(
+            (accumulatedList, contextPageIdentifier) =>
+                this.pages.some(({ identifier }) => identifier === contextPageIdentifier)
+                    ? accumulatedList
+                    : accumulatedList.concat(contextPageIdentifier),
+            []
+        );
+
+        if (missingPages.length > 0)
+            return new PageRangeContextHasSuperfluousPageIdentifiersError(
+                missingPages,
+                this.getCompositeIdentifier()
+            );
+
+        return Valid;
     }
 
     static fromEventHistory(

@@ -6,6 +6,7 @@ import { FunctionalComponent } from '../../utils/types/functional-component';
 
 export const NotFoundPresenter: FunctionalComponent = (): JSX.Element => {
     const { notFoundMessage } = useContext(ConfigurableContentContext);
+
     return (
         <Box
             display={'flex'}

@@ -19,6 +19,7 @@ export enum CoscradDataType {
     Boolean = 'BOOLEAN',
     // TODO How does this fit within the constraint-based validation scheme?
     FixedValue = 'FIXED_VALUE',
+    PageNumber = 'PAGE_NUMBER',
 }
 
 export const isCoscradDataType = (input: unknown): input is CoscradDataType =>

@@ -17,6 +17,7 @@ import { AggregateType } from '../../../../types/AggregateType';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
+import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
@@ -80,6 +81,8 @@ const validCommandFSA = {
 };
 
 const buildValidCommandFSA = (): FluxStandardAction<DTO<AddPageToDigitalText>> => validCommandFSA;
+
+const fsaFactory = new DummyCommandFsaFactory(buildValidCommandFSA);
 
 describe(commandType, () => {
     let app: INestApplication;
@@ -225,6 +228,67 @@ describe(commandType, () => {
                             ])
                         );
                     },
+                });
+            });
+        });
+
+        describe(`when the page identifier consists of solely white space`, () => {
+            it(`should fail with the expected error`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await app
+                            .get(ArangoEventRepository)
+                            .appendEvent(creationEventForExistingDigitalText);
+                    },
+                    buildCommandFSA: () =>
+                        fsaFactory.build(undefined, {
+                            identifier: '   ',
+                        }),
+                });
+            });
+        });
+
+        describe(`when the page identifier includes white space or line breaks`, () => {
+            [' A 1 ', 'B\t', '12\n'].forEach((invalidIdentifier) => {
+                describe(`invalid page identifier: ${invalidIdentifier}`, () => {
+                    it(`should fail with the expected error`, async () => {
+                        await assertCommandError(commandAssertionDependencies, {
+                            systemUserId: dummySystemUserId,
+                            seedInitialState: async () => {
+                                await app
+                                    .get(ArangoEventRepository)
+                                    .appendEvent(creationEventForExistingDigitalText);
+                            },
+                            buildCommandFSA: () =>
+                                fsaFactory.build(undefined, {
+                                    identifier: invalidIdentifier,
+                                }),
+                        });
+                    });
+                });
+            });
+        });
+
+        describe(`when the page identifier is more than 9 characters long`, () => {
+            const MAX_PAGE_IDENTIFIER_LENGTH_INCLUSIVE = 9;
+
+            const invalidIdentifier = 'X'.repeat(MAX_PAGE_IDENTIFIER_LENGTH_INCLUSIVE + 1);
+
+            describe(`invalid page identifier: ${invalidIdentifier}`, () => {
+                it(`should fail with the expected error`, async () => {
+                    await assertCommandError(commandAssertionDependencies, {
+                        systemUserId: dummySystemUserId,
+                        seedInitialState: async () => {
+                            await app
+                                .get(ArangoEventRepository)
+                                .appendEvent(creationEventForExistingDigitalText);
+                        },
+                        buildCommandFSA: () =>
+                            fsaFactory.build(undefined, {
+                                identifier: invalidIdentifier,
+                            }),
+                    });
                 });
             });
         });

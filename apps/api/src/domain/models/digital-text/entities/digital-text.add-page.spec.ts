@@ -62,4 +62,45 @@ describe('When a new page is added to an existing digital text', () => {
             new InvariantValidationError(existingDigitalTextWithPages.getCompositeIdentifier(), [])
         );
     });
+
+    describe(`When the page identifier consists solely of white space`, () => {
+        const result = existingDigitalTextWithPages.addPage('   ');
+
+        assertErrorAsExpected(
+            result,
+            new InvariantValidationError(existingDigitalTextWithPages.getCompositeIdentifier(), [])
+        );
+    });
+
+    describe(`when the page identifier includes white space or line breaks`, () => {
+        [' A 1 ', 'B\t', '12\n'].forEach((invalidIdentifier) => {
+            describe(`invalid page identifier: ${invalidIdentifier}`, () => {
+                it(`should fail with the expected error`, () => {
+                    const result = existingDigitalTextWithPages.addPage(invalidIdentifier);
+
+                    assertErrorAsExpected(
+                        result,
+                        new InvariantValidationError(
+                            existingDigitalTextWithPages.getCompositeIdentifier(),
+                            []
+                        )
+                    );
+                });
+            });
+        });
+    });
+
+    describe(`when the page identifier is too long`, () => {
+        //  TODO Is there an existing standard for this?
+        const MAX_PAGE_IDENTIFIER_LENGTH = 9;
+
+        const invalidIdentifier = 'a'.repeat(MAX_PAGE_IDENTIFIER_LENGTH + 1);
+
+        const result = existingDigitalTextWithPages.addPage(invalidIdentifier);
+
+        assertErrorAsExpected(
+            result,
+            new InvariantValidationError(existingDigitalTextWithPages.getCompositeIdentifier(), [])
+        );
+    });
 });

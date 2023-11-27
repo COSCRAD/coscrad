@@ -46,4 +46,12 @@ export class CreateTagCommandHandler extends BaseCreateCommandHandler<Tag> {
     protected buildEvent(command: CreateTag, eventId: string, userId: string): BaseEvent {
         return new TagCreated(command, eventId, userId);
     }
+
+    protected override async persist(
+        instance: Tag,
+        command: CreateTag,
+        userId: string
+    ): Promise<void> {
+        await super.persist(instance, command, userId);
+    }
 }

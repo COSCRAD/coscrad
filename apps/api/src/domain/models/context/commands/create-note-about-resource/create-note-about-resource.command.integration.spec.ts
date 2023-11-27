@@ -150,11 +150,18 @@ const buildCreateNoteAboutResourceFSAForNote = (
     };
 };
 
+const eventSourcedResourceTypes = [ResourceType.song, ResourceType.digitalText];
+
 const comprehensiveValidFSAs = notesToCreate
     // filter out the self-connections (true notes) from the db
     .filter(({ connectionType }: EdgeConnection) => connectionType === EdgeConnectionType.self)
     // TODO [https://www.pivotaltracker.com/story/show/185903292] Support event-sourced resources in this test
-    .filter(({ members }) => members[0].compositeIdentifier.type !== ResourceType.song)
+    .filter(
+        ({ members }) =>
+            !members.some((member) =>
+                eventSourcedResourceTypes.includes(member.compositeIdentifier.type)
+            )
+    )
     .map(buildCreateNoteAboutResourceFSAForNote)
     .map((payload) => ({
         type: commandType,
