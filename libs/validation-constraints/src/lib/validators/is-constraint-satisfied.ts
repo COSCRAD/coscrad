@@ -17,6 +17,7 @@ import {
 } from '../constraints';
 import { CoscradConstraint } from '../constraints/coscrad-constraint.enum';
 import { isFunction } from '../constraints/is-function';
+import { isPageNumber } from '../constraints/is-page-number';
 import { PredicateFunction } from '../types';
 
 /**
@@ -56,6 +57,7 @@ interface IMultilingualText {
 
 const constraintsLookupTable: { [K in CoscradConstraint]: PredicateFunction } = {
     [CoscradConstraint.isNonEmptyString]: isNonEmptyString,
+    [CoscradConstraint.isPageNumber]: isPageNumber,
     [CoscradConstraint.isBoolean]: isBoolean,
     [CoscradConstraint.isRequired]: (input: unknown) => !isNullOrUndefined(input),
     [CoscradConstraint.isInteger]: isInteger,

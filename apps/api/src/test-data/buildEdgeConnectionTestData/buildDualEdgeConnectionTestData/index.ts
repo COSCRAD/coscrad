@@ -41,22 +41,21 @@ const generateComprehensiveDualEdgeConnectionTestData = (
     uniqueIdOffset: number,
     resourceTypesThatHaveBeenManuallyGenerated: ResourceType[]
 ): EdgeConnection[] => {
-    const validSelfMembers = buildOneSelfEdgeConnectionForEachResourceType(uniqueIdOffset)
-        .flatMap(({ members }) => members)
-        .filter(
-            (member) =>
-                /**
-                 * TODO [https://www.pivotaltracker.com/story/show/181978898]
-                 * Remove this first condition when we support a non-trivial
-                 * context for a `SpatialFeature`.
-                 *
-                 * TODO [https://www.pivotaltracker.com/story/show/182204403]
-                 * Determine context types for bibliographic reference models.
-                 */
-                resourceTypesThatCurrentlyOnlySupportGeneralContext.includes(
-                    member.compositeIdentifier.type
-                ) || member.context.type !== EdgeConnectionContextType.general
-        );
+    const allMembers = buildOneSelfEdgeConnectionForEachResourceType(uniqueIdOffset).flatMap(
+        ({ members }) => members
+    );
+
+    const validSelfMembers = allMembers.filter(
+        (member) =>
+            /**
+             * TODO [https://www.pivotaltracker.com/story/show/181978898]
+             * Remove this first condition when we support a non-trivial
+             * context for a `SpatialFeature`.
+             */
+            resourceTypesThatCurrentlyOnlySupportGeneralContext.includes(
+                member.compositeIdentifier.type
+            ) || member.context.type !== EdgeConnectionContextType.general
+    );
 
     const resourceTypesRequiringDataGeneration = Object.values(ResourceType).filter(
         (resourceType) => !resourceTypesThatHaveBeenManuallyGenerated.includes(resourceType)

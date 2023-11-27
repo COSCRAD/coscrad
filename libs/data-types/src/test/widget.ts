@@ -16,6 +16,7 @@ import {
     Year,
 } from '../lib/decorators';
 import { BooleanDataType } from '../lib/decorators/Boolean';
+import { PageNumber } from '../lib/decorators/PageNumber';
 import { TypeDecoratorOptions } from '../lib/decorators/types/TypeDecoratorOptions';
 import { BibliographicSubjectCreatorType, CoscradEnum } from '../lib/enums';
 import { CoscradUserRole } from '../lib/enums/CoscradUserRole';
@@ -153,6 +154,9 @@ export class Widget {
     @NonEmptyString({ isArray: true, ...buildDummyLabelAndDescription('siblingWidgetIds') })
     siblingWidgetIds = ['1', '2', '33'];
 
+    @PageNumber({ ...buildDummyLabelAndDescription('pageNumber') })
+    pageNumber = 'XII';
+
     @BooleanDataType(buildDummyLabelAndDescription('isActive'))
     isActive = true;
 
@@ -234,4 +238,6 @@ export const buildValidWidgetDto = (): Widget => ({
     isActive: false,
 
     rivetPoint: 20.123,
+
+    pageNumber: '1230',
 });

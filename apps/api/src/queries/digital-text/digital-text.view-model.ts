@@ -11,13 +11,14 @@ import {
     PageAddedToDigitalTextPayload,
 } from '../../domain/models/digital-text/commands';
 import { ContentAddedToDigitalTextPagePayload } from '../../domain/models/digital-text/commands/add-content-to-digital-text-page';
-import { DigitalText } from '../../domain/models/digital-text/entities';
+import { DigitalText, PageIdentifier } from '../../domain/models/digital-text/entities';
 import DigitalTextPage from '../../domain/models/digital-text/entities/digital-text-page.entity';
 import { AccessControlList } from '../../domain/models/shared/access-control/access-control-list.entity';
 import { ResourceReadAccessGrantedToUserPayload } from '../../domain/models/shared/common-commands';
 import { TagCreated } from '../../domain/models/tag/commands/create-tag/tag-created.event';
 import { ResourceOrNoteTaggedPayload } from '../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
 import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
+import { isNullOrUndefined } from '../../domain/utilities/validation/is-null-or-undefined';
 import { EventSourcedTagViewModel } from '../buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { BaseEvent } from '../event-sourcing';
 import { ApplyEvent } from '../event-sourcing/apply-event.interface';
@@ -61,6 +62,40 @@ export class DigitalTextViewModel
 
     constructor(public readonly id: string) {}
 
+    /**
+     * TODO We should establish an alternative approach where the views are updated
+     * (eventually as documents in a second database) and the event sourcing
+     * occurs via dedicated event handlers that may update one or more views (
+     * including "canonical" views for each aggregate root and other views, like
+     * full text search or custom reports).
+     *
+     * ```ts
+     * @EventHandler(`CONTENT_ADDED_TO_DIGITAL_TEXT_PAGE`)
+     * class HandleContentAddedToDigitalTextPage{
+     *   // ...
+     *    async handle({text,languageCode,pageIdentifier, aggregateCompositeIdentifier}: ContentAddedToDigitalTextPage): Promise<void>{
+     *         const digitalTextRepository = this.queryRepositoryProvider.forView(CanonicalViews.digitalText)
+     *
+     *        const digitalTextView = await digitalTextRepository.fetchById(aggregateCompositeIdentifier.id);
+     *
+     *        const updatedDigitalText = digitalTextView.addContentToPage(pageIdentifier,text,langaugeCode);
+     *
+     *        // maybe we want the delta here only
+     *        await this.digitalTextRepository.update(updatedDigitalText);
+     *
+     *         await this.queryRepositoryProvider.getSearchRepository().index(aggregateCompositeIdentifier,{
+     *              languageCode,
+     *              tokens: tokenize(text),
+     *     })
+     *
+     *        // then update Notes \ connections
+     *
+     *      // then update tags
+     *    }
+     * }
+     * ```
+     *
+     */
     apply(event: BaseEvent): this {
         const { payload } = event;
 
@@ -108,13 +143,8 @@ export class DigitalTextViewModel
             if (event.type === 'PAGE_ADDED_TO_DIGITAL_TEXT') {
                 const { identifier } = payload as PageAddedToDigitalTextPayload;
 
-                this.pages.push(
-                    new DigitalTextPage({
-                        identifier,
-                    })
-                );
-
-                return this;
+                // note that this eagerly sorts the pages
+                return this.addPage(identifier);
             }
 
             if (event.type === 'CONTENT_ADDED_TO_DIGITAL_TEXT_PAGE') {
@@ -191,14 +221,23 @@ export class DigitalTextViewModel
                     aggregateCompositeIdentifier: taggedMemberCompositeIdentifier,
                 })
             ) {
-                this.tags = [
-                    ...this.tags,
-                    this.#allTags.find(({ id }) => id === tagId).apply(event),
-                ];
+                const searchResult = this.#allTags.find(({ id }) => id === tagId);
+
+                /**
+                 * This is a safeguard so things do not blow up in the event
+                 * of a system error. Do we want to throw instead?
+                 */
+                if (isNullOrUndefined(searchResult)) {
+                    return this;
+                }
+
+                this.tags = [...this.tags, searchResult.apply(event)];
+
+                return this;
             }
+
             return this;
         }
-
         /**
          * TODO Event source notes and edge connections for this digital text.
          */
@@ -234,6 +273,20 @@ export class DigitalTextViewModel
             this.#accessControlList.canUser(userId) ||
             groups.some(({ id: userGroupId }) => this.#accessControlList.canGroup(userGroupId))
         );
+    }
+
+    private addPage<T extends DigitalTextViewModel>(this: T, pageIdentifier: PageIdentifier): T {
+        // TODO  Insert the page identifier in place instead.
+        const updatedPages = [
+            ...this.pages,
+            new DigitalTextPage({
+                identifier: pageIdentifier,
+            }),
+        ].sort((a, b) => a.identifier.localeCompare(b.identifier));
+
+        this.pages = updatedPages;
+
+        return this;
     }
 
     /**

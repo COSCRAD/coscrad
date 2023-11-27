@@ -4,7 +4,7 @@ import { DTO } from '../../../types/DTO';
 import getValidAggregateInstanceForTest from '../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { Valid } from '../../domainModelValidators/Valid';
-import PageRangeContextHasSuperfluousPageIdentifiersError from '../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext/PageRangeContextHasSuperfluousPageIdentifiersError';
+import PageRangeContextHasSuperfluousPageIdentifiersError from '../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext/page-range-context-has-superfluous-page-identifiers.error';
 import { AggregateType } from '../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';

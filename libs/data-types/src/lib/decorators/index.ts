@@ -10,6 +10,7 @@ export * from './ISBN';
 export * from './NestedDataType';
 export * from './NonEmptyString';
 export * from './NonNegativeFiniteNumber';
+export * from './PageNumber';
 export * from './PositiveInteger';
 export * from './RawData';
 export * from './ReferenceTo';

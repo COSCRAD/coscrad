@@ -8,6 +8,7 @@ import {
 } from '../../domain/models/digital-text/commands';
 import {
     AddContentToDigitalTextPage,
+    AddContentToDigitalTextPageCommandHandler,
     ContentAddedToDigitalTextPage,
 } from '../../domain/models/digital-text/commands/add-content-to-digital-text-page';
 import { CreateDigitalText } from '../../domain/models/digital-text/commands/create-digital-text.command';
@@ -31,6 +32,7 @@ import { DigitalTextQueryController } from '../controllers/resources/digital-tex
         CoscradEventFactory,
         CreateDigitalTextCommandHandler,
         AddPageToDigitalTextCommandHandler,
+        AddContentToDigitalTextPageCommandHandler,
         DigitalTextQueryService,
         ...[
             // Domain Model
