@@ -1,6 +1,9 @@
 import { BibliographicSubjectCreatorType } from '@coscrad/data-types';
+import { CommandFSA } from '../../app/controllers/command/command-fsa/command-fsa.entity';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
+import { RegisterDigitalRepresentationOfBibliographicCitation } from '../../domain/models/bibliographic-reference/common/commands/register-digital-representation-of-bibiliographic-citation';
 import { AggregateType } from '../../domain/types/AggregateType';
+import { ResourceType } from '../../domain/types/ResourceType';
 
 const bookId = buildDummyUuid(81);
 
@@ -30,4 +33,24 @@ const createBookBibliographicReference = {
     },
 };
 
-export const buildBibliographicReferenceTestCommandFsas = () => [createBookBibliographicReference];
+// TODO Add other create commands
+
+const registerDigitalRepresentationOfBibliographicCitation: CommandFSA<RegisterDigitalRepresentationOfBibliographicCitation> =
+    {
+        type: `REGISTER_DIGITAL_REPRESENTATION_OF_BIBLIOGRAPHIC_CITATION`,
+        payload: {
+            aggregateCompositeIdentifier: {
+                type,
+                id: bookId,
+            },
+            digitalRepresentationResourceCompositeIdentifier: {
+                type: ResourceType.digitalText,
+                id: buildDummyUuid(135),
+            },
+        },
+    };
+
+export const buildBibliographicReferenceTestCommandFsas = () => [
+    createBookBibliographicReference,
+    registerDigitalRepresentationOfBibliographicCitation,
+];

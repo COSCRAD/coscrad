@@ -1,6 +1,9 @@
+import { ResourceCompositeIdentifier } from '@coscrad/api-interfaces';
 import { NestedDataType } from '@coscrad/data-types';
+import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../../lib/errors/InternalError';
+import cloneToPlainObject from '../../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../../types/DTO';
 import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../../common/entities/multilingual-text';
@@ -22,6 +25,8 @@ export class BookBibliographicReference
 {
     readonly type = ResourceType.bibliographicReference;
 
+    digitalRepresentationResoruceCompositeIdentifier?: ResourceCompositeIdentifier;
+
     @NestedDataType(BookBibliographicReferenceData, {
         label: 'reference data',
         description: 'citation information for the referenced book',
@@ -33,7 +38,25 @@ export class BookBibliographicReference
 
         if (isNullOrUndefined(dto)) return;
 
+        const { digitalRepresentationResoruceCompositeIdentifier } = dto;
+
         this.data = new BookBibliographicReferenceData(dto.data);
+
+        this.digitalRepresentationResoruceCompositeIdentifier = isNonEmptyObject(
+            digitalRepresentationResoruceCompositeIdentifier
+        )
+            ? cloneToPlainObject(digitalRepresentationResoruceCompositeIdentifier)
+            : digitalRepresentationResoruceCompositeIdentifier;
+    }
+
+    registerDigitalRepresentation(compositeIdentifier: ResourceCompositeIdentifier) {
+        // TODO Ensure that we are not overwriting this
+
+        const updated = this.clone<BookBibliographicReference>({
+            digitalRepresentationResoruceCompositeIdentifier: compositeIdentifier,
+        });
+
+        return updated;
     }
 
     getName(): MultilingualText {

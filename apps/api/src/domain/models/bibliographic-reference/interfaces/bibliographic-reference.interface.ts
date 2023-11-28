@@ -1,3 +1,4 @@
+import { ResourceCompositeIdentifier } from '@coscrad/api-interfaces';
 import { ResourceType } from '../../../types/ResourceType';
 import BaseDomainModel from '../../BaseDomainModel';
 import { Resource } from '../../resource.entity';
@@ -9,4 +10,7 @@ export interface IBibliographicReference<
     type: typeof ResourceType.bibliographicReference;
 
     data: T & BaseDomainModel;
+
+    // TODO Explain this!
+    digitalRepresentationResoruceCompositeIdentifier?: ResourceCompositeIdentifier;
 }
