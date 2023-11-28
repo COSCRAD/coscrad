@@ -1,4 +1,5 @@
 import { ITranscript } from '@coscrad/api-interfaces';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { SubtitlesRounded as SubtitlesRoundedIcon } from '@mui/icons-material';
 import { Card, CardContent, CardHeader, Typography } from '@mui/material';
 import { ParticipantsPresenter } from './participants-presenter';
@@ -8,9 +9,18 @@ interface TranscriptPresenterProps {
     transcript: ITranscript;
 }
 
-export const TranscriptPresenter = ({
-    transcript: { participants, items: transcriptItems },
-}: TranscriptPresenterProps): JSX.Element => {
+export const TranscriptPresenter = ({ transcript }: TranscriptPresenterProps): JSX.Element => {
+    if (isNullOrUndefined(transcript)) {
+        return null;
+    }
+
+    const { participants, items: transcriptItems } = transcript;
+
+    // Transcription is still in progress
+    if (participants.length === 0) return null;
+
+    // We know at this point that we have at least one participant
+
     return (
         <Card elevation={0}>
             <CardHeader
@@ -22,18 +32,8 @@ export const TranscriptPresenter = ({
                 }
             />
             <CardContent>
-                {participants.length > 0 ? (
-                    <ParticipantsPresenter participants={participants} />
-                ) : (
-                    <Typography variant="body1" color="info.main">
-                        A Transcript has been added but no participants have been added to the
-                        transcript yet.
-                    </Typography>
-                )}
-
-                {transcriptItems.length > 0 ? (
-                    <TranscriptItemsPresenter transcriptItems={transcriptItems} />
-                ) : null}
+                <ParticipantsPresenter participants={participants} />
+                <TranscriptItemsPresenter transcriptItems={transcriptItems} />
             </CardContent>
         </Card>
     );

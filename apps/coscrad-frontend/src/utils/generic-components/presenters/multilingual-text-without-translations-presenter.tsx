@@ -22,7 +22,7 @@ export const MultilingualTextWithoutTranslations = ({
         >
             <MultilingualTextItemPresenter
                 key={languageCode}
-                isHeading={true}
+                variant="h4"
                 text={text}
                 languageCode={languageCode}
                 role={role}

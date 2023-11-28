@@ -19,8 +19,8 @@ export const MultilingualTextWithTranslations = ({
         >
             <MultilingualTextItemPresenter
                 key={primaryMultilingualTextItem.languageCode}
-                isHeading={true}
                 text={primaryMultilingualTextItem.text}
+                variant="h4"
                 languageCode={primaryMultilingualTextItem.languageCode}
                 role={primaryMultilingualTextItem.role}
             />
@@ -29,7 +29,7 @@ export const MultilingualTextWithTranslations = ({
             {translations.map(({ text, languageCode, role }) => (
                 <MultilingualTextItemPresenter
                     key={languageCode}
-                    isHeading={false}
+                    variant="body1"
                     text={text}
                     languageCode={languageCode}
                     role={role}
