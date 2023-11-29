@@ -1,6 +1,6 @@
 import { ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { NestedDataType } from '@coscrad/data-types';
+import { FullReference, NestedDataType } from '@coscrad/data-types';
 import { DigitalTextCompositeId } from '../../../../digital-text/commands';
 import { BibliographicReferenceCompositeIdentifier } from '../../../shared/BibliographicReferenceCompositeIdentifier';
 
@@ -28,5 +28,6 @@ export class RegisterDigitalRepresentationOfBibliographicCitation implements ICo
         label: 'digital representation resource composite identifier',
         description: 'ID for the resource that is the digital representation of this citation',
     })
+    @FullReference()
     readonly digitalRepresentationResourceCompositeIdentifier: DigitalTextCompositeId;
 }

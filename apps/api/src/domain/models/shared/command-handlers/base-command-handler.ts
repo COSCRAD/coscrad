@@ -112,6 +112,10 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
         return Valid;
     }
 
+    private async validateReferences(_command: ICommand, _snapshot: InMemorySnapshot) {
+        throw new Error(`not implemented`);
+    }
+
     async execute(
         command: ICommand,
         commandType: string,
