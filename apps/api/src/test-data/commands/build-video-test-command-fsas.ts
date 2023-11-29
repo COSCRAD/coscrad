@@ -5,6 +5,7 @@ import {
     AddLineItemToTranscript,
     AddParticipantToTranscript,
     CreateTranscript,
+    ImportTranslationsForTranscript,
     TranslateLineItem,
 } from '../../domain/models/audio-item/commands';
 import {
@@ -12,6 +13,7 @@ import {
     ADD_PARTICIPANT_TO_TRANSCRIPT,
     CREATE_TRANSCRIPT,
     IMPORT_LINE_ITEMS_TO_TRANSCRIPT,
+    IMPORT_TRANSLATIONS_FOR_TRANSCRIPT,
 } from '../../domain/models/audio-item/commands/transcripts/constants';
 import { ImportLineItemsToTranscript } from '../../domain/models/audio-item/commands/transcripts/import-line-items-to-transcript';
 import { TRANSLATE_LINE_ITEM } from '../../domain/models/audio-item/commands/transcripts/translate-line-item/constants';
@@ -118,6 +120,18 @@ const importLineItemsToTranscript: CommandFSA<ImportLineItemsToTranscript> = {
     },
 };
 
+const importTranslationsForTranscript: CommandFSA<ImportTranslationsForTranscript> = {
+    type: IMPORT_TRANSLATIONS_FOR_TRANSCRIPT,
+    payload: {
+        aggregateCompositeIdentifier: { id, type },
+        translationItems: allTimestamps.map(([inPointMilliseconds, _]) => ({
+            inPointMilliseconds,
+            translation: `translation for item at: ${inPointMilliseconds}`,
+            languageCode: LanguageCode.English,
+        })),
+    },
+};
+
 export const buildVideoTestCommandFsas = () => [
     createVideo,
     translateVideoName,
@@ -127,4 +141,5 @@ export const buildVideoTestCommandFsas = () => [
     addLineItemToTranscript,
     translateLineItem,
     importLineItemsToTranscript,
+    importTranslationsForTranscript,
 ];

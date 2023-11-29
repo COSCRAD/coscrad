@@ -7,11 +7,13 @@ import { NotFound } from '../../../../lib/types/not-found';
 import { DTO } from '../../../../types/DTO';
 import { DeepPartial } from '../../../../types/DeepPartial';
 import { ResultOrError } from '../../../../types/ResultOrError';
-import { MultilingualText } from '../../../common/entities/multilingual-text';
+import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../BaseDomainModel';
 import { InvalidTimestampOrderError } from '../commands/transcripts/errors';
+import { EmptyTranslationForTranscriptItem } from './transcript-errors';
+import { CannotOverrideTranslationError } from './transcript-errors/cannot-override-translation.error';
 
 // We can change this later
 type MediaTimestamp = number;
@@ -67,8 +69,19 @@ export class TranscriptItem extends BaseDomainModel implements ITranscriptItem {
         text: string,
         languageCode: LanguageCode
     ): ResultOrError<TranscriptItem> {
-        if (!isNonEmptyString(text))
-            return new InternalError('encountered a translation with empty text');
+        if (!isNonEmptyString(text)) return new EmptyTranslationForTranscriptItem();
+
+        if (this.text.has(languageCode)) {
+            const { languageCode: existingLanguageCode, text: existingTranslation } =
+                this.text.getTranslation(languageCode) as MultilingualTextItem;
+
+            return new CannotOverrideTranslationError(
+                text,
+                languageCode,
+                existingTranslation,
+                existingLanguageCode
+            );
+        }
 
         const updatedText = this.text.translate({
             languageCode,

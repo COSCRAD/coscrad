@@ -1,6 +1,6 @@
 import { ITranscript } from '@coscrad/api-interfaces';
 import { NestedDataType } from '@coscrad/data-types';
-import { isNullOrUndefined, isNumberWithinRange } from '@coscrad/validation-constraints';
+import { isNumberWithinRange } from '@coscrad/validation-constraints';
 import { isDeepStrictEqual } from 'util';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
@@ -23,9 +23,11 @@ import {
 } from '../errors';
 import { TranscriptParticipantInitialsNotRegisteredError } from '../errors/transcript-participant-initials-not-registered.error';
 import { LineItemTranslation } from './transcribable.mixin';
+import { FailedToImportTranslationsToTranscriptError } from './transcript-errors';
+import { CannotTranslateEmptyTranscriptError } from './transcript-errors/cannot-translate-empty-transcript.error';
+import { LineItemNotFoundForTranslationError } from './transcript-errors/line-item-not-found-for-translation.error';
 import { TranscriptItem } from './transcript-item.entity';
 import { TranscriptParticipant } from './transcript-participant';
-
 export class Transcript extends BaseDomainModel implements ITranscript {
     // TODO Validate that there are not duplicate IDs here
     @NestedDataType(TranscriptParticipant, {
@@ -175,22 +177,41 @@ export class Transcript extends BaseDomainModel implements ITranscript {
     }
 
     importTranslations(translationItems: LineItemTranslation[]): ResultOrError<this> {
-        const itemUpdateResults = this.items.map((item) => {
-            const searchResult = translationItems.find(
+        if (!this.hasLineItems()) return new CannotTranslateEmptyTranscriptError();
+
+        const itemUpdateResults = translationItems.map((item) => {
+            const searchResult = this.items.find(
                 ({ inPointMilliseconds }) => item.inPointMilliseconds === inPointMilliseconds
             );
 
-            const { text, languageCode } = searchResult;
+            if (!searchResult) {
+                const { inPointMilliseconds, text, languageCode } = item;
 
-            return isNullOrUndefined(searchResult) ? item : item.translate(text, languageCode);
+                return new LineItemNotFoundForTranslationError(
+                    inPointMilliseconds,
+                    text,
+                    languageCode
+                );
+            }
+
+            const { text, languageCode } = item;
+
+            return searchResult.translate(text, languageCode);
         });
 
         const allErrors = itemUpdateResults.filter(isInternalError);
 
+        const unaffectedItems = this.items.filter(
+            ({ inPointMilliseconds }) =>
+                !translationItems.some(
+                    (translationItem) => translationItem.inPointMilliseconds === inPointMilliseconds
+                )
+        );
+
         return allErrors.length > 0
-            ? new FailedToImportLineItemsToTranscriptError(allErrors)
+            ? new FailedToImportTranslationsToTranscriptError(allErrors)
             : this.clone({
-                  items: itemUpdateResults,
+                  items: [...unaffectedItems, ...itemUpdateResults],
               } as unknown as DeepPartial<DTO<this>>);
     }
 
