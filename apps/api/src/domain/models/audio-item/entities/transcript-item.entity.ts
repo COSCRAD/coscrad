@@ -1,6 +1,6 @@
 import { ITranscriptItem, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { NestedDataType, NonEmptyString, NonNegativeFiniteNumber } from '@coscrad/data-types';
-import { isNumberWithinRange } from '@coscrad/validation-constraints';
+import { isNonEmptyString, isNumberWithinRange } from '@coscrad/validation-constraints';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
@@ -67,6 +67,9 @@ export class TranscriptItem extends BaseDomainModel implements ITranscriptItem {
         text: string,
         languageCode: LanguageCode
     ): ResultOrError<TranscriptItem> {
+        if (!isNonEmptyString(text))
+            return new InternalError('encountered a translation with empty text');
+
         const updatedText = this.text.translate({
             languageCode,
             text,

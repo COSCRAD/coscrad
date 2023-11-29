@@ -114,25 +114,28 @@ describe('AudioItem.importTranslationsForTranscript', () => {
             });
         });
 
-        ['', '   '].forEach((invalidText) => {
-            const result = audioItemWithEmptyTranscript
-                .clone({
-                    transcript: existingTranscriptWithNoItems.clone({
-                        items: [lineItemToTranslate],
-                    }),
-                })
-                .importTranslationsForTranscript([
-                    {
-                        ...translationItems[0],
-                        text: invalidText,
-                    },
-                ]);
+        // ['', '   ']
+        ['   '].forEach((invalidText) => {
+            describe(`when ever the text has the invalid value "${invalidText}"`, () => {
+                const result = audioItemWithEmptyTranscript
+                    .clone({
+                        transcript: existingTranscriptWithNoItems.clone({
+                            items: [lineItemToTranslate],
+                        }),
+                    })
+                    .importTranslationsForTranscript([
+                        {
+                            ...translationItems[0],
+                            text: invalidText,
+                        },
+                    ]);
 
-            it(`should fail with the expected error`, () => {
-                assertErrorAsExpected(
-                    result,
-                    new InternalError(`Blake, change me to a custom error class instance!`)
-                );
+                it.only(`should fail with the expected error`, () => {
+                    assertErrorAsExpected(
+                        result,
+                        new InternalError(`Blake, change me to a custom error class instance!`)
+                    );
+                });
             });
         });
     });

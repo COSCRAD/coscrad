@@ -15,7 +15,7 @@ export class TranslationItem {
         label: 'in point (ms)',
         description: 'the opening timestamp in milliseconds',
     })
-    readonly InPointMilliseconds: number;
+    readonly inPointMilliseconds: number;
 
     @NonEmptyString({
         label: 'translation',
