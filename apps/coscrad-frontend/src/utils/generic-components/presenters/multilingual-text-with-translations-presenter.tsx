@@ -1,6 +1,6 @@
 import { IMultilingualTextItem } from '@coscrad/api-interfaces';
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material/';
-import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Box } from '@mui/material';
 import { MultilingualTextItemPresenter } from './multilingual-text-item-presenter';
 
 interface MultilingualTextWithTranslationsProps {
@@ -27,13 +27,14 @@ export const MultilingualTextWithTranslations = ({
         </AccordionSummary>
         <AccordionDetails data-testid="multilingual-text-translations">
             {translations.map(({ text, languageCode, role }) => (
-                <MultilingualTextItemPresenter
-                    key={languageCode}
-                    variant="body1"
-                    text={text}
-                    languageCode={languageCode}
-                    role={role}
-                />
+                <Box key={languageCode}>
+                    <MultilingualTextItemPresenter
+                        variant="body1"
+                        text={text}
+                        languageCode={languageCode}
+                        role={role}
+                    />
+                </Box>
             ))}
         </AccordionDetails>
     </Accordion>
