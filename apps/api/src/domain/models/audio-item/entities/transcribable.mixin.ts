@@ -17,6 +17,7 @@ import { CannotOverwriteTranscriptError, TranscriptLineItemOutOfBoundsError } fr
 import { CannotAddParticipantBeforeCreatingTranscriptError } from '../errors/CannotAddParticipantBeforeCreatingTranscript.error';
 import { LineItemNotFoundError } from '../errors/line-item-not-found.error';
 import { TranscriptDoesNotExistError } from './transcript-errors';
+import { NoTranslationsProvidedError } from './transcript-errors/no-translations-provided.error';
 import { TranscriptItem } from './transcript-item.entity';
 import { TranscriptParticipant } from './transcript-participant';
 import { Transcript } from './transcript.entity';
@@ -175,6 +176,7 @@ export function Transcribable<TBase extends Constructor<ITranscribableBase>>(Bas
             } as DeepPartial<DTO<this>>);
         }
 
+        // TODO Do we ensure that there must be at least one line item here?
         importLineItemsToTranscript(
             newItemDtos: DTO<TranscriptItem>[]
         ): ResultOrError<ITranscribableBase> {
@@ -210,6 +212,10 @@ export function Transcribable<TBase extends Constructor<ITranscribableBase>>(Bas
         importTranslationsForTranscript(
             translationItemDtos: LineItemTranslation[]
         ): ResultOrError<ITranscribable & ITranscribableBase> {
+            if (translationItemDtos.length === 0) {
+                return new NoTranslationsProvidedError();
+            }
+
             if (!this.hasTranscript())
                 return new TranscriptDoesNotExistError(this.getCompositeIdentifier());
 

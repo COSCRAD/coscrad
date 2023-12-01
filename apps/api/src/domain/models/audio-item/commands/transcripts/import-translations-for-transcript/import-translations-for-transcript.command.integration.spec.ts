@@ -3,6 +3,7 @@ import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { CommandFSA } from '../../../../../../app/controllers/command/command-fsa/command-fsa.entity';
+import assertErrorAsExpected from '../../../../../../lib/__tests__/assertErrorAsExpected';
 import { clonePlainObjectWithOverrides } from '../../../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { ArangoDatabaseProvider } from '../../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
@@ -10,6 +11,7 @@ import generateDatabaseNameForTestSuite from '../../../../../../persistence/repo
 import { buildTestCommandFsaMap } from '../../../../../../test-data/commands';
 import getValidAggregateInstanceForTest from '../../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextWithSingleItem } from '../../../../../common/build-multilingual-text-with-single-item';
+import InvariantValidationError from '../../../../../domainModelValidators/errors/InvariantValidationError';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
 import { DeluxeInMemoryStore } from '../../../../../types/DeluxeInMemoryStore';
 import { assertCommandError } from '../../../../__tests__/command-helpers/assert-command-error';
@@ -17,12 +19,18 @@ import { assertCommandSuccess } from '../../../../__tests__/command-helpers/asse
 import { DummyCommandFsaFactory } from '../../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUserId';
+import CommandExecutionError from '../../../../shared/common-command-errors/CommandExecutionError';
+import InvalidCommandPayloadTypeError from '../../../../shared/common-command-errors/InvalidCommandPayloadTypeError';
 import { AudioVisualCompositeIdentifier } from '../../../entities/audio-item-composite-identifier';
 import { AudioItem } from '../../../entities/audio-item.entity';
+import { NoTranslationsProvidedError } from '../../../entities/transcript-errors/no-translations-provided.error';
 import { TranscriptItem } from '../../../entities/transcript-item.entity';
 import { Transcript } from '../../../entities/transcript.entity';
 import { IMPORT_TRANSLATIONS_FOR_TRANSCRIPT } from '../constants';
-import { ImportTranslationsForTranscript } from './import-translations-for-transcript.command';
+import {
+    ImportTranslationsForTranscript,
+    TranslationItem,
+} from './import-translations-for-transcript.command';
 
 const commandType = IMPORT_TRANSLATIONS_FOR_TRANSCRIPT;
 
@@ -291,16 +299,113 @@ describe(commandType, () => {
         // TODO when the translation items themselves are inconsistent
         describe(`when the translation items are inconsistent`, () => {
             describe(`when the translations have overlapping timestamps`, () => {
-                it.todo(`should have a test`);
+                const repeatedInPoint = existingAudioItem.lengthMilliseconds * 0.1;
+
+                const translationItemsWithOverlappingInpoints: TranslationItem[] = [
+                    {
+                        inPointMilliseconds: repeatedInPoint,
+                        translation: 'this is the first translation',
+                        languageCode: LanguageCode.English,
+                    },
+                    {
+                        inPointMilliseconds: repeatedInPoint,
+                        translation: 'this is the second translation',
+                        languageCode: LanguageCode.English,
+                    },
+                ];
+
+                it(`should fail with the expected errors`, async () => {
+                    await assertCommandError(commandAssertionDependencies, {
+                        systemUserId: dummySystemUserId,
+                        seedInitialState: async () => {
+                            await testRepositoryProvider.addFullSnapshot(
+                                new DeluxeInMemoryStore({
+                                    [AggregateType.audioItem]: [existingAudioItem],
+                                }).fetchFullSnapshotInLegacyFormat()
+                            );
+                        },
+                        buildCommandFSA: () =>
+                            fsaFactory.build(undefined, {
+                                translationItems: translationItemsWithOverlappingInpoints,
+                            }),
+                        checkError: (error) => {
+                            assertErrorAsExpected(
+                                error,
+                                new CommandExecutionError([
+                                    new InvariantValidationError(
+                                        existingAudioItem.getCompositeIdentifier(),
+                                        []
+                                    ),
+                                ])
+                            );
+                        },
+                    });
+                });
             });
 
             describe(`when no translations ([]) are provided`, () => {
-                it.todo(`should have a test`);
+                it(`should fail with the expected errors`, async () => {
+                    await assertCommandError(commandAssertionDependencies, {
+                        systemUserId: dummySystemUserId,
+                        seedInitialState: async () => {
+                            await testRepositoryProvider.addFullSnapshot(
+                                new DeluxeInMemoryStore({
+                                    [AggregateType.audioItem]: [existingAudioItem],
+                                }).fetchFullSnapshotInLegacyFormat()
+                            );
+                        },
+                        buildCommandFSA: () =>
+                            fsaFactory.build(undefined, {
+                                translationItems: [],
+                            }),
+                        checkError: (error) => {
+                            assertErrorAsExpected(
+                                error,
+                                //  TODO make this a type error
+                                // new InvalidCommandPayloadTypeError(commandType, [])
+                                new CommandExecutionError([new NoTranslationsProvidedError()])
+                            );
+                        },
+                    });
+                });
             });
 
             describe(`when one of the translations has an invalid text`, () => {
-                it.todo(`should have a test`);
+                it(`should fail with the expected errors`, async () => {
+                    await assertCommandError(commandAssertionDependencies, {
+                        systemUserId: dummySystemUserId,
+                        seedInitialState: async () => {
+                            await testRepositoryProvider.addFullSnapshot(
+                                new DeluxeInMemoryStore({
+                                    [AggregateType.audioItem]: [existingAudioItem],
+                                }).fetchFullSnapshotInLegacyFormat()
+                            );
+                        },
+                        buildCommandFSA: () =>
+                            fsaFactory.build(undefined, {
+                                translationItems: [
+                                    {
+                                        ...translationItem,
+                                        translation: '   ',
+                                    },
+                                ],
+                            }),
+                        checkError: (error) => {
+                            const expectedErrorWithoutInnerErrors =
+                                new InvalidCommandPayloadTypeError(commandType, []);
+
+                            // We just want to check that the command type is referenced in a type error without being too specific about inner errors
+                            const invalidMessages = [error.toString()].filter(
+                                (msg) => !msg.includes(expectedErrorWithoutInnerErrors.toString())
+                            );
+
+                            expect(invalidMessages).toEqual([]);
+                        },
+                    });
+                });
             });
+
+            // TODO Add a separate fuzz test \ payload aggregate type teset
         });
     });
 });
