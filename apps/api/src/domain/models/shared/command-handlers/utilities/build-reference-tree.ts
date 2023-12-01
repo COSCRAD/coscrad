@@ -32,16 +32,28 @@ export const buildReferenceTree = (
 
             const allValues = isArray ? value : [value];
 
-            if (!allValues.every((id): id is string => isNonEmptyString(id))) {
-                throw new Error(`Encountered one or more invalid ids: ${allValues.join(',')}`);
+            if (allValues.every((id): id is string => isNonEmptyString(id))) {
+                return acc.concat(
+                    allValues.map((id) => ({
+                        type,
+                        id,
+                    }))
+                );
             }
 
-            return acc.concat(
-                allValues.map((id) => ({
-                    type,
-                    id,
-                }))
-            );
+            if (
+                allValues.every((v: unknown) => {
+                    if (isNullOrUndefined(v)) return false;
+
+                    const { type, id } = v as CompositeIdentifier<string>;
+
+                    return isNonEmptyString(type) && isNonEmptyString(id);
+                })
+            ) {
+                return acc.concat(allValues);
+            }
+
+            throw new Error(`Encountered one or more invalid ids: ${allValues.join(',')}`);
         },
         []
     );
