@@ -96,4 +96,14 @@ describe(`getReferenceTree`, () => {
             expect(hasBookReference).toBe(true);
         });
     });
+
+    describe(`it should property compare two trees`, () => {
+        describe(`when the trees are the same`, () => {
+            it.todo(`should return an empty array of unmatched composite identifiers`);
+        });
+
+        describe(`when the trees are different`, () => {
+            it.todo(`should return the unmatched composite identifiers`);
+        });
+    });
 });

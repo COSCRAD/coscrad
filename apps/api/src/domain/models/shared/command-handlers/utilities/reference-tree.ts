@@ -36,6 +36,21 @@ export class ReferenceTree {
         return this;
     }
 
+    compare(that: ReferenceTree): CompositeIdentifier<string>[] {
+        return [...that.references.entries()].flatMap(([key, ids]) =>
+            ids.flatMap((id) =>
+                this.has(key, id)
+                    ? []
+                    : [
+                          {
+                              type: key,
+                              id,
+                          },
+                      ]
+            )
+        );
+    }
+
     static fromCompositeIdentifierList(compositeIdentifiers: CompositeIdentifier<string>[]) {
         return compositeIdentifiers.reduce(
             (acc: ReferenceTree, { type, id }) => acc.append(type, id),
