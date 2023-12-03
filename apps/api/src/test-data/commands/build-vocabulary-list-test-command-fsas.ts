@@ -3,12 +3,14 @@ import { CommandFSA } from '../../app/controllers/command/command-fsa/command-fs
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import {
     AddTermToVocabularyList,
+    AnalyzeTermInVocabularyList,
     FilterPropertyType,
     REGISTER_VOCABULARY_LIST_FILTER_PROPERTY,
     RegisterVocabularyListFilterProperty,
     TranslateVocabularyListName,
 } from '../../domain/models/vocabulary-list/commands';
 import { ADD_TERM_TO_VOCABULARY_LIST } from '../../domain/models/vocabulary-list/commands/add-term-to-vocabulary-list/constants';
+import { ANALYZE_TERM_IN_VOCABULARY_LIST } from '../../domain/models/vocabulary-list/commands/analyze-term-in-vocabulary-list/constants';
 import {
     CREATE_VOCABULARY_LIST,
     CreateVocabularyList,
@@ -77,9 +79,24 @@ const registerVocabularyListFilterProperty: CommandFSA<RegisterVocabularyListFil
     },
 };
 
+const analyzeTermInVocabularyList: CommandFSA<AnalyzeTermInVocabularyList> = {
+    type: ANALYZE_TERM_IN_VOCABULARY_LIST,
+    payload: {
+        aggregateCompositeIdentifier: {
+            type,
+            id,
+        },
+        termId: buildDummyUuid(55),
+        propertyValues: {
+            dummyPropertyName: 'dummy-property-value',
+        },
+    },
+};
+
 export const buildVocabularyListTestCommandFsas = () => [
     createVocabularyList,
     translateVocabularyListName,
     addTermToVocabularyList,
     registerVocabularyListFilterProperty,
+    analyzeTermInVocabularyList,
 ];
