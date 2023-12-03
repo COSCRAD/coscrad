@@ -68,6 +68,10 @@ export class VocabularyListFilterProperty<
             : validValues;
     }
 
+    isAllowedValue(propertyValueToCheck: string | boolean): boolean {
+        return this.validValues.some(({ value }) => value === propertyValueToCheck);
+    }
+
     validateComplexInvariants(): InternalError[] {
         /**
          * Here we filter out the duplicated labels.
