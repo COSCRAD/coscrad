@@ -3,7 +3,9 @@ import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpect
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
+import InvariantValidationError from '../../../domainModelValidators/errors/InvariantValidationError';
 import { AggregateType } from '../../../types/AggregateType';
+import { InvalidTranscriptError } from '../commands/transcripts/errors';
 import { AudioItem } from './audio-item.entity';
 import { LineItemTranslation } from './transcribable.mixin';
 import {
@@ -49,13 +51,13 @@ const audioItemWithEmptyTranscript = getValidAggregateInstanceForTest(
 
 const translationText = 'this is what was said';
 
-const translationItems: LineItemTranslation[] = [
-    {
-        inPointMilliseconds: lineItemToTranslate.inPointMilliseconds,
-        text: translationText,
-        languageCode: translationLanguageCode,
-    },
-];
+const translationItem: LineItemTranslation = {
+    inPointMilliseconds: lineItemToTranslate.inPointMilliseconds,
+    text: translationText,
+    languageCode: translationLanguageCode,
+};
+
+const translationItems: LineItemTranslation[] = [translationItem];
 
 describe('AudioItem.importTranslationsForTranscript', () => {
     describe(`when the input is valid`, () => {
@@ -154,7 +156,25 @@ describe('AudioItem.importTranslationsForTranscript', () => {
             });
         });
 
-        // TODO Whenever there are multiple translations with the same in point
+        describe(`when there are multiple translations with the same inPoint`, () => {
+            const result = audioItemWithEmptyTranscript
+                .clone({
+                    transcript: existingTranscriptWithNoItems.clone({
+                        items: [lineItemToTranslate],
+                    }),
+                })
+                .importTranslationsForTranscript([translationItem, translationItem]);
+
+            it(`should return the expected error`, () => {
+                assertErrorAsExpected(
+                    result,
+                    new InvariantValidationError(
+                        audioItemWithEmptyTranscript.getCompositeIdentifier(),
+                        [new InvalidTranscriptError([])]
+                    )
+                );
+            });
+        });
 
         ['', '   '].forEach((invalidText) => {
             describe(`when ever the text has the invalid value "${invalidText}"`, () => {
