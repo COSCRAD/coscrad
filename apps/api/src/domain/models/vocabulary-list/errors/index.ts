@@ -1,8 +1,12 @@
 export * from './cannot-add-multiple-entries-for-single-term.error';
 export * from './cannot-have-two-filter-properties-with-the-same-name.error';
+export * from './cannot-overwrite-filter-property-value-for-vocabulary-list-entry.error';
+export * from './checkbox-must-have-exactly-two-allowed-values.error';
 export * from './duplicate-label-for-vocabulary-list-filter-property-value.error';
 export * from './duplicate-value-for-vocabulary-list-filter-property-value.error';
 export * from './duplicate-vocabulary-list-name.error';
-// TODO make sure the imports are correct
-export * from './cannot-overwrite-filter-property-value-for-vocabulary-list-entry.error';
 export * from './failed-to-analyze-vocabulary-list-entry.error';
+export * from './invalid-vocabulary-list-filter-property-value.error';
+export * from './vocabulary-list-entry-not-found.error';
+export * from './vocabulary-list-filter-property-must-have-at-least-one-allowed-value.error';
+export * from './vocabulary-list-filter-property-not-found.error';
