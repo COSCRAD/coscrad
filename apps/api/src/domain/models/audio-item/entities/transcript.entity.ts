@@ -22,9 +22,12 @@ import {
     DuplicateTranscriptParticipantNameError,
 } from '../errors';
 import { TranscriptParticipantInitialsNotRegisteredError } from '../errors/transcript-participant-initials-not-registered.error';
+import { LineItemTranslation } from './transcribable.mixin';
+import { FailedToImportTranslationsToTranscriptError } from './transcript-errors';
+import { CannotTranslateEmptyTranscriptError } from './transcript-errors/cannot-translate-empty-transcript.error';
+import { LineItemNotFoundForTranslationError } from './transcript-errors/line-item-not-found-for-translation.error';
 import { TranscriptItem } from './transcript-item.entity';
 import { TranscriptParticipant } from './transcript-participant';
-
 export class Transcript extends BaseDomainModel implements ITranscript {
     // TODO Validate that there are not duplicate IDs here
     @NestedDataType(TranscriptParticipant, {
@@ -171,6 +174,45 @@ export class Transcript extends BaseDomainModel implements ITranscript {
         const newItems = this.items.concat(items.map((item) => item.clone()));
 
         return this.clone({ items: newItems } as DeepPartial<DTO<this>>);
+    }
+
+    importTranslations(translationItems: LineItemTranslation[]): ResultOrError<this> {
+        if (!this.hasLineItems()) return new CannotTranslateEmptyTranscriptError();
+
+        const itemUpdateResults = translationItems.map((item) => {
+            const searchResult = this.items.find(
+                ({ inPointMilliseconds }) => item.inPointMilliseconds === inPointMilliseconds
+            );
+
+            if (!searchResult) {
+                const { inPointMilliseconds, text, languageCode } = item;
+
+                return new LineItemNotFoundForTranslationError(
+                    inPointMilliseconds,
+                    text,
+                    languageCode
+                );
+            }
+
+            const { text, languageCode } = item;
+
+            return searchResult.translate(text, languageCode);
+        });
+
+        const allErrors = itemUpdateResults.filter(isInternalError);
+
+        const unaffectedItems = this.items.filter(
+            ({ inPointMilliseconds }) =>
+                !translationItems.some(
+                    (translationItem) => translationItem.inPointMilliseconds === inPointMilliseconds
+                )
+        );
+
+        return allErrors.length > 0
+            ? new FailedToImportTranslationsToTranscriptError(allErrors)
+            : this.clone({
+                  items: [...unaffectedItems, ...itemUpdateResults],
+              } as unknown as DeepPartial<DTO<this>>);
     }
 
     countParticipants(): number {

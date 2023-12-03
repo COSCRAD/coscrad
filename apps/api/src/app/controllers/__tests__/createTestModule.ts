@@ -23,13 +23,15 @@ import {
     TranslateLineItemCommandHandler,
 } from '../../../domain/models/audio-item/commands';
 import {
+    ImportLineItemsToTranscript,
+    ImportLineItemsToTranscriptCommandHandler,
+    ImportTranslationsForTranscript,
+    ImportTranslationsForTranscriptCommandHandler,
+} from '../../../domain/models/audio-item/commands/transcripts';
+import {
     AddParticipantToTranscript,
     AddParticipantToTranscriptCommandHandler,
 } from '../../../domain/models/audio-item/commands/transcripts/add-participant-to-transcript';
-import {
-    ImportLineItemsToTranscript,
-    ImportLineItemsToTranscriptCommandHandler,
-} from '../../../domain/models/audio-item/commands/transcripts/import-line-items-to-transcript';
 import { CreateBookBibliographicReference } from '../../../domain/models/bibliographic-reference/book-bibliographic-reference/commands/create-book-bibliographic-reference/create-book-bibliographic-reference.command';
 import { CreateBookBibliographicReferenceCommandHandler } from '../../../domain/models/bibliographic-reference/book-bibliographic-reference/commands/create-book-bibliographic-reference/create-book-bibliographic-reference.command-handler';
 import BookBibliographicReferenceData from '../../../domain/models/bibliographic-reference/book-bibliographic-reference/entities/book-bibliographic-reference-data.entity';
@@ -580,6 +582,8 @@ export default async (
             AddLineItemtoTranscriptCommandHandler,
             ImportLineItemsToTranscript,
             ImportLineItemsToTranscriptCommandHandler,
+            ImportTranslationsForTranscript,
+            ImportTranslationsForTranscriptCommandHandler,
             CreatePlayListCommandHandler,
             ImportAudioItemsToPlaylist,
             ImportAudioItemsToPlaylistCommandHandler,

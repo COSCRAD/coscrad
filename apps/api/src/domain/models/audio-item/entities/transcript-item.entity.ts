@@ -1,16 +1,19 @@
-import { ITranscriptItem } from '@coscrad/api-interfaces';
+import { ITranscriptItem, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { NestedDataType, NonEmptyString, NonNegativeFiniteNumber } from '@coscrad/data-types';
-import { isNumberWithinRange } from '@coscrad/validation-constraints';
+import { isNonEmptyString, isNumberWithinRange } from '@coscrad/validation-constraints';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
 import { DTO } from '../../../../types/DTO';
+import { DeepPartial } from '../../../../types/DeepPartial';
 import { ResultOrError } from '../../../../types/ResultOrError';
-import { MultilingualText } from '../../../common/entities/multilingual-text';
+import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../BaseDomainModel';
 import { InvalidTimestampOrderError } from '../commands/transcripts/errors';
+import { EmptyTranslationForTranscriptItem } from './transcript-errors';
+import { CannotOverrideTranslationError } from './transcript-errors/cannot-override-translation.error';
 
 // We can change this later
 type MediaTimestamp = number;
@@ -59,6 +62,36 @@ export class TranscriptItem extends BaseDomainModel implements ITranscriptItem {
         if (data) this.text = new MultilingualText(data);
 
         this.speakerInitials = label;
+    }
+
+    translate<T extends TranscriptItem>(
+        this: T,
+        text: string,
+        languageCode: LanguageCode
+    ): ResultOrError<TranscriptItem> {
+        if (!isNonEmptyString(text)) return new EmptyTranslationForTranscriptItem();
+
+        if (this.text.has(languageCode)) {
+            const { languageCode: existingLanguageCode, text: existingTranslation } =
+                this.text.getTranslation(languageCode) as MultilingualTextItem;
+
+            return new CannotOverrideTranslationError(
+                text,
+                languageCode,
+                existingTranslation,
+                existingLanguageCode
+            );
+        }
+
+        const updatedText = this.text.translate({
+            languageCode,
+            text,
+            role: MultilingualTextItemRole.freeTranslation,
+        });
+
+        return this.clone<T>({
+            text: updatedText as MultilingualText,
+        } as DeepPartial<DTO<T>>);
     }
 
     hasData(): boolean {
