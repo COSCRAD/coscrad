@@ -150,6 +150,8 @@ import {
 import {
     AddTermToVocabularyList,
     AddTermtoVocabularyListCommandHandler,
+    AnalyzeTermInVocabularyList,
+    AnalyzeTermInVocabularyListCommandHandler,
     CreateVocabularyList,
     CreateVocabularyListCommandHandler,
     RegisterVocabularyListFilterProperty,
@@ -609,6 +611,8 @@ export default async (
             RegisterVocabularyListFilterPropertyCommandHandler,
             AddTermToVocabularyList,
             AddTermtoVocabularyListCommandHandler,
+            AnalyzeTermInVocabularyList,
+            AnalyzeTermInVocabularyListCommandHandler,
             TranslateVideoName,
             TranslateVideoNameCommandHandler,
             TranslateAudioItemName,

@@ -21,13 +21,18 @@ import { Resource } from '../../resource.entity';
 import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
 import { ADD_TERM_TO_VOCABULARY_LIST } from '../commands/add-term-to-vocabulary-list/constants';
+import { ANALYZE_TERM_IN_VOCABULARY_LIST } from '../commands/analyze-term-in-vocabulary-list/constants';
 import { TRANSLATE_VOCABULARY_LIST_NAME } from '../commands/translate-vocabulary-list-name/constants';
 import {
     CannotAddMultipleEntriesForSingleTermError,
     CannotHaveTwoFilterPropertiesWithTheSameNameError,
     DuplicateVocabularyListNameError,
+    FailedToAnalyzeVocabularyListEntryError,
 } from '../errors';
+import { InvalidVocabularyListFilterPropertyValueError } from '../errors/invalid-vocabulary-list-filter-property-value.error';
+import { VocabularyListEntryNotFoundError } from '../errors/vocabulary-list-entry-not-found.error';
 import { VocabularyListFilterPropertyMustHaveAtLeastOneAllowedValueError } from '../errors/vocabulary-list-filter-property-must-have-at-least-one-allowed-value.error';
+import { VocabularyListFilterPropertyNotFoundError } from '../errors/vocabulary-list-filter-property-not-found.error';
 import { DropboxOrCheckbox } from '../types/dropbox-or-checkbox';
 import { VocabularyListEntry } from '../vocabulary-list-entry.entity';
 import { VocabularyListFilterProperty } from './vocabulary-list-variable.entity';
@@ -95,6 +100,10 @@ export class VocabularyList extends Resource {
         return this.entries.some((entry) => termId === entry.termId);
     }
 
+    getEntryForTerm(termId: AggregateId): Maybe<VocabularyListEntry> {
+        return this.entries.find((entry) => termId === entry.termId) || NotFound;
+    }
+
     hasFilterPropertyNamed(name: string): boolean {
         // TODO rename `variables` to `filterProperties`
         return this.variables.some((filterProperty) => filterProperty.name === name);
@@ -130,6 +139,48 @@ export class VocabularyList extends Resource {
 
         return this.safeClone<VocabularyList>({
             entries: this.entries.concat(newEntry),
+        });
+    }
+
+    analyzeEntry(
+        termId: AggregateId,
+        propertyName: string,
+        propertyValue: string | boolean
+    ): ResultOrError<VocabularyList> {
+        const entrySearchResult = this.entries.find((entry) => entry.termId === termId);
+
+        if (isNullOrUndefined(entrySearchResult)) {
+            return new VocabularyListEntryNotFoundError(termId, this.id);
+        }
+
+        const filterPropertySearchResult = this.variables.find(({ name }) => name === propertyName);
+
+        if (isNullOrUndefined(filterPropertySearchResult)) {
+            return new VocabularyListFilterPropertyNotFoundError(propertyName, this.id);
+        }
+
+        if (!filterPropertySearchResult.isAllowedValue(propertyValue)) {
+            return new InvalidVocabularyListFilterPropertyValueError(
+                propertyName,
+                propertyValue,
+                this.id
+            );
+        }
+
+        const entryUpdateResult = entrySearchResult.analyze(propertyName, propertyValue);
+
+        if (isInternalError(entryUpdateResult)) {
+            return new FailedToAnalyzeVocabularyListEntryError(termId, this.id, [
+                entryUpdateResult,
+            ]);
+        }
+
+        const updatedEntries = this.entries.map((entry) =>
+            entry.termId === termId ? entryUpdateResult : entry.clone({})
+        );
+
+        return this.clone<VocabularyList>({
+            entries: updatedEntries,
         });
     }
 
@@ -171,7 +222,11 @@ export class VocabularyList extends Resource {
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {
-        return [TRANSLATE_VOCABULARY_LIST_NAME, ADD_TERM_TO_VOCABULARY_LIST];
+        return [
+            TRANSLATE_VOCABULARY_LIST_NAME,
+            ADD_TERM_TO_VOCABULARY_LIST,
+            ANALYZE_TERM_IN_VOCABULARY_LIST,
+        ];
     }
 
     protected validateComplexInvariants(): InternalError[] {
