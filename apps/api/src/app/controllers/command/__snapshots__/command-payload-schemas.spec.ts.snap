@@ -1899,6 +1899,110 @@ exports[`command payload schemas Command payload schema should match the snapsho
     "type": "IMPORT_LINE_ITEMS_TO_TRANSCRIPT",
   },
   {
+    "description": "import translations for the transcript",
+    "label": "Import Translations For Transcript",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "the audio visual resource's ID (generated)",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "the resource type of the audiovisual item",
+            "enumLabel": "Audiovisual Resource Type",
+            "enumName": "AudiovisualResourceType",
+            "isArray": false,
+            "isOptional": false,
+            "label": "Audiovisual Resource Type",
+            "labelsAndValues": [
+              {
+                "label": "video",
+                "value": "video",
+              },
+              {
+                "label": "audio item",
+                "value": "audioItem",
+              },
+            ],
+          },
+        },
+      },
+      "translationItems": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "translations for the items",
+        "isArray": true,
+        "isOptional": false,
+        "label": "translation items",
+        "schema": {
+          "inPointMilliseconds": {
+            "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+            "description": "the opening timestamp in milliseconds",
+            "isArray": false,
+            "isOptional": false,
+            "label": "in point (ms)",
+          },
+          "languageCode": {
+            "complexDataType": "ENUM",
+            "description": "the language for this text item",
+            "enumLabel": "language code",
+            "enumName": "LanguageCode",
+            "isArray": false,
+            "isOptional": false,
+            "label": "language",
+            "labelsAndValues": [
+              {
+                "label": "Chilcotin",
+                "value": "clc",
+              },
+              {
+                "label": "Haida",
+                "value": "hai",
+              },
+              {
+                "label": "English",
+                "value": "en",
+              },
+              {
+                "label": "French",
+                "value": "fra",
+              },
+              {
+                "label": "Chinook",
+                "value": "chn",
+              },
+              {
+                "label": "Zapotec",
+                "value": "zap",
+              },
+              {
+                "label": "Spanish",
+                "value": "spa",
+              },
+            ],
+          },
+          "translation": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "translation for the transcript",
+            "isArray": false,
+            "isOptional": false,
+            "label": "translation",
+          },
+        },
+      },
+    },
+    "type": "IMPORT_TRANSLATIONS_FOR_TRANSCRIPT",
+  },
+  {
     "description": "Creates a new playlist",
     "label": "Create Playlist",
     "schema": {
