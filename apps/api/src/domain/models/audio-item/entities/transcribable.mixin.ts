@@ -16,12 +16,19 @@ import { TRANSLATE_LINE_ITEM } from '../commands/transcripts/translate-line-item
 import { CannotOverwriteTranscriptError, TranscriptLineItemOutOfBoundsError } from '../errors';
 import { CannotAddParticipantBeforeCreatingTranscriptError } from '../errors/CannotAddParticipantBeforeCreatingTranscript.error';
 import { LineItemNotFoundError } from '../errors/line-item-not-found.error';
+import { TranscriptDoesNotExistError } from './transcript-errors';
+import { NoTranslationsProvidedError } from './transcript-errors/no-translations-provided.error';
 import { TranscriptItem } from './transcript-item.entity';
 import { TranscriptParticipant } from './transcript-participant';
 import { Transcript } from './transcript.entity';
 
 /* eslint-disable-next-line */
 export type Constructor<T extends {} = {}> = new (...args: any[]) => T;
+
+export type LineItemTranslation = Pick<TranscriptItem, 'inPointMilliseconds'> & {
+    text: string;
+    languageCode: LanguageCode;
+};
 
 export interface ITranscribableBase {
     /**
@@ -60,6 +67,10 @@ export interface ITranscribable {
 
     importLineItemsToTranscript(
         newItemDtos: DTO<TranscriptItem>[]
+    ): ResultOrError<ITranscribableBase>;
+
+    importTranslationsForTranscript(
+        translationItemDtos: LineItemTranslation[]
     ): ResultOrError<ITranscribableBase>;
 
     countTranscriptParticipants(): number;
@@ -165,6 +176,7 @@ export function Transcribable<TBase extends Constructor<ITranscribableBase>>(Bas
             } as DeepPartial<DTO<this>>);
         }
 
+        // TODO Do we ensure that there must be at least one line item here?
         importLineItemsToTranscript(
             newItemDtos: DTO<TranscriptItem>[]
         ): ResultOrError<ITranscribableBase> {
@@ -186,6 +198,8 @@ export function Transcribable<TBase extends Constructor<ITranscribableBase>>(Bas
                     outOfBoundsErrors
                 );
 
+            // Shouldn't we null check Transcript here?
+
             const transcriptUpdateResult = this.transcript.importLineItems(newItems);
 
             if (isInternalError(transcriptUpdateResult)) return transcriptUpdateResult;
@@ -193,6 +207,25 @@ export function Transcribable<TBase extends Constructor<ITranscribableBase>>(Bas
             return this.safeClone({
                 transcript: transcriptUpdateResult,
             } as DeepPartial<DTO<this>>);
+        }
+
+        importTranslationsForTranscript(
+            translationItemDtos: LineItemTranslation[]
+        ): ResultOrError<ITranscribable & ITranscribableBase> {
+            if (translationItemDtos.length === 0) {
+                return new NoTranslationsProvidedError();
+            }
+
+            if (!this.hasTranscript())
+                return new TranscriptDoesNotExistError(this.getCompositeIdentifier());
+
+            const transcriptUpdateResult = this.transcript.importTranslations(translationItemDtos);
+
+            if (isInternalError(transcriptUpdateResult)) return transcriptUpdateResult;
+
+            return this.safeClone<ITranscribable & ITranscribableBase>({
+                transcript: transcriptUpdateResult,
+            });
         }
 
         countTranscriptParticipants(): number {

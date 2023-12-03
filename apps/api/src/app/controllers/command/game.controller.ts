@@ -37,6 +37,8 @@ export class GameController {
             // TODO Send correct error code
             return 'Not Available';
 
+        // why not have a `fetchByName` or `fetchId` or `fetchOne`
+        // Note that we bypass any kind of repository \ validation layers for this quick-and-dirty support for legacy data
         const allGames = await this.gamesDatabase.fetchMany();
 
         const searchResult = allGames.find(({ name }) => nameToFind === name);

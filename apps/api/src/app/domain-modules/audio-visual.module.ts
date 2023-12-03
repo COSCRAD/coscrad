@@ -9,6 +9,8 @@ import {
     CreateAudioItemCommandHandler,
     CreateTranscript,
     CreateTranscriptCommandHandler,
+    ImportTranslationsForTranscript,
+    ImportTranslationsForTranscriptCommandHandler,
     TranslateAudioItemName,
     TranslateAudioItemNameCommandHandler,
     TranslateLineItem,
@@ -57,6 +59,8 @@ import { VideoController } from '../controllers/resources/video.controller';
         TranslateLineItemCommandHandler,
         ImportLineItemsToTranscript,
         ImportLineItemsToTranscriptCommandHandler,
+        ImportTranslationsForTranscript,
+        ImportTranslationsForTranscriptCommandHandler,
     ],
 })
 export class AudioVisualModule {}

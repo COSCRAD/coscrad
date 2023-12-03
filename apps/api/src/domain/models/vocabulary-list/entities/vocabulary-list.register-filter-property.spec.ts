@@ -112,7 +112,7 @@ describe(`VocabularyList.registerFilterProperty`, () => {
             });
         });
 
-        describe(`when there is an invalid vocabulary list variable definition`, () => {
+        describe(`when there is an invalid vocabulary list variable definition (string value for checkbox)`, () => {
             const invalidValuesForCheckbox = [
                 {
                     // can only be boolean: true \ false
