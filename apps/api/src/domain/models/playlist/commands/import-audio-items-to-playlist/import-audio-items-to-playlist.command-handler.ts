@@ -27,10 +27,11 @@ export class ImportAudioItemsToPlaylistCommandHandler extends BaseUpdateCommandH
     }
 
     protected validateExternalState(
-        state: InMemorySnapshot,
-        instance: Playlist
+        _state: InMemorySnapshot,
+        _instance: Playlist
     ): InternalError | Valid {
-        return instance.validateExternalReferences(state);
+        // References to audio items are validated via the schema in the base handler
+        return Valid;
     }
 
     protected actOnInstance(

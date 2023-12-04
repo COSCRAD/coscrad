@@ -1431,6 +1431,10 @@
                     "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-book-bibliographic-reference-1_a-day-in-the-life.pdf",
                     "isbn": "978-1-895811-34-6",
                     "numberOfPages": 455
+                },
+                "digitalRepresentationResoruceCompositeIdentifier": {
+                    "type": "digitalText",
+                    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001"
                 }
             },
             {

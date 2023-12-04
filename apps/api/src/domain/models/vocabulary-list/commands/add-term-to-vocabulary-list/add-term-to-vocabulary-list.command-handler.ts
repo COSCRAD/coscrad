@@ -41,6 +41,7 @@ export class AddTermtoVocabularyListCommandHandler extends BaseUpdateCommandHand
 
         const allTerms: Term[] = isNotFound(termSearchResult) ? [] : [termSearchResult];
 
+        // We need to fetch the terms for the schema based reference validation to work
         return Promise.resolve(
             new DeluxeInMemoryStore({
                 [AggregateType.term]: allTerms,
@@ -49,10 +50,11 @@ export class AddTermtoVocabularyListCommandHandler extends BaseUpdateCommandHand
     }
 
     protected validateExternalState(
-        snapshot: InMemorySnapshot,
-        vocabularyList: VocabularyList
+        _snapshot: InMemorySnapshot,
+        _vocabularyList: VocabularyList
     ): InternalError | Valid {
-        return vocabularyList.validateExternalState(snapshot);
+        // references are validated automatically in the base handler via the schema
+        return Valid;
     }
 
     protected buildEvent(

@@ -1,6 +1,7 @@
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../../app/controllers/__tests__/setUpIntegrationTest';
+import assertErrorAsExpected from '../../../../../../lib/__tests__/assertErrorAsExpected';
 import { InternalError, isInternalError } from '../../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../../lib/types/not-found';
 import { ArangoDatabaseProvider } from '../../../../../../persistence/database/database.provider';
@@ -10,18 +11,19 @@ import buildTestData from '../../../../../../test-data/buildTestData';
 import { DTO } from '../../../../../../types/DTO';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
 import { AggregateType } from '../../../../../types/AggregateType';
+import { DeluxeInMemoryStore } from '../../../../../types/DeluxeInMemoryStore';
 import buildInMemorySnapshot from '../../../../../utilities/buildInMemorySnapshot';
 import { assertCommandError } from '../../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandFailsDueToTypeError } from '../../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCommandSuccess } from '../../../../__tests__/command-helpers/assert-command-success';
 import { assertEventRecordPersisted } from '../../../../__tests__/command-helpers/assert-event-record-persisted';
-import { assertExternalStateError } from '../../../../__tests__/command-helpers/assert-external-state-error';
 import { DummyCommandFsaFactory } from '../../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { generateCommandFuzzTestCases } from '../../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUserId';
 import InvalidExternalReferenceByAggregateError from '../../../../categories/errors/InvalidExternalReferenceByAggregateError';
 import AggregateNotFoundError from '../../../../shared/common-command-errors/AggregateNotFoundError';
+import CommandExecutionError from '../../../../shared/common-command-errors/CommandExecutionError';
 import { CoscradUserGroup } from '../../entities/coscrad-user-group.entity';
 import { AddUserToGroup } from './add-user-to-group.command';
 
@@ -142,17 +144,23 @@ describe('AddUserToGroup', () => {
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     buildCommandFSA: buildValidCommandFSA,
-                    initialState: buildInMemorySnapshot({
-                        user: [userAlreadyInGroup],
-                        userGroup: [existingGroup],
-                    }),
+                    seedInitialState: async () => {
+                        await testRepositoryProvider.addFullSnapshot(
+                            new DeluxeInMemoryStore({
+                                user: [userAlreadyInGroup],
+                                userGroup: [existingGroup],
+                            }).fetchFullSnapshotInLegacyFormat()
+                        );
+                    },
                     checkError: (error: InternalError) => {
-                        assertExternalStateError(
+                        assertErrorAsExpected(
                             error,
-                            new InvalidExternalReferenceByAggregateError(
-                                existingGroup.getCompositeIdentifier(),
-                                [{ id: validCommandFSA.payload.userId, type: AggregateType.user }]
-                            )
+                            new CommandExecutionError([
+                                new InvalidExternalReferenceByAggregateError(
+                                    existingGroup.getCompositeIdentifier(),
+                                    [userToAdd.getCompositeIdentifier()]
+                                ),
+                            ])
                         );
                     },
                 });

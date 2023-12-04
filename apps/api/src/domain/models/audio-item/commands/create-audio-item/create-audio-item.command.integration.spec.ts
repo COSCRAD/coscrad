@@ -170,7 +170,10 @@ describe('CREATE_AUDIO_ITEM', () => {
             it('should fail with the appropriate error', async () => {
                 await assertCreateCommandError(assertionHelperDependencies, {
                     buildCommandFSA: buildInvalidCommandFSA,
-                    initialState: new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat(),
+                    seedInitialState: async () => {
+                        // empty database
+                        await Promise.resolve();
+                    },
                     systemUserId: dummyAdminUserId,
                     checkError: (error) => {
                         expect(error).toBeInstanceOf(CommandExecutionError);
