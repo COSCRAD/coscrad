@@ -9,6 +9,7 @@ import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { ResourceType } from '../../../../types/ResourceType';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { buildReferenceTree } from './build-reference-tree';
+import { ReferenceTree } from './reference-tree';
 
 class ResourceCompositeIdentifier {
     @NonEmptyString({
@@ -98,12 +99,41 @@ describe(`getReferenceTree`, () => {
     });
 
     describe(`it should property compare two trees`, () => {
-        describe(`when the trees are the same`, () => {
-            it.todo(`should return an empty array of unmatched composite identifiers`);
+        const matchedCompositeIdentifiers = ['widget', 'whatsit', 'gadget'].map((type, index) => ({
+            type,
+            id: buildDummyUuid(index),
+        }));
+
+        const unmatchedCompositeIdentifier = {
+            type: 'widget',
+            id: buildDummyUuid(678),
+        };
+
+        describe(`when the trees different`, () => {
+            it(`should identiy the unmatched composite identifier`, () => {
+                const result = ReferenceTree.fromCompositeIdentifierList(
+                    matchedCompositeIdentifiers
+                ).compare(
+                    ReferenceTree.fromCompositeIdentifierList([
+                        ...matchedCompositeIdentifiers,
+                        unmatchedCompositeIdentifier,
+                    ])
+                );
+
+                expect(result).toHaveLength(1);
+
+                expect(result[0]).toEqual(unmatchedCompositeIdentifier);
+            });
         });
 
         describe(`when the trees are different`, () => {
-            it.todo(`should return the unmatched composite identifiers`);
+            it(`should return the unmatched composite identifiers`, () => {
+                const result = ReferenceTree.fromCompositeIdentifierList(
+                    matchedCompositeIdentifiers
+                ).compare(ReferenceTree.fromCompositeIdentifierList(matchedCompositeIdentifiers));
+
+                expect(result).toEqual([]);
+            });
         });
     });
 });

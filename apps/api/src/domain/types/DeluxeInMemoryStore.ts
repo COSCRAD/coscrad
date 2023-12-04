@@ -1,8 +1,10 @@
 import { InternalError } from '../../lib/errors/InternalError';
 import { DeepPartial } from '../../types/DeepPartial';
 import { Aggregate } from '../models/aggregate.entity';
+import { ReferenceTree } from '../models/shared/command-handlers/utilities/reference-tree';
 import deepCloneInstance from '../models/shared/functional/deepCloneInstance';
 import { isNullOrUndefined } from '../utilities/validation/is-null-or-undefined';
+import { AggregateCompositeIdentifier } from './AggregateCompositeIdentifier';
 import { AggregateType, AggregateTypeToAggregateInstance } from './AggregateType';
 import { PartialSnapshot } from './PartialSnapshot';
 import { InMemorySnapshot, InMemorySnapshotOfResources, isResourceType } from './ResourceType';
@@ -109,6 +111,24 @@ export class DeluxeInMemoryStore {
         ) as Snapshot;
 
         return result;
+    }
+
+    /**
+     * This makes it easy to validate whether all references in a given snapshot
+     * actually exist in a database, for example.
+     */
+    fetchReferences(): ReferenceTree {
+        return ReferenceTree.fromCompositeIdentifierList(this.fetchCompositeIdentifiers());
+    }
+
+    private fetchCompositeIdentifiers(): AggregateCompositeIdentifier[] {
+        /**
+         * The first flatmap unpacks the array of [key,value] (entry) tuples, and the second
+         * flat map unpacks the IDs returned for each individual aggregate instance.
+         */
+        return [...this.inMemoryMapOfAggregates.entries()].flatMap(([_, aggregates]) =>
+            aggregates.flatMap((aggregate) => aggregate.getCompositeIdentifier())
+        );
     }
 
     filter<TAggregateType extends AggregateType>(

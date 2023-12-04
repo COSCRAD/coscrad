@@ -36,6 +36,11 @@ export class ReferenceTree {
         return this;
     }
 
+    /**
+     *
+     * @param that Another collection of references for comparison.
+     * @returns `[]` when the reference trees are the same, a list of mismatched composite identifiers if they are not
+     */
     compare(that: ReferenceTree): CompositeIdentifier<string>[] {
         return [...that.references.entries()].flatMap(([key, ids]) =>
             ids.flatMap((id) =>
