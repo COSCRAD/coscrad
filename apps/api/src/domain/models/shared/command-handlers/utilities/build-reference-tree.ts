@@ -2,14 +2,12 @@ import { CompositeIdentifier } from '@coscrad/api-interfaces';
 import { getCoscradDataSchema, getReferencesForCoscradDataSchema } from '@coscrad/data-types';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { isDeepStrictEqual } from 'util';
-import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
 import { ReferenceTree } from './reference-tree';
 
 export const buildReferenceTree = (
     Ctor: Object,
     // TODO remove this
-    snapshot: DeluxeInMemoryStore,
     instance: Object
 ) => {
     const referenceSpecifications = getReferencesForCoscradDataSchema(getCoscradDataSchema(Ctor));

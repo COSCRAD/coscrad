@@ -20,6 +20,7 @@ import { assertCommandSuccess } from '../../../../__tests__/command-helpers/asse
 import { assertEventRecordPersisted } from '../../../../__tests__/command-helpers/assert-event-record-persisted';
 import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUserId';
+import InvalidExternalReferenceByAggregateError from '../../../../categories/errors/InvalidExternalReferenceByAggregateError';
 import AggregateNotFoundError from '../../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../../shared/common-command-errors/CommandExecutionError';
 import { IBibliographicReference } from '../../../interfaces/bibliographic-reference.interface';
@@ -77,8 +78,6 @@ describe(commandType, () => {
             commandHandlerService,
             idManager,
         };
-
-        // idRepository = new ArangoIdRepository(databaseProvider);
     });
 
     beforeEach(async () => {
@@ -162,7 +161,7 @@ describe(commandType, () => {
         });
 
         describe(`when the digital representation resource (digital text) does not exist`, () => {
-            it.only(`should fail with the expected error`, async () => {
+            it(`should fail with the expected error`, async () => {
                 await assertCommandError(assertionHelperDependencies, {
                     systemUserId: dummySystemUserId,
                     seedInitialState: async () => {
@@ -179,8 +178,9 @@ describe(commandType, () => {
                         assertErrorAsExpected(
                             error,
                             new CommandExecutionError([
-                                new AggregateNotFoundError(
-                                    existingDigitalText.getCompositeIdentifier()
+                                new InvalidExternalReferenceByAggregateError(
+                                    existingBibliographicReference.getCompositeIdentifier(),
+                                    [existingDigitalText.getCompositeIdentifier()]
                                 ),
                             ])
                         );

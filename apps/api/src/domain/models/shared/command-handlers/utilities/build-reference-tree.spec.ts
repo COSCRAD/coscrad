@@ -5,7 +5,6 @@ import {
     ReferenceTo,
     UUID,
 } from '@coscrad/data-types';
-import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { ResourceType } from '../../../../types/ResourceType';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { buildReferenceTree } from './build-reference-tree';
@@ -85,11 +84,7 @@ describe(`getReferenceTree`, () => {
     };
 
     describe(`it should identify the references that are contained`, () => {
-        const referenceTree = buildReferenceTree(
-            Widget,
-            new DeluxeInMemoryStore({}),
-            existingWidget
-        );
+        const referenceTree = buildReferenceTree(Widget, existingWidget);
 
         it(`should have all references`, () => {
             const hasBookReference = referenceTree.has('book', bookId);

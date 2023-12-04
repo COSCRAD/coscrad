@@ -9,6 +9,8 @@ export interface ReferenceSpecification {
 
 /**
  * TODO We need to recurse and support nested references.
+ *
+ * Rename foo!
  */
 export const getReferencesForCoscradDataSchema = (foo: ClassSchema<Record<string, unknown>>) =>
     Object.entries(foo).reduce((acc: ReferenceSpecification[], [propertyKey, typeDefinition]) => {

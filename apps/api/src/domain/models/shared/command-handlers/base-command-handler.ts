@@ -1,7 +1,13 @@
-import { AggregateCompositeIdentifier, AggregateType, ICommandBase } from '@coscrad/api-interfaces';
+import {
+    AGGREGATE_COMPOSITE_IDENTIFIER,
+    AggregateCompositeIdentifier,
+    AggregateType,
+    ICommandBase,
+} from '@coscrad/api-interfaces';
 import { Ack, ICommand, ICommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
+import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../persistence/constants/persistenceConstants';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid } from '../../../domainModelValidators/Valid';
@@ -9,11 +15,14 @@ import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../repositories/interfaces/repository-provider.interface';
 import { AggregateId } from '../../../types/AggregateId';
+import { DeluxeInMemoryStore } from '../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, isResourceType } from '../../../types/ResourceType';
 import { Aggregate } from '../../aggregate.entity';
+import InvalidExternalReferenceByAggregateError from '../../categories/errors/InvalidExternalReferenceByAggregateError';
 import CommandExecutionError from '../common-command-errors/CommandExecutionError';
 import { BaseEvent } from '../events/base-event.entity';
 import { EventRecordMetadata } from '../events/types/EventRecordMetadata';
+import { buildReferenceTree } from './utilities/build-reference-tree';
 import validateCommandPayloadType from './utilities/validateCommandPayloadType';
 
 const buildExecutionError = (allErrors: InternalError[]) => new CommandExecutionError(allErrors);
@@ -112,12 +121,26 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
         return Valid;
     }
 
-    private async validateReferences(_command: ICommand, _snapshot: InMemorySnapshot) {
-        throw new Error(`not implemented`);
+    private validateReferences(
+        command: ICommandBase,
+        snapshot: InMemorySnapshot
+    ): ValidationResult {
+        const CommandCtor: Object = Object.getPrototypeOf(command).constructor;
+
+        const unmatchedCompositeIdentifiers = new DeluxeInMemoryStore(snapshot)
+            .fetchReferences()
+            .compare(buildReferenceTree(CommandCtor, command));
+
+        return unmatchedCompositeIdentifiers.length > 0
+            ? new InvalidExternalReferenceByAggregateError(
+                  command[AGGREGATE_COMPOSITE_IDENTIFIER],
+                  unmatchedCompositeIdentifiers as AggregateCompositeIdentifier[]
+              )
+            : Valid;
     }
 
     async execute(
-        command: ICommand,
+        command: ICommandBase,
         commandType: string,
         { userId }: Pick<EventRecordMetadata, 'userId'>
     ): Promise<Ack | InternalError> {
@@ -138,6 +161,11 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
 
         // Can we combine this with fetching the write context for performance?
         const externalState = await this.fetchRequiredExternalState(command);
+
+        const referenceValidationResult = this.validateReferences(command, externalState);
+
+        if (isInternalError(referenceValidationResult))
+            return buildExecutionError([referenceValidationResult]);
 
         const externalStateValidationResult = this.validateExternalState(
             externalState,
