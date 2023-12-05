@@ -25,7 +25,7 @@ import AggregateNotFoundError from '../../../../shared/common-command-errors/Agg
 import CommandExecutionError from '../../../../shared/common-command-errors/CommandExecutionError';
 import { IBibliographicReference } from '../../../interfaces/bibliographic-reference.interface';
 import { BibliographicReferenceType } from '../../../types/BibliographicReferenceType';
-import { RegisterDigitalRepresentationOfBibliographicCitation } from './register-digital-representation-of-bibliographic-ciation.command';
+import { RegisterDigitalRepresentationOfBibliographicCitation } from './register-digital-representation-of-bibliographic-citation.command';
 
 const commandType = 'REGISTER_DIGITAL_REPRESENTATION_OF_BIBLIOGRAPHIC_CITATION';
 
@@ -117,7 +117,7 @@ describe(commandType, () => {
                     const updatedInstance = searchResult as IBibliographicReference;
 
                     const reference =
-                        updatedInstance.digitalRepresentationResoruceCompositeIdentifier;
+                        updatedInstance.digitalRepresentationResourceCompositeIdentifier;
 
                     expect(reference).toEqual(existingDigitalText.getCompositeIdentifier());
 

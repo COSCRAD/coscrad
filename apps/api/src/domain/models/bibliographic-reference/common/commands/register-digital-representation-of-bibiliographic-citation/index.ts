@@ -1,1 +1,1 @@
-export * from './register-digital-representation-of-bibliographic-ciation.command';
+export * from './register-digital-representation-of-bibliographic-citation.command';

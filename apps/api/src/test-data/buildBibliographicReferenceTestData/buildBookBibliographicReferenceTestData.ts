@@ -33,7 +33,7 @@ const dtos: DTO<BookBibliographicReference>[] = [
         },
         published: true,
         id: '1',
-        digitalRepresentationResoruceCompositeIdentifier: {
+        digitalRepresentationResourceCompositeIdentifier: {
             type: AggregateType.digitalText,
             id: buildDummyUuid(1),
         },

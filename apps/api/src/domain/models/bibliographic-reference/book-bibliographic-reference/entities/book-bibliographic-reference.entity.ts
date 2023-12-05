@@ -25,7 +25,7 @@ export class BookBibliographicReference
 {
     readonly type = ResourceType.bibliographicReference;
 
-    digitalRepresentationResoruceCompositeIdentifier?: ResourceCompositeIdentifier;
+    digitalRepresentationResourceCompositeIdentifier?: ResourceCompositeIdentifier;
 
     @NestedDataType(BookBibliographicReferenceData, {
         label: 'reference data',
@@ -38,22 +38,25 @@ export class BookBibliographicReference
 
         if (isNullOrUndefined(dto)) return;
 
-        const { digitalRepresentationResoruceCompositeIdentifier } = dto;
+        const {
+            digitalRepresentationResourceCompositeIdentifier:
+                digitalRepresentationResourceCompositeIdentifier,
+        } = dto;
 
         this.data = new BookBibliographicReferenceData(dto.data);
 
-        this.digitalRepresentationResoruceCompositeIdentifier = isNonEmptyObject(
-            digitalRepresentationResoruceCompositeIdentifier
+        this.digitalRepresentationResourceCompositeIdentifier = isNonEmptyObject(
+            digitalRepresentationResourceCompositeIdentifier
         )
-            ? cloneToPlainObject(digitalRepresentationResoruceCompositeIdentifier)
-            : digitalRepresentationResoruceCompositeIdentifier;
+            ? cloneToPlainObject(digitalRepresentationResourceCompositeIdentifier)
+            : digitalRepresentationResourceCompositeIdentifier;
     }
 
     registerDigitalRepresentation(compositeIdentifier: ResourceCompositeIdentifier) {
         // TODO Ensure that we are not overwriting this
 
         const updated = this.clone<BookBibliographicReference>({
-            digitalRepresentationResoruceCompositeIdentifier: compositeIdentifier,
+            digitalRepresentationResourceCompositeIdentifier: compositeIdentifier,
         });
 
         return updated;

@@ -1,5 +1,5 @@
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
-import { RegisterDigitalRepresentationOfBibliographicCitation } from './register-digital-representation-of-bibliographic-ciation.command';
+import { RegisterDigitalRepresentationOfBibliographicCitation } from './register-digital-representation-of-bibliographic-citation.command';
 
 export type DigitalRepresentationOfBibliographicCitationRegisteredPayload =
     RegisterDigitalRepresentationOfBibliographicCitation;

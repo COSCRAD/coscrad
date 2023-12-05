@@ -12,19 +12,22 @@ export interface ReferenceSpecification {
  *
  * Rename foo!
  */
-export const getReferencesForCoscradDataSchema = (foo: ClassSchema<Record<string, unknown>>) =>
-    Object.entries(foo).reduce((acc: ReferenceSpecification[], [propertyKey, typeDefinition]) => {
-        // @ts-expect-error TODO fix types
-        const { referenceTo, isArray } = typeDefinition;
+export const getReferencesForCoscradDataSchema = (schema: ClassSchema<Record<string, unknown>>) =>
+    Object.entries(schema).reduce(
+        (acc: ReferenceSpecification[], [propertyKey, typeDefinition]) => {
+            // @ts-expect-error TODO fix types
+            const { referenceTo, isArray } = typeDefinition;
 
-        if (!isNullOrUndefined(referenceTo))
-            return acc.concat([
-                {
-                    type: referenceTo,
-                    path: propertyKey,
-                    isArray,
-                },
-            ]);
+            if (!isNullOrUndefined(referenceTo))
+                return acc.concat([
+                    {
+                        type: referenceTo,
+                        path: propertyKey,
+                        isArray,
+                    },
+                ]);
 
-        return acc;
-    }, []);
+            return acc;
+        },
+        []
+    );

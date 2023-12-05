@@ -48,7 +48,7 @@ describe(`getReferenceTree`, () => {
 
         @FullReference()
         @NestedDataType(ResourceCompositeIdentifier, {
-            label: 'reosurce ID',
+            label: 'resource ID',
             description: 'the resource ID',
         })
         resourceId: ResourceCompositeIdentifier;

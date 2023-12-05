@@ -11,6 +11,12 @@ export interface IBibliographicReference<
 
     data: T & BaseDomainModel;
 
-    // TODO Explain this!
-    digitalRepresentationResoruceCompositeIdentifier?: ResourceCompositeIdentifier;
+    /**
+     * A `BibliographicCitation` represents a (typically academic) external
+     * resource. In order for such a resource to participate in the web of knowledge,
+     * a user must link the citation to an internal resource. Currently, only
+     * a `DigitalText` is supported as the digital representation of a `BibliographicCitation`,
+     * but in the future other resource types may be allowed (e.g. for `VideoBibliographicCitations`).
+     */
+    digitalRepresentationResourceCompositeIdentifier?: ResourceCompositeIdentifier;
 }

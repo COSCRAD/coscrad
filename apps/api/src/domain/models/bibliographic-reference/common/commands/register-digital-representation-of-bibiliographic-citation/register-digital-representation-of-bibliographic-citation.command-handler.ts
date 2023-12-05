@@ -13,7 +13,7 @@ import { BookBibliographicReference } from '../../../book-bibliographic-referenc
 import { IBibliographicReferenceData } from '../../../interfaces/bibliographic-reference-data.interface';
 import { IBibliographicReference } from '../../../interfaces/bibliographic-reference.interface';
 import { DigitalRepresentationOfBibliographicCitationRegistered } from './digital-representation-of-bibliographic-citation-added.event';
-import { RegisterDigitalRepresentationOfBibliographicCitation } from './register-digital-representation-of-bibliographic-ciation.command';
+import { RegisterDigitalRepresentationOfBibliographicCitation } from './register-digital-representation-of-bibliographic-citation.command';
 
 @CommandHandler(RegisterDigitalRepresentationOfBibliographicCitation)
 export class RegisterDigitalRepresentationOfBibliographicCitationCommandHandler extends BaseUpdateCommandHandler<IBibliographicReference> {
