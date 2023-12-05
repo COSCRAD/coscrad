@@ -169,6 +169,29 @@ export class DigitalText extends Resource {
         return updateResult;
     }
 
+    translatePageContent(
+        pageIdentifier: PageIdentifier,
+        text: string,
+        languageCode: LanguageCode
+    ): ResultOrError<DigitalText> {
+        const pageSearchResult = this.getPage(pageIdentifier) as DigitalTextPage;
+
+        // validate that the page was found
+
+        const updatedPage = pageSearchResult.translateContent(
+            text,
+            languageCode
+        ) as DigitalTextPage;
+
+        const updatedPages = this.pages.map((page) =>
+            page.identifier === pageIdentifier ? updatedPage : page
+        );
+
+        return this.safeClone<DigitalText>({
+            pages: updatedPages,
+        });
+    }
+
     /**
      *
      * @param pageIdentifiers list of all page identifiers that must be included
