@@ -269,12 +269,21 @@ Photograph {
   "eventHistory": [],
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
-  "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png",
+  "mediaItemId": "5",
   "photographer": "Susie McRealart",
   "published": true,
   "queryAccessControlList": AccessControlList {
     "allowedGroupIds": [],
     "allowedUserIds": [],
+  },
+  "title": MultilingualText {
+    "items": [
+      MultilingualTextItem {
+        "languageCode": "en",
+        "role": "original",
+        "text": "Adiitsii Running",
+      },
+    ],
   },
   "type": "photograph",
 }

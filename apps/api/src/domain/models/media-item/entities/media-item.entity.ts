@@ -49,6 +49,11 @@ export class MediaItem extends Resource implements ITimeBoundable {
     // @deprecated Remove this property in favor of edge connections to a Contributor resource
     readonly contributorAndRoles?: ContributorAndRole[];
 
+    /**
+     * TODO Soon we will want to generate URLs dynamically.
+     * There should be an endpoint where you can fetch an
+     * internal media item if you have access.
+     */
     @URL({
         label: 'url',
         description: 'a web link to the corresponding media file',
@@ -71,8 +76,9 @@ export class MediaItem extends Resource implements ITimeBoundable {
     @NonNegativeFiniteNumber({
         label: 'length (ms)',
         description: 'length of the media item in milliseconds',
+        isOptional: true,
     })
-    readonly lengthMilliseconds: number;
+    readonly lengthMilliseconds?: number;
 
     constructor(dto: DTO<MediaItem>) {
         super(dto);

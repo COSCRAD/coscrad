@@ -961,6 +961,70 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
       "tags": [],
       "url": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
     },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
+      "mimeType": "image/png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "snow mountain",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
+      "mimeType": "image/png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Adiitsii Running",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
+      "mimeType": "image/png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Nuu Story",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
+      "mimeType": "image/png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Two Brothers Pole",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png",
+    },
   ],
   "indexScopedActions": [],
 }
@@ -1075,6 +1139,70 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
       "tags": [],
       "url": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
     },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
+      "mimeType": "image/png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "snow mountain",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
+      "mimeType": "image/png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Adiitsii Running",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
+      "mimeType": "image/png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Nuu Story",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
+      "mimeType": "image/png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Two Brothers Pole",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png",
+    },
   ],
   "indexScopedActions": [],
 }
@@ -1086,105 +1214,42 @@ exports[`When fetching multiple resources GET /resources/photographs when all of
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
-      "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png",
       "name": {
         "items": [
           {
             "languageCode": "en",
             "role": "original",
-            "text": "https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png",
+            "text": "Adiitsii Running",
           },
         ],
       },
       "photographer": "Susie McRealart",
-      "tags": [
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-          "label": "placenames",
-          "members": [
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
-              "type": "photograph",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
-              "type": "audioItem",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112003",
-              "type": "note",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
-              "type": "note",
-            },
-          ],
-          "name": {
-            "items": [
-              {
-                "languageCode": "en",
-                "role": "original",
-                "text": "placenames",
-              },
-            ],
-          },
-        },
-      ],
+      "tags": [],
     },
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png",
       "name": {
         "items": [
           {
             "languageCode": "en",
             "role": "original",
-            "text": "https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png",
+            "text": "Nuu Story",
           },
         ],
       },
       "photographer": "Robert McRealart",
-      "tags": [
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
-          "label": "songs",
-          "members": [
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-              "type": "photograph",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112002",
-              "type": "note",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-              "type": "note",
-            },
-          ],
-          "name": {
-            "items": [
-              {
-                "languageCode": "en",
-                "role": "original",
-                "text": "songs",
-              },
-            ],
-          },
-        },
-      ],
+      "tags": [],
     },
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-      "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png",
       "name": {
         "items": [
           {
             "languageCode": "en",
             "role": "original",
-            "text": "https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png",
+            "text": "Two Brothers Pole",
           },
         ],
       },
@@ -1202,105 +1267,42 @@ exports[`When fetching multiple resources GET /resources/photographs when some o
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
-      "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png",
       "name": {
         "items": [
           {
             "languageCode": "en",
             "role": "original",
-            "text": "https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png",
+            "text": "Adiitsii Running",
           },
         ],
       },
       "photographer": "Susie McRealart",
-      "tags": [
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-          "label": "placenames",
-          "members": [
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
-              "type": "photograph",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
-              "type": "audioItem",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112003",
-              "type": "note",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
-              "type": "note",
-            },
-          ],
-          "name": {
-            "items": [
-              {
-                "languageCode": "en",
-                "role": "original",
-                "text": "placenames",
-              },
-            ],
-          },
-        },
-      ],
+      "tags": [],
     },
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png",
       "name": {
         "items": [
           {
             "languageCode": "en",
             "role": "original",
-            "text": "https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png",
+            "text": "Nuu Story",
           },
         ],
       },
       "photographer": "Robert McRealart",
-      "tags": [
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
-          "label": "songs",
-          "members": [
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-              "type": "photograph",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112002",
-              "type": "note",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-              "type": "note",
-            },
-          ],
-          "name": {
-            "items": [
-              {
-                "languageCode": "en",
-                "role": "original",
-                "text": "songs",
-              },
-            ],
-          },
-        },
-      ],
+      "tags": [],
     },
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-      "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png",
       "name": {
         "items": [
           {
             "languageCode": "en",
             "role": "original",
-            "text": "https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png",
+            "text": "Two Brothers Pole",
           },
         ],
       },

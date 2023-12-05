@@ -53,6 +53,42 @@ const dtos: DTO<MediaItem>[] = [
         published: true,
         type: ResourceType.mediaItem,
     },
+    {
+        id: '4',
+        title: 'snow mountain',
+        contributorAndRoles: [],
+        url: 'https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png',
+        mimeType: MIMEType.png,
+        published: true,
+        type: ResourceType.mediaItem,
+    },
+    {
+        id: '5',
+        title: 'Adiitsii Running',
+        contributorAndRoles: [],
+        url: 'https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png',
+        mimeType: MIMEType.png,
+        published: true,
+        type: ResourceType.mediaItem,
+    },
+    {
+        id: '6',
+        title: 'Nuu Story',
+        contributorAndRoles: [],
+        url: 'https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png',
+        mimeType: MIMEType.png,
+        published: true,
+        type: ResourceType.mediaItem,
+    },
+    {
+        id: '7',
+        title: 'Two Brothers Pole',
+        contributorAndRoles: [],
+        url: 'https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png',
+        mimeType: MIMEType.png,
+        published: true,
+        type: ResourceType.mediaItem,
+    },
 ];
 
 export default () => dtos.map((dto) => new MediaItem(dto)).map(convertAggregatesIdToUuid);

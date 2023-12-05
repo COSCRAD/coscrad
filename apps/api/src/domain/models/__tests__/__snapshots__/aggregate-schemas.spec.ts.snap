@@ -622,7 +622,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
     "description": "length of the media item in milliseconds",
     "isArray": false,
-    "isOptional": false,
+    "isOptional": true,
     "label": "length (ms)",
   },
   "mimeType": {
@@ -1039,12 +1039,13 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isOptional": false,
     "label": "ID",
   },
-  "imageUrl": {
-    "coscradDataType": "URL",
-    "description": "a web link to a digital version of the photograph",
+  "mediaItemId": {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "description": "reference to the media item for this photograph",
     "isArray": false,
     "isOptional": false,
-    "label": "image link",
+    "label": "media item ID",
+    "referenceTo": "mediaItem",
   },
   "photographer": {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -1052,6 +1053,101 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "photograph",
+  },
+  "title": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "multilingual title for this photograph",
+    "isArray": false,
+    "isOptional": false,
+    "label": "title",
+    "schema": {
+      "items": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "one item for each provided language",
+        "isArray": true,
+        "isOptional": false,
+        "label": "items",
+        "schema": {
+          "languageCode": {
+            "complexDataType": "ENUM",
+            "description": "an official identifier of the language",
+            "enumLabel": "Language_Code",
+            "enumName": "LangaugeCode",
+            "isArray": false,
+            "isOptional": false,
+            "label": "language code",
+            "labelsAndValues": [
+              {
+                "label": "Chilcotin",
+                "value": "clc",
+              },
+              {
+                "label": "Haida",
+                "value": "hai",
+              },
+              {
+                "label": "English",
+                "value": "en",
+              },
+              {
+                "label": "French",
+                "value": "fra",
+              },
+              {
+                "label": "Chinook",
+                "value": "chn",
+              },
+              {
+                "label": "Zapotec",
+                "value": "zap",
+              },
+              {
+                "label": "Spanish",
+                "value": "spa",
+              },
+            ],
+          },
+          "role": {
+            "complexDataType": "ENUM",
+            "description": "role of this text in the translation process",
+            "enumLabel": "text item role",
+            "enumName": "Multilingual Text Item Role",
+            "isArray": false,
+            "isOptional": false,
+            "label": "text item role",
+            "labelsAndValues": [
+              {
+                "label": "original",
+                "value": "original",
+              },
+              {
+                "label": "glossed to",
+                "value": "glossed to",
+              },
+              {
+                "label": "free translation",
+                "value": "free translation",
+              },
+              {
+                "label": "literal translation",
+                "value": "literal translation",
+              },
+              {
+                "label": "elicited from a prompt",
+                "value": "elicited from a prompt",
+              },
+            ],
+          },
+          "text": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "plain text in the given language",
+            "isArray": false,
+            "isOptional": false,
+            "label": "text",
+          },
+        },
+      },
+    },
   },
 }
 `;

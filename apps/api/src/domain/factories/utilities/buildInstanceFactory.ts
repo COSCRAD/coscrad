@@ -27,7 +27,9 @@ export default <TEntity extends Aggregate = Aggregate>(
         const validationResult = candidateInstance.validateInvariants();
 
         // Maybe this is where we should wrap the top level error instead?
-        if (!isValid(validationResult)) return validationResult;
+        if (!isValid(validationResult)) {
+            return validationResult;
+        }
 
         // We must cast unless we can make the validator into a type guard
         return new Ctor(dto as DTO<TEntity>);
