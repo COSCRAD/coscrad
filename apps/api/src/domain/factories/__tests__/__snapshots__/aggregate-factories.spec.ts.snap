@@ -86,7 +86,7 @@ BookBibliographicReference {
     "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-book-bibliographic-reference-1_a-day-in-the-life.pdf",
     "year": 1999,
   },
-  "digitalRepresentationResoruceCompositeIdentifier": {
+  "digitalRepresentationResourceCompositeIdentifier": {
     "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
     "type": "digitalText",
   },
@@ -115,6 +115,7 @@ CourtCaseBibliographicReference {
     "type": "courtCase",
     "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-court-case-bibliographic-reference-3_title-case.pdf",
   },
+  "digitalRepresentationResourceCompositeIdentifier": undefined,
   "eventHistory": [],
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
@@ -145,6 +146,7 @@ JournalArticleBibliographicReference {
     "type": "journalArticle",
     "url": "https://coscrad.org/wp-content/uploads/2023/05/Test-Journal-Article-Sample-PDF.pdf",
   },
+  "digitalRepresentationResourceCompositeIdentifier": undefined,
   "eventHistory": [],
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
