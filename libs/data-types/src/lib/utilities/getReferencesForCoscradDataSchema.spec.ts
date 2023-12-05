@@ -1,4 +1,13 @@
-import { FullReference, NestedDataType, NonEmptyString, ReferenceTo, UUID } from '../decorators';
+import {
+    FullReference,
+    NestedDataType,
+    NonEmptyString,
+    ReferenceTo,
+    UUID,
+    Union,
+    UnionMember,
+    UnionType,
+} from '../decorators';
 import getCoscradDataSchema from './getCoscradDataSchema';
 import { getReferencesForCoscradDataSchema } from './getReferencesForCoscradDataSchema';
 
@@ -77,6 +86,49 @@ describe(`getReferencesForCoscradDataSchema`, () => {
                 path: 'items.woozeediddleId',
                 type: wType,
             });
+        });
+    });
+
+    describe(`when the reference is on a union property`, () => {
+        const wType = `wooziediddle`;
+
+        const ITEM_UNION = 'ITEM_UNION';
+
+        @Union(ITEM_UNION, 'type')
+        class ItemUnion {
+            type: 'one' | 'two';
+        }
+
+        @UnionMember(ITEM_UNION, 'one')
+        class ItemType1 {
+            @ReferenceTo(wType)
+            woozeediddleId: string;
+            properties: { rating: number }[];
+        }
+
+        @UnionMember(ITEM_UNION, 'two')
+        class ItemType2 {
+            @ReferenceTo(wType)
+            woozeediddleId: string;
+            properties: { grade: string }[];
+        }
+
+        class Whatchamacallit {
+            @UnionType(ITEM_UNION, {
+                label: 'item',
+                description: 'an item may be of one of two types',
+            })
+            item: ItemType1 | ItemType2;
+        }
+
+        it(`should throw`, () => {
+            const act = () =>
+                getReferencesForCoscradDataSchema(getCoscradDataSchema(Whatchamacallit));
+
+            /**
+             * TODO Support this use case.
+             */
+            expect(act).toThrow();
         });
     });
 });
