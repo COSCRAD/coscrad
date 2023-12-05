@@ -657,6 +657,76 @@ exports[`command payload schemas Command payload schema should match the snapsho
     "type": "CREATE_JOURNAL_ARTICLE_BIBLIOGRAPHIC_REFERENCE",
   },
   {
+    "description": "Register a Digital Text as the subject of a Bibliographic Citation",
+    "label": "Add Digital Content for Citation",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system wide unique ID",
+        "isArray": false,
+        "isOptional": false,
+        "label": "composite identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "must be: bibliographicReference",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "bibliographicReference",
+                "value": "bibliographicReference",
+              },
+            ],
+          },
+        },
+      },
+      "digitalRepresentationResourceCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "ID for the resource that is the digital representation of this citation",
+        "isArray": false,
+        "isOptional": false,
+        "label": "digital representation resource composite identifier",
+        "referenceTo": "_COMPOSITE_IDENTIFIER_",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "must be: digitalText",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "digitalText",
+                "value": "digitalText",
+              },
+            ],
+          },
+        },
+      },
+    },
+    "type": "REGISTER_DIGITAL_REPRESENTATION_OF_BIBLIOGRAPHIC_CITATION",
+  },
+  {
     "description": "Creates a new digital text",
     "label": "Create Digital Text",
     "schema": {
@@ -4104,7 +4174,6 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "term ID",
-        "referenceTo": "term",
       },
     },
     "type": "ANALYZE_TERM_IN_VOCABULARY_LIST",

@@ -1,6 +1,6 @@
-import { AggregateType, ICommandBase } from '@coscrad/api-interfaces';
+import { ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { NestedDataType, RawDataObject, ReferenceTo, UUID } from '@coscrad/data-types';
+import { NestedDataType, RawDataObject, UUID } from '@coscrad/data-types';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { VocabularyListCompositeId } from '../create-vocabulary-list';
 import { ANALYZE_TERM_IN_VOCABULARY_LIST } from './constants';
@@ -17,7 +17,10 @@ export class AnalyzeTermInVocabularyList implements ICommandBase {
     })
     readonly aggregateCompositeIdentifier: VocabularyListCompositeId;
 
-    @ReferenceTo(AggregateType.term)
+    /**
+     * Note that this does not count as a reference to a term, since the term ID
+     * reference must already exist on a vocabulary list entry for this to succeed.
+     */
     @UUID({
         label: 'term ID',
         description: 'the ID of the term you are analyzing in the vocabulary list',

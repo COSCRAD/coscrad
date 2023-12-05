@@ -29,6 +29,7 @@ const bibliographicReferenceFactory: InstanceFactory<IBibliographicReference> = 
 
     const Ctor = getCtorFromBibliographicReferenceType(subType);
 
+    // @ts-expect-error TODO Fix the types here
     const instance = new Ctor(dto);
 
     const validationResult = instance.validateInvariants();

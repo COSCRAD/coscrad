@@ -142,6 +142,10 @@ class AudioItemBase extends Resource implements IRadioPublishableResource {
     }: InMemorySnapshot): ValidationResult {
         const myMediaItem = mediaItems.find(({ id }) => id === this.mediaItemId);
 
+        /**
+         * The existence of the media item is validated on creation, but
+         * we double check to be safe.
+         */
         if (isNullOrUndefined(myMediaItem))
             return new InvalidExternalReferenceByAggregateError(this.getCompositeIdentifier(), [
                 {

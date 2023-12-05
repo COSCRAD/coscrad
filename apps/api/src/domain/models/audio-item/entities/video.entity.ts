@@ -134,6 +134,10 @@ export class VideoBase extends Resource {
     }: InMemorySnapshot): ValidationResult {
         const myMediaItem = mediaItems.find(({ id }) => id === this.mediaItemId);
 
+        /**
+         * Note that the reference to the media item is validated via the schema
+         * on video creation, so we shouldn't actually hit this.
+         */
         if (isNullOrUndefined(myMediaItem))
             return new InvalidExternalReferenceByAggregateError(this.getCompositeIdentifier(), [
                 {

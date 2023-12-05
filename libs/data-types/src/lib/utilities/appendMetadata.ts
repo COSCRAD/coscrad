@@ -25,13 +25,20 @@ export default (
 ): void => {
     const existingMeta = getCoscradDataSchemaFromPrototype(target);
 
+    const existingMetaForThisProperty = existingMeta[propertyKey as string] || {};
+
+    const newMetaForThisProperty = isCoscradDataType(propertyType)
+        ? { coscradDataType: propertyType, isOptional, isArray, label, description }
+        : { ...propertyType, isOptional, isArray, label, description };
+
     Reflect.defineMetadata(
         COSCRAD_DATA_TYPE_METADATA,
         {
             ...existingMeta,
-            [propertyKey]: isCoscradDataType(propertyType)
-                ? { coscradDataType: propertyType, isOptional, isArray, label, description }
-                : { ...propertyType, isOptional, isArray, label, description },
+            [propertyKey]: {
+                ...existingMetaForThisProperty,
+                ...newMetaForThisProperty,
+            },
         },
         target
     );

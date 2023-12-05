@@ -18,6 +18,7 @@ export const getAggregateCtor = <TAggregateType extends AggregateType>(
      */
     if (isDiscriminatedUnionResourceType(type)) {
         if (isBibliographicReferenceType(subtype))
+            // @ts-expect-error TODO remove these lookup tables and use dynamic registration
             return getCtorFromBibliographicReferenceType(subtype) as Ctor<
                 AggregateTypeToAggregateInstance[TAggregateType]
             >;

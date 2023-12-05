@@ -35,6 +35,8 @@ import {
 import { CreateBookBibliographicReference } from '../../../domain/models/bibliographic-reference/book-bibliographic-reference/commands/create-book-bibliographic-reference/create-book-bibliographic-reference.command';
 import { CreateBookBibliographicReferenceCommandHandler } from '../../../domain/models/bibliographic-reference/book-bibliographic-reference/commands/create-book-bibliographic-reference/create-book-bibliographic-reference.command-handler';
 import BookBibliographicReferenceData from '../../../domain/models/bibliographic-reference/book-bibliographic-reference/entities/book-bibliographic-reference-data.entity';
+import { RegisterDigitalRepresentationOfBibliographicCitation } from '../../../domain/models/bibliographic-reference/common/commands/register-digital-representation-of-bibiliographic-citation';
+import { RegisterDigitalRepresentationOfBibliographicCitationCommandHandler } from '../../../domain/models/bibliographic-reference/common/commands/register-digital-representation-of-bibiliographic-citation/register-digital-representation-of-bibliographic-citation.command-handler';
 import { CreateCourtCaseBibliographicReference } from '../../../domain/models/bibliographic-reference/court-case-bibliographic-reference/commands/create-court-case-bibliographic-reference.command';
 import { CreateCourtCaseBibliographicReferenceCommandHandler } from '../../../domain/models/bibliographic-reference/court-case-bibliographic-reference/commands/create-court-case-bibliographic-reference.command-handler';
 import { CourtCaseBibliographicReferenceData } from '../../../domain/models/bibliographic-reference/court-case-bibliographic-reference/entities/court-case-bibliographic-reference-data.entity';
@@ -547,6 +549,8 @@ export default async (
             CreateCourtCaseBibliographicReferenceCommandHandler,
             CreateJournalArticleBibliographicReference,
             CreateJournalArticleBibliographicReferenceCommandHandler,
+            RegisterDigitalRepresentationOfBibliographicCitation,
+            RegisterDigitalRepresentationOfBibliographicCitationCommandHandler,
             CreateDigitalText,
             CreateDigitalTextCommandHandler,
             AddPageToDigitalText,

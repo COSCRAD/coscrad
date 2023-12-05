@@ -1,7 +1,9 @@
 import { BibliographicSubjectCreatorType } from '@coscrad/data-types';
+import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { BookBibliographicReference } from '../../domain/models/bibliographic-reference/book-bibliographic-reference/entities/book-bibliographic-reference.entity';
 import { IBibliographicReference } from '../../domain/models/bibliographic-reference/interfaces/bibliographic-reference.interface';
 import { BibliographicReferenceType } from '../../domain/models/bibliographic-reference/types/BibliographicReferenceType';
+import { AggregateType } from '../../domain/types/AggregateType';
 import { ResourceType } from '../../domain/types/ResourceType';
 import { DTO } from '../../types/DTO';
 
@@ -31,6 +33,10 @@ const dtos: DTO<BookBibliographicReference>[] = [
         },
         published: true,
         id: '1',
+        digitalRepresentationResourceCompositeIdentifier: {
+            type: AggregateType.digitalText,
+            id: buildDummyUuid(1),
+        },
     },
 ];
 
