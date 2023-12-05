@@ -61,6 +61,42 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
       "text": "[120] [E1] this type of spoon is used in ceremonies {en} (role: original) [848]
 [930] [E2] by members of the opposite clan of the house chief {en} (role: original) [1080]",
     },
+    {
+      "actions": [],
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110114",
+      "lengthMilliseconds": 1000,
+      "mimeType": "audio/x-wav",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "Mary had a Little Lamb",
+          },
+        ],
+      },
+      "tags": [],
+      "text": "",
+    },
+    {
+      "actions": [],
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110115",
+      "lengthMilliseconds": 10,
+      "mimeType": "audio/x-wav",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "No Light",
+          },
+        ],
+      },
+      "tags": [],
+      "text": "",
+    },
   ],
   "indexScopedActions": [],
 }
@@ -126,6 +162,42 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
       "tags": [],
       "text": "[120] [E1] this type of spoon is used in ceremonies {en} (role: original) [848]
 [930] [E2] by members of the opposite clan of the house chief {en} (role: original) [1080]",
+    },
+    {
+      "actions": [],
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110114",
+      "lengthMilliseconds": 1000,
+      "mimeType": "audio/x-wav",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "Mary had a Little Lamb",
+          },
+        ],
+      },
+      "tags": [],
+      "text": "",
+    },
+    {
+      "actions": [],
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110115",
+      "lengthMilliseconds": 10,
+      "mimeType": "audio/x-wav",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "No Light",
+          },
+        ],
+      },
+      "tags": [],
+      "text": "",
     },
   ],
   "indexScopedActions": [],
@@ -1025,6 +1097,38 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
       "tags": [],
       "url": "https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png",
     },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
+      "mimeType": "audio/x-wav",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Mary Had a Little Lamb",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
+      "mimeType": "audio/x-wav",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "No Light",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav",
+    },
   ],
   "indexScopedActions": [],
 }
@@ -1202,6 +1306,38 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
       },
       "tags": [],
       "url": "https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
+      "mimeType": "audio/x-wav",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Mary Had a Little Lamb",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
+      "mimeType": "audio/x-wav",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "No Light",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav",
     },
   ],
   "indexScopedActions": [],

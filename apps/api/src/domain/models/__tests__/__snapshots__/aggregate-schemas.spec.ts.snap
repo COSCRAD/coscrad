@@ -1301,12 +1301,13 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Song  should match the snapshot 1`] = `
 {
-  "audioURL": {
-    "coscradDataType": "URL",
-    "description": "a web link to the audio for the song",
+  "audioItemId": {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "description": "reference to the corresponding audio item",
     "isArray": false,
     "isOptional": false,
-    "label": "audio URL",
+    "label": "media item ID",
+    "referenceTo": "audioItem",
   },
   "id": {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -1314,13 +1315,6 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "ID",
-  },
-  "lengthMilliseconds": {
-    "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
-    "description": "length of the audio file in milliseconds",
-    "isArray": false,
-    "isOptional": false,
-    "label": "length (ms)",
   },
   "lyrics": {
     "complexDataType": "NESTED_TYPE",
@@ -1416,13 +1410,6 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         },
       },
     },
-  },
-  "startMilliseconds": {
-    "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
-    "description": "the starting timestamp for the audio file",
-    "isArray": false,
-    "isOptional": false,
-    "label": "start (ms)",
   },
   "title": {
     "complexDataType": "NESTED_TYPE",

@@ -1,8 +1,15 @@
 import { ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { NestedDataType, NonEmptyString, RawDataObject, URL, UUID } from '@coscrad/data-types';
+import {
+    NestedDataType,
+    NonEmptyString,
+    RawDataObject,
+    ReferenceTo,
+    UUID,
+} from '@coscrad/data-types';
 import { LanguageCodeEnum } from '../../../common/entities/multilingual-text';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
+import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 import { AggregateTypeProperty } from '../../shared/common-commands';
 
@@ -58,32 +65,12 @@ export class CreateSong implements ICommandBase {
     })
     readonly languageCodeForTitle: LanguageCode;
 
-    // // TODO Remove this in favor of a translation flow
-    // @NonEmptyString({
-    //     isOptional: true,
-    //     label: 'title (colonial language)',
-    //     description: "song's title in the colonial language",
-    // })
-    // readonly titleEnglish?: string;
-
-    /**
-     * TODO This property is being removed in favor of edge connections to a
-     * separate `Contributor` resource.  For now, we use a config to map in
-     * media credits. Be sure to remove this property from existing data. It can
-     * simply be ignored in sourcing V1 events.
-     */
-    // @NestedDataType(ContributorAndRole, {
-    //     isArray: true,
-    //     label: 'contributions',
-    //     description: 'acknowledgement of all contributors who worked on this song',
-    // })
-    // readonly contributions: ContributorAndRole[];
-
-    @URL({
-        label: 'audio link',
-        description: 'a web URL link to the audio for this song',
+    @UUID({
+        label: 'media item ID',
+        description: `reference to the song's audio item`,
     })
-    readonly audioURL: string;
+    @ReferenceTo(AggregateType.audioItem)
+    readonly audioItemId: AggregateId;
 
     @RawDataObject({
         isOptional: true,

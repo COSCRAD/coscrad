@@ -89,6 +89,24 @@ const dtos: DTO<MediaItem>[] = [
         published: true,
         type: ResourceType.mediaItem,
     },
+    {
+        id: '8',
+        title: 'Mary Had a Little Lamb',
+        contributorAndRoles: [],
+        url: 'https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav',
+        mimeType: MIMEType.wav,
+        published: true,
+        type: ResourceType.mediaItem,
+    },
+    {
+        id: '9',
+        title: 'No Light',
+        contributorAndRoles: [],
+        url: 'https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav',
+        mimeType: MIMEType.wav,
+        published: true,
+        type: ResourceType.mediaItem,
+    },
 ];
 
 export default () => dtos.map((dto) => new MediaItem(dto)).map(convertAggregatesIdToUuid);
