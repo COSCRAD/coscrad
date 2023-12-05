@@ -22,6 +22,7 @@ export class SpatialFeatureProperties extends BaseDomainModel implements ISpatia
         label: 'image link',
         description: 'a full URL link to an image to display with this spatial feature',
     })
+    // TODO We may want to make this a media item ID
     readonly imageUrl?: string;
 
     constructor(dto: DTO<SpatialFeatureProperties>) {
