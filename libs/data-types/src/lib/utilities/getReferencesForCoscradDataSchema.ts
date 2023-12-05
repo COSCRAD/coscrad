@@ -9,13 +9,11 @@ export interface ReferenceSpecification {
 
 /**
  * TODO We need to recurse and support nested references.
- *
- * Rename foo!
  */
 export const getReferencesForCoscradDataSchema = (schema: ClassSchema<Record<string, unknown>>) =>
     Object.entries(schema).reduce(
         (acc: ReferenceSpecification[], [propertyKey, typeDefinition]) => {
-            // @ts-expect-error TODO fix types
+            // @ts-expect-error TODO We need to improve type safety of @coscrad/data-types
             const { referenceTo, isArray } = typeDefinition;
 
             if (!isNullOrUndefined(referenceTo))

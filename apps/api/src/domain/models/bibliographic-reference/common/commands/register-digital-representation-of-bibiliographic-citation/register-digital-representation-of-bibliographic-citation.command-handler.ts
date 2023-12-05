@@ -1,5 +1,6 @@
-import { ICommandBase, ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType, ICommandBase, ResourceType } from '@coscrad/api-interfaces';
 import { CommandHandler, ICommand } from '@coscrad/commands';
+import { isDeepStrictEqual } from 'util';
 import { InternalError } from '../../../../../../lib/errors/InternalError';
 import { ResultOrError } from '../../../../../../types/ResultOrError';
 import { Valid } from '../../../../../domainModelValidators/Valid';
@@ -9,9 +10,10 @@ import { DigitalText } from '../../../../digital-text/entities';
 import { BaseUpdateCommandHandler } from '../../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
 import { validAggregateOrThrow } from '../../../../shared/functional';
-import { BookBibliographicReference } from '../../../book-bibliographic-reference/entities/book-bibliographic-reference.entity';
 import { IBibliographicReferenceData } from '../../../interfaces/bibliographic-reference-data.interface';
 import { IBibliographicReference } from '../../../interfaces/bibliographic-reference.interface';
+import { DigitalReprsentationAlreadyRegisteredForResourceError } from '../../errors/digital-representation-already-registered-for-resource.error';
+import { FailedToRegisterDigitalRepresentationError } from '../../errors/failed-to-register-digital-representation.error';
 import { DigitalRepresentationOfBibliographicCitationRegistered } from './digital-representation-of-bibliographic-citation-added.event';
 import { RegisterDigitalRepresentationOfBibliographicCitation } from './register-digital-representation-of-bibliographic-citation.command';
 
@@ -38,17 +40,52 @@ export class RegisterDigitalRepresentationOfBibliographicCitationCommandHandler 
         }: RegisterDigitalRepresentationOfBibliographicCitation
     ): ResultOrError<IBibliographicReference<IBibliographicReferenceData>> {
         // TODO Support this on all bibliographic references
-        return (instance as BookBibliographicReference).registerDigitalRepresentation(
+        return instance.registerDigitalRepresentation(
             digitalRepresentationResourceCompositeIdentifier
         );
     }
 
     protected validateExternalState(
-        _state: InMemorySnapshot,
-        _instance: IBibliographicReference<IBibliographicReferenceData>
+        state: InMemorySnapshot,
+        instance: IBibliographicReference<IBibliographicReferenceData>
     ): InternalError | Valid {
-        // TODO Validate references
-        return Valid;
+        if (!instance.digitalRepresentationResourceCompositeIdentifier) {
+            throw new InternalError(
+                `Failed to set digital representation for bibliographic citation`
+            );
+        }
+
+        /**
+         * TODO Move this logic to the domain class. At this point, it seems like
+         * an abstract base class with some base implemented methods is actually
+         * a good thing.
+         */
+        const { digitalRepresentationResourceCompositeIdentifier } = instance;
+
+        const allBibliographicReferences = new DeluxeInMemoryStore(state).fetchAllOfType(
+            AggregateType.bibliographicReference
+        );
+
+        const collisionErrors: InternalError[] = allBibliographicReferences
+            .filter(
+                (otherBibliographicReference) =>
+                    otherBibliographicReference.id !== instance.id &&
+                    isDeepStrictEqual(
+                        otherBibliographicReference.digitalRepresentationResourceCompositeIdentifier,
+                        digitalRepresentationResourceCompositeIdentifier
+                    )
+            )
+            .map(
+                (otherBibliographicReference) =>
+                    new DigitalReprsentationAlreadyRegisteredForResourceError(
+                        digitalRepresentationResourceCompositeIdentifier,
+                        otherBibliographicReference.id
+                    )
+            );
+
+        return collisionErrors.length > 0
+            ? new FailedToRegisterDigitalRepresentationError(instance.id, collisionErrors)
+            : Valid;
     }
 
     protected buildEvent(

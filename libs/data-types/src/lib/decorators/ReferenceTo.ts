@@ -44,8 +44,16 @@ export function FullReference(): PropertyDecorator {
 }
 
 /**
- * Use this for a direct reference to an id (uuid) on a schema. For composite
- * identifiers, use `@FullReference`.
+ * Use this for a direct reference to an aggregate id (uuid) when the aggregate type
+ * is understood from context. For composite identifiers, use `@FullReference`.
+ *
+ * example
+ * ```ts
+ * class Widget{
+ *      @ReferenceTo('whatsit')
+ *      whatsItId: string;
+ * }
+ * ```
  */
 export function ReferenceTo(aggregateType: string): PropertyDecorator {
     return (target: Object, propertyKey: string) => {

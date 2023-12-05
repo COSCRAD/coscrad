@@ -1,4 +1,5 @@
 import { ResourceCompositeIdentifier } from '@coscrad/api-interfaces';
+import { ResultOrError } from '../../../../types/ResultOrError';
 import { ResourceType } from '../../../types/ResourceType';
 import BaseDomainModel from '../../BaseDomainModel';
 import { Resource } from '../../resource.entity';
@@ -19,4 +20,8 @@ export interface IBibliographicReference<
      * but in the future other resource types may be allowed (e.g. for `VideoBibliographicCitations`).
      */
     digitalRepresentationResourceCompositeIdentifier?: ResourceCompositeIdentifier;
+
+    registerDigitalRepresentation(
+        compositeIdentifier: ResourceCompositeIdentifier
+    ): ResultOrError<IBibliographicReference<T>>;
 }

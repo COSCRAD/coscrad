@@ -1,4 +1,3 @@
-import { ResourceCompositeIdentifier } from '@coscrad/api-interfaces';
 import { NestedDataType } from '@coscrad/data-types';
 import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
@@ -10,7 +9,9 @@ import { MultilingualText } from '../../../../common/entities/multilingual-text'
 import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
+import { ResourceCompositeIdentifier } from '../../../context/commands';
 import { Resource } from '../../../resource.entity';
+import { registerDigitalRepresentationForBibliographicReference } from '../../common/methods/register-digital-representation-for-bibliographic-reference';
 import { IBibliographicReference } from '../../interfaces/bibliographic-reference.interface';
 import BookBibliographicReferenceData from '../entities/book-bibliographic-reference-data.entity';
 
@@ -53,13 +54,7 @@ export class BookBibliographicReference
     }
 
     registerDigitalRepresentation(compositeIdentifier: ResourceCompositeIdentifier) {
-        // TODO Ensure that we are not overwriting this
-
-        const updated = this.clone<BookBibliographicReference>({
-            digitalRepresentationResourceCompositeIdentifier: compositeIdentifier,
-        });
-
-        return updated;
+        return registerDigitalRepresentationForBibliographicReference(this, compositeIdentifier);
     }
 
     getName(): MultilingualText {

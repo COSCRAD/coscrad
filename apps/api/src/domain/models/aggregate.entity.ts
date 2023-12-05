@@ -63,7 +63,7 @@ export abstract class Aggregate extends BaseDomainModel implements HasAggregateI
         id: this.id,
     });
 
-    protected safeClone<T extends Aggregate>(
+    public safeClone<T extends Aggregate>(
         this: T,
         updateDto: DeepPartial<DTO<T>>
     ): ResultOrError<T> {
