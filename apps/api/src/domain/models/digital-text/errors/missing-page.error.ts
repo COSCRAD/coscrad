@@ -3,9 +3,9 @@ import formatAggregateCompositeIdentifier from '../../../../queries/presentation
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 
-export class CannotAddContentToMissingPageError extends InternalError {
+export class MissingPageError extends InternalError {
     constructor(pageIdentifier: string, digitalTextId: AggregateId) {
-        const msg = `You cannot add content to page: ${pageIdentifier} in ${formatAggregateCompositeIdentifier(
+        const msg = `You cannot manage content for page: ${pageIdentifier} in ${formatAggregateCompositeIdentifier(
             {
                 type: AggregateType.digitalText,
                 id: digitalTextId,

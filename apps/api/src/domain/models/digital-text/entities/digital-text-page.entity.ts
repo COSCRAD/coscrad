@@ -1,5 +1,6 @@
 import { IDigitalTextPage, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { NestedDataType, PageNumber } from '@coscrad/data-types';
+import { isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
 import { DTO } from '../../../../types/DTO';
@@ -58,14 +59,16 @@ export default class DigitalTextPage extends BaseDomainModel implements IDigital
     }
 
     translateContent(text: string, languageCode: LanguageCode): ResultOrError<DigitalTextPage> {
-        const updatedContent = this.content.translate({
+        const contentUpdateResult = this.content.translate({
             text,
             languageCode,
             role: MultilingualTextItemRole.freeTranslation,
-        }) as MultilingualText;
+        });
+
+        if (isInternalError(contentUpdateResult)) return contentUpdateResult;
 
         return this.clone<DigitalTextPage>({
-            content: updatedContent,
+            content: contentUpdateResult,
         });
     }
 
