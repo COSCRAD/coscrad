@@ -5,11 +5,7 @@ import { isDeepStrictEqual } from 'util';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
 import { ReferenceTree } from './reference-tree';
 
-export const buildReferenceTree = (
-    Ctor: Object,
-    // TODO remove this
-    instance: Object
-) => {
+export const buildReferenceTree = (Ctor: Object, instance: Object) => {
     const referenceSpecifications = getReferencesForCoscradDataSchema(getCoscradDataSchema(Ctor));
 
     // for every reference property, get the references from the instance
