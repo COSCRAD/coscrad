@@ -1,5 +1,6 @@
 import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { ClassSchema } from '../types';
+import { doesUnionTypeDefinitionDeepContainReferences } from './doesUnionTypeDefinitionDeepContainReferences';
 
 export interface ReferenceSpecification {
     type: string;
@@ -7,9 +8,6 @@ export interface ReferenceSpecification {
     isArray: boolean;
 }
 
-/**
- * TODO We need to recurse and support nested references.
- */
 export const getReferencesForCoscradDataSchema = (
     schema: ClassSchema<Record<string, unknown>>,
     basePath = ''
@@ -37,7 +35,9 @@ export const getReferencesForCoscradDataSchema = (
             }
 
             if (complexDataType == 'UNION_TYPE') {
-                throw new Error(`Gathering Nested References from a Union is not supported`);
+                // @ts-expect-error Fix data types for this lib
+                if (doesUnionTypeDefinitionDeepContainReferences(typeDefinition))
+                    throw new Error(`Gathering Nested References from a Union is not supported`);
             }
 
             return acc;

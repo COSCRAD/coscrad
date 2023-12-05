@@ -122,8 +122,7 @@ describe(`getReferencesForCoscradDataSchema`, () => {
         }
 
         it(`should throw`, () => {
-            const act = () =>
-                getReferencesForCoscradDataSchema(getCoscradDataSchema(Whatchamacallit));
+            const act = getReferencesForCoscradDataSchema(getCoscradDataSchema(Whatchamacallit));
 
             /**
              * TODO Support this use case.
