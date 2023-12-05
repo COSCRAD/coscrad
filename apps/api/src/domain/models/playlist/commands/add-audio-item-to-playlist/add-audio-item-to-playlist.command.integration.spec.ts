@@ -92,10 +92,14 @@ describe(commandType, () => {
             await assertCommandSuccess(commandAssertionDependencies, {
                 systemUserId: dummySystemUserId,
                 buildValidCommandFSA,
-                initialState: new DeluxeInMemoryStore({
-                    [AggregateType.playlist]: [existingPlaylist],
-                    [AggregateType.audioItem]: [existingAudioItem],
-                }).fetchFullSnapshotInLegacyFormat(),
+                seedInitialState: async () => {
+                    await testRepositoryProvider.addFullSnapshot(
+                        new DeluxeInMemoryStore({
+                            [AggregateType.playlist]: [existingPlaylist],
+                            [AggregateType.audioItem]: [existingAudioItem],
+                        }).fetchFullSnapshotInLegacyFormat()
+                    );
+                },
                 checkStateOnSuccess: async ({
                     aggregateCompositeIdentifier: { id: playlistId },
                     audioItemId,

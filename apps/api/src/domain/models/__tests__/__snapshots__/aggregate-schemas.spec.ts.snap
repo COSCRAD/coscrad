@@ -1645,6 +1645,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "media item ID",
+    "referenceTo": "mediaItem",
   },
   "name": {
     "complexDataType": "NESTED_TYPE",
@@ -2044,6 +2045,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "media item ID",
+    "referenceTo": "mediaItem",
   },
   "name": {
     "complexDataType": "NESTED_TYPE",

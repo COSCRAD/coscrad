@@ -52,9 +52,10 @@ export class AddUserToGroupCommandHandler extends BaseUpdateCommandHandler<Coscr
     }
 
     protected validateExternalState(
-        state: InMemorySnapshot,
-        instance: CoscradUserGroup
+        _state: InMemorySnapshot,
+        _instance: CoscradUserGroup
     ): InternalError | Valid {
-        return instance.validateExternalState(state);
+        // The reference to a user is validated from the schema in the base handler
+        return Valid;
     }
 }

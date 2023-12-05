@@ -20,9 +20,9 @@ import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
+import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
-import InvalidExternalStateError from '../../../shared/common-command-errors/InvalidExternalStateError';
 import { VocabularyList } from '../../entities/vocabulary-list.entity';
 import { CannotAddMultipleEntriesForSingleTermError } from '../../errors';
 import { AddTermToVocabularyList } from './add-term-to-vocabulary-list.command';
@@ -89,10 +89,14 @@ describe(commandType, () => {
             await assertCommandSuccess(commandAssertionDependencies, {
                 systemUserId: dummySystemUserId,
                 buildValidCommandFSA: () => validFsa,
-                initialState: new DeluxeInMemoryStore({
-                    [AggregateType.vocabularyList]: [existingVocabularyList],
-                    [AggregateType.term]: [existingTerm],
-                }).fetchFullSnapshotInLegacyFormat(),
+                seedInitialState: async () => {
+                    await testRepositoryProvider.addFullSnapshot(
+                        new DeluxeInMemoryStore({
+                            [AggregateType.vocabularyList]: [existingVocabularyList],
+                            [AggregateType.term]: [existingTerm],
+                        }).fetchFullSnapshotInLegacyFormat()
+                    );
+                },
                 checkStateOnSuccess: async () => {
                     const searchResult = await testRepositoryProvider
                         .forResource(ResourceType.vocabularyList)
@@ -124,19 +128,21 @@ describe(commandType, () => {
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     buildCommandFSA: () => validFsa,
-                    initialState: new DeluxeInMemoryStore({
-                        [AggregateType.vocabularyList]: [existingVocabularyList],
-                    }).fetchFullSnapshotInLegacyFormat(),
+                    seedInitialState: async () => {
+                        await testRepositoryProvider.addFullSnapshot(
+                            new DeluxeInMemoryStore({
+                                [AggregateType.vocabularyList]: [existingVocabularyList],
+                            }).fetchFullSnapshotInLegacyFormat()
+                        );
+                    },
                     checkError: (error) => {
                         assertErrorAsExpected(
                             error,
                             new CommandExecutionError([
-                                new InvalidExternalStateError([
-                                    // TODO double check why this isnt coming through
-                                    // new AggregateNotFoundError(
-                                    //     existingTerm.getCompositeIdentifier()
-                                    // ),
-                                ]),
+                                new InvalidExternalReferenceByAggregateError(
+                                    existingVocabularyList.getCompositeIdentifier(),
+                                    [existingTerm.getCompositeIdentifier()]
+                                ),
                             ])
                         );
                     },
