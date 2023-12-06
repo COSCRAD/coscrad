@@ -269,12 +269,21 @@ Photograph {
   "eventHistory": [],
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
-  "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png",
+  "mediaItemId": "5",
   "photographer": "Susie McRealart",
   "published": true,
   "queryAccessControlList": AccessControlList {
     "allowedGroupIds": [],
     "allowedUserIds": [],
+  },
+  "title": MultilingualText {
+    "items": [
+      MultilingualTextItem {
+        "languageCode": "en",
+        "role": "original",
+        "text": "Adiitsii Running",
+      },
+    ],
   },
   "type": "photograph",
 }
@@ -319,7 +328,7 @@ Playlist {
 
 exports[`Aggregate factories when attempting to build an instance of type: song from a DTO when the DTO is valid valid song should succeed 1`] = `
 Song {
-  "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
+  "audioItemId": "9",
   "contributions": [
     ContributorAndRole {
       "contributorId": "1",
@@ -336,7 +345,7 @@ Song {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "type": "song",
         },
-        "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
+        "audioItemId": "9",
         "languageCodeForTitle": "clc",
         "title": "Song title in language",
       },
@@ -345,7 +354,6 @@ Song {
   ],
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-  "lengthMilliseconds": 3500,
   "lyrics": MultilingualText {
     "items": [
       MultilingualTextItem {
@@ -360,7 +368,6 @@ Song {
     "allowedGroupIds": [],
     "allowedUserIds": [],
   },
-  "startMilliseconds": 0,
   "title": MultilingualText {
     "items": [
       MultilingualTextItem {

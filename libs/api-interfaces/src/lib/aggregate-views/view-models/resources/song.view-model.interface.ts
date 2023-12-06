@@ -13,7 +13,4 @@ export interface ISongViewModel extends IBaseViewModel {
     audioURL: string;
 
     lengthMilliseconds: number;
-
-    // Is this really necessary?
-    startMilliseconds: number;
 }

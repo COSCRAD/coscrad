@@ -3,6 +3,7 @@ import { TestingModule } from '@nestjs/testing';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
+import getValidAggregateInstanceForTest from '../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
 import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
 import { AddLyricsForSong } from '../domain/models/song/commands';
@@ -47,6 +48,8 @@ const assertErrorMessageLogged = (
 const dummyUuids: AggregateId[] = Array(10)
     .fill(0)
     .map((_, index) => buildDummyUuid(index));
+
+const existingAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem);
 
 describe(`CLI Command: ${cliCommandName}`, () => {
     let commandInstance: TestingModule;
@@ -98,15 +101,15 @@ describe(`CLI Command: ${cliCommandName}`, () => {
          */
         await new ArangoIdRepository(databaseProvider).createMany(dummyUuids);
 
+        await testRepositoryProvider.forResource(AggregateType.audioItem).create(existingAudioItem);
+
         jest.clearAllMocks();
     });
 
     const createCommandType = 'CREATE_SONG';
 
-    const dummyAudioUrl = 'https://www.foobar.baz/lalala.mp3';
-
     const payloadOverridesForValidCreateCommand: DeepPartial<CreateSong> = {
-        audioURL: dummyAudioUrl,
+        audioItemId: existingAudioItem.id,
         aggregateCompositeIdentifier: { id: dummyUuids[0] },
     };
 

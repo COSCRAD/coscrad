@@ -5,12 +5,11 @@ import {
     LanguageCode,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
-import { NestedDataType, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
+import { NestedDataType, NonEmptyString, ReferenceTo } from '@coscrad/data-types';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
-import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
 import { Maybe } from '../../../lib/types/maybe';
 import { NotFound, isNotFound } from '../../../lib/types/not-found';
 import formatAggregateCompositeIdentifier from '../../../queries/presentation/formatAggregateCompositeIdentifier';
@@ -23,10 +22,7 @@ import { AggregateRoot } from '../../decorators';
 import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../types/AggregateId';
 import { ResourceType } from '../../types/ResourceType';
-import { TimeRangeContext } from '../context/time-range-context/time-range-context.entity';
-import { ITimeBoundable } from '../interfaces/ITimeBoundable';
 import { Resource } from '../resource.entity';
-import validateTimeRangeContextForModel from '../shared/contextValidators/validateTimeRangeContextForModel';
 import { BaseEvent } from '../shared/events/base-event.entity';
 import { ContributorAndRole } from './ContributorAndRole';
 import { AddLyricsForSong, TranslateSongLyrics, TranslateSongTitle } from './commands';
@@ -48,22 +44,8 @@ const isOptional = true;
 
 @AggregateRoot(AggregateType.song)
 @RegisterIndexScopedCommands(['CREATE_SONG'])
-export class Song extends Resource implements ITimeBoundable {
+export class Song extends Resource {
     readonly type = ResourceType.song;
-
-    // @NonEmptyString({
-    //     isOptional,
-    //     label: 'title',
-    //     description: 'the title of the song in the language',
-    // })
-    // readonly title?: string;
-
-    // @NonEmptyString({
-    //     isOptional,
-    //     label: 'title (colonial language)',
-    //     description: 'the title of the song in the colonial language',
-    // })
-    // readonly titleEnglish?: string;
 
     @NestedDataType(MultilingualText, {
         label: 'title',
@@ -87,35 +69,19 @@ export class Song extends Resource implements ITimeBoundable {
     // the type of `lyrics` should allow three way translation in future
     readonly lyrics?: MultilingualText;
 
-    @URL({ label: 'audio URL', description: 'a web link to the audio for the song' })
-    readonly audioURL: string;
-
-    @NonNegativeFiniteNumber({
-        label: 'length (ms)',
-        description: 'length of the audio file in milliseconds',
+    @NonEmptyString({
+        label: 'media item ID',
+        description: `reference to the corresponding audio item`,
     })
-    readonly lengthMilliseconds: number;
-
-    // TODO Consider removing this if it's not needed
-    @NonNegativeFiniteNumber({
-        label: 'start (ms)',
-        description: 'the starting timestamp for the audio file',
-    })
-    readonly startMilliseconds: number;
+    @ReferenceTo(AggregateType.audioItem)
+    readonly audioItemId: string;
 
     constructor(dto: DTO<Song>) {
         super({ ...dto, type: ResourceType.song });
 
         if (!dto) return;
 
-        const {
-            title,
-            contributions: contributorAndRoles,
-            lyrics,
-            audioURL,
-            lengthMilliseconds,
-            startMilliseconds,
-        } = dto;
+        const { title, contributions: contributorAndRoles, lyrics, audioItemId: mediaItemId } = dto;
 
         this.title = new MultilingualText(title);
 
@@ -125,11 +91,7 @@ export class Song extends Resource implements ITimeBoundable {
 
         if (!isNullOrUndefined(lyrics)) this.lyrics = new MultilingualText(lyrics);
 
-        this.audioURL = audioURL;
-
-        this.lengthMilliseconds = lengthMilliseconds;
-
-        this.startMilliseconds = startMilliseconds;
+        this.audioItemId = mediaItemId;
     }
 
     getName(): MultilingualText {
@@ -145,14 +107,7 @@ export class Song extends Resource implements ITimeBoundable {
     protected validateComplexInvariants(): InternalError[] {
         const allErrors: InternalError[] = [];
 
-        const { startMilliseconds, lengthMilliseconds, title } = this;
-
-        if (startMilliseconds > lengthMilliseconds)
-            allErrors.push(
-                new InternalError(
-                    `the start:${startMilliseconds} cannot be greater than the length:${lengthMilliseconds}`
-                )
-            );
+        const { title } = this;
 
         const titleValidationResult = title.validateComplexInvariants();
 
@@ -193,20 +148,16 @@ export class Song extends Resource implements ITimeBoundable {
             title,
             languageCodeForTitle,
             aggregateCompositeIdentifier: { id, type },
-            audioURL,
+            audioItemId,
         } = creationEvent.payload as CreateSong;
 
         const initialInstance = new Song({
             type,
             id,
-            audioURL,
+            audioItemId,
             published: false,
             title: buildMultilingualTextWithSingleItem(title, languageCodeForTitle),
             eventHistory: [creationEvent],
-            startMilliseconds: 0,
-            // TODO this should be on the create command or else we need a "Register song length" command
-            // TODO Make `audioURL` a `mediaItemId`
-            lengthMilliseconds: 0,
         });
 
         const newSong = updateEvents.reduce(
@@ -247,10 +198,6 @@ export class Song extends Resource implements ITimeBoundable {
 
     protected getExternalReferences(): AggregateCompositeIdentifier[] {
         return [];
-    }
-
-    validateTimeRangeContext(timeRangeContext: TimeRangeContext): ValidationResult {
-        return validateTimeRangeContextForModel(this, timeRangeContext);
     }
 
     /**
@@ -317,13 +264,5 @@ export class Song extends Resource implements ITimeBoundable {
         const searchResult = this.lyrics.getTranslation(languageCode);
 
         return !isNotFound(searchResult);
-    }
-
-    getTimeBounds(): [number, number] {
-        return [this.startMilliseconds, this.getEndMilliseconds()];
-    }
-
-    getEndMilliseconds(): number {
-        return this.startMilliseconds + this.lengthMilliseconds;
     }
 }

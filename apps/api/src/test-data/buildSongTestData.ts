@@ -42,11 +42,8 @@ const songDtos: DTO<Omit<Song, 'id'>>[] = [
             'Mary had a little lamb, little lamb.',
             LanguageCode.English
         ),
-        audioURL:
-            'https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav',
+        audioItemId: '9',
         published: true,
-        startMilliseconds: 0,
-        lengthMilliseconds: 3500,
         contributions: [
             {
                 contributorId: '1',
@@ -71,11 +68,10 @@ const songDtos: DTO<Omit<Song, 'id'>>[] = [
             "Ain't gonna see the light of day, light of day, light of day",
             LanguageCode.English
         ),
-        audioURL:
-            'https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav',
+        audioItemId: '115',
+        // audioURL:
+        //     'https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav',
         published: false,
-        startMilliseconds: 0,
-        lengthMilliseconds: 33000,
         queryAccessControlList: {
             allowedUserIds: ['1'],
             allowedGroupIds: [],
@@ -94,7 +90,7 @@ const songDtos: DTO<Omit<Song, 'id'>>[] = [
  * event stream. We are doing this in the opposite order
  * for historical reasons.
  */
-const createSongCommands: CreateSong[] = songDtos.map(({ title, audioURL }, index) => ({
+const createSongCommands: CreateSong[] = songDtos.map(({ title, audioItemId }, index) => ({
     aggregateCompositeIdentifier: {
         type: AggregateType.song,
         id: (index + 1).toString(),
@@ -102,7 +98,7 @@ const createSongCommands: CreateSong[] = songDtos.map(({ title, audioURL }, inde
     title: title.items.find(({ role }) => role === MultilingualTextItemRole.original).text,
     languageCodeForTitle: title.items.find(({ role }) => role === MultilingualTextItemRole.original)
         .languageCode,
-    audioURL,
+    audioItemId,
 }));
 
 export default (): Song[] =>

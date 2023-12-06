@@ -1,16 +1,17 @@
-import { NestedDataType, NonEmptyString, URL } from '@coscrad/data-types';
+import { NestedDataType, NonEmptyString, ReferenceTo } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import findAllPointsInLineNotWithinBounds from '../../../../lib/validation/geometry/findAllPointsInLineNotWithinBounds';
 import isPointWithinBounds from '../../../../lib/validation/geometry/isPointWithinBounds';
 import formatPosition2D from '../../../../queries/presentation/formatPosition2D';
 import { DTO } from '../../../../types/DTO';
-import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { Valid } from '../../../domainModelValidators/Valid';
 import FreeMultilineContextOutOfBoundsError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/freeMultilineContext/FreeMultilineContextOutOfBoundsError';
 import PointContextOutOfBoundsError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pointContext/PointContextOutOfBoundsError';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
+import { AggregateId } from '../../../types/AggregateId';
+import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
 import { FreeMultilineContext } from '../../context/free-multiline-context/free-multiline-context.entity';
 import { PointContext } from '../../context/point-context/point-context.entity';
@@ -23,12 +24,19 @@ import PhotographDimensions from './PhotographDimensions';
 export class Photograph extends Resource implements Boundable2D {
     readonly type = ResourceType.photograph;
 
-    // TODO Make this a `mediaItemId` @UUID
-    @URL({
-        label: 'image link',
-        description: 'a web link to a digital version of the photograph',
+    @NestedDataType(MultilingualText, {
+        label: 'title',
+        description: 'multilingual title for this photograph',
     })
-    readonly imageUrl: string;
+    readonly title: MultilingualText;
+
+    // TODO Make this a `mediaItemId` @UUID
+    @NonEmptyString({
+        label: 'media item ID',
+        description: 'reference to the media item for this photograph',
+    })
+    @ReferenceTo(AggregateType.mediaItem)
+    readonly mediaItemId: AggregateId;
 
     // TODO make this a `contributorID`
     @NonEmptyString({
@@ -48,25 +56,19 @@ export class Photograph extends Resource implements Boundable2D {
 
         if (!dto) return;
 
-        const { imageUrl, photographer, dimensions: dimensionsDTO } = dto;
+        const { title, mediaItemId, photographer, dimensions: dimensionsDTO } = dto;
 
-        this.imageUrl = imageUrl;
+        this.mediaItemId = mediaItemId;
 
         this.photographer = photographer;
 
         this.dimensions = new PhotographDimensions(dimensionsDTO);
+
+        this.title = new MultilingualText(title);
     }
 
     getName(): MultilingualText {
-        // TODO Consider a second `name` property with type `MultilingualText`
-        return buildMultilingualTextWithSingleItem(this.imageUrl);
-    }
-
-    rescale(scaleFactor: number) {
-        // Note that input validation is deferred to `PhotographDimensions` method
-        return this.clone<Photograph>({
-            dimensions: this.dimensions.rescale(scaleFactor).toDTO(),
-        });
+        return this.title;
     }
 
     protected validateComplexInvariants(): InternalError[] {

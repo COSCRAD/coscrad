@@ -2,6 +2,7 @@ import { AggregateType, FluxStandardAction, LanguageCode } from '@coscrad/api-in
 import { Ack, CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
+import { CommandFSA } from '../../../../../app/controllers/command/command-fsa/command-fsa.entity';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { isNotFound } from '../../../../../lib/types/not-found';
@@ -11,6 +12,7 @@ import TestRepositoryProvider from '../../../../../persistence/repositories/__te
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestCommandFsaMap } from '../../../../../test-data/commands';
 import { DTO } from '../../../../../types/DTO';
+import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
 import { AggregateId } from '../../../../types/AggregateId';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
@@ -27,6 +29,7 @@ import { NoLyricsToTranslateError } from '../../errors';
 import { SongLyricsHaveAlreadyBeenTranslatedToGivenLanguageError } from '../../errors/SongLyricsAlreadyHaveBeenTranslatedToGivenLanguageError';
 import { Song } from '../../song.entity';
 import { AddLyricsForSong } from '../add-lyrics-for-song';
+import { CreateSong } from '../create-song.command';
 import { ADD_LYRICS_FOR_SONG } from './constants';
 import { TranslateSongLyrics } from './translate-song-lyrics.command';
 
@@ -52,7 +55,11 @@ const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<Translate
     },
 });
 
-const dummyCreateSongFsa = buildTestCommandFsaMap().get(`CREATE_SONG`);
+const dummyCreateSongFsa = buildTestCommandFsaMap().get(`CREATE_SONG`) as CommandFSA<CreateSong>;
+
+const existingAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem).clone({
+    id: dummyCreateSongFsa.payload.audioItemId,
+});
 
 describe(commandType, () => {
     let app: INestApplication;
@@ -96,6 +103,10 @@ describe(commandType, () => {
         it(`should succeed with the expected updates to the database`, async () => {
             // Arrange
             const generatedId = await idManager.generate();
+
+            await testRepositoryProvider
+                .forResource(AggregateType.audioItem)
+                .create(existingAudioItem);
 
             const createSongFsa = clonePlainObjectWithOverrides(dummyCreateSongFsa, {
                 payload: { aggregateCompositeIdentifier: { id: generatedId } },
@@ -185,6 +196,10 @@ describe(commandType, () => {
 
                 const validCommandFsa = buildValidCommandFSA(newId);
 
+                await testRepositoryProvider
+                    .forResource(AggregateType.audioItem)
+                    .create(existingAudioItem);
+
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     // Create the song without adding any lyrics
@@ -227,6 +242,10 @@ describe(commandType, () => {
                         });
 
                         const commandMeta = { userId: dummySystemUserId };
+
+                        await testRepositoryProvider
+                            .forResource(AggregateType.audioItem)
+                            .create(existingAudioItem);
 
                         // create the song
                         const createResult = await commandHandlerService.execute(

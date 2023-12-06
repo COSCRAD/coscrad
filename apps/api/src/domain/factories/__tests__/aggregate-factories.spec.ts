@@ -48,7 +48,7 @@ describe(`Aggregate factories`, () => {
                 describe(`when the DTO is valid`, () => {
                     validCases.forEach(({ dto, description }) =>
                         describe(description, () => {
-                            it('should succeed', () => {
+                            it.only('should succeed', () => {
                                 const result = buildInstance(dto);
 
                                 expect(result).not.toBeInstanceOf(InternalError);

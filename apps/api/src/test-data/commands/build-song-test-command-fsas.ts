@@ -22,7 +22,7 @@ const createSong: CommandFSA<CreateSong> = {
         aggregateCompositeIdentifier: { id, type },
         title: 'test-song-name (language)',
         languageCodeForTitle: LanguageCode.English,
-        audioURL: 'https://www.mysound.org/song.mp3',
+        audioItemId: buildDummyUuid(545),
     },
 };
 
