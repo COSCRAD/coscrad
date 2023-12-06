@@ -11,6 +11,7 @@ import { CreateSongCommandHandler } from '../../../domain/models/song/commands/c
 import { Song } from '../../../domain/models/song/song.entity';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { AggregateType } from '../../../domain/types/AggregateType';
+import { DeluxeInMemoryStore } from '../../../domain/types/DeluxeInMemoryStore';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import buildInMemorySnapshot from '../../../domain/utilities/buildInMemorySnapshot';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
@@ -23,13 +24,15 @@ import setUpIntegrationTest from '../__tests__/setUpIntegrationTest';
 
 const commandEndpoint = `/commands`;
 
+const existingAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem);
+
 const buildValidCommandFSA = (id: string): FluxStandardAction<DTO<CreateSong>> => ({
     type: 'CREATE_SONG',
     payload: {
         aggregateCompositeIdentifier: { id, type: AggregateType.song },
         title: 'test-song-name (language)',
         languageCodeForTitle: LanguageCode.Chilcotin,
-        audioURL: 'https://www.mysound.org/song.mp3',
+        audioItemId: existingAudioItem.id,
     },
 });
 
@@ -88,6 +91,12 @@ describe('The Command Controller', () => {
 
         // The admin user must be there for the auth middleware
         await testRepositoryProvider.getUserRepository().create(dummyAdminUser);
+
+        await testRepositoryProvider.addFullSnapshot(
+            new DeluxeInMemoryStore({
+                [AggregateType.audioItem]: [existingAudioItem],
+            }).fetchFullSnapshotInLegacyFormat()
+        );
     });
 
     afterEach(async () => {

@@ -1,4 +1,5 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
+import { buildMultilingualTextWithSingleItem } from '../domain/common/build-multilingual-text-with-single-item';
 import {
     MultilingualText,
     MultilingualTextItem,
@@ -134,6 +135,21 @@ const partialDtos: DTO<Omit<AudioItem, 'type'>>[] = [
         },
         mediaItemId: mediaItems[0].id,
         lengthMilliseconds: 32989,
+        published: true,
+    },
+    {
+        id: '114',
+        name: buildMultilingualTextWithSingleItem(`Mary had a Little Lamb`),
+        mediaItemId: mediaItems[7].id,
+        // TODO use real value here
+        lengthMilliseconds: 1000,
+        published: true,
+    },
+    {
+        id: '115',
+        name: buildMultilingualTextWithSingleItem('No Light'),
+        mediaItemId: mediaItems[8].id,
+        lengthMilliseconds: 10,
         published: true,
     },
 ];

@@ -71,13 +71,7 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
                     type: ResourceType.song,
                     id: '1',
                 },
-                context: new TimeRangeContext({
-                    type: EdgeConnectionContextType.timeRange,
-                    timeRange: {
-                        inPointMilliseconds: 500,
-                        outPointMilliseconds: 778.4,
-                    },
-                }),
+                context: new GeneralContext(),
             },
         ],
     },
@@ -102,13 +96,7 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
                     type: ResourceType.song,
                     id: '1',
                 },
-                context: new TimeRangeContext({
-                    type: EdgeConnectionContextType.timeRange,
-                    timeRange: {
-                        inPointMilliseconds: 500,
-                        outPointMilliseconds: 778.4,
-                    },
-                }),
+                context: new GeneralContext(),
             },
         ],
     },

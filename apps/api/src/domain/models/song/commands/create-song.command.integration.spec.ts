@@ -2,20 +2,24 @@ import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpIntegrationTest';
+import { CommandFSA } from '../../../../app/controllers/command/command-fsa/command-fsa.entity';
 import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpected';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { NotAvailable } from '../../../../lib/types/not-available';
 import { NotFound } from '../../../../lib/types/not-found';
+import { clonePlainObjectWithOverrides } from '../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { buildTestCommandFsaMap } from '../../../../test-data/commands';
 import { DTO } from '../../../../types/DTO';
+import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { assertCommandFailsDueToTypeError } from '../../../models/__tests__/command-helpers/assert-command-payload-type-error';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
+import { DeluxeInMemoryStore } from '../../../types/DeluxeInMemoryStore';
 import { ResourceType } from '../../../types/ResourceType';
-import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
 import { assertCreateCommandError } from '../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../__tests__/command-helpers/assert-create-command-success';
 import { assertEventRecordPersisted } from '../../__tests__/command-helpers/assert-event-record-persisted';
@@ -23,6 +27,7 @@ import { generateCommandFuzzTestCases } from '../../__tests__/command-helpers/ge
 import { CommandAssertionDependencies } from '../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../__tests__/utilities/dummySystemUserId';
+import InvalidExternalReferenceByAggregateError from '../../categories/errors/InvalidExternalReferenceByAggregateError';
 import CommandExecutionError from '../../shared/common-command-errors/CommandExecutionError';
 import UuidNotGeneratedInternallyError from '../../shared/common-command-errors/UuidNotGeneratedInternallyError';
 import { Song } from '../song.entity';
@@ -30,15 +35,26 @@ import { CreateSong } from './create-song.command';
 
 const createSongCommandType = 'CREATE_SONG';
 
-const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateSong>> => ({
-    type: createSongCommandType,
+const existingAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem);
+
+const dummyFsa = buildTestCommandFsaMap().get('CREATE_SONG') as CommandFSA<CreateSong>;
+
+const validFsa = clonePlainObjectWithOverrides(dummyFsa, {
     payload: {
-        aggregateCompositeIdentifier: { id, type: AggregateType.song },
         title: 'test-song-name (language)',
         languageCodeForTitle: LanguageCode.Chilcotin,
-        audioURL: 'https://www.mysound.org/song.mp3',
+        audioItemId: existingAudioItem.id,
     },
 });
+
+const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateSong>> =>
+    clonePlainObjectWithOverrides(validFsa, {
+        payload: {
+            aggregateCompositeIdentifier: {
+                id,
+            },
+        },
+    });
 
 const buildInvalidFSA = (
     id: AggregateId,
@@ -51,7 +67,9 @@ const buildInvalidFSA = (
     },
 });
 
-const initialState = buildInMemorySnapshot({});
+const initialState = new DeluxeInMemoryStore({
+    [AggregateType.audioItem]: [existingAudioItem],
+}).fetchFullSnapshotInLegacyFormat();
 
 describe('CreateSong', () => {
     let testRepositoryProvider: TestRepositoryProvider;
@@ -97,7 +115,9 @@ describe('CreateSong', () => {
         it('should succeed', async () => {
             await assertCreateCommandSuccess(assertionHelperDependencies, {
                 buildValidCommandFSA,
-                initialState,
+                seedInitialState: async () => {
+                    await testRepositoryProvider.addFullSnapshot(initialState);
+                },
                 systemUserId: dummySystemUserId,
                 checkStateOnSuccess: async ({
                     aggregateCompositeIdentifier: { id },
@@ -184,6 +204,39 @@ describe('CreateSong', () => {
                 });
 
                 expect(result).toBeInstanceOf(InternalError);
+            });
+        });
+
+        describe(`when there is no audio item with the given ID`, () => {
+            it(`should fail with the expected errors`, async () => {
+                await assertCreateCommandError(assertionHelperDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider.addFullSnapshot(
+                            new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat()
+                        );
+                    },
+                    buildCommandFSA: buildValidCommandFSA,
+                    checkError: (result, id) => {
+                        assertErrorAsExpected(
+                            result,
+                            new CommandExecutionError([
+                                new InvalidExternalReferenceByAggregateError(
+                                    {
+                                        type: AggregateType.song,
+                                        id,
+                                    },
+                                    [
+                                        {
+                                            type: AggregateType.audioItem,
+                                            id: validFsa.payload.audioItemId,
+                                        },
+                                    ]
+                                ),
+                            ])
+                        );
+                    },
+                });
             });
         });
     });
