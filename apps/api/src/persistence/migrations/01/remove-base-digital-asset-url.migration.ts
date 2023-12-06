@@ -71,6 +71,7 @@ export class RemoveBaseDigitalAssetUrl implements ICoscradMigration {
         await queryRunner.update<OldPhotographDocument, PhotographDocument>(
             ArangoCollectionId.photographs,
             ({ filename }) =>
+                // @ts-expect-error There's no point in maintaining this
                 isNullOrUndefined(filename)
                     ? {}
                     : {
@@ -103,6 +104,7 @@ export class RemoveBaseDigitalAssetUrl implements ICoscradMigration {
 
         await queryRunner.update<PhotographDocument, OldPhotographDocument>(
             ArangoCollectionId.photographs,
+            // @ts-expect-error There's no need to maintain this
             ({ imageUrl }) => {
                 if (imageUrl?.includes(this.baseDigitalAssetUrl)) {
                     return {

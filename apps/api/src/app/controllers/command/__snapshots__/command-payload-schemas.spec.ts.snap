@@ -142,12 +142,13 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
         },
       },
-      "audioURL": {
-        "coscradDataType": "URL",
-        "description": "a web URL link to the audio for this song",
+      "audioItemId": {
+        "coscradDataType": "UUID",
+        "description": "reference to the song's audio item",
         "isArray": false,
         "isOptional": false,
-        "label": "audio link",
+        "label": "media item ID",
+        "referenceTo": "audioItem",
       },
       "languageCodeForTitle": {
         "complexDataType": "ENUM",

@@ -15,11 +15,13 @@ import { EVENT, IIdManager } from '../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../repositories/interfaces/repository-provider.interface';
 import { AggregateId } from '../../../types/AggregateId';
+import { DeluxeInMemoryStore } from '../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
-import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
+import { AudioItem } from '../../audio-item/entities/audio-item.entity';
 import { BaseCommandHandler } from '../../shared/command-handlers/base-command-handler';
 import UuidNotGeneratedInternallyError from '../../shared/common-command-errors/UuidNotGeneratedInternallyError';
 import { BaseEvent } from '../../shared/events/base-event.entity';
+import { validAggregateOrThrow } from '../../shared/functional';
 import { Song } from '../song.entity';
 import { CreateSong } from './create-song.command';
 import { SongCreated } from './song-created.event';
@@ -48,17 +50,15 @@ export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
         aggregateCompositeIdentifier: { id },
         title,
         languageCodeForTitle,
-        audioURL,
+        audioItemId,
     }: CreateSong): Promise<ResultOrError<Song>> {
         const songDTO: DTO<Song> = {
             id,
             title: buildMultilingualTextWithSingleItem(title, languageCodeForTitle),
-            audioURL,
+            audioItemId,
             published: false,
-            startMilliseconds: 0,
             type: ResourceType.song,
             eventHistory: [],
-            lengthMilliseconds: 0,
         };
 
         // Attempt state mutation - Result or Error (Invariant violation in our case- could also be invalid state transition in other cases)
@@ -70,11 +70,12 @@ export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
     }
 
     async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
-        const searchResult = await this.repositoryProvider
-            .forResource<Song>(ResourceType.song)
-            .fetchMany();
+        const [songSearchResult, audioItemSearchResult] = await Promise.all([
+            this.repositoryProvider.forResource<Song>(ResourceType.song).fetchMany(),
+            this.repositoryProvider.forResource<AudioItem>(ResourceType.audioItem).fetchMany(),
+        ]);
 
-        const allSongs = searchResult.filter((song): song is Song => {
+        const allSongs = songSearchResult.filter((song): song is Song => {
             if (isInternalError(song)) {
                 throw song;
             }
@@ -82,9 +83,10 @@ export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
             return true;
         });
 
-        return buildInMemorySnapshot({
-            resources: { song: allSongs },
-        });
+        return new DeluxeInMemoryStore({
+            song: allSongs,
+            audioItem: audioItemSearchResult.filter(validAggregateOrThrow),
+        }).fetchFullSnapshotInLegacyFormat();
     }
 
     validateExternalState(state: InMemorySnapshot, song: Song): ValidationResult {

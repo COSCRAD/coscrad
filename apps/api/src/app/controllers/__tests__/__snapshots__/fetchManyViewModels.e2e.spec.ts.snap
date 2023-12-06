@@ -61,6 +61,42 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
       "text": "[120] [E1] this type of spoon is used in ceremonies {en} (role: original) [848]
 [930] [E2] by members of the opposite clan of the house chief {en} (role: original) [1080]",
     },
+    {
+      "actions": [],
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110114",
+      "lengthMilliseconds": 1000,
+      "mimeType": "audio/x-wav",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "Mary had a Little Lamb",
+          },
+        ],
+      },
+      "tags": [],
+      "text": "",
+    },
+    {
+      "actions": [],
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110115",
+      "lengthMilliseconds": 10,
+      "mimeType": "audio/x-wav",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "No Light",
+          },
+        ],
+      },
+      "tags": [],
+      "text": "",
+    },
   ],
   "indexScopedActions": [],
 }
@@ -126,6 +162,42 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
       "tags": [],
       "text": "[120] [E1] this type of spoon is used in ceremonies {en} (role: original) [848]
 [930] [E2] by members of the opposite clan of the house chief {en} (role: original) [1080]",
+    },
+    {
+      "actions": [],
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110114",
+      "lengthMilliseconds": 1000,
+      "mimeType": "audio/x-wav",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "Mary had a Little Lamb",
+          },
+        ],
+      },
+      "tags": [],
+      "text": "",
+    },
+    {
+      "actions": [],
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110115",
+      "lengthMilliseconds": 10,
+      "mimeType": "audio/x-wav",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "No Light",
+          },
+        ],
+      },
+      "tags": [],
+      "text": "",
     },
   ],
   "indexScopedActions": [],
@@ -961,6 +1033,102 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
       "tags": [],
       "url": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
     },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
+      "mimeType": "image/png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "snow mountain",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
+      "mimeType": "image/png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Adiitsii Running",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
+      "mimeType": "image/png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Nuu Story",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
+      "mimeType": "image/png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Two Brothers Pole",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
+      "mimeType": "audio/x-wav",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Mary Had a Little Lamb",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
+      "mimeType": "audio/x-wav",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "No Light",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav",
+    },
   ],
   "indexScopedActions": [],
 }
@@ -1075,6 +1243,102 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
       "tags": [],
       "url": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
     },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
+      "mimeType": "image/png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "snow mountain",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
+      "mimeType": "image/png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Adiitsii Running",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
+      "mimeType": "image/png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Nuu Story",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
+      "mimeType": "image/png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Two Brothers Pole",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
+      "mimeType": "audio/x-wav",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Mary Had a Little Lamb",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
+      "mimeType": "audio/x-wav",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "No Light",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav",
+    },
   ],
   "indexScopedActions": [],
 }
@@ -1086,105 +1350,42 @@ exports[`When fetching multiple resources GET /resources/photographs when all of
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
-      "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png",
       "name": {
         "items": [
           {
             "languageCode": "en",
             "role": "original",
-            "text": "https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png",
+            "text": "Adiitsii Running",
           },
         ],
       },
       "photographer": "Susie McRealart",
-      "tags": [
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-          "label": "placenames",
-          "members": [
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
-              "type": "photograph",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
-              "type": "audioItem",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112003",
-              "type": "note",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
-              "type": "note",
-            },
-          ],
-          "name": {
-            "items": [
-              {
-                "languageCode": "en",
-                "role": "original",
-                "text": "placenames",
-              },
-            ],
-          },
-        },
-      ],
+      "tags": [],
     },
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png",
       "name": {
         "items": [
           {
             "languageCode": "en",
             "role": "original",
-            "text": "https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png",
+            "text": "Nuu Story",
           },
         ],
       },
       "photographer": "Robert McRealart",
-      "tags": [
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
-          "label": "songs",
-          "members": [
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-              "type": "photograph",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112002",
-              "type": "note",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-              "type": "note",
-            },
-          ],
-          "name": {
-            "items": [
-              {
-                "languageCode": "en",
-                "role": "original",
-                "text": "songs",
-              },
-            ],
-          },
-        },
-      ],
+      "tags": [],
     },
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-      "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png",
       "name": {
         "items": [
           {
             "languageCode": "en",
             "role": "original",
-            "text": "https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png",
+            "text": "Two Brothers Pole",
           },
         ],
       },
@@ -1202,105 +1403,42 @@ exports[`When fetching multiple resources GET /resources/photographs when some o
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
-      "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png",
       "name": {
         "items": [
           {
             "languageCode": "en",
             "role": "original",
-            "text": "https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png",
+            "text": "Adiitsii Running",
           },
         ],
       },
       "photographer": "Susie McRealart",
-      "tags": [
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-          "label": "placenames",
-          "members": [
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
-              "type": "photograph",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
-              "type": "audioItem",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112003",
-              "type": "note",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
-              "type": "note",
-            },
-          ],
-          "name": {
-            "items": [
-              {
-                "languageCode": "en",
-                "role": "original",
-                "text": "placenames",
-              },
-            ],
-          },
-        },
-      ],
+      "tags": [],
     },
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png",
       "name": {
         "items": [
           {
             "languageCode": "en",
             "role": "original",
-            "text": "https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png",
+            "text": "Nuu Story",
           },
         ],
       },
       "photographer": "Robert McRealart",
-      "tags": [
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
-          "label": "songs",
-          "members": [
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-              "type": "photograph",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112002",
-              "type": "note",
-            },
-            {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-              "type": "note",
-            },
-          ],
-          "name": {
-            "items": [
-              {
-                "languageCode": "en",
-                "role": "original",
-                "text": "songs",
-              },
-            ],
-          },
-        },
-      ],
+      "tags": [],
     },
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-      "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png",
       "name": {
         "items": [
           {
             "languageCode": "en",
             "role": "original",
-            "text": "https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png",
+            "text": "Two Brothers Pole",
           },
         ],
       },

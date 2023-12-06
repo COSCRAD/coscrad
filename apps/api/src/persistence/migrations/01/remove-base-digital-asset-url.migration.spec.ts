@@ -113,10 +113,7 @@ describe.skip(`RemoveBaseDigitalAssetUrl`, () => {
         }));
 
         // PHOTOGRAPHS
-        const dtoForPhotographToCheckManually: Omit<
-            ArangoDatabaseDocument<DTO<OldPhotograph>>,
-            '_key'
-        > = {
+        const dtoForPhotographToCheckManually = {
             type: ResourceType.photograph,
             filename: `flowers`,
             photographer: `James Rames`,
@@ -127,10 +124,7 @@ describe.skip(`RemoveBaseDigitalAssetUrl`, () => {
             published: true,
         };
 
-        const dtoForPhotographWithoutFilename: Omit<
-            ArangoDatabaseDocument<DTO<OldPhotograph>>,
-            '_key'
-        > = {
+        const dtoForPhotographWithoutFilename = {
             type: ResourceType.photograph,
             // filename: MISSING!,
             photographer: `James Rames`,
@@ -141,10 +135,10 @@ describe.skip(`RemoveBaseDigitalAssetUrl`, () => {
             published: true,
         };
 
-        const originalPhotographDocumentsWithoutKeys: Omit<
-            ArangoDatabaseDocument<DTO<OldPhotograph>>,
-            '_key'
-        >[] = [dtoForPhotographToCheckManually, dtoForPhotographWithoutFilename];
+        const originalPhotographDocumentsWithoutKeys = [
+            dtoForPhotographToCheckManually,
+            dtoForPhotographWithoutFilename,
+        ];
 
         const originalPhotographDocuments = originalPhotographDocumentsWithoutKeys.map(
             (partialDto, index) => ({
@@ -209,6 +203,7 @@ describe.skip(`RemoveBaseDigitalAssetUrl`, () => {
 
             expect(migratedTermWithoutAudiofilename.audioFilename).not.toBeTruthy();
 
+            // @ts-expect-error there's no point of maintainging this any longer
             const { imageUrl } = (await testDatabaseProvider
                 .getDatabaseForCollection(ArangoCollectionId.photographs)
                 .fetchById(idForPhotographToCheckManually)) as unknown as ArangoDatabaseDocument<
@@ -223,6 +218,7 @@ describe.skip(`RemoveBaseDigitalAssetUrl`, () => {
                 DTO<Photograph>
             >;
 
+            // @ts-expect-error There's no reason to support this now
             expect(dtoForPhotographWithoutFilename.imageUrl).not.toBeTruthy();
 
             const updatedPhotographDocuments = (await testDatabaseProvider
@@ -233,6 +229,7 @@ describe.skip(`RemoveBaseDigitalAssetUrl`, () => {
 
             const idsOfPhotographDocumentsWithoutBaseDigitalAssetUrl =
                 updatedPhotographDocuments.filter(
+                    // @ts-expect-error There's no reason to support this now
                     ({ imageUrl }) =>
                         !isNullOrUndefined(imageUrl) && !imageUrl.includes(baseDigitalAssetUrl)
                 );
