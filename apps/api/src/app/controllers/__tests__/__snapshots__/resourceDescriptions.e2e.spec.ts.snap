@@ -1030,13 +1030,6 @@ exports[`GET /resources should return the expected result 1`] = `
         "isOptional": false,
         "label": "ID",
       },
-      "imageUrl": {
-        "coscradDataType": "URL",
-        "description": "a web link to a digital version of the photograph",
-        "isArray": false,
-        "isOptional": false,
-        "label": "image link",
-      },
       "name": {
         "complexDataType": "NESTED_TYPE",
         "description": "multilingual text name of the entity",
@@ -2079,7 +2072,7 @@ exports[`GET /resources should return the expected result 1`] = `
       },
       "lengthMilliseconds": {
         "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
-        "description": "length of the audio file in milliseconds",
+        "description": "length of the song's audio in milliseconds",
         "isArray": false,
         "isOptional": false,
         "label": "length (ms)",
@@ -2274,13 +2267,6 @@ exports[`GET /resources should return the expected result 1`] = `
           },
         },
       },
-      "startMilliseconds": {
-        "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
-        "description": "the starting timestamp for the audio file",
-        "isArray": false,
-        "isOptional": false,
-        "label": "start (ms)",
-      },
     },
     "type": "song",
   },
@@ -2419,7 +2405,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
         "description": "length of the media item in milliseconds",
         "isArray": false,
-        "isOptional": false,
+        "isOptional": true,
         "label": "length (ms)",
       },
       "mimeType": {

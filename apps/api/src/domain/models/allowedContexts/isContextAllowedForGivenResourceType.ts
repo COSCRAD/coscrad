@@ -61,8 +61,11 @@ const resourceTypeToAllowedContextTypes: Record<ResourceType, string[]> = {
         EdgeConnectionContextType.general,
         EdgeConnectionContextType.pageRange,
     ],
-    [ResourceType.song]: [EdgeConnectionContextType.general, EdgeConnectionContextType.timeRange],
-    [ResourceType.mediaItem]: [EdgeConnectionContextType.general],
+    [ResourceType.song]: [EdgeConnectionContextType.general],
+    [ResourceType.mediaItem]: [
+        EdgeConnectionContextType.general,
+        EdgeConnectionContextType.timeRange,
+    ],
     [ResourceType.playlist]: [EdgeConnectionContextType.general],
 };
 
