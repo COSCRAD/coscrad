@@ -17,6 +17,20 @@ import {
     ResourceOrNoteTagged,
     ResourceOrNoteTaggedPayload,
 } from '../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
+import {
+    PromptTermCreated,
+    PromptTermCreatedPayload,
+    TermCreated,
+    TermCreatedPayload,
+    TermElicitedFromPrompt,
+    TermElicitedFromPromptPayload,
+    TermTranslated,
+    TermTranslatedPayload,
+} from '../../domain/models/term/commands';
+import { PROMPT_TERM_CREATED } from '../../domain/models/term/commands/create-prompt-term/constants';
+import { TERM_CREATED } from '../../domain/models/term/commands/create-term/constants';
+import { TERM_ELICITED_FROM_PROMPT } from '../../domain/models/term/commands/elicit-term-from-prompt/constants';
+import { TERM_TRANSLATED } from '../../domain/models/term/commands/translate-term/constants';
 import { AggregateId } from '../../domain/types/AggregateId';
 import { AggregateType } from '../../domain/types/AggregateType';
 import { InternalError } from '../../lib/errors/InternalError';
@@ -185,6 +199,81 @@ const buildContentAddedToDigitalTextPage = (
     );
 };
 
+const buildTermCreated = (payloadOverrides: DeepPartial<TermCreatedPayload>) => {
+    const defaultPayload: TermCreatedPayload = {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.term,
+            id: buildDummyUuid(123),
+        },
+        text: 'he is jumping',
+        languageCode: LanguageCode.Haida,
+        // TODO remove this
+        contributorId: '1',
+    };
+
+    return new TermCreated(
+        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        buildDummyUuid(10),
+        dummySystemUserId,
+        dateManager.next()
+    );
+};
+
+const buildTermTranslated = (payloadOverrides: DeepPartial<TermTranslatedPayload>) => {
+    const defaultPayload: TermTranslatedPayload = {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.term,
+            id: buildDummyUuid(124),
+        },
+        translation: 'he is jumping (translation)',
+        languageCode: LanguageCode.English,
+    };
+
+    return new TermTranslated(
+        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        buildDummyUuid(11),
+        dummySystemUserId,
+        dateManager.next()
+    );
+};
+
+const buildPromptTermCreated = (payloadOverrides: DeepPartial<PromptTermCreatedPayload>) => {
+    const defaultPayload: PromptTermCreatedPayload = {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.term,
+            id: buildDummyUuid(125),
+        },
+        text: 'how do you say, "sing to me"',
+    };
+
+    return new PromptTermCreated(
+        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        buildDummyUuid(12),
+        dummySystemUserId,
+        dateManager.next()
+    );
+};
+
+const buildTermElicitedFromPrompt = (
+    payloadOverrides: DeepPartial<TermElicitedFromPromptPayload>
+) => {
+    const defaultPayload: TermElicitedFromPromptPayload = {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.term,
+            id: buildDummyUuid(126),
+        },
+        text: 'sing to me (in language)',
+        languageCode: LanguageCode.Haida,
+    };
+
+    return new TermElicitedFromPrompt(
+        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        buildDummyUuid(13),
+        dummySystemUserId,
+        dateManager.next()
+    );
+};
+
 export type EventBuilder<T extends BaseEvent> = (payloadOverrides: EventPayloadOverrides<T>) => T;
 
 export class TestEventStream {
@@ -212,7 +301,11 @@ export class TestEventStream {
             .registerBuilder(
                 'CONTENT_ADDED_TO_DIGITAL_TEXT_PAGE',
                 buildContentAddedToDigitalTextPage
-            );
+            )
+            .registerBuilder(TERM_CREATED, buildTermCreated)
+            .registerBuilder(TERM_TRANSLATED, buildTermTranslated)
+            .registerBuilder(PROMPT_TERM_CREATED, buildPromptTermCreated)
+            .registerBuilder(TERM_ELICITED_FROM_PROMPT, buildTermElicitedFromPrompt);
     }
 
     andThen<T extends BaseEvent>(

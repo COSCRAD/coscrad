@@ -18,8 +18,16 @@ export class CreatePromptTerm implements ICommandBase {
 
     @NonEmptyString({
         label: 'text',
-        description: 'text for the term (in the language)',
+        description: 'text for the term (in English)',
     })
+    /**
+     * Note that this is assumed to be English. If we have a group that wants to
+     * use a different prompt language, we will have to version this event and
+     * upgrade old ones to have a
+     * ```ts
+     * languageCode: LanguageCode;
+     * ```
+     */
     text: string;
 
     @NonEmptyString({

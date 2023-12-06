@@ -1,4 +1,5 @@
-import { ICommandBase } from '@coscrad/api-interfaces';
+import { AGGREGATE_COMPOSITE_IDENTIFIER, ICommandBase } from '@coscrad/api-interfaces';
+import { isDeepStrictEqual } from 'util';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
 import { AggregateId } from '../../../types/AggregateId';
@@ -31,6 +32,14 @@ export abstract class BaseEvent<
 
     public get id(): AggregateId {
         return this.meta.id;
+    }
+
+    public isOfType(eventType: string): boolean {
+        return eventType === this.type;
+    }
+
+    public isFor(compositeIdentifier: { type: string; id: string }): boolean {
+        return isDeepStrictEqual(this.payload[AGGREGATE_COMPOSITE_IDENTIFIER], compositeIdentifier);
     }
 
     public toDTO<T extends BaseEvent>(this: T): DTO<this> {

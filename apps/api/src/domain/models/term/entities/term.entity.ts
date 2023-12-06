@@ -1,9 +1,12 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { BooleanDataType, NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
+import { Maybe } from '../../../../lib/types/maybe';
+import formatAggregateCompositeIdentifier from '../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import {
     MultilingualText,
     MultilingualTextItem,
@@ -17,10 +20,14 @@ import { ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import { TextFieldContext } from '../../context/text-field-context/text-field-context.entity';
 import { Resource } from '../../resource.entity';
+import AggregateNotFoundError from '../../shared/common-command-errors/AggregateNotFoundError';
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
-import { CREATE_PROMPT_TERM } from '../commands/create-prompt-term/constants';
-import { CREATE_TERM } from '../commands/create-term/constants';
-import { TRANSLATE_TERM } from '../commands/translate-term/constants';
+import { BaseEvent } from '../../shared/events/base-event.entity';
+import { PromptTermCreated, TermCreated, TermElicitedFromPromptPayload, TermTranslatedPayload } from '../commands';
+import { CREATE_PROMPT_TERM, PROMPT_TERM_CREATED } from '../commands/create-prompt-term/constants';
+import { CREATE_TERM, TERM_CREATED } from '../commands/create-term/constants';
+import { TERM_ELICITED_FROM_PROMPT } from '../commands/elicit-term-from-prompt/constants';
+import { TERM_TRANSLATED, TRANSLATE_TERM } from '../commands/translate-term/constants';
 import { CannotElicitTermWithoutPromptError, PromptLanguageMustBeUniqueError } from '../errors';
 
 const isOptional = true;
@@ -184,5 +191,108 @@ export class Term extends Resource {
     // TODO We should 'goodlist' properties that can be targets for this context as well
     validateTextFieldContext(context: TextFieldContext): Valid | InternalError {
         return validateTextFieldContextForModel(this, context);
+    }
+
+    static fromEventHistory(
+        eventStream: BaseEvent[],
+        termId: AggregateId
+    ): Maybe<ResultOrError<Term>> {
+        const compositeIdentifier = {
+            type: AggregateType.term,
+            id: termId,
+        };
+
+        const eventsForThisTerm = eventStream.filter((event) => event.isFor(compositeIdentifier));
+
+        if (eventsForThisTerm.length === 0) {
+            return new AggregateNotFoundError(compositeIdentifier);
+        }
+
+        const [creationEvent, ...updateEvents] = eventsForThisTerm;
+
+        const initialTerm = Term.createTermFromEvent(creationEvent);
+
+        return updateEvents.reduce((accumulatedTerm, nextEvent) => {
+            if (isInternalError(accumulatedTerm)) return accumulatedTerm;
+
+            if (nextEvent.isOfType(TERM_TRANSLATED)) {
+                const { translation, languageCode } = nextEvent.payload as TermTranslatedPayload;
+
+                return accumulatedTerm
+                    .addEventToHistory(nextEvent)
+                    .translate(translation, languageCode);
+            }
+
+            if(nextEvent.isOfType(TERM_ELICITED_FROM_PROMPT)){
+                const {text,languageCode} = nextEvent.payload as TermElicitedFromPromptPayload;
+
+           return accumulatedTerm.elicitFromPrompt(text,languageCode)
+            }
+
+            // no event handler found for this event - no update
+            return accumulatedTerm;
+        }, initialTerm);
+    }
+
+    // TODO Find a different pattern of code organization. This feels too Java-ish.
+    private static createTermFromEvent(creationEvent: BaseEvent): Term {
+        const {
+            payload: {
+                aggregateCompositeIdentifier: { id },
+            },
+        } = creationEvent;
+
+        if (creationEvent.isOfType(TERM_CREATED)) {
+            return Term.createTermFromTermCreated(creationEvent as TermCreated);
+        }
+
+        if (creationEvent.isOfType(PROMPT_TERM_CREATED)) {
+            return Term.createTermFromPromptTermCreated(creationEvent as PromptTermCreated);
+        }
+
+        // TODO Let's breakout a shared error class for this
+        throw new InternalError(
+            `The first event for ${formatAggregateCompositeIdentifier({
+                type: AggregateType.term,
+                id,
+            })} should have had one of the types: ${TERM_CREATED},${PROMPT_TERM_CREATED}, but found: ${
+                creationEvent?.type
+            }`
+        );
+    }
+
+    private static createTermFromTermCreated({
+        payload: {
+            aggregateCompositeIdentifier: { id },
+            text,
+            languageCode,
+            contributorId,
+        },
+    }: TermCreated) {
+        return new Term({
+            type: AggregateType.term,
+            id,
+            text: buildMultilingualTextWithSingleItem(text, languageCode),
+            contributorId,
+            // Terms are not published by default
+            published: false,
+        });
+    }
+
+    private static createTermFromPromptTermCreated({
+        payload: {
+            aggregateCompositeIdentifier: { id },
+            text,
+        },
+    }: PromptTermCreated): Term {
+        return new Term({
+            type: AggregateType.term,
+            id,
+            // At present, prompts are only in English
+            text: buildMultilingualTextWithSingleItem(text, LanguageCode.English),
+            isPromptTerm: true,
+            // terms are not published by default
+            published: false,
+        });
     }
 }
