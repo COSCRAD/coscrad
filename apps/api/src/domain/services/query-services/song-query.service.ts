@@ -11,8 +11,11 @@ import { ResourceQueryService } from './resource-query.service';
 export class SongQueryService extends ResourceQueryService<Song, ISongViewModel> {
     protected readonly type = ResourceType.song;
 
-    buildViewModel(song: Song, _: InMemorySnapshot): ISongViewModel {
-        return new SongViewModel(song);
+    buildViewModel(
+        song: Song,
+        { resources: { audioItem: allAudioItems, mediaItem: allMediaItems } }: InMemorySnapshot
+    ): ISongViewModel {
+        return new SongViewModel(song, allAudioItems, allMediaItems);
     }
 
     getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {

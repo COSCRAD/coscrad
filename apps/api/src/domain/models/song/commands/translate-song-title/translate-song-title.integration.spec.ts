@@ -57,7 +57,7 @@ const existingSong = dummySong.clone({
                 aggregateCompositeIdentifier: dummySong.getCompositeIdentifier(),
                 title: existingTitle.getOriginalTextItem().text,
                 languageCodeForTitle: existingTitle.getOriginalTextItem().languageCode,
-                audioURL: dummySong.audioURL,
+                audioItemId: buildDummyUuid(123),
                 // TODO Make BaseEvent generic ?
             } as ICommandBase,
             buildDummyUuid(111),

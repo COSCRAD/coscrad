@@ -272,13 +272,7 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
                     id: '1',
                     type: ResourceType.song,
                 },
-                context: new TimeRangeContext({
-                    timeRange: {
-                        inPointMilliseconds: 300,
-                        outPointMilliseconds: 500,
-                    },
-                    type: EdgeConnectionContextType.timeRange,
-                }),
+                context: new GeneralContext(),
             },
         ],
     },

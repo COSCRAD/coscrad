@@ -2111,11 +2111,7 @@ exports[`When querying for edge connections GET /connections/notes should return
             "type": "song",
           },
           "context": {
-            "timeRange": {
-              "inPointMilliseconds": 300,
-              "outPointMilliseconds": 500,
-            },
-            "type": "timeRange",
+            "type": "general",
           },
           "role": "self",
         },
@@ -2516,42 +2512,6 @@ exports[`When querying for edge connections GET /connections/notes should return
         {
           "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-            "type": "song",
-          },
-          "context": {
-            "type": "general",
-          },
-          "role": "self",
-        },
-      ],
-      "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
-      "name": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "A note about song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-          },
-        ],
-      },
-      "note": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "this is a song",
-          },
-        ],
-      },
-      "tags": [],
-    },
-    {
-      "actions": [],
-      "connectedResources": [
-        {
-          "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "mediaItem",
           },
           "context": {
@@ -2561,7 +2521,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
       "name": {
         "items": [
           {
@@ -2597,7 +2557,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
       "name": {
         "items": [
           {
@@ -3151,11 +3111,7 @@ exports[`When querying for edge connections GET /connections/notes should return
             "type": "song",
           },
           "context": {
-            "timeRange": {
-              "inPointMilliseconds": 300,
-              "outPointMilliseconds": 500,
-            },
-            "type": "timeRange",
+            "type": "general",
           },
           "role": "from",
         },
@@ -3191,11 +3147,7 @@ exports[`When querying for edge connections GET /connections/notes should return
             "type": "song",
           },
           "context": {
-            "timeRange": {
-              "inPointMilliseconds": 300,
-              "outPointMilliseconds": 500,
-            },
-            "type": "timeRange",
+            "type": "general",
           },
           "role": "to",
         },
@@ -3791,11 +3743,7 @@ exports[`When querying for edge connections GET /connections/notes should return
             "type": "song",
           },
           "context": {
-            "timeRange": {
-              "inPointMilliseconds": 500,
-              "outPointMilliseconds": 778.4,
-            },
-            "type": "timeRange",
+            "type": "general",
           },
           "role": "from",
         },
@@ -3841,11 +3789,7 @@ exports[`When querying for edge connections GET /connections/notes should return
             "type": "song",
           },
           "context": {
-            "timeRange": {
-              "inPointMilliseconds": 500,
-              "outPointMilliseconds": 778.4,
-            },
-            "type": "timeRange",
+            "type": "general",
           },
           "role": "from",
         },
