@@ -39,6 +39,12 @@ To run the front-end and back-end concurrently from a single command, run
 
 Note that you will need to have the backend configured in the `api` application, including a working instance of ArangoDB that is linked in your `.env.` See the [docs for `api`](../api/README.md) for more information.
 
+### Redux DevTools Browser Plugin
+
+To inspect the in-memory front-end state stored in Redux, use Redux DevTools in [Chrome](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd), [Edge](https://microsoftedge.microsoft.com/addons/detail/redux-devtools/nnkgneoiohoecpdiaponcejilbhhikei), or [Firefox](https://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/).
+
+See [Redux DevTools](https://github.com/reduxjs/redux-devtools)
+
 ### Unit Tests
 
 To run all of the jest tests, run
@@ -57,7 +63,7 @@ In the event that a Jest snapshot fails, first run the single test with a failin
 
 > > npx nx test coscrad-frontend -- --test-file=<name-of-test-file> -u
 
-### Cypres end-to-end Tests
+### Cypress end-to-end Tests
 
 Cypress is our platform for automated browser end-to-end and integration testing. Our Cypress tests live in a dedicated application within the monorepo.
 
