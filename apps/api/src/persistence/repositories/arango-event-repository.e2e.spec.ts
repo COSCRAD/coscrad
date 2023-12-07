@@ -8,6 +8,7 @@ import { CoscradEventUnion, EventModule } from '../../domain/common';
 import { CoscradEventFactory } from '../../domain/common/events/coscrad-event-factory';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { buildFakeTimersConfig } from '../../domain/models/__tests__/utilities/buildFakeTimersConfig';
+import { dummyDateNow } from '../../domain/models/__tests__/utilities/dummyDateNow';
 import { dummySystemUserId } from '../../domain/models/__tests__/utilities/dummySystemUserId';
 import { SongCreated } from '../../domain/models/song/commands/song-created.event';
 import { AggregateType } from '../../domain/types/AggregateType';
@@ -89,7 +90,11 @@ describe(`Arango Event Repository`, () => {
         it(`should append the event`, async () => {
             const { payload: commandPayload } = buildTestCommandFsaMap().get(`CREATE_SONG`);
 
-            const songCreated = new SongCreated(commandPayload, songId, dummySystemUserId);
+            const songCreated = new SongCreated(commandPayload, {
+                id: songId,
+                userId: dummySystemUserId,
+                dateCreated: dummyDateNow,
+            });
 
             await arangoEventRepository.appendEvent(songCreated);
 
