@@ -18,8 +18,8 @@ import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/a
 import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { Photograph } from '../../../photograph/entities/photograph.entity';
 import { Resource } from '../../../resource.entity';
-import { Term } from '../../../term/entities/term.entity';
 import AggregateNotFoundError from '../../common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../common-command-errors/CommandExecutionError';
 import UserAlreadyHasReadAccessError from '../../common-command-errors/invalid-state-transition-errors/UserAlreadyHasReadAccessError';
@@ -33,7 +33,7 @@ const userId = buildDummyUuid();
 
 const existingUser = users[0].clone({ id: userId, authProviderUserId: `auth0|${userId}` });
 
-const existingTerm = resources.term[0];
+const existingPhotograph = getValidAggregateInstanceForTest(AggregateType.photograph);
 
 const initialState = buildInMemorySnapshot({
     user: [existingUser],
@@ -43,7 +43,7 @@ const initialState = buildInMemorySnapshot({
 const validFSA: FluxStandardAction<GrantResourceReadAccessToUser> = {
     type: commandType,
     payload: {
-        aggregateCompositeIdentifier: existingTerm.getCompositeIdentifier(),
+        aggregateCompositeIdentifier: existingPhotograph.getCompositeIdentifier(),
         userId: existingUser.id,
     },
 };
@@ -93,7 +93,11 @@ describe('GRANT_RESOURCE_READ_ACCESS_TO_USER', () => {
     });
 
     // TODO: add standalone test for these resources
-    const eventSourcedResourceTypes = [ResourceType.song, ResourceType.digitalText];
+    const eventSourcedResourceTypes = [
+        ResourceType.song,
+        ResourceType.digitalText,
+        ResourceType.term,
+    ];
 
     describe('when the command is valid', () => {
         Object.values(ResourceType)
@@ -193,21 +197,21 @@ describe('GRANT_RESOURCE_READ_ACCESS_TO_USER', () => {
 
         describe('when the user already has read access to the resource', () => {
             it('should fail', async () => {
-                const existingTermWithAccessToResource = existingTerm.grantReadAccessToUser(
-                    existingUser.id
-                ) as Term;
+                const existingPhotographWithAccessToResource =
+                    existingPhotograph.grantReadAccessToUser(existingUser.id) as Photograph;
 
                 await assertCommandError(commandAssertionDependencies, {
                     buildCommandFSA: () =>
                         fsaFactory.build(undefined, {
-                            aggregateCompositeIdentifier: existingTerm.getCompositeIdentifier(),
+                            aggregateCompositeIdentifier:
+                                existingPhotograph.getCompositeIdentifier(),
                             userId: existingUser.id,
                         }),
                     systemUserId: dummyAdminUserId,
                     initialState: buildInMemorySnapshot({
                         user: [existingUser],
                         resources: {
-                            term: [existingTermWithAccessToResource],
+                            photograph: [existingPhotographWithAccessToResource],
                         },
                     }),
                     checkError: (error: InternalError) => {
