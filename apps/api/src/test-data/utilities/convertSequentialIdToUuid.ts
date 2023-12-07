@@ -11,13 +11,13 @@ export const convertSequenceNumberToUuid = (sequenceNumber: number): string =>
 export const convertAggregatesIdToUuid = <T extends Aggregate = Aggregate>(aggregate: T): T => {
     const updatedAggregate = aggregate.clone<T>({
         id: convertSequenceNumberToUuid(parseInt(aggregate.id)),
-        eventHistory:
-            aggregate.eventHistory?.map((event) => ({
-                ...event,
-                meta: {
-                    id: convertSequenceNumberToUuid(parseInt(event.meta.id)),
-                },
-            })) || [],
+        // eventHistory:
+        //     aggregate.eventHistory?.map((event) => ({
+        //         ...event,
+        //         meta: {
+        //             id: convertSequenceNumberToUuid(parseInt(event.meta.id)),
+        //         },
+        //     })) || [],
     } as unknown as DeepPartial<DTO<T>>);
 
     return updatedAggregate;

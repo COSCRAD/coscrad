@@ -71,12 +71,11 @@ export default (): DigitalText[] =>
             },
         });
 
-        const creationEvent = new DigitalTextCreated(
-            commandPayloadWithUuid,
-            buildDummyUuid(950 + index),
-            buildDummyUuid(685),
-            dummyDateNow
-        );
+        const creationEvent = new DigitalTextCreated(commandPayloadWithUuid, {
+            id: buildDummyUuid(950 + index),
+            userId: buildDummyUuid(685),
+            dateCreated: dummyDateNow,
+        });
 
         const eventHistory = [creationEvent];
 

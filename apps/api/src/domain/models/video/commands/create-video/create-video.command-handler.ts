@@ -17,6 +17,7 @@ import { InMemorySnapshot, ResourceType } from '../../../../types/ResourceType';
 import { Video, VideoBase } from '../../../audio-item/entities/video.entity';
 import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { CreateVideo } from './create-video.command';
 import { VideoCreated } from './video-created.event';
 
@@ -82,7 +83,7 @@ export class CreateVideoCommandHandler extends BaseCreateCommandHandler<Video> {
         return instance.validateExternalReferences(snapshot);
     }
 
-    protected buildEvent(command: CreateVideo, eventId: string, userId: string): BaseEvent {
-        return new VideoCreated(command, eventId, userId);
+    protected buildEvent(command: CreateVideo, eventMeta: EventRecordMetadata): BaseEvent {
+        return new VideoCreated(command, eventMeta);
     }
 }

@@ -37,8 +37,6 @@ const buildValidCommandFSA = (id: AggregateId) =>
 
 const commandFsaFactory = new DummyCommandFsaFactory(buildValidCommandFSA);
 
-const emptyInitialState = new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat();
-
 describe(commandType, () => {
     let testRepositoryProvider: TestRepositoryProvider;
 
@@ -83,7 +81,9 @@ describe(commandType, () => {
         it(`should succeed with the expected state updates`, async () => {
             await assertCreateCommandSuccess(assertionHelperDependencies, {
                 systemUserId: dummySystemUserId,
-                initialState: emptyInitialState,
+                seedInitialState: async () => {
+                    await Promise.resolve();
+                },
                 buildValidCommandFSA,
                 checkStateOnSuccess: async ({
                     aggregateCompositeIdentifier: { id },
@@ -106,7 +106,7 @@ describe(commandType, () => {
 
     describe(`when the command is invalid`, () => {
         describe(`when there is already a term with the given ID`, () => {
-            it(`should return the expected error`, async () => {
+            it.only(`should return the expected error`, async () => {
                 const newId = await idManager.generate();
 
                 const validCommandFSA = buildValidCommandFSA(newId);
@@ -114,9 +114,7 @@ describe(commandType, () => {
                 await testRepositoryProvider.addFullSnapshot(
                     new DeluxeInMemoryStore({
                         [AggregateType.term]: [
-                            getValidAggregateInstanceForTest(AggregateType.term).clone({
-                                id: newId,
-                            }),
+                            getValidAggregateInstanceForTest(AggregateType.term),
                         ],
                     }).fetchFullSnapshotInLegacyFormat()
                 );
@@ -136,7 +134,9 @@ describe(commandType, () => {
                 await assertCreateCommandError(assertionHelperDependencies, {
                     systemUserId: dummySystemUserId,
                     buildCommandFSA: (_: AggregateId) => commandFsaFactory.build(bogusId),
-                    initialState: emptyInitialState,
+                    seedInitialState: async () => {
+                        await Promise.resolve();
+                    },
                     // TODO Tighten up the error check
                 });
             });

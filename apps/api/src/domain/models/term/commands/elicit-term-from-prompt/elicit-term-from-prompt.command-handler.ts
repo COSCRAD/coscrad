@@ -6,6 +6,7 @@ import { InternalError } from '../../../../../lib/errors/InternalError';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { Term } from '../../entities/term.entity';
 import { ElicitTermFromPrompt } from './elicit-term-from-prompt.command';
 import { TermElicitedFromPrompt } from './term.elicited.from.prompt';
@@ -30,11 +31,7 @@ export class ElicitTermFromPromptCommandHandler extends BaseUpdateCommandHandler
         return Valid;
     }
 
-    protected buildEvent(
-        command: ElicitTermFromPrompt,
-        eventId: string,
-        userId: string
-    ): BaseEvent {
-        return new TermElicitedFromPrompt(command, eventId, userId);
+    protected buildEvent(command: ElicitTermFromPrompt, eventMeta: EventRecordMetadata): BaseEvent {
+        return new TermElicitedFromPrompt(command, eventMeta);
     }
 }

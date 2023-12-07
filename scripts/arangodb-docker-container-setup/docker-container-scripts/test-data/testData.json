@@ -456,7 +456,7 @@
                 "type": "term",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "eventHistory": [],
-                "published": true,
+                "published": false,
                 "queryAccessControlList": {
                     "allowedUserIds": [],
                     "allowedGroupIds": []
@@ -464,25 +464,24 @@
                 "text": {
                     "items": [
                         {
-                            "languageCode": "clc",
+                            "languageCode": "en",
                             "role": "original",
-                            "text": "Chil-term-1"
+                            "text": "Engl-term-1"
                         },
                         {
-                            "languageCode": "en",
-                            "role": "free translation",
-                            "text": "Engl-term-1"
+                            "languageCode": "clc",
+                            "role": "elicited from a prompt",
+                            "text": "Chil-term-1"
                         }
                     ]
                 },
-                "contributorId": "John Doe",
-                "isPromptTerm": false
+                "isPromptTerm": true
             },
             {
                 "type": "term",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "eventHistory": [],
-                "published": true,
+                "published": false,
                 "queryAccessControlList": {
                     "allowedUserIds": [],
                     "allowedGroupIds": []
@@ -490,19 +489,18 @@
                 "text": {
                     "items": [
                         {
-                            "languageCode": "clc",
+                            "languageCode": "en",
                             "role": "original",
-                            "text": "Chil-term-2"
+                            "text": "Engl-term-2"
                         },
                         {
-                            "languageCode": "en",
-                            "role": "free translation",
-                            "text": "Engl-term-2"
+                            "languageCode": "clc",
+                            "role": "elicited from a prompt",
+                            "text": "Chil-term-2"
                         }
                     ]
                 },
-                "contributorId": "John Doe",
-                "isPromptTerm": false
+                "isPromptTerm": true
             },
             {
                 "type": "term",
@@ -516,7 +514,7 @@
                 "text": {
                     "items": [
                         {
-                            "languageCode": "en",
+                            "languageCode": "hai",
                             "role": "original",
                             "text": "Chil-term-no-english"
                         }
@@ -531,28 +529,42 @@
                 "eventHistory": [],
                 "published": false,
                 "queryAccessControlList": {
-                    "allowedUserIds": [
-                        "1"
-                    ],
+                    "allowedUserIds": [],
                     "allowedGroupIds": []
                 },
                 "text": {
                     "items": [
                         {
-                            "languageCode": "en",
+                            "languageCode": "hai",
                             "role": "original",
                             "text": "My Secret Term"
                         }
                     ]
                 },
-                "contributorId": "This will be removed soon",
+                "contributorId": "This prop will be removed soon",
                 "isPromptTerm": false
             },
             {
                 "type": "term",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
-                "eventHistory": [],
-                "published": true,
+                "eventHistory": [
+                    {
+                        "payload": {
+                            "aggregateCompositeIdentifier": {
+                                "type": "term",
+                                "id": "511"
+                            },
+                            "translation": "I am singing (Engl)",
+                            "languageCode": "en"
+                        },
+                        "meta": {
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009"
+                        },
+                        "type": "TERM_TRANSLATED",
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100011"
+                    }
+                ],
+                "published": false,
                 "queryAccessControlList": {
                     "allowedUserIds": [],
                     "allowedGroupIds": []
@@ -572,14 +584,29 @@
                     ]
                 },
                 "contributorId": "Sarah Smith",
-                "audioFilename": "https://coscrad.org/wp-content/uploads/2023/06/511.mp3",
                 "isPromptTerm": false
             },
             {
                 "type": "term",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
-                "eventHistory": [],
-                "published": true,
+                "eventHistory": [
+                    {
+                        "payload": {
+                            "aggregateCompositeIdentifier": {
+                                "type": "term",
+                                "id": "512"
+                            },
+                            "translation": "You are singing (Engl)",
+                            "languageCode": "en"
+                        },
+                        "meta": {
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009"
+                        },
+                        "type": "TERM_TRANSLATED",
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100011"
+                    }
+                ],
+                "published": false,
                 "queryAccessControlList": {
                     "allowedUserIds": [],
                     "allowedGroupIds": []
@@ -599,14 +626,29 @@
                     ]
                 },
                 "contributorId": "Sarah Smith",
-                "audioFilename": "https://coscrad.org/wp-content/uploads/2023/06/512.mp3",
                 "isPromptTerm": false
             },
             {
                 "type": "term",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
-                "eventHistory": [],
-                "published": true,
+                "eventHistory": [
+                    {
+                        "payload": {
+                            "aggregateCompositeIdentifier": {
+                                "type": "term",
+                                "id": "513"
+                            },
+                            "translation": "She is singing (Engl)",
+                            "languageCode": "en"
+                        },
+                        "meta": {
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009"
+                        },
+                        "type": "TERM_TRANSLATED",
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100011"
+                    }
+                ],
+                "published": false,
                 "queryAccessControlList": {
                     "allowedUserIds": [],
                     "allowedGroupIds": []
@@ -626,14 +668,29 @@
                     ]
                 },
                 "contributorId": "Sarah Smith",
-                "audioFilename": "https://coscrad.org/wp-content/uploads/2023/06/513.mp3",
                 "isPromptTerm": false
             },
             {
                 "type": "term",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
-                "eventHistory": [],
-                "published": true,
+                "eventHistory": [
+                    {
+                        "payload": {
+                            "aggregateCompositeIdentifier": {
+                                "type": "term",
+                                "id": "501"
+                            },
+                            "translation": "I am not singing (Engl)",
+                            "languageCode": "en"
+                        },
+                        "meta": {
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009"
+                        },
+                        "type": "TERM_TRANSLATED",
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100011"
+                    }
+                ],
+                "published": false,
                 "queryAccessControlList": {
                     "allowedUserIds": [],
                     "allowedGroupIds": []
@@ -653,14 +710,29 @@
                     ]
                 },
                 "contributorId": "Sarah Smith",
-                "audioFilename": "https://coscrad.org/wp-content/uploads/2023/06/501.mp3",
                 "isPromptTerm": false
             },
             {
                 "type": "term",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502",
-                "eventHistory": [],
-                "published": true,
+                "eventHistory": [
+                    {
+                        "payload": {
+                            "aggregateCompositeIdentifier": {
+                                "type": "term",
+                                "id": "502"
+                            },
+                            "translation": "You are not singing (Engl)",
+                            "languageCode": "en"
+                        },
+                        "meta": {
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009"
+                        },
+                        "type": "TERM_TRANSLATED",
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100011"
+                    }
+                ],
+                "published": false,
                 "queryAccessControlList": {
                     "allowedUserIds": [],
                     "allowedGroupIds": []
@@ -680,7 +752,6 @@
                     ]
                 },
                 "contributorId": "Sarah Smith",
-                "audioFilename": "https://coscrad.org/wp-content/uploads/2023/06/502.mp3",
                 "isPromptTerm": false
             }
         ],
@@ -1083,6 +1154,48 @@
                         }
                     ]
                 }
+            },
+            {
+                "type": "audioItem",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110114",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "name": {
+                    "items": [
+                        {
+                            "languageCode": "en",
+                            "role": "original",
+                            "text": "Mary had a Little Lamb"
+                        }
+                    ]
+                },
+                "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
+                "lengthMilliseconds": 1000
+            },
+            {
+                "type": "audioItem",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110115",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "name": {
+                    "items": [
+                        {
+                            "languageCode": "en",
+                            "role": "original",
+                            "text": "No Light"
+                        }
+                    ]
+                },
+                "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
+                "lengthMilliseconds": 10
             }
         ],
         "books": [
@@ -1163,11 +1276,20 @@
                     "allowedUserIds": [],
                     "allowedGroupIds": []
                 },
-                "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png",
+                "mediaItemId": "5",
                 "photographer": "Susie McRealart",
                 "dimensions": {
                     "widthPX": 300,
                     "heightPX": 400
+                },
+                "title": {
+                    "items": [
+                        {
+                            "languageCode": "en",
+                            "role": "original",
+                            "text": "Adiitsii Running"
+                        }
+                    ]
                 }
             },
             {
@@ -1179,11 +1301,20 @@
                     "allowedUserIds": [],
                     "allowedGroupIds": []
                 },
-                "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png",
+                "mediaItemId": "6",
                 "photographer": "Robert McRealart",
                 "dimensions": {
                     "widthPX": 420,
                     "heightPX": 285
+                },
+                "title": {
+                    "items": [
+                        {
+                            "languageCode": "en",
+                            "role": "original",
+                            "text": "Nuu Story"
+                        }
+                    ]
                 }
             },
             {
@@ -1195,11 +1326,20 @@
                     "allowedUserIds": [],
                     "allowedGroupIds": []
                 },
-                "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png",
+                "mediaItemId": "7",
                 "photographer": "Kenny Tree-Huggens",
                 "dimensions": {
                     "widthPX": 1200,
                     "heightPX": 1500
+                },
+                "title": {
+                    "items": [
+                        {
+                            "languageCode": "en",
+                            "role": "original",
+                            "text": "Two Brothers Pole"
+                        }
+                    ]
                 }
             }
         ],
@@ -1582,7 +1722,7 @@
                             },
                             "title": "Song title in language",
                             "languageCodeForTitle": "clc",
-                            "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav"
+                            "audioItemId": "9"
                         },
                         "meta": {
                             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009"
@@ -1624,9 +1764,7 @@
                         }
                     ]
                 },
-                "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
-                "lengthMilliseconds": 3500,
-                "startMilliseconds": 0
+                "audioItemId": "9"
             },
             {
                 "type": "song",
@@ -1640,7 +1778,7 @@
                             },
                             "title": "Unpublished Song Title (lang)",
                             "languageCodeForTitle": "clc",
-                            "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav"
+                            "audioItemId": "115"
                         },
                         "meta": {
                             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009"
@@ -1684,9 +1822,7 @@
                         }
                     ]
                 },
-                "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav",
-                "lengthMilliseconds": 33000,
-                "startMilliseconds": 0
+                "audioItemId": "115"
             }
         ],
         "media_items": [
@@ -1752,6 +1888,90 @@
                 "url": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
                 "mimeType": "audio/mpeg",
                 "lengthMilliseconds": 2500
+            },
+            {
+                "type": "mediaItem",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "title": "snow mountain",
+                "contributorAndRoles": [],
+                "url": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
+                "mimeType": "image/png"
+            },
+            {
+                "type": "mediaItem",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "title": "Adiitsii Running",
+                "contributorAndRoles": [],
+                "url": "https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png",
+                "mimeType": "image/png"
+            },
+            {
+                "type": "mediaItem",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "title": "Nuu Story",
+                "contributorAndRoles": [],
+                "url": "https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png",
+                "mimeType": "image/png"
+            },
+            {
+                "type": "mediaItem",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "title": "Two Brothers Pole",
+                "contributorAndRoles": [],
+                "url": "https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png",
+                "mimeType": "image/png"
+            },
+            {
+                "type": "mediaItem",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "title": "Mary Had a Little Lamb",
+                "contributorAndRoles": [],
+                "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
+                "mimeType": "audio/x-wav"
+            },
+            {
+                "type": "mediaItem",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "title": "No Light",
+                "contributorAndRoles": [],
+                "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav",
+                "mimeType": "audio/x-wav"
             }
         ],
         "videos": [
@@ -2234,11 +2454,7 @@
                     {
                         "role": "self",
                         "context": {
-                            "type": "timeRange",
-                            "timeRange": {
-                                "inPointMilliseconds": 300,
-                                "outPointMilliseconds": 500
-                            }
+                            "type": "general"
                         }
                     }
                 ],
@@ -2511,35 +2727,10 @@
                 }
             },
             {
-                "_to": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-                "_from": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-                "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
-                "eventHistory": [],
-                "connectionType": "self",
-                "members": [
-                    {
-                        "role": "self",
-                        "context": {
-                            "type": "general"
-                        }
-                    }
-                ],
-                "note": {
-                    "items": [
-                        {
-                            "languageCode": "en",
-                            "role": "original",
-                            "text": "this is a song"
-                        }
-                    ]
-                }
-            },
-            {
                 "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2564,7 +2755,7 @@
                 "_to": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
                 "_from": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2826,11 +3017,7 @@
                     {
                         "role": "from",
                         "context": {
-                            "type": "timeRange",
-                            "timeRange": {
-                                "inPointMilliseconds": 300,
-                                "outPointMilliseconds": 500
-                            }
+                            "type": "general"
                         }
                     }
                 ],
@@ -2855,11 +3042,7 @@
                     {
                         "role": "to",
                         "context": {
-                            "type": "timeRange",
-                            "timeRange": {
-                                "inPointMilliseconds": 300,
-                                "outPointMilliseconds": 500
-                            }
+                            "type": "general"
                         }
                     },
                     {
@@ -3271,11 +3454,7 @@
                     {
                         "role": "from",
                         "context": {
-                            "type": "timeRange",
-                            "timeRange": {
-                                "inPointMilliseconds": 500,
-                                "outPointMilliseconds": 778.4
-                            }
+                            "type": "general"
                         }
                     }
                 ],
@@ -3306,11 +3485,7 @@
                     {
                         "role": "from",
                         "context": {
-                            "type": "timeRange",
-                            "timeRange": {
-                                "inPointMilliseconds": 500,
-                                "outPointMilliseconds": 778.4
-                            }
+                            "type": "general"
                         }
                     }
                 ],

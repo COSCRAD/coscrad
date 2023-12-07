@@ -1,6 +1,7 @@
 import { CoscradEventFactory } from '../../../domain/common';
 import { Category } from '../../../domain/models/categories/entities/category.entity';
 import { Resource } from '../../../domain/models/resource.entity';
+import { DeluxeInMemoryStore } from '../../../domain/types/DeluxeInMemoryStore';
 import {
     InMemorySnapshot,
     InMemorySnapshotOfResources,
@@ -39,14 +40,16 @@ export default class TestRepositoryProvider extends ArangoRepositoryProvider {
      * Do this in a way that is extensible to adding new aggregate types.
      * `DeluxeInMemoryStore` \ `InMemorySnapshotInFlatFormat` may help with this.
      */
-    public async addFullSnapshot({
-        resources,
-        category: categoryTree,
-        tag: tags,
-        note: connections,
-        user: users,
-        userGroup: userGroups,
-    }: InMemorySnapshot): Promise<void> {
+    public async addFullSnapshot(snapshot: InMemorySnapshot): Promise<void> {
+        const {
+            resources,
+            category: categoryTree,
+            tag: tags,
+            note: connections,
+            user: users,
+            userGroup: userGroups,
+        } = snapshot;
+
         await this.addResourcesOfManyTypes(resources);
 
         await this.addCategories(categoryTree);
@@ -58,6 +61,10 @@ export default class TestRepositoryProvider extends ArangoRepositoryProvider {
         await this.getUserRepository().createMany(users);
 
         await this.getUserGroupRepository().createMany(userGroups);
+
+        const allEvents = new DeluxeInMemoryStore(snapshot).fetchEvents();
+
+        await this.getEventRepository().appendEvents(allEvents);
     }
 
     // TODO fix types

@@ -15,6 +15,7 @@ import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { Song } from '../../song.entity';
 import { AddLyricsForSong } from './add-lyrics-for-song.command';
 import { LyricsAddedForSong } from './lyrics-added-for-song.event';
@@ -55,7 +56,7 @@ export class AddLyricsForSongCommandHandler extends BaseUpdateCommandHandler<Son
         return song.addLyrics(lyrics, languageCode);
     }
 
-    protected buildEvent(command: AddLyricsForSong, eventId: string, userId: string): BaseEvent {
-        return new LyricsAddedForSong(command, eventId, userId);
+    protected buildEvent(command: AddLyricsForSong, eventMeta: EventRecordMetadata): BaseEvent {
+        return new LyricsAddedForSong(command, eventMeta);
     }
 }

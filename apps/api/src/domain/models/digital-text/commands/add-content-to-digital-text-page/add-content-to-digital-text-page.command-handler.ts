@@ -7,6 +7,7 @@ import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../types/ResourceType';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { DigitalText } from '../../entities';
 import { AddContentToDigitalTextPage } from './add-content-to-digital-text-page.command';
 import { ContentAddedToDigitalTextPage } from './content-added-to-digital-text-page.event';
@@ -35,9 +36,8 @@ export class AddContentToDigitalTextPageCommandHandler extends BaseUpdateCommand
 
     protected buildEvent(
         command: AddContentToDigitalTextPage,
-        eventId: string,
-        userId: string
+        eventMeta: EventRecordMetadata
     ): BaseEvent<ICommandBase> {
-        return new ContentAddedToDigitalTextPage(command, eventId, userId);
+        return new ContentAddedToDigitalTextPage(command, eventMeta);
     }
 }

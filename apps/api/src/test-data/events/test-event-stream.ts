@@ -1,5 +1,6 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
+import { v4 as uuidv4 } from 'uuid';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../domain/models/__tests__/utilities/dummyDateNow';
 import {
@@ -12,6 +13,7 @@ import {
 } from '../../domain/models/digital-text/commands/add-content-to-digital-text-page';
 import { ResourceReadAccessGrantedToUser } from '../../domain/models/shared/common-commands';
 import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
+import { EventRecordMetadata } from '../../domain/models/shared/events/types/EventRecordMetadata';
 import { TagCreated } from '../../domain/models/tag/commands/create-tag/tag-created.event';
 import {
     ResourceOrNoteTagged,
@@ -55,6 +57,22 @@ class DummyDateManager {
     }
 }
 
+class TestIdGenerator {
+    private currentId: number;
+
+    constructor(firstSequenceNumber = 1) {
+        this.currentId = firstSequenceNumber;
+    }
+
+    next() {
+        const id = buildDummyUuid(this.currentId);
+
+        this.currentId++;
+
+        return id;
+    }
+}
+
 const aggregateCompositeIdentifier = {
     type: AggregateType.digitalText,
     id: buildDummyUuid(1),
@@ -62,20 +80,30 @@ const aggregateCompositeIdentifier = {
 
 const dateManager = new DummyDateManager();
 
+const idGenerator = new TestIdGenerator(3000);
+
 export type EventPayloadOverrides<T extends BaseEvent> = DeepPartial<T['payload']>;
 
 export type EventTypeAndPayloadOverrides<T extends BaseEvent> = {
     type: T['type'];
-    payload: EventPayloadOverrides<T>;
+    payload?: EventPayloadOverrides<T>;
+    meta?: DeepPartial<EventRecordMetadata>;
 };
 
 const dummyQueryUserId = buildDummyUuid(4);
 
 const dummySystemUserId = buildDummyUuid(999);
 
+const buildEventMeta = (): EventRecordMetadata => ({
+    id: idGenerator.next(),
+    userId: dummySystemUserId,
+    dateCreated: dateManager.next(),
+});
+
 // TODO We need a helper for event-sourced test data setup
 const buildDigitalTextCreatedEvent = (
-    payloadOverrides: DeepPartial<DigitalTextCreated['payload']>
+    payloadOverrides: DeepPartial<DigitalTextCreated['payload']>,
+    metadataOverrides?: DeepPartial<EventRecordMetadata>
 ) => {
     const payloadWithOverridesApplied: DigitalTextCreated['payload'] =
         clonePlainObjectWithOverrides(
@@ -87,12 +115,10 @@ const buildDigitalTextCreatedEvent = (
             payloadOverrides
         );
 
-    return new DigitalTextCreated(
-        payloadWithOverridesApplied,
-        buildDummyUuid(2),
-        dummySystemUserId,
-        dateManager.next()
-    );
+    return new DigitalTextCreated(payloadWithOverridesApplied, {
+        ...buildEventMeta(),
+        ...(metadataOverrides || {}),
+    });
 };
 
 const buildResourceReadAccessGrantedToUserEvent = (
@@ -106,9 +132,7 @@ const buildResourceReadAccessGrantedToUserEvent = (
             } as ResourceReadAccessGrantedToUser['payload'],
             payloadOverrides
         ),
-        buildDummyUuid(3),
-        dummySystemUserId,
-        dateManager.next()
+        buildEventMeta()
     );
 
 const buildResourcePublishedEvent = (payloadOverrides: DeepPartial<ResourcePublished['payload']>) =>
@@ -119,9 +143,7 @@ const buildResourcePublishedEvent = (payloadOverrides: DeepPartial<ResourcePubli
             } as ResourcePublished['payload'],
             payloadOverrides
         ),
-        buildDummyUuid(5),
-        dummySystemUserId,
-        dateManager.next()
+        buildEventMeta()
     );
 
 const buildPageAddedEvent = (payloadOverrides: DeepPartial<PageAddedToDigitalText['payload']>) =>
@@ -133,9 +155,7 @@ const buildPageAddedEvent = (payloadOverrides: DeepPartial<PageAddedToDigitalTex
             } as PageAddedToDigitalText['payload'],
             payloadOverrides
         ),
-        buildDummyUuid(6),
-        dummySystemUserId,
-        dateManager.next()
+        buildEventMeta()
     );
 
 const buildTagCreatedEvent = (payloadOverrides: DeepPartial<TagCreated['payload']>) =>
@@ -150,13 +170,12 @@ const buildTagCreatedEvent = (payloadOverrides: DeepPartial<TagCreated['payload'
             } as TagCreated['payload'],
             payloadOverrides
         ),
-        buildDummyUuid(7),
-        dummySystemUserId,
-        dateManager.next()
+        buildEventMeta()
     );
 
 const buildReourceOrNoteTaggedEvent = (
-    payloadOverrides: DeepPartial<ResourceOrNoteTagged['payload']>
+    payloadOverrides: DeepPartial<ResourceOrNoteTagged['payload']>,
+    metadataOverrides: DeepPartial<EventRecordMetadata>
 ) => {
     const defaultPayload: ResourceOrNoteTaggedPayload = {
         aggregateCompositeIdentifier: {
@@ -172,14 +191,16 @@ const buildReourceOrNoteTaggedEvent = (
     return new ResourceOrNoteTagged(
         // TODO Why is this empty?
         clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
-        buildDummyUuid(8),
-        dummySystemUserId,
-        dateManager.next()
+        {
+            ...buildEventMeta(),
+            ...metadataOverrides,
+        }
     );
 };
 
 const buildContentAddedToDigitalTextPage = (
-    payloadOverrides: DeepPartial<ContentAddedToDigitalTextPagePayload>
+    payloadOverrides: DeepPartial<ContentAddedToDigitalTextPagePayload>,
+    metadataOverrides: DeepPartial<EventRecordMetadata>
 ) => {
     const defaultPayload: ContentAddedToDigitalTextPagePayload = {
         aggregateCompositeIdentifier: {
@@ -193,13 +214,17 @@ const buildContentAddedToDigitalTextPage = (
 
     return new ContentAddedToDigitalTextPage(
         clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
-        buildDummyUuid(9),
-        dummySystemUserId,
-        dateManager.next()
+        {
+            ...buildEventMeta(),
+            ...metadataOverrides,
+        }
     );
 };
 
-const buildTermCreated = (payloadOverrides: DeepPartial<TermCreatedPayload>) => {
+const buildTermCreated = (
+    payloadOverrides: DeepPartial<TermCreatedPayload>,
+    metadataOverrides: DeepPartial<EventRecordMetadata>
+) => {
     const defaultPayload: TermCreatedPayload = {
         aggregateCompositeIdentifier: {
             type: AggregateType.term,
@@ -211,15 +236,16 @@ const buildTermCreated = (payloadOverrides: DeepPartial<TermCreatedPayload>) => 
         contributorId: '1',
     };
 
-    return new TermCreated(
-        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
-        buildDummyUuid(10),
-        dummySystemUserId,
-        dateManager.next()
-    );
+    return new TermCreated(clonePlainObjectWithOverrides(defaultPayload, payloadOverrides), {
+        ...buildEventMeta(),
+        ...metadataOverrides,
+    });
 };
 
-const buildTermTranslated = (payloadOverrides: DeepPartial<TermTranslatedPayload>) => {
+const buildTermTranslated = (
+    payloadOverrides: DeepPartial<TermTranslatedPayload>,
+    metadataOverrides: DeepPartial<EventRecordMetadata>
+) => {
     const defaultPayload: TermTranslatedPayload = {
         aggregateCompositeIdentifier: {
             type: AggregateType.term,
@@ -229,15 +255,16 @@ const buildTermTranslated = (payloadOverrides: DeepPartial<TermTranslatedPayload
         languageCode: LanguageCode.English,
     };
 
-    return new TermTranslated(
-        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
-        buildDummyUuid(11),
-        dummySystemUserId,
-        dateManager.next()
-    );
+    return new TermTranslated(clonePlainObjectWithOverrides(defaultPayload, payloadOverrides), {
+        ...buildEventMeta(),
+        ...metadataOverrides,
+    });
 };
 
-const buildPromptTermCreated = (payloadOverrides: DeepPartial<PromptTermCreatedPayload>) => {
+const buildPromptTermCreated = (
+    payloadOverrides: DeepPartial<PromptTermCreatedPayload>,
+    metadataOverrides: DeepPartial<EventRecordMetadata>
+) => {
     const defaultPayload: PromptTermCreatedPayload = {
         aggregateCompositeIdentifier: {
             type: AggregateType.term,
@@ -246,16 +273,15 @@ const buildPromptTermCreated = (payloadOverrides: DeepPartial<PromptTermCreatedP
         text: 'how do you say, "sing to me"',
     };
 
-    return new PromptTermCreated(
-        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
-        buildDummyUuid(12),
-        dummySystemUserId,
-        dateManager.next()
-    );
+    return new PromptTermCreated(clonePlainObjectWithOverrides(defaultPayload, payloadOverrides), {
+        ...buildEventMeta(),
+        ...metadataOverrides,
+    });
 };
 
 const buildTermElicitedFromPrompt = (
-    payloadOverrides: DeepPartial<TermElicitedFromPromptPayload>
+    payloadOverrides: DeepPartial<TermElicitedFromPromptPayload>,
+    metadataOverrides: DeepPartial<EventRecordMetadata>
 ) => {
     const defaultPayload: TermElicitedFromPromptPayload = {
         aggregateCompositeIdentifier: {
@@ -268,13 +294,17 @@ const buildTermElicitedFromPrompt = (
 
     return new TermElicitedFromPrompt(
         clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
-        buildDummyUuid(13),
-        dummySystemUserId,
-        dateManager.next()
+        {
+            ...buildEventMeta(),
+            ...metadataOverrides,
+        }
     );
 };
 
-export type EventBuilder<T extends BaseEvent> = (payloadOverrides: EventPayloadOverrides<T>) => T;
+export type EventBuilder<T extends BaseEvent> = (
+    payloadOverrides: EventPayloadOverrides<T>,
+    metaOverrides: DeepPartial<EventRecordMetadata>
+) => T;
 
 export class TestEventStream {
     private readonly eventOverrides: EventTypeAndPayloadOverrides<BaseEvent>[];
@@ -337,23 +367,30 @@ export class TestEventStream {
      * breaking changes in the future, we take an object as the paramter here.
      */
     as({ id, type: aggregateType }: { id: AggregateId; type?: string }): BaseEvent[] {
-        return this.eventOverrides.map(({ type, payload: payloadOverrides }) => {
-            /**
-             * Note that we already have eagerly checked that there is a builder
-             * for each event type we've registered an event for.
-             */
-            const eventBuilder = this.eventBuilderMap.get(type);
+        return this.eventOverrides.map(
+            ({ type, payload: payloadOverrides, meta: metaOverrides }) => {
+                /**
+                 * Note that we already have eagerly checked that there is a builder
+                 * for each event type we've registered an event for.
+                 */
+                const eventBuilder = this.eventBuilderMap.get(type);
 
-            const identityOverrides = isNonEmptyString(aggregateType)
-                ? { id, type: aggregateType as AggregateType }
-                : { id };
+                const identityOverrides = isNonEmptyString(aggregateType)
+                    ? { id, type: aggregateType as AggregateType }
+                    : { id };
 
-            const overridesWithCustomId = clonePlainObjectWithOverrides(payloadOverrides, {
-                aggregateCompositeIdentifier: identityOverrides,
-            });
+                const overridesWithCustomId = clonePlainObjectWithOverrides(payloadOverrides, {
+                    aggregateCompositeIdentifier: identityOverrides,
+                });
 
-            return eventBuilder(overridesWithCustomId);
-        });
+                return eventBuilder(overridesWithCustomId, {
+                    // Here we avoid event ID collisions for events of the same type
+                    id: uuidv4(),
+                    // You can manually control the ID if necessary, though
+                    ...metaOverrides,
+                });
+            }
+        );
     }
 
     private registerBuilder<T extends BaseEvent>(

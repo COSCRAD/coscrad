@@ -6,6 +6,7 @@ import { InternalError } from '../../../../../lib/errors/InternalError';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { validAggregateOrThrow } from '../../../shared/functional';
 import { Playlist } from '../../entities';
 import { PlaylistItem } from '../../entities/playlist-item.entity';
@@ -50,9 +51,8 @@ export class ImportAudioItemsToPlaylistCommandHandler extends BaseUpdateCommandH
 
     protected buildEvent(
         command: ImportAudioItemsToPlaylist,
-        eventId: string,
-        userId: string
+        eventMeta: EventRecordMetadata
     ): BaseEvent {
-        return new AudioItemsImportedToPlaylist(command, eventId, userId);
+        return new AudioItemsImportedToPlaylist(command, eventMeta);
     }
 }

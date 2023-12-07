@@ -7,9 +7,14 @@ import {
     CreateTermCommandHandler,
     ElicitTermFromPrompt,
     ElicitTermFromPromptCommandHandler,
+    PromptTermCreated,
+    TermCreated,
+    TermElicitedFromPrompt,
+    TermTranslated,
     TranslateTerm,
     TranslateTermCommandHandler,
 } from '../../domain/models/term/commands';
+import { Term } from '../../domain/models/term/entities/term.entity';
 import { TermQueryService } from '../../domain/services/query-services/term-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { PersistenceModule } from '../../persistence/persistence.module';
@@ -27,7 +32,20 @@ import { TermController } from '../controllers/resources/term.controller';
         TranslateTermCommandHandler,
         ElicitTermFromPromptCommandHandler,
         // Data Classes
-        ...[CreateTerm, CreatePromptTerm, TranslateTerm, ElicitTermFromPrompt].map((ctor) => ({
+        ...[
+            // Domain Model
+            Term,
+            // Commands
+            CreateTerm,
+            CreatePromptTerm,
+            TranslateTerm,
+            ElicitTermFromPrompt,
+            // Events
+            TermCreated,
+            PromptTermCreated,
+            TermTranslated,
+            TermElicitedFromPrompt,
+        ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
         })),

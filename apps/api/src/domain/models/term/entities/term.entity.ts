@@ -12,6 +12,7 @@ import {
     MultilingualTextItem,
     MultilingualTextItemRole,
 } from '../../../common/entities/multilingual-text';
+import { AggregateRoot } from '../../../decorators';
 import { Valid, isValid } from '../../../domainModelValidators/Valid';
 import InvalidPublicationStatusError from '../../../domainModelValidators/errors/InvalidPublicationStatusError';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
@@ -23,7 +24,12 @@ import { Resource } from '../../resource.entity';
 import AggregateNotFoundError from '../../shared/common-command-errors/AggregateNotFoundError';
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
 import { BaseEvent } from '../../shared/events/base-event.entity';
-import { PromptTermCreated, TermCreated, TermElicitedFromPromptPayload, TermTranslatedPayload } from '../commands';
+import {
+    PromptTermCreated,
+    TermCreated,
+    TermElicitedFromPromptPayload,
+    TermTranslatedPayload,
+} from '../commands';
 import { CREATE_PROMPT_TERM, PROMPT_TERM_CREATED } from '../commands/create-prompt-term/constants';
 import { CREATE_TERM, TERM_CREATED } from '../commands/create-term/constants';
 import { TERM_ELICITED_FROM_PROMPT } from '../commands/elicit-term-from-prompt/constants';
@@ -32,6 +38,7 @@ import { CannotElicitTermWithoutPromptError, PromptLanguageMustBeUniqueError } f
 
 const isOptional = true;
 
+@AggregateRoot(AggregateType.term)
 @RegisterIndexScopedCommands([CREATE_TERM, CREATE_PROMPT_TERM])
 export class Term extends Resource {
     readonly type: ResourceType = ResourceType.term;
@@ -223,10 +230,12 @@ export class Term extends Resource {
                     .translate(translation, languageCode);
             }
 
-            if(nextEvent.isOfType(TERM_ELICITED_FROM_PROMPT)){
-                const {text,languageCode} = nextEvent.payload as TermElicitedFromPromptPayload;
+            if (nextEvent.isOfType(TERM_ELICITED_FROM_PROMPT)) {
+                const { text, languageCode } = nextEvent.payload as TermElicitedFromPromptPayload;
 
-           return accumulatedTerm.elicitFromPrompt(text,languageCode)
+                return accumulatedTerm
+                    .addEventToHistory(nextEvent)
+                    .elicitFromPrompt(text, languageCode);
             }
 
             // no event handler found for this event - no update
@@ -261,14 +270,16 @@ export class Term extends Resource {
         );
     }
 
-    private static createTermFromTermCreated({
-        payload: {
-            aggregateCompositeIdentifier: { id },
-            text,
-            languageCode,
-            contributorId,
-        },
-    }: TermCreated) {
+    private static createTermFromTermCreated(event: TermCreated) {
+        const {
+            payload: {
+                aggregateCompositeIdentifier: { id },
+                text,
+                languageCode,
+                contributorId,
+            },
+        } = event;
+
         return new Term({
             type: AggregateType.term,
             id,
@@ -276,15 +287,17 @@ export class Term extends Resource {
             contributorId,
             // Terms are not published by default
             published: false,
-        });
+        }).addEventToHistory(event);
     }
 
-    private static createTermFromPromptTermCreated({
-        payload: {
-            aggregateCompositeIdentifier: { id },
-            text,
-        },
-    }: PromptTermCreated): Term {
+    private static createTermFromPromptTermCreated(event: PromptTermCreated): Term {
+        const {
+            payload: {
+                aggregateCompositeIdentifier: { id },
+                text,
+            },
+        } = event;
+
         return new Term({
             type: AggregateType.term,
             id,
@@ -293,6 +306,6 @@ export class Term extends Resource {
             isPromptTerm: true,
             // terms are not published by default
             published: false,
-        });
+        }).addEventToHistory(event);
     }
 }

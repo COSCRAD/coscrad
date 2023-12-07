@@ -15,6 +15,7 @@ import { InMemorySnapshot, isResourceType } from '../../../../types/ResourceType
 import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { Tag } from '../../tag.entity';
 import { ResourceOrNoteTagged } from './resource-or-note-tagged.event';
 import { TagResourceOrNote } from './tag-resource-or-note.command';
@@ -111,7 +112,7 @@ export class TagResourceOrNoteCommandHandler extends BaseUpdateCommandHandler<Ta
             : Valid;
     }
 
-    protected buildEvent(command: TagResourceOrNote, eventId: string, userId: string): BaseEvent {
-        return new ResourceOrNoteTagged(command, eventId, userId);
+    protected buildEvent(command: TagResourceOrNote, eventMeta: EventRecordMetadata): BaseEvent {
+        return new ResourceOrNoteTagged(command, eventMeta);
     }
 }

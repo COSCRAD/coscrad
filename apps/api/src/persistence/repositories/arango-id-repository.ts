@@ -64,6 +64,7 @@ export class ArangoIdRepository implements IIdRepository {
     async create(id: AggregateId): Promise<void> {
         const databaseDocument = mapUuidDocumentToDatabaseDocument({
             id,
+            // we need to be consistent with dates
             timeGenerated: new Date().toISOString(),
             // TODO fix types- there's no sequence number yet on creation
         } as UuidDocument);

@@ -6,6 +6,7 @@ import { DeluxeInMemoryStore } from '../../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../../types/ResourceType';
 import { BaseUpdateCommandHandler } from '../../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../../shared/events/types/EventRecordMetadata';
 import { TranscribableResource } from '../add-line-item-to-transcript';
 import { LineItemTranslated } from './line-item-translated';
 import { TranslateLineItem } from './translate-line-item.command';
@@ -35,7 +36,7 @@ export class TranslateLineItemCommandHandler extends BaseUpdateCommandHandler<Tr
         return Valid;
     }
 
-    protected buildEvent(command: TranslateLineItem, eventId: string, userId: string): BaseEvent {
-        return new LineItemTranslated(command, eventId, userId);
+    protected buildEvent(command: TranslateLineItem, eventMeta: EventRecordMetadata): BaseEvent {
+        return new LineItemTranslated(command, eventMeta);
     }
 }

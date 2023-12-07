@@ -5,8 +5,12 @@ import { DTO } from '../../../../types/DTO';
 import { AggregateId } from '../../../types/AggregateId';
 import { EventRecordMetadata } from './types/EventRecordMetadata';
 
+export interface IEventPayload {
+    aggregateCompositeIdentifier: AggregateId;
+}
+
 export abstract class BaseEvent<
-    // TODO Declare an IEventBase with `aggregateCompositeIdentifier` on it
+    // TODO Do this. Declare a Payload interface with `aggregateCompositeIdentifier` on it
     TPayload extends ICommandBase = ICommandBase
 > {
     abstract type: string;
@@ -17,16 +21,14 @@ export abstract class BaseEvent<
 
     constructor(
         command: TPayload,
-        eventId: AggregateId,
-        systemUserId: AggregateId,
-        timestamp?: number
+        { id: eventId, dateCreated: timestamp, userId }: EventRecordMetadata // eventId: AggregateId, // systemUserId: AggregateId, // timestamp?: number
     ) {
         this.payload = cloneToPlainObject(command);
 
         this.meta = {
             dateCreated: timestamp || Date.now(),
             id: eventId,
-            userId: systemUserId,
+            userId,
         };
     }
 

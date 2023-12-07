@@ -1,6 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
+import { dummyDateNow } from '../../../domain/models/__tests__/utilities/dummyDateNow';
 import { dummySystemUserId } from '../../../domain/models/__tests__/utilities/dummySystemUserId';
 import { Resource } from '../../../domain/models/resource.entity';
 import { ResourcePublished } from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event';
@@ -113,8 +114,11 @@ describe('When fetching multiple resources', () => {
                                             type: AggregateType.song,
                                         },
                                     },
-                                    buildDummyUuid(100 + index),
-                                    dummySystemUserId
+                                    {
+                                        id: buildDummyUuid(100 + index),
+                                        userId: dummySystemUserId,
+                                        dateCreated: dummyDateNow,
+                                    }
                                 )
                         );
 
@@ -204,8 +208,11 @@ describe('When fetching multiple resources', () => {
                                             type: AggregateType.song,
                                         },
                                     },
-                                    buildDummyUuid(100 + index),
-                                    dummySystemUserId
+                                    {
+                                        id: buildDummyUuid(100 + index),
+                                        userId: dummySystemUserId,
+                                        dateCreated: dummyDateNow,
+                                    }
                                 )
                         );
 

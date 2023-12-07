@@ -14,6 +14,7 @@ import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { validAggregateOrThrow } from '../../../shared/functional';
 import { Playlist } from '../../entities';
 import { PlaylistItem } from '../../entities/playlist-item.entity';
@@ -64,9 +65,8 @@ export class AddAudioItemToPlaylistCommandHandler extends BaseUpdateCommandHandl
 
     protected buildEvent(
         command: AddAudioItemToPlaylist,
-        eventId: string,
-        userId: string
+        eventMeta: EventRecordMetadata
     ): BaseEvent {
-        return new AudioItemAddedToPlaylist(command, eventId, userId);
+        return new AudioItemAddedToPlaylist(command, eventMeta);
     }
 }

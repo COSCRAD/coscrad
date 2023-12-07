@@ -9,6 +9,7 @@ import formatAggregateCompositeIdentifier from '../../../../../queries/presentat
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { Term } from '../../../term/entities/term.entity';
 import { VocabularyList } from '../../entities/vocabulary-list.entity';
 import { AddTermToVocabularyList } from './add-term-to-vocabulary-list.command';
@@ -59,9 +60,8 @@ export class AddTermtoVocabularyListCommandHandler extends BaseUpdateCommandHand
 
     protected buildEvent(
         command: AddTermToVocabularyList,
-        eventId: string,
-        userId: string
+        eventMeta: EventRecordMetadata
     ): BaseEvent {
-        return new TermAddedToVocabularyList(command, eventId, userId);
+        return new TermAddedToVocabularyList(command, eventMeta);
     }
 }

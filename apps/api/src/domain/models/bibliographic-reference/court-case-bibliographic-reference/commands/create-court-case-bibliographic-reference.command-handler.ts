@@ -9,6 +9,7 @@ import { IRepositoryForAggregate } from '../../../../repositories/interfaces/rep
 import { IRepositoryProvider } from '../../../../repositories/interfaces/repository-provider.interface';
 import { ResourceType } from '../../../../types/ResourceType';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { BaseCreateBibliographicReference } from '../../common/commands/base-create-bibliographic-reference.command-handler';
 import { BibliographicReferenceType } from '../../types/BibliographicReferenceType';
 import { CourtCaseBibliographicReference } from '../entities/court-case-bibliographic-reference.entity';
@@ -63,9 +64,8 @@ export class CreateCourtCaseBibliographicReferenceCommandHandler extends BaseCre
 
     protected buildEvent(
         command: CreateCourtCaseBibliographicReference,
-        eventId: string,
-        userId: string
+        eventMeta: EventRecordMetadata
     ): BaseEvent {
-        return new CourtCaseBibliographicReferenceCreated(command, eventId, userId);
+        return new CourtCaseBibliographicReferenceCreated(command, eventMeta);
     }
 }

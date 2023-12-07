@@ -6,6 +6,7 @@ import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../types/ResourceType';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { Term } from '../../entities/term.entity';
 import { TermTranslated } from './term-translated.event';
 import { TranslateTerm } from './translate-term.command';
@@ -30,7 +31,7 @@ export class TranslateTermCommandHandler extends BaseUpdateCommandHandler<Term> 
         return Valid;
     }
 
-    protected buildEvent(command: TranslateTerm, eventId: string, userId: string): BaseEvent {
-        return new TermTranslated(command, eventId, userId);
+    protected buildEvent(command: TranslateTerm, eventMeta: EventRecordMetadata): BaseEvent {
+        return new TermTranslated(command, eventMeta);
     }
 }

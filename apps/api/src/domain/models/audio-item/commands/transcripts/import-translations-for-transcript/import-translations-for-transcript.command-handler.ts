@@ -8,6 +8,7 @@ import { ResultOrError } from '../../../../../../types/ResultOrError';
 import { Resource } from '../../../../resource.entity';
 import { BaseUpdateCommandHandler } from '../../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../../shared/events/types/EventRecordMetadata';
 import { ITranscribable } from '../../../entities/transcribable.mixin';
 import { ImportTranslationsForTranscript } from './import-translations-for-transcript.command';
 import { TranslationsImportedForTranscript } from './translations-imported-for-transcript.event';
@@ -41,9 +42,8 @@ export class ImportTranslationsForTranscriptCommandHandler extends BaseUpdateCom
 
     protected buildEvent(
         command: ImportTranslationsForTranscript,
-        eventId: string,
-        userId: string
+        eventMeta: EventRecordMetadata
     ): BaseEvent<ICommandBase> {
-        return new TranslationsImportedForTranscript(command, eventId, userId);
+        return new TranslationsImportedForTranscript(command, eventMeta);
     }
 }
