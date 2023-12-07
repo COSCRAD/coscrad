@@ -238,6 +238,10 @@ export class Term extends Resource {
                     .elicitFromPrompt(text, languageCode);
             }
 
+            if (nextEvent.isOfType(`RESOURCE_PUBLISHED`)) {
+                return accumulatedTerm.addEventToHistory(nextEvent).publish();
+            }
+
             // no event handler found for this event - no update
             return accumulatedTerm;
         }, initialTerm);

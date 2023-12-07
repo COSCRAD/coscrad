@@ -1,8 +1,9 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { NotFound } from '../../../../lib/types/not-found';
 import { TestEventStream } from '../../../../test-data/events/test-event-stream';
 import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import { ResourcePublished } from '../../shared/common-commands/publish-resource/resource-published.event';
 import {
     PromptTermCreated,
     TermCreated,
@@ -96,6 +97,25 @@ describe(`Term.fromEventHistory`, () => {
                     expect(foundTranslationText).toBe(translationText);
                 });
             });
+
+            describe(`When a translated term is pulbished`, () => {
+                it(`should return the appropriate term`, () => {
+                    const result = Term.fromEventHistory(
+                        termTranslated
+                            .andThen<ResourcePublished>({
+                                type: `RESOURCE_PUBLISHED`,
+                            })
+                            .as({ type: AggregateType.term, id: termId }),
+                        termId
+                    );
+
+                    expect(result).toBeInstanceOf(Term);
+
+                    const updatedTerm = result as Term;
+
+                    expect(updatedTerm.published).toBe(true);
+                });
+            });
         });
 
         describe(`when the term is a prompt term`, () => {
@@ -146,6 +166,24 @@ describe(`Term.fromEventHistory`, () => {
                     expect(foundText).toBe(elicitedPromptTranslationText);
 
                     expect(foundLanguageCode).toBe(elicitationLanguageCode);
+                });
+            });
+
+            describe(`When a prompted term is pulbished`, () => {
+                it(`should return the appropriate term`, () => {
+                    const publishTermEvents = termElicitedFromPrompt
+                        .andThen<ResourcePublished>({
+                            type: `RESOURCE_PUBLISHED`,
+                        })
+                        .as({ type: AggregateType.term, id: termId });
+
+                    const result = Term.fromEventHistory(publishTermEvents, termId);
+
+                    expect(result).toBeInstanceOf(Term);
+
+                    const updatedTerm = result as Term;
+
+                    expect(updatedTerm.published).toBe(true);
                 });
             });
         });

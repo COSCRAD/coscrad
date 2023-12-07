@@ -379,15 +379,18 @@ export class TestEventStream {
                     ? { id, type: aggregateType as AggregateType }
                     : { id };
 
-                const overridesWithCustomId = clonePlainObjectWithOverrides(payloadOverrides, {
-                    aggregateCompositeIdentifier: identityOverrides,
-                });
+                const overridesWithCustomId = clonePlainObjectWithOverrides(
+                    payloadOverrides || {},
+                    {
+                        aggregateCompositeIdentifier: identityOverrides,
+                    }
+                );
 
                 return eventBuilder(overridesWithCustomId, {
                     // Here we avoid event ID collisions for events of the same type
                     id: uuidv4(),
                     // You can manually control the ID if necessary, though
-                    ...metaOverrides,
+                    ...(metaOverrides || {}),
                 });
             }
         );

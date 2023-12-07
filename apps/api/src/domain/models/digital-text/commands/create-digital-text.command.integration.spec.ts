@@ -155,7 +155,7 @@ describe('CreateDigitalText', () => {
      * of using the generated ID as part of the initial state.
      */
     describe('when the external state is invalid', () => {
-        describe.only(`when there is already a digital text with the same title`, () => {
+        describe(`when there is already a digital text with the same title`, () => {
             it(`should fail with the expected errors`, async () => {
                 await assertCreateCommandError(assertionHelperDependencies, {
                     systemUserId: dummySystemUserId,
@@ -171,9 +171,11 @@ describe('CreateDigitalText', () => {
 
                         const creationEventForDigitalTextWithSameTitle = new DigitalTextCreated(
                             creationCommand,
-                            buildDummyUuid(111),
-                            dummySystemUserId,
-                            dummyDateNow
+                            {
+                                id: buildDummyUuid(111),
+                                userId: dummySystemUserId,
+                                dateCreated: dummyDateNow,
+                            }
                         );
 
                         await app
