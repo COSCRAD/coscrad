@@ -77,6 +77,9 @@ describe('When fetching multiple resources', () => {
 
         // TODO add standalone query test for song
         AggregateType.song,
+        AggregateType.term,
+        // Not event sourced, but depends on terms
+        AggregateType.vocabularyList,
     ];
 
     Object.values(ResourceType)

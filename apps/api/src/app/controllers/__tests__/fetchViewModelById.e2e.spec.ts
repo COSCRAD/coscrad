@@ -48,6 +48,9 @@ describe('GET  (fetch view models)', () => {
 
         //TODO write standalone query test
         ResourceType.song,
+        ResourceType.term,
+        // not yet event sourced, but depends on term
+        ResourceType.vocabularyList,
     ];
 
     const testDataWithAllResourcesPublished = Object.entries(resourceTestData).reduce(
