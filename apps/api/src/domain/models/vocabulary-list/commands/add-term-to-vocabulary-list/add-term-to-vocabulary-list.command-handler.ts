@@ -16,7 +16,7 @@ import { AddTermToVocabularyList } from './add-term-to-vocabulary-list.command';
 import { TermAddedToVocabularyList } from './term-added-to-vocabulary-list.event';
 
 @CommandHandler(AddTermToVocabularyList)
-export class AddTermtoVocabularyListCommandHandler extends BaseUpdateCommandHandler<VocabularyList> {
+export class AddTermToVocabularyListCommandHandler extends BaseUpdateCommandHandler<VocabularyList> {
     protected actOnInstance(
         vocabularyListToUpdate: VocabularyList,
         { termId }: AddTermToVocabularyList

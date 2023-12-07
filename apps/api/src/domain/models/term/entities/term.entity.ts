@@ -3,6 +3,7 @@ import { BooleanDataType, NestedDataType, NonEmptyString } from '@coscrad/data-t
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
+import { NotFound } from '../../../../lib/types/not-found';
 import formatAggregateCompositeIdentifier from '../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
@@ -21,7 +22,6 @@ import { ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import { TextFieldContext } from '../../context/text-field-context/text-field-context.entity';
 import { Resource } from '../../resource.entity';
-import AggregateNotFoundError from '../../shared/common-command-errors/AggregateNotFoundError';
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import {
@@ -212,7 +212,7 @@ export class Term extends Resource {
         const eventsForThisTerm = eventStream.filter((event) => event.isFor(compositeIdentifier));
 
         if (eventsForThisTerm.length === 0) {
-            return new AggregateNotFoundError(compositeIdentifier);
+            return NotFound;
         }
 
         const [creationEvent, ...updateEvents] = eventsForThisTerm;

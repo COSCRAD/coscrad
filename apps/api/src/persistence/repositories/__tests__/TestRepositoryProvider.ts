@@ -1,7 +1,6 @@
 import { CoscradEventFactory } from '../../../domain/common';
 import { Category } from '../../../domain/models/categories/entities/category.entity';
 import { Resource } from '../../../domain/models/resource.entity';
-import { DeluxeInMemoryStore } from '../../../domain/types/DeluxeInMemoryStore';
 import {
     InMemorySnapshot,
     InMemorySnapshotOfResources,
@@ -62,9 +61,12 @@ export default class TestRepositoryProvider extends ArangoRepositoryProvider {
 
         await this.getUserGroupRepository().createMany(userGroups);
 
-        const allEvents = new DeluxeInMemoryStore(snapshot).fetchEvents();
+        /**
+         * Currently, this is done by `createMany` via `create`.
+         */
+        // const allEvents = new DeluxeInMemoryStore(snapshot).fetchEvents();
 
-        await this.getEventRepository().appendEvents(allEvents);
+        // await this.getEventRepository().appendEvents(allEvents);
     }
 
     // TODO fix types

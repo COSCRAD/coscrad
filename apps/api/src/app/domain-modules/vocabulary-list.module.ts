@@ -2,7 +2,7 @@ import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
 import {
     AddTermToVocabularyList,
-    AddTermtoVocabularyListCommandHandler,
+    AddTermToVocabularyListCommandHandler,
     CreateVocabularyList,
     CreateVocabularyListCommandHandler,
     RegisterVocabularyListFilterProperty,
@@ -26,7 +26,7 @@ import { VocabularyListController } from '../controllers/resources/vocabulary-li
         VocabularyListQueryService,
         CreateVocabularyListCommandHandler,
         TranslateVocabularyListNameCommandHandler,
-        AddTermtoVocabularyListCommandHandler,
+        AddTermToVocabularyListCommandHandler,
         RegisterVocabularyListFilterPropertyCommandHandler,
         // Data Classes
         ...[

@@ -158,7 +158,7 @@ import {
 } from '../../../domain/models/video';
 import {
     AddTermToVocabularyList,
-    AddTermtoVocabularyListCommandHandler,
+    AddTermToVocabularyListCommandHandler,
     AnalyzeTermInVocabularyList,
     AnalyzeTermInVocabularyListCommandHandler,
     CreateVocabularyList,
@@ -628,7 +628,7 @@ export default async (
             RegisterVocabularyListFilterProperty,
             RegisterVocabularyListFilterPropertyCommandHandler,
             AddTermToVocabularyList,
-            AddTermtoVocabularyListCommandHandler,
+            AddTermToVocabularyListCommandHandler,
             AnalyzeTermInVocabularyList,
             AnalyzeTermInVocabularyListCommandHandler,
             TranslateVideoName,

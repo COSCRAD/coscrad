@@ -66,6 +66,21 @@ describe(`CoscradEventFactory`, () => {
                 // Note that currently, we simply copy the command payload across to the event
                 expect(instance.payload).toEqual(dummyCreateWidgetCommand);
             });
+
+            it(`should set the metadata`, async () => {
+                // @ts-expect-error TODO Use Jest mocks for this
+                const coscradEventFactory = new CoscradEventFactory(mockDataFinderService);
+
+                const instance = await coscradEventFactory.build(widgetCreatedDto);
+
+                const { id, userId, dateCreated } = instance.meta;
+
+                expect(id).toBe(eventId);
+
+                expect(userId).toBe(userId);
+
+                expect(dateCreated).toBe(dummyDateNow);
+            });
         });
     });
 });

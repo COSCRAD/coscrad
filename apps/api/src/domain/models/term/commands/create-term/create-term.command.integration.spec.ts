@@ -1,3 +1,4 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
@@ -8,7 +9,7 @@ import { ArangoDatabaseProvider } from '../../../../../persistence/database/data
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestCommandFsaMap } from '../../../../../test-data/commands';
-import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
+import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
@@ -24,6 +25,7 @@ import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { Term } from '../../entities/term.entity';
+import { buildTestTerm } from '../../test-data/build-test-term';
 import { CreateTerm } from './create-term.command';
 
 const commandType = `CREATE_TERM`;
@@ -106,16 +108,25 @@ describe(commandType, () => {
 
     describe(`when the command is invalid`, () => {
         describe(`when there is already a term with the given ID`, () => {
-            it.only(`should return the expected error`, async () => {
+            it(`should return the expected error`, async () => {
                 const newId = await idManager.generate();
 
                 const validCommandFSA = buildValidCommandFSA(newId);
 
+                const existingTerm = buildTestTerm({
+                    aggregateCompositeIdentifier: {
+                        id: newId,
+                    },
+                    isPromptTerm: false,
+                    text: buildMultilingualTextWithSingleItem(
+                        'test word (in language)',
+                        LanguageCode.Chilcotin
+                    ),
+                });
+
                 await testRepositoryProvider.addFullSnapshot(
                     new DeluxeInMemoryStore({
-                        [AggregateType.term]: [
-                            getValidAggregateInstanceForTest(AggregateType.term),
-                        ],
+                        [AggregateType.term]: [existingTerm],
                     }).fetchFullSnapshotInLegacyFormat()
                 );
 

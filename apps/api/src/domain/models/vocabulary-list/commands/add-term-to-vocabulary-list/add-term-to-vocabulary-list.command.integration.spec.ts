@@ -1,4 +1,4 @@
-import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode, ResourceType } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
@@ -12,6 +12,7 @@ import { ArangoDatabaseProvider } from '../../../../../persistence/database/data
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestCommandFsaMap } from '../../../../../test-data/commands';
+import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
@@ -23,6 +24,7 @@ import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserI
 import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
+import { buildTestTerm } from '../../../term/test-data/build-test-term';
 import { VocabularyList } from '../../entities/vocabulary-list.entity';
 import { CannotAddMultipleEntriesForSingleTermError } from '../../errors';
 import { AddTermToVocabularyList } from './add-term-to-vocabulary-list.command';
@@ -36,7 +38,15 @@ const existingVocabularyList = getValidAggregateInstanceForTest(AggregateType.vo
     }
 );
 
-const existingTerm = getValidAggregateInstanceForTest(AggregateType.term);
+const existingTerm = buildTestTerm({
+    aggregateCompositeIdentifier: {
+        id: buildDummyUuid(111),
+    },
+    text: buildMultilingualTextWithSingleItem('term in list', LanguageCode.Chilcotin),
+    isPromptTerm: false,
+});
+
+getValidAggregateInstanceForTest(AggregateType.term);
 
 const dummyFsa = buildTestCommandFsaMap().get(commandType) as CommandFSA<AddTermToVocabularyList>;
 
@@ -197,6 +207,7 @@ describe(commandType, () => {
             });
         });
 
+        // TODO Break this out to a standalone test that doesn't use the network
         describe(`when the command payload has an invalid type`, () => {
             describe(`when the aggregate type is invalid`, () => {
                 Object.values(AggregateType)
