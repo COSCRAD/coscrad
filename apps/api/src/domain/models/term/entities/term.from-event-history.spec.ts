@@ -3,6 +3,10 @@ import { NotFound } from '../../../../lib/types/not-found';
 import { TestEventStream } from '../../../../test-data/events/test-event-stream';
 import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import {
+    RESOURCE_READ_ACCESS_GRANTED_TO_USER,
+    ResourceReadAccessGrantedToUser,
+} from '../../shared/common-commands';
 import { ResourcePublished } from '../../shared/common-commands/publish-resource/resource-published.event';
 import {
     PromptTermCreated,
@@ -62,6 +66,8 @@ const termElicitedFromPrompt = promptTermCreated.andThen<TermElicitedFromPrompt>
     },
 });
 
+const userId = buildDummyUuid(777);
+
 describe(`Term.fromEventHistory`, () => {
     describe(`when the event history is valid`, () => {
         describe(`when the term is an ordinary term (not a prompt term)`, () => {
@@ -114,6 +120,30 @@ describe(`Term.fromEventHistory`, () => {
                     const updatedTerm = result as Term;
 
                     expect(updatedTerm.published).toBe(true);
+                });
+            });
+
+            describe(`when granting read access to a user`, () => {
+                it(`should allow the user access`, () => {
+                    const accessGrantedEvents = termTranslated
+                        .andThen<ResourceReadAccessGrantedToUser>({
+                            type: RESOURCE_READ_ACCESS_GRANTED_TO_USER,
+                            payload: {
+                                userId,
+                            },
+                        })
+                        .as({
+                            type: AggregateType.term,
+                            id: termId,
+                        });
+
+                    const result = Term.fromEventHistory(accessGrantedEvents, termId);
+
+                    expect(result).toBeInstanceOf(Term);
+
+                    const term = result as Term;
+
+                    expect(term.queryAccessControlList.canUser(userId)).toBe(true);
                 });
             });
         });
@@ -184,6 +214,30 @@ describe(`Term.fromEventHistory`, () => {
                     const updatedTerm = result as Term;
 
                     expect(updatedTerm.published).toBe(true);
+                });
+            });
+
+            describe(`when granting read access to a user`, () => {
+                it(`should allow the user access`, () => {
+                    const accessGrantedEvents = termElicitedFromPrompt
+                        .andThen<ResourceReadAccessGrantedToUser>({
+                            type: RESOURCE_READ_ACCESS_GRANTED_TO_USER,
+                            payload: {
+                                userId,
+                            },
+                        })
+                        .as({
+                            type: AggregateType.term,
+                            id: termId,
+                        });
+
+                    const result = Term.fromEventHistory(accessGrantedEvents, termId);
+
+                    expect(result).toBeInstanceOf(Term);
+
+                    const term = result as Term;
+
+                    expect(term.queryAccessControlList.canUser(userId)).toBe(true);
                 });
             });
         });

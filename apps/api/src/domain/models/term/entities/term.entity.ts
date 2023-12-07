@@ -22,6 +22,10 @@ import { ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import { TextFieldContext } from '../../context/text-field-context/text-field-context.entity';
 import { Resource } from '../../resource.entity';
+import {
+    RESOURCE_READ_ACCESS_GRANTED_TO_USER,
+    ResourceReadAccessGrantedToUserPayload,
+} from '../../shared/common-commands';
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import {
@@ -240,6 +244,12 @@ export class Term extends Resource {
 
             if (nextEvent.isOfType(`RESOURCE_PUBLISHED`)) {
                 return accumulatedTerm.addEventToHistory(nextEvent).publish();
+            }
+
+            if (nextEvent.isOfType(RESOURCE_READ_ACCESS_GRANTED_TO_USER)) {
+                const { userId } = nextEvent.payload as ResourceReadAccessGrantedToUserPayload;
+
+                return accumulatedTerm.addEventToHistory(nextEvent).grantReadAccessToUser(userId);
             }
 
             // no event handler found for this event - no update
