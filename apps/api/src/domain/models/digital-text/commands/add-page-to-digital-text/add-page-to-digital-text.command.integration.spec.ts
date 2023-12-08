@@ -20,6 +20,7 @@ import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/a
 import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { dummyDateNow } from '../../../__tests__/utilities/dummyDateNow';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
@@ -47,8 +48,7 @@ const createExistingDigitalTextFsa = clonePlainObjectWithOverrides(dummyCreateDi
 
 const creationEventForExistingDigitalText = new DigitalTextCreated(
     createExistingDigitalTextFsa.payload,
-    buildDummyUuid(2),
-    dummySystemUserId
+    { id: buildDummyUuid(2), userId: dummySystemUserId, dateCreated: dummyDateNow }
 );
 
 const existingPageIdentifier = '12';
@@ -62,9 +62,8 @@ const addPageCommand: AddPageToDigitalText = {
 
 const existingPageAddedEvent = new PageAddedToDigitalText(
     addPageCommand,
-    buildDummyUuid(3),
-    dummySystemUserId
-    // TODO use timestamps
+    { id: buildDummyUuid(3), userId: dummySystemUserId, dateCreated: dummyDateNow + 1 }
+    // TODO use dummy date manager
 );
 
 const validPayload: AddPageToDigitalText = {

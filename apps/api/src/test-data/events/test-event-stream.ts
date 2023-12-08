@@ -14,6 +14,16 @@ import {
 import { ResourceReadAccessGrantedToUser } from '../../domain/models/shared/common-commands';
 import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import { EventRecordMetadata } from '../../domain/models/shared/events/types/EventRecordMetadata';
+import {
+    LyricsAddedForSong,
+    LyricsAddedForSongPayload,
+    SongCreated,
+    SongCreatedPayload,
+    SongLyricsTranslated,
+    SongLyricsTranslatedPayload,
+    SongTitleTranslated,
+    SongTitleTranslatedPayload,
+} from '../../domain/models/song/commands';
 import { TagCreated } from '../../domain/models/tag/commands/create-tag/tag-created.event';
 import {
     ResourceOrNoteTagged,
@@ -301,6 +311,89 @@ const buildTermElicitedFromPrompt = (
     );
 };
 
+const buildSongCreated = (
+    payloadOverrides: DeepPartial<SongCreatedPayload>,
+    metadataOverrides: DeepPartial<EventRecordMetadata>
+) => {
+    const defaultPayload: SongCreatedPayload = {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.song,
+            id: buildDummyUuid(567),
+        },
+        title: 'song title',
+        languageCodeForTitle: LanguageCode.Haida,
+        audioItemId: buildDummyUuid(577),
+    };
+
+    return new SongCreated(clonePlainObjectWithOverrides(defaultPayload, payloadOverrides), {
+        ...buildEventMeta(),
+        ...metadataOverrides,
+    });
+};
+
+const buildSongTitleTranslated = (
+    payloadOverrides: DeepPartial<SongTitleTranslatedPayload>,
+    metadataOverrides: DeepPartial<EventRecordMetadata>
+) => {
+    const defaultPayload: SongTitleTranslatedPayload = {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.song,
+            id: buildDummyUuid(567),
+        },
+        translation: 'translation of song title',
+        languageCode: LanguageCode.English,
+    };
+
+    return new SongTitleTranslated(
+        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        {
+            ...buildEventMeta(),
+            ...metadataOverrides,
+        }
+    );
+};
+
+const buildLyricsAddedForSong = (
+    payloadOverrides: DeepPartial<LyricsAddedForSongPayload>,
+    metadataOverrides: DeepPartial<EventRecordMetadata>
+) => {
+    const defaultPayload: LyricsAddedForSongPayload = {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.song,
+            id: buildDummyUuid(567),
+        },
+        lyrics: 'la la la',
+        languageCode: LanguageCode.Haida,
+    };
+
+    return new LyricsAddedForSong(clonePlainObjectWithOverrides(defaultPayload, payloadOverrides), {
+        ...buildEventMeta(),
+        ...metadataOverrides,
+    });
+};
+
+const buildSongLyricsTranslated = (
+    payloadOverrides: DeepPartial<SongLyricsTranslatedPayload>,
+    metadataOverrides: DeepPartial<EventRecordMetadata>
+) => {
+    const defaultPayload: SongLyricsTranslatedPayload = {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.song,
+            id: buildDummyUuid(567),
+        },
+        translation: 'la la la (translation)',
+        languageCode: LanguageCode.English,
+    };
+
+    return new SongLyricsTranslated(
+        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        {
+            ...buildEventMeta(),
+            ...metadataOverrides,
+        }
+    );
+};
+
 export type EventBuilder<T extends BaseEvent> = (
     payloadOverrides: EventPayloadOverrides<T>,
     metaOverrides: DeepPartial<EventRecordMetadata>
@@ -335,7 +428,11 @@ export class TestEventStream {
             .registerBuilder(TERM_CREATED, buildTermCreated)
             .registerBuilder(TERM_TRANSLATED, buildTermTranslated)
             .registerBuilder(PROMPT_TERM_CREATED, buildPromptTermCreated)
-            .registerBuilder(TERM_ELICITED_FROM_PROMPT, buildTermElicitedFromPrompt);
+            .registerBuilder(TERM_ELICITED_FROM_PROMPT, buildTermElicitedFromPrompt)
+            .registerBuilder(`SONG_CREATED`, buildSongCreated)
+            .registerBuilder(`SONG_TITLE_TRANSLATED`, buildSongTitleTranslated)
+            .registerBuilder(`LYRICS_ADDED_FOR_SONG`, buildLyricsAddedForSong)
+            .registerBuilder(`SONG_LYRICS_TRANSLATED`, buildSongLyricsTranslated);
     }
 
     andThen<T extends BaseEvent>(

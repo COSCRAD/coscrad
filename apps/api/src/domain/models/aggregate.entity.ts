@@ -58,10 +58,17 @@ export abstract class Aggregate extends BaseDomainModel implements HasAggregateI
             : [];
     }
 
-    getCompositeIdentifier = (): AggregateCompositeIdentifier => ({
-        type: this.type,
-        id: this.id,
-    });
+    getCompositeIdentifier<T extends Aggregate>(
+        this: T
+    ): {
+        type: T['type'];
+        id: AggregateId;
+    } {
+        return {
+            type: this.type,
+            id: this.id,
+        };
+    }
 
     public safeClone<T extends Aggregate>(
         this: T,
