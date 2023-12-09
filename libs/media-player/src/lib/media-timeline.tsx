@@ -228,7 +228,8 @@ export const MediaTimeline = ({
                                     width={scrolledTrackLength}
                                     height={trackHeight}
                                     mediaDuration={mediaDuration}
-                                    timeRangeSelection={timeRangeSelection}
+                                    selectionStartMilliseconds={selectionStartMilliseconds}
+                                    selectionEndMilliseconds={selectionEndMilliseconds}
                                 />
                             ))}
                         </ScrolledTracksBox>

@@ -1,5 +1,4 @@
 import { styled } from '@mui/material';
-import { TimeRangeSelection } from './audio-annotator-prototype';
 import { RangeBar } from './media-range-bar';
 
 const WAVE_FORM_URL = 'https://guujaaw.info/images/audio-wave-form.png';
@@ -24,17 +23,17 @@ interface TrackProps {
     width: number;
     height: number;
     mediaDuration: number;
-    timeRangeSelection: TimeRangeSelection;
+    selectionStartMilliseconds: number;
+    selectionEndMilliseconds: number;
 }
 
 export const Track = ({
     width,
     height,
     mediaDuration,
-    timeRangeSelection,
+    selectionStartMilliseconds,
+    selectionEndMilliseconds,
 }: TrackProps): JSX.Element => {
-    const { inPointMilliseconds, outPointMilliseconds } = timeRangeSelection;
-
     return (
         <TrackBox
             sx={{
@@ -43,10 +42,10 @@ export const Track = ({
             }}
         >
             <RangeBar
-                key={inPointMilliseconds}
+                key={selectionStartMilliseconds}
                 mediaDuration={mediaDuration}
-                inPointMilliseconds={inPointMilliseconds}
-                outPointMilliseconds={outPointMilliseconds}
+                selectionStartMilliseconds={selectionStartMilliseconds}
+                selectionEndMilliseconds={selectionEndMilliseconds}
             />
             <WaveForm />
         </TrackBox>

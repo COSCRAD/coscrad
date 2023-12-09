@@ -3,8 +3,9 @@ import {
     ArrowRight as ArrowRightIcon,
     Clear as ClearIcon,
 } from '@mui/icons-material/';
-import { Box, IconButton, Typography, styled } from '@mui/material';
+import { Box, IconButton, Typography } from '@mui/material';
 import { useRef, useState } from 'react';
+import { calculatePercentProgress } from './calculate-percent-progress';
 import { MediaTimeline } from './media-timeline';
 import { KeyboardKey, useKeyDown } from './use-key-down';
 
@@ -28,15 +29,6 @@ const isValidTimeRangeSelection = (timeRangeSelection: TimeRangeSelection, durat
     return outPointMilliseconds > inPointMilliseconds;
 };
 
-export const calculatePercentProgress = (currentTime: number, duration: number) => {
-    return (currentTime / duration) * 100;
-};
-
-type MediaState = {
-    currentTime: number;
-    duration: number;
-};
-
 export type TimeRangeSelection = {
     inPointMilliseconds: number;
     outPointMilliseconds: number;
@@ -48,16 +40,12 @@ interface AudioAnnotatorPrototypeProps {
     onTimeRangeSelected: (timeRangeSelected: TimeRangeSelection | null) => void;
 }
 
-const StyledAudioPlayer = styled('audio')`
-    border-radius: 20px;
-`;
-
 export const AudioAnnotatorPrototype = ({
     audioUrl,
     mimeType,
     onTimeRangeSelected,
 }: AudioAnnotatorPrototypeProps) => {
-    const audioRef = useRef<HTMLVideoElement>(null);
+    const audioRef = useRef<HTMLAudioElement>(null);
 
     const [isPlayed, setIsPlayed] = useState<boolean>(false);
 
@@ -67,9 +55,9 @@ export const AudioAnnotatorPrototype = ({
 
     const [playProgress, setPlayProgress] = useState<number>(0);
 
-    const [inPointMilliseconds, setInPointMilliseconds] = useState<number | null>(null);
+    const [inPointMilliseconds, setInPointMilliseconds] = useState<number>(0);
 
-    const [outPointMilliseconds, setOutPointMilliseconds] = useState<number | null>(null);
+    const [outPointMilliseconds, setOutPointMilliseconds] = useState<number>(0);
 
     const [errorMessage, setErrorMessage] = useState<string>('');
 
@@ -121,9 +109,9 @@ export const AudioAnnotatorPrototype = ({
     };
 
     const clearMarkers = () => {
-        setInPointMilliseconds(null);
+        setInPointMilliseconds(0);
 
-        setOutPointMilliseconds(null);
+        setOutPointMilliseconds(0);
 
         onTimeRangeSelected(null);
 
@@ -144,7 +132,7 @@ export const AudioAnnotatorPrototype = ({
 
     return (
         <>
-            <StyledAudioPlayer ref={audioRef} onPlaying={onPlaying} controls>
+            <audio ref={audioRef} onPlay={onPlaying} controls>
                 {isAudioMIMEType(mimeType) ? (
                     <source key={mimeType} src={audioUrl} type={mimeType} />
                 ) : (
@@ -155,7 +143,7 @@ export const AudioAnnotatorPrototype = ({
                     </>
                 )}
                 Your browser does not support the audio element.
-            </StyledAudioPlayer>
+            </audio>
             <Box sx={{ height: '12px' }}>
                 {errorMessage !== '' ? (
                     <Typography
@@ -167,7 +155,12 @@ export const AudioAnnotatorPrototype = ({
                     </Typography>
                 ) : null}
             </Box>
-            <MediaTimeline mediaDuration={duration} playProgress={} />
+            <MediaTimeline
+                mediaDuration={duration}
+                playProgress={playProgress}
+                selectionStartMilliseconds={inPointMilliseconds}
+                selectionEndMilliseconds={outPointMilliseconds}
+            />
             <Box sx={{ mt: 1 }}>
                 <IconButton
                     data-testid="in-point-marker-button"

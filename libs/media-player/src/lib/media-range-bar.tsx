@@ -14,21 +14,21 @@ const StyledRangeBar = styled('span')({
 
 interface RangeBarProps {
     mediaDuration: number;
-    inPointMilliseconds: number;
-    outPointMilliseconds: number;
+    selectionStartMilliseconds: number;
+    selectionEndMilliseconds: number;
 }
 
 export const RangeBar = ({
     mediaDuration,
-    inPointMilliseconds,
-    outPointMilliseconds,
+    selectionStartMilliseconds,
+    selectionEndMilliseconds,
 }: RangeBarProps): JSX.Element => {
     const [activeRange, setActiveRange] = useState<boolean>(false);
 
-    const rangeStart = calculatePercentProgress(inPointMilliseconds / 1000, mediaDuration);
+    const rangeStart = calculatePercentProgress(selectionStartMilliseconds / 1000, mediaDuration);
 
     const rangeLength =
-        calculatePercentProgress(outPointMilliseconds / 1000, mediaDuration) - rangeStart;
+        calculatePercentProgress(selectionEndMilliseconds / 1000, mediaDuration) - rangeStart;
 
     const handleClick = () => {
         setActiveRange(!activeRange);
