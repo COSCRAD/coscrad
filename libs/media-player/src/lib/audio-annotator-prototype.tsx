@@ -5,6 +5,7 @@ import {
 } from '@mui/icons-material/';
 import { Box, IconButton, Typography, styled } from '@mui/material';
 import { useRef, useState } from 'react';
+import { MediaTimeline } from './media-timeline';
 import { KeyboardKey, useKeyDown } from './use-key-down';
 
 export enum AudioMIMEType {
@@ -25,6 +26,10 @@ const isValidTimeRangeSelection = (timeRangeSelection: TimeRangeSelection, durat
     if (outPointMilliseconds >= duration) return false;
 
     return outPointMilliseconds > inPointMilliseconds;
+};
+
+export const calculatePercentProgress = (currentTime: number, duration: number) => {
+    return (currentTime / duration) * 100;
 };
 
 type MediaState = {
@@ -56,6 +61,12 @@ export const AudioAnnotatorPrototype = ({
 
     const [isPlayed, setIsPlayed] = useState<boolean>(false);
 
+    const [duration, setDuration] = useState<number>(0);
+
+    const [currentTime, setCurrentTime] = useState<number>(0);
+
+    const [playProgress, setPlayProgress] = useState<number>(0);
+
     const [inPointMilliseconds, setInPointMilliseconds] = useState<number | null>(null);
 
     const [outPointMilliseconds, setOutPointMilliseconds] = useState<number | null>(null);
@@ -64,6 +75,20 @@ export const AudioAnnotatorPrototype = ({
 
     const onPlaying = () => {
         if (!isPlayed) setIsPlayed(true);
+    };
+
+    const handlePlayProgress = () => {
+        const audioTarget = audioRef.current!;
+
+        const { currentTime, duration } = audioTarget;
+
+        setCurrentTime(currentTime);
+
+        setDuration(duration);
+
+        const playProgress = calculatePercentProgress(currentTime, duration);
+
+        setPlayProgress(playProgress);
     };
 
     const markInPoint = () => {
@@ -142,6 +167,7 @@ export const AudioAnnotatorPrototype = ({
                     </Typography>
                 ) : null}
             </Box>
+            <MediaTimeline mediaDuration={duration} playProgress={} />
             <Box sx={{ mt: 1 }}>
                 <IconButton
                     data-testid="in-point-marker-button"
