@@ -11,18 +11,6 @@ import {
 import { TimelineRuler } from './media-timeline-ruler';
 import { Track } from './media-timeline-track';
 
-// const RangeBar = styled('div')({
-//     top: `-${PROGRESS_BAR_HEIGHT * 2}px`,
-//     height: `${PROGRESS_BAR_HEIGHT}px`,
-//     width: '0px',
-//     backgroundColor: 'black',
-//     borderLeft: '1px solid red',
-//     borderRadius: '0px',
-//     position: 'relative',
-//     visibility: 'hidden',
-//     zIndex: 500,
-// });
-
 const SoundEditor = styled('div')({
     width: '100%',
     position: 'relative',
@@ -146,10 +134,10 @@ export const MediaTimeline = ({
                 `Outpoint - start: ${start} width: ${width} progress: ${playProgress} end: ${end}`
             );
 
-            rangeSelectionBarRef.current!.style.borderRight = '1px solid red';
+            // rangeSelectionBarRef.current!.style.borderRight = '1px solid red';
         }
 
-        rangeSelectionBarRef.current!.style.visibility = 'visible';
+        // rangeSelectionBarRef.current!.style.visibility = 'visible';
     }, [selectionStartMilliseconds, selectionEndMilliseconds]);
 
     useEffect(() => {

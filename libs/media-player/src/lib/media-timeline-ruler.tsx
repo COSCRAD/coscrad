@@ -1,4 +1,4 @@
-import { RulerTick } from './ruler-tick';
+import { RulerTick } from './media-timeline-ruler-tick';
 
 interface TimelineProps {
     duration: number;

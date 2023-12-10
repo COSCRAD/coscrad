@@ -80,6 +80,8 @@ describe('<AudioPlayer />', () => {
                 cy.get('audio').then(([audioElement]) => {
                     audioElement.play();
                 });
+
+                cy.wait(1000);
             });
 
             describe(`the mark in-point button`, () => {
@@ -90,22 +92,18 @@ describe('<AudioPlayer />', () => {
 
             describe(`the mark out-point button`, () => {
                 it(`should be disabled`, () => {
-                    cy.getByDataAttribute('in-point-marker-button').should('be.disabled');
+                    cy.getByDataAttribute('out-point-marker-button').should('be.disabled');
                 });
             });
 
             describe(`when the mark in-point button is clicked`, () => {
                 it(`should mark an in-point`, () => {
-                    cy.wait(2000);
-
                     cy.getByDataAttribute('in-point-marker-button').click();
                 });
             });
 
             describe(`when the mark in-point button is clicked, the mark out-point button`, () => {
                 it('should be enabled', () => {
-                    cy.wait(2000);
-
                     cy.getByDataAttribute('in-point-marker-button').click();
 
                     cy.wait(2300);
@@ -116,8 +114,6 @@ describe('<AudioPlayer />', () => {
 
             describe(`when the mark in-point button is clicked, clicking the mark out-point button`, () => {
                 it('should mark an out-point', () => {
-                    cy.wait(2000);
-
                     cy.getByDataAttribute('in-point-marker-button').click();
 
                     cy.wait(2500);
@@ -133,7 +129,7 @@ describe('<AudioPlayer />', () => {
 
             describe(`when the mark in-point button is clicked and the user scrubs the playhead back before the in-point, clicking the mark out-point button`, () => {
                 it('should fail with an error', () => {
-                    cy.wait(4000);
+                    cy.wait(1000);
 
                     cy.getByDataAttribute('in-point-marker-button').click();
 
@@ -146,16 +142,11 @@ describe('<AudioPlayer />', () => {
                     cy.getByDataAttribute('time-range-selected').should('not.exist');
 
                     cy.getByDataAttribute('audio-error-message').should('exist');
-
-                    // If I remove this cy.wait() the test suite fails at the first click
-                    cy.wait(2000);
                 });
             });
 
             describe(`after an in-point is selected and the clear range button is clicked`, () => {
                 it('should clear the selected in-point', () => {
-                    cy.wait(4000);
-
                     cy.getByDataAttribute('in-point-marker-button').click();
 
                     cy.wait(500);
@@ -170,8 +161,6 @@ describe('<AudioPlayer />', () => {
 
             describe(`after a time range is selected and the clear range button is clicked`, () => {
                 it('should clear the range selection', () => {
-                    cy.wait(2000);
-
                     cy.getByDataAttribute('in-point-marker-button').click();
 
                     cy.wait(2500);
@@ -190,8 +179,6 @@ describe('<AudioPlayer />', () => {
 
             describe(`after a time range is selected with hotkeys and clear range is invoked with "c"`, () => {
                 it('should clear the range selection', () => {
-                    cy.wait(2000);
-
                     cy.get('body').type('i');
 
                     cy.wait(2500);
