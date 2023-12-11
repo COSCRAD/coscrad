@@ -345,7 +345,7 @@ export class DigitalText extends Resource {
 
             if (event.type === `DIGITAL_TEXT_PAGE_CONTENT_TRANSLATED`) {
                 const {
-                    payload: { pageIdentifer, translation, languageCode },
+                    payload: { pageIdentifier: pageIdentifer, translation, languageCode },
                 } = event as DigitalTextPageContentTranslated;
 
                 return digitalText

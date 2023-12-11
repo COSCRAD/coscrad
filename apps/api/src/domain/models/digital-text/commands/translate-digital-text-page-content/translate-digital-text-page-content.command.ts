@@ -21,7 +21,7 @@ export class TranslateDigitalTextPageContent implements ICommandBase {
         label: `identifier`,
         description: `text identifier for the page`,
     })
-    readonly pageIdentifer: PageIdentifier;
+    readonly pageIdentifier: PageIdentifier;
 
     @NonEmptyString({
         label: `translation`,

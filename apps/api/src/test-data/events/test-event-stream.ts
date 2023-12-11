@@ -242,7 +242,7 @@ const buildDigitalTextPageContentTranslated = (
             type: AggregateType.digitalText,
             id: buildDummyUuid(124),
         },
-        pageIdentifer: '117',
+        pageIdentifier: '117',
         translation: 'the translation',
         languageCode: LanguageCode.English,
     };

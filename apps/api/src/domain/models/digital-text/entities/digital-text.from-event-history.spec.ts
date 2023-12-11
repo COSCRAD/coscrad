@@ -142,7 +142,7 @@ const digitalTextPageContentTranslated = new DigitalTextPageContentTranslated(
             type: AggregateType.digitalText,
             id,
         },
-        pageIdentifer: dummyPageIdentifier,
+        pageIdentifier: dummyPageIdentifier,
         translation: translationText,
         languageCode: translationLanguageCodeForContent,
     },

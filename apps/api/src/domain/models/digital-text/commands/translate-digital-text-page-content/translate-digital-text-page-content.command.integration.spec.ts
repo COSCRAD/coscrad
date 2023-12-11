@@ -70,7 +70,7 @@ const validPayload: TranslateDigitalTextPageContent = {
     aggregateCompositeIdentifier: digitalTextCompositeIdentifier,
     languageCode: translationLanguageCode,
     translation: translationText,
-    pageIdentifer: targetPageIdentifier,
+    pageIdentifier: targetPageIdentifier,
 };
 
 const validCommandFSA = {
