@@ -28,9 +28,9 @@ export class TranslateDigitalTextPageContentCommandHandler extends BaseUpdateCom
 
     protected actOnInstance(
         DigitalText: DigitalText,
-        _command: TranslateDigitalTextPageContent
+        { languageCode, translation, pageIdentifer }: TranslateDigitalTextPageContent
     ): ResultOrError<DigitalText> {
-        return DigitalText;
+        return DigitalText.translatePageContent(pageIdentifer, translation, languageCode);
     }
 
     protected buildEvent(

@@ -1,5 +1,6 @@
 import {
     AGGREGATE_COMPOSITE_IDENTIFIER,
+    AggregateType,
     LanguageCode,
     ResourceType,
 } from '@coscrad/api-interfaces';
@@ -20,6 +21,7 @@ import {
     AddPageToDigitalText,
     CreateDigitalText,
     DigitalTextCreated,
+    DigitalTextPageContentTranslated,
     PageAddedToDigitalText,
 } from '../commands';
 import {
@@ -115,6 +117,7 @@ const originalTextContent = 'Twas many and many a year ago, in a kingdom by the 
 const originalLanguageCodeForContent = LanguageCode.English;
 
 // TODO Use `TestEventStream` helper for this test
+// TODO does this use the dummy page identifier?
 const addContentCommand = clonePlainObjectWithOverrides(dummyAddContentFsa.payload, {
     aggregateCompositeIdentifier: {
         id,
@@ -128,6 +131,24 @@ const contentAddedToDigitalTextPage = new ContentAddedToDigitalTextPage(addConte
     userId: dummySystemUserId,
     dateCreated: dummyDateManager.next(),
 });
+
+const translationText = `the translation`;
+
+const translationLanguageCodeForContent = LanguageCode.Chilcotin;
+
+const digitalTextPageContentTranslated = new DigitalTextPageContentTranslated(
+    {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.digitalText,
+            id,
+        },
+        pageIdentifer: dummyPageIdentifier,
+        translation: translationText,
+        languageCode: translationLanguageCodeForContent,
+    },
+    buildDummyUuid(581),
+    dummySystemUserId
+);
 
 describe(`DigitalText.fromEventHistory`, () => {
     describe(`when there are events for the given aggregate root`, () => {
@@ -195,6 +216,29 @@ describe(`DigitalText.fromEventHistory`, () => {
             expect(text).toBe(originalTextContent);
 
             expect(languageCode).toBe(originalLanguageCodeForContent);
+        });
+
+        describe(`when a page's content has been translated`, () => {
+            it(`should return a digital text with the translated page`, async () => {
+                const eventStream = [
+                    digitalTextCreated,
+                    pageAddedForDigitalText,
+                    contentAddedToDigitalTextPage,
+                    digitalTextPageContentTranslated,
+                ];
+
+                const result = DigitalText.fromEventHistory(eventStream, id);
+
+                expect(result).toBeInstanceOf(DigitalText);
+
+                const digitalText = result as DigitalText;
+
+                const page = digitalText.getPage(dummyPageIdentifier) as DigitalTextPage;
+
+                const hasTranslation = page.content.has(translationLanguageCodeForContent);
+
+                expect(hasTranslation).toBe(true);
+            });
         });
 
         describe(`when a user has not been granted read access to an unpublished digital text`, () => {

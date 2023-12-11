@@ -30,7 +30,11 @@ import { Resource } from '../../resource.entity';
 import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
 import { ResourceReadAccessGrantedToUser } from '../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event';
 import { BaseEvent } from '../../shared/events/base-event.entity';
-import { DigitalTextCreated, PageAddedToDigitalText } from '../commands';
+import {
+    DigitalTextCreated,
+    DigitalTextPageContentTranslated,
+    PageAddedToDigitalText,
+} from '../commands';
 import { ContentAddedToDigitalTextPage } from '../commands/add-content-to-digital-text-page';
 import {
     ADD_PAGE_TO_DIGITAL_TEXT,
@@ -337,6 +341,16 @@ export class DigitalText extends Resource {
                 } = event as ResourceReadAccessGrantedToUser;
 
                 return digitalText.addEventToHistory(event).grantReadAccessToUser(userId);
+            }
+
+            if (event.type === `DIGITAL_TEXT_PAGE_CONTENT_TRANSLATED`) {
+                const {
+                    payload: { pageIdentifer, translation, languageCode },
+                } = event as DigitalTextPageContentTranslated;
+
+                return digitalText
+                    .addEventToHistory(event)
+                    .translatePageContent(pageIdentifer, translation, languageCode);
             }
 
             // This event was not handled
