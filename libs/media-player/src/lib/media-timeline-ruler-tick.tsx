@@ -1,9 +1,11 @@
 import { styled } from '@mui/material';
 import { FormattedCurrentTime } from './formatted-currenttime';
 
-const NUMBERED_TICK_HEIGHT = 27;
+export const TICK_SPACING_FACTOR = 6;
 
 const REGULAR_TICK_HEIGHT = 10;
+
+const NUMBERED_TICK_HEIGHT = 27;
 
 const NUMBER_PADDING_FROM_TICK = 4;
 
@@ -36,16 +38,21 @@ export const RulerTick = ({ index, zoomFactor }: RulerTickProps): JSX.Element =>
 
     const showNumber = index % 10 === 0 ? true : false;
 
+    const tickSpacingFactor = zoomFactor > 4 ? zoomFactor : TICK_SPACING_FACTOR;
+
     return (
         <>
             {showNumber ? (
                 <StyledRulerNumber
-                    sx={{ left: `${index * zoomFactor + NUMBER_PADDING_FROM_TICK}px` }}
+                    sx={{ left: `${index * tickSpacingFactor + NUMBER_PADDING_FROM_TICK}px` }}
                 >
                     <FormattedCurrentTime currentTimeInSeconds={index} />
                 </StyledRulerNumber>
             ) : null}
-            <StyledRulerTick sx={{ height: tickHeight, left: `${index * zoomFactor}px` }} />
+            <StyledRulerTick
+                data-cy={`ruler-tick-${index}`}
+                sx={{ height: tickHeight, left: `${index * tickSpacingFactor}px` }}
+            />
         </>
     );
 };

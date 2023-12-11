@@ -6,6 +6,7 @@ import {
 import { Box, IconButton, Typography } from '@mui/material';
 import { useRef, useState } from 'react';
 import { calculatePercentProgress } from './calculate-percent-progress';
+import { MediaTimeline } from './media-timeline';
 import { KeyboardKey, useKeyDown } from './use-key-down';
 
 export enum AudioMIMEType {
@@ -154,12 +155,12 @@ export const AudioAnnotatorPrototype = ({
                     </Typography>
                 ) : null}
             </Box>
-            {/* <MediaTimeline
+            <MediaTimeline
                 mediaDuration={duration}
                 playProgress={playProgress}
                 selectionStartMilliseconds={inPointMilliseconds}
                 selectionEndMilliseconds={outPointMilliseconds}
-            /> */}
+            />
             <Box sx={{ mt: 1 }}>
                 <IconButton
                     data-testid="in-point-marker-button"

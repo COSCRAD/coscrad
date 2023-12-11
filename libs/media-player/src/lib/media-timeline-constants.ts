@@ -1,4 +1,4 @@
-export const ZOOM_FACTOR = 40;
+export const MINIMUM_ZOOM_FACTOR = 0;
 
 export const NUMBER_OF_TRACKS = 1;
 

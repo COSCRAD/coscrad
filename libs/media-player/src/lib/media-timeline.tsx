@@ -1,14 +1,15 @@
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Box, Grid, styled } from '@mui/material';
+import { Box, Grid, Typography, styled } from '@mui/material';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
     EDITOR_HORIZONTAL_PADDING,
     EDITOR_SOUND_BAR_HEIGHT,
+    MINIMUM_ZOOM_FACTOR,
     NUMBER_OF_TRACKS,
     TIMELINE_RULER_BAR_HEIGHT,
-    ZOOM_FACTOR,
 } from './media-timeline-constants';
 import { TimelineRuler } from './media-timeline-ruler';
+import { TICK_SPACING_FACTOR } from './media-timeline-ruler-tick';
 import { Track } from './media-timeline-track';
 
 const SoundEditor = styled('div')({
@@ -16,14 +17,6 @@ const SoundEditor = styled('div')({
     position: 'relative',
     boxSizing: 'border-box',
     backgroundColor: '#424242',
-});
-
-const Initials = styled('div')({
-    position: 'relative',
-    padding: '4px 4px',
-    color: '#fff',
-    boxSizing: 'border-box',
-    borderBottom: '2px dotted #ccc',
 });
 
 const ScrollingBox = styled('div')({
@@ -36,31 +29,11 @@ const ScrolledTracksBox = styled('div')({
     position: 'relative',
 });
 
-const TimelineRulerBox = styled('div')({
-    marginBottom: '3px',
-    borderBottom: '1px solid #4914db',
-    boxSizing: 'border-box',
-    position: 'relative',
-});
-
-// This doesn't work, but may have some hints to smoothing playhead movement
-// const movePlayhead = keyframes`
-//     0 %  { left: 0; },
-//     25 %  { left: 25%; },
-//     50 %  { left: 50%; },
-//     75 %  { left: 75%; },
-//     100 %  { left: 100%; }
-// `;
-
 const EditorPlayhead = styled('div')({
     height: `${EDITOR_SOUND_BAR_HEIGHT}px`,
     width: '1px',
     backgroundColor: 'red',
     position: 'absolute',
-    // animationName: `${movePlayhead}`,
-    // animationDuration: '2s',
-    // animationTimingFunction: 'ease-in',
-    // animationIterationCount: 'infinite',
     zIndex: 500,
 });
 
@@ -88,20 +61,28 @@ export const MediaTimeline = ({
 
     const playheadRef = useRef<HTMLDivElement>(null);
 
+    const [scrolledTrackLength, setScrolledTrackLength] = useState<number>(0);
+
+    const [editorWidth, setEditorWidth] = useState<number>(0);
+
     const [rangeSelectionBar, setRangeSelectionBar] = useState({
         start: '',
         width: '',
     });
 
-    const scrolledTrackLength = mediaDuration * ZOOM_FACTOR;
-
     const trackHeight = EDITOR_SOUND_BAR_HEIGHT + 2;
 
     const rangeSelectionBarRef = useRef<HTMLDivElement>(null);
 
-    const timeline = useMemo(() => {
-        return <TimelineRuler duration={mediaDuration} zoomFactor={ZOOM_FACTOR} />;
-    }, [mediaDuration]);
+    const timelineRuler = useMemo(() => {
+        return (
+            <TimelineRuler
+                editorWidth={editorWidth}
+                duration={mediaDuration}
+                zoomFactor={MINIMUM_ZOOM_FACTOR}
+            />
+        );
+    }, [mediaDuration, editorWidth]);
 
     const clearRangeBar = () => {
         if (!isNullOrUndefined(rangeSelectionBarRef.current))
@@ -114,11 +95,19 @@ export const MediaTimeline = ({
     };
 
     useEffect(() => {
+        const editorWidth = soundEditorRef.current!.getBoundingClientRect().width;
+
+        setEditorWidth(editorWidth);
+
+        setScrolledTrackLength(mediaDuration * TICK_SPACING_FACTOR);
+    }, [setEditorWidth, setScrolledTrackLength, mediaDuration, soundEditorRef]);
+
+    useEffect(() => {
         const start = (selectionStartMilliseconds / mediaDuration) * 100;
 
-        console.log(
-            `Inpoint - start: ${start}% = in: ${selectionStartMilliseconds} / dur: ${mediaDuration}`
-        );
+        // console.log(
+        //     `Inpoint - start: ${start}% = in: ${selectionStartMilliseconds} / dur: ${mediaDuration}`
+        // );
 
         if (isNullOrUndefined(selectionEndMilliseconds))
             setRangeSelectionBar({ start: `${start}%`, width: `2px` });
@@ -130,9 +119,9 @@ export const MediaTimeline = ({
 
             setRangeSelectionBar({ ...rangeSelectionBar, width: `${width}%` });
 
-            console.log(
-                `Outpoint - start: ${start} width: ${width} progress: ${playProgress} end: ${end}`
-            );
+            // console.log(
+            //     `Outpoint - start: ${start} width: ${width} progress: ${playProgress} end: ${end}`
+            // );
 
             // rangeSelectionBarRef.current!.style.borderRight = '1px solid red';
         }
@@ -164,10 +153,13 @@ export const MediaTimeline = ({
                 behavior: 'smooth',
             });
         }
-    }, [playProgress, scrolledTrackLength]);
+    }, [playProgress]);
 
     return (
-        <SoundEditor ref={soundEditorRef}>
+        <SoundEditor data-testid="media-timeline" ref={soundEditorRef}>
+            <Box>
+                <Typography variant="h5">scrolledTrackLength: {scrolledTrackLength}</Typography>
+            </Box>
             <Grid container spacing={0}>
                 <Grid
                     sx={{
@@ -193,6 +185,7 @@ export const MediaTimeline = ({
                         >
                             <EditorPlayhead
                                 ref={playheadRef}
+                                data-testid="playhead"
                                 sx={{
                                     height: `${
                                         NUMBER_OF_TRACKS * EDITOR_SOUND_BAR_HEIGHT +
@@ -202,14 +195,7 @@ export const MediaTimeline = ({
                                     left: `${playProgress}%`,
                                 }}
                             />
-                            <TimelineRulerBox
-                                sx={{
-                                    width: scrolledTrackLength,
-                                    height: `${TIMELINE_RULER_BAR_HEIGHT}px`,
-                                }}
-                            >
-                                {mediaDuration > 0 ? timeline : null}
-                            </TimelineRulerBox>
+                            {mediaDuration > 0 ? timelineRuler : null}
                             {Array.from(Array(NUMBER_OF_TRACKS).keys()).map((trackNumber) => (
                                 <Track
                                     key={trackNumber}
