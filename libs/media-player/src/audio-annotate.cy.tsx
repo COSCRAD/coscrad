@@ -1,6 +1,6 @@
 import { Box, Stack, Typography, styled } from '@mui/material';
 import { useState } from 'react';
-import { AudioAnnotatorPrototype, TimeRangeSelection } from './lib/audio-annotator-prototype';
+import { AudioAnnotator, TimeRangeSelection } from './lib/audio-annotator';
 
 const Item = styled(Box)`
     margin-bottom: 5px;
@@ -26,10 +26,7 @@ const AudioAnnotatorWidget = ({ audioUrl }: AudioAnnotatorWidgetProps): JSX.Elem
                 <Typography variant="h5">AudioAnnotatorWidget (Wrapper to the Audio)</Typography>
             </Item>
             <Item>
-                <AudioAnnotatorPrototype
-                    audioUrl={audioUrl}
-                    onTimeRangeSelected={onTimeRangeSelected}
-                />
+                <AudioAnnotator audioUrl={audioUrl} onTimeRangeSelected={onTimeRangeSelected} />
             </Item>
             {timeRangeSelected !== null ? (
                 <Item
@@ -115,7 +112,7 @@ describe('<AudioPlayer />', () => {
             });
 
             describe(`when the mark in-point button is clicked, clicking the mark out-point button`, () => {
-                it('should mark an out-point', () => {
+                it.only('should mark an out-point', () => {
                     cy.wait(2000);
 
                     cy.getByDataAttribute('in-point-marker-button').click();

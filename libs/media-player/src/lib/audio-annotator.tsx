@@ -3,8 +3,8 @@ import {
     ArrowRight as ArrowRightIcon,
     Clear as ClearIcon,
 } from '@mui/icons-material/';
-import { Box, IconButton, Typography, styled } from '@mui/material';
-import { useRef, useState } from 'react';
+import { Box, Grid, IconButton, Stack, Typography, styled } from '@mui/material';
+import { useEffect, useRef, useState } from 'react';
 import { KeyboardKey, useKeyDown } from './use-key-down';
 
 export enum AudioMIMEType {
@@ -27,17 +27,21 @@ const isValidTimeRangeSelection = (timeRangeSelection: TimeRangeSelection, durat
     return outPointMilliseconds > inPointMilliseconds;
 };
 
-type MediaState = {
-    currentTime: number;
-    duration: number;
-};
-
 export type TimeRangeSelection = {
     inPointMilliseconds: number;
     outPointMilliseconds: number;
 };
 
-interface AudioAnnotatorPrototypeProps {
+type TimeRangeSelectionBar = 'inPointSelected' | 'fullSelection';
+
+type UXState = {
+    timeRangeSelectionBar: TimeRangeSelectionBar | null;
+};
+
+const isBarVisible = (stateBar: TimeRangeSelectionBar, { timeRangeSelectionBar }: UXState) =>
+    timeRangeSelectionBar === stateBar;
+
+interface AudioAnnotatorProps {
     audioUrl: string;
     mimeType?: AudioMIMEType;
     onTimeRangeSelected: (timeRangeSelected: TimeRangeSelection | null) => void;
@@ -47,14 +51,18 @@ const StyledAudioPlayer = styled('audio')`
     border-radius: 20px;
 `;
 
-export const AudioAnnotatorPrototype = ({
+export const AudioAnnotator = ({
     audioUrl,
     mimeType,
     onTimeRangeSelected,
-}: AudioAnnotatorPrototypeProps) => {
+}: AudioAnnotatorProps) => {
+    const [uxState, setUxState] = useState<UXState>({
+        timeRangeSelectionBar: null,
+    });
+
     const audioRef = useRef<HTMLVideoElement>(null);
 
-    const [isPlayed, setIsPlayed] = useState<boolean>(false);
+    const [isPlayHeadMoved, setIsPlayHeadMoved] = useState<boolean>(false);
 
     const [inPointMilliseconds, setInPointMilliseconds] = useState<number | null>(null);
 
@@ -62,8 +70,12 @@ export const AudioAnnotatorPrototype = ({
 
     const [errorMessage, setErrorMessage] = useState<string>('');
 
-    const onPlaying = () => {
-        if (!isPlayed) setIsPlayed(true);
+    const onTimeUpdate = () => {
+        const currentTime = audioRef.current!.currentTime;
+
+        if (currentTime > 0) {
+            setIsPlayHeadMoved(true);
+        }
     };
 
     const markInPoint = () => {
@@ -72,9 +84,13 @@ export const AudioAnnotatorPrototype = ({
         console.log({ inpoint: audioRef.current!.currentTime });
 
         setInPointMilliseconds(audioRef.current!.currentTime);
+
+        toggleTimeRangeSelectionBars('inPointSelected');
     };
 
     const markOutPoint = () => {
+        setErrorMessage('');
+
         console.log({ outpoint: audioRef.current!.currentTime });
 
         const timeRangeSelection = {
@@ -91,6 +107,8 @@ export const AudioAnnotatorPrototype = ({
         }
 
         setOutPointMilliseconds(audioRef.current!.currentTime);
+
+        toggleTimeRangeSelectionBars('fullSelection');
 
         onTimeRangeSelected(timeRangeSelection);
     };
@@ -117,9 +135,23 @@ export const AudioAnnotatorPrototype = ({
         clearMarkers();
     }, [KeyboardKey.clear]);
 
+    useEffect(() => {
+        console.log({ uxState });
+    }, [uxState]);
+
+    const toggleTimeRangeSelectionBars = (timeRangeSelectionBar: TimeRangeSelectionBar) => {
+        const isVisible = isBarVisible(timeRangeSelectionBar, uxState);
+
+        if (isVisible) {
+            setUxState({ timeRangeSelectionBar: null });
+        } else {
+            setUxState({ timeRangeSelectionBar: timeRangeSelectionBar });
+        }
+    };
+
     return (
-        <>
-            <StyledAudioPlayer ref={audioRef} onPlaying={onPlaying} controls>
+        <Stack>
+            <StyledAudioPlayer ref={audioRef} onTimeUpdate={onTimeUpdate} controls>
                 {isAudioMIMEType(mimeType) ? (
                     <source key={mimeType} src={audioUrl} type={mimeType} />
                 ) : (
@@ -142,11 +174,11 @@ export const AudioAnnotatorPrototype = ({
                     </Typography>
                 ) : null}
             </Box>
-            <Box sx={{ mt: 1 }}>
+            <Box mt={1}>
                 <IconButton
                     data-testid="in-point-marker-button"
                     onClick={markInPoint}
-                    disabled={!isPlayed}
+                    disabled={!isPlayHeadMoved}
                 >
                     <ArrowRightIcon />
                 </IconButton>
@@ -165,6 +197,56 @@ export const AudioAnnotatorPrototype = ({
                     <ClearIcon />
                 </IconButton>
             </Box>
-        </>
+            <Box mt={1}>
+                <Grid container spacing={1}>
+                    <Grid item xs={3}>
+                        <Typography variant="body1" fontWeight="bold">
+                            Inpoint: {inPointMilliseconds}
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Box
+                            data-testid="selection-bar-inpoint"
+                            sx={{
+                                height: '20px',
+                                width: '100%',
+                                backgroundColor: '#75ecff',
+                                backgroundImage: 'linear-gradient(to right, #75ecff, #fff)',
+                                borderLeft: '1px solid #0671ff',
+                                borderRadius: '4px',
+                                visibility: isBarVisible('inPointSelected', uxState)
+                                    ? 'visible'
+                                    : 'hidden',
+                                position: 'absolute',
+                            }}
+                        >
+                            &nbsp;
+                        </Box>
+                        <Box
+                            data-testid="selection-bar-full"
+                            sx={{
+                                height: '20px',
+                                width: '100%',
+                                backgroundColor: '#75ecff',
+                                borderRight: '1px solid #0671ff',
+                                borderLeft: '1px solid #0671ff',
+                                borderRadius: '4px',
+                                visibility: isBarVisible('fullSelection', uxState)
+                                    ? 'visible'
+                                    : 'hidden',
+                                position: 'absolute',
+                            }}
+                        >
+                            &nbsp;
+                        </Box>
+                    </Grid>
+                    <Grid item xs={3}>
+                        <Typography variant="body1" fontWeight="bold">
+                            Outpoint: {outPointMilliseconds}
+                        </Typography>
+                    </Grid>
+                </Grid>
+            </Box>
+        </Stack>
     );
 };
