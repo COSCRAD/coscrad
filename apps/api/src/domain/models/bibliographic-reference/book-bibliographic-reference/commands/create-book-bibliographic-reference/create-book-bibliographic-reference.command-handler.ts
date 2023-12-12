@@ -8,6 +8,7 @@ import { DeluxeInMemoryStore } from '../../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../../../types/ResourceType';
 import { BaseCreateCommandHandler } from '../../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../../shared/events/types/EventRecordMetadata';
 import { validAggregateOrThrow } from '../../../../shared/functional';
 import BibliographicReferenceCreator from '../../../common/bibliographic-reference-creator.entity';
 import { BibliographicReferenceType } from '../../../types/BibliographicReferenceType';
@@ -80,9 +81,8 @@ export class CreateBookBibliographicReferenceCommandHandler extends BaseCreateCo
 
     protected buildEvent(
         command: CreateBookBibliographicReference,
-        eventId: string,
-        userId: string
+        eventMeta: EventRecordMetadata
     ): BaseEvent {
-        return new BookBibliographicReferenceCreated(command, eventId, userId);
+        return new BookBibliographicReferenceCreated(command, eventMeta);
     }
 }

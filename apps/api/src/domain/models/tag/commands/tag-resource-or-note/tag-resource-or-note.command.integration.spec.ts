@@ -66,6 +66,7 @@ describe(commandType, () => {
     const eventSourcedCategorizableTypes: CategorizableType[] = [
         ResourceType.song,
         ResourceType.digitalText,
+        ResourceType.term,
     ];
 
     Object.values(CategorizableType)

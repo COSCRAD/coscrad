@@ -21,7 +21,10 @@ import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDocument
 import mapEdgeConnectionDTOToArangoEdgeDocument from '../database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
 import mapEntityDTOToDatabaseDTO from '../database/utilities/mapEntityDTOToDatabaseDTO';
 import ArangoCategoryRepository from './ArangoCategoryRepository';
-import { ArangoCommandRepositoryForAggregateRoot } from './arango-command-repository-for-aggregate-root';
+import {
+    ArangoCommandRepositoryForAggregateRoot,
+    IEventRepository,
+} from './arango-command-repository-for-aggregate-root';
 import { ArangoCoscradUserRepository } from './arango-coscrad-user-repository';
 import { ArangoEventRepository } from './arango-event-repository';
 import { ArangoRepositoryForAggregate } from './arango-repository-for-aggregate';
@@ -77,6 +80,13 @@ export class ArangoRepositoryProvider implements IRepositoryProvider {
         );
     }
 
+    getEventRepository(): IEventRepository {
+        return new ArangoEventRepository(
+            this.databaseProvider,
+            new CoscradEventFactory(this.dynamicDataTypeFinderService)
+        );
+    }
+
     // TODO: explain why this isn't forAggregate()
     forResource<TResource extends Resource>(resourceType: ResourceType) {
         const snapshotRepository = new ArangoRepositoryForAggregate<TResource>(
@@ -89,7 +99,11 @@ export class ArangoRepositoryProvider implements IRepositoryProvider {
         );
 
         // TODO "strangle out the old snapshot approach and remove this check"
-        const eventSourcedAggregateTypes = [AggregateType.song, AggregateType.digitalText];
+        const eventSourcedAggregateTypes = [
+            AggregateType.song,
+            AggregateType.digitalText,
+            AggregateType.term,
+        ];
 
         if (eventSourcedAggregateTypes.includes(resourceType)) {
             return new ArangoCommandRepositoryForAggregateRoot(

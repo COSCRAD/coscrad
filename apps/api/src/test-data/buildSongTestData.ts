@@ -114,12 +114,11 @@ export default (): Song[] =>
                 },
             });
 
-            const creationEvent = new SongCreated(
-                commandPayloadWithUuid,
-                buildDummyUuid(900 + index),
-                buildDummyUuid(567),
-                dummyDateNow
-            );
+            const creationEvent = new SongCreated(commandPayloadWithUuid, {
+                id: buildDummyUuid(900 + index),
+                userId: buildDummyUuid(567),
+                dateCreated: dummyDateNow,
+            });
 
             return new Song({
                 ...partialDTO,

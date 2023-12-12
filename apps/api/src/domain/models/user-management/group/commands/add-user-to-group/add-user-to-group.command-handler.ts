@@ -6,11 +6,11 @@ import { ResultOrError } from '../../../../../../types/ResultOrError';
 import { Valid } from '../../../../../domainModelValidators/Valid';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
 import { IRepositoryProvider } from '../../../../../repositories/interfaces/repository-provider.interface';
-import { AggregateId } from '../../../../../types/AggregateId';
 import { InMemorySnapshot } from '../../../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../../../utilities/buildInMemorySnapshot';
 import { BaseUpdateCommandHandler } from '../../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../../shared/events/types/EventRecordMetadata';
 import { validAggregateOrThrow } from '../../../../shared/functional';
 import { CoscradUserGroup } from '../../entities/coscrad-user-group.entity';
 import { AddUserToGroup } from './add-user-to-group.command';
@@ -33,12 +33,8 @@ export class AddUserToGroupCommandHandler extends BaseUpdateCommandHandler<Coscr
         return instance.addUser(userId);
     }
 
-    protected buildEvent(
-        command: AddUserToGroup,
-        eventId: string,
-        systemUserId: AggregateId
-    ): BaseEvent {
-        return new UserAddedToGroup(command, eventId, systemUserId);
+    protected buildEvent(command: AddUserToGroup, eventMeta: EventRecordMetadata): BaseEvent {
+        return new UserAddedToGroup(command, eventMeta);
     }
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {

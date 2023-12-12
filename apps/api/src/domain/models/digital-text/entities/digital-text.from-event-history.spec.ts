@@ -49,11 +49,25 @@ const createDigitalText = clonePlainObjectWithOverrides(
     }
 );
 
-const digitalTextCreated = new DigitalTextCreated(
-    createDigitalText.payload,
-    buildDummyUuid(154),
-    dummySystemUserId
-);
+const dummyDateManager = (() => {
+    let currentDate = dummyDateNow;
+
+    return {
+        next: () => {
+            const date = currentDate;
+
+            currentDate++;
+
+            return date;
+        },
+    };
+})();
+
+const digitalTextCreated = new DigitalTextCreated(createDigitalText.payload, {
+    id: buildDummyUuid(154),
+    userId: dummySystemUserId,
+    dateCreated: dummyDateManager.next(),
+});
 
 const dummyPageIdentifier = '21';
 
@@ -67,11 +81,11 @@ const addPageToDigitalText = clonePlainObjectWithOverrides(
     }
 );
 
-const pageAddedForDigitalText = new PageAddedToDigitalText(
-    addPageToDigitalText.payload,
-    buildDummyUuid(155),
-    dummySystemUserId
-);
+const pageAddedForDigitalText = new PageAddedToDigitalText(addPageToDigitalText.payload, {
+    id: buildDummyUuid(155),
+    userId: dummySystemUserId,
+    dateCreated: dummyDateManager.next(),
+});
 
 const idForUserWithAccessToDigitalText = buildDummyUuid(45);
 
@@ -89,8 +103,7 @@ const grantReadAccessToUserForDigitalText = clonePlainObjectWithOverrides(
 
 const digitalTextReadAccessGrantedToUser = new ResourceReadAccessGrantedToUser(
     grantReadAccessToUserForDigitalText.payload,
-    buildDummyUuid(579),
-    dummySystemUserId
+    { id: buildDummyUuid(579), userId: dummySystemUserId, dateCreated: dummyDateManager.next() }
 );
 
 const dummyAddContentFsa = testFsaMap.get(
@@ -110,11 +123,11 @@ const addContentCommand = clonePlainObjectWithOverrides(dummyAddContentFsa.paylo
     languageCode: originalLanguageCodeForContent,
 });
 
-const contentAddedToDigitalTextPage = new ContentAddedToDigitalTextPage(
-    addContentCommand,
-    buildDummyUuid(580),
-    dummySystemUserId
-);
+const contentAddedToDigitalTextPage = new ContentAddedToDigitalTextPage(addContentCommand, {
+    id: buildDummyUuid(580),
+    userId: dummySystemUserId,
+    dateCreated: dummyDateManager.next(),
+});
 
 describe(`DigitalText.fromEventHistory`, () => {
     describe(`when there are events for the given aggregate root`, () => {
@@ -234,9 +247,11 @@ describe(`DigitalText.fromEventHistory`, () => {
                 aggregateCompositeIdentifier:
                     digitalTextCreated.payload[AGGREGATE_COMPOSITE_IDENTIFIER],
             },
-            buildDummyUuid(777),
-            dummySystemUserId,
-            dummyDateNow
+            {
+                id: buildDummyUuid(777),
+                userId: dummySystemUserId,
+                dateCreated: dummyDateManager.next(),
+            }
         );
 
         const eventStream = [widgetBobbled];

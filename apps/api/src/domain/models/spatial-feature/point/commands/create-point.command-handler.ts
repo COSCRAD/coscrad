@@ -7,6 +7,7 @@ import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../types/ResourceType';
 import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { validAggregateOrThrow } from '../../../shared/functional';
 import { Point } from '../entities/point.entity';
 import { CreatePoint } from './create-point.command';
@@ -56,7 +57,7 @@ export class CreatePointCommandHandler extends BaseCreateCommandHandler<Point> {
         return point.validateExternalState(externalState);
     }
 
-    protected buildEvent(command: CreatePoint, eventId: string, userId: string): BaseEvent {
-        return new PointCreated(command, eventId, userId);
+    protected buildEvent(command: CreatePoint, eventMeta: EventRecordMetadata): BaseEvent {
+        return new PointCreated(command, eventMeta);
     }
 }

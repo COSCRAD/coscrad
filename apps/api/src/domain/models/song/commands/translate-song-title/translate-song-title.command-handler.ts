@@ -15,6 +15,7 @@ import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { Song } from '../../song.entity';
 import { SongTitleTranslated } from './song-title-translated.event';
 import { TranslateSongTitle } from './translate-song-title.command';
@@ -55,7 +56,7 @@ export class TranslateSongTitleCommandHandler extends BaseUpdateCommandHandler<S
         return song.translateTitle(translation, languageCode);
     }
 
-    protected buildEvent(command: TranslateSongTitle, eventId: string, userId: string): BaseEvent {
-        return new SongTitleTranslated(command, eventId, userId);
+    protected buildEvent(command: TranslateSongTitle, eventMeta: EventRecordMetadata): BaseEvent {
+        return new SongTitleTranslated(command, eventMeta);
     }
 }

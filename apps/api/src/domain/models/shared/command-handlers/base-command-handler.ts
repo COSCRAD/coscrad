@@ -99,14 +99,15 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
     ): Valid | InternalError;
 
     protected abstract buildEvent(
-        command: ICommand,
-        eventId: AggregateId,
-        userId: AggregateId
+        // Make this base event payload
+        payload: ICommand,
+        eventMeta: EventRecordMetadata
     ): BaseEvent;
 
     protected abstract persist(
         instance: TAggregate,
-        command: ICommand,
+        // Make this base event payload
+        payload: ICommand,
         userId: AggregateId
     ): Promise<void>;
 

@@ -1,5 +1,6 @@
 import { bootstrapDynamicTypes } from '@coscrad/data-types';
 import buildDummyUuid from '../../models/__tests__/utilities/buildDummyUuid';
+import { dummyDateNow } from '../../models/__tests__/utilities/dummyDateNow';
 import { dummySystemUserId } from '../../models/__tests__/utilities/dummySystemUserId';
 import { BaseEvent } from '../../models/shared/events/base-event.entity';
 import { AggregateType } from '../../types/AggregateType';
@@ -44,11 +45,11 @@ describe(`CoscradEventFactory`, () => {
         describe(`when the event document is of a registered type`, () => {
             const eventId = buildDummyUuid(5);
 
-            const widgetCreatedDto = new WidgetCreated(
-                dummyCreateWidgetCommand,
-                eventId,
-                dummySystemUserId
-            ).toDTO();
+            const widgetCreatedDto = new WidgetCreated(dummyCreateWidgetCommand, {
+                id: eventId,
+                userId: dummySystemUserId,
+                dateCreated: dummyDateNow,
+            }).toDTO();
 
             it(`should build an event instance`, async () => {
                 // @ts-expect-error TODO Use Jest mocks for this
@@ -64,6 +65,21 @@ describe(`CoscradEventFactory`, () => {
 
                 // Note that currently, we simply copy the command payload across to the event
                 expect(instance.payload).toEqual(dummyCreateWidgetCommand);
+            });
+
+            it(`should set the metadata`, async () => {
+                // @ts-expect-error TODO Use Jest mocks for this
+                const coscradEventFactory = new CoscradEventFactory(mockDataFinderService);
+
+                const instance = await coscradEventFactory.build(widgetCreatedDto);
+
+                const { id, userId, dateCreated } = instance.meta;
+
+                expect(id).toBe(eventId);
+
+                expect(userId).toBe(userId);
+
+                expect(dateCreated).toBe(dummyDateNow);
             });
         });
     });

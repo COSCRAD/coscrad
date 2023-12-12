@@ -4,12 +4,12 @@ import { DTO } from '../../../../../../types/DTO';
 import { ResultOrError } from '../../../../../../types/ResultOrError';
 import { Valid } from '../../../../../domainModelValidators/Valid';
 import buildInstanceFactory from '../../../../../factories/utilities/buildInstanceFactory';
-import { AggregateId } from '../../../../../types/AggregateId';
 import { AggregateType } from '../../../../../types/AggregateType';
 import { InMemorySnapshot } from '../../../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../../../utilities/buildInMemorySnapshot';
 import { BaseCreateCommandHandler } from '../../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../../shared/events/types/EventRecordMetadata';
 import { validAggregateOrThrow } from '../../../../shared/functional';
 import { CoscradUserGroup } from '../../entities/coscrad-user-group.entity';
 import { CreateGroup } from './create-group.command';
@@ -34,12 +34,8 @@ export class CreateGroupCommandHandler extends BaseCreateCommandHandler<CoscradU
         return buildInstanceFactory(CoscradUserGroup)(createDto);
     }
 
-    protected buildEvent(
-        command: CreateGroup,
-        eventId: string,
-        systemUserId: AggregateId
-    ): BaseEvent {
-        return new GroupCreated(command, eventId, systemUserId);
+    protected buildEvent(command: CreateGroup, eventMeta: EventRecordMetadata): BaseEvent {
+        return new GroupCreated(command, eventMeta);
     }
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {

@@ -10,6 +10,7 @@ import { DeluxeInMemoryStore } from '../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import { BaseCreateCommandHandler } from '../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../shared/events/types/EventRecordMetadata';
 import { DigitalText } from '../entities/digital-text.entity';
 import { CreateDigitalText } from './create-digital-text.command';
 import { DigitalTextCreated } from './digital-text-created.event';
@@ -71,11 +72,7 @@ export class CreateDigitalTextCommandHandler extends BaseCreateCommandHandler<Di
         return instance.validateExternalState(state);
     }
 
-    protected buildEvent(
-        command: CreateDigitalText,
-        eventId: string,
-        systemUserId: string
-    ): BaseEvent {
-        return new DigitalTextCreated(command, eventId, systemUserId);
+    protected buildEvent(command: CreateDigitalText, eventMeta: EventRecordMetadata): BaseEvent {
+        return new DigitalTextCreated(command, eventMeta);
     }
 }

@@ -3,7 +3,6 @@ import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { CommandFSA } from '../../../../../app/controllers/command/command-fsa/command-fsa.entity';
-import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualTextItem } from '../../../../../domain/common/entities/multilingual-text';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
@@ -21,18 +20,23 @@ import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-
 import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
 import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { Term } from '../../entities/term.entity';
 import { CannotElicitTermWithoutPromptError, PromptLanguageMustBeUniqueError } from '../../errors';
+import { buildTestTerm } from '../../test-data/build-test-term';
 import { ELICIT_TERM_FROM_PROMPT, TERM_ELICITED_FROM_PROMPT } from './constants';
 import { ElicitTermFromPrompt } from './elicit-term-from-prompt.command';
 
 const commandType = ElicitTermFromPrompt;
 const originalLanguageCode = LanguageCode.English;
 
-const existingTerm = getValidAggregateInstanceForTest(AggregateType.term).clone({
+const existingTerm = buildTestTerm({
+    aggregateCompositeIdentifier: {
+        id: buildDummyUuid(123),
+    },
     isPromptTerm: true,
     text: buildMultilingualTextWithSingleItem(`existing text in english`, originalLanguageCode),
 });
@@ -155,7 +159,10 @@ describe(commandType, () => {
                     seedInitialState: async () => {
                         const initialState = new DeluxeInMemoryStore({
                             [AggregateType.term]: [
-                                existingTerm.clone({
+                                buildTestTerm({
+                                    aggregateCompositeIdentifier: {
+                                        id: existingTerm.id,
+                                    },
                                     isPromptTerm: false,
                                     text: buildMultilingualTextWithSingleItem(
                                         'I am eating more cookies.',

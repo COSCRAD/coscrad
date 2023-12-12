@@ -11,7 +11,7 @@ import { ArangoDatabaseProvider } from '../../../../../persistence/database/data
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestCommandFsaMap } from '../../../../../test-data/commands';
-import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
+import { buildMultilingualTextFromBilingualText } from '../../../../common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
 import { CannotAddDuplicateTranslationError } from '../../../../common/entities/errors';
 import { MultilingualTextItem } from '../../../../common/entities/multilingual-text';
@@ -24,17 +24,23 @@ import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/a
 import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { Term } from '../../entities/term.entity';
+import { buildTestTerm } from '../../test-data/build-test-term';
 import { TranslateTerm } from './translate-term.command';
 
 const commandType = 'TRANSLATE_TERM';
 
 const originalLanguageCode = LanguageCode.Haida;
 
-const existingTerm = getValidAggregateInstanceForTest(AggregateType.term).clone({
+const existingTerm = buildTestTerm({
+    aggregateCompositeIdentifier: {
+        id: buildDummyUuid(444),
+    },
+    isPromptTerm: false,
     // It's important that there is no English translation of the existing term yet
     text: buildMultilingualTextWithSingleItem(`existing text in Haida`, originalLanguageCode),
 });
@@ -100,7 +106,9 @@ describe(commandType, () => {
         it(`should succeed with the correct database updates`, async () => {
             await assertCommandSuccess(commandAssertionDependencies, {
                 systemUserId: dummySystemUserId,
-                initialState: validInitialState,
+                seedInitialState: async () => {
+                    await testRepositoryProvider.addFullSnapshot(validInitialState);
+                },
                 buildValidCommandFSA,
                 checkStateOnSuccess: async ({
                     translation,
@@ -140,7 +148,9 @@ describe(commandType, () => {
 
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
-                    initialState: validInitialState,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider.addFullSnapshot(validInitialState);
+                    },
                     buildCommandFSA: () =>
                         commandFsaFactory.build(undefined, {
                             translation,
@@ -169,18 +179,36 @@ describe(commandType, () => {
             it(`should fail with the expected error`, async () => {
                 const translationLanguageCode = LanguageCode.English;
 
-                const existingTermWithTranslation = existingTerm.translate(
-                    `existing translation`,
-                    translationLanguageCode
-                ) as Term;
+                const existingTermWithTranslation = buildTestTerm({
+                    aggregateCompositeIdentifier: {
+                        id: existingTerm.id,
+                    },
+                    isPromptTerm: false,
+                    text: buildMultilingualTextFromBilingualText(
+                        {
+                            text: 'original text of existing term',
+                            languageCode: originalLanguageCode,
+                        },
+                        {
+                            text: 'text for translation',
+                            languageCode: translationLanguageCode,
+                        }
+                    ),
+                });
+
+                existingTerm.translate(`existing translation`, translationLanguageCode) as Term;
 
                 const translation = 'duplicated translation';
 
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
-                    initialState: new DeluxeInMemoryStore({
-                        [AggregateType.term]: [existingTermWithTranslation],
-                    }).fetchFullSnapshotInLegacyFormat(),
+                    seedInitialState: async () => {
+                        await testRepositoryProvider.addFullSnapshot(
+                            new DeluxeInMemoryStore({
+                                [AggregateType.term]: [existingTermWithTranslation],
+                            }).fetchFullSnapshotInLegacyFormat()
+                        );
+                    },
                     buildCommandFSA: () =>
                         commandFsaFactory.build(undefined, {
                             translation,
@@ -209,7 +237,10 @@ describe(commandType, () => {
             it(`should fail with the expected error`, async () => {
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
-                    initialState: new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat(),
+                    seedInitialState: async () => {
+                        // nothing to seed
+                        Promise.resolve();
+                    },
                     buildCommandFSA: buildValidCommandFSA,
                     checkError: (error) => {
                         assertErrorAsExpected(

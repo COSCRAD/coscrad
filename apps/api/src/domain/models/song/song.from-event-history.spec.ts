@@ -3,14 +3,14 @@
  * successful command FSA.
  */
 
-import { AGGREGATE_COMPOSITE_IDENTIFIER, LanguageCode } from '@coscrad/api-interfaces';
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandFSA } from '../../../app/controllers/command/command-fsa/command-fsa.entity';
 import { NotFound, isNotFound } from '../../../lib/types/not-found';
 import { clonePlainObjectWithOverrides } from '../../../lib/utilities/clonePlainObjectWithOverrides';
 import { buildTestCommandFsaMap } from '../../../test-data/commands';
+import { TestEventStream } from '../../../test-data/events';
 import { MultilingualTextItem } from '../../common/entities/multilingual-text';
 import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
-import { dummySystemUserId } from '../__tests__/utilities/dummySystemUserId';
 import {
     AddLyricsForSong,
     SongLyricsTranslated,
@@ -22,9 +22,14 @@ import { CreateSong } from './commands/create-song.command';
 import { SongCreated } from './commands/song-created.event';
 import {
     ADD_LYRICS_FOR_SONG,
+    LYRICS_ADDED_FOR_SONG,
+    SONG_LYRICS_TRANSLATED,
     TRANSLATE_SONG_LYRICS,
 } from './commands/translate-song-lyrics/constants';
-import { TRANSLATE_SONG_TITLE } from './commands/translate-song-title/constants';
+import {
+    SONG_TITLE_TRANSLATED,
+    TRANSLATE_SONG_TITLE,
+} from './commands/translate-song-title/constants';
 import { SongTitleTranslated } from './commands/translate-song-title/song-title-translated.event';
 import { Song } from './song.entity';
 
@@ -55,7 +60,10 @@ const createSong = clonePlainObjectWithOverrides(
     }
 );
 
-const songCreated = new SongCreated(createSong.payload, buildDummyUuid(124), dummySystemUserId);
+const songCreated = new TestEventStream().andThen<SongCreated>({
+    type: `SONG_CREATED`,
+    payload: createSong.payload,
+});
 
 const translateSongTitle = clonePlainObjectWithOverrides(
     (testFsaMap.get(TRANSLATE_SONG_TITLE) as CommandFSA<TranslateSongTitle>).payload,
@@ -66,11 +74,10 @@ const translateSongTitle = clonePlainObjectWithOverrides(
     }
 );
 
-const songTitleTranslated = new SongTitleTranslated(
-    translateSongTitle,
-    buildDummyUuid(125),
-    dummySystemUserId
-);
+const songTitleTranslated = songCreated.andThen<SongTitleTranslated>({
+    type: SONG_TITLE_TRANSLATED,
+    payload: translateSongTitle,
+});
 
 const addSongLyrics = clonePlainObjectWithOverrides(
     (testFsaMap.get(ADD_LYRICS_FOR_SONG) as CommandFSA<AddLyricsForSong>).payload,
@@ -82,11 +89,10 @@ const addSongLyrics = clonePlainObjectWithOverrides(
     }
 );
 
-const lyricsAddedForSong = new LyricsAddedForSong(
-    addSongLyrics,
-    buildDummyUuid(126),
-    dummySystemUserId
-);
+const lyricsAddedForSong = songTitleTranslated.andThen<LyricsAddedForSong>({
+    type: LYRICS_ADDED_FOR_SONG,
+    payload: addSongLyrics,
+});
 
 const translateSongLyrics = clonePlainObjectWithOverrides(
     (testFsaMap.get(TRANSLATE_SONG_LYRICS) as CommandFSA<TranslateSongLyrics>).payload,
@@ -97,16 +103,17 @@ const translateSongLyrics = clonePlainObjectWithOverrides(
     }
 );
 
-const songLyricsTranslated = new SongLyricsTranslated(
-    translateSongLyrics,
-    buildDummyUuid(127),
-    dummySystemUserId
-);
+const songLyricsTranslated = lyricsAddedForSong.andThen<SongLyricsTranslated>({
+    type: SONG_LYRICS_TRANSLATED,
+    payload: translateSongLyrics,
+});
 
 describe(`Song.fromEventHistory`, () => {
     describe(`when there are events for the given aggregate root`, () => {
         describe(`when there is only a creation event`, () => {
-            const eventStream = [songCreated];
+            const eventStream = songCreated.as({
+                id,
+            });
 
             it(`should succeed`, () => {
                 const songBuildResult = Song.fromEventHistory(eventStream, id);
@@ -126,7 +133,9 @@ describe(`Song.fromEventHistory`, () => {
         });
 
         describe(`when there is a translation for the title`, () => {
-            const eventStream = [songCreated, songTitleTranslated];
+            const eventStream = songTitleTranslated.as({
+                id,
+            });
 
             it(`should have the correct title`, () => {
                 const song = Song.fromEventHistory(eventStream, id) as Song;
@@ -139,7 +148,7 @@ describe(`Song.fromEventHistory`, () => {
         });
 
         describe(`when lyrics have been added`, () => {
-            const eventStream = [songCreated, songTitleTranslated, lyricsAddedForSong];
+            const eventStream = lyricsAddedForSong.as({ id });
 
             it(`should have the lyrics`, () => {
                 const song = Song.fromEventHistory(eventStream, id) as Song;
@@ -151,12 +160,7 @@ describe(`Song.fromEventHistory`, () => {
         });
 
         describe(`when the lyrics have been translated`, () => {
-            const eventStream = [
-                songCreated,
-                songTitleTranslated,
-                lyricsAddedForSong,
-                songLyricsTranslated,
-            ];
+            const eventStream = songLyricsTranslated.as({ id });
 
             it(`should have translations for the lyrics`, () => {
                 const song = Song.fromEventHistory(eventStream, id) as Song;
@@ -170,21 +174,22 @@ describe(`Song.fromEventHistory`, () => {
     });
 
     describe(`when the first event is not a creation event for the given aggregate root`, () => {
-        const eventStream = [songTitleTranslated];
+        const eventStream = new TestEventStream()
+            .andThen<SongTitleTranslated>({
+                type: SONG_TITLE_TRANSLATED,
+                payload: translateSongTitle,
+            })
+            .as({ id });
 
         it(`should throw`, () => {
-            const attemptToBuildSong = () =>
-                Song.fromEventHistory(
-                    eventStream,
-                    songTitleTranslated.payload[AGGREGATE_COMPOSITE_IDENTIFIER].id
-                );
+            const attemptToBuildSong = () => Song.fromEventHistory(eventStream, id);
 
             expect(attemptToBuildSong).toThrow();
         });
     });
 
     describe(`when there are no events for the given Song`, () => {
-        const eventStream = [songCreated, songTitleTranslated];
+        const eventStream = songTitleTranslated.as({ id });
 
         const bogusId = buildDummyUuid(456);
 

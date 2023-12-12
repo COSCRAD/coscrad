@@ -11,13 +11,7 @@ export const convertSequenceNumberToUuid = (sequenceNumber: number): string =>
 export const convertAggregatesIdToUuid = <T extends Aggregate = Aggregate>(aggregate: T): T => {
     const updatedAggregate = aggregate.clone<T>({
         id: convertSequenceNumberToUuid(parseInt(aggregate.id)),
-        eventHistory:
-            aggregate.eventHistory?.map((event) => ({
-                ...event,
-                meta: {
-                    id: convertSequenceNumberToUuid(parseInt(event.meta.id)),
-                },
-            })) || [],
+        // Note that we do not map over event IDs here as we don't need to find them by sequence number
     } as unknown as DeepPartial<DTO<T>>);
 
     return updatedAggregate;

@@ -10,6 +10,7 @@ import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { validAggregateOrThrow } from '../../../shared/functional';
 import { VocabularyList } from '../../entities/vocabulary-list.entity';
 import { CreateVocabularyList } from './create-vocabulary-list.command';
@@ -56,11 +57,7 @@ export class CreateVocabularyListCommandHandler extends BaseCreateCommandHandler
         return instance.validateExternalState(state);
     }
 
-    protected buildEvent(
-        command: CreateVocabularyList,
-        eventId: string,
-        userId: string
-    ): BaseEvent {
-        return new vocabularyListCreated(command, eventId, userId);
+    protected buildEvent(command: CreateVocabularyList, eventMeta: EventRecordMetadata): BaseEvent {
+        return new vocabularyListCreated(command, eventMeta);
     }
 }

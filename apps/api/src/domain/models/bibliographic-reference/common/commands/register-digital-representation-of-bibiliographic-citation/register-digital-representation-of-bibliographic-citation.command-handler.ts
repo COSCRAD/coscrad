@@ -9,6 +9,7 @@ import { InMemorySnapshot } from '../../../../../types/ResourceType';
 import { DigitalText } from '../../../../digital-text/entities';
 import { BaseUpdateCommandHandler } from '../../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../../shared/events/types/EventRecordMetadata';
 import { validAggregateOrThrow } from '../../../../shared/functional';
 import { IBibliographicReferenceData } from '../../../interfaces/bibliographic-reference-data.interface';
 import { IBibliographicReference } from '../../../interfaces/bibliographic-reference.interface';
@@ -90,9 +91,8 @@ export class RegisterDigitalRepresentationOfBibliographicCitationCommandHandler 
 
     protected buildEvent(
         command: RegisterDigitalRepresentationOfBibliographicCitation,
-        eventId: string,
-        userId: string
+        eventMeta: EventRecordMetadata
     ): BaseEvent<ICommandBase> {
-        return new DigitalRepresentationOfBibliographicCitationRegistered(command, eventId, userId);
+        return new DigitalRepresentationOfBibliographicCitationRegistered(command, eventMeta);
     }
 }
