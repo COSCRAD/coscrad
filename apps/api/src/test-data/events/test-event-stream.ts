@@ -5,6 +5,8 @@ import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUu
 import { dummyDateNow } from '../../domain/models/__tests__/utilities/dummyDateNow';
 import {
     DigitalTextCreated,
+    DigitalTextPageContentTranslated,
+    DigitalTextPageContentTranslatedPayload,
     PageAddedToDigitalText,
 } from '../../domain/models/digital-text/commands';
 import {
@@ -231,6 +233,26 @@ const buildContentAddedToDigitalTextPage = (
     );
 };
 
+const buildDigitalTextPageContentTranslated = (
+    payloadOverrides: DeepPartial<DigitalTextPageContentTranslatedPayload>,
+    metadataOverrides: DeepPartial<EventRecordMetadata>
+) => {
+    const defaultPayload: DigitalTextPageContentTranslatedPayload = {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.digitalText,
+            id: buildDummyUuid(124),
+        },
+        pageIdentifier: '117',
+        translation: 'the translation',
+        languageCode: LanguageCode.English,
+    };
+
+    return new DigitalTextPageContentTranslated(
+        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        { ...buildEventMeta(), ...metadataOverrides }
+    );
+};
+
 const buildTermCreated = (
     payloadOverrides: DeepPartial<TermCreatedPayload>,
     metadataOverrides: DeepPartial<EventRecordMetadata>
@@ -432,7 +454,11 @@ export class TestEventStream {
             .registerBuilder(`SONG_CREATED`, buildSongCreated)
             .registerBuilder(`SONG_TITLE_TRANSLATED`, buildSongTitleTranslated)
             .registerBuilder(`LYRICS_ADDED_FOR_SONG`, buildLyricsAddedForSong)
-            .registerBuilder(`SONG_LYRICS_TRANSLATED`, buildSongLyricsTranslated);
+            .registerBuilder(`SONG_LYRICS_TRANSLATED`, buildSongLyricsTranslated)
+            .registerBuilder(
+                `DIGITAL_TEXT_PAGE_CONTENT_TRANSLATED`,
+                buildDigitalTextPageContentTranslated
+            );
     }
 
     andThen<T extends BaseEvent>(

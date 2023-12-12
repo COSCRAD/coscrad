@@ -32,9 +32,9 @@ import CommandExecutionError from '../../../shared/common-command-errors/Command
 import { DigitalText } from '../../entities';
 import DigitalTextPage from '../../entities/digital-text-page.entity';
 import {
-    CannotAddContentToMissingPageError,
     CannotOverwritePageContentError,
     FailedToUpdateDigitalTextPageError,
+    MissingPageError,
 } from '../../errors';
 import { PageAddedToDigitalText } from '../add-page-to-digital-text/page-added-to-digital-text.event';
 import { DigitalTextCreated } from '../digital-text-created.event';
@@ -232,12 +232,7 @@ describe(commandType, () => {
                             new FailedToUpdateDigitalTextPageError(
                                 existingPageIdentifier,
                                 digitalTextId,
-                                [
-                                    new CannotAddContentToMissingPageError(
-                                        existingPageIdentifier,
-                                        digitalTextId
-                                    ),
-                                ]
+                                [new MissingPageError(existingPageIdentifier, digitalTextId)]
                             ),
                         ])
                     );

@@ -10,7 +10,7 @@ import { RegisterIndexScopedCommands } from '../../../../app/controllers/command
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
 import { Maybe } from '../../../../lib/types/maybe';
-import { NotFound } from '../../../../lib/types/not-found';
+import { NotFound, isNotFound } from '../../../../lib/types/not-found';
 import formatAggregateCompositeIdentifier from '../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
@@ -30,7 +30,11 @@ import { Resource } from '../../resource.entity';
 import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
 import { ResourceReadAccessGrantedToUser } from '../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event';
 import { BaseEvent } from '../../shared/events/base-event.entity';
-import { DigitalTextCreated, PageAddedToDigitalText } from '../commands';
+import {
+    DigitalTextCreated,
+    DigitalTextPageContentTranslated,
+    PageAddedToDigitalText,
+} from '../commands';
 import { ContentAddedToDigitalTextPage } from '../commands/add-content-to-digital-text-page';
 import {
     ADD_PAGE_TO_DIGITAL_TEXT,
@@ -39,9 +43,10 @@ import {
     PAGE_ADDED_TO_DIGITAL_TEXT,
 } from '../constants';
 import { FailedToUpdateDigitalTextPageError } from '../errors';
-import { CannotAddContentToMissingPageError } from '../errors/cannot-add-content-to-missing-page.error';
 import { CannotAddPageWithDuplicateIdentifierError } from '../errors/cannot-add-page-with-duplicate-identifier.error';
 import { DuplicateDigitalTextTitleError } from '../errors/duplicate-digital-text-title.error';
+import { MissingPageContentError } from '../errors/missing-page-content.error';
+import { MissingPageError } from '../errors/missing-page.error';
 import DigitalTextPage from './digital-text-page.entity';
 import { PageIdentifier } from './types/page-identifier';
 
@@ -142,7 +147,7 @@ export class DigitalText extends Resource {
     ): ResultOrError<DigitalText> {
         if (!this.hasPage(pageIdentifier)) {
             return new FailedToUpdateDigitalTextPageError(pageIdentifier, this.id, [
-                new CannotAddContentToMissingPageError(pageIdentifier, this.id),
+                new MissingPageError(pageIdentifier, this.id),
             ]);
         }
 
@@ -167,6 +172,33 @@ export class DigitalText extends Resource {
         });
 
         return updateResult;
+    }
+
+    translatePageContent(
+        pageIdentifier: PageIdentifier,
+        text: string,
+        languageCode: LanguageCode
+    ): ResultOrError<DigitalText> {
+        const pageSearchResult = this.getPage(pageIdentifier);
+
+        if (isNotFound(pageSearchResult)) return new MissingPageError(pageIdentifier, this.id);
+
+        if (!pageSearchResult.hasContent()) {
+            return new MissingPageContentError(pageIdentifier);
+        }
+
+        const updatedPage = pageSearchResult.translateContent(
+            text,
+            languageCode
+        ) as DigitalTextPage;
+
+        const updatedPages = this.pages.map((page) =>
+            page.identifier === pageIdentifier ? updatedPage : page
+        );
+
+        return this.safeClone<DigitalText>({
+            pages: updatedPages,
+        });
     }
 
     /**
@@ -309,6 +341,16 @@ export class DigitalText extends Resource {
                 } = event as ResourceReadAccessGrantedToUser;
 
                 return digitalText.addEventToHistory(event).grantReadAccessToUser(userId);
+            }
+
+            if (event.type === `DIGITAL_TEXT_PAGE_CONTENT_TRANSLATED`) {
+                const {
+                    payload: { pageIdentifier: pageIdentifer, translation, languageCode },
+                } = event as DigitalTextPageContentTranslated;
+
+                return digitalText
+                    .addEventToHistory(event)
+                    .translatePageContent(pageIdentifer, translation, languageCode);
             }
 
             // This event was not handled
