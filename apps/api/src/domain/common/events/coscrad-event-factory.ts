@@ -31,7 +31,7 @@ export class CoscradEventFactory {
 
         /**
          * TODO We need to make the mapping layer from DTO to constructor
-         * explicit and safely typed. It is difficult to come to the conlusion
+         * explicit and safely typed. It is difficult to come to the conclusion
          * that this must be updated when we update the API of the BaseEvent
          * constructor.
          */

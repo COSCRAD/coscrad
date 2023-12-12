@@ -1,4 +1,4 @@
-import { AGGREGATE_COMPOSITE_IDENTIFIER, ICommandBase } from '@coscrad/api-interfaces';
+import { AGGREGATE_COMPOSITE_IDENTIFIER } from '@coscrad/api-interfaces';
 import { isDeepStrictEqual } from 'util';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
@@ -6,12 +6,12 @@ import { AggregateId } from '../../../types/AggregateId';
 import { EventRecordMetadata } from './types/EventRecordMetadata';
 
 export interface IEventPayload {
-    aggregateCompositeIdentifier: AggregateId;
+    [AGGREGATE_COMPOSITE_IDENTIFIER]: AggregateId;
 }
 
 export abstract class BaseEvent<
     // TODO Do this. Declare a Payload interface with `aggregateCompositeIdentifier` on it
-    TPayload extends ICommandBase = ICommandBase
+    TPayload extends IEventPayload = IEventPayload
 > {
     abstract type: string;
 

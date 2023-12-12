@@ -141,7 +141,7 @@ const buildTranslatedTerm = (dto: TestTermDto): Term => {
 
 /**
  * This helper allows one to use state-based reasoning to seed test data and yet
- * attain an event history that coroborates the story.
+ * attain an event history that corroborates the story.
  */
 export const buildTestTerm = (dto: TestTermDto): Term => {
     const { isPromptTerm } = dto;
