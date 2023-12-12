@@ -29,6 +29,7 @@ import {
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import {
+    AudioAddedForTermPayload,
     PromptTermCreated,
     TermCreated,
     TermElicitedFromPromptPayload,
@@ -261,6 +262,12 @@ export class Term extends Resource {
                 return accumulatedTerm
                     .addEventToHistory(nextEvent)
                     .elicitFromPrompt(text, languageCode);
+            }
+
+            if (nextEvent.isOfType(`AUDIO_ADDED_FOR_TERM`)) {
+                const { audioItemId } = nextEvent.payload as AudioAddedForTermPayload;
+
+                return accumulatedTerm.addEventToHistory(nextEvent).addAudio(audioItemId);
             }
 
             if (nextEvent.isOfType(`RESOURCE_PUBLISHED`)) {

@@ -32,6 +32,8 @@ import {
     ResourceOrNoteTaggedPayload,
 } from '../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
 import {
+    AudioAddedForTerm,
+    AudioAddedForTermPayload,
     PromptTermCreated,
     PromptTermCreatedPayload,
     TermCreated,
@@ -333,6 +335,24 @@ const buildTermElicitedFromPrompt = (
     );
 };
 
+const buildAudioAddedForTerm = (
+    payloadOverrides: DeepPartial<AudioAddedForTermPayload>,
+    metadataOverrides: DeepPartial<EventRecordMetadata>
+) => {
+    const defaultPayload: AudioAddedForTermPayload = {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.term,
+            id: buildDummyUuid(127),
+        },
+        audioItemId: buildDummyUuid(777),
+    };
+
+    return new AudioAddedForTerm(clonePlainObjectWithOverrides(defaultPayload, payloadOverrides), {
+        ...buildEventMeta(),
+        ...metadataOverrides,
+    });
+};
+
 const buildSongCreated = (
     payloadOverrides: DeepPartial<SongCreatedPayload>,
     metadataOverrides: DeepPartial<EventRecordMetadata>
@@ -458,7 +478,8 @@ export class TestEventStream {
             .registerBuilder(
                 `DIGITAL_TEXT_PAGE_CONTENT_TRANSLATED`,
                 buildDigitalTextPageContentTranslated
-            );
+            )
+            .registerBuilder(`AUDIO_ADDED_FOR_TERM`, buildAudioAddedForTerm);
     }
 
     andThen<T extends BaseEvent>(

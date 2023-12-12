@@ -1,3 +1,4 @@
+export * from './add-audio-for-term';
 export * from './create-prompt-term';
 export * from './create-term';
 export * from './elicit-term-from-prompt';
