@@ -36,10 +36,10 @@ const AudioAnnotatorWidget = ({ audioUrl }: AudioAnnotatorWidgetProps): JSX.Elem
                     <Typography variant="h5">Valid Time Range Selected:</Typography>
                     <Box p={2}>
                         <Typography variant="h6">
-                            inPoint: {timeRangeSelected.inPointMilliseconds}
+                            inPoint: {timeRangeSelected.inPointSeconds}
                         </Typography>
                         <Typography variant="h6">
-                            outPoint: {timeRangeSelected.outPointMilliseconds}
+                            outPoint: {timeRangeSelected.outPointSeconds}
                         </Typography>
                     </Box>
                 </Item>
@@ -48,7 +48,7 @@ const AudioAnnotatorWidget = ({ audioUrl }: AudioAnnotatorWidgetProps): JSX.Elem
     );
 };
 
-describe('<AudioPlayer />', () => {
+describe('<AudioAnnotator />', () => {
     const validAudioUrl =
         'https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3';
 
@@ -112,7 +112,7 @@ describe('<AudioPlayer />', () => {
             });
 
             describe(`when the mark in-point button is clicked, clicking the mark out-point button`, () => {
-                it.only('should mark an out-point', () => {
+                it('should mark an out-point', () => {
                     cy.wait(2000);
 
                     cy.getByDataAttribute('in-point-marker-button').click();
@@ -202,6 +202,10 @@ describe('<AudioPlayer />', () => {
                     cy.get('body').type('c');
 
                     cy.getByDataAttribute('time-range-selected').should('not.exist');
+
+                    cy.getByDataAttribute('selection-bar-inpoint').should('not.be.visible');
+
+                    cy.getByDataAttribute('selection-bar-full').should('not.be.visible');
                 });
             });
         });

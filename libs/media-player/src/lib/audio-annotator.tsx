@@ -1,12 +1,18 @@
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import {
     ArrowLeft as ArrowLeftIcon,
     ArrowRight as ArrowRightIcon,
     Clear as ClearIcon,
 } from '@mui/icons-material/';
-import { Box, Grid, IconButton, Stack, Typography, styled } from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
+import { Box, IconButton, Stack, Typography, styled } from '@mui/material';
+import { useRef, useState } from 'react';
+import { FormattedMediaTime } from './formatted-currenttime';
 import { KeyboardKey, useKeyDown } from './use-key-down';
 
+/**
+ * This is a duplicate of the enum in the Audio component, it should live in
+ * it's own file
+ */
 export enum AudioMIMEType {
     mp3 = 'audio/mpeg',
     audioMp4 = 'audio/mp4',
@@ -20,16 +26,16 @@ const isAudioMIMEType = (input: unknown): input is AudioMIMEType =>
     Object.values(AudioMIMEType).some((value) => value === (input as AudioMIMEType));
 
 const isValidTimeRangeSelection = (timeRangeSelection: TimeRangeSelection, duration: number) => {
-    const { inPointMilliseconds, outPointMilliseconds } = timeRangeSelection;
+    const { inPointSeconds, outPointSeconds } = timeRangeSelection;
 
-    if (outPointMilliseconds >= duration) return false;
+    if (outPointSeconds >= duration) return false;
 
-    return outPointMilliseconds > inPointMilliseconds;
+    return outPointSeconds > inPointSeconds;
 };
 
 export type TimeRangeSelection = {
-    inPointMilliseconds: number;
-    outPointMilliseconds: number;
+    inPointSeconds: number;
+    outPointSeconds: number;
 };
 
 type TimeRangeSelectionBar = 'inPointSelected' | 'fullSelection';
@@ -51,6 +57,14 @@ const StyledAudioPlayer = styled('audio')`
     border-radius: 20px;
 `;
 
+const TimeRangeSelectionVisual = styled(Box)({
+    height: '20px',
+    width: '150px',
+    backgroundColor: '#75ecff',
+    borderRadius: '4px',
+    position: 'absolute',
+});
+
 export const AudioAnnotator = ({
     audioUrl,
     mimeType,
@@ -64,9 +78,9 @@ export const AudioAnnotator = ({
 
     const [isPlayHeadMoved, setIsPlayHeadMoved] = useState<boolean>(false);
 
-    const [inPointMilliseconds, setInPointMilliseconds] = useState<number | null>(null);
+    const [inPointSeconds, setInPointSeconds] = useState<number | null>(null);
 
-    const [outPointMilliseconds, setOutPointMilliseconds] = useState<number | null>(null);
+    const [outPointSeconds, setOutPointSeconds] = useState<number | null>(null);
 
     const [errorMessage, setErrorMessage] = useState<string>('');
 
@@ -83,7 +97,7 @@ export const AudioAnnotator = ({
 
         console.log({ inpoint: audioRef.current!.currentTime });
 
-        setInPointMilliseconds(audioRef.current!.currentTime);
+        setInPointSeconds(audioRef.current!.currentTime);
 
         toggleTimeRangeSelectionBars('inPointSelected');
     };
@@ -94,19 +108,33 @@ export const AudioAnnotator = ({
         console.log({ outpoint: audioRef.current!.currentTime });
 
         const timeRangeSelection = {
-            inPointMilliseconds: inPointMilliseconds as number,
-            outPointMilliseconds: audioRef.current!.currentTime as number,
+            inPointSeconds: inPointSeconds as number,
+            outPointSeconds: audioRef.current!.currentTime as number,
         };
 
         const duration = audioRef.current!.duration;
 
         if (!isValidTimeRangeSelection(timeRangeSelection, duration)) {
-            setErrorMessage('Out point cannot come before the in point');
+            if (timeRangeSelection.inPointSeconds >= duration) {
+                setInPointSeconds(null);
+
+                setOutPointSeconds(null);
+
+                setUxState({ timeRangeSelectionBar: null });
+
+                onTimeRangeSelected(null);
+
+                setErrorMessage(
+                    'Not a valid time range.  Marker points cannot be set after play ends'
+                );
+            } else {
+                setErrorMessage('Not a valid time range.  Out point must come after in point');
+            }
 
             return;
         }
 
-        setOutPointMilliseconds(audioRef.current!.currentTime);
+        setOutPointSeconds(audioRef.current!.currentTime);
 
         toggleTimeRangeSelectionBars('fullSelection');
 
@@ -114,9 +142,11 @@ export const AudioAnnotator = ({
     };
 
     const clearMarkers = () => {
-        setInPointMilliseconds(null);
+        setInPointSeconds(null);
 
-        setOutPointMilliseconds(null);
+        setOutPointSeconds(null);
+
+        setUxState({ timeRangeSelectionBar: null });
 
         onTimeRangeSelected(null);
 
@@ -135,11 +165,9 @@ export const AudioAnnotator = ({
         clearMarkers();
     }, [KeyboardKey.clear]);
 
-    useEffect(() => {
-        console.log({ uxState });
-    }, [uxState]);
-
     const toggleTimeRangeSelectionBars = (timeRangeSelectionBar: TimeRangeSelectionBar) => {
+        console.log(`timeRangeSelectionBar: ${timeRangeSelectionBar} uxstate: `, uxState);
+
         const isVisible = isBarVisible(timeRangeSelectionBar, uxState);
 
         if (isVisible) {
@@ -185,67 +213,61 @@ export const AudioAnnotator = ({
                 <IconButton
                     data-testid="out-point-marker-button"
                     onClick={markOutPoint}
-                    disabled={inPointMilliseconds === null}
+                    disabled={inPointSeconds === null}
                 >
                     <ArrowLeftIcon />
                 </IconButton>
-                <IconButton
-                    data-testid="clear-selected-time-range-button"
-                    onClick={clearMarkers}
-                    disabled={inPointMilliseconds === null}
-                >
-                    <ClearIcon />
-                </IconButton>
             </Box>
-            <Box mt={1}>
-                <Grid container spacing={1}>
-                    <Grid item xs={3}>
-                        <Typography variant="body1" fontWeight="bold">
-                            Inpoint: {inPointMilliseconds}
+            <Box display="inline-flex" alignItems="center" mt={1}>
+                <Box width="70px">
+                    {!isNullOrUndefined(inPointSeconds) ? (
+                        <Typography variant="body1">
+                            <FormattedMediaTime timeInSeconds={inPointSeconds} />
                         </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Box
-                            data-testid="selection-bar-inpoint"
-                            sx={{
-                                height: '20px',
-                                width: '100%',
-                                backgroundColor: '#75ecff',
-                                backgroundImage: 'linear-gradient(to right, #75ecff, #fff)',
-                                borderLeft: '1px solid #0671ff',
-                                borderRadius: '4px',
-                                visibility: isBarVisible('inPointSelected', uxState)
-                                    ? 'visible'
-                                    : 'hidden',
-                                position: 'absolute',
-                            }}
-                        >
-                            &nbsp;
-                        </Box>
-                        <Box
-                            data-testid="selection-bar-full"
-                            sx={{
-                                height: '20px',
-                                width: '100%',
-                                backgroundColor: '#75ecff',
-                                borderRight: '1px solid #0671ff',
-                                borderLeft: '1px solid #0671ff',
-                                borderRadius: '4px',
-                                visibility: isBarVisible('fullSelection', uxState)
-                                    ? 'visible'
-                                    : 'hidden',
-                                position: 'absolute',
-                            }}
-                        >
-                            &nbsp;
-                        </Box>
-                    </Grid>
-                    <Grid item xs={3}>
-                        <Typography variant="body1" fontWeight="bold">
-                            Outpoint: {outPointMilliseconds}
+                    ) : null}
+                </Box>
+                <Box width="160px" height="20px" padding="0 20px">
+                    <TimeRangeSelectionVisual
+                        data-testid="selection-bar-inpoint"
+                        sx={{
+                            backgroundImage: 'linear-gradient(to right, #75ecff, #fff)',
+                            borderLeft: '1px solid #0671ff',
+                            visibility: isBarVisible('inPointSelected', uxState)
+                                ? 'visible'
+                                : 'hidden',
+                        }}
+                    >
+                        &nbsp;
+                    </TimeRangeSelectionVisual>
+                    <TimeRangeSelectionVisual
+                        data-testid="selection-bar-full"
+                        sx={{
+                            borderRight: '1px solid #0671ff',
+                            borderLeft: '1px solid #0671ff',
+                            visibility: isBarVisible('fullSelection', uxState)
+                                ? 'visible'
+                                : 'hidden',
+                        }}
+                    >
+                        &nbsp;
+                    </TimeRangeSelectionVisual>
+                </Box>
+                <Box width="70px">
+                    {!isNullOrUndefined(outPointSeconds) ? (
+                        <Typography variant="body1">
+                            <FormattedMediaTime timeInSeconds={outPointSeconds} />
                         </Typography>
-                    </Grid>
-                </Grid>
+                    ) : null}
+                </Box>
+                <Box width="70px">
+                    <IconButton
+                        data-testid="clear-selected-time-range-button"
+                        onClick={clearMarkers}
+                        sx={{ visibility: inPointSeconds === null ? 'hidden' : 'visible' }}
+                    >
+                        <ClearIcon />
+                    </IconButton>
+                </Box>
             </Box>
         </Stack>
     );
