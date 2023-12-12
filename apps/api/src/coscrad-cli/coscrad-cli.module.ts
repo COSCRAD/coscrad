@@ -8,6 +8,7 @@ import { ClearDatabaseCliCommand } from './clear-database.cli-comand';
 import { DomainDumpCliCommand } from './data-dump.cli-command';
 import { DomainRestoreCliCommand } from './data-restore.cli-command';
 import { ExecuteCommandStreamCliCommand } from './execute-command-stream.cli-command';
+import { IngestMediaItemsCliCommand } from './ingest-media-items.cli-command';
 import { ListMigrationsCliCommand } from './list-migrations.cli-command';
 import { ConsoleCoscradCliLogger, COSCRAD_LOGGER_TOKEN } from './logging';
 import { RevertLatestMigrationCliCommand } from './revert-latest-migration';
@@ -28,6 +29,7 @@ import { ValidateInvariantsCliCommand } from './validate-invariants.cli-command'
         ExecuteCommandStreamCliCommand,
         SeedTestDataWithCommand,
         SeedTestUuids,
+        IngestMediaItemsCliCommand,
         {
             provide: COSCRAD_LOGGER_TOKEN,
             useClass: ConsoleCoscradCliLogger,
