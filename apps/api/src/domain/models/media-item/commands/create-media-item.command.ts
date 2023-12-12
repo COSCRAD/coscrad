@@ -61,6 +61,7 @@ export class CreateMediaItem implements ICommandBase {
     })
     readonly title?: string;
 
+    // TODO Remove this
     @NonEmptyString({
         isOptional: true,
         label: 'title (colonial language)',
