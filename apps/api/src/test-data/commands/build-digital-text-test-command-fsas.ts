@@ -1,7 +1,11 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandFSA } from '../../app/controllers/command/command-fsa/command-fsa.entity';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
-import { AddPageToDigitalText, CreateDigitalText } from '../../domain/models/digital-text/commands';
+import {
+    AddPageToDigitalText,
+    CreateDigitalText,
+    TranslateDigitalTextPageContent,
+} from '../../domain/models/digital-text/commands';
 import { AddContentToDigitalTextPage } from '../../domain/models/digital-text/commands/add-content-to-digital-text-page';
 import {
     ADD_PAGE_TO_DIGITAL_TEXT,
@@ -40,8 +44,19 @@ const addContentToDigitalTextPage: CommandFSA<AddContentToDigitalTextPage> = {
     },
 };
 
+const translateDigitalTextPageContent: CommandFSA<TranslateDigitalTextPageContent> = {
+    type: `TRANSLATE_DIGITAL_TEXT_PAGE_CONTENT`,
+    payload: {
+        aggregateCompositeIdentifier: { id, type },
+        pageIdentifier: '117',
+        languageCode: LanguageCode.Chilcotin,
+        translation: 'the trainstation',
+    },
+};
+
 export const buildDigitalTextCommandFsas = () => [
     createDigitalText,
     addPageToDigitalText,
     addContentToDigitalTextPage,
+    translateDigitalTextPageContent,
 ];

@@ -6,12 +6,12 @@
     "editor.codeActionsOnSave": {
         "source.fixAll": false,
         "source.organizeImports": true
-      },
-      "[typescript]": {
+    },
+    "[typescript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
-      },
-      "typescript.preferences.quoteStyle": "single",
-      "typescript.updateImportsOnFileMove.enabled": "always",
-      "javascript.updateImportsOnFileMove.enabled": "always",
-      "typescript.tsdk": "node_modules/typescript/lib",
+    },
+    "typescript.preferences.quoteStyle": "single",
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "typescript.tsdk": "node_modules/typescript/lib"
 }

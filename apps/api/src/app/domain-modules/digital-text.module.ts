@@ -4,7 +4,9 @@ import { CoscradEventFactory } from '../../domain/common';
 import {
     AddPageToDigitalText,
     AddPageToDigitalTextCommandHandler,
+    DigitalTextPageContentTranslated,
     PageAddedToDigitalText,
+    TranslateDigitalTextPageContent,
 } from '../../domain/models/digital-text/commands';
 import {
     AddContentToDigitalTextPage,
@@ -41,10 +43,12 @@ import { DigitalTextQueryController } from '../controllers/resources/digital-tex
             CreateDigitalText,
             AddPageToDigitalText,
             AddContentToDigitalTextPage,
+            TranslateDigitalTextPageContent,
             // Events
             DigitalTextCreated,
             PageAddedToDigitalText,
             ContentAddedToDigitalTextPage,
+            DigitalTextPageContentTranslated,
         ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
