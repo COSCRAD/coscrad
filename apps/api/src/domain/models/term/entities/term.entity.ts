@@ -168,7 +168,7 @@ export class Term extends Resource {
             return new CannotOverrideAudioForTermError(this.id, audioItemId);
         }
 
-        return this.clone<Term>({
+        return this.safeClone<Term>({
             audioItemId,
         });
     }
