@@ -91,7 +91,11 @@ export class GrantResourceReadAccessToUserCommandHandler implements ICommandHand
         const eventId = await this.idManager.generate();
 
         const updatedResourceWithEvents = resourceUpdateResult.addEventToHistory(
-            new ResourceReadAccessGrantedToUser(command, eventId, systemUserId)
+            new ResourceReadAccessGrantedToUser(command, {
+                id: eventId,
+                userId: systemUserId,
+                dateCreated: Date.now(),
+            })
         );
 
         /**

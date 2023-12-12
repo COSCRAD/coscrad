@@ -6,6 +6,7 @@ import { InternalError } from '../../../../../lib/errors/InternalError';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { VocabularyList } from '../../entities/vocabulary-list.entity';
 import { DropboxOrCheckbox } from '../../types/dropbox-or-checkbox';
 import {
@@ -47,9 +48,8 @@ export class RegisterVocabularyListFilterPropertyCommandHandler extends BaseUpda
 
     protected buildEvent(
         command: RegisterVocabularyListFilterProperty,
-        eventId: string,
-        userId: string
+        eventMeta: EventRecordMetadata
     ): BaseEvent {
-        return new VocabularyListFilterPropertyRegistered(command, eventId, userId);
+        return new VocabularyListFilterPropertyRegistered(command, eventMeta);
     }
 }

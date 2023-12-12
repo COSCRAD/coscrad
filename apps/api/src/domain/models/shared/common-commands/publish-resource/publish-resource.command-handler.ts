@@ -13,6 +13,7 @@ import { Resource } from '../../../resource.entity';
 import { BaseCommandHandler } from '../../command-handlers/base-command-handler';
 import AggregateNotFoundError from '../../common-command-errors/AggregateNotFoundError';
 import { BaseEvent } from '../../events/base-event.entity';
+import { EventRecordMetadata } from '../../events/types/EventRecordMetadata';
 import { PublishResource } from './publish-resource.command';
 import { ResourcePublished } from './resource-published.event';
 
@@ -51,8 +52,8 @@ export class PublishResourceCommandHandler extends BaseCommandHandler<Resource> 
         return instance.publish();
     }
 
-    protected buildEvent(command: PublishResource, eventId: string, userId: string): BaseEvent {
-        return new ResourcePublished(command, eventId, userId);
+    protected buildEvent(command: PublishResource, eventMeta: EventRecordMetadata): BaseEvent {
+        return new ResourcePublished(command, eventMeta);
     }
 
     protected async persist(
@@ -72,7 +73,7 @@ export class PublishResourceCommandHandler extends BaseCommandHandler<Resource> 
 
         await this.idManager.use({ id: eventId, type: EVENT });
 
-        const event = this.buildEvent(command, eventId, userId);
+        const event = this.buildEvent(command, { id: eventId, userId, dateCreated: Date.now() });
 
         const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);
 

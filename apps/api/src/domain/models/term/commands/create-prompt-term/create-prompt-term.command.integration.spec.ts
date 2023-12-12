@@ -9,7 +9,7 @@ import { ArangoDatabaseProvider } from '../../../../../persistence/database/data
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestCommandFsaMap } from '../../../../../test-data/commands';
-import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
+import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
 import { MultilingualTextItemRole } from '../../../../common/entities/multilingual-text';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../../types/AggregateId';
@@ -26,6 +26,7 @@ import AggregateIdAlreadyInUseError from '../../../shared/common-command-errors/
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import InvalidExternalStateError from '../../../shared/common-command-errors/InvalidExternalStateError';
 import { Term } from '../../entities/term.entity';
+import { buildTestTerm } from '../../test-data/build-test-term';
 import { CREATE_PROMPT_TERM } from './constants';
 import { CreatePromptTerm } from './create-prompt-term.command';
 
@@ -122,13 +123,24 @@ describe(commandType, () => {
 
                 await assertCreateCommandError(assertionHelperDependencies, {
                     systemUserId: dummySystemUserId,
-                    initialState: new DeluxeInMemoryStore({
-                        term: [
-                            getValidAggregateInstanceForTest(AggregateType.term).clone({
-                                id: usedId,
-                            }),
-                        ],
-                    }).fetchFullSnapshotInLegacyFormat(),
+                    seedInitialState: async () => {
+                        await testRepositoryProvider.addFullSnapshot(
+                            new DeluxeInMemoryStore({
+                                term: [
+                                    buildTestTerm({
+                                        aggregateCompositeIdentifier: {
+                                            id: usedId,
+                                        },
+                                        isPromptTerm: false,
+                                        text: buildMultilingualTextWithSingleItem(
+                                            'I have used that ID already',
+                                            LanguageCode.English
+                                        ),
+                                    }),
+                                ],
+                            }).fetchFullSnapshotInLegacyFormat()
+                        );
+                    },
                     buildCommandFSA: (_id) => buildValidCommandFSA(usedId),
                     checkError: (error) => {
                         assertErrorAsExpected(

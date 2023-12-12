@@ -18,6 +18,7 @@ import { InMemorySnapshot } from '../../../../../types/ResourceType';
 import { BaseCommandHandler } from '../../../../shared/command-handlers/base-command-handler';
 import AggregateNotFoundError from '../../../../shared/common-command-errors/AggregateNotFoundError';
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../../shared/events/types/EventRecordMetadata';
 import { AudioItem } from '../../../entities/audio-item.entity';
 import { TranscriptParticipant } from '../../../entities/transcript-participant';
 import { Video } from '../../../entities/video.entity';
@@ -80,10 +81,9 @@ export class AddParticipantToTranscriptCommandHandler extends BaseCommandHandler
 
     protected buildEvent(
         command: AddParticipantToTranscript,
-        eventId: string,
-        userId: string
+        eventMeta: EventRecordMetadata
     ): BaseEvent {
-        return new ParticipantAddedToTranscript(command, eventId, userId);
+        return new ParticipantAddedToTranscript(command, eventMeta);
     }
 
     // TODO There's still lots of overlap with the `create` command handler base- move to base class
@@ -97,7 +97,11 @@ export class AddParticipantToTranscriptCommandHandler extends BaseCommandHandler
 
         await this.idManager.use({ id: eventId, type: EVENT });
 
-        const event = this.buildEvent(command, eventId, systemUserId);
+        const event = this.buildEvent(command, {
+            id: eventId,
+            userId: systemUserId,
+            dateCreated: Date.now(),
+        });
 
         const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);
 

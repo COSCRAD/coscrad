@@ -8,6 +8,7 @@ import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../types/ResourceType';
 import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { validAggregateOrThrow } from '../../../shared/functional';
 import { Term } from '../../entities/term.entity';
 import { CreateTerm } from './create-term.command';
@@ -47,7 +48,7 @@ export class CreateTermCommandHandler extends BaseCreateCommandHandler<Term> {
         return term.validateExternalState(state);
     }
 
-    protected buildEvent(command: CreateTerm, eventId: string, userId: string): BaseEvent {
-        return new TermCreated(command, eventId, userId);
+    protected buildEvent(command: CreateTerm, eventMeta: EventRecordMetadata): BaseEvent {
+        return new TermCreated(command, eventMeta);
     }
 }

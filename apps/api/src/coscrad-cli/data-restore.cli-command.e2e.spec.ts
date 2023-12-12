@@ -116,12 +116,12 @@ describe(`CLI Command: **data-restore**`, () => {
 
         describe(`when using the --filepath option to specify the input file`, () => {
             it(`should restore the db state via the domain snapshot`, async () => {
-                const terms = await testRepositoryProvider
-                    .forResource(AggregateType.term)
+                const photographs = await testRepositoryProvider
+                    .forResource(AggregateType.photograph)
                     .fetchMany();
 
                 // sanity check to ensure db has been emptied
-                expect(terms).toEqual([]);
+                expect(photographs).toEqual([]);
 
                 await CommandTestFactory.run(commandInstance, [
                     cliCommandName,
@@ -200,7 +200,13 @@ describe(`CLI Command: **data-restore**`, () => {
                     []
                 );
 
-                const eventSourcedAggregateTypes = [AggregateType.digitalText, AggregateType.song];
+                const eventSourcedAggregateTypes = [
+                    AggregateType.digitalText,
+                    AggregateType.song,
+                    AggregateType.term,
+                ];
+
+                const compareStrings = (a: string, b: string) => a.localeCompare(b);
 
                 /**
                  * TODO [https://www.pivotaltracker.com/story/show/185903292] Support event-sourced models here
@@ -209,7 +215,9 @@ describe(`CLI Command: **data-restore**`, () => {
                  * least one instnace of each aggregate in the post-restore state
                  * is a good sanity check.
                  */
-                expect(aggregatesNotInSnapshot).toEqual(eventSourcedAggregateTypes);
+                expect(aggregatesNotInSnapshot.sort(compareStrings)).toEqual(
+                    eventSourcedAggregateTypes.sort(compareStrings)
+                );
             });
         });
     });

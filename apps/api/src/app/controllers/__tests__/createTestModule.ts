@@ -131,9 +131,14 @@ import {
     CreateTermCommandHandler,
     ElicitTermFromPrompt,
     ElicitTermFromPromptCommandHandler,
+    PromptTermCreated,
+    TermCreated,
+    TermElicitedFromPrompt,
+    TermTranslated,
     TranslateTerm,
     TranslateTermCommandHandler,
 } from '../../../domain/models/term/commands';
+import { Term } from '../../../domain/models/term/entities/term.entity';
 import {
     CreateGroup,
     CreateGroupCommandHandler,
@@ -153,7 +158,7 @@ import {
 } from '../../../domain/models/video';
 import {
     AddTermToVocabularyList,
-    AddTermtoVocabularyListCommandHandler,
+    AddTermToVocabularyListCommandHandler,
     AnalyzeTermInVocabularyList,
     AnalyzeTermInVocabularyListCommandHandler,
     CreateVocabularyList,
@@ -267,9 +272,14 @@ export const buildAllDataClassProviders = () =>
         ResourcePublished,
         TagCreated,
         ResourceOrNoteTagged,
+        TermCreated,
+        TermTranslated,
+        PromptTermCreated,
+        TermElicitedFromPrompt,
         // Aggregate Root Domain Models
         DigitalText,
         Song,
+        Term,
     ].map((ctor: Ctor<unknown>) => ({
         provide: ctor,
         useValue: ctor,
@@ -618,7 +628,7 @@ export default async (
             RegisterVocabularyListFilterProperty,
             RegisterVocabularyListFilterPropertyCommandHandler,
             AddTermToVocabularyList,
-            AddTermtoVocabularyListCommandHandler,
+            AddTermToVocabularyListCommandHandler,
             AnalyzeTermInVocabularyList,
             AnalyzeTermInVocabularyListCommandHandler,
             TranslateVideoName,

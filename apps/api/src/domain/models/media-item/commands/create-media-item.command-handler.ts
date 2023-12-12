@@ -4,11 +4,11 @@ import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid } from '../../../domainModelValidators/Valid';
 import getInstanceFactoryForResource from '../../../factories/getInstanceFactoryForResource';
-import { AggregateId } from '../../../types/AggregateId';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
 import { BaseCreateCommandHandler } from '../../shared/command-handlers/base-create-command-handler';
 import ResourceIdAlreadyInUseError from '../../shared/common-command-errors/ResourceIdAlreadyInUseError';
+import { EventRecordMetadata } from '../../shared/events/types/EventRecordMetadata';
 import idEquals from '../../shared/functional/idEquals';
 import { MediaItem } from '../entities/media-item.entity';
 import { CreateMediaItem } from './create-media-item.command';
@@ -74,7 +74,7 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
         return Valid;
     }
 
-    protected buildEvent(command: CreateMediaItem, eventId: AggregateId, userId: AggregateId) {
-        return new MediaItemCreated(command, eventId, userId);
+    protected buildEvent(command: CreateMediaItem, eventMeta: EventRecordMetadata) {
+        return new MediaItemCreated(command, eventMeta);
     }
 }

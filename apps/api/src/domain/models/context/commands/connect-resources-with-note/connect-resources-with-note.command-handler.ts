@@ -17,6 +17,7 @@ import { InMemorySnapshot } from '../../../../types/ResourceType';
 import { Resource } from '../../../resource.entity';
 import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { validAggregateOrThrow } from '../../../shared/functional';
 import { EdgeConnection } from '../../edge-connection.entity';
 import { ConnectResourcesWithNote } from './connect-resources-with-note.command';
@@ -103,9 +104,8 @@ export class ConnectResourcesWithNoteCommandHandler extends BaseCreateCommandHan
 
     protected buildEvent(
         command: ConnectResourcesWithNote,
-        eventId: string,
-        userId: string
+        eventMeta: EventRecordMetadata
     ): BaseEvent {
-        return new ResourcesConnectedWithNote(command, eventId, userId);
+        return new ResourcesConnectedWithNote(command, eventMeta);
     }
 }

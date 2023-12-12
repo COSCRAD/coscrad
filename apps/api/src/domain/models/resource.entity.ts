@@ -6,7 +6,6 @@ import { ResultOrError } from '../../types/ResultOrError';
 import DisallowedContextTypeForResourceError from '../domainModelValidators/errors/context/invalidContextStateErrors/DisallowedContextTypeForResourceError';
 import { Valid } from '../domainModelValidators/Valid';
 import { AggregateId } from '../types/AggregateId';
-import { ResourceCompositeIdentifier } from '../types/ResourceCompositeIdentifier';
 import { ResourceType } from '../types/ResourceType';
 import { Aggregate } from './aggregate.entity';
 import { getAllowedContextsForModel } from './allowedContexts/isContextAllowedForGivenResourceType';
@@ -40,11 +39,6 @@ export abstract class Resource extends Aggregate {
 
         this.queryAccessControlList = new AccessControlList(aclDto);
     }
-
-    override getCompositeIdentifier = (): ResourceCompositeIdentifier => ({
-        type: this.type,
-        id: this.id,
-    });
 
     grantReadAccessToUser<T extends Resource>(this: T, userId: AggregateId): ResultOrError<T> {
         if (this.queryAccessControlList.canUser(userId))

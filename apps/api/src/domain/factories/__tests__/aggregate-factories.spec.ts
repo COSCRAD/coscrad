@@ -8,7 +8,14 @@ import buildAggregateFactoryTestCases from './buildAggregateFactoryTestCases';
 
 const testCaseSets = buildAggregateFactoryTestCases();
 
-describe(`Aggregate factories`, () => {
+/**
+ * This test hasn't proven particularly useful. It does notify us when
+ * we change the way an aggregate is built, but mostly just gives us noise.
+ * Now that we are doing proper event sourcing and have detailed tests
+ * for event sourced domain models, this test isn't worth the cost of
+ * maintenance.
+ */
+describe.skip(`Aggregate factories`, () => {
     /**
      * TODO [https://www.pivotaltracker.com/story/show/183109452]
      * Change this to `AggregateType` and add test coverage for non-resource

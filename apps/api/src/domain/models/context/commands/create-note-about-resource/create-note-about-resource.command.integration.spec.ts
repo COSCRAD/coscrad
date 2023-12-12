@@ -150,7 +150,7 @@ const buildCreateNoteAboutResourceFSAForNote = (
     };
 };
 
-const eventSourcedResourceTypes = [ResourceType.song, ResourceType.digitalText];
+const eventSourcedResourceTypes = [ResourceType.song, ResourceType.digitalText, ResourceType.term];
 
 const comprehensiveValidFSAs = notesToCreate
     // filter out the self-connections (true notes) from the db
@@ -249,7 +249,9 @@ describe(commandType, () => {
                                 },
                             },
                         }),
-                        initialState: validInitialState,
+                        seedInitialState: async () => {
+                            await testRepositoryProvider.addFullSnapshot(validInitialState);
+                        },
                     });
                 });
             });
