@@ -118,6 +118,76 @@ export class Song extends Resource {
         return allErrors.concat(titleValidationErrors);
     }
 
+    protected getExternalReferences(): AggregateCompositeIdentifier[] {
+        return [];
+    }
+
+    /**
+     * Adds lyrics for a song that does not yet have any lyrics. To translate
+     * existing lyrics (`original` item in multilingual-text valued `lyrics`),
+     * use `translateLyrics` instead.
+     */
+    addLyrics(text: string, languageCode: LanguageCode): ResultOrError<Song> {
+        if (this.hasLyrics()) return new CannotAddDuplicateSetOfLyricsForSongError(this);
+
+        return this.safeClone({
+            lyrics: new MultilingualText({
+                items: [
+                    new MultilingualTextItem({
+                        text,
+                        languageCode,
+                        role: MultilingualTextItemRole.original,
+                    }),
+                ],
+            }),
+        } as DeepPartial<DTO<this>>);
+    }
+
+    translateTitle(translation: string, languageCode: LanguageCode): ResultOrError<Song> {
+        // return error if there is already a translation in languageCode
+        const newTitle = this.title.translate(
+            new MultilingualTextItem({
+                text: translation,
+                languageCode,
+                role: MultilingualTextItemRole.freeTranslation,
+            })
+        );
+
+        if (isInternalError(newTitle)) return newTitle;
+
+        return this.safeClone<Song>({
+            title: newTitle,
+        });
+    }
+
+    translateLyrics(text: string, languageCode: LanguageCode): ResultOrError<Song> {
+        if (!this.hasLyrics()) return new NoLyricsToTranslateError(this.id);
+
+        if (this.hasTranslation(languageCode))
+            return new SongLyricsHaveAlreadyBeenTranslatedToGivenLanguageError(
+                this.id,
+                languageCode
+            );
+
+        return this.translateMultilingualTextProperty('lyrics', {
+            text,
+            languageCode,
+            role: MultilingualTextItemRole.freeTranslation,
+        });
+    }
+
+    hasLyrics(): boolean {
+        return this.lyrics instanceof MultilingualText;
+    }
+
+    hasTranslation(languageCode: LanguageCode): boolean {
+        if (!this.hasLyrics()) return false;
+
+        const searchResult = this.lyrics.getTranslation(languageCode);
+
+        return !isNotFound(searchResult);
+    }
+
     static fromEventHistory(
         eventStream: BaseEvent[],
         idOfSongToCreate: AggregateId
@@ -194,75 +264,5 @@ export class Song extends Resource {
 
         // TODO Validate invariants as in the factories? Or leave this to the repositories?
         return newSong;
-    }
-
-    protected getExternalReferences(): AggregateCompositeIdentifier[] {
-        return [];
-    }
-
-    /**
-     * Adds lyrics for a song that does not yet have any lyrics. To translate
-     * existing lyrics (`original` item in multilingual-text valued `lyrics`),
-     * use `translateLyrics` instead.
-     */
-    addLyrics(text: string, languageCode: LanguageCode): ResultOrError<Song> {
-        if (this.hasLyrics()) return new CannotAddDuplicateSetOfLyricsForSongError(this);
-
-        return this.safeClone({
-            lyrics: new MultilingualText({
-                items: [
-                    new MultilingualTextItem({
-                        text,
-                        languageCode,
-                        role: MultilingualTextItemRole.original,
-                    }),
-                ],
-            }),
-        } as DeepPartial<DTO<this>>);
-    }
-
-    translateTitle(translation: string, languageCode: LanguageCode): ResultOrError<Song> {
-        // return error if there is already a translation in languageCode
-        const newTitle = this.title.translate(
-            new MultilingualTextItem({
-                text: translation,
-                languageCode,
-                role: MultilingualTextItemRole.freeTranslation,
-            })
-        );
-
-        if (isInternalError(newTitle)) return newTitle;
-
-        return this.safeClone<Song>({
-            title: newTitle,
-        });
-    }
-
-    translateLyrics(text: string, languageCode: LanguageCode): ResultOrError<Song> {
-        if (!this.hasLyrics()) return new NoLyricsToTranslateError(this.id);
-
-        if (this.hasTranslation(languageCode))
-            return new SongLyricsHaveAlreadyBeenTranslatedToGivenLanguageError(
-                this.id,
-                languageCode
-            );
-
-        return this.translateMultilingualTextProperty('lyrics', {
-            text,
-            languageCode,
-            role: MultilingualTextItemRole.freeTranslation,
-        });
-    }
-
-    hasLyrics(): boolean {
-        return this.lyrics instanceof MultilingualText;
-    }
-
-    hasTranslation(languageCode: LanguageCode): boolean {
-        if (!this.hasLyrics()) return false;
-
-        const searchResult = this.lyrics.getTranslation(languageCode);
-
-        return !isNotFound(searchResult);
     }
 }

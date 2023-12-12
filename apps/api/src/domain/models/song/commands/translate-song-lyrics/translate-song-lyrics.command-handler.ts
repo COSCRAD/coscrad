@@ -12,6 +12,7 @@ import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../../types/ResourceType';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { Song } from '../../song.entity';
 import { SongLyricsTranslated } from './song-lyrics-translated.event';
 import { TranslateSongLyrics } from './translate-song-lyrics.command';
@@ -52,7 +53,7 @@ export class TranslateSongLyricsCommandHandler extends BaseUpdateCommandHandler<
         return song.translateLyrics(translation, languageCode);
     }
 
-    protected buildEvent(command: TranslateSongLyrics, eventId: string, userId: string): BaseEvent {
-        return new SongLyricsTranslated(command, eventId, userId);
+    protected buildEvent(command: TranslateSongLyrics, eventMeta: EventRecordMetadata): BaseEvent {
+        return new SongLyricsTranslated(command, eventMeta);
     }
 }

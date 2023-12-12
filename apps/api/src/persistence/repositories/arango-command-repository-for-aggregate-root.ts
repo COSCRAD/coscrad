@@ -32,6 +32,13 @@ export interface IEventRepository {
 
     // TODO Should the event be an instance or DTO?
     appendEvent(event: DTO<BaseEvent>): Promise<void>;
+
+    appendEvents(events: DTO<BaseEvent>[]): Promise<void>;
+}
+
+// TODO Move these interfaces to the domain
+export interface IEventRepositoryProvider {
+    getEventRepository(): IEventRepository;
 }
 
 // TODO [https://www.pivotaltracker.com/story/show/185903292]  Include a test for each aggregate's repository
@@ -100,12 +107,6 @@ export class ArangoCommandRepositoryForAggregateRoot<TAggregate extends Aggregat
 
         const { eventHistory } = entity;
 
-        if (eventHistory.length > 1) {
-            throw new InternalError(
-                `A newly created aggregate root must have exactly 1 event in its history, but found: ${eventHistory.length}`
-            );
-        }
-
         if (eventHistory.length < 1) {
             throw new InternalError(
                 `failed to event source ${formatAggregateCompositeIdentifier(
@@ -114,11 +115,8 @@ export class ArangoCommandRepositoryForAggregateRoot<TAggregate extends Aggregat
             );
         }
 
-        // Events are appended in order, but should we sort here by date to be certain?
-        // note the index here will always be 0 based on the above checks
-        const latestEvent = eventHistory[eventHistory.length - 1];
-
-        await this.eventRepository.appendEvent(latestEvent);
+        // TODO Have these been sorted yet?
+        await this.eventRepository.appendEvents(eventHistory);
 
         await this.snapshotRepositoryForAggregate.create(entity);
     }

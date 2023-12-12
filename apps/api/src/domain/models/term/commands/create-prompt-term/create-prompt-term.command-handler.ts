@@ -17,6 +17,7 @@ import { ResultOrError } from '../../../../../types/ResultOrError';
 import getInstanceFactoryForResource from '../../../../factories/getInstanceFactoryForResource';
 import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { validAggregateOrThrow } from '../../../shared/functional';
 import { Term } from '../../entities/term.entity';
 import { CreatePromptTerm } from './create-prompt-term.command';
@@ -72,7 +73,7 @@ export class CreatePromptTermCommandHandler extends BaseCreateCommandHandler<Ter
         return term.validateExternalState(state);
     }
 
-    protected buildEvent(command: CreatePromptTerm, eventId: string, userId: string): BaseEvent {
-        return new PromptTermCreated(command, eventId, userId);
+    protected buildEvent(command: CreatePromptTerm, eventMeta: EventRecordMetadata): BaseEvent {
+        return new PromptTermCreated(command, eventMeta);
     }
 }

@@ -22,7 +22,6 @@ CoscradUserGroup {
       "type": "USER_GROUP_CREATED",
     },
   ],
-  "getCompositeIdentifier": [Function],
   "id": "41fb2d7f-c483-4e09-a1f0-e9909a6b0001",
   "label": "teachers",
   "type": "userGroup",

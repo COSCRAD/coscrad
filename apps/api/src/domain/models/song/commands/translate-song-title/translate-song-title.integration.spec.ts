@@ -1,9 +1,4 @@
-import {
-    AggregateType,
-    ICommandBase,
-    LanguageCode,
-    MultilingualTextItemRole,
-} from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
@@ -59,10 +54,8 @@ const existingSong = dummySong.clone({
                 languageCodeForTitle: existingTitle.getOriginalTextItem().languageCode,
                 audioItemId: buildDummyUuid(123),
                 // TODO Make BaseEvent generic ?
-            } as ICommandBase,
-            buildDummyUuid(111),
-            dummySystemUserId,
-            dummyDateNow
+            },
+            { id: buildDummyUuid(111), userId: dummySystemUserId, dateCreated: dummyDateNow }
         ),
     ],
 });

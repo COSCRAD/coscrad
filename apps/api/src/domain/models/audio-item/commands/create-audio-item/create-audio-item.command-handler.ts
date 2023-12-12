@@ -15,6 +15,7 @@ import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../types/ResourceType';
 import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { AudioItem } from '../../entities/audio-item.entity';
 import { CreateAudioItem } from './create-audio-item.command';
 import { AudioItemCreated } from './transcript-created.event';
@@ -83,7 +84,7 @@ export class CreateAudioItemCommandHandler extends BaseCreateCommandHandler<Audi
         return instance.validateExternalReferences(snapshot);
     }
 
-    protected buildEvent(command: CreateAudioItem, eventId: string, userId: string): BaseEvent {
-        return new AudioItemCreated(command, eventId, userId);
+    protected buildEvent(command: CreateAudioItem, eventMeta: EventRecordMetadata): BaseEvent {
+        return new AudioItemCreated(command, eventMeta);
     }
 }

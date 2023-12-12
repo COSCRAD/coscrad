@@ -17,6 +17,7 @@ import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { Playlist } from '../../entities';
 import { PlaylistNameTranslated } from './playlist-name-translated.event';
 import { TranslatePlaylistName } from './translate-playlist-name.command';
@@ -60,9 +61,8 @@ export class TranslatePlaylistNameCommandHandler extends BaseUpdateCommandHandle
 
     protected buildEvent(
         command: TranslatePlaylistName,
-        eventId: string,
-        userId: string
+        eventMeta: EventRecordMetadata
     ): BaseEvent {
-        return new PlaylistNameTranslated(command, eventId, userId);
+        return new PlaylistNameTranslated(command, eventMeta);
     }
 }

@@ -11,6 +11,7 @@ import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../types/ResourceType';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { validAggregateOrThrow } from '../../../shared/functional';
 import { Tag } from '../../tag.entity';
 import { RelabelTag } from './relabel-tag.command';
@@ -48,7 +49,7 @@ export class RelabelTagCommandHandler extends BaseUpdateCommandHandler<Tag> {
         return tag.validateLabelAgainstExternalState(state);
     }
 
-    protected buildEvent(command: RelabelTag, eventId: string, userId: string): BaseEvent {
-        return new TagRelabelled(command, eventId, userId);
+    protected buildEvent(command: RelabelTag, eventMeta: EventRecordMetadata): BaseEvent {
+        return new TagRelabelled(command, eventMeta);
     }
 }

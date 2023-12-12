@@ -1,4 +1,5 @@
 import { InternalError } from '../../lib/errors/InternalError';
+import { BaseEvent } from '../../queries/event-sourcing';
 import { DeepPartial } from '../../types/DeepPartial';
 import { Aggregate } from '../models/aggregate.entity';
 import { ReferenceTree } from '../models/shared/command-handlers/utilities/reference-tree';
@@ -119,6 +120,12 @@ export class DeluxeInMemoryStore {
      */
     fetchReferences(): ReferenceTree {
         return ReferenceTree.fromCompositeIdentifierList(this.fetchCompositeIdentifiers());
+    }
+
+    fetchEvents(): BaseEvent[] {
+        return [...this.inMemoryMapOfAggregates.values()].flatMap((aggregates) =>
+            aggregates.flatMap((aggregate) => aggregate.eventHistory)
+        );
     }
 
     private fetchCompositeIdentifiers(): AggregateCompositeIdentifier[] {

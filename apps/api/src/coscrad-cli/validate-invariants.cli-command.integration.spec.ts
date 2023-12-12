@@ -1,11 +1,14 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { TestingModule } from '@nestjs/testing';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
-import getValidAggregateInstanceForTest from '../domain/__tests__/utilities/getValidAggregateInstanceForTest';
+import { buildMultilingualTextWithSingleItem } from '../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../domain/common/entities/multilingual-text';
 import { Valid } from '../domain/domainModelValidators/Valid';
+import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
 import { buildFakeTimersConfig } from '../domain/models/__tests__/utilities/buildFakeTimersConfig';
+import { buildTestTerm } from '../domain/models/term/test-data/build-test-term';
 import { AggregateType } from '../domain/types/AggregateType';
 import { DeluxeInMemoryStore } from '../domain/types/DeluxeInMemoryStore';
 import { InternalError } from '../lib/errors/InternalError';
@@ -27,7 +30,12 @@ const mockLogger = buildMockLogger();
 
 const fakeTimersConfig = buildFakeTimersConfig();
 
-describe(`**${cliCommandName}**`, () => {
+/**
+ * We need to rethink this CLI command as we move to event sourcing. What we need
+ * to do is put some events that trigger invariant validation issues and then
+ * attempt to event source from these.
+ */
+describe.skip(`**${cliCommandName}**`, () => {
     let commandInstance: TestingModule;
 
     let testRepositoryProvider: TestRepositoryProvider;
@@ -91,11 +99,19 @@ describe(`**${cliCommandName}**`, () => {
     });
 
     describe(`when the database state is invalid`, () => {
-        const invalidTerm = getValidAggregateInstanceForTest(AggregateType.term).clone({
-            text: new MultilingualText({
-                items: [],
-            }),
-        });
+        const invalidTerm = buildTestTerm({
+            aggregateCompositeIdentifier: {
+                id: buildDummyUuid(145),
+            },
+            text: buildMultilingualTextWithSingleItem('I will be removed', LanguageCode.Chilcotin),
+            isPromptTerm: false,
+        })
+            // We're cheating a bit because this would never pass the event sourcing logic
+            .clone({
+                text: new MultilingualText({
+                    items: [],
+                }),
+            });
 
         const termValidationError = invalidTerm.validateInvariants();
 

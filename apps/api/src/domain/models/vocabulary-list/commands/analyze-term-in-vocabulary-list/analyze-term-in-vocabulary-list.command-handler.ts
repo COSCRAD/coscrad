@@ -6,6 +6,7 @@ import { InternalError, isInternalError } from '../../../../../lib/errors/Intern
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { VocabularyList } from '../../entities/vocabulary-list.entity';
 import { AnalyzeTermInVocabularyList } from './analyze-term-in-vocabulary-list.command';
 import { TermInVocabularyListAnalyzed } from './term-in-vocabulary-list-analyzed.event';
@@ -40,9 +41,8 @@ export class AnalyzeTermInVocabularyListCommandHandler extends BaseUpdateCommand
 
     protected buildEvent(
         command: AnalyzeTermInVocabularyList,
-        eventId: string,
-        userId: string
+        eventMeta: EventRecordMetadata
     ): BaseEvent {
-        return new TermInVocabularyListAnalyzed(command, eventId, userId);
+        return new TermInVocabularyListAnalyzed(command, eventMeta);
     }
 }

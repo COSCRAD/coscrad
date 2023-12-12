@@ -85,6 +85,9 @@ const resourceTypesThatHaveStandaloneQueryTests = [
 
     // TODO write standalone query test
     ResourceType.song,
+    ResourceType.term,
+    // Not yet event sourced, but depends on vocabulary list
+    ResourceType.vocabularyList,
 ];
 
 describe('Access Control List and Role Based filtering in resource queries', () => {

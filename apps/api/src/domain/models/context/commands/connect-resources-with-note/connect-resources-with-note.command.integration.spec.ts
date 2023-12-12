@@ -58,7 +58,11 @@ const initialStateWithAllResourcesButNoConnections = new DeluxeInMemoryStore({
     [AggregateType.note]: [],
 }).fetchFullSnapshotInLegacyFormat();
 
-const eventSourcedResourceTypes = [AggregateType.song, AggregateType.digitalText];
+const eventSourcedResourceTypes = [
+    AggregateType.song,
+    AggregateType.digitalText,
+    AggregateType.term,
+];
 
 const allDualEdgeConnections = (testDualConnections as EdgeConnection[])
     // TODO [https://www.pivotaltracker.com/story/show/185903292] Support event-sourced resources in this test
@@ -70,7 +74,7 @@ const allDualEdgeConnections = (testDualConnections as EdgeConnection[])
     )
     .filter(({ connectionType }) => connectionType === EdgeConnectionType.dual);
 
-const existingTerm = getValidAggregateInstanceForTest(AggregateType.term);
+const existingPhotograph = getValidAggregateInstanceForTest(AggregateType.photograph);
 
 const existingBook = getValidAggregateInstanceForTest(AggregateType.book);
 
@@ -79,7 +83,7 @@ const buildValidPayload = (id: AggregateId) => ({
         type: AggregateType.note,
         id,
     },
-    toMemberCompositeIdentifier: existingTerm.getCompositeIdentifier(),
+    toMemberCompositeIdentifier: existingPhotograph.getCompositeIdentifier(),
     toMemberContext: new GeneralContext(),
     fromMemberCompositeIdentifier: existingBook.getCompositeIdentifier(),
     fromMemberContext: new GeneralContext(),
@@ -594,7 +598,7 @@ describe(commandType, () => {
                             new CommandExecutionError([
                                 new InvalidExternalStateError([
                                     new AggregateNotFoundError(
-                                        existingTerm.getCompositeIdentifier()
+                                        existingPhotograph.getCompositeIdentifier()
                                     ),
                                 ]),
                             ])
@@ -608,12 +612,16 @@ describe(commandType, () => {
             it(`should fail with the expected error`, async () => {
                 await assertCreateCommandError(assertionHelperDependencies, {
                     systemUserId: dummySystemUserId,
-                    initialState: new DeluxeInMemoryStore({
-                        // to member
-                        [AggregateType.term]: [existingTerm],
+                    seedInitialState: async () => {
+                        await testRepositoryProvider.addFullSnapshot(
+                            new DeluxeInMemoryStore({
+                                // to member
+                                [AggregateType.photograph]: [existingPhotograph],
 
-                        // from member Does Not Exist
-                    }).fetchFullSnapshotInLegacyFormat(),
+                                // from member Does Not Exist
+                            }).fetchFullSnapshotInLegacyFormat()
+                        );
+                    },
                     buildCommandFSA: (id) => commandFsaFactory.build(id),
                     checkError: (error) => {
                         assertErrorAsExpected(
@@ -687,7 +695,11 @@ describe(commandType, () => {
                         commandFsaFactory.build(undefined, {
                             aggregateCompositeIdentifier: { id: bogusId, type: AggregateType.note },
                         }),
-                    initialState: initialStateWithAllResourcesButNoConnections,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider.addFullSnapshot(
+                            initialStateWithAllResourcesButNoConnections
+                        );
+                    },
                     checkError: (error) => {
                         assertErrorAsExpected(
                             error,

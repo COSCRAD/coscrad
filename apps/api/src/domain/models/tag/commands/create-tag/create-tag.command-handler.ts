@@ -9,6 +9,7 @@ import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../types/ResourceType';
 import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { validAggregateOrThrow } from '../../../shared/functional';
 import { Tag } from '../../tag.entity';
 import { CreateTag } from './create-tag.command';
@@ -43,8 +44,8 @@ export class CreateTagCommandHandler extends BaseCreateCommandHandler<Tag> {
         return instance.validateExternalState(state);
     }
 
-    protected buildEvent(command: CreateTag, eventId: string, userId: string): BaseEvent {
-        return new TagCreated(command, eventId, userId);
+    protected buildEvent(command: CreateTag, eventMeta: EventRecordMetadata): BaseEvent {
+        return new TagCreated(command, eventMeta);
     }
 
     protected override async persist(

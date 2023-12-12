@@ -45,7 +45,11 @@ export abstract class BaseUpdateCommandHandler<
 
         await this.idManager.use({ id: eventId, type: EVENT });
 
-        const event = this.buildEvent(command, eventId, systemUserId);
+        const event = this.buildEvent(command, {
+            id: eventId,
+            userId: systemUserId,
+            dateCreated: Date.now(),
+        });
 
         const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);
 
