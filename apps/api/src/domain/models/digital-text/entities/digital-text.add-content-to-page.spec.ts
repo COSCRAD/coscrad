@@ -7,8 +7,8 @@ import { MultilingualText } from '../../../common/entities/multilingual-text';
 import InvariantValidationError from '../../../domainModelValidators/errors/InvariantValidationError';
 import { AggregateType } from '../../../types/AggregateType';
 import { FailedToUpdateDigitalTextPageError } from '../errors';
-import { CannotAddContentToMissingPageError } from '../errors/cannot-add-content-to-missing-page.error';
 import { CannotOverwritePageContentError } from '../errors/cannot-overwrite-page-content.error';
+import { MissingPageError } from '../errors/missing-page.error';
 import DigitalTextPage from './digital-text-page.entity';
 import { DigitalText } from './digital-text.entity';
 
@@ -67,12 +67,7 @@ describe(`DigitalText.addContentToPage`, () => {
                 new FailedToUpdateDigitalTextPageError(
                     idOfPageThatDoesntExist,
                     existingDigitalText.id,
-                    [
-                        new CannotAddContentToMissingPageError(
-                            idOfPageThatDoesntExist,
-                            existingDigitalText.id
-                        ),
-                    ]
+                    [new MissingPageError(idOfPageThatDoesntExist, existingDigitalText.id)]
                 )
             );
         });
