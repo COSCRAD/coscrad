@@ -1,4 +1,7 @@
-import { AGGREGATE_COMPOSITE_IDENTIFIER } from '@coscrad/api-interfaces';
+import {
+    AGGREGATE_COMPOSITE_IDENTIFIER,
+    AggregateCompositeIdentifier,
+} from '@coscrad/api-interfaces';
 import { isDeepStrictEqual } from 'util';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
@@ -6,7 +9,7 @@ import { AggregateId } from '../../../types/AggregateId';
 import { EventRecordMetadata } from './types/EventRecordMetadata';
 
 export interface IEventPayload {
-    [AGGREGATE_COMPOSITE_IDENTIFIER]: AggregateId;
+    [AGGREGATE_COMPOSITE_IDENTIFIER]: AggregateCompositeIdentifier;
 }
 
 export abstract class BaseEvent<
