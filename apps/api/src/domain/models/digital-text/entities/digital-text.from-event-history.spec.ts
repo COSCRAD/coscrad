@@ -146,8 +146,7 @@ const digitalTextPageContentTranslated = new DigitalTextPageContentTranslated(
         translation: translationText,
         languageCode: translationLanguageCodeForContent,
     },
-    buildDummyUuid(581),
-    dummySystemUserId
+    { id: buildDummyUuid(581), userId: dummySystemUserId, dateCreated: dummyDateManager.next() }
 );
 
 describe(`DigitalText.fromEventHistory`, () => {
