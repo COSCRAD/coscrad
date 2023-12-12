@@ -4,8 +4,8 @@
     "prettier.requireConfig": true,
     "editor.rulers": [80],
     "editor.codeActionsOnSave": {
-        "source.fixAll": "never",
-        "source.organizeImports": "explicit"
+        "source.fixAll": false,
+        "source.organizeImports": true
     },
     "[typescript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"

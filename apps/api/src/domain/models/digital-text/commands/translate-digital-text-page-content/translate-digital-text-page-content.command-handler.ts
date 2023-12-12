@@ -7,6 +7,7 @@ import { InternalError } from '../../../../../lib/errors/InternalError';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { DigitalText } from '../../entities';
 import { DigitalTextPageContentTranslated } from './digital-text-page-content-translated.event';
 import { TranslateDigitalTextPageContent } from './translate-digital-text-page-content.command';
@@ -39,9 +40,8 @@ export class TranslateDigitalTextPageContentCommandHandler extends BaseUpdateCom
 
     protected buildEvent(
         command: TranslateDigitalTextPageContent,
-        eventId: string,
-        userId: string
+        meta: EventRecordMetadata
     ): BaseEvent<ICommandBase> {
-        return new DigitalTextPageContentTranslated(command, eventId, userId);
+        return new DigitalTextPageContentTranslated(command, meta);
     }
 }
