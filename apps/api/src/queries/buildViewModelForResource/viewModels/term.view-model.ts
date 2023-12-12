@@ -48,7 +48,7 @@ export class TermViewModel extends BaseViewModel implements ITermViewModel {
     constructor(term: Term) {
         super(term);
 
-        const { contributorId, audioFilename, sourceProject } = term;
+        const { contributorId, audioItemId: audioFilename, sourceProject } = term;
 
         this.contributor = getContributorNameFromId(contributorId);
 
