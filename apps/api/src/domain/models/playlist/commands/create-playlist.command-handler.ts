@@ -18,6 +18,7 @@ import { BaseCreateCommandHandler } from '../../shared/command-handlers/base-cre
 import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
 import ResourceIdAlreadyInUseError from '../../shared/common-command-errors/ResourceIdAlreadyInUseError';
 import { BaseEvent } from '../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../shared/events/types/EventRecordMetadata';
 import idEquals from '../../shared/functional/idEquals';
 import { Playlist } from '../entities';
 import { CreatePlayList } from './create-playlist.command';
@@ -117,7 +118,7 @@ export class CreatePlayListCommandHandler extends BaseCreateCommandHandler<Playl
         return allErrors.length > 0 ? new InvalidExternalStateError(allErrors) : Valid;
     }
 
-    protected buildEvent(command: CreatePlayList, eventId: string, userId: string): BaseEvent {
-        return new playlistCreated(command, eventId, userId);
+    protected buildEvent(command: CreatePlayList, eventMeta: EventRecordMetadata): BaseEvent {
+        return new playlistCreated(command, eventMeta);
     }
 }

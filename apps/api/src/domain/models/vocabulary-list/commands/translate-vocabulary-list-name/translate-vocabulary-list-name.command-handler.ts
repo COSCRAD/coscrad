@@ -10,6 +10,7 @@ import { InternalError } from '../../../../../lib/errors/InternalError';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { VocabularyList } from '../../entities/vocabulary-list.entity';
 import { TranslateVocabularyListName } from './translate-vocabulary-list-name.command';
 import { VocabularyListNameTranslated } from './vocabulary-list-name-translated.event';
@@ -44,9 +45,8 @@ export class TranslateVocabularyListNameCommandHandler extends BaseUpdateCommand
 
     protected buildEvent(
         command: TranslateVocabularyListName,
-        eventId: string,
-        userId: string
+        eventMeta: EventRecordMetadata
     ): BaseEvent {
-        return new VocabularyListNameTranslated(command, eventId, userId);
+        return new VocabularyListNameTranslated(command, eventMeta);
     }
 }

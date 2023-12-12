@@ -21,6 +21,7 @@ import { AudioItem } from '../../audio-item/entities/audio-item.entity';
 import { BaseCommandHandler } from '../../shared/command-handlers/base-command-handler';
 import UuidNotGeneratedInternallyError from '../../shared/common-command-errors/UuidNotGeneratedInternallyError';
 import { BaseEvent } from '../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../shared/events/types/EventRecordMetadata';
 import { validAggregateOrThrow } from '../../shared/functional';
 import { Song } from '../song.entity';
 import { CreateSong } from './create-song.command';
@@ -120,8 +121,8 @@ export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
         return Valid;
     }
 
-    protected buildEvent(command: CreateSong, eventId: string, systemUserId: string): BaseEvent {
-        return new SongCreated(command, eventId, systemUserId);
+    protected buildEvent(command: CreateSong, eventMeta: EventRecordMetadata): BaseEvent {
+        return new SongCreated(command, eventMeta);
     }
 
     async persist(instance: Song, command: CreateSong, systemUserId: AggregateId): Promise<void> {
@@ -137,7 +138,7 @@ export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
         await this.idManager.use(command.aggregateCompositeIdentifier);
 
         const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(
-            this.buildEvent(command, eventId, systemUserId)
+            this.buildEvent(command, { id: eventId, userId: systemUserId, dateCreated: Date.now() })
         );
 
         // Persist the valid instance

@@ -1,6 +1,7 @@
 import { AggregateType, LanguageCode, ResourceType } from '@coscrad/api-interfaces';
 import { CommandFSA } from '../../app/controllers/command/command-fsa/command-fsa.entity';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
+import { dummyDateNow } from '../../domain/models/__tests__/utilities/dummyDateNow';
 import {
     AddPageToDigitalText,
     CreateDigitalText,
@@ -37,11 +38,11 @@ const createDigitalText = clonePlainObjectWithOverrides(
 
 const dummySystemUserId = buildDummyUuid(999);
 
-const digitalTextCreated = new DigitalTextCreated(
-    createDigitalText.payload,
-    buildDummyUuid(154),
-    dummySystemUserId
-);
+const digitalTextCreated = new DigitalTextCreated(createDigitalText.payload, {
+    id: buildDummyUuid(154),
+    userId: dummySystemUserId,
+    dateCreated: dummyDateNow,
+});
 
 const dummyPageIdentifier = '21';
 
@@ -55,11 +56,11 @@ const addPageToDigitalText = clonePlainObjectWithOverrides(
     }
 );
 
-const pageAddedForDigitalText = new PageAddedToDigitalText(
-    addPageToDigitalText.payload,
-    buildDummyUuid(155),
-    dummySystemUserId
-);
+const pageAddedForDigitalText = new PageAddedToDigitalText(addPageToDigitalText.payload, {
+    id: buildDummyUuid(155),
+    userId: dummySystemUserId,
+    dateCreated: dummyDateNow + 1,
+});
 
 const idForUserWithAccessToDigitalText = buildDummyUuid(45);
 
@@ -77,8 +78,7 @@ const grantReadAccessToUserForDigitalText = clonePlainObjectWithOverrides(
 
 const digitalTextReadAccessGrantedToUser = new ResourceReadAccessGrantedToUser(
     grantReadAccessToUserForDigitalText.payload,
-    buildDummyUuid(579),
-    dummySystemUserId
+    { id: buildDummyUuid(579), userId: dummySystemUserId, dateCreated: dummyDateNow + 2 }
 );
 
 const resourcePublished = new ResourcePublished(
@@ -88,8 +88,7 @@ const resourcePublished = new ResourcePublished(
             type: AggregateType.digitalText,
         },
     },
-    buildDummyUuid(580),
-    dummySystemUserId
+    { id: buildDummyUuid(580), userId: dummySystemUserId, dateCreated: dummyDateNow + 3 }
 );
 
 export const buildComprehensiveEventStreamForDigitalText = () => [

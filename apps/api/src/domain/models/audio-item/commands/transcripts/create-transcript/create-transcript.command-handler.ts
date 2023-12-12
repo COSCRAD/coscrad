@@ -18,6 +18,7 @@ import { Resource } from '../../../../resource.entity';
 import { BaseCommandHandler } from '../../../../shared/command-handlers/base-command-handler';
 import AggregateNotFoundError from '../../../../shared/common-command-errors/AggregateNotFoundError';
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../../shared/events/types/EventRecordMetadata';
 import { AudioItem } from '../../../entities/audio-item.entity';
 import { ITranscribable } from '../../../entities/transcribable.mixin';
 import { Video } from '../../../entities/video.entity';
@@ -65,10 +66,11 @@ export class CreateTranscriptCommandHandler extends BaseCommandHandler<ITranscri
         return Valid;
     }
 
-    protected buildEvent(command: CreateTranscript, eventId: string, userId: string): BaseEvent {
-        return new TranscriptCreated(command, eventId, userId);
+    protected buildEvent(command: CreateTranscript, eventMeta: EventRecordMetadata): BaseEvent {
+        return new TranscriptCreated(command, eventMeta);
     }
 
+    // Why do we need persist here?
     // TODO This overlaps with the generic base-update command handler- how can we reuse without complex inheritance hierarchies?
     protected async persist(
         instance: ITranscribable & Resource,
@@ -80,7 +82,11 @@ export class CreateTranscriptCommandHandler extends BaseCommandHandler<ITranscri
 
         await this.idManager.use({ id: eventId, type: EVENT });
 
-        const event = this.buildEvent(command, eventId, systemUserId);
+        const event = this.buildEvent(command, {
+            id: eventId,
+            userId: systemUserId,
+            dateCreated: Date.now(),
+        });
 
         const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);
 

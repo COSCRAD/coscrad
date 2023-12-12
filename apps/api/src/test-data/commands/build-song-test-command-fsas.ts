@@ -7,8 +7,6 @@ import {
     TranslateSongTitle,
 } from '../../domain/models/song/commands';
 import { CreateSong } from '../../domain/models/song/commands/create-song.command';
-import { TRANSLATE_SONG_LYRICS } from '../../domain/models/song/commands/translate-song-lyrics/constants';
-import { TRANSLATE_SONG_TITLE } from '../../domain/models/song/commands/translate-song-title/constants';
 import { AggregateType } from '../../domain/types/AggregateType';
 
 const id = buildDummyUuid(1);
@@ -39,7 +37,7 @@ const addLyricsForSong: CommandFSA<AddLyricsForSong> = {
 };
 
 const translateSongLyrics: CommandFSA<TranslateSongLyrics> = {
-    type: TRANSLATE_SONG_LYRICS,
+    type: `TRANSLATE_SONG_LYRICS`,
     payload: {
         aggregateCompositeIdentifier: { id, type },
         translation: `fo lo lo (in English)`,
@@ -48,7 +46,7 @@ const translateSongLyrics: CommandFSA<TranslateSongLyrics> = {
 };
 
 const translateSongTitle: CommandFSA<TranslateSongTitle> = {
-    type: TRANSLATE_SONG_TITLE,
+    type: `TRANSLATE_SONG_TITLE`,
     payload: {
         aggregateCompositeIdentifier: { id, type },
         translation: 'title translation to chilcotin',

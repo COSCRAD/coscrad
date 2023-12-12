@@ -2,6 +2,7 @@ import { isArangoDatabase } from 'arangojs/database';
 import { ISpecification } from '../../domain/repositories/interfaces/specification.interface';
 import { AggregateId } from '../../domain/types/AggregateId';
 import { HasAggregateId } from '../../domain/types/HasAggregateId';
+import { InternalError } from '../../lib/errors/InternalError';
 import { Maybe } from '../../lib/types/maybe';
 import { DeepPartial } from '../../types/DeepPartial';
 import { ArangoDatabase } from './arango-database';
@@ -55,8 +56,19 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
         return this.#arangoDatabase.create(DatabaseDocument, this.#collectionID);
     }
 
-    createMany(DatabaseDocuments: ArangoDatabaseDocument<TEntity>[]) {
-        return this.#arangoDatabase.createMany(DatabaseDocuments, this.#collectionID);
+    createMany(databaseDocuments: ArangoDatabaseDocument<TEntity>[]) {
+        return this.#arangoDatabase
+            .createMany(databaseDocuments, this.#collectionID)
+            .catch((error) => {
+                throw new InternalError(
+                    `Failed to create many in Arango collection: ${
+                        this.#collectionID
+                    } \n documents: ${JSON.stringify(databaseDocuments)} \n ids: ${databaseDocuments
+                        .map(({ _key }) => _key)
+                        .join(' , ')} `,
+                    error?.message ? [new InternalError(error.message)] : []
+                );
+            });
     }
 
     update(id: AggregateId, updateDTO: DeepPartial<ArangoDatabaseDocument<TEntity>>) {

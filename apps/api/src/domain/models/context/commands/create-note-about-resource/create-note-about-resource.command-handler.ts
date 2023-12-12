@@ -15,6 +15,7 @@ import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../types/ResourceType';
 import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import {
     EdgeConnection,
     EdgeConnectionMemberRole,
@@ -81,9 +82,8 @@ export class CreateNoteAboutResourceCommandHandler extends BaseCreateCommandHand
 
     protected buildEvent(
         command: CreateNoteAboutResource,
-        eventId: string,
-        userId: string
+        eventMeta: EventRecordMetadata
     ): BaseEvent {
-        return new NoteAboutResourceCreated(command, eventId, userId);
+        return new NoteAboutResourceCreated(command, eventMeta);
     }
 }

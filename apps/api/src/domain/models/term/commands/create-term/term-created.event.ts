@@ -1,6 +1,11 @@
+import { CoscradEvent } from '../../../../common';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { TERM_CREATED } from './constants';
+import { CreateTerm } from './create-term.command';
 
-export class TermCreated extends BaseEvent {
+export type TermCreatedPayload = CreateTerm;
+
+@CoscradEvent(TERM_CREATED)
+export class TermCreated extends BaseEvent<TermCreatedPayload> {
     type = TERM_CREATED;
 }

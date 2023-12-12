@@ -10,6 +10,7 @@ import { ResultOrError } from '../../../../../../types/ResultOrError';
 import { Resource } from '../../../../resource.entity';
 import { BaseUpdateCommandHandler } from '../../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../../shared/events/types/EventRecordMetadata';
 import { ITranscribable } from '../../../entities/transcribable.mixin';
 import { ImportLineItemsToTranscript } from './import-line-items-to-transcript.command';
 import { LineItemsImportedToTranscript } from './line-items-imported-to-transcript.event';
@@ -48,9 +49,8 @@ export class ImportLineItemsToTranscriptCommandHandler extends BaseUpdateCommand
 
     protected buildEvent(
         command: ImportLineItemsToTranscript,
-        eventId: string,
-        userId: string
+        eventMeta: EventRecordMetadata
     ): BaseEvent {
-        return new LineItemsImportedToTranscript(command, eventId, userId);
+        return new LineItemsImportedToTranscript(command, eventMeta);
     }
 }

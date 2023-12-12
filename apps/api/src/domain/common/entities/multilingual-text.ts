@@ -145,6 +145,17 @@ export class MultilingualText extends BaseDomainModel implements IMultilingualTe
         return this.items.map((item) => item.toString()).join('\n');
     }
 
+    hasTranslation(): boolean {
+        return this.items.length > 1;
+    }
+
+    getTranslationLanguages(): LanguageCode[] {
+        return this.items.flatMap(
+            // We use flatmap so we can filter and build without a full reduce or two loops.
+            (item) => (item.role === MultilingualTextItemRole.original ? [] : [item.languageCode])
+        );
+    }
+
     has(languageCode: LanguageCode): boolean {
         const searchResult = this.items.find((item) => item.languageCode === languageCode);
 

@@ -19,6 +19,7 @@ import { Resource } from '../../../../resource.entity';
 import { BaseCommandHandler } from '../../../../shared/command-handlers/base-command-handler';
 import AggregateNotFoundError from '../../../../shared/common-command-errors/AggregateNotFoundError';
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../../shared/events/types/EventRecordMetadata';
 import { ITranscribable } from '../../../entities/transcribable.mixin';
 import { AddLineItemToTranscript } from './add-line-item-to-transcript.command';
 import { LineItemAddedToTranscript } from './line-item-added-to-transcript.event';
@@ -79,10 +80,9 @@ export class AddLineItemtoTranscriptCommandHandler extends BaseCommandHandler<Tr
 
     protected buildEvent(
         command: AddLineItemToTranscript,
-        eventId: string,
-        userId: string
+        eventMeta: EventRecordMetadata
     ): BaseEvent {
-        return new LineItemAddedToTranscript(command, eventId, userId);
+        return new LineItemAddedToTranscript(command, eventMeta);
     }
 
     /**
@@ -103,7 +103,11 @@ export class AddLineItemtoTranscriptCommandHandler extends BaseCommandHandler<Tr
 
         await this.idManager.use({ id: eventId, type: EVENT });
 
-        const event = this.buildEvent(command, eventId, systemUserId);
+        const event = this.buildEvent(command, {
+            id: eventId,
+            userId: systemUserId,
+            dateCreated: Date.now(),
+        });
 
         const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);
 

@@ -6,6 +6,7 @@ import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../types/ResourceType';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { DigitalText } from '../../entities/digital-text.entity';
 import { AddPageToDigitalText } from './add-page-to-digital-text.command';
 import { PageAddedToDigitalText } from './page-added-to-digital-text.event';
@@ -30,11 +31,7 @@ export class AddPageToDigitalTextCommandHandler extends BaseUpdateCommandHandler
         return digitalText.addPage(pageIdentifier);
     }
 
-    protected buildEvent(
-        command: AddPageToDigitalText,
-        eventId: string,
-        userId: string
-    ): BaseEvent {
-        return new PageAddedToDigitalText(command, eventId, userId);
+    protected buildEvent(command: AddPageToDigitalText, eventMeta: EventRecordMetadata): BaseEvent {
+        return new PageAddedToDigitalText(command, eventMeta);
     }
 }

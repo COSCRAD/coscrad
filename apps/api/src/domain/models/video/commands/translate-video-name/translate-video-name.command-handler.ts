@@ -7,6 +7,7 @@ import { ResultOrError } from '../../../../../types/ResultOrError';
 import { Video } from '../../../audio-item/entities/video.entity';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { TranslateVideoName } from './translate-video-name.command';
 import { VideoNameTranslated } from './video-name-translated.event';
 
@@ -30,7 +31,7 @@ export class TranslateVideoNameCommandHandler extends BaseUpdateCommandHandler<V
         return video.translateName(text, languageCode);
     }
 
-    protected buildEvent(command: TranslateVideoName, eventId: string, userId: string): BaseEvent {
-        return new VideoNameTranslated(command, eventId, userId);
+    protected buildEvent(command: TranslateVideoName, eventMeta: EventRecordMetadata): BaseEvent {
+        return new VideoNameTranslated(command, eventMeta);
     }
 }

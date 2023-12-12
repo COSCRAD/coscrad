@@ -32,7 +32,7 @@ export abstract class Aggregate extends BaseDomainModel implements HasAggregateI
      * We do not populate instances of the event- only plain objects (DTOs). In order
      * to use instances, we will need an `EventFactory`.
      */
-    readonly eventHistory?: DTO<BaseEvent>[];
+    readonly eventHistory?: BaseEvent[];
 
     readonly type: AggregateType;
 
@@ -58,10 +58,17 @@ export abstract class Aggregate extends BaseDomainModel implements HasAggregateI
             : [];
     }
 
-    getCompositeIdentifier = (): AggregateCompositeIdentifier => ({
-        type: this.type,
-        id: this.id,
-    });
+    getCompositeIdentifier<T extends Aggregate>(
+        this: T
+    ): {
+        type: T['type'];
+        id: AggregateId;
+    } {
+        return {
+            type: this.type,
+            id: this.id,
+        };
+    }
 
     public safeClone<T extends Aggregate>(
         this: T,
@@ -184,12 +191,14 @@ export abstract class Aggregate extends BaseDomainModel implements HasAggregateI
             new DeluxeInMemoryStore(externalState).fetchAllOfType(type).every(not(idEquals(id)))
         );
 
-        return invalidReferences.length > 0
-            ? new InvalidExternalReferenceByAggregateError(
-                  this.getCompositeIdentifier(),
-                  invalidReferences
-              )
-            : Valid;
+        if (invalidReferences.length > 0) {
+            return new InvalidExternalReferenceByAggregateError(
+                this.getCompositeIdentifier(),
+                invalidReferences
+            );
+        }
+
+        return Valid;
     }
 
     validateIdIsUnique(externalState: InMemorySnapshot): InternalError[] {
