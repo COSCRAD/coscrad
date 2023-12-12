@@ -1,4 +1,5 @@
 import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import { InternalError } from '../../../../lib/errors/InternalError';
 import { NotFound } from '../../../../lib/types/not-found';
 import { TestEventStream } from '../../../../test-data/events/test-event-stream';
 import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
@@ -240,6 +241,50 @@ describe(`Term.fromEventHistory`, () => {
                     expect(term.queryAccessControlList.canUser(userId)).toBe(true);
                 });
             });
+        });
+    });
+
+    describe(`when the event history is invalid`, () => {
+        describe(`when there are no events for the term`, () => {
+            const otherId = '999';
+
+            const result = Term.fromEventHistory(
+                termElicitedFromPrompt.as({ id: otherId }),
+                termId
+            );
+
+            expect(result).toBe(NotFound);
+        });
+
+        describe(`when there is no creation event`, () => {
+            const badEventStream = new TestEventStream().andThen<TermTranslated>({
+                type: TERM_TRANSLATED,
+            });
+
+            it(`should throw (system error)`, () => {
+                const act = () =>
+                    Term.fromEventHistory(
+                        badEventStream.as({
+                            id: termId,
+                        }),
+                        termId
+                    );
+
+                expect(act).toThrow();
+            });
+        });
+
+        describe(`when there is a broken event in the database`, () => {
+            const invalidEventStream = termCreated.andThen<TermTranslated>({
+                type: TERM_TRANSLATED,
+                payload: {
+                    translation: ['I am of the wrong type'] as unknown as string,
+                },
+            });
+
+            const result = Term.fromEventHistory(invalidEventStream.as({ id: termId }), termId);
+
+            expect(result).toBeInstanceOf(InternalError);
         });
     });
 });
