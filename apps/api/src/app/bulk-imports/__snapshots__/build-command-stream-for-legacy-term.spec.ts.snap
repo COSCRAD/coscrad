@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`buildCommandStreamForLegacyTerm when the term has text in both languges it should emit the correct commands should return the expected command stream 1`] = `
+[
+  {
+    "payload": {
+      "aggregateCompositeIdentifier": {
+        "id": "45678",
+        "type": "term",
+      },
+      "contributorId": "1",
+      "languageCode": "clc",
+      "rawData": {
+        "_id": "terms/45678",
+        "_key": "45678",
+        "_rev": "_ds6eKEK---",
+        "audioFilename": "scrabble.mp3",
+        "contributorId": "1",
+        "published": true,
+        "sourceId": "2",
+        "term": "I am running (lang)",
+        "termEnglish": "I am running (engl)",
+      },
+      "text": "I am running (lang)",
+    },
+    "type": "CREATE_TERM",
+  },
+  {
+    "payload": {
+      "aggregateCompositeIdentifier": {
+        "id": "45678",
+        "type": "term",
+      },
+      "languageCode": "en",
+      "translation": "I am running (engl)",
+    },
+    "type": "TRANSLATE_TERM",
+  },
+  {
+    "payload": {
+      "aggregateCompositeIdentifier": {
+        "id": "45678",
+        "type": "term",
+      },
+    },
+    "type": "PUBLISH_RESOURCE",
+  },
+]
+`;
