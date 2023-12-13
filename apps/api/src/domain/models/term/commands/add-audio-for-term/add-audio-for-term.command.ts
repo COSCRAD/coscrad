@@ -1,6 +1,6 @@
-import { ICommandBase } from '@coscrad/api-interfaces';
+import { AggregateType, ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { NestedDataType, UUID } from '@coscrad/data-types';
+import { NestedDataType, ReferenceTo, UUID } from '@coscrad/data-types';
 import { AggregateId } from '../../../../types/AggregateId';
 import { TermCompositeIdentifier } from '../create-term';
 
@@ -20,5 +20,6 @@ export class AddAudioForTerm implements ICommandBase {
         label: 'audio item ID',
         description: 'reference to an audio item',
     })
+    @ReferenceTo(AggregateType.audioItem)
     readonly audioItemId: AggregateId;
 }
