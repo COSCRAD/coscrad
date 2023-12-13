@@ -3759,6 +3759,52 @@ exports[`command payload schemas Command payload schema should match the snapsho
     "type": "TRANSLATE_TERM",
   },
   {
+    "description": "add audio for an existing term",
+    "label": "add audio for term",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "term composite identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "must be: term",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "term",
+                "value": "term",
+              },
+            ],
+          },
+        },
+      },
+      "audioItemId": {
+        "coscradDataType": "UUID",
+        "description": "reference to an audio item",
+        "isArray": false,
+        "isOptional": false,
+        "label": "audio item ID",
+        "referenceTo": "audioItem",
+      },
+    },
+    "type": "ADD_AUDIO_FOR_TERM",
+  },
+  {
     "description": "Create a spatial feature with 2D Point geometry",
     "label": "Create Point",
     "schema": {
