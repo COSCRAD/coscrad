@@ -1,4 +1,4 @@
-import { AggregateType } from '@coscrad/api-interfaces';
+import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
@@ -13,6 +13,7 @@ import generateDatabaseNameForTestSuite from '../../../../../persistence/reposit
 import { buildTestCommandFsaMap } from '../../../../../test-data/commands';
 import { TestEventStream } from '../../../../../test-data/events';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
+import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
@@ -102,8 +103,20 @@ describe(commandType, () => {
                     );
                 },
                 checkStateOnSuccess: async ({
-                    
-                }: AddAudioForTerm)
+                    aggregateCompositeIdentifier: { id: termId },
+                }: AddAudioForTerm) => {
+                    const searchResult = await testRepositoryProvider
+                        .forResource(ResourceType.term)
+                        .fetchById(termId);
+
+                    expect(searchResult).toBeInstanceOf(Term);
+
+                    const term = searchResult as Term;
+
+                    expect(term.audioItemId).toBe(existingAudioItem.id);
+
+                    assertEventRecordPersisted(term, `AUDIO_ADDED_FOR_TERM`, dummySystemUserId);
+                },
             });
         });
     });
