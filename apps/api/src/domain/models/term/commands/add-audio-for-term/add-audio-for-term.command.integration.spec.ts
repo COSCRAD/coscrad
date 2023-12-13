@@ -101,6 +101,9 @@ describe(commandType, () => {
                         }).fetchFullSnapshotInLegacyFormat()
                     );
                 },
+                checkStateOnSuccess: async ({
+                    
+                }: AddAudioForTerm)
             });
         });
     });
