@@ -5,13 +5,15 @@ import { readdirSync } from 'fs';
 import { CommandFSA } from '../app/controllers/command/command-fsa/command-fsa.entity';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
 import { CreateMediaItem } from '../domain/models/media-item/commands/create-media-item.command';
-import { AggregateType } from '../domain/types/AggregateType';
-import { InternalError } from '../lib/errors/InternalError';
+import { ResourceType } from '../domain/types/ResourceType';
+import { isNullOrUndefined } from '../domain/utilities/validation/is-null-or-undefined';
+import { InternalError, isInternalError } from '../lib/errors/InternalError';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
 
 interface IngestMediaItemsCliCommandOptions {
     directory: string;
+    baseUrl: string;
 }
 
 @CliCommand({
@@ -29,40 +31,70 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
 
     async run(
         _passedParams: string[],
-        { directory }: IngestMediaItemsCliCommandOptions
+        { directory, baseUrl }: IngestMediaItemsCliCommandOptions
     ): Promise<void> {
         this.logger.log(`Attempting to import media from: ${directory}`);
 
-        const partialPayload: Omit<CreateMediaItem, 'aggregateCompositeIdentifier' | 'url'>[] =
-            readdirSync(directory).map((file) => ({
-                title: file.split('.')[0],
-                // TODO Be more careful about the file name parsing
-                mimeType: this.determineMimeType(file.split('.')[1]),
-            }));
+        const partialPayloads: Omit<CreateMediaItem, 'aggregateCompositeIdentifier' | 'url'>[] =
+            readdirSync(directory).map((file) => {
+                const nameAndExtension = file.split('.');
+
+                if (nameAndExtension.length !== 2) {
+                    throw new InternalError(`Failed to parse filename: ${file}`);
+                }
+
+                const [name, extension] = nameAndExtension;
+
+                return {
+                    title: name,
+                    // TODO Be more careful about the file name parsing
+                    mimeType: this.determineMimeType(extension),
+                };
+            });
 
         // TODO Do this in one go for efficiency
-        const generatedIds = await Promise.all(
-            Array(partialPayload.length).map((_) => this.idManager.generate())
-        );
+        const generatedIds = await this.idManager.generateMany(partialPayloads.length);
 
-        const createMediaItemFsas: CommandFSA<CreateMediaItem>[] = partialPayload.map(
+        const createMediaItemFsas: CommandFSA<CreateMediaItem>[] = partialPayloads.map(
             (partialFsa, index) => ({
                 type: `CREATE_MEDIA_ITEM`,
                 payload: {
                     ...partialFsa,
                     aggregateCompositeIdentifier: {
-                        type: AggregateType.mediaItem,
+                        type: ResourceType.mediaItem,
                         id: generatedIds[index],
                     },
-                    url: `${generatedIds[index]}`, // TODO append extension
+                    url: `${baseUrl}/${generatedIds[index]}.${this.getFileExtensionForMimeType(
+                        partialFsa.mimeType
+                    )}`,
                     rawData: {}, // TODO Add me
-                },
+                } as const,
             })
         );
 
-        createMediaItemFsas.forEach(async (fsa) => {
-            await this.commandHandlerService.execute(fsa);
-        });
+        /**
+         * TODO[Performance] We should consider another pattern such as a promise
+         * queue. In the long run, we may manage media using a different language
+         * and run-time, so we won't invest much time in this as long as the
+         * performance is acceptable for current needs.
+         */
+        for (const fsa of createMediaItemFsas) {
+            const result = await this.commandHandlerService.execute(fsa, {
+                userId: 'COSCRAD Admin',
+            });
+
+            if (isInternalError(result)) {
+                const message = `failed to import media at first invalid request`;
+
+                const topLevelError = new InternalError(message, [result]);
+
+                this.logger.log(topLevelError.toString());
+
+                throw topLevelError;
+            } 
+
+            this.logger.log(`Success: ${JSON.stringify(fsa)}`)
+        }
     }
 
     @CliCommandOption({
@@ -71,6 +103,15 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
         required: true,
     })
     parseDirectory(input: string): string {
+        return input;
+    }
+
+    @CliCommandOption({
+        flags: '-b, --baseUrl [baseUrl]',
+        description: 'the base URL for the media server',
+        required: true,
+    })
+    parseBaseUrl(input: string): string {
         return input;
     }
 
@@ -85,10 +126,39 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
 
         if (extension === 'wav') return MIMEType.wav;
 
+        if (extension === 'ogg') return MIMEType.audioOgg;
+
         if (extension === 'mp4') return MIMEType.mp4;
 
         if (extension === 'png') return MIMEType.png;
 
         throw new InternalError(`Unsupported file extension: ${extension}`);
+    }
+
+    private getFileExtensionForMimeType(mimetype: MIMEType): string {
+        const lookupTable = {
+            [MIMEType.audioOgg]: 'ogg',
+            [MIMEType.mp3]: 'mp3',
+            [MIMEType.wav]: 'wav',
+            [MIMEType.mp4]: 'mp4',
+            [MIMEType.png]: 'png',
+            // is this correct?
+            [MIMEType.videoOgg]: 'ogg',
+            // [MIMEType.videoWebm]
+        };
+
+        const lookupResult = lookupTable[mimetype];
+
+        if (isNullOrUndefined(lookupResult)) {
+            const error = new InternalError(
+                `Cannot build extension for unsupported MIME type: ${mimetype}`
+            );
+
+            this.logger.log(error.toString());
+
+            throw error;
+        }
+
+        return lookupResult;
     }
 }

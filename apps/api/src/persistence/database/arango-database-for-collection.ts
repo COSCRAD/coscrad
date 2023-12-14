@@ -51,9 +51,11 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
     }
 
     // Commands (mutate state)
-    create(DatabaseDocument: ArangoDatabaseDocument<TEntity>) {
+    create(databaseDocument: ArangoDatabaseDocument<TEntity>) {
+        const _dbName = this.#arangoDatabase.getDatabaseName();
+
         // Handle the difference in _id \ _key between model and database
-        return this.#arangoDatabase.create(DatabaseDocument, this.#collectionID);
+        return this.#arangoDatabase.create(databaseDocument, this.#collectionID);
     }
 
     createMany(databaseDocuments: ArangoDatabaseDocument<TEntity>[]) {

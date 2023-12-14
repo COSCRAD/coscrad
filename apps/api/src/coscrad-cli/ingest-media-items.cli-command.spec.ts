@@ -1,19 +1,26 @@
-import { TestingModule } from '@nestjs/testing';
+import { CommandModule } from '@coscrad/commands';
+import { ConfigService } from '@nestjs/config';
+import { Test, TestingModule } from '@nestjs/testing';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
-import createTestModule from '../app/controllers/__tests__/createTestModule';
+import buildMockConfigServiceSpec from '../app/config/__tests__/utilities/buildMockConfigService';
+import buildConfigFilePath from '../app/config/buildConfigFilePath';
+import { Environment } from '../app/config/constants/Environment';
+import { MediaItemModule } from '../app/domain-modules/media-item.module';
+import { CoscradEventFactory, EventModule } from '../domain/common';
 import { validAggregateOrThrow } from '../domain/models/shared/functional';
 import { AggregateType } from '../domain/types/AggregateType';
 import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
+import { PersistenceModule } from '../persistence/persistence.module';
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { DynamicDataTypeFinderService } from '../validation';
+import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../validation';
 import { CoscradCliModule } from './coscrad-cli.module';
 
 const cliCommandName = 'ingest-media-items';
 
-const inputDir = `__cli-command-test-files`;
+const inputDir = `__cli-command-test-inputs__`;
 
 const inputFilePrefix = `./${inputDir}/${cliCommandName}`;
 
@@ -26,10 +33,52 @@ describe(`CLI Command: **data-restore**`, () => {
 
     let databaseProvider: ArangoDatabaseProvider;
 
+    let testAppModule: TestingModule;
+
     beforeAll(async () => {
-        const testAppModule = await createTestModule({
-            ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
-        });
+        testAppModule = await Test.createTestingModule({
+            imports: [
+                CommandModule,
+                EventModule,
+                DynamicDataTypeModule,
+                PersistenceModule.forRootAsync(),
+                MediaItemModule,
+            ],
+            providers: [
+                {
+                    provide: ConfigService,
+                    useFactory: () =>
+                        buildMockConfigServiceSpec(
+                            {
+                                ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+                            },
+                            buildConfigFilePath(Environment.test)
+                        ),
+                },
+                {
+                    provide: TestRepositoryProvider,
+                    useFactory: (
+                        databaseProvider: ArangoDatabaseProvider,
+                        coscradEventFactory: CoscradEventFactory,
+                        dynamicDataTypeFinderService: DynamicDataTypeFinderService
+                    ) =>
+                        new TestRepositoryProvider(
+                            databaseProvider,
+                            coscradEventFactory,
+                            dynamicDataTypeFinderService
+                        ),
+                    inject: [
+                        ArangoDatabaseProvider,
+                        CoscradEventFactory,
+                        DynamicDataTypeFinderService,
+                    ],
+                },
+            ],
+        }).compile();
+
+        // createTestModule({
+        //     ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+        // });
 
         await testAppModule.init();
 
@@ -39,6 +88,8 @@ describe(`CLI Command: **data-restore**`, () => {
 
         const arangoConnectionProvider =
             testAppModule.get<ArangoConnectionProvider>(ArangoConnectionProvider);
+
+        const _dbName = arangoConnectionProvider.getDatabaseName();
 
         databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
 
@@ -56,8 +107,6 @@ describe(`CLI Command: **data-restore**`, () => {
 
     beforeEach(async () => {
         await testRepositoryProvider.testTeardown();
-
-        await testRepositoryProvider.testTeardown();
     });
 
     describe(`when the media directory has some allowed media items only`, () => {
@@ -65,6 +114,7 @@ describe(`CLI Command: **data-restore**`, () => {
             await CommandTestFactory.run(commandInstance, [
                 cliCommandName,
                 `--directory=${buildDirectoryPath(`mediaItemsOnly`)}`,
+                `--baseUrl=http://localhost:3131/uploads`,
             ]);
 
             const expectedNumberOfResults = 3;
