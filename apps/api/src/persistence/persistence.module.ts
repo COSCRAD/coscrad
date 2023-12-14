@@ -96,10 +96,11 @@ export class PersistenceModule implements OnApplicationShutdown {
             useFactory: (
                 databaseProvider: ArangoDatabaseProvider,
                 coscradEventFactory: CoscradEventFactory
-            ) =>
-                new DigitalTextQueryRepository(
+            ) => {
+                return new DigitalTextQueryRepository(
                     new ArangoEventRepository(databaseProvider, coscradEventFactory)
-                ),
+                );
+            },
             inject: [ArangoDatabaseProvider, CoscradEventFactory],
         };
 

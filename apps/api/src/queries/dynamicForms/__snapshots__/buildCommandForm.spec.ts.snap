@@ -18,18 +18,6 @@ exports[`buildCommandForm should return the expected result 1`] = `
     {
       "constraints": [
         {
-          "message": "must be a non-empty string",
-          "name": "non-empty string",
-        },
-      ],
-      "description": "title of the media item in the colonial language",
-      "label": "title (colonial language)",
-      "name": "titleEnglish",
-      "type": "TEXT_FIELD",
-    },
-    {
-      "constraints": [
-        {
           "message": "must be a URL",
           "name": "URL",
         },

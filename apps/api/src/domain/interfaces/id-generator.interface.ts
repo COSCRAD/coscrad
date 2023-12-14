@@ -6,4 +6,6 @@ export interface IIdGenerator {
      * the new ID for subsequent use by the client.
      */
     generate: () => Promise<AggregateId>;
+
+    generateMany: (numberOfIdsToGenerate: number) => Promise<AggregateId[]>;
 }

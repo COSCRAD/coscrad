@@ -61,34 +61,6 @@ export class CreateMediaItem implements ICommandBase {
     })
     readonly title?: string;
 
-    @NonEmptyString({
-        isOptional: true,
-        label: 'title (colonial language)',
-        description: 'title of the media item in the colonial language',
-    })
-    readonly titleEnglish?: string;
-
-    /**
-     * TODO This property is being removed in favor of edge connections to a
-     * separate `Contributor` resource.  For now, we use a config to map in
-     * media credits. Be sure to remove this property from existing data. It can
-     * simply be ignored in sourcing V1 events.
-     */
-    // @NestedDataType(ContributorAndRole, {
-    //     isArray: true,
-    //     label: 'contributions',
-    //     description: 'acknowledgement of all contributors who worked on this song',
-    // })
-    //
-    // readonly contributions: ContributorAndRole[];
-    // @NestedDataType(ContributorAndRole, {
-    //     isArray: true,
-    //     label: 'contributions',
-    //     description:
-    //         'an acknowledgement of each person who contributed to creating and producing this song',
-    // })
-    // readonly contributions: ContributorAndRole[];
-
     @URL({
         label: 'audio link',
         description: 'a web URL link to a digital version of this media item for playback',
