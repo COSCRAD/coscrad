@@ -1,6 +1,9 @@
 import { ITermViewModel } from '@coscrad/api-interfaces';
 import { FromDomainModel, NonEmptyString, URL } from '@coscrad/data-types';
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { AudioItem } from '../../../domain/models/audio-item/entities/audio-item.entity';
+import { MediaItem } from '../../../domain/models/media-item/entities/media-item.entity';
 import { Term } from '../../../domain/models/term/entities/term.entity';
 import { BaseViewModel } from './base.view-model';
 
@@ -45,15 +48,27 @@ export class TermViewModel extends BaseViewModel implements ITermViewModel {
     @FromTerm
     readonly sourceProject?: string;
 
-    constructor(term: Term) {
+    constructor(term: Term, audioItems: AudioItem[], mediaItems: MediaItem[]) {
         super(term);
 
-        const { contributorId, audioItemId: audioFilename, sourceProject } = term;
+        const { contributorId, audioItemId, sourceProject } = term;
 
         this.contributor = getContributorNameFromId(contributorId);
 
-        if (audioFilename) this.audioURL = audioFilename;
-
         if (sourceProject) this.sourceProject = sourceProject;
+
+        if (isNonEmptyString(audioItemId)) {
+            const audioSearchResult = audioItems.find(({ id }) => id === audioItemId);
+
+            if (audioSearchResult) {
+                const { mediaItemId } = audioSearchResult;
+
+                const mediaItemSearchResult = mediaItems.find(({ id }) => id === mediaItemId);
+
+                if (isNonEmptyString(mediaItemSearchResult?.url)) {
+                    this.audioURL = mediaItemSearchResult.url;
+                }
+            }
+        }
     }
 }

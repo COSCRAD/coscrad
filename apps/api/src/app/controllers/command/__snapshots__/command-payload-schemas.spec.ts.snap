@@ -3801,6 +3801,45 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "label": "audio item ID",
         "referenceTo": "audioItem",
       },
+      "languageCode": {
+        "complexDataType": "ENUM",
+        "description": "the language of the audio",
+        "enumLabel": "language code",
+        "enumName": "LanguageCode",
+        "isArray": false,
+        "isOptional": false,
+        "label": "language",
+        "labelsAndValues": [
+          {
+            "label": "Chilcotin",
+            "value": "clc",
+          },
+          {
+            "label": "Haida",
+            "value": "hai",
+          },
+          {
+            "label": "English",
+            "value": "en",
+          },
+          {
+            "label": "French",
+            "value": "fra",
+          },
+          {
+            "label": "Chinook",
+            "value": "chn",
+          },
+          {
+            "label": "Zapotec",
+            "value": "zap",
+          },
+          {
+            "label": "Spanish",
+            "value": "spa",
+          },
+        ],
+      },
     },
     "type": "ADD_AUDIO_FOR_TERM",
   },

@@ -9,6 +9,8 @@ import {
 import { NestedDataType } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
+import { AudioItem } from '../../../domain/models/audio-item/entities/audio-item.entity';
+import { MediaItem } from '../../../domain/models/media-item/entities/media-item.entity';
 import { Term } from '../../../domain/models/term/entities/term.entity';
 import { VocabularyListFilterProperty } from '../../../domain/models/vocabulary-list/entities/vocabulary-list-variable.entity';
 import { VocabularyList } from '../../../domain/models/vocabulary-list/entities/vocabulary-list.entity';
@@ -101,7 +103,12 @@ export class VocabularyListViewModel extends BaseViewModel implements IVocabular
     // })
     readonly form: IDynamicForm;
 
-    constructor(vocabularyList: VocabularyList, allTerms: Term[]) {
+    constructor(
+        vocabularyList: VocabularyList,
+        allTerms: Term[],
+        allAudioItems: AudioItem[],
+        allMediaItems: MediaItem[]
+    ) {
         super(vocabularyList);
 
         const { entries, variables } = vocabularyList;
@@ -115,7 +122,9 @@ export class VocabularyListViewModel extends BaseViewModel implements IVocabular
                 const termSearchResult = allTerms.find((term) => term.id === termId);
 
                 return {
-                    term: termSearchResult ? new TermViewModel(termSearchResult) : NotFound,
+                    term: termSearchResult
+                        ? new TermViewModel(termSearchResult, allAudioItems, allMediaItems)
+                        : NotFound,
                     variableValues,
                 };
             })
