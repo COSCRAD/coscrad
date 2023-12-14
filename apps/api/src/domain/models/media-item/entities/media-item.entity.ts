@@ -6,14 +6,12 @@ import {
     NonNegativeFiniteNumber,
     URL,
 } from '@coscrad/data-types';
-import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
-import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { Valid } from '../../../domainModelValidators/Valid';
-import MediaItemHasNoTitleInAnyLanguageError from '../../../domainModelValidators/errors/mediaItem/MediaItemHasNoTitleInAnyLanguageError';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../../types/ResourceType';
 import { TimeRangeContext } from '../../context/time-range-context/time-range-context.entity';
@@ -33,13 +31,6 @@ export class MediaItem extends Resource implements ITimeBoundable {
         description: 'title of the media item in the language',
     })
     readonly title?: string;
-
-    @NonEmptyString({
-        isOptional: true,
-        label: 'title (colonial language)',
-        description: 'title of the media item in the colonial language',
-    })
-    readonly titleEnglish?: string;
 
     // @NestedDataType(ContributorAndRole, {
     //     isArray: true,
@@ -86,12 +77,9 @@ export class MediaItem extends Resource implements ITimeBoundable {
         // This should only happen within the validation flow
         if (!dto) return;
 
-        const { title, titleEnglish, contributorAndRoles, url, mimeType, lengthMilliseconds } = dto;
+        const { title, contributorAndRoles, url, mimeType, lengthMilliseconds } = dto;
 
-        // TODO [migration] change `title` to `MultilingualText` and remove `titleEnglish`
         this.title = title;
-
-        this.titleEnglish = titleEnglish;
 
         this.contributorAndRoles = Array.isArray(contributorAndRoles)
             ? contributorAndRoles.map(newInstance(ContributorAndRole))
@@ -106,27 +94,11 @@ export class MediaItem extends Resource implements ITimeBoundable {
 
     getName(): MultilingualText {
         // TODO [migration] change `title` to `MultilingualText`
-        return buildMultilingualTextFromBilingualText(
-            {
-                text: this.title,
-                languageCode: LanguageCode.Chilcotin,
-            },
-            {
-                text: this.titleEnglish,
-                languageCode: LanguageCode.English,
-            }
-        );
+        return buildMultilingualTextWithSingleItem(this.title, LanguageCode.Chilcotin);
     }
 
     protected validateComplexInvariants(): InternalError[] {
-        const { id, title, titleEnglish } = this;
-
-        const allErrors: InternalError[] = [];
-
-        if (!isNonEmptyString(title) && !isNonEmptyString(titleEnglish))
-            allErrors.push(new MediaItemHasNoTitleInAnyLanguageError(id));
-
-        return allErrors;
+        return [];
     }
 
     protected getExternalReferences(): AggregateCompositeIdentifier[] {

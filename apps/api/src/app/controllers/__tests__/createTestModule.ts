@@ -359,8 +359,6 @@ export default async (
                     coscradEventFactory: CoscradEventFactory,
                     dynamicDataTypeFinderService: DynamicDataTypeFinderService
                 ) => {
-                    const _dbName = arangoConnectionProvider.getDatabaseName();
-
                     return new ArangoRepositoryProvider(
                         new ArangoDatabaseProvider(arangoConnectionProvider),
                         coscradEventFactory,

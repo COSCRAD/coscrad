@@ -89,8 +89,6 @@ describe(`CLI Command: **data-restore**`, () => {
         const arangoConnectionProvider =
             testAppModule.get<ArangoConnectionProvider>(ArangoConnectionProvider);
 
-        const _dbName = arangoConnectionProvider.getDatabaseName();
-
         databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
 
         testRepositoryProvider = testAppModule.get(TestRepositoryProvider);
@@ -128,4 +126,15 @@ describe(`CLI Command: **data-restore**`, () => {
             expect(mediaItems).toHaveLength(expectedNumberOfResults);
         });
     });
+
+    /**
+     * TODO[test coverage]:
+     * - Stres test
+     * - When the directory has nested directories
+     * - when the directory has other file types
+     *
+     * Note that this is an internal tool and not user facing.
+     * We are not as concerned with comprehensive test coverage
+     * until we expand its use.
+     */
 });

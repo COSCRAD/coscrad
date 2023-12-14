@@ -8,6 +8,7 @@ import { CreateMediaItem } from '../domain/models/media-item/commands/create-med
 import { ResourceType } from '../domain/types/ResourceType';
 import { isNullOrUndefined } from '../domain/utilities/validation/is-null-or-undefined';
 import { InternalError, isInternalError } from '../lib/errors/InternalError';
+import clonePlainObjectWithoutProperty from '../lib/utilities/clonePlainObjectWithoutProperty';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
 
@@ -35,41 +36,47 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
     ): Promise<void> {
         this.logger.log(`Attempting to import media from: ${directory}`);
 
-        const partialPayloads: Omit<CreateMediaItem, 'aggregateCompositeIdentifier' | 'url'>[] =
-            readdirSync(directory).map((file) => {
-                const nameAndExtension = file.split('.');
+        const partialPayloads: (Omit<CreateMediaItem, 'aggregateCompositeIdentifier' | 'url'> & {
+            filename: string;
+        })[] = readdirSync(directory).map((file) => {
+            const nameAndExtension = file.split('.');
 
-                if (nameAndExtension.length !== 2) {
-                    throw new InternalError(`Failed to parse filename: ${file}`);
-                }
+            if (nameAndExtension.length !== 2) {
+                throw new InternalError(`Failed to parse filename: ${file}`);
+            }
 
-                const [name, extension] = nameAndExtension;
+            const [name, extension] = nameAndExtension;
 
-                return {
-                    title: name,
-                    // TODO Be more careful about the file name parsing
-                    mimeType: this.determineMimeType(extension),
-                };
-            });
+            return {
+                title: name,
+                mimeType: this.determineMimeType(extension),
+                filename: file,
+            };
+        });
 
-        // TODO Do this in one go for efficiency
         const generatedIds = await this.idManager.generateMany(partialPayloads.length);
 
         const createMediaItemFsas: CommandFSA<CreateMediaItem>[] = partialPayloads.map(
-            (partialFsa, index) => ({
-                type: `CREATE_MEDIA_ITEM`,
-                payload: {
-                    ...partialFsa,
-                    aggregateCompositeIdentifier: {
-                        type: ResourceType.mediaItem,
-                        id: generatedIds[index],
-                    },
-                    url: `${baseUrl}/${generatedIds[index]}.${this.getFileExtensionForMimeType(
-                        partialFsa.mimeType
-                    )}`,
-                    rawData: {}, // TODO Add me
-                } as const,
-            })
+            (partialFsa, index) => {
+                const { filename, mimeType } = partialFsa;
+
+                return {
+                    type: `CREATE_MEDIA_ITEM`,
+                    payload: {
+                        ...clonePlainObjectWithoutProperty(partialFsa, 'filename'),
+                        aggregateCompositeIdentifier: {
+                            type: ResourceType.mediaItem,
+                            id: generatedIds[index],
+                        },
+                        url: `${baseUrl}/${generatedIds[index]}.${this.getFileExtensionForMimeType(
+                            mimeType
+                        )}`,
+                        rawData: {
+                            filename,
+                        },
+                    } as const,
+                };
+            }
         );
 
         /**
@@ -84,16 +91,18 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
             });
 
             if (isInternalError(result)) {
-                const message = `failed to import media at first invalid request`;
+                const message = `failed to import media atimportimport clonePlainObjectWithoutProperty from '../lib/utilities/clonePlainObjectWithoutProperty';
+ { clonePlainObjectWithoutProperties } from '../lib/utilities/clonePlainObjectWithoutProperties';
+ first invalid request`;
 
                 const topLevelError = new InternalError(message, [result]);
 
                 this.logger.log(topLevelError.toString());
 
                 throw topLevelError;
-            } 
+            }
 
-            this.logger.log(`Success: ${JSON.stringify(fsa)}`)
+            this.logger.log(`Success: ${JSON.stringify(fsa)}`);
         }
     }
 

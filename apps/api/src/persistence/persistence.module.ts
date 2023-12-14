@@ -97,8 +97,6 @@ export class PersistenceModule implements OnApplicationShutdown {
                 databaseProvider: ArangoDatabaseProvider,
                 coscradEventFactory: CoscradEventFactory
             ) => {
-                const _dbName = databaseProvider.getDBInstance().getDatabaseName();
-
                 return new DigitalTextQueryRepository(
                     new ArangoEventRepository(databaseProvider, coscradEventFactory)
                 );
