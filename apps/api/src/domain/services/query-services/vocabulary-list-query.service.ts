@@ -1,11 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
-import { isInternalError } from '../../../lib/errors/InternalError';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
 import { VocabularyListViewModel } from '../../../queries/buildViewModelForResource/viewModels';
 import BaseDomainModel from '../../models/BaseDomainModel';
-import { Tag } from '../../models/tag/tag.entity';
+import { AudioItem } from '../../models/audio-item/entities/audio-item.entity';
+import { MediaItem } from '../../models/media-item/entities/media-item.entity';
+import { validAggregateOrThrow } from '../../models/shared/functional';
 import { Term } from '../../models/term/entities/term.entity';
 import { VocabularyList } from '../../models/vocabulary-list/entities/vocabulary-list.entity';
 import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
@@ -30,31 +31,29 @@ export class VocabularyListQueryService extends ResourceQueryService<
 
     buildViewModel(
         vocabularyList: VocabularyList,
-        { resources: { term: allTerms } }: InMemorySnapshot
+        {
+            resources: { term: allTerms, audioItem: allAudioItems, mediaItem: allMediaItems },
+        }: InMemorySnapshot
     ): VocabularyListViewModel {
-        return new VocabularyListViewModel(vocabularyList, allTerms);
+        return new VocabularyListViewModel(vocabularyList, allTerms, allAudioItems, allMediaItems);
     }
 
     override async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
-        const [allTags, allTerms] = await Promise.all([
-            this.repositoryProvider
-                .getTagRepository()
-                .fetchMany()
-                .then((results) =>
-                    results.filter((result): result is Tag => !isInternalError(result))
-                ),
+        const [allTags, allTerms, allAudioItems, allMediaItems] = await Promise.all([
+            this.repositoryProvider.getTagRepository().fetchMany(),
             this.repositoryProvider
                 .forResource<Term>(ResourceType.term)
-                .fetchMany(new IsPublished(true))
-                .then((results) =>
-                    results.filter((result): result is Term => !isInternalError(result))
-                ),
+                .fetchMany(new IsPublished(true)),
+            this.repositoryProvider.forResource<AudioItem>(ResourceType.audioItem).fetchMany(),
+            this.repositoryProvider.forResource<MediaItem>(ResourceType.mediaItem).fetchMany(),
         ]);
 
         return new DeluxeInMemoryStore({
-            tag: allTags,
+            tag: allTags.filter(validAggregateOrThrow),
             resources: {
-                term: allTerms,
+                term: allTerms.filter(validAggregateOrThrow),
+                audioItem: allAudioItems.filter(validAggregateOrThrow),
+                mediaItem: allMediaItems.filter(validAggregateOrThrow),
             },
         }).fetchFullSnapshotInLegacyFormat();
     }

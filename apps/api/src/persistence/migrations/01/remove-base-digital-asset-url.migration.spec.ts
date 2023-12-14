@@ -180,14 +180,14 @@ describe.skip(`RemoveBaseDigitalAssetUrl`, () => {
             expect(updatedTermDocuments.length).toBe(originalTermDocuments.length);
 
             const idsOfDocumentsWithoutBaseDigitalAssetUrl = updatedTermDocuments.filter(
-                ({ audioFilename }) =>
+                ({ audioItemId: audioFilename }) =>
                     !isNullOrUndefined(audioFilename) &&
                     !audioFilename.includes(baseDigitalAssetUrl)
             );
 
             expect(idsOfDocumentsWithoutBaseDigitalAssetUrl).toEqual([]);
 
-            const { audioFilename } = (await testDatabaseProvider
+            const { audioItemId: audioFilename } = (await testDatabaseProvider
                 .getDatabaseForCollection(ArangoCollectionId.terms)
                 .fetchById(idForTermToCheckManually)) as unknown as ArangoDatabaseDocument<
                 DTO<Term>
@@ -201,7 +201,7 @@ describe.skip(`RemoveBaseDigitalAssetUrl`, () => {
                 DTO<Term>
             >;
 
-            expect(migratedTermWithoutAudiofilename.audioFilename).not.toBeTruthy();
+            expect(migratedTermWithoutAudiofilename.audioItemId).not.toBeTruthy();
 
             // @ts-expect-error there's no point of maintainging this any longer
             const { imageUrl } = (await testDatabaseProvider
