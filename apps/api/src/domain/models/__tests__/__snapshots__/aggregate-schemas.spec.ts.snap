@@ -671,13 +671,6 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isOptional": true,
     "label": "title (language)",
   },
-  "titleEnglish": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "title of the media item in the colonial language",
-    "isArray": false,
-    "isOptional": true,
-    "label": "title (colonial language)",
-  },
   "url": {
     "coscradDataType": "URL",
     "description": "a web link to the corresponding media file",
