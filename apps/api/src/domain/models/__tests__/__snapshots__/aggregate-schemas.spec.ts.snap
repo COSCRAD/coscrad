@@ -1573,12 +1573,12 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Term  should match the snapshot 1`] = `
 {
-  "audioFilename": {
+  "audioItemId": {
     "coscradDataType": "NON_EMPTY_STRING",
-    "description": "a url link to the audio file",
+    "description": "a system reference to the audio file",
     "isArray": false,
     "isOptional": true,
-    "label": "Audio Filename",
+    "label": "Audio Item ID",
   },
   "contributorId": {
     "coscradDataType": "NON_EMPTY_STRING",

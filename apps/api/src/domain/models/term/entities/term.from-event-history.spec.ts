@@ -10,6 +10,7 @@ import {
 } from '../../shared/common-commands';
 import { ResourcePublished } from '../../shared/common-commands/publish-resource/resource-published.event';
 import {
+    AudioAddedForTerm,
     PromptTermCreated,
     TermCreated,
     TermElicitedFromPrompt,
@@ -64,6 +65,15 @@ const termElicitedFromPrompt = promptTermCreated.andThen<TermElicitedFromPrompt>
     payload: {
         text: elicitedPromptTranslationText,
         languageCode: elicitationLanguageCode,
+    },
+});
+
+const audioItemId = buildDummyUuid(50);
+
+const audioAddedForTerm = termElicitedFromPrompt.andThen<AudioAddedForTerm>({
+    type: 'AUDIO_ADDED_FOR_TERM',
+    payload: {
+        audioItemId,
     },
 });
 
@@ -197,6 +207,24 @@ describe(`Term.fromEventHistory`, () => {
                     expect(foundText).toBe(elicitedPromptTranslationText);
 
                     expect(foundLanguageCode).toBe(elicitationLanguageCode);
+                });
+            });
+
+            describe(`when audio is added`, () => {
+                it(`should return the updated term`, () => {
+                    const result = Term.fromEventHistory(
+                        audioAddedForTerm.as({
+                            type: AggregateType.term,
+                            id: termId,
+                        }),
+                        termId
+                    );
+
+                    expect(result).toBeInstanceOf(Term);
+
+                    const updatedTerm = result as Term;
+
+                    expect(updatedTerm.audioItemId).toBe(audioItemId);
                 });
             });
 
