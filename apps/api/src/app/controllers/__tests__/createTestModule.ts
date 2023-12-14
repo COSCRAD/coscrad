@@ -128,6 +128,9 @@ import {
 import { TagCreated } from '../../../domain/models/tag/commands/create-tag/tag-created.event';
 import { ResourceOrNoteTagged } from '../../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
 import {
+    AddAudioForTerm,
+    AddAudioForTermCommandHandler,
+    AudioAddedForTerm,
     CreatePromptTerm,
     CreatePromptTermCommandHandler,
     CreateTerm,
@@ -279,6 +282,7 @@ export const buildAllDataClassProviders = () =>
         TermCreated,
         TermTranslated,
         PromptTermCreated,
+        AudioAddedForTerm,
         TermElicitedFromPrompt,
         // Aggregate Root Domain Models
         DigitalText,
@@ -623,6 +627,8 @@ export default async (
             ElicitTermFromPromptCommandHandler,
             TranslateTerm,
             TranslateTermCommandHandler,
+            AddAudioForTerm,
+            AddAudioForTermCommandHandler,
             CreatePoint,
             CreatePointCommandHandler,
             CreateVocabularyList,
