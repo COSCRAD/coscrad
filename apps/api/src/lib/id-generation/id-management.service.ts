@@ -9,12 +9,14 @@ import { NotFound, isNotFound } from '../types/not-found';
 import { OK, isOK } from '../types/ok';
 import { ID_RESPOSITORY_TOKEN, IIdRepository } from './interfaces/id-repository.interface';
 
+const makeId = (): string => uuidv4();
+
 @Injectable()
 export class IdManagementService implements IIdManager {
     constructor(@Inject(ID_RESPOSITORY_TOKEN) protected readonly idRepository: IIdRepository) {}
 
     async generate(): Promise<string> {
-        const id = await uuidv4();
+        const id = makeId();
 
         /**
          * Mark the newly generated id as
@@ -25,6 +27,17 @@ export class IdManagementService implements IIdManager {
         await this.idRepository.create(id);
 
         return id;
+    }
+
+    async generateMany(numberOfIdsToGenerate: number): Promise<string[]> {
+        const ids = Array(numberOfIdsToGenerate).fill(-1).map(
+            // note this takes no parameters, the `-1` has no effect
+            makeId
+        );
+
+        await this.idRepository.createMany(ids);
+
+        return ids;
     }
 
     async status(id: AggregateId): Promise<NotFound | NotAvailable | OK> {

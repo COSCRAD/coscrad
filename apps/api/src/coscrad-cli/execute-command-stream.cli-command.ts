@@ -73,6 +73,9 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
         super();
     }
 
+    /**
+     * TODO Move this logic into a service we can reuse. Maybe CommandHandlerService.executeStream()
+     */
     async run(
         _passedParams: string[],
         {
