@@ -1,6 +1,7 @@
-import { AggregateType, ICommandBase } from '@coscrad/api-interfaces';
+import { AggregateType, ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { NestedDataType, ReferenceTo, UUID } from '@coscrad/data-types';
+import { LanguageCodeEnum } from '../../../../../domain/common/entities/multilingual-text';
 import { AggregateId } from '../../../../types/AggregateId';
 import { TermCompositeIdentifier } from '../create-term';
 
@@ -22,4 +23,10 @@ export class AddAudioForTerm implements ICommandBase {
     })
     @ReferenceTo(AggregateType.audioItem)
     readonly audioItemId: AggregateId;
+
+    @LanguageCodeEnum({
+        label: 'language',
+        description: 'the language of the audio',
+    })
+    readonly languageCode: LanguageCode;
 }

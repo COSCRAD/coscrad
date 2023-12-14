@@ -74,6 +74,7 @@ const addAudioForTerm: CommandFSA<AddAudioForTerm> = {
             type,
         },
         audioItemId: buildDummyUuid(117),
+        languageCode: LanguageCode.Chilcotin,
     },
 };
 

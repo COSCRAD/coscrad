@@ -345,6 +345,7 @@ const buildAudioAddedForTerm = (
             id: buildDummyUuid(127),
         },
         audioItemId: buildDummyUuid(777),
+        languageCode: LanguageCode.Haida,
     };
 
     return new AudioAddedForTerm(clonePlainObjectWithOverrides(defaultPayload, payloadOverrides), {
