@@ -15,6 +15,8 @@ export class MediaItemViewModel extends BaseViewModel implements IMediaItemViewM
     @FromMediaItem
     readonly lengthMilliseconds: number;
 
+    readonly filepath: string;
+
     constructor(mediaItem: MediaItem) {
         const { url, mimeType, lengthMilliseconds } = mediaItem;
 
@@ -25,5 +27,7 @@ export class MediaItemViewModel extends BaseViewModel implements IMediaItemViewM
         this.mimeType = mimeType;
 
         this.lengthMilliseconds = lengthMilliseconds;
+
+        this.filepath = mediaItem.getFilePath();
     }
 }

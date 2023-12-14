@@ -20,6 +20,7 @@ import { Resource } from '../../resource.entity';
 import validateTimeRangeContextForModel from '../../shared/contextValidators/validateTimeRangeContextForModel';
 import newInstance from '../../shared/functional/newInstance';
 import { ContributorAndRole } from '../../song/ContributorAndRole';
+import { getExtensionForMimeType } from './getExtensionForMimeType';
 
 @RegisterIndexScopedCommands(['CREATE_MEDIA_ITEM'])
 export class MediaItem extends Resource implements ITimeBoundable {
@@ -95,6 +96,10 @@ export class MediaItem extends Resource implements ITimeBoundable {
     getName(): MultilingualText {
         // TODO [migration] change `title` to `MultilingualText`
         return buildMultilingualTextWithSingleItem(this.title, LanguageCode.Chilcotin);
+    }
+
+    getFilePath(): string {
+        return `${this.title}.${getExtensionForMimeType(this.mimeType)}`;
     }
 
     protected validateComplexInvariants(): InternalError[] {
