@@ -2,6 +2,7 @@ import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandFSA } from '../../app/controllers/command/command-fsa/command-fsa.entity';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import {
+    AddAudioForTerm,
     CreatePromptTerm,
     CreateTerm,
     ElicitTermFromPrompt,
@@ -65,9 +66,22 @@ const elicitTermFromPrompt: CommandFSA<ElicitTermFromPrompt> = {
     },
 };
 
+const addAudioForTerm: CommandFSA<AddAudioForTerm> = {
+    type: 'ADD_AUDIO_FOR_TERM',
+    payload: {
+        aggregateCompositeIdentifier: {
+            id,
+            type,
+        },
+        audioItemId: buildDummyUuid(117),
+        languageCode: LanguageCode.Chilcotin,
+    },
+};
+
 export const buildTermTestCommandFsas = () => [
     createTerm,
     translateTerm,
     createPromptTerm,
     elicitTermFromPrompt,
+    addAudioForTerm,
 ];

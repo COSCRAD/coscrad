@@ -60,11 +60,11 @@ export class RemoveBaseDigitalAssetUrl implements ICoscradMigration {
 
         await queryRunner.update<TermDocument, TermDocument>(
             ArangoCollectionId.terms,
-            ({ audioFilename }) =>
+            ({ audioItemId: audioFilename }) =>
                 isNullOrUndefined(audioFilename)
                     ? {}
                     : {
-                          audioFilename: `${this.baseDigitalAssetUrl}${audioFilename}.${defaultAudioExtension}`,
+                          audioItemId: `${this.baseDigitalAssetUrl}${audioFilename}.${defaultAudioExtension}`,
                       }
         );
 
@@ -91,10 +91,10 @@ export class RemoveBaseDigitalAssetUrl implements ICoscradMigration {
 
         await queryRunner.update<TermDocument, TermDocument>(
             ArangoCollectionId.terms,
-            ({ audioFilename }) => {
+            ({ audioItemId: audioFilename }) => {
                 if (audioFilename?.includes(this.baseDigitalAssetUrl)) {
                     return {
-                        audioFilename: audioFilename
+                        audioItemId: audioFilename
                             .replace(this.baseDigitalAssetUrl, '')
                             .replace(`.${defaultAudioExtension}`, ''),
                     };

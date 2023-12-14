@@ -29,6 +29,7 @@ import {
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import {
+    AudioAddedForTermPayload,
     PromptTermCreated,
     TermCreated,
     TermElicitedFromPromptPayload,
@@ -38,7 +39,11 @@ import { CREATE_PROMPT_TERM, PROMPT_TERM_CREATED } from '../commands/create-prom
 import { CREATE_TERM, TERM_CREATED } from '../commands/create-term/constants';
 import { TERM_ELICITED_FROM_PROMPT } from '../commands/elicit-term-from-prompt/constants';
 import { TERM_TRANSLATED, TRANSLATE_TERM } from '../commands/translate-term/constants';
-import { CannotElicitTermWithoutPromptError, PromptLanguageMustBeUniqueError } from '../errors';
+import {
+    CannotElicitTermWithoutPromptError,
+    CannotOverrideAudioForTermError,
+    PromptLanguageMustBeUniqueError,
+} from '../errors';
 
 const isOptional = true;
 
@@ -91,15 +96,12 @@ export class Term extends Resource {
     })
     readonly contributorId?: AggregateId;
 
-    /**
-     * TODO Make this a mediaItemId
-     */
     @NonEmptyString({
         isOptional,
-        label: 'Audio Filename',
-        description: 'a url link to the audio file',
+        label: 'Audio Item ID',
+        description: 'a system reference to the audio file',
     })
-    readonly audioFilename?: string;
+    readonly audioItemId?: string;
 
     /**
      * TODO - This should be done via a tag or a note. Remove this property.
@@ -118,13 +120,19 @@ export class Term extends Resource {
         // This should only happen in the validation context
         if (isNullOrUndefined(dto)) return;
 
-        const { contributorId, audioFilename, sourceProject, text, isPromptTerm } = dto;
+        const {
+            contributorId,
+            audioItemId: audioFilename,
+            sourceProject,
+            text,
+            isPromptTerm,
+        } = dto;
 
         this.text = new MultilingualText(text);
 
         this.contributorId = contributorId;
 
-        this.audioFilename = audioFilename;
+        this.audioItemId = audioFilename;
 
         this.sourceProject = sourceProject;
 
@@ -134,6 +142,10 @@ export class Term extends Resource {
 
     getName(): MultilingualText {
         return this.text.clone();
+    }
+
+    hasAudio(): boolean {
+        return !isNullOrUndefined(this.audioItemId);
     }
 
     translate(text: string, languageCode: LanguageCode): ResultOrError<Term> {
@@ -149,6 +161,16 @@ export class Term extends Resource {
 
         return this.safeClone<Term>({
             text: textUpdateResult,
+        });
+    }
+
+    addAudio(audioItemId: string): ResultOrError<Term> {
+        if (this.hasAudio()) {
+            return new CannotOverrideAudioForTermError(this.id, audioItemId);
+        }
+
+        return this.safeClone<Term>({
+            audioItemId,
         });
     }
 
@@ -240,6 +262,12 @@ export class Term extends Resource {
                 return accumulatedTerm
                     .addEventToHistory(nextEvent)
                     .elicitFromPrompt(text, languageCode);
+            }
+
+            if (nextEvent.isOfType(`AUDIO_ADDED_FOR_TERM`)) {
+                const { audioItemId } = nextEvent.payload as AudioAddedForTermPayload;
+
+                return accumulatedTerm.addEventToHistory(nextEvent).addAudio(audioItemId);
             }
 
             if (nextEvent.isOfType(`RESOURCE_PUBLISHED`)) {
