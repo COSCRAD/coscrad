@@ -7,8 +7,10 @@ import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
+import { AggregateId } from '../../../types/AggregateId';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../BaseDomainModel';
+import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import { CannotOverwritePageContentError } from '../errors/cannot-overwrite-page-content.error';
 import { PageIdentifier } from './types/page-identifier';
 
@@ -31,6 +33,12 @@ export default class DigitalTextPage extends BaseDomainModel implements IDigital
      * time.
      */
     readonly content?: MultilingualText;
+
+    @NestedDataType(MultilingualAudio, {
+        label: `multilingual audio`,
+        description: `maintains references to audio in available languages`,
+    })
+    readonly audio: MultilingualAudio;
 
     constructor(dto: DTO<DigitalTextPage>) {
         super();
@@ -80,5 +88,17 @@ export default class DigitalTextPage extends BaseDomainModel implements IDigital
         if (!this.hasContent()) return NotFound;
 
         return this.content.clone({});
+    }
+
+    hasAudio(): boolean {
+        return this.audio.count() > 0;
+    }
+
+    addAudio(audioItemId: AggregateId, languageCode: LanguageCode) {
+        const updatedAudio = this.audio.addAudio(audioItemId, languageCode) as MultilingualAudio;
+
+        return this.clone<DigitalTextPage>({
+            audio: updatedAudio,
+        });
     }
 }

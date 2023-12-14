@@ -30,6 +30,7 @@ import { Resource } from '../../resource.entity';
 import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
 import { ResourceReadAccessGrantedToUser } from '../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event';
 import { BaseEvent } from '../../shared/events/base-event.entity';
+import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import {
     DigitalTextCreated,
     DigitalTextPageContentTranslated,
@@ -135,6 +136,7 @@ export class DigitalText extends Resource {
                 ...this.pages,
                 new DigitalTextPage({
                     identifier: pageIdentifier,
+                    audio: new MultilingualAudio({ items: [] }),
                 }),
             ],
         });
@@ -194,6 +196,24 @@ export class DigitalText extends Resource {
 
         const updatedPages = this.pages.map((page) =>
             page.identifier === pageIdentifier ? updatedPage : page
+        );
+
+        return this.safeClone<DigitalText>({
+            pages: updatedPages,
+        });
+    }
+
+    addAudioForPage(
+        pageIdentifier: PageIdentifier,
+        audioItemId: AggregateId,
+        languageCode: LanguageCode
+    ): ResultOrError<DigitalText> {
+        const pageToUpdate = this.getPage(pageIdentifier) as DigitalTextPage;
+
+        const updatedPage = pageToUpdate.addAudio(audioItemId, languageCode) as DigitalTextPage;
+
+        const updatedPages = this.pages.map((page) =>
+            page.identifier === updatedPage.identifier ? updatedPage : page
         );
 
         return this.safeClone<DigitalText>({
