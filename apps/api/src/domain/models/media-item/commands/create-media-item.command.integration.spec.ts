@@ -10,8 +10,6 @@ import { ArangoDatabaseProvider } from '../../../../persistence/database/databas
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../types/DTO';
-import InvariantValidationError from '../../../domainModelValidators/errors/InvariantValidationError';
-import MediaItemHasNoTitleInAnyLanguageError from '../../../domainModelValidators/errors/mediaItem/MediaItemHasNoTitleInAnyLanguageError';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { assertCommandFailsDueToTypeError } from '../../../models/__tests__/command-helpers/assert-command-payload-type-error';
 import { AggregateId } from '../../../types/AggregateId';
@@ -38,24 +36,12 @@ const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateMed
     payload: {
         aggregateCompositeIdentifier: { id, type: AggregateType.mediaItem },
         title: 'Fishing Video',
-        titleEnglish: 'Fishing Video (Engl)',
         url: 'https://www.mysoundbox.org/vid.mp4',
         mimeType: MIMEType.mp4,
     },
 });
 
 const existingMediaItemId = `702096a0-c52f-488f-b5dc-22192e9aca3e`;
-
-const buildInvalidFSA = (
-    id: AggregateId,
-    payloadOverrides: Partial<Record<keyof CreateMediaItem, unknown>> = {}
-): FluxStandardAction<DTO<CreateMediaItem>> => ({
-    type: commandType,
-    payload: {
-        ...buildValidCommandFSA(id).payload,
-        ...(payloadOverrides as Partial<CreateMediaItem>),
-    },
-});
 
 const emptyInitialState = new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat();
 
@@ -197,35 +183,6 @@ describe('CreateMediaItem', () => {
                                 id: existingMediaItemId,
                                 resourceType: ResourceType.mediaItem,
                             })
-                        );
-                    },
-                });
-            });
-        });
-    });
-
-    describe('when an invariant validation rule is not satisfied by the new media item', () => {
-        describe('when the media item has no title in any language', () => {
-            it('should fail', async () => {
-                await assertCreateCommandError(assertionHelperDependencies, {
-                    systemUserId: dummyAdminUserId,
-                    buildCommandFSA: (id: AggregateId) =>
-                        buildInvalidFSA(id, {
-                            title: null,
-                            titleEnglish: null,
-                        }),
-                    initialState: emptyInitialState,
-                    checkError: (error: InternalError) => {
-                        expect(error).toBeInstanceOf(CommandExecutionError);
-
-                        const innerErrors = error.innerErrors;
-
-                        expect(innerErrors[0]).toBeInstanceOf(InvariantValidationError);
-
-                        const innermostErrors = innerErrors[0].innerErrors[0];
-
-                        expect(innermostErrors).toBeInstanceOf(
-                            MediaItemHasNoTitleInAnyLanguageError
                         );
                     },
                 });

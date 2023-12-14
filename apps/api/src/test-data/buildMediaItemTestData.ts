@@ -8,7 +8,6 @@ const dtos: DTO<MediaItem>[] = [
     {
         id: '1',
         title: 'episode (media item 1) title (in language)',
-        titleEnglish: 'Metal Mondays episode 1',
         contributorAndRoles: [
             {
                 contributorId: '2',
@@ -24,7 +23,6 @@ const dtos: DTO<MediaItem>[] = [
     {
         id: '2',
         title: 'video (media item 2) title (in language)',
-        titleEnglish: 'cool video',
         contributorAndRoles: [
             {
                 contributorId: '2',
@@ -40,7 +38,6 @@ const dtos: DTO<MediaItem>[] = [
     {
         id: '3',
         title: 'episode (media item 3) title (in language)',
-        titleEnglish: 'Metal Mondays episode 2',
         contributorAndRoles: [
             {
                 contributorId: '2',
