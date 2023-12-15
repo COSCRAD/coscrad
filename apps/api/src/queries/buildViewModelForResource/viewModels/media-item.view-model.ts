@@ -28,6 +28,7 @@ export class MediaItemViewModel extends BaseViewModel implements IMediaItemViewM
 
         this.lengthMilliseconds = lengthMilliseconds;
 
+        // Note that we remove this before returning query results for security
         this.filepath = mediaItem.getFilePath();
     }
 }

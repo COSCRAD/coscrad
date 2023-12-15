@@ -22,6 +22,8 @@ const cliCommandName = 'ingest-media-items';
 
 const inputDir = `__cli-command-test-inputs__`;
 
+const destinationDir = `__cli-command-test-files__`;
+
 const inputFilePrefix = `./${inputDir}/${cliCommandName}`;
 
 const buildDirectoryPath = (suffix: string) => `${inputFilePrefix}/${suffix}`;
@@ -113,6 +115,7 @@ describe(`CLI Command: **data-restore**`, () => {
                 cliCommandName,
                 `--directory=${buildDirectoryPath(`mediaItemsOnly`)}`,
                 `--baseUrl=http://localhost:3131/uploads`,
+                `-s "${destinationDir}"`,
             ]);
 
             const expectedNumberOfResults = 3;
