@@ -216,7 +216,7 @@ import { AdminJwtGuard, CommandController } from '../command/command.controller'
 import { CommandInfoService } from '../command/services/command-info-service';
 import { CoscradUserGroupController } from '../coscrad-user-group.controller';
 import { CoscradUserController } from '../coscrad-user.controller';
-import { EdgeConnectionController } from '../edgeConnection.controller';
+import { EdgeConnectionController } from '../edge-connection.controller';
 import { IdGenerationController } from '../id-generation/id-generation.controller';
 import { AudioItemController } from '../resources/audio-item.controller';
 import { BibliographicReferenceController } from '../resources/bibliographic-reference.controller';

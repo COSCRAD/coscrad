@@ -21,23 +21,10 @@ export class MediaItemController {
 
     @ApiBearerAuth('JWT')
     @UseGuards(OptionalJwtAuthGuard)
-    @ApiParam(buildByIdApiParamMetadata())
-    @ApiOkResponse({ type: MediaItemViewModel })
-    @Get('/:id')
-    async fetchById(@Request() req, @Res() res, @Param('id') id: unknown) {
-        const searchResult = await this.mediaItemQueryService.fetchById(id, req.user || undefined);
-
-        return sendInternalResultAsHttpResponse(res, searchResult);
-    }
-
-    @ApiBearerAuth('JWT')
-    @UseGuards(OptionalJwtAuthGuard)
-    @Get('')
-    async fetchMany(@Request() req) {
-        return this.mediaItemQueryService.fetchMany(req.user || undefined);
-    }
-
     @Get('/download/:id')
+    /**
+     * TODO Move this logic to the service layer.
+     */
     async fetchBinary(@Request() req, @Res() res, @Param('id') id: unknown) {
         const searchResult = await this.mediaItemQueryService.fetchById(id, req.user || undefined);
 
@@ -62,5 +49,23 @@ export class MediaItemController {
         };
 
         return res.sendFile(filePath, options);
+    }
+
+    @ApiBearerAuth('JWT')
+    @UseGuards(OptionalJwtAuthGuard)
+    @ApiParam(buildByIdApiParamMetadata())
+    @ApiOkResponse({ type: MediaItemViewModel })
+    @Get('/:id')
+    async fetchById(@Request() req, @Res() res, @Param('id') id: unknown) {
+        const searchResult = await this.mediaItemQueryService.fetchById(id, req.user || undefined);
+
+        return sendInternalResultAsHttpResponse(res, searchResult);
+    }
+
+    @ApiBearerAuth('JWT')
+    @UseGuards(OptionalJwtAuthGuard)
+    @Get('')
+    async fetchMany(@Request() req) {
+        return this.mediaItemQueryService.fetchMany(req.user || undefined);
     }
 }
