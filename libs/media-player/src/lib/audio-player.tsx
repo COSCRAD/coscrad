@@ -1,16 +1,6 @@
 import { styled } from '@mui/material';
-
-export enum AudioMIMEType {
-    mp3 = 'audio/mpeg',
-    audioMp4 = 'audio/mp4',
-    audioOgg = 'audio/ogg',
-    // TODO change this to audio/wav. This requires a migration
-    wav = 'audio/x-wav',
-    audioWebm = 'audio/webm',
-}
-
-const isAudioMIMEType = (input: unknown): input is AudioMIMEType =>
-    Object.values(AudioMIMEType).some((value) => value === (input as AudioMIMEType));
+import { AudioMIMEType } from './shared/audio-mime-type.enum';
+import { isAudioMIMEType } from './shared/is-audio-mime-type';
 
 interface AudioPlayerProps {
     audioUrl: string;

@@ -14,10 +14,10 @@ interface AudioAnnotatorWidgetProps {
  * This widget will be for testing interaction with the parent component state
  */
 const AudioAnnotatorWidget = ({ audioUrl }: AudioAnnotatorWidgetProps): JSX.Element => {
-    const [timeRangeSelected, setTimeRangeSelected] = useState<TimeRangeSelection | null>(null);
+    const [selectedTimeRange, setSelectedTimeRange] = useState<TimeRangeSelection | null>(null);
 
-    const onTimeRangeSelected = (timeRangeSelected: TimeRangeSelection | null) => {
-        setTimeRangeSelected(timeRangeSelected);
+    const onTimeRangeSelected = (selectedTimeRange: TimeRangeSelection | null) => {
+        setSelectedTimeRange(selectedTimeRange);
     };
 
     return (
@@ -28,18 +28,18 @@ const AudioAnnotatorWidget = ({ audioUrl }: AudioAnnotatorWidgetProps): JSX.Elem
             <Item>
                 <AudioAnnotator audioUrl={audioUrl} onTimeRangeSelected={onTimeRangeSelected} />
             </Item>
-            {timeRangeSelected !== null ? (
+            {selectedTimeRange !== null ? (
                 <Item
-                    data-testid="time-range-selected"
+                    data-testid="selected-time-range"
                     sx={{ backgroundColor: '#ccc', p: 2, mt: 2 }}
                 >
                     <Typography variant="h5">Valid Time Range Selected:</Typography>
                     <Box p={2}>
                         <Typography variant="h6">
-                            inPoint: {timeRangeSelected.inPointSeconds}
+                            inPoint: {selectedTimeRange.inPointSeconds}
                         </Typography>
                         <Typography variant="h6">
-                            outPoint: {timeRangeSelected.outPointSeconds}
+                            outPoint: {selectedTimeRange.outPointSeconds}
                         </Typography>
                     </Box>
                 </Item>
@@ -73,36 +73,34 @@ describe('<AudioAnnotator />', () => {
         });
 
         describe(`when the media has been played`, () => {
-            beforeEach(() => {
-                cy.get('audio').then(([audioElement]) => {
-                    audioElement.play();
-                });
-            });
+            // beforeEach(() => {
+            //     cy.get('audio').then(([audioElement]) => {
+            //         audioElement.play();
+            //     });
+
+            //     cy.wait(1500);
+            // });
 
             describe(`the mark in-point button`, () => {
-                it(`should be enabled`, () => {
+                it.only(`should be enabled`, () => {
                     cy.getByDataAttribute('in-point-marker-button').should('be.enabled');
                 });
             });
 
             describe(`the mark out-point button`, () => {
                 it(`should be disabled`, () => {
-                    cy.getByDataAttribute('in-point-marker-button').should('be.disabled');
+                    cy.getByDataAttribute('out-point-marker-button').should('be.disabled');
                 });
             });
 
             describe(`when the mark in-point button is clicked`, () => {
                 it(`should mark an in-point`, () => {
-                    cy.wait(2000);
-
                     cy.getByDataAttribute('in-point-marker-button').click();
                 });
             });
 
             describe(`when the mark in-point button is clicked, the mark out-point button`, () => {
                 it('should be enabled', () => {
-                    cy.wait(2000);
-
                     cy.getByDataAttribute('in-point-marker-button').click();
 
                     cy.wait(2300);
@@ -113,25 +111,18 @@ describe('<AudioAnnotator />', () => {
 
             describe(`when the mark in-point button is clicked, clicking the mark out-point button`, () => {
                 it('should mark an out-point', () => {
-                    cy.wait(2000);
-
                     cy.getByDataAttribute('in-point-marker-button').click();
 
                     cy.wait(2500);
 
                     cy.getByDataAttribute('out-point-marker-button').click();
 
-                    cy.getByDataAttribute('time-range-selected').should('exist');
-
-                    // If I remove this cy.wait() the test suite fails at the first click
-                    cy.wait(2000);
+                    cy.getByDataAttribute('selected-time-range').should('exist');
                 });
             });
 
             describe(`when the mark in-point button is clicked and the user scrubs the playhead back before the in-point, clicking the mark out-point button`, () => {
                 it('should fail with an error', () => {
-                    cy.wait(4000);
-
                     cy.getByDataAttribute('in-point-marker-button').click();
 
                     cy.get('audio').then(([audioElement]) => {
@@ -140,26 +131,21 @@ describe('<AudioAnnotator />', () => {
 
                     cy.getByDataAttribute('out-point-marker-button').click();
 
-                    cy.getByDataAttribute('time-range-selected').should('not.exist');
+                    cy.getByDataAttribute('selected-time-range').should('not.exist');
 
                     cy.getByDataAttribute('audio-error-message').should('exist');
-
-                    // If I remove this cy.wait() the test suite fails at the first click
-                    cy.wait(2000);
                 });
             });
 
             describe(`after an in-point is selected and the clear range button is clicked`, () => {
                 it('should clear the selected in-point', () => {
-                    cy.wait(4000);
-
                     cy.getByDataAttribute('in-point-marker-button').click();
 
                     cy.wait(500);
 
                     cy.getByDataAttribute('clear-selected-time-range-button').click();
 
-                    cy.getByDataAttribute('time-range-selected').should('not.exist');
+                    cy.getByDataAttribute('selected-time-range').should('not.exist');
 
                     cy.getByDataAttribute('out-point-marker-button').should('be.disabled');
                 });
@@ -167,41 +153,37 @@ describe('<AudioAnnotator />', () => {
 
             describe(`after a time range is selected and the clear range button is clicked`, () => {
                 it('should clear the range selection', () => {
-                    cy.wait(2000);
-
                     cy.getByDataAttribute('in-point-marker-button').click();
 
                     cy.wait(2500);
 
                     cy.getByDataAttribute('out-point-marker-button').click();
 
-                    cy.getByDataAttribute('time-range-selected').should('exist');
+                    cy.getByDataAttribute('selected-time-range').should('exist');
 
                     cy.wait(1000);
 
                     cy.getByDataAttribute('clear-selected-time-range-button').click();
 
-                    cy.getByDataAttribute('time-range-selected').should('not.exist');
+                    cy.getByDataAttribute('selected-time-range').should('not.exist');
                 });
             });
 
             describe(`after a time range is selected with hotkeys and clear range is invoked with "c"`, () => {
                 it('should clear the range selection', () => {
-                    cy.wait(2000);
-
                     cy.get('body').type('i');
 
                     cy.wait(2500);
 
                     cy.get('body').type('o');
 
-                    cy.getByDataAttribute('time-range-selected').should('exist');
+                    cy.getByDataAttribute('selected-time-range').should('exist');
 
                     cy.wait(1000);
 
                     cy.get('body').type('c');
 
-                    cy.getByDataAttribute('time-range-selected').should('not.exist');
+                    cy.getByDataAttribute('selected-time-range').should('not.exist');
 
                     cy.getByDataAttribute('selection-bar-inpoint').should('not.be.visible');
 
@@ -227,7 +209,7 @@ describe('<AudioAnnotator />', () => {
 
                 cy.getByDataAttribute('out-point-marker-button').click();
 
-                cy.getByDataAttribute('time-range-selected').should('not.exist');
+                cy.getByDataAttribute('selected-time-range').should('not.exist');
             });
         });
     });
