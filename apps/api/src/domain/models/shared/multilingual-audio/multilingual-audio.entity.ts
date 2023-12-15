@@ -50,8 +50,12 @@ export class MultilingualAudio extends BaseDomainModel {
         audioItemId: AggregateId,
         languageCode: LanguageCode
     ): ResultOrError<MultilingualAudio> {
+        const newAudioItems = this.items.concat(
+            new MultilingualAudioItem({ audioItemId, languageCode })
+        );
+
         return this.clone<MultilingualAudio>({
-            items: this.items.concat(new MultilingualAudioItem({ audioItemId, languageCode })),
+            items: newAudioItems,
         });
     }
 }

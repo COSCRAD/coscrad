@@ -22,7 +22,7 @@ export class AddAudioForDigitalTextPage implements ICommandBase {
         label: `page identifier`,
         description: `the identifier for the page`,
     })
-    readonly identifier: PageIdentifier;
+    readonly pageIdentifier: PageIdentifier;
 
     @ReferenceTo(AggregateType.audioItem)
     @UUID({

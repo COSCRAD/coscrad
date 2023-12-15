@@ -5,9 +5,11 @@ import {
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { CommandFSA } from '../../../../app/controllers/command/command-fsa/command-fsa.entity';
+import { InternalError } from '../../../../lib/errors/InternalError';
 import { NotFound, isNotFound } from '../../../../lib/types/not-found';
 import { clonePlainObjectWithOverrides } from '../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { buildTestCommandFsaMap } from '../../../../test-data/commands';
+import { TestEventStream } from '../../../../test-data/events';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../__tests__/utilities/dummyDateNow';
@@ -19,6 +21,7 @@ import {
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import {
     AddPageToDigitalText,
+    AudioAddedForDigitalTextPage,
     CreateDigitalText,
     DigitalTextCreated,
     DigitalTextPageContentTranslated,
@@ -149,6 +152,22 @@ const digitalTextPageContentTranslated = new DigitalTextPageContentTranslated(
     { id: buildDummyUuid(581), userId: dummySystemUserId, dateCreated: dummyDateManager.next() }
 );
 
+const audioItemId = buildDummyUuid(680);
+
+const audioAddedForDigitalTextPage = new TestEventStream()
+    .andThen<AudioAddedForDigitalTextPage>({
+        type: `AUDIO_ADDED_FOR_DIGITAL_TEXT_PAGE`,
+        payload: {
+            pageIdentifier: dummyPageIdentifier,
+            languageCode: originalLanguageCodeForContent,
+            audioItemId,
+        },
+    })
+    .as({
+        type: AggregateType.digitalText,
+        id,
+    })[0];
+
 describe(`DigitalText.fromEventHistory`, () => {
     describe(`when there are events for the given aggregate root`, () => {
         describe(`when there is only a creation event`, () => {
@@ -237,6 +256,37 @@ describe(`DigitalText.fromEventHistory`, () => {
                 const hasTranslation = page.content.has(translationLanguageCodeForContent);
 
                 expect(hasTranslation).toBe(true);
+            });
+        });
+
+        describe(`when audio has been added for a digital text page`, () => {
+            it(`should return a digital text with the given audio for the given page`, () => {
+                const eventStream = [
+                    digitalTextCreated,
+                    pageAddedForDigitalText,
+                    contentAddedToDigitalTextPage,
+                    digitalTextPageContentTranslated,
+                    audioAddedForDigitalTextPage,
+                    audioAddedForDigitalTextPage,
+                ];
+
+                const result = DigitalText.fromEventHistory(eventStream, id);
+
+                expect(result).toBeInstanceOf(DigitalText);
+
+                const updatedText = result as DigitalText;
+
+                const pageSearchResult = updatedText.getPage(
+                    dummyPageIdentifier
+                ) as DigitalTextPage;
+
+                const audioSearchResult = pageSearchResult.audio.getIdForAudioIn(
+                    originalLanguageCodeForContent
+                );
+
+                expect(audioSearchResult).not.toBeInstanceOf(InternalError);
+
+                expect(audioSearchResult).toBe(audioItemId);
             });
         });
 

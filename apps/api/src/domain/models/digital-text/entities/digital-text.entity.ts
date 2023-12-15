@@ -32,6 +32,7 @@ import { ResourceReadAccessGrantedToUser } from '../../shared/common-commands/gr
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import {
+    AudioAddedForDigitalTextPagePayload,
     DigitalTextCreated,
     DigitalTextPageContentTranslated,
     PageAddedToDigitalText,
@@ -45,6 +46,7 @@ import {
 } from '../constants';
 import { FailedToUpdateDigitalTextPageError } from '../errors';
 import { CannotAddPageWithDuplicateIdentifierError } from '../errors/cannot-add-page-with-duplicate-identifier.error';
+import { CannotOverrideAudioForPageError } from '../errors/cannot-override-audio-for-page.error';
 import { DuplicateDigitalTextTitleError } from '../errors/duplicate-digital-text-title.error';
 import { MissingPageContentError } from '../errors/missing-page-content.error';
 import { MissingPageError } from '../errors/missing-page.error';
@@ -208,7 +210,19 @@ export class DigitalText extends Resource {
         audioItemId: AggregateId,
         languageCode: LanguageCode
     ): ResultOrError<DigitalText> {
+        if (!this.hasPage(pageIdentifier)) {
+            return new MissingPageError(pageIdentifier, this.id);
+        }
+
         const pageToUpdate = this.getPage(pageIdentifier) as DigitalTextPage;
+
+        if (pageToUpdate.hasAudioIn(languageCode)) {
+            return new CannotOverrideAudioForPageError(
+                pageIdentifier,
+                audioItemId,
+                pageToUpdate.getAudioIn(languageCode) as AggregateId
+            );
+        }
 
         const updatedPage = pageToUpdate.addAudio(audioItemId, languageCode) as DigitalTextPage;
 
@@ -216,9 +230,11 @@ export class DigitalText extends Resource {
             page.identifier === updatedPage.identifier ? updatedPage : page
         );
 
-        return this.safeClone<DigitalText>({
+        const updatedDigitalText = this.safeClone<DigitalText>({
             pages: updatedPages,
         });
+
+        return updatedDigitalText;
     }
 
     /**
@@ -253,8 +269,10 @@ export class DigitalText extends Resource {
     getPage(pageIdentifier: PageIdentifier): Maybe<DigitalTextPage> {
         if (!this.hasPage(pageIdentifier)) return NotFound;
 
+        const searchResult = this.pages.find(({ identifier }) => identifier === pageIdentifier);
+
         // We avoid shared references by cloning
-        return this.pages.find(({ identifier }) => identifier === pageIdentifier).clone({});
+        return searchResult.clone({});
     }
 
     protected validatePageRangeContext(context: PageRangeContext): Valid | InternalError {
@@ -361,6 +379,15 @@ export class DigitalText extends Resource {
                 } = event as ResourceReadAccessGrantedToUser;
 
                 return digitalText.addEventToHistory(event).grantReadAccessToUser(userId);
+            }
+
+            if (event.isOfType(`AUDIO_ADDED_FOR_DIGITAL_TEXT_PAGE`)) {
+                const { pageIdentifier, audioItemId, languageCode } =
+                    event.payload as AudioAddedForDigitalTextPagePayload;
+
+                return digitalText
+                    .addEventToHistory(event)
+                    .addAudioForPage(pageIdentifier, audioItemId, languageCode);
             }
 
             if (event.type === `DIGITAL_TEXT_PAGE_CONTENT_TRANSLATED`) {

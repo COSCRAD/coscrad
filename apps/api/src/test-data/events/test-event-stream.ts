@@ -4,6 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../domain/models/__tests__/utilities/dummyDateNow';
 import {
+    AudioAddedForDigitalTextPage,
+    AudioAddedForDigitalTextPagePayload,
     DigitalTextCreated,
     DigitalTextPageContentTranslated,
     DigitalTextPageContentTranslatedPayload,
@@ -172,7 +174,27 @@ const buildPageAddedEvent = (payloadOverrides: DeepPartial<PageAddedToDigitalTex
         buildEventMeta()
     );
 
-const buildTagCreatedEvent = (payloadOverrides: DeepPartial<TagCreated['payload']>) =>
+const buildAudioAddedForDigitalTextPage = (
+    payloadOverrides: DeepPartial<AudioAddedForDigitalTextPagePayload>,
+    metadataOverrides: DeepPartial<EventRecordMetadata>
+) => {
+    const payloadDefaults: AudioAddedForDigitalTextPagePayload = {
+        aggregateCompositeIdentifier,
+        pageIdentifier: 'XXL',
+        audioItemId: buildDummyUuid(987),
+        languageCode: LanguageCode.Haida,
+    };
+
+    return new AudioAddedForDigitalTextPage(
+        clonePlainObjectWithOverrides(payloadDefaults, payloadOverrides),
+        clonePlainObjectWithOverrides(buildEventMeta(), metadataOverrides)
+    );
+};
+
+const buildTagCreatedEvent = (
+    payloadOverrides: DeepPartial<TagCreated['payload']>,
+    metadataOverrides: DeepPartial<EventRecordMetadata>
+) =>
     new TagCreated(
         clonePlainObjectWithOverrides(
             {
@@ -184,7 +206,7 @@ const buildTagCreatedEvent = (payloadOverrides: DeepPartial<TagCreated['payload'
             } as TagCreated['payload'],
             payloadOverrides
         ),
-        buildEventMeta()
+        clonePlainObjectWithOverrides(buildEventMeta(), metadataOverrides)
     );
 
 const buildReourceOrNoteTaggedEvent = (
@@ -480,7 +502,11 @@ export class TestEventStream {
                 `DIGITAL_TEXT_PAGE_CONTENT_TRANSLATED`,
                 buildDigitalTextPageContentTranslated
             )
-            .registerBuilder(`AUDIO_ADDED_FOR_TERM`, buildAudioAddedForTerm);
+            .registerBuilder(`AUDIO_ADDED_FOR_TERM`, buildAudioAddedForTerm)
+            .registerBuilder(
+                `AUDIO_ADDED_FOR_DIGITAL_TEXT_PAGE`,
+                buildAudioAddedForDigitalTextPage
+            );
     }
 
     andThen<T extends BaseEvent>(

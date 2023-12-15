@@ -45,12 +45,14 @@ export default class DigitalTextPage extends BaseDomainModel implements IDigital
 
         if (!dto) return;
 
-        const { identifier, content } = dto;
+        const { identifier, content, audio } = dto;
 
         // Note that this is just a string (stored by value not reference), so there is no need to clone or build an instance
         this.identifier = identifier;
 
         this.content = !isNullOrUndefined(content) ? new MultilingualText(content) : null;
+
+        this.audio = !isNullOrUndefined(audio) ? new MultilingualAudio(audio) : null;
     }
 
     addContent(text: string, languageCode: LanguageCode): ResultOrError<DigitalTextPage> {
@@ -92,6 +94,14 @@ export default class DigitalTextPage extends BaseDomainModel implements IDigital
 
     hasAudio(): boolean {
         return this.audio.count() > 0;
+    }
+
+    hasAudioIn(langaugeCode: LanguageCode): boolean {
+        return this.audio.hasAudioIn(langaugeCode);
+    }
+
+    getAudioIn(languageCode: LanguageCode): Maybe<AggregateId> {
+        return this.audio.getIdForAudioIn(languageCode);
     }
 
     addAudio(audioItemId: AggregateId, languageCode: LanguageCode) {
