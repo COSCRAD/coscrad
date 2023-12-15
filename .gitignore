@@ -57,6 +57,8 @@ __cli-command-test-files__
 
 # Statically Served Assets
 __static__
+# Keeps the directory placeholder
+!__static__/.gitkeep
 
 # React Native
 
