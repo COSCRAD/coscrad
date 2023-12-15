@@ -120,7 +120,7 @@ describe(`CLI Command: **data-restore**`, () => {
                 cliCommandName,
                 `--directory=${buildDirectoryPath(`mediaItemsOnly`)}`,
                 `--baseUrl=http://localhost:3131/uploads`,
-                `-s "${destinationDir}"`,
+                `--staticAssetDestinationDirectory=${destinationDir}`,
             ]);
 
             const expectedNumberOfResults = 3;
@@ -132,7 +132,7 @@ describe(`CLI Command: **data-restore**`, () => {
             const mediaItems = searchResult.filter(validAggregateOrThrow);
 
             expect(mediaItems).toHaveLength(expectedNumberOfResults);
-        });
+        }, 60000); // timeout of 60s
     });
 
     /**

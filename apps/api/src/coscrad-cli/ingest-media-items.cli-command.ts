@@ -38,16 +38,6 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
     ): Promise<void> {
         this.logger.log(`Attempting to import media from: ${directory}`);
 
-        if (!existsSync(staticAssetDestinationDirectory)) {
-            const error = new InternalError(
-                `Failed to copy assets: ${staticAssetDestinationDirectory} directory not found`
-            );
-
-            this.logger.log(error.toString());
-
-            throw error;
-        }
-
         const partialPayloads: (Omit<CreateMediaItem, 'aggregateCompositeIdentifier' | 'url'> & {
             filename: string;
         })[] = readdirSync(directory).map((file) => {
@@ -181,6 +171,14 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
         required: true,
     })
     parseStaticAssetDestinationDirectory(input: string): string {
+        if (!existsSync(input)) {
+            const error = new InternalError(`Failed to copy assets: ${input} directory not found`);
+
+            this.logger.log(error.toString());
+
+            throw error;
+        }
+
         return isNonEmptyString(input) ? input : undefined;
     }
 
