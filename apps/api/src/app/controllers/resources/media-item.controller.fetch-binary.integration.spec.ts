@@ -1,16 +1,20 @@
-import { AggregateType, MIMEType, ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType, CoscradUserRole, MIMEType, ResourceType } from '@coscrad/api-interfaces';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { INestApplication } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import { copyFileSync, existsSync } from 'fs';
 import * as request from 'supertest';
-import { CoscradEventFactory } from '../../../../src/domain/common';
-import { ArangoDatabaseProvider } from '../../../../src/persistence/database/database.provider';
-import { DynamicDataTypeFinderService } from '../../../../src/validation';
 import { AuthorizationModule } from '../../../authorization/authorization.module';
 import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
+import { CoscradEventFactory } from '../../../domain/common';
+import { MediaItem } from '../../../domain/models/media-item/entities/media-item.entity';
+import { CoscradUser } from '../../../domain/models/user-management/user/entities/user/coscrad-user.entity';
+import { DeluxeInMemoryStore } from '../../../domain/types/DeluxeInMemoryStore';
+import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../persistence/persistence.module';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import { DynamicDataTypeFinderService } from '../../../validation';
 import buildMockConfigService from '../../config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../config/buildConfigFilePath';
 import { Environment } from '../../config/constants/Environment';
@@ -78,23 +82,135 @@ describe(`MediaItemController.fetchBinary`, () => {
         await testRepositoryProvider.testTeardown();
     });
 
-    describe(`when the asset is publicly available`, () => {
-        beforeEach(async () => {
-            await testRepositoryProvider.forResource(ResourceType.mediaItem).create(
-                existingMediaItem.clone({
-                    published: true,
-                    title: dummyMediaItemId,
-                    mimeType: MIMEType.png,
-                })
-            );
-        });
+    const dummyUser = getValidAggregateInstanceForTest(AggregateType.user);
 
-        it(`should succeed`, async () => {
-            const fullUrl = `${baseUrl}/${dummyMediaItemId}`;
+    type TestCase = {
+        user: CoscradUser;
+        userDescription: string;
+        mediaItem: MediaItem;
+        mediaItemDescription: string;
+        expectedStatusCode: HttpStatusCode;
+    };
 
-            const res = await request(app.getHttpServer()).get(fullUrl);
+    const publicUser = undefined;
 
-            expect(res.status).toBe(HttpStatusCode.ok);
-        });
+    const nonAdminUser = dummyUser.clone({
+        roles: [CoscradUserRole.viewer],
     });
+
+    const projectAdmin = dummyUser.clone({
+        roles: [CoscradUserRole.projectAdmin],
+    });
+
+    const coscradAdmin = dummyUser.clone({
+        roles: [CoscradUserRole.superAdmin],
+    });
+
+    const usersAndDescriptions = [
+        [publicUser, 'publicUser'],
+        [nonAdminUser, 'authenticated, non-admin'],
+        [projectAdmin, 'authenticated, non-admin'],
+        [coscradAdmin, 'authenticated, non-admin'],
+    ] as const;
+
+    const publicMediaItem = existingMediaItem.clone({
+        published: true,
+        title: dummyMediaItemId,
+        mimeType: MIMEType.png,
+        queryAccessControlList: {
+            allowedGroupIds: [],
+            allowedUserIds: [],
+        },
+    });
+
+    const privateMediaItem = publicMediaItem.clone({
+        published: false,
+    });
+
+    const publicTestCases: TestCase[] = usersAndDescriptions.map(([user, userDescription]) => ({
+        user,
+        userDescription,
+        mediaItem: publicMediaItem,
+        mediaItemDescription: 'public media item',
+        expectedStatusCode: HttpStatusCode.ok,
+    }));
+
+    const privilegedAccessTestCases: TestCase[] = [
+        {
+            user: projectAdmin,
+            // TODO make this the username
+            userDescription: 'project admin',
+            mediaItem: privateMediaItem,
+            mediaItemDescription: 'private media item',
+            expectedStatusCode: HttpStatusCode.ok,
+        },
+        {
+            user: coscradAdmin,
+            // TODO make this the username
+            userDescription: 'project admin',
+            mediaItem: privateMediaItem,
+            mediaItemDescription: 'private media item',
+            expectedStatusCode: HttpStatusCode.ok,
+        },
+        {
+            user: nonAdminUser,
+            userDescription: 'non-admin user',
+            mediaItem: privateMediaItem.clone({
+                queryAccessControlList: {
+                    allowedUserIds: [nonAdminUser.id],
+                    allowedGroupIds: [],
+                },
+            }),
+            mediaItemDescription: 'private media item with user in the ACL',
+            expectedStatusCode: HttpStatusCode.ok,
+        },
+    ];
+
+    const forbiddenTestCases: TestCase[] = [
+        {
+            user: publicUser,
+            userDescription: 'unauthenticated user',
+            mediaItem: privateMediaItem,
+            mediaItemDescription: 'private media item',
+            // we return a not found in this case for obscurity
+            expectedStatusCode: HttpStatusCode.notFound,
+        },
+        {
+            user: nonAdminUser,
+            userDescription: 'authenticated non-admin user',
+            mediaItem: privateMediaItem,
+            mediaItemDescription: 'private media item (user not in ACL)',
+            // we return a not found in this case for obscurity
+            expectedStatusCode: HttpStatusCode.notFound,
+        },
+    ];
+
+    [...publicTestCases, ...privilegedAccessTestCases, ...forbiddenTestCases].forEach(
+        ({ user, userDescription, mediaItem, mediaItemDescription, expectedStatusCode }) => {
+            describe(`when the user is a: ${userDescription}`, () => {
+                describe(`when the media item is: ${mediaItemDescription}`, () => {
+                    beforeEach(async () => {
+                        await testRepositoryProvider
+                            .forResource(ResourceType.mediaItem)
+                            .create(mediaItem);
+
+                        if (!isNullOrUndefined(user))
+                            await testRepositoryProvider.addFullSnapshot(
+                                new DeluxeInMemoryStore({
+                                    [AggregateType.user]: [user],
+                                }).fetchFullSnapshotInLegacyFormat()
+                            );
+                    });
+
+                    it(`should succeed`, async () => {
+                        const fullUrl = `${baseUrl}/${dummyMediaItemId}`;
+
+                        const res = await request(app.getHttpServer()).get(fullUrl);
+
+                        expect(res.status).toBe(expectedStatusCode);
+                    });
+                });
+            });
+        }
+    );
 });
