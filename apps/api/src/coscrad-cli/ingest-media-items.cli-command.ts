@@ -1,7 +1,8 @@
 import { CommandHandlerService } from '@coscrad/commands';
 import { MIMEType } from '@coscrad/data-types';
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
-import { readdirSync } from 'fs';
+import { copyFileSync, existsSync, readdirSync } from 'fs';
 import { CommandFSA } from '../app/controllers/command/command-fsa/command-fsa.entity';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
 import { CreateMediaItem } from '../domain/models/media-item/commands/create-media-item.command';
@@ -15,6 +16,7 @@ import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
 interface IngestMediaItemsCliCommandOptions {
     directory: string;
     baseUrl: string;
+    staticAssetDestinationDirectory: string;
 }
 
 @CliCommand({
@@ -32,9 +34,19 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
 
     async run(
         _passedParams: string[],
-        { directory, baseUrl }: IngestMediaItemsCliCommandOptions
+        { directory, baseUrl, staticAssetDestinationDirectory }: IngestMediaItemsCliCommandOptions
     ): Promise<void> {
         this.logger.log(`Attempting to import media from: ${directory}`);
+
+        if (!existsSync(staticAssetDestinationDirectory)) {
+            const error = new InternalError(
+                `Failed to copy assets: ${staticAssetDestinationDirectory} directory not found`
+            );
+
+            this.logger.log(error.toString());
+
+            throw error;
+        }
 
         const partialPayloads: (Omit<CreateMediaItem, 'aggregateCompositeIdentifier' | 'url'> & {
             filename: string;
@@ -58,7 +70,7 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
 
         const createMediaItemFsas: CommandFSA<CreateMediaItem>[] = partialPayloads.map(
             (partialFsa, index) => {
-                const { filename, mimeType } = partialFsa;
+                const { filename } = partialFsa;
 
                 return {
                     type: `CREATE_MEDIA_ITEM`,
@@ -68,9 +80,7 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
                             type: ResourceType.mediaItem,
                             id: generatedIds[index],
                         },
-                        url: `${baseUrl}/${generatedIds[index]}.${this.getFileExtensionForMimeType(
-                            mimeType
-                        )}`,
+                        url: `${baseUrl}/${generatedIds[index]}`,
                         rawData: {
                             filename,
                         },
@@ -102,7 +112,48 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
                 throw topLevelError;
             }
 
-            this.logger.log(`Success: ${JSON.stringify(fsa)}`);
+            const publicationResult = await this.commandHandlerService.execute(
+                {
+                    type: 'PUBLISH_RESOURCE',
+                    payload: {
+                        aggregateCompositeIdentifier: fsa.payload.aggregateCompositeIdentifier,
+                    },
+                },
+                {
+                    userId: 'COSCRAD Admin',
+                }
+            );
+
+            if (isInternalError(publicationResult)) {
+                const error = new InternalError(
+                    `Failed to import media item: ${fsa.payload.aggregateCompositeIdentifier.id} at the publication stage`,
+                    [publicationResult]
+                );
+
+                this.logger.log(error.toString());
+
+                throw error;
+            }
+
+            this.logger.log(`Media Item Added: ${JSON.stringify(fsa)}`);
+
+            const {
+                payload: {
+                    title,
+                    mimeType,
+                    rawData: { filename },
+                },
+            } = fsa;
+
+            const destinationPath = `${staticAssetDestinationDirectory}/${title}.${this.getFileExtensionForMimeType(
+                mimeType
+            )}`;
+
+            if (existsSync(destinationPath)) {
+                this.logger.log(`Skipping file (already exists): ${destinationPath}`);
+            } else {
+                copyFileSync(`${directory}/${filename}`, destinationPath);
+            }
         }
     }
 
@@ -122,6 +173,15 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
     })
     parseBaseUrl(input: string): string {
         return input;
+    }
+
+    @CliCommandOption({
+        flags: '-s, --staticAssetDestinationDirectory [staticAssetDestinationDirectory]',
+        description: 'the destination to which the files should be copied (and renamed)',
+        required: true,
+    })
+    parseStaticAssetDestinationDirectory(input: string): string {
+        return isNonEmptyString(input) ? input : undefined;
     }
 
     /**
