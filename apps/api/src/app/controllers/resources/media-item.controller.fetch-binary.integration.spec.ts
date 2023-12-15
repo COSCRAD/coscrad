@@ -3,7 +3,7 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { INestApplication } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
-import { copyFileSync, existsSync } from 'fs';
+import { copyFileSync, existsSync, mkdirSync } from 'fs';
 import * as request from 'supertest';
 import { AuthorizationModule } from '../../../authorization/authorization.module';
 import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
@@ -29,7 +29,9 @@ const testBinaryDataDirectoryPath = `__cli-command-test-inputs__/ingest-media-it
 
 const testPngFilePath = `${testBinaryDataDirectoryPath}/autumn.png`;
 
-const targetFilePath = `__static__/${dummyMediaItemId}.png`;
+const staticAssetsDir = `__static__`;
+
+const targetFilePath = `${staticAssetsDir}/${dummyMediaItemId}.png`;
 
 const existingMediaItem = getValidAggregateInstanceForTest(AggregateType.mediaItem).clone({
     id: dummyMediaItemId,
@@ -74,6 +76,8 @@ describe(`MediaItemController.fetchBinary`, () => {
             app.get(CoscradEventFactory),
             app.get(DynamicDataTypeFinderService)
         );
+
+        if (!existsSync(staticAssetsDir)) mkdirSync(staticAssetsDir);
 
         if (!existsSync(targetFilePath)) copyFileSync(testPngFilePath, targetFilePath);
     });

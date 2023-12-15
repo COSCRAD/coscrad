@@ -1,6 +1,7 @@
 import { CommandModule } from '@coscrad/commands';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
+import { existsSync, mkdirSync } from 'fs';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import buildMockConfigServiceSpec from '../app/config/__tests__/utilities/buildMockConfigService';
@@ -103,6 +104,10 @@ describe(`CLI Command: **data-restore**`, () => {
             .overrideProvider(ArangoDatabaseProvider)
             .useValue(databaseProvider)
             .compile();
+
+        if (!existsSync(destinationDir)) {
+            mkdirSync(destinationDir);
+        }
     });
 
     beforeEach(async () => {
