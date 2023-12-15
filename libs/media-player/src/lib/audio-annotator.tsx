@@ -5,25 +5,14 @@ import {
     Clear as ClearIcon,
 } from '@mui/icons-material/';
 import { Box, IconButton, Stack, Typography, styled } from '@mui/material';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FormattedMediaTime } from './formatted-currenttime';
+import { AudioMIMEType } from './shared/audio-mime-type.enum';
+import { isAudioMIMEType } from './shared/is-audio-mime-type';
+import { TimeRangeSelectionVisual } from './time-range-selection-visual';
 import { KeyboardKey, useKeyDown } from './use-key-down';
 
-/**
- * This is a duplicate of the enum in the Audio component, it should live in
- * it's own file
- */
-export enum AudioMIMEType {
-    mp3 = 'audio/mpeg',
-    audioMp4 = 'audio/mp4',
-    audioOgg = 'audio/ogg',
-    // TODO change this to audio/wav. This requires a migration
-    wav = 'audio/x-wav',
-    audioWebm = 'audio/webm',
-}
-
-const isAudioMIMEType = (input: unknown): input is AudioMIMEType =>
-    Object.values(AudioMIMEType).some((value) => value === (input as AudioMIMEType));
+type Nullable<T> = T | null;
 
 const isValidTimeRangeSelection = (timeRangeSelection: TimeRangeSelection, duration: number) => {
     const { inPointSeconds, outPointSeconds } = timeRangeSelection;
@@ -33,112 +22,87 @@ const isValidTimeRangeSelection = (timeRangeSelection: TimeRangeSelection, durat
     return outPointSeconds > inPointSeconds;
 };
 
+const StyledAudioPlayer = styled('audio')`
+    border-radius: 20px;
+`;
+
 export type TimeRangeSelection = {
     inPointSeconds: number;
     outPointSeconds: number;
 };
 
-type TimeRangeSelectionBar = 'inPointSelected' | 'fullSelection';
-
-type UXState = {
-    timeRangeSelectionBar: TimeRangeSelectionBar | null;
-};
-
-const isBarVisible = (stateBar: TimeRangeSelectionBar, { timeRangeSelectionBar }: UXState) =>
-    timeRangeSelectionBar === stateBar;
-
 interface AudioAnnotatorProps {
     audioUrl: string;
     mimeType?: AudioMIMEType;
-    onTimeRangeSelected: (timeRangeSelected: TimeRangeSelection | null) => void;
+    onTimeRangeSelected: (timeRangeSelected: Nullable<TimeRangeSelection>) => void;
 }
-
-const StyledAudioPlayer = styled('audio')`
-    border-radius: 20px;
-`;
-
-const TimeRangeSelectionVisual = styled(Box)({
-    height: '20px',
-    width: '150px',
-    backgroundColor: '#75ecff',
-    borderRadius: '4px',
-    position: 'absolute',
-});
 
 export const AudioAnnotator = ({
     audioUrl,
     mimeType,
     onTimeRangeSelected,
 }: AudioAnnotatorProps) => {
-    const [uxState, setUxState] = useState<UXState>({
-        timeRangeSelectionBar: null,
-    });
-
     const audioRef = useRef<HTMLVideoElement>(null);
 
-    const [isPlayHeadMoved, setIsPlayHeadMoved] = useState<boolean>(false);
+    const [inPointSeconds, setInPointSeconds] = useState<Nullable<number>>(null);
 
-    const [inPointSeconds, setInPointSeconds] = useState<number | null>(null);
+    /**
+     * outPointSeconds could just be tracked in timeRangeSelection rather than
+     * here.  Only reason to keep this is for symetry
+     */
+    const [outPointSeconds, setOutPointSeconds] = useState<Nullable<number>>(null);
 
-    const [outPointSeconds, setOutPointSeconds] = useState<number | null>(null);
+    const [isPlayable, setIsPlayable] = useState<boolean>(false);
 
     const [errorMessage, setErrorMessage] = useState<string>('');
 
-    const onTimeUpdate = () => {
-        const currentTime = audioRef.current!.currentTime;
+    useEffect(() => {
+        if (isNullOrUndefined(inPointSeconds) || isNullOrUndefined(outPointSeconds)) return;
 
-        if (currentTime > 0) {
-            setIsPlayHeadMoved(true);
-        }
+        if (outPointSeconds <= inPointSeconds)
+            setErrorMessage('Out-point can not be equal to, or come before the in-point');
+    }, [inPointSeconds, outPointSeconds]);
+
+    // TODO: test with a longer audio file
+    const onCanplay = () => {
+        console.log('canPlay');
+
+        setIsPlayable(true);
     };
 
     const markInPoint = () => {
-        setErrorMessage('');
+        const currentTime = audioRef?.current?.currentTime;
 
-        console.log({ inpoint: audioRef.current!.currentTime });
+        if (isNullOrUndefined(currentTime)) return;
 
-        setInPointSeconds(audioRef.current!.currentTime);
+        console.log({ inpoint: currentTime });
 
-        toggleTimeRangeSelectionBars('inPointSelected');
+        setInPointSeconds(currentTime);
     };
 
     const markOutPoint = () => {
-        setErrorMessage('');
+        if (isNullOrUndefined(inPointSeconds)) return;
 
-        console.log({ outpoint: audioRef.current!.currentTime });
+        const currentTime = audioRef?.current?.currentTime;
+
+        if (isNullOrUndefined(currentTime)) return;
+
+        console.log({ outpoint: currentTime });
+
+        setOutPointSeconds(currentTime);
+
+        const duration = audioRef?.current?.duration;
+
+        if (isNullOrUndefined(duration)) return;
 
         const timeRangeSelection = {
-            inPointSeconds: inPointSeconds as number,
-            outPointSeconds: audioRef.current!.currentTime as number,
+            inPointSeconds: inPointSeconds,
+            outPointSeconds: currentTime,
         };
 
-        const duration = audioRef.current!.duration;
-
         if (!isValidTimeRangeSelection(timeRangeSelection, duration)) {
-            if (timeRangeSelection.inPointSeconds >= duration) {
-                setInPointSeconds(null);
-
-                setOutPointSeconds(null);
-
-                setUxState({ timeRangeSelectionBar: null });
-
-                onTimeRangeSelected(null);
-
-                setErrorMessage(
-                    'Not a valid time range.  Marker points cannot be set after play ends'
-                );
-            } else {
-                setErrorMessage('Not a valid time range.  Out point must come after in point');
-            }
-
-            return;
+            onTimeRangeSelected(timeRangeSelection);
         }
-
-        setOutPointSeconds(audioRef.current!.currentTime);
-
-        toggleTimeRangeSelectionBars('fullSelection');
-
-        onTimeRangeSelected(timeRangeSelection);
     };
 
     const clearMarkers = () => {
@@ -146,11 +110,7 @@ export const AudioAnnotator = ({
 
         setOutPointSeconds(null);
 
-        setUxState({ timeRangeSelectionBar: null });
-
         onTimeRangeSelected(null);
-
-        setErrorMessage('');
     };
 
     useKeyDown(() => {
@@ -165,21 +125,9 @@ export const AudioAnnotator = ({
         clearMarkers();
     }, [KeyboardKey.clear]);
 
-    const toggleTimeRangeSelectionBars = (timeRangeSelectionBar: TimeRangeSelectionBar) => {
-        console.log(`timeRangeSelectionBar: ${timeRangeSelectionBar} uxstate: `, uxState);
-
-        const isVisible = isBarVisible(timeRangeSelectionBar, uxState);
-
-        if (isVisible) {
-            setUxState({ timeRangeSelectionBar: null });
-        } else {
-            setUxState({ timeRangeSelectionBar: timeRangeSelectionBar });
-        }
-    };
-
     return (
         <Stack>
-            <StyledAudioPlayer ref={audioRef} onTimeUpdate={onTimeUpdate} controls>
+            <StyledAudioPlayer ref={audioRef} onCanPlay={onCanplay} controls>
                 {isAudioMIMEType(mimeType) ? (
                     <source key={mimeType} src={audioUrl} type={mimeType} />
                 ) : (
@@ -206,7 +154,7 @@ export const AudioAnnotator = ({
                 <IconButton
                     data-testid="in-point-marker-button"
                     onClick={markInPoint}
-                    disabled={!isPlayHeadMoved}
+                    disabled={!isPlayable}
                 >
                     <ArrowRightIcon />
                 </IconButton>
@@ -227,30 +175,7 @@ export const AudioAnnotator = ({
                     ) : null}
                 </Box>
                 <Box width="160px" height="20px" padding="0 20px">
-                    <TimeRangeSelectionVisual
-                        data-testid="selection-bar-inpoint"
-                        sx={{
-                            backgroundImage: 'linear-gradient(to right, #75ecff, #fff)',
-                            borderLeft: '1px solid #0671ff',
-                            visibility: isBarVisible('inPointSelected', uxState)
-                                ? 'visible'
-                                : 'hidden',
-                        }}
-                    >
-                        &nbsp;
-                    </TimeRangeSelectionVisual>
-                    <TimeRangeSelectionVisual
-                        data-testid="selection-bar-full"
-                        sx={{
-                            borderRight: '1px solid #0671ff',
-                            borderLeft: '1px solid #0671ff',
-                            visibility: isBarVisible('fullSelection', uxState)
-                                ? 'visible'
-                                : 'hidden',
-                        }}
-                    >
-                        &nbsp;
-                    </TimeRangeSelectionVisual>
+                    <TimeRangeSelectionVisual inPointSeconds={} />
                 </Box>
                 <Box width="70px">
                     {!isNullOrUndefined(outPointSeconds) ? (
