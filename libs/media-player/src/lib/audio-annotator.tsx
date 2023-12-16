@@ -14,6 +14,8 @@ import { KeyboardKey, useKeyDown } from './use-key-down';
 
 type Nullable<T> = T | null;
 
+export type MedidaPlayDirection = 'forward' | 'reverse';
+
 const isValidTimeRangeSelection = (timeRangeSelection: TimeRangeSelection, duration: number) => {
     const { inPointSeconds, outPointSeconds } = timeRangeSelection;
 
@@ -60,39 +62,97 @@ export const AudioAnnotator = ({
 
     useEffect(() => {
         if (isNullOrUndefined(inPointSeconds)) {
+            setErrorMessage('');
+
             setTimeRangeVisualState(null);
+
             onTimeRangeSelected(null);
+
             return;
         }
 
         if (isNullOrUndefined(outPointSeconds)) {
             setTimeRangeVisualState('inPointSelected');
+
             return;
         }
 
         if (outPointSeconds <= inPointSeconds) {
             setErrorMessage('Out-point can not be equal to, or come before the in-point');
+
             setOutPointSeconds(null);
+
             return;
         }
 
-        const selectedTimeRange: TimeRangeSelection = {
-            inPointSeconds: inPointSeconds,
-            outPointSeconds: outPointSeconds,
-        };
+        if (outPointSeconds > inPointSeconds) {
+            const selectedTimeRange: TimeRangeSelection = {
+                inPointSeconds: inPointSeconds,
+                outPointSeconds: outPointSeconds,
+            };
 
-        console.log({ selectedTimeRange });
+            console.log({ selectedTimeRange });
 
-        setTimeRangeVisualState('timeRangeSelected');
+            setTimeRangeVisualState('timeRangeSelected');
 
-        onTimeRangeSelected(selectedTimeRange);
-    }, [inPointSeconds, outPointSeconds, onTimeRangeSelected]);
+            onTimeRangeSelected(selectedTimeRange);
+
+            return;
+        }
+    }, [
+        inPointSeconds,
+        outPointSeconds,
+        onTimeRangeSelected,
+        setErrorMessage,
+        setTimeRangeVisualState,
+        setOutPointSeconds,
+    ]);
 
     // TODO: test with a longer audio file
     const onCanplay = () => {
         console.log('canPlay');
 
         setIsPlayable(true);
+    };
+
+    const togglePlay = () => {
+        const audio = audioRef?.current;
+
+        if (isNullOrUndefined(audio)) return;
+
+        if (audio.paused) {
+            audio.play();
+        } else {
+            audio.pause();
+        }
+    };
+
+    const scrub = (increment: number, direction: MedidaPlayDirection = 'forward') => {
+        const audio = audioRef?.current;
+
+        if (isNullOrUndefined(audio)) return;
+
+        audio.pause();
+
+        const currentTime = audio.currentTime;
+
+        console.log({ currentTime });
+
+        if (direction === 'forward') {
+            audio.currentTime = currentTime + increment;
+        } else {
+            audio.currentTime = currentTime - increment;
+        }
+
+        console.log({ after: audio.currentTime });
+    };
+
+    const scrubForward = () => {
+        scrub(1, 'forward');
+    };
+
+    const scrubBackward = () => {
+        scrub(1, 'reverse');
     };
 
     const markInPoint = () => {
@@ -134,6 +194,18 @@ export const AudioAnnotator = ({
     useKeyDown(() => {
         clearMarkers();
     }, [KeyboardKey.clear]);
+
+    useKeyDown(() => {
+        togglePlay();
+    }, [KeyboardKey.spacebar]);
+
+    useKeyDown(() => {
+        scrubForward();
+    }, [KeyboardKey.forward]);
+
+    useKeyDown(() => {
+        scrubBackward();
+    }, [KeyboardKey.reverse]);
 
     return (
         <Stack>

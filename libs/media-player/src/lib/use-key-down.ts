@@ -6,6 +6,9 @@ export enum KeyboardKey {
     inpoint = 'i',
     outpoint = 'o',
     clear = 'c',
+    spacebar = ' ',
+    reverse = 'j',
+    forward = 'k',
 }
 
 export const useKeyDown = (callback: () => void, keys: KeyboardKey[]) => {
@@ -15,8 +18,6 @@ export const useKeyDown = (callback: () => void, keys: KeyboardKey[]) => {
 
             if (wasAnyKeyPressed) {
                 event.preventDefault();
-
-                console.log({ wasAnyKeyPressed });
 
                 callback();
             }

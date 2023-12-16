@@ -82,7 +82,7 @@ describe('<AudioAnnotator />', () => {
             });
 
             describe(`the mark in-point button`, () => {
-                it(`should be enabled`, () => {
+                it.only(`should be enabled`, () => {
                     cy.getByDataAttribute('in-point-marker-button').should('be.enabled');
                 });
             });
@@ -187,9 +187,9 @@ describe('<AudioAnnotator />', () => {
 
                     cy.getByDataAttribute('widget-selected-time-range').should('not.exist');
 
-                    cy.getByDataAttribute('selection-bar-inpoint').should('not.be.visible');
+                    cy.getByDataAttribute('inpoint-selected-bar').should('not.be.visible');
 
-                    cy.getByDataAttribute('selection-bar-full').should('not.be.visible');
+                    cy.getByDataAttribute('timerange-selected-bar').should('not.be.visible');
                 });
             });
         });

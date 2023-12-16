@@ -37,7 +37,7 @@ export const TimeRangeSelectionVisual = ({
                 data-testid="timerange-selected-bar"
                 sx={{
                     backgroundColor: '#75ecff',
-                    borderRight: '2px solid #0671ff',
+                    borderRight: '3px solid #0671ff',
                     visibility: isBarVisible('timeRangeSelected') ? 'visible' : 'hidden',
                 }}
             >
