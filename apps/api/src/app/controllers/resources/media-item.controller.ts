@@ -33,6 +33,7 @@ export class MediaItemController {
 
         const filePath = searchResult.filepath;
 
+        // TODO Make this configurable
         const STATIC_DIR = `./__static__`;
 
         if (!existsSync(`${STATIC_DIR}/${filePath}`)) {
@@ -66,6 +67,12 @@ export class MediaItemController {
     @UseGuards(OptionalJwtAuthGuard)
     @Get('')
     async fetchMany(@Request() req) {
-        return this.mediaItemQueryService.fetchMany(req.user || undefined);
+        const result = await this.mediaItemQueryService.fetchMany(req.user || undefined);
+
+        // @ts-expect-error TODO Fix this
+        return clonePlainObjectWithoutProperty(
+            result as unknown as Record<string, unknown>,
+            'filepath'
+        );
     }
 }

@@ -6,9 +6,14 @@ import { Test } from '@nestjs/testing';
 import { copyFileSync, existsSync, mkdirSync } from 'fs';
 import * as request from 'supertest';
 import { AuthorizationModule } from '../../../authorization/authorization.module';
+import { MockJwtAdminAuthGuard } from '../../../authorization/mock-jwt-admin-auth-guard';
+import { MockJwtAuthGuard } from '../../../authorization/mock-jwt-auth-guard';
+import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
 import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { CoscradEventFactory } from '../../../domain/common';
+import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { MediaItem } from '../../../domain/models/media-item/entities/media-item.entity';
+import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../../domain/models/user-management/user/entities/user/coscrad-user.entity';
 import { DeluxeInMemoryStore } from '../../../domain/types/DeluxeInMemoryStore';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
@@ -20,6 +25,7 @@ import buildConfigFilePath from '../../config/buildConfigFilePath';
 import { Environment } from '../../config/constants/Environment';
 import { HttpStatusCode } from '../../constants/httpStatusCodes';
 import { MediaItemModule } from '../../domain-modules/media-item.module';
+import { AdminJwtGuard } from '../command/command.controller';
 
 const baseUrl = `/resources/mediaItems/download`;
 
@@ -29,9 +35,12 @@ const testBinaryDataDirectoryPath = `__cli-command-test-inputs__/ingest-media-it
 
 const testPngFilePath = `${testBinaryDataDirectoryPath}/autumn.png`;
 
+// TODO make this directory name configurable
 const staticAssetsDir = `__static__`;
 
 const targetFilePath = `${staticAssetsDir}/${dummyMediaItemId}.png`;
+
+const dummyUserId = buildDummyUuid(1);
 
 const existingMediaItem = getValidAggregateInstanceForTest(AggregateType.mediaItem).clone({
     id: dummyMediaItemId,
@@ -42,51 +51,10 @@ describe(`MediaItemController.fetchBinary`, () => {
 
     let testRepositoryProvider: TestRepositoryProvider;
 
-    beforeAll(async () => {
-        const mockConfigService = buildMockConfigService(
-            {
-                ARANGO_DB_NAME: 'testingdb_ap', // generateDatabaseNameForTestSuite(),
-                GLOBAL_PREFIX: '',
-            },
-            buildConfigFilePath(Environment.test)
-        );
-
-        const testModuleRef = await Test.createTestingModule({
-            imports: [
-                ConfigModule.forRoot({
-                    isGlobal: true,
-                    envFilePath: buildConfigFilePath(process.env.NODE_ENV),
-                    cache: false,
-                }),
-                PersistenceModule.forRootAsync(),
-                AuthorizationModule,
-                MediaItemModule,
-            ],
-        })
-            .overrideProvider(ConfigService)
-            .useValue(mockConfigService)
-            .compile();
-
-        app = testModuleRef.createNestApplication();
-
-        await app.init();
-
-        testRepositoryProvider = new TestRepositoryProvider(
-            app.get(ArangoDatabaseProvider),
-            app.get(CoscradEventFactory),
-            app.get(DynamicDataTypeFinderService)
-        );
-
-        if (!existsSync(staticAssetsDir)) mkdirSync(staticAssetsDir);
-
-        if (!existsSync(targetFilePath)) copyFileSync(testPngFilePath, targetFilePath);
+    const dummyUser = getValidAggregateInstanceForTest(AggregateType.user).clone({
+        id: dummyUserId,
+        authProviderUserId: `autho|${dummyUserId}`,
     });
-
-    beforeEach(async () => {
-        await testRepositoryProvider.testTeardown();
-    });
-
-    const dummyUser = getValidAggregateInstanceForTest(AggregateType.user);
 
     type TestCase = {
         user: CoscradUser;
@@ -191,9 +159,57 @@ describe(`MediaItemController.fetchBinary`, () => {
 
     [...publicTestCases, ...privilegedAccessTestCases, ...forbiddenTestCases].forEach(
         ({ user, userDescription, mediaItem, mediaItemDescription, expectedStatusCode }) => {
+            const testUserWithGroups = user && new CoscradUserWithGroups(user, []);
+
             describe(`when the user is a: ${userDescription}`, () => {
+                beforeAll(async () => {
+                    const mockConfigService = buildMockConfigService(
+                        {
+                            ARANGO_DB_NAME: 'testingdb_ap', // generateDatabaseNameForTestSuite(),
+                            GLOBAL_PREFIX: '',
+                        },
+                        buildConfigFilePath(Environment.test)
+                    );
+
+                    const testModuleRef = await Test.createTestingModule({
+                        imports: [
+                            ConfigModule.forRoot({
+                                isGlobal: true,
+                                envFilePath: buildConfigFilePath(process.env.NODE_ENV),
+                                cache: false,
+                            }),
+                            PersistenceModule.forRootAsync(),
+                            AuthorizationModule,
+                            MediaItemModule,
+                        ],
+                    })
+                        .overrideGuard(OptionalJwtAuthGuard)
+                        .useValue(new MockJwtAuthGuard(testUserWithGroups, true))
+                        .overrideGuard(AdminJwtGuard)
+                        .useValue(new MockJwtAdminAuthGuard(testUserWithGroups))
+                        .overrideProvider(ConfigService)
+                        .useValue(mockConfigService)
+                        .compile();
+
+                    app = testModuleRef.createNestApplication();
+
+                    await app.init();
+
+                    testRepositoryProvider = new TestRepositoryProvider(
+                        app.get(ArangoDatabaseProvider),
+                        app.get(CoscradEventFactory),
+                        app.get(DynamicDataTypeFinderService)
+                    );
+
+                    if (!existsSync(staticAssetsDir)) mkdirSync(staticAssetsDir);
+
+                    if (!existsSync(targetFilePath)) copyFileSync(testPngFilePath, targetFilePath);
+                });
+
                 describe(`when the media item is: ${mediaItemDescription}`, () => {
                     beforeEach(async () => {
+                        await testRepositoryProvider.testTeardown();
+
                         await testRepositoryProvider
                             .forResource(ResourceType.mediaItem)
                             .create(mediaItem);
