@@ -1,5 +1,5 @@
 import { Box, Stack, Typography, styled } from '@mui/material';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { AudioAnnotator, TimeRangeSelection } from './lib/audio-annotator';
 
 const Item = styled(Box)`
@@ -16,9 +16,12 @@ interface AudioAnnotatorWidgetProps {
 const AudioAnnotatorWidget = ({ audioUrl }: AudioAnnotatorWidgetProps): JSX.Element => {
     const [selectedTimeRange, setSelectedTimeRange] = useState<TimeRangeSelection | null>(null);
 
-    const onTimeRangeSelected = (selectedTimeRange: TimeRangeSelection | null) => {
-        setSelectedTimeRange(selectedTimeRange);
-    };
+    const onTimeRangeSelected = useCallback(
+        (selectedTimeRange: TimeRangeSelection | null) => {
+            setSelectedTimeRange(selectedTimeRange);
+        },
+        [setSelectedTimeRange]
+    );
 
     return (
         <Stack>
@@ -82,7 +85,7 @@ describe('<AudioAnnotator />', () => {
             });
 
             describe(`the mark in-point button`, () => {
-                it.only(`should be enabled`, () => {
+                it(`should be enabled`, () => {
                     cy.getByDataAttribute('in-point-marker-button').should('be.enabled');
                 });
             });

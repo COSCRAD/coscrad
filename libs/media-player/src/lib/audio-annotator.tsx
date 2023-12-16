@@ -85,20 +85,16 @@ export const AudioAnnotator = ({
             return;
         }
 
-        if (outPointSeconds > inPointSeconds) {
-            const selectedTimeRange: TimeRangeSelection = {
-                inPointSeconds: inPointSeconds,
-                outPointSeconds: outPointSeconds,
-            };
+        const selectedTimeRange: TimeRangeSelection = {
+            inPointSeconds: inPointSeconds,
+            outPointSeconds: outPointSeconds,
+        };
 
-            console.log({ selectedTimeRange });
+        console.log({ selectedTimeRange });
 
-            setTimeRangeVisualState('timeRangeSelected');
+        setTimeRangeVisualState('timeRangeSelected');
 
-            onTimeRangeSelected(selectedTimeRange);
-
-            return;
-        }
+        onTimeRangeSelected(selectedTimeRange);
     }, [
         inPointSeconds,
         outPointSeconds,
