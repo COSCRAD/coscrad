@@ -6,6 +6,8 @@ import { MediaItemQueryService } from '../../../domain/services/query-services/m
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { isInternalError } from '../../../lib/errors/InternalError';
 import { NotFound, isNotFound } from '../../../lib/types/not-found';
+import { clonePlainObjectWithOverrides } from '../../../lib/utilities/clonePlainObjectWithOverrides';
+import clonePlainObjectWithoutProperty from '../../../lib/utilities/clonePlainObjectWithoutProperty';
 import { MediaItemViewModel } from '../../../queries/buildViewModelForResource/viewModels/media-item.view-model';
 import { InternalErrorFilter } from '../command/exception-handling/exception-filters/internal-error.filter';
 import buildViewModelPathForResourceType from '../utilities/buildIndexPathForResourceType';
@@ -60,7 +62,16 @@ export class MediaItemController {
     async fetchById(@Request() req, @Res() res, @Param('id') id: unknown) {
         const searchResult = await this.mediaItemQueryService.fetchById(id, req.user || undefined);
 
-        return sendInternalResultAsHttpResponse(res, searchResult);
+        const result =
+            isNotFound(searchResult) || isInternalError(searchResult)
+                ? searchResult
+                : clonePlainObjectWithoutProperty(
+                      // @ts-expect-error fix this
+                      searchResult,
+                      'filepath'
+                  );
+
+        return sendInternalResultAsHttpResponse(res, result);
     }
 
     @ApiBearerAuth('JWT')
@@ -69,10 +80,13 @@ export class MediaItemController {
     async fetchMany(@Request() req) {
         const result = await this.mediaItemQueryService.fetchMany(req.user || undefined);
 
-        // @ts-expect-error TODO Fix this
-        return clonePlainObjectWithoutProperty(
-            result as unknown as Record<string, unknown>,
-            'filepath'
+        const entities = result.entities.map((entity) =>
+            clonePlainObjectWithoutProperty(
+                entity as unknown as Record<string, unknown>,
+                'filepath'
+            )
         );
+
+        return clonePlainObjectWithOverrides(result, { entities });
     }
 }
