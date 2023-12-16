@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from 'react';
 import { FormattedMediaTime } from './formatted-currenttime';
 import { AudioMIMEType } from './shared/audio-mime-type.enum';
 import { isAudioMIMEType } from './shared/is-audio-mime-type';
-import { TimeRangeSelectionVisual } from './time-range-selection-visual';
+import { TimeRangeSelectionVisual, TimeRangeVisualState } from './time-range-selection-visual';
 import { KeyboardKey, useKeyDown } from './use-key-down';
 
 type Nullable<T> = T | null;
@@ -54,14 +54,39 @@ export const AudioAnnotator = ({
 
     const [isPlayable, setIsPlayable] = useState<boolean>(false);
 
+    const [timeRangeVisualState, setTimeRangeVisualState] = useState<TimeRangeVisualState>(null);
+
     const [errorMessage, setErrorMessage] = useState<string>('');
 
     useEffect(() => {
-        if (isNullOrUndefined(inPointSeconds) || isNullOrUndefined(outPointSeconds)) return;
+        if (isNullOrUndefined(inPointSeconds)) {
+            setTimeRangeVisualState(null);
+            onTimeRangeSelected(null);
+            return;
+        }
 
-        if (outPointSeconds <= inPointSeconds)
+        if (isNullOrUndefined(outPointSeconds)) {
+            setTimeRangeVisualState('inPointSelected');
+            return;
+        }
+
+        if (outPointSeconds <= inPointSeconds) {
             setErrorMessage('Out-point can not be equal to, or come before the in-point');
-    }, [inPointSeconds, outPointSeconds]);
+            setOutPointSeconds(null);
+            return;
+        }
+
+        const selectedTimeRange: TimeRangeSelection = {
+            inPointSeconds: inPointSeconds,
+            outPointSeconds: outPointSeconds,
+        };
+
+        console.log({ selectedTimeRange });
+
+        setTimeRangeVisualState('timeRangeSelected');
+
+        onTimeRangeSelected(selectedTimeRange);
+    }, [inPointSeconds, outPointSeconds, onTimeRangeSelected]);
 
     // TODO: test with a longer audio file
     const onCanplay = () => {
@@ -90,27 +115,12 @@ export const AudioAnnotator = ({
         console.log({ outpoint: currentTime });
 
         setOutPointSeconds(currentTime);
-
-        const duration = audioRef?.current?.duration;
-
-        if (isNullOrUndefined(duration)) return;
-
-        const timeRangeSelection = {
-            inPointSeconds: inPointSeconds,
-            outPointSeconds: currentTime,
-        };
-
-        if (!isValidTimeRangeSelection(timeRangeSelection, duration)) {
-            onTimeRangeSelected(timeRangeSelection);
-        }
     };
 
     const clearMarkers = () => {
         setInPointSeconds(null);
 
         setOutPointSeconds(null);
-
-        onTimeRangeSelected(null);
     };
 
     useKeyDown(() => {
@@ -175,7 +185,7 @@ export const AudioAnnotator = ({
                     ) : null}
                 </Box>
                 <Box width="160px" height="20px" padding="0 20px">
-                    <TimeRangeSelectionVisual inPointSeconds={} />
+                    <TimeRangeSelectionVisual timeRangeVisualState={timeRangeVisualState} />
                 </Box>
                 <Box width="70px">
                     {!isNullOrUndefined(outPointSeconds) ? (

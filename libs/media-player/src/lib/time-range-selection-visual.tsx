@@ -1,15 +1,22 @@
-import { Box } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
 export type TimeRangeVisualState = 'inPointSelected' | 'timeRangeSelected' | null;
 
+const Bar = styled(Box)({
+    height: '20px',
+    minWidth: '150px',
+    margin: '0 auto',
+    borderLeft: '3px solid #0671ff',
+    borderRadius: '5px',
+    position: 'absolute',
+});
+
 interface TimeRangeSelectionVisualProps {
-    inPointSeconds: number;
-    outPointSeconds: number;
+    timeRangeVisualState: TimeRangeVisualState;
 }
 
 export const TimeRangeSelectionVisual = ({
-    inPointSeconds,
-    outPointSeconds,
+    timeRangeVisualState,
 }: TimeRangeSelectionVisualProps): JSX.Element => {
     const isBarVisible = (bar: TimeRangeVisualState) => {
         return bar === timeRangeVisualState;
@@ -17,27 +24,25 @@ export const TimeRangeSelectionVisual = ({
 
     return (
         <>
-            <Box
+            <Bar
                 data-testid="inpoint-selected-bar"
                 sx={{
                     backgroundImage: 'linear-gradient(to right, #75ecff, #fff)',
-                    borderLeft: '1px solid #0671ff',
                     visibility: isBarVisible('inPointSelected') ? 'visible' : 'hidden',
                 }}
             >
                 &nbsp;
-            </Box>
-            <Box
+            </Bar>
+            <Bar
                 data-testid="timerange-selected-bar"
                 sx={{
                     backgroundColor: '#75ecff',
-                    borderRight: '1px solid #0671ff',
-                    borderLeft: '1px solid #0671ff',
+                    borderRight: '2px solid #0671ff',
                     visibility: isBarVisible('timeRangeSelected') ? 'visible' : 'hidden',
                 }}
             >
                 &nbsp;
-            </Box>
+            </Bar>
         </>
     );
 };
