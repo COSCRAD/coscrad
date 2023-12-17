@@ -1,5 +1,10 @@
+import { CoscradEvent } from '../../../../../domain/common';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { ConnectResourcesWithNote } from './connect-resources-with-note.command';
 
-export class ResourcesConnectedWithNote extends BaseEvent {
+export type ResourcesConnectedWithNotePayload = ConnectResourcesWithNote;
+
+@CoscradEvent('RESOURCES_CONNECTED_WITH_NOTE')
+export class ResourcesConnectedWithNote extends BaseEvent<ResourcesConnectedWithNotePayload> {
     type = 'RESOURCES_CONNECTED_WITH_NOTE';
 }
