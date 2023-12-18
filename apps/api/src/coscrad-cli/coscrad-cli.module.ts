@@ -1,8 +1,8 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
 import { AppModule } from '../app/app.module';
+import { AudioVisualModule } from '../app/domain-modules/audio-visual.module';
 import { EdgeConnectionModule } from '../app/domain-modules/edge-connection.module';
-import { MediaItemModule } from '../app/domain-modules/media-item.module';
 import { IdGenerationModule } from '../lib/id-generation/id-generation.module';
 import { MigrationModule } from '../persistence/migrations';
 import { PersistenceModule } from '../persistence/persistence.module';
@@ -45,7 +45,7 @@ import { ValidateInvariantsCliCommand } from './validate-invariants.cli-command'
         IdGenerationModule,
         MigrationModule,
         CommandModule,
-        MediaItemModule,
+        AudioVisualModule,
         EdgeConnectionModule,
     ],
 })

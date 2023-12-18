@@ -28,6 +28,8 @@ export class PersistenceModule implements OnApplicationShutdown {
         const arangoConnectionProvider = {
             provide: ArangoConnectionProvider,
             useFactory: async (configService: ConfigService) => {
+                const _db = configService.get('ARANGO_DB_NAME');
+
                 const arangoConnectionProvider = new ArangoConnectionProvider(configService);
 
                 await arangoConnectionProvider.initialize();
