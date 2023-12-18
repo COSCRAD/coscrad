@@ -11,7 +11,10 @@ export class MediaItemQueryService extends ResourceQueryService<MediaItem, Media
     protected readonly type = ResourceType.mediaItem;
 
     buildViewModel(mediaItem: MediaItem): MediaItemViewModel {
-        // note that we need to remove `filepath`, which we currently do in the controller
+        /**
+         * Note that we need to remove `filepath` for security reasons.
+         * We currently do so the controller.
+         */
         return new MediaItemViewModel(mediaItem);
     }
 

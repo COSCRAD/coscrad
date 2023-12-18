@@ -29,7 +29,7 @@ import { AdminJwtGuard } from '../command/command.controller';
 
 const baseUrl = `/resources/mediaItems/download`;
 
-const dummyMediaItemId = `135`; //buildDummyUuid(135);
+const dummyMediaItemId = buildDummyUuid(135);
 
 const testBinaryDataDirectoryPath = `__cli-command-test-inputs__/ingest-media-items/mediaItemsOnly`;
 
@@ -152,7 +152,6 @@ describe(`MediaItemController.fetchBinary`, () => {
             userDescription: 'authenticated non-admin user',
             mediaItem: privateMediaItem,
             mediaItemDescription: 'private media item (user not in ACL)',
-            // we return a not found in this case for obscurity
             expectedStatusCode: HttpStatusCode.notFound,
         },
     ];
@@ -228,6 +227,11 @@ describe(`MediaItemController.fetchBinary`, () => {
                         const res = await request(app.getHttpServer()).get(fullUrl);
 
                         expect(res.status).toBe(expectedStatusCode);
+
+                        /**
+                         * TODO tighten up the test up the expectation. How can
+                         * we be confident the right binary file is sent?
+                         */
                     });
                 });
             });

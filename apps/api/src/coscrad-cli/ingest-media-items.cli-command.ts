@@ -6,8 +6,11 @@ import { copyFileSync, existsSync, readdirSync } from 'fs';
 import { CommandFSA } from '../app/controllers/command/command-fsa/command-fsa.entity';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
 import { CreateMediaItem } from '../domain/models/media-item/commands/create-media-item.command';
+import {
+    getExpectedMimeTypeFromExtension,
+    getExtensionForMimeType,
+} from '../domain/models/media-item/entities/getExtensionForMimeType';
 import { ResourceType } from '../domain/types/ResourceType';
-import { isNullOrUndefined } from '../domain/utilities/validation/is-null-or-undefined';
 import { InternalError, isInternalError } from '../lib/errors/InternalError';
 import clonePlainObjectWithoutProperty from '../lib/utilities/clonePlainObjectWithoutProperty';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
@@ -51,7 +54,13 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
 
             return {
                 title: name,
-                mimeType: this.determineMimeType(extension),
+                /**
+                 * TODO This is not secure, but we are not exposing this publicly. Right now,
+                 * we are only ingesting trusted media items over local host to test out the
+                 * media annotation flow. In the future, we will need to validate the MIME Type
+                 * from the binary data.
+                 */
+                mimeType: getExpectedMimeTypeFromExtension(extension) as MIMEType,
                 filename: file,
             };
         });
@@ -135,7 +144,7 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
                 },
             } = fsa;
 
-            const destinationPath = `${staticAssetDestinationDirectory}/${title}.${this.getFileExtensionForMimeType(
+            const destinationPath = `${staticAssetDestinationDirectory}/${title}.${getExtensionForMimeType(
                 mimeType
             )}`;
 
@@ -180,52 +189,5 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
         }
 
         return isNonEmptyString(input) ? input : undefined;
-    }
-
-    /**
-     * TODO This is not secure, but we are not exposing this publicly. Right now,
-     * we are only ingesting trusted media items over local host to test out the
-     * media annotation flow. In the future, we will need to validate the MIME Type
-     * from the binary data.
-     */
-    private determineMimeType(extension: string): MIMEType {
-        if (extension === 'mp3') return MIMEType.mp3;
-
-        if (extension === 'wav') return MIMEType.wav;
-
-        if (extension === 'ogg') return MIMEType.audioOgg;
-
-        if (extension === 'mp4') return MIMEType.mp4;
-
-        if (extension === 'png') return MIMEType.png;
-
-        throw new InternalError(`Unsupported file extension: ${extension}`);
-    }
-
-    private getFileExtensionForMimeType(mimetype: MIMEType): string {
-        const lookupTable = {
-            [MIMEType.audioOgg]: 'ogg',
-            [MIMEType.mp3]: 'mp3',
-            [MIMEType.wav]: 'wav',
-            [MIMEType.mp4]: 'mp4',
-            [MIMEType.png]: 'png',
-            // is this correct?
-            [MIMEType.videoOgg]: 'ogg',
-            // [MIMEType.videoWebm]
-        };
-
-        const lookupResult = lookupTable[mimetype];
-
-        if (isNullOrUndefined(lookupResult)) {
-            const error = new InternalError(
-                `Cannot build extension for unsupported MIME type: ${mimetype}`
-            );
-
-            this.logger.log(error.toString());
-
-            throw error;
-        }
-
-        return lookupResult;
     }
 }
