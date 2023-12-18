@@ -3,12 +3,12 @@ import { useCallback, useEffect } from 'react';
 export enum KeyboardKey {
     escape = 'Escape',
     enter = 'Enter',
-    inpoint = 'i',
-    outpoint = 'o',
-    clear = 'c',
     spacebar = ' ',
-    reverse = 'j',
-    forward = 'k',
+    i = 'i',
+    o = 'o',
+    c = 'c',
+    j = 'j',
+    k = 'k',
 }
 
 export const useKeyDown = (callback: () => void, keys: KeyboardKey[]) => {

@@ -58,30 +58,41 @@ describe('<AudioAnnotator />', () => {
     const validShorterDurationAudioUrl =
         'https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav';
 
-    describe(`when there is a single, fixed value for audioUrl`, () => {
+    const invalidAudioUrl = 'not-a-url';
+
+    describe(`when the audio url is invalid and no media loads`, () => {
+        beforeEach(() => {
+            cy.mount(<AudioAnnotatorWidget audioUrl={invalidAudioUrl} />);
+        });
+
+        /**
+         * Note: the markInPoint() and markOutPoint() methods return if the media currentTime
+         * is null or undefined so we don't need an equivalent 'disabled' functionality
+         * or test for the keyboard shortcuts
+         */
+        describe(`the mark in- and out-point buttons`, () => {
+            it(`should be disabled`, () => {
+                cy.getByDataAttribute('in-point-marker-button').should('be.disabled');
+
+                cy.getByDataAttribute('out-point-marker-button').should('be.disabled');
+            });
+        });
+    });
+
+    describe(`when there is a valid value for audioUrl`, () => {
         beforeEach(() => {
             cy.mount(<AudioAnnotatorWidget audioUrl={validAudioUrl} />);
         });
 
         it('should display audio controls', () => {
             cy.get('audio').should('be.visible');
+
             cy.get('audio').should('have.prop', 'controls', true);
         });
 
-        describe(`when the media currentTime is 0 the mark in- and out-point buttons`, () => {
-            it(`should be disabled`, () => {
-                cy.getByDataAttribute('in-point-marker-button').should('be.disabled');
-                cy.getByDataAttribute('out-point-marker-button').should('be.disabled');
-            });
-        });
-
-        describe(`when the media has been played`, () => {
-            beforeEach(() => {
-                cy.get('audio').then(([audioElement]) => {
-                    audioElement.play();
-                });
-
-                cy.wait(1500);
+        describe(`when the media first loads`, () => {
+            before(() => {
+                cy.wait(1000);
             });
 
             describe(`the mark in-point button`, () => {
@@ -95,10 +106,30 @@ describe('<AudioAnnotator />', () => {
                     cy.getByDataAttribute('out-point-marker-button').should('be.disabled');
                 });
             });
+        });
+
+        describe(`when the media has been played`, () => {
+            beforeEach(() => {
+                cy.get('audio').then(([audioElement]) => {
+                    audioElement.play();
+                });
+
+                cy.wait(1500);
+            });
 
             describe(`when the mark in-point button is clicked`, () => {
-                it(`should mark an in-point`, () => {
+                it.only(`should mark an in-point`, () => {
                     cy.getByDataAttribute('in-point-marker-button').click();
+
+                    cy.getByDataAttribute('in-point-selection-time-code').should('exist');
+
+                    cy.getByDataAttribute('inpoint-selected-bar').should('be.visible');
+                });
+            });
+
+            describe(`when the keyboard shortcut for mark in-point is pressed`, () => {
+                it(`should mark an in-point`, () => {
+                    cy.get('body').type('i');
                 });
             });
 

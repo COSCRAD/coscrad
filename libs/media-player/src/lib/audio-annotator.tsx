@@ -6,23 +6,15 @@ import {
 } from '@mui/icons-material/';
 import { Box, IconButton, Stack, Typography, styled } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
-import { FormattedMediaTime } from './formatted-currenttime';
+import { asFormattedMediaTimecodeString } from './shared/as-formatted-media-timecode-string';
 import { AudioMIMEType } from './shared/audio-mime-type.enum';
 import { isAudioMIMEType } from './shared/is-audio-mime-type';
+import { KeyboardKey, useKeyDown } from './shared/use-key-down';
 import { TimeRangeSelectionVisual, TimeRangeVisualState } from './time-range-selection-visual';
-import { KeyboardKey, useKeyDown } from './use-key-down';
 
 type Nullable<T> = T | null;
 
 export type MedidaPlayDirection = 'forward' | 'reverse';
-
-const isValidTimeRangeSelection = (timeRangeSelection: TimeRangeSelection, duration: number) => {
-    const { inPointSeconds, outPointSeconds } = timeRangeSelection;
-
-    if (outPointSeconds >= duration) return false;
-
-    return outPointSeconds > inPointSeconds;
-};
 
 const StyledAudioPlayer = styled('audio')`
     border-radius: 20px;
@@ -48,10 +40,6 @@ export const AudioAnnotator = ({
 
     const [inPointSeconds, setInPointSeconds] = useState<Nullable<number>>(null);
 
-    /**
-     * outPointSeconds could just be tracked in timeRangeSelection rather than
-     * here.  Only reason to keep this is for symetry
-     */
     const [outPointSeconds, setOutPointSeconds] = useState<Nullable<number>>(null);
 
     const [isPlayable, setIsPlayable] = useState<boolean>(false);
@@ -90,8 +78,6 @@ export const AudioAnnotator = ({
             outPointSeconds: outPointSeconds,
         };
 
-        console.log({ selectedTimeRange });
-
         setTimeRangeVisualState('timeRangeSelected');
 
         onTimeRangeSelected(selectedTimeRange);
@@ -106,8 +92,6 @@ export const AudioAnnotator = ({
 
     // TODO: test with a longer audio file
     const onCanplay = () => {
-        console.log('canPlay');
-
         setIsPlayable(true);
     };
 
@@ -132,15 +116,11 @@ export const AudioAnnotator = ({
 
         const currentTime = audio.currentTime;
 
-        console.log({ currentTime });
-
         if (direction === 'forward') {
             audio.currentTime = currentTime + increment;
         } else {
             audio.currentTime = currentTime - increment;
         }
-
-        console.log({ after: audio.currentTime });
     };
 
     const scrubForward = () => {
@@ -156,8 +136,6 @@ export const AudioAnnotator = ({
 
         if (isNullOrUndefined(currentTime)) return;
 
-        console.log({ inpoint: currentTime });
-
         setInPointSeconds(currentTime);
     };
 
@@ -167,8 +145,6 @@ export const AudioAnnotator = ({
         const currentTime = audioRef?.current?.currentTime;
 
         if (isNullOrUndefined(currentTime)) return;
-
-        console.log({ outpoint: currentTime });
 
         setOutPointSeconds(currentTime);
     };
@@ -181,15 +157,15 @@ export const AudioAnnotator = ({
 
     useKeyDown(() => {
         markInPoint();
-    }, [KeyboardKey.inpoint]);
+    }, [KeyboardKey.i]);
 
     useKeyDown(() => {
         markOutPoint();
-    }, [KeyboardKey.outpoint]);
+    }, [KeyboardKey.o]);
 
     useKeyDown(() => {
         clearMarkers();
-    }, [KeyboardKey.clear]);
+    }, [KeyboardKey.c]);
 
     useKeyDown(() => {
         togglePlay();
@@ -197,11 +173,11 @@ export const AudioAnnotator = ({
 
     useKeyDown(() => {
         scrubForward();
-    }, [KeyboardKey.forward]);
+    }, [KeyboardKey.k]);
 
     useKeyDown(() => {
         scrubBackward();
-    }, [KeyboardKey.reverse]);
+    }, [KeyboardKey.j]);
 
     return (
         <Stack>
@@ -247,8 +223,8 @@ export const AudioAnnotator = ({
             <Box display="inline-flex" alignItems="center" mt={1}>
                 <Box width="70px">
                     {!isNullOrUndefined(inPointSeconds) ? (
-                        <Typography variant="body1">
-                            <FormattedMediaTime timeInSeconds={inPointSeconds} />
+                        <Typography data-testid="in-point-selection-time-code" variant="body1">
+                            {asFormattedMediaTimecodeString(inPointSeconds)}
                         </Typography>
                     ) : null}
                 </Box>
@@ -257,8 +233,8 @@ export const AudioAnnotator = ({
                 </Box>
                 <Box width="70px">
                     {!isNullOrUndefined(outPointSeconds) ? (
-                        <Typography variant="body1">
-                            <FormattedMediaTime timeInSeconds={outPointSeconds} />
+                        <Typography data-testid="out-point-selection-time-code" variant="body1">
+                            {asFormattedMediaTimecodeString(outPointSeconds)}
                         </Typography>
                     ) : null}
                 </Box>
