@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
-import { MediaItemViewModel } from '../../../queries/buildViewModelForResource/viewModels/media-item.view-model';
-import BaseDomainModel from '../../models/BaseDomainModel';
-import { MediaItem } from '../../models/media-item/entities/media-item.entity';
-import { ResourceType } from '../../types/ResourceType';
-import { ResourceQueryService } from './resource-query.service';
+import { DomainModelCtor } from '../../../../lib/types/DomainModelCtor';
+import { MediaItemViewModel } from '../../../../queries/buildViewModelForResource/viewModels/media-item.view-model';
+import BaseDomainModel from '../../../models/BaseDomainModel';
+import { MediaItem } from '../../../models/media-item/entities/media-item.entity';
+import { ResourceType } from '../../../types/ResourceType';
+import { ResourceQueryService } from '../resource-query.service';
 
 @Injectable()
 export class MediaItemQueryService extends ResourceQueryService<MediaItem, MediaItemViewModel> {

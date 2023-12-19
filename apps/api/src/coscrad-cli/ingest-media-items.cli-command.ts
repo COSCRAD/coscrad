@@ -2,9 +2,7 @@ import { CommandHandlerService } from '@coscrad/commands';
 import { MIMEType } from '@coscrad/data-types';
 import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
-import * as ffmpeg from 'fluent-ffmpeg';
 import { copyFileSync, existsSync, readdirSync } from 'fs';
-import { promisify } from 'util';
 import { CommandFSA } from '../app/controllers/command/command-fsa/command-fsa.entity';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
 import { isAudioMimeType } from '../domain/models/audio-item/entities/audio-item.entity';
@@ -14,8 +12,13 @@ import {
     getExpectedMimeTypeFromExtension,
     getExtensionForMimeType,
 } from '../domain/models/media-item/entities/getExtensionForMimeType';
+import {
+    IMediaProber,
+    MEDIA_PROBER_TOKEN,
+} from '../domain/services/query-services/media-management';
 import { ResourceType } from '../domain/types/ResourceType';
 import { InternalError, isInternalError } from '../lib/errors/InternalError';
+import { isNotFound } from '../lib/types/not-found';
 import clonePlainObjectWithoutProperty from '../lib/utilities/clonePlainObjectWithoutProperty';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
@@ -26,8 +29,6 @@ interface IngestMediaItemsCliCommandOptions {
     staticAssetDestinationDirectory: string;
 }
 
-const ffprobe = promisify(ffmpeg.ffprobe);
-
 @CliCommand({
     name: 'ingest-media-items',
     description: 'ingest all media items within a target directory',
@@ -36,6 +37,7 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
     constructor(
         private readonly commandHandlerService: CommandHandlerService,
         @Inject(ID_MANAGER_TOKEN) private readonly idManager: IIdManager,
+        @Inject(MEDIA_PROBER_TOKEN) private readonly mediaProber: IMediaProber,
         @Inject(COSCRAD_LOGGER_TOKEN) private readonly logger: ICoscradLogger
     ) {
         super();
@@ -76,11 +78,19 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
         const mediaLengthMap = new Map<string, number>();
 
         for (const { filename, mimeType } of partialPayloads) {
-            const ffprobeResult = await ffprobe(`${directory}/${filename}`);
+            const mediaInfo = await this.mediaProber.probe(`${directory}/${filename}`);
 
-            const { streams } = ffprobeResult;
+            if (isNotFound(mediaInfo)) {
+                this.logger.log(`the prober found no media info for: ${filename}`);
 
-            const duration = streams?.[0].duration;
+                continue;
+            }
+
+            /**
+             * TODO Determine the MIME Type with the probe
+             * [see here](https://gist.github.com/DusanBrejka/35238dccb5cefcc804de1c5a218ee004)
+             */
+            const { duration } = mediaInfo;
 
             if (
                 !isNullOrUndefined(duration) &&
