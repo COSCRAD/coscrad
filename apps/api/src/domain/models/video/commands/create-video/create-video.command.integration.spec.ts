@@ -213,6 +213,9 @@ describe(commandType, () => {
             });
         });
 
+        /**
+         * TODO Break this out into a different directory.
+         */
         describe('when the command payload type is invalid', () => {
             describe(`when aggregateCompositeIdentifier.type is not video`, () => {
                 Object.values(AggregateType)
