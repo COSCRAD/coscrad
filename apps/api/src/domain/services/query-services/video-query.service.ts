@@ -1,4 +1,4 @@
-import { AggregateType, IVideoViewModel } from '@coscrad/api-interfaces';
+import { AggregateType, IMediaAnnotation, IVideoViewModel } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
@@ -11,6 +11,7 @@ import { validAggregateOrThrow } from '../../models/shared/functional';
 import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
 import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
+import { buildAnnotationsFromSnapshot } from './build-annotations-from-snapshot';
 import { ResourceQueryService } from './resource-query.service';
 
 export class VideoQueryService extends ResourceQueryService<Video, IVideoViewModel> {
@@ -24,14 +25,16 @@ export class VideoQueryService extends ResourceQueryService<Video, IVideoViewMod
     }
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
-        const mediaItemSearchResult = await this.repositoryProvider
-            .forResource<MediaItem>(AggregateType.mediaItem)
-            .fetchMany();
-
-        const allMediaItems = mediaItemSearchResult.filter(validAggregateOrThrow);
+        const [mediaItemSearchResult, videoSearchResult, noteSearchResult] = await Promise.all([
+            this.repositoryProvider.forResource<MediaItem>(AggregateType.mediaItem).fetchMany(),
+            this.repositoryProvider.forResource<Video>(AggregateType.video).fetchMany(),
+            this.repositoryProvider.getEdgeConnectionRepository().fetchMany(),
+        ]);
 
         return new DeluxeInMemoryStore({
-            [AggregateType.mediaItem]: allMediaItems,
+            [AggregateType.mediaItem]: mediaItemSearchResult.filter(validAggregateOrThrow),
+            [AggregateType.video]: videoSearchResult.filter(validAggregateOrThrow),
+            [AggregateType.note]: noteSearchResult.filter(validAggregateOrThrow),
         }).fetchFullSnapshotInLegacyFormat();
     }
 
@@ -44,5 +47,13 @@ export class VideoQueryService extends ResourceQueryService<Video, IVideoViewMod
 
     getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {
         return [Video as unknown as DomainModelCtor<Video>];
+    }
+
+    async getAnnotations(): Promise<IMediaAnnotation[]> {
+        const flastSnapshot = await this.fetchRequiredExternalState();
+
+        const inMemoryStore = new DeluxeInMemoryStore(flastSnapshot);
+
+        return buildAnnotationsFromSnapshot(inMemoryStore);
     }
 }

@@ -87,6 +87,8 @@ export class ArangoDatabase {
         collectionName: string,
         specification?: ISpecification<TEntityDTO>
     ): Promise<TEntityDTO[]> => {
+        const _dbName = this.db.name;
+
         const { query: filterQuery, bindVars: filterBindVars } = specification
             ? this.#convertSpecificationToAQLFilter(specification, 't')
             : aql``;

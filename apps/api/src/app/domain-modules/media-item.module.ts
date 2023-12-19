@@ -17,5 +17,6 @@ import { MediaItemController } from '../controllers/resources/media-item.control
         CreateMediaItem,
         CreateMediaItemCommandHandler,
     ],
+    exports: [MediaItemQueryService],
 })
 export class MediaItemModule {}

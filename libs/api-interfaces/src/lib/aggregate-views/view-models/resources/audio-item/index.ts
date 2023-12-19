@@ -1,4 +1,5 @@
 export * from './audio-item.view-model.interface';
+export * from './media-anotation.interface';
 export * from './transcript-item.interface';
 export * from './transcript-participant.interface';
 export * from './transcript.interface';

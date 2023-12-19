@@ -62,5 +62,6 @@ import { VideoController } from '../controllers/resources/video.controller';
         ImportTranslationsForTranscript,
         ImportTranslationsForTranscriptCommandHandler,
     ],
+    exports: [AudioItemQueryService, VideoQueryService],
 })
 export class AudioVisualModule {}
