@@ -1,4 +1,5 @@
-import { Ack, ICommand } from '@coscrad/commands';
+import { ICommandBase } from '@coscrad/api-interfaces';
+import { Ack } from '@coscrad/commands';
 import { InMemorySnapshot } from '../../../../domain/types/ResourceType';
 import { AggregateId } from '../../../types/AggregateId';
 import { CommandAssertionDependencies } from '../command-helpers/types/CommandAssertionDependencies';
@@ -13,7 +14,7 @@ interface BaseTestCase {
      * we may want to check that the instance was persisted or that a newly used
      * ID is marked as such.
      */
-    checkStateOnSuccess?: (command: ICommand) => Promise<void>;
+    checkStateOnSuccess?: (command: ICommandBase) => Promise<void>;
 }
 
 interface StateBasedTestCase extends BaseTestCase {

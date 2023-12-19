@@ -5,6 +5,7 @@ import { Valid } from '../../../../../domain/domainModelValidators/Valid';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../../domain/types/ResourceType';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
+import { isNotFound } from '../../../../../lib/types/not-found';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent, IEventPayload } from '../../../shared/events/base-event.entity';
@@ -45,14 +46,35 @@ export class CreatePhotographCommandHandler extends BaseCreateCommandHandler<Pho
         return isInternalError(validationResult) ? validationResult : newInstance;
     }
 
-    protected fetchRequiredExternalState(_command?: CreatePhotograph): Promise<InMemorySnapshot> {
-        return Promise.resolve(new DeluxeInMemoryStore().fetchFullSnapshotInLegacyFormat());
+    protected async fetchRequiredExternalState({
+        mediaItemId,
+    }: CreatePhotograph): Promise<InMemorySnapshot> {
+        const mediaItemSearchResult = await this.repositoryProvider
+            .forResource(AggregateType.mediaItem)
+            .fetchById(mediaItemId);
+
+        if (isInternalError(mediaItemSearchResult)) {
+            throw new InternalError(
+                `Found invalid media item when attempting to create a photograph`,
+                [mediaItemSearchResult]
+            );
+        }
+
+        return Promise.resolve(
+            new DeluxeInMemoryStore({
+                [AggregateType.mediaItem]: isNotFound(mediaItemSearchResult)
+                    ? []
+                    : [mediaItemSearchResult],
+            }).fetchFullSnapshotInLegacyFormat()
+        );
     }
+
     protected validateExternalState(
-        _state: InMemorySnapshot,
-        _instance: Photograph
+        state: InMemorySnapshot,
+        instance: Photograph
     ): InternalError | Valid {
-        return Valid;
+        // note that the reference to a media item is validated in the base handler via the schema
+        return instance.validateExternalReferences(state);
     }
 
     protected buildEvent(
