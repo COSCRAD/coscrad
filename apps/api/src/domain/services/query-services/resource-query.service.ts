@@ -53,17 +53,23 @@ export abstract class ResourceQueryService<
      * just the tags to build your view model.
      */
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
-        const tags = (await this.repositoryProvider.getTagRepository().fetchMany()).filter(
-            (result): result is Tag => !isInternalError(result)
-        );
+        const tagSearchResult = await this.repositoryProvider.getTagRepository().fetchMany();
+
+        const tags = tagSearchResult.filter((result): result is Tag => !isInternalError(result));
 
         return new DeluxeInMemoryStore({
             tag: tags,
         }).fetchFullSnapshotInLegacyFormat();
     }
 
-    protected fetchDomainModelById(id: AggregateId): Promise<ResultOrError<Maybe<TDomainModel>>> {
-        return this.repositoryProvider.forResource<TDomainModel>(this.type).fetchById(id);
+    protected async fetchDomainModelById(
+        id: AggregateId
+    ): Promise<ResultOrError<Maybe<TDomainModel>>> {
+        const repository = this.repositoryProvider.forResource<TDomainModel>(this.type);
+
+        const resource = await repository.fetchById(id);
+
+        return resource;
     }
 
     protected fetchManyDomainModels(
