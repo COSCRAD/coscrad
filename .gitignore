@@ -55,6 +55,11 @@ auth_config.json
 # COSCRAD CLI command e2e test dummy files
 __cli-command-test-files__
 
+# Statically Served Assets
+__static__
+# Keeps the directory placeholder
+!__static__/.gitkeep
+
 # React Native
 
 # OSX

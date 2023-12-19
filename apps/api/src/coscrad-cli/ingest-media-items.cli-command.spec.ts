@@ -1,6 +1,7 @@
 import { CommandModule } from '@coscrad/commands';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
+import { existsSync, mkdirSync } from 'fs';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import buildMockConfigServiceSpec from '../app/config/__tests__/utilities/buildMockConfigService';
@@ -21,6 +22,8 @@ import { CoscradCliModule } from './coscrad-cli.module';
 const cliCommandName = 'ingest-media-items';
 
 const inputDir = `__cli-command-test-inputs__`;
+
+const destinationDir = `__cli-command-test-files__`;
 
 const inputFilePrefix = `./${inputDir}/${cliCommandName}`;
 
@@ -101,6 +104,10 @@ describe(`CLI Command: **data-restore**`, () => {
             .overrideProvider(ArangoDatabaseProvider)
             .useValue(databaseProvider)
             .compile();
+
+        if (!existsSync(destinationDir)) {
+            mkdirSync(destinationDir);
+        }
     });
 
     beforeEach(async () => {
@@ -113,6 +120,7 @@ describe(`CLI Command: **data-restore**`, () => {
                 cliCommandName,
                 `--directory=${buildDirectoryPath(`mediaItemsOnly`)}`,
                 `--baseUrl=http://localhost:3131/uploads`,
+                `--staticAssetDestinationDirectory=${destinationDir}`,
             ]);
 
             const expectedNumberOfResults = 3;
@@ -124,7 +132,7 @@ describe(`CLI Command: **data-restore**`, () => {
             const mediaItems = searchResult.filter(validAggregateOrThrow);
 
             expect(mediaItems).toHaveLength(expectedNumberOfResults);
-        });
+        }, 60000); // timeout of 60s
     });
 
     /**
