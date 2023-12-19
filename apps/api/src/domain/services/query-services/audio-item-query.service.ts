@@ -1,4 +1,4 @@
-import { AggregateType, IAudioItemViewModel } from '@coscrad/api-interfaces';
+import { AggregateType, IAudioItemViewModel, IMediaAnnotation } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
@@ -11,6 +11,7 @@ import { validAggregateOrThrow } from '../../models/shared/functional';
 import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
 import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
+import { buildAnnotationsFromSnapshot } from './build-annotations-from-snapshot';
 import { ResourceQueryService } from './resource-query.service';
 
 export class AudioItemQueryService extends ResourceQueryService<AudioItem, IAudioItemViewModel> {
@@ -24,14 +25,17 @@ export class AudioItemQueryService extends ResourceQueryService<AudioItem, IAudi
     }
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
-        const mediaItemSearchResult = await this.repositoryProvider
-            .forResource<MediaItem>(AggregateType.mediaItem)
-            .fetchMany();
-
-        const allMediaItems = mediaItemSearchResult.filter(validAggregateOrThrow);
+        const [audioItemSearchResult, mediaItemSearchResult, noteSearchResult] = await Promise.all([
+            this.repositoryProvider.forResource<AudioItem>(AggregateType.audioItem).fetchMany(),
+            this.repositoryProvider.forResource<MediaItem>(AggregateType.mediaItem).fetchMany(),
+            // Can we at least put the `fetch notes for` here?
+            this.repositoryProvider.getEdgeConnectionRepository().fetchMany(),
+        ]);
 
         return new DeluxeInMemoryStore({
-            [AggregateType.mediaItem]: allMediaItems,
+            [AggregateType.audioItem]: audioItemSearchResult.filter(validAggregateOrThrow),
+            [AggregateType.mediaItem]: mediaItemSearchResult.filter(validAggregateOrThrow),
+            [AggregateType.note]: noteSearchResult.filter(validAggregateOrThrow),
         }).fetchFullSnapshotInLegacyFormat();
     }
 
@@ -44,5 +48,13 @@ export class AudioItemQueryService extends ResourceQueryService<AudioItem, IAudi
 
     getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {
         return [AudioItem as unknown as DomainModelCtor<AudioItem>];
+    }
+
+    async getAnnotations(): Promise<IMediaAnnotation[]> {
+        const flastSnapshot = await this.fetchRequiredExternalState();
+
+        const inMemoryStore = new DeluxeInMemoryStore(flastSnapshot);
+
+        return buildAnnotationsFromSnapshot(inMemoryStore);
     }
 }

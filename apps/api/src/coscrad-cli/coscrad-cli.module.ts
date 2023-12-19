@@ -1,6 +1,8 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
 import { AppModule } from '../app/app.module';
+import { AudioVisualModule } from '../app/domain-modules/audio-visual.module';
+import { EdgeConnectionModule } from '../app/domain-modules/edge-connection.module';
 import { IdGenerationModule } from '../lib/id-generation/id-generation.module';
 import { MigrationModule } from '../persistence/migrations';
 import { PersistenceModule } from '../persistence/persistence.module';
@@ -8,6 +10,7 @@ import { ClearDatabaseCliCommand } from './clear-database.cli-comand';
 import { DomainDumpCliCommand } from './data-dump.cli-command';
 import { DomainRestoreCliCommand } from './data-restore.cli-command';
 import { ExecuteCommandStreamCliCommand } from './execute-command-stream.cli-command';
+import { ExportMediaAnnotationsCliCommand } from './export-media-annotations.cli-command';
 import { IngestMediaItemsCliCommand } from './ingest-media-items.cli-command';
 import { ListMigrationsCliCommand } from './list-migrations.cli-command';
 import { ConsoleCoscradCliLogger, COSCRAD_LOGGER_TOKEN } from './logging';
@@ -30,11 +33,20 @@ import { ValidateInvariantsCliCommand } from './validate-invariants.cli-command'
         SeedTestDataWithCommand,
         SeedTestUuids,
         IngestMediaItemsCliCommand,
+        ExportMediaAnnotationsCliCommand,
         {
             provide: COSCRAD_LOGGER_TOKEN,
             useClass: ConsoleCoscradCliLogger,
         },
     ],
-    imports: [AppModule, PersistenceModule, IdGenerationModule, MigrationModule, CommandModule],
+    imports: [
+        AppModule,
+        PersistenceModule,
+        IdGenerationModule,
+        MigrationModule,
+        CommandModule,
+        AudioVisualModule,
+        EdgeConnectionModule,
+    ],
 })
 export class CoscradCliModule {}

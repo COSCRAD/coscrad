@@ -6,6 +6,7 @@ import {
     InMemorySnapshotOfResources,
     ResourceType,
 } from '../../../domain/types/ResourceType';
+import { InternalError } from '../../../lib/errors/InternalError';
 import { DynamicDataTypeFinderService } from '../../../validation';
 import { ArangoCollectionId } from '../../database/collection-references/ArangoCollectionId';
 import { getAllArangoDocumentCollectionIDs } from '../../database/collection-references/ArangoDocumentCollectionId';
@@ -30,7 +31,17 @@ export default class TestRepositoryProvider extends ArangoRepositoryProvider {
         resourceType: ResourceType,
         entities: TResource[]
     ): Promise<void> {
-        await this.forResource<TResource>(resourceType).createMany(entities);
+        await this.forResource<TResource>(resourceType)
+            .createMany(entities)
+            .catch((_error) => {
+                throw new InternalError(
+                    `Failed to add resources of type: ${resourceType} \n ${JSON.stringify(
+                        entities,
+                        undefined,
+                        4
+                    )}`
+                );
+            });
     }
 
     /**
