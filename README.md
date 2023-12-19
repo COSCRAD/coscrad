@@ -71,6 +71,19 @@ for managing peer dependencies.
 
 We provide an optional shell script for spinning up an ArangoDB instance. This will only work if you have docker installed on your development machine. Alternatively, you could run an ArangoDB instance on a VirtualBox VM, a local physical machine, in the cloud, or via one of Arango's enterprise hosting solutions.
 
+#### OS Level Dependencies
+
+Some functionality related to media management depends upon [fluent-ffmpeg](https://www.npmjs.com/package/fluent-ffmpeg),
+which in turn requires [ffmpeg](http://www.ffmpeg.org/) to be installed on your OS.
+
+For Ubuntu 20.04, you can run
+
+> > > sudo apt update
+
+> > > sudo apt install ffmpeg
+
+to install `ffmpeg`.
+
 ### Getting Started
 
 Clone this repo
