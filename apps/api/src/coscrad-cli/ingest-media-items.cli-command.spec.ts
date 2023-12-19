@@ -56,7 +56,6 @@ describe(`CLI Command: **data-restore**`, () => {
                         buildMockConfigServiceSpec(
                             {
                                 ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
-                                NODE_ENV: Environment.test,
                             },
                             buildConfigFilePath(Environment.test)
                         ),

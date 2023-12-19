@@ -106,7 +106,7 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
 
                 const lengthSeconds = mediaLengthMap.get(filename);
 
-                // TODO Use a math lib
+                // TODO[https://www.pivotaltracker.com/story/show/186713518] Use a math lib
                 const MILLISECONDS_PER_SECOND = 1000;
 
                 const lengthMilliseconds = isNullOrUndefined(lengthSeconds)
