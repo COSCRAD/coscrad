@@ -32,10 +32,18 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
 
     // Queries (return information)
     fetchById(id: AggregateId): Promise<Maybe<ArangoDatabaseDocument<TEntity>>> {
-        return this.#arangoDatabase.fetchById<ArangoDatabaseDocument<TEntity>>(
-            id,
-            this.#collectionID
-        );
+        return this.#arangoDatabase
+            .fetchById<ArangoDatabaseDocument<TEntity>>(id, this.#collectionID)
+            .catch((error) => {
+                const innerErrors = error?.message ? [new InternalError(error.message)] : [];
+
+                throw new InternalError(
+                    `[Arango Database for Collection]: failed to fetch by ID (${id}) from collection: ${
+                        this.#collectionID
+                    }`,
+                    innerErrors
+                );
+            });
     }
 
     fetchMany(specification?: ISpecification<TEntity>): Promise<ArangoDatabaseDocument<TEntity>[]> {

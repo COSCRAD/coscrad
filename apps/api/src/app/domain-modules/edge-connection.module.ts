@@ -16,7 +16,7 @@ import { IdGenerationModule } from '../../lib/id-generation/id-generation.module
 import { PersistenceModule } from '../../persistence/persistence.module';
 import { NoteViewModel } from '../../queries/edgeConnectionViewModels/note.view-model';
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
-import { EdgeConnectionController } from '../controllers/edgeConnection.controller';
+import { EdgeConnectionController } from '../controllers/edge-connection.controller';
 
 import {
     ConnectResourcesWithNote,

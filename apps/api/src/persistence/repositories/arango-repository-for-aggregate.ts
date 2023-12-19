@@ -51,7 +51,13 @@ export class ArangoRepositoryForAggregate<TEntity extends Aggregate>
     }
 
     async fetchById(id: AggregateId): Promise<ResultOrError<Maybe<TEntity>>> {
-        const searchResultForDTO = await this.#arangoDatabaseForEntitysCollection.fetchById(id);
+        const searchResultForDTO = await this.#arangoDatabaseForEntitysCollection
+            .fetchById(id)
+            .catch((error) => {
+                const innerErrors = error.message ? [new InternalError(error.message)] : [];
+
+                throw new InternalError(`Failed to fetch by id (${id})`, innerErrors);
+            });
 
         return isNotFound(searchResultForDTO)
             ? NotFound
