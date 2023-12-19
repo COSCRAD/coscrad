@@ -114,11 +114,11 @@ describe('<AudioAnnotator />', () => {
                     audioElement.play();
                 });
 
-                cy.wait(1500);
+                cy.wait(2000);
             });
 
             describe(`when the mark in-point button is clicked`, () => {
-                it.only(`should mark an in-point`, () => {
+                it(`should mark an in-point`, () => {
                     cy.getByDataAttribute('in-point-marker-button').click();
 
                     cy.getByDataAttribute('in-point-selection-time-code').should('exist');
@@ -130,12 +130,26 @@ describe('<AudioAnnotator />', () => {
             describe(`when the keyboard shortcut for mark in-point is pressed`, () => {
                 it(`should mark an in-point`, () => {
                     cy.get('body').type('i');
+
+                    cy.getByDataAttribute('in-point-selection-time-code').should('exist');
+
+                    cy.getByDataAttribute('inpoint-selected-bar').should('be.visible');
                 });
             });
 
             describe(`when the mark in-point button is clicked, the mark out-point button`, () => {
                 it('should be enabled', () => {
                     cy.getByDataAttribute('in-point-marker-button').click();
+
+                    cy.wait(300);
+
+                    cy.getByDataAttribute('out-point-marker-button').should('be.enabled');
+                });
+            });
+
+            describe(`when the keyboard shortcut for mark in-point is pressed, the mark out-point button`, () => {
+                it('should be enabled', () => {
+                    cy.get('body').type('i');
 
                     cy.wait(300);
 
@@ -151,14 +165,32 @@ describe('<AudioAnnotator />', () => {
 
                     cy.getByDataAttribute('out-point-marker-button').click();
 
+                    cy.getByDataAttribute('out-point-selection-time-code').should('exist');
+
+                    cy.getByDataAttribute('timerange-selected-bar').should('be.visible');
+
+                    cy.getByDataAttribute('widget-selected-time-range').should('exist');
+                });
+            });
+
+            describe(`when the keyboard shortcut for mark in-point is pressed, pressing the mark out-point keyboard shortcut`, () => {
+                it('should mark an out-point', () => {
+                    cy.get('body').type('i');
+
+                    cy.wait(1000);
+
+                    cy.get('body').type('o');
+
+                    cy.getByDataAttribute('out-point-selection-time-code').should('exist');
+
+                    cy.getByDataAttribute('timerange-selected-bar').should('be.visible');
+
                     cy.getByDataAttribute('widget-selected-time-range').should('exist');
                 });
             });
 
             describe(`when the mark in-point button is clicked and the user scrubs the playhead back before the in-point, clicking the mark out-point button`, () => {
                 it('should fail with an error', () => {
-                    cy.wait(1000);
-
                     cy.getByDataAttribute('in-point-marker-button').click();
 
                     cy.get('audio').then(([audioElement]) => {
@@ -166,6 +198,26 @@ describe('<AudioAnnotator />', () => {
                     });
 
                     cy.getByDataAttribute('out-point-marker-button').click();
+
+                    cy.getByDataAttribute('out-point-selection-time-code').should('not.exist');
+
+                    cy.getByDataAttribute('widget-selected-time-range').should('not.exist');
+
+                    cy.getByDataAttribute('audio-error-message').should('exist');
+                });
+            });
+
+            describe(`when the keyboard shortcut for mark in-point is pressed and the user scrubs the playhead back before the in-point, pressing the mark out-point keyboard shortcut`, () => {
+                it('should fail with an error', () => {
+                    cy.get('body').type('i');
+
+                    cy.get('audio').then(([audioElement]) => {
+                        audioElement.currentTime = 1.0;
+                    });
+
+                    cy.get('body').type('o');
+
+                    cy.getByDataAttribute('out-point-selection-time-code').should('not.exist');
 
                     cy.getByDataAttribute('widget-selected-time-range').should('not.exist');
 
@@ -180,6 +232,20 @@ describe('<AudioAnnotator />', () => {
                     cy.wait(500);
 
                     cy.getByDataAttribute('clear-selected-time-range-button').click();
+
+                    cy.getByDataAttribute('widget-selected-time-range').should('not.exist');
+
+                    cy.getByDataAttribute('out-point-marker-button').should('be.disabled');
+                });
+            });
+
+            describe(`after an in-point is selected, when the keyboard shortcut for clear range is pressed`, () => {
+                it('should clear the selected in-point', () => {
+                    cy.get('body').type('i');
+
+                    cy.wait(500);
+
+                    cy.get('body').type('c');
 
                     cy.getByDataAttribute('widget-selected-time-range').should('not.exist');
 
@@ -205,7 +271,7 @@ describe('<AudioAnnotator />', () => {
                 });
             });
 
-            describe(`after a time range is selected with hotkeys, when clear range is invoked with "c"`, () => {
+            describe(`after a time range is selected with hotkeys, when the keyboard shortcut for clear range is pressed`, () => {
                 it('should clear the range selection', () => {
                     cy.get('body').type('i');
 
@@ -215,15 +281,49 @@ describe('<AudioAnnotator />', () => {
 
                     cy.getByDataAttribute('widget-selected-time-range').should('exist');
 
-                    cy.wait(600);
+                    cy.wait(500);
 
                     cy.get('body').type('c');
 
                     cy.getByDataAttribute('widget-selected-time-range').should('not.exist');
+                });
+            });
 
-                    cy.getByDataAttribute('inpoint-selected-bar').should('not.be.visible');
+            describe(`when the scrub forward keyboard shortcut is pressed`, () => {
+                it('should increment the player currentTime', () => {
+                    const currentTimeStart = 3.0;
 
-                    cy.getByDataAttribute('timerange-selected-bar').should('not.be.visible');
+                    cy.get('audio').then(([audioElement]) => {
+                        audioElement.currentTime = currentTimeStart;
+                    });
+
+                    cy.get('body').type('k');
+
+                    cy.get('audio').then(([audioElement]) => {
+                        const newCurrentTime = audioElement.currentTime;
+
+                        expect(newCurrentTime).to.equal(currentTimeStart + 1);
+                    });
+                });
+            });
+
+            describe(`when the scrub backward keyboard shortcut is pressed twice`, () => {
+                it.only('should decrement the player currentTime', () => {
+                    const currentTimeStart = 8.0;
+
+                    cy.get('audio').then(([audioElement]) => {
+                        audioElement.currentTime = currentTimeStart;
+                    });
+
+                    cy.get('body').type('j');
+
+                    cy.get('body').type('j');
+
+                    cy.get('audio').then(([audioElement]) => {
+                        const newCurrentTime = audioElement.currentTime;
+
+                        expect(newCurrentTime).to.equal(currentTimeStart - 2);
+                    });
                 });
             });
         });

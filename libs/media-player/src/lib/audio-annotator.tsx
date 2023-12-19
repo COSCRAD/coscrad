@@ -16,6 +16,15 @@ type Nullable<T> = T | null;
 
 export type MedidaPlayDirection = 'forward' | 'reverse';
 
+export enum KeyboardShortcuts {
+    play = KeyboardKey.spacebar,
+    clear = KeyboardKey.c,
+    markInPoint = KeyboardKey.i,
+    markOutPoint = KeyboardKey.o,
+    scrubForward = KeyboardKey.k,
+    scrubBackward = KeyboardKey.j,
+}
+
 const StyledAudioPlayer = styled('audio')`
     border-radius: 20px;
 `;
@@ -157,27 +166,27 @@ export const AudioAnnotator = ({
 
     useKeyDown(() => {
         markInPoint();
-    }, [KeyboardKey.i]);
+    }, [KeyboardShortcuts.markInPoint]);
 
     useKeyDown(() => {
         markOutPoint();
-    }, [KeyboardKey.o]);
+    }, [KeyboardShortcuts.markOutPoint]);
 
     useKeyDown(() => {
         clearMarkers();
-    }, [KeyboardKey.c]);
+    }, [KeyboardShortcuts.clear]);
 
     useKeyDown(() => {
         togglePlay();
-    }, [KeyboardKey.spacebar]);
+    }, [KeyboardShortcuts.play]);
 
     useKeyDown(() => {
         scrubForward();
-    }, [KeyboardKey.k]);
+    }, [KeyboardShortcuts.scrubForward]);
 
     useKeyDown(() => {
         scrubBackward();
-    }, [KeyboardKey.j]);
+    }, [KeyboardShortcuts.scrubBackward]);
 
     return (
         <Stack>

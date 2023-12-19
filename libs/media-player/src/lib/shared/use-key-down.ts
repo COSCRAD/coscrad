@@ -1,4 +1,5 @@
 import { useCallback, useEffect } from 'react';
+import { KeyboardShortcuts } from '../audio-annotator';
 
 export enum KeyboardKey {
     escape = 'Escape',
@@ -11,7 +12,7 @@ export enum KeyboardKey {
     k = 'k',
 }
 
-export const useKeyDown = (callback: () => void, keys: KeyboardKey[]) => {
+export const useKeyDown = (callback: () => void, keys: KeyboardShortcuts[]) => {
     const onKeyDown = useCallback(
         (event: KeyboardEvent) => {
             const wasAnyKeyPressed = keys.some((key) => event.key === key);

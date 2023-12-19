@@ -1,17 +1,32 @@
 import { asFormattedMediaTimecodeString } from './as-formatted-media-timecode-string';
 
-const validCurrentTime = 42343.457;
+const validCurrentLongTime = 42343.457;
 
-const validTimecodeString = '11:45:43';
+const validLongTimecodeString = '11:45:43';
+
+const validCurrentShortTime = 253.99473;
+
+// NOTE: we're using Math.floor() rather than Math.max() or Math.ceil()
+const validShortTimecodeString = '00:04:13';
+
+const ninetynineHoursInSecondsPlusOne = 99 * 60 * 60 + 1;
 
 const invalidNegativeNumber = -23.88;
 
 describe(`asFormattedMediaTimecodeString`, () => {
-    describe(`when the inputed number is valid`, () => {
+    describe(`when the inputed number is a valid long time`, () => {
         it('should return a valid timecode string', () => {
-            const result = asFormattedMediaTimecodeString(validCurrentTime);
+            const result = asFormattedMediaTimecodeString(validCurrentLongTime);
 
-            expect(result).toEqual(validTimecodeString);
+            expect(result).toEqual(validLongTimecodeString);
+        });
+    });
+
+    describe(`when the inputed number is a valid short time`, () => {
+        it('should return a valid timecode string', () => {
+            const result = asFormattedMediaTimecodeString(validCurrentShortTime);
+
+            expect(result).toEqual(validShortTimecodeString);
         });
     });
 
@@ -19,7 +34,25 @@ describe(`asFormattedMediaTimecodeString`, () => {
         it('should throw an error', () => {
             expect(() => {
                 asFormattedMediaTimecodeString(invalidNegativeNumber);
-            }).toThrow('timeInSeconds must be a non-negative finite number');
+            }).toThrow(
+                [
+                    'timeInSeconds must be a non-negative finite number',
+                    'representing a duration of less than 99 hours',
+                ].join(' ')
+            );
+        });
+    });
+
+    describe(`when the inputted number is greater than the 99 hour max`, () => {
+        it('should throw an error', () => {
+            expect(() => {
+                asFormattedMediaTimecodeString(ninetynineHoursInSecondsPlusOne);
+            }).toThrow(
+                [
+                    'timeInSeconds must be a non-negative finite number',
+                    'representing a duration of less than 99 hours',
+                ].join(' ')
+            );
         });
     });
 });
