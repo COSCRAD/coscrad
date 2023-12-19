@@ -8,6 +8,9 @@ const audiovisualResourceTypes = [ResourceType.video, ResourceType.audioItem] as
 
 export type AudiovisualResourceType = typeof audiovisualResourceTypes[number];
 
+export const isAudiovisualResourceType = (input: unknown): input is AudiovisualResourceType =>
+    audiovisualResourceTypes.includes(input as AudiovisualResourceType);
+
 export class AudioItemCompositeIdentifier {
     @AggregateTypeProperty([AggregateType.audioItem])
     type = AggregateType.audioItem;

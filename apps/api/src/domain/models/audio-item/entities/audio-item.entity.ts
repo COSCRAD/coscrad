@@ -41,6 +41,9 @@ export interface IRadioPublishableResource {
     buildEpisodes: (snapshot: InMemorySnapshot) => PlaylistEpisode[];
 }
 
+export const isAudioMimeType = (mimeType: MIMEType): boolean =>
+    [MIMEType.mp3, MIMEType.wav, MIMEType.audioOgg].includes(mimeType);
+
 @RegisterIndexScopedCommands([`CREATE_AUDIO_ITEM`])
 class AudioItemBase extends Resource implements IRadioPublishableResource {
     readonly type = ResourceType.audioItem;

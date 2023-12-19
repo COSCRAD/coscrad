@@ -70,6 +70,8 @@ export class MediaItem extends Resource implements ITimeBoundable {
         description: 'length of the media item in milliseconds',
         isOptional: true,
     })
+    // This only applies to audio and video files.
+    // TODO Make the above an invariant validation rule.
     readonly lengthMilliseconds?: number;
 
     constructor(dto: DTO<MediaItem>) {

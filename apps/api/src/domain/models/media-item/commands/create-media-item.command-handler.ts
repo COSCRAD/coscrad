@@ -1,4 +1,5 @@
 import { CommandHandler } from '@coscrad/commands';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
@@ -22,6 +23,7 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
             title,
             url,
             mimeType,
+            lengthMilliseconds,
         } = command;
 
         const createDto: DTO<MediaItem> = {
@@ -32,8 +34,7 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
             mimeType: mimeType,
             // You must execute `PUBLISH_MEDIA_ITEM` to publish
             published: false,
-            // The actual length must be registered via a subsequent command
-            lengthMilliseconds: 0,
+            lengthMilliseconds: isNullOrUndefined(lengthMilliseconds) ? 0 : lengthMilliseconds,
         };
 
         return getInstanceFactoryForResource<MediaItem>(ResourceType.mediaItem)(createDto);

@@ -1,10 +1,14 @@
 import { CommandHandlerService } from '@coscrad/commands';
 import { MIMEType } from '@coscrad/data-types';
-import { isNonEmptyString } from '@coscrad/validation-constraints';
+import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
+import * as ffmpeg from 'fluent-ffmpeg';
 import { copyFileSync, existsSync, readdirSync } from 'fs';
+import { promisify } from 'util';
 import { CommandFSA } from '../app/controllers/command/command-fsa/command-fsa.entity';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
+import { isAudioMimeType } from '../domain/models/audio-item/entities/audio-item.entity';
+import { isVideoMimeType } from '../domain/models/audio-item/entities/video.entity';
 import { CreateMediaItem } from '../domain/models/media-item/commands/create-media-item.command';
 import {
     getExpectedMimeTypeFromExtension,
@@ -21,6 +25,8 @@ interface IngestMediaItemsCliCommandOptions {
     baseUrl: string;
     staticAssetDestinationDirectory: string;
 }
+
+const ffprobe = promisify(ffmpeg.ffprobe);
 
 @CliCommand({
     name: 'ingest-media-items',
@@ -67,9 +73,35 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
 
         const generatedIds = await this.idManager.generateMany(partialPayloads.length);
 
+        const mediaLengthMap = new Map<string, number>();
+
+        for (const { filename, mimeType } of partialPayloads) {
+            const ffprobeResult = await ffprobe(`${directory}/${filename}`);
+
+            const { streams } = ffprobeResult;
+
+            const duration = streams?.[0].duration;
+
+            if (
+                !isNullOrUndefined(duration) &&
+                (isVideoMimeType(mimeType) || isAudioMimeType(mimeType))
+            ) {
+                mediaLengthMap.set(filename, duration);
+            }
+        }
+
         const createMediaItemFsas: CommandFSA<CreateMediaItem>[] = partialPayloads.map(
             (partialFsa, index) => {
                 const { filename } = partialFsa;
+
+                const lengthSeconds = mediaLengthMap.get(filename);
+
+                // TODO Use a math lib
+                const MILLISECONDS_PER_SECOND = 1000;
+
+                const lengthMilliseconds = isNullOrUndefined(lengthSeconds)
+                    ? undefined
+                    : lengthSeconds * MILLISECONDS_PER_SECOND;
 
                 return {
                     type: `CREATE_MEDIA_ITEM`,
@@ -80,6 +112,8 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
                             id: generatedIds[index],
                         },
                         url: `${baseUrl}/${generatedIds[index]}`,
+                        // TODO Avoid magic number and use math lib
+                        lengthMilliseconds,
                         rawData: {
                             filename,
                         },
