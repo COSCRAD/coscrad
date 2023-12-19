@@ -3,12 +3,13 @@ import { Module } from '@nestjs/common';
 import { CreatePhotograph, PhotographCreated } from '../../domain/models/photograph';
 import { CreatePhotographCommandHandler } from '../../domain/models/photograph/commands/create-photograph/create-photograph.command-handler';
 import { PhotographQueryService } from '../../domain/services/query-services/photograph-query.service';
+import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { PersistenceModule } from '../../persistence/persistence.module';
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
 import { PhotographController } from '../controllers/resources/photograph.controller';
 
 @Module({
-    imports: [PersistenceModule, CommandModule],
+    imports: [PersistenceModule, CommandModule, IdGenerationModule],
     controllers: [PhotographController],
     providers: [
         CommandInfoService,
