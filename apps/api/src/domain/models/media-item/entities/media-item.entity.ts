@@ -115,6 +115,8 @@ export class MediaItem extends Resource implements ITimeBoundable {
         ) {
             return [new InconsistentMediaItemPropertyError(`lengthMilliseconds`, this.mimeType)];
         }
+
+        return [];
     }
 
     protected getExternalReferences(): AggregateCompositeIdentifier[] {

@@ -144,7 +144,8 @@ describe(commandType, () => {
 
         describe('when the MIME type of the media item is not an video format', () => {
             const disallowedMIMETypes = Object.values(MIMEType).filter(
-                (mimeType) => ![MIMEType.mp4].includes(mimeType)
+                (mimeType) =>
+                    ![MIMEType.mp4, MIMEType.videoOgg, MIMEType.videoWebm].includes(mimeType)
             );
 
             disallowedMIMETypes.forEach((mimeType) => {
@@ -155,6 +156,16 @@ describe(commandType, () => {
                             initialState: new DeluxeInMemoryStore({
                                 [AggregateType.mediaItem]: [
                                     existingMediaItem.clone({
+                                        /**
+                                         * This avoids an invariant validation
+                                         * error with the `MediaItem`.
+                                         *
+                                         * Realistically, this should be defined for audio.
+                                         * We don't currently fail invariant validation
+                                         * if it is undefined for audio, although we
+                                         * do if it **is** defined for an image, for example.
+                                         */
+                                        lengthMilliseconds: undefined,
                                         mimeType,
                                     }),
                                 ],
