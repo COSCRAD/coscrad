@@ -4617,5 +4617,104 @@ exports[`command payload schemas Command payload schema should match the snapsho
     },
     "type": "ADD_CONTENT_TO_DIGITAL_TEXT_PAGE",
   },
+  {
+    "description": "create a digital photograph with metadata from a raw media item",
+    "label": "Create Photograph",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "a global system reference to the photograph",
+        "isArray": false,
+        "isOptional": false,
+        "label": "composite identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "system reference to this photograph",
+            "isArray": false,
+            "isOptional": false,
+            "label": "Photograph ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "must be: photograph",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "photograph",
+                "value": "photograph",
+              },
+            ],
+          },
+        },
+      },
+      "languageCodeForTitle": {
+        "complexDataType": "ENUM",
+        "description": "the language in which you are naming the photograph",
+        "enumLabel": "language code",
+        "enumName": "LanguageCode",
+        "isArray": false,
+        "isOptional": false,
+        "label": "language for title",
+        "labelsAndValues": [
+          {
+            "label": "Chilcotin",
+            "value": "clc",
+          },
+          {
+            "label": "Haida",
+            "value": "hai",
+          },
+          {
+            "label": "English",
+            "value": "en",
+          },
+          {
+            "label": "French",
+            "value": "fra",
+          },
+          {
+            "label": "Chinook",
+            "value": "chn",
+          },
+          {
+            "label": "Zapotec",
+            "value": "zap",
+          },
+          {
+            "label": "Spanish",
+            "value": "spa",
+          },
+        ],
+      },
+      "mediaItemId": {
+        "coscradDataType": "UUID",
+        "description": "reference to the raw media item for this photograph",
+        "isArray": false,
+        "isOptional": false,
+        "label": "media item ID",
+        "referenceTo": "mediaItem",
+      },
+      "photographer": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the name of the person who took this photograph",
+        "isArray": false,
+        "isOptional": false,
+        "label": "photographer",
+      },
+      "title": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the title of the photograph",
+        "isArray": false,
+        "isOptional": false,
+        "label": "title",
+      },
+    },
+    "type": "CREATE_PHOTOGRAPH",
+  },
 ]
 `;

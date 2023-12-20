@@ -3,7 +3,10 @@ import { buildMultilingualTextWithSingleItem } from '../domain/common/build-mult
 import { Photograph } from '../domain/models/photograph/entities/photograph.entity';
 import { ResourceType } from '../domain/types/ResourceType';
 import { DTO } from '../types/DTO';
-import { convertAggregatesIdToUuid } from './utilities/convertSequentialIdToUuid';
+import {
+    convertAggregatesIdToUuid,
+    convertSequenceNumberToUuid,
+} from './utilities/convertSequentialIdToUuid';
 
 const dtos: DTO<Omit<Photograph, 'id' | 'published' | 'type'>>[] = [
     {
@@ -47,6 +50,7 @@ export default (): Photograph[] =>
                     id: `${index}`,
                     published: true,
                     type: ResourceType.photograph,
+                    mediaItemId: convertSequenceNumberToUuid(parseInt(dto.mediaItemId)),
                 })
         )
         .map(convertAggregatesIdToUuid);

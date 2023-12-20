@@ -84,6 +84,11 @@ import { DigitalText } from '../../../domain/models/digital-text/entities/digita
 import { CreateMediaItem } from '../../../domain/models/media-item/commands/create-media-item.command';
 import { CreateMediaItemCommandHandler } from '../../../domain/models/media-item/commands/create-media-item.command-handler';
 import {
+    CreatePhotograph,
+    CreatePhotographCommandHandler,
+    PhotographCreated,
+} from '../../../domain/models/photograph';
+import {
     AddAudioItemToPlaylistCommandHandler,
     CreatePlayListCommandHandler,
     ImportAudioItemsToPlaylist,
@@ -284,6 +289,7 @@ export const buildAllDataClassProviders = () =>
         PromptTermCreated,
         AudioAddedForTerm,
         TermElicitedFromPrompt,
+        PhotographCreated,
         // Aggregate Root Domain Models
         DigitalText,
         Song,
@@ -651,6 +657,8 @@ export default async (
             AddPageToDigitalTextCommandHandler,
             AddContentToDigitalTextPage,
             AddContentToDigitalTextPageCommandHandler,
+            CreatePhotograph,
+            CreatePhotographCommandHandler,
         ],
 
         controllers: [

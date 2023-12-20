@@ -1,6 +1,7 @@
-import { NestedDataType, NonEmptyString, ReferenceTo } from '@coscrad/data-types';
+import { MIMEType, NestedDataType, NonEmptyString, ReferenceTo } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
+import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
 import findAllPointsInLineNotWithinBounds from '../../../../lib/validation/geometry/findAllPointsInLineNotWithinBounds';
 import isPointWithinBounds from '../../../../lib/validation/geometry/isPointWithinBounds';
 import formatPosition2D from '../../../../queries/presentation/formatPosition2D';
@@ -12,13 +13,23 @@ import PointContextOutOfBoundsError from '../../../domainModelValidators/errors/
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
-import { ResourceType } from '../../../types/ResourceType';
+import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
+import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
+import InvalidExternalReferenceByAggregateError from '../../categories/errors/InvalidExternalReferenceByAggregateError';
 import { FreeMultilineContext } from '../../context/free-multiline-context/free-multiline-context.entity';
 import { PointContext } from '../../context/point-context/point-context.entity';
 import { Boundable2D } from '../../interfaces/Boundable2D';
 import { Resource } from '../../resource.entity';
+import idEquals from '../../shared/functional/idEquals';
 import { Position2D } from '../../spatial-feature/types/Coordinates/Position2D';
+import { InvalidMimeTypeForPhotographError } from '../errors';
 import PhotographDimensions from './PhotographDimensions';
+
+export const isMimeTypeAllowedForPhotograph = (mimeType: MIMEType): boolean =>
+    [
+        // TODO add jpg and bmp
+        MIMEType.png,
+    ].includes(mimeType);
 
 @RegisterIndexScopedCommands([])
 export class Photograph extends Resource implements Boundable2D {
@@ -75,8 +86,38 @@ export class Photograph extends Resource implements Boundable2D {
         return [];
     }
 
+    /**
+     * TODO We should remove `getExternalReferences` now that we do it using
+     * the schema (defined via @ReferenceTo \ @FullReference)
+     */
     protected getExternalReferences(): AggregateCompositeIdentifier[] {
         return [];
+    }
+
+    override validateExternalReferences({
+        resources: { mediaItem: mediaItems },
+    }: InMemorySnapshot): ValidationResult {
+        /**
+         * Note that typically we inject a snapshot with only the relevant
+         * media item.
+         */
+        const myMediaItem = mediaItems.find(idEquals(this.mediaItemId));
+
+        if (isNullOrUndefined(myMediaItem))
+            return new InvalidExternalReferenceByAggregateError(this.getCompositeIdentifier(), [
+                {
+                    type: AggregateType.mediaItem,
+                    id: this.mediaItemId,
+                },
+            ]);
+
+        const { mimeType } = myMediaItem;
+
+        if (!isMimeTypeAllowedForPhotograph(mimeType)) {
+            return new InvalidMimeTypeForPhotographError(mimeType);
+        }
+
+        return Valid;
     }
 
     // TODO break out the validate point logic into a validation library instead
