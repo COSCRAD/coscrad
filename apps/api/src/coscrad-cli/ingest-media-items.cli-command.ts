@@ -197,10 +197,6 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
 
                 const id = generatedIds[index];
 
-                if (isNullOrUndefined(id)) {
-                    console.log('wooh');
-                }
-
                 return {
                     type: `CREATE_MEDIA_ITEM`,
                     payload: {
@@ -225,10 +221,6 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
 
         const createResourceFsas = createMediaItemFsas.map((createMediaItemFsa, index) => {
             const idToUse = generatedIds[index + partialPayloads.length];
-
-            if (isNullOrUndefined(idToUse)) {
-                throw new Error(`broken ID`);
-            }
 
             return buildCreateResourceFsaForMediaItem(createMediaItemFsa.payload, idToUse);
         });
