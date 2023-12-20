@@ -10,6 +10,7 @@ import { ResultOrError } from '../../../../../types/ResultOrError';
 import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent, IEventPayload } from '../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
+import PhotographDimensions from '../../entities/PhotographDimensions';
 import { Photograph } from '../../entities/photograph.entity';
 import { CreatePhotograph } from './create-photograph.command';
 import { PhotographCreated } from './photograph-created.event';
@@ -22,21 +23,18 @@ export class CreatePhotographCommandHandler extends BaseCreateCommandHandler<Pho
         languageCodeForTitle,
         mediaItemId,
         photographer,
+        heightPx,
+        widthPx,
     }: CreatePhotograph): ResultOrError<Photograph> {
         const newInstance = new Photograph({
             type: AggregateType.photograph,
             id,
             title: buildMultilingualTextWithSingleItem(titleText, languageCodeForTitle),
             mediaItemId,
-            /**
-             * TODO [https://github.com/COSCRAD/coscrad/pull/521#discussion_r1431743331]
-             *
-             * Allow the user to set the photograph's dimensions.
-             */
-            dimensions: {
-                heightPX: 0,
-                widthPX: 0,
-            },
+            dimensions: new PhotographDimensions({
+                heightPx,
+                widthPx,
+            }),
             photographer,
             published: false,
         });

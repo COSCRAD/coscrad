@@ -14,13 +14,14 @@ import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.in
 import { CreateAudioItem } from '../domain/models/audio-item/commands';
 import { isAudioMimeType } from '../domain/models/audio-item/entities/audio-item.entity';
 import { isVideoMimeType } from '../domain/models/audio-item/entities/video.entity';
-import { CreateMediaItem } from '../domain/models/media-item/commands/create-media-item.command';
+import { CreateMediaItem } from '../domain/models/media-item/commands/create-media-item/create-media-item.command';
 import {
     getExpectedMimeTypeFromExtension,
     getExtensionForMimeType,
-} from '../domain/models/media-item/entities/getExtensionForMimeType';
+} from '../domain/models/media-item/entities/get-extension-for-mime-type';
+import { MediaItemDimensions } from '../domain/models/media-item/entities/media-item-dimensions';
 import { CreatePhotograph } from '../domain/models/photograph';
-import { isMimeTypeAllowedForPhotograph } from '../domain/models/photograph/entities/photograph.entity';
+import { isPhotographMimeType } from '../domain/models/photograph/entities/photograph.entity';
 import { CreateVideo } from '../domain/models/video';
 import {
     IMediaProber,
@@ -47,6 +48,8 @@ const buildCreateResourceFsaForMediaItem = (
         title,
         mimeType,
         lengthMilliseconds,
+        heightPx,
+        widthPx,
     }: CreateMediaItem,
     generatedId: AggregateId
 ): CommandFSA<ICommandBase> => {
@@ -91,7 +94,7 @@ const buildCreateResourceFsaForMediaItem = (
         return fsa;
     }
 
-    if (isMimeTypeAllowedForPhotograph(mimeType)) {
+    if (isPhotographMimeType(mimeType)) {
         const fsa: CommandFSA<CreatePhotograph> = {
             type: `CREATE_PHOTOGRAPH`,
             payload: {
@@ -104,6 +107,8 @@ const buildCreateResourceFsaForMediaItem = (
                 mediaItemId,
                 // TODO What should we do about this? Maybe it is indicated in the filename? The real metadata? Should be optional?
                 photographer: 'unknown',
+                heightPx,
+                widthPx,
             },
         };
 
@@ -161,7 +166,9 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
          */
         const generatedIds = await this.idManager.generateMany(partialPayloads.length * 2);
 
-        const mediaLengthMap = new Map<string, number>();
+        const durationMap = new Map<string, number>();
+
+        const dimensionsMap = new Map<string, MediaItemDimensions>();
 
         for (const { filename, mimeType } of partialPayloads) {
             const mediaInfo = await this.mediaProber.probe(`${directory}/${filename}`);
@@ -176,13 +183,21 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
              * TODO Determine the MIME Type with the probe
              * [see here](https://gist.github.com/DusanBrejka/35238dccb5cefcc804de1c5a218ee004)
              */
-            const { duration } = mediaInfo;
+            const { duration, heightPx, widthPx } = mediaInfo;
 
             if (
                 !isNullOrUndefined(duration) &&
                 (isVideoMimeType(mimeType) || isAudioMimeType(mimeType))
             ) {
-                mediaLengthMap.set(filename, duration);
+                durationMap.set(filename, duration);
+            }
+
+            if (
+                !isNullOrUndefined(heightPx) &&
+                !isNullOrUndefined(widthPx) &&
+                isPhotographMimeType(mimeType)
+            ) {
+                dimensionsMap.set(filename, new MediaItemDimensions({ widthPx, heightPx }));
             }
         }
 
@@ -190,7 +205,9 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
             (partialFsa, index) => {
                 const { filename } = partialFsa;
 
-                const lengthSeconds = mediaLengthMap.get(filename);
+                const lengthSeconds = durationMap.get(filename);
+
+                const dimensions = dimensionsMap.get(filename);
 
                 // TODO[https://www.pivotaltracker.com/story/show/186713518] Use a math lib
                 const MILLISECONDS_PER_SECOND = 1000;
@@ -214,6 +231,7 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
                             : {
                                   lengthMilliseconds: lengthSeconds * MILLISECONDS_PER_SECOND,
                               }),
+                        ...(isNullOrUndefined(dimensions) ? {} : dimensions),
                     } as const,
                 };
             }

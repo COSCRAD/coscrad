@@ -1,7 +1,7 @@
 import { MIMEType } from '@coscrad/api-interfaces';
 import { CommandFSA } from '../../app/controllers/command/command-fsa/command-fsa.entity';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
-import { CreateMediaItem } from '../../domain/models/media-item/commands/create-media-item.command';
+import { CreateMediaItem } from '../../domain/models/media-item/commands/create-media-item/create-media-item.command';
 import { AggregateType } from '../../domain/types/AggregateType';
 
 const id = buildDummyUuid(41);

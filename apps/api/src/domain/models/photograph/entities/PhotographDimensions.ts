@@ -3,30 +3,31 @@ import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import BaseDomainModel from '../../BaseDomainModel';
 
+// TODO Consolidate this with `MediaItemDimensions`
 // This is a value-object
 export default class PhotographDimensions extends BaseDomainModel {
     @NonNegativeFiniteNumber({
         label: 'width (px)',
         description: 'the width of the photograph in pixels',
     })
-    readonly widthPX: number;
+    readonly widthPx: number;
 
     @NonNegativeFiniteNumber({
         label: 'height (px)',
         description: 'the height of the photograph in pixels',
     })
-    readonly heightPX: number;
+    readonly heightPx: number;
 
     constructor(dto: DTO<PhotographDimensions>) {
         super();
 
         if (!dto) return;
 
-        const { widthPX, heightPX } = dto;
+        const { widthPx: widthPX, heightPx: heightPX } = dto;
 
-        this.widthPX = widthPX;
+        this.widthPx = widthPX;
 
-        this.heightPX = heightPX;
+        this.heightPx = heightPX;
     }
 
     rescale(scaleFactor: number): PhotographDimensions {
@@ -35,8 +36,8 @@ export default class PhotographDimensions extends BaseDomainModel {
         }
 
         return this.clone<PhotographDimensions>({
-            widthPX: scaleFactor * this.widthPX,
-            heightPX: scaleFactor * this.heightPX,
+            widthPx: scaleFactor * this.widthPx,
+            heightPx: scaleFactor * this.heightPx,
         });
     }
 }
