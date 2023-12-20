@@ -57,4 +57,10 @@ export class CreatePhotograph implements ICommandBase {
         description: 'the name of the person who took this photograph',
     })
     readonly photographer: string;
+
+    /**
+     * TODO [https://github.com/COSCRAD/coscrad/pull/521#discussion_r1431743331]
+     *
+     * Allow the user to set the photograph's dimensions.
+     */
 }

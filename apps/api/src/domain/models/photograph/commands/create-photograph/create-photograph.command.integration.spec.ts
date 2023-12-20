@@ -38,7 +38,7 @@ const titleText = `The Photograph Title`;
 
 const languageCodeForTitle = LanguageCode.English;
 
-const photographer = 'Geoff Horner';
+const photographer = 'Jeffory Goat';
 
 const fsaFactory = new DummyCommandFsaFactory((id: AggregateId) =>
     clonePlainObjectWithOverrides(dummyFsa, {
@@ -215,5 +215,12 @@ describe(commandType, () => {
                 });
             });
         });
+
+        /**
+         * TODO [https://github.com/COSCRAD/coscrad/pull/521#discussion_r1431743331]
+         *
+         * Allow the user to set the photograph's dimensions. At this point, test
+         * when the dimensions are invalid.
+         */
     });
 });

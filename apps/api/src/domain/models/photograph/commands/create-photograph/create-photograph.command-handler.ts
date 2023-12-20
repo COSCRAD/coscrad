@@ -28,7 +28,11 @@ export class CreatePhotographCommandHandler extends BaseCreateCommandHandler<Pho
             id,
             title: buildMultilingualTextWithSingleItem(titleText, languageCodeForTitle),
             mediaItemId,
-            // TODO Deal with this properly
+            /**
+             * TODO [https://github.com/COSCRAD/coscrad/pull/521#discussion_r1431743331]
+             *
+             * Allow the user to set the photograph's dimensions.
+             */
             dimensions: {
                 heightPX: 0,
                 widthPX: 0,
