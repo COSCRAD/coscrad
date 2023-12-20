@@ -3,6 +3,7 @@ import { buildBibliographicReferenceTestCommandFsas } from './build-bibliographi
 import { buildDigitalTextCommandFsas } from './build-digital-text-test-command-fsas';
 import { buildGeneralResourceTestCommandFsas } from './build-general-resource-test-command-fsas';
 import { buildMediaItemTestCommandFsas } from './build-media-item-test-command-fsas';
+import { buildPhotographTestCommandFsas } from './build-photograph-test-command-fsas';
 import { buildPlaylistTestCommandFsas } from './build-playlist-test-command-fsas';
 import { buildSongTestCommandFsas } from './build-song-test-command-fsas';
 import { buildSpatialFeatureTestCommandFsas } from './build-spatial-feature-test-command-fsas';
@@ -15,16 +16,17 @@ import { buildEdgeConnectionTestCommandFsas } from './bulid-edge-connection-test
 export const buildTestCommandFsaMap = () =>
     [
         // Resources
-        ...buildGeneralResourceTestCommandFsas(),
-        ...buildSongTestCommandFsas(),
-        ...buildTermTestCommandFsas(),
-        ...buildVocabularyListTestCommandFsas(),
-        ...buildSpatialFeatureTestCommandFsas(),
-        ...buildPlaylistTestCommandFsas(),
-        ...buildMediaItemTestCommandFsas(),
         ...buildBibliographicReferenceTestCommandFsas(),
         ...buildDigitalTextCommandFsas(),
+        ...buildGeneralResourceTestCommandFsas(),
+        ...buildMediaItemTestCommandFsas(),
+        ...buildPhotographTestCommandFsas(),
+        ...buildPlaylistTestCommandFsas(),
+        ...buildSongTestCommandFsas(),
+        ...buildSpatialFeatureTestCommandFsas(),
+        ...buildTermTestCommandFsas(),
         ...buildVideoTestCommandFsas(),
+        ...buildVocabularyListTestCommandFsas(),
         // Edge Connections
         ...buildEdgeConnectionTestCommandFsas(),
         // System Aggregates
