@@ -1,3 +1,9 @@
+import {
+    AGGREGATE_COMPOSITE_IDENTIFIER,
+    AggregateType,
+    ICommandBase,
+    LanguageCode,
+} from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { MIMEType } from '@coscrad/data-types';
 import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
@@ -5,6 +11,7 @@ import { Inject } from '@nestjs/common';
 import { copyFileSync, existsSync, readdirSync } from 'fs';
 import { CommandFSA } from '../app/controllers/command/command-fsa/command-fsa.entity';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
+import { CreateAudioItem } from '../domain/models/audio-item/commands';
 import { isAudioMimeType } from '../domain/models/audio-item/entities/audio-item.entity';
 import { isVideoMimeType } from '../domain/models/audio-item/entities/video.entity';
 import { CreateMediaItem } from '../domain/models/media-item/commands/create-media-item.command';
@@ -12,14 +19,19 @@ import {
     getExpectedMimeTypeFromExtension,
     getExtensionForMimeType,
 } from '../domain/models/media-item/entities/getExtensionForMimeType';
+import { CreatePhotograph } from '../domain/models/photograph';
+import { isMimeTypeAllowedForPhotograph } from '../domain/models/photograph/entities/photograph.entity';
+import { CreateVideo } from '../domain/models/video';
 import {
     IMediaProber,
     MEDIA_PROBER_TOKEN,
 } from '../domain/services/query-services/media-management';
+import { AggregateId } from '../domain/types/AggregateId';
 import { ResourceType } from '../domain/types/ResourceType';
 import { InternalError, isInternalError } from '../lib/errors/InternalError';
 import { isNotFound } from '../lib/types/not-found';
 import clonePlainObjectWithoutProperty from '../lib/utilities/clonePlainObjectWithoutProperty';
+import formatAggregateCompositeIdentifier from '../queries/presentation/formatAggregateCompositeIdentifier';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
 
@@ -28,6 +40,76 @@ interface IngestMediaItemsCliCommandOptions {
     baseUrl: string;
     staticAssetDestinationDirectory: string;
 }
+
+const buildCreateResourceFsaForMediaItem = (
+    {
+        aggregateCompositeIdentifier: { id: mediaItemId },
+        title,
+        mimeType,
+        lengthMilliseconds,
+    }: CreateMediaItem,
+    generatedId: AggregateId
+): CommandFSA<ICommandBase> => {
+    if (isNullOrUndefined(generatedId)) {
+        throw new Error(`missing id`);
+    }
+
+    if (isAudioMimeType(mimeType)) {
+        const fsa: CommandFSA<CreateAudioItem> = {
+            type: `CREATE_AUDIO_ITEM`,
+            payload: {
+                aggregateCompositeIdentifier: {
+                    type: AggregateType.audioItem,
+                    id: generatedId,
+                },
+                name: title,
+                // this is the only choice for media item titles currently
+                languageCodeForName: LanguageCode.English,
+                lengthMilliseconds,
+                mediaItemId,
+            },
+        };
+
+        return fsa;
+    }
+
+    if (isVideoMimeType(mimeType)) {
+        const fsa: CommandFSA<CreateVideo> = {
+            type: `CREATE_VIDEO`,
+            payload: {
+                aggregateCompositeIdentifier: {
+                    type: AggregateType.video,
+                    id: generatedId,
+                },
+                name: title,
+                languageCodeForName: LanguageCode.English,
+                lengthMilliseconds,
+                mediaItemId,
+            },
+        };
+
+        return fsa;
+    }
+
+    if (isMimeTypeAllowedForPhotograph(mimeType)) {
+        const fsa: CommandFSA<CreatePhotograph> = {
+            type: `CREATE_PHOTOGRAPH`,
+            payload: {
+                aggregateCompositeIdentifier: {
+                    type: AggregateType.photograph,
+                    id: generatedId,
+                },
+                title,
+                languageCodeForTitle: LanguageCode.English,
+                mediaItemId,
+                // TODO What should we do about this? Maybe it is indicated in the filename? The real metadata? Should be optional?
+                photographer: 'unknown',
+            },
+        };
+
+        return fsa;
+    }
+};
 
 @CliCommand({
     name: 'ingest-media-items',
@@ -73,7 +155,11 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
             };
         });
 
-        const generatedIds = await this.idManager.generateMany(partialPayloads.length);
+        /**
+         * For each media item we create a media item and link it to one of the
+         * media resources (`AudioItem`, `Video`, or `Photograph`).
+         */
+        const generatedIds = await this.idManager.generateMany(partialPayloads.length * 2);
 
         const mediaLengthMap = new Map<string, number>();
 
@@ -109,13 +195,15 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
                 // TODO[https://www.pivotaltracker.com/story/show/186713518] Use a math lib
                 const MILLISECONDS_PER_SECOND = 1000;
 
+                const id = generatedIds[index];
+
                 return {
                     type: `CREATE_MEDIA_ITEM`,
                     payload: {
                         ...clonePlainObjectWithoutProperty(partialFsa, 'filename'),
                         aggregateCompositeIdentifier: {
                             type: ResourceType.mediaItem,
-                            id: generatedIds[index],
+                            id,
                         },
                         url: `${baseUrl}/${generatedIds[index]}`,
                         rawData: {
@@ -130,6 +218,12 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
                 };
             }
         );
+
+        const createResourceFsas = createMediaItemFsas.map((createMediaItemFsa, index) => {
+            const idToUse = generatedIds[index + partialPayloads.length];
+
+            return buildCreateResourceFsaForMediaItem(createMediaItemFsa.payload, idToUse);
+        });
 
         /**
          * TODO[Performance] We should consider another pattern such as a promise
@@ -194,6 +288,55 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
             } else {
                 copyFileSync(`${directory}/${filename}`, destinationPath);
             }
+        }
+
+        for (const fsa of createResourceFsas) {
+            const result = await this.commandHandlerService.execute(fsa, {
+                userId: 'COSCRAD Admin',
+            });
+
+            if (isInternalError(result)) {
+                const message = `failed to [${fsa.type}] for ${formatAggregateCompositeIdentifier(
+                    fsa.payload[AGGREGATE_COMPOSITE_IDENTIFIER]
+                )}`;
+
+                const topLevelError = new InternalError(message, [result]);
+
+                this.logger.log(topLevelError.toString());
+
+                throw topLevelError;
+            }
+
+            const publicationResult = await this.commandHandlerService.execute(
+                {
+                    type: 'PUBLISH_RESOURCE',
+                    payload: {
+                        aggregateCompositeIdentifier: fsa.payload.aggregateCompositeIdentifier,
+                    },
+                },
+                {
+                    userId: 'COSCRAD Admin',
+                }
+            );
+
+            if (isInternalError(publicationResult)) {
+                const error = new InternalError(
+                    `Failed to create resource: ${formatAggregateCompositeIdentifier(
+                        fsa.payload[AGGREGATE_COMPOSITE_IDENTIFIER]
+                    )} at the publication stage`,
+                    [publicationResult]
+                );
+
+                this.logger.log(error.toString());
+
+                throw error;
+            }
+
+            this.logger.log(
+                `${formatAggregateCompositeIdentifier(
+                    fsa.payload[AGGREGATE_COMPOSITE_IDENTIFIER]
+                )} Added: ${JSON.stringify(fsa)}`
+            );
         }
     }
 

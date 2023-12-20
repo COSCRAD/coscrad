@@ -10,7 +10,10 @@ import buildConfigFilePath from '../app/config/buildConfigFilePath';
 import { Environment } from '../app/config/constants/Environment';
 import { MediaItemModule } from '../app/domain-modules/media-item.module';
 import { CoscradEventFactory, EventModule } from '../domain/common';
+import { AudioItem } from '../domain/models/audio-item/entities/audio-item.entity';
+import { Video } from '../domain/models/audio-item/entities/video.entity';
 import { MediaItem } from '../domain/models/media-item/entities/media-item.entity';
+import { Photograph } from '../domain/models/photograph/entities/photograph.entity';
 import { validAggregateOrThrow } from '../domain/models/shared/functional';
 import { AggregateType } from '../domain/types/AggregateType';
 import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
@@ -154,6 +157,24 @@ describe(`CLI Command: **data-restore**`, () => {
 
             // TODO Is there a Jest matcher for this? It'd be nice to see the value when it fails.
             expect(isMp3LengthWithinTolerance).toBe(true);
+
+            const newAudioItems = (await testRepositoryProvider
+                .forResource(AggregateType.audioItem)
+                .fetchMany()) as AudioItem[];
+
+            expect(newAudioItems.length).toBe(1);
+
+            const newVideos = (await testRepositoryProvider
+                .forResource(AggregateType.video)
+                .fetchMany()) as Video[];
+
+            expect(newVideos.length).toBe(1);
+
+            const newPhotograph = (await testRepositoryProvider
+                .forResource(AggregateType.photograph)
+                .fetchMany()) as Photograph[];
+
+            expect(newPhotograph.length).toBe(1);
         }, 60000); // timeout of 60s
     });
 
