@@ -467,11 +467,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194371,
-                            "id": "9ba0e111-a77f-4273-8f2f-f4ea9e6180ee",
+                            "id": "9d10b532-3896-4cb2-acf2-a3c457dc12fe",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "PROMPT_TERM_CREATED",
-                        "id": "9ba0e111-a77f-4273-8f2f-f4ea9e6180ee"
+                        "id": "9d10b532-3896-4cb2-acf2-a3c457dc12fe"
                     },
                     {
                         "payload": {
@@ -484,11 +484,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194372,
-                            "id": "03919efc-b6f9-4174-85a8-5dc6750770dd",
+                            "id": "53281527-3ca7-4222-a546-7bc670804cd1",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_ELICITED_FROM_PROMPT",
-                        "id": "03919efc-b6f9-4174-85a8-5dc6750770dd"
+                        "id": "53281527-3ca7-4222-a546-7bc670804cd1"
                     }
                 ],
                 "published": false,
@@ -527,11 +527,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194374,
-                            "id": "8d90c1bc-8a05-43c4-bfc2-a8481b45ceb5",
+                            "id": "a720181b-f1a0-4228-b3dd-d2e8cfb9683d",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "PROMPT_TERM_CREATED",
-                        "id": "8d90c1bc-8a05-43c4-bfc2-a8481b45ceb5"
+                        "id": "a720181b-f1a0-4228-b3dd-d2e8cfb9683d"
                     },
                     {
                         "payload": {
@@ -544,11 +544,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194375,
-                            "id": "c3308100-fa1f-4ee0-9a61-18cf3a7527a1",
+                            "id": "211a75d1-e4bb-4589-a22e-6a581622e4c9",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_ELICITED_FROM_PROMPT",
-                        "id": "c3308100-fa1f-4ee0-9a61-18cf3a7527a1"
+                        "id": "211a75d1-e4bb-4589-a22e-6a581622e4c9"
                     }
                 ],
                 "published": false,
@@ -588,11 +588,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194377,
-                            "id": "2477a5b7-8c47-4410-83b7-e0c8bc4ea4c4",
+                            "id": "21f7cef1-ac3f-4738-b78c-e0eb1facdd1b",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_CREATED",
-                        "id": "2477a5b7-8c47-4410-83b7-e0c8bc4ea4c4"
+                        "id": "21f7cef1-ac3f-4738-b78c-e0eb1facdd1b"
                     }
                 ],
                 "published": false,
@@ -628,11 +628,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194378,
-                            "id": "9f5cc2f1-fbd6-4664-a5e9-123247206fb9",
+                            "id": "205cdee8-eaf2-4691-ac3b-ccf77015fb92",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_CREATED",
-                        "id": "9f5cc2f1-fbd6-4664-a5e9-123247206fb9"
+                        "id": "205cdee8-eaf2-4691-ac3b-ccf77015fb92"
                     }
                 ],
                 "published": false,
@@ -668,11 +668,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194380,
-                            "id": "fe018583-2ed7-4a5f-bbc7-315b64c6df64",
+                            "id": "e54ae468-1299-4211-8cf2-af45c8aa9441",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_CREATED",
-                        "id": "fe018583-2ed7-4a5f-bbc7-315b64c6df64"
+                        "id": "e54ae468-1299-4211-8cf2-af45c8aa9441"
                     },
                     {
                         "payload": {
@@ -685,11 +685,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194381,
-                            "id": "ee8651c3-e51c-48c0-ac56-2af1ffe596b0",
+                            "id": "a75091b6-b829-4da4-ac32-d8da99031710",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_TRANSLATED",
-                        "id": "ee8651c3-e51c-48c0-ac56-2af1ffe596b0"
+                        "id": "a75091b6-b829-4da4-ac32-d8da99031710"
                     }
                 ],
                 "published": false,
@@ -730,11 +730,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194383,
-                            "id": "d8299329-ab31-46df-aee9-2fcbe87e7bbf",
+                            "id": "0f700842-b15c-4481-8b30-fc90c62ac97d",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_CREATED",
-                        "id": "d8299329-ab31-46df-aee9-2fcbe87e7bbf"
+                        "id": "0f700842-b15c-4481-8b30-fc90c62ac97d"
                     },
                     {
                         "payload": {
@@ -747,11 +747,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194384,
-                            "id": "f3cae1ed-501f-4360-b00d-2c33afd5123c",
+                            "id": "43305720-302f-4ebd-82b3-361c336e9a92",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_TRANSLATED",
-                        "id": "f3cae1ed-501f-4360-b00d-2c33afd5123c"
+                        "id": "43305720-302f-4ebd-82b3-361c336e9a92"
                     }
                 ],
                 "published": false,
@@ -792,11 +792,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194386,
-                            "id": "32420da3-c863-40c2-9628-ec7d8345c0eb",
+                            "id": "c05bff90-27e6-4a92-9776-c32e9f1bcb0a",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_CREATED",
-                        "id": "32420da3-c863-40c2-9628-ec7d8345c0eb"
+                        "id": "c05bff90-27e6-4a92-9776-c32e9f1bcb0a"
                     },
                     {
                         "payload": {
@@ -809,11 +809,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194387,
-                            "id": "aa19f06f-d2fc-421d-88b0-26e4f94d138d",
+                            "id": "63ddc9fc-5e0e-4380-b8f9-adadd13f676b",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_TRANSLATED",
-                        "id": "aa19f06f-d2fc-421d-88b0-26e4f94d138d"
+                        "id": "63ddc9fc-5e0e-4380-b8f9-adadd13f676b"
                     }
                 ],
                 "published": false,
@@ -854,11 +854,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194389,
-                            "id": "fc3d3cdf-c308-4847-97c8-396f0934e158",
+                            "id": "78c1af35-861e-4cc0-ad6a-6638484507e8",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_CREATED",
-                        "id": "fc3d3cdf-c308-4847-97c8-396f0934e158"
+                        "id": "78c1af35-861e-4cc0-ad6a-6638484507e8"
                     },
                     {
                         "payload": {
@@ -871,11 +871,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194390,
-                            "id": "f831d7ba-bbd6-4a32-aa6a-33a660e1b172",
+                            "id": "309bd1f5-3fa4-4dd2-986c-ddb79c8484cf",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_TRANSLATED",
-                        "id": "f831d7ba-bbd6-4a32-aa6a-33a660e1b172"
+                        "id": "309bd1f5-3fa4-4dd2-986c-ddb79c8484cf"
                     }
                 ],
                 "published": false,
@@ -916,11 +916,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194392,
-                            "id": "3d67e984-8a44-4d11-9782-f9adacb8208d",
+                            "id": "cfab03a6-148b-4f61-bd16-0f2a2790bd96",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_CREATED",
-                        "id": "3d67e984-8a44-4d11-9782-f9adacb8208d"
+                        "id": "cfab03a6-148b-4f61-bd16-0f2a2790bd96"
                     },
                     {
                         "payload": {
@@ -933,11 +933,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194393,
-                            "id": "75194466-22c0-428b-9ce4-fc1e459c0724",
+                            "id": "91a42cf8-b3bb-4aa4-8cf2-924677406bc8",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_TRANSLATED",
-                        "id": "75194466-22c0-428b-9ce4-fc1e459c0724"
+                        "id": "91a42cf8-b3bb-4aa4-8cf2-924677406bc8"
                     }
                 ],
                 "published": false,
@@ -2048,7 +2048,6 @@
                     "allowedGroupIds": []
                 },
                 "title": "episode (media item 1) title (in language)",
-                "titleEnglish": "Metal Mondays episode 1",
                 "contributorAndRoles": [
                     {
                         "contributorId": "2",
@@ -2069,7 +2068,6 @@
                     "allowedGroupIds": []
                 },
                 "title": "video (media item 2) title (in language)",
-                "titleEnglish": "cool video",
                 "contributorAndRoles": [
                     {
                         "contributorId": "2",
@@ -2090,7 +2088,6 @@
                     "allowedGroupIds": []
                 },
                 "title": "episode (media item 3) title (in language)",
-                "titleEnglish": "Metal Mondays episode 2",
                 "contributorAndRoles": [
                     {
                         "contributorId": "2",

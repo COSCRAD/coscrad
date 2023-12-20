@@ -2,7 +2,7 @@ import { Controller, Get, Param, Request, Res, UseFilters, UseGuards } from '@ne
 import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { existsSync } from 'fs';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
-import { MediaItemQueryService } from '../../../domain/services/query-services/media-item-query.service';
+import { MediaItemQueryService } from '../../../domain/services/query-services/media-management/media-item-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { isInternalError } from '../../../lib/errors/InternalError';
 import { NotFound, isNotFound } from '../../../lib/types/not-found';

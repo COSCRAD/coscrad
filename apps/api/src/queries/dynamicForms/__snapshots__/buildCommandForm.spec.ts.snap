@@ -77,6 +77,22 @@ exports[`buildCommandForm should return the expected result 1`] = `
       ],
       "type": "STATIC_SELECT",
     },
+    {
+      "constraints": [
+        {
+          "message": "must be a non-negative number",
+          "name": "non-negative number",
+        },
+        {
+          "message": "must be a finite number",
+          "name": "finite number",
+        },
+      ],
+      "description": "the length of the media item in milliseconds (audio or video only)",
+      "label": "length (ms)",
+      "name": "lengthMilliseconds",
+      "type": "NUMERIC_INPUT",
+    },
   ],
   "prepopulatedFields": {},
 }

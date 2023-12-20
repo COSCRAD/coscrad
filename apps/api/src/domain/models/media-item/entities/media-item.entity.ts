@@ -14,12 +14,16 @@ import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../../types/ResourceType';
+import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
+import { isAudioMimeType } from '../../audio-item/entities/audio-item.entity';
+import { isVideoMimeType } from '../../audio-item/entities/video.entity';
 import { TimeRangeContext } from '../../context/time-range-context/time-range-context.entity';
 import { ITimeBoundable } from '../../interfaces/ITimeBoundable';
 import { Resource } from '../../resource.entity';
 import validateTimeRangeContextForModel from '../../shared/contextValidators/validateTimeRangeContextForModel';
 import newInstance from '../../shared/functional/newInstance';
 import { ContributorAndRole } from '../../song/ContributorAndRole';
+import { InconsistentMediaItemPropertyError } from '../errors';
 import { getExtensionForMimeType } from './getExtensionForMimeType';
 
 @RegisterIndexScopedCommands(['CREATE_MEDIA_ITEM'])
@@ -70,6 +74,7 @@ export class MediaItem extends Resource implements ITimeBoundable {
         description: 'length of the media item in milliseconds',
         isOptional: true,
     })
+    // This only applies to audio and video files.
     readonly lengthMilliseconds?: number;
 
     constructor(dto: DTO<MediaItem>) {
@@ -103,6 +108,14 @@ export class MediaItem extends Resource implements ITimeBoundable {
     }
 
     protected validateComplexInvariants(): InternalError[] {
+        if (
+            !isAudioMimeType(this.mimeType) &&
+            !isVideoMimeType(this.mimeType) &&
+            !isNullOrUndefined(this.lengthMilliseconds)
+        ) {
+            return [new InconsistentMediaItemPropertyError(`lengthMilliseconds`, this.mimeType)];
+        }
+
         return [];
     }
 

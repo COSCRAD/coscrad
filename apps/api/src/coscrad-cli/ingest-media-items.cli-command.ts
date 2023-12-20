@@ -1,17 +1,24 @@
 import { CommandHandlerService } from '@coscrad/commands';
 import { MIMEType } from '@coscrad/data-types';
-import { isNonEmptyString } from '@coscrad/validation-constraints';
+import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { copyFileSync, existsSync, readdirSync } from 'fs';
 import { CommandFSA } from '../app/controllers/command/command-fsa/command-fsa.entity';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
+import { isAudioMimeType } from '../domain/models/audio-item/entities/audio-item.entity';
+import { isVideoMimeType } from '../domain/models/audio-item/entities/video.entity';
 import { CreateMediaItem } from '../domain/models/media-item/commands/create-media-item.command';
 import {
     getExpectedMimeTypeFromExtension,
     getExtensionForMimeType,
 } from '../domain/models/media-item/entities/getExtensionForMimeType';
+import {
+    IMediaProber,
+    MEDIA_PROBER_TOKEN,
+} from '../domain/services/query-services/media-management';
 import { ResourceType } from '../domain/types/ResourceType';
 import { InternalError, isInternalError } from '../lib/errors/InternalError';
+import { isNotFound } from '../lib/types/not-found';
 import clonePlainObjectWithoutProperty from '../lib/utilities/clonePlainObjectWithoutProperty';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
@@ -30,6 +37,7 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
     constructor(
         private readonly commandHandlerService: CommandHandlerService,
         @Inject(ID_MANAGER_TOKEN) private readonly idManager: IIdManager,
+        @Inject(MEDIA_PROBER_TOKEN) private readonly mediaProber: IMediaProber,
         @Inject(COSCRAD_LOGGER_TOKEN) private readonly logger: ICoscradLogger
     ) {
         super();
@@ -67,9 +75,39 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
 
         const generatedIds = await this.idManager.generateMany(partialPayloads.length);
 
+        const mediaLengthMap = new Map<string, number>();
+
+        for (const { filename, mimeType } of partialPayloads) {
+            const mediaInfo = await this.mediaProber.probe(`${directory}/${filename}`);
+
+            if (isNotFound(mediaInfo)) {
+                this.logger.log(`the prober found no media info for: ${filename}`);
+
+                continue;
+            }
+
+            /**
+             * TODO Determine the MIME Type with the probe
+             * [see here](https://gist.github.com/DusanBrejka/35238dccb5cefcc804de1c5a218ee004)
+             */
+            const { duration } = mediaInfo;
+
+            if (
+                !isNullOrUndefined(duration) &&
+                (isVideoMimeType(mimeType) || isAudioMimeType(mimeType))
+            ) {
+                mediaLengthMap.set(filename, duration);
+            }
+        }
+
         const createMediaItemFsas: CommandFSA<CreateMediaItem>[] = partialPayloads.map(
             (partialFsa, index) => {
                 const { filename } = partialFsa;
+
+                const lengthSeconds = mediaLengthMap.get(filename);
+
+                // TODO[https://www.pivotaltracker.com/story/show/186713518] Use a math lib
+                const MILLISECONDS_PER_SECOND = 1000;
 
                 return {
                     type: `CREATE_MEDIA_ITEM`,
@@ -83,6 +121,11 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
                         rawData: {
                             filename,
                         },
+                        ...(isNullOrUndefined(lengthSeconds)
+                            ? {}
+                            : {
+                                  lengthMilliseconds: lengthSeconds * MILLISECONDS_PER_SECOND,
+                              }),
                     } as const,
                 };
             }
@@ -100,9 +143,7 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
             });
 
             if (isInternalError(result)) {
-                const message = `failed to import media atimportimport clonePlainObjectWithoutProperty from '../lib/utilities/clonePlainObjectWithoutProperty';
- { clonePlainObjectWithoutProperties } from '../lib/utilities/clonePlainObjectWithoutProperties';
- first invalid request`;
+                const message = `failed to import media at first invalid request`;
 
                 const topLevelError = new InternalError(message, [result]);
 

@@ -89,6 +89,7 @@ describe(`MediaItemController.fetchBinary`, () => {
         published: true,
         title: dummyMediaItemId,
         mimeType: MIMEType.png,
+        lengthMilliseconds: undefined,
         queryAccessControlList: {
             allowedGroupIds: [],
             allowedUserIds: [],
