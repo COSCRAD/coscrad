@@ -22,6 +22,7 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
             title,
             url,
             mimeType,
+            lengthMilliseconds,
         } = command;
 
         const createDto: DTO<MediaItem> = {
@@ -32,8 +33,14 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
             mimeType: mimeType,
             // You must execute `PUBLISH_MEDIA_ITEM` to publish
             published: false,
-            // The actual length must be registered via a subsequent command
-            lengthMilliseconds: 0,
+            /**
+             * TODO Make this required for an audio or video. Eventually we may
+             * want to populate this by injecting the media prober into this
+             * command handler. It is ok to cache it on the event \ model
+             * because as a rule a media item's length is immutable and is a
+             * core part of its identity within our system.
+             */
+            lengthMilliseconds,
         };
 
         return getInstanceFactoryForResource<MediaItem>(ResourceType.mediaItem)(createDto);

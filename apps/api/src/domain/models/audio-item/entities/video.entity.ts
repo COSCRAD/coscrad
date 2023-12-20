@@ -33,6 +33,9 @@ import {
 } from './transcribable.mixin';
 import { Transcript } from './transcript.entity';
 
+export const isVideoMimeType = (mimeType: MIMEType): boolean =>
+    [MIMEType.mp4, MIMEType.videoOgg, MIMEType.videoWebm].includes(mimeType);
+
 @RegisterIndexScopedCommands([CREATE_VIDEO])
 export class VideoBase extends Resource {
     readonly type = ResourceType.video;
@@ -148,7 +151,7 @@ export class VideoBase extends Resource {
 
         const { mimeType } = myMediaItem;
 
-        if (!this.isMIMETypeAllowed(mimeType))
+        if (!isVideoMimeType(mimeType))
             return new InvalidExternalReferenceByAggregateError(
                 this.getCompositeIdentifier(),
                 [
@@ -184,10 +187,6 @@ export class VideoBase extends Resource {
         const availableCommandIds: string[] = [TRANSLATE_VIDEO_NAME];
 
         return availableCommandIds;
-    }
-
-    private isMIMETypeAllowed(mimeType: MIMEType): boolean {
-        return [MIMEType.mp4].includes(mimeType);
     }
 }
 

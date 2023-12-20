@@ -20,9 +20,11 @@ import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
 import { assertCreateCommandError } from '../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../__tests__/command-helpers/assert-create-command-success';
 import { assertEventRecordPersisted } from '../../__tests__/command-helpers/assert-event-record-persisted';
+import { DummyCommandFsaFactory } from '../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { generateCommandFuzzTestCases } from '../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import { dummySystemUserId } from '../../__tests__/utilities/dummySystemUserId';
 import { dummyUuid } from '../../__tests__/utilities/dummyUuid';
 import CommandExecutionError from '../../shared/common-command-errors/CommandExecutionError';
 import ResourceIdAlreadyInUseError from '../../shared/common-command-errors/ResourceIdAlreadyInUseError';
@@ -46,6 +48,8 @@ const existingMediaItemId = `702096a0-c52f-488f-b5dc-22192e9aca3e`;
 const emptyInitialState = new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat();
 
 const dummyAdminUserId = dummyUuid;
+
+const fsaFactory = new DummyCommandFsaFactory(buildValidCommandFSA);
 
 describe('CreateMediaItem', () => {
     let testRepositoryProvider: TestRepositoryProvider;
@@ -96,7 +100,10 @@ describe('CreateMediaItem', () => {
             await assertCreateCommandSuccess(assertionHelperDependencies, {
                 systemUserId: dummyAdminUserId,
                 buildValidCommandFSA,
-                initialState: emptyInitialState,
+                seedInitialState: async () => {
+                    // nothing to seed
+                    Promise.resolve();
+                },
                 checkStateOnSuccess: async ({
                     aggregateCompositeIdentifier: { id },
                 }: CreateMediaItem) => {
@@ -224,5 +231,30 @@ describe('CreateMediaItem', () => {
                 });
             }
         );
+    });
+
+    describe(`when there a length milliseconds is specified for a media item that is not audio or video`, () => {
+        it(`should fail with the expected error`, async () => {
+            await assertCreateCommandError(assertionHelperDependencies, {
+                systemUserId: dummySystemUserId,
+                seedInitialState: async () => {
+                    // nothing to add
+                    Promise.resolve();
+                },
+                buildCommandFSA: (id) =>
+                    fsaFactory.build(id, {
+                        lengthMilliseconds: 1234,
+                        /**
+                         * Note that we test this comprehensively across
+                         * inconsistent MIME Types in the unit test for
+                         * `MediaItem.validateInvariants`. We also check
+                         * the errors in detail there. We prefer not to duplicate
+                         * that test coverage here as this test leverages the
+                         * network.
+                         */
+                        mimeType: MIMEType.png,
+                    }),
+            });
+        });
     });
 });

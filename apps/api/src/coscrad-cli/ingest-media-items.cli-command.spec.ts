@@ -1,4 +1,5 @@
 import { CommandModule } from '@coscrad/commands';
+import { isFiniteNumber, isNumberWithinRange } from '@coscrad/validation-constraints';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { existsSync, mkdirSync } from 'fs';
@@ -9,6 +10,7 @@ import buildConfigFilePath from '../app/config/buildConfigFilePath';
 import { Environment } from '../app/config/constants/Environment';
 import { MediaItemModule } from '../app/domain-modules/media-item.module';
 import { CoscradEventFactory, EventModule } from '../domain/common';
+import { MediaItem } from '../domain/models/media-item/entities/media-item.entity';
 import { validAggregateOrThrow } from '../domain/models/shared/functional';
 import { AggregateType } from '../domain/types/AggregateType';
 import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
@@ -79,10 +81,6 @@ describe(`CLI Command: **data-restore**`, () => {
             ],
         }).compile();
 
-        // createTestModule({
-        //     ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
-        // });
-
         await testAppModule.init();
 
         const dynamicDataTypeFinderService = testAppModule.get(DynamicDataTypeFinderService);
@@ -126,12 +124,36 @@ describe(`CLI Command: **data-restore**`, () => {
             const expectedNumberOfResults = 3;
 
             const searchResult = await testRepositoryProvider
-                .forResource(AggregateType.mediaItem)
+                .forResource<MediaItem>(AggregateType.mediaItem)
                 .fetchMany();
 
             const mediaItems = searchResult.filter(validAggregateOrThrow);
 
             expect(mediaItems).toHaveLength(expectedNumberOfResults);
+
+            const testMp3FileName = `biodynamic-theme-song-forever`;
+
+            const testMp3MediaItem = mediaItems.find((mediaItem) =>
+                mediaItem.getFilePath().toLowerCase().includes(testMp3FileName.toLowerCase())
+            );
+
+            expect(testMp3MediaItem).toBeInstanceOf(MediaItem);
+
+            const { lengthMilliseconds } = testMp3MediaItem;
+
+            const tolerance = 0.1; // ms = 0.0001 s
+
+            const actualMediaItemLength = 8.35916 * 1000; // ms, determined with Audacity
+
+            const lengthToCompare = isFiniteNumber(lengthMilliseconds) ? lengthMilliseconds : -1;
+
+            const isMp3LengthWithinTolerance = isNumberWithinRange(lengthToCompare, [
+                actualMediaItemLength - tolerance,
+                actualMediaItemLength + tolerance,
+            ]);
+
+            // TODO Is there a Jest matcher for this? It'd be nice to see the value when it fails.
+            expect(isMp3LengthWithinTolerance).toBe(true);
         }, 60000); // timeout of 60s
     });
 

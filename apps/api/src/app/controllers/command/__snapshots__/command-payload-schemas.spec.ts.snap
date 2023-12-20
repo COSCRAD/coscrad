@@ -37,6 +37,13 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
         },
       },
+      "lengthMilliseconds": {
+        "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+        "description": "the length of the media item in milliseconds (audio or video only)",
+        "isArray": false,
+        "isOptional": true,
+        "label": "length (ms)",
+      },
       "mimeType": {
         "complexDataType": "ENUM",
         "description": "technical specification of the type of media item",

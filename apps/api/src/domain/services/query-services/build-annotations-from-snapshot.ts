@@ -43,7 +43,7 @@ export const buildAnnotationsFromSnapshot = (state: DeluxeInMemoryStore): IMedia
             const MILLISECONDS_PER_SECOND = 1000;
 
             return {
-                // TODO Use math lib
+                // TODO[]https://www.pivotaltracker.com/story/show/186713518 Use math lib
                 inPointSeconds: inPointMilliseconds / MILLISECONDS_PER_SECOND,
                 outPointSeconds: outPointMilliseconds / MILLISECONDS_PER_SECOND,
                 name: `TODO Generate sequence number- {aggregateType}-{mediaItemId}-{timeOrderedSequenceNumber}`,
