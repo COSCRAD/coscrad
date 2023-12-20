@@ -26,7 +26,7 @@ import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummyUuid } from '../../../__tests__/utilities/dummyUuid';
 import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
-import { AudioItem } from '../../entities/audio-item.entity';
+import { AudioItem, isAudioMimeType } from '../../entities/audio-item.entity';
 import { CreateAudioItem } from './create-audio-item.command';
 
 const commandType = 'CREATE_AUDIO_ITEM';
@@ -200,6 +200,16 @@ describe('CREATE_AUDIO_ITEM', () => {
                                 [AggregateType.mediaItem]: [
                                     existingMediaItem.clone({
                                         mimeType,
+                                        /**
+                                         * It's unfortunate that this mimics the
+                                         * implementation a bit. But it's necessary
+                                         * to avoid invariant validation errors
+                                         * as an audio item with an image MIME Type
+                                         * cannot have a `lengthMilliseconds`.
+                                         */
+                                        lengthMilliseconds: isAudioMimeType(mimeType)
+                                            ? 12345
+                                            : undefined,
                                     }),
                                 ],
                             }).fetchFullSnapshotInLegacyFormat(),

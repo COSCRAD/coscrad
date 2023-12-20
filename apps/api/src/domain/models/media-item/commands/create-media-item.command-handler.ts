@@ -1,5 +1,4 @@
 import { CommandHandler } from '@coscrad/commands';
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
@@ -34,7 +33,14 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
             mimeType: mimeType,
             // You must execute `PUBLISH_MEDIA_ITEM` to publish
             published: false,
-            lengthMilliseconds: isNullOrUndefined(lengthMilliseconds) ? 0 : lengthMilliseconds,
+            /**
+             * TODO Make this required for an audio or video. Eventually we may
+             * want to populate this by injecting the media prober into this
+             * command handler. It is ok to cache it on the event \ model
+             * because as a rule a media item's length is immutable and is a
+             * core part of its identity within our system.
+             */
+            lengthMilliseconds,
         };
 
         return getInstanceFactoryForResource<MediaItem>(ResourceType.mediaItem)(createDto);

@@ -109,10 +109,6 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
                 // TODO[https://www.pivotaltracker.com/story/show/186713518] Use a math lib
                 const MILLISECONDS_PER_SECOND = 1000;
 
-                const lengthMilliseconds = isNullOrUndefined(lengthSeconds)
-                    ? undefined
-                    : lengthSeconds * MILLISECONDS_PER_SECOND;
-
                 return {
                     type: `CREATE_MEDIA_ITEM`,
                     payload: {
@@ -122,11 +118,14 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
                             id: generatedIds[index],
                         },
                         url: `${baseUrl}/${generatedIds[index]}`,
-                        // TODO Avoid magic number and use math lib
-                        lengthMilliseconds,
                         rawData: {
                             filename,
                         },
+                        ...(isNullOrUndefined(lengthSeconds)
+                            ? {}
+                            : {
+                                  lengthMilliseconds: lengthSeconds * MILLISECONDS_PER_SECOND,
+                              }),
                     } as const,
                 };
             }
@@ -144,9 +143,7 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
             });
 
             if (isInternalError(result)) {
-                const message = `failed to import media atimportimport clonePlainObjectWithoutProperty from '../lib/utilities/clonePlainObjectWithoutProperty';
- { clonePlainObjectWithoutProperties } from '../lib/utilities/clonePlainObjectWithoutProperties';
- first invalid request`;
+                const message = `failed to import media at first invalid request`;
 
                 const topLevelError = new InternalError(message, [result]);
 
