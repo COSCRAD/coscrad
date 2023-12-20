@@ -1,8 +1,12 @@
-import { CommandHandler, ICommand } from '@coscrad/commands';
+import { AggregateType } from '@coscrad/api-interfaces';
+import { CommandHandler } from '@coscrad/commands';
 import { Valid } from '../../../../../domain/domainModelValidators/Valid';
-import { InMemorySnapshot } from '../../../../../domain/types/ResourceType';
-import { InternalError } from '../../../../../lib/errors/InternalError';
+import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
+import { InMemorySnapshot, ResourceType } from '../../../../../domain/types/ResourceType';
+import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
+import { isNotFound } from '../../../../../lib/types/not-found';
 import { ResultOrError } from '../../../../../types/ResultOrError';
+import { AudioItem } from '../../../audio-item/entities/audio-item.entity';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent, IEventPayload } from '../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
@@ -16,17 +20,43 @@ export class AddAudioForDigitalTextPageCommandHandler extends BaseUpdateCommandH
         digitalText: DigitalText,
         { audioItemId, pageIdentifier, languageCode }: AddAudioForDigitalTextPage
     ): ResultOrError<DigitalText> {
+        /**
+         * It's easy to mix up the audio item ID and the page identifier in this
+         * API. Maybe the update method should take an object.
+         */
         const updatedInstance = digitalText.addAudioForPage(
-            audioItemId,
             pageIdentifier,
+            audioItemId,
             languageCode
         );
 
         return updatedInstance;
     }
 
-    protected fetchRequiredExternalState(_: ICommand): Promise<InMemorySnapshot> {
-        return;
+    protected async fetchRequiredExternalState({
+        audioItemId,
+    }: AddAudioForDigitalTextPage): Promise<InMemorySnapshot> {
+        const audioItemSearchResult = await this.repositoryProvider
+            .forResource<AudioItem>(ResourceType.audioItem)
+            // use `fetchById` to avoid sending all audio items from database
+            .fetchById(audioItemId);
+
+        if (isInternalError(audioItemSearchResult)) {
+            throw new InternalError(
+                `Encountered an invalid existing audio item when attempting to add audio to a digital text page`,
+                [audioItemSearchResult]
+            );
+        }
+
+        // no external state required
+        return Promise.resolve(
+            new DeluxeInMemoryStore({
+                // we send back just the target audio item if it is found for efficiency
+                [AggregateType.audioItem]: isNotFound(audioItemSearchResult)
+                    ? []
+                    : [audioItemSearchResult],
+            }).fetchFullSnapshotInLegacyFormat()
+        );
     }
 
     protected validateExternalState(

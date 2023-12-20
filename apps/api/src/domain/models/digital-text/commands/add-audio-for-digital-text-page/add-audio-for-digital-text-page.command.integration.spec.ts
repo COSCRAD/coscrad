@@ -1,8 +1,9 @@
-import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode, ResourceType } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { CommandFSA } from '../../../../../app/controllers/command/command-fsa/command-fsa.entity';
+import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
 import { clonePlainObjectWithOverrides } from '../../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
@@ -14,7 +15,10 @@ import { TestEventStream } from '../../../../../test-data/events';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
+import { DigitalText } from '../../entities';
+import DigitalTextPage from '../../entities/digital-text-page.entity';
 import { ContentAddedToDigitalTextPage } from '../add-content-to-digital-text-page';
 import { PageAddedToDigitalText } from '../add-page-to-digital-text/page-added-to-digital-text.event';
 import { DigitalTextCreated } from '../digital-text-created.event';
@@ -28,6 +32,12 @@ const dummyFsa = buildTestCommandFsaMap().get(
 ) as CommandFSA<AddAudioForDigitalTextPage>;
 
 const languageCode = LanguageCode.Chilcotin;
+
+const audioItemId = buildDummyUuid(123);
+
+const existingAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem).clone({
+    id: audioItemId,
+});
 
 const existingPageIdentifier = `4`;
 
@@ -44,6 +54,7 @@ const commandFsaFactory = new DummyCommandFsaFactory<AddAudioForDigitalTextPage>
             aggregateCompositeIdentifier,
             languageCode,
             pageIdentifier: existingPageIdentifier,
+            audioItemId,
         },
     })
 );
@@ -115,6 +126,12 @@ describe(commandType, () => {
             await assertCommandSuccess(commandAssertionDependencies, {
                 systemUserId: dummySystemUserId,
                 seedInitialState: async () => {
+                    // add the snapshot based audio item
+                    await testRepositoryProvider
+                        .forResource(ResourceType.audioItem)
+                        .create(existingAudioItem);
+
+                    // add the event-sourced digital text
                     await app.get(ArangoEventRepository).appendEvents(eventHistory);
                 },
                 buildValidCommandFSA: () =>
@@ -123,6 +140,21 @@ describe(commandType, () => {
                             id: digitalTextId,
                         },
                     }),
+                checkStateOnSuccess: async () => {
+                    const searchResult = await testRepositoryProvider
+                        .forResource(ResourceType.digitalText)
+                        .fetchById(digitalTextId);
+
+                    expect(searchResult).toBeInstanceOf(DigitalText);
+
+                    const updatedDigitalText = searchResult as DigitalText;
+
+                    const foundAudioItemId = (
+                        updatedDigitalText.getPage(existingPageIdentifier) as DigitalTextPage
+                    ).getAudioIn(languageCode);
+
+                    expect(foundAudioItemId).toBe(audioItemId);
+                },
             });
         });
     });
