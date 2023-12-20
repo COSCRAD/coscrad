@@ -121,6 +121,7 @@
         "@testing-library/react": "^13.4.0",
         "@testing-library/react-native": "11.5.2",
         "@types/detox": "^18.1.0",
+        "@types/fluent-ffmpeg": "^2.1.24",
         "@types/jest": "29.4.4",
         "@types/leaflet": "^1.9.0",
         "@types/node": "18.11.18",
