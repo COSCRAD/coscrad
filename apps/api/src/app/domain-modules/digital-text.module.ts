@@ -2,8 +2,11 @@ import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
 import { CoscradEventFactory } from '../../domain/common';
 import {
+    AddAudioForDigitalTextPage,
+    AddAudioForDigitalTextPageCommandHandler,
     AddPageToDigitalText,
     AddPageToDigitalTextCommandHandler,
+    AudioAddedForDigitalTextPage,
     DigitalTextPageContentTranslated,
     PageAddedToDigitalText,
     TranslateDigitalTextPageContent,
@@ -35,7 +38,9 @@ import { DigitalTextQueryController } from '../controllers/resources/digital-tex
         CreateDigitalTextCommandHandler,
         AddPageToDigitalTextCommandHandler,
         AddContentToDigitalTextPageCommandHandler,
+        AddAudioForDigitalTextPageCommandHandler,
         DigitalTextQueryService,
+
         ...[
             // Domain Model
             DigitalText,
@@ -44,11 +49,13 @@ import { DigitalTextQueryController } from '../controllers/resources/digital-tex
             AddPageToDigitalText,
             AddContentToDigitalTextPage,
             TranslateDigitalTextPageContent,
+            AddAudioForDigitalTextPage,
             // Events
             DigitalTextCreated,
             PageAddedToDigitalText,
             ContentAddedToDigitalTextPage,
             DigitalTextPageContentTranslated,
+            AudioAddedForDigitalTextPage,
         ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,

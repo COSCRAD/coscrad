@@ -15,6 +15,7 @@ import { DigitalText, PageIdentifier } from '../../domain/models/digital-text/en
 import DigitalTextPage from '../../domain/models/digital-text/entities/digital-text-page.entity';
 import { AccessControlList } from '../../domain/models/shared/access-control/access-control-list.entity';
 import { ResourceReadAccessGrantedToUserPayload } from '../../domain/models/shared/common-commands';
+import { MultilingualAudio } from '../../domain/models/shared/multilingual-audio/multilingual-audio.entity';
 import { TagCreated } from '../../domain/models/tag/commands/create-tag/tag-created.event';
 import { ResourceOrNoteTaggedPayload } from '../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
 import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
@@ -156,6 +157,7 @@ export class DigitalTextViewModel
                         ? new DigitalTextPage({
                               identifier: pageIdentifier,
                               content: buildMultilingualTextWithSingleItem(text, languageCode),
+                              audio: new MultilingualAudio({ items: [] }),
                           })
                         : page
                 );
@@ -281,6 +283,7 @@ export class DigitalTextViewModel
             ...this.pages,
             new DigitalTextPage({
                 identifier: pageIdentifier,
+                audio: new MultilingualAudio({ items: [] }),
             }),
         ].sort((a, b) => a.identifier.localeCompare(b.identifier));
 

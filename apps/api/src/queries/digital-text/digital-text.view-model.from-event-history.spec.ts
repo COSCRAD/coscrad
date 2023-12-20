@@ -176,7 +176,7 @@ describe(`DigitalTextViewModel.fromEventHistory`, () => {
                 expect(result.pages).toHaveLength(1);
             });
 
-            describe.only(`when content has been added for a page`, () => {
+            describe(`when content has been added for a page`, () => {
                 const eventHistory = contentAddedToDigitalTextPage.as(aggregateCompositeIdentifier);
 
                 const result = new DigitalTextViewModel(digitalTextId).applyStream(eventHistory);
@@ -195,6 +195,9 @@ describe(`DigitalTextViewModel.fromEventHistory`, () => {
 
                 expect(languageCode).toBe(languageCodeForTextContent);
             });
+
+            // TODO when content has been translated for a page
+            // TODO when audio has been added to a page
         });
     });
 
