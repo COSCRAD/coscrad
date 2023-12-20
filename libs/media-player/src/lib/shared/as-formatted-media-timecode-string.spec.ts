@@ -13,6 +13,12 @@ const ninetynineHoursInSecondsPlusOne = 99 * 60 * 60 + 1;
 
 const invalidNegativeNumber = -23.88;
 
+const invalidInfiniteNumber = Infinity;
+
+const invalidNegativeInfiniteNumber = -Infinity;
+
+const invalidNaN = Number.NaN;
+
 describe(`asFormattedMediaTimecodeString`, () => {
     describe(`when the inputed number is a valid long time`, () => {
         it('should return a valid timecode string', () => {
@@ -34,6 +40,45 @@ describe(`asFormattedMediaTimecodeString`, () => {
         it('should throw an error', () => {
             expect(() => {
                 asFormattedMediaTimecodeString(invalidNegativeNumber);
+            }).toThrow(
+                [
+                    'timeInSeconds must be a non-negative finite number',
+                    'representing a duration of less than 99 hours',
+                ].join(' ')
+            );
+        });
+    });
+
+    describe(`when the inputted number is infinity`, () => {
+        it('should throw an error', () => {
+            expect(() => {
+                asFormattedMediaTimecodeString(invalidInfiniteNumber);
+            }).toThrow(
+                [
+                    'timeInSeconds must be a non-negative finite number',
+                    'representing a duration of less than 99 hours',
+                ].join(' ')
+            );
+        });
+    });
+
+    describe(`when the inputted number is negative infinity`, () => {
+        it('should throw an error', () => {
+            expect(() => {
+                asFormattedMediaTimecodeString(invalidNegativeInfiniteNumber);
+            }).toThrow(
+                [
+                    'timeInSeconds must be a non-negative finite number',
+                    'representing a duration of less than 99 hours',
+                ].join(' ')
+            );
+        });
+    });
+
+    describe(`when the inputted value is NaN`, () => {
+        it('should throw an error', () => {
+            expect(() => {
+                asFormattedMediaTimecodeString(invalidNaN);
             }).toThrow(
                 [
                     'timeInSeconds must be a non-negative finite number',

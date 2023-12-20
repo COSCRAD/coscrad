@@ -1,6 +1,6 @@
 import { Box, styled } from '@mui/material';
 
-export type TimeRangeVisualState = 'inPointSelected' | 'timeRangeSelected' | null;
+export type TimeRangeVisualState = 'inPointOnly' | 'fullSelection' | 'noSelection';
 
 const Bar = styled(Box)({
     height: '20px',

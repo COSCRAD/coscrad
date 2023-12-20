@@ -308,7 +308,7 @@ describe('<AudioAnnotator />', () => {
             });
 
             describe(`when the scrub backward keyboard shortcut is pressed twice`, () => {
-                it.only('should decrement the player currentTime', () => {
+                it('should decrement the player currentTime', () => {
                     const currentTimeStart = 8.0;
 
                     cy.get('audio').then(([audioElement]) => {
