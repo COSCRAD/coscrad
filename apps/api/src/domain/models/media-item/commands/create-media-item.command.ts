@@ -5,6 +5,7 @@ import {
     MIMEType,
     NestedDataType,
     NonEmptyString,
+    NonNegativeFiniteNumber,
     RawDataObject,
     URL,
     UUID,
@@ -94,5 +95,11 @@ export class CreateMediaItem implements ICommandBase {
     })
     readonly rawData?: Record<string, unknown>;
 
-    // The length will be registered later
+    @NonNegativeFiniteNumber({
+        label: 'length (ms)',
+        description: 'the length of the media item in milliseconds (audio or video only)',
+        isOptional: true,
+    })
+    // this only is specified when the MIMEType is for an `Audio Item` or `Video`.
+    readonly lengthMilliseconds?: number;
 }

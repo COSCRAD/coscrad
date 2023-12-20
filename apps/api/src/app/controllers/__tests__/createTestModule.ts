@@ -180,7 +180,7 @@ import { BookQueryService } from '../../../domain/services/query-services/book-q
 import { CoscradUserGroupQueryService } from '../../../domain/services/query-services/coscrad-user-group-query.service';
 import { CoscradUserQueryService } from '../../../domain/services/query-services/coscrad-user-query.service';
 import { EdgeConnectionQueryService } from '../../../domain/services/query-services/edge-connection-query.service';
-import { MediaItemQueryService } from '../../../domain/services/query-services/media-item-query.service';
+import { MediaItemQueryService } from '../../../domain/services/query-services/media-management/media-item-query.service';
 import { PhotographQueryService } from '../../../domain/services/query-services/photograph-query.service';
 import { PlaylistQueryService } from '../../../domain/services/query-services/playlist-query.service';
 import { SongQueryService } from '../../../domain/services/query-services/song-query.service';
