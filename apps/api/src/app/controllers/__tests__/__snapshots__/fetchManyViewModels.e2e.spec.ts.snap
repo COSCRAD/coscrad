@@ -1320,6 +1320,7 @@ exports[`When fetching multiple resources GET /resources/photographs when all of
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
+      "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png",
       "name": {
         "items": [
           {
@@ -1335,6 +1336,7 @@ exports[`When fetching multiple resources GET /resources/photographs when all of
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png",
       "name": {
         "items": [
           {
@@ -1350,6 +1352,7 @@ exports[`When fetching multiple resources GET /resources/photographs when all of
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+      "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png",
       "name": {
         "items": [
           {
@@ -1373,6 +1376,7 @@ exports[`When fetching multiple resources GET /resources/photographs when some o
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
+      "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png",
       "name": {
         "items": [
           {
@@ -1388,6 +1392,7 @@ exports[`When fetching multiple resources GET /resources/photographs when some o
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png",
       "name": {
         "items": [
           {
@@ -1403,6 +1408,7 @@ exports[`When fetching multiple resources GET /resources/photographs when some o
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+      "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png",
       "name": {
         "items": [
           {
