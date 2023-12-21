@@ -34,7 +34,7 @@ describe(`MediaItem.validateInvariants`, () => {
         });
     });
 
-    // TODO Do we inclue videos?
+    // TODO[https://www.pivotaltracker.com/story/show/186725983] support video dimensions
     describe(`when dimensions are provided for a media item not of type photograph`, () => {
         Object.values(MIMEType)
             .filter((mimeType) => ![MIMEType.png].includes(mimeType))

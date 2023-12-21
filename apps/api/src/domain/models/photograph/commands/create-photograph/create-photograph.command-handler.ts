@@ -7,10 +7,10 @@ import { InMemorySnapshot } from '../../../../../domain/types/ResourceType';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { ResultOrError } from '../../../../../types/ResultOrError';
+import { MediaItemDimensions } from '../../../media-item/entities/media-item-dimensions';
 import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent, IEventPayload } from '../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
-import PhotographDimensions from '../../entities/PhotographDimensions';
 import { Photograph } from '../../entities/photograph.entity';
 import { CreatePhotograph } from './create-photograph.command';
 import { PhotographCreated } from './photograph-created.event';
@@ -31,7 +31,7 @@ export class CreatePhotographCommandHandler extends BaseCreateCommandHandler<Pho
             id,
             title: buildMultilingualTextWithSingleItem(titleText, languageCodeForTitle),
             mediaItemId,
-            dimensions: new PhotographDimensions({
+            dimensions: new MediaItemDimensions({
                 heightPx,
                 widthPx,
             }),

@@ -144,8 +144,8 @@ describe('CreateMediaItem', () => {
                     buildValidCommandFSA: (id) =>
                         fsaFactory.build(id, {
                             mimeType: MIMEType.png,
-                            heightPx: 1200,
-                            widthPx: 800,
+                            heightPx,
+                            widthPx,
                         }),
                     seedInitialState: async () => {
                         // no necessary state

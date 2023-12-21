@@ -35,5 +35,5 @@ describe(`FSMediaProber.probe`, () => {
         });
     });
 
-    // TODO add test for audio and video duration
+    // TODO[https://www.pivotaltracker.com/story/show/186726351] add test for audio and video duration
 });

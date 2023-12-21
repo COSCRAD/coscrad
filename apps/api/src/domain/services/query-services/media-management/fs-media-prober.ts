@@ -3,22 +3,12 @@ import * as ffmpeg from 'fluent-ffmpeg';
 import { promisify } from 'util';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound, isNotFound } from '../../../../lib/types/not-found';
+import { MediaItemDimensions } from '../../../models/media-item/entities/media-item-dimensions';
 import { IMediaProber, RawMediaInfo } from './media-prober.interface';
-
-/**
- * TODO Consider making this a nested entity with type decorators and behaviour.
- * If so, leverage this in `Photograph` class.
- */
-export type PhotographDimensions = {
-    heightPx: number;
-    widthPx: number;
-};
 
 const ffprobe = promisify<string, ffmpeg.FfprobeData>(ffmpeg.ffprobe);
 
-const parsePhotographDimensions = ({
-    streams,
-}: ffmpeg.FfprobeData): Maybe<PhotographDimensions> => {
+const parseMediaItemDimensions = ({ streams }: ffmpeg.FfprobeData): Maybe<MediaItemDimensions> => {
     if (streams.length === 0) return NotFound;
 
     const {
@@ -36,10 +26,10 @@ const parsePhotographDimensions = ({
         return NotFound;
     }
 
-    return {
+    return new MediaItemDimensions({
         heightPx: codedHeight,
         widthPx: codedWidth,
-    };
+    });
 };
 
 const parseDuration = ({ streams }: ffmpeg.FfprobeData): Maybe<number> => {
@@ -68,7 +58,7 @@ export class FsMediaProber implements IMediaProber {
 
         // TODO Be sure the 0th stream is always the one we want
 
-        const dimensions = parsePhotographDimensions(ffprobeResult);
+        const dimensions = parseMediaItemDimensions(ffprobeResult);
 
         const durationSeconds = parseDuration(ffprobeResult);
 

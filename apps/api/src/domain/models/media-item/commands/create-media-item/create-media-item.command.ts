@@ -109,7 +109,7 @@ export class CreateMediaItem implements ICommandBase {
         isOptional: true,
     })
     // this only is specified with the MIMEType is for a `Photograph`
-    // what about video?
+    // TODO[https://www.pivotaltracker.com/story/show/186725983 support video
     readonly heightPx?: number;
 
     @NonNegativeFiniteNumber({
@@ -118,6 +118,6 @@ export class CreateMediaItem implements ICommandBase {
         isOptional: true,
     })
     // this only is specified with the MIMEType is for a `Photograph`
-    // what about video?
+    // TODO[https://www.pivotaltracker.com/story/show/186725983 support video
     readonly widthPx?: number;
 }
