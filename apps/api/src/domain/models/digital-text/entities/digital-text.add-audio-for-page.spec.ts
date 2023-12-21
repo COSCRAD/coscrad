@@ -5,7 +5,7 @@ import { buildMultilingualTextWithSingleItem } from '../../../common/build-multi
 import { AggregateType } from '../../../types/AggregateType';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
-import { MissingPageError } from '../errors';
+import { CannotAddAudioForMissingContentError, MissingPageError } from '../errors';
 import { CannotOverrideAudioForPageError } from '../errors/cannot-override-audio-for-page.error';
 import DigitalTextPage from './digital-text-page.entity';
 import { DigitalText } from './digital-text.entity';
@@ -13,6 +13,10 @@ import { DigitalText } from './digital-text.entity';
 const targetPageIdentifier = 'X';
 
 const originalLanguageCode = LanguageCode.Chilcotin;
+
+const translationLanguageCode = LanguageCode.English;
+
+const missingContentLanguageCode = LanguageCode.English;
 
 const existingPageWithoutAudio = new DigitalTextPage({
     identifier: targetPageIdentifier,
@@ -30,25 +34,61 @@ const audioItemId = buildDummyUuid(444);
 
 describe(`DigitalText.addAudioForPage`, () => {
     describe(`when the update is valid`, () => {
-        it(`should return the updated page`, () => {
-            const result = digitalText.addAudioForPage(
-                existingPageWithoutAudio.identifier,
-                audioItemId,
-                originalLanguageCode
-            );
+        describe(`when there is original text only`, () => {
+            it(`should return the updated page`, () => {
+                const result = digitalText.addAudioForPage(
+                    existingPageWithoutAudio.identifier,
+                    audioItemId,
+                    originalLanguageCode
+                );
 
-            expect(result).toBeInstanceOf(DigitalText);
+                expect(result).toBeInstanceOf(DigitalText);
 
-            const updatedDigitalText = result as DigitalText;
+                const updatedDigitalText = result as DigitalText;
 
-            const pageSearchResult = updatedDigitalText.getPage(
-                targetPageIdentifier
-            ) as DigitalTextPage;
+                const pageSearchResult = updatedDigitalText.getPage(
+                    targetPageIdentifier
+                ) as DigitalTextPage;
 
-            const audioItemIdSearchResult =
-                pageSearchResult.audio.getIdForAudioIn(originalLanguageCode);
+                const audioItemIdSearchResult =
+                    pageSearchResult.audio.getIdForAudioIn(originalLanguageCode);
 
-            expect(audioItemIdSearchResult).toBe(audioItemId);
+                expect(audioItemIdSearchResult).toBe(audioItemId);
+            });
+        });
+
+        describe(`when translation text is the target`, () => {
+            const newAudioItemId = buildDummyUuid(467);
+
+            it(`should return the updated page`, () => {
+                const digitalTextWithTranslatedPage = digitalText.clone({
+                    pages: [
+                        existingPageWithoutAudio.translateContent(
+                            'this is the translation of page content',
+                            translationLanguageCode
+                        ) as DigitalTextPage,
+                    ],
+                });
+
+                const result = digitalTextWithTranslatedPage.addAudioForPage(
+                    existingPageWithoutAudio.identifier,
+                    newAudioItemId,
+                    translationLanguageCode
+                );
+
+                expect(result).toBeInstanceOf(DigitalText);
+
+                const updatedDigitalText = result as DigitalText;
+
+                const pageSearchResult = updatedDigitalText.getPage(
+                    targetPageIdentifier
+                ) as DigitalTextPage;
+
+                const audioItemIdSearchResult =
+                    pageSearchResult.audio.getIdForAudioIn(translationLanguageCode);
+
+                expect(audioItemIdSearchResult).toBe(newAudioItemId);
+            });
         });
     });
 
@@ -89,6 +129,25 @@ describe(`DigitalText.addAudioForPage`, () => {
                         targetPageIdentifier,
                         audioItemId,
                         existingAudioItemId
+                    )
+                );
+            });
+        });
+
+        describe(`when the page content has not been translated into the given language`, () => {
+            it(`should return the expected error`, () => {
+                const result = digitalText.addAudioForPage(
+                    targetPageIdentifier,
+                    audioItemId,
+                    missingContentLanguageCode
+                );
+
+                assertErrorAsExpected(
+                    result,
+                    new CannotAddAudioForMissingContentError(
+                        targetPageIdentifier,
+                        audioItemId,
+                        missingContentLanguageCode
                     )
                 );
             });

@@ -11,6 +11,7 @@ import { AggregateId } from '../../../types/AggregateId';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../BaseDomainModel';
 import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
+import { CannotAddAudioForMissingContentError } from '../errors';
 import { CannotOverwritePageContentError } from '../errors/cannot-overwrite-page-content.error';
 import { PageIdentifier } from './types/page-identifier';
 
@@ -86,6 +87,12 @@ export default class DigitalTextPage extends BaseDomainModel implements IDigital
         return !isNullOrUndefined(this.content);
     }
 
+    hasContentIn(languageCode: LanguageCode): boolean {
+        if (!this.hasContent()) return false;
+
+        return this.content.has(languageCode);
+    }
+
     getContent(): Maybe<MultilingualText> {
         if (!this.hasContent()) return NotFound;
 
@@ -105,6 +112,14 @@ export default class DigitalTextPage extends BaseDomainModel implements IDigital
     }
 
     addAudio(audioItemId: AggregateId, languageCode: LanguageCode) {
+        if (!this.hasContentIn(languageCode)) {
+            return new CannotAddAudioForMissingContentError(
+                this.identifier,
+                audioItemId,
+                languageCode
+            );
+        }
+
         const updatedAudio = this.audio.addAudio(audioItemId, languageCode) as MultilingualAudio;
 
         return this.clone<DigitalTextPage>({

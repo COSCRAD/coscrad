@@ -224,10 +224,12 @@ export class DigitalText extends Resource {
             );
         }
 
-        const updatedPage = pageToUpdate.addAudio(audioItemId, languageCode) as DigitalTextPage;
+        const pageUpdateResult = pageToUpdate.addAudio(audioItemId, languageCode);
+
+        if (isInternalError(pageUpdateResult)) return pageUpdateResult;
 
         const updatedPages = this.pages.map((page) =>
-            page.identifier === updatedPage.identifier ? updatedPage : page
+            page.identifier === pageUpdateResult.identifier ? pageUpdateResult : page
         );
 
         const updatedDigitalText = this.safeClone<DigitalText>({
