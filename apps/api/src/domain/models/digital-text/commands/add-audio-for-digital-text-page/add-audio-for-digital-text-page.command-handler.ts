@@ -20,10 +20,6 @@ export class AddAudioForDigitalTextPageCommandHandler extends BaseUpdateCommandH
         digitalText: DigitalText,
         { audioItemId, pageIdentifier, languageCode }: AddAudioForDigitalTextPage
     ): ResultOrError<DigitalText> {
-        /**
-         * It's easy to mix up the audio item ID and the page identifier in this
-         * API. Maybe the update method should take an object.
-         */
         const updatedInstance = digitalText.addAudioForPage(
             pageIdentifier,
             audioItemId,

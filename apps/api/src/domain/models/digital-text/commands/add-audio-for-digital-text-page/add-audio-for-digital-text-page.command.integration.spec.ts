@@ -27,12 +27,13 @@ import DigitalTextPage from '../../entities/digital-text-page.entity';
 import { ContentAddedToDigitalTextPage } from '../add-content-to-digital-text-page';
 import { PageAddedToDigitalText } from '../add-page-to-digital-text/page-added-to-digital-text.event';
 import { DigitalTextCreated } from '../digital-text-created.event';
+import { DigitalTextPageContentTranslated } from '../translate-digital-text-page-content';
 import { AddAudioForDigitalTextPage } from './add-audio-for-digital-text-page.command';
 import { AudioAddedForDigitalTextPage } from './audio-added-for-digital-text-page.event';
 
 const commandType = 'ADD_AUDIO_FOR_DIGITAL_TEXT_PAGE';
 
-// TODO make this helper fail with a more useful message
+// TODO[https://github.com/COSCRAD/coscrad/pull/525#discussion_r1434258838] make this helper fail with a more useful message
 const dummyFsa = buildTestCommandFsaMap().get(
     commandType
 ) as CommandFSA<AddAudioForDigitalTextPage>;
@@ -40,6 +41,8 @@ const dummyFsa = buildTestCommandFsaMap().get(
 const languageCodeForContent = LanguageCode.Chilcotin;
 
 const languageCodeWithoutContent = LanguageCode.English;
+
+const translationLanguageCodeForContent = LanguageCode.Haida;
 
 const audioItemId = buildDummyUuid(123);
 
@@ -127,44 +130,123 @@ describe(commandType, () => {
             },
         });
 
-    describe(`when the command is valid`, () => {
-        it(`should succeed`, async () => {
-            const eventHistory = eventStreamForDigitalTextWithPageContent.as({
-                id: digitalTextId,
+    const eventStreamForDigitalTextWithTranslatedPageContent =
+        eventStreamForDigitalTextWithPageContent
+            // for good measure, we work with a digital text that already has audio for its original item
+            .andThen<AudioAddedForDigitalTextPage>({
+                type: `AUDIO_ADDED_FOR_DIGITAL_TEXT_PAGE`,
+                payload: {
+                    pageIdentifier: existingPageIdentifier,
+                    languageCode: languageCodeForContent,
+                },
+            })
+            .andThen<DigitalTextPageContentTranslated>({
+                type: `DIGITAL_TEXT_PAGE_CONTENT_TRANSLATED`,
+                payload: {
+                    pageIdentifier: existingPageIdentifier,
+                    languageCode: translationLanguageCodeForContent,
+                },
+            })
+            // An extra translation that won't receive audio
+            .andThen<DigitalTextPageContentTranslated>({
+                type: `DIGITAL_TEXT_PAGE_CONTENT_TRANSLATED`,
+                payload: {
+                    pageIdentifier: existingPageIdentifier,
+                    languageCode: LanguageCode.Chinook,
+                },
             });
 
-            await assertCommandSuccess(commandAssertionDependencies, {
-                systemUserId: dummySystemUserId,
-                seedInitialState: async () => {
-                    // add the snapshot based audio item
-                    await testRepositoryProvider
-                        .forResource(ResourceType.audioItem)
-                        .create(existingAudioItem);
+    describe(`when the command is valid`, () => {
+        describe(`when the audio is for the original text item`, () => {
+            it(`should succeed`, async () => {
+                const eventHistory = eventStreamForDigitalTextWithPageContent.as({
+                    id: digitalTextId,
+                });
 
-                    // add the event-sourced digital text
-                    await app.get(ArangoEventRepository).appendEvents(eventHistory);
-                },
-                buildValidCommandFSA: () =>
-                    commandFsaFactory.build(undefined, {
-                        aggregateCompositeIdentifier: {
-                            id: digitalTextId,
-                        },
-                    }),
-                checkStateOnSuccess: async () => {
-                    const searchResult = await testRepositoryProvider
-                        .forResource(ResourceType.digitalText)
-                        .fetchById(digitalTextId);
+                await assertCommandSuccess(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        // add the snapshot based audio item
+                        await testRepositoryProvider
+                            .forResource(ResourceType.audioItem)
+                            .create(existingAudioItem);
 
-                    expect(searchResult).toBeInstanceOf(DigitalText);
+                        // add the event-sourced digital text
+                        await app.get(ArangoEventRepository).appendEvents(eventHistory);
+                    },
+                    buildValidCommandFSA: () =>
+                        commandFsaFactory.build(undefined, {
+                            aggregateCompositeIdentifier: {
+                                id: digitalTextId,
+                            },
+                        }),
+                    checkStateOnSuccess: async () => {
+                        const searchResult = await testRepositoryProvider
+                            .forResource(ResourceType.digitalText)
+                            .fetchById(digitalTextId);
 
-                    const updatedDigitalText = searchResult as DigitalText;
+                        expect(searchResult).toBeInstanceOf(DigitalText);
 
-                    const foundAudioItemId = (
-                        updatedDigitalText.getPage(existingPageIdentifier) as DigitalTextPage
-                    ).getAudioIn(languageCodeForContent);
+                        const updatedDigitalText = searchResult as DigitalText;
 
-                    expect(foundAudioItemId).toBe(audioItemId);
-                },
+                        const foundAudioItemId = (
+                            updatedDigitalText.getPage(existingPageIdentifier) as DigitalTextPage
+                        ).getAudioIn(languageCodeForContent);
+
+                        expect(foundAudioItemId).toBe(audioItemId);
+                    },
+                });
+            });
+        });
+
+        describe(`when the audio is for a translated text item`, () => {
+            const audioIdForTranslatedContent = buildDummyUuid(920);
+
+            it(`should succeed`, async () => {
+                const eventHistory = eventStreamForDigitalTextWithTranslatedPageContent.as({
+                    id: digitalTextId,
+                });
+
+                await assertCommandSuccess(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        // add the snapshot based audio item
+                        await testRepositoryProvider
+                            .forResource(ResourceType.audioItem)
+                            .createMany([
+                                existingAudioItem,
+                                existingAudioItem.clone({
+                                    id: audioIdForTranslatedContent,
+                                }),
+                            ]);
+
+                        // add the event-sourced digital text
+                        await app.get(ArangoEventRepository).appendEvents(eventHistory);
+                    },
+                    buildValidCommandFSA: () =>
+                        commandFsaFactory.build(undefined, {
+                            aggregateCompositeIdentifier: {
+                                id: digitalTextId,
+                            },
+                            audioItemId: audioIdForTranslatedContent,
+                            languageCode: translationLanguageCodeForContent,
+                        }),
+                    checkStateOnSuccess: async () => {
+                        const searchResult = await testRepositoryProvider
+                            .forResource(ResourceType.digitalText)
+                            .fetchById(digitalTextId);
+
+                        expect(searchResult).toBeInstanceOf(DigitalText);
+
+                        const updatedDigitalText = searchResult as DigitalText;
+
+                        const foundAudioItemId = (
+                            updatedDigitalText.getPage(existingPageIdentifier) as DigitalTextPage
+                        ).getAudioIn(translationLanguageCodeForContent);
+
+                        expect(foundAudioItemId).toBe(audioIdForTranslatedContent);
+                    },
+                });
             });
         });
     });

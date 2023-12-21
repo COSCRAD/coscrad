@@ -127,6 +127,7 @@ describe(`DigitalText.addAudioForPage`, () => {
                     result,
                     new CannotOverrideAudioForPageError(
                         targetPageIdentifier,
+                        originalLanguageCode,
                         audioItemId,
                         existingAudioItemId
                     )

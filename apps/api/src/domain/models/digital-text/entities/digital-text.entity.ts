@@ -219,6 +219,7 @@ export class DigitalText extends Resource {
         if (pageToUpdate.hasAudioIn(languageCode)) {
             return new CannotOverrideAudioForPageError(
                 pageIdentifier,
+                languageCode,
                 audioItemId,
                 pageToUpdate.getAudioIn(languageCode) as AggregateId
             );
