@@ -19,13 +19,13 @@ import InvalidExternalReferenceByAggregateError from '../../categories/errors/In
 import { FreeMultilineContext } from '../../context/free-multiline-context/free-multiline-context.entity';
 import { PointContext } from '../../context/point-context/point-context.entity';
 import { Boundable2D } from '../../interfaces/Boundable2D';
+import { MediaItemDimensions } from '../../media-item/entities/media-item-dimensions';
 import { Resource } from '../../resource.entity';
 import idEquals from '../../shared/functional/idEquals';
 import { Position2D } from '../../spatial-feature/types/Coordinates/Position2D';
 import { InvalidMimeTypeForPhotographError } from '../errors';
-import PhotographDimensions from './PhotographDimensions';
 
-export const isMimeTypeAllowedForPhotograph = (mimeType: MIMEType): boolean =>
+export const isPhotographMimeType = (mimeType: MIMEType): boolean =>
     [
         // TODO add jpg and bmp
         MIMEType.png,
@@ -56,11 +56,11 @@ export class Photograph extends Resource implements Boundable2D {
     })
     readonly photographer: string;
 
-    @NestedDataType(PhotographDimensions, {
+    @NestedDataType(MediaItemDimensions, {
         label: 'dimensions',
         description: 'the height and width of the photograph in pixels',
     })
-    readonly dimensions: PhotographDimensions;
+    readonly dimensions: MediaItemDimensions;
 
     constructor(dto: DTO<Photograph>) {
         super({ ...dto, type: ResourceType.photograph });
@@ -73,7 +73,8 @@ export class Photograph extends Resource implements Boundable2D {
 
         this.photographer = photographer;
 
-        this.dimensions = new PhotographDimensions(dimensionsDTO);
+        // Is this a dupliate nested entity with MediaItemDimensions?
+        this.dimensions = new MediaItemDimensions(dimensionsDTO);
 
         this.title = new MultilingualText(title);
     }
@@ -113,7 +114,7 @@ export class Photograph extends Resource implements Boundable2D {
 
         const { mimeType } = myMediaItem;
 
-        if (!isMimeTypeAllowedForPhotograph(mimeType)) {
+        if (!isPhotographMimeType(mimeType)) {
             return new InvalidMimeTypeForPhotographError(mimeType);
         }
 
@@ -179,8 +180,8 @@ export class Photograph extends Resource implements Boundable2D {
      */
     getGeometricBounds(): [Position2D, Position2D] {
         return [
-            [0, this.dimensions.heightPX],
-            [0, this.dimensions.widthPX],
+            [0, this.dimensions.heightPx],
+            [0, this.dimensions.widthPx],
         ];
     }
 

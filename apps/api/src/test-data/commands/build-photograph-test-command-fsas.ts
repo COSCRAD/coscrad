@@ -16,7 +16,8 @@ const createPhotograph: CommandFSA<CreatePhotograph> = {
         languageCodeForTitle: LanguageCode.English,
         mediaItemId: buildDummyUuid(2),
         photographer: 'Jane Deer',
-        // TODO Add dimensions
+        heightPx: 1200,
+        widthPx: 600,
     },
 };
 

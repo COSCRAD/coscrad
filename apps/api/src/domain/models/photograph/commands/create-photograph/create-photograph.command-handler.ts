@@ -7,6 +7,7 @@ import { InMemorySnapshot } from '../../../../../domain/types/ResourceType';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { ResultOrError } from '../../../../../types/ResultOrError';
+import { MediaItemDimensions } from '../../../media-item/entities/media-item-dimensions';
 import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent, IEventPayload } from '../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
@@ -22,21 +23,18 @@ export class CreatePhotographCommandHandler extends BaseCreateCommandHandler<Pho
         languageCodeForTitle,
         mediaItemId,
         photographer,
+        heightPx,
+        widthPx,
     }: CreatePhotograph): ResultOrError<Photograph> {
         const newInstance = new Photograph({
             type: AggregateType.photograph,
             id,
             title: buildMultilingualTextWithSingleItem(titleText, languageCodeForTitle),
             mediaItemId,
-            /**
-             * TODO [https://github.com/COSCRAD/coscrad/pull/521#discussion_r1431743331]
-             *
-             * Allow the user to set the photograph's dimensions.
-             */
-            dimensions: {
-                heightPX: 0,
-                widthPX: 0,
-            },
+            dimensions: new MediaItemDimensions({
+                heightPx,
+                widthPx,
+            }),
             photographer,
             published: false,
         });

@@ -10,9 +10,9 @@ import {
     URL,
     UUID,
 } from '@coscrad/data-types';
-import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
-import { AggregateType } from '../../../types/AggregateType';
-import { AggregateTypeProperty } from '../../shared/common-commands';
+import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
+import { AggregateType } from '../../../../types/AggregateType';
+import { AggregateTypeProperty } from '../../../shared/common-commands';
 
 class MediaItemCompositeId {
     @AggregateTypeProperty([AggregateType.mediaItem])
@@ -102,4 +102,22 @@ export class CreateMediaItem implements ICommandBase {
     })
     // this only is specified when the MIMEType is for an `Audio Item` or `Video`.
     readonly lengthMilliseconds?: number;
+
+    @NonNegativeFiniteNumber({
+        label: 'height (px)',
+        description: 'the height of the media item in pixels',
+        isOptional: true,
+    })
+    // this only is specified with the MIMEType is for a `Photograph`
+    // TODO[https://www.pivotaltracker.com/story/show/186725983 support video
+    readonly heightPx?: number;
+
+    @NonNegativeFiniteNumber({
+        label: 'width (px)',
+        description: 'the width of the media item in pixels',
+        isOptional: true,
+    })
+    // this only is specified with the MIMEType is for a `Photograph`
+    // TODO[https://www.pivotaltracker.com/story/show/186725983 support video
+    readonly widthPx?: number;
 }

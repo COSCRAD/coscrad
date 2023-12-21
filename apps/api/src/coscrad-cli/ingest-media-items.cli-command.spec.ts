@@ -170,17 +170,27 @@ describe(`CLI Command: **data-restore**`, () => {
 
             expect(newVideos.length).toBe(1);
 
-            const newPhotograph = (await testRepositoryProvider
+            const newPhotographs = (await testRepositoryProvider
                 .forResource(AggregateType.photograph)
                 .fetchMany()) as Photograph[];
 
-            expect(newPhotograph.length).toBe(1);
+            expect(newPhotographs.length).toBe(1);
+
+            const newPhotograph = newPhotographs[0];
+
+            const expectedHeightPx = 1280;
+
+            const expectedWidthPx = 960;
+
+            expect(newPhotograph.dimensions.heightPx).toEqual(expectedHeightPx);
+
+            expect(newPhotograph.dimensions.widthPx).toEqual(expectedWidthPx);
         }, 60000); // timeout of 60s
     });
 
     /**
      * TODO[test coverage]:
-     * - Stres test
+     * - Stress test
      * - When the directory has nested directories
      * - when the directory has other file types
      *

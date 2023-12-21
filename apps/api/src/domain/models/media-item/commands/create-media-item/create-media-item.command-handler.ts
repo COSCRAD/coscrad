@@ -1,16 +1,18 @@
 import { CommandHandler } from '@coscrad/commands';
-import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
-import { DTO } from '../../../../types/DTO';
-import { ResultOrError } from '../../../../types/ResultOrError';
-import { Valid } from '../../../domainModelValidators/Valid';
-import getInstanceFactoryForResource from '../../../factories/getInstanceFactoryForResource';
-import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
-import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
-import { BaseCreateCommandHandler } from '../../shared/command-handlers/base-create-command-handler';
-import ResourceIdAlreadyInUseError from '../../shared/common-command-errors/ResourceIdAlreadyInUseError';
-import { EventRecordMetadata } from '../../shared/events/types/EventRecordMetadata';
-import idEquals from '../../shared/functional/idEquals';
-import { MediaItem } from '../entities/media-item.entity';
+import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
+import { DTO } from '../../../../../types/DTO';
+import { ResultOrError } from '../../../../../types/ResultOrError';
+import { Valid } from '../../../../domainModelValidators/Valid';
+import getInstanceFactoryForResource from '../../../../factories/getInstanceFactoryForResource';
+import { InMemorySnapshot, ResourceType } from '../../../../types/ResourceType';
+import buildInMemorySnapshot from '../../../../utilities/buildInMemorySnapshot';
+import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
+import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
+import ResourceIdAlreadyInUseError from '../../../shared/common-command-errors/ResourceIdAlreadyInUseError';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
+import idEquals from '../../../shared/functional/idEquals';
+import { MediaItemDimensions } from '../../entities/media-item-dimensions';
+import { MediaItem } from '../../entities/media-item.entity';
 import { CreateMediaItem } from './create-media-item.command';
 import { MediaItemCreated } from './media-item-created.event';
 
@@ -23,6 +25,8 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
             url,
             mimeType,
             lengthMilliseconds,
+            heightPx,
+            widthPx,
         } = command;
 
         const createDto: DTO<MediaItem> = {
@@ -41,6 +45,13 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
              * core part of its identity within our system.
              */
             lengthMilliseconds,
+            dimensions:
+                isNullOrUndefined(heightPx) && isNullOrUndefined(widthPx)
+                    ? undefined
+                    : new MediaItemDimensions({
+                          heightPx,
+                          widthPx,
+                      }),
         };
 
         return getInstanceFactoryForResource<MediaItem>(ResourceType.mediaItem)(createDto);

@@ -2,6 +2,7 @@ import { LanguageCode } from '@coscrad/api-interfaces';
 import {
     ExternalEnum,
     MIMEType,
+    NestedDataType,
     NonEmptyString,
     NonNegativeFiniteNumber,
     URL,
@@ -19,12 +20,14 @@ import { isAudioMimeType } from '../../audio-item/entities/audio-item.entity';
 import { isVideoMimeType } from '../../audio-item/entities/video.entity';
 import { TimeRangeContext } from '../../context/time-range-context/time-range-context.entity';
 import { ITimeBoundable } from '../../interfaces/ITimeBoundable';
+import { isPhotographMimeType } from '../../photograph/entities/photograph.entity';
 import { Resource } from '../../resource.entity';
 import validateTimeRangeContextForModel from '../../shared/contextValidators/validateTimeRangeContextForModel';
 import newInstance from '../../shared/functional/newInstance';
 import { ContributorAndRole } from '../../song/ContributorAndRole';
 import { InconsistentMediaItemPropertyError } from '../errors';
-import { getExtensionForMimeType } from './getExtensionForMimeType';
+import { getExtensionForMimeType } from './get-extension-for-mime-type';
+import { MediaItemDimensions } from './media-item-dimensions';
 
 @RegisterIndexScopedCommands(['CREATE_MEDIA_ITEM'])
 export class MediaItem extends Resource implements ITimeBoundable {
@@ -77,13 +80,27 @@ export class MediaItem extends Resource implements ITimeBoundable {
     // This only applies to audio and video files.
     readonly lengthMilliseconds?: number;
 
+    @NestedDataType(MediaItemDimensions, {
+        label: 'dimensions',
+        description: 'the width and height of the media item',
+        isOptional: true,
+    })
+    readonly dimensions?: MediaItemDimensions;
+
     constructor(dto: DTO<MediaItem>) {
         super(dto);
 
         // This should only happen within the validation flow
         if (!dto) return;
 
-        const { title, contributorAndRoles, url, mimeType, lengthMilliseconds } = dto;
+        const {
+            title,
+            contributorAndRoles,
+            url,
+            mimeType,
+            lengthMilliseconds,
+            dimensions: dimensionsDto,
+        } = dto;
 
         this.title = title;
 
@@ -96,6 +113,9 @@ export class MediaItem extends Resource implements ITimeBoundable {
         this.mimeType = mimeType;
 
         this.lengthMilliseconds = lengthMilliseconds;
+
+        if (!isNullOrUndefined(dimensionsDto))
+            this.dimensions = new MediaItemDimensions(dimensionsDto);
     }
 
     getName(): MultilingualText {
@@ -114,6 +134,10 @@ export class MediaItem extends Resource implements ITimeBoundable {
             !isNullOrUndefined(this.lengthMilliseconds)
         ) {
             return [new InconsistentMediaItemPropertyError(`lengthMilliseconds`, this.mimeType)];
+        }
+
+        if (!isPhotographMimeType(this.mimeType) && !isNullOrUndefined(this.dimensions)) {
+            return [new InconsistentMediaItemPropertyError('dimensions', this.mimeType)];
         }
 
         return [];
