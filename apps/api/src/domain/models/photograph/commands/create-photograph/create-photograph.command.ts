@@ -5,7 +5,13 @@ import {
     LanguageCode,
 } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { NestedDataType, NonEmptyString, ReferenceTo, UUID } from '@coscrad/data-types';
+import {
+    NestedDataType,
+    NonEmptyString,
+    NonNegativeFiniteNumber,
+    ReferenceTo,
+    UUID,
+} from '@coscrad/data-types';
 import { LanguageCodeEnum } from '../../../../../domain/common/entities/multilingual-text';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { AggregateTypeProperty } from '../../../shared/common-commands';
@@ -58,9 +64,15 @@ export class CreatePhotograph implements ICommandBase {
     })
     readonly photographer: string;
 
-    /**
-     * TODO [https://github.com/COSCRAD/coscrad/pull/521#discussion_r1431743331]
-     *
-     * Allow the user to set the photograph's dimensions.
-     */
+    @NonNegativeFiniteNumber({
+        label: `height (px)`,
+        description: `the height of the digital photograph in pixels`,
+    })
+    heightPx: number;
+
+    @NonNegativeFiniteNumber({
+        label: `width (px)`,
+        description: `the width of the digital photograph in pixels`,
+    })
+    widthPx: number;
 }

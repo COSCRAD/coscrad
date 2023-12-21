@@ -33,7 +33,7 @@ const dummyMediaItemId = buildDummyUuid(135);
 
 const testBinaryDataDirectoryPath = `__cli-command-test-inputs__/ingest-media-items/mediaItemsOnly`;
 
-const testPngFilePath = `${testBinaryDataDirectoryPath}/autumn.png`;
+const testPngFilePath = `${testBinaryDataDirectoryPath}/station.png`;
 
 // TODO make this directory name configurable
 const staticAssetsDir = `__static__`;

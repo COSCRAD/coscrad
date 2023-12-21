@@ -1,5 +1,5 @@
-import { CoscradEvent } from '../../../common';
-import { BaseEvent } from '../../shared/events/base-event.entity';
+import { CoscradEvent } from '../../../../common';
+import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { CreateMediaItem } from './create-media-item.command';
 
 const MEDIA_ITEM_CREATED = 'MEDIA_ITEM_CREATED';

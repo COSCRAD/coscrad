@@ -7,7 +7,10 @@ export const MEDIA_PROBER_TOKEN = `MEDIA_PROBER_TOKEN`;
  * properties that are required with the MIME Type.
  */
 export type RawMediaInfo = {
-    duration?: number;
+    durationSeconds?: number;
+    // TODO Consider leveraging `MediaItemDimensions` here
+    heightPx?: number;
+    widthPx?: number;
 };
 
 /**

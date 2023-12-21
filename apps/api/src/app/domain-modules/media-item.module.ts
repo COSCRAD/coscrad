@@ -1,7 +1,7 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
-import { CreateMediaItem } from '../../domain/models/media-item/commands/create-media-item.command';
-import { CreateMediaItemCommandHandler } from '../../domain/models/media-item/commands/create-media-item.command-handler';
+import { CreateMediaItem } from '../../domain/models/media-item/commands/create-media-item/create-media-item.command';
+import { CreateMediaItemCommandHandler } from '../../domain/models/media-item/commands/create-media-item/create-media-item.command-handler';
 import {
     FsMediaProber,
     MEDIA_PROBER_TOKEN,
