@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
+import config from './Config.json';
 
-interface AlphabetData {
+export interface AlphabetData {
     data: {
         name: string;
         name_english: string;
@@ -18,7 +19,8 @@ export function MenuScreen() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://10.0.2.2:3131/api/games/alphabet', {
+                //TODO use context api
+                const response = await fetch(config.apiUrl, {
                     mode: 'cors',
                 });
                 setAlphabetData(await response.json());
