@@ -2,7 +2,7 @@ import { isInteger, isNonNegativeFiniteNumber } from '@coscrad/validation-constr
 
 /**
  *
- * @param inputNumber non-negative finite number less than 100
+ * @param inputNumber non-negative integer less than 100
  * @returns string
  */
 

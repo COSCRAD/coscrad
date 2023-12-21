@@ -1,4 +1,4 @@
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { isNull, isNullOrUndefined } from '@coscrad/validation-constraints';
 import {
     ArrowLeft as ArrowLeftIcon,
     ArrowRight as ArrowRightIcon,
@@ -10,7 +10,10 @@ import { asFormattedMediaTimecodeString } from './shared/as-formatted-media-time
 import { AudioMIMEType } from './shared/audio-mime-type.enum';
 import { isAudioMIMEType } from './shared/is-audio-mime-type';
 import { KeyboardKey, useKeyDown } from './shared/use-key-down';
-import { TimeRangeSelectionVisual, TimeRangeVisualState } from './time-range-selection-visual';
+import {
+    TimeRangeSelectionStatus,
+    TimeRangeSelectionStatusIndicator,
+} from './time-range-selection-visual';
 
 type Nullable<T> = T | null;
 
@@ -29,6 +32,17 @@ const StyledAudioPlayer = styled('audio')`
     border-radius: 20px;
 `;
 
+const calculateTimeRangeSelectionStatus = (
+    inPointSeconds: number | null,
+    outPointSeconds: number | null
+): TimeRangeSelectionStatus => {
+    if (isNull(inPointSeconds)) return `noSelection`;
+
+    if (isNull(outPointSeconds)) return `inPointOnly`;
+
+    return `fullSelection`;
+};
+
 export type TimeRangeSelection = {
     inPointSeconds: number;
     outPointSeconds: number;
@@ -45,7 +59,7 @@ export const AudioAnnotator = ({
     mimeType,
     onTimeRangeSelected,
 }: AudioAnnotatorProps) => {
-    const audioRef = useRef<HTMLVideoElement>(null);
+    const audioRef = useRef<HTMLAudioElement>(null);
 
     const [inPointSeconds, setInPointSeconds] = useState<Nullable<number>>(null);
 
@@ -53,26 +67,31 @@ export const AudioAnnotator = ({
 
     const [isPlayable, setIsPlayable] = useState<boolean>(false);
 
-    const [timeRangeVisualState, setTimeRangeVisualState] = useState<TimeRangeVisualState>(null);
-
     const [errorMessage, setErrorMessage] = useState<string>('');
+
+    const timeRangeSelectionStatus = calculateTimeRangeSelectionStatus(
+        inPointSeconds,
+        outPointSeconds
+    );
+
+    const blurAudioPlayer = () => {
+        const audioPlayer = audioRef?.current;
+
+        if (isNullOrUndefined(audioPlayer)) return;
+
+        audioPlayer.blur();
+    };
 
     useEffect(() => {
         if (isNullOrUndefined(inPointSeconds)) {
             setErrorMessage('');
-
-            setTimeRangeVisualState(null);
 
             onTimeRangeSelected(null);
 
             return;
         }
 
-        if (isNullOrUndefined(outPointSeconds)) {
-            setTimeRangeVisualState('inPointSelected');
-
-            return;
-        }
+        if (isNullOrUndefined(outPointSeconds)) return;
 
         if (outPointSeconds <= inPointSeconds) {
             setErrorMessage('Out-point can not be equal to, or come before the in-point');
@@ -87,17 +106,8 @@ export const AudioAnnotator = ({
             outPointSeconds: outPointSeconds,
         };
 
-        setTimeRangeVisualState('timeRangeSelected');
-
         onTimeRangeSelected(selectedTimeRange);
-    }, [
-        inPointSeconds,
-        outPointSeconds,
-        onTimeRangeSelected,
-        setErrorMessage,
-        setTimeRangeVisualState,
-        setOutPointSeconds,
-    ]);
+    }, [inPointSeconds, outPointSeconds, onTimeRangeSelected, setErrorMessage, setOutPointSeconds]);
 
     // TODO: test with a longer audio file
     const onCanplay = () => {
@@ -190,7 +200,14 @@ export const AudioAnnotator = ({
 
     return (
         <Stack>
-            <StyledAudioPlayer ref={audioRef} onCanPlay={onCanplay} controls>
+            <StyledAudioPlayer
+                ref={audioRef}
+                onCanPlay={onCanplay}
+                onPlay={blurAudioPlayer}
+                onSeeked={blurAudioPlayer}
+                onVolumeChange={blurAudioPlayer}
+                controls
+            >
                 {isAudioMIMEType(mimeType) ? (
                     <source key={mimeType} src={audioUrl} type={mimeType} />
                 ) : (
@@ -238,7 +255,9 @@ export const AudioAnnotator = ({
                     ) : null}
                 </Box>
                 <Box width="160px" height="20px" padding="0 20px">
-                    <TimeRangeSelectionVisual timeRangeVisualState={timeRangeVisualState} />
+                    <TimeRangeSelectionStatusIndicator
+                        timeRangeSelectionStatus={timeRangeSelectionStatus}
+                    />
                 </Box>
                 <Box width="70px">
                     {!isNullOrUndefined(outPointSeconds) ? (

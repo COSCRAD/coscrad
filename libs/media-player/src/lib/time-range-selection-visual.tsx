@@ -1,6 +1,6 @@
 import { Box, styled } from '@mui/material';
 
-export type TimeRangeVisualState = 'inPointOnly' | 'fullSelection' | 'noSelection';
+export type TimeRangeSelectionStatus = 'inPointOnly' | 'fullSelection' | 'noSelection';
 
 const Bar = styled(Box)({
     height: '20px',
@@ -11,15 +11,15 @@ const Bar = styled(Box)({
     position: 'absolute',
 });
 
-interface TimeRangeSelectionVisualProps {
-    timeRangeVisualState: TimeRangeVisualState;
+interface TimeRangeSelectionStatusIndicatorProps {
+    timeRangeSelectionStatus: TimeRangeSelectionStatus;
 }
 
-export const TimeRangeSelectionVisual = ({
-    timeRangeVisualState,
-}: TimeRangeSelectionVisualProps): JSX.Element => {
-    const isBarVisible = (bar: TimeRangeVisualState) => {
-        return bar === timeRangeVisualState;
+export const TimeRangeSelectionStatusIndicator = ({
+    timeRangeSelectionStatus,
+}: TimeRangeSelectionStatusIndicatorProps): JSX.Element => {
+    const isBarVisible = (bar: TimeRangeSelectionStatus) => {
+        return bar === timeRangeSelectionStatus;
     };
 
     return (
@@ -28,7 +28,7 @@ export const TimeRangeSelectionVisual = ({
                 data-testid="inpoint-selected-bar"
                 sx={{
                     backgroundImage: 'linear-gradient(to right, #75ecff, #fff)',
-                    visibility: isBarVisible('inPointSelected') ? 'visible' : 'hidden',
+                    visibility: isBarVisible('inPointOnly') ? 'visible' : 'hidden',
                 }}
             >
                 &nbsp;
@@ -38,7 +38,7 @@ export const TimeRangeSelectionVisual = ({
                 sx={{
                     backgroundColor: '#75ecff',
                     borderRight: '3px solid #0671ff',
-                    visibility: isBarVisible('timeRangeSelected') ? 'visible' : 'hidden',
+                    visibility: isBarVisible('fullSelection') ? 'visible' : 'hidden',
                 }}
             >
                 &nbsp;
