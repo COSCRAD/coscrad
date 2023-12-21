@@ -74,6 +74,10 @@ export const AudioAnnotator = ({
         outPointSeconds
     );
 
+    /**
+     * NOTE: This is a hack to keep focus off the Audio Player to make sure
+     * keyboard shortcuts are enabled for the `document`
+     */
     const blurAudioPlayer = () => {
         const audioPlayer = audioRef?.current;
 
