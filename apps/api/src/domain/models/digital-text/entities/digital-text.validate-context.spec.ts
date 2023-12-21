@@ -7,6 +7,7 @@ import PageRangeContextHasSuperfluousPageIdentifiersError from '../../../domainM
 import { AggregateType } from '../../../types/AggregateType';
 import { PageRangeContext } from '../../context/page-range-context/page-range.context.entity';
 import { EdgeConnectionContextType } from '../../context/types/EdgeConnectionContextType';
+import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import DigitalTextPage from './digital-text-page.entity';
 import { PageIdentifier } from './types';
 
@@ -24,6 +25,9 @@ const digitalTextWithPages = digitalTextWithNoPages.clone({
             new DigitalTextPage({
                 identifier,
                 content: buildMultilingualTextWithSingleItem(`content for page: ${identifier}`),
+                audio: new MultilingualAudio({
+                    items: [],
+                }),
             })
     ),
 });

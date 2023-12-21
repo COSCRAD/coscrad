@@ -267,7 +267,6 @@ describe(`DigitalText.fromEventHistory`, () => {
                     contentAddedToDigitalTextPage,
                     digitalTextPageContentTranslated,
                     audioAddedForDigitalTextPage,
-                    audioAddedForDigitalTextPage,
                 ];
 
                 const result = DigitalText.fromEventHistory(eventStream, id);

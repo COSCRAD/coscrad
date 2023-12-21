@@ -4,6 +4,7 @@ import { InternalError } from '../../../../lib/errors/InternalError';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import InvariantValidationError from '../../../domainModelValidators/errors/InvariantValidationError';
 import { AggregateType } from '../../../types/AggregateType';
+import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import { CannotAddPageWithDuplicateIdentifierError } from '../errors/cannot-add-page-with-duplicate-identifier.error';
 import DigitalTextPage from './digital-text-page.entity';
 
@@ -13,9 +14,16 @@ const existingDigitalTextWithPages = getValidAggregateInstanceForTest(
     pages: [
         new DigitalTextPage({
             identifier: 'IV',
+            audio: new MultilingualAudio({
+                items: [],
+            }),
         }),
+
         new DigitalTextPage({
             identifier: 'V',
+            audio: new MultilingualAudio({
+                items: [],
+            }),
         }),
     ],
 });

@@ -6,6 +6,7 @@ import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getVa
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import InvariantValidationError from '../../../domainModelValidators/errors/InvariantValidationError';
+import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import { MissingPageError } from '../errors';
 import { MissingPageContentError } from '../errors/missing-page-content.error';
 import DigitalTextPage from './digital-text-page.entity';
@@ -20,6 +21,9 @@ const translationLanguageCode = LanguageCode.English;
 const existingPage = new DigitalTextPage({
     identifier: targetPageIdentifier,
     content: buildMultilingualTextWithSingleItem(`existing content`, existingLanguageCode),
+    audio: new MultilingualAudio({
+        items: [],
+    }),
 });
 
 const digitalText = getValidAggregateInstanceForTest(AggregateType.digitalText).clone({
@@ -97,6 +101,9 @@ describe(`DigitalText.translatePageContent`, () => {
                         pages: [
                             new DigitalTextPage({
                                 identifier: targetPageIdentifier,
+                                audio: new MultilingualAudio({
+                                    items: [],
+                                }),
                             }),
                         ],
                     })
