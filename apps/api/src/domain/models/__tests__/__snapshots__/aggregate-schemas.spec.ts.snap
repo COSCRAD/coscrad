@@ -1034,14 +1034,14 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "schema": {
       "heightPx": {
         "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
-        "description": "the height of the photograph in pixels",
+        "description": "the height of the media item in pixels",
         "isArray": false,
         "isOptional": false,
         "label": "height (px)",
       },
       "widthPx": {
         "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
-        "description": "the width of the photograph in pixels",
+        "description": "the width of the media item in pixels",
         "isArray": false,
         "isOptional": false,
         "label": "width (px)",

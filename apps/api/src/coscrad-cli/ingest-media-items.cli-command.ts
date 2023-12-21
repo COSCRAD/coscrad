@@ -183,13 +183,13 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
              * TODO Determine the MIME Type with the probe
              * [see here](https://gist.github.com/DusanBrejka/35238dccb5cefcc804de1c5a218ee004)
              */
-            const { durationSeconds: duration, heightPx, widthPx } = mediaInfo;
+            const { durationSeconds, heightPx, widthPx } = mediaInfo;
 
             if (
-                !isNullOrUndefined(duration) &&
+                !isNullOrUndefined(durationSeconds) &&
                 (isVideoMimeType(mimeType) || isAudioMimeType(mimeType))
             ) {
-                durationMap.set(filename, duration);
+                durationMap.set(filename, durationSeconds);
             }
 
             if (

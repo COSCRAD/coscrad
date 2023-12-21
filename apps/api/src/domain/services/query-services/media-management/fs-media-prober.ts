@@ -65,8 +65,8 @@ export class FsMediaProber implements IMediaProber {
         // TODO Return this directly when done troubleshooting
         // TODO We need a better pattern for this
         const rawMediaInfo = {
-            ...(isNotFound(durationSeconds) ? {} : { duration: durationSeconds }),
-            ...(isNotFound(dimensions) ? {} : dimensions),
+            ...(isNotFound(durationSeconds) ? {} : { durationSeconds }),
+            ...(isNotFound(dimensions) ? {} : dimensions.toDTO()),
         };
 
         return rawMediaInfo;
