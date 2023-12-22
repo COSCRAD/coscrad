@@ -407,6 +407,70 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isOptional": true,
     "label": "digital text pages",
     "schema": {
+      "audio": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "maintains references to audio in available languages",
+        "isArray": false,
+        "isOptional": false,
+        "label": "multilingual audio",
+        "schema": {
+          "items": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "a list of audio for each available",
+            "isArray": true,
+            "isOptional": false,
+            "label": "audio items",
+            "schema": {
+              "audioItemId": {
+                "coscradDataType": "UUID",
+                "description": "a reference to the audio item",
+                "isArray": false,
+                "isOptional": false,
+                "label": "audio item ID",
+              },
+              "languageCode": {
+                "complexDataType": "ENUM",
+                "description": "language of the audio",
+                "enumLabel": "language code",
+                "enumName": "LanguageCode",
+                "isArray": false,
+                "isOptional": false,
+                "label": "language",
+                "labelsAndValues": [
+                  {
+                    "label": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "label": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "label": "English",
+                    "value": "en",
+                  },
+                  {
+                    "label": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "label": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "label": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "label": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
       "content": {
         "complexDataType": "NESTED_TYPE",
         "description": "(multilingual text) content for this page",

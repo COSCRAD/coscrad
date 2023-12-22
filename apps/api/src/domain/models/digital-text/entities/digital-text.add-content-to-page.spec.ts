@@ -6,6 +6,7 @@ import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getVa
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import InvariantValidationError from '../../../domainModelValidators/errors/InvariantValidationError';
 import { AggregateType } from '../../../types/AggregateType';
+import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import { FailedToUpdateDigitalTextPageError } from '../errors';
 import { CannotOverwritePageContentError } from '../errors/cannot-overwrite-page-content.error';
 import { MissingPageError } from '../errors/missing-page.error';
@@ -22,6 +23,9 @@ const existingDigitalText = getValidAggregateInstanceForTest(AggregateType.digit
     pages: [
         new DigitalTextPage({
             identifier: existingPageIdentifier,
+            audio: new MultilingualAudio({
+                items: [],
+            }),
         }),
     ],
 });

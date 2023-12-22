@@ -65,7 +65,10 @@ import { PointContext } from '../../../domain/models/context/point-context/point
 import { TextFieldContext } from '../../../domain/models/context/text-field-context/text-field-context.entity';
 import { TimeRangeContext } from '../../../domain/models/context/time-range-context/time-range-context.entity';
 import {
+    AddAudioForDigitalTextPage,
+    AddAudioForDigitalTextPageCommandHandler,
     AddPageToDigitalTextCommandHandler,
+    AudioAddedForDigitalTextPage,
     CreateDigitalText,
     CreateDigitalTextCommandHandler,
     DigitalTextCreated,
@@ -277,6 +280,7 @@ export const buildAllDataClassProviders = () =>
         PageAddedToDigitalText,
         ContentAddedToDigitalTextPage,
         DigitalTextPageContentTranslated,
+        AudioAddedForDigitalTextPage,
         SongCreated,
         SongTitleTranslated,
         LyricsAddedForSong,
@@ -581,6 +585,8 @@ export default async (
             AddPageToDigitalTextCommandHandler,
             TranslateDigitalTextPageContent,
             TranslateDigitalTextPageContentCommandHandler,
+            AddAudioForDigitalTextPage,
+            AddAudioForDigitalTextPageCommandHandler,
             RegisterUser,
             RegisterUserCommandHandler,
             CreateGroup,
