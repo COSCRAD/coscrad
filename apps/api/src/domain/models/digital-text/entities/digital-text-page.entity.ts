@@ -7,8 +7,11 @@ import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
+import { AggregateId } from '../../../types/AggregateId';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../BaseDomainModel';
+import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
+import { CannotAddAudioForMissingContentError } from '../errors';
 import { CannotOverwritePageContentError } from '../errors/cannot-overwrite-page-content.error';
 import { PageIdentifier } from './types/page-identifier';
 
@@ -32,17 +35,25 @@ export default class DigitalTextPage extends BaseDomainModel implements IDigital
      */
     readonly content?: MultilingualText;
 
+    @NestedDataType(MultilingualAudio, {
+        label: `multilingual audio`,
+        description: `maintains references to audio in available languages`,
+    })
+    readonly audio: MultilingualAudio;
+
     constructor(dto: DTO<DigitalTextPage>) {
         super();
 
         if (!dto) return;
 
-        const { identifier, content } = dto;
+        const { identifier, content, audio } = dto;
 
         // Note that this is just a string (stored by value not reference), so there is no need to clone or build an instance
         this.identifier = identifier;
 
         this.content = !isNullOrUndefined(content) ? new MultilingualText(content) : null;
+
+        this.audio = !isNullOrUndefined(audio) ? new MultilingualAudio(audio) : null;
     }
 
     addContent(text: string, languageCode: LanguageCode): ResultOrError<DigitalTextPage> {
@@ -76,9 +87,43 @@ export default class DigitalTextPage extends BaseDomainModel implements IDigital
         return !isNullOrUndefined(this.content);
     }
 
+    hasContentIn(languageCode: LanguageCode): boolean {
+        if (!this.hasContent()) return false;
+
+        return this.content.has(languageCode);
+    }
+
     getContent(): Maybe<MultilingualText> {
         if (!this.hasContent()) return NotFound;
 
         return this.content.clone({});
+    }
+
+    hasAudio(): boolean {
+        return this.audio.count() > 0;
+    }
+
+    hasAudioIn(langaugeCode: LanguageCode): boolean {
+        return this.audio.hasAudioIn(langaugeCode);
+    }
+
+    getAudioIn(languageCode: LanguageCode): Maybe<AggregateId> {
+        return this.audio.getIdForAudioIn(languageCode);
+    }
+
+    addAudio(audioItemId: AggregateId, languageCode: LanguageCode) {
+        if (!this.hasContentIn(languageCode)) {
+            return new CannotAddAudioForMissingContentError(
+                this.identifier,
+                audioItemId,
+                languageCode
+            );
+        }
+
+        const updatedAudio = this.audio.addAudio(audioItemId, languageCode) as MultilingualAudio;
+
+        return this.clone<DigitalTextPage>({
+            audio: updatedAudio,
+        });
     }
 }

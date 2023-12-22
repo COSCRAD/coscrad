@@ -2,6 +2,7 @@ import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandFSA } from '../../app/controllers/command/command-fsa/command-fsa.entity';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import {
+    AddAudioForDigitalTextPage,
     AddPageToDigitalText,
     CreateDigitalText,
     TranslateDigitalTextPageContent,
@@ -54,9 +55,20 @@ const translateDigitalTextPageContent: CommandFSA<TranslateDigitalTextPageConten
     },
 };
 
+const addAudioForDigitalTextPage: CommandFSA<AddAudioForDigitalTextPage> = {
+    type: `ADD_AUDIO_FOR_DIGITAL_TEXT_PAGE`,
+    payload: {
+        aggregateCompositeIdentifier: { id, type },
+        pageIdentifier: '127',
+        languageCode: LanguageCode.English,
+        audioItemId: buildDummyUuid(1),
+    },
+};
+
 export const buildDigitalTextCommandFsas = () => [
     createDigitalText,
     addPageToDigitalText,
     addContentToDigitalTextPage,
     translateDigitalTextPageContent,
+    addAudioForDigitalTextPage,
 ];

@@ -96,6 +96,9 @@ exports[`When querying for a digital text when the user is a project admin detai
   },
   "pages": [
     {
+      "audio": {
+        "items": [],
+      },
       "content": null,
       "identifier": "IX",
     },
@@ -198,6 +201,9 @@ exports[`When querying for a digital text when the user is a project admin index
       },
       "pages": [
         {
+          "audio": {
+            "items": [],
+          },
           "content": null,
           "identifier": "IX",
         },
@@ -309,6 +315,9 @@ exports[`When querying for a digital text when the user is a project admin index
       },
       "pages": [
         {
+          "audio": {
+            "items": [],
+          },
           "content": null,
           "identifier": "IX",
         },
@@ -420,6 +429,9 @@ exports[`When querying for a digital text when the user is a project admin index
       },
       "pages": [
         {
+          "audio": {
+            "items": [],
+          },
           "content": null,
           "identifier": "IX",
         },

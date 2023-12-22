@@ -30,7 +30,9 @@ import { Resource } from '../../resource.entity';
 import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
 import { ResourceReadAccessGrantedToUser } from '../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event';
 import { BaseEvent } from '../../shared/events/base-event.entity';
+import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import {
+    AudioAddedForDigitalTextPagePayload,
     DigitalTextCreated,
     DigitalTextPageContentTranslated,
     PageAddedToDigitalText,
@@ -44,6 +46,7 @@ import {
 } from '../constants';
 import { FailedToUpdateDigitalTextPageError } from '../errors';
 import { CannotAddPageWithDuplicateIdentifierError } from '../errors/cannot-add-page-with-duplicate-identifier.error';
+import { CannotOverrideAudioForPageError } from '../errors/cannot-override-audio-for-page.error';
 import { DuplicateDigitalTextTitleError } from '../errors/duplicate-digital-text-title.error';
 import { MissingPageContentError } from '../errors/missing-page-content.error';
 import { MissingPageError } from '../errors/missing-page.error';
@@ -135,6 +138,7 @@ export class DigitalText extends Resource {
                 ...this.pages,
                 new DigitalTextPage({
                     identifier: pageIdentifier,
+                    audio: new MultilingualAudio({ items: [] }),
                 }),
             ],
         });
@@ -201,6 +205,41 @@ export class DigitalText extends Resource {
         });
     }
 
+    addAudioForPage(
+        pageIdentifier: PageIdentifier,
+        audioItemId: AggregateId,
+        languageCode: LanguageCode
+    ): ResultOrError<DigitalText> {
+        if (!this.hasPage(pageIdentifier)) {
+            return new MissingPageError(pageIdentifier, this.id);
+        }
+
+        const pageToUpdate = this.getPage(pageIdentifier) as DigitalTextPage;
+
+        if (pageToUpdate.hasAudioIn(languageCode)) {
+            return new CannotOverrideAudioForPageError(
+                pageIdentifier,
+                languageCode,
+                audioItemId,
+                pageToUpdate.getAudioIn(languageCode) as AggregateId
+            );
+        }
+
+        const pageUpdateResult = pageToUpdate.addAudio(audioItemId, languageCode);
+
+        if (isInternalError(pageUpdateResult)) return pageUpdateResult;
+
+        const updatedPages = this.pages.map((page) =>
+            page.identifier === pageUpdateResult.identifier ? pageUpdateResult : page
+        );
+
+        const updatedDigitalText = this.safeClone<DigitalText>({
+            pages: updatedPages,
+        });
+
+        return updatedDigitalText;
+    }
+
     /**
      *
      * @param pageIdentifiers list of all page identifiers that must be included
@@ -233,8 +272,10 @@ export class DigitalText extends Resource {
     getPage(pageIdentifier: PageIdentifier): Maybe<DigitalTextPage> {
         if (!this.hasPage(pageIdentifier)) return NotFound;
 
+        const searchResult = this.pages.find(({ identifier }) => identifier === pageIdentifier);
+
         // We avoid shared references by cloning
-        return this.pages.find(({ identifier }) => identifier === pageIdentifier).clone({});
+        return searchResult.clone({});
     }
 
     protected validatePageRangeContext(context: PageRangeContext): Valid | InternalError {
@@ -341,6 +382,15 @@ export class DigitalText extends Resource {
                 } = event as ResourceReadAccessGrantedToUser;
 
                 return digitalText.addEventToHistory(event).grantReadAccessToUser(userId);
+            }
+
+            if (event.isOfType(`AUDIO_ADDED_FOR_DIGITAL_TEXT_PAGE`)) {
+                const { pageIdentifier, audioItemId, languageCode } =
+                    event.payload as AudioAddedForDigitalTextPagePayload;
+
+                return digitalText
+                    .addEventToHistory(event)
+                    .addAudioForPage(pageIdentifier, audioItemId, languageCode);
             }
 
             if (event.type === `DIGITAL_TEXT_PAGE_CONTENT_TRANSLATED`) {

@@ -1,3 +1,4 @@
+export * from './cannot-add-audio-for-missing-content.error';
 export * from './cannot-add-page-with-duplicate-identifier.error';
 export * from './cannot-overwrite-page-content.error';
 export * from './duplicate-digital-text-title.error';
