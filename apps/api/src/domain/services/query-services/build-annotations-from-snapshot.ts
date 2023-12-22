@@ -13,9 +13,12 @@ import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 export const buildAnnotationsFromSnapshot = (state: DeluxeInMemoryStore): IMediaAnnotation[] => {
     const allAudioItems = state.fetchAllOfType(AggregateType.audioItem);
 
+    // Do we always return both from each query service?
     const allVideos = state.fetchAllOfType(AggregateType.video);
 
     const allNotes = state.fetchAllOfType(AggregateType.note);
+
+    const allTags = state.fetchAllOfType(AggregateType.tag);
 
     const selfNotesForAudiovisualItems = allNotes.filter(validAggregateOrThrow).filter(
         ({ connectionType, members }) =>
@@ -34,7 +37,9 @@ export const buildAnnotationsFromSnapshot = (state: DeluxeInMemoryStore): IMedia
             isDeepStrictEqual(item.getCompositeIdentifier(), members[0].compositeIdentifier)
         );
 
-        const labels: IMediaSegmentLabel[] = relevantNotes.map(({ members, note }) => {
+        const labels: IMediaSegmentLabel[] = relevantNotes.map((relevantNote) => {
+            const { members, note } = relevantNote;
+
             // we have filtered for this above
             const {
                 timeRange: { inPointMilliseconds, outPointMilliseconds },
@@ -49,7 +54,23 @@ export const buildAnnotationsFromSnapshot = (state: DeluxeInMemoryStore): IMedia
                 name: `TODO Generate sequence number- {aggregateType}-{mediaItemId}-{timeOrderedSequenceNumber}`,
                 note,
                 // TODO Join in tags
-                tags: [],
+                tags: allTags
+                    .filter(({ members }) =>
+                        members.some((memberCompositeIdentifier) =>
+                            isDeepStrictEqual(
+                                memberCompositeIdentifier,
+                                relevantNote.getCompositeIdentifier()
+                            )
+                        )
+                    )
+                    .map(
+                        /**
+                         * For this purpose, we care about the label, not the ID.
+                         * We will export clips to directories named for the tag
+                         * labels.
+                         */
+                        ({ label }) => label
+                    ),
             };
         });
 
