@@ -1,4 +1,3 @@
-import { isNull, isNullOrUndefined } from '@coscrad/validation-constraints';
 import {
     ArrowLeft as ArrowLeftIcon,
     ArrowRight as ArrowRightIcon,
@@ -10,6 +9,7 @@ import { asFormattedMediaTimecodeString } from './shared/as-formatted-media-time
 import { AudioMIMEType } from './shared/audio-mime-type.enum';
 import { isAudioMIMEType } from './shared/is-audio-mime-type';
 import { KeyboardKey, useKeyDown } from './shared/use-key-down';
+import { isNull, isNullOrUndefined } from './shared/validation';
 import {
     TimeRangeSelectionStatus,
     TimeRangeSelectionStatusIndicator,
@@ -75,7 +75,7 @@ export const AudioAnnotator = ({
     );
 
     /**
-     * NOTE: This is a hack to keep focus off the Audio Player to make sure
+     * NOTE: This is a HACK to keep focus off the Audio Player to make sure
      * keyboard shortcuts are enabled for the `document`
      */
     const blurAudioPlayer = () => {
@@ -106,8 +106,8 @@ export const AudioAnnotator = ({
         }
 
         const selectedTimeRange: TimeRangeSelection = {
-            inPointSeconds: inPointSeconds,
-            outPointSeconds: outPointSeconds,
+            inPointSeconds: inPointSeconds as number,
+            outPointSeconds: outPointSeconds as number,
         };
 
         onTimeRangeSelected(selectedTimeRange);

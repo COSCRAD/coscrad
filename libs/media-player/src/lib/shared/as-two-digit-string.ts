@@ -1,11 +1,10 @@
-import { isInteger, isNonNegativeFiniteNumber } from '@coscrad/validation-constraints';
+import { isInteger, isNonNegativeFiniteNumber } from './validation';
 
 /**
  *
  * @param inputNumber non-negative integer less than 100
  * @returns string
  */
-
 export const asTwoDigitString = (inputNumber: number) => {
     if (
         !isNonNegativeFiniteNumber(inputNumber) ||

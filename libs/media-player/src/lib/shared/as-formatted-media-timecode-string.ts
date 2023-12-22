@@ -1,5 +1,5 @@
-import { isNonNegativeFiniteNumber } from '@coscrad/validation-constraints';
 import { asTwoDigitString } from './as-two-digit-string';
+import { isNonNegativeFiniteNumber } from './validation';
 
 const ninetynineHoursInSecondsMaximum = 99 * 60 * 60;
 
