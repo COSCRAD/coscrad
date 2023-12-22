@@ -122,10 +122,7 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
         jest.resetAllMocks();
     });
 
-    [
-        // AggregateType.audioItem,
-        AggregateType.video,
-    ].forEach((aggregateType) => {
+    [AggregateType.audioItem, AggregateType.video].forEach((aggregateType) => {
         describe(`when there are annotations for a : ${aggregateType}`, () => {
             const inPointMilliseconds = 1034;
 
@@ -156,7 +153,9 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
                 },
             });
 
-            const noteForAudioItem = new EdgeConnection({
+            const idOfNoteForAudiovisualItem = buildDummyUuid(123);
+
+            const noteForAudiovisualItem = new EdgeConnection({
                 type: AggregateType.note,
                 connectionType: EdgeConnectionType.self,
                 members: [
@@ -167,8 +166,23 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
                     }),
                 ],
                 note,
-                id: buildDummyUuid(123),
+                id: idOfNoteForAudiovisualItem,
             });
+
+            const dummyTag = getValidAggregateInstanceForTest(AggregateType.tag);
+
+            const tagsForNote = ['publish', 'delete', 'follow-up-with-jones'].map((label, index) =>
+                dummyTag.clone({
+                    id: buildDummyUuid(index),
+                    label,
+                    members: [
+                        {
+                            type: AggregateType.note,
+                            id: idOfNoteForAudiovisualItem,
+                        },
+                    ],
+                })
+            );
 
             // Note that we start indexing at 1 (human readable)
             const outputFilename = `${aggregateType}-${existingAudiovisualItem.id}-1.data.json`;
@@ -187,7 +201,8 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
 
                     await testRepositoryProvider.addFullSnapshot(
                         new DeluxeInMemoryStore({
-                            [AggregateType.note]: [noteForAudioItem],
+                            [AggregateType.tag]: tagsForNote,
+                            [AggregateType.note]: [noteForAudiovisualItem],
                         }).fetchFullSnapshotInLegacyFormat()
                     );
 
