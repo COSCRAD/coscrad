@@ -5,7 +5,7 @@ export enum ResourceType {
     book = 'book',
     photograph = 'photograph',
     spatialFeature = 'spatialFeature',
-    bibliographicReference = 'bibliographicReference',
+    bibliographicCitation = 'bibliographicCitation',
     digitalText = 'digitalText',
     song = 'song',
     mediaItem = 'mediaItem',

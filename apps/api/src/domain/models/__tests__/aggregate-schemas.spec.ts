@@ -4,10 +4,10 @@ import formatAggregateType from '../../../queries/presentation/formatAggregateTy
 import { getAggregateCtor } from '../../factories/utilities/getAggregateCtor';
 import { isDiscriminatedUnionResourceType } from '../../factories/utilities/isDiscriminatedUnionResourceType';
 import { AggregateType } from '../../types/AggregateType';
-import { BibliographicReferenceType } from '../bibliographic-reference/types/BibliographicReferenceType';
+import { BibliographicCitationType } from '../bibliographic-citation/types/bibliogrpahic-citation-type';
 import { GeometricFeatureType } from '../spatial-feature/types/GeometricFeatureType';
 
-type SubtypesUnion = typeof BibliographicReferenceType | typeof GeometricFeatureType;
+type SubtypesUnion = typeof BibliographicCitationType | typeof GeometricFeatureType;
 
 const buildDescription = (aggregateType: AggregateType, subtype?: SubtypesUnion): string =>
     [
@@ -27,9 +27,9 @@ describe(`Coscrad Data Schemas for aggregate root domain models`, () => {
     Object.values(AggregateType)
         .flatMap((aggregateType: AggregateType): AggregateTypeAndSubtype[] => {
             if (isDiscriminatedUnionResourceType(aggregateType)) {
-                if (aggregateType === AggregateType.bibliographicReference)
-                    return Object.values(BibliographicReferenceType).map(
-                        (bibliographicReferenceType) => [aggregateType, bibliographicReferenceType]
+                if (aggregateType === AggregateType.bibliographicCitation)
+                    return Object.values(BibliographicCitationType).map(
+                        (BibliographicCitationType) => [aggregateType, BibliographicCitationType]
                     ) as unknown as AggregateTypeAndSubtype[];
 
                 if (aggregateType === AggregateType.spatialFeature)

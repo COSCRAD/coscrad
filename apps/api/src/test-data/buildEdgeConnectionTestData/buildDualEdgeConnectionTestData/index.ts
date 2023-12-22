@@ -105,10 +105,10 @@ const generateComprehensiveDualEdgeConnectionTestData = (
 };
 
 /**
- * Load connections for bibliographic references to be able to view the thumbnail
+ * Load connections for bibliographic citations to be able to view the thumbnail
  * presenters on the frontend
  */
-const additionalDualConnectionsForBibliographicReferenceDTOs = [
+const additionalDualConnectionsForBibliographicCitationDTOs = [
     {
         type: AggregateType.note,
         connectionType: EdgeConnectionType.dual,
@@ -119,7 +119,7 @@ const additionalDualConnectionsForBibliographicReferenceDTOs = [
                 role: EdgeConnectionMemberRole.from,
                 compositeIdentifier: {
                     id: '3',
-                    type: ResourceType.bibliographicReference,
+                    type: ResourceType.bibliographicCitation,
                 },
                 context: new GeneralContext(),
             },
@@ -133,7 +133,7 @@ const additionalDualConnectionsForBibliographicReferenceDTOs = [
             },
         ],
         note: buildMultilingualTextWithSingleItem(
-            'this is why bibliographic_references/3 is connected to book/24',
+            'this is why bibliographic_citations/3 is connected to book/24',
             LanguageCode.English
         ),
     },
@@ -147,7 +147,7 @@ const additionalDualConnectionsForBibliographicReferenceDTOs = [
                 role: EdgeConnectionMemberRole.from,
                 compositeIdentifier: {
                     id: '23',
-                    type: ResourceType.bibliographicReference,
+                    type: ResourceType.bibliographicCitation,
                 },
                 context: new GeneralContext(),
             },
@@ -161,14 +161,14 @@ const additionalDualConnectionsForBibliographicReferenceDTOs = [
             },
         ],
         note: buildMultilingualTextWithSingleItem(
-            'this is why bibliographic_references/23 is connected to book/24',
+            'this is why bibliographic_citations/23 is connected to book/24',
             LanguageCode.English
         ),
     },
 ];
 
-const additionalDualConnectionsForBibliographicReferences: EdgeConnection[] =
-    additionalDualConnectionsForBibliographicReferenceDTOs.map((dto) => new EdgeConnection(dto));
+const additionalDualConnectionsForBibliographicCitations: EdgeConnection[] =
+    additionalDualConnectionsForBibliographicCitationDTOs.map((dto) => new EdgeConnection(dto));
 
 export default (uniqueIdOffset: number): EdgeConnection[] => [
     /**
@@ -177,10 +177,10 @@ export default (uniqueIdOffset: number): EdgeConnection[] => [
      */
     ...generateComprehensiveDualEdgeConnectionTestData(uniqueIdOffset, [
         ResourceType.mediaItem,
-        ResourceType.bibliographicReference,
+        ResourceType.bibliographicCitation,
     ]),
     ...buildOneDualEdgeConnectionForEveryContextType(),
     ...buildOneFromConnectionForInstanceOfEachResourceType(),
     ...buildOneToConnectionForInstanceOfEachResourceType(),
-    ...additionalDualConnectionsForBibliographicReferences,
+    ...additionalDualConnectionsForBibliographicCitations,
 ];

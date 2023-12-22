@@ -10,7 +10,7 @@ import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { Valid } from '../../../domainModelValidators/Valid';
-import getInstanceFactoryForResource from '../../../factories/getInstanceFactoryForResource';
+import getInstanceFactoryForResource from '../../../factories/get-instance-factory-for-resource';
 import { EVENT, IIdManager } from '../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../repositories/interfaces/repository-provider.interface';

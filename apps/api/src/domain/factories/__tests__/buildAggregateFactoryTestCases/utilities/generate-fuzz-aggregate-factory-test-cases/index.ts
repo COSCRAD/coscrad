@@ -1,18 +1,18 @@
 import { FuzzGenerator, getCoscradDataSchema } from '@coscrad/data-types';
 import { AggregateFactoryInalidTestCase } from '../..';
 import { isDiscriminatedUnionResourceType } from '../../../../../../domain/factories/utilities/isDiscriminatedUnionResourceType';
+import assertErrorAsExpected from '../../../../../../lib/__tests__/assertErrorAsExpected';
 import { InternalError, isInternalError } from '../../../../../../lib/errors/InternalError';
 import { DomainModelCtor } from '../../../../../../lib/types/DomainModelCtor';
-import assertErrorAsExpected from '../../../../../../lib/__tests__/assertErrorAsExpected';
 import { DTO } from '../../../../../../types/DTO';
-import { Aggregate } from '../../../../../models/aggregate.entity';
+import buildInvariantValidationErrorFactoryFunction from '../../../../../__tests__/utilities/buildInvariantValidationErrorFactoryFunction';
 import createInvalidAggregateFactory from '../../../../../models/__tests__/utilities/createInvalidAggregateFactory';
+import { Aggregate } from '../../../../../models/aggregate.entity';
 import {
     AggregateType,
     AggregateTypeToAggregateInstance,
 } from '../../../../../types/AggregateType';
-import buildInvariantValidationErrorFactoryFunction from '../../../../../__tests__/utilities/buildInvariantValidationErrorFactoryFunction';
-import getInstanceFactoryForResource from '../../../../getInstanceFactoryForResource';
+import getInstanceFactoryForResource from '../../../../get-instance-factory-for-resource';
 import getAggregateCtorFromAggregateType from '../../../../utilities/getAggregateCtorFromAggregateType';
 
 const getCtor = <TAggregateType extends AggregateType = AggregateType>(

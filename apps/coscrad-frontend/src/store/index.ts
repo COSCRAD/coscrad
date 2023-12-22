@@ -10,8 +10,8 @@ import { noteReducer, NOTES } from './slices/notes';
 import {
     AUDIO_ITEMS,
     audioItemReducer,
-    BIBLIOGRAPHIC_REFERENCES,
-    bibliographicReferenceReducer,
+    BIBLIOGRAPHIC_CITATIONS,
+    bibliographicCitationReducer,
     bookReducer,
     BOOKS,
     DIGITAL_TEXTS,
@@ -51,7 +51,7 @@ export const rootReducer = combineReducers({
     [VIDEOS]: videoReducer,
     // For consistency, consider pluralizing the following identifiers (constants from each slice)
     [VOCABULARY_LISTS]: vocabularyListReducer,
-    [BIBLIOGRAPHIC_REFERENCES]: bibliographicReferenceReducer,
+    [BIBLIOGRAPHIC_CITATIONS]: bibliographicCitationReducer,
     [DIGITAL_TEXTS]: DigitalTextReducer,
     [SPATIAL_FEATURES]: spatialFeatureReducer,
     [SONGS]: songReducer,

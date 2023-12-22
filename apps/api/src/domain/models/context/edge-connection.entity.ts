@@ -189,12 +189,12 @@ export class EdgeConnection extends Aggregate {
         return allErrors.length > 0 ? new InvalidExternalStateError(allErrors) : Valid;
 
         /**
-         * Currently, every `BibliographicReference` sub-type can participate
+         * Currently, every `BibliographicCitation` sub-type can participate
          * in an identity connection with a `Book` and no other resource. We can
          * verify this as part of invariant validation.
          *
-         * As we introduce additional subtypes of `BibliographicReference`, we
-         * will need to validate that the sub-type of BibliographicReference
+         * As we introduce additional subtypes of `BibliographicCitation`, we
+         * will need to validate that the sub-type of BibliographicCitation
          * in a `from` member for an identity connection is consistent with the
          * `ResourceType` of the `to` member.
          *

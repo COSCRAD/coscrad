@@ -14,7 +14,7 @@ const resourceTypeToArangoCollectionID: {
     [ResourceType.book]: ArangoResourceCollectionId.books,
     [ResourceType.photograph]: ArangoResourceCollectionId.photographs,
     [ResourceType.spatialFeature]: ArangoResourceCollectionId.spatial_features,
-    [ResourceType.bibliographicReference]: ArangoResourceCollectionId.bibliographic_references,
+    [ResourceType.bibliographicCitation]: ArangoResourceCollectionId.bibliographic_references,
     [ResourceType.digitalText]: ArangoResourceCollectionId.digital_texts,
     [ResourceType.song]: ArangoResourceCollectionId.songs,
     [ResourceType.mediaItem]: ArangoResourceCollectionId.media_items,

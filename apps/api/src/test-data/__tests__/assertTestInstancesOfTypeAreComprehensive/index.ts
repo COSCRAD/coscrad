@@ -1,6 +1,6 @@
 import isContextAllowedForGivenResourceType from '../../../domain/models/allowedContexts/isContextAllowedForGivenResourceType';
-import { IBibliographicReference } from '../../../domain/models/bibliographic-reference/interfaces/bibliographic-reference.interface';
-import { BibliographicReferenceType } from '../../../domain/models/bibliographic-reference/types/BibliographicReferenceType';
+import { IBibliographicCitation } from '../../../domain/models/bibliographic-citation/interfaces/bibliographic-citation.interface';
+import { BibliographicCitationType } from '../../../domain/models/bibliographic-citation/types/bibliogrpahic-citation-type';
 import { EdgeConnectionMemberRole } from '../../../domain/models/context/edge-connection.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
 import { ISpatialFeature } from '../../../domain/models/spatial-feature/interfaces/spatial-feature.interface';
@@ -30,14 +30,14 @@ const defaultComprehensiveAssertionFunction: ComprehensiveAssertionFunction = (
 const aggregateTypeToComprehensiveAssertionFunction: {
     [K in AggregateType]?: ComprehensiveAssertionFunction;
 } = {
-    // BibliographicReferenceSubTypes
-    [AggregateType.bibliographicReference]: (_: AggregateType, snapshot: Snapshot) => {
-        const subTypesWithNoTestData = Object.values(BibliographicReferenceType).reduce(
+    // BibliographicCitationSubTypes
+    [AggregateType.bibliographicCitation]: (_: AggregateType, snapshot: Snapshot) => {
+        const subTypesWithNoTestData = Object.values(BibliographicCitationType).reduce(
             (acc, subtype) => {
                 if (
                     !new DeluxeInMemoryStore(snapshot)
-                        .fetchAllOfType(AggregateType.bibliographicReference)
-                        .some(({ data: { type } }: IBibliographicReference) => type === subtype)
+                        .fetchAllOfType(AggregateType.bibliographicCitation)
+                        .some(({ data: { type } }: IBibliographicCitation) => type === subtype)
                 )
                     return [...acc, subtype];
 
@@ -98,8 +98,7 @@ const aggregateTypeToComprehensiveAssertionFunction: {
              */
             const resourceTypeContextTypeCombosWithoutInstanceForThisRole = Object.values(
                 ResourceType
-            )
-            .flatMap((resourceType) =>
+            ).flatMap((resourceType) =>
                 Object.values(EdgeConnectionContextType)
                     .filter(
                         // the rules for whether an identity context is allowed also depend on to \ from roles so we won't enforce these to

@@ -1,4 +1,4 @@
-import { InstanceFactory } from '../../domain/factories/getInstanceFactoryForResource';
+import { InstanceFactory } from '../../domain/factories/get-instance-factory-for-resource';
 import { Aggregate } from '../../domain/models/aggregate.entity';
 import { IRepositoryForAggregate } from '../../domain/repositories/interfaces/repository-for-aggregate.interface';
 import { ISpecification } from '../../domain/repositories/interfaces/specification.interface';

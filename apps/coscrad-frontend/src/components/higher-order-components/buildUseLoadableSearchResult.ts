@@ -4,7 +4,7 @@ import { IMaybeLoadable } from '../../store/slices/interfaces/maybe-loadable.int
 import { useLoadableNoteById } from '../../store/slices/notes';
 import {
     useLoadableAudioItemById,
-    useLoadableBibliographicReferenceById,
+    useLoadableBibliographicCitationById,
     useLoadableBookById,
     useLoadableDigitalTextsById,
     useLoadableMediaItemById,
@@ -29,7 +29,7 @@ type UseLoadableById = (id: string) => IMaybeLoadable<unknown>;
  */
 const lookupTable: { [K in Exclude<AggregateType, 'user' | 'userGroup'>]: UseLoadableById } = {
     // Resources
-    [AggregateType.bibliographicReference]: useLoadableBibliographicReferenceById,
+    [AggregateType.bibliographicCitation]: useLoadableBibliographicCitationById,
     [AggregateType.digitalText]: useLoadableDigitalTextsById,
     [AggregateType.book]: useLoadableBookById,
     [AggregateType.mediaItem]: useLoadableMediaItemById,

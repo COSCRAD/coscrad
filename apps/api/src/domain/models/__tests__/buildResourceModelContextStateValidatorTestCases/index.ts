@@ -1,5 +1,5 @@
 import buildAudioItemResourceModelContextStateValidatorTestCase from './buildAudioItemResourceModelContextStateValidatorTestCase';
-import buildBibliographicReferenceResourceModelContextStateValidatorTestCase from './buildBibliographicReferenceResourceModelContextStateValidatorTestCase';
+import buildBibliographicCitationResourceModelContextStateValidatorTestCase from './buildBibliographicCitationResourceModelContextStateValidatorTestCase';
 import buildBookResourceModelContextStateValidatorTestCase from './buildBookResourceModelContextStateValidatorTestCase';
 import buildMediaItemResourceModelContextStateValidatorTestCase from './buildMediaItemResourceModelContextStateValidatorTestCase';
 import buildPhotographResourceModelContextStateValidatorTestCase from './buildPhotographResourceModelContextStateValidatorTestCase';
@@ -13,7 +13,7 @@ import buildVideoResourceModelContextStateValidatorTestCase from './buildVideoRe
  */
 export default () => {
     const testCases = [
-        buildBibliographicReferenceResourceModelContextStateValidatorTestCase(),
+        buildBibliographicCitationResourceModelContextStateValidatorTestCase(),
         buildBookResourceModelContextStateValidatorTestCase(),
         buildPhotographResourceModelContextStateValidatorTestCase(),
         buildSpatialFeatureResourceModelContextStateValidatorTestCase(),

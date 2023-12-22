@@ -241,7 +241,7 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
                 role,
                 compositeIdentifier: {
                     id: '1',
-                    type: ResourceType.bibliographicReference,
+                    type: ResourceType.bibliographicCitation,
                 },
                 context: new GeneralContext(),
             },
@@ -308,7 +308,7 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
                 role,
                 compositeIdentifier: {
                     id: '1',
-                    type: ResourceType.bibliographicReference,
+                    type: ResourceType.bibliographicCitation,
                 },
                 context: new GeneralContext(),
             },

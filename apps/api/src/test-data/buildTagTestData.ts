@@ -76,7 +76,7 @@ const allTagsDTOs: Omit<DTO<Tag>, 'type'>[] = [
                 id: '7',
             },
             {
-                type: CategorizableType.bibliographicReference,
+                type: CategorizableType.bibliographicCitation,
                 id: '1',
             },
             {
@@ -164,7 +164,7 @@ const allTagsDTOs: Omit<DTO<Tag>, 'type'>[] = [
         label: 'law',
         members: [
             {
-                type: CategorizableType.bibliographicReference,
+                type: CategorizableType.bibliographicCitation,
                 id: '3',
             },
             {

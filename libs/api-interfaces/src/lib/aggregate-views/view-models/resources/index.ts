@@ -1,5 +1,5 @@
 export * from './audio-item';
-export * from './bibliographic-reference';
+export * from './bibliographic-citation';
 export * from './book';
 export * from './common';
 export * from './digital-text';

@@ -38,7 +38,7 @@ interface ResourcePreviewImageProps {
 
 const lookupTable: { [K in ResourceType]: JSX.Element } = {
     [ResourceType.audioItem]: <VolumeUpIcon fontSize="inherit" />,
-    [ResourceType.bibliographicReference]: <CollectionsBookmarkIcon fontSize="inherit" />,
+    [ResourceType.bibliographicCitation]: <CollectionsBookmarkIcon fontSize="inherit" />,
     [ResourceType.digitalText]: <DescriptionIcon fontSize="inherit" />,
     [ResourceType.book]: <AutoStoriesIcon fontSize="inherit" />,
     [ResourceType.mediaItem]: <SubscriptionsIcon fontSize="inherit" />,

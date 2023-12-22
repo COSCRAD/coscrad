@@ -18,7 +18,7 @@ import { CoscradUser } from '../../models/user-management/user/entities/user/cos
 import { VocabularyList } from '../../models/vocabulary-list/entities/vocabulary-list.entity';
 import { AggregateType, AggregateTypeToAggregateInstance } from '../../types/AggregateType';
 
-const specialCases = [AggregateType.bibliographicReference, AggregateType.spatialFeature] as const;
+const specialCases = [AggregateType.bibliographicCitation, AggregateType.spatialFeature] as const;
 
 type SpecialCaseType = typeof specialCases[number];
 

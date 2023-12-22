@@ -2,11 +2,11 @@ import {
     AggregateType,
     IAudioItemViewModel,
     IBaseViewModel,
-    IBibliographicReferenceViewModel,
+    IBibliographicCitationViewModel,
     IMediaItemViewModel,
 } from '@coscrad/api-interfaces';
 import { findOriginalTextItem } from '../../notes/shared/find-original-text-item';
-import { buildBibliographicReferenceJointViewModel } from '../bibliographic-references/joint-view';
+import { buildBibliographicCitationJointViewModel } from '../bibliographic-citations/joint-view';
 
 export type AggregateStringSummarizer<T extends IBaseViewModel> = (viewModel: T) => string;
 
@@ -14,9 +14,9 @@ export const aggregateStringSummarizerFactory = (
     aggregateType: AggregateType
     // TODO correlate the return type with aggregate type
 ): AggregateStringSummarizer<IBaseViewModel> => {
-    if (aggregateType === AggregateType.bibliographicReference)
-        return (viewModel: IBibliographicReferenceViewModel) => {
-            const consolidateViewModel = buildBibliographicReferenceJointViewModel(viewModel);
+    if (aggregateType === AggregateType.bibliographicCitation)
+        return (viewModel: IBibliographicCitationViewModel) => {
+            const consolidateViewModel = buildBibliographicCitationJointViewModel(viewModel);
 
             return consolidateViewModel.title;
         };

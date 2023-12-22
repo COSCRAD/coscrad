@@ -3,7 +3,7 @@ import formatAggregateType from '../../../queries/presentation/formatAggregateTy
 import { DTO } from '../../../types/DTO';
 import { Aggregate } from '../../models/aggregate.entity';
 import { isResourceType, ResourceType } from '../../types/ResourceType';
-import getInstanceFactoryForResource from '../getInstanceFactoryForResource';
+import getInstanceFactoryForResource from '../get-instance-factory-for-resource';
 import buildAggregateFactoryTestCases from './buildAggregateFactoryTestCases';
 
 const testCaseSets = buildAggregateFactoryTestCases();

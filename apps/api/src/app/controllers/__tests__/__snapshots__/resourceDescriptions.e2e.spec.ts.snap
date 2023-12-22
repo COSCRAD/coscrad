@@ -1249,16 +1249,16 @@ exports[`GET /resources should return the expected result 1`] = `
   {
     "description": "A bibliographic reference is a reference to, but not a digital representation of, a research resource.",
     "label": "Bibliographic Reference",
-    "link": "/resources/bibliographicReferences",
+    "link": "/resources/bibliographicCitations",
     "pluralLabel": "Bibliographic References",
     "schema": {
       "data": {
         "complexDataType": "UNION_TYPE",
-        "description": "citation information for this bibliographic reference",
+        "description": "citation information for this bibliographic citation",
         "discriminantPath": "type",
         "isArray": false,
         "isOptional": false,
-        "label": "reference data",
+        "label": "citation data",
         "schemaDefinitions": [
           {
             "discriminant": "courtCase",
@@ -1501,7 +1501,7 @@ exports[`GET /resources should return the expected result 1`] = `
             },
           },
         ],
-        "unionName": "BIBLIOGRAPHIC_REFERENCE_DATA_UNION",
+        "unionName": "BIBLIOGRAPHIC_CITATION_DATA_UNION",
       },
       "id": {
         "coscradDataType": "NON_EMPTY_STRING",
@@ -1606,7 +1606,7 @@ exports[`GET /resources should return the expected result 1`] = `
         },
       },
     },
-    "type": "bibliographicReference",
+    "type": "bibliographicCitation",
   },
   {
     "description": "A digital text is the digital representation of a text-based resource.",
