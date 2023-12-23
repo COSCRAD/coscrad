@@ -1,5 +1,5 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
-import { UUID } from '@coscrad/data-types';
+import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import { ReferenceTo, UUID } from '@coscrad/data-types';
 import { DTO } from '../../../../types/DTO';
 import { LanguageCodeEnum } from '../../../common/entities/multilingual-text';
 import { AggregateId } from '../../../types/AggregateId';
@@ -14,8 +14,9 @@ export class MultilingualAudioItem extends BaseDomainModel {
 
     @UUID({
         label: `audio item ID`,
-        description: `a reference to the audio item`,
+        description: `a reference to the relevant audio item`,
     })
+    @ReferenceTo(AggregateType.audioItem)
     readonly audioItemId: AggregateId;
 
     constructor(dto: DTO<MultilingualAudioItem>) {
@@ -28,5 +29,13 @@ export class MultilingualAudioItem extends BaseDomainModel {
         this.languageCode = languageCode;
 
         this.audioItemId = audioItemId;
+    }
+
+    isIn(languageCode: LanguageCode): boolean {
+        return this.languageCode === languageCode;
+    }
+
+    refersTo(audioItemId: AggregateId): boolean {
+        return this.audioItemId === audioItemId;
     }
 }

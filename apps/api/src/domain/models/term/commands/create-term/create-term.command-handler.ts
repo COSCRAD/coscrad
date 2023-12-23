@@ -10,6 +10,7 @@ import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { validAggregateOrThrow } from '../../../shared/functional';
+import { MultilingualAudio } from '../../../shared/multilingual-audio/multilingual-audio.entity';
 import { Term } from '../../entities/term.entity';
 import { CreateTerm } from './create-term.command';
 import { TermCreated } from './term-created.event';
@@ -27,6 +28,10 @@ export class CreateTermCommandHandler extends BaseCreateCommandHandler<Term> {
             id,
             text: buildMultilingualTextWithSingleItem(text, languageCode),
             contributorId,
+            // You must run `ADD_AUDIO_FOR_TERM`
+            audio: new MultilingualAudio({
+                items: [],
+            }),
             // You must run `PUBLISH_RESOURCE` to publish the term
             published: false,
             isPromptTerm: false,
