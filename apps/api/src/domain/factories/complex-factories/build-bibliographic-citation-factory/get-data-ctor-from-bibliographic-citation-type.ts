@@ -5,7 +5,7 @@ import BookBibliographicCitationData from '../../../models/bibliographic-citatio
 import { CourtCaseBibliographicCitationData } from '../../../models/bibliographic-citation/court-case-bibliographic-citation/entities/court-case-bibliographic-citation-data.entity';
 import { IBibliographicCitationData } from '../../../models/bibliographic-citation/interfaces/bibliographic-citation-data.interface';
 import JournalArticleBibliographicCitationData from '../../../models/bibliographic-citation/journal-article-bibliographic-citation/entities/journal-article-bibliographic-citation-data.entity';
-import { BibliographicCitationType } from '../../../models/bibliographic-citation/types/bibliogrpahic-citation-type';
+import { BibliographicCitationType } from '../../../models/bibliographic-citation/types/bibliographic-citation-type';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 
 const BibliographicCitationTypeToDataClass: {

@@ -33,7 +33,7 @@ import CommandExecutionError from '../../../../shared/common-command-errors/Comm
 import InvalidExternalStateError from '../../../../shared/common-command-errors/InvalidExternalStateError';
 import UuidNotAvailableForUseError from '../../../../shared/common-command-errors/UuidNotAvailableForUseError';
 import UuidNotGeneratedInternallyError from '../../../../shared/common-command-errors/UuidNotGeneratedInternallyError';
-import { BibliographicCitationType } from '../../../types/bibliogrpahic-citation-type';
+import { BibliographicCitationType } from '../../../types/bibliographic-citation-type';
 import { CreateBookBibliographicCitation } from './create-book-bibliographic-citation.command';
 
 const commandType = 'CREATE_BOOK_BIBLIOGRAPHIC_CITATION';

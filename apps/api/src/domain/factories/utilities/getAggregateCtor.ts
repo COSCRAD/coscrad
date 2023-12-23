@@ -1,5 +1,5 @@
 import { Ctor } from '../../../lib/types/Ctor';
-import { isBibliographicCitationType } from '../../models/bibliographic-citation/types/bibliogrpahic-citation-type';
+import { isBibliographicCitationType } from '../../models/bibliographic-citation/types/bibliographic-citation-type';
 import { getSpatialFeatureCtorFromGeometricFeatureType } from '../../models/spatial-feature/types/GeometricFeatureType';
 import isGeometricFeatureType from '../../models/spatial-feature/types/isGeometricFeatureType';
 import { AggregateType, AggregateTypeToAggregateInstance } from '../../types/AggregateType';

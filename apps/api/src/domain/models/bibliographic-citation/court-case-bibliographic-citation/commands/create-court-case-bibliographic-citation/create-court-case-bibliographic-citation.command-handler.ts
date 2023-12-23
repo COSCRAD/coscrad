@@ -11,7 +11,7 @@ import { ResourceType } from '../../../../../types/ResourceType';
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../../shared/events/types/EventRecordMetadata';
 import { BaseCreateBibliographicCitation } from '../../../common/commands/base-create-bibliographic-citation.command-handler';
-import { BibliographicCitationType } from '../../../types/bibliogrpahic-citation-type';
+import { BibliographicCitationType } from '../../../types/bibliographic-citation-type';
 import { CourtCaseBibliographicCitation } from '../../entities/court-case-bibliographic-citation.entity';
 import { CourtCaseBibliographicCitationCreated } from './court-case-bibliographic-citation-created.event';
 import { CreateCourtCaseBibliographicCitation } from './create-court-case-bibliographic-citation.command';

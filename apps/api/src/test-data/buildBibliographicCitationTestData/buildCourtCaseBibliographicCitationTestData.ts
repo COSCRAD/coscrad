@@ -1,6 +1,6 @@
 import { CourtCaseBibliographicCitation } from '../../domain/models/bibliographic-citation/court-case-bibliographic-citation/entities/court-case-bibliographic-citation.entity';
 import { IBibliographicCitation } from '../../domain/models/bibliographic-citation/interfaces/bibliographic-citation.interface';
-import { BibliographicCitationType } from '../../domain/models/bibliographic-citation/types/bibliogrpahic-citation-type';
+import { BibliographicCitationType } from '../../domain/models/bibliographic-citation/types/bibliographic-citation-type';
 import { ResourceType } from '../../domain/types/ResourceType';
 import { DTO } from '../../types/DTO';
 

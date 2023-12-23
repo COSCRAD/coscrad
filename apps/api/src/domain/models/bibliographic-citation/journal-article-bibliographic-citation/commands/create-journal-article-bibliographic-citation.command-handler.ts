@@ -11,7 +11,7 @@ import { ResourceType } from '../../../../types/ResourceType';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { BaseCreateBibliographicCitation } from '../../common/commands/base-create-bibliographic-citation.command-handler';
-import { BibliographicCitationType } from '../../types/bibliogrpahic-citation-type';
+import { BibliographicCitationType } from '../../types/bibliographic-citation-type';
 import { JournalArticleBibliographicCitation } from '../entities/journal-article-bibliographic-citation.entity';
 import { CreateJournalArticleBibliographicCitation } from './create-journal-article-bibliographic-citation.command';
 import { JournalArticleBibliographicCitationCreated } from './journal-article-bibliographic-citation-created.event';

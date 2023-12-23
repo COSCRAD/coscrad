@@ -27,7 +27,7 @@ import AggregateIdAlreadyInUseError from '../../../../shared/common-command-erro
 import CommandExecutionError from '../../../../shared/common-command-errors/CommandExecutionError';
 import InvalidExternalStateError from '../../../../shared/common-command-errors/InvalidExternalStateError';
 import UuidNotGeneratedInternallyError from '../../../../shared/common-command-errors/UuidNotGeneratedInternallyError';
-import { BibliographicCitationType } from '../../../types/bibliogrpahic-citation-type';
+import { BibliographicCitationType } from '../../../types/bibliographic-citation-type';
 import { CreateCourtCaseBibliographicCitation } from './create-court-case-bibliographic-citation.command';
 
 const commandType = 'CREATE_COURT_CASE_BIBLIOGRAPHIC_CITATION';

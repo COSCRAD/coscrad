@@ -2,7 +2,7 @@ import { BibliographicSubjectCreatorType } from '@coscrad/data-types';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { BookBibliographicCitation } from '../../domain/models/bibliographic-citation/book-bibliographic-citation/entities/book-bibliographic-citation.entity';
 import { IBibliographicCitation } from '../../domain/models/bibliographic-citation/interfaces/bibliographic-citation.interface';
-import { BibliographicCitationType } from '../../domain/models/bibliographic-citation/types/bibliogrpahic-citation-type';
+import { BibliographicCitationType } from '../../domain/models/bibliographic-citation/types/bibliographic-citation-type';
 import { AggregateType } from '../../domain/types/AggregateType';
 import { ResourceType } from '../../domain/types/ResourceType';
 import { DTO } from '../../types/DTO';

@@ -1,7 +1,7 @@
 import { AggregateFactoryValidTestCase, FactoryTestSuiteForAggregate } from '.';
 import formatBibliographicCitationType from '../../../../queries/presentation/formatBibliographicCitationType';
 import getValidBibliographicCitationInstanceForTest from '../../../__tests__/utilities/getValidBibliographicCitationInstanceForTest';
-import { BibliographicCitationType } from '../../../models/bibliographic-citation/types/bibliogrpahic-citation-type';
+import { BibliographicCitationType } from '../../../models/bibliographic-citation/types/bibliographic-citation-type';
 import { AggregateType } from '../../../types/AggregateType';
 import buildNullAndUndefinedAggregateFactoryInvalidTestCases from './common/buildNullAndUndefinedAggregateFactoryInvalidTestCases';
 import buildValidCasesForSubtypes from './common/buildValidCasesForSubtypes';

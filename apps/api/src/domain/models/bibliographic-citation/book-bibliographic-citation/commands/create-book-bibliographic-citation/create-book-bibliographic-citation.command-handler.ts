@@ -12,7 +12,7 @@ import { BaseEvent } from '../../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../../shared/events/types/EventRecordMetadata';
 import { validAggregateOrThrow } from '../../../../shared/functional';
 import BibliographicCitationCreator from '../../../common/bibliographic-citation-creator.entity';
-import { BibliographicCitationType } from '../../../types/bibliogrpahic-citation-type';
+import { BibliographicCitationType } from '../../../types/bibliographic-citation-type';
 import { BookBibliographicCitation } from '../../entities/book-bibliographic-citation.entity';
 import { BookBibliographicCitationCreated } from './book-bibliographic-citation-created.event';
 import { CreateBookBibliographicCitation } from './create-book-bibliographic-citation.command';

@@ -14,7 +14,7 @@ import { Resource } from '../../../resource.entity';
 import { registerDigitalRepresentationForBibliographicCitation } from '../../common/methods/register-digital-representation-for-bibliographic-citation';
 import { IBibliographicCitation } from '../../interfaces/bibliographic-citation.interface';
 import { BibliographicCitationUnionMember } from '../../shared';
-import { BibliographicCitationType } from '../../types/bibliogrpahic-citation-type';
+import { BibliographicCitationType } from '../../types/bibliographic-citation-type';
 import JournalArticleBibliographicCitationData from './journal-article-bibliographic-citation-data.entity';
 
 @BibliographicCitationUnionMember(BibliographicCitationType.journalArticle)

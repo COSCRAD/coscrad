@@ -4,7 +4,7 @@ import { Valid } from '../../../../domainModelValidators/Valid';
 import { AggregateType } from '../../../../types/AggregateType';
 import assertTypeErrorsFromInvalidFuzz from '../../../__tests__/invariant-validation-helpers/assertTypeErrorsFromInvalidFuzz';
 import { dummyUuid } from '../../../__tests__/utilities/dummyUuid';
-import { BibliographicCitationType } from '../../types/bibliogrpahic-citation-type';
+import { BibliographicCitationType } from '../../types/bibliographic-citation-type';
 import { CourtCaseBibliographicCitation } from '../entities/court-case-bibliographic-citation.entity';
 
 const validDto: DTO<CourtCaseBibliographicCitation> = {

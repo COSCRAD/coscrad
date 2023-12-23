@@ -4,7 +4,7 @@ import { DTO } from '../../../../../types/DTO';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../../BaseDomainModel';
 import { BibliographicCitationDataUnionMember } from '../../shared/bibliographic-citation-union-data-member.decorator';
-import { BibliographicCitationType } from '../../types/bibliogrpahic-citation-type';
+import { BibliographicCitationType } from '../../types/bibliographic-citation-type';
 
 @BibliographicCitationDataUnionMember(BibliographicCitationType.courtCase)
 export class CourtCaseBibliographicCitationData

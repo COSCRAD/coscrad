@@ -4,7 +4,7 @@ import { DTO } from '../../../../types/DTO';
 import { isValid } from '../../../domainModelValidators/Valid';
 import NullOrUndefinedAggregateDTOError from '../../../domainModelValidators/errors/NullOrUndefinedAggregateDTOError';
 import { IBibliographicCitation } from '../../../models/bibliographic-citation/interfaces/bibliographic-citation.interface';
-import { isBibliographicCitationType } from '../../../models/bibliographic-citation/types/bibliogrpahic-citation-type';
+import { isBibliographicCitationType } from '../../../models/bibliographic-citation/types/bibliographic-citation-type';
 import { AggregateType } from '../../../types/AggregateType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import { InstanceFactory } from '../../get-instance-factory-for-resource';

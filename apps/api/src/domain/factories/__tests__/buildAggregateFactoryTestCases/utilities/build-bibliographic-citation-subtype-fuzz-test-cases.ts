@@ -4,7 +4,7 @@ import { InternalError } from '../../../../../lib/errors/InternalError';
 import formatBibliographicCitationType from '../../../../../queries/presentation/formatBibliographicCitationType';
 import getValidBibliographicCitationInstanceForTest from '../../../../__tests__/utilities/getValidBibliographicCitationInstanceForTest';
 import assertCoscradDataTypeError from '../../../../models/__tests__/invariant-validation-helpers/assertCoscradDataTypeError';
-import { BibliographicCitationType } from '../../../../models/bibliographic-citation/types/bibliogrpahic-citation-type';
+import { BibliographicCitationType } from '../../../../models/bibliographic-citation/types/bibliographic-citation-type';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
 import { getDataCtorFromBibliographicCitationType } from '../../../complex-factories/build-bibliographic-citation-factory/get-data-ctor-from-bibliographic-citation-type';
 

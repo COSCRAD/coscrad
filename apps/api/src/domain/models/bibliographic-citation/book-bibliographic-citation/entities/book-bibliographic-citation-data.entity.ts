@@ -12,7 +12,7 @@ import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-u
 import BaseDomainModel from '../../../BaseDomainModel';
 import BibliographicCitationCreator from '../../common/bibliographic-citation-creator.entity';
 import { BibliographicCitationDataUnionMember } from '../../shared/bibliographic-citation-union-data-member.decorator';
-import { BibliographicCitationType } from '../../types/bibliogrpahic-citation-type';
+import { BibliographicCitationType } from '../../types/bibliographic-citation-type';
 
 const isOptional = true;
 

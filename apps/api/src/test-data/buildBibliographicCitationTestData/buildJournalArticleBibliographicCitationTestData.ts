@@ -1,7 +1,7 @@
 import { BibliographicSubjectCreatorType } from '@coscrad/data-types';
 import { IBibliographicCitation } from '../../domain/models/bibliographic-citation/interfaces/bibliographic-citation.interface';
 import { JournalArticleBibliographicCitation } from '../../domain/models/bibliographic-citation/journal-article-bibliographic-citation/entities/journal-article-bibliographic-citation.entity';
-import { BibliographicCitationType } from '../../domain/models/bibliographic-citation/types/bibliogrpahic-citation-type';
+import { BibliographicCitationType } from '../../domain/models/bibliographic-citation/types/bibliographic-citation-type';
 import { ResourceType } from '../../domain/types/ResourceType';
 import { DTO } from '../../types/DTO';
 

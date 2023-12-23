@@ -3,7 +3,7 @@ import { CtorToInstance } from '../../../../lib/types/InstanceToCtor';
 import { BookBibliographicCitation } from '../../../models/bibliographic-citation/book-bibliographic-citation/entities/book-bibliographic-citation.entity';
 import { CourtCaseBibliographicCitation } from '../../../models/bibliographic-citation/court-case-bibliographic-citation/entities/court-case-bibliographic-citation.entity';
 import { JournalArticleBibliographicCitation } from '../../../models/bibliographic-citation/journal-article-bibliographic-citation/entities/journal-article-bibliographic-citation.entity';
-import { BibliographicCitationType } from '../../../models/bibliographic-citation/types/bibliogrpahic-citation-type';
+import { BibliographicCitationType } from '../../../models/bibliographic-citation/types/bibliographic-citation-type';
 
 /**
  * TODO Can we use dynamic registration instead of lookup tables for these

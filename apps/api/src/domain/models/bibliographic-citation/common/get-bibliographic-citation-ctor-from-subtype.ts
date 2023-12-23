@@ -6,7 +6,7 @@ import { BookBibliographicCitation } from '../book-bibliographic-citation/entiti
 import { CourtCaseBibliographicCitation } from '../court-case-bibliographic-citation/entities/court-case-bibliographic-citation.entity';
 import { IBibliographicCitation } from '../interfaces/bibliographic-citation.interface';
 import { JournalArticleBibliographicCitation } from '../journal-article-bibliographic-citation/entities/journal-article-bibliographic-citation.entity';
-import { BibliographicCitationType } from '../types/bibliogrpahic-citation-type';
+import { BibliographicCitationType } from '../types/bibliographic-citation-type';
 
 // TODO remove this in favor of dynamic annotation
 const bibliographicCitationTypeToCtor: {

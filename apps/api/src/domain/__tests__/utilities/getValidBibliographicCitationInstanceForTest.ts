@@ -1,7 +1,7 @@
 import { InternalError } from '../../../lib/errors/InternalError';
 import buildBibliographicCitationTestData from '../../../test-data/buildBibliographicCitationTestData';
 import { BibliographicCitationTypeToInstance } from '../../factories/complex-factories/build-bibliographic-citation-factory/get-ctor-from-bibliographic-citation-type';
-import { BibliographicCitationType } from '../../models/bibliographic-citation/types/bibliogrpahic-citation-type';
+import { BibliographicCitationType } from '../../models/bibliographic-citation/types/bibliographic-citation-type';
 
 export default <TBibliographicCitationType extends BibliographicCitationType>(
     BibliographicCitationType: TBibliographicCitationType

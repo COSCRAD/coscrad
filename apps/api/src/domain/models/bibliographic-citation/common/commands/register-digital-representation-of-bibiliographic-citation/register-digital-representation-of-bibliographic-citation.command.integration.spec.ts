@@ -25,7 +25,7 @@ import InvalidExternalReferenceByAggregateError from '../../../../categories/err
 import AggregateNotFoundError from '../../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../../shared/common-command-errors/CommandExecutionError';
 import { IBibliographicCitation } from '../../../interfaces/bibliographic-citation.interface';
-import { BibliographicCitationType } from '../../../types/bibliogrpahic-citation-type';
+import { BibliographicCitationType } from '../../../types/bibliographic-citation-type';
 import { DigitalReprsentationAlreadyRegisteredForResourceError } from '../../errors/digital-representation-already-registered-for-resource.error';
 import { FailedToRegisterDigitalRepresentationError } from '../../errors/failed-to-register-digital-representation.error';
 import { RegisterDigitalRepresentationOfBibliographicCitation } from './register-digital-representation-of-bibliographic-citation.command';

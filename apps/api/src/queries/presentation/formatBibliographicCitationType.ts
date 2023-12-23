@@ -1,4 +1,4 @@
-import { BibliographicCitationType } from '../../domain/models/bibliographic-citation/types/bibliogrpahic-citation-type';
+import { BibliographicCitationType } from '../../domain/models/bibliographic-citation/types/bibliographic-citation-type';
 import { isNullOrUndefined } from '../../domain/utilities/validation/is-null-or-undefined';
 import { InternalError } from '../../lib/errors/InternalError';
 import capitalizeEveryFirstLetter from '../../lib/utilities/strings/capitalizeEveryFirstLetter';

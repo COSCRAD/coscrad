@@ -4,7 +4,7 @@ import formatAggregateType from '../../../queries/presentation/formatAggregateTy
 import { getAggregateCtor } from '../../factories/utilities/getAggregateCtor';
 import { isDiscriminatedUnionResourceType } from '../../factories/utilities/isDiscriminatedUnionResourceType';
 import { AggregateType } from '../../types/AggregateType';
-import { BibliographicCitationType } from '../bibliographic-citation/types/bibliogrpahic-citation-type';
+import { BibliographicCitationType } from '../bibliographic-citation/types/bibliographic-citation-type';
 import { GeometricFeatureType } from '../spatial-feature/types/GeometricFeatureType';
 
 type SubtypesUnion = typeof BibliographicCitationType | typeof GeometricFeatureType;

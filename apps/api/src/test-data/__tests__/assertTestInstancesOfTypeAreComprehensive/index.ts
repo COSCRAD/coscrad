@@ -1,6 +1,6 @@
 import isContextAllowedForGivenResourceType from '../../../domain/models/allowedContexts/isContextAllowedForGivenResourceType';
 import { IBibliographicCitation } from '../../../domain/models/bibliographic-citation/interfaces/bibliographic-citation.interface';
-import { BibliographicCitationType } from '../../../domain/models/bibliographic-citation/types/bibliogrpahic-citation-type';
+import { BibliographicCitationType } from '../../../domain/models/bibliographic-citation/types/bibliographic-citation-type';
 import { EdgeConnectionMemberRole } from '../../../domain/models/context/edge-connection.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
 import { ISpatialFeature } from '../../../domain/models/spatial-feature/interfaces/spatial-feature.interface';
