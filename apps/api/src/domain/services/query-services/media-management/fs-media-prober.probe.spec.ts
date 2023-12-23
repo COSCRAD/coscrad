@@ -36,4 +36,22 @@ describe(`FSMediaProber.probe`, () => {
     });
 
     // TODO[https://www.pivotaltracker.com/story/show/186726351] add test for audio and video duration
+    (
+        [
+            ['biodynamic-theme-song-forever.mp3', 8.35916],
+            ['trees-reflect-into-the-lake.mp4', 13.3],
+        ] as const
+    ).forEach(([mediaFilename, expectedDuration]) => {
+        describe(`when probing the media item: ${mediaFilename}`, () => {
+            it(`should determine the correct duration`, async () => {
+                const result = await mediaProber.probe(buildMediaItemPath(mediaFilename));
+
+                expect(result).not.toBe(NotFound);
+
+                const { durationSeconds } = result as RawMediaInfo;
+
+                expect(durationSeconds).toBeCloseTo(expectedDuration, 1);
+            });
+        });
+    });
 });
