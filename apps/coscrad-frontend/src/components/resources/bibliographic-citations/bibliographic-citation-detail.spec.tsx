@@ -16,7 +16,7 @@ const referenceToFind = dummyBibliographicCitations[0];
 
 const { id: idToFind } = referenceToFind;
 
-const endpoint = `${getConfig().apiUrl}/Resources/bibliographicReferences`;
+const endpoint = `${getConfig().apiUrl}/Resources/bibliographicCitations`;
 
 const act = buildCategorizableDetailPageRendererForTest(ResourceType.bibliographicCitation);
 
