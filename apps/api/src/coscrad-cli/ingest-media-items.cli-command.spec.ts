@@ -1,5 +1,5 @@
 import { CommandModule } from '@coscrad/commands';
-import { isFiniteNumber, isNumberWithinRange } from '@coscrad/validation-constraints';
+import { isFiniteNumber } from '@coscrad/validation-constraints';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { existsSync, mkdirSync } from 'fs';
@@ -144,19 +144,11 @@ describe(`CLI Command: **data-restore**`, () => {
 
             const { lengthMilliseconds } = testMp3MediaItem;
 
-            const tolerance = 0.1; // ms = 0.0001 s
-
             const actualMediaItemLength = 8.35916 * 1000; // ms, determined with Audacity
 
             const lengthToCompare = isFiniteNumber(lengthMilliseconds) ? lengthMilliseconds : -1;
 
-            const isMp3LengthWithinTolerance = isNumberWithinRange(lengthToCompare, [
-                actualMediaItemLength - tolerance,
-                actualMediaItemLength + tolerance,
-            ]);
-
-            // TODO Is there a Jest matcher for this? It'd be nice to see the value when it fails.
-            expect(isMp3LengthWithinTolerance).toBe(true);
+            expect(lengthToCompare).toBeCloseTo(actualMediaItemLength);
 
             const newAudioItems = (await testRepositoryProvider
                 .forResource(AggregateType.audioItem)
