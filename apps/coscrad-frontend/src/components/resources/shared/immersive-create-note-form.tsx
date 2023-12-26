@@ -26,7 +26,7 @@ export const ImmersiveCreateNoteForm = ({ onSubmit }: FormProps) => {
 
     const [text, setText] = useState('');
 
-    const [languageCode, setLanguageCode] = useState<LanguageCode>(null);
+    const [languageCode, setLanguageCode] = useState<LanguageCode>(LanguageCode.English);
 
     const { errorInfo, isLoading, data: generatedId } = useLoadableGeneratedId();
 
@@ -34,6 +34,10 @@ export const ImmersiveCreateNoteForm = ({ onSubmit }: FormProps) => {
 
     if (isLoading) return <Loading />;
 
+    /**
+     * Could pass in a callback to the component from the parent specifying its
+     * own condition for enabling the form.  E.g., is the timeRange valid?
+     */
     const isDisabled =
         text.length === 0 ||
         !Object.values(LanguageCode).includes(languageCode) ||
