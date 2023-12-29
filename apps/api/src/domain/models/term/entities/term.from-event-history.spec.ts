@@ -9,6 +9,7 @@ import {
     ResourceReadAccessGrantedToUser,
 } from '../../shared/common-commands';
 import { ResourcePublished } from '../../shared/common-commands/publish-resource/resource-published.event';
+import { BaseEvent } from '../../shared/events/base-event.entity';
 import {
     AudioAddedForTerm,
     PromptTermCreated,
@@ -80,6 +81,9 @@ const audioAddedForTerm = termElicitedFromPrompt.andThen<AudioAddedForTerm>({
 
 const userId = buildDummyUuid(777);
 
+const buildTermFromEventHistory = (eventHistory: BaseEvent[], id: string) =>
+    Term.fromEventHistory(eventHistory, id);
+
 describe(`Term.fromEventHistory`, () => {
     describe(`when the event history is valid`, () => {
         describe(`when the term is an ordinary term (not a prompt term)`, () => {
@@ -98,7 +102,10 @@ describe(`Term.fromEventHistory`, () => {
 
             describe(`When a term is created then translated`, () => {
                 it(`should return the appropriate term`, () => {
-                    const result = Term.fromEventHistory(termTranslated.as({ id: termId }), termId);
+                    const result = buildTermFromEventHistory(
+                        termTranslated.as({ id: termId }),
+                        termId
+                    );
 
                     expect(result).toBeInstanceOf(Term);
 
@@ -118,7 +125,7 @@ describe(`Term.fromEventHistory`, () => {
 
             describe(`When a translated term is pulbished`, () => {
                 it(`should return the appropriate term`, () => {
-                    const result = Term.fromEventHistory(
+                    const result = buildTermFromEventHistory(
                         termTranslated
                             .andThen<ResourcePublished>({
                                 type: `RESOURCE_PUBLISHED`,
@@ -149,7 +156,7 @@ describe(`Term.fromEventHistory`, () => {
                             id: termId,
                         });
 
-                    const result = Term.fromEventHistory(accessGrantedEvents, termId);
+                    const result = buildTermFromEventHistory(accessGrantedEvents, termId);
 
                     expect(result).toBeInstanceOf(Term);
 
@@ -163,7 +170,7 @@ describe(`Term.fromEventHistory`, () => {
         describe(`when the term is a prompt term`, () => {
             describe(`when the prompt term has been created`, () => {
                 it(`should return the appropriate term`, () => {
-                    const result = Term.fromEventHistory(
+                    const result = buildTermFromEventHistory(
                         promptTermCreated.as({
                             id: termId,
                         }),
@@ -189,7 +196,7 @@ describe(`Term.fromEventHistory`, () => {
 
             describe(`when a term has been elicited from a prompt`, () => {
                 it(`should return the expected term`, () => {
-                    const result = Term.fromEventHistory(
+                    const result = buildTermFromEventHistory(
                         termElicitedFromPrompt.as({ id: termId }),
                         termId
                     );
@@ -213,7 +220,7 @@ describe(`Term.fromEventHistory`, () => {
 
             describe(`when audio is added`, () => {
                 it(`should return the updated term`, () => {
-                    const result = Term.fromEventHistory(
+                    const result = buildTermFromEventHistory(
                         audioAddedForTerm.as({
                             type: AggregateType.term,
                             id: termId,
@@ -237,7 +244,7 @@ describe(`Term.fromEventHistory`, () => {
                         })
                         .as({ type: AggregateType.term, id: termId });
 
-                    const result = Term.fromEventHistory(publishTermEvents, termId);
+                    const result = buildTermFromEventHistory(publishTermEvents, termId);
 
                     expect(result).toBeInstanceOf(Term);
 
@@ -261,7 +268,7 @@ describe(`Term.fromEventHistory`, () => {
                             id: termId,
                         });
 
-                    const result = Term.fromEventHistory(accessGrantedEvents, termId);
+                    const result = buildTermFromEventHistory(accessGrantedEvents, termId);
 
                     expect(result).toBeInstanceOf(Term);
 
@@ -277,7 +284,7 @@ describe(`Term.fromEventHistory`, () => {
         describe(`when there are no events for the term`, () => {
             const otherId = '999';
 
-            const result = Term.fromEventHistory(
+            const result = buildTermFromEventHistory(
                 termElicitedFromPrompt.as({ id: otherId }),
                 termId
             );
@@ -292,7 +299,7 @@ describe(`Term.fromEventHistory`, () => {
 
             it(`should throw (system error)`, () => {
                 const act = () =>
-                    Term.fromEventHistory(
+                    buildTermFromEventHistory(
                         badEventStream.as({
                             id: termId,
                         }),
@@ -311,7 +318,7 @@ describe(`Term.fromEventHistory`, () => {
                 },
             });
 
-            const result = Term.fromEventHistory(invalidEventStream.as({ id: termId }), termId);
+            const result = buildTermFromEventHistory(invalidEventStream.as({ id: termId }), termId);
 
             expect(result).toBeInstanceOf(InternalError);
         });

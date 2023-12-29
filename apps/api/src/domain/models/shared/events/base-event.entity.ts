@@ -5,6 +5,7 @@ import {
 import { isDeepStrictEqual } from 'util';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
+import { ICoscradEvent } from '../../../common/events/coscrad-event.interface';
 import { AggregateId } from '../../../types/AggregateId';
 import { EventRecordMetadata } from './types/EventRecordMetadata';
 
@@ -15,7 +16,8 @@ export interface IEventPayload {
 export abstract class BaseEvent<
     // TODO Do this. Declare a Payload interface with `aggregateCompositeIdentifier` on it
     TPayload extends IEventPayload = IEventPayload
-> {
+> implements ICoscradEvent<TPayload, EventRecordMetadata>
+{
     abstract type: string;
 
     meta: EventRecordMetadata;
