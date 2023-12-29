@@ -2,6 +2,7 @@ import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { NotFound } from '../../../../lib/types/not-found';
 import { TestEventStream } from '../../../../test-data/events/test-event-stream';
+import { CoscradEventSourcedAggregateFactory, buildEventHandlerMaps } from '../../../common';
 import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import {
@@ -20,6 +21,15 @@ import {
 import { PROMPT_TERM_CREATED } from '../commands/create-prompt-term/constants';
 import { TERM_ELICITED_FROM_PROMPT } from '../commands/elicit-term-from-prompt/constants';
 import { TERM_TRANSLATED } from '../commands/translate-term/constants';
+import {
+    AudioAddedForTermEventHandler,
+    PromptTermCreatedEventHandler,
+    ResourcePublishedEventHandler,
+    ResourceReadAccessGrantedToUserEventHandler,
+    TermCreatedEventHandler,
+    TermElicitedFromPromptEventHandler,
+    TermTranslatedEventHandler,
+} from './event-handlers';
 import { Term } from './term.entity';
 
 const termId = buildDummyUuid(1);
@@ -81,15 +91,37 @@ const audioAddedForTerm = termElicitedFromPrompt.andThen<AudioAddedForTerm>({
 
 const userId = buildDummyUuid(777);
 
-const buildTermFromEventHistory = (eventHistory: BaseEvent[], id: string) =>
-    Term.fromEventHistory(eventHistory, id);
+const buildTermFromEventHistory = (eventHistory: BaseEvent[], id: string) => {
+    const { creationEventHandlerMap, updateEventHandlerMap } = buildEventHandlerMaps([
+        // Creation Event Handlers
+        TermCreatedEventHandler,
+        PromptTermCreatedEventHandler,
+        // Update Event Handlers
+        TermTranslatedEventHandler,
+        ResourceReadAccessGrantedToUserEventHandler,
+        ResourcePublishedEventHandler,
+        TermElicitedFromPromptEventHandler,
+        AudioAddedForTermEventHandler,
+    ]);
+
+    const aggregateFactory = new CoscradEventSourcedAggregateFactory(
+        // Should this take in an object?
+        creationEventHandlerMap,
+        updateEventHandlerMap
+    );
+
+    return aggregateFactory.build(eventHistory, {
+        type: AggregateType.term,
+        id,
+    });
+};
 
 describe(`Term.fromEventHistory`, () => {
     describe(`when the event history is valid`, () => {
         describe(`when the term is an ordinary term (not a prompt term)`, () => {
             describe(`When there is a creation event`, () => {
                 it(`should return the expected term`, () => {
-                    const result = Term.fromEventHistory(
+                    const result = buildTermFromEventHistory(
                         termCreated.as({
                             id: termId,
                         }),
@@ -219,14 +251,13 @@ describe(`Term.fromEventHistory`, () => {
             });
 
             describe(`when audio is added`, () => {
+                const eventHistoryForTermWithAudio = audioAddedForTerm.as({
+                    type: AggregateType.term,
+                    id: termId,
+                });
+
                 it(`should return the updated term`, () => {
-                    const result = buildTermFromEventHistory(
-                        audioAddedForTerm.as({
-                            type: AggregateType.term,
-                            id: termId,
-                        }),
-                        termId
-                    );
+                    const result = buildTermFromEventHistory(eventHistoryForTermWithAudio, termId);
 
                     expect(result).toBeInstanceOf(Term);
 

@@ -61,6 +61,10 @@ export class ArangoCommandRepositoryForAggregateRoot<TAggregate extends Aggregat
 
         const Ctor = await this.getAggregateRootCtor<TAggregate>();
 
+        /**
+         * TODO How will this work now that we are using dynamic
+         * registration for event handlers and not a static factory method?
+         */
         // types specific to TAggregate
         return Ctor.fromEventHistory(eventStream, id);
     }
@@ -88,6 +92,10 @@ export class ArangoCommandRepositoryForAggregateRoot<TAggregate extends Aggregat
 
         const Ctor = await this.getAggregateRootCtor();
 
+        /**
+         * TODO How will this work now that we are using dynamic
+         * registration for event handlers and not a static factory method?
+         */
         // Specific to TAggregate
         const allTAggregates = uniqueIds
             .map((id) => Ctor.fromEventHistory(eventStream, id))

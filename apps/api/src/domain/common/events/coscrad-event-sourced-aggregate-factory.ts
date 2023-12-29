@@ -1,4 +1,5 @@
 import { isDeepStrictEqual } from 'util';
+import { NotFound } from '../../../lib/types/not-found';
 import { ICoscradEvent } from './coscrad-event.interface';
 
 interface ICreationEventHandler<TAggregate> {
@@ -22,7 +23,7 @@ export class CoscradEventSourcedAggregateFactory<TAggregate> {
             type: string;
             id: string;
         }
-    ): TAggregate | Error {
+    ): TAggregate | Error | NotFound {
         // TODO sort by date, implement unambiguous tie-breaker
         const sortedEventStream = eventStream;
 
@@ -31,13 +32,19 @@ export class CoscradEventSourcedAggregateFactory<TAggregate> {
          * to one aggregate root, so we filter only the events for this particular
          * aggregate root as specified by the `aggregateCompositeIdentifier`.
          */
-        const [creationEvent, ...updateEvents] = sortedEventStream.filter((event) =>
+        const eventsForThisAggregate = sortedEventStream.filter((event) =>
             // TODO Consider using a `behaviour` (method) based interface so we can use `isFor`, `isOfType`, etc.
             isDeepStrictEqual(
                 event.payload.aggregateCompositeIdentifier,
                 aggregateCompositeIdentifier
             )
         );
+
+        if (eventsForThisAggregate.length === 0) {
+            return NotFound;
+        }
+
+        const [creationEvent, ...updateEvents] = eventsForThisAggregate;
 
         // TODO Check that creationEvent has been annotated as such
 
