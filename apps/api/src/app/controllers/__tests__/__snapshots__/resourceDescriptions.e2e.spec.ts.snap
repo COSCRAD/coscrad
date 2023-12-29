@@ -1739,10 +1739,11 @@ exports[`GET /resources should return the expected result 1`] = `
                 "schema": {
                   "audioItemId": {
                     "coscradDataType": "UUID",
-                    "description": "a reference to the audio item",
+                    "description": "a reference to the relevant audio item",
                     "isArray": false,
                     "isOptional": false,
                     "label": "audio item ID",
+                    "referenceTo": "audioItem",
                   },
                   "languageCode": {
                     "complexDataType": "ENUM",

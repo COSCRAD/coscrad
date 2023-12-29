@@ -6,6 +6,7 @@ import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { AggregateId } from '../../../types/AggregateId';
 import BaseDomainModel from '../../BaseDomainModel';
+import { CannotOverrideAudioForLanguageError } from './errors';
 import { MultilingualAudioItem } from './multilingual-audio-item.entity';
 
 export class MultilingualAudio extends BaseDomainModel {
@@ -33,13 +34,17 @@ export class MultilingualAudio extends BaseDomainModel {
     }
 
     hasAudioIn(languageCode: LanguageCode): boolean {
-        return this.items.some((item) => item.languageCode === languageCode);
+        return this.items.some((item) => item.isIn(languageCode));
     }
 
     getIdForAudioIn(languageCode: LanguageCode): Maybe<AggregateId> {
         return (
             this.items.find((item) => item.languageCode === languageCode)?.audioItemId || NotFound
         );
+    }
+
+    hasAudioItem(audioItemId: AggregateId): boolean {
+        return this.items.some((item) => item.refersTo(audioItemId));
     }
 
     count(): number {
@@ -50,6 +55,14 @@ export class MultilingualAudio extends BaseDomainModel {
         audioItemId: AggregateId,
         languageCode: LanguageCode
     ): ResultOrError<MultilingualAudio> {
+        if (this.hasAudioIn(languageCode)) {
+            return new CannotOverrideAudioForLanguageError(
+                languageCode,
+                audioItemId,
+                this.getIdForAudioIn(languageCode) as AggregateId
+            );
+        }
+
         const newAudioItems = this.items.concat(
             new MultilingualAudioItem({ audioItemId, languageCode })
         );

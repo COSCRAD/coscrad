@@ -113,7 +113,12 @@ describe(`MigrateBilingualTermsAndVocabularyLists`, () => {
         await testRepositoryProvider.testTeardown();
     });
 
-    describe(`when migrating songs`, () => {
+    /**
+     * This predates event-sourcing the domain. Migrations are no longer
+     * necessary. But we keep this for posterity, as it affected important
+     * production data for one tenant.
+     */
+    describe.skip(`when migrating songs`, () => {
         beforeEach(async () => {
             await testDatabaseProvider
                 .getDatabaseForCollection(ArangoCollectionId.songs)

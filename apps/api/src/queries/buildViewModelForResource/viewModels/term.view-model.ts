@@ -5,6 +5,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { AudioItem } from '../../../domain/models/audio-item/entities/audio-item.entity';
 import { MediaItem } from '../../../domain/models/media-item/entities/media-item.entity';
 import { Term } from '../../../domain/models/term/entities/term.entity';
+import { AggregateId } from '../../../domain/types/AggregateId';
 import { BaseViewModel } from './base.view-model';
 
 // TODO Add proper contributors repository \ collection
@@ -51,11 +52,20 @@ export class TermViewModel extends BaseViewModel implements ITermViewModel {
     constructor(term: Term, audioItems: AudioItem[], mediaItems: MediaItem[]) {
         super(term);
 
-        const { contributorId, audioItemId, sourceProject } = term;
+        const { contributorId, audio, sourceProject, text } = term;
 
         this.contributor = getContributorNameFromId(contributorId);
 
         if (sourceProject) this.sourceProject = sourceProject;
+
+        const originalLanguageCode = text.getOriginalTextItem().languageCode;
+
+        /**
+         * TODO Expose the full multilingual audio
+         */
+        const audioItemId = audio.hasAudioIn(originalLanguageCode)
+            ? (audio.getIdForAudioIn(originalLanguageCode) as AggregateId)
+            : undefined;
 
         if (isNonEmptyString(audioItemId)) {
             const audioSearchResult = audioItems.find(({ id }) => id === audioItemId);
