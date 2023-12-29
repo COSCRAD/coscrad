@@ -74,6 +74,7 @@ const audioAddedForTerm = termElicitedFromPrompt.andThen<AudioAddedForTerm>({
     type: 'AUDIO_ADDED_FOR_TERM',
     payload: {
         audioItemId,
+        languageCode: elicitationLanguageCode,
     },
 });
 
@@ -224,7 +225,7 @@ describe(`Term.fromEventHistory`, () => {
 
                     const updatedTerm = result as Term;
 
-                    expect(updatedTerm.audioItemId).toBe(audioItemId);
+                    expect(updatedTerm.getIdForAudioIn(elicitationLanguageCode)).toBe(audioItemId);
                 });
             });
 

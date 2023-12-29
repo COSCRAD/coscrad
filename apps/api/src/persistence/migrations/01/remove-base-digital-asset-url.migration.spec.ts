@@ -32,6 +32,9 @@ process.env[BASE_DIGITAL_ASSET_URL] = baseDigitalAssetUrl;
 type OldPhotograph = Omit<Photograph, 'imageUrl'> & { filename?: string };
 
 /**
+ * Migrations are a vestige of when we used a state-based approach to persisting
+ * the domain state.
+ *
  * This migration has been applied to all databases. We keep this test for
  * posterity.
  */
@@ -180,6 +183,7 @@ describe.skip(`RemoveBaseDigitalAssetUrl`, () => {
             expect(updatedTermDocuments.length).toBe(originalTermDocuments.length);
 
             const idsOfDocumentsWithoutBaseDigitalAssetUrl = updatedTermDocuments.filter(
+                // @ts-expect-error no longer relevant
                 ({ audioItemId: audioFilename }) =>
                     !isNullOrUndefined(audioFilename) &&
                     !audioFilename.includes(baseDigitalAssetUrl)
@@ -187,6 +191,7 @@ describe.skip(`RemoveBaseDigitalAssetUrl`, () => {
 
             expect(idsOfDocumentsWithoutBaseDigitalAssetUrl).toEqual([]);
 
+            // @ts-expect-error this test is not longer relevant
             const { audioItemId: audioFilename } = (await testDatabaseProvider
                 .getDatabaseForCollection(ArangoCollectionId.terms)
                 .fetchById(idForTermToCheckManually)) as unknown as ArangoDatabaseDocument<
@@ -201,6 +206,7 @@ describe.skip(`RemoveBaseDigitalAssetUrl`, () => {
                 DTO<Term>
             >;
 
+            // @ts-expect-error this test is no longer relevant
             expect(migratedTermWithoutAudiofilename.audioItemId).not.toBeTruthy();
 
             // @ts-expect-error there's no point of maintainging this any longer

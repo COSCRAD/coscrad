@@ -15,8 +15,11 @@ import { AudioAddedForTerm } from './audio-added-for-term.event';
 
 @CommandHandler(AddAudioForTerm)
 export class AddAudioForTermCommandHandler extends BaseUpdateCommandHandler<Term> {
-    protected actOnInstance(instance: Term, { audioItemId }: AddAudioForTerm): ResultOrError<Term> {
-        return instance.addAudio(audioItemId);
+    protected actOnInstance(
+        instance: Term,
+        { audioItemId, languageCode }: AddAudioForTerm
+    ): ResultOrError<Term> {
+        return instance.addAudio(audioItemId, languageCode);
     }
 
     protected async fetchRequiredExternalState({

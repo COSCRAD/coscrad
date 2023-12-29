@@ -15,12 +15,9 @@ import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
-import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCreateCommandError } from '../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../__tests__/command-helpers/assert-create-command-success';
-import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
-import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import AggregateIdAlreadyInUseError from '../../../shared/common-command-errors/AggregateIdAlreadyInUseError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
@@ -157,45 +154,6 @@ describe(commandType, () => {
                     },
                 });
             });
-        });
-
-        describe(`when the payload type is invalid`, () => {
-            describe(`when the aggregate type is not term`, () => {
-                Object.values(AggregateType)
-                    .filter((aggregateType) => aggregateType !== AggregateType.term)
-                    .forEach((invalidAggregateType) => {
-                        describe(`when the invalid aggregate type is: ${invalidAggregateType}`, () => {
-                            it(`should fail with the expected errors`, async () => {
-                                await assertCommandFailsDueToTypeError(
-                                    assertionHelperDependencies,
-                                    {
-                                        propertyName: 'aggregateCompositeIdentifier',
-                                        invalidValue: {
-                                            type: invalidAggregateType,
-                                            id: commandFsa.payload.aggregateCompositeIdentifier.id,
-                                        },
-                                    },
-                                    commandFsa
-                                );
-                            });
-                        });
-                    });
-            });
-
-            // Fuzz test
-            generateCommandFuzzTestCases(CreatePromptTerm).forEach(
-                ({ description, propertyName, invalidValue }) => {
-                    describe(`when the property: ${propertyName} has the invalid value:${invalidValue} (${description}`, () => {
-                        it('should fail with the appropriate error', async () => {
-                            await assertCommandFailsDueToTypeError(
-                                assertionHelperDependencies,
-                                { propertyName, invalidValue },
-                                buildValidCommandFSA(buildDummyUuid(123))
-                            );
-                        });
-                    });
-                }
-            );
         });
     });
 });

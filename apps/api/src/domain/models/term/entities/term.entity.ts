@@ -1,5 +1,6 @@
 import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { BooleanDataType, NestedDataType, NonEmptyString } from '@coscrad/data-types';
+import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
@@ -28,6 +29,8 @@ import {
 } from '../../shared/common-commands';
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
 import { BaseEvent } from '../../shared/events/base-event.entity';
+import { CannotReuseAudioItemError } from '../../shared/multilingual-audio/errors';
+import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import {
     AudioAddedForTermPayload,
     PromptTermCreated,
@@ -60,23 +63,6 @@ export class Term extends Resource {
     })
     readonly isPromptTerm?: boolean;
 
-    // @NonEmptyString({
-    //     isOptional,
-    //     label: 'text (language)',
-    //     description: 'the term in the language',
-    // })
-    // readonly term?: string;
-
-    // @NonEmptyString({
-    //     isOptional,
-    //     label: 'text (colonial language)',
-    //     description: 'the text in the colonial language',
-    // })
-    // readonly termEnglish?: string;
-
-    /**
-     * TODO We will need a migration for this change
-     */
     @NestedDataType(MultilingualText, {
         label: 'text',
         description: 'the text for the term',
@@ -96,12 +82,11 @@ export class Term extends Resource {
     })
     readonly contributorId?: AggregateId;
 
-    @NonEmptyString({
-        isOptional,
-        label: 'Audio Item ID',
-        description: 'a system reference to the audio file',
+    @NestedDataType(MultilingualAudio, {
+        label: 'multilingual audio',
+        description: 'collection of references to audio for content in available langauges',
     })
-    readonly audioItemId?: string;
+    readonly audio: MultilingualAudio;
 
     /**
      * TODO - This should be done via a tag or a note. Remove this property.
@@ -120,19 +105,13 @@ export class Term extends Resource {
         // This should only happen in the validation context
         if (isNullOrUndefined(dto)) return;
 
-        const {
-            contributorId,
-            audioItemId: audioFilename,
-            sourceProject,
-            text,
-            isPromptTerm,
-        } = dto;
+        const { contributorId, audio: audioDto, sourceProject, text, isPromptTerm } = dto;
 
         this.text = new MultilingualText(text);
 
         this.contributorId = contributorId;
 
-        this.audioItemId = audioFilename;
+        this.audio = isNonEmptyObject(audioDto) ? new MultilingualAudio(audioDto) : undefined;
 
         this.sourceProject = sourceProject;
 
@@ -145,7 +124,21 @@ export class Term extends Resource {
     }
 
     hasAudio(): boolean {
-        return !isNullOrUndefined(this.audioItemId);
+        return !this.audio.isEmpty();
+    }
+
+    hasAudioIn(languageCode: LanguageCode): boolean {
+        return this.hasAudio() && this.audio.hasAudioIn(languageCode);
+    }
+
+    hasAudioItem(audioItemId: AggregateId): boolean {
+        return this.hasAudio() && this.audio.hasAudioItem(audioItemId);
+    }
+
+    getIdForAudioIn(languageCode: LanguageCode): Maybe<AggregateId> {
+        if (!this.hasAudio()) return NotFound;
+
+        return this.audio.getIdForAudioIn(languageCode);
     }
 
     translate(text: string, languageCode: LanguageCode): ResultOrError<Term> {
@@ -164,13 +157,26 @@ export class Term extends Resource {
         });
     }
 
-    addAudio(audioItemId: string): ResultOrError<Term> {
-        if (this.hasAudio()) {
-            return new CannotOverrideAudioForTermError(this.id, audioItemId);
+    addAudio(audioItemId: string, languageCode: LanguageCode): ResultOrError<Term> {
+        if (this.hasAudioIn(languageCode)) {
+            return new CannotOverrideAudioForTermError(
+                this.id,
+                languageCode,
+                audioItemId,
+                this.getIdForAudioIn(languageCode) as AggregateId
+            );
         }
 
+        if (this.hasAudioItem(audioItemId)) {
+            return new CannotReuseAudioItemError(audioItemId);
+        }
+
+        const audioUpdateResult = this.audio.addAudio(audioItemId, languageCode);
+
+        if (isInternalError(audioUpdateResult)) return audioUpdateResult;
+
         return this.safeClone<Term>({
-            audioItemId,
+            audio: audioUpdateResult,
         });
     }
 
@@ -265,9 +271,11 @@ export class Term extends Resource {
             }
 
             if (nextEvent.isOfType(`AUDIO_ADDED_FOR_TERM`)) {
-                const { audioItemId } = nextEvent.payload as AudioAddedForTermPayload;
+                const { audioItemId, languageCode } = nextEvent.payload as AudioAddedForTermPayload;
 
-                return accumulatedTerm.addEventToHistory(nextEvent).addAudio(audioItemId);
+                return accumulatedTerm
+                    .addEventToHistory(nextEvent)
+                    .addAudio(audioItemId, languageCode);
             }
 
             if (nextEvent.isOfType(`RESOURCE_PUBLISHED`)) {
@@ -329,6 +337,9 @@ export class Term extends Resource {
             contributorId,
             // Terms are not published by default
             published: false,
+            audio: new MultilingualAudio({
+                items: [],
+            }),
         }).addEventToHistory(event);
     }
 
@@ -346,6 +357,9 @@ export class Term extends Resource {
             // At present, prompts are only in English
             text: buildMultilingualTextWithSingleItem(text, LanguageCode.English),
             isPromptTerm: true,
+            audio: new MultilingualAudio({
+                items: [],
+            }),
             // terms are not published by default
             published: false,
         }).addEventToHistory(event);
