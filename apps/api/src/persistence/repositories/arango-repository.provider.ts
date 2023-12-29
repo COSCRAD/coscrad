@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CoscradEventFactory } from '../../domain/common';
-import getInstanceFactoryForResource from '../../domain/factories/getInstanceFactoryForResource';
+import getInstanceFactoryForResource from '../../domain/factories/get-instance-factory-for-resource';
 import buildInstanceFactory from '../../domain/factories/utilities/buildInstanceFactory';
 import { EdgeConnection } from '../../domain/models/context/edge-connection.entity';
 import { Resource } from '../../domain/models/resource.entity';

@@ -10,7 +10,7 @@ import {
     MultilingualTextItemRole,
 } from '../../../../common/entities/multilingual-text';
 import { Valid } from '../../../../domainModelValidators/Valid';
-import getInstanceFactoryForResource from '../../../../factories/getInstanceFactoryForResource';
+import getInstanceFactoryForResource from '../../../../factories/get-instance-factory-for-resource';
 import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../../types/ResourceType';

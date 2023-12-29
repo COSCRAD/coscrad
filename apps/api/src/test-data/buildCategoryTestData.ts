@@ -128,7 +128,7 @@ export default (): Category[] => {
                     id: '102',
                 },
                 {
-                    type: CategorizableType.bibliographicReference,
+                    type: CategorizableType.bibliographicCitation,
                     id: '1',
                 },
                 {

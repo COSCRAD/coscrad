@@ -7,7 +7,7 @@ import { buildDummyAggregateCompositeIdentifier } from '../../support/utilities'
  */
 describe('CommaSeparatedList', () => {
     const aggregateCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
-        AggregateType.bibliographicReference,
+        AggregateType.bibliographicCitation,
         1
     );
 
@@ -16,7 +16,7 @@ describe('CommaSeparatedList', () => {
 
         cy.seedTestUuids(1);
 
-        cy.seedDataWithCommand(`CREATE_BOOK_BIBLIOGRAPHIC_REFERENCE`, {
+        cy.seedDataWithCommand(`CREATE_BOOK_BIBLIOGRAPHIC_CITATION`, {
             aggregateCompositeIdentifier,
             creators: [
                 {
@@ -36,10 +36,10 @@ describe('CommaSeparatedList', () => {
     });
 
     beforeEach(() => {
-        cy.visit('/Resources/BibliographicReferences/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001');
+        cy.visit('/Resources/BibliographicCitations/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001');
     });
 
-    it('Should display the creators for the BookBibliographicReference', () => {
+    it('Should display the creators for the BookBibliographicCitation', () => {
         cy.contains('Creators');
     });
 

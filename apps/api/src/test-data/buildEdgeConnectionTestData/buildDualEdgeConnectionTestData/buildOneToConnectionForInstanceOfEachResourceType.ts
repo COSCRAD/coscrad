@@ -60,7 +60,7 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
             {
                 role: EdgeConnectionMemberRole.to,
                 compositeIdentifier: {
-                    type: ResourceType.bibliographicReference,
+                    type: ResourceType.bibliographicCitation,
                     id: '1',
                 },
                 context: new GeneralContext(),
@@ -190,7 +190,7 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
             {
                 role: EdgeConnectionMemberRole.from,
                 compositeIdentifier: {
-                    type: ResourceType.bibliographicReference,
+                    type: ResourceType.bibliographicCitation,
                     id: '1',
                 },
                 context: new IdentityContext(),

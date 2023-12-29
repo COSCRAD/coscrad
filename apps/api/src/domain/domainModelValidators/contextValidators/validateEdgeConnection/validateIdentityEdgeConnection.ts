@@ -55,7 +55,7 @@ export const areIdentityMembersContextTypesConsistentWithRoles = (
         );
     }
 
-    if (fromMember.compositeIdentifier.type !== ResourceType.bibliographicReference) {
+    if (fromMember.compositeIdentifier.type !== ResourceType.bibliographicCitation) {
         return false;
     }
 

@@ -5,7 +5,7 @@ import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import { Valid } from '../../../domainModelValidators/Valid';
-import getInstanceFactoryForResource from '../../../factories/getInstanceFactoryForResource';
+import getInstanceFactoryForResource from '../../../factories/get-instance-factory-for-resource';
 import { DeluxeInMemoryStore } from '../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import { BaseCreateCommandHandler } from '../../shared/command-handlers/base-create-command-handler';

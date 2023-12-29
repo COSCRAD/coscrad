@@ -331,7 +331,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "must be: bibliographicReference",
+            "description": "must be: bibliographicCitation",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -339,8 +339,8 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "type",
             "labelsAndValues": [
               {
-                "label": "bibliographicReference",
-                "value": "bibliographicReference",
+                "label": "bibliographicCitation",
+                "value": "bibliographicCitation",
               },
             ],
           },
@@ -442,11 +442,11 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "label": "year",
       },
     },
-    "type": "CREATE_BOOK_BIBLIOGRAPHIC_REFERENCE",
+    "type": "CREATE_BOOK_BIBLIOGRAPHIC_CITATION",
   },
   {
-    "description": "Creates a new court case bibliographic reference",
-    "label": "Create Court Case Bibliographic Reference",
+    "description": "Creates a new court case bibliographic citation",
+    "label": "Create Court Case Bibliographic Citation",
     "schema": {
       "abstract": {
         "coscradDataType": "NON_EMPTY_STRING",
@@ -471,7 +471,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "must be: bibliographicReference",
+            "description": "must be: bibliographicCitation",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -479,8 +479,8 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "type",
             "labelsAndValues": [
               {
-                "label": "bibliographicReference",
-                "value": "bibliographicReference",
+                "label": "bibliographicCitation",
+                "value": "bibliographicCitation",
               },
             ],
           },
@@ -529,11 +529,11 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "label": "external link",
       },
     },
-    "type": "CREATE_COURT_CASE_BIBLIOGRAPHIC_REFERENCE",
+    "type": "CREATE_COURT_CASE_BIBLIOGRAPHIC_CITATION",
   },
   {
-    "description": "Creates a new journal article bibliographic reference",
-    "label": "Create Journal Article Bibliographic Reference",
+    "description": "Creates a new journal article bibliographic citation",
+    "label": "Create Journal Article Bibliographic Citation",
     "schema": {
       "abstract": {
         "coscradDataType": "NON_EMPTY_STRING",
@@ -558,7 +558,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "must be: bibliographicReference",
+            "description": "must be: bibliographicCitation",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -566,8 +566,8 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "type",
             "labelsAndValues": [
               {
-                "label": "bibliographicReference",
-                "value": "bibliographicReference",
+                "label": "bibliographicCitation",
+                "value": "bibliographicCitation",
               },
             ],
           },
@@ -669,7 +669,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "label": "external link",
       },
     },
-    "type": "CREATE_JOURNAL_ARTICLE_BIBLIOGRAPHIC_REFERENCE",
+    "type": "CREATE_JOURNAL_ARTICLE_BIBLIOGRAPHIC_CITATION",
   },
   {
     "description": "Register a Digital Text as the subject of a Bibliographic Citation",
@@ -691,7 +691,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "must be: bibliographicReference",
+            "description": "must be: bibliographicCitation",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -699,8 +699,8 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "type",
             "labelsAndValues": [
               {
-                "label": "bibliographicReference",
-                "value": "bibliographicReference",
+                "label": "bibliographicCitation",
+                "value": "bibliographicCitation",
               },
             ],
           },
@@ -1284,7 +1284,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "One of: term, vocabularyList, audioItem, book, photograph, spatialFeature, bibliographicReference, digitalText, song, mediaItem, video, playlist",
+            "description": "One of: term, vocabularyList, audioItem, book, photograph, spatialFeature, bibliographicCitation, digitalText, song, mediaItem, video, playlist",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -1316,8 +1316,8 @@ exports[`command payload schemas Command payload schema should match the snapsho
                 "value": "spatialFeature",
               },
               {
-                "label": "bibliographicReference",
-                "value": "bibliographicReference",
+                "label": "bibliographicCitation",
+                "value": "bibliographicCitation",
               },
               {
                 "label": "digitalText",
@@ -1407,7 +1407,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
               },
               {
                 "label": "Bibliographic Reference",
-                "value": "bibliographicReference",
+                "value": "bibliographicCitation",
               },
               {
                 "label": "Digital Text",
@@ -1610,7 +1610,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
               },
               {
                 "label": "Bibliographic Reference",
-                "value": "bibliographicReference",
+                "value": "bibliographicCitation",
               },
               {
                 "label": "Digital Text",
@@ -2620,7 +2620,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "One of: term, vocabularyList, audioItem, book, photograph, spatialFeature, bibliographicReference, digitalText, song, mediaItem, video, playlist",
+            "description": "One of: term, vocabularyList, audioItem, book, photograph, spatialFeature, bibliographicCitation, digitalText, song, mediaItem, video, playlist",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -2652,8 +2652,8 @@ exports[`command payload schemas Command payload schema should match the snapsho
                 "value": "spatialFeature",
               },
               {
-                "label": "bibliographicReference",
-                "value": "bibliographicReference",
+                "label": "bibliographicCitation",
+                "value": "bibliographicCitation",
               },
               {
                 "label": "digitalText",
@@ -2894,7 +2894,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "One of: term, vocabularyList, audioItem, book, photograph, spatialFeature, bibliographicReference, digitalText, song, mediaItem, video, playlist",
+            "description": "One of: term, vocabularyList, audioItem, book, photograph, spatialFeature, bibliographicCitation, digitalText, song, mediaItem, video, playlist",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -2926,8 +2926,8 @@ exports[`command payload schemas Command payload schema should match the snapsho
                 "value": "spatialFeature",
               },
               {
-                "label": "bibliographicReference",
-                "value": "bibliographicReference",
+                "label": "bibliographicCitation",
+                "value": "bibliographicCitation",
               },
               {
                 "label": "digitalText",
@@ -3169,7 +3169,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "One of: term, vocabularyList, audioItem, book, photograph, spatialFeature, bibliographicReference, digitalText, song, mediaItem, video, playlist",
+            "description": "One of: term, vocabularyList, audioItem, book, photograph, spatialFeature, bibliographicCitation, digitalText, song, mediaItem, video, playlist",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -3201,8 +3201,8 @@ exports[`command payload schemas Command payload schema should match the snapsho
                 "value": "spatialFeature",
               },
               {
-                "label": "bibliographicReference",
-                "value": "bibliographicReference",
+                "label": "bibliographicCitation",
+                "value": "bibliographicCitation",
               },
               {
                 "label": "digitalText",

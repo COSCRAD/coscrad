@@ -7,7 +7,7 @@ import { NoteViewModel } from '../../../../edgeConnectionViewModels/note.view-mo
 import { AudioItemViewModel } from '../../audio-visual/audio-item.view-model';
 import { VideoViewModel } from '../../audio-visual/video.view-model';
 import { BaseViewModel } from '../../base.view-model';
-import { BibliographicReferenceViewModel } from '../../bibliographic-reference/bibliographic-reference.view-model';
+import { BibliographicCitationViewModel } from '../../bibliographic-citation/bibliographic-citation.view-model';
 import { BookViewModel } from '../../book.view-model';
 import { CategoryTreeViewModel } from '../../category-tree.view-model';
 import { CoscradUserGroupViewModel } from '../../coscrad-user-group.view-model';
@@ -24,7 +24,7 @@ import { VocabularyListViewModel } from '../../vocabulary-list.view-model';
 export const aggregateTypeToViewModelCtor: {
     [K in AggregateType]: Ctor<BaseViewModel>;
 } = {
-    [ResourceType.bibliographicReference]: BibliographicReferenceViewModel,
+    [ResourceType.bibliographicCitation]: BibliographicCitationViewModel,
     [ResourceType.digitalText]: DigitalTextViewModel,
     [ResourceType.book]: BookViewModel,
     [ResourceType.mediaItem]: MediaItemViewModel,

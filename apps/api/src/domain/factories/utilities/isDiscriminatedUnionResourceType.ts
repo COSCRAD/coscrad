@@ -2,7 +2,7 @@ import { AggregateType } from '../../types/AggregateType';
 import { ResourceType } from '../../types/ResourceType';
 
 const discriminatedUnionResourceTypes = [
-    ResourceType.bibliographicReference,
+    ResourceType.bibliographicCitation,
     ResourceType.spatialFeature,
 ] as const;
 
