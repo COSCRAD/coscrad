@@ -3,7 +3,7 @@ import { InternalError, isInternalError } from '../../../../../lib/errors/Intern
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { Valid } from '../../../../domainModelValidators/Valid';
-import getInstanceFactoryForResource from '../../../../factories/getInstanceFactoryForResource';
+import getInstanceFactoryForResource from '../../../../factories/get-instance-factory-for-resource';
 import { InMemorySnapshot, ResourceType } from '../../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../../utilities/buildInMemorySnapshot';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';

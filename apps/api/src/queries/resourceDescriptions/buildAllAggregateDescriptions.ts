@@ -41,7 +41,7 @@ const resourceDescriptions: Pick<AggregateInfo, 'type' | 'description'>[] = [
         description: 'A spatial feature may be a point, line, or polygon on the map.',
     },
     {
-        type: ResourceType.bibliographicReference,
+        type: ResourceType.bibliographicCitation,
         description:
             'A bibliographic reference is a reference to, but not a digital representation of, a research resource.',
     },

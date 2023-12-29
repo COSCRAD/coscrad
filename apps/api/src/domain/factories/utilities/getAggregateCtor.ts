@@ -1,12 +1,13 @@
 import { Ctor } from '../../../lib/types/Ctor';
-import { isBibliographicReferenceType } from '../../models/bibliographic-reference/types/BibliographicReferenceType';
+import { isBibliographicCitationType } from '../../models/bibliographic-citation/types/bibliographic-citation-type';
 import { getSpatialFeatureCtorFromGeometricFeatureType } from '../../models/spatial-feature/types/GeometricFeatureType';
 import isGeometricFeatureType from '../../models/spatial-feature/types/isGeometricFeatureType';
 import { AggregateType, AggregateTypeToAggregateInstance } from '../../types/AggregateType';
-import getCtorFromBibliographicReferenceType from '../complexFactories/buildBibliographicReferenceFactory/getCtorFromBibliographicReferenceType';
+import getCtorFromBibliographicCitationType from '../complex-factories/build-bibliographic-citation-factory/get-ctor-from-bibliographic-citation-type';
 import getAggregateCtorFromAggregateType from './getAggregateCtorFromAggregateType';
 import { isDiscriminatedUnionResourceType } from './isDiscriminatedUnionResourceType';
 
+// TODO Remove this logic in favor of dynamic registration via annotation (decorators)
 export const getAggregateCtor = <TAggregateType extends AggregateType>(
     type: TAggregateType,
     subtype?: string
@@ -17,9 +18,9 @@ export const getAggregateCtor = <TAggregateType extends AggregateType>(
      * `isUnion` option.
      */
     if (isDiscriminatedUnionResourceType(type)) {
-        if (isBibliographicReferenceType(subtype))
+        if (isBibliographicCitationType(subtype))
             // @ts-expect-error TODO remove these lookup tables and use dynamic registration
-            return getCtorFromBibliographicReferenceType(subtype) as Ctor<
+            return getCtorFromBibliographicCitationType(subtype) as Ctor<
                 AggregateTypeToAggregateInstance[TAggregateType]
             >;
 

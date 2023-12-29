@@ -204,7 +204,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
 }
 `;
 
-exports[`When fetching multiple resources GET /resources/bibliographicReferences when all of the resources are published should fetch multiple resources of type bibliographicReference 1`] = `
+exports[`When fetching multiple resources GET /resources/bibliographicCitations when all of the resources are published should fetch multiple resources of type bibliographicCitation 1`] = `
 {
   "entities": [
     {
@@ -227,7 +227,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
         "publisher": "Atlantic Publishing",
         "title": "A Day in the Life",
         "type": "book",
-        "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-book-bibliographic-reference-1_a-day-in-the-life.pdf",
+        "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-book-bibliographic-citation-1_a-day-in-the-life.pdf",
         "year": 1999,
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -267,7 +267,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
             },
             {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-              "type": "bibliographicReference",
+              "type": "bibliographicCitation",
             },
             {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
@@ -331,7 +331,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
         "dateDecided": "Recorded 2002-07-08",
         "pages": "Pages 1-6",
         "type": "courtCase",
-        "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-court-case-bibliographic-reference-3_title-case.pdf",
+        "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-court-case-bibliographic-citation-3_title-case.pdf",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
       "name": {
@@ -350,7 +350,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
           "members": [
             {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-              "type": "bibliographicReference",
+              "type": "bibliographicCitation",
             },
             {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
@@ -374,7 +374,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
 }
 `;
 
-exports[`When fetching multiple resources GET /resources/bibliographicReferences when some of the resources are unpublished should return the expected number of results 1`] = `
+exports[`When fetching multiple resources GET /resources/bibliographicCitations when some of the resources are unpublished should return the expected number of results 1`] = `
 {
   "entities": [
     {
@@ -397,7 +397,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
         "publisher": "Atlantic Publishing",
         "title": "A Day in the Life",
         "type": "book",
-        "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-book-bibliographic-reference-1_a-day-in-the-life.pdf",
+        "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-book-bibliographic-citation-1_a-day-in-the-life.pdf",
         "year": 1999,
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -437,7 +437,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
             },
             {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-              "type": "bibliographicReference",
+              "type": "bibliographicCitation",
             },
             {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
@@ -501,7 +501,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
         "dateDecided": "Recorded 2002-07-08",
         "pages": "Pages 1-6",
         "type": "courtCase",
-        "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-court-case-bibliographic-reference-3_title-case.pdf",
+        "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-court-case-bibliographic-citation-3_title-case.pdf",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
       "name": {
@@ -520,7 +520,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
           "members": [
             {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-              "type": "bibliographicReference",
+              "type": "bibliographicCitation",
             },
             {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
@@ -1460,7 +1460,7 @@ exports[`When fetching multiple resources GET /resources/playlists when all of t
           "members": [
             {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-              "type": "bibliographicReference",
+              "type": "bibliographicCitation",
             },
             {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
@@ -1518,7 +1518,7 @@ exports[`When fetching multiple resources GET /resources/playlists when some of 
           "members": [
             {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-              "type": "bibliographicReference",
+              "type": "bibliographicCitation",
             },
             {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
@@ -1740,7 +1740,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
             },
             {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-              "type": "bibliographicReference",
+              "type": "bibliographicCitation",
             },
             {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
@@ -2112,7 +2112,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
             },
             {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-              "type": "bibliographicReference",
+              "type": "bibliographicCitation",
             },
             {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",

@@ -5,7 +5,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { NoteIndexPresenter } from '../../notes/note-index.presenter';
 import { TranscribedAudioIndexPresenter } from '../audio-item/audio-item-index.presenter';
-import { BibliographicReferenceIndexPresenter } from '../bibliographic-references/bibliographic-reference-index.presenter';
+import { BibliographicCitationIndexPresenter } from '../bibliographic-citations/bibliographic-citation-index.presenter';
 import { BookIndexPresenter } from '../books/book-index.presenter';
 import { DigitalTextIndexPresenter } from '../digital-text/digital-text-index.presenter';
 import { MediaItemIndexPresenter } from '../media-items/media-item-index.presenter';
@@ -50,8 +50,8 @@ export const tableViewCategorizableIndexPresenterFactory: CategorizableIndexPres
      * that has methods to build index and detail views of various types.
      */
     switch (categorizableType) {
-        case CategorizableType.bibliographicReference:
-            return BibliographicReferenceIndexPresenter as unknown as CategorizableIndexPresenter<T>;
+        case CategorizableType.bibliographicCitation:
+            return BibliographicCitationIndexPresenter as unknown as CategorizableIndexPresenter<T>;
 
         case CategorizableType.digitalText:
             return DigitalTextIndexPresenter as unknown as CategorizableIndexPresenter<T>;

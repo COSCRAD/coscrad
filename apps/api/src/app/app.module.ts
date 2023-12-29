@@ -17,7 +17,7 @@ import { GameController } from './controllers/command/game.controller';
 import { CommandInfoService } from './controllers/command/services/command-info-service';
 import { ResourceDescriptionController } from './controllers/resources/resource-description.controller';
 import { AudioVisualModule } from './domain-modules/audio-visual.module';
-import { BibliographicReferenceModule } from './domain-modules/bibliographic-reference.module';
+import { BibliographicCitationModule } from './domain-modules/bibliographic-citation.module';
 import { BookModule } from './domain-modules/book.module';
 import { DigitalTextModule } from './domain-modules/digital-text.module';
 import { EdgeConnectionModule } from './domain-modules/edge-connection.module';
@@ -55,7 +55,7 @@ import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
         BookModule,
         AudioVisualModule,
         PhotographModule,
-        BibliographicReferenceModule,
+        BibliographicCitationModule,
         DigitalTextModule,
         SpatialFeatureModule,
         PlaylistModule,

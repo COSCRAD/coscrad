@@ -32,18 +32,18 @@ import {
     AddParticipantToTranscript,
     AddParticipantToTranscriptCommandHandler,
 } from '../../../domain/models/audio-item/commands/transcripts/add-participant-to-transcript';
-import { CreateBookBibliographicReference } from '../../../domain/models/bibliographic-reference/book-bibliographic-reference/commands/create-book-bibliographic-reference/create-book-bibliographic-reference.command';
-import { CreateBookBibliographicReferenceCommandHandler } from '../../../domain/models/bibliographic-reference/book-bibliographic-reference/commands/create-book-bibliographic-reference/create-book-bibliographic-reference.command-handler';
-import BookBibliographicReferenceData from '../../../domain/models/bibliographic-reference/book-bibliographic-reference/entities/book-bibliographic-reference-data.entity';
-import { RegisterDigitalRepresentationOfBibliographicCitation } from '../../../domain/models/bibliographic-reference/common/commands/register-digital-representation-of-bibiliographic-citation';
-import { RegisterDigitalRepresentationOfBibliographicCitationCommandHandler } from '../../../domain/models/bibliographic-reference/common/commands/register-digital-representation-of-bibiliographic-citation/register-digital-representation-of-bibliographic-citation.command-handler';
-import { CreateCourtCaseBibliographicReference } from '../../../domain/models/bibliographic-reference/court-case-bibliographic-reference/commands/create-court-case-bibliographic-reference.command';
-import { CreateCourtCaseBibliographicReferenceCommandHandler } from '../../../domain/models/bibliographic-reference/court-case-bibliographic-reference/commands/create-court-case-bibliographic-reference.command-handler';
-import { CourtCaseBibliographicReferenceData } from '../../../domain/models/bibliographic-reference/court-case-bibliographic-reference/entities/court-case-bibliographic-reference-data.entity';
-import { CreateJournalArticleBibliographicReference } from '../../../domain/models/bibliographic-reference/journal-article-bibliographic-reference/commands/create-journal-article-bibliographic-reference.command';
-import { CreateJournalArticleBibliographicReferenceCommandHandler } from '../../../domain/models/bibliographic-reference/journal-article-bibliographic-reference/commands/create-journal-article-bibliographic-reference.command-handler';
-import JournalArticleBibliographicReferenceData from '../../../domain/models/bibliographic-reference/journal-article-bibliographic-reference/entities/journal-article-bibliographic-reference-data.entity';
-import { BibliographicReferenceDataUnion } from '../../../domain/models/bibliographic-reference/shared';
+import { CreateBookBibliographicCitation } from '../../../domain/models/bibliographic-citation/book-bibliographic-citation/commands/create-book-bibliographic-citation/create-book-bibliographic-citation.command';
+import { CreateBookBibliographicCitationCommandHandler } from '../../../domain/models/bibliographic-citation/book-bibliographic-citation/commands/create-book-bibliographic-citation/create-book-bibliographic-citation.command-handler';
+import BookBibliographicCitationData from '../../../domain/models/bibliographic-citation/book-bibliographic-citation/entities/book-bibliographic-citation-data.entity';
+import { RegisterDigitalRepresentationOfBibliographicCitation } from '../../../domain/models/bibliographic-citation/common/commands/register-digital-representation-of-bibiliographic-citation';
+import { RegisterDigitalRepresentationOfBibliographicCitationCommandHandler } from '../../../domain/models/bibliographic-citation/common/commands/register-digital-representation-of-bibiliographic-citation/register-digital-representation-of-bibliographic-citation.command-handler';
+import { CreateCourtCaseBibliographicCitation } from '../../../domain/models/bibliographic-citation/court-case-bibliographic-citation/commands/create-court-case-bibliographic-citation/create-court-case-bibliographic-citation.command';
+import { CreateCourtCaseBibliographicCitationCommandHandler } from '../../../domain/models/bibliographic-citation/court-case-bibliographic-citation/commands/create-court-case-bibliographic-citation/create-court-case-bibliographic-citation.command-handler';
+import { CourtCaseBibliographicCitationData } from '../../../domain/models/bibliographic-citation/court-case-bibliographic-citation/entities/court-case-bibliographic-citation-data.entity';
+import { CreateJournalArticleBibliographicCitation } from '../../../domain/models/bibliographic-citation/journal-article-bibliographic-citation/commands/create-journal-article-bibliographic-citation.command';
+import { CreateJournalArticleBibliographicCitationCommandHandler } from '../../../domain/models/bibliographic-citation/journal-article-bibliographic-citation/commands/create-journal-article-bibliographic-citation.command-handler';
+import JournalArticleBibliographicCitationData from '../../../domain/models/bibliographic-citation/journal-article-bibliographic-citation/entities/journal-article-bibliographic-citation-data.entity';
+import { BibliographicCitationDataUnion } from '../../../domain/models/bibliographic-citation/shared';
 import {
     CreateNoteAboutResource,
     CreateNoteAboutResourceCommandHandler,
@@ -183,7 +183,7 @@ import {
     TranslateVocabularyListNameCommandHandler,
 } from '../../../domain/models/vocabulary-list/commands';
 import { AudioItemQueryService } from '../../../domain/services/query-services/audio-item-query.service';
-import { BibliographicReferenceQueryService } from '../../../domain/services/query-services/bibliographic-reference-query.service';
+import { BibliographicCitationQueryService } from '../../../domain/services/query-services/bibliographic-citation-query.service';
 import { BookQueryService } from '../../../domain/services/query-services/book-query.service';
 import { CoscradUserGroupQueryService } from '../../../domain/services/query-services/coscrad-user-group-query.service';
 import { CoscradUserQueryService } from '../../../domain/services/query-services/coscrad-user-query.service';
@@ -208,7 +208,7 @@ import TestRepositoryProvider from '../../../persistence/repositories/__tests__/
 import { ArangoEventRepository } from '../../../persistence/repositories/arango-event-repository';
 import { ArangoIdRepository } from '../../../persistence/repositories/arango-id-repository';
 import { ArangoRepositoryProvider } from '../../../persistence/repositories/arango-repository.provider';
-import { BibliographicReferenceViewModel } from '../../../queries/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
+import { BibliographicCitationViewModel } from '../../../queries/buildViewModelForResource/viewModels/bibliographic-citation/bibliographic-citation.view-model';
 import { DigitalTextQueryService } from '../../../queries/digital-text';
 import { DigitalTextQueryRepository } from '../../../queries/digital-text/digital-text.query-repository';
 import { NoteViewModel } from '../../../queries/edgeConnectionViewModels/note.view-model';
@@ -227,7 +227,7 @@ import { CoscradUserController } from '../coscrad-user.controller';
 import { EdgeConnectionController } from '../edge-connection.controller';
 import { IdGenerationController } from '../id-generation/id-generation.controller';
 import { AudioItemController } from '../resources/audio-item.controller';
-import { BibliographicReferenceController } from '../resources/bibliographic-reference.controller';
+import { BibliographicCitationController } from '../resources/bibliographic-citation.controller';
 import { BookController } from '../resources/book.controller';
 import { DigitalTextQueryController } from '../resources/digital-text.controller';
 import { MediaItemController } from '../resources/media-item.controller';
@@ -253,11 +253,11 @@ export const buildAllDataClassProviders = () =>
     [
         // Classes with dynamic union data types
         // Bibliographic References
-        BibliographicReferenceDataUnion,
-        BibliographicReferenceViewModel,
-        CourtCaseBibliographicReferenceData,
-        JournalArticleBibliographicReferenceData,
-        BookBibliographicReferenceData,
+        BibliographicCitationDataUnion,
+        BibliographicCitationViewModel,
+        CourtCaseBibliographicCitationData,
+        JournalArticleBibliographicCitationData,
+        BookBibliographicCitationData,
         // Edge Connections
         EdgeConnection,
         EdgeConnectionMember,
@@ -476,11 +476,11 @@ export default async (
                 inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService],
             },
             {
-                provide: BibliographicReferenceQueryService,
+                provide: BibliographicCitationQueryService,
                 useFactory: (
                     repositoryProvider: ArangoRepositoryProvider,
                     commandInfoService: CommandInfoService
-                ) => new BibliographicReferenceQueryService(repositoryProvider, commandInfoService),
+                ) => new BibliographicCitationQueryService(repositoryProvider, commandInfoService),
                 inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService],
             },
             {
@@ -571,12 +571,12 @@ export default async (
             CreateSongCommandHandler,
             AddLyricsForSong,
             AddLyricsForSongCommandHandler,
-            CreateBookBibliographicReference,
-            CreateBookBibliographicReferenceCommandHandler,
-            CreateCourtCaseBibliographicReference,
-            CreateCourtCaseBibliographicReferenceCommandHandler,
-            CreateJournalArticleBibliographicReference,
-            CreateJournalArticleBibliographicReferenceCommandHandler,
+            CreateBookBibliographicCitation,
+            CreateBookBibliographicCitationCommandHandler,
+            CreateCourtCaseBibliographicCitation,
+            CreateCourtCaseBibliographicCitationCommandHandler,
+            CreateJournalArticleBibliographicCitation,
+            CreateJournalArticleBibliographicCitationCommandHandler,
             RegisterDigitalRepresentationOfBibliographicCitation,
             RegisterDigitalRepresentationOfBibliographicCitationCommandHandler,
             CreateDigitalText,
@@ -680,7 +680,7 @@ export default async (
             BookController,
             PhotographController,
             SpatialFeatureController,
-            BibliographicReferenceController,
+            BibliographicCitationController,
             PlaylistController,
             CoscradUserGroupController,
             CategoryController,

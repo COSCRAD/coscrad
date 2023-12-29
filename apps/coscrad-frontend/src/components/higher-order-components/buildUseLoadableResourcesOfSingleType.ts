@@ -8,7 +8,7 @@ import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { useLoadableNotes } from '../../store/slices/notes/hooks';
 import {
     useLoadableAudioItems,
-    useLoadableBibliographicReferences,
+    useLoadableBibliographicCitations,
     useLoadableBooks,
     useLoadableDigitalTexts,
     useLoadableMediaItems,
@@ -28,7 +28,7 @@ type UseLoadableResourcesOfSingleType<T extends IBaseViewModel> = () => ILoadabl
 const lookupTable: {
     [K in CategorizableType]: UseLoadableResourcesOfSingleType<AggregateTypeToViewModel[K]>;
 } = {
-    [CategorizableType.bibliographicReference]: useLoadableBibliographicReferences,
+    [CategorizableType.bibliographicCitation]: useLoadableBibliographicCitations,
     [CategorizableType.digitalText]: useLoadableDigitalTexts,
     [CategorizableType.book]: useLoadableBooks,
     [CategorizableType.mediaItem]: useLoadableMediaItems,

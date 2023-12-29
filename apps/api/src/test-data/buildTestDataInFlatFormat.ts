@@ -2,7 +2,7 @@ import { AggregateType } from '../domain/types/AggregateType';
 import { PartialSnapshot } from '../domain/types/PartialSnapshot';
 import { ResourceType } from '../domain/types/ResourceType';
 import buildAudioItemTestData from './buildAudioItemTestData';
-import buildBibliographicReferenceTestData from './buildBibliographicReferenceTestData';
+import buildBibliographicCitationTestData from './buildBibliographicCitationTestData';
 import buildBookTestData from './buildBookTestData';
 import buildCategoryTestData from './buildCategoryTestData';
 import buildDigitalTextTestData from './buildDigitalTextTestData';
@@ -28,7 +28,7 @@ export default (): PartialSnapshot => ({
     [ResourceType.book]: buildBookTestData(),
     [ResourceType.photograph]: buildPhotographTestData(),
     [ResourceType.spatialFeature]: buildSpatialFeatureTestData(),
-    [ResourceType.bibliographicReference]: buildBibliographicReferenceTestData(),
+    [ResourceType.bibliographicCitation]: buildBibliographicCitationTestData(),
     [ResourceType.digitalText]: buildDigitalTextTestData(),
     [ResourceType.song]: buildSongTestData(),
     [ResourceType.mediaItem]: buildMediaItemTestData(),

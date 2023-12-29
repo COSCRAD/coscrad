@@ -1,5 +1,5 @@
 import { CommandFSA } from '../../app/controllers/command/command-fsa/command-fsa.entity';
-import { buildBibliographicReferenceTestCommandFsas } from './build-bibliographic-reference-test-command-fsas';
+import { buildBibliographicCitationTestCommandFsas } from './build-bibliographic-citation-test-command-fsas';
 import { buildDigitalTextCommandFsas } from './build-digital-text-test-command-fsas';
 import { buildGeneralResourceTestCommandFsas } from './build-general-resource-test-command-fsas';
 import { buildMediaItemTestCommandFsas } from './build-media-item-test-command-fsas';
@@ -16,7 +16,7 @@ import { buildEdgeConnectionTestCommandFsas } from './bulid-edge-connection-test
 export const buildTestCommandFsaMap = () =>
     [
         // Resources
-        ...buildBibliographicReferenceTestCommandFsas(),
+        ...buildBibliographicCitationTestCommandFsas(),
         ...buildDigitalTextCommandFsas(),
         ...buildGeneralResourceTestCommandFsas(),
         ...buildMediaItemTestCommandFsas(),

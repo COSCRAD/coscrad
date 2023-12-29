@@ -22,7 +22,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
 }
 `;
 
-exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/bibliographicReferences/:id when the resource is published when an resource with the id exists should return the expected response 1`] = `
+exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/bibliographicCitations/:id when the resource is published when an resource with the id exists should return the expected response 1`] = `
 {
   "actions": [],
   "data": {
@@ -43,7 +43,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
     "publisher": "Atlantic Publishing",
     "title": "A Day in the Life",
     "type": "book",
-    "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-book-bibliographic-reference-1_a-day-in-the-life.pdf",
+    "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-book-bibliographic-citation-1_a-day-in-the-life.pdf",
     "year": 1999,
   },
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -83,7 +83,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
         },
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-          "type": "bibliographicReference",
+          "type": "bibliographicCitation",
         },
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
@@ -304,7 +304,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
       "members": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-          "type": "bibliographicReference",
+          "type": "bibliographicCitation",
         },
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",

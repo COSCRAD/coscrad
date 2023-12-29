@@ -81,11 +81,11 @@ const validBookToTranscribedAudioDualConnection = new EdgeConnection({
     note: buildMultilingualTextWithSingleItem('These are both about bears', LanguageCode.English),
 }).toDTO();
 
-const validBookBibliographicReferenceMemberWithIdentityContext: DTO<
+const validBookBibliographicCitationMemberWithIdentityContext: DTO<
     EdgeConnectionMember<IdentityContext>
 > = {
     compositeIdentifier: {
-        type: ResourceType.bibliographicReference,
+        type: ResourceType.bibliographicCitation,
         id: dummyUuid,
     },
     context: new IdentityContext(),
@@ -361,7 +361,7 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                     members: [
                         {
                             compositeIdentifier: {
-                                type: ResourceType.bibliographicReference,
+                                type: ResourceType.bibliographicCitation,
                                 id: dummyUuid,
                             },
                             context: new IdentityContext(),
@@ -376,13 +376,13 @@ export default (): EdgeConnectionValidatorTestCase[] => [
             },
             {
                 description:
-                    'when the from member in an identity connection is not a bibliographic reference',
+                    'when the from member in an identity connection is not a bibliographic citation',
                 invalidDTO: {
                     type: AggregateType.note,
                     connectionType: EdgeConnectionType.dual,
                     id: dummyUuid,
                     note: buildMultilingualTextWithSingleItem(
-                        'my from member should be a bibliographic reference, but it is not!',
+                        'my from member should be a bibliographic citation, but it is not!',
                         LanguageCode.English
                     ),
                     members: [
@@ -397,7 +397,7 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                         {
                             role: EdgeConnectionMemberRole.to,
                             compositeIdentifier: {
-                                type: ResourceType.bibliographicReference,
+                                type: ResourceType.bibliographicCitation,
                                 id: '390',
                             },
                             context: new IdentityContext(),
@@ -407,7 +407,7 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                 expectedError: buildTopLevelError(dummyUuid, [
                     new IncompatibleIdentityConnectionMembersError({
                         fromType: ResourceType.book,
-                        toType: ResourceType.bibliographicReference,
+                        toType: ResourceType.bibliographicCitation,
                     }),
                 ]),
             },
@@ -418,11 +418,11 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                     connectionType: EdgeConnectionType.dual,
                     id: dummyUuid,
                     note: buildMultilingualTextWithSingleItem(
-                        'This book reference is having an identity crisis. Thinks it is a term.',
+                        'This book citation is having an identity crisis. Thinks it is a term.',
                         LanguageCode.English
                     ),
                     members: [
-                        validBookBibliographicReferenceMemberWithIdentityContext,
+                        validBookBibliographicCitationMemberWithIdentityContext,
                         {
                             role: EdgeConnectionMemberRole.to,
                             compositeIdentifier: {
@@ -437,7 +437,7 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                     /**
                      * For now, we don't have any resource types that can
                      * participate as the from member in an Identity Connection
-                     * that can't participate with any `BibliographicReference` as
+                     * that can't participate with any `BibliographicCitation` as
                      * the to member. Once we do, rewrite this test so we only see
                      * one error.
                      */
@@ -446,7 +446,7 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                         ResourceType.term
                     ),
                     new IncompatibleIdentityConnectionMembersError({
-                        fromType: ResourceType.bibliographicReference,
+                        fromType: ResourceType.bibliographicCitation,
                         toType: ResourceType.term,
                     }),
                 ]),
@@ -465,7 +465,7 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                         {
                             role: EdgeConnectionMemberRole.self,
                             compositeIdentifier: {
-                                type: ResourceType.bibliographicReference,
+                                type: ResourceType.bibliographicCitation,
                                 id: '45',
                             },
                             context: new IdentityContext(),

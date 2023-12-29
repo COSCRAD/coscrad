@@ -4,7 +4,7 @@ import NullOrUndefinedAggregateDTOError from '../../domainModelValidators/errors
 import { isValid } from '../../domainModelValidators/Valid';
 import { Aggregate } from '../../models/aggregate.entity';
 import { isNullOrUndefined } from '../../utilities/validation/is-null-or-undefined';
-import { InstanceFactory } from '../getInstanceFactoryForResource';
+import { InstanceFactory } from '../get-instance-factory-for-resource';
 
 /**
  * This is the single source of truth for how to safely build a new aggregate

@@ -4,7 +4,7 @@ import { fetchCategoryTree } from '../categories';
 import { fetchNotes } from '../notes/thunks';
 import {
     fetchAudioItems,
-    fetchBibliographicReferences,
+    fetchBibliographicCitations,
     fetchBooks,
     fetchDigitalTexts,
     fetchMediaItems,
@@ -22,8 +22,8 @@ import { fetchTags } from '../tagSlice';
  */
 export const fetchFreshState = (dispatch: AppDispatch, aggregateType: AggregateType): void => {
     switch (aggregateType) {
-        case AggregateType.bibliographicReference:
-            dispatch(fetchBibliographicReferences());
+        case AggregateType.bibliographicCitation:
+            dispatch(fetchBibliographicCitations());
             break;
 
         case AggregateType.digitalText:

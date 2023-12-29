@@ -9,7 +9,7 @@ import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/ge
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { NoteDetailFullViewPresenter } from '../../notes/note-detail.full-view.presenter';
 import { AudioItemDetailFullViewPresenter } from '../audio-item/audio-item-detail.full-view.presenter';
-import { BibliographicReferenceDetailPresenter } from '../bibliographic-references/bibliographic-reference-detail.presenter';
+import { BibliographicCitationDetailPresenter } from '../bibliographic-citations/bibliographic-citation-detail.presenter';
 import { BookInfo } from '../books/book-info';
 import { BookReader } from '../books/pages';
 import { DigitalTextDetailFullViewPresenter } from '../digital-text/digital-text-detail.full-view.presenter';
@@ -26,7 +26,7 @@ import { VocabularyListDetailFullViewPresenter } from '../vocabulary-lists/vocab
  * TODO We could have a mapped type if we need type safety here.
  */
 const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
-    [CategorizableType.bibliographicReference]: BibliographicReferenceDetailPresenter,
+    [CategorizableType.bibliographicCitation]: BibliographicCitationDetailPresenter,
     [CategorizableType.digitalText]: DigitalTextDetailFullViewPresenter,
     [CategorizableType.mediaItem]: MediaItemDetailFullViewPresenter,
     [CategorizableType.photograph]: PhotographDetailFullViewPresenter,
@@ -62,7 +62,6 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
         );
     },
     [CategorizableType.note]: NoteDetailFullViewPresenter,
-    [CategorizableType.mediaItem]: MediaItemDetailFullViewPresenter,
 };
 
 /**
