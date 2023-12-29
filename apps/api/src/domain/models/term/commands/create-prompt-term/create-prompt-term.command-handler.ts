@@ -19,6 +19,7 @@ import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { validAggregateOrThrow } from '../../../shared/functional';
+import { MultilingualAudio } from '../../../shared/multilingual-audio/multilingual-audio.entity';
 import { Term } from '../../entities/term.entity';
 import { CreatePromptTerm } from './create-prompt-term.command';
 import { PromptTermCreated } from './prompt-term-created.event';
@@ -55,6 +56,9 @@ export class CreatePromptTermCommandHandler extends BaseCreateCommandHandler<Ter
             contributorId,
             published: false,
             isPromptTerm: true,
+            audio: new MultilingualAudio({
+                items: [],
+            }),
         };
 
         // TODO Rewrite the base create handler to take in a createDto only

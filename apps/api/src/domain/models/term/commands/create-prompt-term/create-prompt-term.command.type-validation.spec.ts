@@ -6,13 +6,13 @@ import { AggregateType } from '../../../../types/AggregateType';
 import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import validateCommandPayloadType from '../../../shared/command-handlers/utilities/validateCommandPayloadType';
-import { AddAudioForTerm } from './add-audio-for-term.command';
+import { CreatePromptTerm } from './create-prompt-term.command';
 
-const commandType = 'ADD_AUDIO_FOR_TERM';
+const commandType = 'CREATE_PROMPT_TERM';
 
-const dummyFsa = buildTestCommandFsaMap().get(commandType) as CommandFSA<AddAudioForTerm>;
+const dummyFsa = buildTestCommandFsaMap().get(commandType) as CommandFSA<CreatePromptTerm>;
 
-const commandFsaFactory = new DummyCommandFsaFactory<AddAudioForTerm>(() => dummyFsa);
+const commandFsaFactory = new DummyCommandFsaFactory<CreatePromptTerm>(() => dummyFsa);
 
 /**
  * We have moved these comprehensive payload type validation tests here to
@@ -35,7 +35,7 @@ describe(`${commandType} (payload type validation)`, () => {
                         },
                     });
 
-                    const commandInstance = plainToInstance(AddAudioForTerm, invalidFsa.payload);
+                    const commandInstance = plainToInstance(CreatePromptTerm, invalidFsa.payload);
 
                     const result = validateCommandPayloadType(commandInstance, commandType);
 
@@ -55,7 +55,7 @@ describe(`${commandType} (payload type validation)`, () => {
         });
 
         describe(`fuzz test`, () => {
-            generateCommandFuzzTestCases(AddAudioForTerm).forEach(
+            generateCommandFuzzTestCases(CreatePromptTerm).forEach(
                 ({ description, propertyName, invalidValue }) => {
                     describe(`when the property: ${propertyName} has the invalid value:${invalidValue} (${description}`, () => {
                         it('should fail with the appropriate error', () => {
@@ -67,7 +67,7 @@ describe(`${commandType} (payload type validation)`, () => {
                             });
 
                             const commandInstance = plainToInstance(
-                                AddAudioForTerm,
+                                CreatePromptTerm,
                                 invalidFsa.payload
                             );
 
