@@ -58,7 +58,7 @@ export class RemoveBaseDigitalAssetUrl implements ICoscradMigration {
             );
         }
 
-        await queryRunner.update<TermDocument, TermDocument>(
+        await queryRunner.update<any, any>(
             ArangoCollectionId.terms,
             ({ audioItemId: audioFilename }) =>
                 isNullOrUndefined(audioFilename)
@@ -68,16 +68,13 @@ export class RemoveBaseDigitalAssetUrl implements ICoscradMigration {
                       }
         );
 
-        await queryRunner.update<OldPhotographDocument, PhotographDocument>(
-            ArangoCollectionId.photographs,
-            ({ filename }) =>
-                // @ts-expect-error There's no point in maintaining this
-                isNullOrUndefined(filename)
-                    ? {}
-                    : {
-                          imageUrl: `${this.baseDigitalAssetUrl}${filename}.${defaultPhotographExtension}`,
-                          filename: null,
-                      }
+        await queryRunner.update<any, any>(ArangoCollectionId.photographs, ({ filename }) =>
+            isNullOrUndefined(filename)
+                ? {}
+                : {
+                      imageUrl: `${this.baseDigitalAssetUrl}${filename}.${defaultPhotographExtension}`,
+                      filename: null,
+                  }
         );
     }
 
@@ -91,6 +88,7 @@ export class RemoveBaseDigitalAssetUrl implements ICoscradMigration {
 
         await queryRunner.update<TermDocument, TermDocument>(
             ArangoCollectionId.terms,
+            // @ts-expect-error This code is no longer relevant. We keep it for posterity.
             ({ audioItemId: audioFilename }) => {
                 if (audioFilename?.includes(this.baseDigitalAssetUrl)) {
                     return {
