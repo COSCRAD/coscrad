@@ -1,4 +1,4 @@
-import { AggregateType } from '@coscrad/api-interfaces';
+import { AggregateType, MIMEType } from '@coscrad/api-interfaces';
 import { buildDummyAggregateCompositeIdentifier } from '../../../support/utilities';
 
 const audioTitleInLanguage = 'Audio Title';
@@ -29,6 +29,7 @@ describe('the audio annotation process', () => {
         cy.seedDataWithCommand('CREATE_MEDIA_ITEM', {
             aggregateCompositeIdentifier: mediaItemCompositeIdentifier,
             url: validUrl,
+            mimeType: MIMEType.wav,
         });
 
         cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
