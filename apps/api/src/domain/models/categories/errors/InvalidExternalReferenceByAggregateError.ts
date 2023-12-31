@@ -22,6 +22,8 @@ export default class InvalidExternalReferenceByAggregateError extends InternalEr
         const msg = [
             `${formatAggregateCompositeIdentifier(aggregateCompositeIdentifier)}`,
             `references the following composite keys,`,
+
+            // This error should read ...or has invalid data in its payload
             ` which don't exist or are otherwise inconsistent`,
             formatArrayAsList(invalidReferences, (ref) => formatAggregateCompositeIdentifier(ref)),
         ].join(' ');

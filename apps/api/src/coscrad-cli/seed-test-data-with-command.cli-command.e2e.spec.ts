@@ -6,6 +6,7 @@ import createTestModule from '../app/controllers/__tests__/createTestModule';
 import getValidAggregateInstanceForTest from '../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
 import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
+import { CreateAudioItem } from '../domain/models/audio-item/commands';
 import { AddLyricsForSong } from '../domain/models/song/commands';
 import { CreateSong } from '../domain/models/song/commands/create-song.command';
 import { Song } from '../domain/models/song/song.entity';
@@ -50,6 +51,10 @@ const dummyUuids: AggregateId[] = Array(10)
     .map((_, index) => buildDummyUuid(index));
 
 const existingAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem);
+
+const existingMediaItem = getValidAggregateInstanceForTest(AggregateType.mediaItem);
+
+console.log({ existingMediaItem });
 
 describe(`CLI Command: ${cliCommandName}`, () => {
     let commandInstance: TestingModule;
@@ -117,6 +122,17 @@ describe(`CLI Command: ${cliCommandName}`, () => {
         payloadOverridesForValidCreateCommand
     );
 
+    const createAudioCommandType = 'CREATE_AUDIO_ITEM';
+
+    const payloadOverridesForValidCreateAudioCommand: DeepPartial<CreateAudioItem> = {
+        mediaItemId: existingMediaItem.id,
+        aggregateCompositeIdentifier: { id: dummyUuids[1] },
+    };
+
+    const serializedPayloadOverridesForCreateAudioCommand = JSON.stringify(
+        payloadOverridesForValidCreateAudioCommand
+    );
+
     const updateCommandType = 'ADD_LYRICS_FOR_SONG';
 
     const payloadOverridesForUpdateCommand: DeepPartial<AddLyricsForSong> = {
@@ -150,7 +166,25 @@ describe(`CLI Command: ${cliCommandName}`, () => {
             });
         });
 
-        describe(`when execute an update command`, () => {
+        describe(`when executing a create audio command (requires ID generation)`, () => {
+            it(`should succeed`, async () => {
+                await CommandTestFactory.run(commandInstance, [
+                    cliCommandName,
+                    `--type=${createAudioCommandType}`,
+                    `--payload-overrides=${serializedPayloadOverridesForCreateAudioCommand}`,
+                ]);
+
+                const newId = dummyUuids[2];
+
+                const searchResult = await testRepositoryProvider
+                    .forResource(AggregateType.audioItem)
+                    .fetchById(newId);
+
+                expect(searchResult).not.toBe(NotFound);
+            });
+        });
+
+        describe(`when executing an update command`, () => {
             it(`should update the data in the test database`, async () => {
                 // First, we create the song itself so we can updated it
                 await CommandTestFactory.run(commandInstance, [
