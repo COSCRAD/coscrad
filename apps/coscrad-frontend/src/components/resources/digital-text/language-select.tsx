@@ -5,9 +5,10 @@ import { ConfigurableContentContext } from '../../../configurable-front-matter/c
 
 interface LanguageSelectProps {
     onSelectLanguage: (languageCode: LanguageCode) => void;
+    languageCodesToOmit?: LanguageCode[]
 }
 
-export const LanguageSelect = ({ onSelectLanguage }: LanguageSelectProps) => {
+export const LanguageSelect = ({ onSelectLanguage, languageCodesToOmit = [] }: LanguageSelectProps) => {
     const { defaultLanguageCode } = useContext(ConfigurableContentContext);
 
     return (
@@ -21,6 +22,7 @@ export const LanguageSelect = ({ onSelectLanguage }: LanguageSelectProps) => {
                 .filter(([_label, languageCode]) =>
                     // This is robust to the case where English is the default language code
                     [LanguageCode.English, defaultLanguageCode].includes(languageCode)
+                    && !languageCodesToOmit.includes(languageCode)
                 )
                 .map(([label, languageCode]) => (
                     <MenuItem value={languageCode} key={languageCode}>

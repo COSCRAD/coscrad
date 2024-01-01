@@ -61,6 +61,22 @@ export const DigitalTextDetailFullViewPresenter = ({
                             })
                         )
                     }
+                    onSubmitTranslation={({ text, languageCode, pageIdentifier }) =>
+                        dispatch(
+                            executeCommand({
+                                type: 'TRANSLATE_DIGITAL_TEXT_PAGE_CONTENT',
+                                payload: {
+                                    aggregateCompositeIdentifier: {
+                                        type: AggregateType.digitalText,
+                                        id,
+                                    },
+                                    translation: text,
+                                    languageCode,
+                                    pageIdentifier,
+                                },
+                            })
+                        )
+                    }
                 />
             ) : null}
             <Button

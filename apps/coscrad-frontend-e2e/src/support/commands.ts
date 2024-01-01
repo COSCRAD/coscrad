@@ -99,11 +99,13 @@ Cypress.Commands.add('login', () => {
     // TODO Split all chains on top of click and fix the lint error
     cy.get('#username').click();
 
-    cy.get('#username').type(Cypress.env('username'));
+    // we don't want this sensitive info showing up in CI logs, for example
+    cy.get('#username').type(Cypress.env('username'), { log: false });
 
     cy.get('#password').click();
 
-    cy.get('#password').type(Cypress.env('password'));
+    // we don't want this sensitive info showing up in CI logs, for example
+    cy.get('#password').type(Cypress.env('password'), { log: false });
 
     // TODO why doesn't cy.contains("Continue") work?
     cy.getByDataAttribute('true', 'action-button-primary').click();

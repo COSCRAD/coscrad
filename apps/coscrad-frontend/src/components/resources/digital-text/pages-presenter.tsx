@@ -18,6 +18,8 @@ interface PagePresenterProps {
     pages: IDigitalTextPage[];
     currentPageIdentifier?: string;
     onSubmitNewContent: (state: TextAndLanguage & { pageIdentifier: string }) => void;
+    onSubmitTranslation: (state: TextAndLanguage & { pageIdentifier: string }) => void;
+
 }
 
 enum PagesViewType {
@@ -29,6 +31,7 @@ export const PagesPresenter = ({
     pages,
     currentPageIdentifier,
     onSubmitNewContent,
+    onSubmitTranslation
 }: PagePresenterProps): JSX.Element => {
     const [viewType, setViewType] = useState<PagesViewType>(PagesViewType.singleSelected);
 
@@ -56,6 +59,14 @@ export const PagesPresenter = ({
                                 pageIdentifier: currentPage.identifier,
                             })
                         }
+                        onSubmitTranslation = {({ text, languageCode }) =>
+                        onSubmitTranslation({
+                            text,
+                            languageCode,
+                            pageIdentifier: currentPage.identifier,
+                        })
+                    }
+
                     />
                 ) : (
                     pages.map((page) => (
@@ -68,6 +79,7 @@ export const PagesPresenter = ({
             </StyledPages>
             <FormGroup>
                 <FormControlLabel
+                    data-testid="select-page-view"
                     control={
                         <Switch
                             onChange={(_e) =>

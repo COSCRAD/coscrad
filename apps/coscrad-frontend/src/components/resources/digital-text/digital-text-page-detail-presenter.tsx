@@ -3,6 +3,7 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Typography, styled } from '@mui/material';
 import { MultilingualTextPresenter } from '../../../utils/generic-components/presenters/multilingual-text-presenter';
 import { PageContentForm, TextAndLanguage } from './page-content-form';
+import { PageContentTranslationForm } from './page-content-translation-form';
 
 const StyledMuiPage = styled('div')({
     width: '140px',
@@ -17,6 +18,8 @@ interface FullPagePresenterProps {
     page: IDigitalTextPage;
     isSelected: boolean;
     onSubmitNewContent: (state: TextAndLanguage) => void;
+    onSubmitTranslation: (state: TextAndLanguage) =>void;
+    // TODO Remove this in favor of available command types list
     isAdmin?: boolean;
 }
 
@@ -24,13 +27,21 @@ export const DigitalTextPageDetailPresenter = ({
     page,
     isSelected,
     onSubmitNewContent,
+    onSubmitTranslation,
+    // TODO Use available commands to make this decision
     isAdmin: _isAdmin = false,
 }: FullPagePresenterProps): JSX.Element => {
     const { identifier, content } = page;
 
     const hasContent = !isNullOrUndefined(content);
 
-    const shouldShowAddContentForm = !hasContent; // && isAdmin
+    const shouldShowAddContentForm = !hasContent; 
+
+    const shouldShowTranslateContentForm = hasContent;
+
+    const existingLanguageCodes = page?.content?.items.map(
+        ({languageCode}) => languageCode
+    ) || []
 
     /**
      * TODO [https://www.pivotaltracker.com/story/show/186539815] Use a more standard \ idiomatic approach to forms.
@@ -44,6 +55,9 @@ export const DigitalTextPageDetailPresenter = ({
             </Typography>
             {shouldShowAddContentForm ? (
                 <PageContentForm onSubmitNewContent={onSubmitNewContent} />
+            ) : null}
+                        {shouldShowTranslateContentForm ? (
+                <PageContentTranslationForm onSubmitTranslationForContent={onSubmitTranslation} existingLanguageCodes={existingLanguageCodes}/>
             ) : null}
         </StyledMuiPage>
     );
