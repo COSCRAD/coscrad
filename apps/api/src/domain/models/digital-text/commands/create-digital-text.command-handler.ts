@@ -14,7 +14,7 @@ import { EventRecordMetadata } from '../../shared/events/types/EventRecordMetada
 import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import { DigitalText } from '../entities/digital-text.entity';
 import { CreateDigitalText } from './create-digital-text.command';
-import { DigitalTextCreated } from './digital-text-created.event';
+import { DigitalTextCreated } from './events/digital-text-created.event';
 
 @CommandHandler(CreateDigitalText)
 export class CreateDigitalTextCommandHandler extends BaseCreateCommandHandler<DigitalText> {

@@ -11,8 +11,8 @@ import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-
 import { BaseEvent, IEventPayload } from '../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { DigitalText } from '../../entities';
+import { AudioAddedForDigitalTextPage } from '../events/audio-added-for-digital-text-page.event';
 import { AddAudioForDigitalTextPage } from './add-audio-for-digital-text-page.command';
-import { AudioAddedForDigitalTextPage } from './audio-added-for-digital-text-page.event';
 
 @CommandHandler(AddAudioForDigitalTextPage)
 export class AddAudioForDigitalTextPageCommandHandler extends BaseUpdateCommandHandler<DigitalText> {

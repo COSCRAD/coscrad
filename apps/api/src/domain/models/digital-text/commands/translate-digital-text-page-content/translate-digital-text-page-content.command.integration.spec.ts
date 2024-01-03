@@ -22,8 +22,8 @@ import { DIGITAL_TEXT_CREATED, PAGE_ADDED_TO_DIGITAL_TEXT } from '../../constant
 import { DigitalText } from '../../entities';
 import DigitalTextPage from '../../entities/digital-text-page.entity';
 import { ContentAddedToDigitalTextPage } from '../add-content-to-digital-text-page';
-import { PageAddedToDigitalText } from '../add-page-to-digital-text/page-added-to-digital-text.event';
-import { DigitalTextCreated } from '../digital-text-created.event';
+import { DigitalTextCreated } from '../events/digital-text-created.event';
+import { PageAddedToDigitalText } from '../events/page-added-to-digital-text.event';
 import { DigitalTextPageContentTranslated } from './digital-text-page-content-translated.event';
 import { TranslateDigitalTextPageContent } from './translate-digital-text-page-content.command';
 

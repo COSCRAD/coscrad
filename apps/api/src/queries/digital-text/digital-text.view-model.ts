@@ -61,6 +61,8 @@ export class DigitalTextViewModel
     })
     public pages: DigitalTextPage[] = [];
 
+    public audio: MultilingualAudio;
+
     constructor(public readonly id: string) {}
 
     /**

@@ -35,7 +35,7 @@ import UuidNotGeneratedInternallyError from '../../shared/common-command-errors/
 import { CREATE_DIGITAL_TEXT, DIGITAL_TEXT_CREATED } from '../constants';
 import { DigitalText } from '../entities/digital-text.entity';
 import { CreateDigitalText } from './create-digital-text.command';
-import { DigitalTextCreated } from './digital-text-created.event';
+import { DigitalTextCreated } from './events/digital-text-created.event';
 
 const commandType = CREATE_DIGITAL_TEXT;
 

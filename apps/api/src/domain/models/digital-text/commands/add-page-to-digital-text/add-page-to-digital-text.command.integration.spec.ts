@@ -28,9 +28,9 @@ import { CREATE_DIGITAL_TEXT } from '../../constants';
 import { DigitalText } from '../../entities/digital-text.entity';
 import { CannotAddPageWithDuplicateIdentifierError } from '../../errors/cannot-add-page-with-duplicate-identifier.error';
 import { CreateDigitalText } from '../create-digital-text.command';
-import { DigitalTextCreated } from '../digital-text-created.event';
+import { DigitalTextCreated } from '../events/digital-text-created.event';
+import { PageAddedToDigitalText } from '../events/page-added-to-digital-text.event';
 import { AddPageToDigitalText } from './add-page-to-digital-text.command';
-import { PageAddedToDigitalText } from './page-added-to-digital-text.event';
 
 const commandType = `ADD_PAGE_TO_DIGITAL_TEXT`;
 
