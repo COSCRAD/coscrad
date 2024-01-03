@@ -1,7 +1,7 @@
 import { Maybe } from '../../../lib/types/maybe';
 import { NotFound } from '../../../lib/types/not-found';
 
-interface EventHandlerMetadata {
+export interface EventHandlerMetadata {
     type: string;
 }
 

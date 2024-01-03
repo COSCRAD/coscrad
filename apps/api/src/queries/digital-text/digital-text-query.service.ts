@@ -9,13 +9,11 @@ import { Inject } from '@nestjs/common';
 import { CommandInfoService } from '../../app/controllers/command/services/command-info-service';
 import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { AggregateCompositeIdentifier } from '../../domain/types/AggregateCompositeIdentifier';
-import { AggregateId } from '../../domain/types/AggregateId';
-import { AggregateType } from '../../domain/types/AggregateType';
 import { Maybe } from '../../lib/types/maybe';
 import { NotFound, isNotFound } from '../../lib/types/not-found';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { IAggregateRootQueryRepository } from '../interfaces';
-import { DigitalTextQueryRepository } from './digital-text.query-repository';
+import { ArangoDigitalTextQueryRepository } from './digital-text.query-repository';
 import { DigitalTextViewModel } from './digital-text.view-model';
 
 type IndexScopedCommandContext = {
@@ -39,8 +37,8 @@ export class DigitalTextQueryService {
      */
     constructor(
         // TODO Use a string injection token here. Consider using a provider when generalizing the implementation over aggregate type.
-        @Inject(DigitalTextQueryRepository)
-        protected readonly queryRepository: IAggregateRootQueryRepository<DigitalTextViewModel>,
+        @Inject(ArangoDigitalTextQueryRepository)
+        protected readonly queryRepository: IAggregateRootQueryRepository<IDigitalTextViewModel>,
         @Inject(CommandInfoService) protected readonly commandInfoService: CommandInfoService
     ) {}
 
@@ -97,13 +95,6 @@ export class DigitalTextQueryService {
         userWithGroups: CoscradUserWithGroups
     ): boolean {
         return viewModel.isPublished || viewModel.hasReadAccess(userWithGroups);
-    }
-
-    private buildCompositeIdentifier(id: AggregateId): AggregateCompositeIdentifier {
-        return {
-            type: `digitalText` as AggregateType,
-            id,
-        };
     }
 
     /**

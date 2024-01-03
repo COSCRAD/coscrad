@@ -149,9 +149,12 @@ export class ArangoConnectionProvider {
 
     async #createAllMissingCollections(): Promise<void> {
         await Promise.all(
-            getAllArangoCollectionIDs().map((collectionName) =>
-                this.#createCollectionIfNotExists(collectionName)
-            )
+            getAllArangoCollectionIDs()
+                /**
+                 * TODO Remove this and find a more graceful way to handle this.
+                 **/
+                .concat(`digital_text_views` as ArangoCollectionId)
+                .map((collectionName) => this.#createCollectionIfNotExists(collectionName))
         );
     }
 

@@ -5,7 +5,7 @@ import {
 import { isDeepStrictEqual } from 'util';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
-import { ICoscradEvent } from '../../../common/events/coscrad-event.interface';
+import { ICoscradEvent } from '../../../common/events/interfaces/coscrad-event.interface';
 import { AggregateId } from '../../../types/AggregateId';
 import { EventRecordMetadata } from './types/EventRecordMetadata';
 
