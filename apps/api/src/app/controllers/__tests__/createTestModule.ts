@@ -203,6 +203,7 @@ import { MockIdManagementService } from '../../../lib/id-generation/mock-id-mana
 import { Ctor } from '../../../lib/types/Ctor';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
+import { ArangoCollectionId } from '../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { ArangoEventRepository } from '../../../persistence/repositories/arango-event-repository';
@@ -210,7 +211,7 @@ import { ArangoIdRepository } from '../../../persistence/repositories/arango-id-
 import { ArangoRepositoryProvider } from '../../../persistence/repositories/arango-repository.provider';
 import { BibliographicCitationViewModel } from '../../../queries/buildViewModelForResource/viewModels/bibliographic-citation/bibliographic-citation.view-model';
 import { DigitalTextQueryService } from '../../../queries/digital-text';
-import { DigitalTextQueryRepository } from '../../../queries/digital-text/digital-text.query-repository';
+import { ArangoDigitalTextQueryRepository } from '../../../queries/digital-text/digital-text.query-repository';
 import { NoteViewModel } from '../../../queries/edgeConnectionViewModels/note.view-model';
 import { DTO } from '../../../types/DTO';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../../../validation';
@@ -508,17 +509,24 @@ export default async (
                 inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService],
             },
             {
+                /**
+                 * TODO Let's opt out of the `createTestModule` for digital texts.
+                 */
                 provide: DigitalTextQueryService,
                 useFactory: (
-                    eventRepository: ArangoEventRepository,
+                    arangoDatabaseProvider: ArangoDatabaseProvider,
                     commandInfoService: CommandInfoService
                 ) =>
                     new DigitalTextQueryService(
-                        new DigitalTextQueryRepository(eventRepository),
+                        new ArangoDigitalTextQueryRepository(
+                            arangoDatabaseProvider.getDatabaseForCollection(
+                                // TODO Deal with this properly
+                                'digital_text_views' as ArangoCollectionId
+                            )
+                        ),
                         commandInfoService
                     ),
-
-                inject: [ArangoEventRepository, CommandInfoService],
+                inject: [ArangoDatabaseProvider, CommandInfoService],
             },
             {
                 provide: ID_MANAGER_TOKEN,

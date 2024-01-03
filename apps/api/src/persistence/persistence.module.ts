@@ -2,14 +2,14 @@ import { DynamicModule, Global, Module, OnApplicationShutdown } from '@nestjs/co
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CoscradEventFactory, EventModule } from '../domain/common';
 import { ID_RESPOSITORY_TOKEN } from '../lib/id-generation/interfaces/id-repository.interface';
-import { DigitalTextQueryRepository } from '../queries/digital-text/digital-text.query-repository';
+import { ArangoDigitalTextQueryRepository } from '../queries/digital-text/digital-text.query-repository';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../validation';
 import { REPOSITORY_PROVIDER_TOKEN } from './constants/persistenceConstants';
 import { ArangoConnectionProvider } from './database/arango-connection.provider';
 import { ArangoQueryRunner } from './database/arango-query-runner';
+import { ArangoCollectionId } from './database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from './database/database.provider';
 import { ArangoDataExporter } from './repositories/arango-data-exporter';
-import { ArangoEventRepository } from './repositories/arango-event-repository';
 import { ArangoIdRepository } from './repositories/arango-id-repository';
 import { ArangoRepositoryProvider } from './repositories/arango-repository.provider';
 import { DomainDataExporter } from './repositories/domain-data-exporter';
@@ -94,16 +94,16 @@ export class PersistenceModule implements OnApplicationShutdown {
         };
 
         const queryRepositoryProvider = {
-            provide: DigitalTextQueryRepository,
-            useFactory: (
-                databaseProvider: ArangoDatabaseProvider,
-                coscradEventFactory: CoscradEventFactory
-            ) => {
-                return new DigitalTextQueryRepository(
-                    new ArangoEventRepository(databaseProvider, coscradEventFactory)
+            provide: ArangoDigitalTextQueryRepository,
+            useFactory: (databaseProvider: ArangoDatabaseProvider) => {
+                return new ArangoDigitalTextQueryRepository(
+                    databaseProvider.getDatabaseForCollection(
+                        // TODO Deal with this properly
+                        'digital_text_views' as ArangoCollectionId
+                    )
                 );
             },
-            inject: [ArangoDatabaseProvider, CoscradEventFactory],
+            inject: [ArangoDatabaseProvider],
         };
 
         return {

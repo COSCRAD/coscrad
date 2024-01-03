@@ -19,7 +19,7 @@ export interface IAggregateRootQueryRepository<T extends BaseAggregateRootViewMo
     fetchMany(): Promise<T[]>;
 
     // TODO Should this be a separate interface?
-    create(viewCreateDto: DeepPartial<T> & HasId): Promise<void>;
+    create(viewCreateDto: T): Promise<void>;
 
     /**
      * Our API requires an identifier on an update Dto.
