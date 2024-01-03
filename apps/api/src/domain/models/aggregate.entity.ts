@@ -24,6 +24,7 @@ import not from './shared/functional/common/not';
 import getId from './shared/functional/getId';
 import idEquals from './shared/functional/idEquals';
 
+// TODO Rename this `AggregateRoot` to avoid confusion.
 export abstract class Aggregate extends BaseDomainModel implements HasAggregateId {
     /**
      * We make this property optional so we don't need to specify it on existing data
@@ -248,5 +249,30 @@ export abstract class Aggregate extends BaseDomainModel implements HasAggregateI
         };
 
         return this.clone<Aggregate>(overrides) as T;
+    }
+
+    /**
+     * We use convention over configuration here so to avoid the need for yet
+     * another layer of complicated decorators \ metadata.
+     */
+    apply<T extends Aggregate = Aggregate>(this: T, event: BaseEvent): ResultOrError<T> {
+        if (!event.isFor(this.getCompositeIdentifier())) return this;
+
+        const eventCtorName = Object.getPrototypeOf(event).constructor.name;
+
+        /**
+         * Note that `handleLyricsAddedForSong` reads better than
+         * `handle_LYRICS_ADDED_FOR_SONG`;
+         */
+        const handlerMethodName = `handle${eventCtorName}`;
+
+        if (typeof this[handlerMethodName] !== 'function') {
+            /**
+             * Should we throw here?
+             */
+            return this;
+        }
+
+        return this[handlerMethodName](event);
     }
 }
