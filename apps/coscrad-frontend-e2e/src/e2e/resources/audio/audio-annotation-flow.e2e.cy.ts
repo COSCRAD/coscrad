@@ -1,3 +1,4 @@
+/* eslint-disable cypress/no-unnecessary-waiting */
 import { AggregateType, MIMEType } from '@coscrad/api-interfaces';
 import { buildDummyAggregateCompositeIdentifier } from '../../../support/utilities';
 
@@ -48,13 +49,67 @@ describe('the audio annotation process', () => {
         });
     });
 
-    beforeEach(() => {
-        cy.visit(audioDetailRoute);
-    });
+    describe(`when the user is not logged in`, () => {
+        beforeEach(() => {
+            cy.visit(audioDetailRoute);
+        });
 
-    describe(`when the audio has all properties`, () => {
-        it(`should renter the audio title`, () => {
+        it(`should render the audio title`, () => {
             cy.contains(audioTitleInLanguage);
+
+            cy.getByDataAttribute('in-point-marker-button').should('not.exist');
         });
     });
+
+    // describe(`when the audio has all properties`, () => {
+    //     beforeEach(() => {
+    //         cy.visit('/');
+
+    //         cy.login();
+
+    //         cy.visit(audioDetailRoute);
+    //     });
+
+    //     describe(`when a time range is selected in the Audio player`, () => {
+    //         beforeEach(() => {
+    //             cy.get('audio').then(([audioElement]) => {
+    //                 audioElement.play();
+    //             });
+
+    //             cy.wait(2000);
+
+    //             cy.getByDataAttribute('in-point-marker-button').click();
+
+    //             cy.wait(2589);
+
+    //             cy.getByDataAttribute('out-point-marker-button').click();
+    //         });
+
+    //         it('should show the annotation form', () => {
+    //             cy.getByDataAttribute('create-note-about-audio-form');
+    //         });
+
+    //         describe(`when the form is complete`, () => {
+    //             const newAnnotationText = 'This is an interesting comment.';
+
+    //             const languageCodeForAnnotation = 'hai';
+
+    //             beforeEach(() => {
+    //                 cy.getByDataAttribute('text:note').type(newAnnotationText);
+
+    //                 cy.getByDataAttribute('select:language').as('language-select').click();
+
+    //                 cy.get('@language-select')
+    //                     .get(`[data-value="${languageCodeForAnnotation}"]`)
+    //                     .click();
+    //             });
+
+    //             describe(`the annotation submit button`, () => {
+    //                 it('should be enabled', () => {
+    //                     cy.getByDataAttribute('note-submit').should('be.enabled');
+    //                 });
+    //             });
+    //         });
+    //     });
+    // });
 });

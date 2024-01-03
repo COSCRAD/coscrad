@@ -14,7 +14,9 @@ import {
     Box,
     Divider,
     Grid,
+    Paper,
     Typography,
+    styled,
 } from '@mui/material';
 import { useCallback, useState } from 'react';
 import { useAppDispatch } from '../../../app/hooks';
@@ -41,6 +43,10 @@ const convertTimeRangeSelectionToTimeRangeContext = (
         outPointMilliseconds: outPointMilliseconds,
     };
 };
+
+const CreateAnnotationForm = styled(Paper)({
+    padding: '7px',
+});
 
 export type TimeRange = {
     inPointMilliseconds: number;
@@ -81,11 +87,11 @@ export const AudioItemDetailFullViewPresenter = ({
              * player
              */}
             {!isNullOrUndefined(timeRange) ? (
-                <>
+                <CreateAnnotationForm data-testid="create-note-about-audio-form">
                     <Box mt={1}>
-                        <Typography variant="h4">Time Range Selected for Note</Typography>
-                        <Typography variant="body1">
-                            inPoint: {timeRange.inPointMilliseconds} | outPoint:{' '}
+                        <Typography variant="h4">Add Audio Annotation</Typography>
+                        <Typography variant="body1" fontSize="3">
+                            Time Range in Milliseconds: {timeRange.inPointMilliseconds} &lt;----&gt;{' '}
                             {timeRange.outPointMilliseconds}
                         </Typography>
                     </Box>
@@ -116,7 +122,7 @@ export const AudioItemDetailFullViewPresenter = ({
                             )
                         }
                     />
-                </>
+                </CreateAnnotationForm>
             ) : null}
             <Divider sx={{ mt: 1, mb: 1 }} />
             <Accordion elevation={0}>

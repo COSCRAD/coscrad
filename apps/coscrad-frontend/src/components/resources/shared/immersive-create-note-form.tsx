@@ -1,6 +1,6 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Button, TextField, Typography } from '@mui/material';
+import { Box, Button, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useLoadableCommandResult } from '../../../store/slices/command-status';
 import { useLoadableGeneratedId } from '../../../store/slices/id-generation';
@@ -44,17 +44,15 @@ export const ImmersiveCreateNoteForm = ({ onSubmit }: FormProps) => {
         isPreviousCommandInQueue;
 
     return (
-        <>
-            <div>
-                {/* TODO Style this as a validation warning */}
-                {isPreviousCommandInQueue ? (
-                    <Typography variant="body1">
-                        Please acknowledge the outcome of the previous command.
-                    </Typography>
-                ) : null}
-            </div>
+        <Box>
+            {/* TODO Style this as a validation warning */}
+            {isPreviousCommandInQueue ? (
+                <Typography variant="body1">
+                    Please acknowledge the outcome of the previous command.
+                </Typography>
+            ) : null}
             <TextField
-                data-testid={`text:create-note`}
+                data-testid={`text:note`}
                 onChange={(e) => {
                     setText(e.target.value);
                 }}
@@ -65,6 +63,7 @@ export const ImmersiveCreateNoteForm = ({ onSubmit }: FormProps) => {
                 }}
             />
             <Button
+                data-testid={`note-submit`}
                 disabled={isDisabled}
                 onClick={() => {
                     onSubmit(text, languageCode, generatedId);
@@ -72,6 +71,6 @@ export const ImmersiveCreateNoteForm = ({ onSubmit }: FormProps) => {
             >
                 ADD NOTE
             </Button>
-        </>
+        </Box>
     );
 };
