@@ -36,10 +36,10 @@ import {
     FailedToUpdateDigitalTextPageError,
     MissingPageError,
 } from '../../errors';
-import { PageAddedToDigitalText } from '../add-page-to-digital-text/page-added-to-digital-text.event';
-import { DigitalTextCreated } from '../digital-text-created.event';
+import { ContentAddedToDigitalTextPage } from '../events/content-added-to-digital-text-page.event';
+import { DigitalTextCreated } from '../events/digital-text-created.event';
+import { PageAddedToDigitalText } from '../events/page-added-to-digital-text.event';
 import { AddContentToDigitalTextPage } from './add-content-to-digital-text-page.command';
-import { ContentAddedToDigitalTextPage } from './content-added-to-digital-text-page.event';
 
 const commandType = 'ADD_CONTENT_TO_DIGITAL_TEXT_PAGE';
 

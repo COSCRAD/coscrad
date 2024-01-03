@@ -25,11 +25,11 @@ import CommandExecutionError from '../../../shared/common-command-errors/Command
 import { DigitalText } from '../../entities';
 import DigitalTextPage from '../../entities/digital-text-page.entity';
 import { ContentAddedToDigitalTextPage } from '../add-content-to-digital-text-page';
-import { PageAddedToDigitalText } from '../add-page-to-digital-text/page-added-to-digital-text.event';
-import { DigitalTextCreated } from '../digital-text-created.event';
+import { AudioAddedForDigitalTextPage } from '../events/audio-added-for-digital-text-page.event';
+import { DigitalTextCreated } from '../events/digital-text-created.event';
+import { PageAddedToDigitalText } from '../events/page-added-to-digital-text.event';
 import { DigitalTextPageContentTranslated } from '../translate-digital-text-page-content';
 import { AddAudioForDigitalTextPage } from './add-audio-for-digital-text-page.command';
-import { AudioAddedForDigitalTextPage } from './audio-added-for-digital-text-page.event';
 
 const commandType = 'ADD_AUDIO_FOR_DIGITAL_TEXT_PAGE';
 
