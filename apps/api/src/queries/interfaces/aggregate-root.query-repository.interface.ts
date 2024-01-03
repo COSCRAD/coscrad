@@ -1,20 +1,38 @@
-import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { Maybe } from '../../lib/types/maybe';
+import { DeepPartial } from '../../types/DeepPartial';
 
-interface HasAggregateCompositeIdentifier {
-    type: string;
+interface HasId {
     id: string;
 }
 
-interface BaseAggregateRootViewModel extends HasAggregateCompositeIdentifier {
-    isPublished: boolean;
-    // TODO Use an interface for the param type here
-    hasReadAccess(userWithGroups: CoscradUserWithGroups): boolean;
+interface HasAggregateCompositeIdentifier extends HasId {
+    type: string;
 }
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface BaseAggregateRootViewModel extends HasAggregateCompositeIdentifier {}
 
 export interface IAggregateRootQueryRepository<T extends BaseAggregateRootViewModel> {
     // TODO Include filters \ specifications
     fetchById(id: string): Promise<Maybe<T>>;
 
     fetchMany(): Promise<T[]>;
+
+    // TODO Should this be a separate interface?
+    create(viewCreateDto: DeepPartial<T> & HasId): Promise<void>;
+
+    /**
+     * Our API requires an identifier on an update Dto.
+     *
+     * Note that we may want to have more specific interfaces for each view
+     * so that our abstractions don't interfere with performance \ query
+     * optimization.
+     */
+    update(viewUpdateDto: DeepPartial<T> & HasId): Promise<void>;
+
+    /**
+     * TODO This offers an escape hatch in case our abstractions are getting
+     * in the way of query tuning.
+     */
+    executeRawQuery(queryString: string, bindParams: Record<string, unknown>): Promise<void>;
 }

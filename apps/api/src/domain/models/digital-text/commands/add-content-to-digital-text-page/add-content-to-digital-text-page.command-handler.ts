@@ -9,8 +9,8 @@ import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { DigitalText } from '../../entities';
+import { ContentAddedToDigitalTextPage } from '../events/content-added-to-digital-text-page.event';
 import { AddContentToDigitalTextPage } from './add-content-to-digital-text-page.command';
-import { ContentAddedToDigitalTextPage } from './content-added-to-digital-text-page.event';
 
 @CommandHandler(AddContentToDigitalTextPage)
 export class AddContentToDigitalTextPageCommandHandler extends BaseUpdateCommandHandler<DigitalText> {

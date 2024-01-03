@@ -18,7 +18,7 @@ import {
 } from '../../domain/models/digital-text/commands/add-content-to-digital-text-page';
 import { CreateDigitalText } from '../../domain/models/digital-text/commands/create-digital-text.command';
 import { CreateDigitalTextCommandHandler } from '../../domain/models/digital-text/commands/create-digital-text.command-handler';
-import { DigitalTextCreated } from '../../domain/models/digital-text/commands/digital-text-created.event';
+import { DigitalTextCreated } from '../../domain/models/digital-text/commands/events/digital-text-created.event';
 import { DigitalText } from '../../domain/models/digital-text/entities/digital-text.entity';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { ArangoEventRepository } from '../../persistence/repositories/arango-event-repository';
