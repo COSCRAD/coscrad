@@ -20,6 +20,7 @@ import { TagCreated } from '../../domain/models/tag/commands/create-tag/tag-crea
 import { ResourceOrNoteTaggedPayload } from '../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
 import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { isNullOrUndefined } from '../../domain/utilities/validation/is-null-or-undefined';
+import { DTO } from '../../types/DTO';
 import { EventSourcedTagViewModel } from '../buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { BaseEvent } from '../event-sourcing';
 import { ApplyEvent } from '../event-sourcing/apply-event.interface';
@@ -331,5 +332,25 @@ export class DigitalTextViewModel
 
     static getIndexScopedCommands(): string[] {
         return ['CREATE_DIGITAL_TEXT'];
+    }
+
+    static fromSnapshot({
+        id,
+        name,
+        pages,
+        tags,
+        title,
+    }: DTO<DigitalTextViewModel>): DigitalTextViewModel {
+        const digitalText = new DigitalTextViewModel(id);
+
+        digitalText.name = new MultilingualText(name);
+
+        digitalText.pages = pages.map((pageDto) => new DigitalTextPage(pageDto));
+
+        digitalText.tags = tags.map((tag) => EventSourcedTagViewModel.fromSnapshot(tag));
+
+        digitalText.title = new MultilingualText(title);
+
+        return digitalText;
     }
 }
