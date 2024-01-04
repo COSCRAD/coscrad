@@ -8,7 +8,7 @@ import { MockJwtAdminAuthGuard } from '../../../authorization/mock-jwt-admin-aut
 import { MockJwtAuthGuard } from '../../../authorization/mock-jwt-auth-guard';
 import { MockJwtStrategy } from '../../../authorization/mock-jwt.strategy';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
-import { CoscradEventFactory, CoscradEventUnion } from '../../../domain/common';
+import { CoscradEventFactory, CoscradEventUnion, EventModule } from '../../../domain/common';
 import { ID_MANAGER_TOKEN } from '../../../domain/interfaces/id-manager.interface';
 import { AudioItemController } from '../../../domain/models/audio-visual/application/audio-item.controller';
 import { VideoController } from '../../../domain/models/audio-visual/application/video.controller';
@@ -86,14 +86,18 @@ import {
     AddCoverPhotographForDigitalTextCommandHandler,
     AddPageToDigitalTextCommandHandler,
     AudioAddedForDigitalTextPage,
+    AudioAddedForDigitalTextPageEventHandler,
     AudioAddedForDigitalTextTitle,
+    ContentAddedToDigitalTextPageEventHandler,
     CoverPhotographAddedForDigitalText,
     CreateDigitalText,
     CreateDigitalTextCommandHandler,
     DigitalTextCreated,
+    DigitalTextCreatedEventHandler,
     DigitalTextPageContentTranslated,
     DigitalTextTitleTranslated,
     PageAddedToDigitalText,
+    PageAddedToDigitalTextEventHandler,
     TranslateDigitalTextPageContent,
     TranslateDigitalTextPageContentCommandHandler,
     TranslateDigitalTextTitleCommandHandler,
@@ -109,6 +113,7 @@ import {
     AddPhotographToDigitalTextPageCommandHandler,
     PhotographAddedToDigitalTextPage,
 } from '../../../domain/models/digital-text/commands/add-photograph-to-digital-text-page';
+import { DigitalTextPageContentTranslatedEventHandler } from '../../../domain/models/digital-text/commands/events/digital-text-page-content-translated.event-handler';
 import { DigitalText } from '../../../domain/models/digital-text/entities/digital-text.entity';
 import { CreateMediaItem } from '../../../domain/models/media-item/commands/create-media-item/create-media-item.command';
 import { CreateMediaItemCommandHandler } from '../../../domain/models/media-item/commands/create-media-item/create-media-item.command-handler';
@@ -360,6 +365,7 @@ export default async (
             CommandModule,
             PassportModule.register({ defaultStrategy: 'jwt' }),
             DynamicDataTypeModule,
+            EventModule,
         ],
         providers: [
             CommandInfoService,
@@ -543,19 +549,21 @@ export default async (
                  */
                 provide: DigitalTextQueryService,
                 useFactory: (
-                    arangoDatabaseProvider: ArangoDatabaseProvider,
+                    arangoConnectionProvider: ArangoConnectionProvider,
                     commandInfoService: CommandInfoService
                 ) =>
                     new DigitalTextQueryService(
                         new ArangoDigitalTextQueryRepository(
-                            arangoDatabaseProvider.getDatabaseForCollection(
+                            new ArangoDatabaseProvider(
+                                arangoConnectionProvider
+                            ).getDatabaseForCollection(
                                 // TODO Deal with this properly
                                 'digital_text_views' as ArangoCollectionId
                             )
                         ),
                         commandInfoService
                     ),
-                inject: [ArangoDatabaseProvider, CommandInfoService],
+                inject: [ArangoConnectionProvider, CommandInfoService],
             },
             {
                 provide: ID_MANAGER_TOKEN,
@@ -718,6 +726,12 @@ export default async (
             AddContentToDigitalTextPageCommandHandler,
             CreatePhotograph,
             CreatePhotographCommandHandler,
+            // Event Handlers
+            DigitalTextCreatedEventHandler,
+            PageAddedToDigitalTextEventHandler,
+            ContentAddedToDigitalTextPageEventHandler,
+            DigitalTextPageContentTranslatedEventHandler,
+            AudioAddedForDigitalTextPageEventHandler,
         ],
 
         controllers: [

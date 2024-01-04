@@ -31,8 +31,12 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
     }
 
     // Queries (return information)
-    fetchById(id: AggregateId): Promise<Maybe<ArangoDatabaseDocument<TEntity>>> {
-        return this.#arangoDatabase
+    async fetchById(id: AggregateId): Promise<Maybe<ArangoDatabaseDocument<TEntity>>> {
+        const _dbName = this.#arangoDatabase.getDatabaseName();
+
+        const _collectionId = this.#collectionID;
+
+        const result = await this.#arangoDatabase
             .fetchById<ArangoDatabaseDocument<TEntity>>(id, this.#collectionID)
             .catch((error) => {
                 const innerErrors = error?.message ? [new InternalError(error.message)] : [];
@@ -43,6 +47,8 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
                     } \n ${innerErrors.map((e) => e.toString()).join(' \n ')}`
                 );
             });
+
+        return result;
     }
 
     fetchMany(specification?: ISpecification<TEntity>): Promise<ArangoDatabaseDocument<TEntity>[]> {
@@ -78,7 +84,18 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
             });
     }
 
-    update(id: AggregateId, updateDTO: DeepPartial<ArangoDatabaseDocument<TEntity>>) {
-        return this.#arangoDatabase.update(id, updateDTO, this.#collectionID);
+    async update(id: AggregateId, updateDTO: DeepPartial<ArangoDatabaseDocument<TEntity>>) {
+        await this.#arangoDatabase.update(id, updateDTO, this.#collectionID).catch((error) => {
+            const innerErrors = error?.message ? [new InternalError(error.message)] : [];
+
+            throw new InternalError(
+                `Failed to update collection: ${
+                    this.#collectionID
+                } document: ${id} with update: ${updateDTO}`,
+                innerErrors
+            );
+        });
+
+        console.log(`break here`);
     }
 }

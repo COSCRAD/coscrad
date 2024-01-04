@@ -56,11 +56,12 @@ export class ArangoDatabase {
             throw new InternalError(`Arango cannot fetchById with invalid id: ${id}`);
         }
 
-        if (!isArangoCollectionId(collectionName)) {
-            throw new InternalError(
-                `Arango cannot fetchById from an invalid collection: ${collectionName}`
-            );
-        }
+        // TODO Do we need this?
+        // if (!isArangoCollectionId(collectionName)) {
+        //     throw new InternalError(
+        //         `Arango cannot fetchById from an invalid collection: ${collectionName}`
+        //     );
+        // }
 
         const allEntities = await this.fetchMany<TDatabaseDTO>(collectionName, new IdEquals(id));
 
@@ -137,10 +138,14 @@ export class ArangoDatabase {
         /**
          * Although the caller should ensure this, it's nice to double check here
          * as a means of making sure our query isn't subject to injection.
+         *
+         * Is this really a problem? If so, we need to make sure we are injecting
+         * the list of collection names that have been dynamically registered
+         * via annotation.
          */
-        if (!isArangoCollectionId(collectionName)) {
-            throw new Error(`Cannot insert into invalid collection: ${collectionName}`);
-        }
+        // if (!isArangoCollectionId(collectionName)) {
+        //     throw new Error(`Cannot insert into invalid collection: ${collectionName}`);
+        // }
 
         const collectionExists = await this.#doesCollectionExist(collectionName);
 
@@ -333,10 +338,6 @@ export class ArangoDatabase {
             throw new InternalError(
                 `You can only delete all in a test environment. Your environment is: ${process.env.NODE_ENV}`
             );
-        }
-
-        if (!isArangoCollectionId(collectionName)) {
-            throw new InternalError(`Cannot delete all in invalid collection: ${collectionName}`);
         }
 
         const query = `

@@ -6,36 +6,36 @@ import {
 } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
-import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpIntegrationTest';
-import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpected';
-import { InternalError } from '../../../../lib/errors/InternalError';
-import { NotAvailable } from '../../../../lib/types/not-available';
-import { NotFound } from '../../../../lib/types/not-found';
-import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
-import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
-import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { ArangoEventRepository } from '../../../../persistence/repositories/arango-event-repository';
-import { DTO } from '../../../../types/DTO';
-import { IIdManager } from '../../../interfaces/id-manager.interface';
-import { AggregateId } from '../../../types/AggregateId';
-import { assertCommandFailsDueToTypeError } from '../../__tests__/command-helpers/assert-command-payload-type-error';
-import { assertCreateCommandError } from '../../__tests__/command-helpers/assert-create-command-error';
-import { assertCreateCommandSuccess } from '../../__tests__/command-helpers/assert-create-command-success';
-import { assertEventRecordPersisted } from '../../__tests__/command-helpers/assert-event-record-persisted';
-import { generateCommandFuzzTestCases } from '../../__tests__/command-helpers/generate-command-fuzz-test-cases';
-import { CommandAssertionDependencies } from '../../__tests__/command-helpers/types/CommandAssertionDependencies';
-import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
-import { dummyDateNow } from '../../__tests__/utilities/dummyDateNow';
+import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
+import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
+import { InternalError } from '../../../../../lib/errors/InternalError';
+import { NotAvailable } from '../../../../../lib/types/not-available';
+import { NotFound } from '../../../../../lib/types/not-found';
+import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
+import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { ArangoEventRepository } from '../../../../../persistence/repositories/arango-event-repository';
+import { DTO } from '../../../../../types/DTO';
+import { IIdManager } from '../../../../interfaces/id-manager.interface';
+import { AggregateId } from '../../../../types/AggregateId';
+import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
+import { assertCreateCommandError } from '../../../__tests__/command-helpers/assert-create-command-error';
+import { assertCreateCommandSuccess } from '../../../__tests__/command-helpers/assert-create-command-success';
+import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
+import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
+import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { dummyDateNow } from '../../../__tests__/utilities/dummyDateNow';
 import {
     dummySystemUserId as dummyAdminUserId,
     dummySystemUserId,
-} from '../../__tests__/utilities/dummySystemUserId';
-import CommandExecutionError from '../../shared/common-command-errors/CommandExecutionError';
-import UuidNotGeneratedInternallyError from '../../shared/common-command-errors/UuidNotGeneratedInternallyError';
-import { CREATE_DIGITAL_TEXT, DIGITAL_TEXT_CREATED } from '../constants';
-import { DigitalText } from '../entities/digital-text.entity';
+} from '../../../__tests__/utilities/dummySystemUserId';
+import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
+import UuidNotGeneratedInternallyError from '../../../shared/common-command-errors/UuidNotGeneratedInternallyError';
+import { CREATE_DIGITAL_TEXT, DIGITAL_TEXT_CREATED } from '../../constants';
+import { DigitalText } from '../../entities/digital-text.entity';
+import { DigitalTextCreated } from '../events/digital-text-created.event';
 import { CreateDigitalText } from './create-digital-text.command';
-import { DigitalTextCreated } from './events/digital-text-created.event';
 
 const commandType = CREATE_DIGITAL_TEXT;
 

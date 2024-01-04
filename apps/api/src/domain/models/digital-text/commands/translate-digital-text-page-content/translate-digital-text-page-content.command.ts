@@ -3,7 +3,7 @@ import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString, PageNumber } from '@coscrad/data-types';
 import { LanguageCodeEnum } from '../../../../../domain/common/entities/multilingual-text';
 import { PageIdentifier } from '../../entities';
-import { DigitalTextCompositeId } from '../create-digital-text.command';
+import { DigitalTextCompositeId } from '../create-digital-text/create-digital-text.command';
 
 @Command({
     type: `TRANSLATE_DIGITAL_TEXT_PAGE_CONTENT`,
