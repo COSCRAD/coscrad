@@ -340,7 +340,8 @@ export class DigitalTextViewModel
         pages,
         tags,
         title,
-    }: DTO<DigitalTextViewModel>): DigitalTextViewModel {
+        isPublished,
+    }: DTO<Omit<DigitalTextViewModel, 'type'>>): DigitalTextViewModel {
         const digitalText = new DigitalTextViewModel(id);
 
         digitalText.name = new MultilingualText(name);
@@ -350,6 +351,8 @@ export class DigitalTextViewModel
         digitalText.tags = tags.map((tag) => EventSourcedTagViewModel.fromSnapshot(tag));
 
         digitalText.title = new MultilingualText(title);
+
+        digitalText.isPublished = isPublished;
 
         return digitalText;
     }

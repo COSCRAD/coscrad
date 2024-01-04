@@ -13,8 +13,8 @@ import { BaseEvent } from '../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../shared/events/types/EventRecordMetadata';
 import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import { DigitalText } from '../entities/digital-text.entity';
+import { DigitalTextCreated } from '../events/digital-text-created.event';
 import { CreateDigitalText } from './create-digital-text.command';
-import { DigitalTextCreated } from './events/digital-text-created.event';
 
 @CommandHandler(CreateDigitalText)
 export class CreateDigitalTextCommandHandler extends BaseCreateCommandHandler<DigitalText> {

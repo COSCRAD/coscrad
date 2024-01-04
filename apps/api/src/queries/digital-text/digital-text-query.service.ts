@@ -13,7 +13,6 @@ import { Maybe } from '../../lib/types/maybe';
 import { NotFound, isNotFound } from '../../lib/types/not-found';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { IAggregateRootQueryRepository } from '../interfaces';
-import { ArangoDigitalTextQueryRepository } from './digital-text.query-repository';
 import { DigitalTextViewModel } from './digital-text.view-model';
 
 type IndexScopedCommandContext = {
@@ -37,7 +36,7 @@ export class DigitalTextQueryService {
      */
     constructor(
         // TODO Use a string injection token here. Consider using a provider when generalizing the implementation over aggregate type.
-        @Inject(ArangoDigitalTextQueryRepository)
+        @Inject(`DIGITAL_TEXT_QUERY_REPOSITORY`)
         protected readonly queryRepository: IAggregateRootQueryRepository<IDigitalTextViewModel>,
         @Inject(CommandInfoService) protected readonly commandInfoService: CommandInfoService
     ) {}
@@ -46,18 +45,17 @@ export class DigitalTextQueryService {
         id: string,
         userWithGroups?: CoscradUserWithGroups
     ): Promise<Maybe<IDetailQueryResult<IDigitalTextViewModel>>> {
-        //  TODO Use the repository to fetch this
-        const hydratedViewModel = await this.queryRepository.fetchById(id);
+        const viewModelSearchResult = await this.queryRepository.fetchById(id);
 
-        if (isNotFound(hydratedViewModel)) return NotFound;
+        if (isNotFound(viewModelSearchResult)) return NotFound;
 
-        if (this.isVisibleToUser(hydratedViewModel, userWithGroups)) {
+        if (this.isVisibleToUser(viewModelSearchResult, userWithGroups)) {
             // TODO should we remove any fields?
             const withActions = {
-                ...cloneToPlainObject(hydratedViewModel),
+                ...cloneToPlainObject(viewModelSearchResult),
                 actions: this.fetchUserActions(userWithGroups, [
                     // Is there a more graceful way to handle the type mismatch?
-                    hydratedViewModel as unknown as CommandContext,
+                    viewModelSearchResult as unknown as CommandContext,
                 ]),
             };
 

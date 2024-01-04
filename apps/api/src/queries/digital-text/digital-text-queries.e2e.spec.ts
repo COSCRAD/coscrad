@@ -1,9 +1,23 @@
 import { CoscradUserRole, LanguageCode, ResourceType } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
+import buildMockConfigService from '../../app/config/__tests__/utilities/buildMockConfigService';
+import buildConfigFilePath from '../../app/config/buildConfigFilePath';
+import { Environment } from '../../app/config/constants/Environment';
 import httpStatusCodes, { HttpStatusCode } from '../../app/constants/httpStatusCodes';
 import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
+import { AdminJwtGuard } from '../../app/controllers/command/command.controller';
+import { DigitalTextModule } from '../../app/domain-modules/digital-text.module';
+import { UserManagementModule } from '../../app/domain-modules/user-management.module';
+import { MockJwtAdminAuthGuard } from '../../authorization/mock-jwt-admin-auth-guard';
+import { MockJwtAuthGuard } from '../../authorization/mock-jwt-auth-guard';
+import { OptionalJwtAuthGuard } from '../../authorization/optional-jwt-auth-guard';
+import { CoscradEventFactory, EventModule } from '../../domain/common';
 import { buildMultilingualTextWithSingleItem } from '../../domain/common/build-multilingual-text-with-single-item';
+import { EVENT_PUBLISHER_TOKEN } from '../../domain/common/events/constants';
+import { ICoscradEventPublisher } from '../../domain/common/events/interfaces';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import {
     DigitalTextCreated,
@@ -18,11 +32,13 @@ import { CoscradUserWithGroups } from '../../domain/models/user-management/user/
 import { CoscradUser } from '../../domain/models/user-management/user/entities/user/coscrad-user.entity';
 import { AggregateId } from '../../domain/types/AggregateId';
 import { ArangoDatabaseProvider } from '../../persistence/database/database.provider';
+import { PersistenceModule } from '../../persistence/persistence.module';
 import TestRepositoryProvider from '../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoEventRepository } from '../../persistence/repositories/arango-event-repository';
 import buildTestDataInFlatFormat from '../../test-data/buildTestDataInFlatFormat';
 import { TestEventStream } from '../../test-data/events/test-event-stream';
+import { DynamicDataTypeFinderService } from '../../validation';
 import { DigitalTextViewModel } from './digital-text.view-model';
 
 const indexEndpoint = `/resources/digitalTexts`;
@@ -72,15 +88,15 @@ const eventStreamForPublishedDigitalText = new TestEventStream()
             identifier: dummyPageIdentifier,
         },
     })
-    .andThen<ResourceReadAccessGrantedToUser>({
-        type: 'RESOURCE_READ_ACCESS_GRANTED_TO_USER',
-        payload: {
-            userId: dummyQueryUserId,
-        },
-    })
+    // What good is this if the resource is published?
+    // .andThen<ResourceReadAccessGrantedToUser>({
+    //     type: 'RESOURCE_READ_ACCESS_GRANTED_TO_USER',
+    //     payload: {
+    //         userId: dummyQueryUserId,
+    //     },
+    // })
     .andThen<ResourcePublished>({
         type: 'RESOURCE_PUBLISHED',
-        payload: {},
     });
 
 const eventStreamForPrivateDigitalText = new TestEventStream()
@@ -176,6 +192,8 @@ describe(`When querying for a digital text`, () => {
 
     let databaseProvider: ArangoDatabaseProvider;
 
+    let eventPublisher: ICoscradEventPublisher;
+
     beforeEach(async () => {
         await testRepositoryProvider.testSetup();
     });
@@ -197,25 +215,72 @@ describe(`When querying for a digital text`, () => {
 
     describe(`when the user is unauthenticated`, () => {
         beforeAll(async () => {
-            ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
+            const mockConfigService = buildMockConfigService(
                 {
-                    ARANGO_DB_NAME: testDatabaseName,
-                }
-                // no authenticated user
-            ));
+                    ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+                    GLOBAL_PREFIX: '',
+                },
+                buildConfigFilePath(Environment.test)
+            );
+
+            const testModuleRef = await Test.createTestingModule({
+                imports: [
+                    ConfigModule.forRoot({
+                        isGlobal: true,
+                        envFilePath: buildConfigFilePath(process.env.NODE_ENV),
+                        cache: false,
+                    }),
+                    PersistenceModule.forRootAsync(),
+                    EventModule,
+                    DigitalTextModule,
+                    /**
+                     * TODO We have imported generic events and handlers here.
+                     * Let's consider having a `WebOfKnowledge` module at this point
+                     * that includes any generic commands and events that could
+                     * apply to all resources, categorizables, or aggregates.
+                     */
+                    UserManagementModule,
+                ],
+                providers: [
+                    {
+                        provide: ConfigService,
+                        useValue: mockConfigService,
+                    },
+                ],
+            })
+                .overrideGuard(OptionalJwtAuthGuard)
+                .useValue(new MockJwtAuthGuard(undefined, true))
+                .overrideGuard(AdminJwtGuard)
+                .useValue(new MockJwtAdminAuthGuard(undefined))
+                .overrideProvider(ConfigService)
+                .useValue(mockConfigService)
+                .compile();
+
+            app = testModuleRef.createNestApplication();
+
+            databaseProvider = app.get(ArangoDatabaseProvider);
+
+            testRepositoryProvider = new TestRepositoryProvider(
+                databaseProvider,
+                app.get(CoscradEventFactory),
+                app.get(DynamicDataTypeFinderService)
+            );
+
+            await app.init();
+
+            eventPublisher = app.get(EVENT_PUBLISHER_TOKEN);
         });
 
         describe(`fetch single (by ID)`, () => {
             describe(`when the resource is published`, () => {
-                it(`should return the resource (consistent with the API contract)`, async () => {
+                it.only(`should return the resource (consistent with the API contract)`, async () => {
                     const eventHistoryForPublishedDigitalText =
                         eventStreamForPublishedDigitalText.as({
+                            type: ResourceType.digitalText,
                             id: digitalTextId,
                         });
 
-                    await app
-                        .get(ArangoEventRepository)
-                        .appendEvents(eventHistoryForPublishedDigitalText);
+                    eventPublisher.publish(eventHistoryForPublishedDigitalText);
 
                     const res = await request(app.getHttpServer()).get(
                         buildDetailEndpoint(digitalTextId)
