@@ -41,7 +41,16 @@ export class EventModule {
     ) {}
 
     onApplicationBootstrap() {
-        this.discoverService
+        const _foo = this.discoverService
+            .getProviders()
+            .filter((provider) => provider.name.includes('DigitalTextCreated'))
+            .filter((provider) => provider.instance)
+            .map((provider) => [
+                provider.instance,
+                getEventHandlerMeta(Object.getPrototypeOf(provider.instance).constructor),
+            ]);
+
+        const handlersAndTypes = this.discoverService
             .getProviders()
             .filter((provider) => provider.instance)
             .map((provider) => [
@@ -57,7 +66,8 @@ export class EventModule {
             .map(([handler, { type: eventType }]): [ICoscradEventHandler, string] => [
                 handler,
                 eventType,
-            ])
-            .forEach(([handler, type]) => this.eventPublisher.register(type, handler));
+            ]);
+
+        handlersAndTypes.forEach(([handler, type]) => this.eventPublisher.register(type, handler));
     }
 }

@@ -1,6 +1,6 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
-import { CoscradEventFactory } from '../../domain/common';
+import { CoscradEventFactory, EventModule } from '../../domain/common';
 import {
     AddAudioForDigitalTextPage,
     AddAudioForDigitalTextPageCommandHandler,
@@ -16,9 +16,14 @@ import {
     AddContentToDigitalTextPageCommandHandler,
     ContentAddedToDigitalTextPage,
 } from '../../domain/models/digital-text/commands/add-content-to-digital-text-page';
-import { CreateDigitalText } from '../../domain/models/digital-text/commands/create-digital-text.command';
-import { CreateDigitalTextCommandHandler } from '../../domain/models/digital-text/commands/create-digital-text.command-handler';
+import { CreateDigitalText } from '../../domain/models/digital-text/commands/create-digital-text/create-digital-text.command';
+import { CreateDigitalTextCommandHandler } from '../../domain/models/digital-text/commands/create-digital-text/create-digital-text.command-handler';
+import { AudioAddedForDigitalTextPageEventHandler } from '../../domain/models/digital-text/commands/events/audio-added-for-digital-text-page.event-handler';
+import { ContentAddedToDigitalTextPageEventHandler } from '../../domain/models/digital-text/commands/events/content-added-to-digital-text-page.event-handler';
 import { DigitalTextCreated } from '../../domain/models/digital-text/commands/events/digital-text-created.event';
+import { DigitalTextCreatedEventHandler } from '../../domain/models/digital-text/commands/events/digital-text-created.event-handler';
+import { DigitalTextPageContentTranslatedEventHandler } from '../../domain/models/digital-text/commands/events/digital-text-page-content-translated.event-handler';
+import { PageAddedToDigitalTextEventHandler } from '../../domain/models/digital-text/commands/events/page-added-to-digital-text.event-handler';
 import { DigitalText } from '../../domain/models/digital-text/entities/digital-text.entity';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { ArangoEventRepository } from '../../persistence/repositories/arango-event-repository';
@@ -27,8 +32,11 @@ import { DynamicDataTypeFinderService } from '../../validation';
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
 import { DigitalTextQueryController } from '../controllers/resources/digital-text.controller';
 
+/**
+ * TODO Move this to the models directory
+ */
 @Module({
-    imports: [CommandModule, IdGenerationModule],
+    imports: [CommandModule, IdGenerationModule, EventModule],
     controllers: [DigitalTextQueryController],
     providers: [
         CommandInfoService,
@@ -40,7 +48,12 @@ import { DigitalTextQueryController } from '../controllers/resources/digital-tex
         AddContentToDigitalTextPageCommandHandler,
         AddAudioForDigitalTextPageCommandHandler,
         DigitalTextQueryService,
-
+        // Event Handlers
+        DigitalTextCreatedEventHandler,
+        PageAddedToDigitalTextEventHandler,
+        ContentAddedToDigitalTextPageEventHandler,
+        DigitalTextPageContentTranslatedEventHandler,
+        AudioAddedForDigitalTextPageEventHandler,
         ...[
             // Domain Model
             DigitalText,
@@ -61,5 +74,6 @@ import { DigitalTextQueryController } from '../controllers/resources/digital-tex
             useValue: ctor,
         })),
     ],
+    exports: [DigitalTextQueryService],
 })
 export class DigitalTextModule {}

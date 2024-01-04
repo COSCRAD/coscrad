@@ -9,7 +9,7 @@ import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { DigitalText } from '../../entities';
-import { DigitalTextPageContentTranslated } from './digital-text-page-content-translated.event';
+import { DigitalTextPageContentTranslated } from '../events/digital-text-page-content-translated.event';
 import { TranslateDigitalTextPageContent } from './translate-digital-text-page-content.command';
 
 @CommandHandler(TranslateDigitalTextPageContent)

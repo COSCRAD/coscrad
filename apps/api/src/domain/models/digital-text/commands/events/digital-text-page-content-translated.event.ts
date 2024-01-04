@@ -1,6 +1,6 @@
-import { CoscradEvent } from '../../../../../domain/common';
+import { CoscradEvent } from '../../../../common';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
-import { TranslateDigitalTextPageContent } from './translate-digital-text-page-content.command';
+import { TranslateDigitalTextPageContent } from '../translate-digital-text-page-content/translate-digital-text-page-content.command';
 
 export type DigitalTextPageContentTranslatedPayload = TranslateDigitalTextPageContent;
 

@@ -1,11 +1,11 @@
 import { ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
-import { LanguageCodeEnum } from '../../../common/entities/multilingual-text';
-import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
-import { AggregateType } from '../../../types/AggregateType';
-import { AggregateTypeProperty } from '../../shared/common-commands';
-import { CREATE_DIGITAL_TEXT } from '../constants';
+import { LanguageCodeEnum } from '../../../../common/entities/multilingual-text';
+import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
+import { AggregateType } from '../../../../types/AggregateType';
+import { AggregateTypeProperty } from '../../../shared/common-commands';
+import { CREATE_DIGITAL_TEXT } from '../../constants';
 
 export class DigitalTextCompositeId {
     @AggregateTypeProperty([AggregateType.digitalText])

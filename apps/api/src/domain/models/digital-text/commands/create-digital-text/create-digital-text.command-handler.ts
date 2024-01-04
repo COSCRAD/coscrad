@@ -1,19 +1,22 @@
 import { AggregateType, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { CommandHandler } from '@coscrad/commands';
-import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
-import { DTO } from '../../../../types/DTO';
-import { ResultOrError } from '../../../../types/ResultOrError';
-import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
-import { Valid } from '../../../domainModelValidators/Valid';
-import getInstanceFactoryForResource from '../../../factories/get-instance-factory-for-resource';
-import { DeluxeInMemoryStore } from '../../../types/DeluxeInMemoryStore';
-import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
-import { BaseCreateCommandHandler } from '../../shared/command-handlers/base-create-command-handler';
-import { BaseEvent } from '../../shared/events/base-event.entity';
-import { EventRecordMetadata } from '../../shared/events/types/EventRecordMetadata';
-import { DigitalText } from '../entities/digital-text.entity';
+import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
+import { DTO } from '../../../../../types/DTO';
+import { ResultOrError } from '../../../../../types/ResultOrError';
+import {
+    MultilingualText,
+    MultilingualTextItem,
+} from '../../../../common/entities/multilingual-text';
+import { Valid } from '../../../../domainModelValidators/Valid';
+import getInstanceFactoryForResource from '../../../../factories/get-instance-factory-for-resource';
+import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
+import { InMemorySnapshot, ResourceType } from '../../../../types/ResourceType';
+import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
+import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
+import { DigitalText } from '../../entities/digital-text.entity';
+import { DigitalTextCreated } from '../events/digital-text-created.event';
 import { CreateDigitalText } from './create-digital-text.command';
-import { DigitalTextCreated } from './events/digital-text-created.event';
 
 @CommandHandler(CreateDigitalText)
 export class CreateDigitalTextCommandHandler extends BaseCreateCommandHandler<DigitalText> {

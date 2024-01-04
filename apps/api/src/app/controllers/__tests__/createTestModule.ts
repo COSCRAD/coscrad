@@ -8,7 +8,7 @@ import { MockJwtAdminAuthGuard } from '../../../authorization/mock-jwt-admin-aut
 import { MockJwtAuthGuard } from '../../../authorization/mock-jwt-auth-guard';
 import { MockJwtStrategy } from '../../../authorization/mock-jwt.strategy';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
-import { CoscradEventFactory, CoscradEventUnion } from '../../../domain/common';
+import { CoscradEventFactory, CoscradEventUnion, EventModule } from '../../../domain/common';
 import { ID_MANAGER_TOKEN } from '../../../domain/interfaces/id-manager.interface';
 import {
     AddLineItemToTranscript,
@@ -69,11 +69,15 @@ import {
     AddAudioForDigitalTextPageCommandHandler,
     AddPageToDigitalTextCommandHandler,
     AudioAddedForDigitalTextPage,
+    AudioAddedForDigitalTextPageEventHandler,
+    ContentAddedToDigitalTextPageEventHandler,
     CreateDigitalText,
     CreateDigitalTextCommandHandler,
     DigitalTextCreated,
+    DigitalTextCreatedEventHandler,
     DigitalTextPageContentTranslated,
     PageAddedToDigitalText,
+    PageAddedToDigitalTextEventHandler,
     TranslateDigitalTextPageContent,
     TranslateDigitalTextPageContentCommandHandler,
 } from '../../../domain/models/digital-text/commands';
@@ -83,6 +87,7 @@ import {
     ContentAddedToDigitalTextPage,
 } from '../../../domain/models/digital-text/commands/add-content-to-digital-text-page';
 import { AddPageToDigitalText } from '../../../domain/models/digital-text/commands/add-page-to-digital-text/add-page-to-digital-text.command';
+import { DigitalTextPageContentTranslatedEventHandler } from '../../../domain/models/digital-text/commands/events/digital-text-page-content-translated.event-handler';
 import { DigitalText } from '../../../domain/models/digital-text/entities/digital-text.entity';
 import { CreateMediaItem } from '../../../domain/models/media-item/commands/create-media-item/create-media-item.command';
 import { CreateMediaItemCommandHandler } from '../../../domain/models/media-item/commands/create-media-item/create-media-item.command-handler';
@@ -323,6 +328,7 @@ export default async (
             CommandModule,
             PassportModule.register({ defaultStrategy: 'jwt' }),
             DynamicDataTypeModule,
+            EventModule,
         ],
         providers: [
             CommandInfoService,
@@ -514,19 +520,21 @@ export default async (
                  */
                 provide: DigitalTextQueryService,
                 useFactory: (
-                    arangoDatabaseProvider: ArangoDatabaseProvider,
+                    arangoConnectionProvider: ArangoConnectionProvider,
                     commandInfoService: CommandInfoService
                 ) =>
                     new DigitalTextQueryService(
                         new ArangoDigitalTextQueryRepository(
-                            arangoDatabaseProvider.getDatabaseForCollection(
+                            new ArangoDatabaseProvider(
+                                arangoConnectionProvider
+                            ).getDatabaseForCollection(
                                 // TODO Deal with this properly
                                 'digital_text_views' as ArangoCollectionId
                             )
                         ),
                         commandInfoService
                     ),
-                inject: [ArangoDatabaseProvider, CommandInfoService],
+                inject: [ArangoConnectionProvider, CommandInfoService],
             },
             {
                 provide: ID_MANAGER_TOKEN,
@@ -673,6 +681,12 @@ export default async (
             AddContentToDigitalTextPageCommandHandler,
             CreatePhotograph,
             CreatePhotographCommandHandler,
+            // Event Handlers
+            DigitalTextCreatedEventHandler,
+            PageAddedToDigitalTextEventHandler,
+            ContentAddedToDigitalTextPageEventHandler,
+            DigitalTextPageContentTranslatedEventHandler,
+            AudioAddedForDigitalTextPageEventHandler,
         ],
 
         controllers: [

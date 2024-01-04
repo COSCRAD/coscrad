@@ -23,8 +23,8 @@ import { DigitalText } from '../../entities';
 import DigitalTextPage from '../../entities/digital-text-page.entity';
 import { ContentAddedToDigitalTextPage } from '../add-content-to-digital-text-page';
 import { DigitalTextCreated } from '../events/digital-text-created.event';
+import { DigitalTextPageContentTranslated } from '../events/digital-text-page-content-translated.event';
 import { PageAddedToDigitalText } from '../events/page-added-to-digital-text.event';
-import { DigitalTextPageContentTranslated } from './digital-text-page-content-translated.event';
 import { TranslateDigitalTextPageContent } from './translate-digital-text-page-content.command';
 
 const commandType = `TRANSLATE_DIGITAL_TEXT_PAGE_CONTENT`;

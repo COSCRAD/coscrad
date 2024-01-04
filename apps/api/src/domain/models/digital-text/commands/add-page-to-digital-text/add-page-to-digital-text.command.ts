@@ -3,7 +3,7 @@ import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { ADD_PAGE_TO_DIGITAL_TEXT } from '../../constants';
 import { PageIdentifier } from '../../entities';
-import { DigitalTextCompositeId } from '../create-digital-text.command';
+import { DigitalTextCompositeId } from '../create-digital-text/create-digital-text.command';
 
 @Command({
     type: ADD_PAGE_TO_DIGITAL_TEXT,
