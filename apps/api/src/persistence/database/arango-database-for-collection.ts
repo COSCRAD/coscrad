@@ -66,7 +66,11 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
     // Commands (mutate state)
     create(databaseDocument: ArangoDatabaseDocument<TEntity>) {
         // Handle the difference in _id \ _key between model and database
-        return this.#arangoDatabase.create(databaseDocument, this.#collectionID);
+        return this.#arangoDatabase.create(databaseDocument, this.#collectionID).catch((_error) => {
+            throw new InternalError(
+                `Failed to create document in collection: ${this.#collectionID}`
+            );
+        });
     }
 
     createMany(databaseDocuments: ArangoDatabaseDocument<TEntity>[]) {
@@ -95,7 +99,5 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
                 innerErrors
             );
         });
-
-        console.log(`break here`);
     }
 }

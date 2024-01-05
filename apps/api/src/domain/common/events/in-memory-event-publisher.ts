@@ -18,7 +18,9 @@ export class InMemoryEventPublisher
     publish(eventOrEvents: ICoscradEvent<unknown> | ICoscradEvent<unknown>[]): void {
         const eventsToPublish = Array.isArray(eventOrEvents) ? eventOrEvents : [eventOrEvents];
 
-        eventsToPublish.forEach((event) => this._subject$.next(event));
+        eventsToPublish.forEach((event) => {
+            this._subject$.next(event);
+        });
     }
 
     // TODO Link to source code this was inspired by

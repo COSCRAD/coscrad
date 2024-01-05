@@ -7,7 +7,6 @@ import buildMockConfigService from '../../app/config/__tests__/utilities/buildMo
 import buildConfigFilePath from '../../app/config/buildConfigFilePath';
 import { Environment } from '../../app/config/constants/Environment';
 import httpStatusCodes, { HttpStatusCode } from '../../app/constants/httpStatusCodes';
-import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
 import { AdminJwtGuard } from '../../app/controllers/command/command.controller';
 import { DigitalTextModule } from '../../app/domain-modules/digital-text.module';
 import { UserManagementModule } from '../../app/domain-modules/user-management.module';
@@ -17,7 +16,7 @@ import { OptionalJwtAuthGuard } from '../../authorization/optional-jwt-auth-guar
 import { CoscradEventFactory, EventModule } from '../../domain/common';
 import { buildMultilingualTextWithSingleItem } from '../../domain/common/build-multilingual-text-with-single-item';
 import { EVENT_PUBLISHER_TOKEN } from '../../domain/common/events/constants';
-import { ICoscradEventPublisher } from '../../domain/common/events/interfaces';
+import { ICoscradEvent, ICoscradEventPublisher } from '../../domain/common/events/interfaces';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import {
     DigitalTextCreated,
@@ -35,7 +34,6 @@ import { ArangoDatabaseProvider } from '../../persistence/database/database.prov
 import { PersistenceModule } from '../../persistence/persistence.module';
 import TestRepositoryProvider from '../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { ArangoEventRepository } from '../../persistence/repositories/arango-event-repository';
 import buildTestDataInFlatFormat from '../../test-data/buildTestDataInFlatFormat';
 import { TestEventStream } from '../../test-data/events/test-event-stream';
 import { DynamicDataTypeFinderService } from '../../validation';
@@ -175,6 +173,13 @@ const eventStreamForTaggingPrivateDigitalText = new TestEventStream()
         },
     });
 
+const DEFAULT_DELAY = 500;
+
+const TEST_TIMEOUT = DEFAULT_DELAY * 20;
+
+const delay = (time: number = DEFAULT_DELAY) =>
+    new Promise((resolve, _reject) => setTimeout(resolve, time));
+
 /**
  * TODO Move this test to a higher level. Eventually, we may want to run the
  * API out of process and execute these queries against a local, live server.
@@ -183,9 +188,7 @@ const eventStreamForTaggingPrivateDigitalText = new TestEventStream()
  *
  * TODO Write a separate test for `getAvailableCommands`.
  */
-describe(`When querying for a digital text`, () => {
-    const testDatabaseName = generateDatabaseNameForTestSuite();
-
+describe.only(`When querying for a digital text`, () => {
     let app: INestApplication;
 
     let testRepositoryProvider: TestRepositoryProvider;
@@ -193,6 +196,95 @@ describe(`When querying for a digital text`, () => {
     let databaseProvider: ArangoDatabaseProvider;
 
     let eventPublisher: ICoscradEventPublisher;
+
+    const publishEvents = async (events: ICoscradEvent[]): Promise<void> => {
+        for (const e of events) {
+            eventPublisher.publish(e);
+
+            /**
+             * It's not ideal that we need to do this. When using an in-memory
+             * event bus, there are technically race conditions. However, in practice
+             * the user will have already seen the result of the previous command
+             * take effect on the query layer before issuing a subsequent command.
+             *
+             * Keep in mind that we are just using this utility to set up the
+             * desired initial state from an event stream. We may want a way to
+             * apply event handlers sequentially in-memory for this taks.
+             *
+             * It does point out an interesting limitation of our design, though.
+             * The event handlers are serving two purposes.:
+             * 1. Calculate the delta for a given view document (note that sometimes a fetch is required to do this)
+             * 2. Persist this delta
+             *
+             * It might be possible to separate out the logic for calculating
+             * the delta, indepedent from the persistence.
+             *
+             * Alternatively, we could inject an in-memory query repository for
+             * seeding tests and commit to the db only after all deltas have been applied.
+             *
+             * Do we need a separate test to ensure the event handlers indeed
+             * persist the desired updates?
+             */
+            await delay();
+        }
+    };
+
+    const setupTest = async (userWithGroups?: CoscradUserWithGroups): Promise<void> => {
+        const mockConfigService = buildMockConfigService(
+            {
+                ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+                GLOBAL_PREFIX: '',
+            },
+            buildConfigFilePath(Environment.test)
+        );
+
+        const testModuleRef = await Test.createTestingModule({
+            imports: [
+                ConfigModule.forRoot({
+                    isGlobal: true,
+                    envFilePath: buildConfigFilePath(Environment.test),
+                    cache: false,
+                }),
+                PersistenceModule.forRootAsync(),
+                EventModule,
+                DigitalTextModule,
+                /**
+                 * TODO We have imported generic events and handlers here.
+                 * Let's consider having a `WebOfKnowledge` module at this point
+                 * that includes any generic commands and events that could
+                 * apply to all resources, categorizables, or aggregates.
+                 */
+                UserManagementModule,
+            ],
+            providers: [
+                {
+                    provide: ConfigService,
+                    useValue: mockConfigService,
+                },
+            ],
+        })
+            .overrideGuard(OptionalJwtAuthGuard)
+            .useValue(new MockJwtAuthGuard(userWithGroups, true))
+            .overrideGuard(AdminJwtGuard)
+            .useValue(new MockJwtAdminAuthGuard(userWithGroups))
+            .overrideProvider(ConfigService)
+            .useValue(mockConfigService)
+            .compile();
+
+        app = testModuleRef.createNestApplication();
+
+        databaseProvider = app.get(ArangoDatabaseProvider);
+
+        testRepositoryProvider = new TestRepositoryProvider(
+            databaseProvider,
+            app.get(CoscradEventFactory),
+            app.get(DynamicDataTypeFinderService)
+        );
+
+        await app.init();
+
+        eventPublisher = app.get(EVENT_PUBLISHER_TOKEN);
+    };
 
     beforeEach(async () => {
         await testRepositoryProvider.testSetup();
@@ -215,172 +307,134 @@ describe(`When querying for a digital text`, () => {
 
     describe(`when the user is unauthenticated`, () => {
         beforeAll(async () => {
-            const mockConfigService = buildMockConfigService(
-                {
-                    ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
-                    GLOBAL_PREFIX: '',
-                },
-                buildConfigFilePath(Environment.test)
-            );
-
-            const testModuleRef = await Test.createTestingModule({
-                imports: [
-                    ConfigModule.forRoot({
-                        isGlobal: true,
-                        envFilePath: buildConfigFilePath(process.env.NODE_ENV),
-                        cache: false,
-                    }),
-                    PersistenceModule.forRootAsync(),
-                    EventModule,
-                    DigitalTextModule,
-                    /**
-                     * TODO We have imported generic events and handlers here.
-                     * Let's consider having a `WebOfKnowledge` module at this point
-                     * that includes any generic commands and events that could
-                     * apply to all resources, categorizables, or aggregates.
-                     */
-                    UserManagementModule,
-                ],
-                providers: [
-                    {
-                        provide: ConfigService,
-                        useValue: mockConfigService,
-                    },
-                ],
-            })
-                .overrideGuard(OptionalJwtAuthGuard)
-                .useValue(new MockJwtAuthGuard(undefined, true))
-                .overrideGuard(AdminJwtGuard)
-                .useValue(new MockJwtAdminAuthGuard(undefined))
-                .overrideProvider(ConfigService)
-                .useValue(mockConfigService)
-                .compile();
-
-            app = testModuleRef.createNestApplication();
-
-            databaseProvider = app.get(ArangoDatabaseProvider);
-
-            testRepositoryProvider = new TestRepositoryProvider(
-                databaseProvider,
-                app.get(CoscradEventFactory),
-                app.get(DynamicDataTypeFinderService)
-            );
-
-            await app.init();
-
-            eventPublisher = app.get(EVENT_PUBLISHER_TOKEN);
+            await setupTest();
         });
 
         describe(`fetch single (by ID)`, () => {
             describe(`when the resource is published`, () => {
-                it.only(`should return the resource (consistent with the API contract)`, async () => {
-                    const eventHistoryForPublishedDigitalText =
-                        eventStreamForPublishedDigitalText.as({
-                            type: ResourceType.digitalText,
-                            id: digitalTextId,
-                        });
-
-                    eventPublisher.publish(eventHistoryForPublishedDigitalText);
-
-                    const res = await request(app.getHttpServer()).get(
-                        buildDetailEndpoint(digitalTextId)
-                    );
-
-                    expect(res.status).toBe(HttpStatusCode.ok);
-                });
-            });
-
-            describe(`when the resource is not published`, () => {
-                it(`should return not found`, async () => {
-                    const eventHistoryForUnpublishedDigitalText =
-                        eventStreamForPrivateDigitalText.as({
-                            id: digitalTextId,
-                        });
-
-                    await app
-                        .get(ArangoEventRepository)
-                        .appendEvents(eventHistoryForUnpublishedDigitalText);
-
-                    const res = await request(app.getHttpServer()).get(
-                        buildDetailEndpoint(digitalTextId)
-                    );
-
-                    expect(res.status).toBe(HttpStatusCode.notFound);
-                });
-            });
-        });
-
-        describe(`fetch many`, () => {
-            it(`should only return published digital texts`, async () => {
-                await app.get(ArangoEventRepository).appendEvents(eventHistoryForMany);
-
-                const res = await request(app.getHttpServer()).get(indexEndpoint);
-
-                expect(res.status).toBe(httpStatusCodes.ok);
-            });
-        });
-    });
-
-    describe(`when the user is authenticated as a non-admin user`, () => {
-        beforeAll(async () => {
-            ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
-                {
-                    ARANGO_DB_NAME: testDatabaseName,
-                },
-                {
-                    testUserWithGroups: dummyUserWithGroups,
-                }
-            ));
-        });
-
-        describe(`fetch single (by ID)`, () => {
-            describe(`when there are no existing digital texts`, () => {
-                it(`should return not found`, async () => {
-                    const res = await request(app.getHttpServer()).get(
-                        buildDetailEndpoint(buildDummyUuid(456))
-                    );
-
-                    expect(res.status).toBe(httpStatusCodes.notFound);
-                });
-            });
-
-            describe(`when there is a digital text with the given ID`, () => {
-                describe(`when the digital text is published`, () => {
-                    it(`should return the corresponding result`, async () => {
-                        const eventHistory = [
-                            ...eventStreamForTaggingPublicDigitalText.as({
-                                id: tagId,
-                            }),
-                            ...eventStreamForPublishedDigitalText.as({
+                it(
+                    `should return the resource (consistent with the API contract)`,
+                    async () => {
+                        const eventHistoryForPublishedDigitalText =
+                            eventStreamForPublishedDigitalText.as({
+                                type: ResourceType.digitalText,
                                 id: digitalTextId,
-                            }),
-                        ];
+                            });
 
-                        await app.get(ArangoEventRepository).appendEvents(eventHistory);
+                        await publishEvents(eventHistoryForPublishedDigitalText);
 
                         const res = await request(app.getHttpServer()).get(
                             buildDetailEndpoint(digitalTextId)
                         );
 
                         expect(res.status).toBe(HttpStatusCode.ok);
+                    },
+                    TEST_TIMEOUT
+                );
+            });
 
-                        const { body } = res;
+            describe(`when the resource is not published`, () => {
+                it(
+                    `should return not found`,
+                    async () => {
+                        const eventHistoryForUnpublishedDigitalText =
+                            eventStreamForPrivateDigitalText.as({
+                                id: digitalTextId,
+                            });
 
-                        const result = body as DigitalTextViewModel;
+                        await publishEvents(eventHistoryForUnpublishedDigitalText);
 
-                        expect(result.id).toBe(digitalTextId);
+                        const res = await request(app.getHttpServer()).get(
+                            buildDetailEndpoint(digitalTextId)
+                        );
 
-                        const expectedTitle = buildMultilingualTextWithSingleItem(
-                            digitalTextTitle,
-                            languageCodeForDigitalTextTitle
-                        ).toDTO();
+                        expect(res.status).toBe(HttpStatusCode.notFound);
+                    },
+                    TEST_TIMEOUT
+                );
+            });
+        });
 
-                        expect(result.title).toEqual(expectedTitle);
+        describe(`fetch many`, () => {
+            it(
+                `should only return published digital texts`,
+                async () => {
+                    await publishEvents(eventHistoryForMany);
 
-                        const searchResult = result.tags.find(({ label }) => label === tagLabel);
+                    const res = await request(app.getHttpServer()).get(indexEndpoint);
 
-                        expect(searchResult.id).toBe(tagId);
-                    });
+                    expect(res.status).toBe(httpStatusCodes.ok);
+                },
+                // TODO Do this for each test
+                TEST_TIMEOUT
+            );
+        });
+    });
+
+    describe(`when the user is authenticated as a non-admin user`, () => {
+        beforeAll(async () => {
+            await setupTest(dummyUserWithGroups);
+        });
+
+        describe(`fetch single (by ID)`, () => {
+            describe(`when there are no existing digital texts`, () => {
+                // TODO Why does this one fail?
+                it(
+                    `should return not found`,
+                    async () => {
+                        const res = await request(app.getHttpServer()).get(
+                            buildDetailEndpoint(buildDummyUuid(456))
+                        );
+
+                        expect(res.status).toBe(httpStatusCodes.notFound);
+                    },
+                    TEST_TIMEOUT
+                );
+            });
+
+            describe(`when there is a digital text with the given ID`, () => {
+                describe(`when the digital text is published`, () => {
+                    it(
+                        `should return the corresponding result`,
+                        async () => {
+                            const eventHistory = [
+                                ...eventStreamForTaggingPublicDigitalText.as({
+                                    id: tagId,
+                                }),
+                                ...eventStreamForPublishedDigitalText.as({
+                                    id: digitalTextId,
+                                }),
+                            ];
+
+                            await publishEvents(eventHistory);
+
+                            const res = await request(app.getHttpServer()).get(
+                                buildDetailEndpoint(digitalTextId)
+                            );
+
+                            expect(res.status).toBe(HttpStatusCode.ok);
+
+                            const { body } = res;
+
+                            const result = body as DigitalTextViewModel;
+
+                            expect(result.id).toBe(digitalTextId);
+
+                            const expectedTitle = buildMultilingualTextWithSingleItem(
+                                digitalTextTitle,
+                                languageCodeForDigitalTextTitle
+                            ).toDTO();
+
+                            expect(result.title).toEqual(expectedTitle);
+
+                            const searchResult = result.tags.find(
+                                ({ label }) => label === tagLabel
+                            );
+
+                            expect(searchResult.id).toBe(tagId);
+                        },
+                        TEST_TIMEOUT
+                    );
                 });
 
                 describe(`when the digital text is not published`, () => {
@@ -392,9 +446,7 @@ describe(`When querying for a digital text`, () => {
                                         id: digitalTextId,
                                     });
 
-                                await app
-                                    .get(ArangoEventRepository)
-                                    .appendEvents(eventHistoryForUnpublishedDigitalText);
+                                await publishEvents(eventHistoryForUnpublishedDigitalText);
 
                                 const res = await request(app.getHttpServer()).get(
                                     buildDetailEndpoint(digitalTextId)
@@ -406,23 +458,27 @@ describe(`When querying for a digital text`, () => {
 
                         describe(`when the user is part of the digital text's ACL`, () => {
                             describe(`as a user`, () => {
-                                it(`should succeed`, async () => {
-                                    const eventHistoryForUnpublishedDigitalText =
-                                        eventStreamForUnpublishedDigitalTextQueryUserCanAccess.as({
-                                            id: digitalTextId,
-                                        });
+                                it(
+                                    `should succeed`,
+                                    async () => {
+                                        const eventHistoryForUnpublishedDigitalText =
+                                            eventStreamForUnpublishedDigitalTextQueryUserCanAccess.as(
+                                                {
+                                                    id: digitalTextId,
+                                                }
+                                            );
 
-                                    // Do we need to compile the app differently in this case? Where is the user injected?
-                                    await app
-                                        .get(ArangoEventRepository)
-                                        .appendEvents(eventHistoryForUnpublishedDigitalText);
+                                        // Do we need to compile the app differently in this case? Where is the user injected?
+                                        await publishEvents(eventHistoryForUnpublishedDigitalText);
 
-                                    const res = await request(app.getHttpServer()).get(
-                                        buildDetailEndpoint(digitalTextId)
-                                    );
+                                        const res = await request(app.getHttpServer()).get(
+                                            buildDetailEndpoint(digitalTextId)
+                                        );
 
-                                    expect(res.status).toBe(HttpStatusCode.ok);
-                                });
+                                        expect(res.status).toBe(HttpStatusCode.ok);
+                                    },
+                                    TEST_TIMEOUT
+                                );
                             });
 
                             describe(`as the member of a group`, () => {
@@ -438,20 +494,24 @@ describe(`When querying for a digital text`, () => {
         describe(`fetch many`, () => {
             describe(`when the digital text is not published`, () => {
                 describe(`when the user does not have read access`, () => {
-                    it(`should not return the unpublished digital text`, async () => {
-                        await app.get(ArangoEventRepository).appendEvents(eventHistoryForMany);
+                    it(
+                        `should not return the unpublished digital text`,
+                        async () => {
+                            await publishEvents(eventHistoryForMany);
 
-                        const res = await request(app.getHttpServer()).get(indexEndpoint);
+                            const res = await request(app.getHttpServer()).get(indexEndpoint);
 
-                        expect(res.status).toBe(httpStatusCodes.ok);
+                            expect(res.status).toBe(httpStatusCodes.ok);
 
-                        /**
-                         * + published
-                         * + private, but user in ACL
-                         * - private, user not in ACL
-                         */
-                        expect(res.body.entities).toHaveLength(2);
-                    });
+                            /**
+                             * + published
+                             * + private, but user in ACL
+                             * - private, user not in ACL
+                             */
+                            expect(res.body.entities).toHaveLength(2);
+                        },
+                        TEST_TIMEOUT
+                    );
                 });
             });
         });
@@ -465,89 +525,92 @@ describe(`When querying for a digital text`, () => {
     ).forEach(([userRole, description]) => {
         describe(description, () => {
             beforeAll(async () => {
-                ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
-                    {
-                        ARANGO_DB_NAME: testDatabaseName,
-                    },
-                    {
-                        testUserWithGroups: new CoscradUserWithGroups(
-                            dummyUser.clone({
-                                roles: [userRole],
-                            }),
-                            []
-                        ),
-                    }
-                ));
+                await setupTest(
+                    new CoscradUserWithGroups(
+                        dummyUser.clone({
+                            roles: [userRole],
+                        }),
+                        []
+                    )
+                );
             });
 
             describe(`detail queries (fetch by ID)`, () => {
-                it(`should allow the user to access the private resource`, async () => {
-                    await app.get(ArangoEventRepository).appendEvents(eventHistoryForMany);
+                it(
+                    `should allow the user to access the private resource`,
+                    async () => {
+                        await publishEvents(eventHistoryForMany);
 
-                    const res = await request(app.getHttpServer()).get(
-                        buildDetailEndpoint(privateWithNoUserAccessId)
-                    );
+                        const res = await request(app.getHttpServer()).get(
+                            buildDetailEndpoint(privateWithNoUserAccessId)
+                        );
 
-                    expect(res.status).toBe(HttpStatusCode.ok);
+                        expect(res.status).toBe(HttpStatusCode.ok);
 
-                    /**
-                     * This if statement is effectively a filter for our test
-                     * case builder pattern. We only want to snapshot the response
-                     * once for one specific class of user. We want this to be
-                     * an admin user, because admin users have access to all
-                     * data, including command info (available actions).
-                     * Finally, we do this for the project admin, as queries
-                     * for this user are by far more common than for coscrad admin
-                     * in practice.
-                     */
-                    if (userRole === CoscradUserRole.projectAdmin) {
                         /**
-                         * Whenever this snapshot changes, it means the API contract
-                         * with the client has changed. At a practical level, this means
-                         * we have introduced potentially breaking changes or at least
-                         * enhancements that now must be supported on the front-end.
-                         *
-                         * Snapshotting forces us to be intentional about making
-                         * such changes in a controlled manner.
+                         * This if statement is effectively a filter for our test
+                         * case builder pattern. We only want to snapshot the response
+                         * once for one specific class of user. We want this to be
+                         * an admin user, because admin users have access to all
+                         * data, including command info (available actions).
+                         * Finally, we do this for the project admin, as queries
+                         * for this user are by far more common than for coscrad admin
+                         * in practice.
                          */
-                        expect(res.body).toMatchSnapshot();
-                    }
-                });
+                        if (userRole === CoscradUserRole.projectAdmin) {
+                            /**
+                             * Whenever this snapshot changes, it means the API contract
+                             * with the client has changed. At a practical level, this means
+                             * we have introduced potentially breaking changes or at least
+                             * enhancements that now must be supported on the front-end.
+                             *
+                             * Snapshotting forces us to be intentional about making
+                             * such changes in a controlled manner.
+                             */
+                            expect(res.body).toMatchSnapshot();
+                        }
+                    },
+                    TEST_TIMEOUT
+                );
             });
 
             describe(`index queries (fetch many)`, () => {
-                it(`should allow the user to access private resources`, async () => {
-                    await app.get(ArangoEventRepository).appendEvents(eventHistoryForMany);
+                it(
+                    `should allow the user to access private resources`,
+                    async () => {
+                        await publishEvents(eventHistoryForMany);
 
-                    const res = await request(app.getHttpServer()).get(indexEndpoint);
+                        const res = await request(app.getHttpServer()).get(indexEndpoint);
 
-                    const numberOfDigitalTextsIncludingPrivateTexts = 3;
+                        const numberOfDigitalTextsIncludingPrivateTexts = 3;
 
-                    expect(res.status).toBe(HttpStatusCode.ok);
+                        expect(res.status).toBe(HttpStatusCode.ok);
 
-                    expect(res.body.entities).toHaveLength(
-                        numberOfDigitalTextsIncludingPrivateTexts
-                    );
+                        expect(res.body.entities).toHaveLength(
+                            numberOfDigitalTextsIncludingPrivateTexts
+                        );
 
-                    /**
-                     * This if statement is effectively a filter for our test
-                     * case builder pattern. We only want to snapshot the response
-                     * once for one specific class of user. We want this to be
-                     * an admin user, because admin users have access to all
-                     * data, including command info (available actions).
-                     * Finally, we do this for the project admin, as queries
-                     * for this user are by far more common than for coscrad admin
-                     * in practice.
-                     */
-                    if (userRole === CoscradUserRole.projectAdmin) {
                         /**
-                         * This is to catch breaking changes in the API contract with
-                         * the client. See the above comment for the corresponding detail
-                         * endpoint test case.
+                         * This if statement is effectively a filter for our test
+                         * case builder pattern. We only want to snapshot the response
+                         * once for one specific class of user. We want this to be
+                         * an admin user, because admin users have access to all
+                         * data, including command info (available actions).
+                         * Finally, we do this for the project admin, as queries
+                         * for this user are by far more common than for coscrad admin
+                         * in practice.
                          */
-                        expect(res.body).toMatchSnapshot();
-                    }
-                });
+                        if (userRole === CoscradUserRole.projectAdmin) {
+                            /**
+                             * This is to catch breaking changes in the API contract with
+                             * the client. See the above comment for the corresponding detail
+                             * endpoint test case.
+                             */
+                            expect(res.body).toMatchSnapshot();
+                        }
+                    },
+                    TEST_TIMEOUT
+                );
             });
         });
     });
