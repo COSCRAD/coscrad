@@ -9,6 +9,7 @@ import { Environment } from '../../app/config/constants/Environment';
 import httpStatusCodes, { HttpStatusCode } from '../../app/constants/httpStatusCodes';
 import { AdminJwtGuard } from '../../app/controllers/command/command.controller';
 import { DigitalTextModule } from '../../app/domain-modules/digital-text.module';
+import { TagModule } from '../../app/domain-modules/tag.module';
 import { UserManagementModule } from '../../app/domain-modules/user-management.module';
 import { MockJwtAdminAuthGuard } from '../../authorization/mock-jwt-admin-auth-guard';
 import { MockJwtAuthGuard } from '../../authorization/mock-jwt-auth-guard';
@@ -247,6 +248,8 @@ describe.only(`When querying for a digital text`, () => {
                 }),
                 PersistenceModule.forRootAsync(),
                 EventModule,
+                TagModule,
+                UserManagementModule,
                 DigitalTextModule,
                 /**
                  * TODO We have imported generic events and handlers here.
