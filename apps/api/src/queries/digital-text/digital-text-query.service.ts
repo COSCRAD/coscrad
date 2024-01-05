@@ -11,6 +11,7 @@ import { CoscradUserWithGroups } from '../../domain/models/user-management/user/
 import { AggregateCompositeIdentifier } from '../../domain/types/AggregateCompositeIdentifier';
 import { Maybe } from '../../lib/types/maybe';
 import { NotFound, isNotFound } from '../../lib/types/not-found';
+import { clonePlainObjectWithoutProperties } from '../../lib/utilities/clonePlainObjectWithoutProperties';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { IAggregateRootQueryRepository } from '../interfaces';
 import { DigitalTextViewModel } from './digital-text.view-model';
@@ -59,7 +60,8 @@ export class DigitalTextQueryService {
                 ]),
             };
 
-            return withActions;
+            // TODO Fix types here
+            return this.publicFieldsOnly(withActions) as any;
         }
 
         return NotFound;
@@ -79,7 +81,8 @@ export class DigitalTextQueryService {
         return {
             // Here we mix-in the detail-scoped actions.
             entities: availableEntityViewModels.map((entityViewModel) => ({
-                ...cloneToPlainObject(entityViewModel),
+                // @ts-expect-error Fix this
+                ...this.publicFieldsOnly(entityViewModel),
                 actions: this.fetchUserActions(userWithGroups, [
                     entityViewModel as unknown as CommandContext,
                 ]),
@@ -116,5 +119,14 @@ export class DigitalTextQueryService {
                 ? this.commandInfoService.getCommandForms(commandContext)
                 : [];
         });
+    }
+
+    private publicFieldsOnly(
+        digitalTextViewModel: DigitalTextViewModel
+    ): Omit<DigitalTextViewModel, 'queryAccessControlList'> {
+        return clonePlainObjectWithoutProperties(
+            digitalTextViewModel as unknown as Record<string, unknown>,
+            ['queryAccessControlList']
+        ) as unknown as Omit<DigitalTextViewModel, 'queryAccessControlList'>;
     }
 }

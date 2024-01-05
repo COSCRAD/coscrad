@@ -9,8 +9,12 @@ interface HasAggregateCompositeIdentifier extends HasId {
     type: string;
 }
 
+interface HasTags {
+    tags: { label: string; id: string }[];
+}
+
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface BaseAggregateRootViewModel extends HasAggregateCompositeIdentifier {}
+interface BaseAggregateRootViewModel extends HasAggregateCompositeIdentifier, HasTags {}
 
 export interface IAggregateRootQueryRepository<T extends BaseAggregateRootViewModel> {
     // TODO Include filters \ specifications
