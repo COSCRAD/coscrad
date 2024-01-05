@@ -3,6 +3,7 @@ import { EventHandler, ICoscradEventHandler } from '../../../../../domain/common
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { DigitalTextViewModel } from '../../../../../queries/digital-text';
 import { IAggregateRootQueryRepository } from '../../../../../queries/interfaces';
+import { AccessControlList } from '../../../shared/access-control/access-control-list.entity';
 import { MultilingualAudio } from '../../../shared/multilingual-audio/multilingual-audio.entity';
 import { DigitalTextCreated } from './digital-text-created.event';
 
@@ -34,6 +35,7 @@ export class DigitalTextCreatedEventHandler implements ICoscradEventHandler {
             audio: new MultilingualAudio({
                 items: [],
             }),
+            queryAccessControlList: new AccessControlList(),
         });
 
         await this.digitalTextQueryRepository.create(newDigitalText);

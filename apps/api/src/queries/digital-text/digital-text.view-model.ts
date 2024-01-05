@@ -28,8 +28,10 @@ import { ApplyEvent } from '../event-sourcing/apply-event.interface';
 export class DigitalTextViewModel
     implements ApplyEvent<DigitalTextViewModel>, IDigitalTextViewModel
 {
-    #accessControlList: AccessControlList = new AccessControlList();
+    // TODO remove this in the query service
+    public queryAccessControlList: AccessControlList = new AccessControlList();
 
+    // can we just leverage these?
     #allTags: EventSourcedTagViewModel[] = [];
 
     public readonly type = AggregateType.digitalText;
@@ -139,7 +141,8 @@ export class DigitalTextViewModel
                  * Note that `AccessControlList` is an immutable data structure,
                  * so we need to save an updated reference to it.
                  */
-                this.#accessControlList = this.#accessControlList.allowUser(idOfCreatingUser);
+                this.queryAccessControlList =
+                    this.queryAccessControlList.allowUser(idOfCreatingUser);
 
                 return this;
             }
@@ -180,7 +183,7 @@ export class DigitalTextViewModel
                 const { userId } = payload as ResourceReadAccessGrantedToUserPayload;
 
                 // Note that `AccessControlList` is an immutable data structure
-                this.#accessControlList = this.#accessControlList.allowUser(userId);
+                this.queryAccessControlList = this.queryAccessControlList.allowUser(userId);
 
                 return this;
             }
@@ -275,8 +278,8 @@ export class DigitalTextViewModel
         const { id: userId, groups } = userWithGroups;
 
         return (
-            this.#accessControlList.canUser(userId) ||
-            groups.some(({ id: userGroupId }) => this.#accessControlList.canGroup(userGroupId))
+            this.queryAccessControlList.canUser(userId) ||
+            groups.some(({ id: userGroupId }) => this.queryAccessControlList.canGroup(userGroupId))
         );
     }
 
