@@ -149,7 +149,9 @@ export class ArangoDatabase {
 
         const collectionExists = await this.#doesCollectionExist(collectionName);
 
-        if (!collectionExists) throw new Error(`Collection ${collectionName} not found!`);
+        if (!collectionExists) {
+            throw new Error(`Collection ${collectionName} not found!`);
+        }
 
         const query = `
     INSERT @dto
