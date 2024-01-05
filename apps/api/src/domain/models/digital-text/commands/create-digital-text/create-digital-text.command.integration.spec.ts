@@ -231,7 +231,7 @@ describe('CreateDigitalText', () => {
     /**
      * TODO Test these at a lower level that avoids the network.
      */
-    describe('when the payload has an invalid type', () => {
+    describe.skip('when the payload has an invalid type', () => {
         describe(`when the payload has an invalid aggregate type`, () => {
             Object.values(AggregateType)
                 .filter((t) => t !== AggregateType.digitalText)

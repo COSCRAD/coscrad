@@ -208,6 +208,8 @@ import { MockIdManagementService } from '../../../lib/id-generation/mock-id-mana
 import { Ctor } from '../../../lib/types/Ctor';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
+import { ArangoDatabase } from '../../../persistence/database/arango-database';
+import { ArangoDatabaseForCollection } from '../../../persistence/database/arango-database-for-collection';
 import { ArangoCollectionId } from '../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
@@ -311,6 +313,7 @@ export const buildAllDataClassProviders = () =>
 
 const dataClassProviders = buildAllDataClassProviders();
 
+// @deprecated Stick to using Test.createTestingModule and leverage only the modules your test needs
 export default async (
     configOverrides: Partial<DTO<EnvironmentVariables>>,
     userOptions: Partial<CreateTestModuleOptions> = optionDefaults
@@ -387,6 +390,17 @@ export default async (
                     CoscradEventFactory,
                     DynamicDataTypeFinderService,
                 ],
+            },
+            {
+                provide: `DIGITAL_TEXT_QUERY_REPOSITORY`,
+                useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
+                    new ArangoDigitalTextQueryRepository(
+                        new ArangoDatabaseForCollection(
+                            new ArangoDatabase(arangoConnectionProvider.getConnection()),
+                            `digital_text_views` as ArangoCollectionId
+                        )
+                    ),
+                inject: [ArangoConnectionProvider],
             },
             {
                 provide: EdgeConnectionQueryService,

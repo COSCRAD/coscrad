@@ -48,7 +48,11 @@ export class ArangoDigitalTextQueryRepository
     public update(
         updateDto: Pick<DigitalTextViewModel, 'id'> & DeepPartial<DigitalTextViewModel>
     ): Promise<void> {
-        return this.arangoDatabaseForViewCollection.update(updateDto.id, updateDto);
+        return this.arangoDatabaseForViewCollection
+            .update(updateDto.id, updateDto)
+            .catch((_error) => {
+                throw new InternalError(`Failed to update view with update: ${updateDto}`);
+            });
     }
 
     public executeRawQuery(
