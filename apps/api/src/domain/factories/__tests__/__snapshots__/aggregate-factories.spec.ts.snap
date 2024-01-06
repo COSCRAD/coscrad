@@ -3,7 +3,6 @@
 exports[`Aggregate factories when attempting to build an instance of type: audioItem from a DTO when the DTO is valid valid transribed audio DTO should succeed 1`] = `
 WithTranscription {
   "eventHistory": [],
-  "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
   "lengthMilliseconds": 20000,
   "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -83,10 +82,12 @@ DigitalText {
       "type": "DIGITAL_TEXT_CREATED",
     },
   ],
-  "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "pages": [
     DigitalTextPage {
+      "audio": MultilingualAudio {
+        "items": [],
+      },
       "content": null,
       "identifier": "1",
     },
@@ -118,17 +119,15 @@ MediaItem {
     },
   ],
   "eventHistory": [],
-  "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "lengthMilliseconds": 2500,
-  "mimeType": "audio/x-wav",
+  "mimeType": "audio/wav",
   "published": true,
   "queryAccessControlList": AccessControlList {
     "allowedGroupIds": [],
     "allowedUserIds": [],
   },
   "title": "episode (media item 1) title (in language)",
-  "titleEnglish": "Metal Mondays episode 1",
   "type": "mediaItem",
   "url": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
 }
@@ -136,14 +135,13 @@ MediaItem {
 
 exports[`Aggregate factories when attempting to build an instance of type: photograph from a DTO when the DTO is valid valid photograph should succeed 1`] = `
 Photograph {
-  "dimensions": PhotographDimensions {
-    "heightPX": 400,
-    "widthPX": 300,
+  "dimensions": MediaItemDimensions {
+    "heightPx": 400,
+    "widthPx": 300,
   },
   "eventHistory": [],
-  "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
-  "mediaItemId": "5",
+  "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
   "photographer": "Susie McRealart",
   "published": true,
   "queryAccessControlList": AccessControlList {
@@ -166,7 +164,6 @@ Photograph {
 exports[`Aggregate factories when attempting to build an instance of type: playlist from a DTO when the DTO is valid valid playlist DTO should succeed 1`] = `
 Playlist {
   "eventHistory": [],
-  "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
   "items": [
     PlaylistItem {
@@ -228,7 +225,6 @@ Song {
       "type": "SONG_CREATED",
     },
   ],
-  "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "lyrics": MultilingualText {
     "items": [
@@ -298,7 +294,6 @@ Line {
     ],
     "type": "LineString",
   },
-  "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "properties": SpatialFeatureProperties {
     "description": "One amazing hike!",
@@ -324,7 +319,6 @@ Point {
     ],
     "type": "Point",
   },
-  "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
   "properties": SpatialFeatureProperties {
     "description": "Description for point 100",
@@ -366,7 +360,6 @@ Polygon {
     ],
     "type": "Polygon",
   },
-  "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
   "properties": SpatialFeatureProperties {
     "description": "Description for polygon 300",
@@ -384,14 +377,16 @@ Polygon {
 
 exports[`Aggregate factories when attempting to build an instance of type: term from a DTO when the DTO is valid when the dto is valid should succeed 1`] = `
 Term {
-  "audioFilename": undefined,
+  "audio": MultilingualAudio {
+    "items": [],
+  },
   "contributorId": undefined,
   "eventHistory": [
     {
-      "id": "b5233349-71cc-4516-bbd9-08d2fd8728e8",
+      "id": "14d057fd-5411-40bd-bdee-fd8e10e5c273",
       "meta": {
-        "dateCreated": 1664237195283,
-        "id": "b5233349-71cc-4516-bbd9-08d2fd8728e8",
+        "dateCreated": 1664237194659,
+        "id": "14d057fd-5411-40bd-bdee-fd8e10e5c273",
         "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999",
       },
       "payload": {
@@ -405,10 +400,10 @@ Term {
       "type": "PROMPT_TERM_CREATED",
     },
     {
-      "id": "b579efa4-1b22-4196-9894-9f850a6ce127",
+      "id": "475aa22b-00bb-4ceb-bb48-c8253684a892",
       "meta": {
-        "dateCreated": 1664237195284,
-        "id": "b579efa4-1b22-4196-9894-9f850a6ce127",
+        "dateCreated": 1664237194660,
+        "id": "475aa22b-00bb-4ceb-bb48-c8253684a892",
         "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999",
       },
       "payload": {
@@ -422,7 +417,6 @@ Term {
       "type": "TERM_ELICITED_FROM_PROMPT",
     },
   ],
-  "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "isPromptTerm": true,
   "published": false,
@@ -452,7 +446,6 @@ Term {
 exports[`Aggregate factories when attempting to build an instance of type: video from a DTO when the DTO is valid valid video DTO should succeed 1`] = `
 WithTranscription {
   "eventHistory": [],
-  "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
   "lengthMilliseconds": 20000,
   "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
@@ -552,7 +545,6 @@ VocabularyList {
     },
   ],
   "eventHistory": [],
-  "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b114567",
   "name": MultilingualText {
     "items": [

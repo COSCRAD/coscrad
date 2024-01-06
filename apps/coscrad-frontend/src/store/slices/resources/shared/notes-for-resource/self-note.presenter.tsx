@@ -4,6 +4,7 @@ import { TextSnippet as TextSnippetIcon } from '@mui/icons-material';
 import { Box, Grid, Typography } from '@mui/material';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { SelfConnectionNote } from '../../../notes/hooks/use-loadable-self-notes-for-resource';
+import { EdgeConnectionContextPresenter } from './edge-connection-context.presenter';
 
 /**
  * TODO[https://www.pivotaltracker.com/story/show/185592121] augment the DefaultTheme
@@ -21,12 +22,12 @@ export const SelfNotePresenter = ({ text, id, context }: SelfConnectionNote): JS
             </Grid>
             <Grid item>
                 {/* TODO Use property presenter helper after rebasing */}
-                <Typography variant="h5">Note ({id}):</Typography>
+                <Typography variant="h4">Note (Id: {id}):</Typography>
                 <Typography paragraph>{text}</Typography>
                 {/* TODO Eventually we should offer a way to highlight this context in the detail view */}
                 {/* We may not need to present this here in this way. This is for development only. */}
-                <Typography variant="h6">Context</Typography>
-                <Typography paragraph>{JSON.stringify(context)}</Typography>
+                <Typography variant="h5">Context:</Typography>
+                <EdgeConnectionContextPresenter context={context} />
             </Grid>
         </Grid>
     </Item>

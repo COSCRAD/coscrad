@@ -1,8 +1,8 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box, Button, TextField, Typography } from '@mui/material';
-import { useState } from 'react';
-import { useLoadableCommandResult } from '../../../store/slices/command-status';
+import { useEffect, useState } from 'react';
+import { Ack, useLoadableCommandResult } from '../../../store/slices/command-status';
 import { useLoadableGeneratedId } from '../../../store/slices/id-generation';
 import { ErrorDisplay } from '../../error-display/error-display';
 import { Loading } from '../../loading';
@@ -30,6 +30,13 @@ export const ImmersiveCreateNoteForm = ({ onSubmit }: FormProps) => {
 
     const { errorInfo, isLoading, data: generatedId } = useLoadableGeneratedId();
 
+    useEffect(() => {
+        if (commandResult === Ack) {
+            setText('');
+            setLanguageCode(LanguageCode.English);
+        }
+    }, [commandResult, setText, setLanguageCode]);
+
     if (errorInfo) return <ErrorDisplay {...errorInfo} />;
 
     if (isLoading) return <Loading />;
@@ -48,10 +55,11 @@ export const ImmersiveCreateNoteForm = ({ onSubmit }: FormProps) => {
             {/* TODO Style this as a validation warning */}
             {isPreviousCommandInQueue ? (
                 <Typography variant="body1">
-                    Please acknowledge the outcome of the previous command.
+                    Please acknowledge the outcome of the previous command below.
                 </Typography>
             ) : null}
             <TextField
+                sx={{ width: '80%' }}
                 data-testid={`text:note`}
                 onChange={(e) => {
                     setText(e.target.value);
@@ -63,7 +71,7 @@ export const ImmersiveCreateNoteForm = ({ onSubmit }: FormProps) => {
                 }}
             />
             <Button
-                data-testid={`note-submit`}
+                data-testid={`submit-note`}
                 disabled={isDisabled}
                 onClick={() => {
                     onSubmit(text, languageCode, generatedId);

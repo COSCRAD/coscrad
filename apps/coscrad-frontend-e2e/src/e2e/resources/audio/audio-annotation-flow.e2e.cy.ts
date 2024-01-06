@@ -54,62 +54,79 @@ describe('the audio annotation process', () => {
             cy.visit(audioDetailRoute);
         });
 
-        it(`should render the audio title`, () => {
+        // Skip until we have a way to check for admin access
+        it.skip(`should render the audio title`, () => {
             cy.contains(audioTitleInLanguage);
 
             cy.getByDataAttribute('in-point-marker-button').should('not.exist');
         });
     });
 
-    // describe(`when the audio has all properties`, () => {
-    //     beforeEach(() => {
-    //         cy.visit('/');
+    describe(`when the audio has all properties`, () => {
+        beforeEach(() => {
+            cy.visit('/');
 
-    //         cy.login();
+            cy.login();
 
-    //         cy.visit(audioDetailRoute);
-    //     });
+            cy.visit(audioDetailRoute);
+        });
 
-    //     describe(`when a time range is selected in the Audio player`, () => {
-    //         beforeEach(() => {
-    //             cy.get('audio').then(([audioElement]) => {
-    //                 audioElement.play();
-    //             });
+        describe(`when a time range is selected in the Audio player`, () => {
+            beforeEach(() => {
+                cy.get('audio').then(([audioElement]) => {
+                    audioElement.play();
+                });
 
-    //             cy.wait(2000);
+                cy.wait(2000);
 
-    //             cy.getByDataAttribute('in-point-marker-button').click();
+                cy.getByDataAttribute('in-point-marker-button').click();
 
-    //             cy.wait(2589);
+                cy.wait(2589);
 
-    //             cy.getByDataAttribute('out-point-marker-button').click();
-    //         });
+                cy.getByDataAttribute('out-point-marker-button').click();
+            });
 
-    //         it('should show the annotation form', () => {
-    //             cy.getByDataAttribute('create-note-about-audio-form');
-    //         });
+            it('should show the annotation form', () => {
+                cy.getByDataAttribute('create-note-about-audio-form');
+            });
 
-    //         describe(`when the form is complete`, () => {
-    //             const newAnnotationText = 'This is an interesting comment.';
+            describe(`when the form is blank the submit button`, () => {
+                it('should be disabled', () => {
+                    cy.getByDataAttribute('submit-note').should('be.disabled');
+                });
+            });
 
-    //             const languageCodeForAnnotation = 'hai';
+            describe(`when the form is complete`, () => {
+                const newAnnotationText = 'This is an interesting comment.';
 
-    //             beforeEach(() => {
-    //                 cy.getByDataAttribute('text:note').type(newAnnotationText);
+                const languageCodeForAnnotation = 'hai';
 
-    //                 cy.getByDataAttribute('select:language').as('language-select').click();
+                beforeEach(() => {
+                    cy.getByDataAttribute('text:note').type(newAnnotationText);
 
-    //                 cy.get('@language-select')
-    //                     .get(`[data-value="${languageCodeForAnnotation}"]`)
-    //                     .click();
-    //             });
+                    cy.getByDataAttribute('select:language').as('language-select').click();
 
-    //             describe(`the annotation submit button`, () => {
-    //                 it('should be enabled', () => {
-    //                     cy.getByDataAttribute('note-submit').should('be.enabled');
-    //                 });
-    //             });
-    //         });
-    //     });
-    // });
+                    cy.get('@language-select')
+                        .get(`[data-value="${languageCodeForAnnotation}"]`)
+                        .click();
+                });
+
+                describe(`the annotation submit button`, () => {
+                    it('should be enabled', () => {
+                        cy.getByDataAttribute('submit-note').should('be.enabled');
+                    });
+                });
+
+                describe(`when the annotation form is submitted`, () => {
+                    it(`the note should appear in the notes panel for this audio item`, () => {
+                        cy.getByDataAttribute('submit-note').click();
+
+                        cy.getByDataAttribute('open-notes-panel-button').click();
+
+                        cy.getByDataAttribute('selfNotesPanel').should('exist');
+                    });
+                });
+            });
+        });
+    });
 });

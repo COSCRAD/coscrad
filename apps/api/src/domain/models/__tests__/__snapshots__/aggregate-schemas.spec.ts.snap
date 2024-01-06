@@ -662,7 +662,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
       },
       {
         "label": "wav",
-        "value": "audio/x-wav",
+        "value": "audio/wav",
       },
       {
         "label": "audioOgg",

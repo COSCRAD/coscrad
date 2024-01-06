@@ -249,35 +249,35 @@ export const AudioAnnotator = ({
                 >
                     <ArrowLeftIcon />
                 </IconButton>
-            </Box>
-            <Box display="inline-flex" alignItems="center" mt={1}>
-                <Box width="70px">
-                    {!isNullOrUndefined(inPointSeconds) ? (
-                        <Typography data-testid="in-point-selection-time-code" variant="body1">
-                            {asFormattedMediaTimecodeString(inPointSeconds)}
-                        </Typography>
-                    ) : null}
-                </Box>
-                <Box width="160px" height="20px" padding="0 20px">
-                    <TimeRangeSelectionStatusIndicator
-                        timeRangeSelectionStatus={timeRangeSelectionStatus}
-                    />
-                </Box>
-                <Box width="70px">
-                    {!isNullOrUndefined(outPointSeconds) ? (
-                        <Typography data-testid="out-point-selection-time-code" variant="body1">
-                            {asFormattedMediaTimecodeString(outPointSeconds)}
-                        </Typography>
-                    ) : null}
-                </Box>
-                <Box width="70px">
-                    <IconButton
-                        data-testid="clear-selected-time-range-button"
-                        onClick={clearMarkers}
-                        sx={{ visibility: inPointSeconds === null ? 'hidden' : 'visible' }}
-                    >
-                        <ClearIcon />
-                    </IconButton>
+                <Box display="inline-flex" alignItems="center" mt={1} ml={3}>
+                    <Box width="70px">
+                        {!isNullOrUndefined(inPointSeconds) ? (
+                            <Typography data-testid="in-point-selection-time-code" variant="body1">
+                                {asFormattedMediaTimecodeString(inPointSeconds)}
+                            </Typography>
+                        ) : null}
+                    </Box>
+                    <Box width="160px" height="20px" padding="0 20px">
+                        <TimeRangeSelectionStatusIndicator
+                            timeRangeSelectionStatus={timeRangeSelectionStatus}
+                        />
+                    </Box>
+                    <Box width="70px">
+                        {!isNullOrUndefined(outPointSeconds) ? (
+                            <Typography data-testid="out-point-selection-time-code" variant="body1">
+                                {asFormattedMediaTimecodeString(outPointSeconds)}
+                            </Typography>
+                        ) : null}
+                    </Box>
+                    <Box width="70px">
+                        <IconButton
+                            data-testid="clear-selected-time-range-button"
+                            onClick={clearMarkers}
+                            sx={{ visibility: inPointSeconds === null ? 'hidden' : 'visible' }}
+                        >
+                            <ClearIcon />
+                        </IconButton>
+                    </Box>
                 </Box>
             </Box>
         </Stack>

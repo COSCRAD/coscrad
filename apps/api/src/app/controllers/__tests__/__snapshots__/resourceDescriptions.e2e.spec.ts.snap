@@ -432,7 +432,7 @@ exports[`GET /resources should return the expected result 1`] = `
           },
           {
             "label": "wav",
-            "value": "audio/x-wav",
+            "value": "audio/wav",
           },
           {
             "label": "audioOgg",
@@ -596,7 +596,7 @@ exports[`GET /resources should return the expected result 1`] = `
           },
           {
             "label": "wav",
-            "value": "audio/x-wav",
+            "value": "audio/wav",
           },
           {
             "label": "audioOgg",
@@ -2353,7 +2353,7 @@ exports[`GET /resources should return the expected result 1`] = `
           },
           {
             "label": "wav",
-            "value": "audio/x-wav",
+            "value": "audio/wav",
           },
           {
             "label": "audioOgg",

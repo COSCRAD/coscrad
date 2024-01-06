@@ -20,7 +20,7 @@ import {
 } from '@mui/material';
 import { useCallback, useState } from 'react';
 import { useAppDispatch } from '../../../app/hooks';
-import { executeCommand } from '../../../store/slices/command-status';
+import { executeCommand, useLoadableCommandResult } from '../../../store/slices/command-status';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 import { SinglePropertyPresenter } from '../../../utils/generic-components/presenters/single-property-presenter';
 import { ImmersiveCreateNoteForm } from '../shared/immersive-create-note-form';
@@ -62,6 +62,8 @@ export const AudioItemDetailFullViewPresenter = ({
 }: ICategorizableDetailQueryResult<IAudioItemViewModel>): JSX.Element => {
     const dispatch = useAppDispatch();
 
+    const { data: commandResult } = useLoadableCommandResult();
+
     const [timeRange, setTimeRange] = useState<TimeRange | null>(null);
 
     const onTimeRangeSelected = useCallback(
@@ -90,7 +92,7 @@ export const AudioItemDetailFullViewPresenter = ({
                 <CreateAnnotationForm data-testid="create-note-about-audio-form">
                     <Box mt={1}>
                         <Typography variant="h4">Add Audio Annotation</Typography>
-                        <Typography variant="body1" fontSize="3">
+                        <Typography variant="body1" fontSize="3" mb={1}>
                             Time Range in Milliseconds: {timeRange.inPointMilliseconds} &lt;----&gt;{' '}
                             {timeRange.outPointMilliseconds}
                         </Typography>
