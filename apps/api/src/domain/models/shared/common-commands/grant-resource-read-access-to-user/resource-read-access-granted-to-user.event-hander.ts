@@ -39,5 +39,7 @@ export class ResourceReadAccessGrantedToUserEventHandler implements ICoscradEven
             // @ts-expect-error Update the base type now
             queryAccessControlList: updatedAcl,
         });
+
+        console.log('done');
     }
 }

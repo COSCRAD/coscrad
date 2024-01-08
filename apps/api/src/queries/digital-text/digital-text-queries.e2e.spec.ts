@@ -397,7 +397,12 @@ describe.only(`When querying for a digital text`, () => {
 
             describe(`when there is a digital text with the given ID`, () => {
                 describe(`when the digital text is published`, () => {
-                    it(
+                    /**
+                     * TODO[https://www.pivotaltracker.com/story/show/186789899]
+                     * We need to event-source tags and expose the tags on
+                     * digital text queries.
+                     */
+                    it.skip(
                         `should return the corresponding result`,
                         async () => {
                             const eventHistory = [

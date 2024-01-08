@@ -342,6 +342,7 @@ export class DigitalTextViewModel
         tags,
         title,
         isPublished,
+        queryAccessControlList,
     }: DTO<Omit<DigitalTextViewModel, 'type'>>): DigitalTextViewModel {
         const digitalText = new DigitalTextViewModel(id);
 
@@ -354,6 +355,8 @@ export class DigitalTextViewModel
         digitalText.title = new MultilingualText(title);
 
         digitalText.isPublished = isPublished;
+
+        digitalText.queryAccessControlList = new AccessControlList(queryAccessControlList);
 
         return digitalText;
     }
