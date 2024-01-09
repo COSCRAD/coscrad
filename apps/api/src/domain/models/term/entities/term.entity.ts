@@ -5,7 +5,6 @@ import { RegisterIndexScopedCommands } from '../../../../app/controllers/command
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
-import formatAggregateCompositeIdentifier from '../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
@@ -21,27 +20,26 @@ import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeI
 import { AggregateId } from '../../../types/AggregateId';
 import { ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
+import {
+    CreationEventHandlerMap,
+    buildAggregateRootFromEventHistory,
+} from '../../build-aggregate-root-from-event-history';
 import { TextFieldContext } from '../../context/text-field-context/text-field-context.entity';
 import { Resource } from '../../resource.entity';
-import {
-    RESOURCE_READ_ACCESS_GRANTED_TO_USER,
-    ResourceReadAccessGrantedToUserPayload,
-} from '../../shared/common-commands';
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import { CannotReuseAudioItemError } from '../../shared/multilingual-audio/errors';
 import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import {
-    AudioAddedForTermPayload,
+    AudioAddedForTerm,
     PromptTermCreated,
     TermCreated,
-    TermElicitedFromPromptPayload,
-    TermTranslatedPayload,
+    TermElicitedFromPrompt,
+    TermTranslated,
 } from '../commands';
-import { CREATE_PROMPT_TERM, PROMPT_TERM_CREATED } from '../commands/create-prompt-term/constants';
-import { CREATE_TERM, TERM_CREATED } from '../commands/create-term/constants';
-import { TERM_ELICITED_FROM_PROMPT } from '../commands/elicit-term-from-prompt/constants';
-import { TERM_TRANSLATED, TRANSLATE_TERM } from '../commands/translate-term/constants';
+import { CREATE_PROMPT_TERM } from '../commands/create-prompt-term/constants';
+import { CREATE_TERM } from '../commands/create-term/constants';
+import { TRANSLATE_TERM } from '../commands/translate-term/constants';
 import {
     CannotElicitTermWithoutPromptError,
     CannotOverrideAudioForTermError,
@@ -236,88 +234,35 @@ export class Term extends Resource {
         eventStream: BaseEvent[],
         termId: AggregateId
     ): Maybe<ResultOrError<Term>> {
-        const compositeIdentifier = {
-            type: AggregateType.term,
-            id: termId,
-        };
+        const creationEventHandlerMap: CreationEventHandlerMap<Term> = new Map()
+            .set(`TERM_CREATED`, Term.createTermFromTermCreated)
+            .set(`PROMPT_TERM_CREATED`, Term.createTermFromPromptTermCreated);
 
-        const eventsForThisTerm = eventStream.filter((event) => event.isFor(compositeIdentifier));
-
-        if (eventsForThisTerm.length === 0) {
-            return NotFound;
-        }
-
-        const [creationEvent, ...updateEvents] = eventsForThisTerm;
-
-        const initialTerm = Term.createTermFromEvent(creationEvent);
-
-        return updateEvents.reduce((accumulatedTerm, nextEvent) => {
-            if (isInternalError(accumulatedTerm)) return accumulatedTerm;
-
-            if (nextEvent.isOfType(TERM_TRANSLATED)) {
-                const { translation, languageCode } = nextEvent.payload as TermTranslatedPayload;
-
-                return accumulatedTerm
-                    .addEventToHistory(nextEvent)
-                    .translate(translation, languageCode);
-            }
-
-            if (nextEvent.isOfType(TERM_ELICITED_FROM_PROMPT)) {
-                const { text, languageCode } = nextEvent.payload as TermElicitedFromPromptPayload;
-
-                return accumulatedTerm
-                    .addEventToHistory(nextEvent)
-                    .elicitFromPrompt(text, languageCode);
-            }
-
-            if (nextEvent.isOfType(`AUDIO_ADDED_FOR_TERM`)) {
-                const { audioItemId, languageCode } = nextEvent.payload as AudioAddedForTermPayload;
-
-                return accumulatedTerm
-                    .addEventToHistory(nextEvent)
-                    .addAudio(audioItemId, languageCode);
-            }
-
-            if (nextEvent.isOfType(`RESOURCE_PUBLISHED`)) {
-                return accumulatedTerm.addEventToHistory(nextEvent).publish();
-            }
-
-            if (nextEvent.isOfType(RESOURCE_READ_ACCESS_GRANTED_TO_USER)) {
-                const { userId } = nextEvent.payload as ResourceReadAccessGrantedToUserPayload;
-
-                return accumulatedTerm.addEventToHistory(nextEvent).grantReadAccessToUser(userId);
-            }
-
-            // no event handler found for this event - no update
-            return accumulatedTerm;
-        }, initialTerm);
+        return buildAggregateRootFromEventHistory(
+            creationEventHandlerMap,
+            {
+                type: AggregateType.term,
+                id: termId,
+            },
+            // TODO think about the order of parameters
+            eventStream
+        );
     }
 
-    // TODO Find a different pattern of code organization. This feels too Java-ish.
-    private static createTermFromEvent(creationEvent: BaseEvent): Term {
-        const {
-            payload: {
-                aggregateCompositeIdentifier: { id },
-            },
-        } = creationEvent;
+    // should these be protected?
+    /**
+     * Event handlers
+     */
+    handleTermTranslated({ payload: { translation, languageCode } }: TermTranslated) {
+        return this.translate(translation, languageCode);
+    }
 
-        if (creationEvent.isOfType(TERM_CREATED)) {
-            return Term.createTermFromTermCreated(creationEvent as TermCreated);
-        }
+    handleTermElicitedFromPrompt({ payload: { text, languageCode } }: TermElicitedFromPrompt) {
+        return this.elicitFromPrompt(text, languageCode);
+    }
 
-        if (creationEvent.isOfType(PROMPT_TERM_CREATED)) {
-            return Term.createTermFromPromptTermCreated(creationEvent as PromptTermCreated);
-        }
-
-        // TODO Let's breakout a shared error class for this
-        throw new InternalError(
-            `The first event for ${formatAggregateCompositeIdentifier({
-                type: AggregateType.term,
-                id,
-            })} should have had one of the types: ${TERM_CREATED},${PROMPT_TERM_CREATED}, but found: ${
-                creationEvent?.type
-            }`
-        );
+    handleAudioAddedForTerm({ payload: { audioItemId, languageCode } }: AudioAddedForTerm) {
+        return this.addAudio(audioItemId, languageCode);
     }
 
     private static createTermFromTermCreated(event: TermCreated) {

@@ -80,6 +80,21 @@ const audioAddedForTerm = termElicitedFromPrompt.andThen<AudioAddedForTerm>({
 
 const userId = buildDummyUuid(777);
 
+const eventsForOtherAggregateRoots = [
+    ...audioAddedForTerm.as({
+        type: AggregateType.term,
+        // a different term
+        id: buildDummyUuid(972),
+    }),
+    ...new TestEventStream()
+        .andThen({
+            type: `SONG_CREATED`,
+        })
+        .as({
+            id: buildDummyUuid(143),
+        }),
+];
+
 describe(`Term.fromEventHistory`, () => {
     describe(`when the event history is valid`, () => {
         describe(`when the term is an ordinary term (not a prompt term)`, () => {
@@ -231,11 +246,18 @@ describe(`Term.fromEventHistory`, () => {
 
             describe(`When a prompted term is pulbished`, () => {
                 it(`should return the appropriate term`, () => {
-                    const publishTermEvents = termElicitedFromPrompt
-                        .andThen<ResourcePublished>({
-                            type: `RESOURCE_PUBLISHED`,
-                        })
-                        .as({ type: AggregateType.term, id: termId });
+                    const publishTermEvents = [
+                        ...termElicitedFromPrompt
+                            .andThen<ResourcePublished>({
+                                type: `RESOURCE_PUBLISHED`,
+                            })
+                            .as({ type: AggregateType.term, id: termId }),
+                        /**
+                         * This test includes events targetting other
+                         * aggregate roots to ensure they are not applied
+                         */
+                        ...eventsForOtherAggregateRoots,
+                    ];
 
                     const result = Term.fromEventHistory(publishTermEvents, termId);
 
@@ -311,9 +333,11 @@ describe(`Term.fromEventHistory`, () => {
                 },
             });
 
-            const result = Term.fromEventHistory(invalidEventStream.as({ id: termId }), termId);
+            it(`should return the expected error`, () => {
+                const result = Term.fromEventHistory(invalidEventStream.as({ id: termId }), termId);
 
-            expect(result).toBeInstanceOf(InternalError);
+                expect(result).toBeInstanceOf(InternalError);
+            });
         });
     });
 });

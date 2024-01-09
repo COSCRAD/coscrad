@@ -14,6 +14,7 @@ import { EdgeConnectionContextType } from './context/types/EdgeConnectionContext
 import ResourceAlreadyPublishedError from './ResourceAlreadyPublishedError';
 import { AccessControlList } from './shared/access-control/access-control-list.entity';
 import UserAlreadyHasReadAccessError from './shared/common-command-errors/invalid-state-transition-errors/UserAlreadyHasReadAccessError';
+import { ResourceReadAccessGrantedToUser } from './shared/common-commands';
 
 export abstract class Resource extends Aggregate {
     readonly type: ResourceType;
@@ -49,12 +50,23 @@ export abstract class Resource extends Aggregate {
         } as DeepPartial<DTO<T>>);
     }
 
+    handleResourceReadAccessGrantedToUser<T extends Resource>(
+        this: T,
+        { payload: { userId } }: ResourceReadAccessGrantedToUser
+    ) {
+        return this.grantReadAccessToUser(userId);
+    }
+
     publish<T extends Resource>(this: T): ResultOrError<T> {
         if (this.published) return new ResourceAlreadyPublishedError(this.getCompositeIdentifier());
 
         return this.safeClone<T>({
             published: true,
         } as unknown as DeepPartial<DTO<T>>);
+    }
+
+    handleResourcePublished<T extends Resource>(this: T) {
+        return this.publish<T>();
     }
 
     getAllowedContextTypes() {
