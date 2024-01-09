@@ -14,9 +14,9 @@ export type CreationEventHandlerMap<T extends Aggregate> = Map<EventType, Creati
 export const buildAggregateRootFromEventHistory = <T extends Aggregate>(
     creationEventHandlerMap: CreationEventHandlerMap<T>,
     aggregateCompositeIdentifier: AggregateCompositeIdentifier,
-    eventStream
+    sortedEventHistory: BaseEvent[]
 ) => {
-    const eventsForThisAggregateRoot = eventStream.filter((event) =>
+    const eventsForThisAggregateRoot = sortedEventHistory.filter((event) =>
         event.isFor(aggregateCompositeIdentifier)
     );
 
@@ -41,7 +41,7 @@ export const buildAggregateRootFromEventHistory = <T extends Aggregate>(
     /**
      * This would occur if we have invalid data in the database. Maybe we've made
      * a mistake with event versioning. We choose to treat this as an exception
-     * (system error). We should log and notify immediatley so we can fix the state
+     * (system error). We should log and notify immediately so we can fix the state
      * (via compensating events).
      */
     if (isInternalError(initialInstanceBuildResult)) return initialInstanceBuildResult;

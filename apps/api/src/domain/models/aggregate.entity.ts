@@ -273,6 +273,10 @@ export abstract class Aggregate extends BaseDomainModel implements HasAggregateI
             return this;
         }
 
-        return this[handlerMethodName](event);
+        const result = this[handlerMethodName](event) as unknown as ResultOrError<T>;
+
+        if (isInternalError(result)) return result;
+
+        return result.addEventToHistory(event);
     }
 }

@@ -403,9 +403,13 @@ export class DigitalText extends Resource {
                     .translatePageContent(pageIdentifer, translation, languageCode);
             }
 
-            // This event was not handled
-            // TODO: should we throw here?
-            return digitalText;
+            throw new InternalError(
+                `Encountered an unhandled event if type: ${
+                    event.type
+                } for: ${formatAggregateCompositeIdentifier(
+                    event.payload.aggregateCompositeIdentifier
+                )}`
+            );
         }, initialInstance);
 
         return newDigitalText;
