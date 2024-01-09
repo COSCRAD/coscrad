@@ -1,15 +1,17 @@
 import { DynamicModule, Global, Module, OnApplicationShutdown } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CoscradEventFactory, EventModule } from '../domain/common';
+import { ResourceType } from '../domain/types/ResourceType';
 import { ID_RESPOSITORY_TOKEN } from '../lib/id-generation/interfaces/id-repository.interface';
-import { DigitalTextQueryRepository } from '../queries/digital-text/digital-text.query-repository';
+import { ArangoDigitalTextQueryRepository } from '../queries/digital-text/digital-text.query-repository';
+import { QUERY_REPOSITORY_PROVIDER_TOKEN } from '../queries/interfaces/aggregate-root-query-repository-provider.interface';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../validation';
 import { REPOSITORY_PROVIDER_TOKEN } from './constants/persistenceConstants';
 import { ArangoConnectionProvider } from './database/arango-connection.provider';
 import { ArangoQueryRunner } from './database/arango-query-runner';
+import { ArangoCollectionId } from './database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from './database/database.provider';
 import { ArangoDataExporter } from './repositories/arango-data-exporter';
-import { ArangoEventRepository } from './repositories/arango-event-repository';
 import { ArangoIdRepository } from './repositories/arango-id-repository';
 import { ArangoRepositoryProvider } from './repositories/arango-repository.provider';
 import { DomainDataExporter } from './repositories/domain-data-exporter';
@@ -94,16 +96,16 @@ export class PersistenceModule implements OnApplicationShutdown {
         };
 
         const queryRepositoryProvider = {
-            provide: DigitalTextQueryRepository,
-            useFactory: (
-                databaseProvider: ArangoDatabaseProvider,
-                coscradEventFactory: CoscradEventFactory
-            ) => {
-                return new DigitalTextQueryRepository(
-                    new ArangoEventRepository(databaseProvider, coscradEventFactory)
+            provide: `DIGITAL_TEXT_QUERY_REPOSITORY`,
+            useFactory: (databaseProvider: ArangoDatabaseProvider) => {
+                return new ArangoDigitalTextQueryRepository(
+                    databaseProvider.getDatabaseForCollection(
+                        // TODO Deal with this properly
+                        'digital_text_views' as ArangoCollectionId
+                    )
                 );
             },
-            inject: [ArangoDatabaseProvider, CoscradEventFactory],
+            inject: [ArangoDatabaseProvider],
         };
 
         return {
@@ -118,6 +120,31 @@ export class PersistenceModule implements OnApplicationShutdown {
                 arangoDataExporterProvider,
                 domainDataExporterProvider,
                 queryRepositoryProvider,
+                {
+                    provide: QUERY_REPOSITORY_PROVIDER_TOKEN,
+                    useFactory: (databaseProvider: ArangoDatabaseProvider) => {
+                        const digitalTextRepository = new ArangoDigitalTextQueryRepository(
+                            databaseProvider.getDatabaseForCollection(
+                                // TODO Deal with this properly
+                                'digital_text_views' as ArangoCollectionId
+                            )
+                        );
+
+                        return {
+                            // TODO Support this generically
+                            forResource(resourceType) {
+                                if (resourceType !== ResourceType.digitalText) {
+                                    throw new Error(
+                                        `Not Implemented: ArangoQueryRepositoryProvider.forResource(${resourceType})`
+                                    );
+                                }
+
+                                return digitalTextRepository;
+                            },
+                        };
+                    },
+                    inject: [ArangoDatabaseProvider],
+                },
             ],
             exports: [
                 arangoConnectionProvider,
@@ -128,6 +155,9 @@ export class PersistenceModule implements OnApplicationShutdown {
                 arangoDataExporterProvider,
                 domainDataExporterProvider,
                 queryRepositoryProvider,
+                // TODO Export a constant for this
+                `DIGITAL_TEXT_QUERY_REPOSITORY`,
+                QUERY_REPOSITORY_PROVIDER_TOKEN,
             ],
             global: true,
         };

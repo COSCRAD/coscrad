@@ -9,7 +9,10 @@ import {
 import { InternalError } from '../../../lib/errors/InternalError';
 import { DynamicDataTypeFinderService } from '../../../validation';
 import { ArangoCollectionId } from '../../database/collection-references/ArangoCollectionId';
-import { getAllArangoDocumentCollectionIDs } from '../../database/collection-references/ArangoDocumentCollectionId';
+import {
+    ArangoDocumentCollectionId,
+    getAllArangoDocumentCollectionIDs,
+} from '../../database/collection-references/ArangoDocumentCollectionId';
 import { getAllArangoEdgeCollectionIDs } from '../../database/collection-references/ArangoEdgeCollectionId';
 import { getArangoCollectionIDFromResourceType } from '../../database/collection-references/getArangoCollectionIDFromResourceType';
 import { ArangoDatabaseProvider } from '../../database/database.provider';
@@ -135,9 +138,12 @@ export default class TestRepositoryProvider extends ArangoRepositoryProvider {
      */
     private async deleteAllDocumentData(): Promise<void> {
         await Promise.all(
-            getAllArangoDocumentCollectionIDs().map((collectionId) =>
-                this.databaseProvider.getDBInstance().deleteAll(collectionId)
-            )
+            getAllArangoDocumentCollectionIDs()
+                // TODO Fix this
+                .concat(`digital_text_views` as ArangoDocumentCollectionId)
+                .map((collectionId) =>
+                    this.databaseProvider.getDBInstance().deleteAll(collectionId)
+                )
         );
     }
 

@@ -11,6 +11,8 @@ interface Nameable {
 }
 
 export class BaseViewModel implements IBaseViewModel {
+    readonly type: string;
+
     @ApiProperty({
         example: '12',
         description: 'uniquely identifies an entity from other entities of the same type',

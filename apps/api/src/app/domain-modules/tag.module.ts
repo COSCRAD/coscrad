@@ -10,6 +10,7 @@ import {
     TagResourceOrNoteCommandHandler,
 } from '../../domain/models/tag/commands';
 import { ResourceOrNoteTagged } from '../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
+import { ResourceOrNoteTaggedEventHandler } from '../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event-handler';
 import { TagQueryService } from '../../domain/services/query-services/tag-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { ArangoEventRepository } from '../../persistence/repositories/arango-event-repository';
@@ -33,6 +34,7 @@ import { TagController } from '../controllers/tag.controller';
         ArangoEventRepository,
         CoscradEventFactory,
         DynamicDataTypeFinderService,
+        ResourceOrNoteTaggedEventHandler,
         // Data Classes
         ...[
             //Events

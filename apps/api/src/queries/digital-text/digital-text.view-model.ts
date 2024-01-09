@@ -20,6 +20,7 @@ import { TagCreated } from '../../domain/models/tag/commands/create-tag/tag-crea
 import { ResourceOrNoteTaggedPayload } from '../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
 import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { isNullOrUndefined } from '../../domain/utilities/validation/is-null-or-undefined';
+import { DTO } from '../../types/DTO';
 import { EventSourcedTagViewModel } from '../buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { BaseEvent } from '../event-sourcing';
 import { ApplyEvent } from '../event-sourcing/apply-event.interface';
@@ -27,8 +28,10 @@ import { ApplyEvent } from '../event-sourcing/apply-event.interface';
 export class DigitalTextViewModel
     implements ApplyEvent<DigitalTextViewModel>, IDigitalTextViewModel
 {
-    #accessControlList: AccessControlList = new AccessControlList();
+    // TODO remove this in the query service
+    public queryAccessControlList: AccessControlList = new AccessControlList();
 
+    // can we just leverage these?
     #allTags: EventSourcedTagViewModel[] = [];
 
     public readonly type = AggregateType.digitalText;
@@ -60,6 +63,8 @@ export class DigitalTextViewModel
         description: 'digital representation of the pages in this digital text',
     })
     public pages: DigitalTextPage[] = [];
+
+    public audio: MultilingualAudio;
 
     constructor(public readonly id: string) {}
 
@@ -136,7 +141,8 @@ export class DigitalTextViewModel
                  * Note that `AccessControlList` is an immutable data structure,
                  * so we need to save an updated reference to it.
                  */
-                this.#accessControlList = this.#accessControlList.allowUser(idOfCreatingUser);
+                this.queryAccessControlList =
+                    this.queryAccessControlList.allowUser(idOfCreatingUser);
 
                 return this;
             }
@@ -177,7 +183,7 @@ export class DigitalTextViewModel
                 const { userId } = payload as ResourceReadAccessGrantedToUserPayload;
 
                 // Note that `AccessControlList` is an immutable data structure
-                this.#accessControlList = this.#accessControlList.allowUser(userId);
+                this.queryAccessControlList = this.queryAccessControlList.allowUser(userId);
 
                 return this;
             }
@@ -272,8 +278,8 @@ export class DigitalTextViewModel
         const { id: userId, groups } = userWithGroups;
 
         return (
-            this.#accessControlList.canUser(userId) ||
-            groups.some(({ id: userGroupId }) => this.#accessControlList.canGroup(userGroupId))
+            this.queryAccessControlList.canUser(userId) ||
+            groups.some(({ id: userGroupId }) => this.queryAccessControlList.canGroup(userGroupId))
         );
     }
 
@@ -327,5 +333,31 @@ export class DigitalTextViewModel
 
     static getIndexScopedCommands(): string[] {
         return ['CREATE_DIGITAL_TEXT'];
+    }
+
+    static fromSnapshot({
+        id,
+        name,
+        pages,
+        tags,
+        title,
+        isPublished,
+        queryAccessControlList,
+    }: DTO<Omit<DigitalTextViewModel, 'type'>>): DigitalTextViewModel {
+        const digitalText = new DigitalTextViewModel(id);
+
+        digitalText.name = new MultilingualText(name);
+
+        digitalText.pages = pages.map((pageDto) => new DigitalTextPage(pageDto));
+
+        digitalText.tags = tags.map((tag) => EventSourcedTagViewModel.fromSnapshot(tag));
+
+        digitalText.title = new MultilingualText(title);
+
+        digitalText.isPublished = isPublished;
+
+        digitalText.queryAccessControlList = new AccessControlList(queryAccessControlList);
+
+        return digitalText;
     }
 }

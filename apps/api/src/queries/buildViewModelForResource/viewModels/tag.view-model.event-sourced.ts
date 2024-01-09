@@ -12,6 +12,7 @@ import { TagCreatedPayload } from '../../../domain/models/tag/commands/create-ta
 import { ResourceOrNoteTaggedPayload } from '../../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
 import { Tag } from '../../../domain/models/tag/tag.entity';
 import { AggregateId } from '../../../domain/types/AggregateId';
+import { DTO } from '../../../types/DTO';
 import { BaseEvent } from '../../event-sourcing';
 
 /**
@@ -96,5 +97,30 @@ export class EventSourcedTagViewModel implements ITagViewModel {
         aggregateCompositeIdentifier: { type: string; id: string };
     }) {
         return type === this.type && id === this.id;
+    }
+
+    static fromSnapshot({
+        id,
+        label,
+        members,
+        name,
+    }: DTO<EventSourcedTagViewModel>): EventSourcedTagViewModel {
+        /**
+         * Note that the flow is
+         * databaseDocument -> snapshot (viewDto) -> fromSnapshot -> eventHandler
+         * -> database update
+         *
+         * There is no need to clone on write, as the updates are controlled
+         * and the references are short-lived.
+         */
+        const tag = new EventSourcedTagViewModel(id);
+
+        tag.label = label;
+
+        tag.members = members;
+
+        tag.name = new MultilingualText(name);
+
+        return tag;
     }
 }

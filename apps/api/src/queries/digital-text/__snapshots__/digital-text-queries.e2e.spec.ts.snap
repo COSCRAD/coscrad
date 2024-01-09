@@ -4,37 +4,6 @@ exports[`When querying for a digital text when the user is a project admin detai
 {
   "actions": [
     {
-      "description": "Add a page identifier to a digital text",
-      "form": {
-        "fields": [
-          {
-            "constraints": [
-              {
-                "message": "must be a non-empty string",
-                "name": "non-empty string",
-              },
-              {
-                "message": "must be a defined value",
-                "name": "defined value",
-              },
-            ],
-            "description": "the identifier for the page (i.e., the "page number")",
-            "label": "page identifier",
-            "name": "identifier",
-            "type": "TEXT_FIELD",
-          },
-        ],
-        "prepopulatedFields": {
-          "aggregateCompositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
-            "type": "digitalText",
-          },
-        },
-      },
-      "label": "Add Page to Digital Text",
-      "type": "ADD_PAGE_TO_DIGITAL_TEXT",
-    },
-    {
       "description": "Allow a user to view (but not edit) a given resource",
       "form": {
         "fields": [
@@ -82,6 +51,37 @@ exports[`When querying for a digital text when the user is a project admin detai
       "label": "Publish Resource",
       "type": "PUBLISH_RESOURCE",
     },
+    {
+      "description": "Add a page identifier to a digital text",
+      "form": {
+        "fields": [
+          {
+            "constraints": [
+              {
+                "message": "must be a non-empty string",
+                "name": "non-empty string",
+              },
+              {
+                "message": "must be a defined value",
+                "name": "defined value",
+              },
+            ],
+            "description": "the identifier for the page (i.e., the "page number")",
+            "label": "page identifier",
+            "name": "identifier",
+            "type": "TEXT_FIELD",
+          },
+        ],
+        "prepopulatedFields": {
+          "aggregateCompositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
+            "type": "digitalText",
+          },
+        },
+      },
+      "label": "Add Page to Digital Text",
+      "type": "ADD_PAGE_TO_DIGITAL_TEXT",
+    },
   ],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
   "isPublished": false,
@@ -123,37 +123,6 @@ exports[`When querying for a digital text when the user is a project admin index
     {
       "actions": [
         {
-          "description": "Add a page identifier to a digital text",
-          "form": {
-            "fields": [
-              {
-                "constraints": [
-                  {
-                    "message": "must be a non-empty string",
-                    "name": "non-empty string",
-                  },
-                  {
-                    "message": "must be a defined value",
-                    "name": "defined value",
-                  },
-                ],
-                "description": "the identifier for the page (i.e., the "page number")",
-                "label": "page identifier",
-                "name": "identifier",
-                "type": "TEXT_FIELD",
-              },
-            ],
-            "prepopulatedFields": {
-              "aggregateCompositeIdentifier": {
-                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
-                "type": "digitalText",
-              },
-            },
-          },
-          "label": "Add Page to Digital Text",
-          "type": "ADD_PAGE_TO_DIGITAL_TEXT",
-        },
-        {
           "description": "Allow a user to view (but not edit) a given resource",
           "form": {
             "fields": [
@@ -186,6 +155,37 @@ exports[`When querying for a digital text when the user is a project admin index
           },
           "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+        {
+          "description": "Add a page identifier to a digital text",
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
+                    "message": "must be a non-empty string",
+                    "name": "non-empty string",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the identifier for the page (i.e., the "page number")",
+                "label": "page identifier",
+                "name": "identifier",
+                "type": "TEXT_FIELD",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+                "type": "digitalText",
+              },
+            },
+          },
+          "label": "Add Page to Digital Text",
+          "type": "ADD_PAGE_TO_DIGITAL_TEXT",
         },
       ],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
@@ -223,37 +223,6 @@ exports[`When querying for a digital text when the user is a project admin index
     {
       "actions": [
         {
-          "description": "Add a page identifier to a digital text",
-          "form": {
-            "fields": [
-              {
-                "constraints": [
-                  {
-                    "message": "must be a non-empty string",
-                    "name": "non-empty string",
-                  },
-                  {
-                    "message": "must be a defined value",
-                    "name": "defined value",
-                  },
-                ],
-                "description": "the identifier for the page (i.e., the "page number")",
-                "label": "page identifier",
-                "name": "identifier",
-                "type": "TEXT_FIELD",
-              },
-            ],
-            "prepopulatedFields": {
-              "aggregateCompositeIdentifier": {
-                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
-                "type": "digitalText",
-              },
-            },
-          },
-          "label": "Add Page to Digital Text",
-          "type": "ADD_PAGE_TO_DIGITAL_TEXT",
-        },
-        {
           "description": "Allow a user to view (but not edit) a given resource",
           "form": {
             "fields": [
@@ -300,6 +269,37 @@ exports[`When querying for a digital text when the user is a project admin index
           },
           "label": "Publish Resource",
           "type": "PUBLISH_RESOURCE",
+        },
+        {
+          "description": "Add a page identifier to a digital text",
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
+                    "message": "must be a non-empty string",
+                    "name": "non-empty string",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the identifier for the page (i.e., the "page number")",
+                "label": "page identifier",
+                "name": "identifier",
+                "type": "TEXT_FIELD",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
+                "type": "digitalText",
+              },
+            },
+          },
+          "label": "Add Page to Digital Text",
+          "type": "ADD_PAGE_TO_DIGITAL_TEXT",
         },
       ],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
@@ -337,37 +337,6 @@ exports[`When querying for a digital text when the user is a project admin index
     {
       "actions": [
         {
-          "description": "Add a page identifier to a digital text",
-          "form": {
-            "fields": [
-              {
-                "constraints": [
-                  {
-                    "message": "must be a non-empty string",
-                    "name": "non-empty string",
-                  },
-                  {
-                    "message": "must be a defined value",
-                    "name": "defined value",
-                  },
-                ],
-                "description": "the identifier for the page (i.e., the "page number")",
-                "label": "page identifier",
-                "name": "identifier",
-                "type": "TEXT_FIELD",
-              },
-            ],
-            "prepopulatedFields": {
-              "aggregateCompositeIdentifier": {
-                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
-                "type": "digitalText",
-              },
-            },
-          },
-          "label": "Add Page to Digital Text",
-          "type": "ADD_PAGE_TO_DIGITAL_TEXT",
-        },
-        {
           "description": "Allow a user to view (but not edit) a given resource",
           "form": {
             "fields": [
@@ -415,6 +384,37 @@ exports[`When querying for a digital text when the user is a project admin index
           "label": "Publish Resource",
           "type": "PUBLISH_RESOURCE",
         },
+        {
+          "description": "Add a page identifier to a digital text",
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
+                    "message": "must be a non-empty string",
+                    "name": "non-empty string",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the identifier for the page (i.e., the "page number")",
+                "label": "page identifier",
+                "name": "identifier",
+                "type": "TEXT_FIELD",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+                "type": "digitalText",
+              },
+            },
+          },
+          "label": "Add Page to Digital Text",
+          "type": "ADD_PAGE_TO_DIGITAL_TEXT",
+        },
       ],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
       "isPublished": false,
@@ -438,18 +438,9 @@ exports[`When querying for a digital text when the user is a project admin index
       ],
       "tags": [
         {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100555",
-          "label": "animals",
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
           "members": [],
-          "name": {
-            "items": [
-              {
-                "languageCode": "en",
-                "role": "original",
-                "text": "animals",
-              },
-            ],
-          },
+          "name": {},
           "type": "tag",
         },
       ],
