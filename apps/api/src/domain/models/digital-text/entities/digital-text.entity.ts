@@ -1,17 +1,11 @@
-import {
-    AGGREGATE_COMPOSITE_IDENTIFIER,
-    ICommandBase,
-    LanguageCode,
-} from '@coscrad/api-interfaces';
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { NestedDataType } from '@coscrad/data-types';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound, isNotFound } from '../../../../lib/types/not-found';
-import formatAggregateCompositeIdentifier from '../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
@@ -25,25 +19,23 @@ import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
 import { Snapshot } from '../../../types/Snapshot';
+import {
+    CreationEventHandlerMap,
+    buildAggregateRootFromEventHistory,
+} from '../../build-aggregate-root-from-event-history';
 import { PageRangeContext } from '../../context/page-range-context/page-range.context.entity';
 import { Resource } from '../../resource.entity';
 import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
-import { ResourceReadAccessGrantedToUser } from '../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import {
-    AudioAddedForDigitalTextPagePayload,
+    AudioAddedForDigitalTextPage,
     DigitalTextCreated,
     DigitalTextPageContentTranslated,
     PageAddedToDigitalText,
 } from '../commands';
 import { ContentAddedToDigitalTextPage } from '../commands/add-content-to-digital-text-page';
-import {
-    ADD_PAGE_TO_DIGITAL_TEXT,
-    CREATE_DIGITAL_TEXT,
-    DIGITAL_TEXT_CREATED,
-    PAGE_ADDED_TO_DIGITAL_TEXT,
-} from '../constants';
+import { ADD_PAGE_TO_DIGITAL_TEXT, CREATE_DIGITAL_TEXT } from '../constants';
 import { FailedToUpdateDigitalTextPageError } from '../errors';
 import { CannotAddPageWithDuplicateIdentifierError } from '../errors/cannot-add-page-with-duplicate-identifier.error';
 import { CannotOverrideAudioForPageError } from '../errors/cannot-override-audio-for-page.error';
@@ -308,110 +300,66 @@ export class DigitalText extends Resource {
         return Valid;
     }
 
+    handlePageAddedToDigitalText({ payload: { identifier } }: PageAddedToDigitalText) {
+        return this.addPage(identifier);
+    }
+
+    handleContentAddedToDigitalTextPage({
+        payload: { pageIdentifier, text, languageCode },
+    }: ContentAddedToDigitalTextPage) {
+        return this.addContentToPage(pageIdentifier, text, languageCode);
+    }
+
+    handleAudioAddedForDigitalTextPage({
+        payload: { pageIdentifier, audioItemId, languageCode },
+    }: AudioAddedForDigitalTextPage) {
+        return this.addAudioForPage(pageIdentifier, audioItemId, languageCode);
+    }
+
+    handleDigitalTextPageContentTranslated({
+        payload: { pageIdentifier, translation, languageCode },
+    }: DigitalTextPageContentTranslated) {
+        return this.translatePageContent(pageIdentifier, translation, languageCode);
+    }
+
     static fromEventHistory(
         eventStream: BaseEvent[],
         idOfDigitalTextToCreate: AggregateId
     ): Maybe<ResultOrError<DigitalText>> {
-        const eventsForThisDigitalText = eventStream.filter(({ payload }) =>
-            isDeepStrictEqual((payload as ICommandBase)[AGGREGATE_COMPOSITE_IDENTIFIER], {
-                type: AggregateType.digitalText,
-                id: idOfDigitalTextToCreate,
-            })
+        const creationEventHandlerMap: CreationEventHandlerMap<DigitalText> = new Map().set(
+            'DIGITAL_TEXT_CREATED',
+            DigitalText.createDigitalTextFromDigitalTextCreated
         );
 
-        if (eventsForThisDigitalText.length === 0) return NotFound;
+        return buildAggregateRootFromEventHistory(
+            creationEventHandlerMap,
+            {
+                type: AggregateType.digitalText,
+                id: idOfDigitalTextToCreate,
+            },
+            eventStream
+        );
+    }
 
-        const [creationEvent, ...updateEvents] = eventsForThisDigitalText;
-
-        if (creationEvent.type !== DIGITAL_TEXT_CREATED) {
-            throw new InternalError(
-                `The first event for ${formatAggregateCompositeIdentifier({
-                    type: AggregateType.digitalText,
-                    id: idOfDigitalTextToCreate,
-                })} should have been of type ${DIGITAL_TEXT_CREATED}, but found: ${
-                    creationEvent?.type
-                }`
-            );
-        }
-
+    private static createDigitalTextFromDigitalTextCreated(event: DigitalTextCreated) {
         const {
             payload: {
+                aggregateCompositeIdentifier: { id },
                 title,
                 languageCodeForTitle,
-                aggregateCompositeIdentifier: { id, type },
             },
-        } = creationEvent as DigitalTextCreated;
+        } = event;
 
-        const initialInstance = new DigitalText({
-            type,
+        const digitalText = new DigitalText({
+            type: AggregateType.digitalText,
             id,
-            published: false,
             title: buildMultilingualTextWithSingleItem(title, languageCodeForTitle),
             pages: [],
-            eventHistory: [creationEvent],
+            published: false,
         });
 
-        const newDigitalText = updateEvents.reduce((digitalText, event) => {
-            if (isInternalError(digitalText)) return digitalText;
+        // TODO validate invariants
 
-            if (event.type === `RESOURCE_PUBLISHED`) {
-                return digitalText.addEventToHistory(event).publish();
-            }
-
-            if (event.type === PAGE_ADDED_TO_DIGITAL_TEXT) {
-                const {
-                    payload: { identifier },
-                } = event as PageAddedToDigitalText;
-
-                return digitalText.addEventToHistory(event).addPage(identifier);
-            }
-
-            if (event.type === 'CONTENT_ADDED_TO_DIGITAL_TEXT_PAGE') {
-                const {
-                    payload: { pageIdentifier, text, languageCode },
-                } = event as ContentAddedToDigitalTextPage;
-
-                return digitalText
-                    .addEventToHistory(event)
-                    .addContentToPage(pageIdentifier, text, languageCode);
-            }
-
-            if (event.type === `RESOURCE_READ_ACCESS_GRANTED_TO_USER`) {
-                const {
-                    payload: { userId },
-                } = event as ResourceReadAccessGrantedToUser;
-
-                return digitalText.addEventToHistory(event).grantReadAccessToUser(userId);
-            }
-
-            if (event.isOfType(`AUDIO_ADDED_FOR_DIGITAL_TEXT_PAGE`)) {
-                const { pageIdentifier, audioItemId, languageCode } =
-                    event.payload as AudioAddedForDigitalTextPagePayload;
-
-                return digitalText
-                    .addEventToHistory(event)
-                    .addAudioForPage(pageIdentifier, audioItemId, languageCode);
-            }
-
-            if (event.type === `DIGITAL_TEXT_PAGE_CONTENT_TRANSLATED`) {
-                const {
-                    payload: { pageIdentifier: pageIdentifer, translation, languageCode },
-                } = event as DigitalTextPageContentTranslated;
-
-                return digitalText
-                    .addEventToHistory(event)
-                    .translatePageContent(pageIdentifer, translation, languageCode);
-            }
-
-            throw new InternalError(
-                `Encountered an unhandled event if type: ${
-                    event.type
-                } for: ${formatAggregateCompositeIdentifier(
-                    event.payload.aggregateCompositeIdentifier
-                )}`
-            );
-        }, initialInstance);
-
-        return newDigitalText;
+        return digitalText;
     }
 }
