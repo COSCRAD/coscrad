@@ -47,6 +47,7 @@ export const buildAggregateRootFromEventHistory = <T extends Aggregate>(
     if (isInternalError(initialInstanceBuildResult)) return initialInstanceBuildResult;
 
     return updateEvents.reduce(
+        // TODO return early if there is an error
         (accumulatedTerm, nextEvent) => accumulatedTerm.apply(nextEvent),
         initialInstanceBuildResult
     );

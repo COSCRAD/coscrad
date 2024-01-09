@@ -1,4 +1,4 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
+import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { NestedDataType } from '@coscrad/data-types';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
@@ -32,6 +32,7 @@ import {
     AudioAddedForDigitalTextPage,
     DigitalTextCreated,
     DigitalTextPageContentTranslated,
+    DigitalTextTitleTranslated,
     PageAddedToDigitalText,
 } from '../commands';
 import { ContentAddedToDigitalTextPage } from '../commands/add-content-to-digital-text-page';
@@ -298,6 +299,17 @@ export class DigitalText extends Resource {
             );
 
         return Valid;
+    }
+
+    handleDigitalTextTitleTranslated({
+        payload: { translation, languageCode },
+    }: DigitalTextTitleTranslated) {
+        // TODO move this to an update method
+        return this.translateMultilingualTextProperty('title', {
+            languageCode,
+            text: translation,
+            role: MultilingualTextItemRole.freeTranslation,
+        });
     }
 
     handlePageAddedToDigitalText({ payload: { identifier } }: PageAddedToDigitalText) {

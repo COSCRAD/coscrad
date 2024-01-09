@@ -267,10 +267,9 @@ export abstract class Aggregate extends BaseDomainModel implements HasAggregateI
         const handlerMethodName = `handle${eventCtorName}`;
 
         if (typeof this[handlerMethodName] !== 'function') {
-            /**
-             * Should we throw here?
-             */
-            return this;
+            throw new InternalError(
+                `You need to register an event handler method named: ${handlerMethodName} for aggregate root of type: ${this.type}`
+            );
         }
 
         const result = this[handlerMethodName](event) as unknown as ResultOrError<T>;

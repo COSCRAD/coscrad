@@ -9,6 +9,8 @@ import {
     DigitalTextCreated,
     DigitalTextPageContentTranslated,
     DigitalTextPageContentTranslatedPayload,
+    DigitalTextTitleTranslated,
+    DigitalTextTitleTranslatedPayload,
     PageAddedToDigitalText,
 } from '../../domain/models/digital-text/commands';
 import {
@@ -135,6 +137,22 @@ const buildDigitalTextCreatedEvent = (
         ...buildEventMeta(),
         ...(metadataOverrides || {}),
     });
+};
+
+const buildDigitalTextTitleTranslated = (
+    payloadOverrides: DeepPartial<DigitalTextTitleTranslated['payload']>,
+    metadataOverrides: DeepPartial<EventRecordMetadata>
+) => {
+    const payloadDefaults: DigitalTextTitleTranslatedPayload = {
+        aggregateCompositeIdentifier,
+        translation: 'this is the translation',
+        languageCode: LanguageCode.English,
+    };
+
+    return new DigitalTextTitleTranslated(
+        clonePlainObjectWithOverrides(payloadDefaults, payloadOverrides),
+        clonePlainObjectWithOverrides(buildEventMeta(), metadataOverrides)
+    );
 };
 
 const buildResourceReadAccessGrantedToUserEvent = (
@@ -503,10 +521,8 @@ export class TestEventStream {
                 buildDigitalTextPageContentTranslated
             )
             .registerBuilder(`AUDIO_ADDED_FOR_TERM`, buildAudioAddedForTerm)
-            .registerBuilder(
-                `AUDIO_ADDED_FOR_DIGITAL_TEXT_PAGE`,
-                buildAudioAddedForDigitalTextPage
-            );
+            .registerBuilder(`AUDIO_ADDED_FOR_DIGITAL_TEXT_PAGE`, buildAudioAddedForDigitalTextPage)
+            .registerBuilder(`DIGITAL_TEXT_TITLE_TRANSLATED`, buildDigitalTextTitleTranslated);
     }
 
     andThen<T extends BaseEvent>(

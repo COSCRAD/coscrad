@@ -22,6 +22,7 @@ import { TranslateSongTitle } from './translate-song-title.command';
 
 @CommandHandler(TranslateSongTitle)
 export class TranslateSongTitleCommandHandler extends BaseUpdateCommandHandler<Song> {
+    // TODO do we need this?
     protected readonly aggregateType: AggregateType = AggregateType.song;
 
     protected readonly repositoryForCommandsTargetAggregate: IRepositoryForAggregate<Song>;
