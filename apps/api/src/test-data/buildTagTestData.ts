@@ -18,11 +18,11 @@ const allTagsDTOs: Omit<DTO<Tag>, 'type'>[] = [
                 id: '1',
             },
             {
-                type: CategorizableType.book,
+                type: CategorizableType.digitalText,
                 id: '23',
             },
             {
-                type: CategorizableType.book,
+                type: CategorizableType.digitalText,
                 id: '24',
             },
             {

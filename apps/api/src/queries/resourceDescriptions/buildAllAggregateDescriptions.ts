@@ -28,7 +28,7 @@ const resourceDescriptions: Pick<AggregateInfo, 'type' | 'description'>[] = [
         description: 'An video includes a link for playback and possibly a transcript.',
     },
     {
-        type: ResourceType.book,
+        type: ResourceType.digitalText,
         description: 'A book is a digital representation of a text, organized into pages.',
     },
     {

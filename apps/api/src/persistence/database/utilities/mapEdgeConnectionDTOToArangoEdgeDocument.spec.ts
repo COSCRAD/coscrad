@@ -31,7 +31,7 @@ const selfEdgeConnection = new EdgeConnection({
             role: EdgeConnectionMemberRole.self,
             compositeIdentifier: {
                 id: '24',
-                type: ResourceType.book,
+                type: ResourceType.digitalText,
             },
             context: new PageRangeContext({
                 type: EdgeConnectionContextType.pageRange,
@@ -50,7 +50,7 @@ const buildValidBookEdgeConnectionMember = (
     role: EdgeConnectionMemberRole
 ): DTO<EdgeConnectionMember<PageRangeContext>> => ({
     compositeIdentifier: {
-        type: ResourceType.book,
+        type: ResourceType.digitalText,
         id: '1123',
     },
     role,

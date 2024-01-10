@@ -1,17 +1,10 @@
 import {
-    AggregateType,
-    CategorizableType,
-    IBookViewModel,
-    ICategorizableDetailQueryResult,
+    CategorizableType
 } from '@coscrad/api-interfaces';
-import { Card, CardContent } from '@mui/material';
-import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { NoteDetailFullViewPresenter } from '../../notes/note-detail.full-view.presenter';
 import { AudioItemDetailFullViewPresenter } from '../audio-item/audio-item-detail.full-view.presenter';
 import { BibliographicCitationDetailPresenter } from '../bibliographic-citations/bibliographic-citation-detail.presenter';
-import { BookInfo } from '../books/book-info';
-import { BookReader } from '../books/pages';
 import { DigitalTextDetailFullViewPresenter } from '../digital-text/digital-text-detail.full-view.presenter';
 import { MediaItemDetailFullViewPresenter } from '../media-items/media-item-detail.full-view.presenter';
 import { PhotographDetailFullViewPresenter } from '../photographs/photograph-detail.full-view.presenter';
@@ -37,30 +30,6 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
     [CategorizableType.video]: VideoDetailFullViewPresenter,
     [CategorizableType.vocabularyList]: VocabularyListDetailFullViewPresenter,
     [CategorizableType.playlist]: PlaylistDetailFullViewPresenter,
-    /**
-     * TODO Investigate why importing this from the component file leads to a
-     * circular dependency.
-     */
-    [CategorizableType.book]: (
-        book: ICategorizableDetailQueryResult<IBookViewModel>
-    ): JSX.Element => {
-        const { id, pages } = book;
-
-        return (
-            <div
-                data-testid={buildDataAttributeForAggregateDetailComponent(AggregateType.book, id)}
-            >
-                <Card>
-                    <CardContent>
-                        {<BookInfo {...book} />}
-                        <div>
-                            <BookReader pages={pages} />
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-        );
-    },
     [CategorizableType.note]: NoteDetailFullViewPresenter,
 };
 

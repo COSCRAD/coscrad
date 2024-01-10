@@ -45,7 +45,7 @@ const edgeConnections: DTO<EdgeConnection>[] = [
                     pageIdentifiers: ['134', 'ix'],
                 }),
                 compositeIdentifier: {
-                    type: ResourceType.book,
+                    type: ResourceType.digitalText,
                     id: '5353',
                 },
             },

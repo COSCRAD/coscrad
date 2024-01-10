@@ -109,7 +109,7 @@ const dualEdgeConnection: DTO<EdgeConnection> = {
             role: EdgeConnectionMemberRole.to,
             compositeIdentifier: {
                 id: '11',
-                type: ResourceType.book,
+                type: ResourceType.digitalText,
             },
             context: generalContext,
         },

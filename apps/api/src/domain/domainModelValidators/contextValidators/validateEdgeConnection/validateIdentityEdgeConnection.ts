@@ -38,6 +38,8 @@ export const findMemberWithRole = (
  * we cannot verify that the `to` member's bibliographic reference (sub-)type
  * can accept a resource with the `from` member's resource type as a target
  * digital representation.
+ *
+ * TODO Remove identity context.
  */
 export const areIdentityMembersContextTypesConsistentWithRoles = (
     member1: EdgeConnectionMember,
@@ -60,7 +62,7 @@ export const areIdentityMembersContextTypesConsistentWithRoles = (
     }
 
     // TODO Use a lookup table for this logic
-    return toMember.compositeIdentifier.type === ResourceType.book;
+    return toMember.compositeIdentifier.type === ResourceType.digitalText;
 };
 
 export const validateIdentityEdgeConnection = ({ members }: EdgeConnection): InternalError[] => {

@@ -3,7 +3,6 @@ import { ResourceType } from '@coscrad/api-interfaces';
 const lookupTable: { [K in ResourceType]: string } = {
     [ResourceType.bibliographicCitation]: 'BibliographicCitations',
     [ResourceType.digitalText]: 'DigitalTexts',
-    [ResourceType.book]: 'Books',
     [ResourceType.mediaItem]: 'MediaItems',
     [ResourceType.photograph]: 'Photographs',
     [ResourceType.song]: 'Songs',

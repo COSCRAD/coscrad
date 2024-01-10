@@ -16,14 +16,14 @@ export default (): EdgeConnection[] =>
         {
             id: '3301',
             note: buildMultilingualTextWithSingleItem(
-                'this term appears on this page of the book',
+                'this term appears on this page of the digital text',
                 LanguageCode.English
             ),
             members: [
                 {
                     role: EdgeConnectionMemberRole.to,
                     compositeIdentifier: {
-                        type: ResourceType.book,
+                        type: ResourceType.digitalText,
                         id: '23',
                     },
                     context: new PageRangeContext({
@@ -119,14 +119,14 @@ export default (): EdgeConnection[] =>
         {
             id: '3305',
             note: buildMultilingualTextWithSingleItem(
-                'this video is loosely based on the book',
+                'this video is loosely based on the digital text',
                 LanguageCode.English
             ),
             members: [
                 {
                     role: EdgeConnectionMemberRole.to,
                     compositeIdentifier: {
-                        type: ResourceType.book,
+                        type: ResourceType.digitalText,
                         id: '24',
                     },
                     context: new GeneralContext(),

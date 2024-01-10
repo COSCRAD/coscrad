@@ -36,7 +36,7 @@ export default (): Category[] => {
                     id: '1',
                 },
                 {
-                    type: CategorizableType.book,
+                    type: CategorizableType.digitalText,
                     id: '23',
                 },
                 {
@@ -154,7 +154,7 @@ export default (): Category[] => {
             label: 'rodents',
             members: [
                 {
-                    type: CategorizableType.book,
+                    type: CategorizableType.digitalText,
                     id: '24',
                 },
             ],

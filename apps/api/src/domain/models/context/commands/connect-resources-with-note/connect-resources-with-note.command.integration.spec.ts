@@ -76,7 +76,7 @@ const allDualEdgeConnections = (testDualConnections as EdgeConnection[])
 
 const existingPhotograph = getValidAggregateInstanceForTest(AggregateType.photograph);
 
-const existingBook = getValidAggregateInstanceForTest(AggregateType.book);
+const existingDigitalText = getValidAggregateInstanceForTest(AggregateType.digitalText);
 
 const buildValidPayload = (id: AggregateId) => ({
     aggregateCompositeIdentifier: {
@@ -85,7 +85,7 @@ const buildValidPayload = (id: AggregateId) => ({
     },
     toMemberCompositeIdentifier: existingPhotograph.getCompositeIdentifier(),
     toMemberContext: new GeneralContext(),
-    fromMemberCompositeIdentifier: existingBook.getCompositeIdentifier(),
+    fromMemberCompositeIdentifier: existingDigitalText.getCompositeIdentifier(),
     fromMemberContext: new GeneralContext(),
     text: 'this is how these resources are connected',
     languageCode: LanguageCode.English,
@@ -589,7 +589,7 @@ describe(commandType, () => {
                         // to member does not exist
 
                         // from member
-                        [AggregateType.book]: [existingBook],
+                        [AggregateType.digitalText]: [existingDigitalText],
                     }).fetchFullSnapshotInLegacyFormat(),
                     buildCommandFSA: (id) => commandFsaFactory.build(id),
                     checkError: (error) => {
@@ -629,7 +629,7 @@ describe(commandType, () => {
                             new CommandExecutionError([
                                 new InvalidExternalStateError([
                                     new AggregateNotFoundError(
-                                        existingBook.getCompositeIdentifier()
+                                        existingDigitalText.getCompositeIdentifier()
                                     ),
                                 ]),
                             ])

@@ -36,7 +36,7 @@ const buildValidBookEdgeConnectionMemberDto = (
     role: EdgeConnectionMemberRole
 ): DTO<EdgeConnectionMember<PageRangeContext>> => ({
     compositeIdentifier: {
-        type: ResourceType.book,
+        type: ResourceType.digitalText,
         id: '1123',
     },
     role,
@@ -302,7 +302,7 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                                 },
                             }),
                             compositeIdentifier: {
-                                type: ResourceType.book,
+                                type: ResourceType.digitalText,
                                 id: '345',
                             },
                         },
@@ -312,7 +312,7 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                 expectedError: buildTopLevelError(validBookToTranscribedAudioDualConnection.id, [
                     new ContextTypeIsNotAllowedForGivenResourceTypeError(
                         EdgeConnectionContextType.timeRange,
-                        ResourceType.book
+                        ResourceType.digitalText
                     ),
                 ]),
             },
@@ -389,7 +389,7 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                         {
                             role: EdgeConnectionMemberRole.from,
                             compositeIdentifier: {
-                                type: ResourceType.book,
+                                type: ResourceType.digitalText,
                                 id: '6789',
                             },
                             context: new IdentityContext(),
@@ -406,7 +406,7 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                 },
                 expectedError: buildTopLevelError(dummyUuid, [
                     new IncompatibleIdentityConnectionMembersError({
-                        fromType: ResourceType.book,
+                        fromType: ResourceType.digitalText,
                         toType: ResourceType.bibliographicCitation,
                     }),
                 ]),

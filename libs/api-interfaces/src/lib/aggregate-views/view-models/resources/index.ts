@@ -1,6 +1,5 @@
 export * from './audio-item';
 export * from './bibliographic-citation';
-export * from './book';
 export * from './common';
 export * from './digital-text';
 export * from './digital-text/digital-text.view-model.interface';

@@ -1,19 +1,10 @@
 import {
-    AggregateType,
-    CategorizableType,
-    IBookViewModel,
-    ICategorizableDetailQueryResult,
-    ResourceType,
+    CategorizableType
 } from '@coscrad/api-interfaces';
-import { Card, CardContent } from '@mui/material';
-import { Link } from 'react-router-dom';
-import { routes } from '../../../app/routes/routes';
-import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { NoteDetailThumbnailPresenter } from '../../notes/note-detail.thumbnail.presenter';
 import { AudioItemDetailThumbnailPresenter } from '../audio-item/audio-item-detail.thumbnail.presenter';
 import { BibliographicCitationDetailThumbnailPresenter } from '../bibliographic-citations/bibliographic-citation-detail-thumbnail-presenters';
-import { BookInfo } from '../books/book-info';
 import { DigitalTextDetailThumbnailPresenter } from '../digital-text/digital-text-detail.thumbnail.presenter';
 import { MediaItemDetailThumbnailPresenter } from '../media-items/media-item-detail.thumbnail.presenter';
 import { PhotographDetailThumbnailPresenter } from '../photographs/photograph-detail.thumbnail.presenter';
@@ -41,32 +32,6 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
      * TODO Investigate why importing this from the component file leads to a
      * circular dependency.
      */
-    [CategorizableType.book]: (
-        book: ICategorizableDetailQueryResult<IBookViewModel>
-    ): JSX.Element => {
-        const { id, pages } = book;
-
-        return (
-            // TODO We may want to automate the link wrapping because it's easy to forget
-            <Link to={`/${routes.resources.ofType(ResourceType.book).detail(id)}`}>
-                <div
-                    data-testid={buildDataAttributeForAggregateDetailComponent(
-                        AggregateType.mediaItem,
-                        id
-                    )}
-                >
-                    <Card>
-                        <CardContent>
-                            {<BookInfo {...book} />}
-                            <div>
-                                <strong>page count:</strong> {pages.length}
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
-            </Link>
-        );
-    },
     [CategorizableType.note]: NoteDetailThumbnailPresenter,
 };
 

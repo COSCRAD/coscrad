@@ -83,7 +83,7 @@ const dualEdgeConnections: INoteViewModel[] = [
         connectedResources: [
             buildMemberWithGeneralContext(
                 {
-                    type: ResourceType.book,
+                    type: ResourceType.digitalText,
                     id: '123789',
                 },
                 EdgeConnectionMemberRole.to

@@ -4,7 +4,6 @@ export const ArangoResourceCollectionId = {
     terms: 'terms',
     vocabulary_lists: 'vocabulary_lists',
     audio_items: 'audio_items',
-    books: 'books',
     photographs: 'photographs',
     spatial_features: 'spatial_features',
     bibliographic_references: 'bibliographic_references',

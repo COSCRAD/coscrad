@@ -152,6 +152,11 @@ describe(`The command: ${commandType}`, () => {
     });
 
     describe('when the command is invalid', () => {
+        /**
+         * TODO
+         * - Make this comprehensive
+         * - Break this out into a separate test that doesn't use the network
+         */
         describe('when the payload has an invalid type', () => {
             describe('when the aggregate type is wrong', () => {
                 it('should fail with the appropriate error', async () => {
@@ -160,7 +165,7 @@ describe(`The command: ${commandType}`, () => {
                         {
                             propertyName: 'aggregateCompositeIdentifier',
                             invalidValue: {
-                                type: AggregateType.book,
+                                type: AggregateType.digitalText,
                                 id: dummyUuid,
                             },
                         },

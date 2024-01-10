@@ -39,7 +39,7 @@ const childCategory1: ICategoryTreeViewModel = {
     children: [grandChildCategory],
     members: [
         {
-            type: CategorizableType.book,
+            type: CategorizableType.digitalText,
             id: dummyBooks[0].id,
         },
         {
@@ -66,7 +66,7 @@ const dummyCategoryTree: ICategoryTreeViewModel = {
     children: childrenCategories,
     members: [
         {
-            type: CategorizableType.book,
+            type: CategorizableType.digitalText,
             id: dummyBooks[1].id,
         },
         {

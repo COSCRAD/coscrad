@@ -1,7 +1,6 @@
 import { UuidDocument } from '../../lib/id-generation/types/UuidDocument';
 import { AudioItem } from '../models/audio-item/entities/audio-item.entity';
 import { IBibliographicCitation } from '../models/bibliographic-citation/interfaces/bibliographic-citation.interface';
-import { Book } from '../models/book/entities/book.entity';
 import { Category } from '../models/categories/entities/category.entity';
 import { EdgeConnection } from '../models/context/edge-connection.entity';
 import { MediaItem } from '../models/media-item/entities/media-item.entity';
@@ -36,7 +35,6 @@ export type ResourceTypeToResourceModel = {
     vocabularyList: VocabularyList;
     audioItem: AudioItem;
     video: Video;
-    book: Book;
     photograph: Photograph;
     spatialFeature: ISpatialFeature;
     bibliographicCitation: IBibliographicCitation;

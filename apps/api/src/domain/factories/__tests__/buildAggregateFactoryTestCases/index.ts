@@ -5,7 +5,6 @@ import {
 import { DTO } from '../../../../types/DTO';
 import { buildAudioItemFactoryTestSet } from './audio-item.aggregate-factory.test-set';
 import { buildBibliographicCitationFactoryTestSet } from './bibliographic-citation.aggregate-factory.test-set';
-import { buildBookAggregateFactoryTestSet } from './book.aggregate-factory.test-set';
 import { buildDigitalTextFactoryTestSet } from './digital-text.aggregate-factory.test-set';
 import { buildMediaItemFactoryTestSet } from './media-item.aggregate-factory.test-set';
 import { buildPhotographFactoryTestSet } from './photograph.aggregate-factory.test-set';
@@ -36,7 +35,6 @@ export type FactoryTestSuiteForAggregate<TAggregateType extends AggregateType = 
 export default (): FactoryTestSuiteForAggregate[] => [
     buildBibliographicCitationFactoryTestSet(),
     buildDigitalTextFactoryTestSet(),
-    buildBookAggregateFactoryTestSet(),
     buildMediaItemFactoryTestSet(),
     buildPhotographFactoryTestSet(),
     buildSongFactoryTestSet(),

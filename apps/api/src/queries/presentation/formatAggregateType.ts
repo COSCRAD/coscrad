@@ -16,7 +16,6 @@ const resourceTypeAndLabel: AggregateTypeAndLabel = {
     [AggregateType.userGroup]: 'User Group',
     [ResourceType.bibliographicCitation]: 'Bibliographic Reference',
     [ResourceType.digitalText]: 'Digital Text',
-    [ResourceType.book]: 'Book',
     [ResourceType.mediaItem]: 'Media Item',
     [ResourceType.photograph]: 'Photograph',
     [ResourceType.song]: 'Song',

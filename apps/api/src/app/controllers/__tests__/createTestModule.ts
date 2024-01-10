@@ -184,7 +184,6 @@ import {
 } from '../../../domain/models/vocabulary-list/commands';
 import { AudioItemQueryService } from '../../../domain/services/query-services/audio-item-query.service';
 import { BibliographicCitationQueryService } from '../../../domain/services/query-services/bibliographic-citation-query.service';
-import { BookQueryService } from '../../../domain/services/query-services/book-query.service';
 import { CoscradUserGroupQueryService } from '../../../domain/services/query-services/coscrad-user-group-query.service';
 import { CoscradUserQueryService } from '../../../domain/services/query-services/coscrad-user-query.service';
 import { EdgeConnectionQueryService } from '../../../domain/services/query-services/edge-connection-query.service';
@@ -228,7 +227,6 @@ import { EdgeConnectionController } from '../edge-connection.controller';
 import { IdGenerationController } from '../id-generation/id-generation.controller';
 import { AudioItemController } from '../resources/audio-item.controller';
 import { BibliographicCitationController } from '../resources/bibliographic-citation.controller';
-import { BookController } from '../resources/book.controller';
 import { DigitalTextQueryController } from '../resources/digital-text.controller';
 import { MediaItemController } from '../resources/media-item.controller';
 import { PhotographController } from '../resources/photograph.controller';
@@ -452,14 +450,6 @@ export default async (
                 inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService, ConfigService],
             },
             {
-                provide: BookQueryService,
-                useFactory: (
-                    repositoryProvider: ArangoRepositoryProvider,
-                    commandInfoService: CommandInfoService
-                ) => new BookQueryService(repositoryProvider, commandInfoService),
-                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService],
-            },
-            {
                 provide: PhotographQueryService,
                 useFactory: (
                     repositoryProvider: ArangoRepositoryProvider,
@@ -677,7 +667,6 @@ export default async (
             VocabularyListController,
             AudioItemController,
             VideoController,
-            BookController,
             PhotographController,
             SpatialFeatureController,
             BibliographicCitationController,

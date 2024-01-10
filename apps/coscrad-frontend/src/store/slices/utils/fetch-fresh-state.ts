@@ -5,7 +5,6 @@ import { fetchNotes } from '../notes/thunks';
 import {
     fetchAudioItems,
     fetchBibliographicCitations,
-    fetchBooks,
     fetchDigitalTexts,
     fetchMediaItems,
     fetchPhotographs,
@@ -28,10 +27,6 @@ export const fetchFreshState = (dispatch: AppDispatch, aggregateType: AggregateT
 
         case AggregateType.digitalText:
             dispatch(fetchDigitalTexts());
-            break;
-
-        case AggregateType.book:
-            dispatch(fetchBooks());
             break;
 
         case AggregateType.category:

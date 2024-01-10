@@ -17,11 +17,6 @@ import { EdgeConnectionContextType } from '../context/types/EdgeConnectionContex
  *
  */
 const resourceTypeToAllowedContextTypes: Record<ResourceType, string[]> = {
-    [ResourceType.book]: [
-        EdgeConnectionContextType.general,
-        EdgeConnectionContextType.identity,
-        EdgeConnectionContextType.pageRange,
-    ],
     [ResourceType.photograph]: [
         EdgeConnectionContextType.general,
         // TODO Support point2D context for Photographs
