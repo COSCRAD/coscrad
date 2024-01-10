@@ -112,13 +112,15 @@ export class DigitalTextViewModel
          */
         if (this.isForMe(payload)) {
             if (eventType === 'DIGITAL_TEXT_CREATED') {
-                const { title, languageCodeForTitle } = payload as DigitalTextCreatedPayload;
+                const { title } = payload as DigitalTextCreatedPayload;
 
                 const {
                     meta: { userId: idOfCreatingUser },
                 } = event;
 
-                this.title = buildMultilingualTextWithSingleItem(title, languageCodeForTitle);
+                this.title = new MultilingualText({
+                    items: [title],
+                });
 
                 /**
                  * This denormalization provides consistency that the client

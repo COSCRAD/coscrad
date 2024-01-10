@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TextIndexer event consumer when indexing text should work 1`] = `
+[
+  {
+    "languageCode": "en",
+    "token": "title",
+    "viewCompositeIdentifiers": [
+      {
+        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100555",
+        "type": "digitalText",
+      },
+    ],
+  },
+  {
+    "languageCode": "en",
+    "token": "for",
+    "viewCompositeIdentifiers": [
+      {
+        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100555",
+        "type": "digitalText",
+      },
+    ],
+  },
+  {
+    "languageCode": "en",
+    "token": "digital",
+    "viewCompositeIdentifiers": [
+      {
+        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100555",
+        "type": "digitalText",
+      },
+    ],
+  },
+  {
+    "languageCode": "en",
+    "token": "text",
+    "viewCompositeIdentifiers": [
+      {
+        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100555",
+        "type": "digitalText",
+      },
+    ],
+  },
+]
+`;

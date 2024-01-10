@@ -1,6 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { EventHandler, ICoscradEventHandler } from '../../../../../domain/common';
-import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
 import { DigitalTextViewModel } from '../../../../../queries/digital-text';
 import { IAggregateRootQueryRepository } from '../../../../../queries/interfaces';
 import { AccessControlList } from '../../../shared/access-control/access-control-list.entity';
@@ -18,12 +18,13 @@ export class DigitalTextCreatedEventHandler implements ICoscradEventHandler {
         const {
             payload: {
                 aggregateCompositeIdentifier: { id },
-                title: titleText,
-                languageCodeForTitle,
+                title: titleOriginalTextItem,
             },
         } = event;
 
-        const title = buildMultilingualTextWithSingleItem(titleText, languageCodeForTitle);
+        const title = new MultilingualText({
+            items: [titleOriginalTextItem],
+        });
 
         const newDigitalText = DigitalTextViewModel.fromSnapshot({
             id,
