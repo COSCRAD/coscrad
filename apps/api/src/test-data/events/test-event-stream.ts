@@ -6,6 +6,7 @@ import { dummyDateNow } from '../../domain/models/__tests__/utilities/dummyDateN
 import {
     AudioAddedForDigitalTextPage,
     AudioAddedForDigitalTextPagePayload,
+    CreateDigitalText,
     DigitalTextCreated,
     DigitalTextPageContentTranslated,
     DigitalTextPageContentTranslatedPayload,
@@ -118,18 +119,18 @@ const buildEventMeta = (): EventRecordMetadata => ({
 
 // TODO We need a helper for event-sourced test data setup
 const buildDigitalTextCreatedEvent = (
-    payloadOverrides: DeepPartial<DigitalTextCreated['payload']>,
+    payloadOverrides: DeepPartial<CreateDigitalText>,
     metadataOverrides?: DeepPartial<EventRecordMetadata>
 ) => {
-    const payloadWithOverridesApplied: DigitalTextCreated['payload'] =
-        clonePlainObjectWithOverrides(
-            {
-                aggregateCompositeIdentifier,
-                title: 'Title for Digital Text',
-                languageCodeForTitle: LanguageCode.English,
-            } as DigitalTextCreated['payload'],
-            payloadOverrides
-        );
+    // Do we really want the mapping from command to event payload to happen in the event constructor?
+    const payloadWithOverridesApplied: CreateDigitalText = clonePlainObjectWithOverrides(
+        {
+            aggregateCompositeIdentifier,
+            title: 'Title for Digital Text',
+            languageCodeForTitle: LanguageCode.English,
+        } as CreateDigitalText,
+        payloadOverrides
+    );
 
     return new DigitalTextCreated(payloadWithOverridesApplied, {
         ...buildEventMeta(),

@@ -14,7 +14,6 @@ import { NotFound, isNotFound } from '../../../../lib/types/not-found';
 import formatAggregateCompositeIdentifier from '../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
-import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { AggregateRoot } from '../../../decorators';
 import { Valid, isValid } from '../../../domainModelValidators/Valid';
@@ -337,7 +336,6 @@ export class DigitalText extends Resource {
         const {
             payload: {
                 title,
-                languageCodeForTitle,
                 aggregateCompositeIdentifier: { id, type },
             },
         } = creationEvent as DigitalTextCreated;
@@ -346,7 +344,9 @@ export class DigitalText extends Resource {
             type,
             id,
             published: false,
-            title: buildMultilingualTextWithSingleItem(title, languageCodeForTitle),
+            title: new MultilingualText({
+                items: [title],
+            }),
             pages: [],
             eventHistory: [creationEvent],
         });
