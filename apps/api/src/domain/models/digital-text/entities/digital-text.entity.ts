@@ -171,6 +171,17 @@ export class DigitalText extends Resource {
         return updateResult;
     }
 
+    translateTitle(
+        translationOfTitle: string,
+        languageCode: LanguageCode
+    ): ResultOrError<DigitalText> {
+        return this.translateMultilingualTextProperty('title', {
+            languageCode,
+            text: translationOfTitle,
+            role: MultilingualTextItemRole.freeTranslation,
+        });
+    }
+
     translatePageContent(
         pageIdentifier: PageIdentifier,
         text: string,
@@ -304,12 +315,7 @@ export class DigitalText extends Resource {
     handleDigitalTextTitleTranslated({
         payload: { translation, languageCode },
     }: DigitalTextTitleTranslated) {
-        // TODO move this to an update method
-        return this.translateMultilingualTextProperty('title', {
-            languageCode,
-            text: translation,
-            role: MultilingualTextItemRole.freeTranslation,
-        });
+        return this.translateTitle(translation, languageCode);
     }
 
     handlePageAddedToDigitalText({ payload: { identifier } }: PageAddedToDigitalText) {
