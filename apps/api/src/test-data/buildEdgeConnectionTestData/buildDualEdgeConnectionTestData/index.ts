@@ -126,7 +126,7 @@ const additionalDualConnectionsForBibliographicCitationDTOs = [
             {
                 role: EdgeConnectionMemberRole.to,
                 compositeIdentifier: {
-                    id: '24',
+                    id: '1',
                     type: ResourceType.digitalText,
                 },
                 context: new GeneralContext(),
@@ -154,7 +154,7 @@ const additionalDualConnectionsForBibliographicCitationDTOs = [
             {
                 role: EdgeConnectionMemberRole.to,
                 compositeIdentifier: {
-                    id: '24',
+                    id: '1',
                     type: ResourceType.digitalText,
                 },
                 context: new GeneralContext(),

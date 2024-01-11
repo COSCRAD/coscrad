@@ -36,10 +36,6 @@ export default (): Category[] => {
                     id: '1',
                 },
                 {
-                    type: CategorizableType.digitalText,
-                    id: '23',
-                },
-                {
                     type: CategorizableType.song,
                     id: '1',
                 },
@@ -145,17 +141,6 @@ export default (): Category[] => {
                 {
                     type: CategorizableType.photograph,
                     id: '1',
-                },
-            ],
-            childrenIDs: [],
-        },
-        {
-            id: '11',
-            label: 'rodents',
-            members: [
-                {
-                    type: CategorizableType.digitalText,
-                    id: '24',
                 },
             ],
             childrenIDs: [],

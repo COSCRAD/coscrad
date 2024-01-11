@@ -18,14 +18,6 @@ const allTagsDTOs: Omit<DTO<Tag>, 'type'>[] = [
                 id: '1',
             },
             {
-                type: CategorizableType.digitalText,
-                id: '23',
-            },
-            {
-                type: CategorizableType.digitalText,
-                id: '24',
-            },
-            {
                 type: CategorizableType.vocabularyList,
                 id: '1',
             },

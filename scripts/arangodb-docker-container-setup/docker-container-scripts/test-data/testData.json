@@ -12,14 +12,6 @@
                         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
                     },
                     {
-                        "type": "book",
-                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023"
-                    },
-                    {
-                        "type": "book",
-                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024"
-                    },
-                    {
                         "type": "vocabularyList",
                         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
                     },
@@ -72,7 +64,7 @@
                         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007"
                     },
                     {
-                        "type": "bibliographicReference",
+                        "type": "bibliographicCitation",
                         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
                     },
                     {
@@ -168,7 +160,7 @@
                 "label": "law",
                 "members": [
                     {
-                        "type": "bibliographicReference",
+                        "type": "bibliographicCitation",
                         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003"
                     },
                     {
@@ -203,10 +195,6 @@
                     {
                         "type": "term",
                         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
-                    },
-                    {
-                        "type": "book",
-                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023"
                     },
                     {
                         "type": "song",
@@ -297,7 +285,7 @@
                         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102"
                     },
                     {
-                        "type": "bibliographicReference",
+                        "type": "bibliographicCitation",
                         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
                     },
                     {
@@ -314,17 +302,6 @@
                     {
                         "type": "photograph",
                         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
-                    }
-                ],
-                "type": "category"
-            },
-            {
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
-                "label": "rodents",
-                "members": [
-                    {
-                        "type": "book",
-                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024"
                     }
                 ],
                 "type": "category"
@@ -467,11 +444,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194371,
-                            "id": "460ed221-b2e3-4f0a-8093-57d27f2efa28",
+                            "id": "d7ed897e-2097-4641-88ab-949163e9f44c",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "PROMPT_TERM_CREATED",
-                        "id": "460ed221-b2e3-4f0a-8093-57d27f2efa28"
+                        "id": "d7ed897e-2097-4641-88ab-949163e9f44c"
                     },
                     {
                         "payload": {
@@ -484,11 +461,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194372,
-                            "id": "381bd080-38a1-4cb0-a8e0-8c7f46f8e70b",
+                            "id": "12955af1-2e87-4f9a-ab11-dee2d6326bb6",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_ELICITED_FROM_PROMPT",
-                        "id": "381bd080-38a1-4cb0-a8e0-8c7f46f8e70b"
+                        "id": "12955af1-2e87-4f9a-ab11-dee2d6326bb6"
                     }
                 ],
                 "published": false,
@@ -510,6 +487,9 @@
                         }
                     ]
                 },
+                "audio": {
+                    "items": []
+                },
                 "isPromptTerm": true
             },
             {
@@ -527,11 +507,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194374,
-                            "id": "66f90795-a704-48f5-b142-eb29849d00f4",
+                            "id": "97041a0d-0fbc-45dd-8da4-0aade83d520d",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "PROMPT_TERM_CREATED",
-                        "id": "66f90795-a704-48f5-b142-eb29849d00f4"
+                        "id": "97041a0d-0fbc-45dd-8da4-0aade83d520d"
                     },
                     {
                         "payload": {
@@ -544,11 +524,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194375,
-                            "id": "cb7b460a-37d4-4766-a7e2-dd40336b3a36",
+                            "id": "a86a7f20-9efd-470a-ac30-010bb6cb884e",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_ELICITED_FROM_PROMPT",
-                        "id": "cb7b460a-37d4-4766-a7e2-dd40336b3a36"
+                        "id": "a86a7f20-9efd-470a-ac30-010bb6cb884e"
                     }
                 ],
                 "published": false,
@@ -570,6 +550,9 @@
                         }
                     ]
                 },
+                "audio": {
+                    "items": []
+                },
                 "isPromptTerm": true
             },
             {
@@ -588,11 +571,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194377,
-                            "id": "0269b16e-cef3-4e2f-a5cb-e785284357f4",
+                            "id": "3ebe66d1-530d-4d96-ad48-261e4ceb71ec",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_CREATED",
-                        "id": "0269b16e-cef3-4e2f-a5cb-e785284357f4"
+                        "id": "3ebe66d1-530d-4d96-ad48-261e4ceb71ec"
                     }
                 ],
                 "published": false,
@@ -610,6 +593,9 @@
                     ]
                 },
                 "contributorId": "Jane Deer",
+                "audio": {
+                    "items": []
+                },
                 "isPromptTerm": false
             },
             {
@@ -628,11 +614,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194378,
-                            "id": "1193f7fc-bfb9-4e85-82a8-dbe0062c994b",
+                            "id": "00cadb6e-45f3-4c79-a63e-1cc9f946c71e",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_CREATED",
-                        "id": "1193f7fc-bfb9-4e85-82a8-dbe0062c994b"
+                        "id": "00cadb6e-45f3-4c79-a63e-1cc9f946c71e"
                     }
                 ],
                 "published": false,
@@ -650,6 +636,9 @@
                     ]
                 },
                 "contributorId": "This prop will be removed soon",
+                "audio": {
+                    "items": []
+                },
                 "isPromptTerm": false
             },
             {
@@ -668,11 +657,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194380,
-                            "id": "f501aecb-ad88-4e61-bc83-b1f08bc8f22f",
+                            "id": "e44122a0-6336-4b2f-99e0-6c923d8ca56a",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_CREATED",
-                        "id": "f501aecb-ad88-4e61-bc83-b1f08bc8f22f"
+                        "id": "e44122a0-6336-4b2f-99e0-6c923d8ca56a"
                     },
                     {
                         "payload": {
@@ -685,11 +674,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194381,
-                            "id": "9957c72d-f26e-4346-8725-7bd220a9979b",
+                            "id": "2b795a5a-1429-4df6-9efb-874e0ce94ae5",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_TRANSLATED",
-                        "id": "9957c72d-f26e-4346-8725-7bd220a9979b"
+                        "id": "2b795a5a-1429-4df6-9efb-874e0ce94ae5"
                     }
                 ],
                 "published": false,
@@ -712,6 +701,9 @@
                     ]
                 },
                 "contributorId": "Sarah Smith",
+                "audio": {
+                    "items": []
+                },
                 "isPromptTerm": false
             },
             {
@@ -730,11 +722,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194383,
-                            "id": "f3ac2d4a-fd60-4017-a0a6-503597ed5792",
+                            "id": "26e19ea3-5c89-4947-83dc-e888b62da1ec",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_CREATED",
-                        "id": "f3ac2d4a-fd60-4017-a0a6-503597ed5792"
+                        "id": "26e19ea3-5c89-4947-83dc-e888b62da1ec"
                     },
                     {
                         "payload": {
@@ -747,11 +739,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194384,
-                            "id": "c172b818-9a5c-4e70-a401-0768228fba8c",
+                            "id": "c4cb8de6-3b95-4872-96ac-29e0dfa86a29",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_TRANSLATED",
-                        "id": "c172b818-9a5c-4e70-a401-0768228fba8c"
+                        "id": "c4cb8de6-3b95-4872-96ac-29e0dfa86a29"
                     }
                 ],
                 "published": false,
@@ -774,6 +766,9 @@
                     ]
                 },
                 "contributorId": "Sarah Smith",
+                "audio": {
+                    "items": []
+                },
                 "isPromptTerm": false
             },
             {
@@ -792,11 +787,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194386,
-                            "id": "21b8c59c-035b-4193-a3ba-c522d32dce32",
+                            "id": "f634a586-2637-4bd5-82dd-0fb1f5672580",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_CREATED",
-                        "id": "21b8c59c-035b-4193-a3ba-c522d32dce32"
+                        "id": "f634a586-2637-4bd5-82dd-0fb1f5672580"
                     },
                     {
                         "payload": {
@@ -809,11 +804,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194387,
-                            "id": "e4918d8c-7759-47f6-a638-4b200914ceb9",
+                            "id": "5f9b81c9-edaf-45de-ad08-77f200f0b105",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_TRANSLATED",
-                        "id": "e4918d8c-7759-47f6-a638-4b200914ceb9"
+                        "id": "5f9b81c9-edaf-45de-ad08-77f200f0b105"
                     }
                 ],
                 "published": false,
@@ -836,6 +831,9 @@
                     ]
                 },
                 "contributorId": "Sarah Smith",
+                "audio": {
+                    "items": []
+                },
                 "isPromptTerm": false
             },
             {
@@ -854,11 +852,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194389,
-                            "id": "8c597881-b6a7-4139-ba8e-933b22cb50c9",
+                            "id": "66fee1d2-bab4-4b42-bca8-e296f2fbb894",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_CREATED",
-                        "id": "8c597881-b6a7-4139-ba8e-933b22cb50c9"
+                        "id": "66fee1d2-bab4-4b42-bca8-e296f2fbb894"
                     },
                     {
                         "payload": {
@@ -871,11 +869,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194390,
-                            "id": "55412bd1-1f4c-4364-b62d-d9dfeb19626c",
+                            "id": "c650ae86-5aad-4381-80f4-544e0b0da6c5",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_TRANSLATED",
-                        "id": "55412bd1-1f4c-4364-b62d-d9dfeb19626c"
+                        "id": "c650ae86-5aad-4381-80f4-544e0b0da6c5"
                     }
                 ],
                 "published": false,
@@ -898,6 +896,9 @@
                     ]
                 },
                 "contributorId": "Sarah Smith",
+                "audio": {
+                    "items": []
+                },
                 "isPromptTerm": false
             },
             {
@@ -916,11 +917,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194392,
-                            "id": "8e57dadd-f38c-4fec-85f0-3dad1f34e479",
+                            "id": "4e1f3506-dbc1-415f-ba07-568441063d07",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_CREATED",
-                        "id": "8e57dadd-f38c-4fec-85f0-3dad1f34e479"
+                        "id": "4e1f3506-dbc1-415f-ba07-568441063d07"
                     },
                     {
                         "payload": {
@@ -933,11 +934,11 @@
                         },
                         "meta": {
                             "dateCreated": 1664237194393,
-                            "id": "ad13b61e-2851-4ca3-9ba3-8e4feea8463b",
+                            "id": "23674429-e023-4715-8a79-930c1988663a",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_TRANSLATED",
-                        "id": "ad13b61e-2851-4ca3-9ba3-8e4feea8463b"
+                        "id": "23674429-e023-4715-8a79-930c1988663a"
                     }
                 ],
                 "published": false,
@@ -960,6 +961,9 @@
                     ]
                 },
                 "contributorId": "Sarah Smith",
+                "audio": {
+                    "items": []
+                },
                 "isPromptTerm": false
             }
         ],
@@ -1406,74 +1410,6 @@
                 "lengthMilliseconds": 10
             }
         ],
-        "books": [
-            {
-                "type": "book",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
-                "eventHistory": [],
-                "published": true,
-                "queryAccessControlList": {
-                    "allowedUserIds": [],
-                    "allowedGroupIds": []
-                },
-                "title": "Three Little Pigs",
-                "subtitle": "The wolf's revenge",
-                "author": "John Doeburg",
-                "publicationDate": "2002",
-                "pages": [
-                    {
-                        "identifier": "1",
-                        "text": "foo",
-                        "translation": "dee foo"
-                    },
-                    {
-                        "identifier": "2",
-                        "text": "blah blah blah",
-                        "translation": "blahas"
-                    }
-                ]
-            },
-            {
-                "type": "book",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
-                "eventHistory": [],
-                "published": true,
-                "queryAccessControlList": {
-                    "allowedUserIds": [],
-                    "allowedGroupIds": []
-                },
-                "title": "An Adventure Story",
-                "author": "Jane Donnaldson",
-                "publicationDate": "2011",
-                "pages": [
-                    {
-                        "identifier": "ix",
-                        "text": "blah blah blah",
-                        "translation": "blahas"
-                    }
-                ]
-            },
-            {
-                "type": "book",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
-                "eventHistory": [],
-                "published": false,
-                "queryAccessControlList": {
-                    "allowedUserIds": [],
-                    "allowedGroupIds": []
-                },
-                "title": "An Adventure Story II",
-                "author": "Jane Donnaldson",
-                "publicationDate": "2012",
-                "pages": [
-                    {
-                        "identifier": "ix",
-                        "text": "blah blah blah",
-                        "translation": "blahas"
-                    }
-                ]
-            }
-        ],
         "photographs": [
             {
                 "type": "photograph",
@@ -1487,8 +1423,8 @@
                 "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
                 "photographer": "Susie McRealart",
                 "dimensions": {
-                    "widthPX": 300,
-                    "heightPX": 400
+                    "heightPx": 400,
+                    "widthPx": 300
                 },
                 "title": {
                     "items": [
@@ -1512,8 +1448,8 @@
                 "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
                 "photographer": "Robert McRealart",
                 "dimensions": {
-                    "widthPX": 420,
-                    "heightPX": 285
+                    "heightPx": 285,
+                    "widthPx": 420
                 },
                 "title": {
                     "items": [
@@ -1537,8 +1473,8 @@
                 "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
                 "photographer": "Kenny Tree-Huggens",
                 "dimensions": {
-                    "widthPX": 1200,
-                    "heightPX": 1500
+                    "heightPx": 1500,
+                    "widthPx": 1200
                 },
                 "title": {
                     "items": [
@@ -1751,7 +1687,7 @@
         ],
         "bibliographic_references": [
             {
-                "type": "bibliographicReference",
+                "type": "bibliographicCitation",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "eventHistory": [],
                 "published": true,
@@ -1776,7 +1712,7 @@
                     "year": 1999,
                     "publisher": "Atlantic Publishing",
                     "place": "Kennebunk Port, Maine",
-                    "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-book-bibliographic-reference-1_a-day-in-the-life.pdf",
+                    "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-book-bibliographic-citation-1_a-day-in-the-life.pdf",
                     "isbn": "978-1-895811-34-6",
                     "numberOfPages": 455
                 },
@@ -1786,7 +1722,7 @@
                 }
             },
             {
-                "type": "bibliographicReference",
+                "type": "bibliographicCitation",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
                 "eventHistory": [],
                 "published": true,
@@ -1812,7 +1748,7 @@
                 }
             },
             {
-                "type": "bibliographicReference",
+                "type": "bibliographicCitation",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
                 "eventHistory": [],
                 "published": true,
@@ -1826,7 +1762,7 @@
                     "abstract": "Doe, Jane\n- Large Valley\n- Qualifying as an expert in the written language",
                     "dateDecided": "Recorded 2002-07-08",
                     "court": "Supreme Court of British Columbia",
-                    "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-court-case-bibliographic-reference-3_title-case.pdf",
+                    "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-court-case-bibliographic-citation-3_title-case.pdf",
                     "pages": "Pages 1-6"
                 }
             }
@@ -2443,8 +2379,8 @@
                 }
             },
             {
-                "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
-                "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
                 "eventHistory": [],
@@ -2455,7 +2391,7 @@
                         "context": {
                             "type": "pageRange",
                             "pageIdentifiers": [
-                                "ix"
+                                "1"
                             ]
                         }
                     }
@@ -2581,8 +2517,8 @@
                 }
             },
             {
-                "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
-                "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
                 "eventHistory": [],
@@ -2593,7 +2529,7 @@
                         "context": {
                             "type": "pageRange",
                             "pageIdentifiers": [
-                                "ix"
+                                "1"
                             ]
                         }
                     }
@@ -2603,7 +2539,7 @@
                         {
                             "languageCode": "en",
                             "role": "original",
-                            "text": "this section is the best part of an illustrated book about birds"
+                            "text": "this section is the best part of an illustrated digitalText about birds"
                         }
                     ]
                 }
@@ -2732,7 +2668,7 @@
                         {
                             "languageCode": "en",
                             "role": "original",
-                            "text": "this book is hard to track down"
+                            "text": "this digitalText is hard to track down"
                         }
                     ]
                 }
@@ -2842,8 +2778,8 @@
                 }
             },
             {
-                "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
-                "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110019",
                 "eventHistory": [],
@@ -2917,8 +2853,8 @@
                 }
             },
             {
-                "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
-                "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110022",
                 "eventHistory": [],
@@ -2936,7 +2872,7 @@
                         {
                             "languageCode": "en",
                             "role": "original",
-                            "text": "this section is the best part of an illustrated book about birds"
+                            "text": "this section is the best part of an illustrated digitalText about birds"
                         }
                     ]
                 }
@@ -3077,7 +3013,7 @@
             },
             {
                 "_to": "audio_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
-                "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+                "_from": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112002",
                 "eventHistory": [],
@@ -3096,43 +3032,6 @@
                     {
                         "role": "from",
                         "context": {
-                            "type": "pageRange",
-                            "pageIdentifiers": [
-                                "ix"
-                            ]
-                        }
-                    }
-                ],
-                "note": {
-                    "items": [
-                        {
-                            "languageCode": "en",
-                            "role": "original",
-                            "text": "That is why audioItem/110 is related to book/24"
-                        }
-                    ]
-                }
-            },
-            {
-                "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
-                "_from": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-                "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112003",
-                "eventHistory": [],
-                "connectionType": "dual",
-                "members": [
-                    {
-                        "role": "to",
-                        "context": {
-                            "type": "pageRange",
-                            "pageIdentifiers": [
-                                "ix"
-                            ]
-                        }
-                    },
-                    {
-                        "role": "from",
-                        "context": {
                             "type": "general"
                         }
                     }
@@ -3142,7 +3041,7 @@
                         {
                             "languageCode": "en",
                             "role": "original",
-                            "text": "That is why book/24 is related to photograph/2"
+                            "text": "That is why audioItem/110 is related to photograph/2"
                         }
                     ]
                 }
@@ -3151,7 +3050,7 @@
                 "_to": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "_from": "spatial_features/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112004",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112003",
                 "eventHistory": [],
                 "connectionType": "dual",
                 "members": [
@@ -3182,7 +3081,7 @@
                 "_to": "spatial_features/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
                 "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112004",
                 "eventHistory": [],
                 "connectionType": "dual",
                 "members": [
@@ -3216,7 +3115,7 @@
                 "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112006",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
                 "eventHistory": [],
                 "connectionType": "dual",
                 "members": [
@@ -3250,7 +3149,7 @@
                 "_to": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112007",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112006",
                 "eventHistory": [],
                 "connectionType": "dual",
                 "members": [
@@ -3285,7 +3184,7 @@
                 "_to": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
                 "_from": "playlists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112008",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112007",
                 "eventHistory": [],
                 "connectionType": "dual",
                 "members": [
@@ -3320,7 +3219,7 @@
                 "_to": "playlists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
                 "_from": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112009",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112008",
                 "eventHistory": [],
                 "connectionType": "dual",
                 "members": [
@@ -3354,7 +3253,7 @@
                 }
             },
             {
-                "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "_from": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113301",
@@ -3366,7 +3265,7 @@
                         "context": {
                             "type": "pageRange",
                             "pageIdentifiers": [
-                                "2"
+                                "1"
                             ]
                         }
                     },
@@ -3382,7 +3281,7 @@
                         {
                             "languageCode": "en",
                             "role": "original",
-                            "text": "this term appears on this page of the book"
+                            "text": "this term appears on this page of the digital text"
                         }
                     ]
                 }
@@ -3481,7 +3380,7 @@
                 }
             },
             {
-                "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113305",
@@ -3506,7 +3405,7 @@
                         {
                             "languageCode": "en",
                             "role": "original",
-                            "text": "this video is loosely based on the book"
+                            "text": "this video is loosely based on the digital text"
                         }
                     ]
                 }
@@ -3553,37 +3452,6 @@
                 }
             },
             {
-                "_from": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-                "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
-                "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113002",
-                "eventHistory": [],
-                "connectionType": "dual",
-                "members": [
-                    {
-                        "role": "from",
-                        "context": {
-                            "type": "identity"
-                        }
-                    },
-                    {
-                        "role": "to",
-                        "context": {
-                            "type": "identity"
-                        }
-                    }
-                ],
-                "note": {
-                    "items": [
-                        {
-                            "languageCode": "en",
-                            "role": "original",
-                            "text": "here is the digital version of the book!"
-                        }
-                    ]
-                }
-            },
-            {
                 "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_to": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
@@ -3616,7 +3484,7 @@
             },
             {
                 "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-                "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113101",
                 "eventHistory": [],
@@ -3637,7 +3505,7 @@
                         "context": {
                             "type": "pageRange",
                             "pageIdentifiers": [
-                                "ix"
+                                "1"
                             ]
                         }
                     }
@@ -3647,7 +3515,7 @@
                         {
                             "languageCode": "en",
                             "role": "original",
-                            "text": "this selection from the media item portrays the events in the book"
+                            "text": "this selection from the media item portrays the events in the text"
                         }
                     ]
                 }
@@ -3778,7 +3646,7 @@
             },
             {
                 "_to": "audio_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
-                "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113106",
                 "eventHistory": [],
@@ -3808,39 +3676,8 @@
                 }
             },
             {
-                "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
-                "_from": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-                "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113107",
-                "eventHistory": [],
-                "connectionType": "dual",
-                "members": [
-                    {
-                        "role": "to",
-                        "context": {
-                            "type": "identity"
-                        }
-                    },
-                    {
-                        "role": "from",
-                        "context": {
-                            "type": "identity"
-                        }
-                    }
-                ],
-                "note": {
-                    "items": [
-                        {
-                            "languageCode": "en",
-                            "role": "original",
-                            "text": "this is the print version of the digital book"
-                        }
-                    ]
-                }
-            },
-            {
                 "_to": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-                "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113108",
                 "eventHistory": [],
@@ -3857,7 +3694,7 @@
                         "context": {
                             "type": "pageRange",
                             "pageIdentifiers": [
-                                "ix"
+                                "1"
                             ]
                         }
                     }
@@ -3874,7 +3711,7 @@
             },
             {
                 "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-                "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113109",
                 "eventHistory": [],
@@ -3891,7 +3728,7 @@
                         "context": {
                             "type": "pageRange",
                             "pageIdentifiers": [
-                                "ix"
+                                "1"
                             ]
                         }
                     }
@@ -3908,7 +3745,7 @@
             },
             {
                 "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-                "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113110",
                 "eventHistory": [],
@@ -3925,7 +3762,7 @@
                         "context": {
                             "type": "pageRange",
                             "pageIdentifiers": [
-                                "ix"
+                                "1"
                             ]
                         }
                     }
@@ -3973,7 +3810,7 @@
             },
             {
                 "_from": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-                "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113201",
                 "eventHistory": [],
@@ -3997,14 +3834,14 @@
                         {
                             "languageCode": "en",
                             "role": "original",
-                            "text": "this is why bibliographic_references/3 is connected to book/24"
+                            "text": "this is why bibliographic_citations/3 is connected to digitalText/24"
                         }
                     ]
                 }
             },
             {
                 "_from": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
-                "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113202",
                 "eventHistory": [],
@@ -4028,7 +3865,7 @@
                         {
                             "languageCode": "en",
                             "role": "original",
-                            "text": "this is why bibliographic_references/23 is connected to book/24"
+                            "text": "this is why bibliographic_citations/23 is connected to digitalText/24"
                         }
                     ]
                 }

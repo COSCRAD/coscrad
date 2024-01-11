@@ -76,12 +76,12 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
             {
                 role,
                 compositeIdentifier: {
-                    id: '24',
+                    id: '2',
                     type: ResourceType.digitalText,
                 },
                 context: new PageRangeContext({
                     type: EdgeConnectionContextType.pageRange,
-                    pageIdentifiers: ['ix'],
+                    pageIdentifiers: ['1'],
                 }).toDTO(),
             },
         ],
@@ -221,12 +221,12 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
             {
                 role,
                 compositeIdentifier: {
-                    id: '24',
+                    id: '2',
                     type: ResourceType.digitalText,
                 },
                 context: new PageRangeContext({
                     type: EdgeConnectionContextType.pageRange,
-                    pageIdentifiers: ['ix'],
+                    pageIdentifiers: ['1'],
                 }),
             },
         ],
