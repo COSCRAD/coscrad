@@ -160,18 +160,6 @@ exports[`When querying for edge connections GET /connections/ should return the 
                 },
               },
             },
-            {
-              "discriminant": "identity",
-              "schema": {
-                "type": {
-                  "coscradDataType": "FIXED_VALUE",
-                  "description": "must be: identity",
-                  "isArray": false,
-                  "isOptional": false,
-                  "label": "type",
-                },
-              },
-            },
           ],
           "unionName": "EDGE_CONNECTION_CONTEXT_UNION",
         },

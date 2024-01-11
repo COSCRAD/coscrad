@@ -59,7 +59,6 @@ import {
 } from '../../../domain/models/context/edge-connection.entity';
 import { FreeMultilineContext } from '../../../domain/models/context/free-multiline-context/free-multiline-context.entity';
 import { GeneralContext } from '../../../domain/models/context/general-context/general-context.entity';
-import { IdentityContext } from '../../../domain/models/context/identity-context.entity/identity-context.entity';
 import { PageRangeContext } from '../../../domain/models/context/page-range-context/page-range.context.entity';
 import { PointContext } from '../../../domain/models/context/point-context/point-context.entity';
 import { TextFieldContext } from '../../../domain/models/context/text-field-context/text-field-context.entity';
@@ -270,7 +269,6 @@ export const buildAllDataClassProviders = () =>
         TextFieldContext,
         PointContext,
         FreeMultilineContext,
-        IdentityContext,
         // Events
         CoscradEventUnion,
         ResourceReadAccessGrantedToUser,

@@ -187,21 +187,6 @@ export class EdgeConnection extends Aggregate {
         allErrors.push(...inconsistentStateErrorsFromMembers);
 
         return allErrors.length > 0 ? new InvalidExternalStateError(allErrors) : Valid;
-
-        /**
-         * Currently, every `BibliographicCitation` sub-type can participate
-         * in an identity connection with a `Book` and no other resource. We can
-         * verify this as part of invariant validation.
-         *
-         * As we introduce additional subtypes of `BibliographicCitation`, we
-         * will need to validate that the sub-type of BibliographicCitation
-         * in a `from` member for an identity connection is consistent with the
-         * `ResourceType` of the `to` member.
-         *
-         * Further note that we may remove this behaviour. It seems a bit odd
-         * to use an edge connection to mark identity in this way and it may
-         * be that we need to improve our representation of the domain.
-         */
     }
 
     protected validateComplexInvariants(): InternalError[] {

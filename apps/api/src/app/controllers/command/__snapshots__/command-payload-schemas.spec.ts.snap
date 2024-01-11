@@ -1284,7 +1284,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "One of: term, vocabularyList, audioItem, book, photograph, spatialFeature, bibliographicCitation, digitalText, song, mediaItem, video, playlist",
+            "description": "One of: term, vocabularyList, audioItem, photograph, spatialFeature, bibliographicCitation, digitalText, song, mediaItem, video, playlist",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -1302,10 +1302,6 @@ exports[`command payload schemas Command payload schema should match the snapsho
               {
                 "label": "audioItem",
                 "value": "audioItem",
-              },
-              {
-                "label": "book",
-                "value": "book",
               },
               {
                 "label": "photograph",
@@ -1392,10 +1388,6 @@ exports[`command payload schemas Command payload schema should match the snapsho
               {
                 "label": "Transcribed Audio Item",
                 "value": "audioItem",
-              },
-              {
-                "label": "Book",
-                "value": "book",
               },
               {
                 "label": "Photograph",
@@ -1595,10 +1587,6 @@ exports[`command payload schemas Command payload schema should match the snapsho
               {
                 "label": "Transcribed Audio Item",
                 "value": "audioItem",
-              },
-              {
-                "label": "Book",
-                "value": "book",
               },
               {
                 "label": "Photograph",
@@ -2620,7 +2608,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "One of: term, vocabularyList, audioItem, book, photograph, spatialFeature, bibliographicCitation, digitalText, song, mediaItem, video, playlist",
+            "description": "One of: term, vocabularyList, audioItem, photograph, spatialFeature, bibliographicCitation, digitalText, song, mediaItem, video, playlist",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -2638,10 +2626,6 @@ exports[`command payload schemas Command payload schema should match the snapsho
               {
                 "label": "audioItem",
                 "value": "audioItem",
-              },
-              {
-                "label": "book",
-                "value": "book",
               },
               {
                 "label": "photograph",
@@ -2818,18 +2802,6 @@ exports[`command payload schemas Command payload schema should match the snapsho
               },
             },
           },
-          {
-            "discriminant": "identity",
-            "schema": {
-              "type": {
-                "coscradDataType": "FIXED_VALUE",
-                "description": "must be: identity",
-                "isArray": false,
-                "isOptional": false,
-                "label": "type",
-              },
-            },
-          },
         ],
         "unionName": "EDGE_CONNECTION_CONTEXT_UNION",
       },
@@ -2894,7 +2866,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "One of: term, vocabularyList, audioItem, book, photograph, spatialFeature, bibliographicCitation, digitalText, song, mediaItem, video, playlist",
+            "description": "One of: term, vocabularyList, audioItem, photograph, spatialFeature, bibliographicCitation, digitalText, song, mediaItem, video, playlist",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -2912,10 +2884,6 @@ exports[`command payload schemas Command payload schema should match the snapsho
               {
                 "label": "audioItem",
                 "value": "audioItem",
-              },
-              {
-                "label": "book",
-                "value": "book",
               },
               {
                 "label": "photograph",
@@ -3092,18 +3060,6 @@ exports[`command payload schemas Command payload schema should match the snapsho
               },
             },
           },
-          {
-            "discriminant": "identity",
-            "schema": {
-              "type": {
-                "coscradDataType": "FIXED_VALUE",
-                "description": "must be: identity",
-                "isArray": false,
-                "isOptional": false,
-                "label": "type",
-              },
-            },
-          },
         ],
         "unionName": "EDGE_CONNECTION_CONTEXT_UNION",
       },
@@ -3169,7 +3125,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "One of: term, vocabularyList, audioItem, book, photograph, spatialFeature, bibliographicCitation, digitalText, song, mediaItem, video, playlist",
+            "description": "One of: term, vocabularyList, audioItem, photograph, spatialFeature, bibliographicCitation, digitalText, song, mediaItem, video, playlist",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -3187,10 +3143,6 @@ exports[`command payload schemas Command payload schema should match the snapsho
               {
                 "label": "audioItem",
                 "value": "audioItem",
-              },
-              {
-                "label": "book",
-                "value": "book",
               },
               {
                 "label": "photograph",
@@ -3364,18 +3316,6 @@ exports[`command payload schemas Command payload schema should match the snapsho
                 "isArray": false,
                 "isOptional": false,
                 "label": "context type",
-              },
-            },
-          },
-          {
-            "discriminant": "identity",
-            "schema": {
-              "type": {
-                "coscradDataType": "FIXED_VALUE",
-                "description": "must be: identity",
-                "isArray": false,
-                "isOptional": false,
-                "label": "type",
               },
             },
           },

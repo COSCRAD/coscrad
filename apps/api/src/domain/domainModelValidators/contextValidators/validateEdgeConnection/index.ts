@@ -2,21 +2,15 @@ import { InternalError } from '../../../../lib/errors/InternalError';
 import isContextAllowedForGivenResourceType from '../../../models/allowedContexts/isContextAllowedForGivenResourceType';
 import {
     EdgeConnection,
-    EdgeConnectionMember,
     EdgeConnectionMemberRole,
     EdgeConnectionType,
 } from '../../../models/context/edge-connection.entity';
-import { EdgeConnectionContextType } from '../../../models/context/types/EdgeConnectionContextType';
 import BothMembersInEdgeConnectionHaveSameRoleError from '../../errors/context/edgeConnections/BothMembersInEdgeConnectionHaveSameRoleError';
 import ContextTypeIsNotAllowedForGivenResourceTypeError from '../../errors/context/edgeConnections/ContextTypeIsNotAllowedForGivenResourceTypeError';
 import InvalidEdgeConnectionMemberRolesError from '../../errors/context/edgeConnections/InvalidEdgeConnectionMemberRolesError';
 import InvalidNumberOfMembersInEdgeConnectionError from '../../errors/context/edgeConnections/InvalidNumberOfMembersInEdgeConnectionError';
 import { isValid } from '../../Valid';
 import validateContextModelInvariants from '../validateContextModelInvariants';
-import { validateIdentityEdgeConnection } from './validateIdentityEdgeConnection';
-
-export const isMemberContextTheIdentityContext = ({ context: { type } }: EdgeConnectionMember) =>
-    type === EdgeConnectionContextType.identity;
 
 export default (input: unknown): InternalError[] => {
     /**
@@ -123,22 +117,6 @@ export default (input: unknown): InternalError[] => {
     );
 
     if (contextModelInvariantErrors.length > 0) allErrors.push(...contextModelInvariantErrors);
-
-    /**
-     * Validate requirements for an identity connection, if that is what we have.
-     *
-     * TODO[https://www.pivotaltracker.com/story/show/183029681] refactor this.
-     *
-     * We should branch based on the explicit
-     * self \ dual connection. We should confirm that
-     * - a self connection's member does not use the identity context
-     * - a dual connection with one member using the identity context has both
-     * members using the identity context
-     * - the members' `ResourceTypes` are consistent with the `to` \ `from` role
-     */
-    if (members.some(isMemberContextTheIdentityContext)) {
-        validateIdentityEdgeConnection(test).forEach((error) => allErrors.push(error));
-    }
 
     return allErrors;
 };

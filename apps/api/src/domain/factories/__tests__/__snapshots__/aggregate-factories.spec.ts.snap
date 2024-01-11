@@ -63,36 +63,6 @@ WithTranscription {
 }
 `;
 
-exports[`Aggregate factories when attempting to build an instance of type: book from a DTO when the DTO is valid valid book should succeed 1`] = `
-Book {
-  "author": "John Doeburg",
-  "eventHistory": [],
-  "getCompositeIdentifier": [Function],
-  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
-  "pages": [
-    BookPage {
-      "identifier": "1",
-      "text": "foo",
-      "translation": "dee foo",
-    },
-    BookPage {
-      "identifier": "2",
-      "text": "blah blah blah",
-      "translation": "blahas",
-    },
-  ],
-  "publicationDate": "2002",
-  "published": true,
-  "queryAccessControlList": AccessControlList {
-    "allowedGroupIds": [],
-    "allowedUserIds": [],
-  },
-  "subtitle": "The wolf's revenge",
-  "title": "Three Little Pigs",
-  "type": "book",
-}
-`;
-
 exports[`Aggregate factories when attempting to build an instance of type: digitalText from a DTO when the DTO is valid valid digital text should succeed 1`] = `
 DigitalText {
   "eventHistory": [

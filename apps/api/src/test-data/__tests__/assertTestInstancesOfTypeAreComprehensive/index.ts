@@ -100,10 +100,6 @@ const aggregateTypeToComprehensiveAssertionFunction: {
                 ResourceType
             ).flatMap((resourceType) =>
                 Object.values(EdgeConnectionContextType)
-                    .filter(
-                        // the rules for whether an identity context is allowed also depend on to \ from roles so we won't enforce these to
-                        (contextType) => contextType !== EdgeConnectionContextType.identity
-                    )
                     .filter((contextType) =>
                         isContextAllowedForGivenResourceType(contextType, resourceType)
                     )

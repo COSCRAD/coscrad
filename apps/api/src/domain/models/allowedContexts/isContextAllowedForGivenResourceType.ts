@@ -48,10 +48,7 @@ const resourceTypeToAllowedContextTypes: Record<ResourceType, string[]> = {
         EdgeConnectionContextType.general,
         EdgeConnectionContextType.textField,
     ],
-    [ResourceType.bibliographicCitation]: [
-        EdgeConnectionContextType.general,
-        EdgeConnectionContextType.identity,
-    ],
+    [ResourceType.bibliographicCitation]: [EdgeConnectionContextType.general],
     [ResourceType.digitalText]: [
         EdgeConnectionContextType.general,
         EdgeConnectionContextType.pageRange,
