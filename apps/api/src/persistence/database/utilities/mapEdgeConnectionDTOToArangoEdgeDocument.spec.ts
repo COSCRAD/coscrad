@@ -93,8 +93,8 @@ const testCases: TestCase[] = [
         description: 'when given a self edge connection',
         input: selfEdgeConnection,
         expectedResult: {
-            _from: 'digital_texts/24',
-            _to: 'digital_texts/24',
+            _from: 'digital_texts/2',
+            _to: 'digital_texts/2',
             _key: '123',
             connectionType: EdgeConnectionType.self,
             eventHistory: [],
