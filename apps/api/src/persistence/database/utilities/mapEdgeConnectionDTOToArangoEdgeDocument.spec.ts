@@ -30,12 +30,12 @@ const selfEdgeConnection = new EdgeConnection({
         {
             role: EdgeConnectionMemberRole.self,
             compositeIdentifier: {
-                id: '24',
-                type: ResourceType.book,
+                id: '2',
+                type: ResourceType.digitalText,
             },
             context: new PageRangeContext({
                 type: EdgeConnectionContextType.pageRange,
-                pageIdentifiers: ['ix'],
+                pageIdentifiers: ['1'],
             }).toDTO(),
         },
     ],
@@ -50,7 +50,7 @@ const buildValidBookEdgeConnectionMember = (
     role: EdgeConnectionMemberRole
 ): DTO<EdgeConnectionMember<PageRangeContext>> => ({
     compositeIdentifier: {
-        type: ResourceType.book,
+        type: ResourceType.digitalText,
         id: '1123',
     },
     role,
@@ -93,8 +93,8 @@ const testCases: TestCase[] = [
         description: 'when given a self edge connection',
         input: selfEdgeConnection,
         expectedResult: {
-            _from: 'books/24',
-            _to: 'books/24',
+            _from: 'digital_texts/2',
+            _to: 'digital_texts/2',
             _key: '123',
             connectionType: EdgeConnectionType.self,
             eventHistory: [],
@@ -115,7 +115,7 @@ const testCases: TestCase[] = [
         description: 'when given a dual edge connection',
         input: dualEdgeConnection,
         expectedResult: {
-            _from: 'books/1123',
+            _from: 'digital_texts/1123',
             _to: 'audio_items/15',
             _key: '123',
             connectionType: EdgeConnectionType.dual,

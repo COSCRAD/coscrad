@@ -40,7 +40,7 @@ export class DigitalTextQueryService {
     constructor(
         // TODO Use a string injection token here. Consider using a provider when generalizing the implementation over aggregate type.
         @Inject(DigitalTextQueryRepository)
-        protected readonly queryRepository: IAggregateRootQueryRepository<IDigitalTextViewModel>,
+        protected readonly queryRepository: IAggregateRootQueryRepository<DigitalTextViewModel>,
         @Inject(CommandInfoService) protected readonly commandInfoService: CommandInfoService
     ) {}
 

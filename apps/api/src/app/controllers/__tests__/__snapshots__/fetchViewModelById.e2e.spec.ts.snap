@@ -108,91 +108,6 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
 }
 `;
 
-exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/books/:id when the resource is published when an resource with the id exists should return the expected response 1`] = `
-{
-  "actions": [],
-  "author": "John Doeburg",
-  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
-  "name": {
-    "items": [
-      {
-        "languageCode": "en",
-        "role": "original",
-        "text": "Three Little Pigs",
-      },
-    ],
-  },
-  "pages": [
-    {
-      "identifier": "1",
-      "text": "foo",
-      "translation": "dee foo",
-    },
-    {
-      "identifier": "2",
-      "text": "blah blah blah",
-      "translation": "blahas",
-    },
-  ],
-  "publicationDate": "2002",
-  "subtitle": "The wolf's revenge",
-  "tags": [
-    {
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "label": "plants",
-      "members": [
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-          "type": "term",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
-          "type": "book",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
-          "type": "book",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-          "type": "vocabularyList",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
-          "type": "spatialFeature",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
-          "type": "note",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
-          "type": "note",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
-          "type": "note",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-          "type": "digitalText",
-        },
-      ],
-      "name": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "plants",
-          },
-        ],
-      },
-    },
-  ],
-  "title": "Three Little Pigs",
-}
-`;
-
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/mediaItems/:id when the resource is published when an resource with the id exists should return the expected response 1`] = `
 {
   "actions": [],
@@ -358,14 +273,6 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "type": "term",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
-          "type": "book",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
-          "type": "book",
         },
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",

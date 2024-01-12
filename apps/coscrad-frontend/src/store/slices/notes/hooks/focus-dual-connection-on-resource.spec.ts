@@ -23,11 +23,11 @@ const termCompositeIdentifier = {
 };
 
 const bookCompositeIdentifier = {
-    type: ResourceType.book,
+    type: ResourceType.digitalText,
     id: '5',
 };
 
-const notesOriginalText = 'this is why term 123 is related to book 5';
+const notesOriginalText = 'this is why term 123 is related to digitalText/5';
 
 const noteMultilingualText = {
     items: [

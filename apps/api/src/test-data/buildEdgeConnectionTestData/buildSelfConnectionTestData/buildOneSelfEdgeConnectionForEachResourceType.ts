@@ -76,12 +76,12 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
             {
                 role,
                 compositeIdentifier: {
-                    id: '24',
-                    type: ResourceType.book,
+                    id: '2',
+                    type: ResourceType.digitalText,
                 },
                 context: new PageRangeContext({
                     type: EdgeConnectionContextType.pageRange,
-                    pageIdentifiers: ['ix'],
+                    pageIdentifiers: ['1'],
                 }).toDTO(),
             },
         ],
@@ -214,19 +214,19 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
     // },
     {
         note: buildMultilingualTextWithSingleItem(
-            'this section is the best part of an illustrated book about birds',
+            'this section is the best part of an illustrated digitalText about birds',
             LanguageCode.English
         ),
         members: [
             {
                 role,
                 compositeIdentifier: {
-                    id: '24',
-                    type: ResourceType.book,
+                    id: '2',
+                    type: ResourceType.digitalText,
                 },
                 context: new PageRangeContext({
                     type: EdgeConnectionContextType.pageRange,
-                    pageIdentifiers: ['ix'],
+                    pageIdentifiers: ['1'],
                 }),
             },
         ],
@@ -300,7 +300,7 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
     },
     {
         note: buildMultilingualTextWithSingleItem(
-            'this book is hard to track down',
+            'this digitalText is hard to track down',
             LanguageCode.English
         ),
         members: [

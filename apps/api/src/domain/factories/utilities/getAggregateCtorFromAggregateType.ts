@@ -3,7 +3,6 @@ import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { Aggregate } from '../../models/aggregate.entity';
 import { AudioItem } from '../../models/audio-item/entities/audio-item.entity';
 import { Video } from '../../models/audio-item/entities/video.entity';
-import { Book } from '../../models/book/entities/book.entity';
 import { Category } from '../../models/categories/entities/category.entity';
 import { EdgeConnection } from '../../models/context/edge-connection.entity';
 import { DigitalText } from '../../models/digital-text/entities/digital-text.entity';
@@ -28,10 +27,8 @@ export const aggregateTypeToAggregateCtor: {
     [K in AggregateTypesWithADistinctCtor]: DomainModelCtor<Aggregate>;
 } = {
     [AggregateType.tag]: Tag,
-    [AggregateType.note]: EdgeConnection,
     [AggregateType.user]: CoscradUser,
     [AggregateType.userGroup]: CoscradUserGroup,
-    [AggregateType.book]: Book,
     [AggregateType.mediaItem]: MediaItem,
     [AggregateType.note]: EdgeConnection,
     [AggregateType.photograph]: Photograph,

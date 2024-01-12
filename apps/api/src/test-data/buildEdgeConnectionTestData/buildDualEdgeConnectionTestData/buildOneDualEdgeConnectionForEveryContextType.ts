@@ -16,19 +16,19 @@ export default (): EdgeConnection[] =>
         {
             id: '3301',
             note: buildMultilingualTextWithSingleItem(
-                'this term appears on this page of the book',
+                'this term appears on this page of the digital text',
                 LanguageCode.English
             ),
             members: [
                 {
                     role: EdgeConnectionMemberRole.to,
                     compositeIdentifier: {
-                        type: ResourceType.book,
-                        id: '23',
+                        type: ResourceType.digitalText,
+                        id: '2',
                     },
                     context: new PageRangeContext({
                         type: EdgeConnectionContextType.pageRange,
-                        pageIdentifiers: ['2'],
+                        pageIdentifiers: ['1'],
                     }),
                 },
                 {
@@ -119,15 +119,15 @@ export default (): EdgeConnection[] =>
         {
             id: '3305',
             note: buildMultilingualTextWithSingleItem(
-                'this video is loosely based on the book',
+                'this video is loosely based on the digital text',
                 LanguageCode.English
             ),
             members: [
                 {
                     role: EdgeConnectionMemberRole.to,
                     compositeIdentifier: {
-                        type: ResourceType.book,
-                        id: '24',
+                        type: ResourceType.digitalText,
+                        id: '1',
                     },
                     context: new GeneralContext(),
                 },

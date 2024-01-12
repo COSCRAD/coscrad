@@ -1,7 +1,7 @@
+import { PageIdentifier } from '../../../../../../domain/models/digital-text/entities';
 import { InternalError } from '../../../../../../lib/errors/InternalError';
 import formatResourceCompositeIdentifier from '../../../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import formatListOfPageIdentifiers from '../../../../../../queries/presentation/formatListOfPageIdentifiers';
-import { PageIdentifier } from '../../../../../models/book/entities/types/PageIdentifier';
 import { AggregateCompositeIdentifier } from '../../../../../types/AggregateCompositeIdentifier';
 
 export default class PageRangeContextHasSuperfluousPageIdentifiersError extends InternalError {

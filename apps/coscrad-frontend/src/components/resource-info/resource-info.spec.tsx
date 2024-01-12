@@ -94,7 +94,7 @@ describe('Resource Index Page', () => {
                 resourceIndexLabel: dummyLabel,
                 indexToDetailFlows: [
                     {
-                        categorizableType: CategorizableType.book,
+                        categorizableType: CategorizableType.digitalText,
                         labelOverrides: {
                             label: 'Widget',
                             pluralLabel: 'Widgets',
@@ -156,7 +156,7 @@ describe('Resource Index Page', () => {
                 resourceIndexLabel: 'Super Widgets',
                 indexToDetailFlows: [
                     {
-                        categorizableType: CategorizableType.book,
+                        categorizableType: CategorizableType.digitalText,
                         labelOverrides: {
                             label: 'Widget',
                             pluralLabel: 'Widgets',
@@ -263,7 +263,7 @@ describe('Resource Index Page', () => {
                     indexToDetailFlows: [
                         {
                             // todo save reference to this for clarity
-                            categorizableType: ResourceType.book,
+                            categorizableType: ResourceType.digitalText,
                             labelOverrides: {
                                 label: 'Super Deluxe Widget',
                                 pluralLabel: customPluralLabel,
@@ -293,7 +293,7 @@ describe('Resource Index Page', () => {
                 const dummyConfig = getDummyConfigurableContent({
                     indexToDetailFlows: [
                         {
-                            categorizableType: ResourceType.book,
+                            categorizableType: ResourceType.digitalText,
                             labelOverrides: {
                                 label: 'Widget',
                                 pluralLabel: 'Widgets',

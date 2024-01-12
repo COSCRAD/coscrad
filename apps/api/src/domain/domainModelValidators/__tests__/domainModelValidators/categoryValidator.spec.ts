@@ -1,10 +1,10 @@
-import { InternalError } from '../../../../lib/errors/InternalError';
 import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpected';
+import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
+import buildInvariantValidationErrorFactoryFunction from '../../../__tests__/utilities/buildInvariantValidationErrorFactoryFunction';
 import { Category } from '../../../models/categories/entities/category.entity';
 import { AggregateType } from '../../../types/AggregateType';
 import { CategorizableType } from '../../../types/CategorizableType';
-import buildInvariantValidationErrorFactoryFunction from '../../../__tests__/utilities/buildInvariantValidationErrorFactoryFunction';
 import { Valid } from '../../Valid';
 
 const buildTopLevelError = buildInvariantValidationErrorFactoryFunction(AggregateType.category);
@@ -25,7 +25,7 @@ const validDTO: DTO<Category> = {
             id: '55',
         },
         {
-            type: CategorizableType.book,
+            type: CategorizableType.digitalText,
             id: '123',
         },
     ],

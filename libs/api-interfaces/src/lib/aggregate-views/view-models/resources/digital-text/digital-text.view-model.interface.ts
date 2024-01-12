@@ -13,7 +13,4 @@ export interface IDigitalTextViewModel extends IBaseViewModel {
     tags: ITagViewModel[];
 
     pages: IDigitalTextPage[];
-
-    // TODO Is this really something we want to require at this level?
-    hasReadAccess(userWithGroups: unknown): boolean;
 }

@@ -18,7 +18,6 @@ import { CommandInfoService } from './controllers/command/services/command-info-
 import { ResourceDescriptionController } from './controllers/resources/resource-description.controller';
 import { AudioVisualModule } from './domain-modules/audio-visual.module';
 import { BibliographicCitationModule } from './domain-modules/bibliographic-citation.module';
-import { BookModule } from './domain-modules/book.module';
 import { DigitalTextModule } from './domain-modules/digital-text.module';
 import { EdgeConnectionModule } from './domain-modules/edge-connection.module';
 import { MediaItemModule } from './domain-modules/media-item.module';
@@ -52,7 +51,6 @@ import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
         SongModule,
         TermModule,
         VocabularyListModule,
-        BookModule,
         AudioVisualModule,
         PhotographModule,
         BibliographicCitationModule,

@@ -288,76 +288,6 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 }
 `;
 
-exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Book  should match the snapshot 1`] = `
-{
-  "author": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "the author of the book",
-    "isArray": false,
-    "isOptional": false,
-    "label": "author",
-  },
-  "id": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "unique identifier",
-    "isArray": false,
-    "isOptional": false,
-    "label": "ID",
-  },
-  "pages": {
-    "complexDataType": "NESTED_TYPE",
-    "description": "a digital representation of the book's pages",
-    "isArray": true,
-    "isOptional": false,
-    "label": "book pages",
-    "schema": {
-      "identifier": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "text identifier for the page(",
-        "isArray": false,
-        "isOptional": false,
-        "label": "identifier",
-      },
-      "text": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "the page's text in the language",
-        "isArray": false,
-        "isOptional": false,
-        "label": "text",
-      },
-      "translation": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "translation of the page's text into the colonial language",
-        "isArray": false,
-        "isOptional": false,
-        "label": "translation",
-      },
-    },
-  },
-  "publicationDate": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "a free form string that specifies the publication date",
-    "isArray": false,
-    "isOptional": true,
-    "label": "publication date",
-  },
-  "subtitle": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "subtitle of the book (in whatever language)",
-    "isArray": false,
-    "isOptional": true,
-    "label": "subtitle",
-  },
-  "title": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "title of the book (in whatever language)",
-    "isArray": false,
-    "isOptional": false,
-    "label": "title",
-  },
-}
-`;
-
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Category  should match the snapshot 1`] = `
 {
   "childrenIDs": {
@@ -947,18 +877,6 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "isArray": false,
                 "isOptional": false,
                 "label": "context type",
-              },
-            },
-          },
-          {
-            "discriminant": "identity",
-            "schema": {
-              "type": {
-                "coscradDataType": "FIXED_VALUE",
-                "description": "must be: identity",
-                "isArray": false,
-                "isOptional": false,
-                "label": "type",
               },
             },
           },

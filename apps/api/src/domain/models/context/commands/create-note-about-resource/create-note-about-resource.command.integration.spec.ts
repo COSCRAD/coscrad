@@ -360,10 +360,9 @@ describe(commandType, () => {
                 .filter(
                     // It is not possible to have inconsistent state for the following context types
                     (fsa) =>
-                        ![
-                            EdgeConnectionContextType.general,
-                            EdgeConnectionContextType.identity,
-                        ].includes(fsa.payload.resourceContext.type as EdgeConnectionContextType)
+                        ![EdgeConnectionContextType.general].includes(
+                            fsa.payload.resourceContext.type as EdgeConnectionContextType
+                        )
                 )
                 .forEach((fsa) => {
                     const {

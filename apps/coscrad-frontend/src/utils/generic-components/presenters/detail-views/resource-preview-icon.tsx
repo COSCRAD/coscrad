@@ -1,7 +1,6 @@
 import { IAggregateInfo, ResourceType } from '@coscrad/api-interfaces';
 import {
     Audiotrack as AudiotrackIcon,
-    AutoStories as AutoStoriesIcon,
     CollectionsBookmark as CollectionsBookmarkIcon,
     Description as DescriptionIcon,
     Language as LanguageIcon,
@@ -11,7 +10,7 @@ import {
     PlaylistPlay as PlaylistPlayIcon,
     Subscriptions as SubscriptionsIcon,
     Videocam as VideocamIcon,
-    VolumeUp as VolumeUpIcon,
+    VolumeUp as VolumeUpIcon
 } from '@mui/icons-material';
 import { Box, Tooltip } from '@mui/material';
 import { displayLoadableWithErrorsAndLoading } from '../../../../components/higher-order-components';
@@ -40,7 +39,6 @@ const lookupTable: { [K in ResourceType]: JSX.Element } = {
     [ResourceType.audioItem]: <VolumeUpIcon fontSize="inherit" />,
     [ResourceType.bibliographicCitation]: <CollectionsBookmarkIcon fontSize="inherit" />,
     [ResourceType.digitalText]: <DescriptionIcon fontSize="inherit" />,
-    [ResourceType.book]: <AutoStoriesIcon fontSize="inherit" />,
     [ResourceType.mediaItem]: <SubscriptionsIcon fontSize="inherit" />,
     [ResourceType.photograph]: <PhotoIcon fontSize="inherit" />,
     [ResourceType.song]: <AudiotrackIcon fontSize="inherit" />,

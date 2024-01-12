@@ -7,7 +7,6 @@ import { ICoscradUserViewModel } from '../../user-management/coscrad-user';
 import { IVideoViewModel } from '../audio-item';
 import { IAudioItemViewModel } from '../audio-item/audio-item.view-model.interface';
 import { IBibliographicCitationViewModel } from '../bibliographic-citation';
-import { IBookViewModel } from '../book';
 import { IDigitalTextViewModel } from '../digital-text/digital-text.view-model.interface';
 import { IMediaItemViewModel } from '../media-items';
 import { IPhotographViewModel } from '../photograph.view-model.interface';
@@ -21,7 +20,6 @@ export type AggregateTypeToViewModel = {
     // Resources
     [AggregateType.bibliographicCitation]: IBibliographicCitationViewModel;
     [AggregateType.digitalText]: IDigitalTextViewModel;
-    [AggregateType.book]: IBookViewModel;
     [AggregateType.mediaItem]: IMediaItemViewModel;
     [AggregateType.photograph]: IPhotographViewModel;
     [AggregateType.song]: ISongViewModel;

@@ -76,7 +76,7 @@ const allDualEdgeConnections = (testDualConnections as EdgeConnection[])
 
 const existingPhotograph = getValidAggregateInstanceForTest(AggregateType.photograph);
 
-const existingBook = getValidAggregateInstanceForTest(AggregateType.book);
+const existingDigitalText = getValidAggregateInstanceForTest(AggregateType.digitalText);
 
 const buildValidPayload = (id: AggregateId) => ({
     aggregateCompositeIdentifier: {
@@ -85,7 +85,7 @@ const buildValidPayload = (id: AggregateId) => ({
     },
     toMemberCompositeIdentifier: existingPhotograph.getCompositeIdentifier(),
     toMemberContext: new GeneralContext(),
-    fromMemberCompositeIdentifier: existingBook.getCompositeIdentifier(),
+    fromMemberCompositeIdentifier: existingDigitalText.getCompositeIdentifier(),
     fromMemberContext: new GeneralContext(),
     text: 'this is how these resources are connected',
     languageCode: LanguageCode.English,
@@ -444,10 +444,9 @@ describe(commandType, () => {
                 .filter((connection) => {
                     const { to: toMember } = findToAndFromMembers(connection.members);
 
-                    return ![
-                        EdgeConnectionContextType.general,
-                        EdgeConnectionContextType.identity,
-                    ].includes(toMember.context.type as EdgeConnectionContextType);
+                    return ![EdgeConnectionContextType.general].includes(
+                        toMember.context.type as EdgeConnectionContextType
+                    );
                 })
                 .forEach((connection) => {
                     describe(buildDescriptionForMembers(connection.members), () => {
@@ -490,10 +489,9 @@ describe(commandType, () => {
                 .filter((connection) => {
                     const { from: fromMember } = findToAndFromMembers(connection.members);
 
-                    return ![
-                        EdgeConnectionContextType.general,
-                        EdgeConnectionContextType.identity,
-                    ].includes(fromMember.context.type as EdgeConnectionContextType);
+                    return ![EdgeConnectionContextType.general].includes(
+                        fromMember.context.type as EdgeConnectionContextType
+                    );
                 })
                 .forEach((connection) => {
                     describe(buildDescriptionForMembers(connection.members), () => {
@@ -589,7 +587,7 @@ describe(commandType, () => {
                         // to member does not exist
 
                         // from member
-                        [AggregateType.book]: [existingBook],
+                        [AggregateType.digitalText]: [existingDigitalText],
                     }).fetchFullSnapshotInLegacyFormat(),
                     buildCommandFSA: (id) => commandFsaFactory.build(id),
                     checkError: (error) => {
@@ -629,7 +627,7 @@ describe(commandType, () => {
                             new CommandExecutionError([
                                 new InvalidExternalStateError([
                                     new AggregateNotFoundError(
-                                        existingBook.getCompositeIdentifier()
+                                        existingDigitalText.getCompositeIdentifier()
                                     ),
                                 ]),
                             ])

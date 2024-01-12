@@ -6,7 +6,6 @@ import {
     EdgeConnectionType,
 } from '../../../domain/models/context/edge-connection.entity';
 import { GeneralContext } from '../../../domain/models/context/general-context/general-context.entity';
-import { IdentityContext } from '../../../domain/models/context/identity-context.entity/identity-context.entity';
 import { PageRangeContext } from '../../../domain/models/context/page-range-context/page-range.context.entity';
 import { TimeRangeContext } from '../../../domain/models/context/time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
@@ -19,7 +18,7 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
     {
         id: '3101',
         note: buildMultilingualTextWithSingleItem(
-            'this selection from the media item portrays the events in the book',
+            'this selection from the media item portrays the events in the text',
             LanguageCode.English
         ),
         members: [
@@ -40,11 +39,11 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
             {
                 role: EdgeConnectionMemberRole.from,
                 compositeIdentifier: {
-                    type: ResourceType.book,
-                    id: '24',
+                    type: ResourceType.digitalText,
+                    id: '2',
                 },
                 context: new PageRangeContext({
-                    pageIdentifiers: ['ix'],
+                    pageIdentifiers: ['1'],
                     type: EdgeConnectionContextType.pageRange,
                 }),
             },
@@ -165,35 +164,10 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
             {
                 role: EdgeConnectionMemberRole.from,
                 compositeIdentifier: {
-                    type: ResourceType.book,
-                    id: '23',
+                    type: ResourceType.digitalText,
+                    id: '2',
                 },
                 context: new GeneralContext(),
-            },
-        ],
-    },
-    {
-        id: '3107',
-        note: buildMultilingualTextWithSingleItem(
-            'this is the print version of the digital book',
-            LanguageCode.English
-        ),
-        members: [
-            {
-                role: EdgeConnectionMemberRole.to,
-                compositeIdentifier: {
-                    type: ResourceType.book,
-                    id: '23',
-                },
-                context: new IdentityContext(),
-            },
-            {
-                role: EdgeConnectionMemberRole.from,
-                compositeIdentifier: {
-                    type: ResourceType.bibliographicCitation,
-                    id: '1',
-                },
-                context: new IdentityContext(),
             },
         ],
     },
@@ -215,12 +189,12 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
             {
                 role: EdgeConnectionMemberRole.from,
                 compositeIdentifier: {
-                    type: ResourceType.book,
-                    id: '25',
+                    type: ResourceType.digitalText,
+                    id: '2',
                 },
                 context: new PageRangeContext({
                     type: EdgeConnectionContextType.pageRange,
-                    pageIdentifiers: ['ix'],
+                    pageIdentifiers: ['1'],
                 }),
             },
         ],
@@ -243,12 +217,12 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
             {
                 role: EdgeConnectionMemberRole.from,
                 compositeIdentifier: {
-                    type: ResourceType.book,
-                    id: '25',
+                    type: ResourceType.digitalText,
+                    id: '2',
                 },
                 context: new PageRangeContext({
                     type: EdgeConnectionContextType.pageRange,
-                    pageIdentifiers: ['ix'],
+                    pageIdentifiers: ['1'],
                 }),
             },
         ],
@@ -271,12 +245,12 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
             {
                 role: EdgeConnectionMemberRole.from,
                 compositeIdentifier: {
-                    type: ResourceType.book,
-                    id: '25',
+                    type: ResourceType.digitalText,
+                    id: '2',
                 },
                 context: new PageRangeContext({
                     type: EdgeConnectionContextType.pageRange,
-                    pageIdentifiers: ['ix'],
+                    pageIdentifiers: ['1'],
                 }),
             },
         ],

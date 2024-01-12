@@ -12,8 +12,6 @@ import {
     audioItemReducer,
     BIBLIOGRAPHIC_CITATIONS,
     bibliographicCitationReducer,
-    bookReducer,
-    BOOKS,
     DIGITAL_TEXTS,
     DigitalTextReducer,
     MEDIA_ITEMS,
@@ -55,7 +53,6 @@ export const rootReducer = combineReducers({
     [DIGITAL_TEXTS]: DigitalTextReducer,
     [SPATIAL_FEATURES]: spatialFeatureReducer,
     [SONGS]: songReducer,
-    [BOOKS]: bookReducer,
     [MEDIA_ITEMS]: mediaItemReducer,
     [PLAYLISTS]: PlaylistReducer,
 });

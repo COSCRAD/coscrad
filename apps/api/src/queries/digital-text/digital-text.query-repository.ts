@@ -14,7 +14,7 @@ export class DigitalTextQueryRepository
 {
     constructor(private readonly eventRepository: ArangoEventRepository) {}
 
-    public async fetchById(id: string): Promise<Maybe<IDigitalTextViewModel>> {
+    public async fetchById(id: string): Promise<Maybe<DigitalTextViewModel>> {
         const fullEventHistory = await this.eventRepository.fetchEvents();
 
         const eventHistoryForThisDigitalText = fullEventHistory.filter(
@@ -36,7 +36,7 @@ export class DigitalTextQueryRepository
         return hydratedViewModel;
     }
 
-    public async fetchMany(): Promise<IDigitalTextViewModel[]> {
+    public async fetchMany(): Promise<DigitalTextViewModel[]> {
         const fullEventHistory = await this.eventRepository.fetchEvents();
 
         const allIdsWithDuplicates = fullEventHistory
