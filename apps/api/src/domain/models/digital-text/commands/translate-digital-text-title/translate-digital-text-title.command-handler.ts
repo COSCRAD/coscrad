@@ -25,10 +25,10 @@ export class TranslateDigitalTextTitleCommandHandler extends BaseUpdateCommandHa
     }
 
     protected actOnInstance(
-        _instance: DigitalText,
-        _command: ICommand
+        instance: DigitalText,
+        { translation, languageCode }: TranslateDigitalTextTitle
     ): ResultOrError<DigitalText> {
-        throw new InternalError('not implemented');
+        return instance.translateTitle(translation, languageCode);
     }
 
     protected buildEvent(

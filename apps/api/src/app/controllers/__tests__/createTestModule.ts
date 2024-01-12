@@ -72,9 +72,11 @@ import {
     CreateDigitalTextCommandHandler,
     DigitalTextCreated,
     DigitalTextPageContentTranslated,
+    DigitalTextTitleTranslated,
     PageAddedToDigitalText,
     TranslateDigitalTextPageContent,
     TranslateDigitalTextPageContentCommandHandler,
+    TranslateDigitalTextTitleCommandHandler,
 } from '../../../domain/models/digital-text/commands';
 import {
     AddContentToDigitalTextPage,
@@ -276,6 +278,7 @@ export const buildAllDataClassProviders = () =>
         PageAddedToDigitalText,
         ContentAddedToDigitalTextPage,
         DigitalTextPageContentTranslated,
+        DigitalTextTitleTranslated,
         AudioAddedForDigitalTextPage,
         SongCreated,
         SongTitleTranslated,
@@ -573,6 +576,8 @@ export default async (
             AddPageToDigitalTextCommandHandler,
             TranslateDigitalTextPageContent,
             TranslateDigitalTextPageContentCommandHandler,
+            TranslateDigitalTextPageContent,
+            TranslateDigitalTextTitleCommandHandler,
             AddAudioForDigitalTextPage,
             AddAudioForDigitalTextPageCommandHandler,
             RegisterUser,
