@@ -8,7 +8,6 @@ import { AudioItemViewModel } from '../../audio-visual/audio-item.view-model';
 import { VideoViewModel } from '../../audio-visual/video.view-model';
 import { BaseViewModel } from '../../base.view-model';
 import { BibliographicCitationViewModel } from '../../bibliographic-citation/bibliographic-citation.view-model';
-import { BookViewModel } from '../../book.view-model';
 import { CategoryTreeViewModel } from '../../category-tree.view-model';
 import { CoscradUserGroupViewModel } from '../../coscrad-user-group.view-model';
 import { CoscradUserViewModel } from '../../coscrad-user.view-model';
@@ -26,7 +25,6 @@ export const aggregateTypeToViewModelCtor: {
 } = {
     [ResourceType.bibliographicCitation]: BibliographicCitationViewModel,
     [ResourceType.digitalText]: DigitalTextViewModel,
-    [ResourceType.book]: BookViewModel,
     [ResourceType.mediaItem]: MediaItemViewModel,
     [ResourceType.photograph]: PhotographViewModel,
     [ResourceType.song]: SongViewModel,

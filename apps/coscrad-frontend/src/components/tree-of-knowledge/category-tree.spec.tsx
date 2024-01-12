@@ -1,4 +1,4 @@
-import { CategorizableType, IBaseViewModel, ICategoryTreeViewModel } from '@coscrad/api-interfaces';
+import { CategorizableType, IBaseViewModel, ICategoryTreeViewModel, ResourceType } from '@coscrad/api-interfaces';
 import { MemoryRouter } from 'react-router-dom';
 import { getConfig } from '../../config';
 import { assertElementWithTestIdOnScreen, renderWithProviders } from '../../utils/test-utils';
@@ -7,12 +7,12 @@ import { TestId } from '../../utils/test-utils/constants';
 import { setupTestServer } from '../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../utils/test-utils/test-data';
 import { buildMultilingualTextFromEnglishOriginal } from '../notes/test-utils';
-import { buildDummyBooks } from '../resources/books/test-utils/build-dummy-books';
+import { buildDummyDigitalTexts } from '../resources/terms/test-utils/build-dummy-digital-texts';
 import { buildDummyTerms } from '../resources/terms/test-utils/build-dummy-terms';
 import { buildDummyVocabularyLists } from '../resources/vocabulary-lists/test-utils/build-dummy-vocabulary-lists';
 import { CategoryTreeContainer } from './category-tree.container';
 
-const dummyBooks = buildDummyBooks();
+const dummyDigitalTexts = buildDummyDigitalTexts();
 
 const dummyTerms = buildDummyTerms();
 
@@ -26,7 +26,7 @@ const grandChildCategory: ICategoryTreeViewModel = {
     children: [],
     members: [
         {
-            type: 'book',
+            type: ResourceType.digitalText,
             id: '99',
         },
     ],
@@ -39,8 +39,8 @@ const childCategory1: ICategoryTreeViewModel = {
     children: [grandChildCategory],
     members: [
         {
-            type: CategorizableType.book,
-            id: dummyBooks[0].id,
+            type: CategorizableType.digitalText,
+            id: dummyDigitalTexts[0].id,
         },
         {
             type: CategorizableType.term,
@@ -66,8 +66,8 @@ const dummyCategoryTree: ICategoryTreeViewModel = {
     children: childrenCategories,
     members: [
         {
-            type: CategorizableType.book,
-            id: dummyBooks[1].id,
+            type: CategorizableType.digitalText,
+            id: dummyDigitalTexts[1].id,
         },
         {
             type: CategorizableType.vocabularyList,
@@ -120,7 +120,7 @@ describe('Category Tree', () => {
             ...(
                 [
                     [termsEndpoint, dummyTerms],
-                    [booksEndpoint, dummyBooks],
+                    [booksEndpoint, dummyDigitalTexts],
                     [vocabularyListsEndpoint, dummyVocabularyLists],
                 ] as const
             ).map(([endpoint, models]) =>

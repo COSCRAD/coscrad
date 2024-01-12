@@ -1,6 +1,5 @@
 import { IEdgeConnectionContext, LanguageCode } from '@coscrad/api-interfaces';
 import { GeneralContext } from '../general-context/general-context.entity';
-import { IdentityContext } from '../identity-context.entity/identity-context.entity';
 import { PageRangeContext } from '../page-range-context/page-range.context.entity';
 import { TextFieldContext } from '../text-field-context/text-field-context.entity';
 import { TimeRange, TimeRangeContext } from '../time-range-context/time-range-context.entity';
@@ -23,7 +22,6 @@ import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 export const buildContextModelMap = () =>
     new Map<string, IEdgeConnectionContext>()
         .set(EdgeConnectionContextType.general, new GeneralContext())
-        .set(EdgeConnectionContextType.identity, new IdentityContext())
         .set(
             EdgeConnectionContextType.pageRange,
             new PageRangeContext({

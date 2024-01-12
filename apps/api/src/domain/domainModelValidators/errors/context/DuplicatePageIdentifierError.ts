@@ -1,5 +1,5 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
-import { PageIdentifier } from '../../../models/book/entities/types/PageIdentifier';
+import { PageIdentifier } from '../../../models/digital-text/entities';
 
 export default class DuplicatePageIdentifierError extends InternalError {
     constructor(duplicatePageIdentifiers: PageIdentifier[]) {

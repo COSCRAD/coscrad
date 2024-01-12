@@ -5,7 +5,6 @@ import { useLoadableNoteById } from '../../store/slices/notes';
 import {
     useLoadableAudioItemById,
     useLoadableBibliographicCitationById,
-    useLoadableBookById,
     useLoadableDigitalTextsById,
     useLoadableMediaItemById,
     useLoadablePhotographById,
@@ -31,7 +30,6 @@ const lookupTable: { [K in Exclude<AggregateType, 'user' | 'userGroup'>]: UseLoa
     // Resources
     [AggregateType.bibliographicCitation]: useLoadableBibliographicCitationById,
     [AggregateType.digitalText]: useLoadableDigitalTextsById,
-    [AggregateType.book]: useLoadableBookById,
     [AggregateType.mediaItem]: useLoadableMediaItemById,
     [AggregateType.photograph]: useLoadablePhotographById,
     [AggregateType.song]: useLoadableSongById,

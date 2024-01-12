@@ -9,7 +9,6 @@ import { useLoadableNotes } from '../../store/slices/notes/hooks';
 import {
     useLoadableAudioItems,
     useLoadableBibliographicCitations,
-    useLoadableBooks,
     useLoadableDigitalTexts,
     useLoadableMediaItems,
     useLoadablePhotographs,
@@ -30,7 +29,6 @@ const lookupTable: {
 } = {
     [CategorizableType.bibliographicCitation]: useLoadableBibliographicCitations,
     [CategorizableType.digitalText]: useLoadableDigitalTexts,
-    [CategorizableType.book]: useLoadableBooks,
     [CategorizableType.mediaItem]: useLoadableMediaItems,
     [CategorizableType.photograph]: useLoadablePhotographs,
     [CategorizableType.song]: useLoadableSongs,

@@ -2,7 +2,6 @@ export enum ResourceType {
     term = 'term',
     vocabularyList = 'vocabularyList',
     audioItem = 'audioItem',
-    book = 'book',
     photograph = 'photograph',
     spatialFeature = 'spatialFeature',
     bibliographicCitation = 'bibliographicCitation',

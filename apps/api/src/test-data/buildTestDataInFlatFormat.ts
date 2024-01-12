@@ -3,7 +3,6 @@ import { PartialSnapshot } from '../domain/types/PartialSnapshot';
 import { ResourceType } from '../domain/types/ResourceType';
 import buildAudioItemTestData from './buildAudioItemTestData';
 import buildBibliographicCitationTestData from './buildBibliographicCitationTestData';
-import buildBookTestData from './buildBookTestData';
 import buildCategoryTestData from './buildCategoryTestData';
 import buildDigitalTextTestData from './buildDigitalTextTestData';
 import buildEdgeConnectionTestData from './buildEdgeConnectionTestData';
@@ -25,7 +24,6 @@ export default (): PartialSnapshot => ({
     [ResourceType.vocabularyList]: buildVocabularyListTestData(),
     [ResourceType.audioItem]: buildAudioItemTestData(),
     [ResourceType.video]: buildVideoTestData(),
-    [ResourceType.book]: buildBookTestData(),
     [ResourceType.photograph]: buildPhotographTestData(),
     [ResourceType.spatialFeature]: buildSpatialFeatureTestData(),
     [ResourceType.bibliographicCitation]: buildBibliographicCitationTestData(),

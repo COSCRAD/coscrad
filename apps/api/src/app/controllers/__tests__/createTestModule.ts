@@ -59,7 +59,6 @@ import {
 } from '../../../domain/models/context/edge-connection.entity';
 import { FreeMultilineContext } from '../../../domain/models/context/free-multiline-context/free-multiline-context.entity';
 import { GeneralContext } from '../../../domain/models/context/general-context/general-context.entity';
-import { IdentityContext } from '../../../domain/models/context/identity-context.entity/identity-context.entity';
 import { PageRangeContext } from '../../../domain/models/context/page-range-context/page-range.context.entity';
 import { PointContext } from '../../../domain/models/context/point-context/point-context.entity';
 import { TextFieldContext } from '../../../domain/models/context/text-field-context/text-field-context.entity';
@@ -184,7 +183,6 @@ import {
 } from '../../../domain/models/vocabulary-list/commands';
 import { AudioItemQueryService } from '../../../domain/services/query-services/audio-item-query.service';
 import { BibliographicCitationQueryService } from '../../../domain/services/query-services/bibliographic-citation-query.service';
-import { BookQueryService } from '../../../domain/services/query-services/book-query.service';
 import { CoscradUserGroupQueryService } from '../../../domain/services/query-services/coscrad-user-group-query.service';
 import { CoscradUserQueryService } from '../../../domain/services/query-services/coscrad-user-query.service';
 import { EdgeConnectionQueryService } from '../../../domain/services/query-services/edge-connection-query.service';
@@ -228,7 +226,6 @@ import { EdgeConnectionController } from '../edge-connection.controller';
 import { IdGenerationController } from '../id-generation/id-generation.controller';
 import { AudioItemController } from '../resources/audio-item.controller';
 import { BibliographicCitationController } from '../resources/bibliographic-citation.controller';
-import { BookController } from '../resources/book.controller';
 import { DigitalTextQueryController } from '../resources/digital-text.controller';
 import { MediaItemController } from '../resources/media-item.controller';
 import { PhotographController } from '../resources/photograph.controller';
@@ -272,7 +269,6 @@ export const buildAllDataClassProviders = () =>
         TextFieldContext,
         PointContext,
         FreeMultilineContext,
-        IdentityContext,
         // Events
         CoscradEventUnion,
         ResourceReadAccessGrantedToUser,
@@ -450,14 +446,6 @@ export default async (
                     commandInfoService: CommandInfoService
                 ) => new VideoQueryService(repositoryProvider, commandInfoService),
                 inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService, ConfigService],
-            },
-            {
-                provide: BookQueryService,
-                useFactory: (
-                    repositoryProvider: ArangoRepositoryProvider,
-                    commandInfoService: CommandInfoService
-                ) => new BookQueryService(repositoryProvider, commandInfoService),
-                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService],
             },
             {
                 provide: PhotographQueryService,
@@ -677,7 +665,6 @@ export default async (
             VocabularyListController,
             AudioItemController,
             VideoController,
-            BookController,
             PhotographController,
             SpatialFeatureController,
             BibliographicCitationController,

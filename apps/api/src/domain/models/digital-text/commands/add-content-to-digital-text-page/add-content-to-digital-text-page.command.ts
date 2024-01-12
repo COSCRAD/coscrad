@@ -2,7 +2,7 @@ import { ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { BindToViewState, NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { LanguageCodeEnum } from '../../../../common/entities/multilingual-text';
-import { PageIdentifier } from '../../../book/entities/types/PageIdentifier';
+import { PageIdentifier } from '../../entities/types/page-identifier';
 import { DigitalTextCompositeId } from '../create-digital-text.command';
 
 @Command({

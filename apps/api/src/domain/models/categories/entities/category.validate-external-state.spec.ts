@@ -7,9 +7,9 @@ import { AggregateType } from '../../../types/AggregateType';
 import { CategorizableType } from '../../../types/CategorizableType';
 import { DeluxeInMemoryStore } from '../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../types/ResourceType';
+import { dummyUuid } from '../../__tests__/utilities/dummyUuid';
 import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
 import { Term } from '../../term/entities/term.entity';
-import { dummyUuid } from '../../__tests__/utilities/dummyUuid';
 import InvalidExternalReferenceByAggregateError from '../errors/InvalidExternalReferenceByAggregateError';
 import { Category } from './category.entity';
 
@@ -26,7 +26,7 @@ const validCategory = new Category({
     label: 'mammals',
     members: [
         {
-            type: CategorizableType.book,
+            type: CategorizableType.digitalText,
             id: '44',
         },
         {

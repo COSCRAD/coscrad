@@ -67,7 +67,7 @@ const selfEdgeConnection: DTO<EdgeConnection> = {
 
 const dualEdgeDocument: ArangoEdgeDocument = {
     _key: '234',
-    _to: 'books/11',
+    _to: 'digital_texts/11',
     _from: 'audio_items/55',
     connectionType: EdgeConnectionType.dual,
     eventHistory: [],
@@ -109,7 +109,7 @@ const dualEdgeConnection: DTO<EdgeConnection> = {
             role: EdgeConnectionMemberRole.to,
             compositeIdentifier: {
                 id: '11',
-                type: ResourceType.book,
+                type: ResourceType.digitalText,
             },
             context: generalContext,
         },

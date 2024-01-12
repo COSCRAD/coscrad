@@ -36,15 +36,11 @@ export default (): Category[] => {
                     id: '1',
                 },
                 {
-                    type: CategorizableType.book,
-                    id: '23',
-                },
-                {
                     type: CategorizableType.song,
                     id: '1',
                 },
             ],
-            childrenIDs: ['4', '5', '11'],
+            childrenIDs: ['4', '5'],
         },
         {
             id: '3',
@@ -145,17 +141,6 @@ export default (): Category[] => {
                 {
                     type: CategorizableType.photograph,
                     id: '1',
-                },
-            ],
-            childrenIDs: [],
-        },
-        {
-            id: '11',
-            label: 'rodents',
-            members: [
-                {
-                    type: CategorizableType.book,
-                    id: '24',
                 },
             ],
             childrenIDs: [],

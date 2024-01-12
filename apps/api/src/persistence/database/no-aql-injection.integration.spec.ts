@@ -1,5 +1,5 @@
 import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
-import { Book } from '../../domain/models/book/entities/book.entity';
+import { DigitalText } from '../../domain/models/digital-text/entities';
 import { QueryOperator } from '../../domain/repositories/interfaces/QueryOperator';
 import { ISpecification } from '../../domain/repositories/interfaces/specification.interface';
 import generateDatabaseNameForTestSuite from '../repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -21,18 +21,18 @@ describe(`Arango Database`, () => {
 
     describe(`fetchMany`, () => {
         it('should be safe against AQL injection', async () => {
-            const injectionSpecification: ISpecification<Book, string> = {
+            const injectionSpecification: ISpecification<DigitalText, string> = {
                 criterion: {
                     field: 'foo',
                     operator: QueryOperator.equals,
                     value: `7 || true`,
                 },
 
-                isSatisfiedBy: (_: Book) => true,
+                isSatisfiedBy: (_: DigitalText) => true,
             };
 
             const result = await dbInstance.fetchMany(
-                ArangoCollectionId.books,
+                ArangoCollectionId.digital_texts,
                 injectionSpecification
             );
 
