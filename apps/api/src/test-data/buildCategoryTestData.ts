@@ -40,7 +40,7 @@ export default (): Category[] => {
                     id: '1',
                 },
             ],
-            childrenIDs: ['4', '5', '11'],
+            childrenIDs: ['4', '5'],
         },
         {
             id: '3',
