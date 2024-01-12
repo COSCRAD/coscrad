@@ -3,15 +3,20 @@ import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
+import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoEventRepository } from '../../../../../persistence/repositories/arango-event-repository';
 import { TestEventStream } from '../../../../../test-data/events';
+import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
+import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
+import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
+import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { DIGITAL_TEXT_CREATED } from '../../constants';
 import { DigitalText } from '../../entities';
 import { DigitalTextCreated } from '../digital-text-created.event';
@@ -40,7 +45,7 @@ const digitalTextCreated = new TestEventStream().andThen<DigitalTextCreated>({
     },
 });
 
-const _digitalTextTitleTranslated = digitalTextCreated.andThen<DigitalTextTitleTranslated>({
+const digitalTextTitleTranslated = digitalTextCreated.andThen<DigitalTextTitleTranslated>({
     type: 'DIGITAL_TEXT_TITLE_TRANSLATED',
     payload: {
         translation: translationTitle,
@@ -58,6 +63,8 @@ const validCommandFSA = {
     type: commandType,
     payload: validPayload,
 };
+
+const fsaFactory = new DummyCommandFsaFactory(() => validCommandFSA);
 
 describe(commandType, () => {
     let app: INestApplication;
@@ -114,6 +121,59 @@ describe(commandType, () => {
 
                     expect(digitalTextSearchResult).toBeInstanceOf(DigitalText);
                 },
+            });
+        });
+    });
+
+    describe(`when the command is invalid`, () => {
+        describe(`when the digital text does not exist`, () => {
+            it(`should fail with the expected error`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await Promise.resolve();
+                    },
+                    buildCommandFSA: () => validCommandFSA,
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new AggregateNotFoundError(digitalTextCompositeIdentifier),
+                            ])
+                        );
+                    },
+                });
+            });
+        });
+
+        describe(`when the translation language is the same as the target language`, () => {
+            it(`should fail`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        const eventHistory = digitalTextCreated.as(digitalTextCompositeIdentifier);
+
+                        await app.get(ArangoEventRepository).appendEvents(eventHistory);
+                    },
+                    buildCommandFSA: () =>
+                        fsaFactory.build(undefined, { languageCode: originalLanguageCode }),
+                });
+            });
+        });
+
+        describe(`when the title already has a translation in the target language`, () => {
+            it(`should fail`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        const eventHistory = digitalTextTitleTranslated.as(
+                            digitalTextCompositeIdentifier
+                        );
+
+                        await app.get(ArangoEventRepository).appendEvents(eventHistory);
+                    },
+                    buildCommandFSA: () => fsaFactory.build(),
+                });
             });
         });
     });
