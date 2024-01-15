@@ -1,13 +1,16 @@
 import { CommandHandlerService } from '@coscrad/commands';
 import { CoscradUserRole } from '@coscrad/data-types';
-import { isNonEmptyString } from '@coscrad/validation-constraints';
+import { isNonEmptyString, isString } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { readFileSync } from 'fs';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
 import { GrantUserRole } from '../domain/models/user-management/user/commands/grant-user-role/grant-user-role.command';
 import { RegisterUser } from '../domain/models/user-management/user/commands/register-user/register-user.command';
+import { AggregateId } from '../domain/types/AggregateId';
 import { AggregateType } from '../domain/types/AggregateType';
-import { InternalError } from '../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../lib/errors/InternalError';
+import { clonePlainObjectWithOverrides } from '../lib/utilities/clonePlainObjectWithOverrides';
+import { ResultOrError } from '../types/ResultOrError';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
 
@@ -31,10 +34,15 @@ const GENERATE_THIS_ID = 'GENERATE_THIS_ID';
 
 const APPEND_THIS_ID = 'APPEND_THIS_ID';
 
+type SlugContext = typeof GENERATE_THIS_ID | typeof APPEND_THIS_ID;
+
+const isSlugContext = (input: unknown): input is SlugContext =>
+    isString(input) && [GENERATE_THIS_ID, APPEND_THIS_ID].includes(input);
+
 const createAdminUserCommand: RegisterUser = {
     aggregateCompositeIdentifier: {
         type: AggregateType.user,
-        id: GENERATE_THIS_ID,
+        id: `${GENERATE_THIS_ID}:1`,
     },
     userIdFromAuthProvider: 'auth0|6407b7bd81d69faf23e9dd7e',
     username: 'Cypress McTester',
@@ -48,7 +56,7 @@ const createAdminUserCommandFsa = {
 const grantUserRoleCommand: GrantUserRole = {
     aggregateCompositeIdentifier: {
         type: AggregateType.user,
-        id: APPEND_THIS_ID,
+        id: `${APPEND_THIS_ID}:1`,
     },
     role: CoscradUserRole.projectAdmin,
 };
@@ -58,7 +66,79 @@ const grantUserRoleCommandFsa = {
     payload: grantUserRoleCommand,
 };
 
-const createAdminUserCommandStream = [createAdminUserCommandFsa, grantUserRoleCommandFsa];
+/**
+ * Note: Add Geoff's test user
+ * TODO: Find a cleaner way of seeding multiple test users in the database
+ */
+
+const createGeoffUserCommand: RegisterUser = {
+    aggregateCompositeIdentifier: {
+        type: AggregateType.user,
+        id: `${GENERATE_THIS_ID}:2`,
+    },
+    userIdFromAuthProvider: 'auth0|65a56f7af6a935f20eb4b7f5',
+    username: 'Geoff Test User',
+};
+
+const createGeoffUserCommandFsa = {
+    type: 'REGISTER_USER',
+    payload: createGeoffUserCommand,
+};
+
+const grantGeoffUserRoleCommand: GrantUserRole = {
+    aggregateCompositeIdentifier: {
+        type: AggregateType.user,
+        id: `${APPEND_THIS_ID}:2`,
+    },
+    role: CoscradUserRole.projectAdmin,
+};
+
+const grantGeoffUserRoleCommandFsa = {
+    type: 'GRANT_USER_ROLE',
+    payload: grantGeoffUserRoleCommand,
+};
+
+const createAdminUserCommandStream = [
+    createAdminUserCommandFsa,
+    grantUserRoleCommandFsa,
+    createGeoffUserCommandFsa,
+    grantGeoffUserRoleCommandFsa,
+];
+
+const parseSlugDefinition = (
+    input: string
+): ResultOrError<[typeof GENERATE_THIS_ID | typeof APPEND_THIS_ID, string]> => {
+    const DELIMITER = ':';
+
+    const splitOnDelimeter = input.split(DELIMITER);
+
+    const buildErrorMessage = (input: string, problem: string) =>
+        `Encountered an invalid slug definition [${problem}]: {${input}}`;
+
+    if (splitOnDelimeter.length !== 2) {
+        return new InternalError(buildErrorMessage(input, `missing colon (:)`));
+    }
+
+    const [prefix, slug] = splitOnDelimeter;
+
+    // This would happen if the input were `id: "9:GENERATE_THIS_ID"`, for example
+    if (isSlugContext(slug)) {
+        return new InternalError(
+            buildErrorMessage(input, `${GENERATE_THIS_ID} | ${APPEND_THIS_ID} must come first`)
+        );
+    }
+
+    if (!isSlugContext(prefix)) {
+        return new InternalError(
+            buildErrorMessage(
+                input,
+                `invalid slug context (must be ${GENERATE_THIS_ID} | ${APPEND_THIS_ID})`
+            )
+        );
+    }
+
+    return [prefix, slug];
+};
 
 @CliCommand({
     name: 'execute-command-stream',
@@ -107,25 +187,71 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
 
         const commandResults: CommandResult[] = [];
 
-        const generatedId = await this.idManager.generate();
+        const userDefinedSlugParseResult = commandFsasToExecute
+            .map(
+                ({
+                    payload: {
+                        aggregateCompositeIdentifier: { id },
+                    },
+                }) => id
+            )
+            .map(parseSlugDefinition);
+
+        const invalidSlugDefinitions = userDefinedSlugParseResult.filter(isInternalError);
+
+        if (invalidSlugDefinitions.length > 0) {
+            const exception = new InternalError(
+                `Encountered invalid command stream definition`,
+                invalidSlugDefinitions
+            );
+
+            this.logger.log(exception.toString());
+
+            throw exception;
+        }
+
+        const userDefinedSlugs = (userDefinedSlugParseResult as [SlugContext, string][])
+            .filter(([slugContext, _]) => slugContext === GENERATE_THIS_ID)
+            .map(([_slugContext, slug]) => slug);
+
+        const generatedIds = await this.idManager.generateMany(userDefinedSlugs.length);
+
+        const idMap = generatedIds.reduce((acc, generatedId, index) => {
+            // We essentially zipping the slugs together with corresponding uuids
+            const slug = userDefinedSlugs[index];
+
+            // TODO: do we want to throw here?
+            if (acc.has(slug)) return acc;
+
+            return acc.set(slug, generatedId);
+        }, new Map<string, AggregateId>());
 
         for (const [index, fsa] of commandFsasToExecute.entries()) {
-            /**
-             * Note that we need a more sophisticated way to deal with generating
-             * and appending aggregate context in bulk execution.
-             */
-
-            const fsaToExecute = {
-                ...fsa,
+            const {
                 payload: {
-                    ...fsa.payload,
+                    aggregateCompositeIdentifier: { id: idOnPayload },
+                },
+            } = fsa;
+
+            const customIdParseResult = parseSlugDefinition(idOnPayload);
+
+            /**
+             * If parse fails, we take it to mean that the user has provided a
+             * standard UUID on the payload. If not, the command will fail for
+             * other reasons upstream.
+             */
+            const idToUse = isInternalError(customIdParseResult)
+                ? idOnPayload
+                : // look up the UUID corresponding to this slug
+                  idMap.get(customIdParseResult[1]);
+
+            const fsaToExecute = clonePlainObjectWithOverrides(fsa, {
+                payload: {
                     aggregateCompositeIdentifier: {
-                        ...fsa.payload.aggregateCompositeIdentifier,
-                        // Note that we assume the entire command stream targets the same aggregate root
-                        id: generatedId,
+                        id: idToUse,
                     },
                 },
-            };
+            });
 
             this.logger.log(`Attempting to execute command FSA: ${JSON.stringify(fsaToExecute)}`);
 
