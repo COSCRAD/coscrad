@@ -15,7 +15,7 @@
         "type": "TRANSLATE_TERM",
         "payload": {
             "aggregateCompositeIdentifier": {
-                "id": "APPEND_THIS_ID:1",
+                "id": "APPEND_THIS_ID",
                 "type": "term"
             },
             "translation": "I am talking to him (English)",
@@ -26,7 +26,7 @@
         "type": "PUBLISH_RESOURCE",
         "payload": {
             "aggregateCompositeIdentifier": {
-                "id": "APPEND_THIS_ID:1",
+                "id": "APPEND_THIS_ID",
                 "type": "term"
             }
         }

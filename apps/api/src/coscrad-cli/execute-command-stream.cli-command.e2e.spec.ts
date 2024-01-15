@@ -18,6 +18,8 @@ const fixtureName = `users:create-admin`;
 
 const dataFile = `apps/api/src/coscrad-cli/execute-command-stream.cli-command.SAMPLE.json`;
 
+const invalidDataFile = `apps/api/src/coscrad-cli/execute-command-stream.cli-command.invalid.SAMPLE.json`;
+
 describe(`CLI Command: ${cliCommandName}`, () => {
     let commandInstance: TestingModule;
 
@@ -103,6 +105,23 @@ describe(`CLI Command: ${cliCommandName}`, () => {
                 const message = mockLogger.log.mock.calls[0][0];
 
                 const expectedText = `Failed to parse`;
+
+                const invalidMessages = [message].filter((m) => !m.includes(expectedText));
+
+                expect(invalidMessages).toEqual([]);
+            });
+        });
+
+        describe(`when the file exists, but the slugs are invalidly formatted`, () => {
+            it(`should fail`, async () => {
+                await CommandTestFactory.run(commandInstance, [
+                    cliCommandName,
+                    `--data-file=${invalidDataFile}`,
+                ]);
+
+                const message = mockLogger.log.mock.calls[0][0];
+
+                const expectedText = `invalid slug definition`;
 
                 const invalidMessages = [message].filter((m) => !m.includes(expectedText));
 
