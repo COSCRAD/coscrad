@@ -158,9 +158,16 @@ Cypress.Commands.add(`clearDatabase`, () =>
     cy.exec(`node ../../dist/apps/coscrad-cli/main.js clear-database`)
 );
 
-Cypress.Commands.add(`executeCommandStreamByName`, (name: string) =>
-    cy.exec(`node ../../dist/apps/coscrad-cli/main.js execute-command-stream --name=${name}`)
-);
+Cypress.Commands.add(`executeCommandStreamByName`, (name: string) => {
+    const cliCommand = `node ../../dist/apps/coscrad-cli/main.js execute-command-stream --name=${name}`;
+
+    cy.exec(cliCommand).then((_result) => {
+        if (cliCommand.includes(`execute-command-stream`)) {
+            /* eslint-disable-next-line */
+            debugger;
+        }
+    });
+});
 
 Cypress.Commands.add(
     `seedDataWithCommand`,

@@ -6,6 +6,7 @@ import { readFileSync } from 'fs';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
 import { GrantUserRole } from '../domain/models/user-management/user/commands/grant-user-role/grant-user-role.command';
 import { RegisterUser } from '../domain/models/user-management/user/commands/register-user/register-user.command';
+import { AggregateId } from '../domain/types/AggregateId';
 import { AggregateType } from '../domain/types/AggregateType';
 import { InternalError } from '../lib/errors/InternalError';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
@@ -34,7 +35,7 @@ const APPEND_THIS_ID = 'APPEND_THIS_ID';
 const createAdminUserCommand: RegisterUser = {
     aggregateCompositeIdentifier: {
         type: AggregateType.user,
-        id: GENERATE_THIS_ID,
+        id: `${GENERATE_THIS_ID}:1`,
     },
     userIdFromAuthProvider: 'auth0|6407b7bd81d69faf23e9dd7e',
     username: 'Cypress McTester',
@@ -48,7 +49,7 @@ const createAdminUserCommandFsa = {
 const grantUserRoleCommand: GrantUserRole = {
     aggregateCompositeIdentifier: {
         type: AggregateType.user,
-        id: APPEND_THIS_ID,
+        id: `${APPEND_THIS_ID}:1`,
     },
     role: CoscradUserRole.projectAdmin,
 };
@@ -58,7 +59,44 @@ const grantUserRoleCommandFsa = {
     payload: grantUserRoleCommand,
 };
 
-const createAdminUserCommandStream = [createAdminUserCommandFsa, grantUserRoleCommandFsa];
+/**
+ * Note: Add Geoff's test user
+ * TODO: Find a cleaner way of seeding multiple test users in the database
+ */
+
+const createGeoffUserCommand: RegisterUser = {
+    aggregateCompositeIdentifier: {
+        type: AggregateType.user,
+        id: `${GENERATE_THIS_ID}:2`,
+    },
+    userIdFromAuthProvider: 'auth0|65a56f7af6a935f20eb4b7f5',
+    username: 'Geoff Test User',
+};
+
+const createGeoffUserCommandFsa = {
+    type: 'REGISTER_USER',
+    payload: createGeoffUserCommand,
+};
+
+const grantGeoffUserRoleCommand: GrantUserRole = {
+    aggregateCompositeIdentifier: {
+        type: AggregateType.user,
+        id: `${APPEND_THIS_ID}:2`,
+    },
+    role: CoscradUserRole.projectAdmin,
+};
+
+const grantGeoffUserRoleCommandFsa = {
+    type: 'GRANT_USER_ROLE',
+    payload: grantGeoffUserRoleCommand,
+};
+
+const createAdminUserCommandStream = [
+    createAdminUserCommandFsa,
+    grantUserRoleCommandFsa,
+    createGeoffUserCommandFsa,
+    grantGeoffUserRoleCommandFsa,
+];
 
 @CliCommand({
     name: 'execute-command-stream',
@@ -107,13 +145,58 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
 
         const commandResults: CommandResult[] = [];
 
-        const generatedId = await this.idManager.generate();
+        const userDefinedSlugs = commandFsasToExecute
+            .map(
+                ({
+                    payload: {
+                        aggregateCompositeIdentifier: { id },
+                    },
+                }) => id
+            )
+            .filter((id) => id.includes(GENERATE_THIS_ID))
+            .map((slugWithPrefix) => {
+                const splitOnColon = slugWithPrefix.split(':');
+
+                if (splitOnColon.length !== 2) {
+                    throw new InternalError(
+                        `encountered an invalid slug definition: ${slugWithPrefix}`
+                    );
+                }
+
+                return splitOnColon[1];
+            });
+
+        const generatedIds = await this.idManager.generateMany(userDefinedSlugs.length);
+
+        const idMap = generatedIds.reduce((acc, generatedId, index) => {
+            // We essentially zipping the slugs together with corresponding uuids
+            const slug = userDefinedSlugs[index];
+
+            // TODO: do we want to throw here?
+            if (acc.has(slug)) return acc;
+
+            return acc.set(slug, generatedId);
+        }, new Map<string, AggregateId>());
 
         for (const [index, fsa] of commandFsasToExecute.entries()) {
             /**
              * Note that we need a more sophisticated way to deal with generating
              * and appending aggregate context in bulk execution.
              */
+
+            // TODO: use clone utility
+
+            const {
+                payload: {
+                    aggregateCompositeIdentifier: { id: idOnPayload },
+                },
+            } = fsa;
+
+            const idToUse = [GENERATE_THIS_ID, APPEND_THIS_ID].some((prefix) =>
+                idOnPayload.includes(prefix)
+            )
+                ? idMap.get(idOnPayload.split(':')[1])
+                : idOnPayload;
 
             const fsaToExecute = {
                 ...fsa,
@@ -122,7 +205,7 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
                     aggregateCompositeIdentifier: {
                         ...fsa.payload.aggregateCompositeIdentifier,
                         // Note that we assume the entire command stream targets the same aggregate root
-                        id: generatedId,
+                        id: idToUse,
                     },
                 },
             };
