@@ -24,7 +24,7 @@ export class TranslateDigitalTextTitle implements ICommandBase {
 
     @LanguageCodeEnum({
         label: `language code`,
-        description: `the language in which you are naming the new digital text title`,
+        description: `the language in which you are translating the digital text's title`,
     })
     readonly languageCode: LanguageCode;
 }

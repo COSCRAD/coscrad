@@ -1,7 +1,13 @@
-import { AggregateType, LanguageCode, ResourceType } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    LanguageCode,
+    MultilingualTextItemRole,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
+import { MultilingualTextItem } from '../../../../../domain/common/entities/multilingual-text';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
@@ -120,6 +126,19 @@ describe(commandType, () => {
                         .fetchById(digitalTextId);
 
                     expect(digitalTextSearchResult).toBeInstanceOf(DigitalText);
+
+                    const updatedDigitalText = digitalTextSearchResult as DigitalText;
+
+                    const translationSearchResult =
+                        updatedDigitalText.title.getTranslation(translationLanguageCode);
+
+                    expect(translationSearchResult).toBeInstanceOf(MultilingualTextItem);
+
+                    const translationTextItem = translationSearchResult as MultilingualTextItem;
+
+                    expect(translationTextItem.text).toBe(translationTitle);
+
+                    expect(translationTextItem.role).toBe(MultilingualTextItemRole.freeTranslation);
                 },
             });
         });
