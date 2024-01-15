@@ -33,4 +33,4 @@ const translateAudioItemName: CommandFSA<TranslateAudioItemName> = {
     },
 };
 
-export const buildAudioItemCommandFsas = () => [createAudioItem, translateAudioItemName];
+export const buildAudioItemTestCommandFsas = () => [createAudioItem, translateAudioItemName];
