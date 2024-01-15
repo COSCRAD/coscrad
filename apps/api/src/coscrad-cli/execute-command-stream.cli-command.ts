@@ -1,6 +1,6 @@
 import { CommandHandlerService } from '@coscrad/commands';
 import { CoscradUserRole } from '@coscrad/data-types';
-import { isNonEmptyString } from '@coscrad/validation-constraints';
+import { isNonEmptyString, isString } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { readFileSync } from 'fs';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
@@ -8,7 +8,9 @@ import { GrantUserRole } from '../domain/models/user-management/user/commands/gr
 import { RegisterUser } from '../domain/models/user-management/user/commands/register-user/register-user.command';
 import { AggregateId } from '../domain/types/AggregateId';
 import { AggregateType } from '../domain/types/AggregateType';
-import { InternalError } from '../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../lib/errors/InternalError';
+import { clonePlainObjectWithOverrides } from '../lib/utilities/clonePlainObjectWithOverrides';
+import { ResultOrError } from '../types/ResultOrError';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
 
@@ -31,6 +33,11 @@ type CommandResult = {
 const GENERATE_THIS_ID = 'GENERATE_THIS_ID';
 
 const APPEND_THIS_ID = 'APPEND_THIS_ID';
+
+type SlugContext = typeof GENERATE_THIS_ID | typeof APPEND_THIS_ID;
+
+const isSlugContext = (input: unknown): input is SlugContext =>
+    isString(input) && [GENERATE_THIS_ID, APPEND_THIS_ID].includes(input);
 
 const createAdminUserCommand: RegisterUser = {
     aggregateCompositeIdentifier: {
@@ -98,6 +105,41 @@ const createAdminUserCommandStream = [
     grantGeoffUserRoleCommandFsa,
 ];
 
+const parseSlugDefinition = (
+    input: string
+): ResultOrError<[typeof GENERATE_THIS_ID | typeof APPEND_THIS_ID, string]> => {
+    const DELIMITER = ':';
+
+    const splitOnDelimeter = input.split(DELIMITER);
+
+    const buildErrorMessage = (input: string, problem: string) =>
+        `Encountered an invalid slug definition [${problem}]: {${input}}`;
+
+    if (splitOnDelimeter.length !== 2) {
+        return new InternalError(buildErrorMessage(input, `missing colon (:)`));
+    }
+
+    const [prefix, slug] = splitOnDelimeter;
+
+    // This would happen if the input were `id: "9:GENERATE_THIS_ID"`, for example
+    if (isSlugContext(slug)) {
+        return new InternalError(
+            buildErrorMessage(input, `${GENERATE_THIS_ID} | ${APPEND_THIS_ID} must come first`)
+        );
+    }
+
+    if (!isSlugContext(prefix)) {
+        return new InternalError(
+            buildErrorMessage(
+                input,
+                `invalid slug context (must be ${GENERATE_THIS_ID} | ${APPEND_THIS_ID})`
+            )
+        );
+    }
+
+    return [prefix, slug];
+};
+
 @CliCommand({
     name: 'execute-command-stream',
     description: 'executes one or more command FSAs in sequence',
@@ -145,7 +187,7 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
 
         const commandResults: CommandResult[] = [];
 
-        const userDefinedSlugs = commandFsasToExecute
+        const userDefinedSlugParseResult = commandFsasToExecute
             .map(
                 ({
                     payload: {
@@ -153,18 +195,24 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
                     },
                 }) => id
             )
-            .filter((id) => id.includes(GENERATE_THIS_ID))
-            .map((slugWithPrefix) => {
-                const splitOnColon = slugWithPrefix.split(':');
+            .map(parseSlugDefinition);
 
-                if (splitOnColon.length !== 2) {
-                    throw new InternalError(
-                        `encountered an invalid slug definition: ${slugWithPrefix}`
-                    );
-                }
+        const invalidSlugDefinitions = userDefinedSlugParseResult.filter(isInternalError);
 
-                return splitOnColon[1];
-            });
+        if (invalidSlugDefinitions.length > 0) {
+            const exception = new InternalError(
+                `Encountered invalid command stream definition`,
+                invalidSlugDefinitions
+            );
+
+            this.logger.log(exception.toString());
+
+            throw exception;
+        }
+
+        const userDefinedSlugs = (userDefinedSlugParseResult as [SlugContext, string][])
+            .filter(([slugContext, _]) => slugContext === GENERATE_THIS_ID)
+            .map(([_slugContext, slug]) => slug);
 
         const generatedIds = await this.idManager.generateMany(userDefinedSlugs.length);
 
@@ -179,36 +227,31 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
         }, new Map<string, AggregateId>());
 
         for (const [index, fsa] of commandFsasToExecute.entries()) {
-            /**
-             * Note that we need a more sophisticated way to deal with generating
-             * and appending aggregate context in bulk execution.
-             */
-
-            // TODO: use clone utility
-
             const {
                 payload: {
                     aggregateCompositeIdentifier: { id: idOnPayload },
                 },
             } = fsa;
 
-            const idToUse = [GENERATE_THIS_ID, APPEND_THIS_ID].some((prefix) =>
-                idOnPayload.includes(prefix)
-            )
-                ? idMap.get(idOnPayload.split(':')[1])
-                : idOnPayload;
+            const customIdParseResult = parseSlugDefinition(idOnPayload);
 
-            const fsaToExecute = {
-                ...fsa,
+            /**
+             * If parse fails, we take it to mean that the user has provided a
+             * standard UUID on the payload. If not, the command will fail for
+             * other reasons upstream.
+             */
+            const idToUse = isInternalError(customIdParseResult)
+                ? idOnPayload
+                : // look up the UUID corresponding to this slug
+                  idMap.get(customIdParseResult[1]);
+
+            const fsaToExecute = clonePlainObjectWithOverrides(fsa, {
                 payload: {
-                    ...fsa.payload,
                     aggregateCompositeIdentifier: {
-                        ...fsa.payload.aggregateCompositeIdentifier,
-                        // Note that we assume the entire command stream targets the same aggregate root
                         id: idToUse,
                     },
                 },
-            };
+            });
 
             this.logger.log(`Attempting to execute command FSA: ${JSON.stringify(fsaToExecute)}`);
 

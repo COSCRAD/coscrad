@@ -162,7 +162,7 @@ Cypress.Commands.add(`executeCommandStreamByName`, (name: string) => {
     const cliCommand = `node ../../dist/apps/coscrad-cli/main.js execute-command-stream --name=${name}`;
 
     cy.exec(cliCommand).then((_result) => {
-        if (cliCommand.includes(`execute-command-stream`)) {
+        if (cliCommand.includes(`FOOBARBAZ`)) {
             /* eslint-disable-next-line */
             debugger;
         }
