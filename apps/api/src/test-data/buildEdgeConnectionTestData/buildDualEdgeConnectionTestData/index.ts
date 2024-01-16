@@ -126,14 +126,14 @@ const additionalDualConnectionsForBibliographicCitationDTOs = [
             {
                 role: EdgeConnectionMemberRole.to,
                 compositeIdentifier: {
-                    id: '1',
+                    id: '950',
                     type: ResourceType.digitalText,
                 },
                 context: new GeneralContext(),
             },
         ],
         note: buildMultilingualTextWithSingleItem(
-            'this is why bibliographic_citations/3 is connected to digitalText/24',
+            'this is why bibliographic_citations/3 is connected to digitalText/950',
             LanguageCode.English
         ),
     },
@@ -154,14 +154,14 @@ const additionalDualConnectionsForBibliographicCitationDTOs = [
             {
                 role: EdgeConnectionMemberRole.to,
                 compositeIdentifier: {
-                    id: '1',
+                    id: '950',
                     type: ResourceType.digitalText,
                 },
                 context: new GeneralContext(),
             },
         ],
         note: buildMultilingualTextWithSingleItem(
-            'this is why bibliographic_citations/23 is connected to digitalText/24',
+            'this is why bibliographic_citations/23 is connected to digitalText/950',
             LanguageCode.English
         ),
     },

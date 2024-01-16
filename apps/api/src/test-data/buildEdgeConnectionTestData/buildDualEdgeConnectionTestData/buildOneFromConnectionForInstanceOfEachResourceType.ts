@@ -62,7 +62,7 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
                 role: EdgeConnectionMemberRole.from,
                 compositeIdentifier: {
                     type: ResourceType.digitalText,
-                    id: '1',
+                    id: '950',
                 },
                 context: new GeneralContext(),
             },

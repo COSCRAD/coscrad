@@ -2,6 +2,7 @@ import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import {
     DigitalTextCreated,
     DigitalTextTitleTranslated,
+    PageAddedToDigitalText,
 } from '../domain/models/digital-text/commands';
 import { DIGITAL_TEXT_CREATED } from '../domain/models/digital-text/constants';
 import { DigitalText } from '../domain/models/digital-text/entities/digital-text.entity';
@@ -29,6 +30,12 @@ const eventHistoryForTextWithBilingualtitle = new TestEventStream()
             translation: 'Court Case Digital Text title (English)',
             languageCode: LanguageCode.English,
         },
+    })
+    .andThen<PageAddedToDigitalText>({
+        type: `PAGE_ADDED_TO_DIGITAL_TEXT`,
+        payload: {
+            identifier: '1',
+        },
     });
 
 const eventHistoryForTextWithUserAccess = new TestEventStream()
@@ -43,6 +50,12 @@ const eventHistoryForTextWithUserAccess = new TestEventStream()
         type: 'RESOURCE_READ_ACCESS_GRANTED_TO_USER',
         payload: {
             userId: '1',
+        },
+    })
+    .andThen<PageAddedToDigitalText>({
+        type: `PAGE_ADDED_TO_DIGITAL_TEXT`,
+        payload: {
+            identifier: '1',
         },
     });
 

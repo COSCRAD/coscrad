@@ -26,7 +26,7 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
             {
                 role,
                 compositeIdentifier: {
-                    id: '2',
+                    id: '951',
                     type: ResourceType.digitalText,
                 },
                 context: new GeneralContext(),
@@ -60,7 +60,7 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
             {
                 role,
                 compositeIdentifier: {
-                    id: '1',
+                    id: '950',
                     type: ResourceType.digitalText,
                 },
                 context: new PageRangeContext({
@@ -76,7 +76,7 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
             {
                 role,
                 compositeIdentifier: {
-                    id: '2',
+                    id: '951',
                     type: ResourceType.digitalText,
                 },
                 context: new PageRangeContext({
@@ -221,7 +221,7 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
             {
                 role,
                 compositeIdentifier: {
-                    id: '2',
+                    id: '951',
                     type: ResourceType.digitalText,
                 },
                 context: new PageRangeContext({
@@ -256,7 +256,7 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
             {
                 role,
                 compositeIdentifier: {
-                    id: '1',
+                    id: '950',
                     type: ResourceType.digitalText,
                 },
                 context: new GeneralContext(),

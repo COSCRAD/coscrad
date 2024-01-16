@@ -33,7 +33,7 @@
                     },
                     {
                         "type": "digitalText",
-                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950"
                     }
                 ]
             },
@@ -73,7 +73,7 @@
                     },
                     {
                         "type": "digitalText",
-                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110951"
                     }
                 ]
             },
@@ -224,7 +224,7 @@
                     },
                     {
                         "type": "digitalText",
-                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110951"
                     }
                 ],
                 "type": "category"
@@ -235,7 +235,7 @@
                 "members": [
                     {
                         "type": "digitalText",
-                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950"
                     }
                 ],
                 "type": "category"
@@ -443,12 +443,12 @@
                             "contributorId": "John Doe"
                         },
                         "meta": {
-                            "dateCreated": 1664237194371,
-                            "id": "2a627985-1fcf-4932-b8ab-4c93d62b263a",
+                            "dateCreated": 1664237194378,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103022",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "PROMPT_TERM_CREATED",
-                        "id": "2a627985-1fcf-4932-b8ab-4c93d62b263a"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103022"
                     },
                     {
                         "payload": {
@@ -460,15 +460,30 @@
                             "languageCode": "clc"
                         },
                         "meta": {
-                            "dateCreated": 1664237194372,
-                            "id": "85d16d15-2d92-49ed-a88e-62260ae4a30b",
+                            "dateCreated": 1664237194379,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103023",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_ELICITED_FROM_PROMPT",
-                        "id": "85d16d15-2d92-49ed-a88e-62260ae4a30b"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103023"
+                    },
+                    {
+                        "payload": {
+                            "aggregateCompositeIdentifier": {
+                                "type": "term",
+                                "id": "1"
+                            }
+                        },
+                        "meta": {
+                            "dateCreated": 1664237194380,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103024",
+                            "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
+                        },
+                        "type": "RESOURCE_PUBLISHED",
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103024"
                     }
                 ],
-                "published": false,
+                "published": true,
                 "queryAccessControlList": {
                     "allowedUserIds": [],
                     "allowedGroupIds": []
@@ -506,12 +521,12 @@
                             "contributorId": "John Doe"
                         },
                         "meta": {
-                            "dateCreated": 1664237194374,
-                            "id": "1855e03e-1979-4294-a8fe-ee1f287d61f3",
+                            "dateCreated": 1664237194381,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103025",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "PROMPT_TERM_CREATED",
-                        "id": "1855e03e-1979-4294-a8fe-ee1f287d61f3"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103025"
                     },
                     {
                         "payload": {
@@ -523,15 +538,30 @@
                             "languageCode": "clc"
                         },
                         "meta": {
-                            "dateCreated": 1664237194375,
-                            "id": "77c9bd66-70f1-4e0d-86ba-1bc3cd97906b",
+                            "dateCreated": 1664237194382,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103026",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_ELICITED_FROM_PROMPT",
-                        "id": "77c9bd66-70f1-4e0d-86ba-1bc3cd97906b"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103026"
+                    },
+                    {
+                        "payload": {
+                            "aggregateCompositeIdentifier": {
+                                "type": "term",
+                                "id": "2"
+                            }
+                        },
+                        "meta": {
+                            "dateCreated": 1664237194383,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103027",
+                            "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
+                        },
+                        "type": "RESOURCE_PUBLISHED",
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103027"
                     }
                 ],
-                "published": false,
+                "published": true,
                 "queryAccessControlList": {
                     "allowedUserIds": [],
                     "allowedGroupIds": []
@@ -570,12 +600,12 @@
                             "contributorId": "Jane Deer"
                         },
                         "meta": {
-                            "dateCreated": 1664237194377,
-                            "id": "5b478e48-a938-4857-9e38-dc7f87127b9e",
+                            "dateCreated": 1664237194384,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103028",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_CREATED",
-                        "id": "5b478e48-a938-4857-9e38-dc7f87127b9e"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103028"
                     }
                 ],
                 "published": false,
@@ -613,17 +643,35 @@
                             "contributorId": "This prop will be removed soon"
                         },
                         "meta": {
-                            "dateCreated": 1664237194378,
-                            "id": "b15bf240-8ab3-42ad-ab3f-1f19afc0fc6c",
+                            "dateCreated": 1664237194385,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103029",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_CREATED",
-                        "id": "b15bf240-8ab3-42ad-ab3f-1f19afc0fc6c"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103029"
+                    },
+                    {
+                        "payload": {
+                            "aggregateCompositeIdentifier": {
+                                "type": "term",
+                                "id": "4"
+                            },
+                            "userId": "1"
+                        },
+                        "meta": {
+                            "dateCreated": 1664237194386,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103030",
+                            "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
+                        },
+                        "type": "RESOURCE_READ_ACCESS_GRANTED_TO_USER",
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103030"
                     }
                 ],
                 "published": false,
                 "queryAccessControlList": {
-                    "allowedUserIds": [],
+                    "allowedUserIds": [
+                        "1"
+                    ],
                     "allowedGroupIds": []
                 },
                 "text": {
@@ -656,12 +704,12 @@
                             "contributorId": "Sarah Smith"
                         },
                         "meta": {
-                            "dateCreated": 1664237194380,
-                            "id": "8429d798-ac96-4a15-8c88-e78459967457",
+                            "dateCreated": 1664237194363,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103007",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_CREATED",
-                        "id": "8429d798-ac96-4a15-8c88-e78459967457"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103007"
                     },
                     {
                         "payload": {
@@ -673,15 +721,30 @@
                             "languageCode": "en"
                         },
                         "meta": {
-                            "dateCreated": 1664237194381,
-                            "id": "d53ff905-1308-4ec7-8401-54d51a8ce1dc",
+                            "dateCreated": 1664237194364,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103008",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_TRANSLATED",
-                        "id": "d53ff905-1308-4ec7-8401-54d51a8ce1dc"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103008"
+                    },
+                    {
+                        "payload": {
+                            "aggregateCompositeIdentifier": {
+                                "type": "term",
+                                "id": "511"
+                            }
+                        },
+                        "meta": {
+                            "dateCreated": 1664237194365,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103009",
+                            "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
+                        },
+                        "type": "RESOURCE_PUBLISHED",
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103009"
                     }
                 ],
-                "published": false,
+                "published": true,
                 "queryAccessControlList": {
                     "allowedUserIds": [],
                     "allowedGroupIds": []
@@ -721,12 +784,12 @@
                             "contributorId": "Sarah Smith"
                         },
                         "meta": {
-                            "dateCreated": 1664237194383,
-                            "id": "860388da-3c93-4528-94cb-0044a460c18a",
+                            "dateCreated": 1664237194366,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103010",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_CREATED",
-                        "id": "860388da-3c93-4528-94cb-0044a460c18a"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103010"
                     },
                     {
                         "payload": {
@@ -738,15 +801,30 @@
                             "languageCode": "en"
                         },
                         "meta": {
-                            "dateCreated": 1664237194384,
-                            "id": "f901e805-9234-4e6e-bc6f-04492031b2a4",
+                            "dateCreated": 1664237194367,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103011",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_TRANSLATED",
-                        "id": "f901e805-9234-4e6e-bc6f-04492031b2a4"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103011"
+                    },
+                    {
+                        "payload": {
+                            "aggregateCompositeIdentifier": {
+                                "type": "term",
+                                "id": "512"
+                            }
+                        },
+                        "meta": {
+                            "dateCreated": 1664237194368,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103012",
+                            "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
+                        },
+                        "type": "RESOURCE_PUBLISHED",
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103012"
                     }
                 ],
-                "published": false,
+                "published": true,
                 "queryAccessControlList": {
                     "allowedUserIds": [],
                     "allowedGroupIds": []
@@ -786,12 +864,12 @@
                             "contributorId": "Sarah Smith"
                         },
                         "meta": {
-                            "dateCreated": 1664237194386,
-                            "id": "338448d4-b88e-422b-b023-45dd68ff2384",
+                            "dateCreated": 1664237194369,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103013",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_CREATED",
-                        "id": "338448d4-b88e-422b-b023-45dd68ff2384"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103013"
                     },
                     {
                         "payload": {
@@ -803,15 +881,30 @@
                             "languageCode": "en"
                         },
                         "meta": {
-                            "dateCreated": 1664237194387,
-                            "id": "fdd71102-0009-4b9e-9afa-d5085d4548a3",
+                            "dateCreated": 1664237194370,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103014",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_TRANSLATED",
-                        "id": "fdd71102-0009-4b9e-9afa-d5085d4548a3"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103014"
+                    },
+                    {
+                        "payload": {
+                            "aggregateCompositeIdentifier": {
+                                "type": "term",
+                                "id": "513"
+                            }
+                        },
+                        "meta": {
+                            "dateCreated": 1664237194371,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103015",
+                            "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
+                        },
+                        "type": "RESOURCE_PUBLISHED",
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103015"
                     }
                 ],
-                "published": false,
+                "published": true,
                 "queryAccessControlList": {
                     "allowedUserIds": [],
                     "allowedGroupIds": []
@@ -851,12 +944,12 @@
                             "contributorId": "Sarah Smith"
                         },
                         "meta": {
-                            "dateCreated": 1664237194389,
-                            "id": "e3bfcbd7-6373-4c67-b8dc-b7068b7339b8",
+                            "dateCreated": 1664237194372,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103016",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_CREATED",
-                        "id": "e3bfcbd7-6373-4c67-b8dc-b7068b7339b8"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103016"
                     },
                     {
                         "payload": {
@@ -868,15 +961,30 @@
                             "languageCode": "en"
                         },
                         "meta": {
-                            "dateCreated": 1664237194390,
-                            "id": "d4b0c4ce-bb03-4bc9-b50c-7575e3ff04a1",
+                            "dateCreated": 1664237194373,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103017",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_TRANSLATED",
-                        "id": "d4b0c4ce-bb03-4bc9-b50c-7575e3ff04a1"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103017"
+                    },
+                    {
+                        "payload": {
+                            "aggregateCompositeIdentifier": {
+                                "type": "term",
+                                "id": "501"
+                            }
+                        },
+                        "meta": {
+                            "dateCreated": 1664237194374,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103018",
+                            "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
+                        },
+                        "type": "RESOURCE_PUBLISHED",
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103018"
                     }
                 ],
-                "published": false,
+                "published": true,
                 "queryAccessControlList": {
                     "allowedUserIds": [],
                     "allowedGroupIds": []
@@ -916,12 +1024,12 @@
                             "contributorId": "Sarah Smith"
                         },
                         "meta": {
-                            "dateCreated": 1664237194392,
-                            "id": "de9e5a74-7580-4f9f-a267-03f6efddc18c",
+                            "dateCreated": 1664237194375,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103019",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_CREATED",
-                        "id": "de9e5a74-7580-4f9f-a267-03f6efddc18c"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103019"
                     },
                     {
                         "payload": {
@@ -933,15 +1041,30 @@
                             "languageCode": "en"
                         },
                         "meta": {
-                            "dateCreated": 1664237194393,
-                            "id": "00400771-b56e-44e0-9190-8edc1b0e33c3",
+                            "dateCreated": 1664237194376,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103020",
                             "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
                         },
                         "type": "TERM_TRANSLATED",
-                        "id": "00400771-b56e-44e0-9190-8edc1b0e33c3"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103020"
+                    },
+                    {
+                        "payload": {
+                            "aggregateCompositeIdentifier": {
+                                "type": "term",
+                                "id": "502"
+                            }
+                        },
+                        "meta": {
+                            "dateCreated": 1664237194377,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103021",
+                            "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
+                        },
+                        "type": "RESOURCE_PUBLISHED",
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103021"
                     }
                 ],
-                "published": false,
+                "published": true,
                 "queryAccessControlList": {
                     "allowedUserIds": [],
                     "allowedGroupIds": []
@@ -1770,9 +1893,75 @@
         "digital_texts": [
             {
                 "type": "digitalText",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-                "eventHistory": [],
-                "published": false,
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950",
+                "eventHistory": [
+                    {
+                        "payload": {
+                            "aggregateCompositeIdentifier": {
+                                "type": "digitalText",
+                                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950"
+                            },
+                            "title": "Court Case Digital Text title in language",
+                            "languageCodeForTitle": "hai"
+                        },
+                        "meta": {
+                            "dateCreated": 1664237194356,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103000",
+                            "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
+                        },
+                        "type": "DIGITAL_TEXT_CREATED",
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103000"
+                    },
+                    {
+                        "payload": {
+                            "aggregateCompositeIdentifier": {
+                                "type": "digitalText",
+                                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950"
+                            }
+                        },
+                        "meta": {
+                            "dateCreated": 1664237194357,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103001",
+                            "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
+                        },
+                        "type": "RESOURCE_PUBLISHED",
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103001"
+                    },
+                    {
+                        "payload": {
+                            "aggregateCompositeIdentifier": {
+                                "type": "digitalText",
+                                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950"
+                            },
+                            "translation": "Court Case Digital Text title (English)",
+                            "languageCode": "en"
+                        },
+                        "meta": {
+                            "dateCreated": 1664237194358,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103002",
+                            "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
+                        },
+                        "type": "DIGITAL_TEXT_TITLE_TRANSLATED",
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103002"
+                    },
+                    {
+                        "payload": {
+                            "aggregateCompositeIdentifier": {
+                                "type": "digitalText",
+                                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950"
+                            },
+                            "identifier": "1"
+                        },
+                        "meta": {
+                            "dateCreated": 1664237194359,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103003",
+                            "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
+                        },
+                        "type": "PAGE_ADDED_TO_DIGITAL_TEXT",
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103003"
+                    }
+                ],
+                "published": true,
                 "queryAccessControlList": {
                     "allowedUserIds": [],
                     "allowedGroupIds": []
@@ -1783,6 +1972,11 @@
                             "languageCode": "hai",
                             "role": "original",
                             "text": "Court Case Digital Text title in language"
+                        },
+                        {
+                            "languageCode": "en",
+                            "role": "free translation",
+                            "text": "Court Case Digital Text title (English)"
                         }
                     ]
                 },
@@ -1798,11 +1992,63 @@
             },
             {
                 "type": "digitalText",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-                "eventHistory": [],
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110951",
+                "eventHistory": [
+                    {
+                        "payload": {
+                            "aggregateCompositeIdentifier": {
+                                "type": "digitalText",
+                                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110951"
+                            },
+                            "title": "Digital Text number two title",
+                            "languageCodeForTitle": "en"
+                        },
+                        "meta": {
+                            "dateCreated": 1664237194360,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103004",
+                            "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
+                        },
+                        "type": "DIGITAL_TEXT_CREATED",
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103004"
+                    },
+                    {
+                        "payload": {
+                            "aggregateCompositeIdentifier": {
+                                "type": "digitalText",
+                                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110951"
+                            },
+                            "userId": "1"
+                        },
+                        "meta": {
+                            "dateCreated": 1664237194361,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103005",
+                            "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
+                        },
+                        "type": "RESOURCE_READ_ACCESS_GRANTED_TO_USER",
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103005"
+                    },
+                    {
+                        "payload": {
+                            "aggregateCompositeIdentifier": {
+                                "type": "digitalText",
+                                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110951"
+                            },
+                            "identifier": "1"
+                        },
+                        "meta": {
+                            "dateCreated": 1664237194362,
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103006",
+                            "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999"
+                        },
+                        "type": "PAGE_ADDED_TO_DIGITAL_TEXT",
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b103006"
+                    }
+                ],
                 "published": false,
                 "queryAccessControlList": {
-                    "allowedUserIds": [],
+                    "allowedUserIds": [
+                        "1"
+                    ],
                     "allowedGroupIds": []
                 },
                 "title": {
@@ -2257,8 +2503,8 @@
         ],
         "resource_edge_connections": [
             {
-                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110951",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110951",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "eventHistory": [],
@@ -2313,8 +2559,8 @@
                 }
             },
             {
-                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
                 "eventHistory": [],
@@ -2341,8 +2587,8 @@
                 }
             },
             {
-                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110951",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110951",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
                 "eventHistory": [],
@@ -2479,8 +2725,8 @@
                 }
             },
             {
-                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110951",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110951",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
                 "eventHistory": [],
@@ -2532,8 +2778,8 @@
                 }
             },
             {
-                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
                 "eventHistory": [],
@@ -2715,8 +2961,8 @@
                 }
             },
             {
-                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
                 "eventHistory": [],
@@ -2740,8 +2986,8 @@
                 }
             },
             {
-                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110951",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110951",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110019",
                 "eventHistory": [],
@@ -2815,8 +3061,8 @@
                 }
             },
             {
-                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110951",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110951",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110022",
                 "eventHistory": [],
@@ -3041,7 +3287,7 @@
             },
             {
                 "_to": "spatial_features/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
-                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112004",
                 "eventHistory": [],
@@ -3068,13 +3314,13 @@
                         {
                             "languageCode": "en",
                             "role": "original",
-                            "text": "That is why spatialFeature/300 is related to digitalText/1"
+                            "text": "That is why spatialFeature/300 is related to digitalText/950"
                         }
                     ]
                 }
             },
             {
-                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950",
                 "_from": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
@@ -3102,7 +3348,7 @@
                         {
                             "languageCode": "en",
                             "role": "original",
-                            "text": "That is why digitalText/1 is related to song/1"
+                            "text": "That is why digitalText/950 is related to song/1"
                         }
                     ]
                 }
@@ -3215,7 +3461,7 @@
                 }
             },
             {
-                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110951",
                 "_from": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113301",
@@ -3342,7 +3588,7 @@
                 }
             },
             {
-                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950",
                 "_from": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113305",
@@ -3414,7 +3660,7 @@
                 }
             },
             {
-                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950",
                 "_to": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113003",
@@ -3446,7 +3692,7 @@
             },
             {
                 "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110951",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113101",
                 "eventHistory": [],
@@ -3608,7 +3854,7 @@
             },
             {
                 "_to": "audio_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
-                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110951",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113106",
                 "eventHistory": [],
@@ -3639,7 +3885,7 @@
             },
             {
                 "_to": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110951",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113108",
                 "eventHistory": [],
@@ -3673,7 +3919,7 @@
             },
             {
                 "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110951",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113109",
                 "eventHistory": [],
@@ -3707,7 +3953,7 @@
             },
             {
                 "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_from": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110951",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113110",
                 "eventHistory": [],
@@ -3740,7 +3986,7 @@
                 }
             },
             {
-                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950",
                 "_from": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113111",
@@ -3772,7 +4018,7 @@
             },
             {
                 "_from": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113201",
                 "eventHistory": [],
@@ -3796,14 +4042,14 @@
                         {
                             "languageCode": "en",
                             "role": "original",
-                            "text": "this is why bibliographic_citations/3 is connected to digitalText/24"
+                            "text": "this is why bibliographic_citations/3 is connected to digitalText/950"
                         }
                     ]
                 }
             },
             {
                 "_from": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
-                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_to": "digital_texts/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113202",
                 "eventHistory": [],
@@ -3827,7 +4073,7 @@
                         {
                             "languageCode": "en",
                             "role": "original",
-                            "text": "this is why bibliographic_citations/23 is connected to digitalText/24"
+                            "text": "this is why bibliographic_citations/23 is connected to digitalText/950"
                         }
                     ]
                 }

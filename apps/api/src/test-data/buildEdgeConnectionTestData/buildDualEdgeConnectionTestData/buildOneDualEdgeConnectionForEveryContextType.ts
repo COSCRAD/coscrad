@@ -24,7 +24,7 @@ export default (): EdgeConnection[] =>
                     role: EdgeConnectionMemberRole.to,
                     compositeIdentifier: {
                         type: ResourceType.digitalText,
-                        id: '2',
+                        id: '951',
                     },
                     context: new PageRangeContext({
                         type: EdgeConnectionContextType.pageRange,
@@ -127,7 +127,7 @@ export default (): EdgeConnection[] =>
                     role: EdgeConnectionMemberRole.to,
                     compositeIdentifier: {
                         type: ResourceType.digitalText,
-                        id: '1',
+                        id: '950',
                     },
                     context: new GeneralContext(),
                 },

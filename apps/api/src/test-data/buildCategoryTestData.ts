@@ -63,7 +63,7 @@ export default (): Category[] => {
                 },
                 {
                     type: CategorizableType.digitalText,
-                    id: '2',
+                    id: '951',
                 },
             ],
             childrenIDs: ['8', '10'],
@@ -74,7 +74,7 @@ export default (): Category[] => {
             members: [
                 {
                     type: CategorizableType.digitalText,
-                    id: '1',
+                    id: '950',
                 },
             ],
             childrenIDs: ['6', '7'],
