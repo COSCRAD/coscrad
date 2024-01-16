@@ -90,7 +90,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
           "type": "video",
         },
         {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110951",
           "type": "digitalText",
         },
       ],
@@ -295,7 +295,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
           "type": "note",
         },
         {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950",
           "type": "digitalText",
         },
       ],
