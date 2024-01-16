@@ -998,7 +998,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
       },
       "languageCode": {
         "complexDataType": "ENUM",
-        "description": "the language in which you are naming the new digital text title",
+        "description": "the language in which you are translating the digital text's title",
         "enumLabel": "language code",
         "enumName": "LanguageCode",
         "isArray": false,
