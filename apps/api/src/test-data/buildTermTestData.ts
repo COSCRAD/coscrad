@@ -1,6 +1,4 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
-import { buildMultilingualTextFromBilingualText } from '../domain/common/build-multilingual-text-from-bilingual-text';
-import { MultilingualText } from '../domain/common/entities/multilingual-text';
+import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import {
     RESOURCE_READ_ACCESS_GRANTED_TO_USER,
     ResourceReadAccessGrantedToUser,
@@ -17,22 +15,16 @@ import { TERM_CREATED } from '../domain/models/term/commands/create-term/constan
 import { TERM_ELICITED_FROM_PROMPT } from '../domain/models/term/commands/elicit-term-from-prompt/constants';
 import { TERM_TRANSLATED } from '../domain/models/term/commands/translate-term/constants';
 import { Term } from '../domain/models/term/entities/term.entity';
+import { AggregateId } from '../domain/types/AggregateId';
 import { isNotFound } from '../lib/types/not-found';
 import { ResultOrError } from '../types/ResultOrError';
 import { TestEventStream } from './events';
 import { convertAggregatesIdToUuid } from './utilities/convertSequentialIdToUuid';
 
-const _buildBilingualText = (text: string, textEnglish: string): MultilingualText =>
-    buildMultilingualTextFromBilingualText(
-        {
-            text,
-            languageCode: LanguageCode.Chilcotin,
-        },
-        {
-            text: textEnglish,
-            languageCode: LanguageCode.English,
-        }
-    );
+const buildTermCompositeIdentifier = (id: AggregateId) => ({
+    type: AggregateType.term,
+    id,
+});
 
 const resourcePublished = {
     type: `RESOURCE_PUBLISHED`,
@@ -176,21 +168,24 @@ const englishOnlyTermEvents = new TestEventStream()
 // not published
 
 export const buildTermsForVocabularyList = () =>
-    [
-        iAmSingingEvents.as({ id: '511' }),
-        youAreSingingEvents.as({ id: '512' }),
-        sheIsSingingEvents.as({ id: '513' }),
-        iAmNotSingingEvents.as({ id: '501' }),
-        youAreNotSingingEvents.as({ id: '502' }),
-        // Missing entry to check partial filtering behaviour
-        // {
-        //     id: '03',
-        //     term: 'She is not singing (lang)',
-        //     termEnglish: 'She is not singing (Engl)',
-        //     contributorId: 'Sarah Smith',
-        // audioFilename: 'https://coscrad.org/wp-content/uploads/2023/06/503.mp3'
-        // },
-    ]
+    (
+        [
+            [iAmSingingEvents, '511'],
+            [youAreSingingEvents, '512'],
+            [sheIsSingingEvents, '513'],
+            [iAmNotSingingEvents, '501'],
+            [youAreNotSingingEvents, '502'],
+            // Missing entry to check partial filtering behaviour
+            // {
+            //     id: '03',
+            //     term: 'She is not singing (lang)',
+            //     termEnglish: 'She is not singing (Engl)',
+            //     contributorId: 'Sarah Smith',
+            // audioFilename: 'https://coscrad.org/wp-content/uploads/2023/06/503.mp3'
+            // },
+        ] as const
+    )
+        .map(([testEventStream, id]) => testEventStream.as(buildTermCompositeIdentifier(id)))
         .map((eventHistory) =>
             Term.fromEventHistory(
                 eventHistory,
@@ -202,12 +197,15 @@ export const buildTermsForVocabularyList = () =>
         .map(convertAggregatesIdToUuid);
 
 const buildStandAloneTerms = () =>
-    [
-        bilingualTerm1Events.as({ id: '1' }),
-        bilingualTerm2Events.as({ id: '2' }),
-        chilcotinOnlyTermEvents.as({ id: '3' }),
-        englishOnlyTermEvents.as({ id: '4' }),
-    ]
+    (
+        [
+            [bilingualTerm1Events, '1'],
+            [bilingualTerm2Events, '2'],
+            [chilcotinOnlyTermEvents, '3'],
+            [englishOnlyTermEvents, '4'],
+        ] as const
+    )
+        .map(([testEventStream, id]) => testEventStream.as(buildTermCompositeIdentifier(id)))
         .map((eventHistory) =>
             Term.fromEventHistory(
                 eventHistory,

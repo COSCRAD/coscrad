@@ -108,6 +108,10 @@ describe(`Term.fromEventHistory`, () => {
                     );
 
                     expect(result).toBeInstanceOf(Term);
+
+                    const { eventHistory } = result as Term;
+
+                    expect(eventHistory).toHaveLength(1);
                 });
             });
 
