@@ -1,7 +1,8 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box, Button, TextField, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import { Ack, useLoadableCommandResult } from '../../../store/slices/command-status';
 import { useLoadableGeneratedId } from '../../../store/slices/id-generation';
 import { ErrorDisplay } from '../../error-display/error-display';
@@ -26,10 +27,13 @@ export const ImmersiveCreateNoteForm = ({ onSubmit }: FormProps) => {
 
     const [text, setText] = useState('');
 
-    const [languageCode, setLanguageCode] = useState<LanguageCode>(LanguageCode.English);
+    const { defaultLanguageCode } = useContext(ConfigurableContentContext);
+
+    const [languageCode, setLanguageCode] = useState<LanguageCode>(defaultLanguageCode);
 
     const { errorInfo, isLoading, data: generatedId } = useLoadableGeneratedId();
 
+    // TODO: research this pattern to see if it can be improved
     useEffect(() => {
         if (commandResult === Ack) {
             setText('');

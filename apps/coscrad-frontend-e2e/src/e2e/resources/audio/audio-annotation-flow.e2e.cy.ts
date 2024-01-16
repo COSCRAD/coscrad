@@ -1,8 +1,7 @@
-/* eslint-disable cypress/no-unnecessary-waiting */
-import { AggregateType, MIMEType } from '@coscrad/api-interfaces';
+import { AggregateType, MIMEType, ResourceType } from '@coscrad/api-interfaces';
 import { buildDummyAggregateCompositeIdentifier } from '../../../support/utilities';
 
-const audioTitleInLanguage = 'Audio Title';
+const audioTitleInLanguage = 'Audio Title (Lang)';
 
 const basicAudioAggregateCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
     AggregateType.audioItem,
@@ -21,11 +20,15 @@ const audioDetailRoute = `/Resources/AudioItems/${basicAudioId}`;
 const validUrl =
     'https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3';
 
+const buildDetailRoute = (audioItemId: string) => `/Resources/AudioItems/${audioItemId}`;
+
 describe('the audio annotation process', () => {
     before(() => {
         cy.clearDatabase();
 
         cy.seedTestUuids(50);
+
+        cy.executeCommandStreamByName('users:create-admin');
 
         cy.seedDataWithCommand('CREATE_MEDIA_ITEM', {
             aggregateCompositeIdentifier: mediaItemCompositeIdentifier,
@@ -41,7 +44,7 @@ describe('the audio annotation process', () => {
             name: audioTitleInLanguage,
             aggregateCompositeIdentifier: basicAudioAggregateCompositeIdentifier,
             mediaItemId: mediaItemCompositeIdentifier.id,
-            lengthMilliseconds: 2500,
+            lengthMilliseconds: 16000,
         });
 
         cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
@@ -55,20 +58,22 @@ describe('the audio annotation process', () => {
         });
 
         // Skip until we have a way to check for admin access
-        it.skip(`should render the audio title`, () => {
+        it(`should render the audio title`, () => {
             cy.contains(audioTitleInLanguage);
 
             cy.getByDataAttribute('in-point-marker-button').should('not.exist');
         });
     });
 
-    describe(`when the audio has all properties`, () => {
+    describe(`when the user is logged in and the audio-item detail page is loaded`, () => {
         beforeEach(() => {
             cy.visit('/');
 
             cy.login();
 
-            cy.visit(audioDetailRoute);
+            cy.navigateToResourceIndex(ResourceType.audioItem);
+
+            cy.get(`[href="${buildDetailRoute(basicAudioId)}"]`).click();
         });
 
         describe(`when a time range is selected in the Audio player`, () => {
@@ -77,11 +82,15 @@ describe('the audio annotation process', () => {
                     audioElement.play();
                 });
 
-                cy.wait(2000);
+                cy.get('audio').then(([audioElement]) => {
+                    audioElement.currentTime = 1.5;
+                });
 
                 cy.getByDataAttribute('in-point-marker-button').click();
 
-                cy.wait(2589);
+                cy.get('audio').then(([audioElement]) => {
+                    audioElement.currentTime = 3.0;
+                });
 
                 cy.getByDataAttribute('out-point-marker-button').click();
             });
@@ -90,7 +99,7 @@ describe('the audio annotation process', () => {
                 cy.getByDataAttribute('create-note-about-audio-form');
             });
 
-            describe(`when the form is blank the submit button`, () => {
+            describe(`the form`, () => {
                 it('should be disabled', () => {
                     cy.getByDataAttribute('submit-note').should('be.disabled');
                 });
@@ -99,7 +108,7 @@ describe('the audio annotation process', () => {
             describe(`when the form is complete`, () => {
                 const newAnnotationText = 'This is an interesting comment.';
 
-                const languageCodeForAnnotation = 'hai';
+                const languageCodeForAnnotation = 'en';
 
                 beforeEach(() => {
                     cy.getByDataAttribute('text:note').type(newAnnotationText);
@@ -117,13 +126,13 @@ describe('the audio annotation process', () => {
                     });
                 });
 
-                describe(`when the annotation form is submitted`, () => {
-                    it(`the note should appear in the notes panel for this audio item`, () => {
+                describe(`when the form is submitted`, () => {
+                    it(`should display the note with correct time range`, () => {
                         cy.getByDataAttribute('submit-note').click();
 
                         cy.getByDataAttribute('open-notes-panel-button').click();
 
-                        cy.getByDataAttribute('selfNotesPanel').should('exist');
+                        cy.getByDataAttribute('self-note-time-range-context').should('exist');
                     });
                 });
             });

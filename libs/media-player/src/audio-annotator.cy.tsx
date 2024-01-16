@@ -29,7 +29,11 @@ const AudioAnnotatorWidget = ({ audioUrl }: AudioAnnotatorWidgetProps): JSX.Elem
                 <Typography variant="h5">AudioAnnotatorWidget (Wrapper to the Audio)</Typography>
             </Item>
             <Item>
-                <AudioAnnotator audioUrl={audioUrl} onTimeRangeSelected={onTimeRangeSelected} />
+                <AudioAnnotator
+                    audioUrl={audioUrl}
+                    selectedTimeRange={selectedTimeRange}
+                    onTimeRangeSelected={onTimeRangeSelected}
+                />
             </Item>
             {selectedTimeRange !== null ? (
                 <Item

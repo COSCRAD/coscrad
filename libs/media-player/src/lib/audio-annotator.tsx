@@ -15,6 +15,8 @@ import {
     TimeRangeSelectionStatusIndicator,
 } from './time-range-selection-visual';
 
+const DEFAULT_HELP_MESSAGE = '< Select a time range for an annotation';
+
 type Nullable<T> = T | null;
 
 export type MedidaPlayDirection = 'forward' | 'reverse';
@@ -57,23 +59,40 @@ export type TimeRangeSelection = {
 interface AudioAnnotatorProps {
     audioUrl: string;
     mimeType?: AudioMIMEType;
+    selectedTimeRange: Nullable<TimeRangeSelection>;
     onTimeRangeSelected: (timeRangeSelected: Nullable<TimeRangeSelection>) => void;
 }
 
 export const AudioAnnotator = ({
     audioUrl,
     mimeType,
+    selectedTimeRange,
     onTimeRangeSelected,
 }: AudioAnnotatorProps) => {
     const audioRef = useRef<HTMLAudioElement>(null);
 
-    const [inPointSeconds, setInPointSeconds] = useState<Nullable<number>>(null);
+    // This is a bit awkward, but it works
+    const {
+        inPointSeconds: defaultInPointSeconds = null,
+        outPointSeconds: defaultOutPointSeconds = null,
+    } = selectedTimeRange || { inPointSeconds: null, outPointSeconds: null };
 
-    const [outPointSeconds, setOutPointSeconds] = useState<Nullable<number>>(null);
+    const [inPointSeconds, setInPointSeconds] = useState<Nullable<number>>(defaultInPointSeconds);
+
+    const [outPointSeconds, setOutPointSeconds] =
+        useState<Nullable<number>>(defaultOutPointSeconds);
+
+    useEffect(() => {
+        if (selectedTimeRange === null) {
+            setInPointSeconds(null);
+
+            setOutPointSeconds(null);
+        }
+    }, [selectedTimeRange]);
 
     const [isPlayable, setIsPlayable] = useState<boolean>(false);
 
-    const [errorMessage, setErrorMessage] = useState<string>('');
+    const [errorMessage, setErrorMessage] = useState<string>(DEFAULT_HELP_MESSAGE);
 
     const timeRangeSelectionStatus = calculateTimeRangeSelectionStatus(
         inPointSeconds,

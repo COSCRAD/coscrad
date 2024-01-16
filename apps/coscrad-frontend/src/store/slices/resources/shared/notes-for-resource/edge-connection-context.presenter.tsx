@@ -1,10 +1,10 @@
-import { IEdgeConnectionContext } from '@coscrad/api-interfaces';
+import { EdgeConnectionContextType, IEdgeConnectionContext } from '@coscrad/api-interfaces';
 import { asFormattedMediaTimecodeString } from '@coscrad/media-player';
 import { Box, Typography } from '@mui/material';
-import { TimeRange } from '../../../../../components/resources/audio-item/audio-item-detail.full-view.presenter';
+import { TimeRangeMilliseconds } from '../../../../../components/resources/audio-item/audio-item-detail.full-view.presenter';
 import { convertMillisecondsToSeconds } from '../../../../../components/resources/utils/math';
-import { EdgeConnectionContextType } from './edge-connection-context-type.enum';
 
+// Share via lib to frontend and backend
 const upperCaseFirstLetter = (str: string) => {
     return str
         .split(' ')
@@ -12,15 +12,37 @@ const upperCaseFirstLetter = (str: string) => {
         .join(' ');
 };
 
+const TimeRangeContextVisual = (): JSX.Element => (
+    <Box
+        component="span"
+        sx={{
+            height: '20px',
+            width: '70px',
+            backgroundColor: '#75ecff',
+            borderRight: '1px solid #0671ff',
+            borderLeft: '1px solid #0671ff',
+            borderRadius: '5px',
+            display: 'inline-block',
+            ml: 1,
+            mr: 1,
+        }}
+    />
+);
+
 type TimeRangeContext = {
     type: EdgeConnectionContextType.timeRange;
-    timeRange: TimeRange;
+    timeRange: TimeRangeMilliseconds;
 };
 
 interface EdgeConnectionContextPresenterProps {
     context: IEdgeConnectionContext;
 }
 
+/**
+ * NOTE: This presenter is a temporary step before properly implementing
+ * context using a `noteContext` in the base resource detail view interface and
+ * implement it for all detail views
+ */
 export const EdgeConnectionContextPresenter = ({
     context,
 }: EdgeConnectionContextPresenterProps): JSX.Element => {
@@ -32,20 +54,17 @@ export const EdgeConnectionContextPresenter = ({
         } = context as TimeRangeContext;
 
         return (
-            <Box>
-                <Typography component="span" variant="body1">
-                    <strong>Time Range:</strong>&nbsp;
-                    {asFormattedMediaTimecodeString(
-                        convertMillisecondsToSeconds(inPointMilliseconds)
-                    )}{' '}
-                    &lt;----&gt;{' '}
-                    {asFormattedMediaTimecodeString(
-                        convertMillisecondsToSeconds(outPointMilliseconds)
-                    )}
-                </Typography>
+            <Box
+                sx={{ display: 'flex', alignItems: 'center' }}
+                data-testid="self-note-time-range-context"
+            >
+                <strong>Time Range:</strong>&nbsp;
+                {asFormattedMediaTimecodeString(convertMillisecondsToSeconds(inPointMilliseconds))}
+                <TimeRangeContextVisual />
+                {asFormattedMediaTimecodeString(convertMillisecondsToSeconds(outPointMilliseconds))}
             </Box>
         );
-    } else {
-        return <Typography>{JSON.stringify(context)}</Typography>;
     }
+
+    return <Typography>{JSON.stringify(context)}</Typography>;
 };

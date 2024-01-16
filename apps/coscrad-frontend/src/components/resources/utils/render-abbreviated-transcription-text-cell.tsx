@@ -1,11 +1,14 @@
 import { Typography } from '@mui/material';
+import { TruncateTextForDisplay } from './truncate-text-for-display';
+
+const WORD_LENGTH_LIMIT = 10;
 
 export const renderAbbreviatedTranscriptionTextCell = (text: string) => {
     if (text.length === 0) return null;
 
     return (
         <Typography variant="body1">
-            {text.split(' ').map((word, index) => (index < 10 ? `${word} ` : ''))}&hellip;
+            <TruncateTextForDisplay text={text} limit={WORD_LENGTH_LIMIT} />
         </Typography>
     );
 };

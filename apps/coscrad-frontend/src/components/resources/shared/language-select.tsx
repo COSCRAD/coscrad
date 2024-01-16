@@ -13,7 +13,7 @@ export const LanguageSelect = ({ onSelectLanguage }: LanguageSelectProps) => {
     return (
         <Select
             data-testid={`select:language`}
-            defaultValue={LanguageCode.English}
+            defaultValue={defaultLanguageCode}
             label="Language"
             onChange={(e) => {
                 onSelectLanguage(e.target.value as LanguageCode);
