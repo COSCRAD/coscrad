@@ -177,11 +177,11 @@ const englishOnlyTermEvents = new TestEventStream()
 
 export const buildTermsForVocabularyList = () =>
     [
-        Term.fromEventHistory(iAmSingingEvents.as({ id: '511' }), '511'),
-        Term.fromEventHistory(youAreSingingEvents.as({ id: '512' }), '512'),
-        Term.fromEventHistory(sheIsSingingEvents.as({ id: '513' }), '513'),
-        Term.fromEventHistory(iAmNotSingingEvents.as({ id: '501' }), '501'),
-        Term.fromEventHistory(youAreNotSingingEvents.as({ id: '502' }), '502'),
+        iAmSingingEvents.as({ id: '511' }),
+        youAreSingingEvents.as({ id: '512' }),
+        sheIsSingingEvents.as({ id: '513' }),
+        iAmNotSingingEvents.as({ id: '501' }),
+        youAreNotSingingEvents.as({ id: '502' }),
         // Missing entry to check partial filtering behaviour
         // {
         //     id: '03',
@@ -191,17 +191,29 @@ export const buildTermsForVocabularyList = () =>
         // audioFilename: 'https://coscrad.org/wp-content/uploads/2023/06/503.mp3'
         // },
     ]
+        .map((eventHistory) =>
+            Term.fromEventHistory(
+                eventHistory,
+                eventHistory[0].payload.aggregateCompositeIdentifier.id
+            )
+        )
         .filter((result): result is ResultOrError<Term> => !isNotFound(result))
         .filter(validAggregateOrThrow)
         .map(convertAggregatesIdToUuid);
 
 const buildStandAloneTerms = () =>
     [
-        Term.fromEventHistory(bilingualTerm1Events.as({ id: '1' }), '1'),
-        Term.fromEventHistory(bilingualTerm2Events.as({ id: '2' }), '2'),
-        Term.fromEventHistory(chilcotinOnlyTermEvents.as({ id: '3' }), '3'),
-        Term.fromEventHistory(englishOnlyTermEvents.as({ id: '4' }), '4'),
+        bilingualTerm1Events.as({ id: '1' }),
+        bilingualTerm2Events.as({ id: '2' }),
+        chilcotinOnlyTermEvents.as({ id: '3' }),
+        englishOnlyTermEvents.as({ id: '4' }),
     ]
+        .map((eventHistory) =>
+            Term.fromEventHistory(
+                eventHistory,
+                eventHistory[0].payload.aggregateCompositeIdentifier.id
+            )
+        )
         .filter((result): result is ResultOrError<Term> => !isNotFound(result))
         .filter(validAggregateOrThrow)
         .map(convertAggregatesIdToUuid);
@@ -211,12 +223,16 @@ const buildStandAloneTerms = () =>
  * run `validateTestData.spec.ts` to ensure your test data satisfies all domain
  * invariants.
  */
-export default (): Term[] => [
-    // ...[
+export default (): Term[] => {
+    const allTerms = [
+        // ...[
 
-    // ]
-    //     .map((dto) => new Term({ ...dto, type: ResourceType.term, isPromptTerm: false }))
-    //     .map(convertAggregatesIdToUuid),
-    ...buildStandAloneTerms(),
-    ...buildTermsForVocabularyList(),
-];
+        // ]
+        //     .map((dto) => new Term({ ...dto, type: ResourceType.term, isPromptTerm: false }))
+        //     .map(convertAggregatesIdToUuid),
+        ...buildStandAloneTerms(),
+        ...buildTermsForVocabularyList(),
+    ];
+
+    return allTerms;
+};

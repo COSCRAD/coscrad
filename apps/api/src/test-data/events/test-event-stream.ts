@@ -483,9 +483,13 @@ export type EventBuilder<T extends BaseEvent> = (
 ) => T;
 
 export class TestEventStream {
+    private readonly TIME_OFFSET = 100; // 100 ms between events
+
     private readonly eventOverrides: EventTypeAndPayloadOverrides<BaseEvent>[];
 
     private readonly eventBuilderMap: Map<string, EventBuilder<BaseEvent>> = new Map();
+
+    private readonly startingDate: number = dummyDateNow;
 
     constructor(eventOverrides: EventTypeAndPayloadOverrides<BaseEvent>[] = []) {
         this.eventOverrides = eventOverrides;
@@ -545,7 +549,15 @@ export class TestEventStream {
          * Save a reference to the return of `andThen`. You can chain another
          * `andThen` without mutating the original.
          */
-        return this.clone([...this.eventOverrides, eventTypeAndPayloadOverrides]);
+        return this.clone([
+            ...this.eventOverrides,
+            {
+                ...eventTypeAndPayloadOverrides,
+                meta: {
+                    dateCreated: this.startingDate + this.eventOverrides.length * this.TIME_OFFSET,
+                },
+            },
+        ]);
     }
 
     /**
