@@ -22,6 +22,21 @@ const validUrl =
 
 const buildDetailRoute = (audioItemId: string) => `/Resources/AudioItems/${audioItemId}`;
 
+const millisecondsToRoundedSeconds = (milliseconds: number) => {
+    const seconds = milliseconds / 1000;
+
+    // round to one decimal place
+    return Math.round(seconds * 10) / 10;
+};
+
+const isWithinToleranceOfFloat = (value: number, targetValue: number) => {
+    const max = targetValue + 0.5;
+
+    const min = targetValue - 0.5;
+
+    return value >= min && value <= max;
+};
+
 describe('the audio annotation process', () => {
     before(() => {
         cy.clearDatabase();
@@ -77,25 +92,29 @@ describe('the audio annotation process', () => {
         });
 
         describe(`when a time range is selected in the Audio player`, () => {
+            const inPointSeconds = 1.5;
+
+            const outPointSeconds = 3.0;
+
             beforeEach(() => {
                 cy.get('audio').then(([audioElement]) => {
                     audioElement.play();
                 });
 
                 cy.get('audio').then(([audioElement]) => {
-                    audioElement.currentTime = 1.5;
+                    audioElement.currentTime = inPointSeconds;
                 });
 
                 cy.getByDataAttribute('in-point-marker-button').click();
 
                 cy.get('audio').then(([audioElement]) => {
-                    audioElement.currentTime = 3.0;
+                    audioElement.currentTime = outPointSeconds;
                 });
 
                 cy.getByDataAttribute('out-point-marker-button').click();
             });
 
-            it.only('should show the annotation form', () => {
+            it('should show the annotation form', () => {
                 cy.getByDataAttribute('create-note-about-audio-form');
             });
 
@@ -108,7 +127,7 @@ describe('the audio annotation process', () => {
             describe(`when the form is complete`, () => {
                 const newAnnotationText = 'This is an interesting comment.';
 
-                const languageCodeForAnnotation = 'hai';
+                const languageCodeForAnnotation = 'en';
 
                 beforeEach(() => {
                     cy.getByDataAttribute('text:note').type(newAnnotationText);
@@ -127,12 +146,70 @@ describe('the audio annotation process', () => {
                 });
 
                 describe(`when the form is submitted`, () => {
-                    it(`should display the note`, () => {
+                    beforeEach(() => {
                         cy.getByDataAttribute('submit-note').click();
+                    });
 
+                    it(`should display the note with correct time range`, () => {
                         cy.getByDataAttribute('open-notes-panel-button').click();
 
-                        cy.getByDataAttribute('selfNotesPanel').should('exist');
+                        cy.getByDataAttribute('self-note-time-range-context')
+                            .invoke('text')
+                            .then((timeRangeJson) => {
+                                const timeRange = JSON.parse(timeRangeJson);
+
+                                const { inPointMilliseconds, outPointMilliseconds } = timeRange;
+
+                                const result =
+                                    isWithinToleranceOfFloat(
+                                        millisecondsToRoundedSeconds(inPointMilliseconds),
+                                        inPointSeconds
+                                    ) &&
+                                    isWithinToleranceOfFloat(
+                                        millisecondsToRoundedSeconds(outPointMilliseconds),
+                                        outPointSeconds
+                                    );
+
+                                cy.log(
+                                    `inPointSeconds: ${millisecondsToRoundedSeconds(
+                                        inPointMilliseconds
+                                    )} = ${inPointSeconds}`
+                                );
+
+                                cy.log(
+                                    `outPointSeconds: ${millisecondsToRoundedSeconds(
+                                        outPointMilliseconds
+                                    )} = ${outPointSeconds}`
+                                );
+
+                                expect(result).to.be.true;
+                            });
+                    });
+
+                    describe(`before the successful command is acknowledged, the annotation form`, () => {
+                        beforeEach(() => {
+                            cy.get('audio').then(([audioElement]) => {
+                                audioElement.play();
+                            });
+
+                            cy.get('audio').then(([audioElement]) => {
+                                audioElement.currentTime = inPointSeconds;
+                            });
+
+                            cy.getByDataAttribute('in-point-marker-button').click();
+
+                            cy.get('audio').then(([audioElement]) => {
+                                audioElement.currentTime = outPointSeconds;
+                            });
+
+                            cy.getByDataAttribute('out-point-marker-button').click();
+                        });
+
+                        it.only(`should be disabled`, () => {
+                            cy.getByDataAttribute('note-form-ui-feedback').should('exist');
+
+                            cy.getByDataAttribute('note-form').should('not.exist');
+                        });
                     });
                 });
             });

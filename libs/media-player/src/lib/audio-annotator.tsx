@@ -15,8 +15,6 @@ import {
     TimeRangeSelectionStatusIndicator,
 } from './time-range-selection-visual';
 
-const DEFAULT_HELP_MESSAGE = 'Use the Marker Buttons to select a time range for an annotation';
-
 type Nullable<T> = T | null;
 
 export type MedidaPlayDirection = 'forward' | 'reverse';
@@ -92,7 +90,7 @@ export const AudioAnnotator = ({
 
     const [isPlayable, setIsPlayable] = useState<boolean>(false);
 
-    const [errorMessage, setErrorMessage] = useState<string>(DEFAULT_HELP_MESSAGE);
+    const [errorMessage, setErrorMessage] = useState<string>('');
 
     const timeRangeSelectionStatus = calculateTimeRangeSelectionStatus(
         inPointSeconds,
@@ -113,7 +111,7 @@ export const AudioAnnotator = ({
 
     useEffect(() => {
         if (isNullOrUndefined(inPointSeconds)) {
-            setErrorMessage(DEFAULT_HELP_MESSAGE);
+            setErrorMessage('');
 
             onTimeRangeSelected(null);
 
@@ -250,15 +248,19 @@ export const AudioAnnotator = ({
                     Your browser does not support the audio element.
                 </StyledAudioElement>
                 <Box sx={{ height: '12px' }}>
-                    {errorMessage !== '' ? (
-                        <Typography
-                            data-testid="audio-error-message"
-                            variant="body2"
-                            sx={{ color: '#A40011', fontWeight: 'bold', m: 1 }}
-                        >
-                            {errorMessage}
-                        </Typography>
-                    ) : null}
+                    <Typography
+                        data-testid="audio-error-message"
+                        variant="body2"
+                        sx={{ color: '#A40011', fontWeight: 'bold', m: 1 }}
+                    >
+                        {errorMessage !== '' ? (
+                            <span>{errorMessage}</span>
+                        ) : (
+                            <span>
+                                Use the Marker Buttons to select a time range for an annotation
+                            </span>
+                        )}
+                    </Typography>
                 </Box>
                 <Box mt={1}>
                     <Tooltip title="Mark In Point">

@@ -13,5 +13,5 @@ interface UIFeedbackProps {
 }
 
 export const UIFeedback = ({ feedbackMessage }: UIFeedbackProps): JSX.Element => (
-    <StyledMessage>{feedbackMessage}</StyledMessage>
+    <StyledMessage data-testid="note-form-ui-feedback">{feedbackMessage}</StyledMessage>
 );

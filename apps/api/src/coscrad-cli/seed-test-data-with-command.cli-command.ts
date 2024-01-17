@@ -29,8 +29,6 @@ export class SeedTestDataWithCommand extends CliCommandRunner {
     async run(_passedParams: string[], options: SeedTestDataWithCommandOptions): Promise<void> {
         const { type: commandType, payloadOverrides } = options;
 
-        console.log({ commandType });
-
         if (!fsaMap.has(commandType)) {
             this.logger.log(`failed to find a fixture command of type: ${commandType}. Exiting.`);
 

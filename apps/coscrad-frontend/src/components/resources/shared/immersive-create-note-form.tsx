@@ -67,6 +67,7 @@ export const ImmersiveCreateNoteForm = ({ onSubmit }: FormProps) => {
                 <UIFeedback feedbackMessage={acknowledgeResultFeedback} />
             ) : (
                 <>
+                    <div data-testid="note-form" />
                     <TextField
                         sx={{ width: '80%' }}
                         data-testid={`text:note`}
