@@ -58,7 +58,7 @@ exports[`buildTreeFromNodes when given a valid tree should return the expected r
                   "type": "term",
                 },
                 {
-                  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110951",
                   "type": "digitalText",
                 },
               ],
@@ -118,7 +118,7 @@ exports[`buildTreeFromNodes when given a valid tree should return the expected r
               "label": "felines",
               "members": [
                 {
-                  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950",
                   "type": "digitalText",
                 },
               ],
