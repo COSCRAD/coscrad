@@ -1,16 +1,8 @@
 import { EdgeConnectionContextType, IEdgeConnectionContext } from '@coscrad/api-interfaces';
 import { asFormattedMediaTimecodeString } from '@coscrad/media-player';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, styled } from '@mui/material';
 import { TimeRangeMilliseconds } from '../../../../../components/resources/audio-item/audio-item-detail.full-view.presenter';
 import { convertMillisecondsToSeconds } from '../../../../../components/resources/utils/math';
-
-// Share via lib to frontend and backend
-const upperCaseFirstLetter = (str: string) => {
-    return str
-        .split(' ')
-        .map((word) => [word.charAt(0).toUpperCase(), word.slice(1)].join(''))
-        .join(' ');
-};
 
 const TimeRangeContextVisual = (): JSX.Element => (
     <Box
@@ -28,6 +20,12 @@ const TimeRangeContextVisual = (): JSX.Element => (
         }}
     />
 );
+
+const HiddenData = styled('div')({
+    visibility: 'hidden',
+    height: 0,
+    width: 0,
+});
 
 type TimeRangeContext = {
     type: EdgeConnectionContextType.timeRange;
@@ -54,11 +52,14 @@ export const EdgeConnectionContextPresenter = ({
         } = context as TimeRangeContext;
 
         return (
-            <Box
-                sx={{ display: 'flex', alignItems: 'center' }}
-                data-testid="self-note-time-range-context"
-            >
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <strong>Time Range:</strong>&nbsp;
+                <HiddenData data-testid="self-note-time-range-context">
+                    {JSON.stringify({
+                        inPointMilliseconds: inPointMilliseconds,
+                        outPointMilliseconds: outPointMilliseconds,
+                    })}
+                </HiddenData>
                 {asFormattedMediaTimecodeString(convertMillisecondsToSeconds(inPointMilliseconds))}
                 <TimeRangeContextVisual />
                 {asFormattedMediaTimecodeString(convertMillisecondsToSeconds(outPointMilliseconds))}

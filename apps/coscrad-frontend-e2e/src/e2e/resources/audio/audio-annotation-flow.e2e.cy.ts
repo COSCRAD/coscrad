@@ -22,6 +22,13 @@ const validUrl =
 
 const buildDetailRoute = (audioItemId: string) => `/Resources/AudioItems/${audioItemId}`;
 
+const millisecondsToRoundedSeconds = (milliseconds: number) => {
+    const seconds = milliseconds / 1000;
+
+    // round to one decimal place
+    return Math.round(seconds * 10) / 10;
+};
+
 describe('the audio annotation process', () => {
     before(() => {
         cy.clearDatabase();
@@ -77,19 +84,23 @@ describe('the audio annotation process', () => {
         });
 
         describe(`when a time range is selected in the Audio player`, () => {
+            const inPointSeconds = 1.5;
+
+            const outPointSeconds = 3.0;
+
             beforeEach(() => {
                 cy.get('audio').then(([audioElement]) => {
                     audioElement.play();
                 });
 
                 cy.get('audio').then(([audioElement]) => {
-                    audioElement.currentTime = 1.5;
+                    audioElement.currentTime = inPointSeconds;
                 });
 
                 cy.getByDataAttribute('in-point-marker-button').click();
 
                 cy.get('audio').then(([audioElement]) => {
-                    audioElement.currentTime = 3.0;
+                    audioElement.currentTime = outPointSeconds;
                 });
 
                 cy.getByDataAttribute('out-point-marker-button').click();
@@ -132,7 +143,21 @@ describe('the audio annotation process', () => {
 
                         cy.getByDataAttribute('open-notes-panel-button').click();
 
-                        cy.getByDataAttribute('self-note-time-range-context').should('exist');
+                        cy.getByDataAttribute('self-note-time-range-context')
+                            .invoke('text')
+                            .then((timeRangeJson) => {
+                                const timeRange = JSON.parse(timeRangeJson);
+
+                                const { inPointMilliseconds, outPointMilliseconds } = timeRange;
+
+                                expect(millisecondsToRoundedSeconds(inPointMilliseconds)).to.equal(
+                                    inPointSeconds
+                                );
+
+                                expect(millisecondsToRoundedSeconds(outPointMilliseconds)).to.equal(
+                                    outPointSeconds
+                                );
+                            });
                     });
                 });
             });

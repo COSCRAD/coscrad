@@ -1,13 +1,19 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button, TextField } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import { Ack, useLoadableCommandResult } from '../../../store/slices/command-status';
 import { useLoadableGeneratedId } from '../../../store/slices/id-generation';
 import { ErrorDisplay } from '../../error-display/error-display';
 import { Loading } from '../../loading';
+import { UIFeedback } from '../utils/ui-feedback';
 import { LanguageSelect } from './language-select';
+
+const acknowledgeResultFeedback = [
+    'Please acknowledge the outcome of the previous command below to',
+    'open the annotation form.',
+].join(' ');
 
 interface FormProps {
     onSubmit: (text: string, languageCode: LanguageCode, id: string) => void;
@@ -58,31 +64,32 @@ export const ImmersiveCreateNoteForm = ({ onSubmit }: FormProps) => {
         <Box>
             {/* TODO Style this as a validation warning */}
             {isPreviousCommandInQueue ? (
-                <Typography variant="body1">
-                    Please acknowledge the outcome of the previous command below.
-                </Typography>
-            ) : null}
-            <TextField
-                sx={{ width: '80%' }}
-                data-testid={`text:note`}
-                onChange={(e) => {
-                    setText(e.target.value);
-                }}
-            ></TextField>
-            <LanguageSelect
-                onSelectLanguage={(newLanguageCode: LanguageCode) => {
-                    setLanguageCode(newLanguageCode);
-                }}
-            />
-            <Button
-                data-testid={`submit-note`}
-                disabled={isDisabled}
-                onClick={() => {
-                    onSubmit(text, languageCode, generatedId);
-                }}
-            >
-                ADD NOTE
-            </Button>
+                <UIFeedback feedbackMessage={acknowledgeResultFeedback} />
+            ) : (
+                <>
+                    <TextField
+                        sx={{ width: '80%' }}
+                        data-testid={`text:note`}
+                        onChange={(e) => {
+                            setText(e.target.value);
+                        }}
+                    ></TextField>
+                    <LanguageSelect
+                        onSelectLanguage={(newLanguageCode: LanguageCode) => {
+                            setLanguageCode(newLanguageCode);
+                        }}
+                    />
+                    <Button
+                        data-testid={`submit-note`}
+                        disabled={isDisabled}
+                        onClick={() => {
+                            onSubmit(text, languageCode, generatedId);
+                        }}
+                    >
+                        ADD NOTE
+                    </Button>
+                </>
+            )}
         </Box>
     );
 };

@@ -15,7 +15,7 @@ import {
     TimeRangeSelectionStatusIndicator,
 } from './time-range-selection-visual';
 
-const DEFAULT_HELP_MESSAGE = '< Select a time range for an annotation';
+const DEFAULT_HELP_MESSAGE = 'Use the Marker Buttons to select a time range for an annotation';
 
 type Nullable<T> = T | null;
 
@@ -113,7 +113,7 @@ export const AudioAnnotator = ({
 
     useEffect(() => {
         if (isNullOrUndefined(inPointSeconds)) {
-            setErrorMessage('');
+            setErrorMessage(DEFAULT_HELP_MESSAGE);
 
             onTimeRangeSelected(null);
 
