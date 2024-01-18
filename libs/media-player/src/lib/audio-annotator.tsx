@@ -15,7 +15,7 @@ import {
     TimeRangeSelectionStatusIndicator,
 } from './time-range-selection-visual';
 
-type Nullable<T> = T | null;
+export type Nullable<T> = T | null;
 
 export type MedidaPlayDirection = 'forward' | 'reverse';
 

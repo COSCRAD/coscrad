@@ -29,14 +29,6 @@ const millisecondsToRoundedSeconds = (milliseconds: number) => {
     return Math.round(seconds * 10) / 10;
 };
 
-const isWithinToleranceOfFloat = (value: number, targetValue: number) => {
-    const max = targetValue + 0.5;
-
-    const min = targetValue - 0.5;
-
-    return value >= min && value <= max;
-};
-
 describe('the audio annotation process', () => {
     before(() => {
         cy.clearDatabase();
@@ -160,29 +152,15 @@ describe('the audio annotation process', () => {
 
                                 const { inPointMilliseconds, outPointMilliseconds } = timeRange;
 
-                                const result =
-                                    isWithinToleranceOfFloat(
-                                        millisecondsToRoundedSeconds(inPointMilliseconds),
-                                        inPointSeconds
-                                    ) &&
-                                    isWithinToleranceOfFloat(
-                                        millisecondsToRoundedSeconds(outPointMilliseconds),
-                                        outPointSeconds
-                                    );
+                                const tolerance = 0.2;
 
-                                cy.log(
-                                    `inPointSeconds: ${millisecondsToRoundedSeconds(
-                                        inPointMilliseconds
-                                    )} = ${inPointSeconds}`
-                                );
+                                expect(
+                                    millisecondsToRoundedSeconds(inPointMilliseconds)
+                                ).to.be.closeTo(inPointSeconds, tolerance);
 
-                                cy.log(
-                                    `outPointSeconds: ${millisecondsToRoundedSeconds(
-                                        outPointMilliseconds
-                                    )} = ${outPointSeconds}`
-                                );
-
-                                expect(result).to.be.true;
+                                expect(
+                                    millisecondsToRoundedSeconds(outPointMilliseconds)
+                                ).to.be.closeTo(outPointSeconds, tolerance);
                             });
                     });
 
@@ -205,7 +183,7 @@ describe('the audio annotation process', () => {
                             cy.getByDataAttribute('out-point-marker-button').click();
                         });
 
-                        it.only(`should be disabled`, () => {
+                        it(`should be disabled`, () => {
                             cy.getByDataAttribute('note-form-ui-feedback').should('exist');
 
                             cy.getByDataAttribute('note-form').should('not.exist');

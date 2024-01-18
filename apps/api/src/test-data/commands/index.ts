@@ -18,7 +18,6 @@ export const buildTestCommandFsaMap = () =>
     [
         // Resources
         ...buildAudioItemTestCommandFsas(),
-        ...buildAudioItemTestCommandFsas(),
         ...buildBibliographicCitationTestCommandFsas(),
         ...buildDigitalTextCommandFsas(),
         ...buildGeneralResourceTestCommandFsas(),

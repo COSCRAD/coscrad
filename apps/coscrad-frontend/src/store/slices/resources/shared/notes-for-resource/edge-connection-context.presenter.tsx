@@ -1,7 +1,7 @@
 import { EdgeConnectionContextType, IEdgeConnectionContext } from '@coscrad/api-interfaces';
 import { asFormattedMediaTimecodeString } from '@coscrad/media-player';
 import { Box, Typography, styled } from '@mui/material';
-import { TimeRangeMilliseconds } from '../../../../../components/resources/audio-item/audio-item-detail.full-view.presenter';
+import { TimeRangeMilliseconds } from '../../../../../components/resources/audio-item/interactive-annotator';
 import { convertMillisecondsToSeconds } from '../../../../../components/resources/utils/math';
 
 const TimeRangeContextVisual = (): JSX.Element => (
