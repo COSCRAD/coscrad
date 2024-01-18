@@ -38,6 +38,7 @@ import {
 import { ContentAddedToDigitalTextPage } from '../commands/add-content-to-digital-text-page';
 import { ADD_PAGE_TO_DIGITAL_TEXT, CREATE_DIGITAL_TEXT } from '../constants';
 import { FailedToUpdateDigitalTextPageError } from '../errors';
+import { CannotAddAudioForTitleInGivenLanguageError } from '../errors/cannot-add--audio-for-title-in-given-language.error';
 import { CannotAddPageWithDuplicateIdentifierError } from '../errors/cannot-add-page-with-duplicate-identifier.error';
 import { CannotOverrideAudioForPageError } from '../errors/cannot-override-audio-for-page.error';
 import { DuplicateDigitalTextTitleError } from '../errors/duplicate-digital-text-title.error';
@@ -256,6 +257,14 @@ export class DigitalText extends Resource {
         audioItemId: AggregateId,
         languageCode: LanguageCode
     ): ResultOrError<DigitalText> {
+        if (!this.title.has(languageCode)) {
+            return new CannotAddAudioForTitleInGivenLanguageError(
+                this.id,
+                audioItemId,
+                languageCode
+            );
+        }
+
         const audioUpdateResult = this.audioForTitle.addAudio(audioItemId, languageCode);
 
         if (isInternalError(audioUpdateResult)) {
