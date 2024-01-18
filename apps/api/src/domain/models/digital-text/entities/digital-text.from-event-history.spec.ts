@@ -10,7 +10,7 @@ import { NotFound, isNotFound } from '../../../../lib/types/not-found';
 import { clonePlainObjectWithOverrides } from '../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { buildTestCommandFsaMap } from '../../../../test-data/commands';
 import { TestEventStream } from '../../../../test-data/events';
-import { MultilingualText } from '../../../common/entities/multilingual-text';
+import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../__tests__/utilities/dummyDateNow';
 import { dummySystemUserId } from '../../__tests__/utilities/dummySystemUserId';
@@ -25,6 +25,7 @@ import {
     CreateDigitalText,
     DigitalTextCreated,
     DigitalTextPageContentTranslated,
+    DigitalTextTitleTranslated,
     PageAddedToDigitalText,
 } from '../commands';
 import {
@@ -42,6 +43,8 @@ const testFsaMap = buildTestCommandFsaMap();
 const digitalTextTitle = `Foo Bar Baz Text`;
 
 const languageCodeForTitle = LanguageCode.Haida;
+
+const languageCodeForTitleTranslation = LanguageCode.English;
 
 const createDigitalText = clonePlainObjectWithOverrides(
     testFsaMap.get(`CREATE_DIGITAL_TEXT`) as CommandFSA<CreateDigitalText>,
@@ -168,6 +171,21 @@ const audioAddedForDigitalTextPage = new TestEventStream()
         id,
     })[0];
 
+const titleTranslationText = 'translation of title';
+
+const digitalTextTitleTranslated = new TestEventStream()
+    .andThen<DigitalTextTitleTranslated>({
+        type: 'DIGITAL_TEXT_TITLE_TRANSLATED',
+        payload: {
+            translation: titleTranslationText,
+            languageCode: languageCodeForTitleTranslation,
+        },
+    })
+    .as({
+        type: AggregateType.digitalText,
+        id,
+    })[0];
+
 describe(`DigitalText.fromEventHistory`, () => {
     describe(`when there are events for the given aggregate root`, () => {
         describe(`when there is only a creation event`, () => {
@@ -189,6 +207,26 @@ describe(`DigitalText.fromEventHistory`, () => {
 
                 expect(builtDigitalTextTitle.text).toBe(digitalTextTitle);
             });
+        });
+
+        describe(`when the title has been translated`, () => {
+            const eventStream = [digitalTextCreated, digitalTextTitleTranslated];
+
+            const digitalTextBuildResult = DigitalText.fromEventHistory(eventStream, id);
+
+            expect(digitalTextBuildResult).toBeInstanceOf(DigitalText);
+
+            const digitalText = digitalTextBuildResult as DigitalText;
+
+            const titleTranslationSearchResult = digitalText.title.getTranslation(
+                languageCodeForTitleTranslation
+            );
+
+            expect(titleTranslationSearchResult).toBeInstanceOf(MultilingualTextItem);
+
+            const titleTransation = titleTranslationSearchResult as MultilingualTextItem;
+
+            expect(titleTransation.text).toBe(titleTranslationText);
         });
 
         describe(`when a page has been added`, () => {

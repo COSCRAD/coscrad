@@ -39,7 +39,7 @@ const allTagsDTOs: Omit<DTO<Tag>, 'type'>[] = [
             },
             {
                 type: CategorizableType.digitalText,
-                id: '1',
+                id: '950',
             },
         ],
     },
@@ -77,7 +77,7 @@ const allTagsDTOs: Omit<DTO<Tag>, 'type'>[] = [
             },
             {
                 type: CategorizableType.digitalText,
-                id: '2',
+                id: '951',
             },
         ],
     },

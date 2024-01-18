@@ -285,7 +285,7 @@ export class Term extends Resource {
             audio: new MultilingualAudio({
                 items: [],
             }),
-        }).addEventToHistory(event);
+        });
     }
 
     private static createTermFromPromptTermCreated(event: PromptTermCreated): Term {
@@ -307,6 +307,6 @@ export class Term extends Resource {
             }),
             // terms are not published by default
             published: false,
-        }).addEventToHistory(event);
+        });
     }
 }

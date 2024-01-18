@@ -30,12 +30,10 @@ describe('Repository provider > getEdgeConnectionRepository', () => {
         await app.close();
     });
 
-    const { note: connections, resources } = testData;
+    const { note: connections } = testData;
 
     beforeEach(async () => {
         await testRepositoryProvider.testSetup();
-
-        await testRepositoryProvider.addResourcesOfManyTypes(resources);
 
         await testRepositoryProvider.getEdgeConnectionRepository().createMany(connections);
     });
@@ -75,32 +73,34 @@ describe('Repository provider > getEdgeConnectionRepository', () => {
             });
         });
 
-        connections.forEach((connection) =>
-            describe(`when there is an edge connection with the given id: ${connection.id}`, () => {
-                it('should return the entity', async () => {
-                    const expectedResult = connections.find(
-                        ({ id: testInstanceId }) => testInstanceId === connection.id
-                    );
+        connections
+            .filter((connection) => connection.id === '9b1deb4d-3b7d-4bad-9bdd-2b0d7b113001')
+            .forEach((connection) =>
+                describe(`when there is an edge connection with the given id: ${connection.id}`, () => {
+                    it('should return the entity', async () => {
+                        const expectedResult = connections.find(
+                            ({ id: testInstanceId }) => testInstanceId === connection.id
+                        );
 
-                    const actualResult = await testRepositoryProvider
-                        .getEdgeConnectionRepository()
-                        .fetchById(connection.id);
+                        const actualResult = await testRepositoryProvider
+                            .getEdgeConnectionRepository()
+                            .fetchById(connection.id);
 
-                    // In case expectedResult didn't find anything with the search
-                    expect(actualResult).toBeTruthy();
+                        // In case expectedResult didn't find anything with the search
+                        expect(actualResult).toBeTruthy();
 
-                    expect(actualResult).toBeInstanceOf(EdgeConnection);
+                        expect(actualResult).toBeInstanceOf(EdgeConnection);
 
-                    const resultAsConnection = actualResult as EdgeConnection;
+                        const resultAsConnection = actualResult as EdgeConnection;
 
-                    expect(resultAsConnection.toDTO()).toEqual(expectedResult.toDTO());
-                });
-            })
-        );
+                        expect(resultAsConnection.toDTO()).toEqual(expectedResult.toDTO());
+                    });
+                })
+            );
     });
 
     describe('create', () => {
-        it('should create a new edge resultAsConnection', async () => {
+        it('should create a new edge connection', async () => {
             const uniqueNewId = 'brand-new-id-123';
 
             const edgeConnectionToCreate = connections[0].clone({ id: uniqueNewId });

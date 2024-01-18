@@ -1,4 +1,5 @@
 import { AGGREGATE_COMPOSITE_IDENTIFIER, ICommandBase } from '@coscrad/api-interfaces';
+import { isString } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { AggregateTypeMetadata, getAggregateTypeForTarget } from '../../domain/decorators';
 import { Aggregate } from '../../domain/models/aggregate.entity';
@@ -103,8 +104,6 @@ export class ArangoCommandRepositoryForAggregateRoot<TAggregate extends Aggregat
     }
 
     async create(entity: TAggregate) {
-        // throw new InternalError(`You should use the event repository append method`);
-
         const { eventHistory } = entity;
 
         if (eventHistory.length < 1) {
@@ -134,7 +133,16 @@ export class ArangoCommandRepositoryForAggregateRoot<TAggregate extends Aggregat
 
         if (entities.length === 0) return;
 
-        await Promise.all(entities.map((entity) => this.create(entity)));
+        await Promise.all(entities.map((entity) => this.create(entity))).catch((error) => {
+            const innerErrors: InternalError[] = isString(error?.message)
+                ? [new InternalError(error.message)]
+                : [];
+
+            throw new InternalError(
+                `Failed to create many aggregate roots from event history`,
+                innerErrors
+            );
+        });
     }
 
     /**

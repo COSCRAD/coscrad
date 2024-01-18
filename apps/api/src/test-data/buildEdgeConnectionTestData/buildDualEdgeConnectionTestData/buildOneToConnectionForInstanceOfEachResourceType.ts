@@ -40,7 +40,7 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
                 role: EdgeConnectionMemberRole.from,
                 compositeIdentifier: {
                     type: ResourceType.digitalText,
-                    id: '2',
+                    id: '951',
                 },
                 context: new PageRangeContext({
                     pageIdentifiers: ['1'],
@@ -165,7 +165,7 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
                 role: EdgeConnectionMemberRole.from,
                 compositeIdentifier: {
                     type: ResourceType.digitalText,
-                    id: '2',
+                    id: '951',
                 },
                 context: new GeneralContext(),
             },
@@ -190,7 +190,7 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
                 role: EdgeConnectionMemberRole.from,
                 compositeIdentifier: {
                     type: ResourceType.digitalText,
-                    id: '2',
+                    id: '951',
                 },
                 context: new PageRangeContext({
                     type: EdgeConnectionContextType.pageRange,
@@ -218,7 +218,7 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
                 role: EdgeConnectionMemberRole.from,
                 compositeIdentifier: {
                     type: ResourceType.digitalText,
-                    id: '2',
+                    id: '951',
                 },
                 context: new PageRangeContext({
                     type: EdgeConnectionContextType.pageRange,
@@ -246,7 +246,7 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
                 role: EdgeConnectionMemberRole.from,
                 compositeIdentifier: {
                     type: ResourceType.digitalText,
-                    id: '2',
+                    id: '951',
                 },
                 context: new PageRangeContext({
                     type: EdgeConnectionContextType.pageRange,
@@ -266,7 +266,7 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
                 role: EdgeConnectionMemberRole.to,
                 compositeIdentifier: {
                     type: ResourceType.digitalText,
-                    id: '1',
+                    id: '950',
                 },
                 context: new GeneralContext(),
             },
