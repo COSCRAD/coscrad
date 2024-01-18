@@ -57,6 +57,12 @@ export class DigitalText extends Resource {
     })
     readonly title: MultilingualText;
 
+    @NestedDataType(MultilingualAudio, {
+        label: 'audio for title',
+        description: 'contains refereneces to audio for the title',
+    })
+    readonly audioForTitle: MultilingualAudio;
+
     @NestedDataType(DigitalTextPage, {
         isOptional: true,
         isArray: true,
@@ -70,13 +76,15 @@ export class DigitalText extends Resource {
 
         if (!dto) return;
 
-        const { title, pages: pageDTOs } = dto;
+        const { title, pages: pageDTOs, audioForTitle: audioForTitleDto } = dto;
 
         this.title = new MultilingualText(title);
 
         this.pages = Array.isArray(pageDTOs)
             ? pageDTOs.map((pageDTO) => new DigitalTextPage(pageDTO))
             : undefined;
+
+        this.audioForTitle = audioForTitleDto ? new MultilingualAudio(audioForTitleDto) : undefined;
     }
 
     getName(): MultilingualText {
@@ -244,6 +252,21 @@ export class DigitalText extends Resource {
         return updatedDigitalText;
     }
 
+    addAudioForTitle(
+        audioItemId: AggregateId,
+        languageCode: LanguageCode
+    ): ResultOrError<DigitalText> {
+        const audioUpdateResult = this.audioForTitle.addAudio(audioItemId, languageCode);
+
+        if (isInternalError(audioUpdateResult)) {
+            return audioUpdateResult;
+        }
+
+        return this.safeClone<DigitalText>({
+            audioForTitle: audioUpdateResult,
+        });
+    }
+
     /**
      *
      * @param pageIdentifiers list of all page identifiers that must be included
@@ -280,6 +303,14 @@ export class DigitalText extends Resource {
 
         // We avoid shared references by cloning
         return searchResult.clone({});
+    }
+
+    hasAudioForTitle(): boolean {
+        return !this.audioForTitle.isEmpty();
+    }
+
+    getAudioForTitleInLanguage(languageCode: LanguageCode): Maybe<AggregateId> {
+        return this.audioForTitle.getIdForAudioIn(languageCode);
     }
 
     protected validatePageRangeContext(context: PageRangeContext): Valid | InternalError {
@@ -372,6 +403,7 @@ export class DigitalText extends Resource {
             type: AggregateType.digitalText,
             id,
             title: buildMultilingualTextWithSingleItem(title, languageCodeForTitle),
+            audioForTitle: MultilingualAudio.buildEmpty(),
             pages: [],
             published: false,
         });
