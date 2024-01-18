@@ -1,3 +1,4 @@
+import { isString } from '@coscrad/validation-constraints';
 import { CoscradEventFactory } from '../../../domain/common';
 import { Category } from '../../../domain/models/categories/entities/category.entity';
 import { Resource } from '../../../domain/models/resource.entity';
@@ -33,13 +34,18 @@ export default class TestRepositoryProvider extends ArangoRepositoryProvider {
     ): Promise<void> {
         await this.forResource<TResource>(resourceType)
             .createMany(entities)
-            .catch((_error) => {
+            .catch((error) => {
+                const innerErrors = isString(error?.message)
+                    ? [new InternalError(error.message)]
+                    : [];
+
                 throw new InternalError(
                     `Failed to add resources of type: ${resourceType} \n ${JSON.stringify(
                         entities,
                         undefined,
                         4
-                    )}`
+                    )}`,
+                    innerErrors
                 );
             });
     }

@@ -46,8 +46,22 @@ export const buildAggregateRootFromEventHistory = <T extends Aggregate>(
      */
     if (isInternalError(initialInstanceBuildResult)) return initialInstanceBuildResult;
 
+    /**
+     * Any invariant error probably would have been caught when applying
+     * events, but just in case the event stream in the database corresponds
+     * to an aggregate root that doesn't satisfy it's invariant rules (perhaps
+     * by a problem raised with event versioning), we validate invariants here.
+     */
+    const invariantValidationResult = initialInstanceBuildResult.validateInvariants();
+
+    if (isInternalError(invariantValidationResult)) {
+        return invariantValidationResult;
+    }
+
     return updateEvents.reduce(
-        (accumulatedTerm, nextEvent) => accumulatedTerm.apply(nextEvent),
-        initialInstanceBuildResult
+        (previousResult: ResultOrError<T>, nextEvent) =>
+            isInternalError(previousResult) ? previousResult : previousResult.apply(nextEvent),
+        // Ensure that the creation event is available on the model
+        initialInstanceBuildResult.addEventToHistory(creationEvent)
     );
 };

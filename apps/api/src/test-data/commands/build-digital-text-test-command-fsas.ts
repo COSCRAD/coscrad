@@ -6,6 +6,7 @@ import {
     AddPageToDigitalText,
     CreateDigitalText,
     TranslateDigitalTextPageContent,
+    TranslateDigitalTextTitle,
 } from '../../domain/models/digital-text/commands';
 import { AddContentToDigitalTextPage } from '../../domain/models/digital-text/commands/add-content-to-digital-text-page';
 import {
@@ -65,10 +66,20 @@ const addAudioForDigitalTextPage: CommandFSA<AddAudioForDigitalTextPage> = {
     },
 };
 
+const translateDigitalTextTitle: CommandFSA<TranslateDigitalTextTitle> = {
+    type: `TRANSLATE_DIGITAL_TEXT_TITLE`,
+    payload: {
+        aggregateCompositeIdentifier: { id, type },
+        translation: `translation of title`,
+        languageCode: LanguageCode.Chilcotin,
+    },
+};
+
 export const buildDigitalTextCommandFsas = () => [
     createDigitalText,
     addPageToDigitalText,
     addContentToDigitalTextPage,
     translateDigitalTextPageContent,
     addAudioForDigitalTextPage,
+    translateDigitalTextTitle,
 ];

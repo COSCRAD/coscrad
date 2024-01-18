@@ -8,6 +8,7 @@ import { clonePlainObjectWithOverrides } from '../../../../../../lib/utilities/c
 import { TEST_DATABASE_PREFIX } from '../../../../../../persistence/constants/persistenceConstants';
 import { ArangoDatabaseProvider } from '../../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import { ArangoEventRepository } from '../../../../../../persistence/repositories/arango-event-repository';
 import { buildTestCommandFsaMap } from '../../../../../../test-data/commands';
 import getValidAggregateInstanceForTest from '../../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import getValidBibliographicCitationInstanceForTest from '../../../../../__tests__/utilities/getValidBibliographicCitationInstanceForTest';
@@ -110,9 +111,12 @@ describe(commandType, () => {
                                     [ResourceType.bibliographicCitation]: [
                                         existingBibliographicCitation,
                                     ],
-                                    [ResourceType.digitalText]: [existingDigitalText],
                                 }).fetchFullSnapshotInLegacyFormat()
                             );
+
+                            await app
+                                .get(ArangoEventRepository)
+                                .appendEvents(existingDigitalText.eventHistory);
                         },
                         buildValidCommandFSA,
                         checkStateOnSuccess: async () => {
@@ -248,7 +252,7 @@ describe(commandType, () => {
                                     error,
                                     new CommandExecutionError([
                                         new FailedToRegisterDigitalRepresentationError(
-                                            existingDigitalText.id,
+                                            existingBibliographicCitation.id,
                                             [
                                                 new DigitalReprsentationAlreadyRegisteredForResourceError(
                                                     existingDigitalText.getCompositeIdentifier(),
