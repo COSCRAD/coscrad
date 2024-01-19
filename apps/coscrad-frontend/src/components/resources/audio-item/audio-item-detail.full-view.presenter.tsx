@@ -14,7 +14,6 @@ import {
     Grid,
     Typography,
 } from '@mui/material';
-import { useAppDispatch } from '../../../app/hooks';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 import { SinglePropertyPresenter } from '../../../utils/generic-components/presenters/single-property-presenter';
 import { convertMillisecondsToSeconds } from '../utils/math';
@@ -30,8 +29,6 @@ export const AudioItemDetailFullViewPresenter = ({
     name,
     actions,
 }: ICategorizableDetailQueryResult<IAudioItemViewModel>): JSX.Element => {
-    const dispatch = useAppDispatch();
-
     const formatedPlainText = plainText.split('\n').map((line, index) => (
         <Box mb={1} key={index}>
             {line}

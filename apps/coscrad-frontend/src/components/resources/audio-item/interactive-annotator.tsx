@@ -2,7 +2,7 @@ import { AggregateType } from '@coscrad/api-interfaces';
 import { AudioAnnotator, TimeRangeSelection } from '@coscrad/media-player';
 import { isNull, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box, Paper, Typography, styled } from '@mui/material';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useAppDispatch } from '../../../app/hooks';
 import { executeCommand } from '../../../store/slices/command-status/';
 import { ImmersiveCreateNoteForm } from '../shared/immersive-create-note-form';
@@ -44,9 +44,9 @@ export const InteractiveAnnotator = ({ id, audioURL }: InteractiveAnnotatorProps
 
     const [timeRange, setTimeRange] = useState<TimeRangeSelection | null>(null);
 
-    const onTimeRangeSelected = (selectedTimeRange: TimeRangeSelection | null) => {
+    const onTimeRangeSelected = useCallback((selectedTimeRange: TimeRangeSelection | null) => {
         setTimeRange(selectedTimeRange);
-    };
+    }, []);
 
     return (
         <>
