@@ -20,6 +20,8 @@ export enum KeyboardKey {
 export const useKeyDown = (callback: () => void, keys: KeyboardShortcuts[]) => {
     const onKeyDown = useCallback(
         (event: KeyboardEvent) => {
+            if (event.ctrlKey || event.shiftKey || event.altKey) return;
+
             if (
                 event.target &&
                 (event.target instanceof HTMLTextAreaElement ||

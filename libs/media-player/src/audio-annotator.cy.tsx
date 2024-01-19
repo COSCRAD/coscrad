@@ -94,11 +94,7 @@ describe('<AudioAnnotator />', () => {
             cy.get('audio').should('have.prop', 'controls', true);
         });
 
-        describe(`when the media first loads`, () => {
-            before(() => {
-                cy.wait(1000);
-            });
-
+        describe(`when the media first plays`, () => {
             describe(`the mark in-point button`, () => {
                 it(`should be enabled`, () => {
                     cy.getByDataAttribute('in-point-marker-button').should('be.enabled');
@@ -109,16 +105,6 @@ describe('<AudioAnnotator />', () => {
                 it(`should be disabled`, () => {
                     cy.getByDataAttribute('out-point-marker-button').should('be.disabled');
                 });
-            });
-        });
-
-        describe(`when the media has been played`, () => {
-            beforeEach(() => {
-                cy.get('audio').then(([audioElement]) => {
-                    audioElement.play();
-                });
-
-                cy.wait(2000);
             });
 
             describe(`when the mark in-point button is clicked`, () => {
@@ -145,8 +131,6 @@ describe('<AudioAnnotator />', () => {
                 it('should be enabled', () => {
                     cy.getByDataAttribute('in-point-marker-button').click();
 
-                    cy.wait(300);
-
                     cy.getByDataAttribute('out-point-marker-button').should('be.enabled');
                 });
             });
@@ -154,8 +138,6 @@ describe('<AudioAnnotator />', () => {
             describe(`when the keyboard shortcut for mark in-point is pressed, the mark out-point button`, () => {
                 it('should be enabled', () => {
                     cy.get('body').type('i');
-
-                    cy.wait(300);
 
                     cy.getByDataAttribute('out-point-marker-button').should('be.enabled');
                 });
@@ -165,7 +147,9 @@ describe('<AudioAnnotator />', () => {
                 it('should mark an out-point', () => {
                     cy.getByDataAttribute('in-point-marker-button').click();
 
-                    cy.wait(1000);
+                    cy.get('audio').then(([audioElement]) => {
+                        audioElement.currentTime = 3.0;
+                    });
 
                     cy.getByDataAttribute('out-point-marker-button').click();
 
@@ -181,7 +165,9 @@ describe('<AudioAnnotator />', () => {
                 it('should mark an out-point', () => {
                     cy.get('body').type('i');
 
-                    cy.wait(1000);
+                    cy.get('audio').then(([audioElement]) => {
+                        audioElement.currentTime = 3.0;
+                    });
 
                     cy.get('body').type('o');
 
@@ -195,10 +181,14 @@ describe('<AudioAnnotator />', () => {
 
             describe(`when the mark in-point button is clicked and the user scrubs the playhead back before the in-point, clicking the mark out-point button`, () => {
                 it('should fail with an error', () => {
+                    cy.get('audio').then(([audioElement]) => {
+                        audioElement.currentTime = 4.0;
+                    });
+
                     cy.getByDataAttribute('in-point-marker-button').click();
 
                     cy.get('audio').then(([audioElement]) => {
-                        audioElement.currentTime = 1.0;
+                        audioElement.currentTime = 2.0;
                     });
 
                     cy.getByDataAttribute('out-point-marker-button').click();
@@ -213,6 +203,10 @@ describe('<AudioAnnotator />', () => {
 
             describe(`when the keyboard shortcut for mark in-point is pressed and the user scrubs the playhead back before the in-point, pressing the mark out-point keyboard shortcut`, () => {
                 it('should fail with an error', () => {
+                    cy.get('audio').then(([audioElement]) => {
+                        audioElement.currentTime = 4.0;
+                    });
+
                     cy.get('body').type('i');
 
                     cy.get('audio').then(([audioElement]) => {
@@ -233,8 +227,6 @@ describe('<AudioAnnotator />', () => {
                 it('should clear the selected in-point', () => {
                     cy.getByDataAttribute('in-point-marker-button').click();
 
-                    cy.wait(500);
-
                     cy.getByDataAttribute('clear-selected-time-range-button').click();
 
                     cy.getByDataAttribute('widget-selected-time-range').should('not.exist');
@@ -247,8 +239,6 @@ describe('<AudioAnnotator />', () => {
                 it('should clear the selected in-point', () => {
                     cy.get('body').type('i');
 
-                    cy.wait(500);
-
                     cy.get('body').type('c');
 
                     cy.getByDataAttribute('widget-selected-time-range').should('not.exist');
@@ -257,17 +247,27 @@ describe('<AudioAnnotator />', () => {
                 });
             });
 
+            describe(`the browser shortcut key Control + C`, () => {
+                it(`should not be overridden`, () => {
+                    cy.get('body').type('i');
+
+                    cy.get('body').type('{ctrl+c}');
+
+                    cy.getByDataAttribute('in-point-selection-time-code').should('exist');
+                });
+            });
+
             describe(`after a time range is selected, when the clear range button is clicked`, () => {
                 it('should clear the range selection', () => {
                     cy.getByDataAttribute('in-point-marker-button').click();
 
-                    cy.wait(1000);
+                    cy.get('audio').then(([audioElement]) => {
+                        audioElement.currentTime = 3.0;
+                    });
 
                     cy.getByDataAttribute('out-point-marker-button').click();
 
                     cy.getByDataAttribute('widget-selected-time-range').should('exist');
-
-                    cy.wait(500);
 
                     cy.getByDataAttribute('clear-selected-time-range-button').click();
 
@@ -279,13 +279,13 @@ describe('<AudioAnnotator />', () => {
                 it('should clear the range selection', () => {
                     cy.get('body').type('i');
 
-                    cy.wait(1000);
+                    cy.get('audio').then(([audioElement]) => {
+                        audioElement.currentTime = 2.0;
+                    });
 
                     cy.get('body').type('o');
 
                     cy.getByDataAttribute('widget-selected-time-range').should('exist');
-
-                    cy.wait(500);
 
                     cy.get('body').type('c');
 
@@ -295,6 +295,8 @@ describe('<AudioAnnotator />', () => {
 
             describe(`when the scrub forward keyboard shortcut is pressed`, () => {
                 it('should increment the player currentTime', () => {
+                    cy.wait(100);
+
                     const currentTimeStart = 3.0;
 
                     cy.get('audio').then(([audioElement]) => {
@@ -313,7 +315,7 @@ describe('<AudioAnnotator />', () => {
 
             describe(`when the scrub backward keyboard shortcut is pressed twice`, () => {
                 it('should decrement the player currentTime', () => {
-                    const currentTimeStart = 8.0;
+                    const currentTimeStart = 3.0;
 
                     cy.get('audio').then(([audioElement]) => {
                         audioElement.currentTime = currentTimeStart;
@@ -338,14 +340,13 @@ describe('<AudioAnnotator />', () => {
             it('should fail to create a time range selection', () => {
                 cy.mount(<AudioAnnotatorWidget audioUrl={validShorterDurationAudioUrl} />);
 
+                const audioDuration = 5.0;
+
                 cy.get('audio').then(([audioElement]) => {
-                    audioElement.play();
+                    audioElement.currentTime = audioDuration;
                 });
-                cy.wait(6000);
 
                 cy.getByDataAttribute('in-point-marker-button').click();
-
-                cy.wait(300);
 
                 cy.getByDataAttribute('out-point-marker-button').click();
 

@@ -8,7 +8,12 @@ export const AckNotification = ({ _onClick: onClick }: AckNotificationProps): JS
     <Card data-testid="command-succeeded-notification">
         <CardContent>
             The command has succeeded.
-            <Button data-testid="command-ack-button" onClick={onClick}>
+            <Button
+                variant="outlined"
+                sx={{ ml: 2 }}
+                data-testid="command-ack-button"
+                onClick={onClick}
+            >
                 OK
             </Button>
         </CardContent>
