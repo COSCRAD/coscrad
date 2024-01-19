@@ -184,9 +184,34 @@ describe('the audio annotation process', () => {
                         });
 
                         it(`should be disabled`, () => {
-                            cy.getByDataAttribute('note-form-ui-feedback').should('exist');
+                            cy.getByDataAttribute('command-succeeded-notification').should('exist');
 
                             cy.getByDataAttribute('note-form').should('not.exist');
+                        });
+                    });
+
+                    describe(`when the successful command has been acknowledged`, () => {
+                        beforeEach(() => {
+                            // .first() is temporary until we resolve the command panel
+                            cy.getByDataAttribute(`command-ack-button`).first().click();
+                        });
+
+                        describe(`the annotation form`, () => {
+                            it(`should be disabled`, () => {
+                                cy.getByDataAttribute('note-form').should('not.exist');
+                            });
+                        });
+
+                        describe(`the time range`, () => {
+                            it.only(`should be cleared`, () => {
+                                cy.getByDataAttribute('in-point-selection-time-code').should(
+                                    'not.exist'
+                                );
+
+                                cy.getByDataAttribute('inpoint-selected-bar').should(
+                                    'not.be.visible'
+                                );
+                            });
                         });
                     });
                 });

@@ -2,9 +2,13 @@ import { AggregateType } from '@coscrad/api-interfaces';
 import { AudioAnnotator, TimeRangeSelection } from '@coscrad/media-player';
 import { isNull, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box, Paper, Typography, styled } from '@mui/material';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../../app/hooks';
-import { executeCommand } from '../../../store/slices/command-status/';
+import {
+    Ack,
+    executeCommand,
+    useLoadableCommandResult,
+} from '../../../store/slices/command-status/';
 import { ImmersiveCreateNoteForm } from '../shared/immersive-create-note-form';
 import { convertSecondsToMilliseconds } from '../utils/math/convert-seconds-to-milliseconds';
 
@@ -47,6 +51,12 @@ export const InteractiveAnnotator = ({ id, audioURL }: InteractiveAnnotatorProps
     const onTimeRangeSelected = useCallback((selectedTimeRange: TimeRangeSelection | null) => {
         setTimeRange(selectedTimeRange);
     }, []);
+
+    const { data: commandResult, errorInfo } = useLoadableCommandResult();
+
+    useEffect(() => {
+        if (errorInfo === null && commandResult !== Ack) setTimeRange(null);
+    }, [setTimeRange, errorInfo, commandResult]);
 
     return (
         <>
@@ -91,8 +101,6 @@ export const InteractiveAnnotator = ({ id, audioURL }: InteractiveAnnotatorProps
                                     },
                                 })
                             );
-
-                            setTimeRange(null);
                         }}
                     />
                 </CreateAnnotationForm>

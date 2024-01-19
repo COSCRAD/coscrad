@@ -5,7 +5,7 @@ interface AckNotificationProps {
 }
 
 export const AckNotification = ({ _onClick: onClick }: AckNotificationProps): JSX.Element => (
-    <Card>
+    <Card data-testid="command-succeeded-notification">
         <CardContent>
             The command has succeeded.
             <Button data-testid="command-ack-button" onClick={onClick}>
