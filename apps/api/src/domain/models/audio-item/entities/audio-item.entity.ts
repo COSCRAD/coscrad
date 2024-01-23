@@ -216,7 +216,10 @@ class AudioItemBase extends Resource implements IRadioPublishableResource {
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {
-        const availableCommandIds: string[] = [`TRANSLATE_AUDIO_ITEM_NAME`];
+        const availableCommandIds: string[] = [
+            `TRANSLATE_AUDIO_ITEM_NAME`,
+            `CREATE_NOTE_ABOUT_RESOURCE`,
+        ];
 
         return availableCommandIds;
     }

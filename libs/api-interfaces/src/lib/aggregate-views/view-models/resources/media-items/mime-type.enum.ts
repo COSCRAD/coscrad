@@ -4,8 +4,7 @@ export enum MIMEType {
     png = 'image/png',
     // audio
     mp3 = 'audio/mpeg',
-    // TODO change this to audio/wav. This requires a migration
-    wav = 'audio/x-wav',
+    wav = 'audio/wav',
     audioOgg = 'audio/ogg',
     // video
     mp4 = 'video/mp4',

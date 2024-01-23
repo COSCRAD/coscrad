@@ -83,7 +83,7 @@ describe(`term detail flow`, () => {
                 cy.get(`[href="/Resources/Terms/${termId}"]`).click();
             });
 
-            it(`should be avilable`, () => {
+            it(`should be available`, () => {
                 cy.contains(createConnectionCommandLabel);
             });
 

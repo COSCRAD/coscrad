@@ -105,6 +105,16 @@ export const AggregatePage = ({
 
     const actionsFromApi = viewModel.actions as IBackendCommandFormAndLabels[];
 
+    /**
+     * If the actions array is empty, the user does not have write access to
+     * the aggregate root. 
+     * 
+     * For audio items, we disable the command panel, even for admin, in favor
+     * of a more "immersive admin experience". This introduces collisions with
+     * the dynamic command forms available in the command panel.
+     */
+    const shouldShowCommands = viewModel?.actions?.length > 0 && aggregateType !== AggregateType.audioItem; 
+
     const Commands = () => (
         <>
             {/* Note that we don't mix-in static forms if there were no
@@ -112,7 +122,7 @@ export const AggregatePage = ({
                     mode in that case. Note that exposing the forms is only a 
                     matter of user experience and not security. The command will
                     fail if the user doesn't have a valid admin token. */}
-            {viewModel?.actions?.length > 0 ? (
+            {shouldShowCommands ? (
                 <CommandPanel
                     actions={buildCommandExecutionFormsAndLabels(
                         actionsFromApi,

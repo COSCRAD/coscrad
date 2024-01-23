@@ -21,8 +21,9 @@ export default class InvalidExternalReferenceByAggregateError extends InternalEr
     ) {
         const msg = [
             `${formatAggregateCompositeIdentifier(aggregateCompositeIdentifier)}`,
-            `references the following composite keys,`,
-            ` which don't exist or are otherwise inconsistent`,
+            `invalidly references the following entities. \n`,
+            ` This could be because the entities don't exist,`,
+            ` or because their state is inconsistent.`,
             formatArrayAsList(invalidReferences, (ref) => formatAggregateCompositeIdentifier(ref)),
         ].join(' ');
 

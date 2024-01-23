@@ -12,7 +12,11 @@ export const CommandSelectionArea = ({
 }: CommandSelectionAreaProps): JSX.Element => (
     <div data-testid="command-selection-area">
         {metaForCommands.map((commandMeta) => (
-            <CommandButton commandMeta={commandMeta} onButtonClick={onCommandSelection} />
+            <CommandButton
+                key={commandMeta.type}
+                commandMeta={commandMeta}
+                onButtonClick={onCommandSelection}
+            />
         ))}
     </div>
 );

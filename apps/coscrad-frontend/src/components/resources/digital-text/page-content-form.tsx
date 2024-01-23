@@ -2,7 +2,7 @@ import { LanguageCode } from '@coscrad/api-interfaces';
 import { Button, TextField } from '@mui/material';
 import { useContext, useState } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
-import { LanguageSelect } from './language-select';
+import { LanguageSelect } from '../shared/language-select';
 
 export interface TextAndLanguage {
     text: string;

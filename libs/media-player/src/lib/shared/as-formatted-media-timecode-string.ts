@@ -1,14 +1,15 @@
 import { asTwoDigitString } from './as-two-digit-string';
 import { isNonNegativeFiniteNumber } from './validation';
 
-const ninetynineHoursInSecondsMaximum = 99 * 60 * 60;
-
 /**
+ * TODO Import this from a separate `Math` library.
  *
  * @param timeInSeconds non-negative finite number of seconds
  * @returns string formatted as media timecode HH:MM:SS
  */
 export const asFormattedMediaTimecodeString = (timeInSeconds: number): string => {
+    const ninetynineHoursInSecondsMaximum = 99 * 60 * 60;
+
     if (
         !isNonNegativeFiniteNumber(timeInSeconds) ||
         timeInSeconds >= ninetynineHoursInSecondsMaximum

@@ -56,7 +56,7 @@ exports[`buildCommandForm should return the expected result 1`] = `
         },
         {
           "display": "wav",
-          "value": "audio/x-wav",
+          "value": "audio/wav",
         },
         {
           "display": "audioOgg",

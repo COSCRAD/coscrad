@@ -169,7 +169,7 @@ export const buildFormFieldForCommandPayloadProp = (
     }
 
     if (complexDataType === ComplexCoscradDataType.union) {
-        throw new InternalError(`A command form should not have a union-typed property`);
+        return {} as any;
     }
 
     const exhaustiveCheck: never = complexDataType;

@@ -14,7 +14,7 @@ import {
     ResourceDetailFullViewPresenter,
 } from '../../../utils/generic-components';
 import { cyclicDecrement, cyclicIncrement } from '../../../utils/math';
-import { ImmersiveCreateNoteForm } from './immersive-create-note-form';
+import { ImmersiveCreateNoteForm } from '../shared/immersive-create-note-form';
 import { NewPageForm } from './new-page-form';
 import { PublicationForm } from './page-publication-form';
 import { PagesPresenter } from './pages-presenter';

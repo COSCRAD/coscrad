@@ -70,7 +70,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           {
             "label": "wav",
-            "value": "audio/x-wav",
+            "value": "audio/wav",
           },
           {
             "label": "audioOgg",

@@ -65,6 +65,7 @@
                     },
                     {
                         "type": "bibliographicCitation",
+                        "type": "bibliographicCitation",
                         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
                     },
                     {
@@ -160,6 +161,7 @@
                 "label": "law",
                 "members": [
                     {
+                        "type": "bibliographicCitation",
                         "type": "bibliographicCitation",
                         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003"
                     },
@@ -285,6 +287,7 @@
                         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102"
                     },
                     {
+                        "type": "bibliographicCitation",
                         "type": "bibliographicCitation",
                         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
                     },
@@ -505,6 +508,9 @@
                 "audio": {
                     "items": []
                 },
+                "audio": {
+                    "items": []
+                },
                 "isPromptTerm": true
             },
             {
@@ -583,6 +589,9 @@
                 "audio": {
                     "items": []
                 },
+                "audio": {
+                    "items": []
+                },
                 "isPromptTerm": true
             },
             {
@@ -623,6 +632,9 @@
                     ]
                 },
                 "contributorId": "Jane Deer",
+                "audio": {
+                    "items": []
+                },
                 "audio": {
                     "items": []
                 },
@@ -684,6 +696,9 @@
                     ]
                 },
                 "contributorId": "This prop will be removed soon",
+                "audio": {
+                    "items": []
+                },
                 "audio": {
                     "items": []
                 },
@@ -767,6 +782,9 @@
                 "audio": {
                     "items": []
                 },
+                "audio": {
+                    "items": []
+                },
                 "isPromptTerm": false
             },
             {
@@ -844,6 +862,9 @@
                     ]
                 },
                 "contributorId": "Sarah Smith",
+                "audio": {
+                    "items": []
+                },
                 "audio": {
                     "items": []
                 },
@@ -927,6 +948,9 @@
                 "audio": {
                     "items": []
                 },
+                "audio": {
+                    "items": []
+                },
                 "isPromptTerm": false
             },
             {
@@ -1007,6 +1031,9 @@
                 "audio": {
                     "items": []
                 },
+                "audio": {
+                    "items": []
+                },
                 "isPromptTerm": false
             },
             {
@@ -1084,6 +1111,9 @@
                     ]
                 },
                 "contributorId": "Sarah Smith",
+                "audio": {
+                    "items": []
+                },
                 "audio": {
                     "items": []
                 },
@@ -1548,6 +1578,8 @@
                 "dimensions": {
                     "heightPx": 400,
                     "widthPx": 300
+                    "heightPx": 400,
+                    "widthPx": 300
                 },
                 "title": {
                     "items": [
@@ -1573,6 +1605,8 @@
                 "dimensions": {
                     "heightPx": 285,
                     "widthPx": 420
+                    "heightPx": 285,
+                    "widthPx": 420
                 },
                 "title": {
                     "items": [
@@ -1596,6 +1630,8 @@
                 "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
                 "photographer": "Kenny Tree-Huggens",
                 "dimensions": {
+                    "heightPx": 1500,
+                    "widthPx": 1200
                     "heightPx": 1500,
                     "widthPx": 1200
                 },
@@ -1811,6 +1847,7 @@
         "bibliographic_references": [
             {
                 "type": "bibliographicCitation",
+                "type": "bibliographicCitation",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "eventHistory": [],
                 "published": true,
@@ -1836,6 +1873,7 @@
                     "publisher": "Atlantic Publishing",
                     "place": "Kennebunk Port, Maine",
                     "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-book-bibliographic-citation-1_a-day-in-the-life.pdf",
+                    "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-book-bibliographic-citation-1_a-day-in-the-life.pdf",
                     "isbn": "978-1-895811-34-6",
                     "numberOfPages": 455
                 },
@@ -1845,6 +1883,7 @@
                 }
             },
             {
+                "type": "bibliographicCitation",
                 "type": "bibliographicCitation",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
                 "eventHistory": [],
@@ -1872,6 +1911,7 @@
             },
             {
                 "type": "bibliographicCitation",
+                "type": "bibliographicCitation",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
                 "eventHistory": [],
                 "published": true,
@@ -1885,6 +1925,7 @@
                     "abstract": "Doe, Jane\n- Large Valley\n- Qualifying as an expert in the written language",
                     "dateDecided": "Recorded 2002-07-08",
                     "court": "Supreme Court of British Columbia",
+                    "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-court-case-bibliographic-citation-3_title-case.pdf",
                     "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-court-case-bibliographic-citation-3_title-case.pdf",
                     "pages": "Pages 1-6"
                 }
@@ -4042,7 +4083,7 @@
                         {
                             "languageCode": "en",
                             "role": "original",
-                            "text": "this is why bibliographic_citations/3 is connected to digitalText/950"
+                            "text": "this is why bibliographic_citations/3 is connected to book/950"
                         }
                     ]
                 }
@@ -4073,7 +4114,7 @@
                         {
                             "languageCode": "en",
                             "role": "original",
-                            "text": "this is why bibliographic_citations/23 is connected to digitalText/950"
+                            "text": "this is why bibliographic_citations/23 is connected to book/950"
                         }
                     ]
                 }
