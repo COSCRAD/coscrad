@@ -1,7 +1,7 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box, Button, TextField } from '@mui/material';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useAppDispatch } from '../../../app/hooks';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import {
@@ -42,13 +42,7 @@ export const ImmersiveCreateNoteForm = ({ onSubmit }: FormProps) => {
 
     const dispatch = useAppDispatch();
 
-    // TODO: research this pattern to see if it can be improved
-    useEffect(() => {
-        if (commandResult === Ack) {
-            setText('');
-            setLanguageCode(defaultLanguageCode);
-        }
-    }, [commandResult, setText, setLanguageCode, defaultLanguageCode]);
+
 
     if (errorInfo) return <ErrorDisplay {...errorInfo} />;
 

@@ -1,5 +1,5 @@
 import { AggregateType, MIMEType, ResourceType } from '@coscrad/api-interfaces';
-import { buildDummyAggregateCompositeIdentifier } from '../../../support/utilities';
+import { Steps, buildDummyAggregateCompositeIdentifier } from '../../../support/utilities';
 
 const audioTitleInLanguage = 'Audio Title (Lang)';
 
@@ -83,19 +83,32 @@ describe('the audio annotation process', () => {
             cy.get(`[href="${buildDetailRoute(basicAudioId)}"]`).click();
         });
 
-        describe(`when a time range is selected in the Audio player`, () => {
-            const inPointSeconds = 1.5;
+        const inPointSeconds = 1.5;
 
-            const outPointSeconds = 3.0;
+        const outPointSeconds = 3.0;
 
-            beforeEach(() => {
+        const newAnnotationText = 'This is an interesting comment.';
+
+        const languageCodeForAnnotation = 'en';
+
+        const setTimeRange = 'setTimeRange';
+
+        const fillTextForm = 'fillTextForm';
+
+        const chooseLanguage = 'chooseLanguage';
+
+        const submitForm = 'submitForm';
+
+        const acknowledgeCommandSuccess = 'acknowledgeCommandSuccess';
+
+        const steps = new Steps()
+            .addStep(setTimeRange, () => {
                 cy.get('audio').then(([audioElement]) => {
                     audioElement.play();
-                });
-
-                cy.get('audio').then(([audioElement]) => {
                     audioElement.currentTime = inPointSeconds;
                 });
+
+                cy.getByDataAttribute('in-point-marker-button').should('not.be.disabled');
 
                 cy.getByDataAttribute('in-point-marker-button').click();
 
@@ -103,116 +116,125 @@ describe('the audio annotation process', () => {
                     audioElement.currentTime = outPointSeconds;
                 });
 
+                cy.getByDataAttribute('out-point-marker-button').should('not.be.disabled');
+
                 cy.getByDataAttribute('out-point-marker-button').click();
+            })
+            .addStep(fillTextForm, () => {
+                cy.getByDataAttribute('text:note').type(newAnnotationText);
+            })
+            .addStep(chooseLanguage, () => {
+                cy.getByDataAttribute('select:language').as('language-select').click();
+
+                cy.get('@language-select')
+                    .get(`[data-value="${languageCodeForAnnotation}"]`)
+                    .click();
+            })
+            .addStep(submitForm, () => {
+                cy.getByDataAttribute('submit-note').click();
+            })
+            .addStep(acknowledgeCommandSuccess, () => {
+                cy.getByDataAttribute(`command-ack-button`).click();
+            });
+
+        describe(`when a time range is first selected in the Audio player`, () => {
+            beforeEach(() => {
+                steps.apply([setTimeRange]);
             });
 
             it('should show the annotation form', () => {
                 cy.getByDataAttribute('create-note-about-audio-form');
             });
 
-            describe(`the form`, () => {
-                it('should be disabled', () => {
-                    cy.getByDataAttribute('submit-note').should('be.disabled');
+            it('should not show the command panel', () => {
+                cy.getByDataAttribute('command-selection-area').should('not.exist');
+            });
+        });
+
+        describe(`the form`, () => {
+            beforeEach(() => {
+                steps.apply([setTimeRange]);
+            });
+
+            it('should be disabled', () => {
+                cy.getByDataAttribute('submit-note').should('be.disabled');
+            });
+        });
+
+        describe(`when the form is complete`, () => {
+            describe(`the annotation submit button`, () => {
+                beforeEach(() => {
+                    steps.apply([setTimeRange, fillTextForm, chooseLanguage]);
+                });
+
+                it('should be enabled', () => {
+                    cy.getByDataAttribute('submit-note').should('be.enabled');
                 });
             });
 
-            describe(`when the form is complete`, () => {
-                const newAnnotationText = 'This is an interesting comment.';
-
-                const languageCodeForAnnotation = 'en';
-
+            describe(`when the form is submitted (prior to acknowledgement)`, () => {
                 beforeEach(() => {
-                    cy.getByDataAttribute('text:note').type(newAnnotationText);
-
-                    cy.getByDataAttribute('select:language').as('language-select').click();
-
-                    cy.get('@language-select')
-                        .get(`[data-value="${languageCodeForAnnotation}"]`)
-                        .click();
+                    steps.apply([setTimeRange, fillTextForm, chooseLanguage, submitForm]);
                 });
 
-                describe(`the annotation submit button`, () => {
-                    it('should be enabled', () => {
-                        cy.getByDataAttribute('submit-note').should('be.enabled');
+                it(`should display the note with correct time range`, () => {
+                    cy.getByDataAttribute('open-notes-panel-button').click();
+
+                    cy.getByDataAttribute('self-note-time-range-context')
+                        .invoke('text')
+                        .then((timeRangeJson) => {
+                            const timeRange = JSON.parse(timeRangeJson);
+
+                            const { inPointMilliseconds, outPointMilliseconds } = timeRange;
+
+                            const tolerance = 0.2;
+
+                            expect(millisecondsToRoundedSeconds(inPointMilliseconds)).to.be.closeTo(
+                                inPointSeconds,
+                                tolerance
+                            );
+
+                            expect(
+                                millisecondsToRoundedSeconds(outPointMilliseconds)
+                            ).to.be.closeTo(outPointSeconds, tolerance);
+                        });
+                });
+            });
+
+            describe(`before the successful command is acknowledged`, () => {
+                beforeEach(() => {
+                    steps.apply([setTimeRange, fillTextForm, chooseLanguage, submitForm]);
+                });
+
+                it(`should be disabled`, () => {
+                    cy.getByDataAttribute('command-succeeded-notification').should('exist');
+
+                    cy.getByDataAttribute('note-form').should('not.exist');
+                });
+            });
+
+            describe(`when the successful command has been acknowledged`, () => {
+                beforeEach(() => {
+                    steps.apply([
+                        setTimeRange,
+                        fillTextForm,
+                        chooseLanguage,
+                        submitForm,
+                        acknowledgeCommandSuccess,
+                    ]);
+                });
+
+                describe(`the annotation form`, () => {
+                    it(`should no longer be present`, () => {
+                        cy.getByDataAttribute('note-form').should('not.exist');
                     });
                 });
 
-                describe(`when the form is submitted`, () => {
-                    beforeEach(() => {
-                        cy.getByDataAttribute('submit-note').click();
-                    });
+                describe(`the time range`, () => {
+                    it(`should be cleared`, () => {
+                        cy.getByDataAttribute('in-point-selection-time-code').should('not.exist');
 
-                    it(`should display the note with correct time range`, () => {
-                        cy.getByDataAttribute('open-notes-panel-button').click();
-
-                        cy.getByDataAttribute('self-note-time-range-context')
-                            .invoke('text')
-                            .then((timeRangeJson) => {
-                                const timeRange = JSON.parse(timeRangeJson);
-
-                                const { inPointMilliseconds, outPointMilliseconds } = timeRange;
-
-                                const tolerance = 0.2;
-
-                                expect(
-                                    millisecondsToRoundedSeconds(inPointMilliseconds)
-                                ).to.be.closeTo(inPointSeconds, tolerance);
-
-                                expect(
-                                    millisecondsToRoundedSeconds(outPointMilliseconds)
-                                ).to.be.closeTo(outPointSeconds, tolerance);
-                            });
-                    });
-
-                    describe(`before the successful command is acknowledged, the annotation form`, () => {
-                        beforeEach(() => {
-                            cy.get('audio').then(([audioElement]) => {
-                                audioElement.play();
-                            });
-
-                            cy.get('audio').then(([audioElement]) => {
-                                audioElement.currentTime = inPointSeconds;
-                            });
-
-                            cy.getByDataAttribute('in-point-marker-button').click();
-
-                            cy.get('audio').then(([audioElement]) => {
-                                audioElement.currentTime = outPointSeconds;
-                            });
-
-                            cy.getByDataAttribute('out-point-marker-button').click();
-                        });
-
-                        it(`should be disabled`, () => {
-                            cy.getByDataAttribute('command-succeeded-notification').should('exist');
-
-                            cy.getByDataAttribute('note-form').should('not.exist');
-                        });
-                    });
-
-                    describe(`when the successful command has been acknowledged`, () => {
-                        beforeEach(() => {
-                            // .first() is temporary until we resolve the command panel
-                            cy.getByDataAttribute(`command-ack-button`).first().click();
-                        });
-
-                        describe(`the annotation form`, () => {
-                            it(`should be disabled`, () => {
-                                cy.getByDataAttribute('note-form').should('not.exist');
-                            });
-                        });
-
-                        describe(`the time range`, () => {
-                            it.only(`should be cleared`, () => {
-                                cy.getByDataAttribute('in-point-selection-time-code').should(
-                                    'not.exist'
-                                );
-
-                                cy.getByDataAttribute('inpoint-selected-bar').should(
-                                    'not.be.visible'
-                                );
-                            });
-                        });
+                        cy.getByDataAttribute('inpoint-selected-bar').should('not.be.visible');
                     });
                 });
             });
