@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { Button, Text, View } from 'react-native';
 import config from './Config.json';
 
+interface AlphabetCard {
+    letter: string;
+    word: string;
+    //be careful this is a string, should be parsed
+    sequence_number: string;
+    letter_audio: string;
+    word_audio: string;
+    standalone_image: string;
+    card_image: string;
+}
 export interface AlphabetData {
     data: {
         name: string;
@@ -10,13 +20,15 @@ export interface AlphabetData {
             name: string;
             url: string;
         };
+        alphabet_cards: AlphabetCard[];
     };
 }
 
-export function MenuScreen() {
+const MenuScreen = ({ navigation }) => {
     const [alphabetData, setAlphabetData] = useState<AlphabetData | null>(null);
 
     useEffect(() => {
+        //cache this after fetching it once
         const fetchData = async () => {
             try {
                 //TODO use context api
@@ -37,17 +49,14 @@ export function MenuScreen() {
     }
 
     const {
-        data: { name, name_english, poster },
+        data: { name, name_english, poster, alphabet_cards: alphabetCards },
     } = alphabetData;
 
     return (
         <View>
-            <Text>Name: {name}</Text>
-            <Text>English: {name_english}</Text>
-            <Text>Poster: {poster.name}</Text>
-            <Text>Poster URL: {poster.url}</Text>
+            <Button testID="Detail" title={'Detail'} onPress={() => navigation.push('Detail')} />
         </View>
     );
-}
+};
 
 export default MenuScreen;
