@@ -64,7 +64,6 @@ describe('the audio annotation process', () => {
             cy.visit(audioDetailRoute);
         });
 
-        // Skip until we have a way to check for admin access
         it(`should render the audio title`, () => {
             cy.contains(audioTitleInLanguage);
 

@@ -24,8 +24,14 @@ export const SelfNotePresenter = ({ text, id, context }: SelfConnectionNote): JS
                 {/* TODO Use property presenter helper after rebasing */}
                 <Typography variant="h4">Note (Id: {id}):</Typography>
                 <Typography paragraph>{text}</Typography>
-                {/* TODO Eventually we should offer a way to highlight this context in the detail view */}
-                {/* We may not need to present this here in this way. This is for development only. */}
+                {/* 
+                
+                TODO Eventually we should offer a way to highlight this context 
+                in the detail view. For example, we may want to scrub to
+                the in-point of an audio player when a note with `timeRange`
+                context is selected. 
+                
+                */}
                 <Typography variant="h5">Context:</Typography>
                 <EdgeConnectionContextPresenter context={context} />
             </Grid>

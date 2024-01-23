@@ -1,3 +1,4 @@
+import { ITimeRangeContext } from '@coscrad/api-interfaces';
 import {
     FixedValue,
     NestedDataType,
@@ -44,7 +45,7 @@ export type TimeRangeWithoutData = Pick<
 >;
 
 @UnionMember(EDGE_CONNECTION_CONTEXT_UNION, EdgeConnectionContextType.timeRange)
-export class TimeRangeContext extends EdgeConnectionContext {
+export class TimeRangeContext extends EdgeConnectionContext implements ITimeRangeContext {
     @FixedValue({
         label: 'type',
         description: 'type',

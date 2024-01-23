@@ -257,6 +257,28 @@ describe('<AudioAnnotator />', () => {
                 });
             });
 
+            describe(
+                `the browser shortcut key Control + o`, ()=>{
+                    it(`should not set an out point`,()=>{
+
+                        cy.get('body').type('i');
+
+                        cy.get('body').type('{ctrl+o}');
+    
+                        cy.getByDataAttribute('out-point-selection-time-code').should('not.exist')
+                    })
+                }
+            )
+
+            describe.only(`the browser shortcut key Control + i`,()=>{
+                it(`should not set an in-point`,()=>{
+                    cy.get('body').type('{ctrl+i}');
+
+                    cy.getByDataAttribute('in-point-selection-time-code').should('not.exist');
+                })
+                
+            })
+
             describe(`after a time range is selected, when the clear range button is clicked`, () => {
                 it('should clear the range selection', () => {
                     cy.getByDataAttribute('in-point-marker-button').click();
