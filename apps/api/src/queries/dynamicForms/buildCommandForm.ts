@@ -1,5 +1,6 @@
 import {
     AGGREGATE_COMPOSITE_IDENTIFIER,
+    CoscradComplexDataType,
     CoscradDataType,
     ICoscradModelSchema,
     IDynamicForm,
@@ -14,6 +15,12 @@ import { buildFormFieldForCommandPayloadProp } from './buildFormFieldForCommandP
 // TODO We should have a SST for `rawData` as a key on all CREATE_X payloads.
 const propertyKeysToOmitFromForms = [AGGREGATE_COMPOSITE_IDENTIFIER, 'rawData'];
 
+const isPropertyOmittedFromForm = (key, propertySchema) => {
+    if (propertyKeysToOmitFromForms.includes(key)) return true;
+
+    return propertySchema?.complexDataType === CoscradComplexDataType.union;
+};
+
 export const buildCommandForm = <T extends Record<string, unknown>>(
     schema: ICoscradModelSchema<T, CoscradDataType>,
     context: CommandContext
@@ -26,7 +33,7 @@ export const buildCommandForm = <T extends Record<string, unknown>>(
 
     const fields: IFormField[] = Object.entries(schema).reduce(
         (acc: IFormField[], [key, propertySchema]) =>
-            propertyKeysToOmitFromForms.includes(key)
+            isPropertyOmittedFromForm(key, schema)
                 ? acc
                 : [
                       ...acc,

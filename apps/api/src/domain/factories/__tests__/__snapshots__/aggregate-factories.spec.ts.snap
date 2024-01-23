@@ -3,7 +3,6 @@
 exports[`Aggregate factories when attempting to build an instance of type: audioItem from a DTO when the DTO is valid valid transribed audio DTO should succeed 1`] = `
 WithTranscription {
   "eventHistory": [],
-  "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
   "lengthMilliseconds": 20000,
   "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -63,6 +62,99 @@ WithTranscription {
 }
 `;
 
+exports[`Aggregate factories when attempting to build an instance of type: bibliographicCitation from a DTO when the DTO is valid valid dto for a Bibliographic Reference of sub-type: Book should succeed 1`] = `
+BookBibliographicCitation {
+  "data": BookBibliographicCitationData {
+    "abstract": "This is the abstract, NOT a general note!",
+    "creators": [
+      {
+        "name": "Alana Duvernay",
+        "type": "author",
+      },
+      {
+        "name": "James Smith",
+        "type": "author",
+      },
+    ],
+    "isbn": "978-1-895811-34-6",
+    "numberOfPages": 455,
+    "place": "Kennebunk Port, Maine",
+    "publisher": "Atlantic Publishing",
+    "title": "A Day in the Life",
+    "type": "book",
+    "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-book-bibliographic-citation-1_a-day-in-the-life.pdf",
+    "year": 1999,
+  },
+  "digitalRepresentationResourceCompositeIdentifier": {
+    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
+    "type": "digitalText",
+  },
+  "eventHistory": [],
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+  "published": true,
+  "queryAccessControlList": AccessControlList {
+    "allowedGroupIds": [],
+    "allowedUserIds": [],
+  },
+  "type": "bibliographicCitation",
+}
+`;
+
+exports[`Aggregate factories when attempting to build an instance of type: bibliographicCitation from a DTO when the DTO is valid valid dto for a Bibliographic Reference of sub-type: Court Case should succeed 1`] = `
+CourtCaseBibliographicCitation {
+  "data": CourtCaseBibliographicCitationData {
+    "abstract": "Doe, Jane
+- Large Valley
+- Qualifying as an expert in the written language",
+    "caseName": "2002-07-08_NationTitleCase",
+    "court": "Supreme Court of British Columbia",
+    "dateDecided": "Recorded 2002-07-08",
+    "pages": "Pages 1-6",
+    "type": "courtCase",
+    "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-court-case-bibliographic-citation-3_title-case.pdf",
+  },
+  "digitalRepresentationResourceCompositeIdentifier": undefined,
+  "eventHistory": [],
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+  "published": true,
+  "queryAccessControlList": AccessControlList {
+    "allowedGroupIds": [],
+    "allowedUserIds": [],
+  },
+  "type": "bibliographicCitation",
+}
+`;
+
+exports[`Aggregate factories when attempting to build an instance of type: bibliographicCitation from a DTO when the DTO is valid valid dto for a Bibliographic Reference of sub-type: Journal Article should succeed 1`] = `
+JournalArticleBibliographicCitation {
+  "data": JournalArticleBibliographicCitationData {
+    "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
+    "creators": [
+      BibliographicCitationCreator {
+        "name": "Sigurd Purcell",
+        "type": "author",
+      },
+    ],
+    "doi": "10.14288/bcs.v0i19.784",
+    "issn": "00052949",
+    "issueDate": "Spring 2013",
+    "publicationTitle": "Journal of History",
+    "title": "Report on the Cariboo Chilcotin Justice inquiry",
+    "type": "journalArticle",
+    "url": "https://coscrad.org/wp-content/uploads/2023/05/Test-Journal-Article-Sample-PDF.pdf",
+  },
+  "digitalRepresentationResourceCompositeIdentifier": undefined,
+  "eventHistory": [],
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+  "published": true,
+  "queryAccessControlList": AccessControlList {
+    "allowedGroupIds": [],
+    "allowedUserIds": [],
+  },
+  "type": "bibliographicCitation",
+}
+`;
+
 exports[`Aggregate factories when attempting to build an instance of type: digitalText from a DTO when the DTO is valid valid digital text should succeed 1`] = `
 DigitalText {
   "eventHistory": [
@@ -83,10 +175,12 @@ DigitalText {
       "type": "DIGITAL_TEXT_CREATED",
     },
   ],
-  "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "pages": [
     DigitalTextPage {
+      "audio": MultilingualAudio {
+        "items": [],
+      },
       "content": null,
       "identifier": "1",
     },
@@ -118,17 +212,15 @@ MediaItem {
     },
   ],
   "eventHistory": [],
-  "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "lengthMilliseconds": 2500,
-  "mimeType": "audio/x-wav",
+  "mimeType": "audio/wav",
   "published": true,
   "queryAccessControlList": AccessControlList {
     "allowedGroupIds": [],
     "allowedUserIds": [],
   },
   "title": "episode (media item 1) title (in language)",
-  "titleEnglish": "Metal Mondays episode 1",
   "type": "mediaItem",
   "url": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
 }
@@ -136,14 +228,13 @@ MediaItem {
 
 exports[`Aggregate factories when attempting to build an instance of type: photograph from a DTO when the DTO is valid valid photograph should succeed 1`] = `
 Photograph {
-  "dimensions": PhotographDimensions {
-    "heightPX": 400,
-    "widthPX": 300,
+  "dimensions": MediaItemDimensions {
+    "heightPx": 400,
+    "widthPx": 300,
   },
   "eventHistory": [],
-  "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
-  "mediaItemId": "5",
+  "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
   "photographer": "Susie McRealart",
   "published": true,
   "queryAccessControlList": AccessControlList {
@@ -166,7 +257,6 @@ Photograph {
 exports[`Aggregate factories when attempting to build an instance of type: playlist from a DTO when the DTO is valid valid playlist DTO should succeed 1`] = `
 Playlist {
   "eventHistory": [],
-  "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
   "items": [
     PlaylistItem {
@@ -228,7 +318,6 @@ Song {
       "type": "SONG_CREATED",
     },
   ],
-  "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "lyrics": MultilingualText {
     "items": [
@@ -298,7 +387,6 @@ Line {
     ],
     "type": "LineString",
   },
-  "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "properties": SpatialFeatureProperties {
     "description": "One amazing hike!",
@@ -324,7 +412,6 @@ Point {
     ],
     "type": "Point",
   },
-  "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
   "properties": SpatialFeatureProperties {
     "description": "Description for point 100",
@@ -366,7 +453,6 @@ Polygon {
     ],
     "type": "Polygon",
   },
-  "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
   "properties": SpatialFeatureProperties {
     "description": "Description for polygon 300",
@@ -384,14 +470,19 @@ Polygon {
 
 exports[`Aggregate factories when attempting to build an instance of type: term from a DTO when the DTO is valid when the dto is valid should succeed 1`] = `
 Term {
-  "audioFilename": undefined,
+  "audio": MultilingualAudio {
+    "items": [],
+  },
+  "audio": MultilingualAudio {
+    "items": [],
+  },
   "contributorId": undefined,
   "eventHistory": [
     {
-      "id": "b5233349-71cc-4516-bbd9-08d2fd8728e8",
+      "id": "fa07b764-adfe-4ff7-a12d-bd09d1964d0e",
       "meta": {
-        "dateCreated": 1664237195283,
-        "id": "b5233349-71cc-4516-bbd9-08d2fd8728e8",
+        "dateCreated": 1664237194635,
+        "id": "fa07b764-adfe-4ff7-a12d-bd09d1964d0e",
         "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999",
       },
       "payload": {
@@ -405,10 +496,10 @@ Term {
       "type": "PROMPT_TERM_CREATED",
     },
     {
-      "id": "b579efa4-1b22-4196-9894-9f850a6ce127",
+      "id": "18769856-badd-43f9-a3d6-b227c46182a0",
       "meta": {
-        "dateCreated": 1664237195284,
-        "id": "b579efa4-1b22-4196-9894-9f850a6ce127",
+        "dateCreated": 1664237194636,
+        "id": "18769856-badd-43f9-a3d6-b227c46182a0",
         "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100999",
       },
       "payload": {
@@ -422,7 +513,6 @@ Term {
       "type": "TERM_ELICITED_FROM_PROMPT",
     },
   ],
-  "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "isPromptTerm": true,
   "published": false,
@@ -452,7 +542,6 @@ Term {
 exports[`Aggregate factories when attempting to build an instance of type: video from a DTO when the DTO is valid valid video DTO should succeed 1`] = `
 WithTranscription {
   "eventHistory": [],
-  "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
   "lengthMilliseconds": 20000,
   "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
@@ -552,7 +641,6 @@ VocabularyList {
     },
   ],
   "eventHistory": [],
-  "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b114567",
   "name": MultilingualText {
     "items": [

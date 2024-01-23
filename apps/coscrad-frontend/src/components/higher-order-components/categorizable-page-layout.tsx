@@ -18,7 +18,6 @@ import {
     styled,
 } from '@mui/material';
 import { ReactNode, useEffect, useState } from 'react';
-import { CommandPanel } from '../commands';
 
 interface CategorizablePageLayoutProps {
     compositeIdentifier: AggregateCompositeIdentifier;
@@ -203,7 +202,7 @@ export const CategorizablePageLayout = ({
                 <Divider variant="fullWidth" sx={{ mb: 3 }} />
                 <DrawerContentStack>{selfNotesList}</DrawerContentStack>
             </Drawer>
-            {!isNullOrUndefined(CommandPanel) ? commandPanel : null}
+            {!isNullOrUndefined(commandPanel) ? commandPanel : null}
         </div>
     );
 };

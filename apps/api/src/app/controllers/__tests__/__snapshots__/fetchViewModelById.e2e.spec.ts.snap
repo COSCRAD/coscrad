@@ -6,7 +6,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
   "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
   "lengthMilliseconds": 20000,
-  "mimeType": "audio/x-wav",
+  "mimeType": "audio/wav",
   "name": {
     "items": [
       {
@@ -113,7 +113,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
   "actions": [],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "lengthMilliseconds": 2500,
-  "mimeType": "audio/x-wav",
+  "mimeType": "audio/wav",
   "name": {
     "items": [
       {
@@ -193,7 +193,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
   "episodes": [
     {
       "mediaItemUrl": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
-      "mimeType": "audio/x-wav",
+      "mimeType": "audio/wav",
       "name": "The Wooden Boy {en} (role: original)",
     },
     {

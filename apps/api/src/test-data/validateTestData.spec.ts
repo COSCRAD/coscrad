@@ -40,8 +40,7 @@ describe('buildTestData', () => {
         });
     });
 
-    Object.values(AggregateType)
-    .forEach((aggregateType) => {
+    Object.values(AggregateType).forEach((aggregateType) => {
         describe(`The test instances for ${formatAggregateType(aggregateType)}`, () => {
             it('should be comprehensive', () => {
                 assertTestInstancesOfTypeAreComprehensive(aggregateType, testData);
@@ -104,7 +103,16 @@ describe('buildTestData', () => {
     afterAll(() => {
         const fullSnapshotInDatabaseFormat = convertInMemorySnapshotToDatabaseFormat(testData);
 
-        const testDataFilePath = `${process.cwd()}/scripts/arangodb-docker-container-setup/docker-container-scripts/test-data/testData.json`;
+        /**
+         * At one point, we used to version control `testData.json`. We realized
+         * that, given the branch, one can simply run the present test and obtain
+         * `testData.json`, so there isn't a lot of value in checking this in.
+         * Further, one run this test and export the json file to some other location.
+         *
+         * For that reason, we have changed the name of this file to `testData.data.json`
+         * which **is** gitignored.
+         */
+        const testDataFilePath = `${process.cwd()}/scripts/arangodb-docker-container-setup/docker-container-scripts/test-data/testData.data.json`;
 
         const numberOfSpacesToIndent = 4;
 
