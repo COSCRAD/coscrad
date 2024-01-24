@@ -20,8 +20,10 @@ import {
 } from '../../shared/common-commands';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import {
+    AddAudioForDigitalTextTitle,
     AddPageToDigitalText,
     AudioAddedForDigitalTextPage,
+    AudioAddedForDigitalTextTitle,
     CreateDigitalText,
     DigitalTextCreated,
     DigitalTextPageContentTranslated,
@@ -86,6 +88,25 @@ const addPageToDigitalText = clonePlainObjectWithOverrides(
             aggregateCompositeIdentifier: { id },
             identifier: dummyPageIdentifier,
         },
+    }
+);
+
+const addAudioForDigitalTextTitle = clonePlainObjectWithOverrides(
+    testFsaMap.get(ADD_AUDIO_FOR_DIGITAL_TEXT_TITLE) as CommandFSA<AddAudioForDigitalTextTitle>,
+    {
+        payload: {
+            aggregateCompositeIdentifier: { id },
+            audioItemId: buildDummyUuid(2),
+        },
+    }
+);
+
+const audioAddedForDigitalTextTitle = new AudioAddedForDigitalTextTitle(
+    addAudioForDigitalTextTitle.payload,
+    {
+        id: buildDummyUuid(117),
+        userId: dummySystemUserId,
+        dateCreated: dummyDateManager.next(),
     }
 );
 
@@ -227,6 +248,14 @@ describe(`DigitalText.fromEventHistory`, () => {
             const titleTransation = titleTranslationSearchResult as MultilingualTextItem;
 
             expect(titleTransation.text).toBe(titleTranslationText);
+        });
+
+        describe(`when audio has been added to the title`, () => {
+            it(`should return audio for the title`, () => {
+                const eventStream = [digitalTextCreated, addAudioForDigitalTextTitle];
+
+                const digitalTextBuildResult = DigitalText.fromEventHistory(eventStream, id);
+            });
         });
 
         describe(`when a page has been added`, () => {
