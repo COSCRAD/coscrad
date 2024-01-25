@@ -5,7 +5,7 @@ import 'react-native-gesture-handler';
 import CreditsScreen from './Components/Credits';
 import HomeScreen from './Components/Home';
 import MenuScreen from './Components/Menu';
-import MenuDetailScreen from './Components/Menu-detail.presenter';
+import { AlphabetCardDetailScreen } from './Components/alphabet-card-detail.screen';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,7 +15,7 @@ export const App = () => {
             <Stack.Navigator>
                 <Stack.Screen name="Home" component={HomeScreen} />
                 <Stack.Screen name="Menu" component={MenuScreen} />
-                <Stack.Screen name="Detail" component={MenuDetailScreen} />
+                <Stack.Screen name="Detail" component={AlphabetCardDetailScreen} />
                 <Stack.Screen name="Credits" component={CreditsScreen} />
             </Stack.Navigator>
         </NavigationContainer>

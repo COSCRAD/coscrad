@@ -3,9 +3,10 @@ import { Button, Image, Text, View } from 'react-native';
 import config from './Config.json';
 import { AlphabetData } from './Menu';
 
-export function MenuDetialScreen() {
+export function AlphabetCardDetailScreen() {
     const [alphabetData, setAlphabetData] = useState<AlphabetData | null>(null);
 
+    // Sequence numbers are indexed starting at 1
     const [selectedLetterSequenceNumber, setSelectedLetterSequenceNumber] = useState<number>(1);
 
     useEffect(() => {
@@ -48,7 +49,7 @@ export function MenuDetialScreen() {
     } = selectedCard;
 
     return (
-        <View testID="Detail">
+        <View testID="AlphabetCardDetail">
             <Image
                 style={{ width: 200, height: 200 }}
                 resizeMode="cover"
@@ -58,7 +59,9 @@ export function MenuDetialScreen() {
             />
             <Text>Letter: {letter}</Text>
             <Text>Word: {word}</Text>
-            <Text testID={sequence_number}>Sequence #: {sequence_number}</Text>
+            <Text testID={`AlphabetCardDetail/${sequence_number}`}>
+                Sequence #: {sequence_number}
+            </Text>
             <Text>Image: {card_image}</Text>
             <Text>Letter Audio:{letter_audio}</Text>
             <Text>Word Audio: {word_audio}</Text>
@@ -86,4 +89,4 @@ export function MenuDetialScreen() {
     );
 }
 
-export default MenuDetialScreen;
+export default AlphabetCardDetailScreen;

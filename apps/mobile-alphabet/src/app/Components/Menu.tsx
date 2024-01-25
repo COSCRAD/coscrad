@@ -54,7 +54,11 @@ const MenuScreen = ({ navigation }) => {
 
     return (
         <View>
-            <Button testID="Detail" title={'Detail'} onPress={() => navigation.push('Detail')} />
+            <Button
+                testID="AlphabetDetailLinkButton"
+                title={'Detail'}
+                onPress={() => navigation.push('Detail')}
+            />
         </View>
     );
 };
