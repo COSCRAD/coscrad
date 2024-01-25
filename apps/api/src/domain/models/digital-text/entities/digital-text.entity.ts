@@ -30,6 +30,7 @@ import { BaseEvent } from '../../shared/events/base-event.entity';
 import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import {
     AudioAddedForDigitalTextPage,
+    AudioAddedForDigitalTextTitle,
     DigitalTextCreated,
     DigitalTextPageContentTranslated,
     DigitalTextTitleTranslated,
@@ -356,6 +357,12 @@ export class DigitalText extends Resource {
         payload: { translation, languageCode },
     }: DigitalTextTitleTranslated) {
         return this.translateTitle(translation, languageCode);
+    }
+
+    handleAudioAddedForDigitalTextTitle({
+        payload: { audioItemId, languageCode },
+    }: AudioAddedForDigitalTextTitle) {
+        return this.addAudioForTitle(audioItemId, languageCode);
     }
 
     handlePageAddedToDigitalText({ payload: { identifier } }: PageAddedToDigitalText) {

@@ -91,18 +91,41 @@ const addPageToDigitalText = clonePlainObjectWithOverrides(
     }
 );
 
-const addAudioForDigitalTextTitle = clonePlainObjectWithOverrides(
-    testFsaMap.get(ADD_AUDIO_FOR_DIGITAL_TEXT_TITLE) as CommandFSA<AddAudioForDigitalTextTitle>,
+const audioItemIdForTitle = buildDummyUuid(2);
+
+const addAudioForDigitalTextOriginalTitle = clonePlainObjectWithOverrides(
+    testFsaMap.get(`ADD_AUDIO_FOR_DIGITAL_TEXT_TITLE`) as CommandFSA<AddAudioForDigitalTextTitle>,
     {
         payload: {
             aggregateCompositeIdentifier: { id },
-            audioItemId: buildDummyUuid(2),
+            audioItemId: audioItemIdForTitle,
+            languageCode: languageCodeForTitle,
+        },
+    }
+);
+
+const addAudioForDigitalTextTitleTranslation = clonePlainObjectWithOverrides(
+    testFsaMap.get(`ADD_AUDIO_FOR_DIGITAL_TEXT_TITLE`) as CommandFSA<AddAudioForDigitalTextTitle>,
+    {
+        payload: {
+            aggregateCompositeIdentifier: { id },
+            audioItemId: audioItemIdForTitle,
+            languageCode: languageCodeForTitleTranslation,
         },
     }
 );
 
 const audioAddedForDigitalTextTitle = new AudioAddedForDigitalTextTitle(
-    addAudioForDigitalTextTitle.payload,
+    addAudioForDigitalTextOriginalTitle.payload,
+    {
+        id: buildDummyUuid(117),
+        userId: dummySystemUserId,
+        dateCreated: dummyDateManager.next(),
+    }
+);
+
+const audioAddedForDigitalTextTitleTranslation = new AudioAddedForDigitalTextTitle(
+    addAudioForDigitalTextTitleTranslation.payload,
     {
         id: buildDummyUuid(117),
         userId: dummySystemUserId,
@@ -251,10 +274,46 @@ describe(`DigitalText.fromEventHistory`, () => {
         });
 
         describe(`when audio has been added to the title`, () => {
-            it(`should return audio for the title`, () => {
-                const eventStream = [digitalTextCreated, addAudioForDigitalTextTitle];
+            describe(`when audio has been added in the original language: ${languageCodeForTitle}`, () => {
+                it(`should return audio for the title`, () => {
+                    // arrange
+                    const eventStream = [digitalTextCreated, audioAddedForDigitalTextTitle];
 
-                const digitalTextBuildResult = DigitalText.fromEventHistory(eventStream, id);
+                    // act
+                    const digitalTextBuildResult = DigitalText.fromEventHistory(eventStream, id);
+
+                    // assert
+                    expect(digitalTextBuildResult).toBeInstanceOf(DigitalText);
+
+                    const builtDigitalText = digitalTextBuildResult as DigitalText;
+
+                    const audioIdForTitleSearchResult =
+                        builtDigitalText.getAudioForTitleInLanguage(languageCodeForTitle);
+
+                    expect(audioIdForTitleSearchResult).toBe(audioItemIdForTitle);
+                });
+            });
+
+            describe(`when audio has been added in the translation language: ${languageCodeForTitleTranslation}`, () => {
+                it(`should return the expected digital text`, () => {
+                    const eventHistory = [
+                        digitalTextCreated,
+                        digitalTextTitleTranslated,
+                        audioAddedForDigitalTextTitleTranslation,
+                    ];
+
+                    const result = DigitalText.fromEventHistory(eventHistory, id);
+
+                    expect(result).toBeInstanceOf(DigitalText);
+
+                    const updatedDigitalText = result as DigitalText;
+
+                    const audioIdSearchResult = updatedDigitalText.getAudioForTitleInLanguage(
+                        languageCodeForTitleTranslation
+                    );
+
+                    expect(audioIdSearchResult).toBe(audioItemIdForTitle);
+                });
             });
         });
 
