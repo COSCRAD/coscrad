@@ -37,6 +37,7 @@ import {
     PageAddedToDigitalText,
 } from '../commands';
 import { ContentAddedToDigitalTextPage } from '../commands/add-content-to-digital-text-page';
+import { PhotographAddedToDigitalTextPage } from '../commands/add-photograph-to-digital-text-page';
 import { ADD_PAGE_TO_DIGITAL_TEXT, CREATE_DIGITAL_TEXT } from '../constants';
 import {
     CannotAddPhotographForMissingPageError,
@@ -427,6 +428,12 @@ export class DigitalText extends Resource {
         payload: { pageIdentifier, audioItemId, languageCode },
     }: AudioAddedForDigitalTextPage) {
         return this.addAudioForPage(pageIdentifier, audioItemId, languageCode);
+    }
+
+    handlePhotographAddedToDigitalTextPage({
+        payload: { pageIdentifier, photographId },
+    }: PhotographAddedToDigitalTextPage) {
+        return this.addPhotographToPage(pageIdentifier, photographId);
     }
 
     handleDigitalTextPageContentTranslated({

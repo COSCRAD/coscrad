@@ -34,6 +34,7 @@ import {
     AddContentToDigitalTextPage,
     ContentAddedToDigitalTextPage,
 } from '../commands/add-content-to-digital-text-page';
+import { PhotographAddedToDigitalTextPage } from '../commands/add-photograph-to-digital-text-page';
 import { ADD_PAGE_TO_DIGITAL_TEXT } from '../constants';
 import DigitalTextPage from './digital-text-page.entity';
 import { DigitalText } from './digital-text.entity';
@@ -208,6 +209,21 @@ const audioAddedForDigitalTextPage = new TestEventStream()
             pageIdentifier: dummyPageIdentifier,
             languageCode: originalLanguageCodeForContent,
             audioItemId,
+        },
+    })
+    .as({
+        type: AggregateType.digitalText,
+        id,
+    })[0];
+
+const photographIdForDummyPage = buildDummyUuid(456);
+
+const photographAddedToDigitalTextPage = new TestEventStream()
+    .andThen<PhotographAddedToDigitalTextPage>({
+        type: `PHOTOGRAPH_ADDED_TO_DIGITAL_TEXT_PAGE`,
+        payload: {
+            pageIdentifier: dummyPageIdentifier,
+            photographId: photographIdForDummyPage,
         },
     })
     .as({
@@ -412,6 +428,24 @@ describe(`DigitalText.fromEventHistory`, () => {
                 expect(audioSearchResult).not.toBeInstanceOf(InternalError);
 
                 expect(audioSearchResult).toBe(audioItemId);
+            });
+        });
+
+        describe(`when a photograph has been added for a digital text page`, () => {
+            it(`should return a digital text with the given photograph on the given page`, () => {
+                const result = DigitalText.fromEventHistory(
+                    [digitalTextCreated, pageAddedForDigitalText, photographAddedToDigitalTextPage],
+                    id
+                );
+
+                expect(result).toBeInstanceOf(DigitalText);
+
+                const builtDigitalText = result as DigitalText;
+
+                const photographIdSearchResult =
+                    builtDigitalText.getPhotographForPage(dummyPageIdentifier);
+
+                expect(photographIdSearchResult).toBe(photographIdForDummyPage);
             });
         });
 
