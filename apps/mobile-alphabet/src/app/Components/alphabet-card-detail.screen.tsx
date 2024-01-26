@@ -57,8 +57,8 @@ export function AlphabetCardDetailScreen() {
                     uri: standalone_image,
                 }}
             />
-            <Text>Letter: {letter}</Text>
-            <Text>Word: {word}</Text>
+            <Text testID={`${letter}`}>Letter: {letter}</Text>
+            <Text testID={`${word}`}>Word: {word}</Text>
             <Text testID={`AlphabetCardDetail/${sequence_number}`}>
                 Sequence #: {sequence_number}
             </Text>
@@ -67,6 +67,7 @@ export function AlphabetCardDetailScreen() {
             <Text>Word Audio: {word_audio}</Text>
             <Text>Standalone Image: {standalone_image}</Text>
             <Button
+                testID="Back"
                 title="Back"
                 onPress={() => {
                     setSelectedLetterSequenceNumber(
