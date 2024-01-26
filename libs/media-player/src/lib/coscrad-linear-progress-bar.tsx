@@ -1,6 +1,6 @@
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { styled } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
+import { isNullOrUndefined } from './shared/validation';
 
 const PROGRESS_BAR_HEIGHT = 30;
 

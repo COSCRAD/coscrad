@@ -1,6 +1,6 @@
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { styled } from '@mui/material';
 import { LanguageCode } from './language-code.enum';
+import { isNullOrUndefined } from './shared/validation';
 import { Subtitle } from './video-prototype-player';
 
 const StyledSubtitle = styled('span')({

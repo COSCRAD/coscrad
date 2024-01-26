@@ -1,4 +1,3 @@
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Grid, styled } from '@mui/material';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -7,6 +6,7 @@ import {
     TIMELINE_RULER_BAR_HEIGHT,
     ZOOM_FACTOR,
 } from './editor-constants';
+import { isNullOrUndefined } from './shared/validation';
 import { TimelineRuler } from './timeline-ruler';
 import { Track } from './track';
 import { ITranscript } from './video-prototype-interfaces/transcript-interface';

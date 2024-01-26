@@ -1,4 +1,4 @@
-import { asTwoDigitString } from './asTwoDigitString';
+import { asTwoDigitString } from './shared/as-two-digit-string';
 
 interface FormattedCurrentTimeProps {
     currentTimeInSeconds: number;

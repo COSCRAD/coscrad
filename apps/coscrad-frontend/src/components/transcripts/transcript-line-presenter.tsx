@@ -8,7 +8,7 @@ enum FontColor {
 
 interface TranscriptLinePresenterProps {
     transcriptLine: ITranscriptItem;
-    onHighlight: () => {};
+    // onHighlight: () => {};
 }
 
 export const TranscriptLinePresenter = ({ transcriptLine }: TranscriptLinePresenterProps) => {

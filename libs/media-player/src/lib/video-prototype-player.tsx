@@ -1,4 +1,3 @@
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import {
     ArrowLeft as ArrowLeftIcon,
     ArrowRight as ArrowRightIcon,
@@ -24,6 +23,7 @@ import { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { CoscradMediaEditor } from './coscrad-media-editor';
 import { FormattedCurrentTime } from './formatted-currenttime';
 import { LanguageCode } from './language-code.enum';
+import { isNullOrUndefined } from './shared/validation';
 import { ITranscript } from './video-prototype-interfaces/transcript-interface';
 
 export const calculatePercentProgress = (currentTime: number, duration: number) => {
