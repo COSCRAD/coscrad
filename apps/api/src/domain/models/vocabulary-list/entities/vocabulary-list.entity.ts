@@ -7,6 +7,7 @@ import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import { Valid, isValid } from '../../../domainModelValidators/Valid';
 import VocabularyListWithNoEntriesCannotBePublishedError from '../../../domainModelValidators/errors/vocabularyList/vocabulary-list-with-no-entries-cannot-be-published.error';
@@ -16,10 +17,16 @@ import { AggregateType } from '../../../types/AggregateType';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import { DuplicateLanguageInMultilingualTextError } from '../../audio-item/errors/duplicate-language-in-multilingual-text.error';
+import {
+    CreationEventHandlerMap,
+    buildAggregateRootFromEventHistory,
+} from '../../build-aggregate-root-from-event-history';
 import { TextFieldContext } from '../../context/text-field-context/text-field-context.entity';
 import { Resource } from '../../resource.entity';
 import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
+import { BaseEvent } from '../../shared/events/base-event.entity';
+import { VocabularyListCreated } from '../commands';
 import { ADD_TERM_TO_VOCABULARY_LIST } from '../commands/add-term-to-vocabulary-list/constants';
 import { ANALYZE_TERM_IN_VOCABULARY_LIST } from '../commands/analyze-term-in-vocabulary-list/constants';
 import { TRANSLATE_VOCABULARY_LIST_NAME } from '../commands/translate-vocabulary-list-name/constants';
@@ -295,5 +302,45 @@ export class VocabularyList extends Resource {
 
     validateTextFieldContext(context: TextFieldContext): Valid | InternalError {
         return validateTextFieldContextForModel(this, context);
+    }
+
+    static fromEventHistory(
+        eventStream: BaseEvent[],
+        vocabularyListId: AggregateId
+    ): ResultOrError<Maybe<VocabularyList>> {
+        const creationEventHandlerMap: CreationEventHandlerMap<VocabularyList> = new Map().set(
+            `VOCABULARY_LIST_CREATED`,
+            VocabularyList.createVocabularyListFromVocabularyListCreated
+        );
+
+        return buildAggregateRootFromEventHistory(
+            creationEventHandlerMap,
+            {
+                type: AggregateType.vocabularyList,
+                id: vocabularyListId,
+            },
+            eventStream
+        );
+    }
+
+    private static createVocabularyListFromVocabularyListCreated(
+        event: VocabularyListCreated
+    ): ResultOrError<Maybe<VocabularyList>> {
+        const {
+            payload: {
+                aggregateCompositeIdentifier: { id },
+                name,
+                languageCodeForName,
+            },
+        } = event;
+
+        return new VocabularyList({
+            type: AggregateType.vocabularyList,
+            id,
+            name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
+            entries: [],
+            variables: [],
+            published: false,
+        });
     }
 }

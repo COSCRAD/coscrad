@@ -50,6 +50,10 @@ import { PROMPT_TERM_CREATED } from '../../domain/models/term/commands/create-pr
 import { TERM_CREATED } from '../../domain/models/term/commands/create-term/constants';
 import { TERM_ELICITED_FROM_PROMPT } from '../../domain/models/term/commands/elicit-term-from-prompt/constants';
 import { TERM_TRANSLATED } from '../../domain/models/term/commands/translate-term/constants';
+import {
+    VocabularyListCreated,
+    VocabularyListCreatedPayload,
+} from '../../domain/models/vocabulary-list/commands';
 import { AggregateId } from '../../domain/types/AggregateId';
 import { AggregateType } from '../../domain/types/AggregateType';
 import { InternalError } from '../../lib/errors/InternalError';
@@ -59,7 +63,7 @@ import { DeepPartial } from '../../types/DeepPartial';
 
 type EventRecordMetadataOverrides = DeepPartial<EventRecordMetadata>;
 
-type EventMetadataBuilder = () => EventRecordMetadata;
+export type EventMetadataBuilder = () => EventRecordMetadata;
 
 export type EventBuilder<T extends BaseEvent> = (
     payloadOverrides: EventPayloadOverrides<T>,
@@ -467,6 +471,25 @@ const buildSongLyricsTranslated = (
     );
 };
 
+const buildVocabularyListCreated = (
+    payloadOverrides: DeepPartial<VocabularyListCreatedPayload>,
+    buildMetadata: EventMetadataBuilder
+) => {
+    const defaultPayload: VocabularyListCreatedPayload = {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.vocabularyList,
+            id: buildDummyUuid(124),
+        },
+        name: 'the vocab list',
+        languageCodeForName: LanguageCode.English,
+    };
+
+    return new VocabularyListCreated(
+        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        buildMetadata()
+    );
+};
+
 export class TestEventStream {
     private readonly TIME_OFFSET = 100; // 100 ms between events
 
@@ -487,6 +510,9 @@ export class TestEventStream {
          * TODO Consider injecting the builder as a dependency to the constructor.
          *
          * TODO Find a pattern for doing this in separate files.
+         *
+         * TODO If you use the constructor in `.clone`, this logic happens
+         * on every call to clone. This isn't very performant.
          */
         this.registerBuilder('DIGITAL_TEXT_CREATED', buildDigitalTextCreatedEvent)
             .registerBuilder('PAGE_ADDED_TO_DIGITAL_TEXT', buildPageAddedEvent)
@@ -515,7 +541,8 @@ export class TestEventStream {
             )
             .registerBuilder(`AUDIO_ADDED_FOR_TERM`, buildAudioAddedForTerm)
             .registerBuilder(`AUDIO_ADDED_FOR_DIGITAL_TEXT_PAGE`, buildAudioAddedForDigitalTextPage)
-            .registerBuilder(`DIGITAL_TEXT_TITLE_TRANSLATED`, buildDigitalTextTitleTranslated);
+            .registerBuilder(`DIGITAL_TEXT_TITLE_TRANSLATED`, buildDigitalTextTitleTranslated)
+            .registerBuilder(`VOCABULARY_LIST_CREATED`, buildVocabularyListCreated);
     }
 
     andThen<T extends BaseEvent>(
@@ -580,7 +607,7 @@ export class TestEventStream {
         );
     }
 
-    private registerBuilder<T extends BaseEvent>(
+    public registerBuilder<T extends BaseEvent>(
         eventType: string,
         builder: EventBuilder<T>
     ): TestEventStream {
