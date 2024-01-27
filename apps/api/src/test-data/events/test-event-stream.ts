@@ -51,9 +51,16 @@ import { TERM_CREATED } from '../../domain/models/term/commands/create-term/cons
 import { TERM_ELICITED_FROM_PROMPT } from '../../domain/models/term/commands/elicit-term-from-prompt/constants';
 import { TERM_TRANSLATED } from '../../domain/models/term/commands/translate-term/constants';
 import {
+    FilterPropertyType,
     VocabularyListCreated,
     VocabularyListCreatedPayload,
+    VocabularyListFilterPropertyRegistered,
+    VocabularyListFilterPropertyRegisteredPayload,
 } from '../../domain/models/vocabulary-list/commands';
+import {
+    VocabularyListNameTranslated,
+    VocabularyListNameTranslatedPayload,
+} from '../../domain/models/vocabulary-list/commands/translate-vocabulary-list-name/vocabulary-list-name-translated.event';
 import { AggregateId } from '../../domain/types/AggregateId';
 import { AggregateType } from '../../domain/types/AggregateType';
 import { InternalError } from '../../lib/errors/InternalError';
@@ -490,6 +497,58 @@ const buildVocabularyListCreated = (
     );
 };
 
+const buildVocabularyListNameTranslated = (
+    payloadOverrides: DeepPartial<VocabularyListNameTranslatedPayload>,
+    buildMetadata: EventMetadataBuilder
+) => {
+    const defaultPayload: VocabularyListNameTranslatedPayload = {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.vocabularyList,
+            id: buildDummyUuid(135),
+        },
+        text: 'Translation of Vocabulary List Name',
+        languageCode: LanguageCode.Chilcotin,
+    };
+
+    return new VocabularyListNameTranslated(
+        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        buildMetadata()
+    );
+};
+
+// const buildTermAddedToVocabularyList
+
+const buildVocabularyListFilterPropertyRegistered = (
+    payloadOverrides: DeepPartial<VocabularyListFilterPropertyRegisteredPayload>,
+    buildMetadata: EventMetadataBuilder
+) => {
+    const defaultPayload: VocabularyListFilterPropertyRegisteredPayload = {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.vocabularyList,
+            id: buildDummyUuid(34),
+        },
+        type: FilterPropertyType.selection,
+        name: 'person',
+        allowedValuesAndLabels: [
+            {
+                value: '12',
+                label: 'we',
+            },
+            {
+                value: '11',
+                label: 'I',
+            },
+        ],
+    };
+
+    return new VocabularyListFilterPropertyRegistered(
+        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        buildMetadata()
+    );
+};
+
+// const buildTermInVocabularyListAnalyzed
+
 export class TestEventStream {
     private readonly TIME_OFFSET = 100; // 100 ms between events
 
@@ -542,7 +601,12 @@ export class TestEventStream {
             .registerBuilder(`AUDIO_ADDED_FOR_TERM`, buildAudioAddedForTerm)
             .registerBuilder(`AUDIO_ADDED_FOR_DIGITAL_TEXT_PAGE`, buildAudioAddedForDigitalTextPage)
             .registerBuilder(`DIGITAL_TEXT_TITLE_TRANSLATED`, buildDigitalTextTitleTranslated)
-            .registerBuilder(`VOCABULARY_LIST_CREATED`, buildVocabularyListCreated);
+            .registerBuilder(`VOCABULARY_LIST_CREATED`, buildVocabularyListCreated)
+            .registerBuilder(`VOCABULARY_LIST_NAME_TRANSLATED`, buildVocabularyListNameTranslated)
+            .registerBuilder(
+                `VOCABULARY_LIST_FILTER_PROPERTY_REGISTERED`,
+                buildVocabularyListFilterPropertyRegistered
+            );
     }
 
     andThen<T extends BaseEvent>(
