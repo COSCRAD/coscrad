@@ -8,7 +8,11 @@ import { NotFound } from '../../../../lib/types/not-found';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
-import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
+import {
+    MultilingualText,
+    MultilingualTextItem,
+    MultilingualTextItemRole,
+} from '../../../common/entities/multilingual-text';
 import { Valid, isValid } from '../../../domainModelValidators/Valid';
 import VocabularyListWithNoEntriesCannotBePublishedError from '../../../domainModelValidators/errors/vocabularyList/vocabulary-list-with-no-entries-cannot-be-published.error';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
@@ -26,10 +30,17 @@ import { Resource } from '../../resource.entity';
 import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
 import { BaseEvent } from '../../shared/events/base-event.entity';
-import { VocabularyListCreated } from '../commands';
+import {
+    FilterPropertyType,
+    TermAddedToVocabularyList,
+    TermInVocabularyListAnalyzed,
+    VocabularyListCreated,
+    VocabularyListFilterPropertyRegistered,
+} from '../commands';
 import { ADD_TERM_TO_VOCABULARY_LIST } from '../commands/add-term-to-vocabulary-list/constants';
 import { ANALYZE_TERM_IN_VOCABULARY_LIST } from '../commands/analyze-term-in-vocabulary-list/constants';
 import { TRANSLATE_VOCABULARY_LIST_NAME } from '../commands/translate-vocabulary-list-name/constants';
+import { VocabularyListNameTranslated } from '../commands/translate-vocabulary-list-name/vocabulary-list-name-translated.event';
 import {
     CannotAddMultipleEntriesForSingleTermError,
     CannotHaveTwoFilterPropertiesWithTheSameNameError,
@@ -111,6 +122,12 @@ export class VocabularyList extends Resource {
         return this.entries.find((entry) => termId === entry.termId) || NotFound;
     }
 
+    findEntries(
+        propertyValueSpecification: Record<string, boolean | string>
+    ): VocabularyListEntry[] {
+        return this.entries.filter((entry) => entry.doesMatchAll(propertyValueSpecification));
+    }
+
     hasFilterPropertyNamed(name: string): boolean {
         // TODO rename `variables` to `filterProperties`
         return this.variables.some((filterProperty) => filterProperty.name === name);
@@ -150,6 +167,19 @@ export class VocabularyList extends Resource {
     }
 
     analyzeEntry(
+        termId: AggregateId,
+        propertyNamesAndValues: Record<string, string | boolean>
+    ): ResultOrError<VocabularyList> {
+        return Object.entries(propertyNamesAndValues).reduce(
+            (acc: ResultOrError<VocabularyList>, [propertyName, propertyValue]) =>
+                isInternalError(acc)
+                    ? acc
+                    : acc.analyzeEntryForSingleProperty(termId, propertyName, propertyValue),
+            this
+        );
+    }
+
+    analyzeEntryForSingleProperty(
         termId: AggregateId,
         propertyName: string,
         propertyValue: string | boolean
@@ -194,9 +224,18 @@ export class VocabularyList extends Resource {
     // TODO should type be an enum?
     registerFilterProperty(
         name: string,
-        type: DropboxOrCheckbox,
+        type: FilterPropertyType,
         allowedValuesWithLabels: LabelAndValue<string | boolean>[]
     ): ResultOrError<VocabularyList> {
+        /**
+         * This is necessary until a migration \ event versioning occurs so we can
+         * rename the properties on existing data.
+         */
+        const mappedType =
+            type === FilterPropertyType.selection
+                ? DropboxOrCheckbox.dropbox
+                : DropboxOrCheckbox.checkbox;
+
         // TODO add unit test for this
         if (allowedValuesWithLabels.length === 0) {
             return new VocabularyListFilterPropertyMustHaveAtLeastOneAllowedValueError(
@@ -215,7 +254,7 @@ export class VocabularyList extends Resource {
                     .map((variable) => variable.toDTO())
                     .concat({
                         name,
-                        type,
+                        type: mappedType,
                         validValues: allowedValuesWithLabels.map(({ label, value }) => ({
                             value,
                             display: label,
@@ -302,6 +341,35 @@ export class VocabularyList extends Resource {
 
     validateTextFieldContext(context: TextFieldContext): Valid | InternalError {
         return validateTextFieldContextForModel(this, context);
+    }
+
+    handleVocabularyListNameTranslated({
+        payload: { text, languageCode },
+    }: VocabularyListNameTranslated) {
+        return this.translateName(
+            new MultilingualTextItem({
+                text,
+                languageCode,
+                // Do we really want to expose this here? Shouldn't the update method hardwire this?
+                role: MultilingualTextItemRole.freeTranslation,
+            })
+        );
+    }
+
+    handleTermAddedToVocabularyList({ payload: { termId } }: TermAddedToVocabularyList) {
+        return this.addEntry(termId);
+    }
+
+    handleVocabularyListFilterPropertyRegistered({
+        payload: { name, type, allowedValuesAndLabels },
+    }: VocabularyListFilterPropertyRegistered) {
+        return this.registerFilterProperty(name, type, allowedValuesAndLabels);
+    }
+
+    handleTermInVocabularyListAnalyzed({
+        payload: { termId, propertyValues },
+    }: TermInVocabularyListAnalyzed) {
+        return this.analyzeEntry(termId, propertyValues);
     }
 
     static fromEventHistory(

@@ -52,6 +52,10 @@ import { TERM_ELICITED_FROM_PROMPT } from '../../domain/models/term/commands/eli
 import { TERM_TRANSLATED } from '../../domain/models/term/commands/translate-term/constants';
 import {
     FilterPropertyType,
+    TermAddedToVocabularyList,
+    TermAddedToVocabularyListPayload,
+    TermInVocabularyListAnalyzed,
+    TermInVocabularyListAnalyzedPayload,
     VocabularyListCreated,
     VocabularyListCreatedPayload,
     VocabularyListFilterPropertyRegistered,
@@ -516,7 +520,23 @@ const buildVocabularyListNameTranslated = (
     );
 };
 
-// const buildTermAddedToVocabularyList
+const buildTermAddedToVocabularyList = (
+    payloadOverrides: DeepPartial<TermAddedToVocabularyListPayload>,
+    buildMetadata: EventMetadataBuilder
+) => {
+    const defaultPayload: TermAddedToVocabularyListPayload = {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.vocabularyList,
+            id: buildDummyUuid(999),
+        },
+        termId: buildDummyUuid(123),
+    };
+
+    return new TermAddedToVocabularyList(
+        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        buildMetadata()
+    );
+};
 
 const buildVocabularyListFilterPropertyRegistered = (
     payloadOverrides: DeepPartial<VocabularyListFilterPropertyRegisteredPayload>,
@@ -547,7 +567,29 @@ const buildVocabularyListFilterPropertyRegistered = (
     );
 };
 
-// const buildTermInVocabularyListAnalyzed
+const buildTermInVocabularyListAnalyzed = (
+    payloadOverrides: TermInVocabularyListAnalyzedPayload,
+    buildMetadata: EventMetadataBuilder
+) => {
+    const defaultPayload: TermInVocabularyListAnalyzedPayload = {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.vocabularyList,
+            id: buildDummyUuid(901),
+        },
+        termId: buildDummyUuid(88),
+        propertyValues: {
+            person: '1',
+            number: '1',
+            aspect: '3',
+            positive: '0',
+        },
+    };
+
+    return new TermInVocabularyListAnalyzed(
+        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        buildMetadata()
+    );
+};
 
 export class TestEventStream {
     private readonly TIME_OFFSET = 100; // 100 ms between events
@@ -606,7 +648,9 @@ export class TestEventStream {
             .registerBuilder(
                 `VOCABULARY_LIST_FILTER_PROPERTY_REGISTERED`,
                 buildVocabularyListFilterPropertyRegistered
-            );
+            )
+            .registerBuilder(`TERM_ADDED_TO_VOCABULARY_LIST`, buildTermAddedToVocabularyList)
+            .registerBuilder(`TERM_IN_VOCABULARY_LIST_ANALYZED`, buildTermInVocabularyListAnalyzed);
     }
 
     andThen<T extends BaseEvent>(

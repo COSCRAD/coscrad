@@ -67,11 +67,14 @@ const existingVocabularyList = getValidAggregateInstanceForTest(AggregateType.vo
 /**
  * TODO Make all cases comprehensive for all filter property types (currently
  * checkbox and dropbox)
+ *
+ * TODO We should test `VocabularyList.analyzeEntry` instead and leave this
+ * as an implementation detail.
  */
-describe('VocabularyList.analyzeEntry', () => {
+describe('VocabularyList.analyzeEntryForSingleProperty', () => {
     describe('when the analysis is valid', () => {
         it('should return a new vocabulary list with the analysis applied', () => {
-            const result = existingVocabularyList.analyzeEntry(
+            const result = existingVocabularyList.analyzeEntryForSingleProperty(
                 existingEntry.termId,
                 existingCheckBoxFilterProperty.name,
                 validValueForCheckBox
@@ -86,7 +89,7 @@ describe('VocabularyList.analyzeEntry', () => {
             const missingTermId = 'not-found-entry-123';
 
             it(`should return the expected error`, () => {
-                const result = existingVocabularyList.analyzeEntry(
+                const result = existingVocabularyList.analyzeEntryForSingleProperty(
                     missingTermId,
                     existingCheckBoxFilterProperty.name,
                     validValueForCheckBox
@@ -103,7 +106,7 @@ describe('VocabularyList.analyzeEntry', () => {
             it(`should return the expected error`, () => {
                 const missingFilterPropertyName = 'boooooogus';
 
-                const result = existingVocabularyList.analyzeEntry(
+                const result = existingVocabularyList.analyzeEntryForSingleProperty(
                     existingEntry.termId,
                     missingFilterPropertyName,
                     validValueForCheckBox
@@ -123,7 +126,7 @@ describe('VocabularyList.analyzeEntry', () => {
             it(`should return the expected error`, () => {
                 const unregisteredValue = '3c';
 
-                const result = existingVocabularyList.analyzeEntry(
+                const result = existingVocabularyList.analyzeEntryForSingleProperty(
                     existingEntry.termId,
                     existingSelectProperty.name,
                     unregisteredValue
@@ -143,17 +146,18 @@ describe('VocabularyList.analyzeEntry', () => {
         describe(`when a value has already been registered for the given filter property for this entry`, () => {
             it(`should fail with the expected errors`, () => {
                 const vocabularyListWithValueRegisteredForEntry =
-                    existingVocabularyList.analyzeEntry(
+                    existingVocabularyList.analyzeEntryForSingleProperty(
                         existingEntry.termId,
                         existingSelectProperty.name,
                         validValueForSelect
                     ) as VocabularyList;
 
-                const result = vocabularyListWithValueRegisteredForEntry.analyzeEntry(
-                    existingEntry.termId,
-                    existingSelectProperty.name,
-                    additionalValidValueForSelect
-                );
+                const result =
+                    vocabularyListWithValueRegisteredForEntry.analyzeEntryForSingleProperty(
+                        existingEntry.termId,
+                        existingSelectProperty.name,
+                        additionalValidValueForSelect
+                    );
 
                 assertErrorAsExpected(
                     result,
