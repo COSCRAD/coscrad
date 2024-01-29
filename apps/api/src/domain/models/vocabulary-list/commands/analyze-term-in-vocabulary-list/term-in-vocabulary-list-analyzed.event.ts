@@ -1,6 +1,10 @@
+import { CoscradEvent } from '../../../../../domain/common';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
-import { TERM_IN_VOCABULARY_LIST_ANALYZED } from './constants';
+import { AnalyzeTermInVocabularyList } from './analyze-term-in-vocabulary-list.command';
 
-export class TermInVocabularyListAnalyzed extends BaseEvent {
-    type = TERM_IN_VOCABULARY_LIST_ANALYZED;
+export type TermInVocabularyListAnalyzedPayload = AnalyzeTermInVocabularyList;
+
+@CoscradEvent('TERM_IN_VOCABULARY_LIST_ANALYZED')
+export class TermInVocabularyListAnalyzed extends BaseEvent<TermInVocabularyListAnalyzedPayload> {
+    type = 'TERM_IN_VOCABULARY_LIST_ANALYZED';
 }
