@@ -1,6 +1,10 @@
+import { CoscradEvent } from '../../../../../domain/common';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
-import { VOCABULARY_LIST_PROPERTY_FILTER_REGISTERED } from './constants';
+import { RegisterVocabularyListFilterProperty } from './register-vocabulary-list-filter-property.command';
 
-export class VocabularyListFilterPropertyRegistered extends BaseEvent {
-    type = VOCABULARY_LIST_PROPERTY_FILTER_REGISTERED;
+export type VocabularyListFilterPropertyRegisteredPayload = RegisterVocabularyListFilterProperty;
+
+@CoscradEvent('VOCABULARY_LIST_PROPERTY_FILTER_REGISTERED')
+export class VocabularyListFilterPropertyRegistered extends BaseEvent<VocabularyListFilterPropertyRegisteredPayload> {
+    type = 'VOCABULARY_LIST_PROPERTY_FILTER_REGISTERED';
 }

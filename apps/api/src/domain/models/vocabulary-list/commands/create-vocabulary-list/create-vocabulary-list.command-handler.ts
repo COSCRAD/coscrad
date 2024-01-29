@@ -14,7 +14,7 @@ import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMet
 import { validAggregateOrThrow } from '../../../shared/functional';
 import { VocabularyList } from '../../entities/vocabulary-list.entity';
 import { CreateVocabularyList } from './create-vocabulary-list.command';
-import { vocabularyListCreated } from './vocabulary-list.created.event';
+import { VocabularyListCreated } from './vocabulary-list-created.event';
 
 @CommandHandler(CreateVocabularyList)
 export class CreateVocabularyListCommandHandler extends BaseCreateCommandHandler<VocabularyList> {
@@ -58,6 +58,6 @@ export class CreateVocabularyListCommandHandler extends BaseCreateCommandHandler
     }
 
     protected buildEvent(command: CreateVocabularyList, eventMeta: EventRecordMetadata): BaseEvent {
-        return new vocabularyListCreated(command, eventMeta);
+        return new VocabularyListCreated(command, eventMeta);
     }
 }

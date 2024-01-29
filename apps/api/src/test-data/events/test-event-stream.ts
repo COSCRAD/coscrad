@@ -50,6 +50,21 @@ import { PROMPT_TERM_CREATED } from '../../domain/models/term/commands/create-pr
 import { TERM_CREATED } from '../../domain/models/term/commands/create-term/constants';
 import { TERM_ELICITED_FROM_PROMPT } from '../../domain/models/term/commands/elicit-term-from-prompt/constants';
 import { TERM_TRANSLATED } from '../../domain/models/term/commands/translate-term/constants';
+import {
+    FilterPropertyType,
+    TermAddedToVocabularyList,
+    TermAddedToVocabularyListPayload,
+    TermInVocabularyListAnalyzed,
+    TermInVocabularyListAnalyzedPayload,
+    VocabularyListCreated,
+    VocabularyListCreatedPayload,
+    VocabularyListFilterPropertyRegistered,
+    VocabularyListFilterPropertyRegisteredPayload,
+} from '../../domain/models/vocabulary-list/commands';
+import {
+    VocabularyListNameTranslated,
+    VocabularyListNameTranslatedPayload,
+} from '../../domain/models/vocabulary-list/commands/translate-vocabulary-list-name/vocabulary-list-name-translated.event';
 import { AggregateId } from '../../domain/types/AggregateId';
 import { AggregateType } from '../../domain/types/AggregateType';
 import { InternalError } from '../../lib/errors/InternalError';
@@ -59,7 +74,7 @@ import { DeepPartial } from '../../types/DeepPartial';
 
 type EventRecordMetadataOverrides = DeepPartial<EventRecordMetadata>;
 
-type EventMetadataBuilder = () => EventRecordMetadata;
+export type EventMetadataBuilder = () => EventRecordMetadata;
 
 export type EventBuilder<T extends BaseEvent> = (
     payloadOverrides: EventPayloadOverrides<T>,
@@ -467,6 +482,115 @@ const buildSongLyricsTranslated = (
     );
 };
 
+const buildVocabularyListCreated = (
+    payloadOverrides: DeepPartial<VocabularyListCreatedPayload>,
+    buildMetadata: EventMetadataBuilder
+) => {
+    const defaultPayload: VocabularyListCreatedPayload = {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.vocabularyList,
+            id: buildDummyUuid(124),
+        },
+        name: 'the vocab list',
+        languageCodeForName: LanguageCode.English,
+    };
+
+    return new VocabularyListCreated(
+        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        buildMetadata()
+    );
+};
+
+const buildVocabularyListNameTranslated = (
+    payloadOverrides: DeepPartial<VocabularyListNameTranslatedPayload>,
+    buildMetadata: EventMetadataBuilder
+) => {
+    const defaultPayload: VocabularyListNameTranslatedPayload = {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.vocabularyList,
+            id: buildDummyUuid(135),
+        },
+        text: 'Translation of Vocabulary List Name',
+        languageCode: LanguageCode.Chilcotin,
+    };
+
+    return new VocabularyListNameTranslated(
+        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        buildMetadata()
+    );
+};
+
+const buildTermAddedToVocabularyList = (
+    payloadOverrides: DeepPartial<TermAddedToVocabularyListPayload>,
+    buildMetadata: EventMetadataBuilder
+) => {
+    const defaultPayload: TermAddedToVocabularyListPayload = {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.vocabularyList,
+            id: buildDummyUuid(999),
+        },
+        termId: buildDummyUuid(123),
+    };
+
+    return new TermAddedToVocabularyList(
+        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        buildMetadata()
+    );
+};
+
+const buildVocabularyListFilterPropertyRegistered = (
+    payloadOverrides: DeepPartial<VocabularyListFilterPropertyRegisteredPayload>,
+    buildMetadata: EventMetadataBuilder
+) => {
+    const defaultPayload: VocabularyListFilterPropertyRegisteredPayload = {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.vocabularyList,
+            id: buildDummyUuid(34),
+        },
+        type: FilterPropertyType.selection,
+        name: 'person',
+        allowedValuesAndLabels: [
+            {
+                value: '12',
+                label: 'we',
+            },
+            {
+                value: '11',
+                label: 'I',
+            },
+        ],
+    };
+
+    return new VocabularyListFilterPropertyRegistered(
+        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        buildMetadata()
+    );
+};
+
+const buildTermInVocabularyListAnalyzed = (
+    payloadOverrides: TermInVocabularyListAnalyzedPayload,
+    buildMetadata: EventMetadataBuilder
+) => {
+    const defaultPayload: TermInVocabularyListAnalyzedPayload = {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.vocabularyList,
+            id: buildDummyUuid(901),
+        },
+        termId: buildDummyUuid(88),
+        propertyValues: {
+            person: '1',
+            number: '1',
+            aspect: '3',
+            positive: '0',
+        },
+    };
+
+    return new TermInVocabularyListAnalyzed(
+        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        buildMetadata()
+    );
+};
+
 export class TestEventStream {
     private readonly TIME_OFFSET = 100; // 100 ms between events
 
@@ -487,6 +611,9 @@ export class TestEventStream {
          * TODO Consider injecting the builder as a dependency to the constructor.
          *
          * TODO Find a pattern for doing this in separate files.
+         *
+         * TODO If you use the constructor in `.clone`, this logic happens
+         * on every call to clone. This isn't very performant.
          */
         this.registerBuilder('DIGITAL_TEXT_CREATED', buildDigitalTextCreatedEvent)
             .registerBuilder('PAGE_ADDED_TO_DIGITAL_TEXT', buildPageAddedEvent)
@@ -515,7 +642,15 @@ export class TestEventStream {
             )
             .registerBuilder(`AUDIO_ADDED_FOR_TERM`, buildAudioAddedForTerm)
             .registerBuilder(`AUDIO_ADDED_FOR_DIGITAL_TEXT_PAGE`, buildAudioAddedForDigitalTextPage)
-            .registerBuilder(`DIGITAL_TEXT_TITLE_TRANSLATED`, buildDigitalTextTitleTranslated);
+            .registerBuilder(`DIGITAL_TEXT_TITLE_TRANSLATED`, buildDigitalTextTitleTranslated)
+            .registerBuilder(`VOCABULARY_LIST_CREATED`, buildVocabularyListCreated)
+            .registerBuilder(`VOCABULARY_LIST_NAME_TRANSLATED`, buildVocabularyListNameTranslated)
+            .registerBuilder(
+                `VOCABULARY_LIST_FILTER_PROPERTY_REGISTERED`,
+                buildVocabularyListFilterPropertyRegistered
+            )
+            .registerBuilder(`TERM_ADDED_TO_VOCABULARY_LIST`, buildTermAddedToVocabularyList)
+            .registerBuilder(`TERM_IN_VOCABULARY_LIST_ANALYZED`, buildTermInVocabularyListAnalyzed);
     }
 
     andThen<T extends BaseEvent>(
@@ -580,7 +715,7 @@ export class TestEventStream {
         );
     }
 
-    private registerBuilder<T extends BaseEvent>(
+    public registerBuilder<T extends BaseEvent>(
         eventType: string,
         builder: EventBuilder<T>
     ): TestEventStream {

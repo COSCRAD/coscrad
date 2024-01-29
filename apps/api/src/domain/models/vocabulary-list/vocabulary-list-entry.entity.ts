@@ -63,4 +63,10 @@ export class VocabularyListEntry extends BaseDomainModel {
     doesMatch(propertyName: string, propertyValue: string | boolean): boolean {
         return this.variableValues[propertyName] === propertyValue;
     }
+
+    doesMatchAll(propertyNamesAndValues: Record<string, boolean | string>): boolean {
+        return Object.entries(propertyNamesAndValues).every(([propertyName, propertyValue]) =>
+            this.doesMatch(propertyName, propertyValue)
+        );
+    }
 }

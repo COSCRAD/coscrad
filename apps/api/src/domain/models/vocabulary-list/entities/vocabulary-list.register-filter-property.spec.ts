@@ -3,6 +3,7 @@ import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpect
 import { InternalError } from '../../../../lib/errors/InternalError';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { AggregateType } from '../../../types/AggregateType';
+import { FilterPropertyType } from '../commands';
 import { CannotHaveTwoFilterPropertiesWithTheSameNameError } from '../errors';
 import { DropboxOrCheckbox } from '../types/dropbox-or-checkbox';
 import { VocabularyListFilterProperty } from './vocabulary-list-variable.entity';
@@ -10,7 +11,7 @@ import { VocabularyList } from './vocabulary-list.entity';
 
 const filterPropertyName = 'person';
 
-const newFilterPropertyType = DropboxOrCheckbox.dropbox;
+const newFilterPropertyType = FilterPropertyType.selection; // corresponds to DropboxOrCheckbox.dropbox;
 
 const allowedValuesWithLabels = [
     {
@@ -75,7 +76,12 @@ describe(`VocabularyList.registerFilterProperty`, () => {
             });
 
             it(`should apply the correct type to the new filter`, () => {
-                expect(type).toBe(newFilterPropertyType);
+                /**
+                 * Note that as it stands, the database has "dropbox", but the
+                 * models and command \ event payloads use "selection" from
+                 * `FilterPropertyType`.
+                 */
+                expect(type).toBe(DropboxOrCheckbox.dropbox);
             });
 
             it(`should set all of the valid values for the new filter property`, () => {
@@ -128,7 +134,7 @@ describe(`VocabularyList.registerFilterProperty`, () => {
             it(`should flow through the nested errors`, () => {
                 const result = basicVocabularyList.registerFilterProperty(
                     'aspect',
-                    DropboxOrCheckbox.checkbox,
+                    FilterPropertyType.checkbox, // corresponds to DropboxOrCheckbox.checkbox,
                     invalidValuesForCheckbox.map(({ value, display }) => ({
                         value,
                         // TODO make the API consistent across the board

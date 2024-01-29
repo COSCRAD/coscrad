@@ -2,7 +2,7 @@ import { CommandHandler } from '@coscrad/commands';
 import { Valid } from '../../../../../domain/domainModelValidators/Valid';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../../domain/types/ResourceType';
-import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
+import { InternalError } from '../../../../../lib/errors/InternalError';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
@@ -17,13 +17,7 @@ export class AnalyzeTermInVocabularyListCommandHandler extends BaseUpdateCommand
         vocabularyList: VocabularyList,
         { termId, propertyValues: propertyDefinition }: AnalyzeTermInVocabularyList
     ): ResultOrError<VocabularyList> {
-        const updateResult = Object.entries(propertyDefinition).reduce(
-            (acc: ResultOrError<VocabularyList>, [propertyName, propertyValue]) =>
-                isInternalError(acc) ? acc : acc.analyzeEntry(termId, propertyName, propertyValue),
-            vocabularyList
-        );
-
-        return updateResult;
+        return vocabularyList.analyzeEntry(termId, propertyDefinition);
     }
 
     protected fetchRequiredExternalState(
