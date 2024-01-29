@@ -19,7 +19,9 @@ import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
+import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
+import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { PageAddedToDigitalText } from '../add-page-to-digital-text/page-added-to-digital-text.event';
 import { DigitalTextCreated } from '../digital-text-created.event';
 import { AddPhotographToDigitalTextPage } from './add-photograph-to-digital-text-page.command';
@@ -138,7 +140,9 @@ describe(commandType, () => {
                     checkError: (result) => {
                         assertErrorAsExpected(
                             result,
-                            new AggregateNotFoundError(existingPhotograph.getCompositeIdentifier())
+                            new CommandExecutionError([
+                                new AggregateNotFoundError(digitalTextCompositeIdentifier),
+                            ])
                         );
                     },
                 });
@@ -162,7 +166,12 @@ describe(commandType, () => {
                     checkError: (result) => {
                         assertErrorAsExpected(
                             result,
-                            new AggregateNotFoundError(existingPhotograph.getCompositeIdentifier())
+                            new CommandExecutionError([
+                                new InvalidExternalReferenceByAggregateError(
+                                    digitalTextCompositeIdentifier,
+                                    [existingPhotograph.getCompositeIdentifier()]
+                                ),
+                            ])
                         );
                     },
                 });

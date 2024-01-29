@@ -871,6 +871,59 @@ exports[`command payload schemas Command payload schema should match the snapsho
     "type": "ADD_PAGE_TO_DIGITAL_TEXT",
   },
   {
+    "description": "Add a photograph to a digital text page",
+    "label": "Add Photograph to Page",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "must be: digitalText",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "digitalText",
+                "value": "digitalText",
+              },
+            ],
+          },
+        },
+      },
+      "pageIdentifier": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the page to which you are adding the photograph",
+        "isArray": false,
+        "isOptional": false,
+        "label": "page identifier",
+      },
+      "photographId": {
+        "coscradDataType": "UUID",
+        "description": "system reference to the photograph",
+        "isArray": false,
+        "isOptional": false,
+        "label": "photograph ID",
+        "referenceTo": "photograph",
+      },
+    },
+    "type": "ADD_PHOTOGRAPH_TO_DIGITAL_TEXT_PAGE",
+  },
+  {
     "description": "Tranlate the digital text page content to another language",
     "label": "Translate Digital Text Page Content",
     "schema": {

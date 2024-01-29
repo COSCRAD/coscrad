@@ -569,6 +569,13 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "isOptional": false,
         "label": "identifier",
       },
+      "photographId": {
+        "coscradDataType": "UUID",
+        "description": "a reference to the main photograph for this page",
+        "isArray": false,
+        "isOptional": true,
+        "label": "photograph ID",
+      },
     },
   },
   "title": {

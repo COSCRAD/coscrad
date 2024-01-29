@@ -90,6 +90,7 @@ import { AddPageToDigitalText } from '../../../domain/models/digital-text/comman
 import {
     AddPhotographToDigitalTextPage,
     AddPhotographToDigitalTextPageCommandHandler,
+    PhotographAddedToDigitalTextPage,
 } from '../../../domain/models/digital-text/commands/add-photograph-to-digital-text-page';
 import { DigitalText } from '../../../domain/models/digital-text/entities/digital-text.entity';
 import { CreateMediaItem } from '../../../domain/models/media-item/commands/create-media-item/create-media-item.command';
@@ -288,6 +289,7 @@ export const buildAllDataClassProviders = () =>
         DigitalTextPageContentTranslated,
         DigitalTextTitleTranslated,
         AudioAddedForDigitalTextPage,
+        PhotographAddedToDigitalTextPage,
         SongCreated,
         SongTitleTranslated,
         LyricsAddedForSong,
