@@ -1,16 +1,12 @@
 import {
     EdgeConnectionContextType,
-    EdgeConnectionMemberRole,
-    EdgeConnectionType,
     IAudioItemViewModel,
     ICategorizableDetailQueryResult,
-    INoteViewModel,
     ITimeRangeContext,
-    LanguageCode,
-    MultilingualTextItemRole,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { AudioPlayer } from '@coscrad/media-player';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material/';
 import {
     Accordion,
@@ -24,7 +20,7 @@ import {
     Tooltip,
     Typography,
 } from '@mui/material';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 import { SinglePropertyPresenter } from '../../../utils/generic-components/presenters/single-property-presenter';
 import { convertMillisecondsToSeconds } from '../utils/math';
@@ -127,8 +123,27 @@ export const AudioItemDetailFullViewPresenter = ({
     text: plainText,
     name,
     actions,
+    annotations,
 }: ICategorizableDetailQueryResult<IAudioItemViewModel>): JSX.Element => {
     const audioRef = useRef<HTMLAudioElement>(null);
+
+    const [marks, setMarks] = useState([]);
+
+    useEffect(() => {
+        const updatedMarks = isNullOrUndefined(audioRef?.current?.currentTime)
+            ? []
+            : annotations.flatMap(({ connectedResources, name }) =>
+                  convertAnnotationToMarks(
+                      name.items[0].text,
+                      connectedResources[0].context as ITimeRangeContext,
+                      (timeStamp) => {
+                          audioRef.current.currentTime = timeStamp;
+                      }
+                  )
+              );
+
+        setMarks(updatedMarks);
+    }, [audioRef, annotations]);
 
     /**
      * TODO This is a temporary hack. In the long run, we want to denormalize our
@@ -141,46 +156,36 @@ export const AudioItemDetailFullViewPresenter = ({
         </Box>
     ));
 
-    const toyAnnotations: INoteViewModel[] = buildDummyContext(lengthMilliseconds, 10).map(
-        (context, index) => {
-            const note = {
-                items: [
-                    {
-                        languageCode: LanguageCode.English,
-                        text: `Connection ${index + 1}`,
-                        role: MultilingualTextItemRole.original,
-                    },
-                ],
-            };
+    // const toyAnnotations: INoteViewModel[] = buildDummyContext(lengthMilliseconds, 10).map(
+    //     (context, index) => {
+    //         const note = {
+    //             items: [
+    //                 {
+    //                     languageCode: LanguageCode.English,
+    //                     text: `Connection ${index + 1}`,
+    //                     role: MultilingualTextItemRole.original,
+    //                 },
+    //             ],
+    //         };
 
-            return {
-                connectionType: EdgeConnectionType.self,
-                id: (index + 1).toString(),
-                note,
-                name: note,
-                connectedResources: [
-                    {
-                        compositeIdentifier: {
-                            type: ResourceType.audioItem,
-                            id: (100 + index + 1).toString(),
-                        },
-                        context,
-                        role: EdgeConnectionMemberRole.self,
-                    },
-                ],
-            };
-        }
-    );
-
-    const marks = toyAnnotations.flatMap(({ connectedResources, name }) =>
-        convertAnnotationToMarks(
-            name.items[0].text,
-            connectedResources[0].context as ITimeRangeContext,
-            (timeStamp) => {
-                audioRef.current.currentTime = timeStamp;
-            }
-        )
-    );
+    //         return {
+    //             connectionType: EdgeConnectionType.self,
+    //             id: (index + 1).toString(),
+    //             note,
+    //             name: note,
+    //             connectedResources: [
+    //                 {
+    //                     compositeIdentifier: {
+    //                         type: ResourceType.audioItem,
+    //                         id: (100 + index + 1).toString(),
+    //                     },
+    //                     context,
+    //                     role: EdgeConnectionMemberRole.self,
+    //                 },
+    //             ],
+    //         };
+    //     }
+    // );
 
     return (
         <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.audioItem}>
