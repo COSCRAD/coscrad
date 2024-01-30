@@ -4,7 +4,7 @@ import {
     Clear as ClearIcon,
 } from '@mui/icons-material/';
 import { Box, IconButton, Paper, Stack, Tooltip, Typography, styled } from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
+import { RefObject, useEffect, useState } from 'react';
 import { asFormattedMediaTimecodeString } from './shared/as-formatted-media-timecode-string';
 import { AudioMIMEType } from './shared/audio-mime-type.enum';
 import { isAudioMIMEType } from './shared/is-audio-mime-type';
@@ -59,6 +59,7 @@ interface AudioAnnotatorProps {
     mimeType?: AudioMIMEType;
     selectedTimeRange: Nullable<TimeRangeSelection>;
     onTimeRangeSelected: (timeRangeSelected: Nullable<TimeRangeSelection>) => void;
+    audioRef: RefObject<HTMLAudioElement>;
 }
 
 export const AudioAnnotator = ({
@@ -66,9 +67,8 @@ export const AudioAnnotator = ({
     mimeType,
     selectedTimeRange,
     onTimeRangeSelected,
+    audioRef,
 }: AudioAnnotatorProps) => {
-    const audioRef = useRef<HTMLAudioElement>(null);
-
     // This is a bit awkward, but it works
     const {
         inPointSeconds: defaultInPointSeconds = null,

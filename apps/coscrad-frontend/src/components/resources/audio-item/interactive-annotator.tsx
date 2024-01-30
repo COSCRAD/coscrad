@@ -2,7 +2,7 @@ import { AggregateType } from '@coscrad/api-interfaces';
 import { AudioAnnotator, TimeRangeSelection } from '@coscrad/media-player';
 import { isNull, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box, Paper, Typography, styled } from '@mui/material';
-import { useCallback, useEffect, useState } from 'react';
+import { RefObject, useCallback, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../../app/hooks';
 import {
     Ack,
@@ -41,9 +41,14 @@ const CreateAnnotationForm = styled(Paper)({
 interface InteractiveAnnotatorProps {
     id: string;
     audioURL: string;
+    audioRef: RefObject<HTMLAudioElement>;
 }
 
-export const InteractiveAnnotator = ({ id, audioURL }: InteractiveAnnotatorProps): JSX.Element => {
+export const InteractiveAnnotator = ({
+    id,
+    audioURL,
+    audioRef,
+}: InteractiveAnnotatorProps): JSX.Element => {
     const dispatch = useAppDispatch();
 
     const [timeRange, setTimeRange] = useState<TimeRangeSelection | null>(null);
@@ -64,6 +69,7 @@ export const InteractiveAnnotator = ({ id, audioURL }: InteractiveAnnotatorProps
                 audioUrl={audioURL}
                 selectedTimeRange={timeRange}
                 onTimeRangeSelected={onTimeRangeSelected}
+                audioRef={audioRef}
             />
 
             {!isNullOrUndefined(timeRange) ? (

@@ -1,4 +1,4 @@
-import { IAudioItemViewModel, MIMEType } from '@coscrad/api-interfaces';
+import { AggregateType, IAudioItemViewModel, MIMEType } from '@coscrad/api-interfaces';
 import {
     ExternalEnum,
     NestedDataType,
@@ -9,7 +9,9 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 import { MultilingualText } from '../../../../domain/common/entities/multilingual-text';
 import { AudioItem } from '../../../../domain/models/audio-item/entities/audio-item.entity';
+import { EdgeConnection } from '../../../../domain/models/context/edge-connection.entity';
 import { MediaItem } from '../../../../domain/models/media-item/entities/media-item.entity';
+import { NoteViewModel } from '../../../edgeConnectionViewModels/note.view-model';
 import { BaseViewModel } from '../base.view-model';
 
 export class AudioItemViewModel extends BaseViewModel implements IAudioItemViewModel {
@@ -67,7 +69,13 @@ export class AudioItemViewModel extends BaseViewModel implements IAudioItemViewM
     })
     readonly text: string;
 
-    constructor(audioItem: AudioItem, allMediaItems: MediaItem[]) {
+    @NonEmptyString({
+        label: 'annotations',
+        description: 'time-range contextualized notes for this audio item',
+    })
+    readonly annotations: NoteViewModel[];
+
+    constructor(audioItem: AudioItem, allMediaItems: MediaItem[], allNotes: EdgeConnection[]) {
         super(audioItem);
 
         const { transcript, mediaItemId, lengthMilliseconds, name } = audioItem;
@@ -84,5 +92,21 @@ export class AudioItemViewModel extends BaseViewModel implements IAudioItemViewM
         this.mimeType = mimeType;
 
         this.name = name;
+
+        this.annotations = this.findMyAnnotations(allNotes).map(
+            (edgeConnection) => new NoteViewModel(edgeConnection)
+        );
+    }
+
+    private findMyAnnotations(allNotes: EdgeConnection[]) {
+        return allNotes.filter((note) => {
+            return (
+                note.isAudioVisualAnnotation() &&
+                note.concerns({
+                    type: AggregateType.audioItem,
+                    id: this.id,
+                })
+            );
+        });
     }
 }
