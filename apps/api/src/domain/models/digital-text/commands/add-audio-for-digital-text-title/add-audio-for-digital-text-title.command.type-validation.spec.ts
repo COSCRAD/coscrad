@@ -11,7 +11,7 @@ import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import validateCommandPayloadType from '../../../shared/command-handlers/utilities/validateCommandPayloadType';
 import { AddAudioForDigitalTextTitle } from './add-audio-for-digital-text-title.command';
 
-const commandType = 'ADD_CONTENT_TO_DIGITAL_TEXT_PAGE';
+const commandType = 'ADD_AUDIO_FOR_DIGITAL_TEXT_TITLE';
 
 const dummyFsa = buildTestCommandFsaMap().get(
     commandType
