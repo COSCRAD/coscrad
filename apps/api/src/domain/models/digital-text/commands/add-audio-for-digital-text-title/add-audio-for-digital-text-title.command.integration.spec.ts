@@ -101,26 +101,22 @@ describe(commandType, () => {
         databaseProvider.close();
     });
 
-    const eventStreamForDigitalTextWithNoAudioForTitleAndNoTranslation =
-        new TestEventStream().andThen<DigitalTextCreated>({
-            type: `DIGITAL_TEXT_CREATED`,
-            payload: {
-                languageCodeForTitle,
-            },
-        });
+    const digitalTextCreated = new TestEventStream().andThen<DigitalTextCreated>({
+        type: `DIGITAL_TEXT_CREATED`,
+        payload: {
+            languageCodeForTitle,
+        },
+    });
 
-    const eventStreamForDigitalTextWithATranslation =
-        eventStreamForDigitalTextWithNoAudioForTitleAndNoTranslation.andThen<DigitalTextTitleTranslated>(
-            {
-                type: `DIGITAL_TEXT_TITLE_TRANSLATED`,
-                payload: {
-                    languageCode: languageCodeForTitleTranslation,
-                },
-            }
-        );
+    const digitalTextTitleTranslated = digitalTextCreated.andThen<DigitalTextTitleTranslated>({
+        type: `DIGITAL_TEXT_TITLE_TRANSLATED`,
+        payload: {
+            languageCode: languageCodeForTitleTranslation,
+        },
+    });
 
-    const eventStreamForDigitalTextWithOriginalAudio =
-        eventStreamForDigitalTextWithATranslation.andThen<AudioAddedForDigitalTextTitle>({
+    const audioAddedForDigitalText =
+        digitalTextTitleTranslated.andThen<AudioAddedForDigitalTextTitle>({
             type: `AUDIO_ADDED_FOR_DIGITAL_TEXT_TITLE`,
             payload: {
                 audioItemId,
@@ -128,10 +124,9 @@ describe(commandType, () => {
             },
         });
 
-    const validEventHistoryForDigitalText =
-        eventStreamForDigitalTextWithNoAudioForTitleAndNoTranslation.as({
-            id: digitalTextId,
-        });
+    const validEventHistoryForDigitalTextWithNoTitleTranslationAndNoAudio = digitalTextCreated.as({
+        id: digitalTextId,
+    });
 
     describe(`when the command is valid`, () => {
         describe(`when the audio is for the original text title`, () => {
@@ -142,9 +137,12 @@ describe(commandType, () => {
                         await testRepositoryProvider
                             .forResource(ResourceType.audioItem)
                             .create(existingAudioItem);
+
                         await app
                             .get(ArangoEventRepository)
-                            .appendEvents(validEventHistoryForDigitalText);
+                            .appendEvents(
+                                validEventHistoryForDigitalTextWithNoTitleTranslationAndNoAudio
+                            );
                     },
                     buildValidCommandFSA: () =>
                         commandFsaFactory.build(undefined, {
@@ -163,6 +161,54 @@ describe(commandType, () => {
 
                         const audioIdSearchResult =
                             updatedDigitalText.getAudioForTitleInLanguage(languageCodeForTitle);
+
+                        expect(audioIdSearchResult).toBe(audioItemId);
+
+                        assertEventRecordPersisted(
+                            updatedDigitalText,
+                            'AUDIO_ADDED_FOR_DIGITAL_TEXT_TITLE',
+                            dummySystemUserId
+                        );
+                    },
+                });
+            });
+        });
+
+        describe(`when the audio is for the title's translation`, () => {
+            it(`should succeed`, async () => {
+                await assertCommandSuccess(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider
+                            .forResource(ResourceType.audioItem)
+                            .create(existingAudioItem);
+
+                        await app.get(ArangoEventRepository).appendEvents(
+                            digitalTextTitleTranslated.as({
+                                type: AggregateType.digitalText,
+                                id: digitalTextId,
+                            })
+                        );
+                    },
+                    buildValidCommandFSA: () =>
+                        commandFsaFactory.build(undefined, {
+                            aggregateCompositeIdentifier: {
+                                id: digitalTextId,
+                            },
+                            languageCode: languageCodeForTitleTranslation,
+                        }),
+                    checkStateOnSuccess: async () => {
+                        const digitalTextSearchResult = await testRepositoryProvider
+                            .forResource(ResourceType.digitalText)
+                            .fetchById(digitalTextId);
+
+                        expect(digitalTextSearchResult).toBeInstanceOf(DigitalText);
+
+                        const updatedDigitalText = digitalTextSearchResult as DigitalText;
+
+                        const audioIdSearchResult = updatedDigitalText.getAudioForTitleInLanguage(
+                            languageCodeForTitleTranslation
+                        );
 
                         expect(audioIdSearchResult).toBe(audioItemId);
 
@@ -208,7 +254,9 @@ describe(commandType, () => {
                         seedInitialState: async () => {
                             await app
                                 .get(ArangoEventRepository)
-                                .appendEvents(validEventHistoryForDigitalText);
+                                .appendEvents(
+                                    validEventHistoryForDigitalTextWithNoTitleTranslationAndNoAudio
+                                );
                         },
                         buildCommandFSA: () => commandFsaFactory.build(),
                         checkError: (error) => {
@@ -231,7 +279,7 @@ describe(commandType, () => {
                 });
             });
 
-            describe(`when there is no text item for the title in the given language`, () => {
+            describe(`when the title does not have a translation in the given language`, () => {
                 it(`should fail`, async () => {
                     await assertCommandError(commandAssertionDependencies, {
                         systemUserId: dummySystemUserId,
@@ -241,7 +289,9 @@ describe(commandType, () => {
                                 .create(existingAudioItem);
                             await app
                                 .get(ArangoEventRepository)
-                                .appendEvents(validEventHistoryForDigitalText);
+                                .appendEvents(
+                                    validEventHistoryForDigitalTextWithNoTitleTranslationAndNoAudio
+                                );
                         },
                         buildCommandFSA: () =>
                             commandFsaFactory.build(undefined, {
@@ -257,7 +307,7 @@ describe(commandType, () => {
                         systemUserId: dummySystemUserId,
                         seedInitialState: async () => {
                             await app.get(ArangoEventRepository).appendEvents(
-                                eventStreamForDigitalTextWithOriginalAudio.as({
+                                audioAddedForDigitalText.as({
                                     type: AggregateType.digitalText,
                                     id: digitalTextId,
                                 })
