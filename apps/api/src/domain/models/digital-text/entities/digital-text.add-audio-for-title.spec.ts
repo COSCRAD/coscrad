@@ -7,7 +7,7 @@ import { buildMultilingualTextWithSingleItem } from '../../../common/build-multi
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { CannotOverrideAudioForLanguageError } from '../../shared/multilingual-audio/errors';
 import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
-import { CannotAddAudioForTitleInGivenLanguageError } from '../errors/cannot-add--audio-for-title-in-given-language.error';
+import { CannotAddAudioForTitleInGivenLanguageError } from '../errors/cannot-add-audio-for-title-in-given-language.error';
 import { DigitalText } from './digital-text.entity';
 
 const originalLanguageCode = LanguageCode.English;

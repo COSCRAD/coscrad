@@ -39,13 +39,11 @@ export class AddAudioForDigitalTextTitleCommandHandler extends BaseUpdateCommand
             );
         }
 
-        return Promise.resolve(
-            new DeluxeInMemoryStore({
-                [AggregateType.audioItem]: isNotFound(audioItemSearchResult)
-                    ? []
-                    : [audioItemSearchResult],
-            }).fetchFullSnapshotInLegacyFormat()
-        );
+        return new DeluxeInMemoryStore({
+            [AggregateType.audioItem]: isNotFound(audioItemSearchResult)
+                ? []
+                : [audioItemSearchResult],
+        }).fetchFullSnapshotInLegacyFormat();
     }
 
     protected validateExternalState(
