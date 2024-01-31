@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
-import { writeFileSync } from 'fs';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { buildAllDataClassProviders } from '../app/controllers/__tests__/createTestModule';
-import { isValid, Valid } from '../domain/domainModelValidators/Valid';
+import { Valid, isValid } from '../domain/domainModelValidators/Valid';
 import getId from '../domain/models/shared/functional/getId';
 import { AggregateId } from '../domain/types/AggregateId';
 import { AggregateType } from '../domain/types/AggregateType';
@@ -103,6 +103,8 @@ describe('buildTestData', () => {
     afterAll(() => {
         const fullSnapshotInDatabaseFormat = convertInMemorySnapshotToDatabaseFormat(testData);
 
+        const testDataDirectory = `${process.cwd()}/scripts/arangodb-docker-container-setup/docker-container-scripts/test-data`;
+
         /**
          * At one point, we used to version control `testData.json`. We realized
          * that, given the branch, one can simply run the present test and obtain
@@ -112,9 +114,13 @@ describe('buildTestData', () => {
          * For that reason, we have changed the name of this file to `testData.data.json`
          * which **is** gitignored.
          */
-        const testDataFilePath = `${process.cwd()}/scripts/arangodb-docker-container-setup/docker-container-scripts/test-data/testData.data.json`;
+        const testDataFilePath = `${testDataDirectory}/testData.data.json`;
 
         const numberOfSpacesToIndent = 4;
+
+        if (!existsSync(testDataDirectory)) {
+            mkdirSync(testDataDirectory, { recursive: true });
+        }
 
         writeFileSync(
             testDataFilePath,

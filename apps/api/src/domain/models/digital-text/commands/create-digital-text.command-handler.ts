@@ -11,6 +11,7 @@ import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import { BaseCreateCommandHandler } from '../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../shared/events/types/EventRecordMetadata';
+import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import { DigitalText } from '../entities/digital-text.entity';
 import { CreateDigitalText } from './create-digital-text.command';
 import { DigitalTextCreated } from './digital-text-created.event';
@@ -35,6 +36,7 @@ export class CreateDigitalTextCommandHandler extends BaseCreateCommandHandler<Di
                     }),
                 ],
             }),
+            audioForTitle: MultilingualAudio.buildEmpty(),
             // You must run a subsequent command to add pages
             pages: [],
         };

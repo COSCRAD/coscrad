@@ -30,6 +30,7 @@ import { BaseEvent } from '../../shared/events/base-event.entity';
 import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import {
     AudioAddedForDigitalTextPage,
+    AudioAddedForDigitalTextTitle,
     DigitalTextCreated,
     DigitalTextPageContentTranslated,
     DigitalTextTitleTranslated,
@@ -38,6 +39,7 @@ import {
 import { ContentAddedToDigitalTextPage } from '../commands/add-content-to-digital-text-page';
 import { ADD_PAGE_TO_DIGITAL_TEXT, CREATE_DIGITAL_TEXT } from '../constants';
 import { FailedToUpdateDigitalTextPageError } from '../errors';
+import { CannotAddAudioForTitleInGivenLanguageError } from '../errors/cannot-add-audio-for-title-in-given-language.error';
 import { CannotAddPageWithDuplicateIdentifierError } from '../errors/cannot-add-page-with-duplicate-identifier.error';
 import { CannotOverrideAudioForPageError } from '../errors/cannot-override-audio-for-page.error';
 import { DuplicateDigitalTextTitleError } from '../errors/duplicate-digital-text-title.error';
@@ -57,6 +59,12 @@ export class DigitalText extends Resource {
     })
     readonly title: MultilingualText;
 
+    @NestedDataType(MultilingualAudio, {
+        label: 'audio for title',
+        description: 'contains refereneces to audio for the title',
+    })
+    readonly audioForTitle: MultilingualAudio;
+
     @NestedDataType(DigitalTextPage, {
         isOptional: true,
         isArray: true,
@@ -70,13 +78,15 @@ export class DigitalText extends Resource {
 
         if (!dto) return;
 
-        const { title, pages: pageDTOs } = dto;
+        const { title, pages: pageDTOs, audioForTitle: audioForTitleDto } = dto;
 
         this.title = new MultilingualText(title);
 
         this.pages = Array.isArray(pageDTOs)
             ? pageDTOs.map((pageDTO) => new DigitalTextPage(pageDTO))
             : undefined;
+
+        this.audioForTitle = audioForTitleDto ? new MultilingualAudio(audioForTitleDto) : undefined;
     }
 
     getName(): MultilingualText {
@@ -244,6 +254,29 @@ export class DigitalText extends Resource {
         return updatedDigitalText;
     }
 
+    addAudioForTitle(
+        audioItemId: AggregateId,
+        languageCode: LanguageCode
+    ): ResultOrError<DigitalText> {
+        if (!this.title.has(languageCode)) {
+            return new CannotAddAudioForTitleInGivenLanguageError(
+                this.id,
+                audioItemId,
+                languageCode
+            );
+        }
+
+        const audioUpdateResult = this.audioForTitle.addAudio(audioItemId, languageCode);
+
+        if (isInternalError(audioUpdateResult)) {
+            return audioUpdateResult;
+        }
+
+        return this.safeClone<DigitalText>({
+            audioForTitle: audioUpdateResult,
+        });
+    }
+
     /**
      *
      * @param pageIdentifiers list of all page identifiers that must be included
@@ -282,6 +315,14 @@ export class DigitalText extends Resource {
         return searchResult.clone({});
     }
 
+    hasAudioForTitle(): boolean {
+        return !this.audioForTitle.isEmpty();
+    }
+
+    getAudioForTitleInLanguage(languageCode: LanguageCode): Maybe<AggregateId> {
+        return this.audioForTitle.getIdForAudioIn(languageCode);
+    }
+
     protected validatePageRangeContext(context: PageRangeContext): Valid | InternalError {
         // TODO Is this really necessary?
         if (isNullOrUndefined(context))
@@ -316,6 +357,12 @@ export class DigitalText extends Resource {
         payload: { translation, languageCode },
     }: DigitalTextTitleTranslated) {
         return this.translateTitle(translation, languageCode);
+    }
+
+    handleAudioAddedForDigitalTextTitle({
+        payload: { audioItemId, languageCode },
+    }: AudioAddedForDigitalTextTitle) {
+        return this.addAudioForTitle(audioItemId, languageCode);
     }
 
     handlePageAddedToDigitalText({ payload: { identifier } }: PageAddedToDigitalText) {
@@ -372,6 +419,7 @@ export class DigitalText extends Resource {
             type: AggregateType.digitalText,
             id,
             title: buildMultilingualTextWithSingleItem(title, languageCodeForTitle),
+            audioForTitle: MultilingualAudio.buildEmpty(),
             pages: [],
             published: false,
         });

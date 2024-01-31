@@ -5,6 +5,8 @@ import { dummyDateNow } from '../../domain/models/__tests__/utilities/dummyDateN
 import {
     AudioAddedForDigitalTextPage,
     AudioAddedForDigitalTextPagePayload,
+    AudioAddedForDigitalTextTitle,
+    AudioAddedForDigitalTextTitlePayload,
     DigitalTextCreated,
     DigitalTextPageContentTranslated,
     DigitalTextPageContentTranslatedPayload,
@@ -225,6 +227,22 @@ const buildAudioAddedForDigitalTextPage = (
     };
 
     return new AudioAddedForDigitalTextPage(
+        clonePlainObjectWithOverrides(payloadDefaults, payloadOverrides),
+        buildMetadata()
+    );
+};
+
+const buildAudioAddedForDigitalTextTitle = (
+    payloadOverrides: DeepPartial<AudioAddedForDigitalTextTitlePayload>,
+    buildMetadata: EventMetadataBuilder
+) => {
+    const payloadDefaults: AudioAddedForDigitalTextTitlePayload = {
+        aggregateCompositeIdentifier,
+        audioItemId: buildDummyUuid(117),
+        languageCode: LanguageCode.English,
+    };
+
+    return new AudioAddedForDigitalTextTitle(
         clonePlainObjectWithOverrides(payloadDefaults, payloadOverrides),
         buildMetadata()
     );
@@ -643,6 +661,10 @@ export class TestEventStream {
             .registerBuilder(`AUDIO_ADDED_FOR_TERM`, buildAudioAddedForTerm)
             .registerBuilder(`AUDIO_ADDED_FOR_DIGITAL_TEXT_PAGE`, buildAudioAddedForDigitalTextPage)
             .registerBuilder(`DIGITAL_TEXT_TITLE_TRANSLATED`, buildDigitalTextTitleTranslated)
+            .registerBuilder(
+                `AUDIO_ADDED_FOR_DIGITAL_TEXT_TITLE`,
+                buildAudioAddedForDigitalTextTitle
+            )
             .registerBuilder(`VOCABULARY_LIST_CREATED`, buildVocabularyListCreated)
             .registerBuilder(`VOCABULARY_LIST_NAME_TRANSLATED`, buildVocabularyListNameTranslated)
             .registerBuilder(

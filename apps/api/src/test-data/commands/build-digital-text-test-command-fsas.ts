@@ -3,6 +3,7 @@ import { CommandFSA } from '../../app/controllers/command/command-fsa/command-fs
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import {
     AddAudioForDigitalTextPage,
+    AddAudioForDigitalTextTitle,
     AddPageToDigitalText,
     CreateDigitalText,
     TranslateDigitalTextPageContent,
@@ -46,6 +47,15 @@ const addContentToDigitalTextPage: CommandFSA<AddContentToDigitalTextPage> = {
     },
 };
 
+const addAudioForDigitalTextTitle: CommandFSA<AddAudioForDigitalTextTitle> = {
+    type: `ADD_AUDIO_FOR_DIGITAL_TEXT_TITLE`,
+    payload: {
+        aggregateCompositeIdentifier: { id, type },
+        languageCode: LanguageCode.Chilcotin,
+        audioItemId: buildDummyUuid(2),
+    },
+};
+
 const translateDigitalTextPageContent: CommandFSA<TranslateDigitalTextPageContent> = {
     type: `TRANSLATE_DIGITAL_TEXT_PAGE_CONTENT`,
     payload: {
@@ -79,6 +89,7 @@ export const buildDigitalTextCommandFsas = () => [
     createDigitalText,
     addPageToDigitalText,
     addContentToDigitalTextPage,
+    addAudioForDigitalTextTitle,
     translateDigitalTextPageContent,
     addAudioForDigitalTextPage,
     translateDigitalTextTitle,
