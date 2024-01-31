@@ -10,6 +10,7 @@ import {
     TranslateDigitalTextTitle,
 } from '../../domain/models/digital-text/commands';
 import { AddContentToDigitalTextPage } from '../../domain/models/digital-text/commands/add-content-to-digital-text-page';
+import { AddPhotographToDigitalTextPage } from '../../domain/models/digital-text/commands/add-photograph-to-digital-text-page';
 import {
     ADD_PAGE_TO_DIGITAL_TEXT,
     CREATE_DIGITAL_TEXT,
@@ -76,6 +77,15 @@ const addAudioForDigitalTextPage: CommandFSA<AddAudioForDigitalTextPage> = {
     },
 };
 
+const addPhotographToDigitalTextPage: CommandFSA<AddPhotographToDigitalTextPage> = {
+    type: `ADD_PHOTOGRAPH_TO_DIGITAL_TEXT_PAGE`,
+    payload: {
+        aggregateCompositeIdentifier: { id, type },
+        pageIdentifier: '127',
+        photographId: buildDummyUuid(44),
+    },
+};
+
 const translateDigitalTextTitle: CommandFSA<TranslateDigitalTextTitle> = {
     type: `TRANSLATE_DIGITAL_TEXT_TITLE`,
     payload: {
@@ -92,5 +102,6 @@ export const buildDigitalTextCommandFsas = () => [
     addAudioForDigitalTextTitle,
     translateDigitalTextPageContent,
     addAudioForDigitalTextPage,
+    addPhotographToDigitalTextPage,
     translateDigitalTextTitle,
 ];
