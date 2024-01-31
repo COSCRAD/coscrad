@@ -23,6 +23,7 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 import { SinglePropertyPresenter } from '../../../utils/generic-components/presenters/single-property-presenter';
+import { TranscriptPresenter } from '../../transcripts/transcript-presenter';
 import { convertMillisecondsToSeconds } from '../utils/math';
 import { InteractiveAnnotator } from './interactive-annotator';
 
@@ -124,6 +125,7 @@ export const AudioItemDetailFullViewPresenter = ({
     name,
     actions,
     annotations,
+    transcript,
 }: ICategorizableDetailQueryResult<IAudioItemViewModel>): JSX.Element => {
     const audioRef = useRef<HTMLAudioElement>(null);
 
@@ -144,48 +146,6 @@ export const AudioItemDetailFullViewPresenter = ({
 
         setMarks(updatedMarks);
     }, [audioRef, annotations]);
-
-    /**
-     * TODO This is a temporary hack. In the long run, we want to denormalize our
-     * views and have the annotations available on props to this component.
-     */
-
-    const formatedPlainText = plainText.split('\n').map((line, index) => (
-        <Box mb={1} key={index}>
-            {line}
-        </Box>
-    ));
-
-    // const toyAnnotations: INoteViewModel[] = buildDummyContext(lengthMilliseconds, 10).map(
-    //     (context, index) => {
-    //         const note = {
-    //             items: [
-    //                 {
-    //                     languageCode: LanguageCode.English,
-    //                     text: `Connection ${index + 1}`,
-    //                     role: MultilingualTextItemRole.original,
-    //                 },
-    //             ],
-    //         };
-
-    //         return {
-    //             connectionType: EdgeConnectionType.self,
-    //             id: (index + 1).toString(),
-    //             note,
-    //             name: note,
-    //             connectedResources: [
-    //                 {
-    //                     compositeIdentifier: {
-    //                         type: ResourceType.audioItem,
-    //                         id: (100 + index + 1).toString(),
-    //                     },
-    //                     context,
-    //                     role: EdgeConnectionMemberRole.self,
-    //                 },
-    //             ],
-    //         };
-    //     }
-    // );
 
     return (
         <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.audioItem}>
@@ -237,7 +197,7 @@ export const AudioItemDetailFullViewPresenter = ({
                             </Typography>
                         </Grid>
                         <Grid item xs={5}>
-                            {formatedPlainText}
+                            <TranscriptPresenter transcript={transcript} />
                         </Grid>
                     </Grid>
                 </AccordionDetails>

@@ -1,8 +1,9 @@
+import { ITranscriptParticipant } from '@coscrad/api-interfaces';
 import { NonEmptyString } from '@coscrad/data-types';
 import { DTO } from '../../../../types/DTO';
 import BaseDomainModel from '../../BaseDomainModel';
 
-export class TranscriptParticipant extends BaseDomainModel {
+export class TranscriptParticipant extends BaseDomainModel implements ITranscriptParticipant {
     @NonEmptyString({
         label: 'speaker initials',
         description: 'the initials or text identifier for this speaker',

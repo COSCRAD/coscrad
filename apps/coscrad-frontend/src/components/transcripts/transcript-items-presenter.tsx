@@ -1,5 +1,5 @@
-import { ITranscriptItem } from '@coscrad/api-interfaces';
-import { Box, Typography } from '@mui/material';
+import { ITranscriptItem, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import { OriginalTranscriptTextPresenter } from './original-transcript-text-presenter';
 
 interface TranscriptItemsPresenterProps {
     transcriptItems: ITranscriptItem[];
@@ -12,30 +12,29 @@ export const TranscriptItemsPresenter = ({
 
     return (
         <>
-            {transcriptItems.map(
-                ({ speakerInitials, inPointMilliseconds, outPointMilliseconds, text }) => (
-                    <Box key={`${speakerInitials}-${inPointMilliseconds}`} mb={1}>
-                        <Typography component="span" variant="body1" mr={1} fontWeight="bold">
-                            {speakerInitials} [{inPointMilliseconds}-{outPointMilliseconds}]:
-                        </Typography>
-                        {/**
-                         * TODO: sort out language version presentation
-                         * - should we use the multilingual presenter and pass in
-                         *  a `variant` so that it displays inline?
-                         * - would the user toggle the transcript language at the top
-                         *  level so that the entire transcript be displayed in each language?
-                         * - should we build another multilingual text presenter for this
-                         *  inline use case?  How would we do it without an accordion?
-                         */}
+            {transcriptItems.map((transcriptItem) => {
+                const originalItem = transcriptItem.text.items.find(
+                    ({ role }) => role === MultilingualTextItemRole.original
+                );
 
-                        {text.items.map(({ text, languageCode, role }) => (
-                            <Box component="span" key={role} mr={1}>
-                                "{text} ({languageCode})"
-                            </Box>
-                        ))}
-                    </Box>
-                )
-            )}
+                const { inPointMilliseconds, outPointMilliseconds, speakerInitials } =
+                    transcriptItem;
+
+                const { text, languageCode: originalLanguageCode } = originalItem;
+
+                return (
+                    <>
+                        <OriginalTranscriptTextPresenter
+                            text={text}
+                            languageCode={originalLanguageCode}
+                            speakerInitials={speakerInitials}
+                            inPointMilliseconds={inPointMilliseconds}
+                            outPointMilliseconds={outPointMilliseconds}
+                        />
+                        {/* <TranslatedTranscriptTextItemPresenter /> */}
+                    </>
+                );
+            })}
         </>
     );
 };

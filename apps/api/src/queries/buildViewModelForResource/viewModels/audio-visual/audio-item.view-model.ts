@@ -9,6 +9,7 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 import { MultilingualText } from '../../../../domain/common/entities/multilingual-text';
 import { AudioItem } from '../../../../domain/models/audio-item/entities/audio-item.entity';
+import { Transcript } from '../../../../domain/models/audio-item/entities/transcript.entity';
 import { EdgeConnection } from '../../../../domain/models/context/edge-connection.entity';
 import { MediaItem } from '../../../../domain/models/media-item/entities/media-item.entity';
 import { NoteViewModel } from '../../../edgeConnectionViewModels/note.view-model';
@@ -69,6 +70,13 @@ export class AudioItemViewModel extends BaseViewModel implements IAudioItemViewM
     })
     readonly text: string;
 
+    @NestedDataType(Transcript, {
+        label: 'transcript',
+        description: 'time aligned transcription of the audio item',
+        isOptional: true,
+    })
+    readonly transcript: Transcript;
+
     @NonEmptyString({
         label: 'annotations',
         description: 'time-range contextualized notes for this audio item',
@@ -92,6 +100,11 @@ export class AudioItemViewModel extends BaseViewModel implements IAudioItemViewM
         this.mimeType = mimeType;
 
         this.name = name;
+
+        if (transcript) {
+            // avoid shared references
+            this.transcript = transcript.clone();
+        }
 
         this.annotations = this.findMyAnnotations(allNotes).map(
             (edgeConnection) => new NoteViewModel(edgeConnection)
