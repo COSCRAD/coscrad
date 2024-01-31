@@ -1138,6 +1138,91 @@ exports[`command payload schemas Command payload schema should match the snapsho
     "type": "ADD_AUDIO_FOR_DIGITAL_TEXT_PAGE",
   },
   {
+    "description": "add audio for a digital text title",
+    "label": "Add Audio for Digital Text Title",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "must be: digitalText",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "digitalText",
+                "value": "digitalText",
+              },
+            ],
+          },
+        },
+      },
+      "audioItemId": {
+        "coscradDataType": "UUID",
+        "description": "the ID of the audio item being added for digital text title",
+        "isArray": false,
+        "isOptional": false,
+        "label": "audio item ID",
+        "referenceTo": "audioItem",
+      },
+      "languageCode": {
+        "complexDataType": "ENUM",
+        "description": "language for the text title",
+        "enumLabel": "language code",
+        "enumName": "LanguageCode",
+        "isArray": false,
+        "isOptional": false,
+        "label": "language",
+        "labelsAndValues": [
+          {
+            "label": "Chilcotin",
+            "value": "clc",
+          },
+          {
+            "label": "Haida",
+            "value": "hai",
+          },
+          {
+            "label": "English",
+            "value": "en",
+          },
+          {
+            "label": "French",
+            "value": "fra",
+          },
+          {
+            "label": "Chinook",
+            "value": "chn",
+          },
+          {
+            "label": "Zapotec",
+            "value": "zap",
+          },
+          {
+            "label": "Spanish",
+            "value": "spa",
+          },
+        ],
+      },
+    },
+    "type": "ADD_AUDIO_FOR_DIGITAL_TEXT_TITLE",
+  },
+  {
     "description": "Register a new COSCRAD user after the user has been registered with the auth provider",
     "label": "Register User",
     "schema": {

@@ -323,6 +323,71 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Digital Text  should match the snapshot 1`] = `
 {
+  "audioForTitle": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "contains refereneces to audio for the title",
+    "isArray": false,
+    "isOptional": false,
+    "label": "audio for title",
+    "schema": {
+      "items": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "a list of audio for each available",
+        "isArray": true,
+        "isOptional": false,
+        "label": "audio items",
+        "schema": {
+          "audioItemId": {
+            "coscradDataType": "UUID",
+            "description": "a reference to the relevant audio item",
+            "isArray": false,
+            "isOptional": false,
+            "label": "audio item ID",
+            "referenceTo": "audioItem",
+          },
+          "languageCode": {
+            "complexDataType": "ENUM",
+            "description": "language of the audio",
+            "enumLabel": "language code",
+            "enumName": "LanguageCode",
+            "isArray": false,
+            "isOptional": false,
+            "label": "language",
+            "labelsAndValues": [
+              {
+                "label": "Chilcotin",
+                "value": "clc",
+              },
+              {
+                "label": "Haida",
+                "value": "hai",
+              },
+              {
+                "label": "English",
+                "value": "en",
+              },
+              {
+                "label": "French",
+                "value": "fra",
+              },
+              {
+                "label": "Chinook",
+                "value": "chn",
+              },
+              {
+                "label": "Zapotec",
+                "value": "zap",
+              },
+              {
+                "label": "Spanish",
+                "value": "spa",
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
   "id": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",

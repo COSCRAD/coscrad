@@ -13,6 +13,27 @@ import { isNotFound } from '../lib/types/not-found';
 import { TestEventStream } from './events';
 import { convertSequenceNumberToUuid } from './utilities/convertSequentialIdToUuid';
 
+const eventHistoryForTextWithUserAccess = new TestEventStream()
+    .andThen<DigitalTextCreated>({
+        type: `DIGITAL_TEXT_CREATED`,
+        payload: {
+            title: 'Digital Text number two title',
+            languageCodeForTitle: LanguageCode.English,
+        },
+    })
+    .andThen<ResourceReadAccessGrantedToUser>({
+        type: 'RESOURCE_READ_ACCESS_GRANTED_TO_USER',
+        payload: {
+            userId: '1',
+        },
+    })
+    .andThen<PageAddedToDigitalText>({
+        type: `PAGE_ADDED_TO_DIGITAL_TEXT`,
+        payload: {
+            identifier: '1',
+        },
+    });
+
 const eventHistoryForTextWithBilingualtitle = new TestEventStream()
     .andThen<DigitalTextCreated>({
         type: DIGITAL_TEXT_CREATED,
@@ -29,27 +50,6 @@ const eventHistoryForTextWithBilingualtitle = new TestEventStream()
         payload: {
             translation: 'Court Case Digital Text title (English)',
             languageCode: LanguageCode.English,
-        },
-    })
-    .andThen<PageAddedToDigitalText>({
-        type: `PAGE_ADDED_TO_DIGITAL_TEXT`,
-        payload: {
-            identifier: '1',
-        },
-    });
-
-const eventHistoryForTextWithUserAccess = new TestEventStream()
-    .andThen<DigitalTextCreated>({
-        type: `DIGITAL_TEXT_CREATED`,
-        payload: {
-            title: 'Digital Text number two title',
-            languageCodeForTitle: LanguageCode.English,
-        },
-    })
-    .andThen<ResourceReadAccessGrantedToUser>({
-        type: 'RESOURCE_READ_ACCESS_GRANTED_TO_USER',
-        payload: {
-            userId: '1',
         },
     })
     .andThen<PageAddedToDigitalText>({

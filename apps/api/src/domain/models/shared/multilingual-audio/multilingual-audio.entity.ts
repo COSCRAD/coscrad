@@ -71,4 +71,10 @@ export class MultilingualAudio extends BaseDomainModel {
             items: newAudioItems,
         });
     }
+
+    static buildEmpty(): MultilingualAudio {
+        return new MultilingualAudio({
+            items: [],
+        });
+    }
 }
