@@ -118,8 +118,8 @@ describe('buildTestData', () => {
 
         const numberOfSpacesToIndent = 4;
 
-        if (!existsSync(testDataFilePath)) {
-            mkdirSync(testDataFilePath);
+        if (!existsSync(testDataDirectory)) {
+            mkdirSync(testDataDirectory, { recursive: true });
         }
 
         writeFileSync(
