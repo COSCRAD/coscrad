@@ -1,5 +1,7 @@
 import { IDigitalTextPage, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
-import { NestedDataType, PageNumber } from '@coscrad/data-types';
+import { NestedDataType, PageNumber, UUID } from '@coscrad/data-types';
+import { isNonEmptyString } from '@coscrad/validation-constraints';
+import { isDeepStrictEqual } from 'util';
 import { isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
@@ -13,6 +15,7 @@ import BaseDomainModel from '../../BaseDomainModel';
 import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import { CannotAddAudioForMissingContentError } from '../errors';
 import { CannotOverwritePageContentError } from '../errors/cannot-overwrite-page-content.error';
+import { CannotOverwritePhotographForPageError } from '../errors/cannot-overwrite-photograph-for-page.error';
 import { PageIdentifier } from './types/page-identifier';
 
 export default class DigitalTextPage extends BaseDomainModel implements IDigitalTextPage {
@@ -41,12 +44,19 @@ export default class DigitalTextPage extends BaseDomainModel implements IDigital
     })
     readonly audio: MultilingualAudio;
 
+    @UUID({
+        label: 'photograph ID',
+        description: 'a reference to the main photograph for this page',
+        isOptional: true,
+    })
+    readonly photographId?: AggregateId;
+
     constructor(dto: DTO<DigitalTextPage>) {
         super();
 
         if (!dto) return;
 
-        const { identifier, content, audio } = dto;
+        const { identifier, content, audio, photographId } = dto;
 
         // Note that this is just a string (stored by value not reference), so there is no need to clone or build an instance
         this.identifier = identifier;
@@ -54,6 +64,14 @@ export default class DigitalTextPage extends BaseDomainModel implements IDigital
         this.content = !isNullOrUndefined(content) ? new MultilingualText(content) : null;
 
         this.audio = !isNullOrUndefined(audio) ? new MultilingualAudio(audio) : null;
+
+        if (isNonEmptyString(photographId)) {
+            this.photographId = photographId;
+        }
+    }
+
+    is(pageIdentifier: PageIdentifier): boolean {
+        return isDeepStrictEqual(pageIdentifier, this.identifier);
     }
 
     addContent(text: string, languageCode: LanguageCode): ResultOrError<DigitalTextPage> {
@@ -111,6 +129,30 @@ export default class DigitalTextPage extends BaseDomainModel implements IDigital
         return this.audio.getIdForAudioIn(languageCode);
     }
 
+    hasPhotograph(): boolean {
+        return isNonEmptyString(this.photographId);
+    }
+
+    getPhotograph(): Maybe<AggregateId> {
+        if (this.hasPhotograph()) return this.photographId;
+
+        return NotFound;
+    }
+
+    addPhotograph(photographId: AggregateId): ResultOrError<DigitalTextPage> {
+        if (this.hasPhotograph()) {
+            return new CannotOverwritePhotographForPageError(
+                this.identifier,
+                photographId,
+                this.photographId
+            );
+        }
+
+        return this.clone<DigitalTextPage>({
+            photographId,
+        });
+    }
+
     addAudio(audioItemId: AggregateId, languageCode: LanguageCode) {
         if (!this.hasContentIn(languageCode)) {
             return new CannotAddAudioForMissingContentError(
@@ -124,6 +166,13 @@ export default class DigitalTextPage extends BaseDomainModel implements IDigital
 
         return this.clone<DigitalTextPage>({
             audio: updatedAudio,
+        });
+    }
+
+    static buildEmpty({ identifier }: Pick<DigitalTextPage, 'identifier'>): DigitalTextPage {
+        return new DigitalTextPage({
+            identifier,
+            audio: MultilingualAudio.buildEmpty(),
         });
     }
 }

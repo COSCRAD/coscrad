@@ -87,6 +87,11 @@ import {
     ContentAddedToDigitalTextPage,
 } from '../../../domain/models/digital-text/commands/add-content-to-digital-text-page';
 import { AddPageToDigitalText } from '../../../domain/models/digital-text/commands/add-page-to-digital-text/add-page-to-digital-text.command';
+import {
+    AddPhotographToDigitalTextPage,
+    AddPhotographToDigitalTextPageCommandHandler,
+    PhotographAddedToDigitalTextPage,
+} from '../../../domain/models/digital-text/commands/add-photograph-to-digital-text-page';
 import { DigitalText } from '../../../domain/models/digital-text/entities/digital-text.entity';
 import { CreateMediaItem } from '../../../domain/models/media-item/commands/create-media-item/create-media-item.command';
 import { CreateMediaItemCommandHandler } from '../../../domain/models/media-item/commands/create-media-item/create-media-item.command-handler';
@@ -284,6 +289,7 @@ export const buildAllDataClassProviders = () =>
         DigitalTextPageContentTranslated,
         DigitalTextTitleTranslated,
         AudioAddedForDigitalTextPage,
+        PhotographAddedToDigitalTextPage,
         SongCreated,
         SongTitleTranslated,
         LyricsAddedForSong,
@@ -578,6 +584,8 @@ export default async (
             CreateDigitalTextCommandHandler,
             AddPageToDigitalText,
             AddPageToDigitalTextCommandHandler,
+            AddPhotographToDigitalTextPage,
+            AddPhotographToDigitalTextPageCommandHandler,
             TranslateDigitalTextPageContent,
             TranslateDigitalTextPageContentCommandHandler,
             TranslateDigitalTextPageContent,

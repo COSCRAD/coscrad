@@ -1,6 +1,6 @@
 import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { NestedDataType } from '@coscrad/data-types';
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
@@ -37,8 +37,12 @@ import {
     PageAddedToDigitalText,
 } from '../commands';
 import { ContentAddedToDigitalTextPage } from '../commands/add-content-to-digital-text-page';
+import { PhotographAddedToDigitalTextPage } from '../commands/add-photograph-to-digital-text-page';
 import { ADD_PAGE_TO_DIGITAL_TEXT, CREATE_DIGITAL_TEXT } from '../constants';
-import { FailedToUpdateDigitalTextPageError } from '../errors';
+import {
+    CannotAddPhotographForMissingPageError,
+    FailedToUpdateDigitalTextPageError,
+} from '../errors';
 import { CannotAddAudioForTitleInGivenLanguageError } from '../errors/cannot-add-audio-for-title-in-given-language.error';
 import { CannotAddPageWithDuplicateIdentifierError } from '../errors/cannot-add-page-with-duplicate-identifier.error';
 import { CannotOverrideAudioForPageError } from '../errors/cannot-override-audio-for-page.error';
@@ -254,6 +258,37 @@ export class DigitalText extends Resource {
         return updatedDigitalText;
     }
 
+    addPhotographToPage(
+        pageIdentifier: PageIdentifier,
+        photographId: AggregateId
+    ): ResultOrError<DigitalText> {
+        // TODO Investigate why `safeClone` doesn't catch this with invariant validation
+        if (!isNonEmptyString(photographId)) {
+            return new InternalError(
+                `Invalid page identifier format. Expected non-empty string, received: ${photographId}`
+            );
+        }
+
+        const pageSearchResult = this.getPage(pageIdentifier);
+
+        if (isNotFound(pageSearchResult)) {
+            return new CannotAddPhotographForMissingPageError(pageIdentifier, photographId);
+        }
+
+        const pageUpdateResult = pageSearchResult.addPhotograph(photographId);
+
+        if (isInternalError(pageUpdateResult)) {
+            return pageUpdateResult;
+        }
+
+        return this.safeClone<DigitalText>({
+            // here we update only the target page
+            pages: this.pages.map((page) =>
+                page.is(pageUpdateResult.identifier) ? pageUpdateResult : page
+            ),
+        });
+    }
+
     addAudioForTitle(
         audioItemId: AggregateId,
         languageCode: LanguageCode
@@ -323,6 +358,20 @@ export class DigitalText extends Resource {
         return this.audioForTitle.getIdForAudioIn(languageCode);
     }
 
+    /**
+     * Note that if the page does not exist or if the page does not have a
+     * linked photograph, this will return `NotFound`.
+     *
+     * @param pageIdentifier the page for which you would like the photographId
+     */
+    getPhotographForPage(pageIdentifier: PageIdentifier): Maybe<AggregateId> {
+        const pageSearchResult = this.getPage(pageIdentifier);
+
+        if (isNotFound(pageSearchResult)) return NotFound;
+
+        return pageSearchResult.getPhotograph();
+    }
+
     protected validatePageRangeContext(context: PageRangeContext): Valid | InternalError {
         // TODO Is this really necessary?
         if (isNullOrUndefined(context))
@@ -379,6 +428,12 @@ export class DigitalText extends Resource {
         payload: { pageIdentifier, audioItemId, languageCode },
     }: AudioAddedForDigitalTextPage) {
         return this.addAudioForPage(pageIdentifier, audioItemId, languageCode);
+    }
+
+    handlePhotographAddedToDigitalTextPage({
+        payload: { pageIdentifier, photographId },
+    }: PhotographAddedToDigitalTextPage) {
+        return this.addPhotographToPage(pageIdentifier, photographId);
     }
 
     handleDigitalTextPageContentTranslated({

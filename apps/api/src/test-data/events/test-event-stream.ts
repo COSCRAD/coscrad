@@ -18,6 +18,10 @@ import {
     ContentAddedToDigitalTextPage,
     ContentAddedToDigitalTextPagePayload,
 } from '../../domain/models/digital-text/commands/add-content-to-digital-text-page';
+import {
+    PhotographAddedToDigitalTextPage,
+    PhotographAddedToDigitalTextPagePayload,
+} from '../../domain/models/digital-text/commands/add-photograph-to-digital-text-page';
 import { ResourceReadAccessGrantedToUser } from '../../domain/models/shared/common-commands';
 import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import { EventRecordMetadata } from '../../domain/models/shared/events/types/EventRecordMetadata';
@@ -322,6 +326,22 @@ const buildDigitalTextPageContentTranslated = (
     };
 
     return new DigitalTextPageContentTranslated(
+        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        buildMetadata()
+    );
+};
+
+const buildPhotographAddedToDigitalTextPage = (
+    payloadOverrides: DeepPartial<PhotographAddedToDigitalTextPagePayload>,
+    buildMetadata: EventMetadataBuilder
+) => {
+    const defaultPayload: PhotographAddedToDigitalTextPagePayload = {
+        aggregateCompositeIdentifier: { type: AggregateType.digitalText, id: buildDummyUuid(124) },
+        pageIdentifier: '117',
+        photographId: buildDummyUuid(5),
+    };
+
+    return new PhotographAddedToDigitalTextPage(
         clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
         buildMetadata()
     );
@@ -645,6 +665,10 @@ export class TestEventStream {
             .registerBuilder(
                 'CONTENT_ADDED_TO_DIGITAL_TEXT_PAGE',
                 buildContentAddedToDigitalTextPage
+            )
+            .registerBuilder(
+                'PHOTOGRAPH_ADDED_TO_DIGITAL_TEXT_PAGE',
+                buildPhotographAddedToDigitalTextPage
             )
             .registerBuilder(TERM_CREATED, buildTermCreated)
             .registerBuilder(TERM_TRANSLATED, buildTermTranslated)
