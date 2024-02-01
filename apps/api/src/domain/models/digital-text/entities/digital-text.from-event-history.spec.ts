@@ -24,6 +24,7 @@ import {
     AddPageToDigitalText,
     AudioAddedForDigitalTextPage,
     AudioAddedForDigitalTextTitle,
+    CoverPhotographAddedForDigitalText,
     CreateDigitalText,
     DigitalTextCreated,
     DigitalTextPageContentTranslated,
@@ -246,6 +247,20 @@ const digitalTextTitleTranslated = new TestEventStream()
         id,
     })[0];
 
+const coverPhotographId = buildDummyUuid(134);
+
+const coverPhotographAddedForDigitalText = new TestEventStream()
+    .andThen<CoverPhotographAddedForDigitalText>({
+        type: 'COVER_PHOTOGRAPH_ADDED_FOR_DIGITAL_TEXT',
+        payload: {
+            photographId: coverPhotographId,
+        },
+    })
+    .as({
+        type: AggregateType.digitalText,
+        id,
+    })[0];
+
 describe(`DigitalText.fromEventHistory`, () => {
     describe(`when there are events for the given aggregate root`, () => {
         describe(`when there is only a creation event`, () => {
@@ -287,6 +302,20 @@ describe(`DigitalText.fromEventHistory`, () => {
             const titleTransation = titleTranslationSearchResult as MultilingualTextItem;
 
             expect(titleTransation.text).toBe(titleTranslationText);
+        });
+
+        describe(`when a cover photograph has been added`, () => {
+            it.only(`should return the cover photograph for digital text`, () => {
+                const eventStream = [digitalTextCreated, coverPhotographAddedForDigitalText];
+
+                const digitalTextBuildResult = DigitalText.fromEventHistory(eventStream, id);
+
+                expect(digitalTextBuildResult).toBeInstanceOf(DigitalText);
+
+                const builtDigitalText = digitalTextBuildResult as DigitalText;
+
+                expect(builtDigitalText.coverPhotographId).toBe(coverPhotographId);
+            });
         });
 
         describe(`when audio has been added to the title`, () => {
