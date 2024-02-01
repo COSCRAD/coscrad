@@ -59,6 +59,8 @@ const { id: audioItemId } = audioCompositeIdentifier;
 
 const buildDetailRoute = (audioItemId: string) => `/Resources/AudioItems/${audioItemId}`;
 
+const annotationTrackTestId = 'timeline:Annotation Track';
+
 describe(`the audio item detail view`, () => {
     before(() => {
         cy.clearDatabase();
@@ -101,7 +103,7 @@ describe(`the audio item detail view`, () => {
 
         describe(`when there are no annotations`, () => {
             it(`should show no annotations`, () => {
-                cy.getByDataAttribute('timeline:audio-item-annotations');
+                cy.getByDataAttribute(annotationTrackTestId).should('not.exist');
             });
         });
 
@@ -124,13 +126,13 @@ describe(`the audio item detail view`, () => {
                     // TODO Assert that the order of labels is correct
                     describe(`the timeline labels for the given annotation`, () => {
                         describe(`the label for the in point`, () => {
-                            it(`should be displayed on the timeline`, () => {
-                                cy.getByDataAttribute(`annotation-timeline:${noteId}:in`);
+                            it.only(`should be displayed on the timeline`, () => {
+                                cy.getByDataAttribute(`timeline-label:${noteId}:in`);
                             });
 
                             describe(`when clicked`, () => {
                                 beforeEach(() => {
-                                    cy.getByDataAttribute(`annotation-timeline:${noteId}:in`);
+                                    cy.getByDataAttribute(`timeline-label:${noteId}:in`);
                                 });
 
                                 it(`should cause the audio to scrub to the correct point`, () => {
@@ -143,12 +145,12 @@ describe(`the audio item detail view`, () => {
 
                         describe(`the label for the out point`, () => {
                             it(`should be displayed on the timeline`, () => {
-                                cy.getByDataAttribute(`annotation-timeline:${noteId}:out`);
+                                cy.getByDataAttribute(`timeline-label:${noteId}:out`);
                             });
 
                             describe(`when clicked`, () => {
                                 beforeEach(() => {
-                                    cy.getByDataAttribute(`annotation-timeline:${noteId}:out`);
+                                    cy.getByDataAttribute(`timeline-label:${noteId}:out`);
                                 });
 
                                 it(`should cause the audio to scrub to the correct point`, () => {

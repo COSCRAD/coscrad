@@ -16,16 +16,18 @@ interface TimelineProps {
 
 export const Timeline = ({ marks, defaultValue, step, min, max, name }: TimelineProps) => {
     return (
-        <Box sx={{ width: '1000px' }}>
-            <Slider
-                aria-label={name}
-                defaultValue={defaultValue}
-                step={step}
-                min={min}
-                max={max}
-                valueLabelDisplay="auto"
-                marks={marks}
-            />
-        </Box>
+        <div data-testid={`timeline:${name}`}>
+            <Box sx={{ width: '1000px' }}>
+                <Slider
+                    aria-label={name}
+                    defaultValue={defaultValue}
+                    step={step}
+                    min={min}
+                    max={max}
+                    valueLabelDisplay="auto"
+                    marks={marks}
+                />
+            </Box>
+        </div>
     );
 };

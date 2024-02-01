@@ -2,17 +2,25 @@ import { Tooltip } from '@mui/material';
 import { TimelineMark } from './timeline';
 
 export interface TimelineLabelProps {
+    name: string;
     text: string;
     tip: string;
     value: number;
     onClick?: (timeStamp: number) => void;
 }
 
-export const TimelineLabel = ({ text, tip, value, onClick }: TimelineLabelProps): JSX.Element => {
+export const TimelineLabel = ({
+    text,
+    tip,
+    value,
+    name,
+    onClick,
+}: TimelineLabelProps): JSX.Element => {
     return (
         <Tooltip title={tip}>
             {/* Do we really need the value param here? the client already has access to this */}
             <div
+                data-testid={`timeline-label:${name}`}
                 onClick={() => {
                     onClick(value);
                 }}

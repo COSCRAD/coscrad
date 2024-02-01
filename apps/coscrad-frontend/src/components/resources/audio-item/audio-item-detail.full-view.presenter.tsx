@@ -6,6 +6,7 @@ import {
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { AudioPlayer } from '@coscrad/media-player';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material/';
 import {
     Accordion,
@@ -17,7 +18,6 @@ import {
     Typography,
 } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
-import { isNullOrUndefined } from 'util';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 import { SinglePropertyPresenter } from '../../../utils/generic-components/presenters/single-property-presenter';
 import { Timeline, TimelineMark, buildTimelineMark } from '../../timeline';
@@ -42,7 +42,7 @@ export const AudioItemDetailFullViewPresenter = ({
     useEffect(() => {
         const updatedMarks = isNullOrUndefined(audioRef?.current?.currentTime)
             ? []
-            : annotations.flatMap(({ connectedResources, name }) => {
+            : annotations.flatMap(({ connectedResources, name, id: noteId }) => {
                   const timeRangeContext = connectedResources[0].context as ITimeRangeContext;
 
                   const {
@@ -55,12 +55,17 @@ export const AudioItemDetailFullViewPresenter = ({
 
                   const fullText = `[${inPointMilliseconds}] ${text} [${outPointMilliseconds}]`;
 
+                  /**
+                   * Should we break this logic out so we can share it for
+                   * video annotation?
+                   */
                   return [
                       buildTimelineMark({
                           // Shouldn't this be an icon instead?
                           text: `<-`,
                           tip: fullText,
                           value: inPointMilliseconds,
+                          name: `${noteId}:in`,
                           onClick: (timeStamp) => {
                               audioRef.current.currentTime = timeStamp;
                           },
@@ -69,6 +74,7 @@ export const AudioItemDetailFullViewPresenter = ({
                           text: `->`,
                           tip: fullText,
                           value: outPointMilliseconds,
+                          name: `${noteId}:out`,
                           onClick: (timeStamp) => {
                               audioRef.current.currentTime = timeStamp;
                           },
