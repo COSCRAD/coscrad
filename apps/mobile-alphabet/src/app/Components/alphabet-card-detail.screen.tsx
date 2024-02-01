@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Image, Text, View } from 'react-native';
+import { Button, Text, View } from 'react-native';
 import config from './Config.json';
 import { AlphabetData } from './Menu';
+import { AlphabetCardDetailPresenter } from './alphabet-card-detail.presenter';
 
 export function AlphabetCardDetailScreen() {
     const [alphabetData, setAlphabetData] = useState<AlphabetData | null>(null);
@@ -38,34 +39,9 @@ export function AlphabetCardDetailScreen() {
         return Number.parseInt(sequenceNumber) === selectedLetterSequenceNumber;
     });
 
-    const {
-        word,
-        letter,
-        sequence_number,
-        card_image,
-        letter_audio,
-        word_audio,
-        standalone_image,
-    } = selectedCard;
-
     return (
         <View testID="AlphabetCardDetail">
-            <Image
-                style={{ width: 200, height: 200 }}
-                resizeMode="cover"
-                source={{
-                    uri: standalone_image,
-                }}
-            />
-            <Text testID={`${letter}`}>Letter: {letter}</Text>
-            <Text testID={`${word}`}>Word: {word}</Text>
-            <Text testID={`AlphabetCardDetail/${sequence_number}`}>
-                Sequence #: {sequence_number}
-            </Text>
-            <Text>Image: {card_image}</Text>
-            <Text>Letter Audio:{letter_audio}</Text>
-            <Text>Word Audio: {word_audio}</Text>
-            <Text>Standalone Image: {standalone_image}</Text>
+            <AlphabetCardDetailPresenter {...selectedCard} />
             <Button
                 testID="Back"
                 title="Back"
@@ -89,5 +65,3 @@ export function AlphabetCardDetailScreen() {
         </View>
     );
 }
-
-export default AlphabetCardDetailScreen;
