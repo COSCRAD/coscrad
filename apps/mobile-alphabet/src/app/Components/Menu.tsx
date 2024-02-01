@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Text, View } from 'react-native';
 import config from './Config.json';
 
-interface AlphabetCard {
+export interface AlphabetCard {
     letter: string;
     word: string;
     //be careful this is a string, should be parsed
