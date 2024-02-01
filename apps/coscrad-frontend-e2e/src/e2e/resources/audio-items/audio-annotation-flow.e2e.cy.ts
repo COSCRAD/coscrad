@@ -92,6 +92,8 @@ describe('the audio annotation process', () => {
 
         const setTimeRange = 'setTimeRange';
 
+        const startAnnotation = 'startAnnotation';
+
         const fillTextForm = 'fillTextForm';
 
         const chooseLanguage = 'chooseLanguage';
@@ -119,6 +121,9 @@ describe('the audio annotation process', () => {
 
                 cy.getByDataAttribute('out-point-marker-button').click();
             })
+            .addStep(startAnnotation, () => {
+                cy.getByDataAttribute('button:add-annotation').click();
+            })
             .addStep(fillTextForm, () => {
                 cy.getByDataAttribute('text:note').type(newAnnotationText);
             })
@@ -138,7 +143,7 @@ describe('the audio annotation process', () => {
 
         describe(`when a time range is first selected in the Audio player`, () => {
             beforeEach(() => {
-                steps.apply([setTimeRange]);
+                steps.apply([setTimeRange, startAnnotation]);
             });
 
             it('should show the annotation form', () => {
@@ -152,7 +157,7 @@ describe('the audio annotation process', () => {
 
         describe(`the form`, () => {
             beforeEach(() => {
-                steps.apply([setTimeRange]);
+                steps.apply([setTimeRange, startAnnotation]);
             });
 
             it('should be disabled', () => {
@@ -163,7 +168,7 @@ describe('the audio annotation process', () => {
         describe(`when the form is complete`, () => {
             describe(`the annotation submit button`, () => {
                 beforeEach(() => {
-                    steps.apply([setTimeRange, fillTextForm, chooseLanguage]);
+                    steps.apply([setTimeRange, startAnnotation, fillTextForm, chooseLanguage]);
                 });
 
                 it('should be enabled', () => {
@@ -173,7 +178,13 @@ describe('the audio annotation process', () => {
 
             describe(`when the form is submitted (prior to acknowledgement)`, () => {
                 beforeEach(() => {
-                    steps.apply([setTimeRange, fillTextForm, chooseLanguage, submitForm]);
+                    steps.apply([
+                        setTimeRange,
+                        startAnnotation,
+                        fillTextForm,
+                        chooseLanguage,
+                        submitForm,
+                    ]);
                 });
 
                 it(`should display the note with correct time range`, () => {
@@ -202,7 +213,13 @@ describe('the audio annotation process', () => {
 
             describe(`before the successful command is acknowledged`, () => {
                 beforeEach(() => {
-                    steps.apply([setTimeRange, fillTextForm, chooseLanguage, submitForm]);
+                    steps.apply([
+                        setTimeRange,
+                        startAnnotation,
+                        fillTextForm,
+                        chooseLanguage,
+                        submitForm,
+                    ]);
                 });
 
                 it(`should be disabled`, () => {
