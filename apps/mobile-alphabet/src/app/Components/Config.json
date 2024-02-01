@@ -1,3 +1,4 @@
 {
-    "apiUrl": "https://10.0.2.2:3131/api/games/alphabet"
+    "apiUrl": "http://10.0.2.2:3131/api/games/alphabet",
+    "baseMediaAssetUrl": "http://10.0.2.2:3131/api/resources/mediaitems/download"
 }

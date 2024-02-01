@@ -39,9 +39,14 @@ export function AlphabetCardDetailScreen() {
         return Number.parseInt(sequenceNumber) === selectedLetterSequenceNumber;
     });
 
+    const buildFullMediaAssetUrl = (path: string) => `${config.baseMediaAssetUrl}/${path}`;
+
     return (
         <View testID="AlphabetCardDetail">
-            <AlphabetCardDetailPresenter {...selectedCard} />
+            <AlphabetCardDetailPresenter
+                {...selectedCard}
+                standalone_image={buildFullMediaAssetUrl(selectedCard.standalone_image)}
+            />
             <Button
                 testID="Back"
                 title="Back"
