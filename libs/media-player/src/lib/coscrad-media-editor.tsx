@@ -1,12 +1,11 @@
-import { Grid, styled } from '@mui/material';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { Box, styled } from '@mui/material';
+import { useEffect, useMemo, useRef } from 'react';
 import {
     EDITOR_SOUND_BAR_HEIGHT,
     EDITOR_X_PADDING,
     TIMELINE_RULER_BAR_HEIGHT,
     ZOOM_FACTOR,
 } from './editor-constants';
-import { isNullOrUndefined } from './shared/validation';
 import { TimelineRuler } from './timeline-ruler';
 import { Track } from './track';
 import { ITranscript } from './video-prototype-interfaces/transcript-interface';
@@ -23,7 +22,7 @@ import { ITranscript } from './video-prototype-interfaces/transcript-interface';
 //     zIndex: 500,
 // });
 
-const SoundEditor = styled('div')({
+const SoundEditor = styled(Box)({
     width: '100%',
     position: 'relative',
     boxSizing: 'border-box',
@@ -35,7 +34,7 @@ const Initials = styled('div')({
     padding: '4px 4px',
     color: '#fff',
     boxSizing: 'border-box',
-    borderBottom: '2px dotted #ccc',
+    // borderBottom: '2px dotted #ccc',
 });
 
 const ScrollingBox = styled('div')({
@@ -73,7 +72,7 @@ const EditorPlayhead = styled('div')({
     // animationDuration: '2s',
     // animationTimingFunction: 'ease-in',
     // animationIterationCount: 'infinite',
-    zIndex: 500,
+    zIndex: 1500,
 });
 
 interface CoscradLinearProgressBarProps {
@@ -102,20 +101,22 @@ export const CoscradMediaEditor = ({
 
     const soundEditorRef = useRef<HTMLDivElement>(null);
 
+    const scrollingBoxRef = useRef<HTMLDivElement>(null);
+
     const tracksRef = useRef<HTMLDivElement>(null);
 
     const playheadRef = useRef<HTMLDivElement>(null);
 
-    const [rangeBar, setRangeBar] = useState({
-        start: '',
-        width: '',
-    });
+    // const [rangeBar, setRangeBar] = useState({
+    //     start: '',
+    //     width: '',
+    // });
 
     const scrolledTrackLength = mediaDuration * ZOOM_FACTOR;
 
     const trackHeight = EDITOR_SOUND_BAR_HEIGHT + 2;
 
-    const rangeBarRef = useRef<HTMLDivElement>(null);
+    // const rangeBarRef = useRef<HTMLDivElement>(null);
 
     const { participants, items } = transcript;
 
@@ -125,79 +126,84 @@ export const CoscradMediaEditor = ({
         return <TimelineRuler duration={mediaDuration} zoomFactor={ZOOM_FACTOR} />;
     }, [mediaDuration]);
 
-    const handleSeekInProgressBar = (event: React.MouseEvent<HTMLSpanElement>) => {
-        const progressBarElement = event.currentTarget;
+    // const handleSeekInProgressBar = (event: React.MouseEvent<HTMLSpanElement>) => {
+    //     const progressBarElement = event.currentTarget;
 
-        const { left: progressBarStartingPoint, width: progressBarWidth } =
-            progressBarElement.getBoundingClientRect();
+    //     const { left: progressBarStartingPoint, width: progressBarWidth } =
+    //         progressBarElement.getBoundingClientRect();
 
-        const progressSelected = (event.clientX - progressBarStartingPoint) / progressBarWidth;
+    //     const progressSelected = (event.clientX - progressBarStartingPoint) / progressBarWidth;
 
-        seekInProgressBar(progressSelected);
-    };
+    //     seekInProgressBar(progressSelected);
+    // };
 
-    const clearRangeBar = () => {
-        if (!isNullOrUndefined(rangeBarRef.current))
-            rangeBarRef.current.style.visibility = 'hidden';
+    // const clearRangeBar = () => {
+    //     if (!isNullOrUndefined(rangeBarRef.current))
+    //         rangeBarRef.current.style.visibility = 'hidden';
 
-        setRangeBar({
-            start: '',
-            width: '',
-        });
-    };
+    //     setRangeBar({
+    //         start: '',
+    //         width: '',
+    //     });
+    // };
 
-    useEffect(() => {
-        if (isNullOrUndefined(inPointMilliseconds)) {
-            clearRangeBar();
+    // useEffect(() => {
+    //     if (isNullOrUndefined(inPointMilliseconds)) {
+    //         clearRangeBar();
 
-            return;
-        }
+    //         return;
+    //     }
 
-        const start = (inPointMilliseconds / mediaDuration) * 100;
+    //     const start = (inPointMilliseconds / mediaDuration) * 100;
 
-        console.log(
-            `Inpoint - start: ${start}% = in: ${inPointMilliseconds} / dur: ${mediaDuration}`
-        );
+    //     console.log(
+    //         `Inpoint - start: ${start}% = in: ${inPointMilliseconds} / dur: ${mediaDuration}`
+    //     );
 
-        if (isNullOrUndefined(outPointMilliseconds))
-            setRangeBar({ start: `${start}%`, width: `2px` });
+    //     if (isNullOrUndefined(outPointMilliseconds))
+    //         setRangeBar({ start: `${start}%`, width: `2px` });
 
-        if (!isNullOrUndefined(outPointMilliseconds)) {
-            const end = (outPointMilliseconds / mediaDuration) * 100;
+    //     if (!isNullOrUndefined(outPointMilliseconds)) {
+    //         const end = (outPointMilliseconds / mediaDuration) * 100;
 
-            const width = end - start;
+    //         const width = end - start;
 
-            setRangeBar({ ...rangeBar, width: `${width}%` });
+    //         setRangeBar({ ...rangeBar, width: `${width}%` });
 
-            console.log(
-                `Outpoint - start: ${start} width: ${width} progress: ${playProgress} end: ${end}`
-            );
+    //         console.log(
+    //             `Outpoint - start: ${start} width: ${width} progress: ${playProgress} end: ${end}`
+    //         );
 
-            rangeBarRef.current!.style.borderRight = '1px solid red';
-        }
+    //         rangeBarRef.current!.style.borderRight = '1px solid red';
+    //     }
 
-        rangeBarRef.current!.style.visibility = 'visible';
-    }, [inPointMilliseconds, outPointMilliseconds]);
+    //     rangeBarRef.current!.style.visibility = 'visible';
+    // }, [inPointMilliseconds, outPointMilliseconds]);
 
     useEffect(() => {
         const editorWidth = soundEditorRef.current!.getBoundingClientRect().width;
 
         const editorPadding = 2 * EDITOR_X_PADDING;
 
-        const editorMidPoint = (editorWidth - editorPadding) / 2;
+        const editorStickyPoint = (editorWidth - editorPadding) / 3;
+
+        console.log({ editorWidth });
+        console.log({ editorMidPoint: editorStickyPoint });
 
         const playheadPosition = playheadRef.current!.offsetLeft;
 
-        if (playheadPosition >= editorMidPoint) {
-            const scrollLeft = playheadPosition - editorMidPoint;
+        console.log({ playheadPosition });
 
-            soundEditorRef.current!.scrollTo({
+        if (playheadPosition >= editorStickyPoint) {
+            const scrollLeft = playheadPosition - editorStickyPoint;
+
+            scrollingBoxRef.current!.scrollTo({
                 top: 0,
                 left: scrollLeft,
                 behavior: 'smooth',
             });
         } else {
-            soundEditorRef.current!.scrollTo({
+            scrollingBoxRef.current!.scrollTo({
                 top: 0,
                 left: 0,
                 behavior: 'smooth',
@@ -206,72 +212,70 @@ export const CoscradMediaEditor = ({
     }, [playProgress, scrolledTrackLength]);
 
     return (
-        <SoundEditor ref={soundEditorRef}>
-            <Grid container spacing={0}>
-                <Grid
-                    sx={{
-                        paddingTop: `${TIMELINE_RULER_BAR_HEIGHT + 2}px`,
-                    }}
-                    item
-                    xs={0.8}
-                >
-                    {participants.map(({ initials }) => (
-                        <Initials
-                            key={initials}
-                            sx={{
-                                height: `${trackHeight + 2}px`,
-                            }}
-                        >
-                            {initials}
-                        </Initials>
-                    ))}
-                </Grid>
-                <Grid item xs={11.2}>
-                    <ScrollingBox>
-                        <ScrolledTracksBox
-                            ref={tracksRef}
+        <SoundEditor data-testid="sound-editor" ref={soundEditorRef} display="flex">
+            <Box
+                sx={{
+                    paddingTop: `${TIMELINE_RULER_BAR_HEIGHT + 2}px`,
+                    width: '5%',
+                    maxWidth: '45px',
+                }}
+            >
+                {participants.map(({ initials }) => (
+                    <Initials
+                        key={initials}
+                        sx={{
+                            height: `${trackHeight + 2}px`,
+                        }}
+                    >
+                        {initials}
+                    </Initials>
+                ))}
+            </Box>
+            <Box sx={{ flexGrow: 1, width: '95%' }}>
+                <ScrollingBox data-testid="scroll-container" ref={scrollingBoxRef}>
+                    <ScrolledTracksBox
+                        ref={tracksRef}
+                        sx={{
+                            height: `${
+                                numberOfParticipants * EDITOR_SOUND_BAR_HEIGHT +
+                                TIMELINE_RULER_BAR_HEIGHT +
+                                10
+                            }px`,
+                            width: `${scrolledTrackLength}px`,
+                        }}
+                    >
+                        <EditorPlayhead
+                            ref={playheadRef}
                             sx={{
                                 height: `${
                                     numberOfParticipants * EDITOR_SOUND_BAR_HEIGHT +
                                     TIMELINE_RULER_BAR_HEIGHT +
-                                    10
+                                    8
                                 }px`,
-                                width: `${scrolledTrackLength}px`,
+                                left: `${playProgress}%`,
+                            }}
+                        />
+                        <TimelineRulerBox
+                            sx={{
+                                width: scrolledTrackLength,
+                                height: `${TIMELINE_RULER_BAR_HEIGHT}px`,
                             }}
                         >
-                            <EditorPlayhead
-                                ref={playheadRef}
-                                sx={{
-                                    height: `${
-                                        numberOfParticipants * EDITOR_SOUND_BAR_HEIGHT +
-                                        TIMELINE_RULER_BAR_HEIGHT +
-                                        8
-                                    }px`,
-                                    left: `${playProgress}%`,
-                                }}
+                            {mediaDuration > 0 ? timeline : null}
+                        </TimelineRulerBox>
+                        {participants.map(({ initials }) => (
+                            <Track
+                                key={initials}
+                                width={scrolledTrackLength}
+                                height={trackHeight}
+                                mediaDuration={mediaDuration}
+                                participantInitials={initials}
+                                transcriptItems={items}
                             />
-                            <TimelineRulerBox
-                                sx={{
-                                    width: scrolledTrackLength,
-                                    height: `${TIMELINE_RULER_BAR_HEIGHT}px`,
-                                }}
-                            >
-                                {mediaDuration > 0 ? timeline : null}
-                            </TimelineRulerBox>
-                            {participants.map(({ initials }) => (
-                                <Track
-                                    key={initials}
-                                    width={scrolledTrackLength}
-                                    height={trackHeight}
-                                    mediaDuration={mediaDuration}
-                                    participantInitials={initials}
-                                    transcriptItems={items}
-                                />
-                            ))}
-                        </ScrolledTracksBox>
-                    </ScrollingBox>
-                </Grid>
-            </Grid>
+                        ))}
+                    </ScrolledTracksBox>
+                </ScrollingBox>
+            </Box>
         </SoundEditor>
     );
 };

@@ -8,7 +8,7 @@ const TrackBox = styled('div')({
     position: 'relative',
     marginBottom: '2px',
     boxSizing: 'border-box',
-    borderBottom: '2px dotted #ccc',
+    borderBottom: '1px solid #666',
 });
 
 const WaveForm = styled('div')({
