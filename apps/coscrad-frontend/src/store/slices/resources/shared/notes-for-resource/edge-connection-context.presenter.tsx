@@ -1,7 +1,11 @@
-import { EdgeConnectionContextType, IEdgeConnectionContext, ITimeRangeContext } from '@coscrad/api-interfaces';
+import {
+    EdgeConnectionContextType,
+    IEdgeConnectionContext,
+    ITimeRangeContext,
+} from '@coscrad/api-interfaces';
 import { isInteger, isNonNegativeFiniteNumber } from '@coscrad/validation-constraints';
 import { Box, Typography, styled } from '@mui/material';
-import { convertMillisecondsToSeconds } from '../../../../../components/resources/utils/math';
+import { convertMillisecondsToSecondsRounded } from '../../../../../components/resources/utils/math';
 
 /**
  * TODO Import this from a separate `Math` library. This implementation has
@@ -20,15 +24,16 @@ const asFormattedMediaTimecodeString = (timeInSeconds: number): string => {
             !isInteger(inputNumber) ||
             inputNumber.toString().length > 2
         ) {
-            throw new Error('inputNumber must be a non-negative finite integer that is less than 100');
+            throw new Error(
+                'inputNumber must be a non-negative finite integer that is less than 100'
+            );
         }
-    
+
         const inputAsString = inputNumber.toString();
-    
+
         return inputNumber > 9 ? inputAsString : `0${inputAsString}`;
     };
-    
-    
+
     if (
         !isNonNegativeFiniteNumber(timeInSeconds) ||
         timeInSeconds >= ninetynineHoursInSecondsMaximum
@@ -62,7 +67,6 @@ const asFormattedMediaTimecodeString = (timeInSeconds: number): string => {
     return formattedMediaTimecodeString;
 };
 
-
 const TimeRangeContextVisual = (): JSX.Element => (
     <Box
         component="span"
@@ -86,7 +90,6 @@ const HiddenData = styled('div')({
     width: 0,
 });
 
-
 interface EdgeConnectionContextPresenterProps {
     context: IEdgeConnectionContext;
 }
@@ -103,9 +106,9 @@ export const EdgeConnectionContextPresenter = ({
 
     /**
      * TODO This is fine for now, but if we keep this presenter, we will want
-     * to find a pattern that is more extensible to adding new \ custom 
+     * to find a pattern that is more extensible to adding new \ custom
      * context types. This is very similar to getting rid of the switch statements
-     * \ lookup tables in detail presenter factories, for example, and is a 
+     * \ lookup tables in detail presenter factories, for example, and is a
      * manifestation of the expression problem. We'd prefer to be extensible
      * to adding new subtypes, not adding new functionality, in this case.
      */
@@ -123,9 +126,13 @@ export const EdgeConnectionContextPresenter = ({
                         outPointMilliseconds: outPointMilliseconds,
                     })}
                 </HiddenData>
-                {asFormattedMediaTimecodeString(convertMillisecondsToSeconds(inPointMilliseconds))}
+                {asFormattedMediaTimecodeString(
+                    convertMillisecondsToSecondsRounded(inPointMilliseconds)
+                )}
                 <TimeRangeContextVisual />
-                {asFormattedMediaTimecodeString(convertMillisecondsToSeconds(outPointMilliseconds))}
+                {asFormattedMediaTimecodeString(
+                    convertMillisecondsToSecondsRounded(outPointMilliseconds)
+                )}
             </Box>
         );
     }

@@ -20,8 +20,8 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 import { SinglePropertyPresenter } from '../../../utils/generic-components/presenters/single-property-presenter';
-import { Timeline, TimelineMark, buildTimelineMark } from '../../timeline';
-import { convertMillisecondsToSeconds } from '../utils/math';
+import { TimeRangeClip, Timeline, buildTimeRangeClip } from '../../timeline';
+import { convertMillisecondsToSecondsRounded } from '../utils/math';
 import { InteractiveAnnotator } from './interactive-annotator';
 
 const CREATE_NOTE_ABOUT_RESOURCE = 'CREATE_NOTE_ABOUT_RESOURCE';
@@ -35,12 +35,16 @@ export const AudioItemDetailFullViewPresenter = ({
     actions,
     annotations,
 }: ICategorizableDetailQueryResult<IAudioItemViewModel>): JSX.Element => {
-    const audioRef = useRef(null);
+    const audioRef = useRef<HTMLAudioElement>(null);
 
-    const [marks, setMarks] = useState<TimelineMark[]>([]);
+    const [timeRangeClips, setTimeRangeClips] = useState<TimeRangeClip[]>([]);
+
+    const durationSeconds = lengthMilliseconds / 1000;
+
+    console.log({ annotations });
 
     useEffect(() => {
-        const updatedMarks = isNullOrUndefined(audioRef?.current?.currentTime)
+        const updatedTimeRangeClips = isNullOrUndefined(audioRef?.current?.currentTime)
             ? []
             : annotations.flatMap(({ connectedResources, name, id: noteId }) => {
                   const timeRangeContext = connectedResources[0].context as ITimeRangeContext;
@@ -60,21 +64,12 @@ export const AudioItemDetailFullViewPresenter = ({
                    * video annotation?
                    */
                   return [
-                      buildTimelineMark({
-                          // Shouldn't this be an icon instead?
-                          text: `<-`,
+                      buildTimeRangeClip({
+                          name: `${noteId}`,
+                          noteText: text,
                           tip: fullText,
-                          value: inPointMilliseconds,
-                          name: `${noteId}:in`,
-                          onClick: (timeStamp) => {
-                              audioRef.current.currentTime = timeStamp;
-                          },
-                      }),
-                      buildTimelineMark({
-                          text: `->`,
-                          tip: fullText,
-                          value: outPointMilliseconds,
-                          name: `${noteId}:out`,
+                          inPointMilliseconds: inPointMilliseconds,
+                          outPointMilliseconds: outPointMilliseconds,
                           onClick: (timeStamp) => {
                               audioRef.current.currentTime = timeStamp;
                           },
@@ -82,7 +77,7 @@ export const AudioItemDetailFullViewPresenter = ({
                   ];
               });
 
-        setMarks(updatedMarks);
+        setTimeRangeClips(updatedTimeRangeClips);
     }, [audioRef, annotations]);
 
     const formatedPlainText = plainText.split('\n').map((line, index) => (
@@ -94,19 +89,18 @@ export const AudioItemDetailFullViewPresenter = ({
     return (
         <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.audioItem}>
             {actions.some(({ type: commandType }) => commandType === CREATE_NOTE_ABOUT_RESOURCE) ? (
-                <InteractiveAnnotator id={id} audioURL={audioURL} audioRef={audioRef} />
+                <>
+                    <InteractiveAnnotator id={id} audioURL={audioURL} audioRef={audioRef} />
+                    <Typography variant="h3">Annotation Track</Typography>
+                    <Timeline
+                        durationSeconds={durationSeconds}
+                        name={`Annotation Track`}
+                        timeRangeClips={timeRangeClips}
+                    />
+                </>
             ) : (
                 <AudioPlayer audioUrl={audioURL} />
             )}
-            <Typography variant="h3">Annotation Track</Typography>
-            <Timeline
-                name={`Annotation Track`}
-                step={100}
-                defaultValue={0}
-                min={0}
-                max={lengthMilliseconds}
-                marks={marks}
-            />
             {/* <Typography variant='h3'>Transcript Track</Typography> */}
 
             <Divider sx={{ mt: 1, mb: 1 }} />
@@ -119,7 +113,7 @@ export const AudioItemDetailFullViewPresenter = ({
                 <AccordionDetails>
                     <SinglePropertyPresenter
                         display="Duration"
-                        value={`${convertMillisecondsToSeconds(lengthMilliseconds)} secs`}
+                        value={`${convertMillisecondsToSecondsRounded(lengthMilliseconds)} secs`}
                     />
                     <SinglePropertyPresenter display="Audio Url" value={audioURL} />
                 </AccordionDetails>

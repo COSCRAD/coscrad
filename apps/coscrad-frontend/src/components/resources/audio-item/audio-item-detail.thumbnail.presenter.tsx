@@ -5,7 +5,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
 import { ResourceDetailThumbnailPresenter } from '../../../utils/generic-components/presenters/detail-views';
-import { convertMillisecondsToSeconds } from '../utils/math';
+import { convertMillisecondsToSecondsRounded } from '../utils/math';
 
 export const AudioItemDetailThumbnailPresenter = ({
     id,
@@ -17,7 +17,7 @@ export const AudioItemDetailThumbnailPresenter = ({
             {/* TODO: add spotify experience to audioItems thumbnail views */}
             <SinglePropertyPresenter
                 display="Duration"
-                value={convertMillisecondsToSeconds(lengthMilliseconds)}
+                value={convertMillisecondsToSecondsRounded(lengthMilliseconds)}
             />
         </ResourceDetailThumbnailPresenter>
     );
