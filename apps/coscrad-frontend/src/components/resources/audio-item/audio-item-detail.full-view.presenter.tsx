@@ -2,7 +2,6 @@ import {
     IAudioItemViewModel,
     ICategorizableDetailQueryResult,
     ITimeRangeContext,
-    MultilingualTextItemRole,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { AudioPlayer } from '@coscrad/media-player';
@@ -20,6 +19,7 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 import { SinglePropertyPresenter } from '../../../utils/generic-components/presenters/single-property-presenter';
+import { findOriginalTextItem } from '../../notes/shared/find-original-text-item';
 import { TimeRangeClip, Timeline, buildTimeRangeClip } from '../../timeline';
 import { convertMillisecondsToSecondsRounded } from '../utils/math';
 import { InteractiveAnnotator } from './interactive-annotator';
@@ -41,23 +41,19 @@ export const AudioItemDetailFullViewPresenter = ({
 
     const durationSeconds = lengthMilliseconds / 1000;
 
-    console.log({ annotations });
-
     useEffect(() => {
         const updatedTimeRangeClips = isNullOrUndefined(audioRef?.current?.currentTime)
             ? []
-            : annotations.flatMap(({ connectedResources, name, id: noteId }) => {
+            : annotations.flatMap(({ connectedResources, name, id: noteId, note }) => {
                   const timeRangeContext = connectedResources[0].context as ITimeRangeContext;
 
                   const {
                       timeRange: { inPointMilliseconds, outPointMilliseconds },
                   } = timeRangeContext;
 
-                  const text = name.items.find(
-                      ({ role }) => role === MultilingualTextItemRole.original
-                  )?.text;
+                  const noteOriginal = findOriginalTextItem(note).text;
 
-                  const fullText = `[${inPointMilliseconds}] ${text} [${outPointMilliseconds}]`;
+                  const tipText = `[${inPointMilliseconds} ms to ${outPointMilliseconds}] ${noteOriginal}`;
 
                   /**
                    * Should we break this logic out so we can share it for
@@ -66,12 +62,12 @@ export const AudioItemDetailFullViewPresenter = ({
                   return [
                       buildTimeRangeClip({
                           name: `${noteId}`,
-                          noteText: text,
-                          tip: fullText,
+                          noteText: noteOriginal,
+                          tip: tipText,
                           inPointMilliseconds: inPointMilliseconds,
                           outPointMilliseconds: outPointMilliseconds,
-                          onClick: (timeStamp) => {
-                              audioRef.current.currentTime = timeStamp;
+                          onClick: (inPointSeconds) => {
+                              audioRef.current.currentTime = inPointSeconds;
                           },
                       }),
                   ];

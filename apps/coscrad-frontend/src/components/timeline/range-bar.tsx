@@ -5,7 +5,7 @@ import { EDITOR_SOUND_BAR_HEIGHT } from './constants';
 import { TimeRangeClip } from './timeline';
 
 const StyledRangeBar = styled('span')({
-    height: `${EDITOR_SOUND_BAR_HEIGHT + 2}px`,
+    height: `${EDITOR_SOUND_BAR_HEIGHT - 2}px`,
     position: 'relative',
     backgroundColor: '#0bccf9',
     opacity: 0.7,
@@ -13,6 +13,7 @@ const StyledRangeBar = styled('span')({
     boxSizing: 'border-box',
     display: 'inline-block',
     overflow: 'hidden',
+    cursor: 'pointer',
 });
 
 interface RangeBarProps {

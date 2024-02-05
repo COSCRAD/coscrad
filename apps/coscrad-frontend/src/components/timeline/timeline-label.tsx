@@ -12,7 +12,7 @@ export interface TimeRangeClipLabelProps {
     tip: string;
     inPointMilliseconds: number;
     outPointMilliseconds: number;
-    onClick?: (timeStamp: number) => void;
+    onClick?: (inPointSeconds: number) => void;
 }
 
 export const TimeRangeClipLabel = ({
@@ -30,7 +30,7 @@ export const TimeRangeClipLabel = ({
             {/* Do we really need the value param here? the client already has access to this */}
             <Box
                 sx={{
-                    height: `${EDITOR_SOUND_BAR_HEIGHT - 2}px`,
+                    height: `${EDITOR_SOUND_BAR_HEIGHT - 4}px`,
                     whiteSpace: 'nowrap',
                     padding: '3px',
                     position: 'relative',

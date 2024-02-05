@@ -48,11 +48,17 @@ export const Timeline = ({ timeRangeClips, durationSeconds, name }: TimelineProp
                 sx={{
                     width: `${scrolledTrackLength}px`,
                     height: `${EDITOR_SOUND_BAR_HEIGHT + 4}px`,
+                    paddingTop: '2px',
                     backgroundColor: '#444',
                 }}
             >
+                {/* Need a Track component encompassing the time range clips */}
                 {timeRangeClips.map((timeRangeClip) => (
-                    <RangeBar timeRangeClip={timeRangeClip} durationSeconds={durationSeconds} />
+                    <RangeBar
+                        key={JSON.stringify(timeRangeClip.timeRangeSeconds)}
+                        timeRangeClip={timeRangeClip}
+                        durationSeconds={durationSeconds}
+                    />
                 ))}
                 <WaveForm />
             </Box>

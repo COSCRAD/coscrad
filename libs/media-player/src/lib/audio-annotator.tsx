@@ -269,13 +269,15 @@ export const AudioAnnotator = ({
                 </Box>
                 <Box mt={1}>
                     <Tooltip title="Mark In Point">
-                        <IconButton
-                            data-testid="in-point-marker-button"
-                            onClick={markInPoint}
-                            disabled={!isPlayable}
-                        >
-                            <ArrowRightIcon />
-                        </IconButton>
+                        <span>
+                            <IconButton
+                                data-testid="in-point-marker-button"
+                                onClick={markInPoint}
+                                disabled={!isPlayable}
+                            >
+                                <ArrowRightIcon />
+                            </IconButton>
+                        </span>
                     </Tooltip>
                     <Tooltip title="Mark Out Point">
                         <span>
