@@ -66,8 +66,11 @@ export const AudioItemDetailFullViewPresenter = ({
                           tip: fullText,
                           value: inPointMilliseconds,
                           name: `${noteId}:in`,
-                          onClick: (timeStamp) => {
-                              audioRef.current.currentTime = timeStamp;
+                          onClick: () => {
+                              console.log({ currentInTime: inPointMilliseconds });
+
+                              audioRef.current.currentTime =
+                                  convertMillisecondsToSeconds(inPointMilliseconds);
                           },
                       }),
                       buildTimelineMark({
@@ -75,8 +78,11 @@ export const AudioItemDetailFullViewPresenter = ({
                           tip: fullText,
                           value: outPointMilliseconds,
                           name: `${noteId}:out`,
-                          onClick: (timeStamp) => {
-                              audioRef.current.currentTime = timeStamp;
+                          onClick: () => {
+                              console.log({ currentTime: outPointMilliseconds });
+
+                              audioRef.current.currentTime =
+                                  convertMillisecondsToSeconds(outPointMilliseconds);
                           },
                       }),
                   ];
@@ -99,14 +105,16 @@ export const AudioItemDetailFullViewPresenter = ({
                 <AudioPlayer audioUrl={audioURL} />
             )}
             <Typography variant="h3">Annotation Track</Typography>
-            <Timeline
-                name={`Annotation Track`}
-                step={100}
-                defaultValue={0}
-                min={0}
-                max={lengthMilliseconds}
-                marks={marks}
-            />
+            {marks.length > 0 ? (
+                <Timeline
+                    name={`Annotation Track`}
+                    step={100}
+                    defaultValue={0}
+                    min={0}
+                    max={lengthMilliseconds}
+                    marks={marks}
+                />
+            ) : null}
             {/* <Typography variant='h3'>Transcript Track</Typography> */}
 
             <Divider sx={{ mt: 1, mb: 1 }} />
