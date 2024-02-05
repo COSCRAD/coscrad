@@ -56,6 +56,13 @@ export class MediaItemController {
 
     @ApiBearerAuth('JWT')
     @UseGuards(OptionalJwtAuthGuard)
+    @Get('/download')
+    async fetchBinaryForMediaItemByName() {
+        const searchResult = await this.mediaItemQueryService.fetchByName;
+    }
+
+    @ApiBearerAuth('JWT')
+    @UseGuards(OptionalJwtAuthGuard)
     @ApiParam(buildByIdApiParamMetadata())
     @ApiOkResponse({ type: MediaItemViewModel })
     @Get('/:id')
