@@ -18,8 +18,6 @@ export const Timeline = ({ marks, defaultValue, step, min, max, name }: Timeline
     return (
         <div data-testid={`timeline:${name}`}>
             <Box sx={{ width: '1000px' }}>
-                max: {max}
-                Marks: {JSON.stringify(marks)}
                 <Slider
                     aria-label={name}
                     defaultValue={defaultValue}
