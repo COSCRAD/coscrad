@@ -28,16 +28,20 @@ import { InteractiveAnnotator } from './interactive-annotator';
 
 const CREATE_NOTE_ABOUT_RESOURCE = 'CREATE_NOTE_ABOUT_RESOURCE';
 
-export const AudioItemDetailFullViewPresenter = ({
-    id,
-    lengthMilliseconds,
-    audioURL,
-    text: plainText,
-    name,
-    actions,
-    transcript,
-    annotations,
-}: ICategorizableDetailQueryResult<IAudioItemViewModel>): JSX.Element => {
+export const AudioItemDetailFullViewPresenter = (
+    props: ICategorizableDetailQueryResult<IAudioItemViewModel>
+): JSX.Element => {
+    const {
+        id,
+        lengthMilliseconds,
+        audioURL,
+        text: plainText,
+        name,
+        actions,
+        transcript,
+        annotations,
+    } = props;
+
     const audioRef = useRef(null);
 
     const [marks, setMarks] = useState<TimelineMark[]>([]);
@@ -132,7 +136,7 @@ export const AudioItemDetailFullViewPresenter = ({
               ];
           });
 
-    const participants = !hasTranscript ? [] : transcript.participants;
+    const _participants = !hasTranscript ? [] : transcript.participants;
 
     return (
         <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.audioItem}>
@@ -141,9 +145,9 @@ export const AudioItemDetailFullViewPresenter = ({
                     id={id}
                     audioURL={audioURL}
                     audioRef={audioRef}
-                    participants={participants}
+                    // participants={participants}
                     // This is currently disabled
-                    canTranscribe={false}
+                    // canTranscribe={false}
                 />
             ) : (
                 <AudioPlayer audioUrl={audioURL} />
