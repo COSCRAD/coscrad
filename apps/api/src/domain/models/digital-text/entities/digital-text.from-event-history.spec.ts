@@ -305,7 +305,7 @@ describe(`DigitalText.fromEventHistory`, () => {
         });
 
         describe(`when a cover photograph has been added`, () => {
-            it.only(`should return the cover photograph for digital text`, () => {
+            it(`should return the cover photograph for digital text`, () => {
                 const eventStream = [digitalTextCreated, coverPhotographAddedForDigitalText];
 
                 const digitalTextBuildResult = DigitalText.fromEventHistory(eventStream, id);
