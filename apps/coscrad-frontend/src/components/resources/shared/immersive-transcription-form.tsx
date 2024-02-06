@@ -1,6 +1,6 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
+import { ITranscriptParticipant, LanguageCode } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Box, Button, TextField } from '@mui/material';
+import { Box, Button, MenuItem, Select, TextField } from '@mui/material';
 import { useContext, useState } from 'react';
 import { useAppDispatch } from '../../../app/hooks';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
@@ -12,14 +12,22 @@ import {
 import { idUsed, useLoadableGeneratedId } from '../../../store/slices/id-generation';
 import { AckNotification } from '../../commands/ack-notification';
 import { NackNotification } from '../../commands/nack-notification';
+import { ErrorDisplay } from '../../error-display/error-display';
 import { Loading } from '../../loading';
 import { LanguageSelect } from './language-select';
 
 interface FormProps {
+    participants: ITranscriptParticipant[];
     onSubmit: (text: string, languageCode: LanguageCode, id: string) => void;
 }
 
-export const ImmersiveCreateNoteForm = ({ onSubmit }: FormProps) => {
+/**
+ * TODO Share the multilingual text form here with the `ImmersiveCreateNoteForm`
+ */
+export const ImmersiveTranscriptionForm = ({
+    onSubmit,
+    participants: participantInitials,
+}: FormProps) => {
     const {
         isLoading: isAnotherCommandPending,
         errorInfo: previousCommandErrorInfo,
@@ -33,6 +41,8 @@ export const ImmersiveCreateNoteForm = ({ onSubmit }: FormProps) => {
 
     const [text, setText] = useState('');
 
+    const [selectedParticipantInitials, setSelectedParticipantInitials] = useState('');
+
     const { defaultLanguageCode } = useContext(ConfigurableContentContext);
 
     const [languageCode, setLanguageCode] = useState<LanguageCode>(defaultLanguageCode);
@@ -40,6 +50,8 @@ export const ImmersiveCreateNoteForm = ({ onSubmit }: FormProps) => {
     const { errorInfo, isLoading, data: generatedId } = useLoadableGeneratedId();
 
     const dispatch = useAppDispatch();
+
+    if (errorInfo) return <ErrorDisplay {...errorInfo} />;
 
     if (isLoading) return <Loading />;
 
@@ -66,14 +78,15 @@ export const ImmersiveCreateNoteForm = ({ onSubmit }: FormProps) => {
     const isDisabled =
         text.length === 0 ||
         !Object.values(LanguageCode).includes(languageCode) ||
-        isPreviousCommandInQueue;
+        isPreviousCommandInQueue ||
+        selectedParticipantInitials === '';
 
     return (
         <Box>
-            <div data-testid="note-form" />
+            <div data-testid="transcription-form" />
             <TextField
                 sx={{ width: '80%' }}
-                data-testid={`text:note`}
+                data-testid={`text:transcript-item`}
                 onChange={(e) => {
                     setText(e.target.value);
                 }}
@@ -83,14 +96,28 @@ export const ImmersiveCreateNoteForm = ({ onSubmit }: FormProps) => {
                     setLanguageCode(newLanguageCode);
                 }}
             />
+            <Select
+                data-testid={`select:participant`}
+                defaultValue={''}
+                label="Participant"
+                onChange={(e) => {
+                    setSelectedParticipantInitials(e.target.value);
+                }}
+            >
+                {participantInitials.map(({ initials, name }) => (
+                    <MenuItem value={initials} key={initials}>
+                        {name}
+                    </MenuItem>
+                ))}
+            </Select>
             <Button
-                data-testid={`submit-note`}
+                data-testid={`submit-transcript-item`}
                 disabled={isDisabled}
                 onClick={() => {
                     onSubmit(text, languageCode, generatedId);
                 }}
             >
-                ADD NOTE
+                TRANSCRIBE
             </Button>
         </Box>
     );

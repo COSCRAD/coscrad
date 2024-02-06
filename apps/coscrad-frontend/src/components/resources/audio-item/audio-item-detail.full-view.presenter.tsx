@@ -1,4 +1,5 @@
 import {
+    AggregateType,
     IAudioItemViewModel,
     ICategorizableDetailQueryResult,
     ITimeRangeContext,
@@ -22,6 +23,7 @@ import { ResourceDetailFullViewPresenter } from '../../../utils/generic-componen
 import { SinglePropertyPresenter } from '../../../utils/generic-components/presenters/single-property-presenter';
 import { Timeline, TimelineMark, buildTimelineMark } from '../../timeline';
 import { convertMillisecondsToSeconds } from '../utils/math';
+import { CreateTranscriptButton } from './create-transcript-button';
 import { InteractiveAnnotator } from './interactive-annotator';
 
 const CREATE_NOTE_ABOUT_RESOURCE = 'CREATE_NOTE_ABOUT_RESOURCE';
@@ -33,6 +35,7 @@ export const AudioItemDetailFullViewPresenter = ({
     text: plainText,
     name,
     actions,
+    transcript,
     annotations,
 }: ICategorizableDetailQueryResult<IAudioItemViewModel>): JSX.Element => {
     const audioRef = useRef(null);
@@ -91,16 +94,57 @@ export const AudioItemDetailFullViewPresenter = ({
         setMarks(updatedMarks);
     }, [audioRef, annotations]);
 
+    const aggregateCompositeIdentifier = {
+        type: AggregateType.audioItem,
+        id,
+    };
+
     const formatedPlainText = plainText.split('\n').map((line, index) => (
         <Box mb={1} key={index}>
             {line}
         </Box>
     ));
 
+    const hasTranscript = !isNullOrUndefined(transcript);
+
+    const transcriptItemMarks = !hasTranscript
+        ? []
+        : transcript.items.flatMap(({ inPointMilliseconds, outPointMilliseconds, text }) => {
+              const tip = text.items.find(
+                  ({ role }) => role === MultilingualTextItemRole.original
+              ).text;
+
+              const namePrefix = `transcript-item:${inPointMilliseconds}`;
+
+              return [
+                  buildTimelineMark({
+                      value: inPointMilliseconds,
+                      name: `${namePrefix}:in`,
+                      text: `<-`,
+                      tip,
+                  }),
+                  buildTimelineMark({
+                      value: outPointMilliseconds,
+                      name: `${namePrefix}:out`,
+                      text: `->`,
+                      tip,
+                  }),
+              ];
+          });
+
+    const participants = !hasTranscript ? [] : transcript.participants;
+
     return (
         <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.audioItem}>
             {actions.some(({ type: commandType }) => commandType === CREATE_NOTE_ABOUT_RESOURCE) ? (
-                <InteractiveAnnotator id={id} audioURL={audioURL} audioRef={audioRef} />
+                <InteractiveAnnotator
+                    id={id}
+                    audioURL={audioURL}
+                    audioRef={audioRef}
+                    participants={participants}
+                    // This is currently disabled
+                    canTranscribe={false}
+                />
             ) : (
                 <AudioPlayer audioUrl={audioURL} />
             )}
@@ -115,8 +159,28 @@ export const AudioItemDetailFullViewPresenter = ({
                     marks={marks}
                 />
             ) : null}
-            {/* <Typography variant='h3'>Transcript Track</Typography> */}
-
+            <Typography variant="h3">Transcript Track</Typography>
+            {!hasTranscript ? (
+                <CreateTranscriptButton
+                    aggregateCompositeIdentifier={aggregateCompositeIdentifier}
+                />
+            ) : null}
+            {/* {hasTranscript ? (
+                <AddParticipantsForm
+                    aggregateCompositeIdentifier={aggregateCompositeIdentifier}
+                    existingParticipants={participants}
+                />
+            ) : null} */}
+            {transcriptItemMarks.length > 0 ? (
+                <Timeline
+                    name={`Annotation Track`}
+                    step={100}
+                    defaultValue={0}
+                    min={0}
+                    max={lengthMilliseconds}
+                    marks={transcriptItemMarks}
+                />
+            ) : null}
             <Divider sx={{ mt: 1, mb: 1 }} />
             <Accordion elevation={0}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
