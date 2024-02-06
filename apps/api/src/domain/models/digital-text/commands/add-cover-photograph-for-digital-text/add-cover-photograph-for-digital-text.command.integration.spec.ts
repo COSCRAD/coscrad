@@ -162,5 +162,25 @@ describe(commandType, () => {
                 });
             });
         });
+
+        describe(`when the digital text already has a cover photograph`, () => {
+            it(`should fail with the expected error`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await app
+                            .get(ArangoEventRepository)
+                            .appendEvents(digitalTextCreated.as(digitalTextCompositeIdentifier));
+                    },
+                    buildCommandFSA: () => fsaFactory.build(),
+                    checkError: (result) => {
+                        result;
+                        new CommandExecutionError([
+                            new AggregateNotFoundError(digitalTextCompositeIdentifier),
+                        ]);
+                    },
+                });
+            });
+        });
     });
 });
