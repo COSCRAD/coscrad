@@ -1,17 +1,32 @@
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box, styled } from '@mui/material';
+import { useEffect, useRef, useState } from 'react';
 import { EDITOR_SOUND_BAR_HEIGHT, ZOOM_FACTOR } from './constants';
 import { RangeBar } from './range-bar';
 
 const WAVE_FORM_URL = 'https://guujaaw.info/images/audio-wave-form.png';
 
-const WaveForm = styled('div')({
-    backgroundImage: `url(${WAVE_FORM_URL})`,
+const StyledTimelineBox = styled(Box)({
     width: '100%',
-    height: 'auto',
-    backgroundSize: 'auto 30px',
+    height: `${EDITOR_SOUND_BAR_HEIGHT + 20}px`,
+    paddingTop: `2px`,
+    paddingBottom: `2px`,
+    border: '1px solid #666',
+    backgroundColor: '#ddd',
+    overflowX: 'scroll',
+});
+
+const StyledScrolledTrack = styled(Box)({
+    minWidth: '100%',
+    position: 'relative',
+    display: 'flex',
+    alignItems: 'center',
+    height: `${EDITOR_SOUND_BAR_HEIGHT}px`,
+    border: '1px solid #666',
+    borderRadius: '7px',
+    backgroundImage: `url(${WAVE_FORM_URL})`,
     backgroundBlendMode: 'lighten',
-    display: 'block',
-    position: 'absolute',
+    backgroundSize: `auto ${EDITOR_SOUND_BAR_HEIGHT + 5}px`,
 });
 
 export type TimeRangeSeconds = {
@@ -31,37 +46,35 @@ interface TimelineProps {
 }
 
 export const Timeline = ({ timeRangeClips, durationSeconds, name }: TimelineProps) => {
-    const scrolledTrackLength = durationSeconds * ZOOM_FACTOR;
+    const timelineRef = useRef<HTMLDivElement>(null);
+
+    const [renderedTimelineLength, setRenderedTimelineLength] = useState<number>(null);
+
+    useEffect(() => {
+        if (!isNullOrUndefined(timelineRef.current)) {
+            const timelineBoxWidth = timelineRef.current.getBoundingClientRect().width;
+
+            setRenderedTimelineLength(timelineBoxWidth * ZOOM_FACTOR);
+        }
+    }, [timelineRef]);
 
     return (
-        <Box
-            data-testid={`timeline:${name}`}
-            sx={{
-                width: '100%',
-                height: `${EDITOR_SOUND_BAR_HEIGHT + 10}px`,
-                border: '1px solid red',
-                overflowX: 'scroll',
-            }}
-        >
-            <Box
-                data-testid="scrollable-timeline"
-                sx={{
-                    width: `${scrolledTrackLength}px`,
-                    height: `${EDITOR_SOUND_BAR_HEIGHT + 4}px`,
-                    paddingTop: '2px',
-                    backgroundColor: '#444',
-                }}
+        <StyledTimelineBox ref={timelineRef} data-testid={`timeline:${name}`}>
+            <StyledScrolledTrack
+                data-testid="scrollable-track"
+                sx={{ width: `${renderedTimelineLength}px` }}
             >
-                {/* Need a Track component encompassing the time range clips */}
-                {timeRangeClips.map((timeRangeClip) => (
-                    <RangeBar
-                        key={JSON.stringify(timeRangeClip.timeRangeSeconds)}
-                        timeRangeClip={timeRangeClip}
-                        durationSeconds={durationSeconds}
-                    />
-                ))}
-                <WaveForm />
-            </Box>
-        </Box>
+                {!isNullOrUndefined(renderedTimelineLength)
+                    ? timeRangeClips.map((timeRangeClip) => (
+                          <RangeBar
+                              key={JSON.stringify(timeRangeClip.timeRangeSeconds)}
+                              renderedTimelineLength={renderedTimelineLength}
+                              timeRangeClip={timeRangeClip}
+                              durationSeconds={durationSeconds}
+                          />
+                      ))
+                    : null}
+            </StyledScrolledTrack>
+        </StyledTimelineBox>
     );
 };

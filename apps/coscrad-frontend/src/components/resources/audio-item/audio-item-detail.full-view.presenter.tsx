@@ -44,7 +44,7 @@ export const AudioItemDetailFullViewPresenter = ({
     useEffect(() => {
         const updatedTimeRangeClips = isNullOrUndefined(audioRef?.current?.currentTime)
             ? []
-            : annotations.flatMap(({ connectedResources, name, id: noteId, note }) => {
+            : annotations.flatMap(({ connectedResources, id: noteId, note }) => {
                   const timeRangeContext = connectedResources[0].context as ITimeRangeContext;
 
                   const {

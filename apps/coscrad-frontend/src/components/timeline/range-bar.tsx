@@ -1,12 +1,12 @@
 import { Box, styled } from '@mui/material';
 import { useState } from 'react';
-import { calculatePositionAsPercentage } from './calculate-percent-progress';
+import { convertTimecodeToRelativeTimelineUnits } from './calculate-position-on-timeline';
 import { EDITOR_SOUND_BAR_HEIGHT } from './constants';
 import { TimeRangeClip } from './timeline';
 
 const StyledRangeBar = styled('span')({
     height: `${EDITOR_SOUND_BAR_HEIGHT - 2}px`,
-    position: 'relative',
+    position: 'absolute',
     backgroundColor: '#0bccf9',
     opacity: 0.7,
     borderRadius: '5px',
@@ -17,11 +17,16 @@ const StyledRangeBar = styled('span')({
 });
 
 interface RangeBarProps {
+    renderedTimelineLength: number;
     durationSeconds: number;
     timeRangeClip: TimeRangeClip;
 }
 
-export const RangeBar = ({ durationSeconds, timeRangeClip }: RangeBarProps): JSX.Element => {
+export const RangeBar = ({
+    renderedTimelineLength,
+    durationSeconds,
+    timeRangeClip,
+}: RangeBarProps): JSX.Element => {
     const [activeRange, setActiveRange] = useState<boolean>(false);
 
     const {
@@ -29,10 +34,18 @@ export const RangeBar = ({ durationSeconds, timeRangeClip }: RangeBarProps): JSX
         label,
     } = timeRangeClip;
 
-    const rangeStart = calculatePositionAsPercentage(inPointSeconds, durationSeconds);
+    const rangeStart = convertTimecodeToRelativeTimelineUnits(
+        renderedTimelineLength,
+        inPointSeconds,
+        durationSeconds
+    );
 
     const rangeLength =
-        calculatePositionAsPercentage(outPointSeconds, durationSeconds) - rangeStart;
+        convertTimecodeToRelativeTimelineUnits(
+            renderedTimelineLength,
+            outPointSeconds,
+            durationSeconds
+        ) - rangeStart;
 
     const handleClick = (event: React.MouseEvent<HTMLSpanElement>) => {
         setActiveRange(!activeRange);
@@ -41,8 +54,8 @@ export const RangeBar = ({ durationSeconds, timeRangeClip }: RangeBarProps): JSX
     return (
         <StyledRangeBar
             sx={{
-                left: `${rangeStart}%`,
-                width: `${rangeLength}%`,
+                left: `${rangeStart}px`,
+                width: `${rangeLength}px`,
                 border: activeRange ? '2px solid #fdec5e' : '1px solid blue',
             }}
             onClick={handleClick}
