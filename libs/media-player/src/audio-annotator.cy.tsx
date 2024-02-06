@@ -1,5 +1,5 @@
 import { Box, Stack, Typography, styled } from '@mui/material';
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { AudioAnnotator, TimeRangeSelection } from './lib/audio-annotator';
 
 const Item = styled(Box)`
@@ -14,6 +14,8 @@ interface AudioAnnotatorWidgetProps {
  * This widget will be for testing interaction with the parent component state
  */
 const AudioAnnotatorWidget = ({ audioUrl }: AudioAnnotatorWidgetProps): JSX.Element => {
+    const audioRef = useRef<HTMLAudioElement>(null);
+
     const [selectedTimeRange, setSelectedTimeRange] = useState<TimeRangeSelection | null>(null);
 
     const onTimeRangeSelected = useCallback(
@@ -30,6 +32,7 @@ const AudioAnnotatorWidget = ({ audioUrl }: AudioAnnotatorWidgetProps): JSX.Elem
             </Item>
             <Item>
                 <AudioAnnotator
+                    audioRef={audioRef}
                     audioUrl={audioUrl}
                     selectedTimeRange={selectedTimeRange}
                     onTimeRangeSelected={onTimeRangeSelected}
@@ -257,27 +260,23 @@ describe('<AudioAnnotator />', () => {
                 });
             });
 
-            describe(
-                `the browser shortcut key Control + o`, ()=>{
-                    it(`should not set an out point`,()=>{
+            describe(`the browser shortcut key Control + o`, () => {
+                it(`should not set an out point`, () => {
+                    cy.get('body').type('i');
 
-                        cy.get('body').type('i');
+                    cy.get('body').type('{ctrl+o}');
 
-                        cy.get('body').type('{ctrl+o}');
-    
-                        cy.getByDataAttribute('out-point-selection-time-code').should('not.exist')
-                    })
-                }
-            )
+                    cy.getByDataAttribute('out-point-selection-time-code').should('not.exist');
+                });
+            });
 
-            describe.only(`the browser shortcut key Control + i`,()=>{
-                it(`should not set an in-point`,()=>{
+            describe.only(`the browser shortcut key Control + i`, () => {
+                it(`should not set an in-point`, () => {
                     cy.get('body').type('{ctrl+i}');
 
                     cy.getByDataAttribute('in-point-selection-time-code').should('not.exist');
-                })
-                
-            })
+                });
+            });
 
             describe(`after a time range is selected, when the clear range button is clicked`, () => {
                 it('should clear the range selection', () => {

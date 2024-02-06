@@ -181,7 +181,7 @@ Cypress.Commands.add(
         )}"`;
 
         cy.exec(command).then((_result) => {
-            if (command.includes(`FOOBARBAZ`))
+            if (command.includes(`CREATE_NOTE`))
                 /* eslint-disable-next-line */
                 debugger;
         });
