@@ -24,6 +24,7 @@ import AggregateNotFoundError from '../../../shared/common-command-errors/Aggreg
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { DigitalTextCreated } from '../digital-text-created.event';
 import { AddCoverPhotographForDigitalText } from './add-cover-photograph-for-digital-text.command';
+import { CoverPhotographAddedForDigitalText } from './cover-photograph-added-for-digital-text.event';
 
 const commandType = `ADD_COVER_PHOTOGRAPH_FOR_DIGITAL_TEXT`;
 
@@ -96,6 +97,12 @@ describe(commandType, () => {
     const validEventHistoryForDigitalTextWithNoCoverPhotograph = digitalTextCreated.as(
         digitalTextCompositeIdentifier
     );
+
+    const coverPhotographAddedForDigitalText =
+        digitalTextCreated.andThen<CoverPhotographAddedForDigitalText>({
+            payload: { aggregateCompositeIdentifier: digitalTextCompositeIdentifier },
+            type: 'COVER_PHOTOGRAPH_ADDED_FOR_DIGITAL_TEXT',
+        });
 
     describe(`when the command is valid`, () => {
         it(`should succeed with the expected updates`, async () => {
@@ -170,15 +177,13 @@ describe(commandType, () => {
                     seedInitialState: async () => {
                         await app
                             .get(ArangoEventRepository)
-                            .appendEvents(digitalTextCreated.as(digitalTextCompositeIdentifier));
+                            .appendEvents(
+                                coverPhotographAddedForDigitalText.as(
+                                    digitalTextCompositeIdentifier
+                                )
+                            );
                     },
                     buildCommandFSA: () => fsaFactory.build(),
-                    checkError: (result) => {
-                        result;
-                        new CommandExecutionError([
-                            new AggregateNotFoundError(digitalTextCompositeIdentifier),
-                        ]);
-                    },
                 });
             });
         });

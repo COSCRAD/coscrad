@@ -6,5 +6,5 @@ export type CoverPhotographAddedForDigitalTextPayload = AddCoverPhotographForDig
 
 @CoscradEvent('COVER_PHOTOGRAPH_ADDED_FOR_DIGITAL_TEXT')
 export class CoverPhotographAddedForDigitalText extends BaseEvent<CoverPhotographAddedForDigitalTextPayload> {
-    readonly type: 'COVER_PHOTOGRAPH_ADDED_FOR_DIGITAL_TEXT';
+    readonly type = 'COVER_PHOTOGRAPH_ADDED_FOR_DIGITAL_TEXT';
 }
