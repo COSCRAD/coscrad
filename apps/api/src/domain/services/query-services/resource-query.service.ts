@@ -134,6 +134,25 @@ export abstract class ResourceQueryService<
         };
     }
 
+    public async fetchByName(
+        _name: string,
+        _userWithGroups?: CoscradUserWithGroups
+    ): Promise<ResultOrError<Maybe<UViewModel>>> {
+        throw new InternalError('Not Implemented');
+
+        // const allResources = await this.fetchMany();
+
+        // now find in `allResources` the resource with the given `name` by filtering
+
+        // if there are 2, throw an error
+
+        // if there are 0 return not found
+
+        // if there is 1
+        //      if it is an error, return it (the error)
+        //      otherwise, build a view model for this resource
+    }
+
     public async fetchMany(
         userWithGroups?: CoscradUserWithGroups
     ): Promise<IIndexQueryResult<ViewModelWithTags<UViewModel>>> {

@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Request, Res, UseFilters, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Query, Request, Res, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { existsSync } from 'fs';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
@@ -52,6 +52,21 @@ export class MediaItemController {
         };
 
         return res.sendFile(filePath, options);
+    }
+
+    // TODO Route Guards
+    // /download?name=C1
+    async fetchBinaryByName(@Request() _req, @Res() _res, @Query('name') _name) {
+        // try this and see that it works /api/resources/mediaItems/download?name=foo and get foo back
+        // return name;
+
+        throw new Error(`Not Implemented.`);
+
+        // 1. add a method to call this.mediaItemQueryService.fetchByName(name,user)
+
+        // 2. call this method here
+
+        // 3. if a result is found (returned from service call), send the binary as in `fetchBinary`
     }
 
     @ApiBearerAuth('JWT')
