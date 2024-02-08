@@ -2,7 +2,7 @@ import { AggregateType } from '@coscrad/api-interfaces';
 import { AudioAnnotator, TimeRangeSelection } from '@coscrad/media-player';
 import { isNull, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box, Paper, Typography, styled } from '@mui/material';
-import { RefObject, useCallback, useEffect, useState } from 'react';
+import { RefObject, useCallback, useContext, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../../app/hooks';
 import {
     Ack,
@@ -10,6 +10,7 @@ import {
     useLoadableCommandResult,
 } from '../../../store/slices/command-status/';
 import { ImmersiveCreateNoteForm } from '../shared/immersive-create-note-form';
+import { MediaCurrentTimeContext } from '../shared/media-currenttime-provider';
 import { convertSecondsToMilliseconds } from '../utils/math/convert-seconds-to-milliseconds';
 
 export type TimeRangeMilliseconds = {
@@ -51,6 +52,9 @@ export const InteractiveAnnotator = ({
 }: InteractiveAnnotatorProps): JSX.Element => {
     const dispatch = useAppDispatch();
 
+    const { mediaCurrentTimeFromContext, setMediaCurrentTimeFromContext } =
+        useContext(MediaCurrentTimeContext);
+
     const [timeRange, setTimeRange] = useState<TimeRangeSelection | null>(null);
 
     const onTimeRangeSelected = useCallback((selectedTimeRange: TimeRangeSelection | null) => {
@@ -60,8 +64,14 @@ export const InteractiveAnnotator = ({
     const { data: commandResult, errorInfo } = useLoadableCommandResult();
 
     useEffect(() => {
-        if (errorInfo === null && commandResult !== Ack) setTimeRange(null);
-    }, [setTimeRange, errorInfo, commandResult]);
+        if (errorInfo === null && commandResult !== Ack) {
+            setTimeRange(null);
+
+            if (!isNull(mediaCurrentTimeFromContext)) {
+                audioRef.current.currentTime = mediaCurrentTimeFromContext;
+            }
+        }
+    }, [setTimeRange, errorInfo, commandResult, audioRef, mediaCurrentTimeFromContext]);
 
     return (
         <>
@@ -83,6 +93,8 @@ export const InteractiveAnnotator = ({
                     </Box>
                     <ImmersiveCreateNoteForm
                         onSubmit={(text, languageCode, noteId) => {
+                            setMediaCurrentTimeFromContext(timeRange.outPointSeconds);
+
                             dispatch(
                                 executeCommand({
                                     type: 'CREATE_NOTE_ABOUT_RESOURCE',

@@ -175,11 +175,11 @@ export const AudioAnnotator = ({
     };
 
     const scrubForward = () => {
-        scrub(1, 'forward');
+        scrub(0.25, 'forward');
     };
 
     const scrubBackward = () => {
-        scrub(1, 'reverse');
+        scrub(0.25, 'reverse');
     };
 
     const markInPoint = () => {
