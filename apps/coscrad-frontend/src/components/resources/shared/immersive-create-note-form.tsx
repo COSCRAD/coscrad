@@ -42,8 +42,6 @@ export const ImmersiveCreateNoteForm = ({ onSubmit }: FormProps) => {
 
     const dispatch = useAppDispatch();
 
-
-
     if (errorInfo) return <ErrorDisplay {...errorInfo} />;
 
     if (isLoading) return <Loading />;

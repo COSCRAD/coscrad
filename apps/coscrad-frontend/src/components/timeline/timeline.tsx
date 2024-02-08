@@ -1,9 +1,14 @@
-import { Box, Slider } from '@mui/material';
+import { Box, Slider, styled } from '@mui/material';
 
 export interface TimelineMark {
     value: number;
     label: React.ReactNode;
 }
+
+const StyledTimeline = styled(Box)({
+    width: '100%',
+    overflowX: 'scroll',
+});
 
 interface TimelineProps {
     defaultValue: number;
@@ -16,7 +21,7 @@ interface TimelineProps {
 
 export const Timeline = ({ marks, defaultValue, step, min, max, name }: TimelineProps) => {
     return (
-        <div data-testid={`timeline:${name}`}>
+        <StyledTimeline data-testid={`timeline:${name}`}>
             <Box sx={{ width: '1000px' }}>
                 <Slider
                     aria-label={name}
@@ -28,6 +33,6 @@ export const Timeline = ({ marks, defaultValue, step, min, max, name }: Timeline
                     marks={marks}
                 />
             </Box>
-        </div>
+        </StyledTimeline>
     );
 };

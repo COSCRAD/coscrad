@@ -42,7 +42,7 @@ export const AudioItemDetailFullViewPresenter = ({
     useEffect(() => {
         const updatedMarks = isNullOrUndefined(audioRef?.current?.currentTime)
             ? []
-            : annotations.flatMap(({ connectedResources, name, id: noteId }) => {
+            : annotations.flatMap(({ connectedResources, note, name, id: noteId }) => {
                   const timeRangeContext = connectedResources[0].context as ITimeRangeContext;
 
                   const {
@@ -53,7 +53,7 @@ export const AudioItemDetailFullViewPresenter = ({
                       ({ role }) => role === MultilingualTextItemRole.original
                   )?.text;
 
-                  const fullText = `[${inPointMilliseconds}] ${text} [${outPointMilliseconds}]`;
+                  const fullText = `[${inPointMilliseconds}] ${note} [${outPointMilliseconds}]`;
 
                   /**
                    * Should we break this logic out so we can share it for

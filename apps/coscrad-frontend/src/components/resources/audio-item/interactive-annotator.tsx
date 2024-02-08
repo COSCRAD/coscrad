@@ -72,7 +72,7 @@ export const InteractiveAnnotator = ({
                 audioRef={audioRef}
             />
 
-            {!isNullOrUndefined(timeRange) ? (
+            {!isNullOrUndefined(timeRange) || commandResult === Ack ? (
                 <CreateAnnotationForm data-testid="create-note-about-audio-form">
                     <Box mt={1}>
                         <Typography variant="h4">Add Audio Annotation</Typography>
