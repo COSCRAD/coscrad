@@ -2,7 +2,6 @@ import {
     IAudioItemViewModel,
     ICategorizableDetailQueryResult,
     ITimeRangeContext,
-    MultilingualTextItemRole,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { AudioPlayer } from '@coscrad/media-player';
@@ -20,7 +19,8 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 import { SinglePropertyPresenter } from '../../../utils/generic-components/presenters/single-property-presenter';
-import { Timeline, TimelineMark, buildTimelineMark } from '../../timeline';
+import { findOriginalTextItem } from '../../notes/shared/find-original-text-item';
+import { TimeRangeClip, Timeline, buildTimeRangeClip } from '../../timeline';
 import { convertMillisecondsToSeconds } from '../utils/math';
 import { InteractiveAnnotator } from './interactive-annotator';
 
@@ -37,58 +37,45 @@ export const AudioItemDetailFullViewPresenter = ({
 }: ICategorizableDetailQueryResult<IAudioItemViewModel>): JSX.Element => {
     const audioRef = useRef(null);
 
-    const [marks, setMarks] = useState<TimelineMark[]>([]);
+    const timelineRef = useRef<HTMLDivElement>(null);
+
+    const [timeRangeClips, setTimeRangeClips] = useState<TimeRangeClip[]>([]);
+
+    const durationSeconds = lengthMilliseconds / 1000;
 
     useEffect(() => {
-        const updatedMarks = isNullOrUndefined(audioRef?.current?.currentTime)
+        const updatedTimeRangeClips = isNullOrUndefined(audioRef?.current?.currentTime)
             ? []
-            : annotations.flatMap(({ connectedResources, note, name, id: noteId }) => {
+            : annotations.flatMap(({ connectedResources, note, id: noteId }) => {
                   const timeRangeContext = connectedResources[0].context as ITimeRangeContext;
 
                   const {
                       timeRange: { inPointMilliseconds, outPointMilliseconds },
                   } = timeRangeContext;
 
-                  const text = name.items.find(
-                      ({ role }) => role === MultilingualTextItemRole.original
-                  )?.text;
+                  const noteOriginal = findOriginalTextItem(note).text;
 
-                  const fullText = `[${inPointMilliseconds}] ${note} [${outPointMilliseconds}]`;
+                  const tipText = `[${inPointMilliseconds} ms to ${outPointMilliseconds}] ${noteOriginal}`;
 
                   /**
                    * Should we break this logic out so we can share it for
                    * video annotation?
                    */
                   return [
-                      buildTimelineMark({
-                          // Shouldn't this be an icon instead?
-                          text: `<-`,
-                          tip: fullText,
-                          value: inPointMilliseconds,
-                          name: `${noteId}:in`,
-                          onClick: () => {
-                              console.log({ currentInTime: inPointMilliseconds });
-
-                              audioRef.current.currentTime =
-                                  convertMillisecondsToSeconds(inPointMilliseconds);
-                          },
-                      }),
-                      buildTimelineMark({
-                          text: `->`,
-                          tip: fullText,
-                          value: outPointMilliseconds,
-                          name: `${noteId}:out`,
-                          onClick: () => {
-                              console.log({ currentTime: outPointMilliseconds });
-
-                              audioRef.current.currentTime =
-                                  convertMillisecondsToSeconds(outPointMilliseconds);
+                      buildTimeRangeClip({
+                          name: `${noteId}`,
+                          noteText: noteOriginal,
+                          tip: tipText,
+                          inPointMilliseconds: inPointMilliseconds,
+                          outPointMilliseconds: outPointMilliseconds,
+                          onClick: (inPointSeconds) => {
+                              audioRef.current.currentTime = inPointSeconds;
                           },
                       }),
                   ];
               });
 
-        setMarks(updatedMarks);
+        setTimeRangeClips(updatedTimeRangeClips);
     }, [audioRef, annotations]);
 
     const formatedPlainText = plainText.split('\n').map((line, index) => (
@@ -100,22 +87,19 @@ export const AudioItemDetailFullViewPresenter = ({
     return (
         <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.audioItem}>
             {actions.some(({ type: commandType }) => commandType === CREATE_NOTE_ABOUT_RESOURCE) ? (
-                <InteractiveAnnotator id={id} audioURL={audioURL} audioRef={audioRef} />
+                <>
+                    <InteractiveAnnotator id={id} audioURL={audioURL} audioRef={audioRef} />
+                    <Typography variant="h3">Annotation Track</Typography>
+                    <Timeline
+                        durationSeconds={durationSeconds}
+                        name={`Annotation Track`}
+                        timeRangeClips={timeRangeClips}
+                        timelineRef={timelineRef}
+                    />
+                </>
             ) : (
                 <AudioPlayer audioUrl={audioURL} />
             )}
-            <Typography variant="h3">Annotation Track</Typography>
-            {marks.length > 0 ? (
-                <Timeline
-                    name={`Annotation Track`}
-                    step={100}
-                    defaultValue={0}
-                    min={0}
-                    max={lengthMilliseconds}
-                    marks={marks}
-                />
-            ) : null}
-            {/* <Typography variant='h3'>Transcript Track</Typography> */}
 
             <Divider sx={{ mt: 1, mb: 1 }} />
             <Accordion elevation={0}>

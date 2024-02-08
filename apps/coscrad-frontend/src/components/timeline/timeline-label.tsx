@@ -1,46 +1,62 @@
-import { Tooltip } from '@mui/material';
-import { TimelineMark } from './timeline';
+import { Box, Tooltip } from '@mui/material';
+import {
+    convertMillisecondsToSeconds,
+    convertMillisecondsToSecondsRounded,
+} from '../resources/utils/math';
+import { EDITOR_SOUND_BAR_HEIGHT } from './constants';
+import { TimeRangeClip, TimeRangeSeconds } from './timeline';
 
-export interface TimelineLabelProps {
+export interface TimeRangeClipLabelProps {
     name: string;
-    text: string;
+    noteText: string;
     tip: string;
-    value: number;
-    onClick?: (timeStamp: number) => void;
+    inPointMilliseconds: number;
+    outPointMilliseconds: number;
+    onClick?: (inPointSeconds: number) => void;
 }
 
-export const TimelineLabel = ({
-    text,
-    tip,
-    value,
+export const TimeRangeClipLabel = ({
     name,
+    noteText,
+    tip,
+    inPointMilliseconds,
     onClick,
-}: TimelineLabelProps): JSX.Element => {
+}: TimeRangeClipLabelProps): JSX.Element => {
+    const inPointSeconds = convertMillisecondsToSeconds(inPointMilliseconds);
+
     return (
+        /* Consider using onMouseEnter/onMouseLeave for div instead of button */
         <Tooltip title={tip}>
             {/* Do we really need the value param here? the client already has access to this */}
-            <div
-                data-testid={`timeline-label:${name}`}
+            <Box
+                sx={{
+                    height: `${EDITOR_SOUND_BAR_HEIGHT - 4}px`,
+                    whiteSpace: 'nowrap',
+                    padding: '3px',
+                    position: 'relative',
+                    overflow: 'hidden',
+                }}
+                data-testid={`time-range-clip-label:${name}`}
                 onClick={() => {
-                    onClick(value);
+                    onClick(inPointSeconds);
                 }}
             >
-                {text}
-            </div>
+                {noteText}
+            </Box>
         </Tooltip>
     );
 };
 
-/**
- * We have followed the API set by React MUI's `Slider`. This api requires
- * a value and a rich (i.e., `ReactNode`) label. This helper packages a label
- * into a mark data structure.
- */
-export const buildTimelineMark = (props: TimelineLabelProps): TimelineMark => {
-    const { value } = props;
+export const buildTimeRangeClip = (props: TimeRangeClipLabelProps): TimeRangeClip => {
+    const { inPointMilliseconds, outPointMilliseconds } = props;
+
+    const timeRangeSeconds: TimeRangeSeconds = {
+        inPointSeconds: convertMillisecondsToSecondsRounded(inPointMilliseconds),
+        outPointSeconds: convertMillisecondsToSecondsRounded(outPointMilliseconds),
+    };
 
     return {
-        value,
-        label: TimelineLabel(props),
+        timeRangeSeconds,
+        label: TimeRangeClipLabel(props),
     };
 };
