@@ -6,8 +6,8 @@ import { DigitalTextCompositeId } from '../create-digital-text.command';
 
 @Command({
     type: 'ADD_COVER_PHOTOGRAPH_FOR_DIGITAL_TEXT',
-    description: 'Add a cover photograph for digital text',
-    label: 'Add Cover Photograph for Digital Text',
+    description: 'Add a cover photograph for this digital text',
+    label: 'Add Cover Photograph',
 })
 export class AddCoverPhotographForDigitalText implements ICommandBase {
     @NestedDataType(DigitalTextCompositeId, {
