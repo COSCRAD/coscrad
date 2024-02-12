@@ -388,6 +388,14 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
       },
     },
   },
+  "coverPhotographId": {
+    "coscradDataType": "UUID",
+    "description": "a reference to a cover photograph for this digital text",
+    "isArray": false,
+    "isOptional": true,
+    "label": "cover photograph ID",
+    "referenceTo": "photograph",
+  },
   "id": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",

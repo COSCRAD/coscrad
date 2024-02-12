@@ -1,5 +1,5 @@
 import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
-import { NestedDataType } from '@coscrad/data-types';
+import { NestedDataType, ReferenceTo, UUID } from '@coscrad/data-types';
 import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
@@ -31,6 +31,7 @@ import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-
 import {
     AudioAddedForDigitalTextPage,
     AudioAddedForDigitalTextTitle,
+    CoverPhotographAddedForDigitalText,
     DigitalTextCreated,
     DigitalTextPageContentTranslated,
     DigitalTextTitleTranslated,
@@ -41,6 +42,7 @@ import { PhotographAddedToDigitalTextPage } from '../commands/add-photograph-to-
 import { ADD_PAGE_TO_DIGITAL_TEXT, CREATE_DIGITAL_TEXT } from '../constants';
 import {
     CannotAddPhotographForMissingPageError,
+    CannotOverrideCoverPhotographError,
     FailedToUpdateDigitalTextPageError,
 } from '../errors';
 import { CannotAddAudioForTitleInGivenLanguageError } from '../errors/cannot-add-audio-for-title-in-given-language.error';
@@ -63,6 +65,14 @@ export class DigitalText extends Resource {
     })
     readonly title: MultilingualText;
 
+    @ReferenceTo(AggregateType.photograph)
+    @UUID({
+        label: 'cover photograph ID',
+        description: 'a reference to a cover photograph for this digital text',
+        isOptional: true,
+    })
+    readonly coverPhotographId?: AggregateId;
+
     @NestedDataType(MultilingualAudio, {
         label: 'audio for title',
         description: 'contains refereneces to audio for the title',
@@ -82,9 +92,11 @@ export class DigitalText extends Resource {
 
         if (!dto) return;
 
-        const { title, pages: pageDTOs, audioForTitle: audioForTitleDto } = dto;
+        const { title, pages: pageDTOs, audioForTitle: audioForTitleDto, coverPhotographId } = dto;
 
         this.title = new MultilingualText(title);
+
+        if (!isNullOrUndefined(coverPhotographId)) this.coverPhotographId = coverPhotographId;
 
         this.pages = Array.isArray(pageDTOs)
             ? pageDTOs.map((pageDTO) => new DigitalTextPage(pageDTO))
@@ -220,6 +232,16 @@ export class DigitalText extends Resource {
 
         return this.safeClone<DigitalText>({
             pages: updatedPages,
+        });
+    }
+
+    addCoverPhotograph(photographId): ResultOrError<DigitalText> {
+        if (!isNullOrUndefined(this.coverPhotographId)) {
+            return new CannotOverrideCoverPhotographError(photographId);
+        }
+
+        return this.safeClone<DigitalText>({
+            coverPhotographId: photographId,
         });
     }
 
@@ -416,6 +438,12 @@ export class DigitalText extends Resource {
 
     handlePageAddedToDigitalText({ payload: { identifier } }: PageAddedToDigitalText) {
         return this.addPage(identifier);
+    }
+
+    handleCoverPhotographAddedForDigitalText({
+        payload: { photographId },
+    }: CoverPhotographAddedForDigitalText) {
+        return this.addCoverPhotograph(photographId);
     }
 
     handleContentAddedToDigitalTextPage({

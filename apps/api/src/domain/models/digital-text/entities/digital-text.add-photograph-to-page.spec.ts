@@ -24,7 +24,7 @@ const digitalTextWithoutPhotographOnPage = getValidAggregateInstanceForTest(
 
 describe(`DigitalText.addPhotographToPage`, () => {
     describe(`when the update is valid`, () => {
-        it(`should add the photograph to thte page`, () => {
+        it(`should add the photograph to the page`, () => {
             const result = digitalTextWithoutPhotographOnPage.addPhotographToPage(
                 targetPageIdentifier,
                 photographId

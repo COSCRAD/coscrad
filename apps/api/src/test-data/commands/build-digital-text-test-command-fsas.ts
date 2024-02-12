@@ -4,6 +4,7 @@ import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUu
 import {
     AddAudioForDigitalTextPage,
     AddAudioForDigitalTextTitle,
+    AddCoverPhotographForDigitalText,
     AddPageToDigitalText,
     CreateDigitalText,
     TranslateDigitalTextPageContent,
@@ -77,6 +78,14 @@ const addAudioForDigitalTextPage: CommandFSA<AddAudioForDigitalTextPage> = {
     },
 };
 
+const addCoverPhotographForDigitalText: CommandFSA<AddCoverPhotographForDigitalText> = {
+    type: `ADD_COVER_PHOTOGRAPH_FOR_DIGITAL_TEXT`,
+    payload: {
+        aggregateCompositeIdentifier: { id, type },
+        photographId: buildDummyUuid(117),
+    },
+};
+
 const addPhotographToDigitalTextPage: CommandFSA<AddPhotographToDigitalTextPage> = {
     type: `ADD_PHOTOGRAPH_TO_DIGITAL_TEXT_PAGE`,
     payload: {
@@ -102,6 +111,7 @@ export const buildDigitalTextCommandFsas = () => [
     addAudioForDigitalTextTitle,
     translateDigitalTextPageContent,
     addAudioForDigitalTextPage,
+    addCoverPhotographForDigitalText,
     addPhotographToDigitalTextPage,
     translateDigitalTextTitle,
 ];

@@ -7,6 +7,8 @@ import {
     AudioAddedForDigitalTextPagePayload,
     AudioAddedForDigitalTextTitle,
     AudioAddedForDigitalTextTitlePayload,
+    CoverPhotographAddedForDigitalText,
+    CoverPhotographAddedForDigitalTextPayload,
     DigitalTextCreated,
     DigitalTextPageContentTranslated,
     DigitalTextPageContentTranslatedPayload,
@@ -326,6 +328,21 @@ const buildDigitalTextPageContentTranslated = (
     };
 
     return new DigitalTextPageContentTranslated(
+        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        buildMetadata()
+    );
+};
+
+const buildCoverPhotographForDigitalText = (
+    payloadOverrides: DeepPartial<CoverPhotographAddedForDigitalTextPayload>,
+    buildMetadata: EventMetadataBuilder
+) => {
+    const defaultPayload: CoverPhotographAddedForDigitalTextPayload = {
+        aggregateCompositeIdentifier: { type: AggregateType.digitalText, id: buildDummyUuid(117) },
+        photographId: buildDummyUuid(145),
+    };
+
+    return new CoverPhotographAddedForDigitalText(
         clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
         buildMetadata()
     );
@@ -669,6 +686,10 @@ export class TestEventStream {
             .registerBuilder(
                 'PHOTOGRAPH_ADDED_TO_DIGITAL_TEXT_PAGE',
                 buildPhotographAddedToDigitalTextPage
+            )
+            .registerBuilder(
+                'COVER_PHOTOGRAPH_ADDED_FOR_DIGITAL_TEXT',
+                buildCoverPhotographForDigitalText
             )
             .registerBuilder(TERM_CREATED, buildTermCreated)
             .registerBuilder(TERM_TRANSLATED, buildTermTranslated)
