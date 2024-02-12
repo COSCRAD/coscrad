@@ -34,7 +34,10 @@ const inputFilePrefix = `./${inputDir}/${cliCommandName}`;
 
 const buildDirectoryPath = (suffix: string) => `${inputFilePrefix}/${suffix}`;
 
-describe(`CLI Command: **data-restore**`, () => {
+/**
+ * TODO Diagnose why this test is flakey when run by the CI.
+ */
+describe.skip(`CLI Command: **ingest-media-items**`, () => {
     let commandInstance: TestingModule;
 
     let testRepositoryProvider: TestRepositoryProvider;

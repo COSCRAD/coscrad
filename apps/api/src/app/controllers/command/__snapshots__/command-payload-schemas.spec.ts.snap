@@ -924,6 +924,52 @@ exports[`command payload schemas Command payload schema should match the snapsho
     "type": "ADD_PHOTOGRAPH_TO_DIGITAL_TEXT_PAGE",
   },
   {
+    "description": "Add a cover photograph for this digital text",
+    "label": "Add Cover Photograph",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unqiue identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "must be: digitalText",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "digitalText",
+                "value": "digitalText",
+              },
+            ],
+          },
+        },
+      },
+      "photographId": {
+        "coscradDataType": "UUID",
+        "description": "system reference to the photograph",
+        "isArray": false,
+        "isOptional": false,
+        "label": "photograph ID",
+        "referenceTo": "photograph",
+      },
+    },
+    "type": "ADD_COVER_PHOTOGRAPH_FOR_DIGITAL_TEXT",
+  },
+  {
     "description": "Tranlate the digital text page content to another language",
     "label": "Translate Digital Text Page Content",
     "schema": {
