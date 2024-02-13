@@ -1,4 +1,4 @@
-import { isNull, isNullOrUndefined } from '@coscrad/validation-constraints';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box, styled } from '@mui/material';
 import { RefObject, useEffect, useRef, useState } from 'react';
 import { EDITOR_SOUND_BAR_HEIGHT, ZOOM_FACTOR } from './constants';
@@ -8,7 +8,7 @@ import { RangeBar } from './range-bar';
 const WAVE_FORM_URL = 'https://guujaaw.info/images/audio-wave-form.png';
 
 const StyledTimelineBox = styled(Box)({
-    width: '100%',
+    width: '99%',
     height: `${EDITOR_SOUND_BAR_HEIGHT + 20}px`,
     paddingTop: `2px`,
     paddingBottom: `2px`,
@@ -28,12 +28,12 @@ const StyledScrolledTrack = styled(Box)({
     backgroundImage: `url(${WAVE_FORM_URL})`,
     backgroundBlendMode: 'saturation',
     backgroundSize: `auto ${EDITOR_SOUND_BAR_HEIGHT + 5}px`,
-    scrollBehavior: 'smooth',
 });
 
 const ScrollingBox = styled('div')({
     height: `${EDITOR_SOUND_BAR_HEIGHT + 20}px`,
     overflowX: 'scroll',
+    scrollBehavior: 'smooth',
     position: 'relative',
 });
 
@@ -72,6 +72,8 @@ export const Timeline = ({
 
     const [renderedTimelineLength, setRenderedTimelineLength] = useState<number>(0);
 
+    const currentTime = audioRef.current?.currentTime;
+
     useEffect(() => {
         if (isNullOrUndefined(timelineRef.current)) return;
 
@@ -82,7 +84,7 @@ export const Timeline = ({
         setRenderedTimelineLength(timelineBoxWidth * ZOOM_FACTOR);
 
         if (
-            isNull(mediaCurrentTimeFromContext) ||
+            isNullOrUndefined(currentTime) ||
             isNullOrUndefined(durationSeconds) ||
             isNullOrUndefined(scrollingBoxRef.current)
         )
@@ -92,20 +94,22 @@ export const Timeline = ({
 
         const trackPosition = convertTimecodeToRelativeTimelineUnits(
             renderedTimelineLength,
-            mediaCurrentTimeFromContext,
+            currentTime,
             durationSeconds
         );
 
         const scrollLeft = trackPosition - editorStickyPoint;
 
-        scrollingBoxRef.current.scrollLeft += scrollLeft;
-    }, [
-        timelineRef,
-        trackRef,
-        durationSeconds,
-        mediaCurrentTimeFromContext,
-        renderedTimelineLength,
-    ]);
+        console.log({ scrollLeft });
+
+        // scrollingBoxRef.current.scrollLeft += scrollLeft;
+
+        scrollingBoxRef.current.scrollTo({
+            top: 0,
+            left: scrollLeft,
+            behavior: 'smooth',
+        });
+    }, [timelineRef, trackRef, durationSeconds, currentTime, renderedTimelineLength]);
 
     return (
         <StyledTimelineBox ref={timelineRef} data-testid={`timeline:${name}`}>

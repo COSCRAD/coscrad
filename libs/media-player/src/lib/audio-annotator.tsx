@@ -110,6 +110,7 @@ export const AudioAnnotator = ({
 
         if (isNullOrUndefined(audioRef.current)) return;
 
+        // Return playhead to the endpoint of the last time range after it's submitted
         audioRef.current.currentTime = mediaCurrentTimeFromContext;
     }, [audioRef, mediaCurrentTimeFromContext]);
 
@@ -279,7 +280,7 @@ export const AudioAnnotator = ({
 
     return (
         <AudioAnnotatorBox>
-            <Stack>
+            <Stack mb={2}>
                 <StyledAudioElement
                     ref={audioRef}
                     onLoadedData={onLoadedData}
@@ -345,7 +346,7 @@ export const AudioAnnotator = ({
                             <Typography variant="body1">currentTime: {currentTime}</Typography>
                         </Box>
                     </Box>
-                    <Box display="inline-flex" alignItems="center" mt={1} ml={3}>
+                    <Box display="inline-flex" alignItems="center" width="80%" margin="0 auto">
                         <Box width="70px">
                             {!isNullOrUndefined(inPointSeconds) ? (
                                 <Typography
@@ -391,7 +392,7 @@ export const AudioAnnotator = ({
                 </Box>
                 {!isNullOrUndefined(durationSeconds) ? (
                     <Box>
-                        <Typography sx={{ mt: 1 }} variant="h3">
+                        <Typography sx={{ mt: 1 }} variant="h5">
                             Annotation Track
                         </Typography>
                         <Box>
