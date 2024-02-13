@@ -6,5 +6,5 @@ export type NoteAboutResourceCreatedPayload = CreateNoteAboutResource;
 
 @CoscradEvent('NOTE_ABOUT_RESOURCE_CREATED')
 export class NoteAboutResourceCreated extends BaseEvent<NoteAboutResourceCreatedPayload> {
-    type = 'NOTE_ABOUT_RESOURCE_CREATED';
+    readonly type = 'NOTE_ABOUT_RESOURCE_CREATED';
 }

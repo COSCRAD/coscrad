@@ -3,6 +3,7 @@ import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { plainToInstance } from 'class-transformer';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../domain/models/__tests__/utilities/dummyDateNow';
+import { getNoteTestEventMap } from '../../domain/models/context/test-data';
 import {
     AudioAddedForDigitalTextPage,
     AudioAddedForDigitalTextPagePayload,
@@ -674,7 +675,7 @@ export class TestEventStream {
             .registerBuilder(`TERM_ADDED_TO_VOCABULARY_LIST`, buildTermAddedToVocabularyList)
             .registerBuilder(`TERM_IN_VOCABULARY_LIST_ANALYZED`, buildTermInVocabularyListAnalyzed);
 
-        [...getTagTestEventBuildersMap().entries()].reduce(
+        [...getTagTestEventBuildersMap().entries(), ...getNoteTestEventMap().entries()].reduce(
             (acc, [eventType, builder]) => acc.registerBuilder(eventType, builder),
             this
         );
