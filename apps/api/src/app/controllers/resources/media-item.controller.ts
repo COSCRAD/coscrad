@@ -54,13 +54,12 @@ export class MediaItemController {
         return res.sendFile(filePath, options);
     }
 
-    // TODO Route Guards
     // /download?name=C1
+    @ApiBearerAuth('JWT')
+    @UseGuards(OptionalJwtAuthGuard)
+    @Get(`/download`)
     async fetchBinaryByName(@Request() _req, @Res() _res, @Query('name') _name) {
-        // try this and see that it works /api/resources/mediaItems/download?name=foo and get foo back
-        // return name;
-
-        throw new Error(`Not Implemented.`);
+        throw new Error(`fetchBinaryByName - NOT IMPLEMENTED`);
 
         // 1. add a method to call this.mediaItemQueryService.fetchByName(name,user)
 
