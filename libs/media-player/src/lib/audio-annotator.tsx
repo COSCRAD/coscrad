@@ -4,7 +4,7 @@ import {
     Clear as ClearIcon,
 } from '@mui/icons-material/';
 import { Box, IconButton, Paper, Stack, Tooltip, Typography, styled } from '@mui/material';
-import { RefObject, useEffect, useState } from 'react';
+import { RefObject, SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { asFormattedMediaTimecodeString } from './shared/as-formatted-media-timecode-string';
 import { AudioMIMEType } from './shared/audio-mime-type.enum';
 import { isAudioMIMEType } from './shared/is-audio-mime-type';
@@ -14,10 +14,11 @@ import {
     TimeRangeSelectionStatus,
     TimeRangeSelectionStatusIndicator,
 } from './time-range-selection-visual';
+import { TimeRangeClip, Timeline } from './timeline';
 
 export type Nullable<T> = T | null;
 
-export type MedidaPlayDirection = 'forward' | 'reverse';
+export type MediaPlayDirection = 'forward' | 'reverse';
 
 export enum KeyboardShortcuts {
     play = KeyboardKey.spacebar,
@@ -64,7 +65,9 @@ interface AudioAnnotatorProps {
      * freedom to syncronize state between the audio element and ad-hoc command
      * forms.
      */
+    timeRangeClips: TimeRangeClip[];
     audioRef: RefObject<HTMLAudioElement>;
+    mediaCurrentTimeFromContext: number;
 }
 
 export const AudioAnnotator = ({
@@ -72,7 +75,9 @@ export const AudioAnnotator = ({
     mimeType,
     selectedTimeRange,
     onTimeRangeSelected,
+    timeRangeClips,
     audioRef,
+    mediaCurrentTimeFromContext,
 }: AudioAnnotatorProps) => {
     // This is a bit awkward, but it works
     const {
@@ -80,18 +85,16 @@ export const AudioAnnotator = ({
         outPointSeconds: defaultOutPointSeconds = null,
     } = selectedTimeRange || { inPointSeconds: null, outPointSeconds: null };
 
+    const timelineRef = useRef<HTMLDivElement>(null);
+
     const [inPointSeconds, setInPointSeconds] = useState<Nullable<number>>(defaultInPointSeconds);
 
     const [outPointSeconds, setOutPointSeconds] =
         useState<Nullable<number>>(defaultOutPointSeconds);
 
-    useEffect(() => {
-        if (selectedTimeRange === null) {
-            setInPointSeconds(null);
+    const [currentTime, setCurrentTime] = useState<number | null>(null);
 
-            setOutPointSeconds(null);
-        }
-    }, [selectedTimeRange]);
+    const [durationSeconds, setDurationSeconds] = useState<number | null>(null);
 
     const [isPlayable, setIsPlayable] = useState<boolean>(false);
 
@@ -102,17 +105,21 @@ export const AudioAnnotator = ({
         outPointSeconds
     );
 
-    /**
-     * NOTE: This is a HACK to keep focus off the Audio Player to make sure
-     * keyboard shortcuts are enabled for the `document`
-     */
-    const blurAudioPlayer = () => {
-        const audioPlayer = audioRef?.current;
+    useEffect(() => {
+        if (isNull(mediaCurrentTimeFromContext)) return;
 
-        if (isNullOrUndefined(audioPlayer)) return;
+        if (isNullOrUndefined(audioRef.current)) return;
 
-        audioPlayer.blur();
-    };
+        audioRef.current.currentTime = mediaCurrentTimeFromContext;
+    }, [audioRef, mediaCurrentTimeFromContext]);
+
+    useEffect(() => {
+        if (selectedTimeRange === null) {
+            setInPointSeconds(null);
+
+            setOutPointSeconds(null);
+        }
+    }, [selectedTimeRange]);
 
     useEffect(() => {
         if (isNullOrUndefined(inPointSeconds)) {
@@ -141,6 +148,40 @@ export const AudioAnnotator = ({
         onTimeRangeSelected(selectedTimeRange);
     }, [inPointSeconds, outPointSeconds, onTimeRangeSelected, setErrorMessage, setOutPointSeconds]);
 
+    const onLoadedData = (event: SyntheticEvent<HTMLAudioElement, Event>) => {
+        const audioTarget = event.target as HTMLAudioElement;
+
+        const { duration } = audioTarget;
+
+        setDurationSeconds(duration);
+    };
+
+    const onCanPlayThrough = () => {
+        console.log('canplaythrough');
+
+        if (isNullOrUndefined(audioRef.current)) return;
+
+        if (durationSeconds === 0 || isNull(durationSeconds)) {
+            const audioTarget = audioRef.current;
+
+            const { duration } = audioTarget;
+
+            setDurationSeconds(duration);
+        }
+    };
+
+    /**
+     * NOTE: This is a HACK to keep focus off the Audio Player to make sure
+     * keyboard shortcuts are enabled for the `document`
+     */
+    const blurAudioPlayer = () => {
+        const audioPlayer = audioRef?.current;
+
+        if (isNullOrUndefined(audioPlayer)) return;
+
+        audioPlayer.blur();
+    };
+
     // TODO: test with a longer audio file
     const onCanplay = () => {
         setIsPlayable(true);
@@ -158,7 +199,13 @@ export const AudioAnnotator = ({
         }
     };
 
-    const scrub = (increment: number, direction: MedidaPlayDirection = 'forward') => {
+    const updateCurrentTime = () => {
+        if (!isNullOrUndefined(audioRef.current)) {
+            setCurrentTime(audioRef.current.currentTime);
+        }
+    };
+
+    const scrub = (increment: number, direction: MediaPlayDirection = 'forward') => {
         const audio = audioRef?.current;
 
         if (isNullOrUndefined(audio)) return;
@@ -235,8 +282,11 @@ export const AudioAnnotator = ({
             <Stack>
                 <StyledAudioElement
                     ref={audioRef}
+                    onLoadedData={onLoadedData}
                     onCanPlay={onCanplay}
+                    onCanPlayThrough={onCanPlayThrough}
                     onPlay={blurAudioPlayer}
+                    onTimeUpdate={updateCurrentTime}
                     onSeeked={blurAudioPlayer}
                     onVolumeChange={blurAudioPlayer}
                     controls
@@ -268,28 +318,33 @@ export const AudioAnnotator = ({
                     </Typography>
                 </Box>
                 <Box mt={1}>
-                    <Tooltip title="Mark In Point">
-                        <span>
-                            <IconButton
-                                data-testid="in-point-marker-button"
-                                onClick={markInPoint}
-                                disabled={!isPlayable}
-                            >
-                                <ArrowRightIcon />
-                            </IconButton>
-                        </span>
-                    </Tooltip>
-                    <Tooltip title="Mark Out Point">
-                        <span>
-                            <IconButton
-                                data-testid="out-point-marker-button"
-                                onClick={markOutPoint}
-                                disabled={inPointSeconds === null}
-                            >
-                                <ArrowLeftIcon />
-                            </IconButton>
-                        </span>
-                    </Tooltip>
+                    <Box display="inline-flex" alignItems="center">
+                        <Tooltip title="Mark In Point">
+                            <span>
+                                <IconButton
+                                    data-testid="in-point-marker-button"
+                                    onClick={markInPoint}
+                                    disabled={!isPlayable}
+                                >
+                                    <ArrowRightIcon />
+                                </IconButton>
+                            </span>
+                        </Tooltip>
+                        <Tooltip title="Mark Out Point">
+                            <span>
+                                <IconButton
+                                    data-testid="out-point-marker-button"
+                                    onClick={markOutPoint}
+                                    disabled={inPointSeconds === null}
+                                >
+                                    <ArrowLeftIcon />
+                                </IconButton>
+                            </span>
+                        </Tooltip>
+                        <Box>
+                            <Typography variant="body1">currentTime: {currentTime}</Typography>
+                        </Box>
+                    </Box>
                     <Box display="inline-flex" alignItems="center" mt={1} ml={3}>
                         <Box width="70px">
                             {!isNullOrUndefined(inPointSeconds) ? (
@@ -334,6 +389,26 @@ export const AudioAnnotator = ({
                         </Box>
                     </Box>
                 </Box>
+                {!isNullOrUndefined(durationSeconds) ? (
+                    <Box>
+                        <Typography sx={{ mt: 1 }} variant="h3">
+                            Annotation Track
+                        </Typography>
+                        <Box>
+                            <Typography variant="h6">
+                                Context Time: {mediaCurrentTimeFromContext}
+                            </Typography>
+                        </Box>
+                        <Timeline
+                            durationSeconds={durationSeconds}
+                            name={`Annotation Track`}
+                            timeRangeClips={timeRangeClips}
+                            timelineRef={timelineRef}
+                            audioRef={audioRef}
+                            mediaCurrentTimeFromContext={mediaCurrentTimeFromContext}
+                        />
+                    </Box>
+                ) : null}
             </Stack>
         </AudioAnnotatorBox>
     );

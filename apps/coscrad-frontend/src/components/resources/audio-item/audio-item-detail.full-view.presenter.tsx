@@ -1,11 +1,9 @@
 import {
     IAudioItemViewModel,
     ICategorizableDetailQueryResult,
-    ITimeRangeContext,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { AudioPlayer } from '@coscrad/media-player';
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material/';
 import {
     Accordion,
@@ -16,11 +14,9 @@ import {
     Grid,
     Typography,
 } from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 import { SinglePropertyPresenter } from '../../../utils/generic-components/presenters/single-property-presenter';
-import { findOriginalTextItem } from '../../notes/shared/find-original-text-item';
-import { TimeRangeClip, Timeline, buildTimeRangeClip } from '../../timeline';
 import { convertMillisecondsToSeconds } from '../utils/math';
 import { InteractiveAnnotator } from './interactive-annotator';
 
@@ -37,47 +33,6 @@ export const AudioItemDetailFullViewPresenter = ({
 }: ICategorizableDetailQueryResult<IAudioItemViewModel>): JSX.Element => {
     const audioRef = useRef(null);
 
-    const timelineRef = useRef<HTMLDivElement>(null);
-
-    const [timeRangeClips, setTimeRangeClips] = useState<TimeRangeClip[]>([]);
-
-    const durationSeconds = lengthMilliseconds / 1000;
-
-    useEffect(() => {
-        const updatedTimeRangeClips = isNullOrUndefined(audioRef?.current?.currentTime)
-            ? []
-            : annotations.flatMap(({ connectedResources, note, id: noteId }) => {
-                  const timeRangeContext = connectedResources[0].context as ITimeRangeContext;
-
-                  const {
-                      timeRange: { inPointMilliseconds, outPointMilliseconds },
-                  } = timeRangeContext;
-
-                  const noteOriginal = findOriginalTextItem(note).text;
-
-                  const tipText = `[${inPointMilliseconds} ms to ${outPointMilliseconds}] ${noteOriginal}`;
-
-                  /**
-                   * Should we break this logic out so we can share it for
-                   * video annotation?
-                   */
-                  return [
-                      buildTimeRangeClip({
-                          name: `${noteId}`,
-                          noteText: noteOriginal,
-                          tip: tipText,
-                          inPointMilliseconds: inPointMilliseconds,
-                          outPointMilliseconds: outPointMilliseconds,
-                          onClick: (inPointSeconds) => {
-                              audioRef.current.currentTime = inPointSeconds;
-                          },
-                      }),
-                  ];
-              });
-
-        setTimeRangeClips(updatedTimeRangeClips);
-    }, [audioRef, annotations]);
-
     const formatedPlainText = plainText.split('\n').map((line, index) => (
         <Box mb={1} key={index}>
             {line}
@@ -86,17 +41,19 @@ export const AudioItemDetailFullViewPresenter = ({
 
     return (
         <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.audioItem}>
+            {/* <Stack>
+                {annotations.map((annotation) => (
+                    <div>{findOriginalTextItem(annotation.note).text}</div>
+                ))}
+            </Stack> */}
+
             {actions.some(({ type: commandType }) => commandType === CREATE_NOTE_ABOUT_RESOURCE) ? (
-                <>
-                    <InteractiveAnnotator id={id} audioURL={audioURL} audioRef={audioRef} />
-                    <Typography variant="h3">Annotation Track</Typography>
-                    <Timeline
-                        durationSeconds={durationSeconds}
-                        name={`Annotation Track`}
-                        timeRangeClips={timeRangeClips}
-                        timelineRef={timelineRef}
-                    />
-                </>
+                <InteractiveAnnotator
+                    id={id}
+                    audioURL={audioURL}
+                    audioRef={audioRef}
+                    annotations={annotations}
+                />
             ) : (
                 <AudioPlayer audioUrl={audioURL} />
             )}

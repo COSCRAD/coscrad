@@ -1,4 +1,4 @@
-import { Box, Tooltip } from '@mui/material';
+import { Box, Tooltip, styled } from '@mui/material';
 import {
     convertMillisecondsToSeconds,
     convertMillisecondsToSecondsRounded,
@@ -6,6 +6,9 @@ import {
 import { EDITOR_SOUND_BAR_HEIGHT } from './constants';
 import { TimeRangeClip, TimeRangeSeconds } from './timeline';
 
+export const StyledTimeRangeClipLabel = styled(Box)({
+    width: '100%',
+});
 export interface TimeRangeClipLabelProps {
     name: string;
     noteText: string;
@@ -25,25 +28,27 @@ export const TimeRangeClipLabel = ({
     const inPointSeconds = convertMillisecondsToSeconds(inPointMilliseconds);
 
     return (
-        /* Consider using onMouseEnter/onMouseLeave for div instead of button */
-        <Tooltip title={tip}>
-            {/* Do we really need the value param here? the client already has access to this */}
-            <Box
-                sx={{
-                    height: `${EDITOR_SOUND_BAR_HEIGHT - 4}px`,
-                    whiteSpace: 'nowrap',
-                    padding: '3px',
-                    position: 'relative',
-                    overflow: 'hidden',
-                }}
-                data-testid={`time-range-clip-label:${name}`}
-                onClick={() => {
-                    onClick(inPointSeconds);
-                }}
-            >
-                {noteText}
-            </Box>
-        </Tooltip>
+        /* Consider using onMouseEnter/onMouseLeave for div popup instead of button */
+        <StyledTimeRangeClipLabel>
+            <Tooltip title={tip}>
+                {/* Do we really need the value param here? the client already has access to this */}
+                <Box
+                    sx={{
+                        height: `${EDITOR_SOUND_BAR_HEIGHT - 4}px`,
+                        whiteSpace: 'nowrap',
+                        padding: '3px',
+                        position: 'relative',
+                        overflow: 'hidden',
+                    }}
+                    data-testid={`time-range-clip-label:${name}`}
+                    onClick={() => {
+                        onClick(inPointSeconds);
+                    }}
+                >
+                    {noteText}
+                </Box>
+            </Tooltip>
+        </StyledTimeRangeClipLabel>
     );
 };
 

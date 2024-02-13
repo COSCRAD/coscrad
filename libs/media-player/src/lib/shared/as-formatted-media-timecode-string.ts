@@ -34,11 +34,17 @@ export const asFormattedMediaTimecodeString = (timeInSeconds: number): string =>
             ? Math.floor((timeInSeconds - hours * numberOfSecondsInHour) / 60)
             : Math.floor(timeInSeconds / 60);
 
-    const seconds = Math.floor(timeInSeconds - hours * numberOfSecondsInHour - minutes * 60);
+    const seconds = timeInSeconds - hours * numberOfSecondsInHour - minutes * 60;
 
-    const formattedMediaTimecodeString = [hours, minutes, seconds]
+    const secondsRoundedToThreeDecimals = Math.round((seconds + Number.EPSILON) * 100) / 100;
+
+    const formattedHoursAndMinutesAsString = [hours, minutes]
         .map((time) => asTwoDigitString(time))
         .join(':');
+
+    const formattedMediaTimecodeString = formattedHoursAndMinutesAsString.concat(
+        `:${secondsRoundedToThreeDecimals.toString()}`
+    );
 
     return formattedMediaTimecodeString;
 };

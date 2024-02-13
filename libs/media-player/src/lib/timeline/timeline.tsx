@@ -1,7 +1,6 @@
 import { isNull, isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Box, Typography, styled } from '@mui/material';
-import { RefObject, useContext, useEffect, useRef, useState } from 'react';
-import { MediaCurrentTimeContext } from '../resources/shared/media-currenttime-provider';
+import { Box, styled } from '@mui/material';
+import { RefObject, useEffect, useRef, useState } from 'react';
 import { EDITOR_SOUND_BAR_HEIGHT, ZOOM_FACTOR } from './constants';
 import { convertTimecodeToRelativeTimelineUnits } from './convert-timecode-to-relative-timeline-units';
 import { RangeBar } from './range-bar';
@@ -54,6 +53,7 @@ interface TimelineProps {
     name: string;
     timelineRef: RefObject<HTMLDivElement>;
     audioRef: RefObject<HTMLAudioElement>;
+    mediaCurrentTimeFromContext: number;
 }
 
 export const Timeline = ({
@@ -62,35 +62,43 @@ export const Timeline = ({
     name,
     timelineRef,
     audioRef,
+    mediaCurrentTimeFromContext,
 }: TimelineProps) => {
     const trackRef = useRef<HTMLDivElement>(null);
 
     const scrollingBoxRef = useRef<HTMLDivElement>(null);
 
-    const { mediaCurrentTimeFromContext } = useContext(MediaCurrentTimeContext);
+    // const { mediaCurrentTimeFromContext } = useContext(MediaCurrentTimeContext);
 
-    const [renderedTimelineLength, setRenderedTimelineLength] = useState<number>(null);
+    const [renderedTimelineLength, setRenderedTimelineLength] = useState<number>(0);
 
     useEffect(() => {
-        if (!isNullOrUndefined(timelineRef.current)) {
-            const timelineBoxWidth = timelineRef.current.getBoundingClientRect().width;
+        if (isNullOrUndefined(timelineRef.current)) return;
 
-            setRenderedTimelineLength(timelineBoxWidth * ZOOM_FACTOR);
+        // if (isNullOrUndefined(renderedTimelineLength)) return;
 
-            if (!isNull(mediaCurrentTimeFromContext)) {
-                const editorStickyPoint = timelineBoxWidth / 2;
+        const timelineBoxWidth = timelineRef.current.getBoundingClientRect().width;
 
-                const trackPosition = convertTimecodeToRelativeTimelineUnits(
-                    renderedTimelineLength,
-                    mediaCurrentTimeFromContext,
-                    durationSeconds
-                );
+        setRenderedTimelineLength(timelineBoxWidth * ZOOM_FACTOR);
 
-                const scrollLeft = trackPosition - editorStickyPoint;
+        if (
+            isNull(mediaCurrentTimeFromContext) ||
+            isNullOrUndefined(durationSeconds) ||
+            isNullOrUndefined(scrollingBoxRef.current)
+        )
+            return;
 
-                scrollingBoxRef.current.scrollLeft += scrollLeft;
-            }
-        }
+        const editorStickyPoint = timelineBoxWidth / 2;
+
+        const trackPosition = convertTimecodeToRelativeTimelineUnits(
+            renderedTimelineLength,
+            mediaCurrentTimeFromContext,
+            durationSeconds
+        );
+
+        const scrollLeft = trackPosition - editorStickyPoint;
+
+        scrollingBoxRef.current.scrollLeft += scrollLeft;
     }, [
         timelineRef,
         trackRef,
@@ -101,7 +109,6 @@ export const Timeline = ({
 
     return (
         <StyledTimelineBox ref={timelineRef} data-testid={`timeline:${name}`}>
-            <Typography variant="body1">Context Time: {mediaCurrentTimeFromContext}</Typography>
             <ScrollingBox data-testid="scroll-container" ref={scrollingBoxRef}>
                 <StyledScrolledTrack
                     ref={trackRef}
