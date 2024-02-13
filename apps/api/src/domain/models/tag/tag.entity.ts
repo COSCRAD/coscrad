@@ -1,7 +1,7 @@
 import { CompositeIdentifier, NonEmptyString } from '@coscrad/data-types';
 import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { InternalError } from '../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
 import { Maybe } from '../../../lib/types/maybe';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
@@ -209,11 +209,19 @@ export class Tag extends Aggregate implements HasLabel {
             label,
         } = event.payload;
 
-        return new Tag({
+        const buildResult = new Tag({
             type: AggregateType.tag,
             id: tagId,
             label,
             members: [],
         });
+
+        const invariantValidationResult = buildResult.validateInvariants();
+
+        if (isInternalError(invariantValidationResult)) {
+            return invariantValidationResult;
+        }
+
+        return buildResult;
     }
 }
