@@ -1,3 +1,4 @@
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Controller, Get, Param, Query, Request, Res, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { existsSync } from 'fs';
@@ -60,9 +61,13 @@ export class MediaItemController {
     @UseGuards(OptionalJwtAuthGuard)
     @Get(`/download`)
     async fetchBinaryByName(@Request() req, @Res() res, @Query('name') name) {
-        // 1. add a method to call this.mediaItemQueryService.fetchByName(name,user)
-        // done
-        // 2. call this method here
+        if (!isNonEmptyString(name)) {
+            return sendInternalResultAsHttpResponse(
+                res,
+                new InternalError(`name must be a non-empty string`)
+            );
+        }
+
         const searchResult = await this.mediaItemQueryService.fetchByName(
             name,
             req.user || undefined
@@ -74,9 +79,9 @@ export class MediaItemController {
             ]);
         }
 
-        // 3. if a result is found (returned from service call), send the binary as in `fetchBinary`
         if (isNotFound(searchResult)) {
-            return searchResult;
+            // Why do we need to do this explicitly?
+            return sendInternalResultAsHttpResponse(res, NotFound);
         }
 
         // TODO share this logic with the fetch binary method

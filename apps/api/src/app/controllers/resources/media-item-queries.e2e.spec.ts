@@ -78,7 +78,7 @@ describe('when querying for a media item by name (/resources/mediaItems/download
                     );
                 });
 
-                it.only(`should return the expected binary`, async () => {
+                it(`should return the expected binary`, async () => {
                     const endpoint = buildFindByNameQueryUrl(mediaItemName);
 
                     const res = await request(app.getHttpServer()).get(endpoint);
@@ -90,11 +90,37 @@ describe('when querying for a media item by name (/resources/mediaItems/download
             });
 
             describe(`when the media item is not published`, () => {
-                it.todo(`should return not found`);
+                beforeEach(async () => {
+                    await testRepositoryProvider.addFullSnapshot(
+                        new DeluxeInMemoryStore({
+                            [AggregateType.mediaItem]: [
+                                mediaItemToFind.clone({
+                                    published: false,
+                                }),
+                            ],
+                        }).fetchFullSnapshotInLegacyFormat()
+                    );
+                });
+
+                it(`should return not found`, async () => {
+                    const endpoint = buildFindByNameQueryUrl(mediaItemName);
+
+                    const res = await request(app.getHttpServer()).get(endpoint);
+
+                    expect(res.status).toBe(HttpStatusCode.notFound);
+                });
             });
 
             describe(`when the name parameter is invalidly formatted`, () => {
-                it.todo(`should return a 400 (user error)`);
+                it.only(`should return a 400 (user error)`, async () => {
+                    const whitespaceOnly = '%20'.repeat(4);
+
+                    const invalidEndpoint = buildFindByNameQueryUrl(whitespaceOnly);
+
+                    const res = await request(app.getHttpServer()).get(invalidEndpoint);
+
+                    expect(res.status).toBe(HttpStatusCode.badRequest);
+                });
             });
         });
 
