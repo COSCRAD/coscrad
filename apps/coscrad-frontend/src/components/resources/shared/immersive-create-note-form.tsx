@@ -40,6 +40,8 @@ export const ImmersiveCreateNoteForm = ({ onSubmit }: FormProps) => {
 
     const { errorInfo, isLoading, data: generatedId } = useLoadableGeneratedId();
 
+    console.log(`isLoading: ${isLoading} | errorInfo: ${errorInfo} | generatedId: ${generatedId}`);
+
     const dispatch = useAppDispatch();
 
     if (errorInfo) return <ErrorDisplay {...errorInfo} />;

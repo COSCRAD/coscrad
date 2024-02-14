@@ -158,7 +158,7 @@ export const AudioAnnotator = ({
     };
 
     const onCanPlayThrough = () => {
-        console.log('canplaythrough');
+        // console.log('canplaythrough');
 
         if (isNullOrUndefined(audioRef.current)) return;
 
@@ -342,9 +342,13 @@ export const AudioAnnotator = ({
                                 </IconButton>
                             </span>
                         </Tooltip>
-                        <Box>
-                            <Typography variant="body1">currentTime: {currentTime}</Typography>
-                        </Box>
+                        {!isNullOrUndefined(currentTime) ? (
+                            <Box>
+                                <Typography variant="body1">
+                                    Current Time in Seconds: {currentTime}
+                                </Typography>
+                            </Box>
+                        ) : null}
                     </Box>
                     <Box display="inline-flex" alignItems="center" width="80%" margin="0 auto">
                         <Box width="70px">
@@ -406,7 +410,6 @@ export const AudioAnnotator = ({
                             timeRangeClips={timeRangeClips}
                             timelineRef={timelineRef}
                             audioRef={audioRef}
-                            mediaCurrentTimeFromContext={mediaCurrentTimeFromContext}
                         />
                     </Box>
                 ) : null}
