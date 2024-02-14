@@ -26,6 +26,7 @@ import {
     PhotographAddedToDigitalTextPage,
     PhotographAddedToDigitalTextPagePayload,
 } from '../../domain/models/digital-text/commands/add-photograph-to-digital-text-page';
+import { getPhotographTestEventBuilders } from '../../domain/models/photograph/test-data';
 import { ResourceReadAccessGrantedToUser } from '../../domain/models/shared/common-commands';
 import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import { EventRecordMetadata } from '../../domain/models/shared/events/types/EventRecordMetadata';
@@ -675,10 +676,11 @@ export class TestEventStream {
             .registerBuilder(`TERM_ADDED_TO_VOCABULARY_LIST`, buildTermAddedToVocabularyList)
             .registerBuilder(`TERM_IN_VOCABULARY_LIST_ANALYZED`, buildTermInVocabularyListAnalyzed);
 
-        [...getTagTestEventBuildersMap().entries(), ...getNoteTestEventMap().entries()].reduce(
-            (acc, [eventType, builder]) => acc.registerBuilder(eventType, builder),
-            this
-        );
+        [
+            ...getTagTestEventBuildersMap(),
+            ...getNoteTestEventMap().entries(),
+            ...getPhotographTestEventBuilders().entries(),
+        ].reduce((acc, [eventType, builder]) => acc.registerBuilder(eventType, builder), this);
     }
 
     andThen<T extends BaseEvent>(

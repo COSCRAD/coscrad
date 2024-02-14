@@ -6,5 +6,5 @@ export type PhotographCreatedPayload = CreatePhotograph;
 
 @CoscradEvent(`PHOTOGRAPH_CREATED`)
 export class PhotographCreated extends BaseEvent<PhotographCreatedPayload> {
-    type = `PHOTOGRAPH_CREATED`;
+    readonly type = `PHOTOGRAPH_CREATED`;
 }
