@@ -1,5 +1,6 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
+import { plainToInstance } from 'class-transformer';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../domain/models/__tests__/utilities/dummyDateNow';
 import {
@@ -37,11 +38,7 @@ import {
     SongTitleTranslated,
     SongTitleTranslatedPayload,
 } from '../../domain/models/song/commands';
-import { TagCreated } from '../../domain/models/tag/commands/create-tag/tag-created.event';
-import {
-    ResourceOrNoteTagged,
-    ResourceOrNoteTaggedPayload,
-} from '../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
+import { getTagTestEventBuildersMap } from '../../domain/models/tag';
 import {
     AudioAddedForTerm,
     AudioAddedForTermPayload,
@@ -77,6 +74,7 @@ import { AggregateId } from '../../domain/types/AggregateId';
 import { AggregateType } from '../../domain/types/AggregateType';
 import { InternalError } from '../../lib/errors/InternalError';
 import { clonePlainObjectWithOverrides } from '../../lib/utilities/clonePlainObjectWithOverrides';
+import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { BaseEvent } from '../../queries/event-sourcing';
 import { DeepPartial } from '../../types/DeepPartial';
 
@@ -250,45 +248,6 @@ const buildAudioAddedForDigitalTextTitle = (
 
     return new AudioAddedForDigitalTextTitle(
         clonePlainObjectWithOverrides(payloadDefaults, payloadOverrides),
-        buildMetadata()
-    );
-};
-
-const buildTagCreatedEvent = (
-    payloadOverrides: DeepPartial<TagCreated['payload']>,
-    buildMetadata: EventMetadataBuilder
-) =>
-    new TagCreated(
-        clonePlainObjectWithOverrides(
-            {
-                aggregateCompositeIdentifier: {
-                    type: AggregateType.tag,
-                    id: buildDummyUuid(9),
-                },
-                label: 'birds',
-            } as TagCreated['payload'],
-            payloadOverrides
-        ),
-        buildMetadata()
-    );
-
-const buildReourceOrNoteTaggedEvent = (
-    payloadOverrides: DeepPartial<ResourceOrNoteTagged['payload']>,
-    buildMetadata: EventMetadataBuilder
-) => {
-    const defaultPayload: ResourceOrNoteTaggedPayload = {
-        aggregateCompositeIdentifier: {
-            type: AggregateType.tag,
-            id: buildDummyUuid(8),
-        },
-        taggedMemberCompositeIdentifier: {
-            type: AggregateType.song,
-            id: buildDummyUuid(9),
-        },
-    };
-
-    return new ResourceOrNoteTagged(
-        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
         buildMetadata()
     );
 };
@@ -649,9 +608,9 @@ const buildTermInVocabularyListAnalyzed = (
 export class TestEventStream {
     private readonly TIME_OFFSET = 100; // 100 ms between events
 
-    private readonly eventOverrides: EventTypeAndPayloadOverrides<BaseEvent>[];
+    private readonly eventOverrides: EventTypeAndPayloadOverrides<BaseEvent>[] = [];
 
-    private readonly eventBuilderMap: Map<string, EventBuilder<BaseEvent>> = new Map();
+    private eventBuilderMap: Map<string, EventBuilder<BaseEvent>> = new Map();
 
     private readonly startingDate: number = dummyDateNow;
 
@@ -659,9 +618,7 @@ export class TestEventStream {
 
     private readonly dateManager: DummyDateManager = new DummyDateManager(dummyDateNow);
 
-    constructor(eventOverrides: EventTypeAndPayloadOverrides<BaseEvent>[] = []) {
-        this.eventOverrides = eventOverrides;
-
+    constructor() {
         /**
          * TODO Consider injecting the builder as a dependency to the constructor.
          *
@@ -677,8 +634,6 @@ export class TestEventStream {
                 buildResourceReadAccessGrantedToUserEvent
             )
             .registerBuilder('RESOURCE_PUBLISHED', buildResourcePublishedEvent)
-            .registerBuilder('RESOURCE_OR_NOTE_TAGGED', buildReourceOrNoteTaggedEvent)
-            .registerBuilder('TAG_CREATED', buildTagCreatedEvent)
             .registerBuilder(
                 'CONTENT_ADDED_TO_DIGITAL_TEXT_PAGE',
                 buildContentAddedToDigitalTextPage
@@ -718,6 +673,11 @@ export class TestEventStream {
             )
             .registerBuilder(`TERM_ADDED_TO_VOCABULARY_LIST`, buildTermAddedToVocabularyList)
             .registerBuilder(`TERM_IN_VOCABULARY_LIST_ANALYZED`, buildTermInVocabularyListAnalyzed);
+
+        [...getTagTestEventBuildersMap().entries()].reduce(
+            (acc, [eventType, builder]) => acc.registerBuilder(eventType, builder),
+            this
+        );
     }
 
     andThen<T extends BaseEvent>(
@@ -797,8 +757,23 @@ export class TestEventStream {
         return this;
     }
 
+    /**
+     * It is important to clone when creating a new event stream from an old one,
+     * so that we don't have side effects from aliasing.
+     */
     private clone(eventOverrides: EventTypeAndPayloadOverrides<BaseEvent>[]): TestEventStream {
-        return new TestEventStream(eventOverrides);
+        const { eventBuilderMap } = this;
+
+        // We follow this approach so we can maintain the private, internal state except for the event overrides
+        const dto = cloneToPlainObject(this);
+
+        dto.eventOverrides = eventOverrides;
+
+        const instance = plainToInstance(TestEventStream, dto);
+
+        instance.eventBuilderMap = eventBuilderMap;
+
+        return instance;
     }
 
     private buildEventMeta(metaOverrides?: EventRecordMetadataOverrides): EventRecordMetadata {
@@ -809,5 +784,16 @@ export class TestEventStream {
         };
 
         return clonePlainObjectWithOverrides(defaultMeta, metaOverrides || {});
+    }
+
+    static fromReflection() {
+        const defaultPayloadMap = Reflect.getMetadata(
+            '__DEFAULT_PAYLOADS__',
+            TestEventStream
+        ) as Map<string, EventBuilder<BaseEvent>>;
+
+        const builder = defaultPayloadMap.get('TAG_CREATED');
+
+        return new TestEventStream().registerBuilder('TAG_CREATED', builder);
     }
 }
