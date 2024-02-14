@@ -33,10 +33,21 @@ import {
     IEdgeConnectionMember,
 } from '@coscrad/api-interfaces';
 import { Injectable } from '@nestjs/common';
+import { Maybe } from '../../../lib/types/maybe';
+import { NotFound } from '../../../lib/types/not-found';
 import formatAggregateCompositeIdentifier from '../../../queries/presentation/formatAggregateCompositeIdentifier';
+import { ResultOrError } from '../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../common/entities/multilingual-text';
+import { AggregateId } from '../../types/AggregateId';
+import {
+    CreationEventHandlerMap,
+    buildAggregateRootFromEventHistory,
+} from '../build-aggregate-root-from-event-history';
 import AggregateNotFoundError from '../shared/common-command-errors/AggregateNotFoundError';
+import { BaseEvent } from '../shared/events/base-event.entity';
+import { ResourcesConnectedWithNote } from './commands/connect-resources-with-note/resources-connected-with-note.event';
+import { NoteAboutResourceCreated } from './commands/create-note-about-resource/note-about-resource-created.event';
 import { ContextUnionType } from './edge-connection-context-union';
 
 export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnectionContext>
@@ -206,4 +217,115 @@ export class EdgeConnection extends Aggregate {
             type: AggregateType.note,
             id: this.id,
         } as const);
+
+    getMemberWithRole(role: EdgeConnectionMemberRole): Maybe<EdgeConnectionMember> {
+        return this.members.find((member) => member.role === role) || NotFound;
+    }
+
+    static fromEventHistory(
+        eventHistory: BaseEvent[],
+        targetId: AggregateId
+    ): Maybe<ResultOrError<EdgeConnection>> {
+        const creationEventHandlerMap: CreationEventHandlerMap<EdgeConnection> = new Map()
+            .set(
+                'NOTE_ABOUT_RESOURCE_CREATED',
+                EdgeConnection.createEdgeConnectionFromNoteAboutResourceCreated
+            )
+            .set(
+                'RESOURCES_CONNECTED_WITH_NOTE',
+                EdgeConnection.createEdgeConnectionFromResourcesConnectedWithNote
+            );
+
+        return buildAggregateRootFromEventHistory(
+            creationEventHandlerMap,
+            {
+                type: AggregateType.note,
+                id: targetId,
+            },
+            eventHistory
+        );
+    }
+
+    private static createEdgeConnectionFromNoteAboutResourceCreated({
+        payload: {
+            aggregateCompositeIdentifier: { id },
+            text,
+            resourceCompositeIdentifier,
+            resourceContext,
+            languageCode,
+        },
+    }: NoteAboutResourceCreated): ResultOrError<EdgeConnection> {
+        const buildResult = new EdgeConnection({
+            type: AggregateType.note,
+            id,
+            /**
+             * A "self note" is a note about a resource with context, represented
+             * as a self connection back to the resource node in the graph.
+             */
+            connectionType: EdgeConnectionType.self,
+            note: buildMultilingualTextWithSingleItem(text, languageCode),
+            members: [
+                // a self-connection has one member, the subject of the note
+                new EdgeConnectionMember({
+                    compositeIdentifier: resourceCompositeIdentifier,
+                    // TODO Use the context union factory
+                    context: resourceContext,
+                    role: EdgeConnectionMemberRole.self,
+                }),
+            ],
+        });
+
+        const invariantValidationResult = buildResult.validateInvariants();
+
+        if (isInternalError(invariantValidationResult)) {
+            throw new InternalError(
+                'Failed to event source Edge Connection due to invalid existing state',
+                [invariantValidationResult]
+            );
+        }
+
+        return buildResult;
+    }
+
+    private static createEdgeConnectionFromResourcesConnectedWithNote({
+        payload: {
+            aggregateCompositeIdentifier: { id },
+            text,
+            languageCode,
+            fromMemberCompositeIdentifier,
+            fromMemberContext,
+            toMemberCompositeIdentifier,
+            toMemberContext,
+        },
+    }: ResourcesConnectedWithNote): ResultOrError<EdgeConnection> {
+        const buildResult = new EdgeConnection({
+            type: AggregateType.note,
+            id,
+            note: buildMultilingualTextWithSingleItem(text, languageCode),
+            connectionType: EdgeConnectionType.dual,
+            members: [
+                new EdgeConnectionMember({
+                    compositeIdentifier: fromMemberCompositeIdentifier,
+                    context: fromMemberContext,
+                    role: EdgeConnectionMemberRole.from,
+                }),
+                new EdgeConnectionMember({
+                    compositeIdentifier: toMemberCompositeIdentifier,
+                    context: toMemberContext,
+                    role: EdgeConnectionMemberRole.to,
+                }),
+            ],
+        });
+
+        const invariantValidationResult = buildResult.validateInvariants();
+
+        if (isInternalError(invariantValidationResult)) {
+            throw new InternalError(
+                'Failed to event source Edge Connection due to invalid existing state',
+                [invariantValidationResult]
+            );
+        }
+
+        return buildResult;
+    }
 }
