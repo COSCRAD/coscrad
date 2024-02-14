@@ -1,11 +1,14 @@
 import { MIMEType, NestedDataType, NonEmptyString, ReferenceTo } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { InternalError } from '../../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
+import { Maybe } from '../../../../lib/types/maybe';
 import findAllPointsInLineNotWithinBounds from '../../../../lib/validation/geometry/findAllPointsInLineNotWithinBounds';
 import isPointWithinBounds from '../../../../lib/validation/geometry/isPointWithinBounds';
 import formatPosition2D from '../../../../queries/presentation/formatPosition2D';
 import { DTO } from '../../../../types/DTO';
+import { ResultOrError } from '../../../../types/ResultOrError';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { Valid } from '../../../domainModelValidators/Valid';
 import FreeMultilineContextOutOfBoundsError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/freeMultilineContext/FreeMultilineContextOutOfBoundsError';
@@ -15,14 +18,20 @@ import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
+import {
+    CreationEventHandlerMap,
+    buildAggregateRootFromEventHistory,
+} from '../../build-aggregate-root-from-event-history';
 import InvalidExternalReferenceByAggregateError from '../../categories/errors/InvalidExternalReferenceByAggregateError';
 import { FreeMultilineContext } from '../../context/free-multiline-context/free-multiline-context.entity';
 import { PointContext } from '../../context/point-context/point-context.entity';
 import { Boundable2D } from '../../interfaces/Boundable2D';
 import { MediaItemDimensions } from '../../media-item/entities/media-item-dimensions';
 import { Resource } from '../../resource.entity';
+import { BaseEvent } from '../../shared/events/base-event.entity';
 import idEquals from '../../shared/functional/idEquals';
 import { Position2D } from '../../spatial-feature/types/Coordinates/Position2D';
+import { PhotographCreated } from '../commands';
 import { InvalidMimeTypeForPhotographError } from '../errors';
 
 export const isPhotographMimeType = (mimeType: MIMEType): boolean =>
@@ -187,5 +196,59 @@ export class Photograph extends Resource implements Boundable2D {
 
     protected getResourceSpecificAvailableCommands(): string[] {
         return [];
+    }
+
+    static fromEventHistory(
+        eventHistory: BaseEvent[],
+        photographId: AggregateId
+    ): Maybe<ResultOrError<Photograph>> {
+        const creationEventHandlerMap: CreationEventHandlerMap<Photograph> = new Map().set(
+            'PHOTOGRAPH_CREATED',
+            Photograph.createPhotographFromPhotographCreated
+        );
+
+        return buildAggregateRootFromEventHistory(
+            creationEventHandlerMap,
+            {
+                type: AggregateType.photograph,
+                id: photographId,
+            },
+            eventHistory
+        );
+    }
+
+    private static createPhotographFromPhotographCreated({
+        payload: {
+            aggregateCompositeIdentifier: { id },
+            title,
+            languageCodeForTitle,
+            photographer,
+            widthPx,
+            heightPx,
+            mediaItemId,
+        },
+    }: PhotographCreated): ResultOrError<Photograph> {
+        const buildResult = new Photograph({
+            type: AggregateType.photograph,
+            id,
+            title: buildMultilingualTextWithSingleItem(title, languageCodeForTitle),
+            photographer,
+            dimensions: {
+                heightPx,
+                widthPx,
+            },
+            mediaItemId,
+            published: false,
+        });
+
+        const invariantValidationResult = buildResult.validateInvariants();
+
+        if (isInternalError(invariantValidationResult)) {
+            throw new InternalError(`failed to event source photograph`, [
+                invariantValidationResult,
+            ]);
+        }
+
+        return buildResult;
     }
 }
