@@ -135,22 +135,57 @@ export abstract class ResourceQueryService<
     }
 
     public async fetchByName(
-        _name: string,
-        _userWithGroups?: CoscradUserWithGroups
+        name: string,
+        userWithGroups?: CoscradUserWithGroups
     ): Promise<ResultOrError<Maybe<UViewModel>>> {
-        throw new InternalError('Not Implemented');
+        const externalState = await this.fetchRequiredExternalState();
 
-        // const allResources = await this.fetchMany();
+        // TODO filter by name in database
+        const searchResult = await this.fetchManyDomainModels();
+
+        const allResources = searchResult.filter(validAggregateOrThrow);
 
         // now find in `allResources` the resource with the given `name` by filtering
+        const foundResources = allResources.filter(
+            (resource) => resource.getName().getOriginalTextItem().text === name
+        );
 
         // if there are 2, throw an error
+        if (foundResources.length > 1) {
+            throw new InternalError(
+                `found ${foundResources.length} resources of type: ${this.type} with the name: ${name}`
+            );
+        }
 
         // if there are 0 return not found
+        if (foundResources.length === 0) {
+            return NotFound;
+        }
 
-        // if there is 1
-        //      if it is an error, return it (the error)
-        //      otherwise, build a view model for this resource
+        const resource = foundResources[0];
+
+        const isResourceAvailableToUser = buildAccessFilter(userWithGroups);
+
+        if (!isResourceAvailableToUser(resource)) {
+            return NotFound;
+        }
+
+        //  we found exactly one domain model, so we will build the corresponding view model
+
+        const viewModel = this.buildViewModel(resource, externalState);
+
+        const viewModelWithTags = mixTagsIntoViewModel(
+            viewModel,
+            externalState.tag,
+            this.type
+        ) as UViewModel & {
+            tags: TagViewModel[];
+        };
+
+        return {
+            ...viewModelWithTags,
+            actions: this.fetchUserActions(userWithGroups, [resource]),
+        };
     }
 
     public async fetchMany(

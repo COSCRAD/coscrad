@@ -1,5 +1,6 @@
 import { AggregateType, HttpStatusCode, MIMEType } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
+import { copyFileSync, existsSync, mkdirSync } from 'fs';
 import * as request from 'supertest';
 import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { DeluxeInMemoryStore } from '../../../domain/types/DeluxeInMemoryStore';
@@ -12,7 +13,15 @@ const mediaItemBaseEndpoint = `/resources/mediaItems`;
 
 const buildFindByNameQueryUrl = (name: string) => `${mediaItemBaseEndpoint}/download?name=${name}`;
 
-const mediaItemName = 'metal-mondays-mock2_370934__karolist__guitar-solo';
+const staticAssetDestinationDirectory = '__static__';
+
+const mediaItemName = 'biodynamic-theme-song-forever';
+
+const extension = 'mp3';
+
+const mediaItemPath = `${staticAssetDestinationDirectory}/${mediaItemName}.${extension}`;
+
+const testFilePath = `__cli-command-test-inputs__/ingest-media-items/mediaItemsOnly/biodynamic-theme-song-forever.mp3`;
 
 const mediaItemToFind = getValidAggregateInstanceForTest(AggregateType.mediaItem).clone({
     title: mediaItemName,
@@ -32,6 +41,14 @@ describe('when querying for a media item by name (/resources/mediaItems/download
         ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest({
             ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
         }));
+
+        if (!existsSync(staticAssetDestinationDirectory)) {
+            mkdirSync(staticAssetDestinationDirectory);
+        }
+
+        if (!existsSync(mediaItemPath)) {
+            copyFileSync(testFilePath, mediaItemPath);
+        }
     });
 
     afterEach(async () => {

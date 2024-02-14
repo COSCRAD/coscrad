@@ -4,7 +4,7 @@ import { existsSync } from 'fs';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
 import { MediaItemQueryService } from '../../../domain/services/query-services/media-management/media-item-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
-import { isInternalError } from '../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { NotFound, isNotFound } from '../../../lib/types/not-found';
 import { clonePlainObjectWithOverrides } from '../../../lib/utilities/clonePlainObjectWithOverrides';
 import clonePlainObjectWithoutProperty from '../../../lib/utilities/clonePlainObjectWithoutProperty';
@@ -30,6 +30,7 @@ export class MediaItemController {
     async fetchBinary(@Request() req, @Res() res, @Param('id') id: unknown) {
         const searchResult = await this.mediaItemQueryService.fetchById(id, req.user || undefined);
 
+        // TODO do we want to throw if there is an error?
         if (isInternalError(searchResult) || isNotFound(searchResult))
             return sendInternalResultAsHttpResponse(res, searchResult);
 
@@ -58,14 +59,46 @@ export class MediaItemController {
     @ApiBearerAuth('JWT')
     @UseGuards(OptionalJwtAuthGuard)
     @Get(`/download`)
-    async fetchBinaryByName(@Request() _req, @Res() _res, @Query('name') _name) {
-        throw new Error(`fetchBinaryByName - NOT IMPLEMENTED`);
-
+    async fetchBinaryByName(@Request() req, @Res() res, @Query('name') name) {
         // 1. add a method to call this.mediaItemQueryService.fetchByName(name,user)
-
+        // done
         // 2. call this method here
+        const searchResult = await this.mediaItemQueryService.fetchByName(
+            name,
+            req.user || undefined
+        );
+
+        if (isInternalError(searchResult)) {
+            throw new InternalError(`failed to fetch binary for media item with name: ${name}`, [
+                searchResult,
+            ]);
+        }
 
         // 3. if a result is found (returned from service call), send the binary as in `fetchBinary`
+        if (isNotFound(searchResult)) {
+            return searchResult;
+        }
+
+        // TODO share this logic with the fetch binary method
+        const filePath = searchResult.filepath;
+
+        // TODO Make this configurable
+        const STATIC_DIR = `./__static__`;
+
+        if (!existsSync(`${STATIC_DIR}/${filePath}`)) {
+            return sendInternalResultAsHttpResponse(res, NotFound);
+        }
+
+        const options = {
+            root: STATIC_DIR,
+            dotfiles: 'deny',
+            headers: {
+                'x-timestamp': Date.now(),
+                'x-sent': true,
+            },
+        };
+
+        return res.sendFile(filePath, options);
     }
 
     @ApiBearerAuth('JWT')
