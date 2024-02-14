@@ -27,8 +27,17 @@ export const buildNoteAboutResourceCreated = (
         languageCode: LanguageCode.English,
     };
 
+    const { resourceContext: resourceContextOverrides } = payloadOverrides;
+
+    const entireObjectOverrides = resourceContextOverrides
+        ? { fromMemberContext: resourceContextOverrides }
+        : {};
+
     return new NoteAboutResourceCreated(
-        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        {
+            ...clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+            ...entireObjectOverrides,
+        },
         buildMetadata()
     );
 };

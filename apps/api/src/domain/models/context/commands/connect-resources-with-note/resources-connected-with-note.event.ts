@@ -6,5 +6,5 @@ export type ResourcesConnectedWithNotePayload = ConnectResourcesWithNote;
 
 @CoscradEvent('RESOURCES_CONNECTED_WITH_NOTE')
 export class ResourcesConnectedWithNote extends BaseEvent<ResourcesConnectedWithNotePayload> {
-    type = 'RESOURCES_CONNECTED_WITH_NOTE';
+    readonly type = 'RESOURCES_CONNECTED_WITH_NOTE';
 }
