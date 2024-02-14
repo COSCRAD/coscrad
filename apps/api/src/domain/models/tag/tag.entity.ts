@@ -1,10 +1,12 @@
 import { CompositeIdentifier, NonEmptyString } from '@coscrad/data-types';
 import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { InternalError } from '../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
+import { Maybe } from '../../../lib/types/maybe';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../types/DTO';
+import { ResultOrError } from '../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../common/entities/multilingual-text';
 import { Valid, isValid } from '../../domainModelValidators/Valid';
@@ -16,9 +18,17 @@ import { AggregateType } from '../../types/AggregateType';
 import { CategorizableType, isCategorizableType } from '../../types/CategorizableType';
 import { InMemorySnapshot } from '../../types/ResourceType';
 import { Aggregate } from '../aggregate.entity';
+import {
+    CreationEventHandlerMap,
+    buildAggregateRootFromEventHistory,
+} from '../build-aggregate-root-from-event-history';
 import { CategorizableCompositeIdentifier } from '../categories/types/ResourceOrNoteCompositeIdentifier';
 import InvalidExternalStateError from '../shared/common-command-errors/InvalidExternalStateError';
+import { BaseEvent } from '../shared/events/base-event.entity';
+import { TagRelabelled } from './commands';
+import { TagCreated } from './commands/create-tag/tag-created.event';
 import { DuplicateTagError } from './commands/errors';
+import { ResourceOrNoteTagged } from './commands/tag-resource-or-note/resource-or-note-tagged.event';
 
 @RegisterIndexScopedCommands(['CREATE_TAG'])
 export class Tag extends Aggregate implements HasLabel {
@@ -56,6 +66,12 @@ export class Tag extends Aggregate implements HasLabel {
     getName(): MultilingualText {
         // TODO Should tag labels be multilingual text?
         return buildMultilingualTextWithSingleItem(this.label);
+    }
+
+    isFor(categorizableCompositeIdentifier: CategorizableCompositeIdentifier) {
+        return this.members.some((compositeId) =>
+            isDeepStrictEqual(compositeId, categorizableCompositeIdentifier)
+        );
     }
 
     relabel(newLabel: string) {
@@ -156,5 +172,56 @@ export class Tag extends Aggregate implements HasLabel {
     protected getExternalReferences(): AggregateCompositeIdentifier[] {
         // Avoid shared references
         return this.members.map(cloneToPlainObject);
+    }
+
+    static fromEventHistory(
+        eventStream: BaseEvent[],
+        tagId: AggregateId
+    ): Maybe<ResultOrError<Tag>> {
+        const creationEventHandlerMap: CreationEventHandlerMap<Tag> = new Map().set(
+            'TAG_CREATED',
+            Tag.createTagFromTagCreated
+        );
+
+        return buildAggregateRootFromEventHistory(
+            creationEventHandlerMap,
+            {
+                type: AggregateType.tag,
+                id: tagId,
+            },
+            eventStream
+        );
+    }
+
+    handleResourceOrNoteTagged({
+        payload: { taggedMemberCompositeIdentifier },
+    }: ResourceOrNoteTagged): ResultOrError<Tag> {
+        return this.addMember(taggedMemberCompositeIdentifier);
+    }
+
+    handleTagRelabelled({ payload: { newLabel } }: TagRelabelled) {
+        return this.relabel(newLabel);
+    }
+
+    private static createTagFromTagCreated(event: TagCreated): ResultOrError<Tag> {
+        const {
+            aggregateCompositeIdentifier: { id: tagId },
+            label,
+        } = event.payload;
+
+        const buildResult = new Tag({
+            type: AggregateType.tag,
+            id: tagId,
+            label,
+            members: [],
+        });
+
+        const invariantValidationResult = buildResult.validateInvariants();
+
+        if (isInternalError(invariantValidationResult)) {
+            return invariantValidationResult;
+        }
+
+        return buildResult;
     }
 }
