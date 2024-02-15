@@ -3,7 +3,7 @@ import {
     ISpatialFeatureProperties,
     ISpatialFeatureViewModel,
 } from '@coscrad/api-interfaces';
-import { ISpatialFeature } from '../../../../domain/models/spatial-feature/interfaces/spatial-feature.interface';
+import { SpatialFeature } from '../../../../domain/models/spatial-feature/interfaces/spatial-feature.entity';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { BaseViewModel } from '../base.view-model';
 
@@ -28,7 +28,7 @@ export class SpatialFeatureViewModel extends BaseViewModel implements ISpatialFe
      */
     readonly properties: ISpatialFeatureProperties;
 
-    constructor(spatialFeature: ISpatialFeature) {
+    constructor(spatialFeature: SpatialFeature) {
         super(spatialFeature);
 
         const { geometry, properties } = spatialFeature;

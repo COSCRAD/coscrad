@@ -1,4 +1,4 @@
-import { AggregateType, ISpatialFeatureProperties } from '@coscrad/api-interfaces';
+import { AggregateType } from '@coscrad/api-interfaces';
 import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../../lib/errors/InternalError';
@@ -11,30 +11,24 @@ import { Valid } from '../../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../../types/ResourceType';
-import { Resource } from '../../../resource.entity';
 import InvalidExternalStateError from '../../../shared/common-command-errors/InvalidExternalStateError';
 import { IGeometricFeature } from '../../interfaces/geometric-feature.interface';
-import { ISpatialFeature } from '../../interfaces/spatial-feature.interface';
+import { SpatialFeature } from '../../interfaces/spatial-feature.entity';
 import { PointCoordinates } from '../../types/Coordinates/PointCoordinates';
 import { GeometricFeatureType } from '../../types/GeometricFeatureType';
 import validatePosition2D from '../../validation/validatePosition2D';
 import { CREATE_POINT } from '../commands';
-import { SpatialFeatureProperties } from './spatial-feature-properties.entity';
 
 @RegisterIndexScopedCommands([CREATE_POINT])
-export class Point extends Resource implements ISpatialFeature {
-    readonly type = ResourceType.spatialFeature;
-
+export class Point extends SpatialFeature {
     readonly geometry: IGeometricFeature<typeof GeometricFeatureType.point, PointCoordinates>;
-
-    readonly properties: ISpatialFeatureProperties;
 
     constructor(dto: DTO<Point>) {
         super({ ...dto, type: ResourceType.spatialFeature });
 
         if (!dto) return;
 
-        const { geometry: geometryDTO, properties: propertiesDTO } = dto;
+        const { geometry: geometryDTO } = dto;
 
         /**
          * We use a plain-old object here to minimize maintenance and readability
@@ -44,8 +38,6 @@ export class Point extends Resource implements ISpatialFeature {
         this.geometry = cloneToPlainObject(
             geometryDTO as IGeometricFeature<typeof GeometricFeatureType.point, PointCoordinates>
         );
-
-        this.properties = new SpatialFeatureProperties(propertiesDTO);
     }
 
     getName(): MultilingualText {
@@ -101,4 +93,17 @@ export class Point extends Resource implements ISpatialFeature {
     protected getResourceSpecificAvailableCommands(): string[] {
         return [];
     }
+
+    // protected static buildPointFromPointCreated({payload: {lattitude,longitude,name}}: PointCreated): ResultOrError<Point>{
+
+    //     const buildResult = new Point({
+    //         type: AggregateType.spatialFeature,
+    //         geometry: {
+    //             type: GeometricFeatureType.point,
+    //             coordinates: {
+    //                 l
+    //             }
+    //         }
+    //     })
+    // }
 }

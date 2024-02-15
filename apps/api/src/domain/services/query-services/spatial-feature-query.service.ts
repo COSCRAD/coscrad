@@ -2,7 +2,7 @@ import { ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { SpatialFeatureViewModel } from '../../../queries/buildViewModelForResource/viewModels/spatial-data/spatial-feature.view-model';
 import BaseDomainModel from '../../models/BaseDomainModel';
-import { ISpatialFeature } from '../../models/spatial-feature/interfaces/spatial-feature.interface';
+import { SpatialFeature } from '../../models/spatial-feature/interfaces/spatial-feature.entity';
 import { Line } from '../../models/spatial-feature/line/entities/line.entity';
 import { Point } from '../../models/spatial-feature/point/entities/point.entity';
 import { Polygon } from '../../models/spatial-feature/polygon/entities/polygon.entity';
@@ -10,12 +10,12 @@ import { ResourceType } from '../../types/ResourceType';
 import { ResourceQueryService } from './resource-query.service';
 
 export class SpatialFeatureQueryService extends ResourceQueryService<
-    ISpatialFeature,
+    SpatialFeature,
     ISpatialFeatureViewModel
 > {
     protected readonly type = ResourceType.spatialFeature;
 
-    buildViewModel(spatialFeatureInstance: ISpatialFeature): ISpatialFeatureViewModel {
+    buildViewModel(spatialFeatureInstance: SpatialFeature): ISpatialFeatureViewModel {
         return new SpatialFeatureViewModel(spatialFeatureInstance);
     }
 

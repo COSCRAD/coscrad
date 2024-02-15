@@ -40,6 +40,7 @@ import {
     SongTitleTranslated,
     SongTitleTranslatedPayload,
 } from '../../domain/models/song/commands';
+import { getSpatialFeatureTestEventBuilderMap } from '../../domain/models/spatial-feature/test-data/events';
 import { getTagTestEventBuildersMap } from '../../domain/models/tag';
 import {
     AudioAddedForTerm,
@@ -677,9 +678,10 @@ export class TestEventStream {
             .registerBuilder(`TERM_IN_VOCABULARY_LIST_ANALYZED`, buildTermInVocabularyListAnalyzed);
 
         [
-            ...getTagTestEventBuildersMap(),
+            ...getTagTestEventBuildersMap().entries(),
             ...getNoteTestEventMap().entries(),
             ...getPhotographTestEventBuilders().entries(),
+            ...getSpatialFeatureTestEventBuilderMap().entries(),
         ].reduce((acc, [eventType, builder]) => acc.registerBuilder(eventType, builder), this);
     }
 

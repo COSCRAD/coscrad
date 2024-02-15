@@ -1,4 +1,3 @@
-import { ISpatialFeatureProperties } from '@coscrad/api-interfaces';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import cloneToPlainObject from '../../../../../lib/utilities/cloneToPlainObject';
@@ -7,28 +6,22 @@ import { buildMultilingualTextWithSingleItem } from '../../../../common/build-mu
 import { MultilingualText } from '../../../../common/entities/multilingual-text';
 import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../../../types/ResourceType';
-import { Resource } from '../../../resource.entity';
 import { IGeometricFeature } from '../../interfaces/geometric-feature.interface';
-import { ISpatialFeature } from '../../interfaces/spatial-feature.interface';
-import { SpatialFeatureProperties } from '../../point/entities/spatial-feature-properties.entity';
+import { SpatialFeature } from '../../interfaces/spatial-feature.entity';
 import { LineCoordinates } from '../../types/Coordinates/LineCoordinates';
 import { GeometricFeatureType } from '../../types/GeometricFeatureType';
 import validateAllCoordinatesInLinearStructure from '../../validation/validateAllCoordinatesInLinearStructure';
 
 @RegisterIndexScopedCommands([])
-export class Line extends Resource implements ISpatialFeature {
-    readonly type = ResourceType.spatialFeature;
-
+export class Line extends SpatialFeature {
     readonly geometry: IGeometricFeature<typeof GeometricFeatureType.line, LineCoordinates>;
-
-    readonly properties: ISpatialFeatureProperties;
 
     constructor(dto: DTO<Line>) {
         super({ ...dto, type: ResourceType.spatialFeature });
 
         if (!dto) return;
 
-        const { geometry: geometryDTO, properties: propertiesDTO } = dto;
+        const { geometry: geometryDTO } = dto;
 
         /**
          * We use a plain-old object here to minimize maintenance and readability
@@ -41,8 +34,6 @@ export class Line extends Resource implements ISpatialFeature {
         this.geometry = cloneToPlainObject(
             geometryDTO as IGeometricFeature<typeof GeometricFeatureType.line, LineCoordinates>
         );
-
-        this.properties = new SpatialFeatureProperties(propertiesDTO);
     }
 
     getName(): MultilingualText {

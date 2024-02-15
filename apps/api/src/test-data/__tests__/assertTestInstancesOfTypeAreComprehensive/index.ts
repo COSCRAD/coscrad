@@ -3,7 +3,7 @@ import { IBibliographicCitation } from '../../../domain/models/bibliographic-cit
 import { BibliographicCitationType } from '../../../domain/models/bibliographic-citation/types/bibliographic-citation-type';
 import { EdgeConnectionMemberRole } from '../../../domain/models/context/edge-connection.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
-import { ISpatialFeature } from '../../../domain/models/spatial-feature/interfaces/spatial-feature.interface';
+import { SpatialFeature } from '../../../domain/models/spatial-feature/interfaces/spatial-feature.entity';
 import { GeometricFeatureType } from '../../../domain/models/spatial-feature/types/GeometricFeatureType';
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../domain/types/DeluxeInMemoryStore';
@@ -55,7 +55,7 @@ const aggregateTypeToComprehensiveAssertionFunction: {
                 if (
                     !new DeluxeInMemoryStore(snapshot)
                         .fetchAllOfType(AggregateType.spatialFeature)
-                        .some(({ geometry: { type } }: ISpatialFeature) => type === subtype)
+                        .some(({ geometry: { type } }: SpatialFeature) => type === subtype)
                 )
                     return [...acc, subtype];
 

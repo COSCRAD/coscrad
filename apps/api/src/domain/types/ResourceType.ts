@@ -6,7 +6,6 @@ import { EdgeConnection } from '../models/context/edge-connection.entity';
 import { MediaItem } from '../models/media-item/entities/media-item.entity';
 import { Photograph } from '../models/photograph/entities/photograph.entity';
 import { Song } from '../models/song/song.entity';
-import { ISpatialFeature } from '../models/spatial-feature/interfaces/spatial-feature.interface';
 import { Tag } from '../models/tag/tag.entity';
 import { Term } from '../models/term/entities/term.entity';
 import { CoscradUserGroup } from '../models/user-management/group/entities/coscrad-user-group.entity';
@@ -17,6 +16,7 @@ import { ResourceType } from '@coscrad/api-interfaces';
 import { Video } from '../models/audio-item/entities/video.entity';
 import { DigitalText } from '../models/digital-text/entities/digital-text.entity';
 import { Playlist } from '../models/playlist';
+import { SpatialFeature } from '../models/spatial-feature/interfaces/spatial-feature.entity';
 
 export { ResourceType };
 
@@ -36,7 +36,7 @@ export type ResourceTypeToResourceModel = {
     audioItem: AudioItem;
     video: Video;
     photograph: Photograph;
-    spatialFeature: ISpatialFeature;
+    spatialFeature: SpatialFeature;
     bibliographicCitation: IBibliographicCitation;
     digitalText: DigitalText;
     song: Song;

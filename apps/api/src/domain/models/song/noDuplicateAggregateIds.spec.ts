@@ -8,7 +8,7 @@ import { PartialSnapshot } from '../../types/PartialSnapshot';
 import { dummyUuid } from '../__tests__/utilities/dummyUuid';
 import AggregateIdAlreadyInUseError from '../shared/common-command-errors/AggregateIdAlreadyInUseError';
 import InvalidExternalStateError from '../shared/common-command-errors/InvalidExternalStateError';
-import { ISpatialFeature } from '../spatial-feature/interfaces/spatial-feature.interface';
+import { SpatialFeature } from '../spatial-feature/interfaces/spatial-feature.entity';
 import { CoscradUserGroup } from '../user-management/group/entities/coscrad-user-group.entity';
 import { CoscradUser } from '../user-management/user/entities/user/coscrad-user.entity';
 
@@ -21,7 +21,7 @@ const userDtoOverrides: Partial<DTO<CoscradUser>> = {
     username: 'unique-username',
 };
 
-const spatialFeatureDtoOverrides: Partial<DTO<ISpatialFeature>> = {
+const spatialFeatureDtoOverrides: Partial<DTO<SpatialFeature>> = {
     properties: {
         name: `unique name`,
         description: `I have my own name and promise not to take yours!`,

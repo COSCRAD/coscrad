@@ -1,4 +1,3 @@
-import { ISpatialFeatureProperties } from '@coscrad/api-interfaces';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import cloneToPlainObject from '../../../../../lib/utilities/cloneToPlainObject';
@@ -7,27 +6,21 @@ import { buildMultilingualTextWithSingleItem } from '../../../../common/build-mu
 import { MultilingualText } from '../../../../common/entities/multilingual-text';
 import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../../../types/ResourceType';
-import { Resource } from '../../../resource.entity';
 import { IGeometricFeature } from '../../interfaces/geometric-feature.interface';
-import { ISpatialFeature } from '../../interfaces/spatial-feature.interface';
-import { SpatialFeatureProperties } from '../../point/entities/spatial-feature-properties.entity';
+import { SpatialFeature } from '../../interfaces/spatial-feature.entity';
 import { PolygonCoordinates } from '../../types/Coordinates/PolygonCoordinates';
 import { GeometricFeatureType } from '../../types/GeometricFeatureType';
 
 @RegisterIndexScopedCommands([])
-export class Polygon extends Resource implements ISpatialFeature {
-    readonly type = ResourceType.spatialFeature;
-
+export class Polygon extends SpatialFeature {
     readonly geometry: IGeometricFeature<typeof GeometricFeatureType.polygon, PolygonCoordinates>;
-
-    readonly properties: ISpatialFeatureProperties;
 
     constructor(dto: DTO<Polygon>) {
         super({ ...dto, type: ResourceType.spatialFeature });
 
         if (!dto) return;
 
-        const { geometry: geometryDTO, properties: propertiesDTO } = dto;
+        const { geometry: geometryDTO } = dto;
 
         /**
          * We use a plain-old object here to minimize maintenance and readability
@@ -40,8 +33,6 @@ export class Polygon extends Resource implements ISpatialFeature {
                 PolygonCoordinates
             >
         );
-
-        this.properties = new SpatialFeatureProperties(propertiesDTO);
     }
 
     getName(): MultilingualText {

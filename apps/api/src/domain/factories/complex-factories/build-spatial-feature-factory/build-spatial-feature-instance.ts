@@ -1,7 +1,7 @@
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import InvalidGeometryTypeForSpatialFeatureError from '../../../models/spatial-feature/errors/InvalidGeometryTypeForSpatialFeatureError';
-import { ISpatialFeature } from '../../../models/spatial-feature/interfaces/spatial-feature.interface';
+import { SpatialFeature } from '../../../models/spatial-feature/interfaces/spatial-feature.entity';
 import { Line } from '../../../models/spatial-feature/line/entities/line.entity';
 import { Point } from '../../../models/spatial-feature/point/entities/point.entity';
 import { Polygon } from '../../../models/spatial-feature/polygon/entities/polygon.entity';
@@ -10,7 +10,7 @@ import { GeometricFeatureType } from '../../../models/spatial-feature/types/Geom
 /**
  * We may want to introduce a `SpatialFeatureUnion` and strive for type safety \ narrowing here
  */
-export default (dto: DTO<ISpatialFeature>): ResultOrError<ISpatialFeature> => {
+export default (dto: DTO<SpatialFeature>): ResultOrError<SpatialFeature> => {
     const type = dto?.geometry?.type;
 
     switch (type) {
