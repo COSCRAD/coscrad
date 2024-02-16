@@ -82,7 +82,6 @@ interface TimelineProps {
     durationSeconds: number;
     timeRangeClips: TimeRangeClip[];
     name: string;
-    timelineRef: RefObject<HTMLDivElement>;
     audioRef: RefObject<HTMLAudioElement>;
     isPlaying: boolean;
     seekInMedia: (newTime: number) => void;
@@ -92,7 +91,6 @@ export const Timeline = ({
     timeRangeClips,
     durationSeconds,
     name,
-    timelineRef,
     audioRef,
     isPlaying,
     seekInMedia,
@@ -119,23 +117,41 @@ export const Timeline = ({
     }, [durationSeconds, renderedTimelineLength]);
 
     useEffect(() => {
-        if (isNullOrUndefined(timelineRef.current)) return;
+        // Render timeline
+        if (isNullOrUndefined(scrollingBoxRef.current)) return;
 
-        const timelineBoxWidth = timelineRef.current.getBoundingClientRect().width;
+        const timelineBoxWidth = scrollingBoxRef.current.getBoundingClientRect().width;
 
         setRenderedTimelineLength(timelineBoxWidth * ZOOM_FACTOR);
 
-        setRenderedTimelineHeight(timelineRef.current.getBoundingClientRect().height);
+        setRenderedTimelineHeight(scrollingBoxRef.current.getBoundingClientRect().height);
+    }, [scrollingBoxRef, setRenderedTimelineLength, setRenderedTimelineHeight]);
 
+    useEffect(() => {
+        // Set playhead position
+        if (isNullOrUndefined(currentTime) || isNullOrUndefined(durationSeconds)) return;
+
+        const currentPlayheadPosition = convertTimecodeToTimelineUnits(
+            renderedTimelineLength,
+            currentTime,
+            durationSeconds
+        );
+
+        setplayheadPosition(currentPlayheadPosition);
+    }, [renderedTimelineLength, currentTime, durationSeconds, setplayheadPosition]);
+
+    useEffect(() => {
+        // Scroll timeline when playing
         if (!isPlaying) return;
 
         if (
             isNullOrUndefined(currentTime) ||
             isNullOrUndefined(durationSeconds) ||
-            isNullOrUndefined(timelineRef.current) ||
             isNullOrUndefined(scrollingBoxRef.current)
         )
             return;
+
+        const timelineBoxWidth = scrollingBoxRef.current.getBoundingClientRect().width;
 
         const editorStickyPoint = timelineBoxWidth / 2;
 
@@ -145,8 +161,6 @@ export const Timeline = ({
             durationSeconds
         );
 
-        setplayheadPosition(currentPlayheadPosition);
-
         const scrollLeft = currentPlayheadPosition - editorStickyPoint;
 
         scrollingBoxRef.current.scrollTo({
@@ -155,13 +169,11 @@ export const Timeline = ({
             behavior: 'smooth',
         });
     }, [
-        timelineRef,
-        renderedTimelineLength,
-        renderedTimelineHeight,
         scrollingBoxRef,
+        renderedTimelineLength,
         durationSeconds,
         currentTime,
-        playheadPosition,
+        setplayheadPosition,
         isPlaying,
     ]);
 
@@ -178,13 +190,13 @@ export const Timeline = ({
             offSetLeftFromViewPortOfScrollableDiv +
             scrollLeftOfScrollableDiv;
 
+        setplayheadPosition(clickPositionInTimelineUnits);
+
         const seekPosition = convertTimelineUnitsToTimecode(
             clickPositionInTimelineUnits,
             renderedTimelineLength,
             durationSeconds
         );
-
-        console.log({ seekPosition });
 
         seekInMedia(seekPosition);
     };
@@ -192,9 +204,9 @@ export const Timeline = ({
     return (
         <>
             <Box>Playhead: {playheadPosition}</Box>
+            <Box>Rendered Timeline: {renderedTimelineLength}</Box>
             <StyledTimelineBox
                 sx={{ height: `${2 * EDITOR_SOUND_BAR_HEIGHT + 10}px` }}
-                ref={timelineRef}
                 data-testid={`timeline:${name}`}
             >
                 <Box
@@ -216,10 +228,11 @@ export const Timeline = ({
                     sx={{ flexGrow: 1, width: '94%', position: 'relative' }}
                 >
                     <ScrollingBox
+                        ref={scrollingBoxRef}
                         sx={{ height: `${2 * EDITOR_SOUND_BAR_HEIGHT + 20}px` }}
                         data-testid="scroll-container"
+                        // TODO move onClick to timeline and get position via parent(?)
                         onClick={handleSeek}
-                        ref={scrollingBoxRef}
                     >
                         <StyledScrolledTrack
                             data-testid="timeline-ruler"

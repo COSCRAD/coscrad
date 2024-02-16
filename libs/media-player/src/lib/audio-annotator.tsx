@@ -4,7 +4,7 @@ import {
     Clear as ClearIcon,
 } from '@mui/icons-material/';
 import { Box, IconButton, Paper, Stack, Tooltip, Typography, styled } from '@mui/material';
-import { RefObject, SyntheticEvent, useEffect, useRef, useState } from 'react';
+import { RefObject, SyntheticEvent, useEffect, useState } from 'react';
 import { asFormattedMediaTimecodeString } from './shared/as-formatted-media-timecode-string';
 import { AudioMIMEType } from './shared/audio-mime-type.enum';
 import { isAudioMIMEType } from './shared/is-audio-mime-type';
@@ -84,8 +84,6 @@ export const AudioAnnotator = ({
         inPointSeconds: defaultInPointSeconds = null,
         outPointSeconds: defaultOutPointSeconds = null,
     } = selectedTimeRange || { inPointSeconds: null, outPointSeconds: null };
-
-    const timelineRef = useRef<HTMLDivElement>(null);
 
     const [inPointSeconds, setInPointSeconds] = useState<Nullable<number>>(defaultInPointSeconds);
 
@@ -432,7 +430,6 @@ export const AudioAnnotator = ({
                             durationSeconds={durationSeconds}
                             name={`Annotation Track`}
                             timeRangeClips={timeRangeClips}
-                            timelineRef={timelineRef}
                             audioRef={audioRef}
                             isPlaying={isPlaying}
                             seekInMedia={seekInMedia}
