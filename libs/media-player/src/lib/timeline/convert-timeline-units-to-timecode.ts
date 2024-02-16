@@ -1,9 +1,9 @@
-export const convertTimecodeToTimelineUnits = (
+export const convertTimelineUnitsToTimecode = (
+    timelineUnits: number,
     renderedTimelineLength: number,
-    timecodeInSeconds: number,
     mediaDurationSeconds: number
 ) => {
     const timelineUnit = renderedTimelineLength / mediaDurationSeconds;
 
-    return timecodeInSeconds * timelineUnit;
+    return timelineUnits / timelineUnit;
 };

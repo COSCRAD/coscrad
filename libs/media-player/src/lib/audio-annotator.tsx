@@ -94,6 +94,8 @@ export const AudioAnnotator = ({
 
     const [currentTime, setCurrentTime] = useState<number | null>(null);
 
+    const [isPlaying, setIsPlaying] = useState<boolean>(false);
+
     const [durationSeconds, setDurationSeconds] = useState<number | null>(null);
 
     const [isPlayable, setIsPlayable] = useState<boolean>(false);
@@ -200,10 +202,30 @@ export const AudioAnnotator = ({
         }
     };
 
+    const onPlaying = () => {
+        console.log('onPlaying');
+        if (!isPlaying) {
+            setIsPlaying(true);
+        }
+    };
+
+    const onPause = () => {
+        console.log('onPause');
+        if (isPlaying) {
+            setIsPlaying(false);
+        }
+    };
+
     const updateCurrentTime = () => {
         if (!isNullOrUndefined(audioRef.current)) {
             setCurrentTime(audioRef.current.currentTime);
         }
+    };
+
+    const seekInMedia = (newTime: number) => {
+        if (isNullOrUndefined(audioRef.current)) return;
+
+        audioRef.current.currentTime = newTime;
     };
 
     const scrub = (increment: number, direction: MediaPlayDirection = 'forward') => {
@@ -287,6 +309,8 @@ export const AudioAnnotator = ({
                     onCanPlay={onCanplay}
                     onCanPlayThrough={onCanPlayThrough}
                     onPlay={blurAudioPlayer}
+                    onPlaying={onPlaying}
+                    onPause={onPause}
                     onTimeUpdate={updateCurrentTime}
                     onSeeked={blurAudioPlayer}
                     onVolumeChange={blurAudioPlayer}
@@ -410,6 +434,8 @@ export const AudioAnnotator = ({
                             timeRangeClips={timeRangeClips}
                             timelineRef={timelineRef}
                             audioRef={audioRef}
+                            isPlaying={isPlaying}
+                            seekInMedia={seekInMedia}
                         />
                     </Box>
                 ) : null}

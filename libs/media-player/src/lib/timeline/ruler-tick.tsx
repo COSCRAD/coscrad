@@ -39,8 +39,6 @@ export const RulerTick = ({ index, rulerTickOffset }: RulerTickProps): JSX.Eleme
 
     const left = index * rulerTickOffset;
 
-    console.log(`${index} * ${rulerTickOffset}`);
-
     return (
         <>
             {showNumber ? (

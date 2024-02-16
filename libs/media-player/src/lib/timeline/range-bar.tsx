@@ -1,7 +1,7 @@
 import { Box, styled } from '@mui/material';
 import { useState } from 'react';
 import { EDITOR_SOUND_BAR_HEIGHT } from './constants';
-import { convertTimecodeToRelativeTimelineUnits } from './convert-timecode-to-relative-timeline-units';
+import { convertTimecodeToTimelineUnits } from './convert-timecode-to-relative-timeline-units';
 import { TimeRangeClip } from './timeline';
 
 const StyledRangeBar = styled('span')({
@@ -34,18 +34,15 @@ export const RangeBar = ({
         label,
     } = timeRangeClip;
 
-    const rangeStart = convertTimecodeToRelativeTimelineUnits(
+    const rangeStart = convertTimecodeToTimelineUnits(
         renderedTimelineLength,
         inPointSeconds,
         durationSeconds
     );
 
     const rangeLength =
-        convertTimecodeToRelativeTimelineUnits(
-            renderedTimelineLength,
-            outPointSeconds,
-            durationSeconds
-        ) - rangeStart;
+        convertTimecodeToTimelineUnits(renderedTimelineLength, outPointSeconds, durationSeconds) -
+        rangeStart;
 
     const handleClick = (event: React.MouseEvent<HTMLSpanElement>) => {
         setActiveRange(!activeRange);
