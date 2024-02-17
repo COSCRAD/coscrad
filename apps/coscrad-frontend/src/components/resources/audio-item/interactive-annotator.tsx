@@ -6,9 +6,12 @@ import { RefObject, useCallback, useContext, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../../app/hooks';
 import {
     Ack,
+    clearCommandStatus,
     executeCommand,
     useLoadableCommandResult,
 } from '../../../store/slices/command-status/';
+import { idUsed } from '../../../store/slices/id-generation';
+import { NackNotification } from '../../commands/nack-notification';
 import { findOriginalTextItem } from '../../notes/shared/find-original-text-item';
 import { TimelineTrack, buildTimeRangeClip } from '../../timeline';
 import { ImmersiveCreateNoteForm } from '../shared/immersive-create-note-form';
@@ -121,6 +124,11 @@ export const InteractiveAnnotator = ({
         setTimelineTracks([annotationTimeLineTrack]);
     }, [audioRef, annotations]);
 
+    const onAcknowledgeCommandResult = (didCommandSucceed: boolean) => {
+        dispatch(clearCommandStatus());
+        if (didCommandSucceed) dispatch(idUsed());
+    };
+
     return (
         <>
             {/* <Stack>
@@ -137,8 +145,14 @@ export const InteractiveAnnotator = ({
                 mediaCurrentTimeFromContext={mediaCurrentTimeFromContext}
             />
 
-            {!isNullOrUndefined(timeRange) || commandResult === Ack ? (
+            {!isNullOrUndefined(timeRange) || commandResult === Ack || errorInfo !== null ? (
                 <CreateAnnotationForm data-testid="create-note-about-audio-form">
+                    {errorInfo !== null ? (
+                        <NackNotification
+                            _onClick={() => onAcknowledgeCommandResult(false)}
+                            errorInfo={errorInfo}
+                        />
+                    ) : null}
                     <Box mt={1}>
                         <Typography variant="h4">Add Audio Annotation</Typography>
                         <Typography variant="body1" fontSize="3" mb={1}>

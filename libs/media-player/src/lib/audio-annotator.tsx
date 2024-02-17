@@ -437,6 +437,7 @@ export const AudioAnnotator = ({
                             audioRef={audioRef}
                             isPlaying={isPlaying}
                             seekInMedia={seekInMedia}
+                            mediaCurrentTimeFromContext={mediaCurrentTimeFromContext}
                         />
                     </Box>
                 ) : null}

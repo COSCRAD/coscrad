@@ -1,6 +1,7 @@
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box, styled } from '@mui/material';
 import { RefObject, useEffect, useMemo, useRef, useState } from 'react';
+import { asFormattedMediaTimecodeString } from '../shared/as-formatted-media-timecode-string';
 import { EDITOR_SOUND_BAR_HEIGHT, ZOOM_FACTOR } from './constants';
 import { convertTimecodeToTimelineUnits } from './convert-timecode-to-timeline-units';
 import { convertTimelineUnitsToTimecode } from './convert-timeline-units-to-timecode';
@@ -90,6 +91,7 @@ interface TimelineProps {
     audioRef: RefObject<HTMLAudioElement>;
     isPlaying: boolean;
     seekInMedia: (newTime: number) => void;
+    mediaCurrentTimeFromContext: number;
 }
 
 export const Timeline = ({
@@ -99,6 +101,7 @@ export const Timeline = ({
     audioRef,
     isPlaying,
     seekInMedia,
+    mediaCurrentTimeFromContext,
 }: TimelineProps) => {
     const scrollingBoxRef = useRef<HTMLDivElement>(null);
 
@@ -145,7 +148,7 @@ export const Timeline = ({
 
     useEffect(() => {
         // Scroll timeline when playing
-        if (!isPlaying) return;
+        if (!isPlaying && mediaCurrentTimeFromContext === null) return;
 
         if (
             isNullOrUndefined(currentTime) ||
@@ -178,6 +181,7 @@ export const Timeline = ({
         currentTime,
         setplayheadPosition,
         isPlaying,
+        mediaCurrentTimeFromContext,
     ]);
 
     const handleSeek = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -217,6 +221,10 @@ export const Timeline = ({
             <Box>Playhead: {playheadPosition}</Box>
             <Box>Rendered Timeline: {renderedTimelineLength}</Box>
             <Box>Current Time: {currentTime}</Box>
+            <Box>
+                Duration from Player: {durationSeconds} /{' '}
+                {asFormattedMediaTimecodeString(durationSeconds)}
+            </Box>
             <StyledTimelineBox
                 sx={{ height: `${2 * EDITOR_SOUND_BAR_HEIGHT + 10}px` }}
                 data-testid={`timeline:${name}`}
@@ -267,7 +275,7 @@ export const Timeline = ({
                                     width: `${renderedTimelineLength}px`,
                                 }}
                             >
-                                {durationSeconds > 0 ? timelineRuler : null}
+                                {durationSeconds > 0 && durationSeconds < 60 ? timelineRuler : null}
                             </StyledTimelineRulerBox>
                         </StyledScrolledTrack>
                         {timelineTracks.length !== 0 ? (
