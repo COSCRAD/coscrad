@@ -2,7 +2,7 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box, styled } from '@mui/material';
 import { RefObject, useEffect, useMemo, useRef, useState } from 'react';
 import { EDITOR_SOUND_BAR_HEIGHT, ZOOM_FACTOR } from './constants';
-import { convertTimecodeToTimelineUnits } from './convert-timecode-to-relative-timeline-units';
+import { convertTimecodeToTimelineUnits } from './convert-timecode-to-timeline-units';
 import { convertTimelineUnitsToTimecode } from './convert-timeline-units-to-timecode';
 import { RangeBar } from './range-bar';
 import { RULER_TICKS_AND_NUMBERS_COLOR } from './ruler-tick';
@@ -106,13 +106,9 @@ export const Timeline = ({
 
     const [renderedTimelineLength, setRenderedTimelineLength] = useState<number>(0);
 
-    const [renderedTimelineHeight, setRenderedTimelineHeight] = useState<number>(0);
-
     const [playheadPosition, setplayheadPosition] = useState<number>(0);
 
     const currentTime = audioRef.current?.currentTime;
-
-    const [tracksHeight, setTracksHeight] = useState<number>(0);
 
     const numberOfTracksDisplayed = [...timelineTracks, 'timeline ruler'].length;
 
@@ -132,12 +128,10 @@ export const Timeline = ({
         const timelineBoxWidth = scrollingBoxRef.current.getBoundingClientRect().width;
 
         setRenderedTimelineLength(timelineBoxWidth * ZOOM_FACTOR);
-
-        setRenderedTimelineHeight(scrollingBoxRef.current.getBoundingClientRect().height);
-    }, [scrollingBoxRef, setRenderedTimelineLength, setRenderedTimelineHeight]);
+    }, [scrollingBoxRef, setRenderedTimelineLength]);
 
     useEffect(() => {
-        // Set playhead position
+        // Set playhead position when playing from currentTime
         if (isNullOrUndefined(currentTime) || isNullOrUndefined(durationSeconds)) return;
 
         const currentPlayheadPosition = convertTimecodeToTimelineUnits(
@@ -222,6 +216,7 @@ export const Timeline = ({
         <>
             <Box>Playhead: {playheadPosition}</Box>
             <Box>Rendered Timeline: {renderedTimelineLength}</Box>
+            <Box>Current Time: {currentTime}</Box>
             <StyledTimelineBox
                 sx={{ height: `${2 * EDITOR_SOUND_BAR_HEIGHT + 10}px` }}
                 data-testid={`timeline:${name}`}

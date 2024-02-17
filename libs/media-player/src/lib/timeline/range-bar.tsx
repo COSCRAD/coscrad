@@ -1,7 +1,7 @@
 import { Box, styled } from '@mui/material';
 import { useState } from 'react';
 import { EDITOR_SOUND_BAR_HEIGHT } from './constants';
-import { convertTimecodeToTimelineUnits } from './convert-timecode-to-relative-timeline-units';
+import { convertTimecodeToTimelineUnits } from './convert-timecode-to-timeline-units';
 import { TimeRangeClip } from './timeline';
 
 const StyledRangeBar = styled('span')({

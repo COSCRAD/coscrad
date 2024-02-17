@@ -1,4 +1,4 @@
-export const ZOOM_FACTOR = 4;
+export const ZOOM_FACTOR = 2;
 
 export const EDITOR_SOUND_BAR_HEIGHT = 40;
 
