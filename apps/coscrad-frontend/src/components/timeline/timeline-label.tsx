@@ -3,8 +3,8 @@ import {
     convertMillisecondsToSeconds,
     convertMillisecondsToSecondsRounded,
 } from '../resources/utils/math';
-import { EDITOR_SOUND_BAR_HEIGHT } from './constants';
-import { TimeRangeClip, TimeRangeSeconds } from './timeline';
+
+const EDITOR_SOUND_BAR_HEIGHT = 40;
 
 export const StyledTimeRangeClipLabel = styled(Box)({
     width: '100%',
@@ -17,6 +17,22 @@ export interface TimeRangeClipLabelProps {
     outPointMilliseconds: number;
     onClick?: (inPointSeconds: number) => void;
 }
+
+export type TimeRangeSeconds = {
+    inPointSeconds: number;
+    outPointSeconds: number;
+};
+
+// TODO move these two types to shared lib
+export interface TimeRangeClip {
+    timeRangeSeconds: TimeRangeSeconds;
+    label: React.ReactNode;
+}
+
+export type TimelineTrack = {
+    trackLabel: string;
+    timelineTrack: TimeRangeClip[];
+};
 
 export const TimeRangeClipLabel = ({
     name,

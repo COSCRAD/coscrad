@@ -78,9 +78,14 @@ export interface TimeRangeClip {
     label: React.ReactNode;
 }
 
+export type TimelineTrack = {
+    trackLabel: string;
+    timelineTrack: TimeRangeClip[];
+};
+
 interface TimelineProps {
     durationSeconds: number;
-    timeRangeClips: TimeRangeClip[];
+    timelineTracks: TimelineTrack[];
     name: string;
     audioRef: RefObject<HTMLAudioElement>;
     isPlaying: boolean;
@@ -88,7 +93,7 @@ interface TimelineProps {
 }
 
 export const Timeline = ({
-    timeRangeClips,
+    timelineTracks,
     durationSeconds,
     name,
     audioRef,
@@ -106,6 +111,10 @@ export const Timeline = ({
     const [playheadPosition, setplayheadPosition] = useState<number>(0);
 
     const currentTime = audioRef.current?.currentTime;
+
+    const [tracksHeight, setTracksHeight] = useState<number>(0);
+
+    const numberOfTracksDisplayed = [...timelineTracks, 'timeline ruler'].length;
 
     const timelineRuler = useMemo(() => {
         return (
@@ -180,14 +189,22 @@ export const Timeline = ({
     const handleSeek = (event: React.MouseEvent<HTMLDivElement>) => {
         const mouseClickViewportPositionX = event.clientX;
 
-        const offSetLeftFromViewPortOfScrollableDiv =
-            event.currentTarget.getBoundingClientRect().left;
+        const scrollableDivParent = event.currentTarget.parentElement;
 
-        const scrollLeftOfScrollableDiv = event.currentTarget.scrollLeft;
+        if (isNullOrUndefined(scrollableDivParent)) return;
+
+        const offSetLeftFromViewPortOfScrollableDivParent =
+            scrollableDivParent.getBoundingClientRect().left;
+
+        const scrollLeftOfScrollableDiv = scrollableDivParent.scrollLeft;
+
+        console.log({
+            scrollLeftOfScrollableDiv: scrollLeftOfScrollableDiv,
+        });
 
         const clickPositionInTimelineUnits =
             mouseClickViewportPositionX -
-            offSetLeftFromViewPortOfScrollableDiv +
+            offSetLeftFromViewPortOfScrollableDivParent +
             scrollLeftOfScrollableDiv;
 
         setplayheadPosition(clickPositionInTimelineUnits);
@@ -218,10 +235,12 @@ export const Timeline = ({
                         borderRight: '1px solid #666',
                     }}
                 >
-                    <StyledTrackLabel sx={{ fontSize: '10px' }}>
-                        {/* TODO need an icon here for annotations */}
-                        Annotations
-                    </StyledTrackLabel>
+                    {timelineTracks.map((timelineTrack) => (
+                        <StyledTrackLabel key={timelineTrack.trackLabel} sx={{ fontSize: '10px' }}>
+                            {/* TODO need an icon here for annotations */}
+                            {timelineTrack.trackLabel}
+                        </StyledTrackLabel>
+                    ))}
                 </Box>
                 <Box
                     data-testid="tracks-container"
@@ -232,16 +251,19 @@ export const Timeline = ({
                         sx={{ height: `${2 * EDITOR_SOUND_BAR_HEIGHT + 20}px` }}
                         data-testid="scroll-container"
                         // TODO move onClick to timeline and get position via parent(?)
-                        onClick={handleSeek}
                     >
                         <StyledScrolledTrack
                             data-testid="timeline-ruler"
                             sx={{ width: `${renderedTimelineLength}px` }}
+                            onClick={handleSeek}
                         >
                             <EditorPlayhead
                                 ref={playheadRef}
+                                data-testid="playhead"
                                 sx={{
-                                    height: `${renderedTimelineHeight - 4}px`,
+                                    height: `${
+                                        numberOfTracksDisplayed * EDITOR_SOUND_BAR_HEIGHT
+                                    }px`,
                                     left: `${playheadPosition}px`,
                                 }}
                             />
@@ -253,24 +275,34 @@ export const Timeline = ({
                                 {durationSeconds > 0 ? timelineRuler : null}
                             </StyledTimelineRulerBox>
                         </StyledScrolledTrack>
-                        <StyledScrolledTrack
-                            data-testid="scrollable-track"
-                            sx={{
-                                width: `${renderedTimelineLength}px`,
-                                backgroundImage: `url(${WAVE_FORM_URL})`,
-                            }}
-                        >
-                            {!isNullOrUndefined(renderedTimelineLength)
-                                ? timeRangeClips.map((timeRangeClip) => (
-                                      <RangeBar
-                                          key={JSON.stringify(timeRangeClip.timeRangeSeconds)}
-                                          renderedTimelineLength={renderedTimelineLength}
-                                          timeRangeClip={timeRangeClip}
-                                          durationSeconds={durationSeconds}
-                                      />
-                                  ))
-                                : null}
-                        </StyledScrolledTrack>
+                        {timelineTracks.length !== 0 ? (
+                            <StyledScrolledTrack
+                                data-testid="scrollable-track"
+                                sx={{
+                                    width: `${renderedTimelineLength}px`,
+                                    // backgroundImage: `url(${WAVE_FORM_URL})`,
+                                }}
+                            >
+                                {!isNullOrUndefined(renderedTimelineLength)
+                                    ? timelineTracks.map((timelineTrack) => {
+                                          return timelineTrack.timelineTrack.map(
+                                              (timeRangeClip) => (
+                                                  <RangeBar
+                                                      key={JSON.stringify(
+                                                          timeRangeClip.timeRangeSeconds
+                                                      )}
+                                                      renderedTimelineLength={
+                                                          renderedTimelineLength
+                                                      }
+                                                      timeRangeClip={timeRangeClip}
+                                                      durationSeconds={durationSeconds}
+                                                  />
+                                              )
+                                          );
+                                      })
+                                    : null}
+                            </StyledScrolledTrack>
+                        ) : null}
                     </ScrollingBox>
                 </Box>
             </StyledTimelineBox>

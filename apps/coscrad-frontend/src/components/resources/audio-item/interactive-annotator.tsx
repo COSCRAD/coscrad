@@ -10,7 +10,7 @@ import {
     useLoadableCommandResult,
 } from '../../../store/slices/command-status/';
 import { findOriginalTextItem } from '../../notes/shared/find-original-text-item';
-import { TimeRangeClip, buildTimeRangeClip } from '../../timeline';
+import { TimelineTrack, buildTimeRangeClip } from '../../timeline';
 import { ImmersiveCreateNoteForm } from '../shared/immersive-create-note-form';
 import { MediaCurrentTimeContext } from '../shared/media-currenttime-provider';
 import { convertSecondsToMilliseconds } from '../utils/math/convert-seconds-to-milliseconds';
@@ -61,7 +61,7 @@ export const InteractiveAnnotator = ({
 
     const [timeRange, setTimeRange] = useState<TimeRangeSelection | null>(null);
 
-    const [timeRangeClips, setTimeRangeClips] = useState<TimeRangeClip[]>([]);
+    const [timelineTracks, setTimelineTracks] = useState<TimelineTrack[]>([]);
 
     const onTimeRangeSelected = useCallback((selectedTimeRange: TimeRangeSelection | null) => {
         setTimeRange(selectedTimeRange);
@@ -80,38 +80,45 @@ export const InteractiveAnnotator = ({
     }, [setTimeRange, errorInfo, commandResult, audioRef, mediaCurrentTimeFromContext]);
 
     useEffect(() => {
-        const updatedTimeRangeClips = isNullOrUndefined(audioRef?.current?.currentTime)
-            ? []
-            : annotations.flatMap(({ connectedResources, note, id: noteId }) => {
-                  const timeRangeContext = connectedResources[0].context as ITimeRangeContext;
+        if (isNullOrUndefined(audioRef.current.currentTime)) return;
 
-                  const {
-                      timeRange: { inPointMilliseconds, outPointMilliseconds },
-                  } = timeRangeContext;
+        const annotationTimeRangeClips = annotations.flatMap(
+            ({ connectedResources, note, id: noteId }) => {
+                const timeRangeContext = connectedResources[0].context as ITimeRangeContext;
 
-                  const noteOriginal = findOriginalTextItem(note).text;
+                const {
+                    timeRange: { inPointMilliseconds, outPointMilliseconds },
+                } = timeRangeContext;
 
-                  const tipText = `[${inPointMilliseconds} ms to ${outPointMilliseconds}] ${noteOriginal}`;
+                const noteOriginal = findOriginalTextItem(note).text;
 
-                  /**
-                   * Should we break this logic out so we can share it for
-                   * video annotation?
-                   */
-                  return [
-                      buildTimeRangeClip({
-                          name: `${noteId}`,
-                          noteText: noteOriginal,
-                          tip: tipText,
-                          inPointMilliseconds: inPointMilliseconds,
-                          outPointMilliseconds: outPointMilliseconds,
-                          onClick: (inPointSeconds) => {
-                              audioRef.current.currentTime = inPointSeconds;
-                          },
-                      }),
-                  ];
-              });
+                const tipText = `[${inPointMilliseconds} ms to ${outPointMilliseconds}] ${noteOriginal}`;
 
-        setTimeRangeClips(updatedTimeRangeClips);
+                /**
+                 * Should we break this logic out so we can share it for
+                 * video annotation?
+                 */
+                return [
+                    buildTimeRangeClip({
+                        name: `${noteId}`,
+                        noteText: noteOriginal,
+                        tip: tipText,
+                        inPointMilliseconds: inPointMilliseconds,
+                        outPointMilliseconds: outPointMilliseconds,
+                        onClick: (inPointSeconds) => {
+                            audioRef.current.currentTime = inPointSeconds;
+                        },
+                    }),
+                ];
+            }
+        );
+
+        const annotationTimeLineTrack: TimelineTrack = {
+            trackLabel: 'Annotations',
+            timelineTrack: annotationTimeRangeClips,
+        };
+
+        setTimelineTracks([annotationTimeLineTrack]);
     }, [audioRef, annotations]);
 
     return (
@@ -125,7 +132,7 @@ export const InteractiveAnnotator = ({
                 audioUrl={audioURL}
                 selectedTimeRange={timeRange}
                 onTimeRangeSelected={onTimeRangeSelected}
-                timeRangeClips={timeRangeClips}
+                timelineTracks={timelineTracks}
                 audioRef={audioRef}
                 mediaCurrentTimeFromContext={mediaCurrentTimeFromContext}
             />
