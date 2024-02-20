@@ -1,6 +1,10 @@
+import { CoscradEvent } from '../../../../../domain/common';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
-import { POINT_CREATED } from './constants';
+import { CreatePoint } from './create-point.command';
 
-export class PointCreated extends BaseEvent {
-    type = POINT_CREATED;
+export type PointCreatedPayload = CreatePoint;
+
+@CoscradEvent('POINT_CREATED')
+export class PointCreated extends BaseEvent<PointCreatedPayload> {
+    readonly type = 'POINT_CREATED';
 }
