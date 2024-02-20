@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Button, Text, View } from 'react-native';
 import config from './Config.json';
 import { AlphabetData } from './Menu';
-import { AlphabetCardDetailPresenter } from './alphabet-card-detail.presenter';
 
 export function AlphabetCardDetailScreen() {
     const [alphabetData, setAlphabetData] = useState<AlphabetData | null>(null);
@@ -39,9 +38,36 @@ export function AlphabetCardDetailScreen() {
         return Number.parseInt(sequenceNumber) === selectedLetterSequenceNumber;
     });
 
+    const {
+        word,
+        letter,
+        sequence_number,
+        card_image,
+        letter_audio,
+        word_audio,
+        standalone_image,
+    } = selectedCard;
+
+    const apiUrlPrefix = `http://10.0.2.2:3131/api/resources/mediaitems/download?name=`;
+
     return (
         <View testID="AlphabetCardDetail">
-            <AlphabetCardDetailPresenter {...selectedCard} />
+            <Image
+                style={{ height: 300 }}
+                resizeMode="contain"
+                source={{
+                    uri: `${apiUrlPrefix}${card_image.replace('.png', '')}`,
+                }}
+            />
+            <Text testID={`${letter}`}>Letter: {letter}</Text>
+            <Text testID={`${word}`}>Word: {word}</Text>
+            <Text testID={`AlphabetCardDetail/${sequence_number}`}>
+                Sequence #: {sequence_number}
+            </Text>
+            <Text>Image: {card_image}</Text>
+            <Text>Letter Audio:{letter_audio}</Text>
+            <Text>Word Audio: {word_audio}</Text>
+            <Text>Standalone Image: {standalone_image}</Text>
             <Button
                 testID="Back"
                 title="Back"
