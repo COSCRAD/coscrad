@@ -164,9 +164,9 @@ export abstract class ResourceQueryService<
 
         const resource = foundResources[0];
 
-        const isResourceAvailableToUser = buildAccessFilter(userWithGroups);
+        const isResourceAvailableToUser = buildAccessFilter(userWithGroups)(resource);
 
-        if (!isResourceAvailableToUser(resource)) {
+        if (!isResourceAvailableToUser) {
             return NotFound;
         }
 

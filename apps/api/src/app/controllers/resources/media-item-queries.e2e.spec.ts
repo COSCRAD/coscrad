@@ -61,36 +61,36 @@ describe('when querying for a media item by name (/resources/mediaItems/download
 
     let databaseProvider: ArangoDatabaseProvider;
 
-    let userWithGroups: CoscradUserWithGroups;
-
-    beforeEach(async () => {
-        ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
-            {
-                ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
-            },
-            { testUserWithGroups: userWithGroups }
-        ));
-
-        if (!existsSync(staticAssetDestinationDirectory)) {
-            mkdirSync(staticAssetDestinationDirectory);
-        }
-
-        if (!existsSync(mediaItemPath)) {
-            copyFileSync(testFilePath, mediaItemPath);
-        }
-
-        await testRepositoryProvider.testTeardown();
-    });
-
-    afterEach(async () => {
-        await testRepositoryProvider.testTeardown();
-    });
-
-    afterAll(() => {
-        databaseProvider.close();
-    });
-
     describe(`when there is no media item with the given name`, () => {
+        beforeAll(async () => {
+            ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
+                {
+                    ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+                },
+                {
+                    testUserWithGroups: undefined,
+                }
+            ));
+
+            if (!existsSync(staticAssetDestinationDirectory)) {
+                mkdirSync(staticAssetDestinationDirectory);
+            }
+
+            if (!existsSync(mediaItemPath)) {
+                copyFileSync(testFilePath, mediaItemPath);
+            }
+
+            await testRepositoryProvider.testTeardown();
+        });
+
+        beforeEach(async () => {
+            await testRepositoryProvider.testTeardown();
+        });
+
+        afterAll(async () => {
+            databaseProvider.close();
+        });
+
         const bogusName = 'I do not exist';
 
         it('should return a 404', () => {
@@ -100,168 +100,121 @@ describe('when querying for a media item by name (/resources/mediaItems/download
         });
     });
 
+    const testCases = [
+        {
+            description: 'when the user is an ordinary viewer (non admin)',
+            userRole: CoscradUserRole.viewer,
+            expectedPrivateResourceResult: HttpStatusCode.notFound,
+        },
+        {
+            description: 'when the user is a project admin',
+            userRole: CoscradUserRole.projectAdmin,
+            expectedPrivateResourceResult: HttpStatusCode.ok,
+        },
+        {
+            description: 'when the user is a COSCRAD admin',
+            userRole: CoscradUserRole.superAdmin,
+            expectedPrivateResourceResult: HttpStatusCode.ok,
+        },
+    ];
+
     describe(`when the media item exists`, () => {
-        describe(`when the user is not logged in`, () => {
-            describe(`when the media item is published`, () => {
-                beforeEach(async () => {
-                    await testRepositoryProvider.addFullSnapshot(
-                        new DeluxeInMemoryStore({
-                            [AggregateType.mediaItem]: [mediaItemToFind],
-                        }).fetchFullSnapshotInLegacyFormat()
+        testCases.forEach(({ description, userRole, expectedPrivateResourceResult }) => {
+            describe(description, () => {
+                beforeAll(async () => {
+                    const testUserWithGroups = new CoscradUserWithGroups(
+                        user.clone({
+                            roles: [userRole],
+                        }),
+                        [userGroup]
                     );
+
+                    ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
+                        {
+                            ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+                        },
+                        {
+                            testUserWithGroups,
+                        }
+                    ));
+
+                    if (!existsSync(staticAssetDestinationDirectory)) {
+                        mkdirSync(staticAssetDestinationDirectory);
+                    }
+
+                    if (!existsSync(mediaItemPath)) {
+                        copyFileSync(testFilePath, mediaItemPath);
+                    }
+
+                    await testRepositoryProvider.testTeardown();
                 });
 
-                it(`should return the expected binary`, async () => {
-                    const endpoint = buildFindByNameQueryUrl(mediaItemName);
-
-                    const res = await request(app.getHttpServer()).get(endpoint);
-
-                    expect(res.status).toBe(HttpStatusCode.ok);
-
-                    // TODO verify that the appropriate binary is there
-                });
-            });
-
-            describe(`when the media item is not published`, () => {
-                beforeEach(async () => {
-                    await testRepositoryProvider.addFullSnapshot(
-                        new DeluxeInMemoryStore({
-                            [AggregateType.mediaItem]: [
-                                mediaItemToFind.clone({
-                                    published: false,
-                                }),
-                            ],
-                        }).fetchFullSnapshotInLegacyFormat()
-                    );
-                });
-
-                it(`should return not found`, async () => {
-                    const endpoint = buildFindByNameQueryUrl(mediaItemName);
-
-                    const res = await request(app.getHttpServer()).get(endpoint);
-
-                    expect(res.status).toBe(HttpStatusCode.notFound);
-                });
-            });
-
-            describe(`when the name parameter is invalidly formatted`, () => {
-                it(`should return a 400 (user error)`, async () => {
-                    const whitespaceOnly = '%20'.repeat(4);
-
-                    const invalidEndpoint = buildFindByNameQueryUrl(whitespaceOnly);
-
-                    const res = await request(app.getHttpServer()).get(invalidEndpoint);
-
-                    expect(res.status).toBe(HttpStatusCode.badRequest);
-                });
-            });
-        });
-
-        describe(`when the user is authenticated as an ordinary user`, () => {
-            beforeEach(async () => {
-                userWithGroups = new CoscradUserWithGroups(user, [userGroup]);
-                await testRepositoryProvider.addFullSnapshot(
-                    new DeluxeInMemoryStore({
-                        [AggregateType.mediaItem]: [mediaItemToFind],
-                    }).fetchFullSnapshotInLegacyFormat()
-                );
-            });
-
-            describe(`when the media item is published`, () => {
-                it(`should return the expected binary`, async () => {
-                    const endpoint = buildFindByNameQueryUrl(mediaItemName);
-
-                    const res = await request(app.getHttpServer()).get(endpoint);
-
-                    expect(res.status).toBe(HttpStatusCode.ok);
-
-                    // TODO verify that the appropriate binary is there
-                });
-            });
-
-            describe(`when the media item is not published`, () => {
-                beforeEach(async () => {
-                    await testRepositoryProvider.addFullSnapshot(
-                        new DeluxeInMemoryStore({
-                            [AggregateType.mediaItem]: [
-                                mediaItemToFind.clone({
-                                    published: false,
-                                }),
-                            ],
-                        }).fetchFullSnapshotInLegacyFormat()
-                    );
-                });
-
-                it(`should return not found`, async () => {
-                    const endpoint = buildFindByNameQueryUrl(mediaItemName);
-
-                    const res = await request(app.getHttpServer()).get(endpoint);
-
-                    expect(res.status).toBe(HttpStatusCode.notFound);
-                });
-            });
-
-            describe(`when the media item is not published, but the user is in the ACL as a user`, () => {
                 beforeEach(async () => {
                     await testRepositoryProvider.testTeardown();
-                    await testRepositoryProvider.addFullSnapshot(
-                        new DeluxeInMemoryStore({
-                            [AggregateType.mediaItem]: [
-                                mediaItemToFind.clone({
-                                    published: false,
-                                    queryAccessControlList: {
-                                        allowedUserIds: [userId],
-                                        allowedGroupIds: [],
-                                    },
-                                }),
-                            ],
-                        }).fetchFullSnapshotInLegacyFormat()
-                    );
                 });
 
-                it(`should return not found`, async () => {
-                    const endpoint = buildFindByNameQueryUrl(mediaItemName);
+                afterAll(async () => {
+                    databaseProvider.close();
+                });
 
-                    const res = await request(app.getHttpServer()).get(endpoint);
+                describe(`when the media item is published`, () => {
+                    beforeEach(async () => {
+                        await testRepositoryProvider.testTeardown();
 
-                    expect(res.status).toBe(HttpStatusCode.notFound);
+                        await testRepositoryProvider.addFullSnapshot(
+                            new DeluxeInMemoryStore({
+                                [AggregateType.mediaItem]: [mediaItemToFind],
+                            }).fetchFullSnapshotInLegacyFormat()
+                        );
+                    });
+
+                    it(`should return the expected binary`, async () => {
+                        const endpoint = buildFindByNameQueryUrl(mediaItemName);
+
+                        const res = await request(app.getHttpServer()).get(endpoint);
+
+                        expect(res.status).toBe(HttpStatusCode.ok);
+
+                        // TODO verify that the appropriate binary is there
+                    });
+                });
+
+                describe(`when the media item is not published`, () => {
+                    beforeEach(async () => {
+                        await testRepositoryProvider.testTeardown();
+
+                        await testRepositoryProvider.addFullSnapshot(
+                            new DeluxeInMemoryStore({
+                                [AggregateType.mediaItem]: [
+                                    mediaItemToFind.clone({
+                                        published: false,
+                                    }),
+                                ],
+                            }).fetchFullSnapshotInLegacyFormat()
+                        );
+                    });
+
+                    it(`should return the expected result (${expectedPrivateResourceResult})`, async () => {
+                        const endpoint = buildFindByNameQueryUrl(mediaItemName);
+
+                        const res = await request(app.getHttpServer()).get(endpoint);
+
+                        expect(res.status).toBe(expectedPrivateResourceResult);
+                    });
+                });
+
+                describe(`when the name parameter is invalidly formatted`, () => {
+                    it(`should return a 400 (user error)`, async () => {
+                        const whitespaceOnly = '%20'.repeat(4);
+
+                        const invalidEndpoint = buildFindByNameQueryUrl(whitespaceOnly);
+
+                        const res = await request(app.getHttpServer()).get(invalidEndpoint);
+
+                        expect(res.status).toBe(HttpStatusCode.badRequest);
+                    });
                 });
             });
-
-            describe(`when the media item is not published, but the user is in the ACL as a group member`, () => {
-                beforeEach(async () => {
-                    await testRepositoryProvider.testTeardown();
-                    await testRepositoryProvider.addFullSnapshot(
-                        new DeluxeInMemoryStore({
-                            [AggregateType.mediaItem]: [
-                                mediaItemToFind.clone({
-                                    published: false,
-                                    queryAccessControlList: {
-                                        allowedUserIds: [],
-                                        allowedGroupIds: [groupId],
-                                    },
-                                }),
-                            ],
-                        }).fetchFullSnapshotInLegacyFormat()
-                    );
-                });
-
-                it(`should return not found`, async () => {
-                    const endpoint = buildFindByNameQueryUrl(mediaItemName);
-
-                    const res = await request(app.getHttpServer()).get(endpoint);
-
-                    expect(res.status).toBe(HttpStatusCode.notFound);
-                });
-            });
-        });
-
-        describe(`when the user is authenticated as a project admin`, () => {
-            it.todo(`similar test cases, please`);
-        });
-
-        describe(`when the user is authenticated as COSCRAD admin`, () => {
-            it.todo(`similar test cases, please`);
         });
     });
 });
