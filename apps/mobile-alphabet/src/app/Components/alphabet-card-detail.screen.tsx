@@ -48,6 +48,7 @@ export function AlphabetCardDetailScreen() {
         standalone_image,
     } = selectedCard;
 
+    //TODO pull this from a config
     const apiUrlPrefix = `http://10.0.2.2:3131/api/resources/mediaitems/download?name=`;
 
     return (
@@ -64,7 +65,6 @@ export function AlphabetCardDetailScreen() {
             <Text testID={`AlphabetCardDetail/${sequence_number}`}>
                 Sequence #: {sequence_number}
             </Text>
-            <Text>Image: {card_image}</Text>
             <Text>Letter Audio:{letter_audio}</Text>
             <Text>Word Audio: {word_audio}</Text>
             <Text>Standalone Image: {standalone_image}</Text>
