@@ -113,7 +113,7 @@ describe(`BookBibliographicCitation.fromEventHistory`, () => {
     describe(`when the event history is valid`, () => {
         describe(`when there is a creation event`, () => {
             describe(`when only the required properties have been specified`, () => {
-                it(`should return a Book Bibliographic Reference with the expected state`, () => {
+                it(`should return a Book Bibliographic Citation with the expected state`, () => {
                     const result = BookBibliographicCitation.fromEventHistory(
                         bookCreatedWithRequiredInfoOnly.as(aggregateCompositeIdentifier),
                         bookBibliographicCitationId
@@ -150,7 +150,7 @@ describe(`BookBibliographicCitation.fromEventHistory`, () => {
             });
 
             describe(`when all optional properties have been specified`, () => {
-                it(`should return a Book Bibliographic References with the optional data set`, () => {
+                it(`should return a Book Bibliographic Citations with the optional data set`, () => {
                     const result = BookBibliographicCitation.fromEventHistory(
                         bookCreatedWithAllInfo.as(aggregateCompositeIdentifier),
                         bookBibliographicCitationId

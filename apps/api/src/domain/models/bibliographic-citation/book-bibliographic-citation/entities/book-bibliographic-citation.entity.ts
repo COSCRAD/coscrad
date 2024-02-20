@@ -143,7 +143,7 @@ export class BookBibliographicCitation
 
         if (isInternalError(invariantValidationResult)) {
             throw new InternalError(
-                `Failed to event source Book Bibliographic Reference: ${formatAggregateCompositeIdentifier(
+                `Failed to event source Book Bibliographic Citation: ${formatAggregateCompositeIdentifier(
                     {
                         type: AggregateType.bibliographicCitation,
                         id,

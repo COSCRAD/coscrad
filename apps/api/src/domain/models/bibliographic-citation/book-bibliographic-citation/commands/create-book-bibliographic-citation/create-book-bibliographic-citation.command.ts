@@ -19,8 +19,8 @@ const isOptional = true;
 
 @Command({
     type: 'CREATE_BOOK_BIBLIOGRAPHIC_CITATION',
-    label: 'Create Book Bibliographic Reference',
-    description: 'Creates a new book bibliographic reference',
+    label: 'Create Book Bibliographic Citation',
+    description: 'Creates a new book bibliographic citation',
 })
 export class CreateBookBibliographicCitation implements ICommandBase {
     @NestedDataType(BibliographicCitationCompositeIdentifier, {
