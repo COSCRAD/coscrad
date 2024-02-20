@@ -1,24 +1,33 @@
 import { AggregateType, ISpatialFeatureProperties } from '@coscrad/api-interfaces';
 import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { InternalError } from '../../../../../lib/errors/InternalError';
+import { AggregateId } from '../../../../../domain/types/AggregateId';
+import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../../lib/errors/types/ValidationResult';
+import { Maybe } from '../../../../../lib/types/maybe';
 import cloneToPlainObject from '../../../../../lib/utilities/cloneToPlainObject';
+import formatAggregateCompositeIdentifier from '../../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { DTO } from '../../../../../types/DTO';
+import { ResultOrError } from '../../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../../common/entities/multilingual-text';
 import { Valid } from '../../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../../types/ResourceType';
+import {
+    CreationEventHandlerMap,
+    buildAggregateRootFromEventHistory,
+} from '../../../build-aggregate-root-from-event-history';
 import { Resource } from '../../../resource.entity';
 import InvalidExternalStateError from '../../../shared/common-command-errors/InvalidExternalStateError';
+import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { IGeometricFeature } from '../../interfaces/geometric-feature.interface';
 import { ISpatialFeature } from '../../interfaces/spatial-feature.interface';
 import { PointCoordinates } from '../../types/Coordinates/PointCoordinates';
 import { GeometricFeatureType } from '../../types/GeometricFeatureType';
 import validatePosition2D from '../../validation/validatePosition2D';
-import { CREATE_POINT } from '../commands';
+import { CREATE_POINT, PointCreated } from '../commands';
 import { SpatialFeatureProperties } from './spatial-feature-properties.entity';
 
 @RegisterIndexScopedCommands([CREATE_POINT])
@@ -100,5 +109,63 @@ export class Point extends Resource implements ISpatialFeature {
 
     protected getResourceSpecificAvailableCommands(): string[] {
         return [];
+    }
+
+    static fromEventHistory(
+        eventHistory: BaseEvent[],
+        id: AggregateId
+    ): Maybe<ResultOrError<Point>> {
+        const creationEventHandlerMap: CreationEventHandlerMap<Point> = new Map().set(
+            'POINT_CREATED',
+            Point.buildPointFromPointCreated
+        );
+
+        return buildAggregateRootFromEventHistory(
+            creationEventHandlerMap,
+            {
+                type: AggregateType.spatialFeature,
+                id,
+            },
+            eventHistory
+        );
+    }
+
+    static buildPointFromPointCreated({
+        payload: {
+            aggregateCompositeIdentifier: { id },
+            lattitude,
+            longitude,
+            name,
+            description,
+        },
+    }: PointCreated): ResultOrError<Point> {
+        const buildResult = new Point({
+            type: AggregateType.spatialFeature,
+            id,
+            geometry: {
+                type: GeometricFeatureType.point,
+                coordinates: [lattitude, longitude],
+            },
+            properties: {
+                // TODO make this multilingual
+                name,
+                description,
+            },
+            published: false,
+        });
+
+        const invariantValidationResult = buildResult.validateInvariants();
+
+        if (isInternalError(invariantValidationResult)) {
+            throw new InternalError(
+                `Failed to build point: ${formatAggregateCompositeIdentifier({
+                    type: AggregateType.spatialFeature,
+                    id,
+                })} from event history`,
+                [invariantValidationResult]
+            );
+        }
+
+        return buildResult;
     }
 }
