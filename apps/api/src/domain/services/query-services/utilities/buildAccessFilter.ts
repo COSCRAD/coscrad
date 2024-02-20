@@ -10,26 +10,31 @@ type ResourceFilter = (resource: Resource) => boolean;
  * We need a unit test for this.
  */
 export const buildAccessFilter = (userWithGroups?: CoscradUserWithGroups): ResourceFilter => {
-    if (!(userWithGroups instanceof CoscradUserWithGroups))
-        return (resource: Resource) => resource.published;
-
     if (!(userWithGroups instanceof CoscradUserWithGroups)) {
-        throw new InternalError(`Invalid user with groups encountered: ${userWithGroups}`);
+        return (resource: Resource) => resource.published;
     }
 
     const { roles } = userWithGroups;
 
     if (!roles) {
-        throw new InternalError(`Invalid user with groups encountered: ${userWithGroups.toDTO()}`);
+        throw new InternalError(`Invalid user with groups encountered: missing roles`);
     }
 
-    return userWithGroups.roles.includes(CoscradUserRole.projectAdmin) ||
-        userWithGroups.roles.includes(CoscradUserRole.superAdmin)
-        ? (_: Resource) => true
-        : (resource: Resource) =>
-              resource.published ||
-              resource.queryAccessControlList.canUser(userWithGroups.id) ||
-              userWithGroups.groups.some(({ id: groupId }) =>
-                  resource.queryAccessControlList.canGroup(groupId)
-              );
+    if (
+        [CoscradUserRole.projectAdmin, CoscradUserRole.superAdmin].some((role) =>
+            userWithGroups.roles.includes(role)
+        )
+    ) {
+        return (_: Resource) => true;
+    }
+
+    return (resource: Resource) => {
+        if (resource.published) return true;
+
+        if (resource.queryAccessControlList.canUser(userWithGroups.id)) return true;
+
+        return userWithGroups.groups.some(({ id: groupId }) =>
+            resource.queryAccessControlList.canGroup(groupId)
+        );
+    };
 };
