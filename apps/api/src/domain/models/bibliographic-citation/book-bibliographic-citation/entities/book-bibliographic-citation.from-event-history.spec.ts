@@ -232,7 +232,7 @@ describe(`BookBibliographicCitation.fromEventHistory`, () => {
                     .andThen<BookBibliographicCitationCreated>({
                         type: 'BOOK_BIBLIOGRAPHIC_CITATION_CREATED',
                         payload: {
-                            // this is not allowed
+                            // here we intentionally break a simple invariant validation rule
                             title: 99 as unknown as string,
                         },
                     })
