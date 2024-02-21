@@ -8,7 +8,7 @@ import {
 } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { MultilingualText } from '../../../../domain/common/entities/multilingual-text';
-import { AudioItem } from '../../../../domain/models/audio-item/entities/audio-item.entity';
+import { AudioItem } from '../../../../domain/models/audio-visual/audio-item/entities/audio-item.entity';
 import { MediaItem } from '../../../../domain/models/media-item/entities/media-item.entity';
 import { BaseViewModel } from '../base.view-model';
 

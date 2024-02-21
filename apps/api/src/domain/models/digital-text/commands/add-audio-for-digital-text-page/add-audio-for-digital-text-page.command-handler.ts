@@ -6,7 +6,7 @@ import { InMemorySnapshot, ResourceType } from '../../../../../domain/types/Reso
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { ResultOrError } from '../../../../../types/ResultOrError';
-import { AudioItem } from '../../../audio-item/entities/audio-item.entity';
+import { AudioItem } from '../../../audio-visual/audio-item/entities/audio-item.entity';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent, IEventPayload } from '../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
