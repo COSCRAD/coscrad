@@ -1,5 +1,5 @@
 import { UuidDocument } from '../../lib/id-generation/types/UuidDocument';
-import { AudioItem } from '../models/audio-item/entities/audio-item.entity';
+import { AudioItem } from '../models/audio-visual/audio-item/entities/audio-item.entity';
 import { IBibliographicCitation } from '../models/bibliographic-citation/interfaces/bibliographic-citation.interface';
 import { Category } from '../models/categories/entities/category.entity';
 import { EdgeConnection } from '../models/context/edge-connection.entity';
@@ -14,7 +14,7 @@ import { CoscradUser } from '../models/user-management/user/entities/user/coscra
 import { VocabularyList } from '../models/vocabulary-list/entities/vocabulary-list.entity';
 
 import { ResourceType } from '@coscrad/api-interfaces';
-import { Video } from '../models/audio-item/entities/video.entity';
+import { Video } from '../models/audio-visual/video/entities/video.entity';
 import { DigitalText } from '../models/digital-text/entities/digital-text.entity';
 import { Playlist } from '../models/playlist';
 

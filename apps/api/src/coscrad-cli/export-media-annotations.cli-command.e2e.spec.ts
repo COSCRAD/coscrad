@@ -8,14 +8,14 @@ import { AppModule } from '../app/app.module';
 import buildMockConfigServiceSpec from '../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../app/config/buildConfigFilePath';
 import { Environment } from '../app/config/constants/Environment';
-import { AudioVisualModule } from '../app/domain-modules/audio-visual.module';
 import { EdgeConnectionModule } from '../app/domain-modules/edge-connection.module';
 import getValidAggregateInstanceForTest from '../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { CoscradEventFactory, EventModule } from '../domain/common';
 import { buildMultilingualTextWithSingleItem } from '../domain/common/build-multilingual-text-with-single-item';
 import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
-import { AudioItem } from '../domain/models/audio-item/entities/audio-item.entity';
-import { Video } from '../domain/models/audio-item/entities/video.entity';
+import { AudioVisualModule } from '../domain/models/audio-visual/application/audio-visual.module';
+import { AudioItem } from '../domain/models/audio-visual/audio-item/entities/audio-item.entity';
+import { Video } from '../domain/models/audio-visual/video/entities/video.entity';
 import {
     EdgeConnection,
     EdgeConnectionMember,

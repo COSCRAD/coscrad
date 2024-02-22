@@ -10,6 +10,8 @@ import { MockJwtStrategy } from '../../../authorization/mock-jwt.strategy';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
 import { CoscradEventFactory, CoscradEventUnion } from '../../../domain/common';
 import { ID_MANAGER_TOKEN } from '../../../domain/interfaces/id-manager.interface';
+import { AudioItemController } from '../../../domain/models/audio-visual/application/audio-item.controller';
+import { VideoController } from '../../../domain/models/audio-visual/application/video.controller';
 import {
     AddLineItemToTranscript,
     AddLineItemtoTranscriptCommandHandler,
@@ -21,17 +23,23 @@ import {
     TranslateAudioItemNameCommandHandler,
     TranslateLineItem,
     TranslateLineItemCommandHandler,
-} from '../../../domain/models/audio-item/commands';
+} from '../../../domain/models/audio-visual/audio-item/commands';
 import {
     ImportLineItemsToTranscript,
     ImportLineItemsToTranscriptCommandHandler,
     ImportTranslationsForTranscript,
     ImportTranslationsForTranscriptCommandHandler,
-} from '../../../domain/models/audio-item/commands/transcripts';
+} from '../../../domain/models/audio-visual/shared/commands/transcripts';
 import {
     AddParticipantToTranscript,
     AddParticipantToTranscriptCommandHandler,
-} from '../../../domain/models/audio-item/commands/transcripts/add-participant-to-transcript';
+} from '../../../domain/models/audio-visual/shared/commands/transcripts/add-participant-to-transcript';
+import {
+    CreateVideo,
+    CreateVideoCommandHandler,
+    TranslateVideoName,
+    TranslateVideoNameCommandHandler,
+} from '../../../domain/models/audio-visual/video';
 import { CreateBookBibliographicCitation } from '../../../domain/models/bibliographic-citation/book-bibliographic-citation/commands/create-book-bibliographic-citation/create-book-bibliographic-citation.command';
 import { CreateBookBibliographicCitationCommandHandler } from '../../../domain/models/bibliographic-citation/book-bibliographic-citation/commands/create-book-bibliographic-citation/create-book-bibliographic-citation.command-handler';
 import BookBibliographicCitationData from '../../../domain/models/bibliographic-citation/book-bibliographic-citation/entities/book-bibliographic-citation-data.entity';
@@ -177,12 +185,6 @@ import { RegisterUser } from '../../../domain/models/user-management/user/comman
 import { RegisterUserCommandHandler } from '../../../domain/models/user-management/user/commands/register-user/register-user.command-handler';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import {
-    CreateVideo,
-    CreateVideoCommandHandler,
-    TranslateVideoName,
-    TranslateVideoNameCommandHandler,
-} from '../../../domain/models/video';
-import {
     AddTermToVocabularyList,
     AddTermToVocabularyListCommandHandler,
     AnalyzeTermInVocabularyList,
@@ -237,7 +239,6 @@ import { CoscradUserGroupController } from '../coscrad-user-group.controller';
 import { CoscradUserController } from '../coscrad-user.controller';
 import { EdgeConnectionController } from '../edge-connection.controller';
 import { IdGenerationController } from '../id-generation/id-generation.controller';
-import { AudioItemController } from '../resources/audio-item.controller';
 import { BibliographicCitationController } from '../resources/bibliographic-citation.controller';
 import { DigitalTextQueryController } from '../resources/digital-text.controller';
 import { MediaItemController } from '../resources/media-item.controller';
@@ -247,7 +248,6 @@ import { ResourceDescriptionController } from '../resources/resource-description
 import { SongController } from '../resources/song.controller';
 import { SpatialFeatureController } from '../resources/spatial-feature.controller';
 import { TermController } from '../resources/term.controller';
-import { VideoController } from '../resources/video.controller';
 import { VocabularyListController } from '../resources/vocabulary-list.controller';
 import { TagController } from '../tag.controller';
 

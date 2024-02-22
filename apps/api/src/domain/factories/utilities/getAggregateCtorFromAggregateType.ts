@@ -1,8 +1,8 @@
 import { InternalError } from '../../../lib/errors/InternalError';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { Aggregate } from '../../models/aggregate.entity';
-import { AudioItem } from '../../models/audio-item/entities/audio-item.entity';
-import { Video } from '../../models/audio-item/entities/video.entity';
+import { AudioItem } from '../../models/audio-visual/audio-item/entities/audio-item.entity';
+import { Video } from '../../models/audio-visual/video/entities/video.entity';
 import { Category } from '../../models/categories/entities/category.entity';
 import { EdgeConnection } from '../../models/context/edge-connection.entity';
 import { DigitalText } from '../../models/digital-text/entities/digital-text.entity';

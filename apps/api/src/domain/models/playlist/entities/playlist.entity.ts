@@ -9,7 +9,7 @@ import { isValid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
-import { DuplicateLanguageInMultilingualTextError } from '../../audio-item/errors/duplicate-language-in-multilingual-text.error';
+import { DuplicateLanguageInMultilingualTextError } from '../../audio-visual/audio-item/errors/duplicate-language-in-multilingual-text.error';
 import { Resource } from '../../resource.entity';
 import { CannotAddDuplicateItemToPlaylist } from '../errors';
 import { FailedToImportAudioItemsError } from '../errors/failed-to-import-audio-items.error';
