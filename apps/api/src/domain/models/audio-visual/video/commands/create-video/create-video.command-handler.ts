@@ -1,23 +1,23 @@
 import { CommandHandler } from '@coscrad/commands';
-import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
-import { isNotFound } from '../../../../../lib/types/not-found';
-import formatAggregateCompositeIdentifier from '../../../../../queries/presentation/formatAggregateCompositeIdentifier';
-import { DTO } from '../../../../../types/DTO';
-import { ResultOrError } from '../../../../../types/ResultOrError';
+import { InternalError, isInternalError } from '../../../../../../lib/errors/InternalError';
+import { isNotFound } from '../../../../../../lib/types/not-found';
+import formatAggregateCompositeIdentifier from '../../../../../../queries/presentation/formatAggregateCompositeIdentifier';
+import { DTO } from '../../../../../../types/DTO';
+import { ResultOrError } from '../../../../../../types/ResultOrError';
 import {
     MultilingualText,
     MultilingualTextItem,
     MultilingualTextItemRole,
-} from '../../../../common/entities/multilingual-text';
-import { Valid } from '../../../../domainModelValidators/Valid';
-import getInstanceFactoryForResource from '../../../../factories/get-instance-factory-for-resource';
-import { AggregateType } from '../../../../types/AggregateType';
-import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
-import { InMemorySnapshot, ResourceType } from '../../../../types/ResourceType';
-import { Video, VideoBase } from '../../../audio-visual/audio-item/entities/video.entity';
-import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
-import { BaseEvent } from '../../../shared/events/base-event.entity';
-import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
+} from '../../../../../common/entities/multilingual-text';
+import { Valid } from '../../../../../domainModelValidators/Valid';
+import getInstanceFactoryForResource from '../../../../../factories/get-instance-factory-for-resource';
+import { AggregateType } from '../../../../../types/AggregateType';
+import { DeluxeInMemoryStore } from '../../../../../types/DeluxeInMemoryStore';
+import { InMemorySnapshot, ResourceType } from '../../../../../types/ResourceType';
+import { BaseCreateCommandHandler } from '../../../../shared/command-handlers/base-create-command-handler';
+import { BaseEvent } from '../../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../../shared/events/types/EventRecordMetadata';
+import { Video, VideoBase } from '../../entities/video.entity';
 import { CreateVideo } from './create-video.command';
 import { VideoCreated } from './video-created.event';
 

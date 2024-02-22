@@ -1,7 +1,7 @@
 import { AggregateCompositeIdentifier, ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
-import { LanguageCodeEnum } from '../../../../../domain/common/entities/multilingual-text';
+import { LanguageCodeEnum } from '../../../../../../domain/common/entities/multilingual-text';
 import { VideoCompositeIdentifier } from '../../entities';
 import { TRANSLATE_VIDEO_NAME } from '../constants';
 
