@@ -47,5 +47,25 @@ describe(`Playlist.fromEventhistory`, () => {
                 expect(playlist).toBe(playlist);
             });
         });
+
+        describe(`when the playlist name has been translated`, () => {
+            it.todo(``);
+        });
+
+        describe(`when a single audio item has been added`, () => {
+            it.todo(``);
+        });
+
+        describe(`when audio items have been imported`, () => {
+            it.todo(``);
+        });
+
+        describe(`when the playlist has been published`, () => {
+            it.todo(``);
+        });
+
+        describe(`when a user has been granted read access to the playlist`, () => {
+            it.todo(`should succeed with the expected update`);
+        });
     });
 });
