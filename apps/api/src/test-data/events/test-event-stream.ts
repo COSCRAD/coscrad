@@ -29,6 +29,7 @@ import {
     PhotographAddedToDigitalTextPagePayload,
 } from '../../domain/models/digital-text/commands/add-photograph-to-digital-text-page';
 import { getPhotographTestEventBuilders } from '../../domain/models/photograph/test-data';
+import { getPlaylistTestEventBuilderMap } from '../../domain/models/playlist/test-data/events/get-playlist-test-event-builder-map';
 import { ResourceReadAccessGrantedToUser } from '../../domain/models/shared/common-commands';
 import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import { EventRecordMetadata } from '../../domain/models/shared/events/types/EventRecordMetadata';
@@ -686,6 +687,7 @@ export class TestEventStream {
             ...getSpatialFeatureTestEventBuilderMap().entries(),
             ...getAudioItemTestEventBuilderMap().entries(),
             ...getVideoTestEventBuilder().entries(),
+            ...getPlaylistTestEventBuilderMap().entries(),
         ].reduce((acc, [eventType, builder]) => acc.registerBuilder(eventType, builder), this);
     }
 

@@ -2,15 +2,24 @@ import { NestedDataType } from '@coscrad/data-types';
 import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
+import { Maybe } from '../../../../lib/types/maybe';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import { isValid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
+import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
 import { DuplicateLanguageInMultilingualTextError } from '../../audio-visual/audio-item/errors/duplicate-language-in-multilingual-text.error';
+import {
+    CreationEventHandlerMap,
+    buildAggregateRootFromEventHistory,
+} from '../../build-aggregate-root-from-event-history';
 import { Resource } from '../../resource.entity';
+import { BaseEvent } from '../../shared/events/base-event.entity';
+import { PlaylistCreated } from '../commands/playlist-created.event';
 import { CannotAddDuplicateItemToPlaylist } from '../errors';
 import { FailedToImportAudioItemsError } from '../errors/failed-to-import-audio-items.error';
 import { PlaylistItem } from './playlist-item.entity';
@@ -108,5 +117,42 @@ export class Playlist extends Resource {
 
     protected getExternalReferences(): AggregateCompositeIdentifier<AggregateType>[] {
         return this.items.map(({ resourceCompositeIdentifier }) => resourceCompositeIdentifier);
+    }
+
+    static fromEventHistory(
+        eventStream: BaseEvent[],
+        playlistId: AggregateId
+    ): Maybe<ResultOrError<Playlist>> {
+        const creationEventHandlerMap: CreationEventHandlerMap<Playlist> = new Map().set(
+            `PLAYLIST_CREATED`,
+            Playlist.buildPlaylistFromPlaylistCreated
+        );
+
+        return buildAggregateRootFromEventHistory(
+            creationEventHandlerMap,
+            {
+                type: AggregateType.playlist,
+                id: playlistId,
+            },
+            eventStream
+        );
+    }
+
+    static buildPlaylistFromPlaylistCreated(event: PlaylistCreated): ResultOrError<Playlist> {
+        const {
+            aggregateCompositeIdentifier: { id: playlistId },
+            name,
+            languageCodeForName,
+        } = event.payload;
+
+        const buildResult = new Playlist({
+            type: AggregateType.playlist,
+            id: playlistId,
+            published: false,
+            items: [],
+            name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
+        });
+
+        return buildResult;
     }
 }

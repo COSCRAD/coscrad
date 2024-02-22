@@ -22,10 +22,11 @@ import { EventRecordMetadata } from '../../shared/events/types/EventRecordMetada
 import idEquals from '../../shared/functional/idEquals';
 import { Playlist } from '../entities';
 import { CreatePlayList } from './create-playlist.command';
-import { playlistCreated } from './playlist-created.event';
+import { PlaylistCreated } from './playlist-created.event';
 
 @CommandHandler(CreatePlayList)
 export class CreatePlayListCommandHandler extends BaseCreateCommandHandler<Playlist> {
+    // TODO do we need this?
     protected aggregateType = ResourceType.playlist;
 
     protected repositoryForCommandsTargetAggregate: IRepositoryForAggregate<Playlist>;
@@ -119,6 +120,6 @@ export class CreatePlayListCommandHandler extends BaseCreateCommandHandler<Playl
     }
 
     protected buildEvent(command: CreatePlayList, eventMeta: EventRecordMetadata): BaseEvent {
-        return new playlistCreated(command, eventMeta);
+        return new PlaylistCreated(command, eventMeta);
     }
 }
