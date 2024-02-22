@@ -2,7 +2,7 @@ import { ITermViewModel } from '@coscrad/api-interfaces';
 import { FromDomainModel, NonEmptyString, URL } from '@coscrad/data-types';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { AudioItem } from '../../../domain/models/audio-item/entities/audio-item.entity';
+import { AudioItem } from '../../../domain/models/audio-visual/audio-item/entities/audio-item.entity';
 import { MediaItem } from '../../../domain/models/media-item/entities/media-item.entity';
 import { Term } from '../../../domain/models/term/entities/term.entity';
 import { AggregateId } from '../../../domain/types/AggregateId';

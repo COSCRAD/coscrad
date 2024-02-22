@@ -4,7 +4,7 @@ import { InternalError } from '../../../../lib/errors/InternalError';
 import buildInvariantValidationErrorFactoryFunction from '../../../__tests__/utilities/buildInvariantValidationErrorFactoryFunction';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import VocabularyListWithNoEntriesCannotBePublishedError from '../../../domainModelValidators/errors/vocabularyList/vocabulary-list-with-no-entries-cannot-be-published.error';
-import { MultilingualTextHasNoOriginalError } from '../../../models/audio-item/errors/multilingual-text-has-no-original.error';
+import { MultilingualTextHasNoOriginalError } from '../../../models/audio-visual/audio-item/errors/multilingual-text-has-no-original.error';
 import { AggregateType } from '../../../types/AggregateType';
 import buildNullAndUndefinedAggregateFactoryInvalidTestCases from './common/buildNullAndUndefinedAggregateFactoryInvalidTestCases';
 import { generateFuzzAggregateFactoryTestCases } from './utilities/generate-fuzz-aggregate-factory-test-cases';

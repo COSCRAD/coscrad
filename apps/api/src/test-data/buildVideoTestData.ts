@@ -1,7 +1,7 @@
 import { LanguageCode, ResourceType } from '@coscrad/api-interfaces';
 import { Aggregate } from '../domain/models/aggregate.entity';
-import { Transcript } from '../domain/models/audio-item/entities/transcript.entity';
-import { Video } from '../domain/models/audio-item/entities/video.entity';
+import { Transcript } from '../domain/models/audio-visual/shared/entities/transcript.entity';
+import { Video } from '../domain/models/audio-visual/video/entities/video.entity';
 import { DTO } from '../types/DTO';
 import { buildSingleLanguageText } from './buildAudioItemTestData';
 import buildMediaItemTestData from './buildMediaItemTestData';

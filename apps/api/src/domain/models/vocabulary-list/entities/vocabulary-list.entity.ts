@@ -20,7 +20,7 @@ import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
-import { DuplicateLanguageInMultilingualTextError } from '../../audio-item/errors/duplicate-language-in-multilingual-text.error';
+import { DuplicateLanguageInMultilingualTextError } from '../../audio-visual/audio-item/errors/duplicate-language-in-multilingual-text.error';
 import {
     CreationEventHandlerMap,
     buildAggregateRootFromEventHistory,

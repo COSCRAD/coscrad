@@ -28,7 +28,7 @@ import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
-import { DuplicateLanguageInMultilingualTextError } from '../../../audio-item/errors/duplicate-language-in-multilingual-text.error';
+import { DuplicateLanguageInMultilingualTextError } from '../../../audio-visual/audio-item/errors/duplicate-language-in-multilingual-text.error';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { VocabularyList } from '../../entities/vocabulary-list.entity';

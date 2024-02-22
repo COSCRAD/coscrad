@@ -18,9 +18,9 @@ import { DeepPartial } from '../../../types/DeepPartial';
 import { ResultOrError } from '../../../types/ResultOrError';
 import { Valid } from '../../domainModelValidators/Valid';
 import BaseDomainModel from '../../models/BaseDomainModel';
-import { DuplicateLanguageInMultilingualTextError } from '../../models/audio-item/errors/duplicate-language-in-multilingual-text.error';
-import { MultilingualTextHasNoOriginalError } from '../../models/audio-item/errors/multilingual-text-has-no-original.error';
-import { MultipleOriginalsInMultilingualTextError } from '../../models/audio-item/errors/multiple-originals-in-multilingual-text.error';
+import { DuplicateLanguageInMultilingualTextError } from '../../models/audio-visual/audio-item/errors/duplicate-language-in-multilingual-text.error';
+import { MultilingualTextHasNoOriginalError } from '../../models/audio-visual/audio-item/errors/multilingual-text-has-no-original.error';
+import { MultipleOriginalsInMultilingualTextError } from '../../models/audio-visual/shared/transcript-errors/multiple-originals-in-multilingual-text.error';
 import {
     isNull,
     isNullOrUndefined,

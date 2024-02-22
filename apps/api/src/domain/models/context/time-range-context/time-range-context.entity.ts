@@ -7,7 +7,7 @@ import {
 } from '@coscrad/data-types';
 import { DTO } from '../../../../types/DTO';
 import BaseDomainModel from '../../BaseDomainModel';
-import { TranscriptItem } from '../../audio-item/entities/transcript-item.entity';
+import { TranscriptItem } from '../../audio-visual/shared/entities/transcript-item.entity';
 import { EdgeConnectionContext } from '../context.entity';
 import { EDGE_CONNECTION_CONTEXT_UNION } from '../edge-connection-context-union';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';

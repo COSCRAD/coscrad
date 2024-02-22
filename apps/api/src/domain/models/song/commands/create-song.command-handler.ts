@@ -17,7 +17,7 @@ import { IRepositoryProvider } from '../../../repositories/interfaces/repository
 import { AggregateId } from '../../../types/AggregateId';
 import { DeluxeInMemoryStore } from '../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
-import { AudioItem } from '../../audio-item/entities/audio-item.entity';
+import { AudioItem } from '../../audio-visual/audio-item/entities/audio-item.entity';
 import { BaseCommandHandler } from '../../shared/command-handlers/base-command-handler';
 import UuidNotGeneratedInternallyError from '../../shared/common-command-errors/UuidNotGeneratedInternallyError';
 import { BaseEvent } from '../../shared/events/base-event.entity';

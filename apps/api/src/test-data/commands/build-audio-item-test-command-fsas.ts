@@ -6,7 +6,7 @@ import {
     CreateAudioItem,
     TRANSLATE_AUDIO_ITEM_NAME,
     TranslateAudioItemName,
-} from '../../domain/models/audio-item/commands';
+} from '../../domain/models/audio-visual/audio-item/commands';
 import { AggregateType } from '../../domain/types/AggregateType';
 
 const id = buildDummyUuid(67);

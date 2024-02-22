@@ -6,8 +6,8 @@ import {
     MultilingualTextItemRole,
 } from '../domain/common/entities/multilingual-text';
 import { Aggregate } from '../domain/models/aggregate.entity';
-import { AudioItem } from '../domain/models/audio-item/entities/audio-item.entity';
-import { Transcript } from '../domain/models/audio-item/entities/transcript.entity';
+import { AudioItem } from '../domain/models/audio-visual/audio-item/entities/audio-item.entity';
+import { Transcript } from '../domain/models/audio-visual/shared/entities/transcript.entity';
 import { ResourceType } from '../domain/types/ResourceType';
 import { DTO } from '../types/DTO';
 import buildMediaItemTestData from './buildMediaItemTestData';

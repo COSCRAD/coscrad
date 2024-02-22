@@ -3,7 +3,7 @@ import { doesDeepAnyPropertyEqual } from '@coscrad/validation-constraints';
 import createTestModule from '../../../app/controllers/__tests__/createTestModule';
 import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { CoscradEventFactory } from '../../../domain/common';
-import { AudioItem } from '../../../domain/models/audio-item/entities/audio-item.entity';
+import { AudioItem } from '../../../domain/models/audio-visual/audio-item/entities/audio-item.entity';
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { HasAggregateId } from '../../../domain/types/HasAggregateId';
 import { DTO } from '../../../types/DTO';

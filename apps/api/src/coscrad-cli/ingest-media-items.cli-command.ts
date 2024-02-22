@@ -11,9 +11,10 @@ import { Inject } from '@nestjs/common';
 import { copyFileSync, existsSync, readdirSync } from 'fs';
 import { CommandFSA } from '../app/controllers/command/command-fsa/command-fsa.entity';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
-import { CreateAudioItem } from '../domain/models/audio-item/commands';
-import { isAudioMimeType } from '../domain/models/audio-item/entities/audio-item.entity';
-import { isVideoMimeType } from '../domain/models/audio-item/entities/video.entity';
+import { CreateAudioItem } from '../domain/models/audio-visual/audio-item/commands';
+import { isAudioMimeType } from '../domain/models/audio-visual/audio-item/entities/audio-item.entity';
+import { CreateVideo } from '../domain/models/audio-visual/video';
+import { isVideoMimeType } from '../domain/models/audio-visual/video/entities/video.entity';
 import { CreateMediaItem } from '../domain/models/media-item/commands/create-media-item/create-media-item.command';
 import {
     getExpectedMimeTypeFromExtension,
@@ -22,7 +23,6 @@ import {
 import { MediaItemDimensions } from '../domain/models/media-item/entities/media-item-dimensions';
 import { CreatePhotograph } from '../domain/models/photograph';
 import { isPhotographMimeType } from '../domain/models/photograph/entities/photograph.entity';
-import { CreateVideo } from '../domain/models/video';
 import {
     IMediaProber,
     MEDIA_PROBER_TOKEN,

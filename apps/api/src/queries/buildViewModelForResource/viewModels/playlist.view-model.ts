@@ -1,7 +1,7 @@
 import { IPlayListViewModel, ResourceType } from '@coscrad/api-interfaces';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
-import { AudioItem } from '../../../domain/models/audio-item/entities/audio-item.entity';
+import { AudioItem } from '../../../domain/models/audio-visual/audio-item/entities/audio-item.entity';
 import { MediaItem } from '../../../domain/models/media-item/entities/media-item.entity';
 import { Playlist } from '../../../domain/models/playlist';
 import { PlaylistEpisode } from '../../../domain/models/playlist/entities/playlist-episode.entity';

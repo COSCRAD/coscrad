@@ -2,7 +2,7 @@ import { ISongViewModel } from '@coscrad/api-interfaces';
 import { FromDomainModel, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
-import { AudioItem } from '../../../domain/models/audio-item/entities/audio-item.entity';
+import { AudioItem } from '../../../domain/models/audio-visual/audio-item/entities/audio-item.entity';
 import { MediaItem } from '../../../domain/models/media-item/entities/media-item.entity';
 import { Song } from '../../../domain/models/song/song.entity';
 import { BaseViewModel } from './base.view-model';
