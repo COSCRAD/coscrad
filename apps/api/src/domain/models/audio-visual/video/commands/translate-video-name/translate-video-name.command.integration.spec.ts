@@ -1,32 +1,32 @@
 import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
-import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
-import { CommandFSA } from '../../../../../app/controllers/command/command-fsa/command-fsa.entity';
-import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
-import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
-import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
-import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
-import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
-import { CannotAddDuplicateTranslationError } from '../../../../common/entities/errors';
+import setUpIntegrationTest from '../../../../../../app/controllers/__tests__/setUpIntegrationTest';
+import { CommandFSA } from '../../../../../../app/controllers/command/command-fsa/command-fsa.entity';
+import { IIdManager } from '../../../../../../domain/interfaces/id-manager.interface';
+import assertErrorAsExpected from '../../../../../../lib/__tests__/assertErrorAsExpected';
+import { ArangoDatabaseProvider } from '../../../../../../persistence/database/database.provider';
+import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import getValidAggregateInstanceForTest from '../../../../../__tests__/utilities/getValidAggregateInstanceForTest';
+import { CannotAddDuplicateTranslationError } from '../../../../../common/entities/errors';
 import {
     MultilingualText,
     MultilingualTextItem,
-} from '../../../../common/entities/multilingual-text';
-import { AggregateType } from '../../../../types/AggregateType';
-import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
-import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
-import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
-import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
-import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
-import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
-import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
-import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
-import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
-import { Video } from '../../../audio-visual/audio-item/entities/video.entity';
-import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
-import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
+} from '../../../../../common/entities/multilingual-text';
+import { AggregateType } from '../../../../../types/AggregateType';
+import { DeluxeInMemoryStore } from '../../../../../types/DeluxeInMemoryStore';
+import { assertCommandError } from '../../../../__tests__/command-helpers/assert-command-error';
+import { assertCommandFailsDueToTypeError } from '../../../../__tests__/command-helpers/assert-command-payload-type-error';
+import { assertCommandSuccess } from '../../../../__tests__/command-helpers/assert-command-success';
+import { DummyCommandFsaFactory } from '../../../../__tests__/command-helpers/dummy-command-fsa-factory';
+import { generateCommandFuzzTestCases } from '../../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
+import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
+import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
+import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUserId';
+import AggregateNotFoundError from '../../../../shared/common-command-errors/AggregateNotFoundError';
+import CommandExecutionError from '../../../../shared/common-command-errors/CommandExecutionError';
+import { Video } from '../../entities/video.entity';
 import { TranslateVideoName } from './translate-video-name.command';
 
 const commandType = `TRANSLATE_VIDEO_NAME`;
