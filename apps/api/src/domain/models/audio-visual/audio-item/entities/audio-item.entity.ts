@@ -31,6 +31,7 @@ import {
     Transcribable,
 } from '../../shared/entities/transcribable.mixin';
 import { Transcript } from '../../shared/entities/transcript.entity';
+import { createTranscriptImplementation } from '../../shared/methods/create-transcript';
 import { InvalidMIMETypeForAudiovisualResourceError } from '../commands/errors';
 
 export type CoscradTimeStamp = number;
@@ -189,6 +190,10 @@ class AudioItemBase extends Resource implements IRadioPublishableResource {
 
     getTimeBounds(): [number, number] {
         return [0, this.lengthMilliseconds];
+    }
+
+    createTranscript<T>(this: T) {
+        return createTranscriptImplementation.apply(this);
     }
 
     // TODO Does this belong in the view layer?

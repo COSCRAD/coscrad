@@ -26,7 +26,7 @@ import { CreateTranscript } from './create-transcript.command';
 import { TranscriptCreated } from './transcript-created.event';
 
 @CommandHandler(CreateTranscript)
-export class CreateTranscriptCommandHandler extends BaseCommandHandler<ITranscribable & Resource> {
+export class CreateTranscriptCommandHandler extends BaseCommandHandler<AudioItem | Video> {
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN)
         protected readonly repositoryProvider: IRepositoryProvider,
@@ -37,7 +37,7 @@ export class CreateTranscriptCommandHandler extends BaseCommandHandler<ITranscri
 
     protected async createOrFetchWriteContext({
         aggregateCompositeIdentifier: { type, id },
-    }: CreateTranscript): Promise<ResultOrError<ITranscribable & Resource>> {
+    }: CreateTranscript): Promise<ResultOrError<AudioItem | Video>> {
         const searchResult = await this.repositoryProvider
             .forResource<AudioItem | Video>(type)
             .fetchById(id);
@@ -53,10 +53,10 @@ export class CreateTranscriptCommandHandler extends BaseCommandHandler<ITranscri
 
     protected actOnInstance(
         // should we program to `HasCreateTranscript` or `Transcribable` here?
-        instance: ITranscribable & Resource,
+        instance: AudioItem | Video,
         _command: CreateTranscript
-    ): ResultOrError<ITranscribable & Resource> {
-        return instance.createTranscript() as unknown as AudioItem;
+    ): ResultOrError<AudioItem | Video> {
+        return instance.createTranscript() as unknown as AudioItem | Video;
     }
 
     protected validateExternalState(

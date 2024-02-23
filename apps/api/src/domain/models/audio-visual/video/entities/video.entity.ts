@@ -31,6 +31,7 @@ import {
     Transcribable,
 } from '../../shared/entities/transcribable.mixin';
 import { Transcript } from '../../shared/entities/transcript.entity';
+import { createTranscriptImplementation } from '../../shared/methods/create-transcript';
 
 export const isVideoMimeType = (mimeType: MIMEType): boolean =>
     [MIMEType.mp4, MIMEType.videoOgg, MIMEType.videoWebm].includes(mimeType);
@@ -121,6 +122,10 @@ export class VideoBase extends Resource {
                 id: this.mediaItemId,
             },
         ];
+    }
+
+    createTranscript<T>(this: T) {
+        return createTranscriptImplementation.apply(this);
     }
 
     translateName(text: string, languageCode: LanguageCode): ResultOrError<this> {

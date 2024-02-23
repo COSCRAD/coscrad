@@ -8,10 +8,7 @@ import { CannotAddDuplicateTranslationError } from '../../../../common/entities/
 import { MultilingualTextItem } from '../../../../common/entities/multilingual-text';
 import { ResourceCompositeIdentifier } from '../../../../types/ResourceCompositeIdentifier';
 
-import {
-    CannotOverwriteTranscriptError,
-    TranscriptLineItemOutOfBoundsError,
-} from '../../audio-item/errors';
+import { TranscriptLineItemOutOfBoundsError } from '../../audio-item/errors';
 import {
     ADD_LINE_ITEM_TO_TRANSCRIPT,
     ADD_PARTICIPANT_TO_TRANSCRIPT,
@@ -51,8 +48,6 @@ export interface ITranscribableBase {
 }
 
 export interface ITranscribable {
-    createTranscript(): ResultOrError<ITranscribableBase>;
-
     hasTranscript(): boolean;
 
     addParticipantToTranscript(
@@ -81,18 +76,6 @@ export interface ITranscribable {
 
 export function Transcribable<TBase extends Constructor<ITranscribableBase>>(Base: TBase) {
     return class WithTranscription extends Base implements ITranscribable {
-        createTranscript(): ResultOrError<this> {
-            if (this.hasTranscript())
-                return new CannotOverwriteTranscriptError(this.getCompositeIdentifier());
-
-            return this.safeClone({
-                transcript: new Transcript({
-                    items: [],
-                    participants: [],
-                }),
-            } as DeepPartial<DTO<this>>);
-        }
-
         hasTranscript(): boolean {
             return !isNullOrUndefined(this.transcript);
         }
