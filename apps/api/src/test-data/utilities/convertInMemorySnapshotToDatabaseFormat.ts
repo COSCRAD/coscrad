@@ -1,3 +1,4 @@
+import { Aggregate } from '../../domain/models/aggregate.entity';
 import { toDto } from '../../domain/models/shared/functional/index';
 import {
     InMemorySnapshot,
@@ -54,6 +55,23 @@ export default (snapshot: InMemorySnapshot): InMemoryDatabaseSnapshot => {
                         .map(mapEntityDTOToDatabaseDTO),
                 }),
                 {} as InMemorySnapshotOfResources
+            ),
+            // TODO Write UUIDs as well
+            [ArangoCollectionId.events]: [
+                ...Object.values(snapshot.resources),
+                snapshot.category,
+                snapshot.note,
+                snapshot.tag,
+                snapshot.user,
+                snapshot.userGroup,
+            ].flatMap((instances) =>
+                // Here we extract the events from the instances to build the event history. In the future we should just dump the events collection directly
+                instances.map(
+                    (aggregateRoot: Aggregate) =>
+                        aggregateRoot.eventHistory.map((eventRecord) =>
+                            mapEntityDTOToDatabaseDTO(eventRecord)
+                        ) || []
+                )
             ),
         },
 
