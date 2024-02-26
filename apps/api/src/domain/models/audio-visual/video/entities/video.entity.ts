@@ -24,20 +24,24 @@ import { Resource } from '../../../resource.entity';
 import validateTimeRangeContextForModel from '../../../shared/contextValidators/validateTimeRangeContextForModel';
 import { InvalidMIMETypeForAudiovisualResourceError } from '../../audio-item/commands/errors';
 import { CoscradTimeStamp } from '../../audio-item/entities/audio-item.entity';
-import {
-    Constructor,
-    ITranscribable,
-    ITranscribableBase,
-    Transcribable,
-} from '../../shared/entities/transcribable.mixin';
+import { TranscriptItem } from '../../shared/entities/transcript-item.entity';
+import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
 import { Transcript } from '../../shared/entities/transcript.entity';
+import { addLineItemToTranscriptImplementation } from '../../shared/methods/add-line-item-to-transcript';
+import { addParticipantToTranscriptImplementation } from '../../shared/methods/add-participant-to-transcript';
 import { createTranscriptImplementation } from '../../shared/methods/create-transcript';
+import { importLineItemsToTranscriptImplementation } from '../../shared/methods/import-line-items-to-transcript';
+import {
+    LineItemTranslation,
+    importTranslationsForTranscriptImplementation,
+} from '../../shared/methods/import-translations-for-transcript';
+import { translateLineItemImplementation } from '../../shared/methods/translate-line-item';
 
 export const isVideoMimeType = (mimeType: MIMEType): boolean =>
     [MIMEType.mp4, MIMEType.videoOgg, MIMEType.videoWebm].includes(mimeType);
 
 @RegisterIndexScopedCommands([`CREATE_VIDEO`])
-export class VideoBase extends Resource {
+export class Video extends Resource {
     readonly type = ResourceType.video;
 
     @NestedDataType(MultilingualText, {
@@ -80,7 +84,7 @@ export class VideoBase extends Resource {
     })
     readonly lengthMilliseconds: CoscradTimeStamp;
 
-    constructor(dto: DTO<VideoBase>) {
+    constructor(dto: DTO<Video>) {
         super(dto);
 
         if (!dto) return;
@@ -128,12 +132,44 @@ export class VideoBase extends Resource {
         return createTranscriptImplementation.apply(this);
     }
 
+    addParticipantToTranscript(participant: TranscriptParticipant): ResultOrError<this> {
+        return addParticipantToTranscriptImplementation.apply(this, [participant]);
+    }
+
+    addLineItemToTranscript(newItemDto: DTO<TranscriptItem>): ResultOrError<Video> {
+        return addLineItemToTranscriptImplementation.apply(this, [newItemDto]);
+    }
+
+    translateLineItem(
+        inPointMillisecondsForTranslation: number,
+        outPointMillisecondsForTranslation: number,
+        translation: string,
+        languageCode: LanguageCode
+    ): ResultOrError<Video> {
+        return translateLineItemImplementation.apply(this, [
+            inPointMillisecondsForTranslation,
+            outPointMillisecondsForTranslation,
+            translation,
+            languageCode,
+        ]);
+    }
+
+    importLineItemsToTranscript(newItemDtos: DTO<TranscriptItem>[]): ResultOrError<Video> {
+        return importLineItemsToTranscriptImplementation.apply(this, [newItemDtos]);
+    }
+
     translateName(text: string, languageCode: LanguageCode): ResultOrError<this> {
         return this.translateMultilingualTextProperty('name', {
             text,
             languageCode,
             role: MultilingualTextItemRole.freeTranslation,
         });
+    }
+
+    importTranslationsForTranscript(
+        translationItemDtos: LineItemTranslation[]
+    ): ResultOrError<Video> {
+        return importTranslationsForTranscriptImplementation.apply(this, [translationItemDtos]);
     }
 
     override validateExternalReferences({
@@ -187,14 +223,31 @@ export class VideoBase extends Resource {
         return [0, this.lengthMilliseconds];
     }
 
+    hasTranscript(): boolean {
+        return !isNullOrUndefined(this.transcript);
+    }
+
+    countTranscriptParticipants(): number {
+        if (!this.hasTranscript()) return 0;
+
+        return this.transcript.countParticipants();
+    }
+
+    // TODO Move this to the view layer
     protected getResourceSpecificAvailableCommands(): string[] {
         const availableCommandIds: string[] = [`TRANSLATE_VIDEO_NAME`];
+
+        if (!this.hasTranscript()) availableCommandIds.push(`CREATE_TRANSCRIPT`);
+
+        if (this.hasTranscript()) availableCommandIds.push(`ADD_PARTICIPANT_TO_TRANSCRIPT`);
+
+        // You can't add a line item without a participant to refer to (by initials)
+        if (this.countTranscriptParticipants() > 0)
+            availableCommandIds.push(`ADD_LINE_ITEM_TO_TRANSCRIPT`);
+
+        if (this.hasTranscript() && this.transcript.hasLineItems())
+            availableCommandIds.push(`TRANSLATE_LINE_ITEM`);
 
         return availableCommandIds;
     }
 }
-
-// mixin the transcribable behaviour
-export const Video = Transcribable(VideoBase as unknown as Constructor<ITranscribableBase>);
-
-export type Video = ITranscribable & VideoBase;

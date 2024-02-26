@@ -20,11 +20,13 @@ import { BaseCommandHandler } from '../../../../../shared/command-handlers/base-
 import AggregateNotFoundError from '../../../../../shared/common-command-errors/AggregateNotFoundError';
 import { BaseEvent } from '../../../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../../../shared/events/types/EventRecordMetadata';
+import { AudioItem } from '../../../../audio-item/entities/audio-item.entity';
+import { Video } from '../../../../video/entities/video.entity';
 import { ITranscribable } from '../../../entities/transcribable.mixin';
 import { AddLineItemToTranscript } from './add-line-item-to-transcript.command';
 import { LineItemAddedToTranscript } from './line-item-added-to-transcript.event';
 
-export type TranscribableResource = ITranscribable & Resource;
+export type TranscribableResource = AudioItem | Video;
 
 @CommandHandler(AddLineItemToTranscript)
 export class AddLineItemtoTranscriptCommandHandler extends BaseCommandHandler<TranscribableResource> {
