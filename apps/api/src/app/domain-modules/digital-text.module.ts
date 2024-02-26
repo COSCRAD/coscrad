@@ -8,6 +8,7 @@ import {
     AddPageToDigitalTextCommandHandler,
     AudioAddedForDigitalTextPage,
     DigitalTextPageContentTranslated,
+    DigitalTextTitleTranslated,
     PageAddedToDigitalText,
     TranslateDigitalTextPageContent,
 } from '../../domain/models/digital-text/commands';
@@ -56,6 +57,7 @@ import { DigitalTextQueryController } from '../controllers/resources/digital-tex
             ContentAddedToDigitalTextPage,
             DigitalTextPageContentTranslated,
             AudioAddedForDigitalTextPage,
+            DigitalTextTitleTranslated,
         ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
