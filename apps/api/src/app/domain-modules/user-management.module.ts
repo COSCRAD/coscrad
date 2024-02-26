@@ -5,6 +5,7 @@ import {
     GrantResourceReadAccessToUserCommandHandler,
     PublishResource,
     PublishResourceCommandHandler,
+    ResourceReadAccessGrantedToUser,
 } from '../../domain/models/shared/common-commands';
 import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import {
@@ -47,7 +48,7 @@ import { CoscradUserController } from '../controllers/coscrad-user.controller';
         PublishResource,
         PublishResourceCommandHandler,
         // Events
-        ...[ResourcePublished].map((ctor) => ({
+        ...[ResourcePublished, ResourceReadAccessGrantedToUser].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
         })),

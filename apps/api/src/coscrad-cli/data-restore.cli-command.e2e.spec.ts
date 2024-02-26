@@ -90,18 +90,12 @@ describe(`CLI Command: **data-restore**`, () => {
 
         if (existsSync(fileToRestore)) unlinkSync(fileToRestore);
 
-        writeFileSync(
-            fileToRestore,
-            JSON.stringify(
-                convertInMemorySnapshotToDatabaseFormat(
-                    new DeluxeInMemoryStore(
-                        testDataWithUniqueKeys
-                    ).fetchFullSnapshotInLegacyFormat()
-                ),
-                null,
-                4
-            )
+        const snapshot = convertInMemorySnapshotToDatabaseFormat(
+            new DeluxeInMemoryStore(testDataWithUniqueKeys).fetchFullSnapshotInLegacyFormat()
         );
+
+        writeFileSync(fileToRestore, JSON.stringify(snapshot, null, 4));
+
         await testRepositoryProvider.testTeardown();
     });
 
@@ -200,12 +194,6 @@ describe(`CLI Command: **data-restore**`, () => {
                     []
                 );
 
-                const eventSourcedAggregateTypes = [
-                    AggregateType.digitalText,
-                    AggregateType.song,
-                    AggregateType.term,
-                ];
-
                 const compareStrings = (a: string, b: string) => a.localeCompare(b);
 
                 /**
@@ -215,9 +203,7 @@ describe(`CLI Command: **data-restore**`, () => {
                  * least one instnace of each aggregate in the post-restore state
                  * is a good sanity check.
                  */
-                expect(aggregatesNotInSnapshot.sort(compareStrings)).toEqual(
-                    eventSourcedAggregateTypes.sort(compareStrings)
-                );
+                expect(aggregatesNotInSnapshot.sort(compareStrings)).toEqual([]);
             });
         });
     });
