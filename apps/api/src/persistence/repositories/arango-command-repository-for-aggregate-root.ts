@@ -4,6 +4,7 @@ import { Inject } from '@nestjs/common';
 import { AggregateTypeMetadata, getAggregateTypeForTarget } from '../../domain/decorators';
 import { Aggregate } from '../../domain/models/aggregate.entity';
 import { BaseEvent } from '../../domain/models/shared/events/base-event.entity';
+import { validAggregateOrThrow } from '../../domain/models/shared/functional';
 import { IRepositoryForAggregate } from '../../domain/repositories/interfaces/repository-for-aggregate.interface';
 import { ISpecification } from '../../domain/repositories/interfaces/specification.interface';
 import { AggregateCompositeIdentifier } from '../../domain/types/AggregateCompositeIdentifier';
@@ -73,12 +74,6 @@ export class ArangoCommandRepositoryForAggregateRoot<TAggregate extends Aggregat
             type: this.aggregateType,
         });
 
-        if (specification) {
-            throw new InternalError(
-                `The specification pattern is not yet supported for the event-sourced song repository`
-            );
-        }
-
         const uniqueIds = [
             ...new Set(
                 eventStream.map(
@@ -92,7 +87,12 @@ export class ArangoCommandRepositoryForAggregateRoot<TAggregate extends Aggregat
         // Specific to TAggregate
         const allTAggregates = uniqueIds
             .map((id) => Ctor.fromEventHistory(eventStream, id))
-            .filter((result): result is ResultOrError<TAggregate> => !isNotFound(result));
+            .filter((result): result is ResultOrError<TAggregate> => !isNotFound(result))
+            // We fail fast if we have received invalid data from the database
+            .filter(validAggregateOrThrow);
+
+        if (specification)
+            return allTAggregates.filter((instance) => specification.isSatisfiedBy(instance));
 
         return allTAggregates;
     }
