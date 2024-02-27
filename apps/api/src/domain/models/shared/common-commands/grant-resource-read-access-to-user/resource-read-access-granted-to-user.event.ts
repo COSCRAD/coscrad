@@ -12,5 +12,5 @@ export type ResourceReadAccessGrantedToUserPayload = {
 
 @CoscradEvent(`RESOURCE_READ_ACCESS_GRANTED_TO_USER`)
 export class ResourceReadAccessGrantedToUser extends BaseEvent<ResourceReadAccessGrantedToUserPayload> {
-    type = RESOURCE_READ_ACCESS_GRANTED_TO_USER;
+    readonly type = RESOURCE_READ_ACCESS_GRANTED_TO_USER;
 }

@@ -32,6 +32,10 @@ import { Resource } from '../../../resource.entity';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import validateTimeRangeContextForModel from '../../../shared/contextValidators/validateTimeRangeContextForModel';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { LineItemAddedToTranscript } from '../../shared/commands/transcripts/add-line-item-to-transcript/line-item-added-to-transcript.event';
+import { ParticipantAddedToTranscript } from '../../shared/commands/transcripts/add-participant-to-transcript/participant-added-to-transcript.event';
+import { TranscriptCreated } from '../../shared/commands/transcripts/create-transcript/transcript-created.event';
+import { LineItemsImportedToTranscript } from '../../shared/commands/transcripts/import-line-items-to-transcript/line-items-imported-to-transcript.event';
 import { TranscriptItem } from '../../shared/entities/transcript-item.entity';
 import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
 import { Transcript } from '../../shared/entities/transcript.entity';
@@ -44,8 +48,10 @@ import {
     importTranslationsForTranscriptImplementation,
 } from '../../shared/methods/import-translations-for-transcript';
 import { translateLineItemImplementation } from '../../shared/methods/translate-line-item';
+import { LineItemTranslated, TranslationsImportedForTranscript } from '../commands';
 import { AudioItemCreated } from '../commands/create-audio-item/transcript-created.event';
 import { InvalidMIMETypeForAudiovisualResourceError } from '../commands/errors';
+import { AudioItemNameTranslated } from '../commands/translate-audio-item-name/audio-item-name-translated-event';
 
 export type CoscradTimeStamp = number;
 
@@ -309,6 +315,73 @@ export class AudioItem extends Resource implements IRadioPublishableResource {
         return [MIMEType.mp3, MIMEType.wav].includes(mimeType);
     }
 
+    handleAudioItemNameTranslated({ payload: { text, languageCode } }: AudioItemNameTranslated) {
+        return this.translateName(text, languageCode);
+    }
+
+    handleTranscriptCreated(_: TranscriptCreated) {
+        return this.createTranscript();
+    }
+
+    handleParticipantAddedToTranscript({
+        payload: { name, initials },
+    }: ParticipantAddedToTranscript) {
+        return this.addParticipantToTranscript(
+            new TranscriptParticipant({
+                initials,
+                name,
+            })
+        );
+    }
+
+    handleLineItemAddedToTranscript({
+        payload: { inPointMilliseconds, outPointMilliseconds, text, languageCode, speakerInitials },
+    }: LineItemAddedToTranscript) {
+        // TODO Consider changing the following API
+        return this.addLineItemToTranscript(
+            new TranscriptItem({
+                inPointMilliseconds,
+                outPointMilliseconds,
+                text: buildMultilingualTextWithSingleItem(text, languageCode),
+                speakerInitials,
+            })
+        );
+    }
+
+    handleLineItemTranslated({
+        payload: { inPointMilliseconds, outPointMilliseconds, translation, languageCode },
+    }: LineItemTranslated) {
+        return this.translateLineItem(
+            inPointMilliseconds,
+            outPointMilliseconds,
+            translation,
+            languageCode
+        );
+    }
+
+    handleLineItemsImportedToTranscript({ payload: { lineItems } }: LineItemsImportedToTranscript) {
+        return this.importLineItemsToTranscript(
+            lineItems.map((lineItem) => ({
+                ...lineItem,
+                inPoint: lineItem.inPointMilliseconds,
+                outPoint: lineItem.outPointMilliseconds,
+                text: buildMultilingualTextWithSingleItem(lineItem.text, lineItem.languageCode),
+            }))
+        );
+    }
+
+    handleTranslationsImportedForTranscript({
+        payload: { translationItems },
+    }: TranslationsImportedForTranscript) {
+        return this.importTranslationsForTranscript(
+            translationItems.map(({ inPointMilliseconds, translation, languageCode }) => ({
+                inPointMilliseconds,
+                languageCode,
+                text: translation,
+            }))
+        );
+    }
+
     static fromEventHistory(
         eventStream: BaseEvent[],
         audioItemId: AggregateId
@@ -346,7 +419,14 @@ export class AudioItem extends Resource implements IRadioPublishableResource {
             lengthMilliseconds,
         });
 
-        // TODO Validate invariants
+        const invariantValidationResult = newInstance.validateInvariants();
+
+        if (isInternalError(invariantValidationResult)) {
+            throw new InternalError(
+                `failed to event source Audio Item due to invalid existing state`,
+                [invariantValidationResult]
+            );
+        }
 
         return newInstance;
     }

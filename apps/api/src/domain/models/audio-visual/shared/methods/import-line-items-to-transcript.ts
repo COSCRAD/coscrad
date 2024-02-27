@@ -12,6 +12,7 @@ interface Transcribable {
     getTimeBounds(): [number, number];
 }
 
+// Should we rename this to `import-transcript`?
 // TODO Do we ensure that there must be at least one line item here?(
 export function importLineItemsToTranscriptImplementation<T extends Transcribable & Resource>(
     this: T,
