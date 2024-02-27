@@ -7,9 +7,9 @@ import InvariantValidationError from '../../../domainModelValidators/errors/Inva
 import { AggregateType } from '../../../types/AggregateType';
 import { AudioItem } from '../audio-item/entities/audio-item.entity';
 import { InvalidTranscriptError } from './commands/transcripts/errors';
-import { LineItemTranslation } from './entities/transcribable.mixin';
 import { TranscriptItem } from './entities/transcript-item.entity';
 import { Transcript } from './entities/transcript.entity';
+import { LineItemTranslation } from './methods/import-translations-for-transcript';
 import {
     CannotOverrideTranslationError,
     CannotTranslateEmptyTranscriptError,

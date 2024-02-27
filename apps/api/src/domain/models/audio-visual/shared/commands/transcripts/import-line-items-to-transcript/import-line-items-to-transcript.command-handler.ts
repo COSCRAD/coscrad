@@ -7,15 +7,15 @@ import { Valid } from '../../../../../../domainModelValidators/Valid';
 import { IRepositoryForAggregate } from '../../../../../../repositories/interfaces/repository-for-aggregate.interface';
 import { DeluxeInMemoryStore } from '../../../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../../../types/ResourceType';
-import { Resource } from '../../../../../resource.entity';
 import { BaseUpdateCommandHandler } from '../../../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../../../shared/events/types/EventRecordMetadata';
-import { ITranscribable } from '../../../entities/transcribable.mixin';
+import { AudioItem } from '../../../../audio-item/entities/audio-item.entity';
+import { Video } from '../../../../video/entities/video.entity';
 import { ImportLineItemsToTranscript } from './import-line-items-to-transcript.command';
 import { LineItemsImportedToTranscript } from './line-items-imported-to-transcript.event';
 
-type TranscribableResource = ITranscribable & Resource;
+type TranscribableResource = AudioItem | Video;
 @CommandHandler(ImportLineItemsToTranscript)
 export class ImportLineItemsToTranscriptCommandHandler extends BaseUpdateCommandHandler<TranscribableResource> {
     protected aggregateType: typeof AggregateType.audioItem | typeof AggregateType.video;
