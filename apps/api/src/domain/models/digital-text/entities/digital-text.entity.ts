@@ -189,6 +189,7 @@ export class DigitalText extends Resource {
         return allErrors.length > 0 ? new InvalidExternalStateError(allErrors) : Valid;
     }
 
+    @UpdateMethod()
     addPage(pageIdentifier: PageIdentifier): ResultOrError<DigitalText> {
         if (this.hasPage(pageIdentifier))
             return new CannotAddPageWithDuplicateIdentifierError(this.id, pageIdentifier);
