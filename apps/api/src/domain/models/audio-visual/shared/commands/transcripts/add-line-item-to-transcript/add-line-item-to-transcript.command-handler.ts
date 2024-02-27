@@ -15,16 +15,16 @@ import { IRepositoryProvider } from '../../../../../../repositories/interfaces/r
 import { AggregateId } from '../../../../../../types/AggregateId';
 import { DeluxeInMemoryStore } from '../../../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../../../types/ResourceType';
-import { Resource } from '../../../../../resource.entity';
 import { BaseCommandHandler } from '../../../../../shared/command-handlers/base-command-handler';
 import AggregateNotFoundError from '../../../../../shared/common-command-errors/AggregateNotFoundError';
 import { BaseEvent } from '../../../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../../../shared/events/types/EventRecordMetadata';
-import { ITranscribable } from '../../../entities/transcribable.mixin';
+import { AudioItem } from '../../../../audio-item/entities/audio-item.entity';
+import { Video } from '../../../../video/entities/video.entity';
 import { AddLineItemToTranscript } from './add-line-item-to-transcript.command';
 import { LineItemAddedToTranscript } from './line-item-added-to-transcript.event';
 
-export type TranscribableResource = ITranscribable & Resource;
+export type TranscribableResource = AudioItem | Video;
 
 @CommandHandler(AddLineItemToTranscript)
 export class AddLineItemtoTranscriptCommandHandler extends BaseCommandHandler<TranscribableResource> {
@@ -94,7 +94,7 @@ export class AddLineItemtoTranscriptCommandHandler extends BaseCommandHandler<Tr
      * subscribers via messaging queue).
      */
     protected async persist(
-        instance: ITranscribable & Resource,
+        instance: TranscribableResource,
         command: AddLineItemToTranscript,
         systemUserId: AggregateId
     ): Promise<void> {

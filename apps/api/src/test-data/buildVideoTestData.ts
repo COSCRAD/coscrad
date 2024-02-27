@@ -46,7 +46,5 @@ const partialDtos: DTO<Omit<Video, 'type'>>[] = [
 
 export default () =>
     partialDtos
-        .map((partialDto) => new Video({ ...partialDto, type: ResourceType.audioItem }))
-        .map((audioItemDto) =>
-            convertAggregatesIdToUuid(audioItemDto as unknown as Aggregate)
-        ) as Video[];
+        .map((partialDto) => new Video({ ...partialDto, type: ResourceType.video }))
+        .map((audioItemDto) => convertAggregatesIdToUuid(audioItemDto as unknown as Aggregate));

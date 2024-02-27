@@ -14,19 +14,17 @@ import { IRepositoryProvider } from '../../../../../../repositories/interfaces/r
 import { AggregateId } from '../../../../../../types/AggregateId';
 import { DeluxeInMemoryStore } from '../../../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../../../types/ResourceType';
-import { Resource } from '../../../../../resource.entity';
 import { BaseCommandHandler } from '../../../../../shared/command-handlers/base-command-handler';
 import AggregateNotFoundError from '../../../../../shared/common-command-errors/AggregateNotFoundError';
 import { BaseEvent } from '../../../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../../../shared/events/types/EventRecordMetadata';
 import { AudioItem } from '../../../../audio-item/entities/audio-item.entity';
 import { Video } from '../../../../video/entities/video.entity';
-import { ITranscribable } from '../../../entities/transcribable.mixin';
 import { CreateTranscript } from './create-transcript.command';
 import { TranscriptCreated } from './transcript-created.event';
 
 @CommandHandler(CreateTranscript)
-export class CreateTranscriptCommandHandler extends BaseCommandHandler<ITranscribable & Resource> {
+export class CreateTranscriptCommandHandler extends BaseCommandHandler<AudioItem | Video> {
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN)
         protected readonly repositoryProvider: IRepositoryProvider,
@@ -37,7 +35,7 @@ export class CreateTranscriptCommandHandler extends BaseCommandHandler<ITranscri
 
     protected async createOrFetchWriteContext({
         aggregateCompositeIdentifier: { type, id },
-    }: CreateTranscript): Promise<ResultOrError<ITranscribable & Resource>> {
+    }: CreateTranscript): Promise<ResultOrError<AudioItem | Video>> {
         const searchResult = await this.repositoryProvider
             .forResource<AudioItem | Video>(type)
             .fetchById(id);
@@ -53,10 +51,10 @@ export class CreateTranscriptCommandHandler extends BaseCommandHandler<ITranscri
 
     protected actOnInstance(
         // should we program to `HasCreateTranscript` or `Transcribable` here?
-        instance: ITranscribable & Resource,
+        instance: AudioItem | Video,
         _command: CreateTranscript
-    ): ResultOrError<ITranscribable & Resource> {
-        return instance.createTranscript() as unknown as AudioItem;
+    ): ResultOrError<AudioItem | Video> {
+        return instance.createTranscript() as unknown as AudioItem | Video;
     }
 
     protected validateExternalState(
@@ -73,7 +71,7 @@ export class CreateTranscriptCommandHandler extends BaseCommandHandler<ITranscri
     // Why do we need persist here?
     // TODO This overlaps with the generic base-update command handler- how can we reuse without complex inheritance hierarchies?
     protected async persist(
-        instance: ITranscribable & Resource,
+        instance: AudioItem | Video,
         command: CreateTranscript,
         systemUserId: AggregateId
     ): Promise<void> {

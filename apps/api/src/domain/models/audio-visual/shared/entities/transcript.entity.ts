@@ -21,13 +21,13 @@ import {
     FailedToImportLineItemsToTranscriptError,
     InvalidTranscriptError,
 } from '../commands/transcripts/errors';
+import { LineItemTranslation } from '../methods/import-translations-for-transcript';
 import {
     CannotTranslateEmptyTranscriptError,
     FailedToImportTranslationsToTranscriptError,
     LineItemNotFoundForTranslationError,
 } from '../transcript-errors';
 import { TranscriptParticipantInitialsNotRegisteredError } from '../transcript-errors/transcript-participant-initials-not-registered.error';
-import { LineItemTranslation } from './transcribable.mixin';
 import { TranscriptItem } from './transcript-item.entity';
 import { TranscriptParticipant } from './transcript-participant';
 export class Transcript extends BaseDomainModel implements ITranscript {
