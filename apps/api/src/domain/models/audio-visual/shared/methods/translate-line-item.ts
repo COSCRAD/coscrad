@@ -2,8 +2,6 @@ import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces'
 import { CannotAddDuplicateTranslationError } from '../../../../../domain/common/entities/errors';
 import { MultilingualTextItem } from '../../../../../domain/common/entities/multilingual-text';
 import { isInternalError } from '../../../../../lib/errors/InternalError';
-import { DTO } from '../../../../../types/DTO';
-import { DeepPartial } from '../../../../../types/DeepPartial';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { Resource } from '../../../resource.entity';
 import { TranscriptItem } from '../entities/transcript-item.entity';
@@ -54,11 +52,11 @@ export function translateLineItemImplementation<T extends Transcribable & Resour
         text: textUpdateResult,
     });
 
-    return this.safeClone({
-        transcript: this.transcript.clone({
-            items: this.transcript.items.map((item) =>
-                item.isColocatedWith(existingLineItem) ? newLineItem : item
-            ),
-        }),
-    } as DeepPartial<DTO<T>>);
+    this.transcript = this.transcript.clone({
+        items: this.transcript.items.map((item) =>
+            item.isColocatedWith(existingLineItem) ? newLineItem : item
+        ),
+    });
+
+    return this;
 }

@@ -144,6 +144,7 @@ describe(commandType, () => {
     });
 
     // TODO Do these tests for a video item as well
+    // DO this now!
     describe(`when the command is invalid`, () => {
         describe(`when the audiovisual item does not exist`, () => {
             it(`should fail with the expected errors`, async () => {

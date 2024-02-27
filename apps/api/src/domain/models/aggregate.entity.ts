@@ -175,9 +175,9 @@ export abstract class Aggregate extends BaseDomainModel implements HasAggregateI
 
         if (isInternalError(valueUpdateResult)) return valueUpdateResult;
 
-        return this.safeClone({
-            [propertyName]: valueUpdateResult,
-        } as unknown as DeepPartial<DTO<this>>);
+        this[propertyName] = valueUpdateResult;
+
+        return this;
     }
 
     /**

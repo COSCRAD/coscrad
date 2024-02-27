@@ -7,6 +7,7 @@ import {
     UUID,
 } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { UpdateMethod } from '../../../../../domain/decorators';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../../lib/errors/types/ValidationResult';
 import { DTO } from '../../../../../types/DTO';
@@ -114,14 +115,6 @@ export class AudioItem extends Resource implements IRadioPublishableResource {
         return this.name;
     }
 
-    translateName(text: string, languageCode: LanguageCode): ResultOrError<this> {
-        return this.translateMultilingualTextProperty('name', {
-            text,
-            languageCode,
-            role: MultilingualTextItemRole.freeTranslation,
-        });
-    }
-
     protected validateComplexInvariants(): InternalError[] {
         const allErrors: InternalError[] = [];
 
@@ -196,18 +189,42 @@ export class AudioItem extends Resource implements IRadioPublishableResource {
         return [0, this.lengthMilliseconds];
     }
 
+    hasTranscript(): boolean {
+        return !isNullOrUndefined(this.transcript);
+    }
+
+    countTranscriptParticipants(): number {
+        if (!this.hasTranscript()) return 0;
+
+        return this.transcript.countParticipants();
+    }
+
+    // TODO Should the @UpdateMethod be applied here instead?
+    @UpdateMethod()
+    translateName(text: string, languageCode: LanguageCode): ResultOrError<this> {
+        return this.translateMultilingualTextProperty('name', {
+            text,
+            languageCode,
+            role: MultilingualTextItemRole.freeTranslation,
+        });
+    }
+
+    @UpdateMethod()
     createTranscript<T>(this: T) {
         return createTranscriptImplementation.apply(this);
     }
 
+    @UpdateMethod()
     addParticipantToTranscript(participant: TranscriptParticipant): ResultOrError<this> {
         return addParticipantToTranscriptImplementation.apply(this, [participant]);
     }
 
+    @UpdateMethod()
     addLineItemToTranscript(newItemDto: DTO<TranscriptItem>): ResultOrError<AudioItem> {
         return addLineItemToTranscriptImplementation.apply(this, [newItemDto]);
     }
 
+    @UpdateMethod()
     translateLineItem(
         inPointMillisecondsForTranslation: number,
         outPointMillisecondsForTranslation: number,
@@ -222,24 +239,16 @@ export class AudioItem extends Resource implements IRadioPublishableResource {
         ]);
     }
 
+    @UpdateMethod()
     importLineItemsToTranscript(newItemDtos: DTO<TranscriptItem>[]): ResultOrError<AudioItem> {
         return importLineItemsToTranscriptImplementation.apply(this, [newItemDtos]);
     }
 
+    @UpdateMethod()
     importTranslationsForTranscript(
         translationItemDtos: LineItemTranslation[]
     ): ResultOrError<AudioItem> {
         return importTranslationsForTranscriptImplementation.apply(this, [translationItemDtos]);
-    }
-
-    hasTranscript(): boolean {
-        return !isNullOrUndefined(this.transcript);
-    }
-
-    countTranscriptParticipants(): number {
-        if (!this.hasTranscript()) return 0;
-
-        return this.transcript.countParticipants();
     }
 
     // TODO Does this belong in the view layer?

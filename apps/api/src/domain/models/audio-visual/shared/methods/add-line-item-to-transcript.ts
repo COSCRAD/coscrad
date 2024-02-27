@@ -1,7 +1,6 @@
 import { isNumberWithinRange } from '@coscrad/validation-constraints';
 import { isInternalError } from '../../../../../lib/errors/InternalError';
 import { DTO } from '../../../../../types/DTO';
-import { DeepPartial } from '../../../../../types/DeepPartial';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { Resource } from '../../../resource.entity';
 import { TranscriptItem } from '../entities/transcript-item.entity';
@@ -30,7 +29,7 @@ export function addLineItemToTranscriptImplementation<T extends Transcribable & 
 
     if (isInternalError(updatedTranscript)) return updatedTranscript;
 
-    return this.safeClone({
-        transcript: updatedTranscript,
-    } as DeepPartial<DTO<T>>);
+    this.transcript = updatedTranscript;
+
+    return this;
 }
