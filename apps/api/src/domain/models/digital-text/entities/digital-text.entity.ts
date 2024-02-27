@@ -68,7 +68,7 @@ function UpdateMethod(): MethodDecorator {
 
             const cloned = this.clone();
 
-            const updated = originalImplementation.apply(cloned, args) as Aggregate;
+            const updated = originalImplementation.apply(cloned, args) as ResultOrError<Aggregate>;
 
             if (!updated) {
                 throw new Error(
@@ -78,9 +78,15 @@ function UpdateMethod(): MethodDecorator {
                 );
             }
 
+            if (isInternalError(updated)) {
+                // The update method returned an error
+                return updated;
+            }
+
             const invariantValidationResult = updated.validateInvariants();
 
             if (isInternalError(invariantValidationResult)) {
+                // The update method succeeded, but the instance that was built broke an invariant validation rule
                 return invariantValidationResult;
             }
 
