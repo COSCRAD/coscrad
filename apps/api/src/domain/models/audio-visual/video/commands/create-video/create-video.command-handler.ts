@@ -17,7 +17,7 @@ import { InMemorySnapshot, ResourceType } from '../../../../../types/ResourceTyp
 import { BaseCreateCommandHandler } from '../../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../../shared/events/types/EventRecordMetadata';
-import { Video, VideoBase } from '../../entities/video.entity';
+import { Video } from '../../entities/video.entity';
 import { CreateVideo } from './create-video.command';
 import { VideoCreated } from './video-created.event';
 
@@ -31,7 +31,7 @@ export class CreateVideoCommandHandler extends BaseCreateCommandHandler<Video> {
         lengthMilliseconds,
     }: CreateVideo): ResultOrError<Video> {
         // Due to the mixin, we do not have typesafety in the constructor call bellow, so we type the DTO here
-        const videoItemDto: DTO<VideoBase> = {
+        const videoItemDto: DTO<Video> = {
             name: new MultilingualText({
                 items: [
                     new MultilingualTextItem({

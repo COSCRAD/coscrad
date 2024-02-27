@@ -14,14 +14,12 @@ import { IRepositoryProvider } from '../../../../../../repositories/interfaces/r
 import { AggregateId } from '../../../../../../types/AggregateId';
 import { DeluxeInMemoryStore } from '../../../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../../../types/ResourceType';
-import { Resource } from '../../../../../resource.entity';
 import { BaseCommandHandler } from '../../../../../shared/command-handlers/base-command-handler';
 import AggregateNotFoundError from '../../../../../shared/common-command-errors/AggregateNotFoundError';
 import { BaseEvent } from '../../../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../../../shared/events/types/EventRecordMetadata';
 import { AudioItem } from '../../../../audio-item/entities/audio-item.entity';
 import { Video } from '../../../../video/entities/video.entity';
-import { ITranscribable } from '../../../entities/transcribable.mixin';
 import { CreateTranscript } from './create-transcript.command';
 import { TranscriptCreated } from './transcript-created.event';
 
@@ -73,7 +71,7 @@ export class CreateTranscriptCommandHandler extends BaseCommandHandler<AudioItem
     // Why do we need persist here?
     // TODO This overlaps with the generic base-update command handler- how can we reuse without complex inheritance hierarchies?
     protected async persist(
-        instance: ITranscribable & Resource,
+        instance: AudioItem | Video,
         command: CreateTranscript,
         systemUserId: AggregateId
     ): Promise<void> {
