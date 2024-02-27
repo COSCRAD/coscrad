@@ -6,7 +6,11 @@ import { Maybe } from '../../../../lib/types/maybe';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
-import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
+import {
+    MultilingualText,
+    MultilingualTextItem,
+    MultilingualTextItemRole,
+} from '../../../common/entities/multilingual-text';
 import { isValid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
@@ -20,6 +24,7 @@ import {
 import { Resource } from '../../resource.entity';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import { PlaylistCreated } from '../commands/playlist-created.event';
+import { PlaylistNameTranslated } from '../commands/translate-playlist-name/playlist-name-translated.event';
 import { CannotAddDuplicateItemToPlaylist } from '../errors';
 import { FailedToImportAudioItemsError } from '../errors/failed-to-import-audio-items.error';
 import { PlaylistItem } from './playlist-item.entity';
@@ -117,6 +122,18 @@ export class Playlist extends Resource {
 
     protected getExternalReferences(): AggregateCompositeIdentifier<AggregateType>[] {
         return this.items.map(({ resourceCompositeIdentifier }) => resourceCompositeIdentifier);
+    }
+
+    handlePlaylistNameTranslated({
+        payload: { text, languageCode },
+    }: PlaylistNameTranslated): ResultOrError<Playlist> {
+        return this.translateName(
+            new MultilingualTextItem({
+                text,
+                languageCode,
+                role: MultilingualTextItemRole.freeTranslation,
+            })
+        );
     }
 
     static fromEventHistory(
