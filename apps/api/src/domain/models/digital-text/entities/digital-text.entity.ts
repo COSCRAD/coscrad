@@ -19,6 +19,7 @@ import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
 import { Snapshot } from '../../../types/Snapshot';
+import { Aggregate } from '../../aggregate.entity';
 import {
     CreationEventHandlerMap,
     buildAggregateRootFromEventHistory,
@@ -54,6 +55,40 @@ import { MissingPageError } from '../errors/missing-page.error';
 import DigitalTextPage from './digital-text-page.entity';
 import { PageIdentifier } from './types/page-identifier';
 
+function UpdateMethod(): MethodDecorator {
+    return (_target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
+        const originalImplementation = descriptor.value;
+
+        descriptor.value = function (...args) {
+            if (!(this instanceof Aggregate)) {
+                throw new InternalError(
+                    `A method must belong to an AggregateRoot class in order to be annotated as an update method`
+                );
+            }
+
+            const cloned = this.clone();
+
+            const updated = originalImplementation.apply(cloned, args) as Aggregate;
+
+            if (!updated) {
+                throw new Error(
+                    `There is a problem with the implementation of: ${JSON.stringify(
+                        propertyKey
+                    )}. Did you remember to "return this;"?`
+                );
+            }
+
+            const invariantValidationResult = updated.validateInvariants();
+
+            if (isInternalError(invariantValidationResult)) {
+                return invariantValidationResult;
+            }
+
+            return updated;
+        };
+    };
+}
+
 @AggregateRoot(AggregateType.digitalText)
 @RegisterIndexScopedCommands([CREATE_DIGITAL_TEXT])
 export class DigitalText extends Resource {
@@ -63,7 +98,7 @@ export class DigitalText extends Resource {
         label: 'title',
         description: 'the title of the digital text',
     })
-    readonly title: MultilingualText;
+    title: MultilingualText;
 
     @ReferenceTo(AggregateType.photograph)
     @UUID({
@@ -71,13 +106,13 @@ export class DigitalText extends Resource {
         description: 'a reference to a cover photograph for this digital text',
         isOptional: true,
     })
-    readonly coverPhotographId?: AggregateId;
+    coverPhotographId?: AggregateId;
 
     @NestedDataType(MultilingualAudio, {
         label: 'audio for title',
         description: 'contains refereneces to audio for the title',
     })
-    readonly audioForTitle: MultilingualAudio;
+    audioForTitle: MultilingualAudio;
 
     @NestedDataType(DigitalTextPage, {
         isOptional: true,
@@ -152,17 +187,18 @@ export class DigitalText extends Resource {
         if (this.hasPage(pageIdentifier))
             return new CannotAddPageWithDuplicateIdentifierError(this.id, pageIdentifier);
 
-        return this.safeClone<DigitalText>({
-            pages: [
-                ...this.pages,
-                new DigitalTextPage({
-                    identifier: pageIdentifier,
-                    audio: new MultilingualAudio({ items: [] }),
-                }),
-            ],
-        });
+        this.pages = [
+            ...this.pages,
+            new DigitalTextPage({
+                identifier: pageIdentifier,
+                audio: new MultilingualAudio({ items: [] }),
+            }),
+        ];
+
+        return this;
     }
 
+    @UpdateMethod()
     addContentToPage(
         pageIdentifier: PageIdentifier,
         text: string,
@@ -190,13 +226,12 @@ export class DigitalText extends Resource {
             page.identifier === pageIdentifier ? pageUpdateResult : page.clone({})
         );
 
-        const updateResult = this.safeClone<DigitalText>({
-            pages: updatedPages,
-        });
+        this.pages = updatedPages;
 
-        return updateResult;
+        return this;
     }
 
+    @UpdateMethod()
     translateTitle(
         translationOfTitle: string,
         languageCode: LanguageCode
@@ -208,6 +243,7 @@ export class DigitalText extends Resource {
         });
     }
 
+    @UpdateMethod()
     translatePageContent(
         pageIdentifier: PageIdentifier,
         text: string,
@@ -230,21 +266,23 @@ export class DigitalText extends Resource {
             page.identifier === pageIdentifier ? updatedPage : page
         );
 
-        return this.safeClone<DigitalText>({
-            pages: updatedPages,
-        });
+        this.pages = updatedPages;
+
+        return this;
     }
 
+    @UpdateMethod()
     addCoverPhotograph(photographId): ResultOrError<DigitalText> {
         if (!isNullOrUndefined(this.coverPhotographId)) {
             return new CannotOverrideCoverPhotographError(photographId);
         }
 
-        return this.safeClone<DigitalText>({
-            coverPhotographId: photographId,
-        });
+        this.coverPhotographId = photographId;
+
+        return this;
     }
 
+    @UpdateMethod()
     addAudioForPage(
         pageIdentifier: PageIdentifier,
         audioItemId: AggregateId,
@@ -273,13 +311,12 @@ export class DigitalText extends Resource {
             page.identifier === pageUpdateResult.identifier ? pageUpdateResult : page
         );
 
-        const updatedDigitalText = this.safeClone<DigitalText>({
-            pages: updatedPages,
-        });
+        this.pages = updatedPages;
 
-        return updatedDigitalText;
+        return this;
     }
 
+    @UpdateMethod()
     addPhotographToPage(
         pageIdentifier: PageIdentifier,
         photographId: AggregateId
@@ -303,14 +340,15 @@ export class DigitalText extends Resource {
             return pageUpdateResult;
         }
 
-        return this.safeClone<DigitalText>({
-            // here we update only the target page
-            pages: this.pages.map((page) =>
-                page.is(pageUpdateResult.identifier) ? pageUpdateResult : page
-            ),
-        });
+        // here we update only the target page
+        this.pages = this.pages.map((page) =>
+            page.is(pageUpdateResult.identifier) ? pageUpdateResult : page
+        );
+
+        return this;
     }
 
+    @UpdateMethod()
     addAudioForTitle(
         audioItemId: AggregateId,
         languageCode: LanguageCode
@@ -329,9 +367,9 @@ export class DigitalText extends Resource {
             return audioUpdateResult;
         }
 
-        return this.safeClone<DigitalText>({
-            audioForTitle: audioUpdateResult,
-        });
+        this.audioForTitle = audioUpdateResult;
+
+        return this;
     }
 
     /**
