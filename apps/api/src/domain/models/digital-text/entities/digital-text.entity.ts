@@ -10,7 +10,7 @@ import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
-import { AggregateRoot } from '../../../decorators';
+import { AggregateRoot, UpdateMethod } from '../../../decorators';
 import { Valid, isValid } from '../../../domainModelValidators/Valid';
 import { EmptyPageRangeContextError } from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext';
 import PageRangeContextHasSuperfluousPageIdentifiersError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext/page-range-context-has-superfluous-page-identifiers.error';
@@ -63,7 +63,7 @@ export class DigitalText extends Resource {
         label: 'title',
         description: 'the title of the digital text',
     })
-    readonly title: MultilingualText;
+    title: MultilingualText;
 
     @ReferenceTo(AggregateType.photograph)
     @UUID({
@@ -71,13 +71,13 @@ export class DigitalText extends Resource {
         description: 'a reference to a cover photograph for this digital text',
         isOptional: true,
     })
-    readonly coverPhotographId?: AggregateId;
+    coverPhotographId?: AggregateId;
 
     @NestedDataType(MultilingualAudio, {
         label: 'audio for title',
         description: 'contains refereneces to audio for the title',
     })
-    readonly audioForTitle: MultilingualAudio;
+    audioForTitle: MultilingualAudio;
 
     @NestedDataType(DigitalTextPage, {
         isOptional: true,
@@ -148,21 +148,23 @@ export class DigitalText extends Resource {
         return allErrors.length > 0 ? new InvalidExternalStateError(allErrors) : Valid;
     }
 
+    @UpdateMethod()
     addPage(pageIdentifier: PageIdentifier): ResultOrError<DigitalText> {
         if (this.hasPage(pageIdentifier))
             return new CannotAddPageWithDuplicateIdentifierError(this.id, pageIdentifier);
 
-        return this.safeClone<DigitalText>({
-            pages: [
-                ...this.pages,
-                new DigitalTextPage({
-                    identifier: pageIdentifier,
-                    audio: new MultilingualAudio({ items: [] }),
-                }),
-            ],
-        });
+        this.pages = [
+            ...this.pages,
+            new DigitalTextPage({
+                identifier: pageIdentifier,
+                audio: new MultilingualAudio({ items: [] }),
+            }),
+        ];
+
+        return this;
     }
 
+    @UpdateMethod()
     addContentToPage(
         pageIdentifier: PageIdentifier,
         text: string,
@@ -190,13 +192,12 @@ export class DigitalText extends Resource {
             page.identifier === pageIdentifier ? pageUpdateResult : page.clone({})
         );
 
-        const updateResult = this.safeClone<DigitalText>({
-            pages: updatedPages,
-        });
+        this.pages = updatedPages;
 
-        return updateResult;
+        return this;
     }
 
+    @UpdateMethod()
     translateTitle(
         translationOfTitle: string,
         languageCode: LanguageCode
@@ -208,6 +209,7 @@ export class DigitalText extends Resource {
         });
     }
 
+    @UpdateMethod()
     translatePageContent(
         pageIdentifier: PageIdentifier,
         text: string,
@@ -230,21 +232,23 @@ export class DigitalText extends Resource {
             page.identifier === pageIdentifier ? updatedPage : page
         );
 
-        return this.safeClone<DigitalText>({
-            pages: updatedPages,
-        });
+        this.pages = updatedPages;
+
+        return this;
     }
 
+    @UpdateMethod()
     addCoverPhotograph(photographId): ResultOrError<DigitalText> {
         if (!isNullOrUndefined(this.coverPhotographId)) {
             return new CannotOverrideCoverPhotographError(photographId);
         }
 
-        return this.safeClone<DigitalText>({
-            coverPhotographId: photographId,
-        });
+        this.coverPhotographId = photographId;
+
+        return this;
     }
 
+    @UpdateMethod()
     addAudioForPage(
         pageIdentifier: PageIdentifier,
         audioItemId: AggregateId,
@@ -273,13 +277,12 @@ export class DigitalText extends Resource {
             page.identifier === pageUpdateResult.identifier ? pageUpdateResult : page
         );
 
-        const updatedDigitalText = this.safeClone<DigitalText>({
-            pages: updatedPages,
-        });
+        this.pages = updatedPages;
 
-        return updatedDigitalText;
+        return this;
     }
 
+    @UpdateMethod()
     addPhotographToPage(
         pageIdentifier: PageIdentifier,
         photographId: AggregateId
@@ -303,14 +306,15 @@ export class DigitalText extends Resource {
             return pageUpdateResult;
         }
 
-        return this.safeClone<DigitalText>({
-            // here we update only the target page
-            pages: this.pages.map((page) =>
-                page.is(pageUpdateResult.identifier) ? pageUpdateResult : page
-            ),
-        });
+        // here we update only the target page
+        this.pages = this.pages.map((page) =>
+            page.is(pageUpdateResult.identifier) ? pageUpdateResult : page
+        );
+
+        return this;
     }
 
+    @UpdateMethod()
     addAudioForTitle(
         audioItemId: AggregateId,
         languageCode: LanguageCode
@@ -329,9 +333,9 @@ export class DigitalText extends Resource {
             return audioUpdateResult;
         }
 
-        return this.safeClone<DigitalText>({
-            audioForTitle: audioUpdateResult,
-        });
+        this.audioForTitle = audioUpdateResult;
+
+        return this;
     }
 
     /**
