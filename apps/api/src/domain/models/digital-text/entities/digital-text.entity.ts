@@ -10,7 +10,7 @@ import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
-import { AggregateRoot } from '../../../decorators';
+import { AggregateRoot, UpdateMethod } from '../../../decorators';
 import { Valid, isValid } from '../../../domainModelValidators/Valid';
 import { EmptyPageRangeContextError } from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext';
 import PageRangeContextHasSuperfluousPageIdentifiersError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext/page-range-context-has-superfluous-page-identifiers.error';
@@ -19,7 +19,6 @@ import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
 import { Snapshot } from '../../../types/Snapshot';
-import { Aggregate } from '../../aggregate.entity';
 import {
     CreationEventHandlerMap,
     buildAggregateRootFromEventHistory,
@@ -54,46 +53,6 @@ import { MissingPageContentError } from '../errors/missing-page-content.error';
 import { MissingPageError } from '../errors/missing-page.error';
 import DigitalTextPage from './digital-text-page.entity';
 import { PageIdentifier } from './types/page-identifier';
-
-function UpdateMethod(): MethodDecorator {
-    return (_target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
-        const originalImplementation = descriptor.value;
-
-        descriptor.value = function (...args) {
-            if (!(this instanceof Aggregate)) {
-                throw new InternalError(
-                    `A method must belong to an AggregateRoot class in order to be annotated as an update method`
-                );
-            }
-
-            const cloned = this.clone();
-
-            const updated = originalImplementation.apply(cloned, args) as ResultOrError<Aggregate>;
-
-            if (!updated) {
-                throw new Error(
-                    `There is a problem with the implementation of: ${JSON.stringify(
-                        propertyKey
-                    )}. Did you remember to "return this;"?`
-                );
-            }
-
-            if (isInternalError(updated)) {
-                // The update method returned an error
-                return updated;
-            }
-
-            const invariantValidationResult = updated.validateInvariants();
-
-            if (isInternalError(invariantValidationResult)) {
-                // The update method succeeded, but the instance that was built broke an invariant validation rule
-                return invariantValidationResult;
-            }
-
-            return updated;
-        };
-    };
-}
 
 @AggregateRoot(AggregateType.digitalText)
 @RegisterIndexScopedCommands([CREATE_DIGITAL_TEXT])
