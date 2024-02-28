@@ -7,9 +7,11 @@ import {
     UUID,
 } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { UpdateMethod } from '../../../../../domain/decorators';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../../lib/errors/types/ValidationResult';
+import { Maybe } from '../../../../../lib/types/maybe';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { MultilingualText } from '../../../../common/entities/multilingual-text';
@@ -19,15 +21,21 @@ import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
 import { InMemorySnapshot, ResourceType } from '../../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
+import {
+    CreationEventHandlerMap,
+    buildAggregateRootFromEventHistory,
+} from '../../../build-aggregate-root-from-event-history';
 import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
 import { TimeRangeContext } from '../../../context/time-range-context/time-range-context.entity';
 import { Resource } from '../../../resource.entity';
 import validateTimeRangeContextForModel from '../../../shared/contextValidators/validateTimeRangeContextForModel';
+import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { InvalidMIMETypeForAudiovisualResourceError } from '../../audio-item/commands/errors';
 import { CoscradTimeStamp } from '../../audio-item/entities/audio-item.entity';
 import { TranscriptItem } from '../../shared/entities/transcript-item.entity';
 import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
 import { Transcript } from '../../shared/entities/transcript.entity';
+import { EventSourcedTranscribable } from '../../shared/event-sourcing';
 import { addLineItemToTranscriptImplementation } from '../../shared/methods/add-line-item-to-transcript';
 import { addParticipantToTranscriptImplementation } from '../../shared/methods/add-participant-to-transcript';
 import { createTranscriptImplementation } from '../../shared/methods/create-transcript';
@@ -37,11 +45,14 @@ import {
     importTranslationsForTranscriptImplementation,
 } from '../../shared/methods/import-translations-for-transcript';
 import { translateLineItemImplementation } from '../../shared/methods/translate-line-item';
+import { VideoCreated, VideoNameTranslated } from '../commands';
 
 export const isVideoMimeType = (mimeType: MIMEType): boolean =>
     [MIMEType.mp4, MIMEType.videoOgg, MIMEType.videoWebm].includes(mimeType);
 
 @RegisterIndexScopedCommands([`CREATE_VIDEO`])
+// mixin the magic method event handlers for transcripts
+@EventSourcedTranscribable()
 export class Video extends Resource {
     readonly type = ResourceType.video;
 
@@ -256,5 +267,57 @@ export class Video extends Resource {
             availableCommandIds.push(`TRANSLATE_LINE_ITEM`);
 
         return availableCommandIds;
+    }
+
+    handleVideoNameTranslated({ payload: { text, languageCode } }: VideoNameTranslated) {
+        return this.translateName(text, languageCode);
+    }
+
+    static fromEventHistory(
+        eventHistory: BaseEvent[],
+        videoId: AggregateId
+    ): Maybe<ResultOrError<Video>> {
+        const creationEventHandlerMap: CreationEventHandlerMap<Video> = new Map().set(
+            'VIDEO_CREATED',
+            Video.buildVideoFromVideoCreated
+        );
+
+        return buildAggregateRootFromEventHistory(
+            creationEventHandlerMap,
+            {
+                type: AggregateType.video,
+                id: videoId,
+            },
+            eventHistory
+        );
+    }
+
+    private static buildVideoFromVideoCreated({
+        payload: {
+            aggregateCompositeIdentifier: { id },
+            name,
+            languageCodeForName,
+            lengthMilliseconds,
+            mediaItemId,
+        },
+    }: VideoCreated): ResultOrError<Video> {
+        const instance = new Video({
+            type: AggregateType.video,
+            id,
+            published: false,
+            name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
+            mediaItemId,
+            lengthMilliseconds,
+        });
+
+        const invariantValidationResult = instance.validateInvariants();
+
+        if (isInternalError(invariantValidationResult)) {
+            throw new InternalError(`Failed to event source video due to invalid existing data`, [
+                invariantValidationResult,
+            ]);
+        }
+
+        return instance;
     }
 }
