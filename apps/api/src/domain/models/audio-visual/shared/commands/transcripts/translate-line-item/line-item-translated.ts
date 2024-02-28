@@ -1,6 +1,10 @@
+import { CoscradEvent } from '../../../../../../../domain/common';
 import { BaseEvent } from '../../../../../shared/events/base-event.entity';
-import { LINE_ITEM_TRANSLATED } from './constants';
+import { TranslateLineItem } from './translate-line-item.command';
 
-export class LineItemTranslated extends BaseEvent {
-    type = LINE_ITEM_TRANSLATED;
+export type LineItemTranslatedPayload = TranslateLineItem;
+
+@CoscradEvent('LINE_ITEM_TRANSLATED')
+export class LineItemTranslated extends BaseEvent<LineItemTranslatedPayload> {
+    readonly type = 'LINE_ITEM_TRANSLATED';
 }

@@ -1,6 +1,4 @@
 import { isInternalError } from '../../../../../lib/errors/InternalError';
-import { DTO } from '../../../../../types/DTO';
-import { DeepPartial } from '../../../../../types/DeepPartial';
 import { Resource } from '../../../resource.entity';
 import { TranscriptParticipant } from '../entities/transcript-participant';
 import { Transcript } from '../entities/transcript.entity';
@@ -22,7 +20,7 @@ export function addParticipantToTranscriptImplementation<T extends HasTranscript
 
     if (isInternalError(updatedTranscript)) return updatedTranscript;
 
-    return this.safeClone({
-        transcript: updatedTranscript,
-    } as DeepPartial<DTO<T>>);
+    this.transcript = updatedTranscript;
+
+    return this;
 }

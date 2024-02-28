@@ -7,8 +7,11 @@ import {
     UUID,
 } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
+import { UpdateMethod } from '../../../../../domain/decorators';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../../lib/errors/types/ValidationResult';
+import { Maybe } from '../../../../../lib/types/maybe';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { MultilingualText } from '../../../../common/entities/multilingual-text';
@@ -18,12 +21,21 @@ import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
 import { InMemorySnapshot, ResourceType } from '../../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
+import {
+    CreationEventHandlerMap,
+    buildAggregateRootFromEventHistory,
+} from '../../../build-aggregate-root-from-event-history';
 import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
 import { TimeRangeContext } from '../../../context/time-range-context/time-range-context.entity';
 import { PlaylistEpisode } from '../../../playlist/entities/playlist-episode.entity';
 import { Resource } from '../../../resource.entity';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import validateTimeRangeContextForModel from '../../../shared/contextValidators/validateTimeRangeContextForModel';
+import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { LineItemAddedToTranscript } from '../../shared/commands/transcripts/add-line-item-to-transcript/line-item-added-to-transcript.event';
+import { ParticipantAddedToTranscript } from '../../shared/commands/transcripts/add-participant-to-transcript/participant-added-to-transcript.event';
+import { TranscriptCreated } from '../../shared/commands/transcripts/create-transcript/transcript-created.event';
+import { LineItemsImportedToTranscript } from '../../shared/commands/transcripts/import-line-items-to-transcript/line-items-imported-to-transcript.event';
 import { TranscriptItem } from '../../shared/entities/transcript-item.entity';
 import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
 import { Transcript } from '../../shared/entities/transcript.entity';
@@ -36,7 +48,10 @@ import {
     importTranslationsForTranscriptImplementation,
 } from '../../shared/methods/import-translations-for-transcript';
 import { translateLineItemImplementation } from '../../shared/methods/translate-line-item';
+import { LineItemTranslated, TranslationsImportedForTranscript } from '../commands';
+import { AudioItemCreated } from '../commands/create-audio-item/transcript-created.event';
 import { InvalidMIMETypeForAudiovisualResourceError } from '../commands/errors';
+import { AudioItemNameTranslated } from '../commands/translate-audio-item-name/audio-item-name-translated-event';
 
 export type CoscradTimeStamp = number;
 
@@ -114,14 +129,6 @@ export class AudioItem extends Resource implements IRadioPublishableResource {
         return this.name;
     }
 
-    translateName(text: string, languageCode: LanguageCode): ResultOrError<this> {
-        return this.translateMultilingualTextProperty('name', {
-            text,
-            languageCode,
-            role: MultilingualTextItemRole.freeTranslation,
-        });
-    }
-
     protected validateComplexInvariants(): InternalError[] {
         const allErrors: InternalError[] = [];
 
@@ -196,18 +203,41 @@ export class AudioItem extends Resource implements IRadioPublishableResource {
         return [0, this.lengthMilliseconds];
     }
 
+    hasTranscript(): boolean {
+        return !isNullOrUndefined(this.transcript);
+    }
+
+    countTranscriptParticipants(): number {
+        if (!this.hasTranscript()) return 0;
+
+        return this.transcript.countParticipants();
+    }
+
+    @UpdateMethod()
+    translateName(text: string, languageCode: LanguageCode): ResultOrError<this> {
+        return this.translateMultilingualTextProperty('name', {
+            text,
+            languageCode,
+            role: MultilingualTextItemRole.freeTranslation,
+        });
+    }
+
+    @UpdateMethod()
     createTranscript<T>(this: T) {
         return createTranscriptImplementation.apply(this);
     }
 
+    @UpdateMethod()
     addParticipantToTranscript(participant: TranscriptParticipant): ResultOrError<this> {
         return addParticipantToTranscriptImplementation.apply(this, [participant]);
     }
 
+    @UpdateMethod()
     addLineItemToTranscript(newItemDto: DTO<TranscriptItem>): ResultOrError<AudioItem> {
         return addLineItemToTranscriptImplementation.apply(this, [newItemDto]);
     }
 
+    @UpdateMethod()
     translateLineItem(
         inPointMillisecondsForTranslation: number,
         outPointMillisecondsForTranslation: number,
@@ -222,24 +252,16 @@ export class AudioItem extends Resource implements IRadioPublishableResource {
         ]);
     }
 
+    @UpdateMethod()
     importLineItemsToTranscript(newItemDtos: DTO<TranscriptItem>[]): ResultOrError<AudioItem> {
         return importLineItemsToTranscriptImplementation.apply(this, [newItemDtos]);
     }
 
+    @UpdateMethod()
     importTranslationsForTranscript(
         translationItemDtos: LineItemTranslation[]
     ): ResultOrError<AudioItem> {
         return importTranslationsForTranscriptImplementation.apply(this, [translationItemDtos]);
-    }
-
-    hasTranscript(): boolean {
-        return !isNullOrUndefined(this.transcript);
-    }
-
-    countTranscriptParticipants(): number {
-        if (!this.hasTranscript()) return 0;
-
-        return this.transcript.countParticipants();
     }
 
     // TODO Does this belong in the view layer?
@@ -290,5 +312,121 @@ export class AudioItem extends Resource implements IRadioPublishableResource {
 
     private isMIMETypeAllowed(mimeType: MIMEType): boolean {
         return [MIMEType.mp3, MIMEType.wav].includes(mimeType);
+    }
+
+    handleAudioItemNameTranslated({ payload: { text, languageCode } }: AudioItemNameTranslated) {
+        return this.translateName(text, languageCode);
+    }
+
+    handleTranscriptCreated(_: TranscriptCreated) {
+        return this.createTranscript();
+    }
+
+    handleParticipantAddedToTranscript({
+        payload: { name, initials },
+    }: ParticipantAddedToTranscript) {
+        return this.addParticipantToTranscript(
+            new TranscriptParticipant({
+                initials,
+                name,
+            })
+        );
+    }
+
+    handleLineItemAddedToTranscript({
+        payload: { inPointMilliseconds, outPointMilliseconds, text, languageCode, speakerInitials },
+    }: LineItemAddedToTranscript) {
+        // TODO Consider changing the following API
+        return this.addLineItemToTranscript(
+            new TranscriptItem({
+                inPointMilliseconds,
+                outPointMilliseconds,
+                text: buildMultilingualTextWithSingleItem(text, languageCode),
+                speakerInitials,
+            })
+        );
+    }
+
+    handleLineItemTranslated({
+        payload: { inPointMilliseconds, outPointMilliseconds, translation, languageCode },
+    }: LineItemTranslated) {
+        return this.translateLineItem(
+            inPointMilliseconds,
+            outPointMilliseconds,
+            translation,
+            languageCode
+        );
+    }
+
+    handleLineItemsImportedToTranscript({ payload: { lineItems } }: LineItemsImportedToTranscript) {
+        return this.importLineItemsToTranscript(
+            lineItems.map((lineItem) => ({
+                ...lineItem,
+                inPoint: lineItem.inPointMilliseconds,
+                outPoint: lineItem.outPointMilliseconds,
+                text: buildMultilingualTextWithSingleItem(lineItem.text, lineItem.languageCode),
+            }))
+        );
+    }
+
+    handleTranslationsImportedForTranscript({
+        payload: { translationItems },
+    }: TranslationsImportedForTranscript) {
+        return this.importTranslationsForTranscript(
+            translationItems.map(({ inPointMilliseconds, translation, languageCode }) => ({
+                inPointMilliseconds,
+                languageCode,
+                text: translation,
+            }))
+        );
+    }
+
+    static fromEventHistory(
+        eventStream: BaseEvent[],
+        audioItemId: AggregateId
+    ): Maybe<ResultOrError<AudioItem>> {
+        const creationEventHandlerMap: CreationEventHandlerMap<AudioItem> = new Map().set(
+            'AUDIO_ITEM_CREATED',
+            AudioItem.buildAudioItemFromCreationEvent
+        );
+
+        return buildAggregateRootFromEventHistory(
+            creationEventHandlerMap,
+            {
+                type: AggregateType.audioItem,
+                id: audioItemId,
+            },
+            eventStream
+        );
+    }
+
+    private static buildAudioItemFromCreationEvent({
+        payload: {
+            aggregateCompositeIdentifier: { id: audioItemId },
+            mediaItemId,
+            name,
+            languageCodeForName,
+            lengthMilliseconds,
+        },
+    }: AudioItemCreated): ResultOrError<AudioItem> {
+        const newInstance = new AudioItem({
+            type: AggregateType.audioItem,
+            id: audioItemId,
+            published: false,
+            mediaItemId,
+            name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
+            lengthMilliseconds,
+        });
+
+        const invariantValidationResult = newInstance.validateInvariants();
+
+        if (isInternalError(invariantValidationResult)) {
+            throw new InternalError(
+                `failed to event source Audio Item due to invalid existing state`,
+                [invariantValidationResult]
+            );
+        }
+
+        return newInstance;
     }
 }
