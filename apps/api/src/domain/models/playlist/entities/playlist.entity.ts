@@ -184,7 +184,9 @@ export class Playlist extends Resource {
         );
     }
 
-    static buildPlaylistFromPlaylistCreated(event: PlaylistCreated): ResultOrError<Playlist> {
+    private static buildPlaylistFromPlaylistCreated(
+        event: PlaylistCreated
+    ): ResultOrError<Playlist> {
         const {
             aggregateCompositeIdentifier: { id: playlistId },
             name,
@@ -198,6 +200,15 @@ export class Playlist extends Resource {
             items: [],
             name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
         });
+
+        const invariantValidationResult = buildResult.validateInvariants();
+
+        if (isInternalError(invariantValidationResult)) {
+            throw new InternalError(
+                'failed to build playlist due to invalid existing event history',
+                [invariantValidationResult]
+            );
+        }
 
         return buildResult;
     }

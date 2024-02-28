@@ -1,4 +1,5 @@
 import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import { NotFound } from '../../../../lib/types/not-found';
 import { TestEventStream } from '../../../../test-data/events';
 import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import { AggregateType } from '../../../types/AggregateType';
@@ -165,6 +166,74 @@ describe(`Playlist.fromEventhistory`, () => {
                 const playlist = result as Playlist;
 
                 expect(playlist.queryAccessControlList.canUser(userId)).toBe(true);
+            });
+        });
+    });
+
+    describe(`when the event history is invalid`, () => {
+        describe(`when there are no events for the given playlist`, () => {
+            it(`should return not found`, () => {
+                const result = Playlist.fromEventHistory(
+                    playlistPublished.as({
+                        type: AggregateType.playlist,
+                        id: buildDummyUuid(555),
+                    }),
+                    playlistId
+                );
+
+                expect(result).toBe(NotFound);
+            });
+        });
+
+        describe(`when there is no creation event`, () => {
+            it(`should throw`, () => {
+                const eventSource = () => {
+                    Playlist.fromEventHistory(
+                        playlistPublished.as(aggregateCompositeIdentifier).slice(1),
+                        playlistId
+                    );
+                };
+
+                expect(eventSource).toThrow();
+            });
+        });
+
+        describe(`when the creation event is invalid`, () => {
+            it(`should throw`, () => {
+                const eventSource = () => {
+                    Playlist.fromEventHistory(
+                        new TestEventStream()
+                            .andThen<PlaylistCreated>({
+                                type: 'PLAYLIST_CREATED',
+                                payload: {
+                                    // name is not allowed to be an emtpy string
+                                    name: '',
+                                },
+                            })
+                            .as(aggregateCompositeIdentifier),
+                        playlistId
+                    );
+                };
+
+                expect(eventSource).toThrow();
+            });
+        });
+
+        describe(`when a update event is invalid`, () => {
+            it(`should throw`, () => {
+                const eventSource = () => {
+                    Playlist.fromEventHistory(
+                        playlistCreated
+                            .andThen<PlaylistNameTranslated>({
+                                type: 'PLAYLIST_NAME_TRANSLATED',
+                                payload: { languageCode: 77 as unknown as LanguageCode },
+                            })
+                            .as(aggregateCompositeIdentifier),
+                        playlistId
+                    );
+                };
+
+                expect(eventSource).toThrow();
             });
         });
     });
