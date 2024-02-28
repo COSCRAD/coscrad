@@ -13,7 +13,8 @@ interface Transcribable {
 }
 
 // Should we rename this to `import-transcript`?
-// TODO Do we ensure that there must be at least one line item here?(
+// TODO Do we ensure that there must be at least one line item here?
+// TODO[https://www.pivotaltracker.com/story/show/187128338] Look at this when adding video test coverage.
 export function importLineItemsToTranscriptImplementation<T extends Transcribable & Resource>(
     this: T,
     newItemDtos: DTO<TranscriptItem>[]

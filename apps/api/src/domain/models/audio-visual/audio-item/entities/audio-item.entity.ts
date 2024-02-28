@@ -213,7 +213,6 @@ export class AudioItem extends Resource implements IRadioPublishableResource {
         return this.transcript.countParticipants();
     }
 
-    // TODO Should the @UpdateMethod be applied here instead?
     @UpdateMethod()
     translateName(text: string, languageCode: LanguageCode): ResultOrError<this> {
         return this.translateMultilingualTextProperty('name', {

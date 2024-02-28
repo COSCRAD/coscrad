@@ -143,8 +143,10 @@ describe(commandType, () => {
         });
     });
 
-    // TODO Do these tests for a video item as well
-    // DO this now!
+    /**
+     *  TODO[https://www.pivotaltracker.com/story/show/187128338]
+     * Add test cases for a video item as well.
+     */
     describe(`when the command is invalid`, () => {
         describe(`when the audiovisual item does not exist`, () => {
             it(`should fail with the expected errors`, async () => {
