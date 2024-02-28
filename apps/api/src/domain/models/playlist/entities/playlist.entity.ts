@@ -11,6 +11,7 @@ import {
     MultilingualTextItem,
     MultilingualTextItemRole,
 } from '../../../common/entities/multilingual-text';
+import { UpdateMethod } from '../../../decorators';
 import { isValid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
@@ -39,7 +40,7 @@ export class Playlist extends Resource {
         label: 'name',
         description: 'the name of the playlist',
     })
-    readonly name: MultilingualText;
+    name: MultilingualText;
 
     // TODO add refrence to a photograph
 
@@ -76,15 +77,17 @@ export class Playlist extends Resource {
         return result;
     }
 
+    @UpdateMethod()
     addItem(item: PlaylistItem): ResultOrError<Playlist> {
         if (this.has(item.resourceCompositeIdentifier))
             return new CannotAddDuplicateItemToPlaylist(this.id, item);
 
-        return this.safeClone<Playlist>({
-            items: this.items.concat(item),
-        });
+        this.items.push(item);
+
+        return this;
     }
 
+    @UpdateMethod()
     addItems(items: PlaylistItem[]): ResultOrError<Playlist> {
         const duplicateItems = items.filter((item) => this.has(item.resourceCompositeIdentifier));
 
@@ -94,11 +97,12 @@ export class Playlist extends Resource {
                 duplicateItems.map((item) => new CannotAddDuplicateItemToPlaylist(this.id, item))
             );
 
-        return this.safeClone<Playlist>({
-            items: this.items.concat(items),
-        });
+        this.items.push(...items);
+
+        return this;
     }
 
+    @UpdateMethod()
     translateName(textItem: MultilingualTextItem): ResultOrError<Playlist> {
         if (this.name.items.some(({ languageCode }) => languageCode === textItem.languageCode))
             return new DuplicateLanguageInMultilingualTextError(textItem.languageCode);
@@ -107,9 +111,9 @@ export class Playlist extends Resource {
 
         if (isInternalError(nameUpdateResult)) return nameUpdateResult;
 
-        return this.safeClone<Playlist>({
-            name: nameUpdateResult,
-        });
+        this.name = nameUpdateResult;
+
+        return this;
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {
