@@ -7,6 +7,7 @@ import {
     UUID,
 } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { UpdateMethod } from '../../../../../domain/decorators';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../../lib/errors/types/ValidationResult';
 import { DTO } from '../../../../../types/DTO';
@@ -128,18 +129,22 @@ export class Video extends Resource {
         ];
     }
 
+    @UpdateMethod()
     createTranscript<T>(this: T) {
         return createTranscriptImplementation.apply(this);
     }
 
+    @UpdateMethod()
     addParticipantToTranscript(participant: TranscriptParticipant): ResultOrError<this> {
         return addParticipantToTranscriptImplementation.apply(this, [participant]);
     }
 
+    @UpdateMethod()
     addLineItemToTranscript(newItemDto: DTO<TranscriptItem>): ResultOrError<Video> {
         return addLineItemToTranscriptImplementation.apply(this, [newItemDto]);
     }
 
+    @UpdateMethod()
     translateLineItem(
         inPointMillisecondsForTranslation: number,
         outPointMillisecondsForTranslation: number,
@@ -154,10 +159,12 @@ export class Video extends Resource {
         ]);
     }
 
+    @UpdateMethod()
     importLineItemsToTranscript(newItemDtos: DTO<TranscriptItem>[]): ResultOrError<Video> {
         return importLineItemsToTranscriptImplementation.apply(this, [newItemDtos]);
     }
 
+    @UpdateMethod()
     translateName(text: string, languageCode: LanguageCode): ResultOrError<this> {
         return this.translateMultilingualTextProperty('name', {
             text,

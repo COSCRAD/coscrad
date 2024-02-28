@@ -1,6 +1,10 @@
+import { CoscradEvent } from '../../../../../../domain/common';
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
-import { AUDIO_ITEM_NAME_TRANSLATED } from '../constants';
+import { TranslateAudioItemName } from './translate-audio-item-name.command';
 
-export class AudioItemNameTranslated extends BaseEvent {
-    readonly type = AUDIO_ITEM_NAME_TRANSLATED;
+export type AudioItemNameTranslatedPayload = TranslateAudioItemName;
+
+@CoscradEvent('AUDIO_ITEM_NAME_TRANSLATED')
+export class AudioItemNameTranslated extends BaseEvent<AudioItemNameTranslatedPayload> {
+    readonly type = 'AUDIO_ITEM_NAME_TRANSLATED';
 }

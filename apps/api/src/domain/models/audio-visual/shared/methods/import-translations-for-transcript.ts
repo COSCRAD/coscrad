@@ -1,7 +1,5 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { isInternalError } from '../../../../../lib/errors/InternalError';
-import { DTO } from '../../../../../types/DTO';
-import { DeepPartial } from '../../../../../types/DeepPartial';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { Resource } from '../../../resource.entity';
 import { TranscriptItem } from '../entities/transcript-item.entity';
@@ -36,7 +34,7 @@ export function importTranslationsForTranscriptImplementation<T extends Transcri
         return transcriptUpdateResult;
     }
 
-    return this.safeClone<T>({
-        transcript: transcriptUpdateResult,
-    } as DeepPartial<DTO<T>>);
+    this.transcript = transcriptUpdateResult;
+
+    return this;
 }

@@ -1,7 +1,6 @@
 import { isNumberWithinRange } from '@coscrad/validation-constraints';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { DTO } from '../../../../../types/DTO';
-import { DeepPartial } from '../../../../../types/DeepPartial';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { Resource } from '../../../resource.entity';
 import { TranscriptItem } from '../entities/transcript-item.entity';
@@ -13,7 +12,9 @@ interface Transcribable {
     getTimeBounds(): [number, number];
 }
 
-// TODO Do we ensure that there must be at least one line item here?(
+// Should we rename this to `import-transcript`?
+// TODO Do we ensure that there must be at least one line item here?
+// TODO[https://www.pivotaltracker.com/story/show/187128338] Look at this when adding video test coverage.
 export function importLineItemsToTranscriptImplementation<T extends Transcribable & Resource>(
     this: T,
     newItemDtos: DTO<TranscriptItem>[]
@@ -42,7 +43,7 @@ export function importLineItemsToTranscriptImplementation<T extends Transcribabl
 
     if (isInternalError(transcriptUpdateResult)) return transcriptUpdateResult;
 
-    return this.safeClone({
-        transcript: transcriptUpdateResult,
-    } as DeepPartial<DTO<T>>);
+    this.transcript = transcriptUpdateResult;
+
+    return this;
 }

@@ -3,6 +3,7 @@ import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { plainToInstance } from 'class-transformer';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../domain/models/__tests__/utilities/dummyDateNow';
+import { getAudioItemTestEventBuilderMap } from '../../domain/models/audio-visual';
 import { getNoteTestEventMap } from '../../domain/models/context/test-data';
 import {
     AudioAddedForDigitalTextPage,
@@ -682,6 +683,7 @@ export class TestEventStream {
             ...getNoteTestEventMap().entries(),
             ...getPhotographTestEventBuilders().entries(),
             ...getSpatialFeatureTestEventBuilderMap().entries(),
+            ...getAudioItemTestEventBuilderMap().entries(),
         ].reduce((acc, [eventType, builder]) => acc.registerBuilder(eventType, builder), this);
     }
 

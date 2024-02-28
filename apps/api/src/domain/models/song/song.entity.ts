@@ -18,7 +18,7 @@ import { DeepPartial } from '../../../types/DeepPartial';
 import { ResultOrError } from '../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText, MultilingualTextItem } from '../../common/entities/multilingual-text';
-import { AggregateRoot } from '../../decorators';
+import { AggregateRoot, UpdateMethod } from '../../decorators';
 import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../types/AggregateId';
 import { ResourceType } from '../../types/ResourceType';
@@ -160,6 +160,7 @@ export class Song extends Resource {
         });
     }
 
+    @UpdateMethod()
     translateLyrics(text: string, languageCode: LanguageCode): ResultOrError<Song> {
         if (!this.hasLyrics()) return new NoLyricsToTranslateError(this.id);
 
