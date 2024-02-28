@@ -23,6 +23,8 @@ import {
 } from '../../build-aggregate-root-from-event-history';
 import { Resource } from '../../resource.entity';
 import { BaseEvent } from '../../shared/events/base-event.entity';
+import { AudioItemAddedToPlaylist } from '../commands/add-audio-item-to-playlist/audio-item-added-to-playlist.event';
+import { AudioItemsImportedToPlaylist } from '../commands/import-audio-items-to-playlist/audio-items-imported-to-playlist.event';
 import { PlaylistCreated } from '../commands/playlist-created.event';
 import { PlaylistNameTranslated } from '../commands/translate-playlist-name/playlist-name-translated.event';
 import { CannotAddDuplicateItemToPlaylist } from '../errors';
@@ -133,6 +135,33 @@ export class Playlist extends Resource {
                 languageCode,
                 role: MultilingualTextItemRole.freeTranslation,
             })
+        );
+    }
+
+    handleAudioItemAddedToPlaylist({ payload: { audioItemId } }: AudioItemAddedToPlaylist) {
+        return this.addItem(
+            new PlaylistItem({
+                resourceCompositeIdentifier: {
+                    type: AggregateType.audioItem,
+                    id: audioItemId,
+                },
+            })
+        );
+    }
+
+    handleAudioItemsImportedToPlaylist({
+        payload: { audioItemIds },
+    }: AudioItemsImportedToPlaylist) {
+        return this.addItems(
+            audioItemIds.map(
+                (id) =>
+                    new PlaylistItem({
+                        resourceCompositeIdentifier: {
+                            type: ResourceType.audioItem,
+                            id,
+                        },
+                    })
+            )
         );
     }
 
