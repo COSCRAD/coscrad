@@ -1,7 +1,9 @@
 import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpected';
 import { NotFound } from '../../../../lib/types/not-found';
 import { TestEventStream } from '../../../../test-data/events';
 import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
+import InvariantValidationError from '../../../domainModelValidators/errors/InvariantValidationError';
 import { AggregateType } from '../../../types/AggregateType';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { ResourceReadAccessGrantedToUser } from '../../shared/common-commands';
@@ -219,21 +221,22 @@ describe(`Playlist.fromEventhistory`, () => {
             });
         });
 
-        describe(`when a update event is invalid`, () => {
-            it(`should throw`, () => {
-                const eventSource = () => {
-                    Playlist.fromEventHistory(
-                        playlistCreated
-                            .andThen<PlaylistNameTranslated>({
-                                type: 'PLAYLIST_NAME_TRANSLATED',
-                                payload: { languageCode: 77 as unknown as LanguageCode },
-                            })
-                            .as(aggregateCompositeIdentifier),
-                        playlistId
-                    );
-                };
+        describe(`when an update event is invalid`, () => {
+            it(`should return the error`, () => {
+                const result = Playlist.fromEventHistory(
+                    playlistCreated
+                        .andThen<PlaylistNameTranslated>({
+                            type: 'PLAYLIST_NAME_TRANSLATED',
+                            payload: { languageCode: 77 as unknown as LanguageCode },
+                        })
+                        .as(aggregateCompositeIdentifier),
+                    playlistId
+                );
 
-                expect(eventSource).toThrow();
+                assertErrorAsExpected(
+                    result,
+                    new InvariantValidationError(aggregateCompositeIdentifier, [])
+                );
             });
         });
     });
