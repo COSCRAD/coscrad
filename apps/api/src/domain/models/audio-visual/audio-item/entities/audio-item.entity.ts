@@ -61,6 +61,7 @@ export const isAudioMimeType = (mimeType: MIMEType): boolean =>
     [MIMEType.mp3, MIMEType.wav, MIMEType.audioOgg].includes(mimeType);
 
 @RegisterIndexScopedCommands([`CREATE_AUDIO_ITEM`])
+// mixin the magic method event handlers for transcripts
 @EventSourcedTranscribable()
 export class AudioItem extends Resource implements IRadioPublishableResource {
     readonly type = ResourceType.audioItem;
