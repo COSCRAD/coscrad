@@ -2,15 +2,32 @@ import { NestedDataType } from '@coscrad/data-types';
 import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
+import { Maybe } from '../../../../lib/types/maybe';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
-import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
+import {
+    MultilingualText,
+    MultilingualTextItem,
+    MultilingualTextItemRole,
+} from '../../../common/entities/multilingual-text';
+import { UpdateMethod } from '../../../decorators';
 import { isValid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
+import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
 import { DuplicateLanguageInMultilingualTextError } from '../../audio-visual/audio-item/errors/duplicate-language-in-multilingual-text.error';
+import {
+    CreationEventHandlerMap,
+    buildAggregateRootFromEventHistory,
+} from '../../build-aggregate-root-from-event-history';
 import { Resource } from '../../resource.entity';
+import { BaseEvent } from '../../shared/events/base-event.entity';
+import { AudioItemAddedToPlaylist } from '../commands/add-audio-item-to-playlist/audio-item-added-to-playlist.event';
+import { AudioItemsImportedToPlaylist } from '../commands/import-audio-items-to-playlist/audio-items-imported-to-playlist.event';
+import { PlaylistCreated } from '../commands/playlist-created.event';
+import { PlaylistNameTranslated } from '../commands/translate-playlist-name/playlist-name-translated.event';
 import { CannotAddDuplicateItemToPlaylist } from '../errors';
 import { FailedToImportAudioItemsError } from '../errors/failed-to-import-audio-items.error';
 import { PlaylistItem } from './playlist-item.entity';
@@ -23,7 +40,7 @@ export class Playlist extends Resource {
         label: 'name',
         description: 'the name of the playlist',
     })
-    readonly name: MultilingualText;
+    name: MultilingualText;
 
     // TODO add refrence to a photograph
 
@@ -60,15 +77,17 @@ export class Playlist extends Resource {
         return result;
     }
 
+    @UpdateMethod()
     addItem(item: PlaylistItem): ResultOrError<Playlist> {
         if (this.has(item.resourceCompositeIdentifier))
             return new CannotAddDuplicateItemToPlaylist(this.id, item);
 
-        return this.safeClone<Playlist>({
-            items: this.items.concat(item),
-        });
+        this.items.push(item);
+
+        return this;
     }
 
+    @UpdateMethod()
     addItems(items: PlaylistItem[]): ResultOrError<Playlist> {
         const duplicateItems = items.filter((item) => this.has(item.resourceCompositeIdentifier));
 
@@ -78,11 +97,12 @@ export class Playlist extends Resource {
                 duplicateItems.map((item) => new CannotAddDuplicateItemToPlaylist(this.id, item))
             );
 
-        return this.safeClone<Playlist>({
-            items: this.items.concat(items),
-        });
+        this.items.push(...items);
+
+        return this;
     }
 
+    @UpdateMethod()
     translateName(textItem: MultilingualTextItem): ResultOrError<Playlist> {
         if (this.name.items.some(({ languageCode }) => languageCode === textItem.languageCode))
             return new DuplicateLanguageInMultilingualTextError(textItem.languageCode);
@@ -91,9 +111,9 @@ export class Playlist extends Resource {
 
         if (isInternalError(nameUpdateResult)) return nameUpdateResult;
 
-        return this.safeClone<Playlist>({
-            name: nameUpdateResult,
-        });
+        this.name = nameUpdateResult;
+
+        return this;
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {
@@ -108,5 +128,92 @@ export class Playlist extends Resource {
 
     protected getExternalReferences(): AggregateCompositeIdentifier<AggregateType>[] {
         return this.items.map(({ resourceCompositeIdentifier }) => resourceCompositeIdentifier);
+    }
+
+    handlePlaylistNameTranslated({
+        payload: { text, languageCode },
+    }: PlaylistNameTranslated): ResultOrError<Playlist> {
+        return this.translateName(
+            new MultilingualTextItem({
+                text,
+                languageCode,
+                role: MultilingualTextItemRole.freeTranslation,
+            })
+        );
+    }
+
+    handleAudioItemAddedToPlaylist({ payload: { audioItemId } }: AudioItemAddedToPlaylist) {
+        return this.addItem(
+            new PlaylistItem({
+                resourceCompositeIdentifier: {
+                    type: AggregateType.audioItem,
+                    id: audioItemId,
+                },
+            })
+        );
+    }
+
+    handleAudioItemsImportedToPlaylist({
+        payload: { audioItemIds },
+    }: AudioItemsImportedToPlaylist) {
+        return this.addItems(
+            audioItemIds.map(
+                (id) =>
+                    new PlaylistItem({
+                        resourceCompositeIdentifier: {
+                            type: ResourceType.audioItem,
+                            id,
+                        },
+                    })
+            )
+        );
+    }
+
+    static fromEventHistory(
+        eventStream: BaseEvent[],
+        playlistId: AggregateId
+    ): Maybe<ResultOrError<Playlist>> {
+        const creationEventHandlerMap: CreationEventHandlerMap<Playlist> = new Map().set(
+            `PLAYLIST_CREATED`,
+            Playlist.buildPlaylistFromPlaylistCreated
+        );
+
+        return buildAggregateRootFromEventHistory(
+            creationEventHandlerMap,
+            {
+                type: AggregateType.playlist,
+                id: playlistId,
+            },
+            eventStream
+        );
+    }
+
+    private static buildPlaylistFromPlaylistCreated(
+        event: PlaylistCreated
+    ): ResultOrError<Playlist> {
+        const {
+            aggregateCompositeIdentifier: { id: playlistId },
+            name,
+            languageCodeForName,
+        } = event.payload;
+
+        const buildResult = new Playlist({
+            type: AggregateType.playlist,
+            id: playlistId,
+            published: false,
+            items: [],
+            name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
+        });
+
+        const invariantValidationResult = buildResult.validateInvariants();
+
+        if (isInternalError(invariantValidationResult)) {
+            throw new InternalError(
+                'failed to build playlist due to invalid existing event history',
+                [invariantValidationResult]
+            );
+        }
+
+        return buildResult;
     }
 }
