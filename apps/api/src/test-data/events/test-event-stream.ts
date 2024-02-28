@@ -4,6 +4,7 @@ import { plainToInstance } from 'class-transformer';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../domain/models/__tests__/utilities/dummyDateNow';
 import { getAudioItemTestEventBuilderMap } from '../../domain/models/audio-visual';
+import { getVideoTestEventBuilder } from '../../domain/models/audio-visual/video/test-data';
 import { getNoteTestEventMap } from '../../domain/models/context/test-data';
 import {
     AudioAddedForDigitalTextPage,
@@ -684,6 +685,7 @@ export class TestEventStream {
             ...getPhotographTestEventBuilders().entries(),
             ...getSpatialFeatureTestEventBuilderMap().entries(),
             ...getAudioItemTestEventBuilderMap().entries(),
+            ...getVideoTestEventBuilder().entries(),
         ].reduce((acc, [eventType, builder]) => acc.registerBuilder(eventType, builder), this);
     }
 
