@@ -13,7 +13,7 @@ import {
     MultilingualTextItem,
     MultilingualTextItemRole,
 } from '../../../common/entities/multilingual-text';
-import { AggregateRoot } from '../../../decorators';
+import { AggregateRoot, UpdateMethod } from '../../../decorators';
 import { Valid, isValid } from '../../../domainModelValidators/Valid';
 import InvalidPublicationStatusError from '../../../domainModelValidators/errors/InvalidPublicationStatusError';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
@@ -59,13 +59,13 @@ export class Term extends Resource {
         label: 'is prompt term',
         description: 'flag for whether or not this is a prompt term',
     })
-    readonly isPromptTerm?: boolean;
+    isPromptTerm?: boolean;
 
     @NestedDataType(MultilingualText, {
         label: 'text',
         description: 'the text for the term',
     })
-    readonly text: MultilingualText;
+    text: MultilingualText;
 
     /**
      * Note  that eventually, we will track contributions as follows. Every
@@ -84,7 +84,7 @@ export class Term extends Resource {
         label: 'multilingual audio',
         description: 'collection of references to audio for content in available langauges',
     })
-    readonly audio: MultilingualAudio;
+    audio: MultilingualAudio;
 
     /**
      * TODO - This should be done via a tag or a note. Remove this property.
@@ -139,6 +139,7 @@ export class Term extends Resource {
         return this.audio.getIdForAudioIn(languageCode);
     }
 
+    @UpdateMethod()
     translate(text: string, languageCode: LanguageCode): ResultOrError<Term> {
         const textUpdateResult = this.text.translate(
             new MultilingualTextItem({
@@ -150,11 +151,12 @@ export class Term extends Resource {
 
         if (isInternalError(textUpdateResult)) return textUpdateResult;
 
-        return this.safeClone<Term>({
-            text: textUpdateResult,
-        });
+        this.text = textUpdateResult;
+
+        return this;
     }
 
+    @UpdateMethod()
     addAudio(audioItemId: string, languageCode: LanguageCode): ResultOrError<Term> {
         if (this.hasAudioIn(languageCode)) {
             return new CannotOverrideAudioForTermError(
@@ -173,11 +175,12 @@ export class Term extends Resource {
 
         if (isInternalError(audioUpdateResult)) return audioUpdateResult;
 
-        return this.safeClone<Term>({
-            audio: audioUpdateResult,
-        });
+        this.audio = audioUpdateResult;
+
+        return this;
     }
 
+    @UpdateMethod()
     elicitFromPrompt(text: string, languageCode: LanguageCode): ResultOrError<Term> {
         if (!this.isPromptTerm) return new CannotElicitTermWithoutPromptError(this.id);
 
@@ -196,9 +199,7 @@ export class Term extends Resource {
 
         if (isInternalError(textUpdateResult)) return textUpdateResult;
 
-        return this.safeClone<Term>({
-            text: textUpdateResult,
-        });
+        this.text = textUpdateResult;
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {
