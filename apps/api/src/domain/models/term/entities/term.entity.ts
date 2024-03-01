@@ -200,6 +200,8 @@ export class Term extends Resource {
         if (isInternalError(textUpdateResult)) return textUpdateResult;
 
         this.text = textUpdateResult;
+
+        return this;
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {

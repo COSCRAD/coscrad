@@ -254,19 +254,16 @@ export class VocabularyList extends Resource {
             return new CannotHaveTwoFilterPropertiesWithTheSameNameError(name, this.id);
         }
 
-        this.variables = [
-            ...this.variables
-                .map((variable) => variable.toDTO())
-                .concat({
-                    name,
-                    type: mappedType,
-                    validValues: allowedValuesWithLabels.map(({ label, value }) => ({
-                        value,
-                        display: label,
-                    })),
-                } as DTO<VocabularyListFilterProperty>)
-                .map((dto) => new VocabularyListFilterProperty(dto)),
-        ];
+        this.variables.push(
+            new VocabularyListFilterProperty({
+                name,
+                type: mappedType,
+                validValues: allowedValuesWithLabels.map(({ label, value }) => ({
+                    value,
+                    display: label,
+                })),
+            })
+        );
 
         return this;
     }
