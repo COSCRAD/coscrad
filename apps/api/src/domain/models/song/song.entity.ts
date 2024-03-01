@@ -14,7 +14,6 @@ import { Maybe } from '../../../lib/types/maybe';
 import { NotFound, isNotFound } from '../../../lib/types/not-found';
 import formatAggregateCompositeIdentifier from '../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { DTO } from '../../../types/DTO';
-import { DeepPartial } from '../../../types/DeepPartial';
 import { ResultOrError } from '../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText, MultilingualTextItem } from '../../common/entities/multilingual-text';
@@ -51,7 +50,7 @@ export class Song extends Resource {
         label: 'title',
         description: 'the title of the song',
     })
-    readonly title: MultilingualText;
+    title: MultilingualText;
 
     // @NestedDataType(ContributorAndRole, {
     //     isArray: true,
@@ -67,7 +66,7 @@ export class Song extends Resource {
         description: 'the lyrics of the song',
     })
     // the type of `lyrics` should allow three way translation in future
-    readonly lyrics?: MultilingualText;
+    lyrics?: MultilingualText;
 
     @NonEmptyString({
         label: 'media item ID',
@@ -127,22 +126,23 @@ export class Song extends Resource {
      * existing lyrics (`original` item in multilingual-text valued `lyrics`),
      * use `translateLyrics` instead.
      */
+    @UpdateMethod()
     addLyrics(text: string, languageCode: LanguageCode): ResultOrError<Song> {
         if (this.hasLyrics()) return new CannotAddDuplicateSetOfLyricsForSongError(this);
 
-        return this.safeClone({
-            lyrics: new MultilingualText({
-                items: [
-                    new MultilingualTextItem({
-                        text,
-                        languageCode,
-                        role: MultilingualTextItemRole.original,
-                    }),
-                ],
-            }),
-        } as DeepPartial<DTO<this>>);
+        this.lyrics = new MultilingualText({
+            items: [
+                new MultilingualTextItem({
+                    text,
+                    languageCode,
+                    role: MultilingualTextItemRole.original,
+                }),
+            ],
+        });
+        return this;
     }
 
+    @UpdateMethod()
     translateTitle(translation: string, languageCode: LanguageCode): ResultOrError<Song> {
         // return error if there is already a translation in languageCode
         const newTitle = this.title.translate(
@@ -155,9 +155,9 @@ export class Song extends Resource {
 
         if (isInternalError(newTitle)) return newTitle;
 
-        return this.safeClone<Song>({
-            title: newTitle,
-        });
+        this.title = newTitle;
+
+        return this;
     }
 
     @UpdateMethod()

@@ -13,6 +13,7 @@ import {
     MultilingualTextItem,
     MultilingualTextItemRole,
 } from '../../../common/entities/multilingual-text';
+import { UpdateMethod } from '../../../decorators';
 import { Valid, isValid } from '../../../domainModelValidators/Valid';
 import VocabularyListWithNoEntriesCannotBePublishedError from '../../../domainModelValidators/errors/vocabularyList/vocabulary-list-with-no-entries-cannot-be-published.error';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
@@ -78,7 +79,7 @@ export class VocabularyList extends Resource {
         label: 'entries',
         description: 'all terms in this vocabulary list with corresponding filter properties',
     })
-    readonly entries: VocabularyListEntry[];
+    entries: VocabularyListEntry[];
 
     /**
      * TODO rename this `property filters`
@@ -90,7 +91,7 @@ export class VocabularyList extends Resource {
         label: 'filters',
         description: 'defines a dynamic form that can be used to filter the entries',
     })
-    readonly variables: VocabularyListFilterProperty[];
+    variables: VocabularyListFilterProperty[];
 
     constructor(dto: DTO<VocabularyList>) {
         super({ ...dto, type: ResourceType.vocabularyList });
@@ -139,6 +140,7 @@ export class VocabularyList extends Resource {
         return isNullOrUndefined(searchResult) ? NotFound : searchResult;
     }
 
+    @UpdateMethod()
     translateName(textItem: MultilingualTextItem): ResultOrError<VocabularyList> {
         if (this.name.items.some(({ languageCode }) => languageCode === textItem.languageCode))
             return new DuplicateLanguageInMultilingualTextError(textItem.languageCode);
@@ -147,11 +149,12 @@ export class VocabularyList extends Resource {
 
         if (isInternalError(nameUpdateResult)) return nameUpdateResult;
 
-        return this.safeClone<VocabularyList>({
-            name: nameUpdateResult,
-        });
+        this.name = nameUpdateResult;
+
+        return this;
     }
 
+    @UpdateMethod()
     addEntry(termId: AggregateId): ResultOrError<VocabularyList> {
         if (this.hasEntryForTerm(termId))
             return new CannotAddMultipleEntriesForSingleTermError(termId, this.id);
@@ -161,11 +164,12 @@ export class VocabularyList extends Resource {
             variableValues: {},
         });
 
-        return this.safeClone<VocabularyList>({
-            entries: this.entries.concat(newEntry),
-        });
+        this.entries = this.entries.concat(newEntry);
+
+        return this;
     }
 
+    @UpdateMethod()
     analyzeEntry(
         termId: AggregateId,
         propertyNamesAndValues: Record<string, string | boolean>
@@ -179,6 +183,7 @@ export class VocabularyList extends Resource {
         );
     }
 
+    @UpdateMethod()
     analyzeEntryForSingleProperty(
         termId: AggregateId,
         propertyName: string,
@@ -216,12 +221,13 @@ export class VocabularyList extends Resource {
             entry.termId === termId ? entryUpdateResult : entry.clone({})
         );
 
-        return this.clone<VocabularyList>({
-            entries: updatedEntries,
-        });
+        this.entries = updatedEntries;
+
+        return this;
     }
 
     // TODO should type be an enum?
+    @UpdateMethod()
     registerFilterProperty(
         name: string,
         type: FilterPropertyType,
@@ -248,23 +254,18 @@ export class VocabularyList extends Resource {
             return new CannotHaveTwoFilterPropertiesWithTheSameNameError(name, this.id);
         }
 
-        const newVocabularyList = this.safeClone<VocabularyList>({
-            variables: [
-                ...this.variables
-                    .map((variable) => variable.toDTO())
-                    .concat({
-                        name,
-                        type: mappedType,
-                        validValues: allowedValuesWithLabels.map(({ label, value }) => ({
-                            value,
-                            display: label,
-                        })),
-                    } as DTO<VocabularyListFilterProperty>)
-                    .map((dto) => new VocabularyListFilterProperty(dto)),
-            ],
-        });
+        this.variables.push(
+            new VocabularyListFilterProperty({
+                name,
+                type: mappedType,
+                validValues: allowedValuesWithLabels.map(({ label, value }) => ({
+                    value,
+                    display: label,
+                })),
+            })
+        );
 
-        return newVocabularyList;
+        return this;
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {
