@@ -5,6 +5,6 @@ import { CreateBookBibliographicCitation } from './create-book-bibliographic-cit
 export type BookBibliographicCitationCreatedPayload = CreateBookBibliographicCitation;
 
 @CoscradEvent('BOOK_BIBLIOGRAPHIC_CITATION_CREATED')
-export class BookBibliographicCitationCreated extends BaseEvent {
-    type = 'BOOK_BIBLIOGRAPHIC_CITATION_CREATED';
+export class BookBibliographicCitationCreated extends BaseEvent<BookBibliographicCitationCreatedPayload> {
+    readonly type = 'BOOK_BIBLIOGRAPHIC_CITATION_CREATED';
 }

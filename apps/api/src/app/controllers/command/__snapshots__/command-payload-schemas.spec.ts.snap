@@ -305,8 +305,8 @@ exports[`command payload schemas Command payload schema should match the snapsho
     "type": "ADD_LYRICS_FOR_SONG",
   },
   {
-    "description": "Creates a new book bibliographic reference",
-    "label": "Create Book Bibliographic Reference",
+    "description": "Creates a new book bibliographic citation",
+    "label": "Create Book Bibliographic Citation",
     "schema": {
       "abstract": {
         "coscradDataType": "NON_EMPTY_STRING",
@@ -1666,7 +1666,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
                 "value": "spatialFeature",
               },
               {
-                "label": "Bibliographic Reference",
+                "label": "Bibliographic Citation",
                 "value": "bibliographicCitation",
               },
               {
@@ -1865,7 +1865,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
                 "value": "spatialFeature",
               },
               {
-                "label": "Bibliographic Reference",
+                "label": "Bibliographic Citation",
                 "value": "bibliographicCitation",
               },
               {

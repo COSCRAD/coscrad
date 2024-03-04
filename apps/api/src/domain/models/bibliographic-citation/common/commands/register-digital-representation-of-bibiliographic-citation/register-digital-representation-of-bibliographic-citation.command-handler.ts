@@ -41,7 +41,7 @@ export class RegisterDigitalRepresentationOfBibliographicCitationCommandHandler 
             digitalRepresentationResourceCompositeIdentifier,
         }: RegisterDigitalRepresentationOfBibliographicCitation
     ): ResultOrError<IBibliographicCitation<IBibliographicCitationData>> {
-        // TODO Support this on all bibliographic references
+        // TODO Support this on all bibliographic citations
         return instance.registerDigitalRepresentation(
             digitalRepresentationResourceCompositeIdentifier
         );

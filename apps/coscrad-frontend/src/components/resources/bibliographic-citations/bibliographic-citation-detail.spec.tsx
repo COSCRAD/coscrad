@@ -22,7 +22,7 @@ const act = buildCategorizableDetailPageRendererForTest(ResourceType.bibliograph
 
 const mockGetNotesHandler = buildMockGetNotesHandler();
 
-describe('bibliographic reference detail', () => {
+describe('bibliographic citation detail', () => {
     describe('when the API request is valid', () => {
         setupTestServer(
             buildMockSuccessfulGETHandler({
@@ -36,8 +36,8 @@ describe('bibliographic reference detail', () => {
             mockGetNotesHandler
         );
 
-        describe('when the ID in the route matches an existing bibliographic reference', () => {
-            it('should display the bibliographic reference', async () => {
+        describe('when the ID in the route matches an existing bibliographic citation', () => {
+            it('should display the bibliographic citation', async () => {
                 act(idToFind);
 
                 await assertElementWithTestIdOnScreen(
@@ -46,7 +46,7 @@ describe('bibliographic reference detail', () => {
             });
         });
 
-        describe('when the ID in the route does not match any existing bibliographic reference', () => {
+        describe('when the ID in the route does not match any existing bibliographic citation', () => {
             it('should render Not Found', async () => {
                 act('bogus-id');
 

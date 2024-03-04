@@ -39,7 +39,7 @@ const resourceDescriptions: Pick<AggregateInfo, 'type' | 'description'>[] = [
     {
         type: ResourceType.bibliographicCitation,
         description:
-            'A bibliographic reference is a reference to, but not a digital representation of, a research resource.',
+            'A bibliographic citation is a reference to, but not a digital representation of, a research resource.',
     },
     {
         type: ResourceType.digitalText,

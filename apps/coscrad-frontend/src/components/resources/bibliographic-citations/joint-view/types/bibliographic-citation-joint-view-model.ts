@@ -4,7 +4,7 @@
  */
 export type BibliographicCitationJointViewModel = {
     id: string;
-    // Label for the bibliographic reference type
+    // Label for the bibliographic citation type
     type: string;
     title: string;
     citation: string;

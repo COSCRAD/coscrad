@@ -1108,10 +1108,10 @@ exports[`GET /resources should return the expected result 1`] = `
     "type": "spatialFeature",
   },
   {
-    "description": "A bibliographic reference is a reference to, but not a digital representation of, a research resource.",
-    "label": "Bibliographic Reference",
+    "description": "A bibliographic citation is a reference to, but not a digital representation of, a research resource.",
+    "label": "Bibliographic Citation",
     "link": "/resources/bibliographicCitations",
-    "pluralLabel": "Bibliographic References",
+    "pluralLabel": "Bibliographic Citations",
     "schema": {
       "data": {
         "complexDataType": "UNION_TYPE",

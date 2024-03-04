@@ -262,7 +262,7 @@ const optionDefaults = { shouldMockIdGenerator: false };
 export const buildAllDataClassProviders = () =>
     [
         // Classes with dynamic union data types
-        // Bibliographic References
+        // Bibliographic Citations
         BibliographicCitationDataUnion,
         BibliographicCitationViewModel,
         CourtCaseBibliographicCitationData,

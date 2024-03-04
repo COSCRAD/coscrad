@@ -14,7 +14,7 @@ const endpoint = `${getConfig().apiUrl}/resources/bibliographicCitations`;
 
 const act = () => renderResourceIndexPageForTest(ResourceType.bibliographicCitation);
 
-describe('Bibliographic Reference Index', () => {
+describe('Bibliographic Citation Index', () => {
     describe('when the API request is valid', () => {
         setupTestServer(
             buildMockSuccessfulGETHandler({
@@ -26,7 +26,7 @@ describe('Bibliographic Reference Index', () => {
             })
         );
 
-        it('should display the bibliographic references', async () => {
+        it('should display the bibliographic citations', async () => {
             act();
 
             await assertElementWithEveryIdRenderedForIndex(

@@ -7,7 +7,7 @@ import { IBibliographicCitation } from '../../interfaces/bibliographic-citation.
 import { CannotOverrideDigitalRepresentationError } from '../errors';
 
 /**
- * We have considered putting this on a base class for bibliographic references,
+ * We have considered putting this on a base class for bibliographic citations,
  * but currently we only have an interface, and it is nice to keep the inheritance
  * hierarchies shallow. Mixins have caused trouble with the type system. So we
  * are attempting a third approach where we bind a pure function to this on each

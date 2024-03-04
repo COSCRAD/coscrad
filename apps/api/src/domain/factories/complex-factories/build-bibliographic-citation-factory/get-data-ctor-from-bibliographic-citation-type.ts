@@ -23,7 +23,7 @@ export const getDataCtorFromBibliographicCitationType = (
 
     if (isNullOrUndefined(lookupResult))
         throw new InternalError(
-            `Failed to find a data constructor for bibliographic reference type: ${BibliographicCitationType}`
+            `Failed to find a data constructor for bibliographic citation type: ${BibliographicCitationType}`
         );
 
     return lookupResult;

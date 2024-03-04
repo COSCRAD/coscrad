@@ -25,7 +25,7 @@ const keysAndLabels: PropertyLabels<MultiplePropertyWidget> = {
 };
 
 describe('MultiplePropertyPresenter', () => {
-    describe('when a bibliographic reference is passed in', () => {
+    describe('when a bibliographic citation is passed in', () => {
         it('should display each of the properties present on the keysAndLabels object', () => {
             const {
                 baseElement: { textContent },
