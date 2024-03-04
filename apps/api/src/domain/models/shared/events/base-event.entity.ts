@@ -23,10 +23,10 @@ export abstract class BaseEvent<
     payload: TPayload;
 
     constructor(
-        command: TPayload,
+        payload: TPayload,
         { id: eventId, dateCreated: timestamp, userId }: EventRecordMetadata // eventId: AggregateId, // systemUserId: AggregateId, // timestamp?: number
     ) {
-        this.payload = cloneToPlainObject(command);
+        this.payload = cloneToPlainObject(payload);
 
         this.meta = {
             dateCreated: timestamp || Date.now(),

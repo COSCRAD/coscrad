@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Bibliographic Reference of subtype: book should match the snapshot 1`] = `
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Bibliographic Citation of subtype: book should match the snapshot 1`] = `
 {
   "data": {
     "complexDataType": "NESTED_TYPE",
@@ -116,7 +116,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 }
 `;
 
-exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Bibliographic Reference of subtype: courtCase should match the snapshot 1`] = `
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Bibliographic Citation of subtype: courtCase should match the snapshot 1`] = `
 {
   "data": {
     "complexDataType": "NESTED_TYPE",
@@ -179,7 +179,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 }
 `;
 
-exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Bibliographic Reference of subtype: journalArticle should match the snapshot 1`] = `
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Bibliographic Citation of subtype: journalArticle should match the snapshot 1`] = `
 {
   "data": {
     "complexDataType": "NESTED_TYPE",

@@ -44,7 +44,7 @@ describe('spatial feature detail', () => {
             });
         });
 
-        describe('when the ID in the route does not match any existing bibliographic reference', () => {
+        describe('when the ID in the route does not match any existing bibliographic citation', () => {
             it('should render Not Found', async () => {
                 act('bogus-id');
 

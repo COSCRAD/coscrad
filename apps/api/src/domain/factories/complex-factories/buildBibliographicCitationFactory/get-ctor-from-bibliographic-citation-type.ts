@@ -35,7 +35,7 @@ export default <TBibliographicCitationType extends BibliographicCitationType>(
 
     if (!ctor) {
         throw new InternalError(
-            `No constructor registered for bibliographic reference model of type: ${BibliographicCitationType}`
+            `No constructor registered for bibliographic citation model of type: ${BibliographicCitationType}`
         );
     }
 

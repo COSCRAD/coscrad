@@ -24,7 +24,7 @@ export const getBibliographicCitationCtorFromSubtype = (
 
     if (isNullOrUndefined(lookup))
         throw new InternalError(
-            `Failed to find a constructor for bibliographic reference subtype: ${subtype}`
+            `Failed to find a constructor for bibliographic citation subtype: ${subtype}`
         );
 
     return lookupResult;

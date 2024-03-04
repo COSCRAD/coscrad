@@ -28,7 +28,7 @@ export const buildBibliographicCitationDetailPresenter = (
 
     if (!lookupResult)
         throw new Error(
-            `Failed to build a detail presenter for bibliographic reference type: ${bibliographicCitationType}`
+            `Failed to build a detail presenter for bibliographic citation type: ${bibliographicCitationType}`
         );
 
     return lookupResult;

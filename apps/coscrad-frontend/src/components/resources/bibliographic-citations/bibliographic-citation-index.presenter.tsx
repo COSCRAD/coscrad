@@ -48,7 +48,7 @@ export const BibliographicCitationIndexPresenter = ({
             headingLabels={headingLabels}
             tableData={consolidatedViewOfBibliographicCitations}
             cellRenderersDefinition={cellRenderersDefinition}
-            heading="Bibliographic References"
+            heading="Bibliographic Citations"
             filterableProperties={['title', 'citation', 'type']}
         />
     );

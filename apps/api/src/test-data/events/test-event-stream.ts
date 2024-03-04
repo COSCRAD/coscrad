@@ -5,6 +5,7 @@ import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUu
 import { dummyDateNow } from '../../domain/models/__tests__/utilities/dummyDateNow';
 import { getAudioItemTestEventBuilderMap } from '../../domain/models/audio-visual';
 import { getVideoTestEventBuilder } from '../../domain/models/audio-visual/video/test-data';
+import { getBibliographicCitationTestEventBuilderMap } from '../../domain/models/bibliographic-citation/test-data';
 import { getNoteTestEventMap } from '../../domain/models/context/test-data';
 import {
     AudioAddedForDigitalTextPage,
@@ -688,6 +689,7 @@ export class TestEventStream {
             ...getAudioItemTestEventBuilderMap().entries(),
             ...getVideoTestEventBuilder().entries(),
             ...getPlaylistTestEventBuilderMap().entries(),
+            ...getBibliographicCitationTestEventBuilderMap().entries(),
         ].reduce((acc, [eventType, builder]) => acc.registerBuilder(eventType, builder), this);
     }
 

@@ -12,7 +12,7 @@ export default <TBibliographicCitationType extends BibliographicCitationType>(
 
     if (!searchResult)
         throw new InternalError(
-            `Test data missing for bibliographic reference with type: ${BibliographicCitationType}`
+            `Test data missing for bibliographic citation with type: ${BibliographicCitationType}`
         );
 
     return searchResult as unknown as BibliographicCitationTypeToInstance[TBibliographicCitationType];

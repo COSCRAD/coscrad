@@ -32,7 +32,7 @@ export const buildBibliographicCitationJointViewModel = (
 
     if (!adapterLookupResult) {
         throw new Error(
-            `Failed to build a consolidated index view for Bibliographic Reference model of unknown type: ${bibliographicCitationType}`
+            `Failed to build a consolidated index view for Bibliographic Citation model of unknown type: ${bibliographicCitationType}`
         );
     }
 

@@ -182,7 +182,7 @@ describe(`The command: ${commandType}`, () => {
     });
 
     describe('when the command is invalid', () => {
-        describe(`when there is already a Book Bibliographic Reference with the same ID`, () => {
+        describe(`when there is already a Book Bibliographic Citation with the same ID`, () => {
             it('should fail with the expected error', async () => {
                 await assertCreateCommandError(assertionHelperDependencies, {
                     systemUserId: dummySystemUserId,

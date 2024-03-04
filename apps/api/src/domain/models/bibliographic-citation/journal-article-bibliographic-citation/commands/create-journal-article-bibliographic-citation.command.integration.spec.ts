@@ -175,7 +175,7 @@ describe(`The command: ${commandType}`, () => {
          * modelling of the research subdomain, so we should wait to invest
          * time in this until we are certain we have it right.
          */
-        describe('when there is already a Journal Article Bibliographic Reference with the same ID', () => {
+        describe('when there is already a Journal Article Bibliographic Citation with the same ID', () => {
             it('should fail with the expected error', async () => {
                 await assertCreateCommandError(assertionHelperDependencies, {
                     systemUserId: dummySystemUserId,
