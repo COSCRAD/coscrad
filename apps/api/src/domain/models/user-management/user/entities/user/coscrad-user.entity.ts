@@ -6,6 +6,7 @@ import {
     NonEmptyString,
 } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { UpdateMethod } from '../../../../../../domain/decorators';
 import { InternalError } from '../../../../../../lib/errors/InternalError';
 import { DTO } from '../../../../../../types/DTO';
 import { ResultOrError } from '../../../../../../types/ResultOrError';
@@ -96,12 +97,13 @@ export class CoscradUser extends Aggregate {
         );
     }
 
+    @UpdateMethod()
     grantRole(role: CoscradUserRole): ResultOrError<CoscradUser> {
         if (this.roles.includes(role)) return new UserAlreadyHasRoleError(this.id, role);
 
-        return this.safeClone<CoscradUser>({
-            roles: [...this.roles, role],
-        });
+        this.roles.push(role);
+
+        return this;
     }
 
     getAvailableCommands(): string[] {

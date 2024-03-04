@@ -1,5 +1,6 @@
 import { NonEmptyString } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { UpdateMethod } from '../../../../../domain/decorators';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { DTO } from '../../../../../types/DTO';
 import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
@@ -71,17 +72,16 @@ export class CoscradUserGroup extends Aggregate {
         return this.userIds.includes(userId);
     }
 
+    @UpdateMethod()
     addUser(newUserId: AggregateId) {
         if (this.userIds.includes(newUserId)) {
             // Invalid state transition
             return new UserIsAlreadyInGroupError(newUserId, this);
         }
 
-        // ensure new instance does not violate invariants
-        return this.safeClone<CoscradUserGroup>({
-            // userIds are strings so shallow clone is sufficient to avoid shared references
-            userIds: [...this.userIds, newUserId],
-        });
+        this.userIds.push(newUserId);
+
+        return this;
     }
 
     protected validateComplexInvariants(): InternalError[] {

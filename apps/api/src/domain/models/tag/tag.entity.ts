@@ -9,6 +9,7 @@ import { DTO } from '../../../types/DTO';
 import { ResultOrError } from '../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../common/entities/multilingual-text';
+import { UpdateMethod } from '../../decorators';
 import { Valid, isValid } from '../../domainModelValidators/Valid';
 import TagLabelAlreadyInUseError from '../../domainModelValidators/errors/tag/TagLabelAlreadyInUseError';
 import { HasLabel } from '../../interfaces/HasAggregateIdAndLabel';
@@ -74,12 +75,13 @@ export class Tag extends Aggregate implements HasLabel {
         );
     }
 
+    @UpdateMethod()
     relabel(newLabel: string) {
-        return this.safeClone<Tag>({
-            label: newLabel,
-        });
+        this.label = newLabel;
+        return this;
     }
 
+    @UpdateMethod()
     addMember(taggedMemberCompositeIdentifier: CategorizableCompositeIdentifier) {
         /**
          * Note that this is catching what would eventually be an invariant
@@ -96,9 +98,9 @@ export class Tag extends Aggregate implements HasLabel {
         )
             return new DuplicateTagError(this.label, taggedMemberCompositeIdentifier);
 
-        return this.safeClone<Tag>({
-            members: this.members.concat(taggedMemberCompositeIdentifier),
-        });
+        this.members = this.members.concat(taggedMemberCompositeIdentifier);
+
+        return this;
     }
 
     getAvailableCommands(): string[] {
