@@ -61,7 +61,7 @@ export class CoscradUser extends Aggregate {
         description:
             "the user's roles, which grant privileges to perform certain read \\ write actions",
     })
-    roles: CoscradUserRole[];
+    readonly roles: CoscradUserRole[];
 
     // userData - we may want to store usage data some day- e.g. to store what level the user has completed on a game
 
@@ -101,7 +101,7 @@ export class CoscradUser extends Aggregate {
     grantRole(role: CoscradUserRole): ResultOrError<CoscradUser> {
         if (this.roles.includes(role)) return new UserAlreadyHasRoleError(this.id, role);
 
-        this.roles = [...this.roles, role];
+        this.roles.push(role);
 
         return this;
     }

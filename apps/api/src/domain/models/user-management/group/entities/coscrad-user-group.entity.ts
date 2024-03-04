@@ -36,7 +36,7 @@ export class CoscradUserGroup extends Aggregate {
         label: 'user IDs',
         description: 'the ID of every user that is in this group',
     })
-    userIds: string[];
+    readonly userIds: string[];
 
     @NonEmptyString({
         label: 'description',
@@ -79,10 +79,7 @@ export class CoscradUserGroup extends Aggregate {
             return new UserIsAlreadyInGroupError(newUserId, this);
         }
 
-        // ensure new instance does not violate invariants
-
-        // userIds are strings so shallow clone is sufficient to avoid shared references
-        this.userIds = [...this.userIds, newUserId];
+        this.userIds.push(newUserId);
 
         return this;
     }
