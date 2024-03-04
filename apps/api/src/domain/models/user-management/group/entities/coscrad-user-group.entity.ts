@@ -1,5 +1,6 @@
 import { NonEmptyString } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { UpdateMethod } from '../../../../../domain/decorators';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { DTO } from '../../../../../types/DTO';
 import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
@@ -35,7 +36,7 @@ export class CoscradUserGroup extends Aggregate {
         label: 'user IDs',
         description: 'the ID of every user that is in this group',
     })
-    readonly userIds: string[];
+    userIds: string[];
 
     @NonEmptyString({
         label: 'description',
@@ -71,6 +72,7 @@ export class CoscradUserGroup extends Aggregate {
         return this.userIds.includes(userId);
     }
 
+    @UpdateMethod()
     addUser(newUserId: AggregateId) {
         if (this.userIds.includes(newUserId)) {
             // Invalid state transition
@@ -78,10 +80,11 @@ export class CoscradUserGroup extends Aggregate {
         }
 
         // ensure new instance does not violate invariants
-        return this.safeClone<CoscradUserGroup>({
-            // userIds are strings so shallow clone is sufficient to avoid shared references
-            userIds: [...this.userIds, newUserId],
-        });
+
+        // userIds are strings so shallow clone is sufficient to avoid shared references
+        this.userIds = [...this.userIds, newUserId];
+
+        return this;
     }
 
     protected validateComplexInvariants(): InternalError[] {
