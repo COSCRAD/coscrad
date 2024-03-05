@@ -1,12 +1,11 @@
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box, styled } from '@mui/material';
-import { RefObject, useEffect, useMemo, useRef, useState } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 import { asFormattedMediaTimecodeString } from '../shared/as-formatted-media-timecode-string';
 import { EDITOR_SOUND_BAR_HEIGHT, ZOOM_FACTOR } from './constants';
 import { convertTimecodeToTimelineUnits } from './convert-timecode-to-timeline-units';
 import { convertTimelineUnitsToTimecode } from './convert-timeline-units-to-timecode';
 import { RangeBar } from './range-bar';
-import { RULER_TICKS_AND_NUMBERS_COLOR } from './ruler-tick';
 import { TimelineRuler } from './timeline-ruler';
 
 const WAVE_FORM_URL = 'https://guujaaw.info/images/audio-wave-form.png';
@@ -40,7 +39,6 @@ const StyledScrolledTrack = styled(Box)({
     minWidth: '100%',
     position: 'relative',
     display: 'flex',
-    alignItems: 'center',
     height: `${EDITOR_SOUND_BAR_HEIGHT}px`,
     border: '1px solid #666',
     borderRadius: '7px',
@@ -51,7 +49,6 @@ const StyledScrolledTrack = styled(Box)({
 
 const StyledTimelineRulerBox = styled('div')({
     marginBottom: '3px',
-    borderBottom: `1px solid ${RULER_TICKS_AND_NUMBERS_COLOR}`,
     boxSizing: 'border-box',
     position: 'relative',
 });
@@ -115,14 +112,13 @@ export const Timeline = ({
 
     const numberOfTracksDisplayed = [...timelineTracks, 'timeline ruler'].length;
 
-    const timelineRuler = useMemo(() => {
-        return (
-            <TimelineRuler
-                duration={durationSeconds}
-                renderedTimelineLength={renderedTimelineLength}
-            />
-        );
-    }, [durationSeconds, renderedTimelineLength]);
+    const timelineRuler = (
+        <TimelineRuler
+            duration={durationSeconds}
+            zoomLevel={ZOOM_FACTOR}
+            timelineTrackHeight={EDITOR_SOUND_BAR_HEIGHT}
+        />
+    );
 
     useEffect(() => {
         // Render timeline
@@ -258,7 +254,7 @@ export const Timeline = ({
                         <StyledScrolledTrack
                             data-testid="timeline-ruler"
                             sx={{ width: `${renderedTimelineLength}px` }}
-                            onClick={handleSeek}
+                            // onClick={handleSeek}
                         >
                             <EditorPlayhead
                                 ref={playheadRef}
@@ -275,7 +271,7 @@ export const Timeline = ({
                                     width: `${renderedTimelineLength}px`,
                                 }}
                             >
-                                {durationSeconds > 0 && durationSeconds < 60 ? timelineRuler : null}
+                                {durationSeconds > 0 ? timelineRuler : null}
                             </StyledTimelineRulerBox>
                         </StyledScrolledTrack>
                         {timelineTracks.length !== 0 ? (
