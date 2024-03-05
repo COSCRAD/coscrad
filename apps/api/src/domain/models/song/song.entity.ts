@@ -104,17 +104,13 @@ export class Song extends Resource {
     }
 
     protected validateComplexInvariants(): InternalError[] {
-        const allErrors: InternalError[] = [];
-
         const { title } = this;
 
         const titleValidationResult = title.validateComplexInvariants();
 
-        const titleValidationErrors = isInternalError(titleValidationResult)
-            ? [titleValidationResult]
-            : [];
+        const allErrors = isInternalError(titleValidationResult) ? [titleValidationResult] : [];
 
-        return allErrors.concat(titleValidationErrors);
+        return allErrors;
     }
 
     protected getExternalReferences(): AggregateCompositeIdentifier[] {
