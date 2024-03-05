@@ -304,8 +304,6 @@ export class AudioItem extends Resource implements IRadioPublishableResource {
             availableCommandIds.push(`TRANSLATE_LINE_ITEM`);
 
         return availableCommandIds;
-
-        return availableCommandIds;
     }
 
     private isMIMETypeAllowed(mimeType: MIMEType): boolean {
