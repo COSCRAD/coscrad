@@ -37,7 +37,7 @@ const buildDirectoryPath = (suffix: string) => `${inputFilePrefix}/${suffix}`;
 /**
  * TODO Diagnose why this test is flakey when run by the CI.
  */
-describe.skip(`CLI Command: **ingest-media-items**`, () => {
+describe(`CLI Command: **ingest-media-items**`, () => {
     let commandInstance: TestingModule;
 
     let testRepositoryProvider: TestRepositoryProvider;

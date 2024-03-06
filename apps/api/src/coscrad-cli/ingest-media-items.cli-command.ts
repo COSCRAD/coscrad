@@ -30,7 +30,7 @@ import {
 import { AggregateId } from '../domain/types/AggregateId';
 import { ResourceType } from '../domain/types/ResourceType';
 import { InternalError, isInternalError } from '../lib/errors/InternalError';
-import { isNotFound } from '../lib/types/not-found';
+import { NotFound, isNotFound } from '../lib/types/not-found';
 import clonePlainObjectWithoutProperty from '../lib/utilities/clonePlainObjectWithoutProperty';
 import formatAggregateCompositeIdentifier from '../queries/presentation/formatAggregateCompositeIdentifier';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
@@ -171,7 +171,9 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
         const dimensionsMap = new Map<string, MediaItemDimensions>();
 
         for (const { filename, mimeType } of partialPayloads) {
-            const mediaInfo = await this.mediaProber.probe(`${directory}/${filename}`);
+            const mediaInfo = [MIMEType.pdf].includes(mimeType)
+                ? NotFound
+                : await this.mediaProber.probe(`${directory}/${filename}`);
 
             if (isNotFound(mediaInfo)) {
                 this.logger.log(`the prober found no media info for: ${filename}`);
@@ -201,8 +203,13 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
             }
         }
 
-        const createMediaItemFsas: CommandFSA<CreateMediaItem>[] = partialPayloads.map(
-            (partialFsa, index) => {
+        const createMediaItemFsas: CommandFSA<CreateMediaItem>[] = partialPayloads
+            /**
+             * We only want to create corresponding media resources when the MIME Type
+             * corresponds to a audio, video, or photograph.
+             */
+            .filter(({ mimeType }) => ![MIMEType.pdf].includes(mimeType))
+            .map((partialFsa, index) => {
                 const { filename } = partialFsa;
 
                 const lengthSeconds = durationMap.get(filename);
@@ -234,8 +241,7 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
                         ...(isNullOrUndefined(dimensions) ? {} : dimensions),
                     } as const,
                 };
-            }
-        );
+            });
 
         const createResourceFsas = createMediaItemFsas.map((createMediaItemFsa, index) => {
             const idToUse = generatedIds[index + partialPayloads.length];

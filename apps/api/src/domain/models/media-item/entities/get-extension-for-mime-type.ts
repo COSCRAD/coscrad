@@ -13,6 +13,7 @@ const lookupTable = {
     [MIMEType.wav]: 'wav',
     [MIMEType.videoOgg]: 'ogv',
     [MIMEType.videoWebm]: 'webm',
+    [MIMEType.pdf]: 'pdf',
 } as const;
 
 // TODO Reuse this in CLI commands
