@@ -170,8 +170,13 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
 
         const dimensionsMap = new Map<string, MediaItemDimensions>();
 
+        const isMediaResourceMimeType = (mimeType: MIMEType) =>
+            [isPhotographMimeType, isAudioMimeType, isVideoMimeType].some((predicate) =>
+                predicate(mimeType)
+            );
+
         for (const { filename, mimeType } of partialPayloads) {
-            const mediaInfo = [MIMEType.pdf].includes(mimeType)
+            const mediaInfo = !isMediaResourceMimeType(mimeType)
                 ? NotFound
                 : await this.mediaProber.probe(`${directory}/${filename}`);
 
@@ -203,13 +208,8 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
             }
         }
 
-        const createMediaItemFsas: CommandFSA<CreateMediaItem>[] = partialPayloads
-            /**
-             * We only want to create corresponding media resources when the MIME Type
-             * corresponds to a audio, video, or photograph.
-             */
-            .filter(({ mimeType }) => ![MIMEType.pdf].includes(mimeType))
-            .map((partialFsa, index) => {
+        const createMediaItemFsas: CommandFSA<CreateMediaItem>[] = partialPayloads.map(
+            (partialFsa, index) => {
                 const { filename } = partialFsa;
 
                 const lengthSeconds = durationMap.get(filename);
@@ -241,13 +241,20 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
                         ...(isNullOrUndefined(dimensions) ? {} : dimensions),
                     } as const,
                 };
+            }
+        );
+
+        const createResourceFsas = createMediaItemFsas
+            /**
+             * We only want to create corresponding media resources when the MIME Type
+             * corresponds to a audio, video, or photograph.
+             */
+            .filter(({ payload: { mimeType } }) => isMediaResourceMimeType(mimeType))
+            .map((createMediaItemFsa, index) => {
+                const idToUse = generatedIds[index + partialPayloads.length];
+
+                return buildCreateResourceFsaForMediaItem(createMediaItemFsa.payload, idToUse);
             });
-
-        const createResourceFsas = createMediaItemFsas.map((createMediaItemFsa, index) => {
-            const idToUse = generatedIds[index + partialPayloads.length];
-
-            return buildCreateResourceFsaForMediaItem(createMediaItemFsa.payload, idToUse);
-        });
 
         /**
          * TODO[Performance] We should consider another pattern such as a promise
@@ -327,6 +334,8 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
                 const topLevelError = new InternalError(message, [result]);
 
                 this.logger.log(topLevelError.toString());
+
+                this.logger.log(`failed payload: ${JSON.stringify(fsa)}`);
 
                 throw topLevelError;
             }

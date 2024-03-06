@@ -2,17 +2,18 @@
 export enum MIMEType {
     // documents
     pdf = 'application/pdf',
-    // xlsx = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    // bmp = 'image/bmp',
-    // // also for `jpeg`
-    // jpg = 'image/jpeg',
-    // csv = 'text/csv',
+    csv = 'text/csv',
+    xlsx = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     // doc = 'application/msword',
-    // docx = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    docx = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     // ppt = 'application/vnd.ms-powerpoint',
-    // pptx = 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    pptx = 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
     // images
     png = 'image/png',
+    bmp = 'image/bmp',
+    // // also for `jpeg`
+    jpg = 'image/jpeg',
+    svg = 'image/svg+xml',
     // audio
     mp3 = 'audio/mpeg',
     wav = 'audio/wav',
