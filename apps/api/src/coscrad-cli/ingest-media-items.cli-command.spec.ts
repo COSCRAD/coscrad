@@ -37,7 +37,7 @@ const buildDirectoryPath = (suffix: string) => `${inputFilePrefix}/${suffix}`;
 /**
  * TODO Diagnose why this test is flakey when run by the CI.
  */
-describe.skip(`CLI Command: **ingest-media-items**`, () => {
+describe(`CLI Command: **ingest-media-items**`, () => {
     let commandInstance: TestingModule;
 
     let testRepositoryProvider: TestRepositoryProvider;
@@ -127,7 +127,8 @@ describe.skip(`CLI Command: **ingest-media-items**`, () => {
                 `--staticAssetDestinationDirectory=${destinationDir}`,
             ]);
 
-            const expectedNumberOfResults = 3;
+            // the number of items in `__cli-command-test-inputs__/ingest-media-items/media-items-only/`
+            const expectedNumberOfResults = 11;
 
             const searchResult = await testRepositoryProvider
                 .forResource<MediaItem>(AggregateType.mediaItem)
@@ -169,17 +170,19 @@ describe.skip(`CLI Command: **ingest-media-items**`, () => {
                 .forResource(AggregateType.photograph)
                 .fetchMany()) as Photograph[];
 
-            expect(newPhotographs.length).toBe(1);
+            expect(newPhotographs.length).toBe(3);
 
-            const newPhotograph = newPhotographs[0];
+            const newPngPhotograph = newPhotographs.find(
+                ({ title }) => title.getOriginalTextItem().text === 'station'
+            );
 
             const expectedHeightPx = 1280;
 
             const expectedWidthPx = 960;
 
-            expect(newPhotograph.dimensions.heightPx).toEqual(expectedHeightPx);
+            expect(newPngPhotograph.dimensions.heightPx).toEqual(expectedHeightPx);
 
-            expect(newPhotograph.dimensions.widthPx).toEqual(expectedWidthPx);
+            expect(newPngPhotograph.dimensions.widthPx).toEqual(expectedWidthPx);
         }, 60000); // timeout of 60s
     });
 

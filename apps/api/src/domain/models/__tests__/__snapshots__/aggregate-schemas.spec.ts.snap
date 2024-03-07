@@ -733,8 +733,40 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "label": "MIME type",
     "labelsAndValues": [
       {
+        "label": "pdf",
+        "value": "application/pdf",
+      },
+      {
+        "label": "csv",
+        "value": "text/csv",
+      },
+      {
+        "label": "xlsx",
+        "value": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      },
+      {
+        "label": "docx",
+        "value": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      },
+      {
+        "label": "pptx",
+        "value": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+      },
+      {
         "label": "png",
         "value": "image/png",
+      },
+      {
+        "label": "bmp",
+        "value": "image/bmp",
+      },
+      {
+        "label": "jpg",
+        "value": "image/jpeg",
+      },
+      {
+        "label": "svg",
+        "value": "image/svg+xml",
       },
       {
         "label": "mp3",

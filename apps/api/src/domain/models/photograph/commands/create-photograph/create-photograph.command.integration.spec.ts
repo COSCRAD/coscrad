@@ -162,7 +162,7 @@ describe(commandType, () => {
 
         describe(`when the media item's MIME Type is not consistent with a photograph`, () => {
             // TODO Add jpg and bmp
-            const allowedMimeTypes = [MIMEType.png];
+            const allowedMimeTypes = [MIMEType.png, MIMEType.jpg, MIMEType.bmp];
 
             Object.values(MIMEType)
                 .filter((mimeType) => !allowedMimeTypes.includes(mimeType))

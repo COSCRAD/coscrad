@@ -30,7 +30,7 @@ import {
 import { AggregateId } from '../domain/types/AggregateId';
 import { ResourceType } from '../domain/types/ResourceType';
 import { InternalError, isInternalError } from '../lib/errors/InternalError';
-import { isNotFound } from '../lib/types/not-found';
+import { NotFound, isNotFound } from '../lib/types/not-found';
 import clonePlainObjectWithoutProperty from '../lib/utilities/clonePlainObjectWithoutProperty';
 import formatAggregateCompositeIdentifier from '../queries/presentation/formatAggregateCompositeIdentifier';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
@@ -170,8 +170,15 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
 
         const dimensionsMap = new Map<string, MediaItemDimensions>();
 
+        const isMediaResourceMimeType = (mimeType: MIMEType) =>
+            [isPhotographMimeType, isAudioMimeType, isVideoMimeType].some((predicate) =>
+                predicate(mimeType)
+            );
+
         for (const { filename, mimeType } of partialPayloads) {
-            const mediaInfo = await this.mediaProber.probe(`${directory}/${filename}`);
+            const mediaInfo = !isMediaResourceMimeType(mimeType)
+                ? NotFound
+                : await this.mediaProber.probe(`${directory}/${filename}`);
 
             if (isNotFound(mediaInfo)) {
                 this.logger.log(`the prober found no media info for: ${filename}`);
@@ -237,11 +244,17 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
             }
         );
 
-        const createResourceFsas = createMediaItemFsas.map((createMediaItemFsa, index) => {
-            const idToUse = generatedIds[index + partialPayloads.length];
+        const createResourceFsas = createMediaItemFsas
+            /**
+             * We only want to create corresponding media resources when the MIME Type
+             * corresponds to a audio, video, or photograph.
+             */
+            .filter(({ payload: { mimeType } }) => isMediaResourceMimeType(mimeType))
+            .map((createMediaItemFsa, index) => {
+                const idToUse = generatedIds[index + partialPayloads.length];
 
-            return buildCreateResourceFsaForMediaItem(createMediaItemFsa.payload, idToUse);
-        });
+                return buildCreateResourceFsaForMediaItem(createMediaItemFsa.payload, idToUse);
+            });
 
         /**
          * TODO[Performance] We should consider another pattern such as a promise
@@ -321,6 +334,8 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
                 const topLevelError = new InternalError(message, [result]);
 
                 this.logger.log(topLevelError.toString());
+
+                this.logger.log(`failed payload: ${JSON.stringify(fsa)}`);
 
                 throw topLevelError;
             }
