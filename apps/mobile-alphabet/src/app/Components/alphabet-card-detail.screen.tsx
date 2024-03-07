@@ -1,30 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Image, Text, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { setApiData } from './../../store/slices/alphabet-slice';
 import config from './Config.json';
 import { AlphabetData } from './Menu';
 
+interface alphabetRootState {
+    apiData: { [key: string]: AlphabetData };
+}
+
 export function AlphabetCardDetailScreen() {
+    const dispatch = useDispatch();
+
+    const alphabetApi = useSelector((state: alphabetRootState) => state.apiData);
+
     const [alphabetData, setAlphabetData] = useState<AlphabetData | null>(null);
 
     // Sequence numbers are indexed starting at 1
     const [selectedLetterSequenceNumber, setSelectedLetterSequenceNumber] = useState<number>(1);
 
     useEffect(() => {
-        //TODO cache this after fetching it once
         const fetchData = async () => {
             try {
-                //TODO use context api
-                const response = await fetch(config.apiUrl, {
-                    mode: 'cors',
-                });
-                setAlphabetData(await response.json());
+                const endpoint = config.apiUrl;
+                if (alphabetApi[endpoint]) {
+                    setAlphabetData(alphabetApi[endpoint]);
+                } else {
+                    const response = await fetch(endpoint, { mode: 'cors' });
+                    const data = await response.json();
+                    setAlphabetData(data);
+                    dispatch(setApiData({ endpoint, data }));
+                }
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
 
         fetchData();
-    }, []);
+    }, [alphabetApi, dispatch]);
 
     if (!alphabetData) {
         return <Text>Loading...</Text>;
@@ -48,8 +61,7 @@ export function AlphabetCardDetailScreen() {
         standalone_image,
     } = selectedCard;
 
-    //TODO pull this from a config
-    const apiUrlPrefix = `http://10.0.2.2:3131/api/resources/mediaitems/download?name=`;
+    const apiUrlPrefix = config.apiUrlPrefix;
 
     return (
         <View testID="AlphabetCardDetail">
