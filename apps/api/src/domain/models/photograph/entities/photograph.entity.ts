@@ -35,10 +35,7 @@ import { PhotographCreated } from '../commands';
 import { InvalidMimeTypeForPhotographError } from '../errors';
 
 export const isPhotographMimeType = (mimeType: MIMEType): boolean =>
-    [
-        // TODO add jpg and bmp
-        MIMEType.png,
-    ].includes(mimeType);
+    [MIMEType.png, MIMEType.jpg, MIMEType.bmp].includes(mimeType);
 
 @RegisterIndexScopedCommands([])
 export class Photograph extends Resource implements Boundable2D {

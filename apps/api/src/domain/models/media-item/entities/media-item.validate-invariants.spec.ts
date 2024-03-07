@@ -8,7 +8,16 @@ import { MediaItemDimensions } from './media-item-dimensions';
 
 describe(`MediaItem.validateInvariants`, () => {
     describe(`when a length is provided for a media item not of type audio or video`, () => {
-        [MIMEType.png].forEach((inconsistentMimeType) => {
+        [
+            MIMEType.png,
+            MIMEType.csv,
+            MIMEType.xlsx,
+            MIMEType.docx,
+            MIMEType.pptx,
+            MIMEType.bmp,
+            MIMEType.jpg,
+            MIMEType.svg,
+        ].forEach((inconsistentMimeType) => {
             describe(`when the mimeType is: ${inconsistentMimeType}`, () => {
                 it(`should return the expected errors`, () => {
                     const mediaItem = getValidAggregateInstanceForTest(
@@ -37,7 +46,7 @@ describe(`MediaItem.validateInvariants`, () => {
     // TODO[https://www.pivotaltracker.com/story/show/186725983] support video dimensions
     describe(`when dimensions are provided for a media item not of type photograph`, () => {
         Object.values(MIMEType)
-            .filter((mimeType) => ![MIMEType.png].includes(mimeType))
+            .filter((mimeType) => ![MIMEType.png, MIMEType.bmp, MIMEType.jpg].includes(mimeType))
             .forEach((inconsistentMimeType) => {
                 describe(`when the MIME Type is: ${inconsistentMimeType}`, () => {
                     it(`should return the expected error`, () => {
