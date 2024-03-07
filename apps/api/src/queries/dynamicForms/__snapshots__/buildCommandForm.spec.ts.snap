@@ -47,8 +47,40 @@ exports[`buildCommandForm should return the expected result 1`] = `
       "name": "mimeType",
       "options": [
         {
+          "display": "pdf",
+          "value": "application/pdf",
+        },
+        {
+          "display": "csv",
+          "value": "text/csv",
+        },
+        {
+          "display": "xlsx",
+          "value": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        },
+        {
+          "display": "docx",
+          "value": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        },
+        {
+          "display": "pptx",
+          "value": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        },
+        {
           "display": "png",
           "value": "image/png",
+        },
+        {
+          "display": "bmp",
+          "value": "image/bmp",
+        },
+        {
+          "display": "jpg",
+          "value": "image/jpeg",
+        },
+        {
+          "display": "svg",
+          "value": "image/svg+xml",
         },
         {
           "display": "mp3",

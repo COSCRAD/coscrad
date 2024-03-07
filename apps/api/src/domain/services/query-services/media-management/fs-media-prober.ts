@@ -56,7 +56,7 @@ const parseDuration = ({ streams }: ffmpeg.FfprobeData): Maybe<number> => {
  * this in COSCRAD.
  *
  * A better pattern is to have a factory function that builds `RawMediaInfo`
- * based on pattern matching `ffprobeResult` agains the codec info.
+ * based on pattern matching `ffprobeResult` against the codec info.
  *
  * ```ts
  * if(isVideoMeta(ffprobeResult)){
