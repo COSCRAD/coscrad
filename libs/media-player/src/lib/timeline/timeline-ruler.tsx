@@ -2,9 +2,20 @@ import { Canvas } from '../shared/canvas/canvas';
 import { Draw } from '../shared/canvas/use-canvas';
 import { RULER_TICKS_AND_NUMBERS_COLOR } from './ruler-tick';
 
-const zoomLevels = [
-    { rulerTickOffset: 9, rulerTickFrequency: 1 },
-    { rulerTickOffset: 10, rulerTickFrequency: 2 },
+/**
+ * This limitation is from the IE 9 / 10 (Win) implementation of Canvas
+ * https://jhildenbiddle.github.io/canvas-size/#/?id=test-results
+ */
+const MAX_CANVAS_WIDTH = 8000;
+
+type ZoomLevels = {
+    rulerTickXCoordinateOffset: number;
+    rulerTickFrequencyInSeconds: number;
+};
+
+const zoomLevels: ZoomLevels[] = [
+    { rulerTickXCoordinateOffset: 9, rulerTickFrequencyInSeconds: 1 },
+    { rulerTickXCoordinateOffset: 10, rulerTickFrequencyInSeconds: 2 },
 ];
 
 const getZoomLevel = (zoomLevel: number) => {
@@ -22,7 +33,7 @@ export const TimelineRuler = ({
     zoomLevel,
     timelineTrackHeight,
 }: TimelineProps): JSX.Element => {
-    const rulerLength = Math.ceil(duration);
+    const secondsOnTimeline: number[] = [...Array(Math.ceil(duration)).keys()];
 
     const rulerHeight = timelineTrackHeight / 2;
 
@@ -38,25 +49,67 @@ export const TimelineRuler = ({
 
     const rulerTickY = rulerHeight - rulerTickHeight;
 
-    const rulerTicks: number[] = [...Array(rulerLength).keys()];
+    const { rulerTickXCoordinateOffset, rulerTickFrequencyInSeconds } = getZoomLevel(zoomLevel);
 
-    // const rulerTickOffset = renderedTimelineLength / rulerLength;
+    const rulerUnitWidth = rulerTickXCoordinateOffset + rulerTickWidth;
 
-    const rulerTickOffset = getZoomLevel(zoomLevel).rulerTickOffset;
+    const rulerWidth = rulerUnitWidth * (secondsOnTimeline.length / rulerTickFrequencyInSeconds);
 
-    const rulerTickFrequency = getZoomLevel(zoomLevel).rulerTickFrequency;
+    const numberOfWholeCanvases = Math.floor(rulerWidth / MAX_CANVAS_WIDTH);
 
-    const rulerWidth = rulerTickOffset * (rulerTicks.length / rulerTickFrequency);
+    const lastCanvasWidth = rulerWidth % MAX_CANVAS_WIDTH;
+
+    const getNumberOfCanvases = (lastCanvasWidth: number, numberOfWholeCanvases: number) => {
+        if (lastCanvasWidth > 0) {
+            return numberOfWholeCanvases + 1;
+        } else {
+            return numberOfWholeCanvases;
+        }
+    };
+
+    const numberOfCanvases = getNumberOfCanvases(lastCanvasWidth, numberOfWholeCanvases);
+
+    const numberOfCanvasesAsArray = [...Array(numberOfCanvases).keys()];
+
+    const ticksPerWholeCanvas = MAX_CANVAS_WIDTH / rulerUnitWidth;
+
+    type CanvasParameters = {
+        canvasWidth: number;
+        ticksPerCanvas: number;
+    };
+
+    const canvases = numberOfCanvasesAsArray.reduce((acc: CanvasParameters[], currentCanvas) => {
+        if (currentCanvas < numberOfCanvasesAsArray.length) {
+            return acc.concat({
+                canvasWidth: MAX_CANVAS_WIDTH,
+                ticksPerCanvas: ticksPerWholeCanvas,
+            });
+        } else {
+            return acc.concat({
+                canvasWidth: MAX_CANVAS_WIDTH,
+                ticksPerCanvas: ticksPerWholeCanvas,
+            });
+        }
+    }, []);
+
+    console.log({ canvases: numberOfCanvases });
+
+    /**
+     * create an array of arrays of ticks to pass to the timeline canvas
+     * component
+     */
+
+    // numberOfCanvases.forEach((wholeCanvas) => {});
 
     const drawCanvas: Draw = (context) => {
         context.clearRect(0, 0, context.canvas.width, context.canvas.height);
 
         context.fillStyle = RULER_TICKS_AND_NUMBERS_COLOR;
 
-        rulerTicks.forEach((tick, index) => {
-            if (index % rulerTickFrequency !== 0) return;
+        secondsOnTimeline.forEach((tick, index) => {
+            if (index % rulerTickFrequencyInSeconds !== 0) return;
 
-            const tickX = tick * rulerTickOffset;
+            const tickX = tick * rulerTickXCoordinateOffset;
 
             context.fillRect(tickX, rulerTickY, rulerTickWidth, rulerTickHeight);
         });
@@ -66,7 +119,7 @@ export const TimelineRuler = ({
         <Canvas
             canvasId="timeline-ruler"
             draw={drawCanvas}
-            width={rulerWidth}
+            width={lastCanvasWidth}
             height={rulerHeight}
             sxProps={sxProps}
         />
