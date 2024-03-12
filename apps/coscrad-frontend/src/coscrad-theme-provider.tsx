@@ -30,6 +30,7 @@ export const CoscradThemeProvider = ({ children }: CoscradThemeProviderProps): J
                 },
             },
             typography: {
+                fontFamily: ['"Helvetica"', 'Roboto', 'Arial', 'sans-serif'].join(','),
                 h1: {
                     fontSize: 40,
                 },
@@ -59,7 +60,7 @@ export const CoscradThemeProvider = ({ children }: CoscradThemeProviderProps): J
                     marginBottom: '4px',
                 },
                 body1: {
-                    lineHeight: '1.1',
+                    lineHeight: '1.6',
                 },
             },
             components: {

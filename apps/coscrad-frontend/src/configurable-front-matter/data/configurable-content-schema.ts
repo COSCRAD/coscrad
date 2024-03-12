@@ -65,6 +65,7 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     resourceIndexLabel: string;
     defaultLanguageCode: LanguageCode;
     phoneNumber: string;
+    email: string;
     address: string;
     internalLinks: InternalLink[];
     socialMediaLinks: SocialMediaLinks;
@@ -97,6 +98,7 @@ export const configurableContentPropertiesAndConstraints: {
     resourceIndexLabel: [CoscradConstraint.isString],
     defaultLanguageCode: [CoscradConstraint.isNonEmptyString],
     phoneNumber: [CoscradConstraint.isString],
+    email: [CoscradConstraint.isString],
     address: [CoscradConstraint.isString],
     internalLinks: [],
     socialMediaLinks: [CoscradConstraint.isObject],

@@ -12,6 +12,7 @@ export const CoscradLayoutContainer = ({ children }: CoscradStyleContainerProps)
             display: 'flex',
             flexDirection: 'column',
             minHeight: '80vh',
+            paddingBottom: '30px',
         }}
     >
         <Container disableGutters maxWidth={false} component="div" sx={{ mt: '64px' }}>
