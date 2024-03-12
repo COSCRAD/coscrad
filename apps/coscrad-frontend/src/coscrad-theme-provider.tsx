@@ -30,7 +30,7 @@ export const CoscradThemeProvider = ({ children }: CoscradThemeProviderProps): J
                 },
             },
             typography: {
-                fontFamily: ['"Helvetica"', 'Roboto', 'Arial', 'sans-serif'].join(','),
+                fontFamily: ['Helvetica', 'Roboto', 'Arial', 'sans-serif'].join(','),
                 h1: {
                     fontSize: 40,
                 },

@@ -26,8 +26,7 @@ interface ImageInContentProps {
 
 const StyledContentFigure = styled('figure')({
     position: 'relative',
-    margin: 0,
-    marginBottom: '15px',
+    margin: '0 0 15px 0',
 });
 
 export const ImageInContent = ({ image, displayWidth, alignment }: ImageInContentProps) => {
