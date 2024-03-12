@@ -12,7 +12,6 @@ export const Tenant = (): JSX.Element => {
                 alignItems: 'center',
                 margin: 'auto',
                 gap: 2,
-                mb: 2,
             }}
         >
             <TenantLogo />
