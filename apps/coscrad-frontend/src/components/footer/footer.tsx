@@ -1,4 +1,6 @@
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import {
+    AlternateEmail,
     FacebookOutlined,
     GitHub,
     Instagram,
@@ -30,7 +32,7 @@ export const Footer = (): JSX.Element => {
     /**
      * TODO: Move data (ConfigurableContentContext) out of presenter
      */
-    const { subTitle, phoneNumber, address, internalLinks, socialMediaLinks, siteTitle } =
+    const { subTitle, phoneNumber, email, address, internalLinks, socialMediaLinks, siteTitle } =
         useContext(ConfigurableContentContext);
 
     const socialMediaIcons = [
@@ -61,11 +63,21 @@ export const Footer = (): JSX.Element => {
     const handleClose = () => setOpen(false);
 
     return (
-        <Box sx={{ backgroundColor: '#ededed' }}>
+        <Box
+            component="footer"
+            sx={{
+                backgroundColor: '#ededed',
+                position: 'relative',
+                marginTop: 'auto',
+                bottom: 0,
+                left: 0,
+                width: '100%',
+                paddingBottom: '15px',
+            }}
+        >
             <Grid
                 container
-                component="footer"
-                direction="column"
+                direction="row"
                 spacing={0}
                 sx={{
                     py: 3,
@@ -73,85 +85,89 @@ export const Footer = (): JSX.Element => {
                     mt: 'auto',
                 }}
             >
-                <Grid container spacing={4} sx={{ padding: '20px' }}>
-                    <Grid item xs={12} sm={3} color="text.secondary" sx={{ paddingLeft: '10px' }}>
-                        <Typography color="primary.main" variant="h3">
-                            {siteTitle}
-                        </Typography>
-                        <Typography variant="subtitle1">{subTitle}</Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={3} color="text.secondary">
-                        <Typography color="primary.main" variant="h3">
-                            QR Code
-                        </Typography>
-                        <IconButton color="secondary" onClick={handleOpen}>
-                            <QrCode2Icon />
+                <Grid item xs={12} sm={3} color="text.secondary" sx={{ pl: '10px' }}>
+                    <Typography color="primary.main" variant="h3">
+                        {siteTitle}
+                    </Typography>
+                    <Typography variant="subtitle1">{subTitle}</Typography>
+                </Grid>
+                <Grid item xs={12} sm={3} sx={{ pl: '10px' }} color="text.secondary">
+                    <Typography color="primary.main" variant="h3">
+                        QR Code
+                    </Typography>
+                    <IconButton color="secondary" onClick={handleOpen}>
+                        <QrCode2Icon />
+                    </IconButton>
+                    <Modal
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="QR code for this page"
+                        aria-describedby="get QR code for the current page"
+                    >
+                        <StyledQRCode>
+                            <QRCodeForThisPage />
+                        </StyledQRCode>
+                    </Modal>
+                </Grid>
+                <Grid item xs={12} sm={3} sx={{ pl: '10px' }} color="text.secondary">
+                    <Typography color="primary.main" variant="h3">
+                        Contact
+                    </Typography>
+                    <Box>
+                        <IconButton color="secondary">
+                            <AlternateEmail />
                         </IconButton>
-                        <Modal
-                            open={open}
-                            onClose={handleClose}
-                            aria-labelledby="QR code for this page"
-                            aria-describedby="get QR code for the current page"
-                        >
-                            <StyledQRCode>
-                                <QRCodeForThisPage />
-                            </StyledQRCode>
-                        </Modal>
-                    </Grid>
-                    <Grid item xs={12} sm={3} color="text.secondary">
-                        <Typography color="primary.main" variant="h3">
-                            Contact
-                        </Typography>
+                        {email}
+                    </Box>
+                    {isNonEmptyString(phoneNumber) ? (
                         <Box>
                             <IconButton color="secondary">
                                 <Phone />
                             </IconButton>
                             {phoneNumber}
                         </Box>
-                        <Box>
-                            <IconButton color="secondary">
-                                <LocationOn />
-                            </IconButton>
-                            {address}
-                        </Box>
-                    </Grid>
-                    <Grid item xs={12} sm={3} color="text.secondary">
-                        <Typography color="primary.main" variant="h3">
-                            Links
-                        </Typography>
-                        {socialMediaIcons
-                            .map(({ link, icon }) =>
-                                link ? (
-                                    <IconButton
-                                        key={link}
-                                        href={link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        color="secondary"
-                                        children={icon}
-                                    />
-                                ) : (
-                                    ''
-                                )
-                            )
-                            .filter((element) => element !== '')}
-                        <Box>
-                            {internalLinks.map(({ description, url, iconUrl }) => (
-                                <Tooltip key={url} title={description}>
-                                    <a href={url} target="_blank" rel="noopener noreferrer">
-                                        <img height={40} src={iconUrl} alt={description} />
-                                    </a>
-                                </Tooltip>
-                            ))}
-                        </Box>
-                    </Grid>
+                    ) : null}
+                    <Box>
+                        <IconButton color="secondary">
+                            <LocationOn />
+                        </IconButton>
+                        {address}
+                    </Box>
                 </Grid>
-            </Grid>
-            <Grid container>
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={3} sx={{ pl: '10px' }} color="text.secondary">
+                    <Typography color="primary.main" variant="h3">
+                        Links
+                    </Typography>
+                    {socialMediaIcons
+                        .map(({ link, icon }) =>
+                            link ? (
+                                <IconButton
+                                    key={link}
+                                    href={link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    color="secondary"
+                                    children={icon}
+                                />
+                            ) : (
+                                ''
+                            )
+                        )
+                        .filter((element) => element !== '')}
+                    <Box>
+                        {internalLinks.map(({ description, url, iconUrl }) => (
+                            <Tooltip key={url} title={description}>
+                                <a href={url} target="_blank" rel="noopener noreferrer">
+                                    <img height={40} src={iconUrl} alt={description} />
+                                </a>
+                            </Tooltip>
+                        ))}
+                    </Box>
+                </Grid>
+                <Grid item xs={12} sx={{ pt: 2 }}>
                     <Tenant />
                 </Grid>
-                <Grid item xs={12} sx={{ height: '40px' }}>
+                <Grid item xs={12}>
                     <COSCRADByline />
                 </Grid>
             </Grid>

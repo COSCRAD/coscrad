@@ -94,6 +94,7 @@ export const contentConfig: ConfigurableContent = {
     resourceIndexLabel: 'Available Resources',
     defaultLanguageCode: LanguageCode.Chilcotin,
     phoneNumber: '1-{234} 567-8901',
+    email: 'contact@emailserver.com',
     address: 'Somewhere Drive, Sanctuary , NA',
     internalLinks: [
         {
