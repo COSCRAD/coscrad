@@ -7,6 +7,7 @@ export * from './FiniteNumber';
 export * from './FixedValue';
 export * from './FromDomainModel';
 export * from './ISBN';
+export * from './Month';
 export * from './NestedDataType';
 export * from './NonEmptyString';
 export * from './NonNegativeFiniteNumber';

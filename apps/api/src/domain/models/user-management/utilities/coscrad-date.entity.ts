@@ -1,19 +1,26 @@
-import { InternalError } from '../../../../lib/errors/InternalError';
-import { MultilingualText } from '../../../common/entities/multilingual-text';
-import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
-import { Aggregate } from '../../aggregate.entity';
+import { Month, PositiveInteger, Year } from '@coscrad/data-types';
+import BaseDomainModel from '../../BaseDomainModel';
 
-export class CoscradDate extends Aggregate {
-    protected validateComplexInvariants(): InternalError[] {
-        throw new Error('Method not implemented.');
-    }
-    getAvailableCommands(): string[] {
-        throw new Error('Method not implemented.');
-    }
-    getName(): MultilingualText {
-        throw new Error('Method not implemented.');
-    }
-    protected getExternalReferences(): AggregateCompositeIdentifier[] {
-        throw new Error('Method not implemented.');
+export class CoscradDate extends BaseDomainModel {
+    @PositiveInteger({
+        label: 'day of month',
+        description: 'Day of Month',
+    })
+    readonly day: number;
+
+    @Month({
+        label: 'month of the year',
+        description: 'Month of the Year',
+    })
+    readonly month: typeof Month;
+
+    @Year({
+        label: 'the year',
+        description: 'The Year',
+    })
+    readonly year: number;
+
+    toString(): string {
+        return `${(this.day, this.month, this.year)}`;
     }
 }
