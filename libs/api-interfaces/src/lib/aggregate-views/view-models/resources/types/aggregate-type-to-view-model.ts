@@ -2,7 +2,7 @@ import { AggregateType } from '../../aggregate-type.enum';
 import { ICategoryTreeViewModel } from '../../category-tree';
 import { INoteViewModel } from '../../note';
 import { ITagViewModel } from '../../tag.view-model.interface';
-import { ICoscradUserGroupViewModel } from '../../user-management';
+import { ICoscradContributorViewModel, ICoscradUserGroupViewModel } from '../../user-management';
 import { ICoscradUserViewModel } from '../../user-management/coscrad-user';
 import { IVideoViewModel } from '../audio-item';
 import { IAudioItemViewModel } from '../audio-item/audio-item.view-model.interface';
@@ -36,6 +36,7 @@ export type AggregateTypeToViewModel = {
     [AggregateType.category]: ICategoryTreeViewModel;
     [AggregateType.user]: ICoscradUserViewModel;
     [AggregateType.userGroup]: ICoscradUserGroupViewModel;
+    [AggregateType.contributor]: ICoscradContributorViewModel;
 };
 
 /**

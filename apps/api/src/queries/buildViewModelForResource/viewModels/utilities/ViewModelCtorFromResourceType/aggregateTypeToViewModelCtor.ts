@@ -9,6 +9,7 @@ import { VideoViewModel } from '../../audio-visual/video.view-model';
 import { BaseViewModel } from '../../base.view-model';
 import { BibliographicCitationViewModel } from '../../bibliographic-citation/bibliographic-citation.view-model';
 import { CategoryTreeViewModel } from '../../category-tree.view-model';
+import { CoscradContributorViewModel } from '../../coscrad-contributor.view-model';
 import { CoscradUserGroupViewModel } from '../../coscrad-user-group.view-model';
 import { CoscradUserViewModel } from '../../coscrad-user.view-model';
 import { MediaItemViewModel } from '../../media-item.view-model';
@@ -39,4 +40,5 @@ export const aggregateTypeToViewModelCtor: {
     [AggregateType.tag]: TagViewModel,
     [AggregateType.user]: CoscradUserViewModel,
     [AggregateType.userGroup]: CoscradUserGroupViewModel,
+    [AggregateType.contributor]: CoscradContributorViewModel,
 };

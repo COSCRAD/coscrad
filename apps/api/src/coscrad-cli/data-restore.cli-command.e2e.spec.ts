@@ -32,6 +32,8 @@ const buildFullFilepath = (suffix: string): string => `${outputFilePrefix}${suff
 
 const fileToRestore = buildFullFilepath(`__restore-file__`);
 
+const testDataInFlatFormat = buildTestDataInFlatFormat();
+
 describe(`CLI Command: **data-restore**`, () => {
     let commandInstance: TestingModule;
 
@@ -73,8 +75,6 @@ describe(`CLI Command: **data-restore**`, () => {
 
     beforeEach(async () => {
         await testRepositoryProvider.testTeardown();
-
-        const testDataInFlatFormat = buildTestDataInFlatFormat();
 
         const testDataWithUniqueKeys = Object.entries(testDataInFlatFormat).reduce(
             (acc, [aggregateType, instances]) => ({

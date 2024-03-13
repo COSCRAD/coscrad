@@ -82,6 +82,14 @@ const resourceDescriptions: Pick<AggregateInfo, 'type' | 'description'>[] = [
         description:
             'A user group serves to organize users based on shared privileges to access data',
     },
+    {
+        type: AggregateType.contributor,
+        description: [
+            'A contributor is a person',
+            'not necessarily a system user',
+            'who has shared or processed information',
+        ].join(', '),
+    },
 ];
 
 /**
