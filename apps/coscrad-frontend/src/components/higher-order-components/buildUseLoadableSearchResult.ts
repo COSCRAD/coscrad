@@ -26,7 +26,9 @@ type UseLoadableById = (id: string) => IMaybeLoadable<unknown>;
  *
  * TODO Support users and user groups here when adding corresponding slices to Redux.
  */
-const lookupTable: { [K in Exclude<AggregateType, 'user' | 'userGroup'>]: UseLoadableById } = {
+const lookupTable: {
+    [K in Exclude<AggregateType, 'user' | 'userGroup' | 'contributor'>]: UseLoadableById;
+} = {
     // Resources
     [AggregateType.bibliographicCitation]: useLoadableBibliographicCitationById,
     [AggregateType.digitalText]: useLoadableDigitalTextsById,

@@ -56,6 +56,9 @@ export default (snapshot: InMemorySnapshot): InMemoryDatabaseSnapshot => {
                 }),
                 {} as InMemorySnapshotOfResources
             ),
+            [ArangoCollectionId.contributors]: snapshot.contributor
+                .map(toDto)
+                .map(mapEntityDTOToDatabaseDTO),
             // TODO Write UUIDs as well
             [ArangoCollectionId.events]: [
                 ...Object.values(snapshot.resources),
