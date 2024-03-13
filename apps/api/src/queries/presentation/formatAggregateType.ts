@@ -13,6 +13,7 @@ const resourceTypeAndLabel: AggregateTypeAndLabel = {
     [AggregateType.category]: 'Category',
     [AggregateType.tag]: 'Tag',
     [AggregateType.user]: 'User',
+    [AggregateType.contributor]: 'Contributor',
     [AggregateType.userGroup]: 'User Group',
     [ResourceType.bibliographicCitation]: 'Bibliographic Citation',
     [ResourceType.digitalText]: 'Digital Text',

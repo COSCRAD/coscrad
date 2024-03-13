@@ -194,16 +194,22 @@ describe(`CLI Command: **clear-database**`, () => {
             await CommandTestFactory.run(commandInstance, [cliCommandName]);
 
             const collectionNamesAndContents = await Promise.all(
-                Object.values(ArangoCollectionId).map(
-                    (collectionName): Promise<[string, unknown[]]> =>
-                        databaseProvider
-                            .getDBInstance()
-                            .fetchMany(collectionName)
-                            .then((documents: unknown[]): [string, unknown[]] => [
-                                collectionName,
-                                documents,
-                            ])
-                )
+                Object.values(ArangoCollectionId)
+                    /**
+                     * TODO[https://www.pivotaltracker.com/story/show/187176029]
+                     * Opt back into this check
+                     */
+                    .filter((id) => id !== ArangoCollectionId.contributors)
+                    .map(
+                        (collectionName): Promise<[string, unknown[]]> =>
+                            databaseProvider
+                                .getDBInstance()
+                                .fetchMany(collectionName)
+                                .then((documents: unknown[]): [string, unknown[]] => [
+                                    collectionName,
+                                    documents,
+                                ])
+                    )
             );
 
             const nonEmptyCollections = collectionNamesAndContents

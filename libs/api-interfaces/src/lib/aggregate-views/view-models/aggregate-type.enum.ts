@@ -9,6 +9,7 @@ export const AggregateType = {
     category: 'category',
     user: 'user',
     userGroup: 'userGroup',
+    contributor: 'contributor',
 } as const;
 
 export type AggregateType = ValueType<typeof AggregateType>;
