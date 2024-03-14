@@ -2,11 +2,11 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box, styled } from '@mui/material';
 import { RefObject, useEffect, useRef, useState } from 'react';
 import { asFormattedMediaTimecodeString } from '../shared/as-formatted-media-timecode-string';
-import { EDITOR_SOUND_BAR_HEIGHT, ZOOM_FACTOR } from './constants';
+import { EDITOR_SOUND_BAR_HEIGHT, RULER_TICK_WIDTH, ZOOM_FACTOR } from './constants';
 import { convertTimecodeToTimelineUnits } from './convert-timecode-to-timeline-units';
 import { convertTimelineUnitsToTimecode } from './convert-timeline-units-to-timecode';
 import { RangeBar } from './range-bar';
-import { TimelineRuler } from './timeline-ruler';
+import { TimelineRuler, getZoomLevel } from './timeline-ruler';
 
 const WAVE_FORM_URL = 'https://guujaaw.info/images/audio-wave-form.png';
 
@@ -112,6 +112,17 @@ export const Timeline = ({
 
     const numberOfTracksDisplayed = [...timelineTracks, 'timeline ruler'].length;
 
+    /**
+     * begin copy
+     */
+    const secondsOnTimeline: number = Math.ceil(durationSeconds);
+
+    const { rulerTickXCoordinateOffset, rulerTickFrequencyInSeconds } = getZoomLevel(ZOOM_FACTOR);
+
+    const rulerUnitWidth = rulerTickXCoordinateOffset + RULER_TICK_WIDTH;
+
+    const rulerWidth = rulerUnitWidth * (secondsOnTimeline / rulerTickFrequencyInSeconds);
+
     const timelineRuler = (
         <TimelineRuler
             duration={durationSeconds}
@@ -121,26 +132,17 @@ export const Timeline = ({
     );
 
     useEffect(() => {
-        // Render timeline
-        if (isNullOrUndefined(scrollingBoxRef.current)) return;
-
-        const timelineBoxWidth = scrollingBoxRef.current.getBoundingClientRect().width;
-
-        setRenderedTimelineLength(timelineBoxWidth * ZOOM_FACTOR);
-    }, [scrollingBoxRef, setRenderedTimelineLength]);
-
-    useEffect(() => {
         // Set playhead position when playing from currentTime
         if (isNullOrUndefined(currentTime) || isNullOrUndefined(durationSeconds)) return;
 
         const currentPlayheadPosition = convertTimecodeToTimelineUnits(
-            renderedTimelineLength,
+            rulerWidth,
             currentTime,
             durationSeconds
         );
 
         setplayheadPosition(currentPlayheadPosition);
-    }, [renderedTimelineLength, currentTime, durationSeconds, setplayheadPosition]);
+    }, [rulerWidth, currentTime, durationSeconds, setplayheadPosition]);
 
     useEffect(() => {
         // Scroll timeline when playing
@@ -158,7 +160,7 @@ export const Timeline = ({
         const editorStickyPoint = timelineBoxWidth / 2;
 
         const currentPlayheadPosition = convertTimecodeToTimelineUnits(
-            renderedTimelineLength,
+            rulerWidth,
             currentTime,
             durationSeconds
         );
@@ -172,7 +174,7 @@ export const Timeline = ({
         });
     }, [
         scrollingBoxRef,
-        renderedTimelineLength,
+        rulerWidth,
         durationSeconds,
         currentTime,
         setplayheadPosition,
@@ -205,7 +207,7 @@ export const Timeline = ({
 
         const seekPosition = convertTimelineUnitsToTimecode(
             clickPositionInTimelineUnits,
-            renderedTimelineLength,
+            rulerWidth,
             durationSeconds
         );
 
@@ -215,8 +217,12 @@ export const Timeline = ({
     return (
         <>
             <Box>Playhead: {playheadPosition}</Box>
-            <Box>Rendered Timeline: {renderedTimelineLength}</Box>
-            <Box>Current Time: {currentTime}</Box>
+            <Box>Rendered Timeline: {rulerWidth}</Box>
+            <Box>Seconds On Timeline: {secondsOnTimeline}</Box>
+            <Box>
+                Current Time:{' '}
+                {!isNullOrUndefined(currentTime) ? asFormattedMediaTimecodeString(currentTime) : ''}
+            </Box>
             <Box>
                 Duration from Player: {durationSeconds} /{' '}
                 {asFormattedMediaTimecodeString(durationSeconds)}
@@ -253,7 +259,7 @@ export const Timeline = ({
                     >
                         <StyledScrolledTrack
                             data-testid="timeline-ruler"
-                            sx={{ width: `${renderedTimelineLength}px` }}
+                            sx={{ width: `${rulerWidth}px` }}
                             // onClick={handleSeek}
                         >
                             <EditorPlayhead
@@ -268,7 +274,7 @@ export const Timeline = ({
                             />
                             <StyledTimelineRulerBox
                                 sx={{
-                                    width: `${renderedTimelineLength}px`,
+                                    width: `${rulerWidth}px`,
                                 }}
                             >
                                 {durationSeconds > 0 ? timelineRuler : null}
@@ -278,11 +284,11 @@ export const Timeline = ({
                             <StyledScrolledTrack
                                 data-testid="scrollable-track"
                                 sx={{
-                                    width: `${renderedTimelineLength}px`,
+                                    width: `${rulerWidth}px`,
                                     // backgroundImage: `url(${WAVE_FORM_URL})`,
                                 }}
                             >
-                                {!isNullOrUndefined(renderedTimelineLength)
+                                {!isNullOrUndefined(rulerWidth)
                                     ? timelineTracks.map((timelineTrack) => {
                                           return timelineTrack.timelineTrack.map(
                                               (timeRangeClip) => (
@@ -290,9 +296,7 @@ export const Timeline = ({
                                                       key={JSON.stringify(
                                                           timeRangeClip.timeRangeSeconds
                                                       )}
-                                                      renderedTimelineLength={
-                                                          renderedTimelineLength
-                                                      }
+                                                      rulerWidth={rulerWidth}
                                                       timeRangeClip={timeRangeClip}
                                                       durationSeconds={durationSeconds}
                                                   />

@@ -1,4 +1,5 @@
 import { Box } from '@mui/material';
+import { RULER_TICK_WIDTH, ZOOM_LEVELS } from './constants';
 import { RULER_TICKS_AND_NUMBERS_COLOR } from './ruler-tick';
 import { TimelineCanvas } from './timeline-canvas';
 
@@ -16,23 +17,13 @@ const getNumberOfCanvases = (lastCanvasWidth: number, numberOfWholeCanvases: num
     }
 };
 
-type ZoomLevels = {
-    rulerTickXCoordinateOffset: number;
-    rulerTickFrequencyInSeconds: number;
-};
-
-const zoomLevels: ZoomLevels[] = [
-    { rulerTickXCoordinateOffset: 9, rulerTickFrequencyInSeconds: 1 },
-    { rulerTickXCoordinateOffset: 10, rulerTickFrequencyInSeconds: 2 },
-];
-
-const getZoomLevel = (zoomLevel: number) => {
-    return zoomLevels[zoomLevel];
+export const getZoomLevel = (zoomLevel: number) => {
+    return ZOOM_LEVELS[zoomLevel];
 };
 
 export type CanvasParameters = {
     canvasWidth: number;
-    ticksPerCanvas: number;
+    numberedCanvasTicks: number[];
 };
 
 interface TimelineProps {
@@ -46,71 +37,69 @@ export const TimelineRuler = ({
     zoomLevel,
     timelineTrackHeight,
 }: TimelineProps): JSX.Element => {
-    const secondsOnTimeline: number[] = [...Array(Math.ceil(duration)).keys()];
-
-    const rulerHeight = timelineTrackHeight / 2;
+    const secondsOnTimeline: number = Math.ceil(duration);
 
     const sxProps = {
         borderBottom: `1px solid ${RULER_TICKS_AND_NUMBERS_COLOR}`,
     };
 
-    const rulerTickWidth = 1;
+    const { rulerTickXCoordinateOffset, rulerTickFrequencyInSeconds, numberFrequencyInSeconds } =
+        getZoomLevel(zoomLevel);
 
-    const rulerTickHeight = 10;
+    const rulerUnitWidth = rulerTickXCoordinateOffset + RULER_TICK_WIDTH;
 
-    const rulerTickWithNumberHeight = 20;
-
-    const rulerTickY = rulerHeight - rulerTickHeight;
-
-    const { rulerTickXCoordinateOffset, rulerTickFrequencyInSeconds } = getZoomLevel(zoomLevel);
-
-    const rulerUnitWidth = rulerTickXCoordinateOffset + rulerTickWidth;
-
-    /**
-     * THIS NEEDS TO BE MOVED INTO THE PARENT COMPONENT
-     */
-    const rulerWidth = rulerUnitWidth * (secondsOnTimeline.length / rulerTickFrequencyInSeconds);
+    const rulerWidth = rulerUnitWidth * (secondsOnTimeline / rulerTickFrequencyInSeconds);
 
     const numberOfWholeCanvases = Math.floor(rulerWidth / MAX_CANVAS_WIDTH);
 
+    const ticksPerWholeCanvas = MAX_CANVAS_WIDTH / rulerUnitWidth;
+
     const lastCanvasWidth = rulerWidth % MAX_CANVAS_WIDTH;
+
+    const ticksInLastCanvas = lastCanvasWidth / rulerUnitWidth;
 
     const numberOfCanvases = getNumberOfCanvases(lastCanvasWidth, numberOfWholeCanvases);
 
     const numberOfCanvasesAsArray = [...Array(numberOfCanvases).keys()];
 
-    const ticksPerWholeCanvas = MAX_CANVAS_WIDTH / rulerUnitWidth;
+    const secondsOnTimelineAsArray = [...Array(secondsOnTimeline).keys()];
+
+    console.log({ len: secondsOnTimelineAsArray.length });
 
     const canvases = numberOfCanvasesAsArray.reduce((acc: CanvasParameters[], currentCanvas) => {
         if (currentCanvas < numberOfCanvasesAsArray.length - 1) {
+            const start = currentCanvas * ticksPerWholeCanvas;
+
+            const end = start + ticksPerWholeCanvas;
+
             return acc.concat({
                 canvasWidth: MAX_CANVAS_WIDTH,
-                ticksPerCanvas: ticksPerWholeCanvas,
+                numberedCanvasTicks: secondsOnTimelineAsArray.slice(start, end),
             });
         } else {
-            const ticksInLastCanvas = lastCanvasWidth / rulerUnitWidth;
+            const start = currentCanvas * ticksPerWholeCanvas;
+
+            const end = start + ticksInLastCanvas;
 
             return acc.concat({
                 canvasWidth: lastCanvasWidth,
-                ticksPerCanvas: ticksInLastCanvas,
+                numberedCanvasTicks: secondsOnTimelineAsArray.slice(start, end),
             });
         }
     }, []);
 
     return (
-        <Box component="span" sx={{ position: 'relative' }}>
+        <Box component="span" sx={{ position: 'relative', display: 'flex', flexDirection: 'row' }}>
             {canvases.map((canvas, index) => (
                 <TimelineCanvas
                     key={index}
                     canvasWidth={canvas.canvasWidth}
-                    ticksPerCanvas={canvas.ticksPerCanvas}
-                    rulerTickXCoordinateOffset={rulerTickXCoordinateOffset}
+                    numberedCanvasTicks={canvas.numberedCanvasTicks}
+                    rulerUnitWidth={rulerUnitWidth}
                     rulerTickFrequencyInSeconds={rulerTickFrequencyInSeconds}
+                    numberFrequencyInSeconds={numberFrequencyInSeconds}
                     sxProps={sxProps}
-                    rulerHeight={rulerHeight}
-                    rulerTickY={rulerTickY}
-                    rulerTickWidth={rulerTickWidth}
-                    rulerTickHeight={rulerHeight}
+                    rulerTickWidth={RULER_TICK_WIDTH}
                 />
             ))}
         </Box>

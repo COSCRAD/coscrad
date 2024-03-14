@@ -1,3 +1,4 @@
+import { asDecimalStringWithLeadingZero } from './as-decimal-string-with-leading-zero';
 import { asTwoDigitString } from './as-two-digit-string';
 import { isNonNegativeFiniteNumber } from './validation';
 
@@ -36,7 +37,9 @@ export const asFormattedMediaTimecodeString = (timeInSeconds: number): string =>
 
     const seconds = timeInSeconds - hours * numberOfSecondsInHour - minutes * 60;
 
-    const secondsRoundedToThreeDecimals = Math.round((seconds + Number.EPSILON) * 100) / 100;
+    const secondsRoundedToThreeDecimals = asDecimalStringWithLeadingZero(
+        Math.round((seconds + Number.EPSILON) * 1000) / 1000
+    );
 
     const formattedHoursAndMinutesAsString = [hours, minutes]
         .map((time) => asTwoDigitString(time))

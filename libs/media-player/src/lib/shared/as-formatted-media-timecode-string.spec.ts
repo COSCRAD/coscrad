@@ -2,12 +2,12 @@ import { asFormattedMediaTimecodeString } from './as-formatted-media-timecode-st
 
 const validCurrentLongTime = 42343.457;
 
-const validLongTimecodeString = '11:45:43';
+const validLongTimecodeString = '11:45:43.457';
 
 const validCurrentShortTime = 253.99473;
 
 // NOTE: we're using Math.floor() rather than Math.max() or Math.ceil()
-const validShortTimecodeString = '00:04:13';
+const validShortTimecodeString = '00:04:13.995';
 
 const ninetynineHoursInSecondsPlusOne = 99 * 60 * 60 + 1;
 

@@ -17,13 +17,13 @@ const StyledRangeBar = styled('span')({
 });
 
 interface RangeBarProps {
-    renderedTimelineLength: number;
+    rulerWidth: number;
     durationSeconds: number;
     timeRangeClip: TimeRangeClip;
 }
 
 export const RangeBar = ({
-    renderedTimelineLength,
+    rulerWidth,
     durationSeconds,
     timeRangeClip,
 }: RangeBarProps): JSX.Element => {
@@ -34,15 +34,10 @@ export const RangeBar = ({
         label,
     } = timeRangeClip;
 
-    const rangeStart = convertTimecodeToTimelineUnits(
-        renderedTimelineLength,
-        inPointSeconds,
-        durationSeconds
-    );
+    const rangeStart = convertTimecodeToTimelineUnits(rulerWidth, inPointSeconds, durationSeconds);
 
     const rangeLength =
-        convertTimecodeToTimelineUnits(renderedTimelineLength, outPointSeconds, durationSeconds) -
-        rangeStart;
+        convertTimecodeToTimelineUnits(rulerWidth, outPointSeconds, durationSeconds) - rangeStart;
 
     const handleClick = (event: React.MouseEvent<HTMLSpanElement>) => {
         setActiveRange(!activeRange);
