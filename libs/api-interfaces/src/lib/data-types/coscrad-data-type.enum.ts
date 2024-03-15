@@ -14,7 +14,6 @@ export enum CoscradDataType {
      */
     CompositeIdentifier = 'COMPOSITE_IDENTIFIER',
     Year = 'YEAR',
-    Month = 'MONTH',
     PositiveInteger = 'POSITIVE_INTEGER',
     ISBN = 'ISBN',
     Boolean = 'BOOLEAN',

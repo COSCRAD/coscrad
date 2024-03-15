@@ -15,7 +15,6 @@ type CoscradDataTypeToTypeScriptType = {
     [CoscradDataType.RawData]: Record<string, unknown>;
     [CoscradDataType.URL]: string;
     [CoscradDataType.UUID]: string;
-    [CoscradDataType.Month]: number;
     [CoscradDataType.Year]: number;
     [CoscradDataType.String]: string;
     [CoscradDataType.FixedValue]: unknown;

@@ -1,5 +1,21 @@
-import { Month, PositiveInteger, Year } from '@coscrad/data-types';
+import { ExternalEnum, PositiveInteger, Year } from '@coscrad/data-types';
+import { DTO } from '../../../../types/DTO';
 import BaseDomainModel from '../../BaseDomainModel';
+
+export enum Month {
+    January = '01',
+    February = '02',
+    March = '03',
+    April = '04',
+    May = '05',
+    June = '06',
+    July = '07',
+    August = '08',
+    September = '09',
+    October = '10',
+    November = '11',
+    December = '12',
+}
 
 export class CoscradDate extends BaseDomainModel {
     @PositiveInteger({
@@ -8,11 +24,21 @@ export class CoscradDate extends BaseDomainModel {
     })
     readonly day: number;
 
-    @Month({
-        label: 'month of the year',
-        description: 'Month of the Year',
-    })
-    readonly month: typeof Month;
+    @ExternalEnum(
+        {
+            enumName: `Month`,
+            enumLabel: `Month`,
+            labelsAndValues: Object.entries(Month).map(([label, value]) => ({
+                label,
+                value,
+            })),
+        },
+        {
+            label: `month`,
+            description: `a month of the year`,
+        }
+    )
+    readonly month: Month;
 
     @Year({
         label: 'the year',
@@ -20,7 +46,21 @@ export class CoscradDate extends BaseDomainModel {
     })
     readonly year: number;
 
+    constructor(dto: DTO<CoscradDate>) {
+        super();
+
+        if (!dto) return;
+
+        const { day, month, year } = dto;
+
+        this.day = day;
+
+        this.month = month;
+
+        this.year = year;
+    }
+
     toString(): string {
-        return `${(this.day, this.month, this.year)}`;
+        return `${this.day} ${this.month}, ${this.year}`;
     }
 }
