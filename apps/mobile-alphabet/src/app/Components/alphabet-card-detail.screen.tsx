@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Image, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { setApiData } from './../../store/slices/alphabet-slice';
+import { fetchAlphabetApiData } from './../../store/slices/alphabet-slice';
 import config from './Config.json';
 import { AlphabetData } from './Menu';
 
@@ -20,23 +20,7 @@ export function AlphabetCardDetailScreen() {
     const [selectedLetterSequenceNumber, setSelectedLetterSequenceNumber] = useState<number>(1);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const endpoint = config.apiUrl;
-                if (alphabetApi[endpoint]) {
-                    setAlphabetData(alphabetApi[endpoint]);
-                } else {
-                    const response = await fetch(endpoint, { mode: 'cors' });
-                    const data = await response.json();
-                    setAlphabetData(data);
-                    dispatch(setApiData({ endpoint, data }));
-                }
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-
-        fetchData();
+        dispatch(fetchAlphabetApiData());
     }, [alphabetApi, dispatch]);
 
     if (!alphabetData) {
