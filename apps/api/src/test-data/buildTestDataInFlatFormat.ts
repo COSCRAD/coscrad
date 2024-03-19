@@ -4,6 +4,7 @@ import { ResourceType } from '../domain/types/ResourceType';
 import buildAudioItemTestData from './buildAudioItemTestData';
 import buildBibliographicCitationTestData from './buildBibliographicCitationTestData';
 import buildCategoryTestData from './buildCategoryTestData';
+import buildContributorTestData from './buildContributorTestData';
 import buildDigitalTextTestData from './buildDigitalTextTestData';
 import buildEdgeConnectionTestData from './buildEdgeConnectionTestData';
 import buildMediaItemTestData from './buildMediaItemTestData';
@@ -37,4 +38,5 @@ export default (): PartialSnapshot => ({
     [AggregateType.category]: buildCategoryTestData(),
     [AggregateType.user]: buildUserTestData(),
     [AggregateType.userGroup]: buildUserGroupTestData(),
+    [AggregateType.contributor]: buildContributorTestData(),
 });

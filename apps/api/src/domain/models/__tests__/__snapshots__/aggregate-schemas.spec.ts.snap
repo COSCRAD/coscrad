@@ -321,6 +321,130 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 }
 `;
 
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Contributor  should match the snapshot 1`] = `
+{
+  "dateOfBirth": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "Contributor's Date of Birth",
+    "isArray": false,
+    "isOptional": true,
+    "label": "date of birth",
+    "schema": {
+      "day": {
+        "coscradDataType": "POSITIVE_INTEGER",
+        "description": "Day of Month",
+        "isArray": false,
+        "isOptional": false,
+        "label": "day of month",
+      },
+      "month": {
+        "complexDataType": "ENUM",
+        "description": "a month of the year",
+        "enumLabel": "Month",
+        "enumName": "Month",
+        "isArray": false,
+        "isOptional": false,
+        "label": "month",
+        "labelsAndValues": [
+          {
+            "label": "January",
+            "value": "01",
+          },
+          {
+            "label": "February",
+            "value": "02",
+          },
+          {
+            "label": "March",
+            "value": "03",
+          },
+          {
+            "label": "April",
+            "value": "04",
+          },
+          {
+            "label": "May",
+            "value": "05",
+          },
+          {
+            "label": "June",
+            "value": "06",
+          },
+          {
+            "label": "July",
+            "value": "07",
+          },
+          {
+            "label": "August",
+            "value": "08",
+          },
+          {
+            "label": "September",
+            "value": "09",
+          },
+          {
+            "label": "October",
+            "value": "10",
+          },
+          {
+            "label": "November",
+            "value": "11",
+          },
+          {
+            "label": "December",
+            "value": "12",
+          },
+        ],
+      },
+      "year": {
+        "coscradDataType": "YEAR",
+        "description": "The Year",
+        "isArray": false,
+        "isOptional": false,
+        "label": "the year",
+      },
+    },
+  },
+  "fullName": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "The Contributor's Full Name",
+    "isArray": false,
+    "isOptional": false,
+    "label": "full name",
+    "schema": {
+      "firstName": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the user's first name",
+        "isArray": false,
+        "isOptional": false,
+        "label": "first name",
+      },
+      "lastName": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the user's last name",
+        "isArray": false,
+        "isOptional": false,
+        "label": "last name",
+      },
+    },
+  },
+  "id": {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "description": "unique identifier",
+    "isArray": false,
+    "isOptional": false,
+    "label": "ID",
+  },
+  "shortBio": {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "description": "A Short Biography",
+    "isArray": false,
+    "isOptional": true,
+    "label": "biography",
+  },
+}
+`;
+
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Digital Text  should match the snapshot 1`] = `
 {
   "audioForTitle": {

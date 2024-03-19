@@ -12,6 +12,7 @@ import { Playlist } from '../../models/playlist';
 import { Song } from '../../models/song/song.entity';
 import { Tag } from '../../models/tag/tag.entity';
 import { Term } from '../../models/term/entities/term.entity';
+import { CoscradContributor } from '../../models/user-management/contributor/entities/coscrad-contributor.entity';
 import { CoscradUserGroup } from '../../models/user-management/group/entities/coscrad-user-group.entity';
 import { CoscradUser } from '../../models/user-management/user/entities/user/coscrad-user.entity';
 import { VocabularyList } from '../../models/vocabulary-list/entities/vocabulary-list.entity';
@@ -29,6 +30,7 @@ export const aggregateTypeToAggregateCtor: {
     [AggregateType.tag]: Tag,
     [AggregateType.user]: CoscradUser,
     [AggregateType.userGroup]: CoscradUserGroup,
+    [AggregateType.contributor]: CoscradContributor,
     [AggregateType.mediaItem]: MediaItem,
     [AggregateType.note]: EdgeConnection,
     [AggregateType.photograph]: Photograph,

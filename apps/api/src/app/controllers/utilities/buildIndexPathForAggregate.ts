@@ -4,6 +4,7 @@ import { isResourceType, ResourceType } from '../../../domain/types/ResourceType
 import { InternalError } from '../../../lib/errors/InternalError';
 import {
     CATEGORY_TREE_INDEX_ROUTE,
+    CONTRIBUTOR_INDEX_ROUTE,
     NOTE_INDEX_ROUTE,
     USER_GROUP_INDEX_ROUTE,
     USER_INDEX_ROUTE,
@@ -19,6 +20,7 @@ const nonResourceAggregateTypeToIndexPath: {
     category: CATEGORY_TREE_INDEX_ROUTE,
     user: USER_INDEX_ROUTE,
     userGroup: USER_GROUP_INDEX_ROUTE,
+    contributor: CONTRIBUTOR_INDEX_ROUTE,
 };
 
 export const buildIndexPathForAggregate = (aggregateType: AggregateType): string => {
