@@ -65,12 +65,13 @@ export class DomainDataExporter {
     async fetchAllAggregateRoots(): Promise<InMemoryDomainSnapshotIncludingErrors> {
         const categoryTree = await this.repositoryProvider.getCategoryRepository().fetchTree();
 
-        const [edgeConnections, users, userGroups, tags] = await Promise.all(
+        const [edgeConnections, users, userGroups, tags, contributors] = await Promise.all(
             [
                 this.repositoryProvider.getEdgeConnectionRepository(),
                 this.repositoryProvider.getUserRepository(),
                 this.repositoryProvider.getUserGroupRepository(),
                 this.repositoryProvider.getTagRepository(),
+                this.repositoryProvider.getContributorRepository(),
             ].map((repository) => repository.fetchMany())
         );
 
@@ -93,6 +94,7 @@ export class DomainDataExporter {
                 [AggregateType.note, edgeConnections],
                 [AggregateType.user, users],
                 [AggregateType.userGroup, userGroups],
+                [AggregateType.contributor, contributors],
                 [AggregateType.tag, tags],
                 ...resourceTypesAndInstances,
             ] as [AggregateType, ResultOrError<Aggregate>[]][]

@@ -185,19 +185,14 @@ describe(`CLI Command: **data-restore**`, () => {
                  * of --filename, we have left it with the data check at the level of
                  * the domain (instead of persistence layer).
                  */
-                const aggregatesNotInSnapshot = Object.values(AggregateType)
-                    /**
-                     * TODO Remove this filter when opting in to the repository
-                     */
-                    .filter((aggregateType) => aggregateType !== AggregateType.contributor)
-                    .reduce(
-                        (acc: AggregateType[], aggregateType) =>
-                            isNullOrUndefined(snapshot[aggregateType]) ||
-                            snapshot[aggregateType]?.length === 0
-                                ? acc.concat(aggregateType)
-                                : acc,
-                        []
-                    );
+                const aggregatesNotInSnapshot = Object.values(AggregateType).reduce(
+                    (acc: AggregateType[], aggregateType) =>
+                        isNullOrUndefined(snapshot[aggregateType]) ||
+                        snapshot[aggregateType]?.length === 0
+                            ? acc.concat(aggregateType)
+                            : acc,
+                    []
+                );
 
                 const compareStrings = (a: string, b: string) => a.localeCompare(b);
 
