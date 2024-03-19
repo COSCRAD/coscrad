@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Image, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store';
@@ -25,9 +25,9 @@ export function AlphabetCardDetailScreen() {
 
     // TODO create a `useLoadableAlphabet` hook
     // Better yet, createa  `useLoadableCardBySequenceNumber` hooks
-    if (isNull(alphabetData)) {
-        dispatch(fetchAlphabets());
-    }
+    useEffect(() => {
+        if (isNull(alphabetData)) dispatch(fetchAlphabets());
+    }, [alphabetData, dispatch]);
 
     // Sequence numbers are indexed starting at 1
     const [selectedLetterSequenceNumber, setSelectedLetterSequenceNumber] = useState<number>(1);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store';
@@ -12,6 +12,10 @@ const MenuScreen = ({ navigation }) => {
     const dispatch = useDispatch<AppDispatch>();
 
     const { isLoading, errorInfo, data: alphabetData } = useSelector(selectAlphabet);
+
+    useEffect(() => {
+        if (isNull(alphabetData)) dispatch(fetchAlphabets());
+    }, [alphabetData, dispatch]);
 
     if (isNull(alphabetData)) {
         dispatch(fetchAlphabets());
