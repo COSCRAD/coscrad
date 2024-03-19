@@ -1,14 +1,17 @@
-import { configureStore } from '@reduxjs/toolkit';
-import alphabetSlice from './slices/alphabet-slice';
+import { PreloadedState, combineReducers, configureStore } from '@reduxjs/toolkit';
+import { ALPHABET, alphabetReducer } from './slices/alphabet-slice';
 
-export const setupStore = () =>
+const rootReducer = combineReducers({
+    [ALPHABET]: alphabetReducer,
+});
+
+export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
     configureStore({
-        reducer: {
-            apiData: alphabetSlice,
-        },
+        reducer: rootReducer,
+        preloadedState,
     });
 
-export type RootState = ReturnType<typeof alphabetSlice>;
+export type RootState = ReturnType<typeof rootReducer>;
 
 export type AppStore = ReturnType<typeof setupStore>;
 

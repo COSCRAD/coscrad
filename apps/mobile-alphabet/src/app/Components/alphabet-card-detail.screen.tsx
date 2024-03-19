@@ -1,40 +1,44 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Image, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from 'store';
-import { fetchAlphabetApiData } from './../../store/slices/alphabet-slice';
+import { AppDispatch } from '../../store';
+import { selectAlphabet } from '../../store/slices/selectors';
+import { fetchAlphabets } from './../../store/slices/alphabet-slice';
 import config from './Config.json';
-import { AlphabetData } from './Menu';
 
-interface alphabetRootState {
-    apiData: {
-        data: AlphabetData;
-        isLoading: boolean;
-        isError: boolean;
-    };
-}
+/**
+ *
+ * TODO Fix the project.json (remove package.json?) so that you can import
+ * from libs and then import these from the validation lib.
+ */
+const isNull = (input: unknown): input is null => input === null;
+
+const isUndefined = (input: unknown): input is undefined => typeof input === 'undefined';
+
+const isNullOrUndefined = (input: unknown): input is null | undefined =>
+    isNull(input) || isUndefined(input);
 
 export function AlphabetCardDetailScreen() {
     const dispatch = useDispatch<AppDispatch>();
 
-    const alphabetApi = useSelector((state: alphabetRootState) => state.apiData);
+    const { isLoading, errorInfo, data: alphabetData } = useSelector(selectAlphabet);
+
+    // TODO create a `useLoadableAlphabet` hook
+    // Better yet, createa  `useLoadableCardBySequenceNumber` hooks
+    if (isNull(alphabetData)) {
+        dispatch(fetchAlphabets());
+    }
 
     // Sequence numbers are indexed starting at 1
     const [selectedLetterSequenceNumber, setSelectedLetterSequenceNumber] = useState<number>(1);
 
-    useEffect(() => {
-        dispatch(fetchAlphabetApiData());
-    }, [dispatch]);
-
-    if (alphabetApi.isLoading) {
+    if (isLoading || isNull(alphabetData)) {
         return <Text>Loading...</Text>;
     }
 
-    if (alphabetApi.isError || !alphabetApi.data) {
+    if (!isNullOrUndefined(errorInfo)) {
         return <Text>Error loading data.</Text>;
     }
-
-    const { data: alphabetData } = alphabetApi;
 
     const {
         data: { alphabet_cards: alphabetCards },
@@ -43,6 +47,12 @@ export function AlphabetCardDetailScreen() {
     const selectedCard = alphabetCards.find(({ sequence_number: sequenceNumber }) => {
         return Number.parseInt(sequenceNumber) === selectedLetterSequenceNumber;
     });
+
+    // The data is validate so really this is a system error
+    if (isUndefined(selectedCard)) {
+        // TODO handle this properly
+        return <div>Card not found!</div>;
+    }
 
     const {
         word,
