@@ -18,8 +18,6 @@ const MenuScreen = ({ navigation }) => {
     }, [alphabetData, dispatch]);
 
     if (isNull(alphabetData)) {
-        dispatch(fetchAlphabets());
-
         // TODO break out a Loading component
         return <Text>Loading...</Text>;
     }
@@ -30,7 +28,7 @@ const MenuScreen = ({ navigation }) => {
     }
 
     if (errorInfo) {
-        return <div>Justin- Finish this</div>;
+        return <Text>Justin- Finish this</Text>;
     }
 
     // TODO Use the alphabet cards to create a menu
