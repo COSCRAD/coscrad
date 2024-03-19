@@ -1,6 +1,9 @@
 import { ExternalEnum, PositiveInteger, Year } from '@coscrad/data-types';
+import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import BaseDomainModel from '../../BaseDomainModel';
+import { DayOfMonthTooLargeError } from './day-of-month-too-large.error';
+import { NotALeapYearError } from './not-a-leap-year.error';
 
 export enum Month {
     January = '01',
@@ -16,6 +19,21 @@ export enum Month {
     November = '11',
     December = '12',
 }
+
+const daysInMonthNonLeapYear: { [K in Month]: number } = {
+    [Month.January]: 31,
+    [Month.February]: 28,
+    [Month.March]: 31,
+    [Month.April]: 30,
+    [Month.May]: 31,
+    [Month.June]: 30,
+    [Month.July]: 31,
+    [Month.August]: 31,
+    [Month.September]: 30,
+    [Month.October]: 31,
+    [Month.November]: 30,
+    [Month.December]: 31,
+};
 
 export class CoscradDate extends BaseDomainModel {
     /**
@@ -66,6 +84,39 @@ export class CoscradDate extends BaseDomainModel {
 
     toString(): string {
         return `${this.day} ${this.month}, ${this.year}`;
+    }
+
+    validateComplexInvariants(): InternalError[] {
+        if (this.month === Month.February && this.day === 29) {
+            if (!this.isLeapYear()) {
+                return [new NotALeapYearError(this.year)];
+            }
+        }
+
+        // at this point, we know we are not dealing with February 29 on a leap year
+        const lastDayOfMonth = daysInMonthNonLeapYear[this.month];
+
+        if (this.day > lastDayOfMonth) {
+            return [new DayOfMonthTooLargeError(this, lastDayOfMonth)];
+        }
+
+        return [];
+    }
+
+    private isLeapYear(): boolean {
+        const { year } = this;
+
+        if (year % 4 !== 0) {
+            return false;
+        }
+
+        if (year % 400 === 0) {
+            return true;
+        }
+
+        // We know that the year is divisble by 4 but not 400
+        // So as long as the year is not divisible by 100, it's a leap year
+        return year % 100 !== 0;
     }
 
     /**
