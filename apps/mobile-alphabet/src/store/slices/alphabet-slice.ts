@@ -1,9 +1,10 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { AlphabetData } from 'app/Components/Menu';
 import config from './../../app/Components/Config.json';
 
 type AlphabetApiDataPayload = {
     endpoint: string;
-    data: JSON;
+    data: AlphabetData;
     isLoading: boolean;
     isError: boolean;
 };
@@ -36,7 +37,7 @@ const alphabetApiSlice = createSlice({
     reducers: {
         setApiData: (state, action: PayloadAction<AlphabetApiDataPayload>) => {
             const data = action.payload;
-            state = data;
+            return data;
         },
     },
 });

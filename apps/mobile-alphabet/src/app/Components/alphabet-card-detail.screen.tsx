@@ -1,31 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Image, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from 'store';
 import { fetchAlphabetApiData } from './../../store/slices/alphabet-slice';
 import config from './Config.json';
 import { AlphabetData } from './Menu';
 
 interface alphabetRootState {
-    apiData: { [key: string]: AlphabetData };
+    apiData: {
+        data: AlphabetData;
+        isLoading: boolean;
+        isError: boolean;
+    };
 }
 
 export function AlphabetCardDetailScreen() {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     const alphabetApi = useSelector((state: alphabetRootState) => state.apiData);
-
-    const [alphabetData, setAlphabetData] = useState<AlphabetData | null>(null);
 
     // Sequence numbers are indexed starting at 1
     const [selectedLetterSequenceNumber, setSelectedLetterSequenceNumber] = useState<number>(1);
 
     useEffect(() => {
         dispatch(fetchAlphabetApiData());
-    }, [alphabetApi, dispatch]);
+    }, [dispatch]);
 
-    if (!alphabetData) {
+    if (alphabetApi.isLoading) {
         return <Text>Loading...</Text>;
     }
+
+    if (alphabetApi.isError || !alphabetApi.data) {
+        return <Text>Error loading data.</Text>;
+    }
+
+    const { data: alphabetData } = alphabetApi;
 
     const {
         data: { alphabet_cards: alphabetCards },
