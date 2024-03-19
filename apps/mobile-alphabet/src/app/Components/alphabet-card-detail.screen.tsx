@@ -1,33 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Image, Text, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../store';
+import { selectAlphabet } from '../../store/slices/selectors';
+import { fetchAlphabets } from './../../store/slices/alphabet-slice';
 import config from './Config.json';
-import { AlphabetData } from './Menu';
+
+/**
+ *
+ * TODO Fix the project.json (remove package.json?) so that you can import
+ * from libs and then import these from the validation lib.
+ */
+const isNull = (input: unknown): input is null => input === null;
+
+const isUndefined = (input: unknown): input is undefined => typeof input === 'undefined';
+
+const isNullOrUndefined = (input: unknown): input is null | undefined =>
+    isNull(input) || isUndefined(input);
 
 export function AlphabetCardDetailScreen() {
-    const [alphabetData, setAlphabetData] = useState<AlphabetData | null>(null);
+    const dispatch = useDispatch<AppDispatch>();
+
+    const { isLoading, errorInfo, data: alphabetData } = useSelector(selectAlphabet);
+
+    // TODO create a `useLoadableAlphabet` hook
+    // Better yet, createa  `useLoadableCardBySequenceNumber` hooks
+    useEffect(() => {
+        if (isNull(alphabetData)) dispatch(fetchAlphabets());
+    }, [alphabetData, dispatch]);
 
     // Sequence numbers are indexed starting at 1
     const [selectedLetterSequenceNumber, setSelectedLetterSequenceNumber] = useState<number>(1);
 
-    useEffect(() => {
-        //TODO cache this after fetching it once
-        const fetchData = async () => {
-            try {
-                //TODO use context api
-                const response = await fetch(config.apiUrl, {
-                    mode: 'cors',
-                });
-                setAlphabetData(await response.json());
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-
-        fetchData();
-    }, []);
-
-    if (!alphabetData) {
+    if (isLoading || isNull(alphabetData)) {
         return <Text>Loading...</Text>;
+    }
+
+    if (!isNullOrUndefined(errorInfo)) {
+        return <Text>Error loading data.</Text>;
     }
 
     const {
@@ -37,6 +47,12 @@ export function AlphabetCardDetailScreen() {
     const selectedCard = alphabetCards.find(({ sequence_number: sequenceNumber }) => {
         return Number.parseInt(sequenceNumber) === selectedLetterSequenceNumber;
     });
+
+    // The data is validate so really this is a system error
+    if (isUndefined(selectedCard)) {
+        // TODO handle this properly
+        return <div>Card not found!</div>;
+    }
 
     const {
         word,
@@ -48,8 +64,7 @@ export function AlphabetCardDetailScreen() {
         standalone_image,
     } = selectedCard;
 
-    //TODO pull this from a config
-    const apiUrlPrefix = `http://10.0.2.2:3131/api/resources/mediaitems/download?name=`;
+    const apiUrlPrefix = config.apiUrlPrefix;
 
     return (
         <View testID="AlphabetCardDetail">
