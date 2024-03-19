@@ -18,6 +18,10 @@ export enum Month {
 }
 
 export class CoscradDate extends BaseDomainModel {
+    /**
+     * TODO[https://www.pivotaltracker.com/story/show/187270553]
+     * This should be @DayOfMonth()
+     */
     @PositiveInteger({
         label: 'day of month',
         description: 'Day of Month',
@@ -63,4 +67,10 @@ export class CoscradDate extends BaseDomainModel {
     toString(): string {
         return `${this.day} ${this.month}, ${this.year}`;
     }
+
+    /**
+     * TODO [https://www.pivotaltracker.com/story/show/187270562]
+     * We need to implement complex invariant validation that ensures
+     * that the leap year rules are satisfied.
+     */
 }

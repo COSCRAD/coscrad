@@ -32,6 +32,8 @@ const buildFullFilepath = (suffix: string): string => `${outputFilePrefix}${suff
 
 const fileToRestore = buildFullFilepath(`__restore-file__`);
 
+const testDataInFlatFormat = buildTestDataInFlatFormat();
+
 describe(`CLI Command: **data-restore**`, () => {
     let commandInstance: TestingModule;
 
@@ -73,8 +75,6 @@ describe(`CLI Command: **data-restore**`, () => {
 
     beforeEach(async () => {
         await testRepositoryProvider.testTeardown();
-
-        const testDataInFlatFormat = buildTestDataInFlatFormat();
 
         const testDataWithUniqueKeys = Object.entries(testDataInFlatFormat).reduce(
             (acc, [aggregateType, instances]) => ({
@@ -185,14 +185,19 @@ describe(`CLI Command: **data-restore**`, () => {
                  * of --filename, we have left it with the data check at the level of
                  * the domain (instead of persistence layer).
                  */
-                const aggregatesNotInSnapshot = Object.values(AggregateType).reduce(
-                    (acc: AggregateType[], aggregateType) =>
-                        isNullOrUndefined(snapshot[aggregateType]) ||
-                        snapshot[aggregateType]?.length === 0
-                            ? acc.concat(aggregateType)
-                            : acc,
-                    []
-                );
+                const aggregatesNotInSnapshot = Object.values(AggregateType)
+                    /**
+                     * TODO Remove this filter when opting in to the repository
+                     */
+                    .filter((aggregateType) => aggregateType !== AggregateType.contributor)
+                    .reduce(
+                        (acc: AggregateType[], aggregateType) =>
+                            isNullOrUndefined(snapshot[aggregateType]) ||
+                            snapshot[aggregateType]?.length === 0
+                                ? acc.concat(aggregateType)
+                                : acc,
+                        []
+                    );
 
                 const compareStrings = (a: string, b: string) => a.localeCompare(b);
 
