@@ -17,6 +17,8 @@ export const clonePlainObjectWithOverrides = <T extends object = object>(
     // First we deep-clone to avoid shared references with the original
     const clone = cloneToPlainObject(object);
 
+    // TODO What if we override with an empty object?
+
     Object.entries(overrides).forEach(([keyForThisProperty, overridesForThisProperty]) => {
         // Is this value a primitive type? Then we can do a shallow assign.
         if (

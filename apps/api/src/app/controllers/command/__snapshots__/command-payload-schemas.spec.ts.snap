@@ -1932,6 +1932,72 @@ exports[`command payload schemas Command payload schema should match the snapsho
     "type": "TAG_RESOURCE_OR_NOTE",
   },
   {
+    "description": "Create a new COSCRAD contributor",
+    "label": "Create Contributor",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "must be: contributor",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "contributor",
+                "value": "contributor",
+              },
+            ],
+          },
+        },
+      },
+      "dateOfBirth": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "The Contributor's Date of Birth (YYYY-MM-DD)",
+        "isArray": false,
+        "isOptional": true,
+        "label": "date of birth",
+      },
+      "firstName": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "The Contributor's first name",
+        "isArray": false,
+        "isOptional": false,
+        "label": "the contributor's first name",
+      },
+      "lastName": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "The Contributor's last name",
+        "isArray": false,
+        "isOptional": false,
+        "label": "the contributor's last name",
+      },
+      "shortBio": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "a brief biography to help uniquely identify this contributor",
+        "isArray": false,
+        "isOptional": true,
+        "label": "short bio",
+      },
+    },
+    "type": "CREATE_CONTRIBUTOR",
+  },
+  {
     "description": "Create a new video",
     "label": "Create Video",
     "schema": {

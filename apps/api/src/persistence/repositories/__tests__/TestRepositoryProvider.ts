@@ -64,6 +64,7 @@ export default class TestRepositoryProvider extends ArangoRepositoryProvider {
             note: connections,
             user: users,
             userGroup: userGroups,
+            contributor: contributors,
         } = snapshot;
 
         await this.addResourcesOfManyTypes(resources);
@@ -77,6 +78,8 @@ export default class TestRepositoryProvider extends ArangoRepositoryProvider {
         await this.getUserRepository().createMany(users);
 
         await this.getUserGroupRepository().createMany(userGroups);
+
+        await this.getContributorRepository().createMany(contributors);
 
         /**
          * Currently, this is done by `createMany` via `create`.
