@@ -1,8 +1,6 @@
 import { AggregateCompositeIdentifier, ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { NestedDataType } from '@coscrad/data-types';
-import { FullName } from '../../../user/entities/user/full-name.entity';
-import { CoscradDate } from '../../../utilities';
+import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { ContributorCompositeIdentifier } from '../contributor-composite-identifier';
 
 @Command({
@@ -17,15 +15,29 @@ export class CreateContributor implements ICommandBase {
     })
     readonly aggregateCompositeIdentifier: AggregateCompositeIdentifier;
 
-    @NestedDataType(FullName, {
-        label: 'full name',
-        description: "The Contributor's Full Name",
+    @NonEmptyString({
+        label: "the contributor's first name",
+        description: "The Contributor's first name",
     })
-    readonly fullName: FullName;
+    readonly firstName: string;
 
-    @NestedDataType(CoscradDate, {
-        label: 'date of birth',
-        description: "The Contributor's Date of Birth",
+    @NonEmptyString({
+        label: "the contributor's last name",
+        description: "The Contributor's last name",
     })
-    readonly dateOfBirth: CoscradDate;
+    readonly lastName: string;
+
+    @NonEmptyString({
+        label: 'short bio',
+        description: 'a brief biography to help uniquely identify this contributor',
+        isOptional: true,
+    })
+    readonly shortBio?: string;
+
+    @NonEmptyString({
+        label: 'date of birth',
+        description: "The Contributor's Date of Birth (YYYY-MM-DD)",
+        isOptional: true,
+    })
+    readonly dateOfBirth?: string;
 }

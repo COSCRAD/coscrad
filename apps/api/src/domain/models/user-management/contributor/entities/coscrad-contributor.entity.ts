@@ -11,6 +11,7 @@ import { DTO } from '../../../../../types/DTO';
 import { Aggregate } from '../../../aggregate.entity';
 import { FullName } from '../../user/entities/user/full-name.entity';
 import { CoscradDate } from '../../utilities/coscrad-date.entity';
+import { ContributorNotUniquelyIdentifiableUserError } from './errors';
 
 @AggregateRoot(AggregateType.contributor)
 @RegisterIndexScopedCommands([])
@@ -57,11 +58,11 @@ export class CoscradContributor extends Aggregate {
     }
 
     protected validateComplexInvariants(): InternalError[] {
-        /**
-         * TODO[https://www.pivotaltracker.com/story/show/187270528]
-         * Implement complex invariant validation.
-         */
-        return [];
+        if (isNullOrUndefined(this.dateOfBirth) && isNullOrUndefined(this.shortBio)) {
+            return [new ContributorNotUniquelyIdentifiableUserError(this.fullName)];
+        }
+
+        return this.dateOfBirth?.validateComplexInvariants() || [];
     }
 
     getAvailableCommands(): string[] {
