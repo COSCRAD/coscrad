@@ -13,6 +13,7 @@ import { DomainRestoreCliCommand } from './data-restore.cli-command';
 import { ExecuteCommandStreamCliCommand } from './execute-command-stream.cli-command';
 import { ExportAudioItemLineagesCliCommand } from './export-audio-item-lineages.cli-command';
 import { ExportMediaAnnotationsCliCommand } from './export-media-annotations.cli-command';
+import { ExportSchemasCliCommand } from './export-schemas.cli-command';
 import { IngestMediaItemsCliCommand } from './ingest-media-items.cli-command';
 import { ListMigrationsCliCommand } from './list-migrations.cli-command';
 import { ConsoleCoscradCliLogger, COSCRAD_LOGGER_TOKEN } from './logging';
@@ -37,6 +38,7 @@ import { ValidateInvariantsCliCommand } from './validate-invariants.cli-command'
         IngestMediaItemsCliCommand,
         ExportMediaAnnotationsCliCommand,
         ExportAudioItemLineagesCliCommand,
+        ExportSchemasCliCommand,
         {
             provide: COSCRAD_LOGGER_TOKEN,
             useClass: ConsoleCoscradCliLogger,
