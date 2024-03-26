@@ -9,7 +9,9 @@ import { ArangoDatabaseProvider } from '../../../../../../persistence/database/d
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../../../types/DTO';
+import { assertCreateCommandError } from '../../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../../__tests__/command-helpers/assert-create-command-success';
+import { DummyCommandFsaFactory } from '../../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { buildFakeTimersConfig } from '../../../../__tests__/utilities/buildFakeTimersConfig';
 import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUserId';
@@ -33,6 +35,8 @@ const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateCon
 });
 
 const initialState = buildEmptyInMemorySnapshot();
+
+const fsaFactory = new DummyCommandFsaFactory<CreateContributor>(buildValidCommandFSA);
 
 describe('CreateContributor', () => {
     let testRepositoryProvider: TestRepositoryProvider;
@@ -79,14 +83,16 @@ describe('CreateContributor', () => {
         databaseProvider.close();
     });
 
+    const seedValidInitialState = async () => {
+        await testRepositoryProvider.addFullSnapshot(initialState);
+    };
+
     describe(`when the command is valid`, () => {
         it('should succeed', async () => {
             await assertCreateCommandSuccess(commandAssertionDependencies, {
                 systemUserId: dummySystemUserId,
                 buildValidCommandFSA,
-                seedInitialState: async () => {
-                    await testRepositoryProvider.addFullSnapshot(initialState);
-                },
+                seedInitialState: seedValidInitialState,
                 checkStateOnSuccess: async ({
                     aggregateCompositeIdentifier: { id },
                 }: CreateContributor) => {
@@ -106,6 +112,22 @@ describe('CreateContributor', () => {
 
                     // TODO set the optional date of birth
                 },
+            });
+        });
+    });
+
+    describe('when the command is invalid', () => {
+        describe('when neither short bio nor date of birth is provided', () => {
+            it('should return the expected error', async () => {
+                await assertCreateCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    buildCommandFSA: (id: AggregateId) =>
+                        fsaFactory.build(id, {
+                            shortBio: undefined,
+                            dateOfBirth: undefined,
+                        }),
+                    seedInitialState: seedValidInitialState,
+                });
             });
         });
     });

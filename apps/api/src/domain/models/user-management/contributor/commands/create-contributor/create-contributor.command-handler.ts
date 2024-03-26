@@ -4,12 +4,13 @@ import { Valid } from '../../../../../../domain/domainModelValidators/Valid';
 import buildInstanceFactory from '../../../../../../domain/factories/utilities/buildInstanceFactory';
 import { DeluxeInMemoryStore } from '../../../../../../domain/types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../../../domain/types/ResourceType';
-import { InternalError } from '../../../../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../../../../lib/errors/InternalError';
 import { DTO } from '../../../../../../types/DTO';
 import { ResultOrError } from '../../../../../../types/ResultOrError';
 import { BaseCreateCommandHandler } from '../../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent, IEventPayload } from '../../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../../shared/events/types/EventRecordMetadata';
+import { CoscradDate } from '../../../utilities';
 import { CoscradContributor } from '../../entities/coscrad-contributor.entity';
 import { ContributorCreated } from './contributor-created.event';
 import { CreateContributor } from './create-contributor.command';
@@ -22,11 +23,17 @@ export class CreateContributorCommandHandler extends BaseCreateCommandHandler<Co
         lastName,
         dateOfBirth,
     }: CreateContributor): ResultOrError<CoscradContributor> {
+        const dateBuildResult = CoscradDate.parseString(dateOfBirth);
+
+        if (isInternalError(dateBuildResult)) {
+            return dateBuildResult;
+        }
+
         const createDto: DTO<CoscradContributor> = {
             type: AggregateType.contributor,
             id,
             fullName: { firstName, lastName },
-            dateOfBirth,
+            dateOfBirth: dateBuildResult,
         };
 
         return buildInstanceFactory(CoscradContributor)(createDto);
