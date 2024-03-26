@@ -70,7 +70,7 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
         }
 
         if (aggregateType === AggregateType.contributor) {
-            throw new InternalError(`Not Implemented: Contributor Repository Provider`);
+            return this.repositoryProvider.getContributorRepository() as unknown as IRepositoryForAggregate<T>;
         }
 
         const exhaustiveCheck: never = aggregateType;

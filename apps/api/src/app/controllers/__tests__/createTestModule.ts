@@ -174,6 +174,11 @@ import {
 } from '../../../domain/models/term/commands';
 import { Term } from '../../../domain/models/term/entities/term.entity';
 import {
+    ContributorCreated,
+    CreateContributor,
+    CreateContributorCommandHandler,
+} from '../../../domain/models/user-management/contributor';
+import {
     CreateGroup,
     CreateGroupCommandHandler,
 } from '../../../domain/models/user-management/group/commands';
@@ -307,6 +312,7 @@ export const buildAllDataClassProviders = () =>
         AudioAddedForTerm,
         TermElicitedFromPrompt,
         PhotographCreated,
+        ContributorCreated,
         // Aggregate Root Domain Models
         DigitalText,
         Song,
@@ -618,6 +624,8 @@ export default async (
             RelabelTagCommandHandler,
             TagResourceOrNote,
             TagResourceOrNoteCommandHandler,
+            CreateContributorCommandHandler,
+            CreateContributor,
             // Next time try importing the domain module!
             CreateVideo,
             CreateVideoCommandHandler,

@@ -17,6 +17,7 @@ import { ResourceType } from '@coscrad/api-interfaces';
 import { Video } from '../models/audio-visual/video/entities/video.entity';
 import { DigitalText } from '../models/digital-text/entities/digital-text.entity';
 import { Playlist } from '../models/playlist';
+import { CoscradContributor } from '../models/user-management/contributor/entities/coscrad-contributor.entity';
 
 export { ResourceType };
 
@@ -64,4 +65,5 @@ export type InMemorySnapshot = {
     user: CoscradUser[];
     userGroup: CoscradUserGroup[];
     uuid: UuidDocument[];
+    contributor: CoscradContributor[];
 };
