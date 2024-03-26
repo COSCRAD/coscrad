@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CreateContributor when the command is valid should succeed: 41fb2d7f-c483-4e09-a1f0-e9909a6b0001 1`] = `
+CoscradContributor {
+  "eventHistory": [
+    {
+      "id": "41fb2d7f-c483-4e09-a1f0-e9909a6b0002",
+      "meta": {
+        "dateCreated": 1664237194356,
+        "id": "41fb2d7f-c483-4e09-a1f0-e9909a6b0002",
+        "userId": "system4d-3b7d-4bad-9bdd-2b0d70userid",
+      },
+      "payload": {
+        "aggregateCompositeIdentifier": {
+          "id": "41fb2d7f-c483-4e09-a1f0-e9909a6b0001",
+          "type": "contributor",
+        },
+        "firstName": "the contributor's first name",
+        "lastName": "the contributor's last name",
+      },
+      "type": "CONTRIBUTOR_CREATED",
+    },
+  ],
+  "fullName": FullName {
+    "firstName": "the contributor's first name",
+    "lastName": "the contributor's last name",
+  },
+  "id": "41fb2d7f-c483-4e09-a1f0-e9909a6b0001",
+  "type": "contributor",
+}
+`;

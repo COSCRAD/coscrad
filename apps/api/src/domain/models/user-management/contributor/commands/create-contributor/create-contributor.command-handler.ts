@@ -37,10 +37,10 @@ export class CreateContributorCommandHandler extends BaseCreateCommandHandler<Co
     }
 
     protected validateExternalState(
-        state: InMemorySnapshot,
-        instance: CoscradContributor
+        _state: InMemorySnapshot,
+        _instance: CoscradContributor
     ): InternalError | Valid {
-        return instance.validateExternalState(state);
+        return Valid;
     }
 
     protected buildEvent(

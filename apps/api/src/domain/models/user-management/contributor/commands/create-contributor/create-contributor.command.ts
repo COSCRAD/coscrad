@@ -31,6 +31,7 @@ export class CreateContributor implements ICommandBase {
     @NestedDataType(CoscradDate, {
         label: 'date of birth',
         description: "The Contributor's Date of Birth",
+        isOptional: true,
     })
     readonly dateOfBirth?: CoscradDate;
 }

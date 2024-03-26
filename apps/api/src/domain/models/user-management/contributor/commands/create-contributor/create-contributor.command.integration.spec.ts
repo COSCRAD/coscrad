@@ -89,6 +89,8 @@ describe('CreateContributor', () => {
                         .fetchById(id);
 
                     expect(contributorSearchResult).toBeInstanceOf(CoscradContributor);
+
+                    expect(contributorSearchResult).toMatchSnapshot(id);
                 },
             });
         });
