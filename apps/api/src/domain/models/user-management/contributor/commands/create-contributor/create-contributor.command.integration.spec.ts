@@ -15,6 +15,7 @@ import { DummyCommandFsaFactory } from '../../../../__tests__/command-helpers/du
 import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { buildFakeTimersConfig } from '../../../../__tests__/utilities/buildFakeTimersConfig';
 import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUserId';
+import { Month } from '../../../utilities';
 import { CoscradContributor } from '../../entities/coscrad-contributor.entity';
 import { CreateContributor } from './create-contributor.command';
 
@@ -24,6 +25,16 @@ const firstName = "the contributor's first name";
 
 const lastName = "the contributor's last name";
 
+const shortBio = "all about the contributor's life";
+
+const dateOfBirth = '1949-05-12';
+
+const expectedDay = 12;
+
+const expectedMonth = Month.May;
+
+const expectedYear = 1949;
+
 const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateContributor>> => ({
     type: commandType,
 
@@ -31,6 +42,8 @@ const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateCon
         aggregateCompositeIdentifier: { id, type: AggregateType.contributor },
         firstName,
         lastName,
+        shortBio,
+        dateOfBirth,
     },
 });
 
@@ -110,7 +123,15 @@ describe('CreateContributor', () => {
 
                     expect(fullName.lastName).toBe(lastName);
 
-                    // TODO set the optional date of birth
+                    const foundDob = contributor.dateOfBirth;
+
+                    expect(foundDob.day).toBe(expectedDay);
+
+                    expect(foundDob.month).toBe(expectedMonth);
+
+                    expect(foundDob.year).toBe(expectedYear);
+
+                    expect(contributor.shortBio).toBe(shortBio);
                 },
             });
         });

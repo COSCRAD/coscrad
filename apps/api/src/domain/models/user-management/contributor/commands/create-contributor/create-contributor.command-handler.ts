@@ -1,5 +1,6 @@
 import { AggregateType } from '@coscrad/api-interfaces';
 import { CommandHandler, ICommand } from '@coscrad/commands';
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Valid } from '../../../../../../domain/domainModelValidators/Valid';
 import buildInstanceFactory from '../../../../../../domain/factories/utilities/buildInstanceFactory';
 import { DeluxeInMemoryStore } from '../../../../../../domain/types/DeluxeInMemoryStore';
@@ -22,8 +23,11 @@ export class CreateContributorCommandHandler extends BaseCreateCommandHandler<Co
         firstName,
         lastName,
         dateOfBirth,
+        shortBio,
     }: CreateContributor): ResultOrError<CoscradContributor> {
-        const dateBuildResult = CoscradDate.parseString(dateOfBirth);
+        const dateBuildResult = isNonEmptyString(dateOfBirth)
+            ? CoscradDate.parseString(dateOfBirth)
+            : undefined;
 
         if (isInternalError(dateBuildResult)) {
             return dateBuildResult;
@@ -34,6 +38,7 @@ export class CreateContributorCommandHandler extends BaseCreateCommandHandler<Co
             id,
             fullName: { firstName, lastName },
             dateOfBirth: dateBuildResult,
+            shortBio,
         };
 
         return buildInstanceFactory(CoscradContributor)(createDto);
