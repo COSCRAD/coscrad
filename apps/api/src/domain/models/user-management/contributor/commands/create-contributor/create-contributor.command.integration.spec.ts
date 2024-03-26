@@ -18,13 +18,17 @@ import { CreateContributor } from './create-contributor.command';
 
 const commandType = 'CREATE_CONTRIBUTOR';
 
+const firstName = "the contributor's first name";
+
+const lastName = "the contributor's last name";
+
 const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateContributor>> => ({
     type: commandType,
 
     payload: {
         aggregateCompositeIdentifier: { id, type: AggregateType.contributor },
-        firstName: "the contributor's first name",
-        lastName: "the contributor's last name",
+        firstName,
+        lastName,
     },
 });
 
@@ -80,7 +84,9 @@ describe('CreateContributor', () => {
             await assertCreateCommandSuccess(commandAssertionDependencies, {
                 systemUserId: dummySystemUserId,
                 buildValidCommandFSA,
-                initialState,
+                seedInitialState: async () => {
+                    await testRepositoryProvider.addFullSnapshot(initialState);
+                },
                 checkStateOnSuccess: async ({
                     aggregateCompositeIdentifier: { id },
                 }: CreateContributor) => {
@@ -90,7 +96,15 @@ describe('CreateContributor', () => {
 
                     expect(contributorSearchResult).toBeInstanceOf(CoscradContributor);
 
-                    expect(contributorSearchResult).toMatchSnapshot(id);
+                    const contributor = contributorSearchResult as CoscradContributor;
+
+                    const fullName = contributor.fullName;
+
+                    expect(fullName.firstName).toBe(firstName);
+
+                    expect(fullName.lastName).toBe(lastName);
+
+                    // TODO set the optional date of birth
                 },
             });
         });
