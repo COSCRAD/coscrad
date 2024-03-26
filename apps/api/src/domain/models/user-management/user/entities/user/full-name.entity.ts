@@ -26,4 +26,8 @@ export class FullName extends BaseDomainModel {
 
         this.lastName = lastName;
     }
+
+    toString(): string {
+        return `${this.firstName} ${this.lastName}`;
+    }
 }
