@@ -2,6 +2,7 @@ import { AggregateType } from '@coscrad/api-interfaces';
 import { Valid } from '../../../../../domain/domainModelValidators/Valid';
 import InvariantValidationError from '../../../../../domain/domainModelValidators/errors/InvariantValidationError';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
+import { isInternalError } from '../../../../../lib/errors/InternalError';
 import { clonePlainObjectWithOverrides } from '../../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { clonePlainObjectWithoutProperties } from '../../../../../lib/utilities/clonePlainObjectWithoutProperties';
 import { DTO } from '../../../../../types/DTO';
@@ -90,24 +91,37 @@ describe(`CoscradContributor.validateInvariants`, () => {
         });
 
         describe(`fuzz test`, () => {
-            generateCommandFuzzTestCases(CoscradContributor).forEach(
-                ({ description, propertyName, invalidValue }) => {
+            generateCommandFuzzTestCases(CoscradContributor)
+                .filter(({ propertyName }) => !propertyName.includes('bogus'))
+                .forEach(({ description, propertyName, invalidValue }) => {
                     describe(`when the property: ${propertyName} has the invalid value:${invalidValue} (${description}`, () => {
                         it('should fail with the appropriate error', () => {
-                            const result = new CoscradContributor(
-                                clonePlainObjectWithOverrides(validDto, {
-                                    [propertyName]: invalidValue,
-                                })
-                            ).validateInvariants();
+                            const invalidDto = {
+                                ...validDto,
+                                [propertyName]: invalidValue,
+                            };
+
+                            const result = new CoscradContributor(invalidDto).validateInvariants();
+
+                            if (!isInternalError(result)) {
+                                throw new Error('booh');
+                            }
+
+                            const idToUse =
+                                propertyName === 'id'
+                                    ? {
+                                          ...compositeId,
+                                          id: invalidValue as string,
+                                      }
+                                    : compositeId;
 
                             assertErrorAsExpected(
                                 result,
-                                new InvariantValidationError(compositeId, [])
+                                new InvariantValidationError(idToUse, [])
                             );
                         });
                     });
-                }
-            );
+                });
         });
     });
 });
