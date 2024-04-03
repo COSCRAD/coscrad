@@ -62,7 +62,7 @@ export class CoscradContributor extends Aggregate {
             return [new ContributorNotUniquelyIdentifiableUserError(this.fullName)];
         }
 
-        return this.dateOfBirth.validateComplexInvariants();
+        return this.dateOfBirth?.validateComplexInvariants() || [];
     }
 
     getAvailableCommands(): string[] {
