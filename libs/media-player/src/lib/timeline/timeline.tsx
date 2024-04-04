@@ -2,7 +2,11 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box, styled } from '@mui/material';
 import { RefObject, useEffect, useRef, useState } from 'react';
 import { asFormattedMediaTimecodeString } from '../shared/as-formatted-media-timecode-string';
-import { EDITOR_SOUND_BAR_HEIGHT, RULER_TICK_WIDTH, ZOOM_FACTOR } from './constants';
+import {
+    EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS,
+    RULER_TICK_WIDTH_IN_PIXELS,
+    ZOOM_FACTOR,
+} from './constants';
 import { convertTimecodeToTimelineUnits } from './convert-timecode-to-timeline-units';
 import { convertTimelineUnitsToTimecode } from './convert-timeline-units-to-timecode';
 import { RangeBar } from './range-bar';
@@ -28,7 +32,7 @@ const ScrollingBox = styled('div')({
 });
 
 const StyledTrackLabel = styled(Box)({
-    height: `${EDITOR_SOUND_BAR_HEIGHT}px`,
+    height: `${EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS}px`,
     padding: '2px',
     wordWrap: 'break-word',
     overflow: 'hidden',
@@ -39,11 +43,11 @@ const StyledScrolledTrack = styled(Box)({
     minWidth: '100%',
     position: 'relative',
     display: 'flex',
-    height: `${EDITOR_SOUND_BAR_HEIGHT}px`,
+    height: `${EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS}px`,
     border: '1px solid #666',
     borderRadius: '7px',
     backgroundBlendMode: 'saturation',
-    backgroundSize: `auto ${EDITOR_SOUND_BAR_HEIGHT + 5}px`,
+    backgroundSize: `auto ${EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS + 5}px`,
     boxSizing: 'border-box',
 });
 
@@ -106,7 +110,7 @@ export const Timeline = ({
 
     const [renderedTimelineLength, setRenderedTimelineLength] = useState<number>(0);
 
-    const [playheadPosition, setplayheadPosition] = useState<number>(0);
+    const [playheadPositionInPixels, setplayheadPositionInPixels] = useState<number>(0);
 
     const currentTime = audioRef.current?.currentTime;
 
@@ -119,7 +123,7 @@ export const Timeline = ({
 
     const { rulerTickXCoordinateOffset, rulerTickFrequencyInSeconds } = getZoomLevel(ZOOM_FACTOR);
 
-    const rulerUnitWidth = rulerTickXCoordinateOffset + RULER_TICK_WIDTH;
+    const rulerUnitWidth = rulerTickXCoordinateOffset + RULER_TICK_WIDTH_IN_PIXELS;
 
     const rulerWidth = rulerUnitWidth * (secondsOnTimeline / rulerTickFrequencyInSeconds);
 
@@ -127,7 +131,7 @@ export const Timeline = ({
         <TimelineRuler
             duration={durationSeconds}
             zoomLevel={ZOOM_FACTOR}
-            timelineTrackHeight={EDITOR_SOUND_BAR_HEIGHT}
+            timelineTrackHeight={EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS}
         />
     );
 
@@ -135,14 +139,14 @@ export const Timeline = ({
         // Set playhead position when playing from currentTime
         if (isNullOrUndefined(currentTime) || isNullOrUndefined(durationSeconds)) return;
 
-        const currentPlayheadPosition = convertTimecodeToTimelineUnits(
+        const currentPlayheadPositionInPixels = convertTimecodeToTimelineUnits(
             rulerWidth,
             currentTime,
             durationSeconds
         );
 
-        setplayheadPosition(currentPlayheadPosition);
-    }, [rulerWidth, currentTime, durationSeconds, setplayheadPosition]);
+        setplayheadPositionInPixels(currentPlayheadPositionInPixels);
+    }, [rulerWidth, currentTime, durationSeconds, setplayheadPositionInPixels]);
 
     useEffect(() => {
         // Scroll timeline when playing
@@ -177,7 +181,7 @@ export const Timeline = ({
         rulerWidth,
         durationSeconds,
         currentTime,
-        setplayheadPosition,
+        setplayheadPositionInPixels,
         isPlaying,
         mediaCurrentTimeFromContext,
     ]);
@@ -203,7 +207,7 @@ export const Timeline = ({
             offSetLeftFromViewPortOfScrollableDivParent +
             scrollLeftOfScrollableDiv;
 
-        setplayheadPosition(clickPositionInTimelineUnits);
+        setplayheadPositionInPixels(clickPositionInTimelineUnits);
 
         const seekPosition = convertTimelineUnitsToTimecode(
             clickPositionInTimelineUnits,
@@ -216,7 +220,7 @@ export const Timeline = ({
 
     return (
         <>
-            <Box>Playhead: {playheadPosition}</Box>
+            <Box>Playhead: {playheadPositionInPixels}</Box>
             <Box>Rendered Timeline: {rulerWidth}</Box>
             <Box>Seconds On Timeline: {secondsOnTimeline}</Box>
             <Box>
@@ -228,13 +232,13 @@ export const Timeline = ({
                 {asFormattedMediaTimecodeString(durationSeconds)}
             </Box>
             <StyledTimelineBox
-                sx={{ height: `${2 * EDITOR_SOUND_BAR_HEIGHT + 10}px` }}
+                sx={{ height: `${2 * EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS + 10}px` }}
                 data-testid={`timeline:${name}`}
             >
                 <Box
                     data-testid="timeline-left-side-labels"
                     sx={{
-                        paddingTop: `${EDITOR_SOUND_BAR_HEIGHT}px`,
+                        paddingTop: `${EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS}px`,
                         width: '6%',
                         maxWidth: '45px',
                         borderRight: '1px solid #666',
@@ -253,7 +257,7 @@ export const Timeline = ({
                 >
                     <ScrollingBox
                         ref={scrollingBoxRef}
-                        sx={{ height: `${2 * EDITOR_SOUND_BAR_HEIGHT + 20}px` }}
+                        sx={{ height: `${2 * EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS + 20}px` }}
                         data-testid="scroll-container"
                         // TODO move onClick to timeline and get position via parent(?)
                     >
@@ -267,9 +271,9 @@ export const Timeline = ({
                                 data-testid="playhead"
                                 sx={{
                                     height: `${
-                                        numberOfTracksDisplayed * EDITOR_SOUND_BAR_HEIGHT
+                                        numberOfTracksDisplayed * EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS
                                     }px`,
-                                    left: `${playheadPosition}px`,
+                                    left: `${playheadPositionInPixels}px`,
                                 }}
                             />
                             <StyledTimelineRulerBox

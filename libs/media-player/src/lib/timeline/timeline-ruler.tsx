@@ -1,13 +1,9 @@
+import { isNull } from '@coscrad/validation-constraints';
 import { Box } from '@mui/material';
-import { RULER_TICK_WIDTH, ZOOM_LEVELS } from './constants';
+import { asFormattedMediaTimecodeString } from '../shared/as-formatted-media-timecode-string';
+import { MAX_CANVAS_WIDTH_IN_PIXELS, RULER_TICK_WIDTH_IN_PIXELS, ZOOM_LEVELS } from './constants';
 import { RULER_TICKS_AND_NUMBERS_COLOR } from './ruler-tick';
 import { TimelineCanvas } from './timeline-canvas';
-
-/**
- * This limitation is from the IE 9 / 10 (Win) implementation of Canvas
- * https://jhildenbiddle.github.io/canvas-size/#/?id=test-results
- */
-const MAX_CANVAS_WIDTH = 8000;
 
 const getNumberOfCanvases = (lastCanvasWidth: number, numberOfWholeCanvases: number) => {
     if (lastCanvasWidth > 0) {
@@ -21,9 +17,18 @@ export const getZoomLevel = (zoomLevel: number) => {
     return ZOOM_LEVELS[zoomLevel];
 };
 
-export type CanvasParameters = {
+export type TimelineTimecodeProps = {
+    currentSecond: number;
+    label?: string;
+};
+
+export type CanvasProps = {
     canvasWidth: number;
-    numberedCanvasTicks: number[];
+    ticksForThisCanvas: TimelineTimecodeProps[];
+};
+
+const sxProps = {
+    borderBottom: `1px solid ${RULER_TICKS_AND_NUMBERS_COLOR}`,
 };
 
 interface TimelineProps {
@@ -37,44 +42,62 @@ export const TimelineRuler = ({
     zoomLevel,
     timelineTrackHeight,
 }: TimelineProps): JSX.Element => {
-    const secondsOnTimeline: number = Math.ceil(duration);
+    const roundedSecondsInDuration: number = Math.ceil(duration);
 
-    const sxProps = {
-        borderBottom: `1px solid ${RULER_TICKS_AND_NUMBERS_COLOR}`,
-    };
+    const {
+        rulerTickXCoordinateOffset,
+        rulerTickFrequencyInSeconds,
+        timecodeDisplayFrequencyInSeconds,
+    } = getZoomLevel(zoomLevel);
 
-    const { rulerTickXCoordinateOffset, rulerTickFrequencyInSeconds, numberFrequencyInSeconds } =
-        getZoomLevel(zoomLevel);
+    const ticksOnTimelineAtCurrentZoom = [...Array(roundedSecondsInDuration).keys()]
+        .map((second) => {
+            if (second % rulerTickFrequencyInSeconds === 0) {
+                if (second % timecodeDisplayFrequencyInSeconds === 0) {
+                    const timeCode = asFormattedMediaTimecodeString(second);
 
-    const rulerUnitWidth = rulerTickXCoordinateOffset + RULER_TICK_WIDTH;
+                    return {
+                        second: second,
+                        label: timeCode,
+                    };
+                }
 
-    const rulerWidth = rulerUnitWidth * (secondsOnTimeline / rulerTickFrequencyInSeconds);
+                return {
+                    second: second,
+                };
+            }
 
-    const numberOfWholeCanvases = Math.floor(rulerWidth / MAX_CANVAS_WIDTH);
+            return null;
+        })
+        .filter((second) => !isNull(second)) as unknown as TimelineTimecodeProps[];
 
-    const ticksPerWholeCanvas = MAX_CANVAS_WIDTH / rulerUnitWidth;
+    // Set up sequential timeline canvases
 
-    const lastCanvasWidth = rulerWidth % MAX_CANVAS_WIDTH;
+    const rulerUnitWidthInPixels = rulerTickXCoordinateOffset + RULER_TICK_WIDTH_IN_PIXELS;
 
-    const ticksInLastCanvas = lastCanvasWidth / rulerUnitWidth;
+    const rulerWidthInPixels = rulerUnitWidthInPixels * ticksOnTimelineAtCurrentZoom.length;
 
-    const numberOfCanvases = getNumberOfCanvases(lastCanvasWidth, numberOfWholeCanvases);
+    const numberOfWholeCanvases = Math.floor(rulerWidthInPixels / MAX_CANVAS_WIDTH_IN_PIXELS);
+
+    const ticksPerWholeCanvas = MAX_CANVAS_WIDTH_IN_PIXELS / rulerUnitWidthInPixels;
+
+    const lastCanvasWidthInPixels = rulerWidthInPixels % MAX_CANVAS_WIDTH_IN_PIXELS;
+
+    const ticksInLastCanvas = lastCanvasWidthInPixels / rulerUnitWidthInPixels;
+
+    const numberOfCanvases = getNumberOfCanvases(lastCanvasWidthInPixels, numberOfWholeCanvases);
 
     const numberOfCanvasesAsArray = [...Array(numberOfCanvases).keys()];
 
-    const secondsOnTimelineAsArray = [...Array(secondsOnTimeline).keys()];
-
-    console.log({ len: secondsOnTimelineAsArray.length });
-
-    const canvases = numberOfCanvasesAsArray.reduce((acc: CanvasParameters[], currentCanvas) => {
+    const canvases = numberOfCanvasesAsArray.reduce((acc: CanvasProps[], currentCanvas) => {
         if (currentCanvas < numberOfCanvasesAsArray.length - 1) {
             const start = currentCanvas * ticksPerWholeCanvas;
 
             const end = start + ticksPerWholeCanvas;
 
             return acc.concat({
-                canvasWidth: MAX_CANVAS_WIDTH,
-                numberedCanvasTicks: secondsOnTimelineAsArray.slice(start, end),
+                canvasWidth: MAX_CANVAS_WIDTH_IN_PIXELS,
+                ticksForThisCanvas: ticksOnTimelineAtCurrentZoom.slice(start, end),
             });
         } else {
             const start = currentCanvas * ticksPerWholeCanvas;
@@ -82,8 +105,8 @@ export const TimelineRuler = ({
             const end = start + ticksInLastCanvas;
 
             return acc.concat({
-                canvasWidth: lastCanvasWidth,
-                numberedCanvasTicks: secondsOnTimelineAsArray.slice(start, end),
+                canvasWidth: lastCanvasWidthInPixels,
+                ticksForThisCanvas: ticksOnTimelineAtCurrentZoom.slice(start, end),
             });
         }
     }, []);
@@ -94,12 +117,11 @@ export const TimelineRuler = ({
                 <TimelineCanvas
                     key={index}
                     canvasWidth={canvas.canvasWidth}
-                    numberedCanvasTicks={canvas.numberedCanvasTicks}
-                    rulerUnitWidth={rulerUnitWidth}
-                    rulerTickFrequencyInSeconds={rulerTickFrequencyInSeconds}
-                    numberFrequencyInSeconds={numberFrequencyInSeconds}
+                    ticksForThisCanvas={canvas.ticksForThisCanvas}
+                    rulerUnitWidth={rulerUnitWidthInPixels}
+                    timecodeDisplayFrequencyInSeconds={timecodeDisplayFrequencyInSeconds}
                     sxProps={sxProps}
-                    rulerTickWidth={RULER_TICK_WIDTH}
+                    rulerTickWidth={RULER_TICK_WIDTH_IN_PIXELS}
                 />
             ))}
         </Box>

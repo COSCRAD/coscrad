@@ -1,26 +1,29 @@
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box, SxProps } from '@mui/material';
-import { asFormattedMediaTimecodeString } from '../shared/as-formatted-media-timecode-string';
 import { Canvas } from '../shared/canvas/canvas';
 import { Draw } from '../shared/canvas/use-canvas';
-import { RULER_HEIGHT, RULER_TICK_HEIGHT, RULER_TICK_WITH_NUMBER_HEIGHT } from './constants';
+import {
+    RULER_HEIGHT_IN_PIXELS,
+    RULER_TICK_HEIGHT_IN_PIXELS,
+    RULER_TICK_WITH_NUMBER_HEIGHT_IN_PIXELS,
+} from './constants';
 import { RULER_TICKS_AND_NUMBERS_COLOR } from './ruler-tick';
+import { TimelineTimecodeProps } from './timeline-ruler';
 
 interface TimelineCanvasProps {
     canvasWidth: number;
-    numberedCanvasTicks: number[];
+    ticksForThisCanvas: TimelineTimecodeProps[];
     rulerUnitWidth: number;
-    rulerTickFrequencyInSeconds: number;
-    numberFrequencyInSeconds: number;
+    timecodeDisplayFrequencyInSeconds: number;
     sxProps: SxProps;
     rulerTickWidth: number;
 }
 
 export const TimelineCanvas = ({
     canvasWidth,
-    numberedCanvasTicks,
+    ticksForThisCanvas: numberedCanvasTicks,
     rulerUnitWidth,
-    rulerTickFrequencyInSeconds,
-    numberFrequencyInSeconds,
+    timecodeDisplayFrequencyInSeconds,
     sxProps,
     rulerTickWidth,
 }: TimelineCanvasProps) => {
@@ -29,32 +32,26 @@ export const TimelineCanvas = ({
 
         context.fillStyle = RULER_TICKS_AND_NUMBERS_COLOR;
 
-        numberedCanvasTicks.forEach((tick, index) => {
-            if (tick % rulerTickFrequencyInSeconds !== 0) return;
-
+        numberedCanvasTicks.forEach(({ currentSecond, label }, index) => {
             const tickX = index * rulerUnitWidth;
 
-            if (tick % numberFrequencyInSeconds === 0) {
-                const timeCode = asFormattedMediaTimecodeString(tick);
-
+            if (!isNullOrUndefined(label)) {
                 context.font = '12px Arial';
 
                 context.fillText(
-                    timeCode,
+                    label,
                     tickX + 4,
-                    RULER_HEIGHT - RULER_TICK_WITH_NUMBER_HEIGHT + 2
+                    RULER_HEIGHT_IN_PIXELS - RULER_TICK_WITH_NUMBER_HEIGHT_IN_PIXELS + 2
                 );
             }
 
-            const rulerTickHeight =
-                tick % numberFrequencyInSeconds === 0
-                    ? RULER_TICK_WITH_NUMBER_HEIGHT
-                    : RULER_TICK_HEIGHT;
+            const rulerTickHeight = isNullOrUndefined(label)
+                ? RULER_TICK_HEIGHT_IN_PIXELS
+                : RULER_TICK_WITH_NUMBER_HEIGHT_IN_PIXELS;
 
-            const rulerTickY =
-                tick % numberFrequencyInSeconds === 0
-                    ? RULER_HEIGHT - RULER_TICK_WITH_NUMBER_HEIGHT
-                    : RULER_HEIGHT - RULER_TICK_HEIGHT;
+            const rulerTickY = isNullOrUndefined(label)
+                ? RULER_HEIGHT_IN_PIXELS - RULER_TICK_HEIGHT_IN_PIXELS
+                : RULER_HEIGHT_IN_PIXELS - RULER_TICK_WITH_NUMBER_HEIGHT_IN_PIXELS;
 
             context.fillRect(tickX, rulerTickY, rulerTickWidth, rulerTickHeight);
         });
@@ -66,7 +63,7 @@ export const TimelineCanvas = ({
                 canvasId={`timeline-ruler`}
                 draw={drawCanvas}
                 width={canvasWidth}
-                height={RULER_HEIGHT}
+                height={RULER_HEIGHT_IN_PIXELS}
                 sxProps={sxProps}
             />
         </Box>

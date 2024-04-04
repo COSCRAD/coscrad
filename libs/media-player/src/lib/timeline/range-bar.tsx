@@ -1,11 +1,11 @@
 import { Box, styled } from '@mui/material';
 import { useState } from 'react';
-import { EDITOR_SOUND_BAR_HEIGHT } from './constants';
+import { EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS } from './constants';
 import { convertTimecodeToTimelineUnits } from './convert-timecode-to-timeline-units';
 import { TimeRangeClip } from './timeline';
 
 const StyledRangeBar = styled('span')({
-    height: `${EDITOR_SOUND_BAR_HEIGHT - 2}px`,
+    height: `${EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS - 2}px`,
     position: 'absolute',
     backgroundColor: '#0bccf9',
     opacity: 0.7,
