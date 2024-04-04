@@ -1,6 +1,7 @@
 import { CommandFSA } from '../../app/controllers/command/command-fsa/command-fsa.entity';
 import { buildAudioItemTestCommandFsas } from './build-audio-item-test-command-fsas';
 import { buildBibliographicCitationTestCommandFsas } from './build-bibliographic-citation-test-command-fsas';
+import { buildContributorTestCommandFsas } from './build-contributor-test-command-fsas';
 import { buildDigitalTextCommandFsas } from './build-digital-text-test-command-fsas';
 import { buildGeneralResourceTestCommandFsas } from './build-general-resource-test-command-fsas';
 import { buildMediaItemTestCommandFsas } from './build-media-item-test-command-fsas';
@@ -19,6 +20,7 @@ export const buildTestCommandFsaMap = () =>
         // Resources
         ...buildAudioItemTestCommandFsas(),
         ...buildBibliographicCitationTestCommandFsas(),
+        ...buildContributorTestCommandFsas(),
         ...buildDigitalTextCommandFsas(),
         ...buildGeneralResourceTestCommandFsas(),
         ...buildMediaItemTestCommandFsas(),
