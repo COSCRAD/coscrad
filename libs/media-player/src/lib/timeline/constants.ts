@@ -43,7 +43,7 @@ export const ZOOM_LEVELS: ZoomLevels[] = [
     },
     // 3
     {
-        rulerTickXCoordinateOffset: 10,
+        rulerTickXCoordinateOffset: 40,
         rulerTickFrequencyInSeconds: 5,
         timecodeDisplayFrequencyInSeconds: 10,
     },

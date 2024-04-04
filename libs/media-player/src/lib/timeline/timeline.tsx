@@ -1,5 +1,6 @@
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Box, styled } from '@mui/material';
+import { ZoomIn as ZoomInIcon, ZoomOut as ZoomOutIcon } from '@mui/icons-material';
+import { Box, Divider, IconButton, Tooltip, styled } from '@mui/material';
 import { RefObject, useEffect, useRef, useState } from 'react';
 import { asFormattedMediaTimecodeString } from '../shared/as-formatted-media-timecode-string';
 import {
@@ -230,6 +231,31 @@ export const Timeline = ({
             <Box>
                 Duration from Player: {durationSeconds} /{' '}
                 {asFormattedMediaTimecodeString(durationSeconds)}
+            </Box>
+            <Divider />
+            <Box>
+                <Tooltip title="Zoom In">
+                    <span>
+                        <IconButton
+                            data-testid="timeline-zoom-in-button"
+                            // onClick={markInPoint}
+                            // disabled={!isPlayable}
+                        >
+                            <ZoomInIcon />
+                        </IconButton>
+                    </span>
+                </Tooltip>
+                <Tooltip title="Zoom Out">
+                    <span>
+                        <IconButton
+                            data-testid="timeline-zoom-out-button"
+                            // onClick={markInPoint}
+                            // disabled={!isPlayable}
+                        >
+                            <ZoomOutIcon />
+                        </IconButton>
+                    </span>
+                </Tooltip>
             </Box>
             <StyledTimelineBox
                 sx={{ height: `${2 * EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS + 10}px` }}
