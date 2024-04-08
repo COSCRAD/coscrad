@@ -6,6 +6,7 @@ import buildInstanceFactory from '../../../../../../domain/factories/utilities/b
 import { DeluxeInMemoryStore } from '../../../../../../domain/types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../../../domain/types/ResourceType';
 import { InternalError, isInternalError } from '../../../../../../lib/errors/InternalError';
+import cloneToPlainObject from '../../../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../../../types/DTO';
 import { ResultOrError } from '../../../../../../types/ResultOrError';
 import { BaseCreateCommandHandler } from '../../../../shared/command-handlers/base-create-command-handler';
@@ -56,9 +57,14 @@ export class CreateContributorCommandHandler extends BaseCreateCommandHandler<Co
     }
 
     protected buildEvent(
-        payload: CreateContributor,
+        commandPayload: CreateContributor,
         eventMeta: EventRecordMetadata
     ): BaseEvent<IEventPayload> {
-        return new ContributorCreated(payload, eventMeta);
+        const eventPayload = cloneToPlainObject(commandPayload);
+
+        // Here we convert the string that came from user input to our internal data format
+        eventPayload.dateOfBirth = CoscradDate.parseString(commandPayload.dateOfBirth);
+
+        return new ContributorCreated(eventPayload, eventMeta);
     }
 }

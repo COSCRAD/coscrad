@@ -5,16 +5,21 @@ import setUpIntegrationTest from '../../../../../../app/controllers/__tests__/se
 import { IIdManager } from '../../../../../../domain/interfaces/id-manager.interface';
 import { AggregateId } from '../../../../../../domain/types/AggregateId';
 import buildEmptyInMemorySnapshot from '../../../../../../domain/utilities/buildEmptyInMemorySnapshot';
+import assertErrorAsExpected from '../../../../../../lib/__tests__/assertErrorAsExpected';
 import { ArangoDatabaseProvider } from '../../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../../../types/DTO';
 import { assertCreateCommandError } from '../../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../../__tests__/command-helpers/assert-create-command-success';
+import { assertEventRecordPersisted } from '../../../../__tests__/command-helpers/assert-event-record-persisted';
 import { DummyCommandFsaFactory } from '../../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
+import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { buildFakeTimersConfig } from '../../../../__tests__/utilities/buildFakeTimersConfig';
 import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUserId';
+import CommandExecutionError from '../../../../shared/common-command-errors/CommandExecutionError';
+import UuidNotGeneratedInternallyError from '../../../../shared/common-command-errors/UuidNotGeneratedInternallyError';
 import { Month } from '../../../utilities';
 import { CoscradContributor } from '../../entities/coscrad-contributor.entity';
 import { CreateContributor } from './create-contributor.command';
@@ -132,12 +137,43 @@ describe('CreateContributor', () => {
                     expect(foundDob.year).toBe(expectedYear);
 
                     expect(contributor.shortBio).toBe(shortBio);
+
+                    assertEventRecordPersisted(
+                        contributor,
+                        'CONTRIBUTOR_CREATED',
+                        dummySystemUserId
+                    );
                 },
             });
         });
     });
 
     describe('when the command is invalid', () => {
+        describe(`when the ID was not generated with our ID generation system`, () => {
+            it(`should fail with the expected errors`, async () => {
+                const badId = buildDummyUuid(999);
+
+                await assertCreateCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        Promise.resolve();
+                    },
+                    buildCommandFSA: (id) =>
+                        fsaFactory.build(id, {
+                            aggregateCompositeIdentifier: {
+                                id: badId, // random ID
+                            },
+                        }),
+                    checkError: (result) => {
+                        assertErrorAsExpected(
+                            result,
+                            new CommandExecutionError([new UuidNotGeneratedInternallyError(badId)])
+                        );
+                    },
+                });
+            });
+        });
+
         describe('when neither short bio nor date of birth is provided', () => {
             it('should return the expected error', async () => {
                 await assertCreateCommandError(commandAssertionDependencies, {
