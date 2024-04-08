@@ -10,6 +10,12 @@ import { DayOfMonthTooLargeError } from './day-of-month-too-large.error';
 import { InvalidDateError } from './invalid-date.error';
 import { NotALeapYearError } from './not-a-leap-year.error';
 
+export class InvalidCoscradDateError extends InternalError {
+    constructor(innerErrors: InternalError[]) {
+        super(`Invalid coscrad date`, innerErrors);
+    }
+}
+
 export enum Month {
     January = '01',
     February = '02',
@@ -119,11 +125,19 @@ export class CoscradDate extends BaseDomainModel {
             return new InternalError(`failed to parse month: ${monthAsString} in date: ${input}`);
         }
 
-        return new CoscradDate({
+        const date = new CoscradDate({
             day: parseInt(dayAsString),
             month: monthParseResult,
             year: parseInt(yearAsString),
         });
+
+        const invariantValidationErrors = date.validateComplexInvariants();
+
+        if (invariantValidationErrors.length > 0) {
+            return new InvalidCoscradDateError(invariantValidationErrors);
+        }
+
+        return date;
     }
 
     validateComplexInvariants(): InternalError[] {

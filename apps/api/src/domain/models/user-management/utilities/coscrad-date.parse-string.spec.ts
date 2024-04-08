@@ -1,6 +1,5 @@
 import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpected';
-import { InternalError } from '../../../../lib/errors/InternalError';
-import { CoscradDate, Month } from './coscrad-date.entity';
+import { CoscradDate, InvalidCoscradDateError, Month } from './coscrad-date.entity';
 import { InvalidDateError } from './invalid-date.error';
 
 describe('CoscradDate.parseString', () => {
@@ -39,7 +38,8 @@ describe('CoscradDate.parseString', () => {
 
                 const result = CoscradDate.parseString(invalidInput);
 
-                assertErrorAsExpected(result, new InternalError('finish this'));
+                // TODO check the inner errors
+                assertErrorAsExpected(result, new InvalidCoscradDateError([]));
             });
         });
     });
