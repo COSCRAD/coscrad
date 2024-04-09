@@ -1,7 +1,7 @@
 import { isNull } from '@coscrad/validation-constraints';
 import { Box } from '@mui/material';
 import { asFormattedMediaTimecodeString } from '../shared/as-formatted-media-timecode-string';
-import { MAX_CANVAS_WIDTH_IN_PIXELS, RULER_TICK_WIDTH_IN_PIXELS, ZOOM_LEVELS } from './constants';
+import { MAX_CANVAS_WIDTH_IN_PIXELS, RULER_TICK_WIDTH_IN_PIXELS, ZoomLevels } from './constants';
 import { RULER_TICKS_AND_NUMBERS_COLOR } from './ruler-tick';
 import { TimelineCanvas } from './timeline-canvas';
 
@@ -11,10 +11,6 @@ const getNumberOfCanvases = (lastCanvasWidth: number, numberOfWholeCanvases: num
     } else {
         return numberOfWholeCanvases;
     }
-};
-
-export const getZoomLevel = (zoomLevel: number) => {
-    return ZOOM_LEVELS[zoomLevel];
 };
 
 export type TimelineTimecodeProps = {
@@ -33,22 +29,24 @@ const sxProps = {
 
 interface TimelineProps {
     duration: number;
-    zoomLevel: number;
+    zoomLevelConfig: ZoomLevels;
     timelineTrackHeight: number;
 }
 
 export const TimelineRuler = ({
     duration,
-    zoomLevel,
+    zoomLevelConfig,
     timelineTrackHeight,
 }: TimelineProps): JSX.Element => {
     const roundedSecondsInDuration: number = Math.ceil(duration);
+
+    console.log({ zoomLevelConfig });
 
     const {
         rulerTickXCoordinateOffset,
         rulerTickFrequencyInSeconds,
         timecodeDisplayFrequencyInSeconds,
-    } = getZoomLevel(zoomLevel);
+    } = zoomLevelConfig;
 
     const ticksOnTimelineAtCurrentZoom = [...Array(roundedSecondsInDuration).keys()]
         .map((second) => {

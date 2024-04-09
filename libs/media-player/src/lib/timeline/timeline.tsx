@@ -3,15 +3,12 @@ import { ZoomIn as ZoomInIcon, ZoomOut as ZoomOutIcon } from '@mui/icons-materia
 import { Box, Divider, IconButton, Tooltip, styled } from '@mui/material';
 import { RefObject, useEffect, useRef, useState } from 'react';
 import { asFormattedMediaTimecodeString } from '../shared/as-formatted-media-timecode-string';
-import {
-    EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS,
-    RULER_TICK_WIDTH_IN_PIXELS,
-    ZOOM_FACTOR,
-} from './constants';
+import { EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS, ZOOM_LEVELS, ZoomLevels } from './constants';
 import { convertTimecodeToTimelineUnits } from './convert-timecode-to-timeline-units';
 import { convertTimelineUnitsToTimecode } from './convert-timeline-units-to-timecode';
+import { getZoomLevelConfig } from './get-zoom-level';
 import { RangeBar } from './range-bar';
-import { TimelineRuler, getZoomLevel } from './timeline-ruler';
+import { TimelineRuler } from './timeline-ruler';
 
 const WAVE_FORM_URL = 'https://guujaaw.info/images/audio-wave-form.png';
 
@@ -113,6 +110,17 @@ export const Timeline = ({
 
     const [playheadPositionInPixels, setplayheadPositionInPixels] = useState<number>(0);
 
+    const initialZoomLevel = 5;
+
+    const [zoomLevel, setZoomLevel] = useState<number>(initialZoomLevel);
+
+    const initialZoomLevelConfig = ZOOM_LEVELS[initialZoomLevel];
+
+    const [zoomLevelConfig, setZoomLevelConfig] = useState<ZoomLevels>(initialZoomLevelConfig);
+
+    // NEED TO SET RULER WIDTH
+    const [rulerWidth, setRulerWidth] = useState<number>(0);
+
     const currentTime = audioRef.current?.currentTime;
 
     const numberOfTracksDisplayed = [...timelineTracks, 'timeline ruler'].length;
@@ -121,20 +129,6 @@ export const Timeline = ({
      * begin copy
      */
     const secondsOnTimeline: number = Math.ceil(durationSeconds);
-
-    const { rulerTickXCoordinateOffset, rulerTickFrequencyInSeconds } = getZoomLevel(ZOOM_FACTOR);
-
-    const rulerUnitWidth = rulerTickXCoordinateOffset + RULER_TICK_WIDTH_IN_PIXELS;
-
-    const rulerWidth = rulerUnitWidth * (secondsOnTimeline / rulerTickFrequencyInSeconds);
-
-    const timelineRuler = (
-        <TimelineRuler
-            duration={durationSeconds}
-            zoomLevel={ZOOM_FACTOR}
-            timelineTrackHeight={EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS}
-        />
-    );
 
     useEffect(() => {
         // Set playhead position when playing from currentTime
@@ -187,6 +181,35 @@ export const Timeline = ({
         mediaCurrentTimeFromContext,
     ]);
 
+    const zoomIn = () => {
+        console.log(`Zoom in at level: ${zoomLevel}`);
+
+        if (zoomLevel === 0) return;
+
+        // How to zoom dynamically so entire timeline is in view?
+        const newZoomLevel = zoomLevel - 1;
+
+        setZoomLevel(newZoomLevel);
+
+        const newZoomLevelConfig = getZoomLevelConfig(newZoomLevel);
+
+        setZoomLevelConfig(newZoomLevelConfig);
+    };
+
+    const zoomOut = () => {
+        console.log(`Zoom in at level: ${zoomLevel} for ${ZOOM_LEVELS.length}`);
+
+        if (zoomLevel >= ZOOM_LEVELS.length - 1) return;
+
+        const newZoomLevel = zoomLevel + 1;
+
+        setZoomLevel(newZoomLevel);
+
+        const newZoomLevelConfig = getZoomLevelConfig(newZoomLevel);
+
+        setZoomLevelConfig(newZoomLevelConfig);
+    };
+
     const handleSeek = (event: React.MouseEvent<HTMLDivElement>) => {
         const mouseClickViewportPositionX = event.clientX;
 
@@ -232,13 +255,14 @@ export const Timeline = ({
                 Duration from Player: {durationSeconds} /{' '}
                 {asFormattedMediaTimecodeString(durationSeconds)}
             </Box>
+            <Box>ZoomLevel From Config: {zoomLevelConfig.zoomLevel}</Box>
             <Divider />
             <Box>
                 <Tooltip title="Zoom In">
                     <span>
                         <IconButton
                             data-testid="timeline-zoom-in-button"
-                            // onClick={markInPoint}
+                            onClick={zoomIn}
                             // disabled={!isPlayable}
                         >
                             <ZoomInIcon />
@@ -249,7 +273,7 @@ export const Timeline = ({
                     <span>
                         <IconButton
                             data-testid="timeline-zoom-out-button"
-                            // onClick={markInPoint}
+                            onClick={zoomOut}
                             // disabled={!isPlayable}
                         >
                             <ZoomOutIcon />
@@ -307,7 +331,13 @@ export const Timeline = ({
                                     width: `${rulerWidth}px`,
                                 }}
                             >
-                                {durationSeconds > 0 ? timelineRuler : null}
+                                {durationSeconds > 0 ? (
+                                    <TimelineRuler
+                                        duration={durationSeconds}
+                                        zoomLevelConfig={zoomLevelConfig}
+                                        timelineTrackHeight={EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS}
+                                    />
+                                ) : null}
                             </StyledTimelineRulerBox>
                         </StyledScrolledTrack>
                         {timelineTracks.length !== 0 ? (
