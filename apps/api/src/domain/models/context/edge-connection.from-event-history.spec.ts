@@ -11,7 +11,12 @@ import { NoteViewModel } from '../../../queries/edgeConnectionViewModels/note.vi
 import { TestEventStream } from '../../../test-data/events';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../../../validation';
 import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
-import { ConnectResourcesWithNote, CreateNoteAboutResource } from './commands';
+import {
+    ConnectResourcesWithNote,
+    CreateNoteAboutResource,
+    NoteTranslatedAboutResource,
+    TranslateNoteAboutResource,
+} from './commands';
 import { ResourcesConnectedWithNote } from './commands/connect-resources-with-note/resources-connected-with-note.event';
 import { NoteAboutResourceCreated } from './commands/create-note-about-resource/note-about-resource-created.event';
 import { EdgeConnectionContextUnion } from './edge-connection-context-union';
@@ -67,6 +72,15 @@ const resourcesConnectedWithNote = new TestEventStream().andThen<ResourcesConnec
     },
 });
 
+const noteTranslatedAboutResource = new TestEventStream().andThen<NoteTranslatedAboutResource>({
+    type: 'NOTE_TRANSLATED_ABOUT_RESOURCE',
+    payload: {
+        aggregateCompositeIdentifier: resourceCompositeIdentifier,
+        text: noteText,
+        languageCode: originalLanguageCode,
+    },
+});
+
 const edgeConnectionId = buildDummyUuid(1);
 
 const aggregateCompositeIdentifier = {
@@ -97,8 +111,10 @@ describe(`EdgeConnection.fromEventHistory`, () => {
                     // Commands
                     CreateNoteAboutResource,
                     ConnectResourcesWithNote,
+                    TranslateNoteAboutResource,
                     // Events
                     NoteAboutResourceCreated,
+                    NoteTranslatedAboutResource,
                     ResourcesConnectedWithNote,
                 ].map((ctor) => ({
                     provide: ctor,
@@ -186,6 +202,31 @@ describe(`EdgeConnection.fromEventHistory`, () => {
                 expect(toCompositeId).toEqual(connectedResourceCompositeIdentifier);
 
                 expect(toContext).toEqual(pageRangeContext.toDTO());
+            });
+        });
+    });
+
+    describe(`When created via NOTE_TRANSLATED_ABOUT_RESOURCE`, () => {
+        describe(`when there is only a creation event: NOTE_TRANSLATED_ABOUT_RESOURCE`, () => {
+            it(`should create the expected edge connection`, () => {
+                const result = EdgeConnection.fromEventHistory(
+                    noteTranslatedAboutResource.as(aggregateCompositeIdentifier),
+                    edgeConnectionId
+                );
+
+                expect(result).toBeInstanceOf(EdgeConnection);
+
+                const edgeConnection = result as EdgeConnection;
+
+                const { text, languageCode } = edgeConnection.note.getOriginalTextItem();
+
+                expect(text).toBe(noteText);
+
+                expect(languageCode).toBe(languageCode);
+
+                const { members } = edgeConnection;
+
+                expect(members).toHaveLength(2);
             });
         });
     });
