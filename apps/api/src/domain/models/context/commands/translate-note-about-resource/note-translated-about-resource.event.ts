@@ -5,6 +5,6 @@ import { TranslateNoteAboutResource } from './translate-note-about-resource.comm
 export type NoteTranslatedAboutResourcePayload = TranslateNoteAboutResource;
 
 @CoscradEvent('NOTE_TRANSLATED_ABOUT_RESOURCE')
-export class NoteTranslatedAboutResource extends BaseEvent {
+export class NoteTranslatedAboutResource extends BaseEvent<NoteTranslatedAboutResourcePayload> {
     readonly type = 'NOTE_TRANSLATED_ABOUT_RESOURCE';
 }

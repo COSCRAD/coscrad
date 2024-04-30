@@ -29,11 +29,16 @@ import { TextFieldContext } from './text-field-context/text-field-context.entity
 import { TimeRangeContext } from './time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from './types/EdgeConnectionContextType';
 
-const noteText = 'this is cool';
+const noteTranslation = 'this is cool';
 
 const generalContext = new GeneralContext();
 
 const originalLanguageCode = LanguageCode.English;
+
+const aggregateCompositeIdentifier = {
+    type: AggregateType.note,
+    id: buildDummyUuid(2),
+};
 
 const resourceCompositeIdentifier = {
     type: ResourceType.audioItem,
@@ -53,7 +58,7 @@ const pageRangeContext = new PageRangeContext({
 const noteAboutResourceCreated = new TestEventStream().andThen<NoteAboutResourceCreated>({
     type: 'NOTE_ABOUT_RESOURCE_CREATED',
     payload: {
-        text: noteText,
+        text: noteTranslation,
         resourceCompositeIdentifier,
         resourceContext: generalContext.toDTO(),
         languageCode: originalLanguageCode,
@@ -63,7 +68,7 @@ const noteAboutResourceCreated = new TestEventStream().andThen<NoteAboutResource
 const resourcesConnectedWithNote = new TestEventStream().andThen<ResourcesConnectedWithNote>({
     type: 'RESOURCES_CONNECTED_WITH_NOTE',
     payload: {
-        text: noteText,
+        text: noteTranslation,
         languageCode: originalLanguageCode,
         fromMemberCompositeIdentifier: resourceCompositeIdentifier,
         fromMemberContext: generalContext,
@@ -72,23 +77,23 @@ const resourcesConnectedWithNote = new TestEventStream().andThen<ResourcesConnec
     },
 });
 
-const noteTranslatedAboutResource = new TestEventStream().andThen<NoteTranslatedAboutResource>({
-    type: 'NOTE_TRANSLATED_ABOUT_RESOURCE',
-    payload: {
-        aggregateCompositeIdentifier: resourceCompositeIdentifier,
-        text: noteText,
-        languageCode: originalLanguageCode,
-    },
-});
+const noteTranslatedAboutResource = new TestEventStream()
+    .andThen<NoteAboutResourceCreated>({
+        type: 'NOTE_ABOUT_RESOURCE_CREATED',
+        payload: {
+            text: 'original text for note',
+        },
+    })
+    .andThen<NoteTranslatedAboutResource>({
+        type: 'NOTE_TRANSLATED_ABOUT_RESOURCE',
+        payload: {
+            aggregateCompositeIdentifier: aggregateCompositeIdentifier,
+            text: noteTranslation,
+            languageCode: originalLanguageCode,
+        },
+    });
 
 const edgeConnectionId = buildDummyUuid(1);
-
-const aggregateCompositeIdentifier = {
-    type: AggregateType.note,
-    id: edgeConnectionId,
-};
-
-const _foo = resourcesConnectedWithNote.as(aggregateCompositeIdentifier);
 
 describe(`EdgeConnection.fromEventHistory`, () => {
     beforeAll(async () => {
@@ -144,7 +149,7 @@ describe(`EdgeConnection.fromEventHistory`, () => {
 
                 const { text, languageCode } = note.note.getOriginalTextItem();
 
-                expect(text).toBe(noteText);
+                expect(text).toBe(noteTranslation);
 
                 expect(languageCode).toBe(originalLanguageCode);
 
@@ -159,6 +164,31 @@ describe(`EdgeConnection.fromEventHistory`, () => {
                 expect(compositeIdentifier).toEqual(resourceCompositeIdentifier);
 
                 expect(context).toEqual(generalContext);
+            });
+        });
+
+        describe(`when there are update events`, () => {
+            describe(`when there is an update event: NOTE_TRANSLATED_ABOUT_RESOURCE`, () => {
+                it(`should return the expected edge connection`, () => {
+                    const result = EdgeConnection.fromEventHistory(
+                        noteTranslatedAboutResource.as(aggregateCompositeIdentifier),
+                        edgeConnectionId
+                    );
+
+                    expect(result).toBeInstanceOf(EdgeConnection);
+
+                    const edgeConnection = result as EdgeConnection;
+
+                    const { text, languageCode } = edgeConnection.note.getOriginalTextItem();
+
+                    expect(text).toBe(noteTranslation);
+
+                    expect(languageCode).toBe(languageCode);
+
+                    const { members } = edgeConnection;
+
+                    expect(members).toHaveLength(2);
+                });
             });
         });
     });
@@ -177,7 +207,7 @@ describe(`EdgeConnection.fromEventHistory`, () => {
 
                 const { text, languageCode } = edgeConnection.note.getOriginalTextItem();
 
-                expect(text).toBe(noteText);
+                expect(text).toBe(noteTranslation);
 
                 expect(languageCode).toBe(languageCode);
 
@@ -202,31 +232,6 @@ describe(`EdgeConnection.fromEventHistory`, () => {
                 expect(toCompositeId).toEqual(connectedResourceCompositeIdentifier);
 
                 expect(toContext).toEqual(pageRangeContext.toDTO());
-            });
-        });
-    });
-
-    describe(`When created via NOTE_TRANSLATED_ABOUT_RESOURCE`, () => {
-        describe(`when there is only a creation event: NOTE_TRANSLATED_ABOUT_RESOURCE`, () => {
-            it(`should create the expected edge connection`, () => {
-                const result = EdgeConnection.fromEventHistory(
-                    noteTranslatedAboutResource.as(aggregateCompositeIdentifier),
-                    edgeConnectionId
-                );
-
-                expect(result).toBeInstanceOf(EdgeConnection);
-
-                const edgeConnection = result as EdgeConnection;
-
-                const { text, languageCode } = edgeConnection.note.getOriginalTextItem();
-
-                expect(text).toBe(noteText);
-
-                expect(languageCode).toBe(languageCode);
-
-                const { members } = edgeConnection;
-
-                expect(members).toHaveLength(2);
             });
         });
     });

@@ -46,7 +46,6 @@ import {
 } from '../build-aggregate-root-from-event-history';
 import AggregateNotFoundError from '../shared/common-command-errors/AggregateNotFoundError';
 import { BaseEvent } from '../shared/events/base-event.entity';
-import { NoteTranslatedAboutResource } from './commands';
 import { ResourcesConnectedWithNote } from './commands/connect-resources-with-note/resources-connected-with-note.event';
 import { NoteAboutResourceCreated } from './commands/create-note-about-resource/note-about-resource-created.event';
 import { ContextUnionType } from './edge-connection-context-union';
@@ -235,10 +234,6 @@ export class EdgeConnection extends Aggregate {
             .set(
                 'RESOURCES_CONNECTED_WITH_NOTE',
                 EdgeConnection.createEdgeConnectionFromResourcesConnectedWithNote
-            )
-            .set(
-                'NOTE_TRANSLATED_ABOUT_RESOURCE',
-                EdgeConnection.createEdgeConnectionFromNoteTranslatedAboutResource
             );
 
         return buildAggregateRootFromEventHistory(
@@ -318,40 +313,6 @@ export class EdgeConnection extends Aggregate {
                     compositeIdentifier: toMemberCompositeIdentifier,
                     context: toMemberContext,
                     role: EdgeConnectionMemberRole.to,
-                }),
-            ],
-        });
-
-        const invariantValidationResult = buildResult.validateInvariants();
-
-        if (isInternalError(invariantValidationResult)) {
-            throw new InternalError(
-                'Failed to event source Edge Connection due to invalid existing state',
-                [invariantValidationResult]
-            );
-        }
-
-        return buildResult;
-    }
-
-    private static createEdgeConnectionFromNoteTranslatedAboutResource({
-        payload: {
-            aggregateCompositeIdentifier: { id },
-            text,
-            resourceCompositeIdentifier,
-            languageCode,
-        },
-    }: NoteTranslatedAboutResource): ResultOrError<EdgeConnection> {
-        const buildResult = new EdgeConnection({
-            type: AggregateType.note,
-            id,
-            note: buildMultilingualTextWithSingleItem(text, languageCode),
-            connectionType: EdgeConnectionType.dual,
-            members: [
-                new EdgeConnectionMember({
-                    compositeIdentifier: resourceCompositeIdentifier,
-                    context: resourceCompositeIdentifier,
-                    role: EdgeConnectionMemberRole.self,
                 }),
             ],
         });
