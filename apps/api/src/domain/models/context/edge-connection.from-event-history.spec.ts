@@ -14,8 +14,8 @@ import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
 import {
     ConnectResourcesWithNote,
     CreateNoteAboutResource,
-    NoteTranslatedAboutResource,
-    TranslateNoteAboutResource,
+    NoteTranslated,
+    TranslateNote,
 } from './commands';
 import { ResourcesConnectedWithNote } from './commands/connect-resources-with-note/resources-connected-with-note.event';
 import { NoteAboutResourceCreated } from './commands/create-note-about-resource/note-about-resource-created.event';
@@ -77,15 +77,15 @@ const resourcesConnectedWithNote = new TestEventStream().andThen<ResourcesConnec
     },
 });
 
-const noteTranslatedAboutResource = new TestEventStream()
+const noteTranslated = new TestEventStream()
     .andThen<NoteAboutResourceCreated>({
         type: 'NOTE_ABOUT_RESOURCE_CREATED',
         payload: {
             text: 'original text for note',
         },
     })
-    .andThen<NoteTranslatedAboutResource>({
-        type: 'NOTE_TRANSLATED_ABOUT_RESOURCE',
+    .andThen<NoteTranslated>({
+        type: 'NOTE_TRANSLATED',
         payload: {
             aggregateCompositeIdentifier: aggregateCompositeIdentifier,
             text: noteTranslation,
@@ -116,10 +116,10 @@ describe(`EdgeConnection.fromEventHistory`, () => {
                     // Commands
                     CreateNoteAboutResource,
                     ConnectResourcesWithNote,
-                    TranslateNoteAboutResource,
+                    TranslateNote,
                     // Events
                     NoteAboutResourceCreated,
-                    NoteTranslatedAboutResource,
+                    NoteTranslated,
                     ResourcesConnectedWithNote,
                 ].map((ctor) => ({
                     provide: ctor,
@@ -168,10 +168,10 @@ describe(`EdgeConnection.fromEventHistory`, () => {
         });
 
         describe(`when there are update events`, () => {
-            describe(`when there is an update event: NOTE_TRANSLATED_ABOUT_RESOURCE`, () => {
+            describe(`when there is an update event: NOTE_TRANSLATED`, () => {
                 it(`should return the expected edge connection`, () => {
                     const result = EdgeConnection.fromEventHistory(
-                        noteTranslatedAboutResource.as(aggregateCompositeIdentifier),
+                        noteTranslated.as(aggregateCompositeIdentifier),
                         edgeConnectionId
                     );
 

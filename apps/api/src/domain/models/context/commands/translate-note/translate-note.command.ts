@@ -1,15 +1,15 @@
 import { ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
-import { LanguageCodeEnum } from '../../../../../domain/common/entities/multilingual-text';
+import { LanguageCodeEnum } from '../../../../common/entities/multilingual-text';
 import { EdgeConnectionCompositeIdentifier } from '../create-note-about-resource';
 
 @Command({
-    type: 'TRANSLATE_NOTE_ABOUT_RESOURCE',
-    label: 'Translates a Note About Resource',
-    description: 'translate a note about resource',
+    type: 'TRANSLATE_NOTE',
+    label: 'Translates a Note',
+    description: 'translate a note',
 })
-export class TranslateNoteAboutResource implements ICommandBase {
+export class TranslateNote implements ICommandBase {
     @NestedDataType(EdgeConnectionCompositeIdentifier, {
         label: 'composite identifier',
         description: 'system-wide unique identifier',
@@ -17,8 +17,8 @@ export class TranslateNoteAboutResource implements ICommandBase {
     readonly aggregateCompositeIdentifier: EdgeConnectionCompositeIdentifier;
 
     @NonEmptyString({
-        label: 'text',
-        description: 'text for the note',
+        label: 'translation',
+        description: 'translation for the note',
     })
     text: string;
 

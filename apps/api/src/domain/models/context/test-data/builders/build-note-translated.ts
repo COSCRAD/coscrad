@@ -3,13 +3,13 @@ import { clonePlainObjectWithOverrides } from '../../../../../lib/utilities/clon
 import { EventMetadataBuilder } from '../../../../../test-data/events';
 import { DeepPartial } from '../../../../../types/DeepPartial';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
-import { NoteTranslatedAboutResource, NoteTranslatedAboutResourcePayload } from '../../commands';
+import { NoteTranslated, NoteTranslatedPayload } from '../../commands';
 
-export const buildNoteTranslatedAboutResource = (
-    payloadOverrides: DeepPartial<NoteTranslatedAboutResourcePayload>,
+export const buildNoteTranslated = (
+    payloadOverrides: DeepPartial<NoteTranslatedPayload>,
     buildMetadata: EventMetadataBuilder
 ) => {
-    const defaultPayload: NoteTranslatedAboutResourcePayload = {
+    const defaultPayload: NoteTranslatedPayload = {
         aggregateCompositeIdentifier: {
             type: AggregateType.note,
             id: buildDummyUuid(1),
@@ -18,7 +18,7 @@ export const buildNoteTranslatedAboutResource = (
         languageCode: LanguageCode.Chilcotin,
     };
 
-    return new NoteTranslatedAboutResource(
+    return new NoteTranslated(
         {
             ...clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
         },
