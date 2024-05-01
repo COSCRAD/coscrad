@@ -22,4 +22,5 @@ export enum MIMEType {
     mp4 = 'video/mp4',
     videoOgg = 'video/ogg',
     videoWebm = 'video/webm',
+    // mov = 'mov',
 }
