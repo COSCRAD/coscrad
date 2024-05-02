@@ -39,4 +39,41 @@ describe('Footer', () => {
 
         expect(screenRes).toBeTruthy();
     });
+
+    it('renders email icon when email is given', () => {
+        const email = 'johndoe@johndoe.com';
+        const myConfigurableContent = { ...dummyConfigurableContent, email };
+
+        renderWithProviders(
+            <MemoryRouter>
+                <Footer />
+            </MemoryRouter>,
+            {
+                contentConfig: myConfigurableContent,
+            }
+        );
+
+        const searchPattern = new RegExp(email);
+        const screenRes = screen.getByText(searchPattern);
+
+        expect(screenRes).toBeTruthy();
+    });
+
+    it('does not render email icon when email is empty', () => {
+        const email = '';
+        const myConfigurableContent = { ...dummyConfigurableContent, email };
+
+        renderWithProviders(
+            <MemoryRouter>
+                <Footer />
+            </MemoryRouter>,
+            {
+                contentConfig: myConfigurableContent,
+            }
+        );
+
+        const screenRes = screen.queryByTestId('email-icon');
+
+        expect(screenRes).toBeFalsy();
+    });
 });
