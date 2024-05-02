@@ -113,12 +113,15 @@ export const Footer = (): JSX.Element => {
                     <Typography color="primary.main" variant="h3">
                         Contact
                     </Typography>
-                    <Box>
-                        <IconButton color="secondary">
-                            <AlternateEmail />
-                        </IconButton>
-                        {email}
-                    </Box>
+                    {isNonEmptyString(email) ? (
+                        <Box>
+                            <IconButton color="secondary">
+                                <AlternateEmail />
+                            </IconButton>
+                            {email}
+                        </Box>
+                    ) : null}
+
                     {isNonEmptyString(phoneNumber) ? (
                         <Box>
                             <IconButton color="secondary">
