@@ -224,7 +224,7 @@ export class EdgeConnection extends Aggregate {
 
     @UpdateMethod()
     translateNote(text: string, languageCode: LanguageCode): ResultOrError<EdgeConnection> {
-        return this.translateMultilingualTextProperty('translation', {
+        return this.translateMultilingualTextProperty('note', {
             text,
             languageCode,
             role: MultilingualTextItemRole.freeTranslation,
@@ -235,7 +235,7 @@ export class EdgeConnection extends Aggregate {
         return this.members.find((member) => member.role === role) || NotFound;
     }
 
-    handleEdgeConnectionNoteTranslated({ payload: { text, languageCode } }: NoteTranslated) {
+    handleNoteTranslated({ payload: { text, languageCode } }: NoteTranslated) {
         return this.translateNote(text, languageCode);
     }
 

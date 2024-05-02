@@ -29,15 +29,21 @@ import { TextFieldContext } from './text-field-context/text-field-context.entity
 import { TimeRangeContext } from './time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from './types/EdgeConnectionContextType';
 
-const noteTranslation = 'this is cool';
+const noteText = 'this is cool';
+
+const noteTranslation = noteText;
 
 const generalContext = new GeneralContext();
 
 const originalLanguageCode = LanguageCode.English;
 
+const translationLanguageCode = LanguageCode.Chilcotin;
+
+const edgeConnectionId = buildDummyUuid(1);
+
 const aggregateCompositeIdentifier = {
     type: AggregateType.note,
-    id: buildDummyUuid(2),
+    id: edgeConnectionId,
 };
 
 const resourceCompositeIdentifier = {
@@ -81,7 +87,8 @@ const noteTranslated = new TestEventStream()
     .andThen<NoteAboutResourceCreated>({
         type: 'NOTE_ABOUT_RESOURCE_CREATED',
         payload: {
-            text: 'original text for note',
+            text: noteText,
+            languageCode: originalLanguageCode,
         },
     })
     .andThen<NoteTranslated>({
@@ -89,11 +96,9 @@ const noteTranslated = new TestEventStream()
         payload: {
             aggregateCompositeIdentifier: aggregateCompositeIdentifier,
             text: noteTranslation,
-            languageCode: originalLanguageCode,
+            languageCode: translationLanguageCode,
         },
     });
-
-const edgeConnectionId = buildDummyUuid(1);
 
 describe(`EdgeConnection.fromEventHistory`, () => {
     beforeAll(async () => {
@@ -187,7 +192,7 @@ describe(`EdgeConnection.fromEventHistory`, () => {
 
                     const { members } = edgeConnection;
 
-                    expect(members).toHaveLength(2);
+                    expect(members).toHaveLength(1);
                 });
             });
         });
