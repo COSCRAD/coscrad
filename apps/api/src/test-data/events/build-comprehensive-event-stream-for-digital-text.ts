@@ -42,6 +42,7 @@ const digitalTextCreated = new DigitalTextCreated(createDigitalText.payload, {
     id: buildDummyUuid(154),
     userId: dummySystemUserId,
     dateCreated: dummyDateNow,
+    contributorIds: [],
 });
 
 const dummyPageIdentifier = '21';
@@ -60,6 +61,7 @@ const pageAddedForDigitalText = new PageAddedToDigitalText(addPageToDigitalText.
     id: buildDummyUuid(155),
     userId: dummySystemUserId,
     dateCreated: dummyDateNow + 1,
+    contributorIds: [],
 });
 
 const idForUserWithAccessToDigitalText = buildDummyUuid(45);
@@ -78,7 +80,12 @@ const grantReadAccessToUserForDigitalText = clonePlainObjectWithOverrides(
 
 const digitalTextReadAccessGrantedToUser = new ResourceReadAccessGrantedToUser(
     grantReadAccessToUserForDigitalText.payload,
-    { id: buildDummyUuid(579), userId: dummySystemUserId, dateCreated: dummyDateNow + 2 }
+    {
+        id: buildDummyUuid(579),
+        userId: dummySystemUserId,
+        dateCreated: dummyDateNow + 2,
+        contributorIds: [],
+    }
 );
 
 const resourcePublished = new ResourcePublished(
@@ -88,7 +95,12 @@ const resourcePublished = new ResourcePublished(
             type: AggregateType.digitalText,
         },
     },
-    { id: buildDummyUuid(580), userId: dummySystemUserId, dateCreated: dummyDateNow + 3 }
+    {
+        id: buildDummyUuid(580),
+        userId: dummySystemUserId,
+        dateCreated: dummyDateNow + 3,
+        contributorIds: [],
+    }
 );
 
 export const buildComprehensiveEventStreamForDigitalText = () => [

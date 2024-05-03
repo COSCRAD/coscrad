@@ -40,7 +40,8 @@ export abstract class BaseCreateCommandHandler<
     protected async persist(
         instance: TAggregate,
         command: ICommandBase,
-        userId: AggregateId
+        userId: AggregateId,
+        contributorIds: AggregateId[]
     ): Promise<void> {
         /**
          * TODO [https://www.pivotaltracker.com/story/show/182597855]
@@ -55,7 +56,12 @@ export abstract class BaseCreateCommandHandler<
 
         await this.idManager.use({ id: eventId, type: EVENT });
 
-        const event = this.buildEvent(command, { id: eventId, userId, dateCreated: Date.now() });
+        const event = this.buildEvent(command, {
+            id: eventId,
+            userId,
+            dateCreated: Date.now(),
+            contributorIds,
+        });
 
         const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);
 

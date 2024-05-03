@@ -134,6 +134,9 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
         _passedParams: string[],
         { directory, baseUrl, staticAssetDestinationDirectory }: IngestMediaItemsCliCommandOptions
     ): Promise<void> {
+        console.time();
+        console.timeLog();
+
         this.logger.log(`Attempting to import media from: ${directory}`);
 
         const partialPayloads: (Omit<CreateMediaItem, 'aggregateCompositeIdentifier' | 'url'> & {
@@ -371,6 +374,9 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
                 )} Added: ${JSON.stringify(fsa)}`
             );
         }
+
+        console.timeLog();
+        console.timeEnd();
     }
 
     @CliCommandOption({

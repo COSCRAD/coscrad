@@ -10,6 +10,10 @@ interface Nameable {
     getName(): MultilingualText;
 }
 
+interface _Accreditable {
+    getContributions(): { contributorId: string; eventType: string; date: number }[];
+}
+
 export class BaseViewModel implements IBaseViewModel {
     @ApiProperty({
         example: '12',
@@ -23,6 +27,8 @@ export class BaseViewModel implements IBaseViewModel {
         label: `name`,
     })
     readonly name: IMultilingualText;
+
+    // readonly contributions: IContribution[];
 
     constructor(domainModel: HasViewModelId & Nameable) {
         this.id = domainModel.id;

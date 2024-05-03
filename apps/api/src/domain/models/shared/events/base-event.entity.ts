@@ -24,7 +24,7 @@ export abstract class BaseEvent<
 
     constructor(
         payload: TPayload,
-        { id: eventId, dateCreated: timestamp, userId }: EventRecordMetadata // eventId: AggregateId, // systemUserId: AggregateId, // timestamp?: number
+        { id: eventId, dateCreated: timestamp, userId, contributorIds }: EventRecordMetadata // eventId: AggregateId, // systemUserId: AggregateId, // timestamp?: number
     ) {
         this.payload = cloneToPlainObject(payload);
 
@@ -32,6 +32,7 @@ export abstract class BaseEvent<
             dateCreated: timestamp || Date.now(),
             id: eventId,
             userId,
+            contributorIds: contributorIds || [],
         };
     }
 

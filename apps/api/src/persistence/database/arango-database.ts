@@ -4,6 +4,7 @@ import { isArangoDatabase } from 'arangojs/database';
 import { isTestEnvironment } from '../../app/config/constants/Environment';
 import { QueryOperator } from '../../domain/repositories/interfaces/QueryOperator';
 import { ISpecification } from '../../domain/repositories/interfaces/specification.interface';
+import { IdEquals } from '../../domain/repositories/specifications/id-equals.specification';
 import { isAggregateId } from '../../domain/types/AggregateId';
 import { HasAggregateId } from '../../domain/types/HasAggregateId';
 import { InternalError } from '../../lib/errors/InternalError';
@@ -61,7 +62,7 @@ export class ArangoDatabase {
             );
         }
 
-        const allEntities = await this.fetchMany<TDatabaseDTO>(collectionName);
+        const allEntities = await this.fetchMany<TDatabaseDTO>(collectionName, new IdEquals(id));
 
         if (allEntities.length === 0) return NotFound;
 

@@ -112,7 +112,8 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
         instance: TAggregate,
         // Make this base event payload
         payload: ICommand,
-        userId: AggregateId
+        userId: AggregateId,
+        contributorIds: AggregateId[]
     ): Promise<void>;
 
     /**
@@ -147,8 +148,13 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
     async execute(
         command: ICommandBase,
         commandType: string,
-        { userId }: Pick<EventRecordMetadata, 'userId'>
+        {
+            userId,
+            contributorIds,
+        }: Pick<EventRecordMetadata, 'userId'> & { contributorIds?: AggregateId[] }
     ): Promise<Ack | InternalError> {
+        console.log({ contributorIds });
+
         const typeValidationResult = this.validateType(command, commandType);
 
         if (isInternalError(typeValidationResult)) {
@@ -185,7 +191,7 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
         if (isInternalError(additionalValidationResult))
             return buildExecutionError([additionalValidationResult]);
 
-        await this.persist(updatedInstance, command, userId);
+        await this.persist(updatedInstance, command, userId, contributorIds || []);
 
         return Ack;
     }
