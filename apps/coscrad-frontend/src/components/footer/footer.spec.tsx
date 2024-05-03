@@ -44,7 +44,7 @@ describe('Footer', () => {
 describe('when an email is provided', () => {
     const dummyConfigurableContent = getDummyConfigurableContent();
 
-    it('should render the email icon and address', () => {
+    it('should render the email address', () => {
         const email = 'johndoe@johndoe.com';
         const myConfigurableContent = { ...dummyConfigurableContent, email };
 
@@ -62,12 +62,30 @@ describe('when an email is provided', () => {
 
         expect(screenRes).toBeTruthy();
     });
+
+    it('should render the email icon', () => {
+        const email = 'johndoe@johndoe.com';
+        const myConfigurableContent = { ...dummyConfigurableContent, email };
+
+        renderWithProviders(
+            <MemoryRouter>
+                <Footer />
+            </MemoryRouter>,
+            {
+                contentConfig: myConfigurableContent,
+            }
+        );
+
+        const screenRes = screen.queryByTestId('email-icon');
+
+        expect(screenRes).toBeTruthy();
+    });
 });
 
 describe('when an email is not provided', () => {
     const dummyConfigurableContent = getDummyConfigurableContent();
 
-    it('does not render email icon when email is empty', () => {
+    it('should not render the email', () => {
         const email = '';
         const myConfigurableContent = { ...dummyConfigurableContent, email };
 
