@@ -114,7 +114,7 @@ export const Footer = (): JSX.Element => {
                         Contact
                     </Typography>
                     {isNonEmptyString(email) ? (
-                        <Box>
+                        <Box data-testid="email-text">
                             <IconButton color="secondary">
                                 <AlternateEmail data-testid="email-icon" />
                             </IconButton>

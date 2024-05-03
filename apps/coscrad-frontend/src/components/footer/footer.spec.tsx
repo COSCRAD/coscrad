@@ -85,7 +85,7 @@ describe('when an email is provided', () => {
 describe('when an email is not provided', () => {
     const dummyConfigurableContent = getDummyConfigurableContent();
 
-    it('should not render the email', () => {
+    it('should not render the email icon or email address', () => {
         const email = '';
         const myConfigurableContent = { ...dummyConfigurableContent, email };
 
@@ -99,7 +99,9 @@ describe('when an email is not provided', () => {
         );
 
         const screenRes = screen.queryByTestId('email-icon');
+        const emailText = screen.queryByTestId('email-text');
 
         expect(screenRes).toBeFalsy();
+        expect(emailText).toBeFalsy();
     });
 });
