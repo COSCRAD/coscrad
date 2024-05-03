@@ -39,8 +39,12 @@ describe('Footer', () => {
 
         expect(screenRes).toBeTruthy();
     });
+});
 
-    it('renders email icon when email is given', () => {
+describe('when an email is provided', () => {
+    const dummyConfigurableContent = getDummyConfigurableContent();
+
+    it('should render the email icon and address', () => {
         const email = 'johndoe@johndoe.com';
         const myConfigurableContent = { ...dummyConfigurableContent, email };
 
@@ -58,6 +62,10 @@ describe('Footer', () => {
 
         expect(screenRes).toBeTruthy();
     });
+});
+
+describe('when an email is not provided', () => {
+    const dummyConfigurableContent = getDummyConfigurableContent();
 
     it('does not render email icon when email is empty', () => {
         const email = '';
