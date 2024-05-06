@@ -40,3 +40,68 @@ describe('Footer', () => {
         expect(screenRes).toBeTruthy();
     });
 });
+
+describe('when an email is provided', () => {
+    const dummyConfigurableContent = getDummyConfigurableContent();
+
+    it('should render the email address', () => {
+        const email = 'johndoe@johndoe.com';
+        const myConfigurableContent = { ...dummyConfigurableContent, email };
+
+        renderWithProviders(
+            <MemoryRouter>
+                <Footer />
+            </MemoryRouter>,
+            {
+                contentConfig: myConfigurableContent,
+            }
+        );
+
+        const searchPattern = new RegExp(email);
+        const screenRes = screen.getByText(searchPattern);
+
+        expect(screenRes).toBeTruthy();
+    });
+
+    it('should render the email icon', () => {
+        const email = 'johndoe@johndoe.com';
+        const myConfigurableContent = { ...dummyConfigurableContent, email };
+
+        renderWithProviders(
+            <MemoryRouter>
+                <Footer />
+            </MemoryRouter>,
+            {
+                contentConfig: myConfigurableContent,
+            }
+        );
+
+        const screenRes = screen.queryByTestId('email-icon');
+
+        expect(screenRes).toBeTruthy();
+    });
+});
+
+describe('when an email is not provided', () => {
+    const dummyConfigurableContent = getDummyConfigurableContent();
+
+    it('should not render the email icon or email address', () => {
+        const email = '';
+        const myConfigurableContent = { ...dummyConfigurableContent, email };
+
+        renderWithProviders(
+            <MemoryRouter>
+                <Footer />
+            </MemoryRouter>,
+            {
+                contentConfig: myConfigurableContent,
+            }
+        );
+
+        const screenRes = screen.queryByTestId('email-icon');
+        const emailText = screen.queryByTestId('email-text');
+
+        expect(screenRes).toBeFalsy();
+        expect(emailText).toBeFalsy();
+    });
+});
