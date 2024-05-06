@@ -153,8 +153,6 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
             contributorIds,
         }: Pick<EventRecordMetadata, 'userId'> & { contributorIds?: AggregateId[] }
     ): Promise<Ack | InternalError> {
-        console.log({ contributorIds });
-
         const typeValidationResult = this.validateType(command, commandType);
 
         if (isInternalError(typeValidationResult)) {

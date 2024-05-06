@@ -16,38 +16,11 @@ import { AggregateType } from '../domain/types/AggregateType';
 import { InternalError, isInternalError } from '../lib/errors/InternalError';
 import { Ctor } from '../lib/types/Ctor';
 import { clonePlainObjectWithOverrides } from '../lib/utilities/clonePlainObjectWithOverrides';
+import { cloneWithOverridesByDeepPath } from '../lib/utilities/cloneWithOverridesByDeepPath';
+import { getDeepPropertyFromObject } from '../lib/utilities/getDeepPropertyFromObject';
 import { ResultOrError } from '../types/ResultOrError';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
-
-/**
- *
- * @param key the key of the property you'd like to access. It may have zero or
- * more occurrences of '.', indicating nested. E.g., 'foo.bar.baz'
- */
-const getPropertyFromDeepDynamicKey = <T extends Object>(o: T, key: string) => {
-    const propertyNames = key.split('.');
-
-    let result = o;
-
-    for (const propertyName of propertyNames) {
-        result = result[propertyName];
-    }
-
-    return result;
-};
-
-const setDeepPropertyFromDynamicKey = <T extends Object, U>(o: T, key: string, value: U) => {
-    const propertyNames = key.split('.');
-
-    let result = o;
-
-    for (const propertyName of propertyNames.slice(0, -1)) {
-        result = result[propertyName];
-    }
-
-    result[propertyNames.pop()] = value;
-};
 
 type CommandFsa = {
     type: string;
@@ -235,8 +208,6 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
                 }) => id
             )
             .map((slugFromPayload) => {
-                console.log({ s: slugFromPayload });
-
                 return parseSlugDefinition(slugFromPayload);
             });
 
@@ -297,7 +268,12 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
 
                 const referencePropertyPaths = referenceSpecifications.map(
                     // If the reference is a full composite identifier, we need to access the nested ID property
-                    ({ type, path }) => (type === COMPOSITE_IDENTIFIER ? `${path}.id` : path)
+                    ({ type, path }) => {
+                        const nestedPath = type === COMPOSITE_IDENTIFIER ? `${path}.id` : path;
+
+                        // note that the COSCRAD Schema is for the payload, which is itself a nested FSA property
+                        return `payload.${nestedPath}`;
+                    }
                 );
 
                 return acc.set(type, referencePropertyPaths);
@@ -330,7 +306,7 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
              * also consider all referential properties (annotated with
              * @RefersTo) and check if we need to append these IDs as well.
              */
-            const fsaToExecute = clonePlainObjectWithOverrides(fsa, {
+            let fsaToExecute = clonePlainObjectWithOverrides(fsa, {
                 payload: {
                     aggregateCompositeIdentifier: {
                         id: idToUse,
@@ -340,7 +316,7 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
 
             if (commandTypeToReferentialPropertyPaths.has(commandType)) {
                 commandTypeToReferentialPropertyPaths.get(commandType).forEach((fullPath) => {
-                    const value = getPropertyFromDeepDynamicKey(fsaToExecute, fullPath);
+                    const value = getDeepPropertyFromObject(fsaToExecute, fullPath);
 
                     if (Array.isArray(value)) {
                         throw new InternalError(
@@ -356,8 +332,14 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
                             : // look up the UUID corresponding to this slug
                               idMap.get(customIdParseResult[1]);
 
-                        setDeepPropertyFromDynamicKey(fsaToExecute, fullPath, referenceIdToUse);
+                        fsaToExecute = cloneWithOverridesByDeepPath(
+                            fsaToExecute,
+                            fullPath,
+                            referenceIdToUse
+                        );
                     }
+
+                    console.log(fsaToExecute);
                 });
             }
 
