@@ -130,13 +130,13 @@ describe(commandType, () => {
                     await app.get(ArangoEventRepository).appendEvents(eventHistory);
                 },
                 checkStateOnSuccess: async () => {
-                    const edgeConnectionnSearchResult = await testRepositoryProvider
+                    const edgeConnectionSearchResult = await testRepositoryProvider
                         .getEdgeConnectionRepository()
                         .fetchById(edgeConnectionId);
 
-                    expect(edgeConnectionnSearchResult).toBeInstanceOf(EdgeConnection);
+                    expect(edgeConnectionSearchResult).toBeInstanceOf(EdgeConnection);
 
-                    const updatedEdgeConnection = edgeConnectionnSearchResult as EdgeConnection;
+                    const updatedEdgeConnection = edgeConnectionSearchResult as EdgeConnection;
 
                     const translationSearchResult =
                         updatedEdgeConnection.note.getTranslation(translationLanguageCode);
@@ -174,7 +174,7 @@ describe(commandType, () => {
             });
         });
 
-        describe(`when the translation language is the same as the target language`, () => {
+        describe(`when the translation language is the same as the original language`, () => {
             it(`should fail`, async () => {
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
