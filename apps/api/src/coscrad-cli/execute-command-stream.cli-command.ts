@@ -301,11 +301,6 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
                 : // look up the UUID corresponding to this slug
                   idMap.get(customIdParseResult[1]);
 
-            /**
-             * TODO We need to use the schema for the command to
-             * also consider all referential properties (annotated with
-             * @RefersTo) and check if we need to append these IDs as well.
-             */
             let fsaToExecute = clonePlainObjectWithOverrides(fsa, {
                 payload: {
                     aggregateCompositeIdentifier: {

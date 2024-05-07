@@ -135,7 +135,7 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
         { directory, baseUrl, staticAssetDestinationDirectory }: IngestMediaItemsCliCommandOptions
     ): Promise<void> {
         console.time();
-        console.timeLog();
+        // console.timeLog();
 
         this.logger.log(`Attempting to import media from: ${directory}`);
 
@@ -375,8 +375,8 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
             );
         }
 
-        console.timeLog();
-        console.timeEnd();
+        // console.timeLog();
+        // console.timeEnd();
     }
 
     @CliCommandOption({

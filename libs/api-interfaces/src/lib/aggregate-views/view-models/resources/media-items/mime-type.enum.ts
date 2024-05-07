@@ -22,5 +22,6 @@ export enum MIMEType {
     mp4 = 'video/mp4',
     videoOgg = 'video/ogg',
     videoWebm = 'video/webm',
+    // TODO [https://github.com/COSCRAD/coscrad/pull/583#discussion_r1586447863]
     // mov = 'mov',
 }

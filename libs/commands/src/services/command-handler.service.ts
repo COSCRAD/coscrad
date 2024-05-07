@@ -29,12 +29,6 @@ export class CommandHandlerService {
     ): Promise<Error | Ack> {
         const handler = this.#handlers.get(type);
 
-        if (type === 'CREATE_CONTRIBUTOR') {
-            console.log({
-                createContributorHandler: handler,
-            });
-        }
-
         if (!handler) throw new NoCommandHandlerRegisteredForCommandException(type);
 
         const commandInstance = this.#buildCommand({ type, payload });

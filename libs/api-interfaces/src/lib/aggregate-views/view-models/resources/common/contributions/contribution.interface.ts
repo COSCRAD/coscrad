@@ -3,5 +3,8 @@ export interface IContribution {
         firstName: string;
         lastName: string;
     };
-    // TODO Add a summary of the given contribution
+    /**
+     * TODO [https://www.pivotaltracker.com/story/show/187557664]
+     * Add a summary of the given contribution
+     */
 }

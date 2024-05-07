@@ -15,7 +15,7 @@ import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
 import { buildAnnotationsFromSnapshot } from './build-annotations-from-snapshot';
 import { ResourceQueryService } from './resource-query.service';
 
-type MediaLinenageRecord = {
+export type AudioLineageRecord = {
     filename: string;
     audioItemId: AggregateId;
 };
@@ -64,7 +64,7 @@ export class AudioItemQueryService extends ResourceQueryService<AudioItem, IAudi
         return buildAnnotationsFromSnapshot(inMemoryStore);
     }
 
-    async getMediaLineage(): Promise<MediaLinenageRecord[]> {
+    async getMediaLineage(): Promise<AudioLineageRecord[]> {
         const audioItems = await this.repositoryProvider
             .forResource<AudioItem>(ResourceType.audioItem)
             .fetchMany();
