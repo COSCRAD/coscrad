@@ -6,7 +6,9 @@ import getValidAggregateInstanceForTest from '../../__tests__/utilities/getValid
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { CannotAddDuplicateTranslationError } from '../../common/entities/errors';
 import { MultilingualTextItem } from '../../common/entities/multilingual-text';
+import InvariantValidationError from '../../domainModelValidators/errors/InvariantValidationError';
 import { AggregateType } from '../../types/AggregateType';
+import { EdgeConnectionContextUnion } from './edge-connection-context-union';
 import { EdgeConnection } from './edge-connection.entity';
 import { GeneralContext } from './general-context/general-context.entity';
 import { PointContext } from './point-context/point-context.entity';
@@ -28,11 +30,17 @@ const translationOfNote = 'translation of note';
 
 describe(`EdgeConnection.translateNote`, () => {
     beforeAll(() => {
-        bootstrapDynamicTypes([GeneralContext, TimeRangeContext, PointContext]);
+        bootstrapDynamicTypes([
+            EdgeConnectionContextUnion,
+            GeneralContext,
+            TimeRangeContext,
+            PointContext,
+            EdgeConnection,
+        ]);
     });
 
     describe(`when the translation is valid`, () => {
-        it.only(`should return the translated note`, () => {
+        it(`should return the translated note`, () => {
             const result = edgeConnection.translateNote(translationOfNote, translationLanguageCode);
 
             expect(result).toBeInstanceOf(EdgeConnection);
@@ -59,7 +67,7 @@ describe(`EdgeConnection.translateNote`, () => {
             it(`should return the expected error`, () => {
                 const result = edgeConnection.translateNote(
                     translationOfNote,
-                    translationLanguageCode
+                    existingLanguageCode
                 );
 
                 assertErrorAsExpected(
@@ -67,11 +75,22 @@ describe(`EdgeConnection.translateNote`, () => {
                     new CannotAddDuplicateTranslationError(
                         new MultilingualTextItem({
                             text: translationOfNote,
-                            languageCode: translationLanguageCode,
+                            languageCode: existingLanguageCode,
                             role: MultilingualTextItemRole.freeTranslation,
                         }),
                         edgeConnection.note
                     )
+                );
+            });
+        });
+
+        describe(`when the translation is an empty string`, () => {
+            it(`should return an invarient validation error`, () => {
+                const result = edgeConnection.translateNote('', translationLanguageCode);
+
+                assertErrorAsExpected(
+                    result,
+                    new InvariantValidationError(edgeConnection.getCompositeIdentifier(), [])
                 );
             });
         });
