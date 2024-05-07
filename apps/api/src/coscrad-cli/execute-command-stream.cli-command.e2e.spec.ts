@@ -2,6 +2,7 @@ import { TestingModule } from '@nestjs/testing';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
+import { VocabularyList } from '../domain/models/vocabulary-list/entities/vocabulary-list.entity';
 import { ResourceType } from '../domain/types/ResourceType';
 import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
@@ -16,7 +17,9 @@ const cliCommandName = 'execute-command-stream';
 
 const fixtureName = `users:create-admin`;
 
-const dataFile = `apps/api/src/coscrad-cli/execute-command-stream.cli-command.SAMPLE.json`;
+const dataFile = `apps/api/src/coscrad-cli/execute-command-stream.cli-command.valid.SAMPLE.json`;
+
+const dataFileWithJoin = `apps/api/src/coscrad-cli/execute-command-stream.cli-command.valid.with-join.SAMPLE.json`;
 
 const invalidDataFile = `apps/api/src/coscrad-cli/execute-command-stream.cli-command.invalid.SAMPLE.json`;
 
@@ -57,12 +60,13 @@ describe(`CLI Command: ${cliCommandName}`, () => {
 
         await testRepositoryProvider.testTeardown();
 
-        await jest.clearAllMocks();
+        jest.clearAllMocks();
     });
 
     describe(`when the [name] property is specified`, () => {
         describe(`when the command is valid`, () => {
             describe(`when executing the command fixture with name: ${fixtureName}`, () => {
+                jest.setTimeout(30000); // ms
                 it(`should succeed`, async () => {
                     await CommandTestFactory.run(commandInstance, [
                         cliCommandName,
@@ -81,17 +85,48 @@ describe(`CLI Command: ${cliCommandName}`, () => {
 
     describe(`when the [data-file] option is specified`, () => {
         describe(`when the command is valid`, () => {
-            it(`should succeed with the expected updates`, async () => {
-                await CommandTestFactory.run(commandInstance, [
-                    cliCommandName,
-                    `--data-file=${dataFile}`,
-                ]);
+            describe(`when there are generated IDs, but no joins`, () => {
+                it(`should succeed with the expected updates`, async () => {
+                    await CommandTestFactory.run(commandInstance, [
+                        cliCommandName,
+                        `--data-file=${dataFile}`,
+                    ]);
 
-                const numberOfTerms = await testRepositoryProvider
-                    .forResource(ResourceType.term)
-                    .getCount();
+                    const numberOfTerms = await testRepositoryProvider
+                        .forResource(ResourceType.term)
+                        .getCount();
 
-                expect(numberOfTerms).toBeGreaterThan(0);
+                    expect(numberOfTerms).toBeGreaterThan(0);
+                });
+            });
+
+            describe(`when there are generated IDs and joins (i.e., referential properties with APPEND_THIS_ID)`, () => {
+                it(`should succeed with the expected updates`, async () => {
+                    await CommandTestFactory.run(commandInstance, [
+                        cliCommandName,
+                        `--data-file=${dataFileWithJoin}`,
+                    ]);
+
+                    const numberOfTerms = await testRepositoryProvider
+                        .forResource(ResourceType.term)
+                        .getCount();
+
+                    expect(numberOfTerms).toBeGreaterThan(0);
+
+                    const vocabularyLists = await testRepositoryProvider
+                        .forResource(ResourceType.vocabularyList)
+                        .fetchMany();
+
+                    expect(vocabularyLists).toHaveLength(1);
+
+                    const foundList = vocabularyLists[0];
+
+                    expect(foundList).toBeInstanceOf(VocabularyList);
+
+                    const numberOfEntries = (foundList as VocabularyList).entries.length;
+
+                    expect(numberOfEntries).toBe(1);
+                });
             });
         });
 

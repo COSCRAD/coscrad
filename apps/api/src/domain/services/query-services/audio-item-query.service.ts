@@ -9,10 +9,16 @@ import { AudioItem } from '../../models/audio-visual/audio-item/entities/audio-i
 import { MediaItem } from '../../models/media-item/entities/media-item.entity';
 import { validAggregateOrThrow } from '../../models/shared/functional';
 import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
+import { AggregateId } from '../../types/AggregateId';
 import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
 import { buildAnnotationsFromSnapshot } from './build-annotations-from-snapshot';
 import { ResourceQueryService } from './resource-query.service';
+
+export type AudioLineageRecord = {
+    filename: string;
+    audioItemId: AggregateId;
+};
 
 export class AudioItemQueryService extends ResourceQueryService<AudioItem, IAudioItemViewModel> {
     protected readonly type = ResourceType.audioItem;
@@ -56,5 +62,38 @@ export class AudioItemQueryService extends ResourceQueryService<AudioItem, IAudi
         const inMemoryStore = new DeluxeInMemoryStore(flastSnapshot);
 
         return buildAnnotationsFromSnapshot(inMemoryStore);
+    }
+
+    async getMediaLineage(): Promise<AudioLineageRecord[]> {
+        const audioItems = await this.repositoryProvider
+            .forResource<AudioItem>(ResourceType.audioItem)
+            .fetchMany();
+
+        const mediaItems = await this.repositoryProvider
+            .forResource<MediaItem>(ResourceType.mediaItem)
+            .fetchMany();
+
+        const mediaFilenameById = mediaItems
+            .filter(validAggregateOrThrow)
+            .reduce(
+                (table, mediaItem) =>
+                    table.set(mediaItem.id, mediaItem.getName().getOriginalTextItem().text),
+                new Map()
+            );
+
+        const mediaFilenameByAudioItemId = audioItems
+            .filter(validAggregateOrThrow)
+            .reduce((table, audioItem) => {
+                const { id, mediaItemId } = audioItem;
+
+                const filename = mediaFilenameById.get(mediaItemId);
+
+                return table.set(id, filename);
+            }, new Map());
+
+        return Array.from(mediaFilenameByAudioItemId.entries()).map(([audioItemId, filename]) => ({
+            audioItemId,
+            filename,
+        }));
     }
 }

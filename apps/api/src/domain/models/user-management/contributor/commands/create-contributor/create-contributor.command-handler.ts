@@ -62,8 +62,10 @@ export class CreateContributorCommandHandler extends BaseCreateCommandHandler<Co
     ): BaseEvent<IEventPayload> {
         const eventPayload = cloneToPlainObject(commandPayload);
 
-        // Here we convert the string that came from user input to our internal data format
-        eventPayload.dateOfBirth = CoscradDate.parseString(commandPayload.dateOfBirth);
+        if (isNonEmptyString(eventPayload.dateOfBirth)) {
+            // Here we convert the string that came from user input to our internal data format
+            eventPayload.dateOfBirth = CoscradDate.parseString(commandPayload.dateOfBirth);
+        }
 
         return new ContributorCreated(eventPayload, eventMeta);
     }

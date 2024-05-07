@@ -65,8 +65,6 @@ export class SeedTestDataWithCommand extends CliCommandRunner {
 
         const msg = `The command failed with the following errors: ${result.toString()}`;
 
-        console.log({ msg });
-
         this.logger.log(msg);
 
         throw new InternalError(msg);

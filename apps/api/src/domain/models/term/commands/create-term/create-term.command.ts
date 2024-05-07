@@ -1,6 +1,6 @@
 import { AggregateType, ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
+import { NestedDataType, NonEmptyString, RawDataObject, UUID } from '@coscrad/data-types';
 import { LanguageCodeEnum } from '../../../../common/entities/multilingual-text';
 import { AggregateTypeProperty } from '../../../shared/common-commands';
 import { CREATE_TERM } from './constants';
@@ -56,4 +56,11 @@ export class CreateTerm implements ICommandBase {
         description: 'The ID of the knowledge keeper who contributed the term',
     })
     contributorId: string;
+
+    @RawDataObject({
+        isOptional: true,
+        label: 'raw data',
+        description: 'additional data from a legacy \\ third-party system source of the data',
+    })
+    readonly rawData?: Record<string, unknown>;
 }

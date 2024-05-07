@@ -3,6 +3,8 @@ import { Module } from '@nestjs/common';
 import {
     AddTermToVocabularyList,
     AddTermToVocabularyListCommandHandler,
+    AnalyzeTermInVocabularyList,
+    AnalyzeTermInVocabularyListCommandHandler,
     CreateVocabularyList,
     CreateVocabularyListCommandHandler,
     RegisterVocabularyListFilterProperty,
@@ -27,7 +29,9 @@ import { VocabularyListController } from '../controllers/resources/vocabulary-li
         CreateVocabularyListCommandHandler,
         TranslateVocabularyListNameCommandHandler,
         AddTermToVocabularyListCommandHandler,
+        AnalyzeTermInVocabularyListCommandHandler,
         RegisterVocabularyListFilterPropertyCommandHandler,
+        AnalyzeTermInVocabularyList,
         // Data Classes
         ...[
             CreateVocabularyList,
@@ -35,6 +39,7 @@ import { VocabularyListController } from '../controllers/resources/vocabulary-li
             VocabularyListNameTranslated,
             AddTermToVocabularyList,
             RegisterVocabularyListFilterProperty,
+            AnalyzeTermInVocabularyList,
         ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,

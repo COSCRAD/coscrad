@@ -11,6 +11,7 @@ import { ClearDatabaseCliCommand } from './clear-database.cli-comand';
 import { DomainDumpCliCommand } from './data-dump.cli-command';
 import { DomainRestoreCliCommand } from './data-restore.cli-command';
 import { ExecuteCommandStreamCliCommand } from './execute-command-stream.cli-command';
+import { ExportAudioItemLineagesCliCommand } from './export-audio-item-lineages.cli-command';
 import { ExportMediaAnnotationsCliCommand } from './export-media-annotations.cli-command';
 import { IngestMediaItemsCliCommand } from './ingest-media-items.cli-command';
 import { ListMigrationsCliCommand } from './list-migrations.cli-command';
@@ -35,6 +36,7 @@ import { ValidateInvariantsCliCommand } from './validate-invariants.cli-command'
         SeedTestUuids,
         IngestMediaItemsCliCommand,
         ExportMediaAnnotationsCliCommand,
+        ExportAudioItemLineagesCliCommand,
         {
             provide: COSCRAD_LOGGER_TOKEN,
             useClass: ConsoleCoscradCliLogger,

@@ -1,0 +1,55 @@
+[
+    {
+        "type": "CREATE_TERM",
+        "payload": {
+            "aggregateCompositeIdentifier": {
+                "id": "GENERATE_THIS_ID:1",
+                "type": "term"
+            },
+            "text": "I am talking to him (language)",
+            "languageCode": "clc",
+            "contributorId": "1"
+        }
+    },
+    {
+        "type": "TRANSLATE_TERM",
+        "payload": {
+            "aggregateCompositeIdentifier": {
+                "id": "APPEND_THIS_ID:1",
+                "type": "term"
+            },
+            "translation": "I am talking to him (English)",
+            "languageCode": "en"
+        }
+    },
+    {
+        "type": "PUBLISH_RESOURCE",
+        "payload": {
+            "aggregateCompositeIdentifier": {
+                "id": "APPEND_THIS_ID:1",
+                "type": "term"
+            }
+        }
+    },
+    {
+        "type": "CREATE_VOCABULARY_LIST",
+        "payload": {
+            "aggregateCompositeIdentifier": {
+                "id": "GENERATE_THIS_ID:v22",
+                "type": "vocabularyList"
+            },
+            "name": "test vocabulary list with joined term",
+            "languageCodeForName": "en"
+        }
+    },
+    {
+        "type": "ADD_TERM_TO_VOCABULARY_LIST",
+        "payload": {
+            "aggregateCompositeIdentifier": {
+                "id": "APPEND_THIS_ID:v22",
+                "type": "vocabularyList"
+            },
+            "termId": "APPEND_THIS_ID:1"
+        }
+    }
+]

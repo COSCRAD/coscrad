@@ -3,10 +3,8 @@ import { Command } from '@coscrad/commands';
 import { NestedDataType, RawDataObject, UUID } from '@coscrad/data-types';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { VocabularyListCompositeId } from '../create-vocabulary-list';
-import { ANALYZE_TERM_IN_VOCABULARY_LIST } from './constants';
-
 @Command({
-    type: ANALYZE_TERM_IN_VOCABULARY_LIST,
+    type: 'ANALYZE_TERM_IN_VOCABULARY_LIST',
     label: 'analyze term in a vocabulary list',
     description: 'analyze a term in a vocabulary list',
 })

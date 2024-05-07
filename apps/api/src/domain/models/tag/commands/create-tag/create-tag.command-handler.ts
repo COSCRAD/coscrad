@@ -1,4 +1,5 @@
 import { CommandHandler } from '@coscrad/commands';
+import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
@@ -51,8 +52,9 @@ export class CreateTagCommandHandler extends BaseCreateCommandHandler<Tag> {
     protected override async persist(
         instance: Tag,
         command: CreateTag,
-        userId: string
+        userId: string,
+        contributorIds?: AggregateId[]
     ): Promise<void> {
-        await super.persist(instance, command, userId);
+        await super.persist(instance, command, userId, contributorIds || []);
     }
 }

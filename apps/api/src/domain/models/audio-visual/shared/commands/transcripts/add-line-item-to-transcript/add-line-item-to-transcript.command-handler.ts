@@ -96,7 +96,8 @@ export class AddLineItemtoTranscriptCommandHandler extends BaseCommandHandler<Tr
     protected async persist(
         instance: TranscribableResource,
         command: AddLineItemToTranscript,
-        systemUserId: AggregateId
+        systemUserId: AggregateId,
+        contributorIds?: AggregateId[]
     ): Promise<void> {
         // generate a unique ID for the event
         const eventId = await this.idManager.generate();
@@ -107,6 +108,7 @@ export class AddLineItemtoTranscriptCommandHandler extends BaseCommandHandler<Tr
             id: eventId,
             userId: systemUserId,
             dateCreated: Date.now(),
+            contributorIds: contributorIds || [],
         });
 
         const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);

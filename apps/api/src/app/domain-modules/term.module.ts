@@ -1,6 +1,9 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
 import {
+    AddAudioForTerm,
+    AddAudioForTermCommandHandler,
+    AudioAddedForTerm,
     CreatePromptTerm,
     CreatePromptTermCommandHandler,
     CreateTerm,
@@ -31,6 +34,7 @@ import { TermController } from '../controllers/resources/term.controller';
         CreatePromptTermCommandHandler,
         TranslateTermCommandHandler,
         ElicitTermFromPromptCommandHandler,
+        AddAudioForTermCommandHandler,
         // Data Classes
         ...[
             // Domain Model
@@ -40,11 +44,13 @@ import { TermController } from '../controllers/resources/term.controller';
             CreatePromptTerm,
             TranslateTerm,
             ElicitTermFromPrompt,
+            AddAudioForTerm,
             // Events
             TermCreated,
             PromptTermCreated,
             TermTranslated,
             TermElicitedFromPrompt,
+            AudioAddedForTerm,
         ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,

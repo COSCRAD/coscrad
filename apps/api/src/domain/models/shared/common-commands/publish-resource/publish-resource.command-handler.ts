@@ -1,5 +1,6 @@
 import { CommandHandler, ICommand } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
+import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
@@ -59,7 +60,8 @@ export class PublishResourceCommandHandler extends BaseCommandHandler<Resource> 
     protected async persist(
         instance: Resource,
         command: PublishResource,
-        userId: string
+        userId: string,
+        contributorIds?: AggregateId[]
     ): Promise<void> {
         const {
             aggregateCompositeIdentifier: { type: resourceType },
@@ -73,7 +75,12 @@ export class PublishResourceCommandHandler extends BaseCommandHandler<Resource> 
 
         await this.idManager.use({ id: eventId, type: EVENT });
 
-        const event = this.buildEvent(command, { id: eventId, userId, dateCreated: Date.now() });
+        const event = this.buildEvent(command, {
+            id: eventId,
+            userId,
+            dateCreated: Date.now(),
+            contributorIds: contributorIds || [],
+        });
 
         const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);
 
