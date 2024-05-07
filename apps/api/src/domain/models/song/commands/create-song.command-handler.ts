@@ -125,7 +125,12 @@ export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
         return new SongCreated(command, eventMeta);
     }
 
-    async persist(instance: Song, command: CreateSong, systemUserId: AggregateId): Promise<void> {
+    async persist(
+        instance: Song,
+        command: CreateSong,
+        systemUserId: AggregateId,
+        contributorIds?: AggregateId[]
+    ): Promise<void> {
         // generate a unique ID for the event
         const eventId = await this.idManager.generate();
 
@@ -138,7 +143,12 @@ export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
         await this.idManager.use(command.aggregateCompositeIdentifier);
 
         const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(
-            this.buildEvent(command, { id: eventId, userId: systemUserId, dateCreated: Date.now() })
+            this.buildEvent(command, {
+                id: eventId,
+                userId: systemUserId,
+                dateCreated: Date.now(),
+                contributorIds: contributorIds || [],
+            })
         );
 
         // Persist the valid instance

@@ -90,7 +90,8 @@ export class AddParticipantToTranscriptCommandHandler extends BaseCommandHandler
     protected async persist(
         instance: AudioItem | Video,
         command: AddParticipantToTranscript,
-        systemUserId: AggregateId
+        systemUserId: AggregateId,
+        contributorIds?: AggregateId[]
     ): Promise<void> {
         // generate a unique ID for the event
         const eventId = await this.idManager.generate();
@@ -101,6 +102,7 @@ export class AddParticipantToTranscriptCommandHandler extends BaseCommandHandler
             id: eventId,
             userId: systemUserId,
             dateCreated: Date.now(),
+            contributorIds: contributorIds || [],
         });
 
         const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);

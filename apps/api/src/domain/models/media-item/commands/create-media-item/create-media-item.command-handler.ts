@@ -1,5 +1,6 @@
 import { CommandHandler } from '@coscrad/commands';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
+import { isNotFound } from '../../../../../lib/types/not-found';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { Valid } from '../../../../domainModelValidators/Valid';
@@ -57,22 +58,22 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
         return getInstanceFactoryForResource<MediaItem>(ResourceType.mediaItem)(createDto);
     }
 
-    protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
-        const searchResults = await this.repositoryProvider
+    protected async fetchRequiredExternalState({
+        aggregateCompositeIdentifier: { id: mediaItemId },
+    }: CreateMediaItem): Promise<InMemorySnapshot> {
+        const searchResult = await this.repositoryProvider
             .forResource<MediaItem>(ResourceType.mediaItem)
-            .fetchMany();
+            .fetchById(mediaItemId);
 
-        const preExistingMediaItems = searchResults.filter((result): result is MediaItem => {
-            if (isInternalError(result)) {
-                throw new InternalError(`Invalid media item in database!`, [result]);
-            }
+        if (isInternalError(searchResult)) {
+            throw new InternalError(`Invalid media item in database!`, [searchResult]);
+        }
 
-            return true;
-        });
+        const relevantExistingMediaItems = isNotFound(searchResult) ? [] : [searchResult];
 
         return buildInMemorySnapshot({
             resources: {
-                mediaItem: preExistingMediaItems,
+                mediaItem: relevantExistingMediaItems,
             },
         });
     }

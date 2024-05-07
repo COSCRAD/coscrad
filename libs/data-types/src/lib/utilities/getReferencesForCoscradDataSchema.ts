@@ -11,7 +11,7 @@ export interface ReferenceSpecification {
 export const getReferencesForCoscradDataSchema = (
     schema: ClassSchema<Record<string, unknown>>,
     basePath = ''
-) =>
+): ReferenceSpecification[] =>
     Object.entries(schema).reduce(
         (acc: ReferenceSpecification[], [propertyKey, typeDefinition]) => {
             // @ts-expect-error TODO We need to improve type safety of @coscrad/data-types
@@ -43,4 +43,4 @@ export const getReferencesForCoscradDataSchema = (
             return acc;
         },
         []
-    );
+    ) as ReferenceSpecification[];

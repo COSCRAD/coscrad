@@ -1,5 +1,10 @@
 import { CommandHandlerService } from '@coscrad/commands';
-import { CoscradUserRole } from '@coscrad/data-types';
+import {
+    COMPOSITE_IDENTIFIER,
+    CoscradUserRole,
+    getCoscradDataSchema,
+    getReferencesForCoscradDataSchema,
+} from '@coscrad/data-types';
 import { isNonEmptyString, isString } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { readFileSync } from 'fs';
@@ -9,7 +14,10 @@ import { RegisterUser } from '../domain/models/user-management/user/commands/reg
 import { AggregateId } from '../domain/types/AggregateId';
 import { AggregateType } from '../domain/types/AggregateType';
 import { InternalError, isInternalError } from '../lib/errors/InternalError';
+import { Ctor } from '../lib/types/Ctor';
 import { clonePlainObjectWithOverrides } from '../lib/utilities/clonePlainObjectWithOverrides';
+import { cloneWithOverridesByDeepPath } from '../lib/utilities/cloneWithOverridesByDeepPath';
+import { getDeepPropertyFromObject } from '../lib/utilities/getDeepPropertyFromObject';
 import { ResultOrError } from '../types/ResultOrError';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
@@ -22,6 +30,10 @@ type CommandFsa = {
             type: string;
         };
     };
+};
+
+type CommandFsaWithMeta = CommandFsa & {
+    meta?: Record<string, unknown>;
 };
 
 type CommandResult = {
@@ -161,7 +173,7 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
         {
             name: commandFsasFromFixture,
             dataFile: commandFsasFromDataFile,
-        }: { name: CommandFsa[]; dataFile: CommandFsa[] }
+        }: { name: CommandFsaWithMeta[]; dataFile: CommandFsaWithMeta[] }
     ): Promise<void> {
         if (commandFsasFromDataFile && commandFsasFromFixture) {
             const msg = `You must only specify one of [name, data-file]`;
@@ -195,7 +207,9 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
                     },
                 }) => id
             )
-            .map(parseSlugDefinition);
+            .map((slugFromPayload) => {
+                return parseSlugDefinition(slugFromPayload);
+            });
 
         const invalidSlugDefinitions = userDefinedSlugParseResult.filter(isInternalError);
 
@@ -226,8 +240,50 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
             return acc.set(slug, generatedId);
         }, new Map<string, AggregateId>());
 
+        const commandCtorsAndMeta = this.commandHandlerService.getAllCommandCtorsAndMetadata();
+
+        const commandTypeToCtor = commandCtorsAndMeta.reduce(
+            (acc: Map<string, Ctor<unknown>>, { meta: { type }, constructor }) =>
+                acc.set(type, constructor),
+            new Map<string, Ctor<unknown>>()
+        );
+
+        const commandTypeToReferentialPropertyPaths = commandFsasToExecute.reduce(
+            (acc, { type }) => {
+                if (acc.has(type)) {
+                    return acc;
+                }
+
+                if (!commandTypeToCtor.has(type)) {
+                    throw new InternalError(
+                        `Failed to find a constructor for command of type: ${type}`
+                    );
+                }
+
+                const ctor = commandTypeToCtor.get(type);
+
+                const referenceSpecifications = getReferencesForCoscradDataSchema(
+                    getCoscradDataSchema(ctor)
+                );
+
+                const referencePropertyPaths = referenceSpecifications.map(
+                    // If the reference is a full composite identifier, we need to access the nested ID property
+                    ({ type, path }) => {
+                        const nestedPath = type === COMPOSITE_IDENTIFIER ? `${path}.id` : path;
+
+                        // note that the COSCRAD Schema is for the payload, which is itself a nested FSA property
+                        return `payload.${nestedPath}`;
+                    }
+                );
+
+                return acc.set(type, referencePropertyPaths);
+            },
+            new Map<string, string[]>()
+        );
+
         for (const [index, fsa] of commandFsasToExecute.entries()) {
             const {
+                type: commandType,
                 payload: {
                     aggregateCompositeIdentifier: { id: idOnPayload },
                 },
@@ -245,7 +301,7 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
                 : // look up the UUID corresponding to this slug
                   idMap.get(customIdParseResult[1]);
 
-            const fsaToExecute = clonePlainObjectWithOverrides(fsa, {
+            let fsaToExecute = clonePlainObjectWithOverrides(fsa, {
                 payload: {
                     aggregateCompositeIdentifier: {
                         id: idToUse,
@@ -253,10 +309,46 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
                 },
             });
 
+            if (commandTypeToReferentialPropertyPaths.has(commandType)) {
+                commandTypeToReferentialPropertyPaths.get(commandType).forEach((fullPath) => {
+                    const value = getDeepPropertyFromObject(fsaToExecute, fullPath);
+
+                    if (Array.isArray(value)) {
+                        throw new InternalError(
+                            `Using slugs for arrays of references is not yet supported`
+                        );
+                    }
+
+                    if (isString(value) && value.includes(APPEND_THIS_ID)) {
+                        const customIdParseResult = parseSlugDefinition(value);
+
+                        const referenceIdToUse = isInternalError(customIdParseResult)
+                            ? idOnPayload
+                            : // look up the UUID corresponding to this slug
+                              idMap.get(customIdParseResult[1]);
+
+                        fsaToExecute = cloneWithOverridesByDeepPath(
+                            fsaToExecute,
+                            fullPath,
+                            referenceIdToUse
+                        );
+                    }
+
+                    console.log(fsaToExecute);
+                });
+            }
+
             this.logger.log(`Attempting to execute command FSA: ${JSON.stringify(fsaToExecute)}`);
+
+            const contributorIds = fsaToExecute?.meta?.contributorIds || [];
 
             const commandResult = await this.commandHandlerService.execute(fsaToExecute, {
                 userId: 'COSCRAD Admin',
+                /**
+                 * This allows the user to inject `contributorIds`. We do not
+                 * want the user to override timestamps, though.
+                 */
+                contributorIds,
             });
 
             commandResults.push({
@@ -299,7 +391,7 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
         description: 'path to the (local) JSON data file with an array of command FSAs',
         required: false,
     })
-    parseDataFile(value: string): CommandFsa[] {
+    parseDataFile(value: string): CommandFsaWithMeta[] {
         if (!isNonEmptyString(value)) return undefined;
 
         try {
