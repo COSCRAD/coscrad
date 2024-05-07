@@ -36,7 +36,9 @@ export class SongViewModel extends BaseViewModel implements ISongViewModel {
             ? mediaItems.find(({ id }) => audioItemSearchResult.mediaItemId === id)
             : undefined;
 
-        const url = mediaItemSearchResult?.url;
+        const url = mediaItemSearchResult?.id
+            ? `/resources/mediaItems/download/${mediaItemSearchResult.id}`
+            : undefined;
 
         if (!isNullOrUndefined(lyrics)) this.lyrics = new MultilingualText(lyrics);
 
