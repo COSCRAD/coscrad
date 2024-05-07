@@ -25,10 +25,10 @@ export class TranslateNoteCommandHandler extends BaseUpdateCommandHandler<EdgeCo
     }
 
     protected validateExternalState(
-        state: InMemorySnapshot,
-        instance: EdgeConnection
+        _state: InMemorySnapshot,
+        _instance: EdgeConnection
     ): InternalError | Valid {
-        return instance.validateExternalState(state);
+        return Valid;
     }
 
     protected buildEvent(

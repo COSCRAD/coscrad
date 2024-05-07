@@ -223,9 +223,12 @@ export class EdgeConnection extends Aggregate {
         } as const);
 
     @UpdateMethod()
-    translateNote(text: string, languageCode: LanguageCode): ResultOrError<EdgeConnection> {
+    translateNote(
+        translationOfNote: string,
+        languageCode: LanguageCode
+    ): ResultOrError<EdgeConnection> {
         return this.translateMultilingualTextProperty('note', {
-            text,
+            text: translationOfNote,
             languageCode,
             role: MultilingualTextItemRole.freeTranslation,
         });

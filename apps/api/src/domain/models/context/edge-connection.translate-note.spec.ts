@@ -1,19 +1,24 @@
-import { AggregateType, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import { bootstrapDynamicTypes } from '@coscrad/data-types';
 import assertErrorAsExpected from '../../../lib/__tests__/assertErrorAsExpected';
 import { NotFound } from '../../../lib/types/not-found';
 import getValidAggregateInstanceForTest from '../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { CannotAddDuplicateTranslationError } from '../../common/entities/errors';
 import { MultilingualTextItem } from '../../common/entities/multilingual-text';
+import { AggregateType } from '../../types/AggregateType';
 import { EdgeConnection } from './edge-connection.entity';
+import { GeneralContext } from './general-context/general-context.entity';
+import { PointContext } from './point-context/point-context.entity';
+import { TimeRangeContext } from './time-range-context/time-range-context.entity';
 
 const existingLanguageCode = LanguageCode.Chilcotin;
 
 const translationLanguageCode = LanguageCode.English;
 
-const noteText = 'note';
+const originalNoteText = 'original note';
 
-const existingNote = buildMultilingualTextWithSingleItem(noteText, existingLanguageCode);
+const existingNote = buildMultilingualTextWithSingleItem(originalNoteText, existingLanguageCode);
 
 const edgeConnection = getValidAggregateInstanceForTest(AggregateType.note).clone({
     note: existingNote,
@@ -22,8 +27,12 @@ const edgeConnection = getValidAggregateInstanceForTest(AggregateType.note).clon
 const translationOfNote = 'translation of note';
 
 describe(`EdgeConnection.translateNote`, () => {
+    beforeAll(() => {
+        bootstrapDynamicTypes([GeneralContext, TimeRangeContext, PointContext]);
+    });
+
     describe(`when the translation is valid`, () => {
-        it(`should return the translated note`, () => {
+        it.only(`should return the translated note`, () => {
             const result = edgeConnection.translateNote(translationOfNote, translationLanguageCode);
 
             expect(result).toBeInstanceOf(EdgeConnection);
@@ -58,7 +67,7 @@ describe(`EdgeConnection.translateNote`, () => {
                     new CannotAddDuplicateTranslationError(
                         new MultilingualTextItem({
                             text: translationOfNote,
-                            languageCode: existingLanguageCode,
+                            languageCode: translationLanguageCode,
                             role: MultilingualTextItemRole.freeTranslation,
                         }),
                         edgeConnection.note

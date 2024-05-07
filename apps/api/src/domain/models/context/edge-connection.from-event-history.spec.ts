@@ -94,7 +94,7 @@ const noteTranslated = new TestEventStream()
     .andThen<NoteTranslated>({
         type: 'NOTE_TRANSLATED',
         payload: {
-            aggregateCompositeIdentifier: aggregateCompositeIdentifier,
+            aggregateCompositeIdentifier,
             text: noteTranslation,
             languageCode: translationLanguageCode,
         },
