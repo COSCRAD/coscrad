@@ -794,6 +794,7 @@ export class TestEventStream {
             id: idGenerator.next(),
             userId: dummySystemUserId,
             dateCreated: dateManager.next(),
+            contributorIds: [],
         };
 
         return clonePlainObjectWithOverrides(defaultMeta, metaOverrides || {});

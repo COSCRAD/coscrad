@@ -38,7 +38,8 @@ export abstract class BaseUpdateCommandHandler<
     protected async persist(
         instance: TAggregate,
         command: ICommandBase,
-        systemUserId: AggregateId
+        systemUserId: AggregateId,
+        contributorIds?: AggregateId[]
     ): Promise<void> {
         // generate a unique ID for the event
         const eventId = await this.idManager.generate();
@@ -49,6 +50,7 @@ export abstract class BaseUpdateCommandHandler<
             id: eventId,
             userId: systemUserId,
             dateCreated: Date.now(),
+            contributorIds: contributorIds || [],
         });
 
         const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);

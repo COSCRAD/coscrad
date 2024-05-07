@@ -30,5 +30,26 @@
                 "type": "term"
             }
         }
+    },
+    {
+        "type": "CREATE_VOCABULARY_LIST",
+        "payload": {
+            "aggregateCompositeIdentifier": {
+                "id": "GENERATE_THIS_ID:v22",
+                "type": "vocabularyList"
+            },
+            "name": "test vocabulary list with joined term",
+            "languageCodeForName": "en"
+        }
+    },
+    {
+        "type": "ADD_TERM_TO_VOCABULARY_LIST",
+        "payload": {
+            "aggregateCompositeIdentifier": {
+                "id": "APPEND_THIS_ID:v22",
+                "type": "vocabularyList"
+            },
+            "termId": "APPEND_THIS_ID:1"
+        }
     }
 ]

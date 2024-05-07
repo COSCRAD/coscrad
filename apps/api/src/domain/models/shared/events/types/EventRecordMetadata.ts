@@ -6,4 +6,7 @@ export type EventRecordMetadata = {
     id: AggregateId;
 
     userId: AggregateId;
+
+    // we make `contributorIds` optional here for backwards compatibility
+    contributorIds?: AggregateId[];
 };

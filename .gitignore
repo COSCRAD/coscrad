@@ -46,7 +46,8 @@ cypress.env.json
 
 # data for data processing scripts
 /scripts/data-processing/data
-*.data.*
+*.data.* 
+__data__
 
 # front-end configs
 auth_config.json

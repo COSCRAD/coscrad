@@ -9,6 +9,11 @@ import {
 } from '../../domain/models/shared/common-commands';
 import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import {
+    ContributorCreated,
+    CreateContributor,
+    CreateContributorCommandHandler,
+} from '../../domain/models/user-management/contributor';
+import {
     AddUserToGroup,
     AddUserToGroupCommandHandler,
     CreateGroup,
@@ -42,13 +47,15 @@ import { CoscradUserController } from '../controllers/coscrad-user.controller';
         AddUserToGroupCommandHandler,
         GrantUserRole,
         GrantUserRoleCommandHandler,
+        CreateContributor,
+        CreateContributorCommandHandler,
         // We include this command here for lack of a better place
         GrantResourceReadAccessToUser,
         GrantResourceReadAccessToUserCommandHandler,
         PublishResource,
         PublishResourceCommandHandler,
         // Events
-        ...[ResourcePublished, ResourceReadAccessGrantedToUser].map((ctor) => ({
+        ...[ResourcePublished, ResourceReadAccessGrantedToUser, ContributorCreated].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
         })),
