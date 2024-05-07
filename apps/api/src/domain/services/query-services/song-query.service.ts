@@ -17,9 +17,12 @@ export class SongQueryService extends ResourceQueryService<Song, ISongViewModel>
 
     buildViewModel(
         song: Song,
-        { resources: { audioItem: allAudioItems, mediaItem: allMediaItems } }: InMemorySnapshot
+        {
+            resources: { audioItem: allAudioItems, mediaItem: allMediaItems },
+            contributor: allContributors,
+        }: InMemorySnapshot
     ): ISongViewModel {
-        return new SongViewModel(song, allAudioItems, allMediaItems);
+        return new SongViewModel(song, allAudioItems, allMediaItems, allContributors);
     }
 
     getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {
@@ -43,10 +46,17 @@ export class SongQueryService extends ResourceQueryService<Song, ISongViewModel>
 
         const mediaItems = mediaItemSearchResult.filter(validAggregateOrThrow);
 
+        const contributorSearchResult = await this.repositoryProvider
+            .getContributorRepository()
+            .fetchMany();
+
+        const contributors = contributorSearchResult.filter(validAggregateOrThrow);
+
         return new DeluxeInMemoryStore({
             tag: tags,
             audioItem: audioItems,
             mediaItem: mediaItems,
+            contributor: contributors,
         }).fetchFullSnapshotInLegacyFormat();
     }
 }
