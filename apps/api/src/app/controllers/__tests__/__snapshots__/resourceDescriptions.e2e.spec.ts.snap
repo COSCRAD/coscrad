@@ -2060,6 +2060,13 @@ exports[`GET /resources should return the expected result 1`] = `
         "isOptional": false,
         "label": "audio link",
       },
+      "contributions": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "list of knowledge keepers who contributed this song",
+        "isArray": true,
+        "isOptional": false,
+        "label": "contributions",
+      },
       "id": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "unique identifier",
