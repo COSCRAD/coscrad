@@ -5,10 +5,19 @@ import {
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { AudioClipPlayer } from '@coscrad/media-player';
-import { Box, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import {
+    Box,
+    Divider,
+    IconButton,
+    List,
+    ListItem,
+    ListItemIcon,
+    Paper,
+    Typography,
+} from '@mui/material';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 
-import { Person } from '@mui/icons-material';
+import { ListRounded, Person } from '@mui/icons-material';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components';
@@ -22,16 +31,14 @@ interface ContributionPresenterProps {
 
 const ContributionPresenter = ({ contributor }: ContributionPresenterProps) => {
     return (
-        <Box>
-            <List>
-                <ListItemButton>
-                    <ListItemIcon>
-                        <Person color="primary" />
-                    </ListItemIcon>
-                    <ListItemText>{contributor}</ListItemText>
-                </ListItemButton>
-            </List>
-        </Box>
+        <List>
+            <ListItem disableGutters disablePadding>
+                <ListItemIcon>
+                    <Person color="secondary" />
+                </ListItemIcon>
+                <Typography variant="body1">{contributor}</Typography>
+            </ListItem>
+        </List>
     );
 };
 
@@ -63,11 +70,23 @@ export const SongDetailFullViewPresenter = ({
             </Box>
 
             <Box>
-                <ListItemText primary="Contributor" />
+                <Box elevation={0} component={Paper}>
+                    <IconButton>
+                        <ListRounded />
+                    </IconButton>
+                    Contributions
+                </Box>
 
-                {(contributions || []).map((contribution) => {
-                    return <ContributionPresenter contributor={contribution} />;
-                })}
+                <Box ml={1}>
+                    {(contributions || []).map((contribution) => {
+                        return (
+                            <Box>
+                                <ContributionPresenter contributor={contribution} />
+                                <Divider />
+                            </Box>
+                        );
+                    })}
+                </Box>
             </Box>
 
             <Box className="detail-meta">
