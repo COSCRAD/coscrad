@@ -5,6 +5,7 @@ import {
     EdgeConnectionMemberRole,
     EdgeConnectionType,
 } from '../../../domain/models/context/edge-connection.entity';
+import { MultilingualAudio } from '../../../domain/models/shared/multilingual-audio/multilingual-audio.entity';
 import { AggregateCompositeIdentifier } from '../../../domain/types/AggregateCompositeIdentifier';
 import { isAggregateId } from '../../../domain/types/AggregateId';
 import { AggregateType } from '../../../domain/types/AggregateType';
@@ -111,6 +112,7 @@ export default (document: ArangoEdgeDocument): DTO<EdgeConnection> => {
     return {
         type: AggregateType.note,
         connectionType: determineEdgeConnectionTypeFromDocument(document),
+        audioForNote: MultilingualAudio.buildEmpty(),
         id,
         note,
         members: membersForEdgeConnectionDTO,
