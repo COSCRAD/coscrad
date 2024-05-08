@@ -30,29 +30,23 @@ export class SongQueryService extends ResourceQueryService<Song, ISongViewModel>
     }
 
     protected override async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
-        const tagSearchResult = Promise.all(
-            await this.repositoryProvider.getTagRepository().fetchMany()
-        );
+        const [
+            tagSearchResult,
+            audioItemSearchResult,
+            mediaItemSearchResult,
+            contributorSearchResult,
+        ] = await Promise.all([
+            this.repositoryProvider.getTagRepository().fetchMany(),
+            this.repositoryProvider.forResource(AggregateType.audioItem).fetchMany(),
+            this.repositoryProvider.forResource(AggregateType.mediaItem).fetchMany(),
+            this.repositoryProvider.getContributorRepository().fetchMany(),
+        ]);
 
-        const tags = (await tagSearchResult).filter(
-            (result): result is Tag => !isInternalError(result)
-        );
-
-        const audioItemSearchResult = await this.repositoryProvider
-            .forResource(AggregateType.audioItem)
-            .fetchMany();
+        const tags = tagSearchResult.filter((result): result is Tag => !isInternalError(result));
 
         const audioItems = audioItemSearchResult.filter(validAggregateOrThrow);
 
-        const mediaItemSearchResult = await this.repositoryProvider
-            .forResource(AggregateType.mediaItem)
-            .fetchMany();
-
         const mediaItems = mediaItemSearchResult.filter(validAggregateOrThrow);
-
-        const contributorSearchResult = await this.repositoryProvider
-            .getContributorRepository()
-            .fetchMany();
 
         const contributors = contributorSearchResult.filter(validAggregateOrThrow);
 
