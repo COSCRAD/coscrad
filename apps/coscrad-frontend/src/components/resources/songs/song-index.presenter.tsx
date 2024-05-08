@@ -20,6 +20,7 @@ export const SongIndexPresenter = (songsIndexResult: SongIndexState) => {
         { propertyKey: 'id', headingLabel: 'Link' },
         { propertyKey: 'name', headingLabel: 'Title' },
         { propertyKey: 'audioURL', headingLabel: 'Audio' },
+        { propertyKey: 'contributions', headingLabel: 'Contributors' },
     ];
 
     const cellRenderersDefinition: CellRenderersDefinition<ISongViewModel> = {
@@ -27,6 +28,7 @@ export const SongIndexPresenter = (songsIndexResult: SongIndexState) => {
         name: ({ name }: ISongViewModel) => renderMultilingualTextCell(name, defaultLanguageCode),
         audioURL: ({ audioURL }: ISongViewModel) =>
             isNullOrUndefined(audioURL) ? <LinkOff /> : <AudioClipPlayer audioUrl={audioURL} />,
+        contributions: ({ contributions }) => (contributions || []).join(`, `),
     };
 
     const matchers: Matchers<ISongViewModel> = {
@@ -41,7 +43,7 @@ export const SongIndexPresenter = (songsIndexResult: SongIndexState) => {
             tableData={songs}
             cellRenderersDefinition={cellRenderersDefinition}
             heading={'Songs'}
-            filterableProperties={['name']}
+            filterableProperties={['name', 'contributions']}
             matchers={matchers}
         />
     );
