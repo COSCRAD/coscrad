@@ -1,7 +1,22 @@
+import { IMultilingualText } from '@coscrad/api-interfaces';
 import { isNonEmptyString, isNull, isUndefined } from '@coscrad/validation-constraints';
 
 export type Matchers<T> = {
     [K in keyof T]?: (value: T[K], searchTerm: string) => boolean;
+};
+
+// Break out into separate file and test?
+const isMultilingualText = (text: unknown): text is IMultilingualText => {
+    if ((text as IMultilingualText).items) return true;
+
+    return false;
+};
+
+// Make this into a matcher? or keep it as a default function to deal with all multilingual text?
+const multilingualTextItemsToSearchableString = (multilingualText: IMultilingualText): string => {
+    const searchableString = multilingualText.items.map(({ text }) => text).join(' ');
+
+    return String(searchableString);
 };
 
 // TODO Unit test this and break this out into a lib
@@ -12,6 +27,8 @@ const defaultStringify = (value: unknown): string => {
     if (isNull(value)) return '<null>';
 
     if (isUndefined(value)) return '<undefined>';
+
+    if (isMultilingualText(value)) return multilingualTextItemsToSearchableString(value);
 
     return String(value);
 };
