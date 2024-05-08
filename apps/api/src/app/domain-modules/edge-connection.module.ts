@@ -22,6 +22,9 @@ import {
     ConnectResourcesWithNoteCommandHandler,
     CreateNoteAboutResource,
     CreateNoteAboutResourceCommandHandler,
+    NoteTranslated,
+    TranslateNote,
+    TranslateNoteCommandHandler,
 } from '../../domain/models/context/commands';
 import { ResourcesConnectedWithNote } from '../../domain/models/context/commands/connect-resources-with-note/resources-connected-with-note.event';
 import { NoteAboutResourceCreated } from '../../domain/models/context/commands/create-note-about-resource/note-about-resource-created.event';
@@ -49,9 +52,11 @@ import { EdgeConnectionContextUnion } from '../../domain/models/context/edge-con
             // Commands
             CreateNoteAboutResource,
             ConnectResourcesWithNote,
+            TranslateNote,
             // Events
             NoteAboutResourceCreated,
             ResourcesConnectedWithNote,
+            NoteTranslated,
         ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
@@ -59,6 +64,7 @@ import { EdgeConnectionContextUnion } from '../../domain/models/context/edge-con
 
         CreateNoteAboutResourceCommandHandler,
         ConnectResourcesWithNoteCommandHandler,
+        TranslateNoteCommandHandler,
     ],
     exports: [EdgeConnectionQueryService],
 })
