@@ -31,6 +31,8 @@ import {
     EdgeConnectionMemberRole,
     EdgeConnectionType,
     IEdgeConnectionMember,
+    LanguageCode,
+    MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
 import { Injectable } from '@nestjs/common';
 import { Maybe } from '../../../lib/types/maybe';
@@ -39,6 +41,7 @@ import formatAggregateCompositeIdentifier from '../../../queries/presentation/fo
 import { ResultOrError } from '../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../common/entities/multilingual-text';
+import { UpdateMethod } from '../../decorators';
 import { AggregateId } from '../../types/AggregateId';
 import {
     CreationEventHandlerMap,
@@ -46,6 +49,7 @@ import {
 } from '../build-aggregate-root-from-event-history';
 import AggregateNotFoundError from '../shared/common-command-errors/AggregateNotFoundError';
 import { BaseEvent } from '../shared/events/base-event.entity';
+import { NoteTranslated } from './commands';
 import { ResourcesConnectedWithNote } from './commands/connect-resources-with-note/resources-connected-with-note.event';
 import { NoteAboutResourceCreated } from './commands/create-note-about-resource/note-about-resource-created.event';
 import { ContextUnionType } from './edge-connection-context-union';
@@ -218,8 +222,24 @@ export class EdgeConnection extends Aggregate {
             id: this.id,
         } as const);
 
+    @UpdateMethod()
+    translateNote(
+        translationOfNote: string,
+        languageCode: LanguageCode
+    ): ResultOrError<EdgeConnection> {
+        return this.translateMultilingualTextProperty('note', {
+            text: translationOfNote,
+            languageCode,
+            role: MultilingualTextItemRole.freeTranslation,
+        });
+    }
+
     getMemberWithRole(role: EdgeConnectionMemberRole): Maybe<EdgeConnectionMember> {
         return this.members.find((member) => member.role === role) || NotFound;
+    }
+
+    handleNoteTranslated({ payload: { text, languageCode } }: NoteTranslated) {
+        return this.translateNote(text, languageCode);
     }
 
     static fromEventHistory(

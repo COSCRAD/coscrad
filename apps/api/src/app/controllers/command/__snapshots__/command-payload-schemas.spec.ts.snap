@@ -3182,6 +3182,90 @@ exports[`command payload schemas Command payload schema should match the snapsho
     "type": "CREATE_NOTE_ABOUT_RESOURCE",
   },
   {
+    "description": "translate a note",
+    "label": "Translates a Note",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "composite identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "must be: note",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "note",
+                "value": "note",
+              },
+            ],
+          },
+        },
+      },
+      "languageCode": {
+        "complexDataType": "ENUM",
+        "description": "the language in which you are translating the note",
+        "enumLabel": "language code",
+        "enumName": "LanguageCode",
+        "isArray": false,
+        "isOptional": false,
+        "label": "language",
+        "labelsAndValues": [
+          {
+            "label": "Chilcotin",
+            "value": "clc",
+          },
+          {
+            "label": "Haida",
+            "value": "hai",
+          },
+          {
+            "label": "English",
+            "value": "en",
+          },
+          {
+            "label": "French",
+            "value": "fra",
+          },
+          {
+            "label": "Chinook",
+            "value": "chn",
+          },
+          {
+            "label": "Zapotec",
+            "value": "zap",
+          },
+          {
+            "label": "Spanish",
+            "value": "spa",
+          },
+        ],
+      },
+      "text": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "translation for the note",
+        "isArray": false,
+        "isOptional": false,
+        "label": "translation",
+      },
+    },
+    "type": "TRANSLATE_NOTE",
+  },
+  {
     "description": "connects two resources with a note and context",
     "label": "Connect Resources with Note",
     "schema": {

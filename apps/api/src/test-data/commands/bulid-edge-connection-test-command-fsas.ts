@@ -5,6 +5,7 @@ import {
     CREATE_NOTE_ABOUT_RESOURCE,
     ConnectResourcesWithNote,
     CreateNoteAboutResource,
+    TranslateNote,
 } from '../../domain/models/context/commands';
 import { CONNECT_RESOURCES_WITH_NOTE } from '../../domain/models/context/commands/connect-resources-with-note/constants';
 import { EdgeConnectionContextType } from '../../domain/models/context/types/EdgeConnectionContextType';
@@ -56,7 +57,17 @@ const connectResourcesWithNote: CommandFSA<ConnectResourcesWithNote> = {
     },
 };
 
+const translateNote: CommandFSA<TranslateNote> = {
+    type: 'TRANSLATE_NOTE',
+    payload: {
+        aggregateCompositeIdentifier,
+        text: 'this contains the translated note',
+        languageCode: LanguageCode.Chinook,
+    },
+};
+
 export const buildEdgeConnectionTestCommandFsas = () => [
     createNoteAboutResource,
     connectResourcesWithNote,
+    translateNote,
 ];

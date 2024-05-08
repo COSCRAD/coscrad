@@ -55,6 +55,9 @@ import { BibliographicCitationDataUnion } from '../../../domain/models/bibliogra
 import {
     CreateNoteAboutResource,
     CreateNoteAboutResourceCommandHandler,
+    NoteTranslated,
+    TranslateNote,
+    TranslateNoteCommandHandler,
 } from '../../../domain/models/context/commands';
 import {
     ConnectResourcesWithNote,
@@ -279,6 +282,7 @@ export const buildAllDataClassProviders = () =>
         NoteViewModel,
         ConnectResourcesWithNote,
         CreateNoteAboutResource,
+        TranslateNote,
         // Context Union
         EdgeConnectionContextUnion,
         GeneralContext,
@@ -300,6 +304,7 @@ export const buildAllDataClassProviders = () =>
         AudioAddedForDigitalTextPage,
         PhotographAddedToDigitalTextPage,
         SongCreated,
+        NoteTranslated,
         SongTitleTranslated,
         LyricsAddedForSong,
         SongLyricsTranslated,
@@ -647,6 +652,7 @@ export default async (
             AddAudioItemToPlaylistCommandHandler,
             TranslatePlaylistNameCommandHandler,
             CreateNoteAboutResourceCommandHandler,
+            TranslateNoteCommandHandler,
             ConnectResourcesWithNoteCommandHandler,
             TranslateSongLyrics,
             TranslateSongLyricsCommandHandler,
