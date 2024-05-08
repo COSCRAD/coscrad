@@ -48,7 +48,7 @@ import { translateLineItemImplementation } from '../../shared/methods/translate-
 import { VideoCreated, VideoNameTranslated } from '../commands';
 
 export const isVideoMimeType = (mimeType: MIMEType): boolean =>
-    [MIMEType.mp4, MIMEType.videoOgg, MIMEType.videoWebm].includes(mimeType);
+    [MIMEType.mp4, MIMEType.videoOgg, MIMEType.videoWebm, MIMEType.mov].includes(mimeType);
 
 @RegisterIndexScopedCommands([`CREATE_VIDEO`])
 // mixin the magic method event handlers for transcripts
