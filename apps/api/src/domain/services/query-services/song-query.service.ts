@@ -30,9 +30,13 @@ export class SongQueryService extends ResourceQueryService<Song, ISongViewModel>
     }
 
     protected override async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
-        const tagSearchResult = await this.repositoryProvider.getTagRepository().fetchMany();
+        const tagSearchResult = Promise.all(
+            await this.repositoryProvider.getTagRepository().fetchMany()
+        );
 
-        const tags = tagSearchResult.filter((result): result is Tag => !isInternalError(result));
+        const tags = (await tagSearchResult).filter(
+            (result): result is Tag => !isInternalError(result)
+        );
 
         const audioItemSearchResult = await this.repositoryProvider
             .forResource(AggregateType.audioItem)
