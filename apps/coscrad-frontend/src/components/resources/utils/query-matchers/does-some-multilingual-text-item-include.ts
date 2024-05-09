@@ -1,11 +1,12 @@
 import { IMultilingualText } from '@coscrad/api-interfaces';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
+import { parseLanguageCode } from './parse-language-code-from-query';
 
 export const doesSomeMultilingualTextItemInclude = (
     multilingualText: IMultilingualText,
     query: string
 ) => {
-    // const languageCodeInQuery = parseLanguageCode(query);
+    const languageCodeInQuery = parseLanguageCode(query);
 
     if (!isNonEmptyString(languageCodeInQuery)) {
         // language independent search
