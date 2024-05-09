@@ -2,6 +2,7 @@ import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandFSA } from '../../app/controllers/command/command-fsa/command-fsa.entity';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import {
+    AddAudioForNote,
     CREATE_NOTE_ABOUT_RESOURCE,
     ConnectResourcesWithNote,
     CreateNoteAboutResource,
@@ -66,8 +67,18 @@ const translateNote: CommandFSA<TranslateNote> = {
     },
 };
 
+const addaudioForNote: CommandFSA<AddAudioForNote> = {
+    type: 'ADD_AUDIO_FOR_NOTE',
+    payload: {
+        aggregateCompositeIdentifier,
+        audioItemId: buildDummyUuid(12),
+        languageCode: LanguageCode.English,
+    },
+};
+
 export const buildEdgeConnectionTestCommandFsas = () => [
     createNoteAboutResource,
     connectResourcesWithNote,
     translateNote,
+    addaudioForNote,
 ];

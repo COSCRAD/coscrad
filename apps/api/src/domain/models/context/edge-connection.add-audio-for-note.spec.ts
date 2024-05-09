@@ -1,9 +1,12 @@
 import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { bootstrapDynamicTypes } from '@coscrad/data-types';
+import assertErrorAsExpected from '../../../lib/__tests__/assertErrorAsExpected';
 import getValidAggregateInstanceForTest from '../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextFromBilingualText } from '../../common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
+import { CannnotAddAudioForNoteInGivenLanguageError } from '../context/errors';
+import { CannotOverrideAudioForLanguageError } from '../shared/multilingual-audio/errors';
 import { MultilingualAudio } from '../shared/multilingual-audio/multilingual-audio.entity';
 import { EdgeConnectionContextUnion } from './edge-connection-context-union';
 import { EdgeConnection } from './edge-connection.entity';
@@ -65,6 +68,71 @@ describe(`EdgeConnection.AddAudioForNote`, () => {
                     updatedEdgeConnection.getAudioForNoteInLanguage(originalLanguageCode);
 
                 expect(audioIdSearchResult).toBe(audioItemId);
+            });
+        });
+
+        describe(`when the audio is for translation text`, () => {
+            const edgeConnection = existingEdgeConnectionWithoutAudioForNote;
+
+            it(`should return the updated note text`, () => {
+                const result = edgeConnection.addAudioForNote(audioItemId, translationLanguageCode);
+
+                expect(result).toBeInstanceOf(EdgeConnection);
+
+                const updatedEdgeConnection = result as EdgeConnection;
+
+                const audioIdSearchResult =
+                    updatedEdgeConnection.getAudioForNoteInLanguage(translationLanguageCode);
+
+                expect(audioIdSearchResult).toBe(audioItemId);
+            });
+        });
+    });
+
+    describe(`when the update is invalid`, () => {
+        describe(`when there is no text item in the given language`, () => {
+            it(`should fail with the expected error`, () => {
+                const languageCodeWithNoNoteTranslation = LanguageCode.Spanish;
+
+                const result = existingEdgeConnectionWithoutAudioForNote.addAudioForNote(
+                    audioItemId,
+                    languageCodeWithNoNoteTranslation
+                );
+
+                assertErrorAsExpected(
+                    result,
+                    new CannnotAddAudioForNoteInGivenLanguageError(
+                        existingEdgeConnectionWithoutAudioForNote.id,
+                        audioItemId,
+                        languageCodeWithNoNoteTranslation
+                    )
+                );
+            });
+        });
+
+        describe(`when there is already audio for the given language`, () => {
+            it.only(`should fail with the expected error`, () => {
+                const edgeConnectionWithAudio =
+                    existingEdgeConnectionWithoutAudioForNote.addAudioForNote(
+                        audioItemId,
+                        originalLanguageCode
+                    ) as EdgeConnection;
+
+                const secondAudioItemId = buildDummyUuid(21);
+
+                const result = edgeConnectionWithAudio.addAudioForNote(
+                    secondAudioItemId,
+                    originalLanguageCode
+                );
+
+                assertErrorAsExpected(
+                    result,
+                    new CannotOverrideAudioForLanguageError(
+                        originalLanguageCode,
+                        secondAudioItemId,
+                        audioItemId
+                    )
+                );
             });
         });
     });

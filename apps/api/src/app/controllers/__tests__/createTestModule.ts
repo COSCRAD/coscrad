@@ -53,6 +53,9 @@ import { CreateJournalArticleBibliographicCitationCommandHandler } from '../../.
 import JournalArticleBibliographicCitationData from '../../../domain/models/bibliographic-citation/journal-article-bibliographic-citation/entities/journal-article-bibliographic-citation-data.entity';
 import { BibliographicCitationDataUnion } from '../../../domain/models/bibliographic-citation/shared';
 import {
+    AddAudioForNote,
+    AddAudioForNoteCommandHandler,
+    AudioAddedForNote,
     CreateNoteAboutResource,
     CreateNoteAboutResourceCommandHandler,
     NoteTranslated,
@@ -283,6 +286,7 @@ export const buildAllDataClassProviders = () =>
         ConnectResourcesWithNote,
         CreateNoteAboutResource,
         TranslateNote,
+        AddAudioForNote,
         // Context Union
         EdgeConnectionContextUnion,
         GeneralContext,
@@ -305,6 +309,7 @@ export const buildAllDataClassProviders = () =>
         PhotographAddedToDigitalTextPage,
         SongCreated,
         NoteTranslated,
+        AudioAddedForNote,
         SongTitleTranslated,
         LyricsAddedForSong,
         SongLyricsTranslated,
@@ -653,6 +658,7 @@ export default async (
             TranslatePlaylistNameCommandHandler,
             CreateNoteAboutResourceCommandHandler,
             TranslateNoteCommandHandler,
+            AddAudioForNoteCommandHandler,
             ConnectResourcesWithNoteCommandHandler,
             TranslateSongLyrics,
             TranslateSongLyricsCommandHandler,
