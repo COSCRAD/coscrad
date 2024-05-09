@@ -482,6 +482,10 @@ exports[`GET /resources should return the expected result 1`] = `
             "label": "videoWebm",
             "value": "video/webm",
           },
+          {
+            "label": "mov",
+            "value": "mov",
+          },
         ],
       },
       "name": {
@@ -677,6 +681,10 @@ exports[`GET /resources should return the expected result 1`] = `
           {
             "label": "videoWebm",
             "value": "video/webm",
+          },
+          {
+            "label": "mov",
+            "value": "mov",
           },
         ],
       },
@@ -2480,6 +2488,10 @@ exports[`GET /resources should return the expected result 1`] = `
           {
             "label": "videoWebm",
             "value": "video/webm",
+          },
+          {
+            "label": "mov",
+            "value": "mov",
           },
         ],
       },

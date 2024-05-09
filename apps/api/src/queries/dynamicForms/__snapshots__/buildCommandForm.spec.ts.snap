@@ -106,6 +106,10 @@ exports[`buildCommandForm should return the expected result 1`] = `
           "display": "videoWebm",
           "value": "video/webm",
         },
+        {
+          "display": "mov",
+          "value": "mov",
+        },
       ],
       "type": "STATIC_SELECT",
     },
