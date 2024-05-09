@@ -34,5 +34,23 @@ describe(`parseLanguageCode`, () => {
 
             expect(result).toBeUndefined();
         });
+
+        describe(`when the input includes an incomplete language code query`, () => {
+            describe(`{hai`, () => {
+                it(`should return undefined`, () => {
+                    const result = parseLanguageCode(`{hai`);
+
+                    expect(result).toBeUndefined();
+                });
+            });
+
+            describe(`clc} foo bar baz`, () => {
+                it(`should return undefined`, () => {
+                    const result = parseLanguageCode(`clc} foo bar baz`);
+
+                    expect(result).toBeUndefined();
+                });
+            });
+        });
     });
 });

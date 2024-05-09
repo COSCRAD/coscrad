@@ -5,6 +5,10 @@ export const parseLanguageCode = (query: string): LanguageCode | undefined => {
 
     const splitOnBracket = query.split('{');
 
+    if (!splitOnBracket[1].includes('}')) {
+        return undefined;
+    }
+
     const beforeClosingBracket = splitOnBracket[1].split('}')[0];
 
     return Object.values(LanguageCode).find(

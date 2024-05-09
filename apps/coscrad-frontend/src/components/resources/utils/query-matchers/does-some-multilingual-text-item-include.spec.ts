@@ -29,27 +29,86 @@ describe(``, () => {
         });
 
         describe(`when the multilingual text does not match the search`, () => {
-            const textToFind = 'Bears eat';
+            describe(`when the search is ordinary text`, () => {
+                const textToFind = 'Bears eat';
 
-            it(`should return false`, () => {
-                const multilingualText: IMultilingualText = {
-                    items: [
-                        {
-                            languageCode: LanguageCode.English,
-                            text: `Deer drink water.`,
-                            role: MultilingualTextItemRole.original,
-                        },
-                        {
-                            languageCode: LanguageCode.Haida,
-                            text: 'text in Haida',
-                            role: MultilingualTextItemRole.freeTranslation,
-                        },
-                    ],
-                };
+                it(`should return false`, () => {
+                    const multilingualText: IMultilingualText = {
+                        items: [
+                            {
+                                languageCode: LanguageCode.English,
+                                text: `Deer drink water.`,
+                                role: MultilingualTextItemRole.original,
+                            },
+                            {
+                                languageCode: LanguageCode.Haida,
+                                text: 'text in Haida',
+                                role: MultilingualTextItemRole.freeTranslation,
+                            },
+                        ],
+                    };
 
-                const result = doesSomeMultilingualTextItemInclude(multilingualText, textToFind);
+                    const result = doesSomeMultilingualTextItemInclude(
+                        multilingualText,
+                        textToFind
+                    );
 
-                expect(result).toBe(false);
+                    expect(result).toBe(false);
+                });
+            });
+
+            describe(`when the search is a partial query pattern`, () => {
+                describe(`{hai`, () => {
+                    it(`should return false`, () => {
+                        const multilingualText: IMultilingualText = {
+                            items: [
+                                {
+                                    languageCode: LanguageCode.English,
+                                    text: `Deer drink water.`,
+                                    role: MultilingualTextItemRole.original,
+                                },
+                                {
+                                    languageCode: LanguageCode.Haida,
+                                    text: 'text in Haida',
+                                    role: MultilingualTextItemRole.freeTranslation,
+                                },
+                            ],
+                        };
+
+                        const result = doesSomeMultilingualTextItemInclude(
+                            multilingualText,
+                            `{hai`
+                        );
+
+                        expect(result).toBe(false);
+                    });
+                });
+
+                describe(`what does this }even mean?`, () => {
+                    it(`should return false`, () => {
+                        const multilingualText: IMultilingualText = {
+                            items: [
+                                {
+                                    languageCode: LanguageCode.English,
+                                    text: `Deer drink water.`,
+                                    role: MultilingualTextItemRole.original,
+                                },
+                                {
+                                    languageCode: LanguageCode.Haida,
+                                    text: 'text in Haida',
+                                    role: MultilingualTextItemRole.freeTranslation,
+                                },
+                            ],
+                        };
+
+                        const result = doesSomeMultilingualTextItemInclude(
+                            multilingualText,
+                            `what does this }even mean?`
+                        );
+
+                        expect(result).toBe(false);
+                    });
+                });
             });
         });
     });
