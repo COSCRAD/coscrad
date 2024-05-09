@@ -1,7 +1,6 @@
 import { IMultilingualText, LanguageCode } from '@coscrad/api-interfaces';
-import { isNonEmptyString } from '@coscrad/validation-constraints';
 
-const parseLanguageCode = (query: string): LanguageCode | undefined => {
+const _parseLanguageCode = (query: string): LanguageCode | undefined => {
     if (!query.includes('{')) return undefined;
 
     const splitOnBracket = query.split('{');
@@ -17,17 +16,17 @@ export const doesSomeMultilingualTextItemInclude = (
     multilingualText: IMultilingualText,
     query: string
 ) => {
-    const languageCodeInQuery = parseLanguageCode(query);
+    // const languageCodeInQuery = parseLanguageCode(query);
 
-    if (!isNonEmptyString(languageCodeInQuery)) {
-        // language independent search
-        return multilingualText.items.some(({ text }) =>
-            text.toLowerCase().includes(query.toLowerCase())
-        );
-    }
-
-    return multilingualText.items.some(
-        ({ text, languageCode }) =>
-            text.toLowerCase().includes(query.toLowerCase()) && languageCodeInQuery === languageCode
+    // if (!isNonEmptyString(languageCodeInQuery)) {
+    // language independent search
+    return multilingualText.items.some(({ text }) =>
+        text.toLowerCase().includes(query.toLowerCase())
     );
+    // }
+
+    // return multilingualText.items.some(
+    //     ({ text, languageCode }) =>
+    //         text.toLowerCase().includes(query.toLowerCase()) && languageCodeInQuery === languageCode
+    // );
 };
