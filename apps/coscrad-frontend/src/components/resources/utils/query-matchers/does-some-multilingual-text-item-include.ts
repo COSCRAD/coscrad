@@ -1,5 +1,5 @@
 import { IMultilingualText } from '@coscrad/api-interfaces';
-import { isNonEmptyString } from '@coscrad/validation-constraints';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { parseLanguageCode } from './parse-language-code-from-query';
 
 export const doesSomeMultilingualTextItemInclude = (
@@ -8,12 +8,16 @@ export const doesSomeMultilingualTextItemInclude = (
 ) => {
     const languageCodeInQuery = parseLanguageCode(query);
 
-    if (!isNonEmptyString(languageCodeInQuery)) {
+    if (isNullOrUndefined(languageCodeInQuery)) {
         // language independent search
         return multilingualText.items.some(({ text }) =>
             text.toLowerCase().includes(query.toLowerCase())
         );
     }
+
+    const splitQuery = query.split(`{${languageCodeInQuery}}:`);
+
+    if (isNullOrUndefined(splitQuery[1])) return undefined;
 
     const searchTerms = query.split(`{${languageCodeInQuery}}:`)[1];
 
