@@ -63,6 +63,98 @@ describe(`Term index-to-detail flow`, () => {
 
             cy.location('pathname').should('contain', `/Resources/Terms/${basicTermId}`);
         });
+
+        describe.only(`the search filter`, () => {
+            const termWithQDash = 'Q-Term';
+
+            const dummyEnglishTranslationOfTerm = `ZZZ Term (English)`;
+
+            const searchScopes = [`allProperties`, `name`];
+
+            before(() => {
+                cy.seedDataWithCommand(`CREATE_TERM`, {
+                    aggregateCompositeIdentifier: buildDummyAggregateCompositeIdentifier(
+                        AggregateType.term,
+                        516
+                    ),
+                    text: termWithQDash,
+                    languageCode: LanguageCode.Haida,
+                });
+
+                cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+                    aggregateCompositeIdentifier: buildDummyAggregateCompositeIdentifier(
+                        AggregateType.term,
+                        516
+                    ),
+                });
+
+                cy.seedDataWithCommand(`TRANSLATE_TERM`, {
+                    aggregateCompositeIdentifier: buildDummyAggregateCompositeIdentifier(
+                        AggregateType.term,
+                        516
+                    ),
+                    translation: dummyEnglishTranslationOfTerm,
+                    languageCode: LanguageCode.English,
+                });
+            });
+
+            searchScopes.forEach((searchScope) => {
+                describe(`when the search scope is: ${searchScope}`, () => {
+                    beforeEach(() => {
+                        cy.visit('/Resources/Terms');
+
+                        cy.getByDataAttribute('select_index_search_scope')
+                            .click()
+                            .get(`[data-value="${searchScope}"]`)
+                            .click();
+                    });
+
+                    describe(`when the filter should return 1 result (based on default language term)`, () => {
+                        it(`should return the correct result`, () => {
+                            const searchTerms = `Q-`;
+
+                            cy.getByDataAttribute(`index_search_bar`).click().type(searchTerms);
+
+                            cy.getLoading().should(`not.exist`);
+
+                            cy.contains(termWithQDash);
+
+                            cy.contains(textForTerm).should('not.exist');
+                        });
+                    });
+
+                    describe(`when the filter should return 1 result (based on english term)`, () => {
+                        it(`should return the correct result`, () => {
+                            const searchTerms = `ZZZ`;
+
+                            cy.getByDataAttribute(`index_search_bar`).click().type(searchTerms);
+
+                            cy.getLoading().should(`not.exist`);
+
+                            cy.contains(dummyEnglishTranslationOfTerm);
+
+                            cy.contains(textForTerm).should('not.exist');
+                        });
+                    });
+
+                    describe(`when the filter should return no results`, () => {
+                        it(`should show no results`, () => {
+                            const searchTerms = `BBQ Chicken`;
+
+                            cy.getByDataAttribute(`index_search_bar`).click().type(searchTerms);
+
+                            cy.getLoading().should(`not.exist`);
+
+                            cy.contains(dummyEnglishTranslationOfTerm).should(`not.exist`);
+
+                            cy.contains(textForTerm).should('not.exist');
+
+                            cy.getByDataAttribute(`not-found`);
+                        });
+                    });
+                });
+            });
+        });
     });
 
     describe(`the term detail page`, () => {

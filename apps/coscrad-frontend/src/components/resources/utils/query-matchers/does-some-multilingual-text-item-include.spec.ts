@@ -1,7 +1,7 @@
 import { IMultilingualText, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { doesSomeMultilingualTextItemInclude } from './does-some-multilingual-text-item-include';
 
-describe(``, () => {
+describe(`doesSomeMultilingualTextItemInclude`, () => {
     const textToFind = 'Bears eat';
 
     describe(`when the search is language indpenendent`, () => {
