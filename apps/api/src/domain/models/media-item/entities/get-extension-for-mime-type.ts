@@ -8,6 +8,7 @@ import { InternalError } from '../../../../lib/errors/InternalError';
 const lookupTable: { [K in MIMEType]: string } = {
     [MIMEType.mp3]: 'mp3',
     [MIMEType.mp4]: 'mp4',
+    [MIMEType.mov]: 'mov',
     [MIMEType.audioOgg]: 'oga',
     [MIMEType.png]: 'png',
     [MIMEType.bmp]: 'bmp',

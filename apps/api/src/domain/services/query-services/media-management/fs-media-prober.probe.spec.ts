@@ -40,6 +40,7 @@ describe(`FSMediaProber.probe`, () => {
         [
             ['biodynamic-theme-song-forever.mp3', 8.35916],
             ['trees-reflect-into-the-lake.mp4', 13.3],
+            ['coscrad-test-video.mov', 4.1],
         ] as const
     ).forEach(([mediaFilename, expectedDuration]) => {
         describe(`when probing the media item: ${mediaFilename}`, () => {

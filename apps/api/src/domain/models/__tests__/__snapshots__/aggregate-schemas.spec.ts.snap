@@ -916,6 +916,10 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "label": "videoWebm",
         "value": "video/webm",
       },
+      {
+        "label": "mov",
+        "value": "mov",
+      },
     ],
   },
   "title": {
