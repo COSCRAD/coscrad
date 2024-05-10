@@ -145,7 +145,9 @@ describe(commandType, () => {
         describe('when the MIME type of the media item is not an video format', () => {
             const disallowedMIMETypes = Object.values(MIMEType).filter(
                 (mimeType) =>
-                    ![MIMEType.mp4, MIMEType.videoOgg, MIMEType.videoWebm].includes(mimeType)
+                    ![MIMEType.mp4, MIMEType.videoOgg, MIMEType.videoWebm, MIMEType.mov].includes(
+                        mimeType
+                    )
             );
 
             disallowedMIMETypes.forEach((mimeType) => {
