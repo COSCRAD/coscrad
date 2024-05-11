@@ -6,7 +6,9 @@ import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import { TermIndexState } from '../../../store/slices/resources/terms/types/term-index-state';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
+import { Matchers } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/filter-table-data';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
+import { doesSomeMultilingualTextItemInclude } from '../utils/query-matchers';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { renderMultilingualTextCell } from '../utils/render-multilingual-text-cell';
 
@@ -36,6 +38,10 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
         contributor: ({ contributor }: ITermViewModel) => contributor,
     };
 
+    const matchers: Matchers<ITermViewModel> = {
+        name: doesSomeMultilingualTextItemInclude,
+    };
+
     return (
         <IndexTable
             type={AggregateType.term}
@@ -44,6 +50,7 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
             cellRenderersDefinition={cellRenderersDefinition}
             heading={'Terms'}
             filterableProperties={['name', 'contributor']}
+            matchers={matchers}
         />
     );
 };
