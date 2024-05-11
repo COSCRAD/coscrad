@@ -64,8 +64,10 @@ describe(`Term index-to-detail flow`, () => {
             cy.location('pathname').should('contain', `/Resources/Terms/${basicTermId}`);
         });
 
-        describe.only(`the search filter`, () => {
+        describe(`the search filter`, () => {
             const termWithQDash = 'Q-Term';
+
+            const haidaTextToFind = 'Q-';
 
             const dummyEnglishTranslationOfTerm = `ZZZ Term (English)`;
 
@@ -111,9 +113,25 @@ describe(`Term index-to-detail flow`, () => {
 
                     describe(`when the filter should return 1 result (based on default language term)`, () => {
                         it(`should return the correct result`, () => {
-                            const searchTerms = `Q-`;
+                            const searchTerms = haidaTextToFind;
 
                             cy.getByDataAttribute(`index_search_bar`).click().type(searchTerms);
+
+                            cy.getLoading().should(`not.exist`);
+
+                            cy.contains(termWithQDash);
+
+                            cy.contains(textForTerm).should('not.exist');
+                        });
+                    });
+
+                    describe(`when the filter should return (with language query) 1 result (based on haida term)`, () => {
+                        it(`should return the correct result`, () => {
+                            const searchTerms = `{hai}:${haidaTextToFind}`;
+
+                            cy.getByDataAttribute(`index_search_bar`).click().type(searchTerms, {
+                                parseSpecialCharSequences: false,
+                            });
 
                             cy.getLoading().should(`not.exist`);
 
