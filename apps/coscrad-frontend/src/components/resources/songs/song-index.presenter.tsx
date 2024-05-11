@@ -1,4 +1,4 @@
-import { AggregateType, IMultilingualText, ISongViewModel } from '@coscrad/api-interfaces';
+import { AggregateType, ISongViewModel } from '@coscrad/api-interfaces';
 import { AudioClipPlayer } from '@coscrad/media-player';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { LinkOff } from '@mui/icons-material';
@@ -8,6 +8,7 @@ import { SongIndexState } from '../../../store/slices/resources/songs/types';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { Matchers } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/filter-table-data';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
+import { doesSomeMultilingualTextItemInclude } from '../utils/query-matchers';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { renderMultilingualTextCell } from '../utils/render-multilingual-text-cell';
 
@@ -32,8 +33,7 @@ export const SongIndexPresenter = (songsIndexResult: SongIndexState) => {
     };
 
     const matchers: Matchers<ISongViewModel> = {
-        name: ({ items }: IMultilingualText, search) =>
-            items.some(({ text }) => text.toLowerCase().includes(search.toLowerCase())),
+        name: doesSomeMultilingualTextItemInclude,
     };
 
     return (
