@@ -47,9 +47,9 @@ export class AudioItemQueryService extends ResourceQueryService<AudioItem, IAudi
 
     buildViewModel(
         transcribedAudioInstance: AudioItem,
-        { resources: { mediaItem: mediaItems } }: InMemorySnapshot
+        { resources: { mediaItem: mediaItems }, note: allNotes }: InMemorySnapshot
     ): IAudioItemViewModel {
-        return new AudioItemViewModel(transcribedAudioInstance, mediaItems);
+        return new AudioItemViewModel(transcribedAudioInstance, mediaItems, allNotes);
     }
 
     getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {
