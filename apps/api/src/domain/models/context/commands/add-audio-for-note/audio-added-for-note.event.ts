@@ -6,5 +6,5 @@ export type AudioAddedForNotePayload = AddAudioForNote;
 
 @CoscradEvent('AUDIO_ADDED_FOR_NOTE')
 export class AudioAddedForNote extends BaseEvent<AudioAddedForNotePayload> {
-    readonly type: 'AUDIO_ADDED_FOR_NOTE';
+    readonly type = 'AUDIO_ADDED_FOR_NOTE';
 }

@@ -281,7 +281,9 @@ export class EdgeConnection extends Aggregate {
     }
 
     getAudioForNoteInLanguage(languageCode: LanguageCode): Maybe<AggregateId> {
-        return this.audioForNote.getIdForAudioIn(languageCode);
+        const result = this.audioForNote.getIdForAudioIn(languageCode);
+
+        return result;
     }
 
     handleNoteTranslated({ payload: { text, languageCode } }: NoteTranslated) {

@@ -52,6 +52,7 @@ export class AddAudioForNoteCommandHandler extends BaseUpdateCommandHandler<Edge
     ): InternalError | Valid {
         return Valid;
     }
+
     protected buildEvent(
         payload: AddAudioForNote,
         eventMeta: EventRecordMetadata

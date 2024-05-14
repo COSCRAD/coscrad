@@ -138,7 +138,7 @@ describe(`EdgeConnection.AddAudioForNote`, () => {
         });
 
         describe(`when the audio item id is an empty string`, () => {
-            it.only(`should fail`, () => {
+            it(`should fail`, () => {
                 const result = existingEdgeConnectionWithoutAudioForNote.addAudioForNote(
                     '',
                     originalLanguageCode

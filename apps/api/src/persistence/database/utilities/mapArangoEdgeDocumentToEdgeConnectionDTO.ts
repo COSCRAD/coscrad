@@ -5,7 +5,6 @@ import {
     EdgeConnectionMemberRole,
     EdgeConnectionType,
 } from '../../../domain/models/context/edge-connection.entity';
-import { MultilingualAudio } from '../../../domain/models/shared/multilingual-audio/multilingual-audio.entity';
 import { AggregateCompositeIdentifier } from '../../../domain/types/AggregateCompositeIdentifier';
 import { isAggregateId } from '../../../domain/types/AggregateId';
 import { AggregateType } from '../../../domain/types/AggregateType';
@@ -88,7 +87,7 @@ const getCompositeIdentifierForMemberWithRole = (
         : parseResourceCompositeID(_to);
 
 export default (document: ArangoEdgeDocument): DTO<EdgeConnection> => {
-    const { members, note, _key: id, _to, _from, eventHistory } = document;
+    const { members, audioForNote, note, _key: id, _to, _from, eventHistory } = document;
 
     if ([_to, _from, id].some(isNullOrUndefined)) {
         throw new InternalError(`invalid edge document: ${JSON.stringify(document)}`);
@@ -112,7 +111,7 @@ export default (document: ArangoEdgeDocument): DTO<EdgeConnection> => {
     return {
         type: AggregateType.note,
         connectionType: determineEdgeConnectionTypeFromDocument(document),
-        audioForNote: MultilingualAudio.buildEmpty(),
+        audioForNote,
         id,
         note,
         members: membersForEdgeConnectionDTO,
