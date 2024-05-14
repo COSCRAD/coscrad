@@ -20,13 +20,13 @@ export class AddAudioForNote implements ICommandBase {
     @ReferenceTo(AggregateType.audioItem)
     @UUID({
         label: 'audio item ID',
-        description: 'the ID for the audio item being added for note',
+        description: 'ID of the audio for the given note text',
     })
     readonly audioItemId: AggregateId;
 
     @LanguageCodeEnum({
         label: 'language',
-        description: 'language for the note',
+        description: 'language of the audio you are adding',
     })
     readonly languageCode: LanguageCode;
 }

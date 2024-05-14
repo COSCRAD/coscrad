@@ -1,6 +1,7 @@
 import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { bootstrapDynamicTypes } from '@coscrad/data-types';
 import assertErrorAsExpected from '../../../lib/__tests__/assertErrorAsExpected';
+import { InternalError } from '../../../lib/errors/InternalError';
 import getValidAggregateInstanceForTest from '../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextFromBilingualText } from '../../common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
@@ -111,7 +112,7 @@ describe(`EdgeConnection.AddAudioForNote`, () => {
         });
 
         describe(`when there is already audio for the given language`, () => {
-            it.only(`should fail with the expected error`, () => {
+            it(`should fail with the expected error`, () => {
                 const edgeConnectionWithAudio =
                     existingEdgeConnectionWithoutAudioForNote.addAudioForNote(
                         audioItemId,
@@ -133,6 +134,17 @@ describe(`EdgeConnection.AddAudioForNote`, () => {
                         audioItemId
                     )
                 );
+            });
+        });
+
+        describe(`when the audio item id is an empty string`, () => {
+            it.only(`should fail`, () => {
+                const result = existingEdgeConnectionWithoutAudioForNote.addAudioForNote(
+                    '',
+                    originalLanguageCode
+                );
+
+                expect(result).toBeInstanceOf(InternalError);
             });
         });
     });

@@ -223,7 +223,15 @@ export class EdgeConnection extends Aggregate {
     }
 
     getAvailableCommands(): string[] {
-        return [];
+        const allCommands: string[] = [];
+
+        allCommands.push('TRANSLATE_NOTE');
+
+        if (this.note.items.length > this.audioForNote.items.length) {
+            allCommands.push('ADD_AUDIO_FOR_NOTE');
+        }
+
+        return allCommands;
     }
 
     getCompositeIdentifier = () =>
@@ -257,10 +265,13 @@ export class EdgeConnection extends Aggregate {
             );
         }
 
-        const updatedAudio = this.audioForNote.addAudio(audioItemId, languageCode);
+        const audioUpdateResult = this.audioForNote.addAudio(audioItemId, languageCode);
 
-        // TODO remove cast
-        this.audioForNote = updatedAudio as MultilingualAudio;
+        if (isInternalError(audioUpdateResult)) {
+            return audioUpdateResult;
+        }
+
+        this.audioForNote = audioUpdateResult;
 
         return this;
     }
