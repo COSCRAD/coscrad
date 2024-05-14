@@ -8,6 +8,8 @@ export const RULER_TICK_HEIGHT_IN_PIXELS = 10;
 
 export const RULER_TICK_WITH_NUMBER_HEIGHT_IN_PIXELS = 20;
 
+export const RULER_TICKS_AND_NUMBERS_COLOR = '#178e06';
+
 /**
  * This limitation is from the IE 9 / 10 (Win) implementation of Canvas
  * https://jhildenbiddle.github.io/canvas-size/#/?id=test-results
@@ -55,15 +57,15 @@ export const ZOOM_LEVELS: ZoomLevels[] = [
     // 4
     {
         zoomLevel: 4,
-        rulerTickXCoordinateOffset: 5,
-        rulerTickFrequencyInSeconds: 10,
-        timecodeDisplayFrequencyInSeconds: 10,
+        rulerTickXCoordinateOffset: 10,
+        rulerTickFrequencyInSeconds: 1,
+        timecodeDisplayFrequencyInSeconds: 20,
     },
     // 5
     {
         zoomLevel: 5,
-        rulerTickXCoordinateOffset: 10,
-        rulerTickFrequencyInSeconds: 1,
-        timecodeDisplayFrequencyInSeconds: 20,
+        rulerTickXCoordinateOffset: 40,
+        rulerTickFrequencyInSeconds: 5,
+        timecodeDisplayFrequencyInSeconds: 10,
     },
 ];

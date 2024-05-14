@@ -1,10 +1,10 @@
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box, SxProps } from '@mui/material';
-import { RULER_TICKS_AND_NUMBERS_COLOR } from './ruler-tick';
 import { Canvas } from './shared/canvas/canvas';
 import { Draw } from './shared/canvas/use-canvas';
 import {
     RULER_HEIGHT_IN_PIXELS,
+    RULER_TICKS_AND_NUMBERS_COLOR,
     RULER_TICK_HEIGHT_IN_PIXELS,
     RULER_TICK_WITH_NUMBER_HEIGHT_IN_PIXELS,
 } from './shared/constants';

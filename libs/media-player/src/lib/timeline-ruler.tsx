@@ -1,5 +1,6 @@
 import { isNull } from '@coscrad/validation-constraints';
 import { Box } from '@mui/material';
+import { useEffect } from 'react';
 import { RULER_TICKS_AND_NUMBERS_COLOR } from './ruler-tick';
 import { asFormattedMediaTimecodeString } from './shared/as-formatted-media-timecode-string';
 import {
@@ -35,16 +36,16 @@ interface TimelineProps {
     duration: number;
     zoomLevelConfig: ZoomLevels;
     timelineTrackHeight: number;
+    setRulerWidth: (rulerWidth: number) => void;
 }
 
 export const TimelineRuler = ({
     duration,
     zoomLevelConfig,
     timelineTrackHeight,
+    setRulerWidth,
 }: TimelineProps): JSX.Element => {
     const roundedSecondsInDuration: number = Math.ceil(duration);
-
-    console.log({ zoomLevelConfig });
 
     const {
         rulerTickXCoordinateOffset,
@@ -52,6 +53,16 @@ export const TimelineRuler = ({
         timecodeDisplayFrequencyInSeconds,
     } = zoomLevelConfig;
 
+    /**
+     * Create an array of all the ticks on the ruler from the seconds in the media duration
+     * based on the zoom level config e.g.,
+     * {
+     *      zoomLevel: 0,
+     *      rulerTickXCoordinateOffset: 40,  // 40px between ticks at this zoom level
+     *      rulerTickFrequencyInSeconds: 1,  // a tick for each second, or less as the zoom decreases
+     *      timecodeDisplayFrequencyInSeconds: 10  // display the timecode every 10th second in the timeline
+     * }
+     */
     const ticksOnTimelineAtCurrentZoom = [...Array(roundedSecondsInDuration).keys()]
         .map((second) => {
             if (second % rulerTickFrequencyInSeconds === 0) {
@@ -79,6 +90,18 @@ export const TimelineRuler = ({
 
     const rulerWidthInPixels = rulerUnitWidthInPixels * ticksOnTimelineAtCurrentZoom.length;
 
+    // Pass ruler width to parent Timeline component for playhead tracking
+    useEffect(() => {
+        setRulerWidth(rulerWidthInPixels);
+    }, [setRulerWidth, rulerWidthInPixels]);
+
+    /**
+     * Due to the performance hit resulting from representing each second of a long
+     * media item with an HTML div element, we need to use <canvas> to represent the
+     * timeline ruler.  And, because each browser has its own width limit for <canvas>
+     * we set the maximum canvas width at 8000px.  As a result, for longer timelines,
+     * we need to display the timeline ruler using one or more canvases.
+     */
     const numberOfWholeCanvases = Math.floor(rulerWidthInPixels / MAX_CANVAS_WIDTH_IN_PIXELS);
 
     const ticksPerWholeCanvas = MAX_CANVAS_WIDTH_IN_PIXELS / rulerUnitWidthInPixels;

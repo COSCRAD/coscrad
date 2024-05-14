@@ -106,8 +106,6 @@ export const Timeline = ({
 
     const playheadRef = useRef<HTMLDivElement>(null);
 
-    const [renderedTimelineLength, setRenderedTimelineLength] = useState<number>(0);
-
     const [playheadPositionInPixels, setplayheadPositionInPixels] = useState<number>(0);
 
     const initialZoomLevel = 5;
@@ -125,9 +123,6 @@ export const Timeline = ({
 
     const numberOfTracksDisplayed = [...timelineTracks, 'timeline ruler'].length;
 
-    /**
-     * begin copy
-     */
     const secondsOnTimeline: number = Math.ceil(durationSeconds);
 
     useEffect(() => {
@@ -245,7 +240,7 @@ export const Timeline = ({
     return (
         <>
             <Box>Playhead: {playheadPositionInPixels}</Box>
-            <Box>Rendered Timeline: {rulerWidth}</Box>
+            <Box>Ruler Width: {rulerWidth}</Box>
             <Box>Seconds On Timeline: {secondsOnTimeline}</Box>
             <Box>
                 Current Time:{' '}
@@ -314,7 +309,7 @@ export const Timeline = ({
                         <StyledScrolledTrack
                             data-testid="timeline-ruler"
                             sx={{ width: `${rulerWidth}px` }}
-                            // onClick={handleSeek}
+                            onClick={handleSeek}
                         >
                             <EditorPlayhead
                                 ref={playheadRef}
@@ -336,6 +331,7 @@ export const Timeline = ({
                                         duration={durationSeconds}
                                         zoomLevelConfig={zoomLevelConfig}
                                         timelineTrackHeight={EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS}
+                                        setRulerWidth={setRulerWidth}
                                     />
                                 ) : null}
                             </StyledTimelineRulerBox>

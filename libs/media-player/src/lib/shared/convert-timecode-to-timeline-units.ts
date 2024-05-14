@@ -1,9 +1,9 @@
 export const convertTimecodeToTimelineUnits = (
-    renderedTimelineLength: number,
+    rulerWidth: number,
     timecodeInSeconds: number,
     mediaDurationSeconds: number
 ) => {
-    const timelineUnit = renderedTimelineLength / mediaDurationSeconds;
+    const timelineUnit = rulerWidth / mediaDurationSeconds;
 
     return timecodeInSeconds * timelineUnit;
 };

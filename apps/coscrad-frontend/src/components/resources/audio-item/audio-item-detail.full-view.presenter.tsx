@@ -31,6 +31,20 @@ export const AudioItemDetailFullViewPresenter = ({
     actions,
     annotations,
 }: ICategorizableDetailQueryResult<IAudioItemViewModel>): JSX.Element => {
+    // const loadableAudioItems = useLoadableAudioItems();
+
+    // const {
+    //     data: { entities },
+    // } = loadableAudioItems;
+
+    // const thisAudioItem = entities.filter((audioItem) => audioItem.id === id);
+
+    // const { annotations: annotationsFromSlice } = thisAudioItem[0];
+
+    // console.log({ annotationsFromSlice });
+
+    // console.log({ annotations });
+
     const audioRef = useRef(null);
 
     const formatedPlainText = plainText.split('\n').map((line, index) => (

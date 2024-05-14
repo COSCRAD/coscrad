@@ -1,3 +1,7 @@
+/**
+ * This file may be deprecated
+ */
+
 import { styled } from '@mui/material';
 import { asFormattedMediaTimecodeString } from './shared/as-formatted-media-timecode-string';
 
