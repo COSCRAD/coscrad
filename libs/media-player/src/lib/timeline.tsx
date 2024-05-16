@@ -217,9 +217,9 @@ export const Timeline = ({
 
         const scrollLeftOfScrollableDiv = scrollableDivParent.scrollLeft;
 
-        console.log({
-            scrollLeftOfScrollableDiv: scrollLeftOfScrollableDiv,
-        });
+        // console.log({
+        //     scrollLeftOfScrollableDiv: scrollLeftOfScrollableDiv,
+        // });
 
         const clickPositionInTimelineUnits =
             mouseClickViewportPositionX -

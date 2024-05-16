@@ -39,6 +39,16 @@ export const fetchFreshState = (dispatch: AppDispatch, aggregateType: AggregateT
 
         case AggregateType.note:
             dispatch(fetchNotes());
+
+            /**
+             * This is a huge hack. We are moving away from storing normalized
+             * state in Redux and towards denormalizing materialized views
+             * in agreement with CQRS-ES practices. At that point, we will use
+             * a SSE to notify the client that a specific view was updated, even
+             * if this was triggered by an update to a foreign aggregate root that
+             * is joined into the view.
+             */
+            dispatch(fetchAudioItems());
             break;
 
         case AggregateType.photograph:
