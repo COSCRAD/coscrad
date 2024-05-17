@@ -27,6 +27,8 @@ export function NestedDataType(
         const nestedDataTypeDefinition: NestedTypeDefinition = {
             complexDataType: ComplexCoscradDataType.nested,
             schema: getCoscradDataSchema(NestedDataClass),
+            // @ts-expect-error Fix types
+            name: NestedDataClass.name,
         };
 
         appendMetadata(target, propertyKey, nestedDataTypeDefinition, options);
