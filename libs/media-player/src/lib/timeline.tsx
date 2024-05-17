@@ -12,6 +12,8 @@ import { TimelineRuler } from './timeline-ruler';
 
 const WAVE_FORM_URL = 'https://guujaaw.info/images/audio-wave-form.png';
 
+const EDITOR_MARKER_PIXEL_WIDTH = 20;
+
 const StyledTimelineBox = styled(Box)({
     width: '99%',
     paddingTop: `2px`,
@@ -68,6 +70,32 @@ const EditorPlayhead = styled('div')({
     zIndex: 1500,
 });
 
+const EditorInPoint = styled('div')({
+    top: '0px',
+    width: `${EDITOR_MARKER_PIXEL_WIDTH}px`,
+    backgroundImage: 'linear-gradient(to right, #75ecff, rgba(255,0,0,0))',
+    borderLeft: '1px solid #007082',
+    borderTopLeftRadius: '7px',
+    borderBottomLeftRadius: '7px',
+    position: 'absolute',
+    boxSizing: 'border-box',
+    visibility: 'hidden',
+    zIndex: 1500,
+});
+
+const EditorOutPoint = styled('div')({
+    top: '0px',
+    width: `${EDITOR_MARKER_PIXEL_WIDTH}px`,
+    backgroundImage: 'linear-gradient(to left, #75ecff, rgba(255,0,0,0))',
+    borderRight: '1px solid #007082',
+    borderTopRightRadius: '7px',
+    borderBottomRightRadius: '7px',
+    position: 'absolute',
+    boxSizing: 'border-box',
+    visibility: 'hidden',
+    zIndex: 1500,
+});
+
 export type TimeRangeSeconds = {
     inPointSeconds: number;
     outPointSeconds: number;
@@ -90,6 +118,8 @@ interface TimelineProps {
     audioRef: RefObject<HTMLAudioElement>;
     isPlaying: boolean;
     seekInMedia: (newTime: number) => void;
+    inPointSeconds: number | null;
+    outPointSeconds: number | null;
     mediaCurrentTimeFromContext: number;
 }
 
@@ -100,13 +130,23 @@ export const Timeline = ({
     audioRef,
     isPlaying,
     seekInMedia,
+    inPointSeconds,
+    outPointSeconds,
     mediaCurrentTimeFromContext,
 }: TimelineProps) => {
     const scrollingBoxRef = useRef<HTMLDivElement>(null);
 
     const playheadRef = useRef<HTMLDivElement>(null);
 
-    const [playheadPositionInPixels, setplayheadPositionInPixels] = useState<number>(0);
+    const inPointRef = useRef<HTMLDivElement>(null);
+
+    const outPointRef = useRef<HTMLDivElement>(null);
+
+    const [playheadPositionInPixels, setPlayheadPositionInPixels] = useState<number>(0);
+
+    const [inPointPositionInPixels, setInPointPositionInPixels] = useState<number>(0);
+
+    const [outPointPositionInPixels, setOutPointPositionInPixels] = useState<number>(0);
 
     const initialZoomLevel = 5;
 
@@ -135,8 +175,8 @@ export const Timeline = ({
             durationSeconds
         );
 
-        setplayheadPositionInPixels(currentPlayheadPositionInPixels);
-    }, [rulerWidth, currentTime, durationSeconds, setplayheadPositionInPixels]);
+        setPlayheadPositionInPixels(currentPlayheadPositionInPixels);
+    }, [rulerWidth, currentTime, durationSeconds, setPlayheadPositionInPixels]);
 
     useEffect(() => {
         // Scroll timeline when playing
@@ -171,9 +211,59 @@ export const Timeline = ({
         rulerWidth,
         durationSeconds,
         currentTime,
-        setplayheadPositionInPixels,
+        setPlayheadPositionInPixels,
         isPlaying,
         mediaCurrentTimeFromContext,
+    ]);
+
+    useEffect(() => {
+        // Set in and out points from annotator component
+        if (isNullOrUndefined(inPointRef.current)) return;
+
+        const inPointMarker = inPointRef.current;
+
+        if (isNullOrUndefined(inPointSeconds)) {
+            inPointMarker.style.visibility = 'hidden';
+
+            return;
+        }
+
+        inPointMarker.style.visibility = 'visible';
+
+        const currentInPointPositionInPixels = convertTimecodeToTimelineUnits(
+            rulerWidth,
+            inPointSeconds,
+            durationSeconds
+        );
+
+        setInPointPositionInPixels(currentInPointPositionInPixels);
+
+        if (isNullOrUndefined(outPointRef.current)) return;
+
+        const outPointMarker = outPointRef.current;
+
+        if (isNullOrUndefined(outPointSeconds)) {
+            outPointMarker.style.visibility = 'hidden';
+
+            return;
+        }
+
+        outPointMarker.style.visibility = 'visible';
+
+        const currentOutPointPositionInPixels = convertTimecodeToTimelineUnits(
+            rulerWidth,
+            outPointSeconds,
+            durationSeconds
+        );
+
+        setOutPointPositionInPixels(currentOutPointPositionInPixels - EDITOR_MARKER_PIXEL_WIDTH);
+    }, [
+        rulerWidth,
+        inPointSeconds,
+        outPointSeconds,
+        durationSeconds,
+        setInPointPositionInPixels,
+        setOutPointPositionInPixels,
     ]);
 
     const zoomIn = () => {
@@ -226,7 +316,7 @@ export const Timeline = ({
             offSetLeftFromViewPortOfScrollableDivParent +
             scrollLeftOfScrollableDiv;
 
-        setplayheadPositionInPixels(clickPositionInTimelineUnits);
+        setPlayheadPositionInPixels(clickPositionInTimelineUnits);
 
         const seekPosition = convertTimelineUnitsToTimecode(
             clickPositionInTimelineUnits,
@@ -235,6 +325,12 @@ export const Timeline = ({
         );
 
         seekInMedia(seekPosition);
+    };
+
+    const selectTrack = (event: React.MouseEvent<HTMLDivElement>) => {
+        const targetDiv = event.currentTarget;
+
+        targetDiv.style.backgroundColor = 'blue';
     };
 
     return (
@@ -290,7 +386,11 @@ export const Timeline = ({
                     }}
                 >
                     {timelineTracks.map((timelineTrack) => (
-                        <StyledTrackLabel key={timelineTrack.trackLabel} sx={{ fontSize: '10px' }}>
+                        <StyledTrackLabel
+                            key={timelineTrack.trackLabel}
+                            sx={{ fontSize: '10px' }}
+                            onClick={selectTrack}
+                        >
                             {/* TODO need an icon here for annotations */}
                             {timelineTrack.trackLabel}
                         </StyledTrackLabel>
@@ -318,6 +418,26 @@ export const Timeline = ({
                                         numberOfTracksDisplayed * EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS
                                     }px`,
                                     left: `${playheadPositionInPixels}px`,
+                                }}
+                            />
+                            <EditorInPoint
+                                ref={inPointRef}
+                                data-testid="editor-selected-in-point"
+                                sx={{
+                                    height: `${
+                                        numberOfTracksDisplayed * EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS
+                                    }px`,
+                                    left: `${inPointPositionInPixels}px`,
+                                }}
+                            />
+                            <EditorOutPoint
+                                ref={outPointRef}
+                                data-testid="editor-selected-out-point"
+                                sx={{
+                                    height: `${
+                                        numberOfTracksDisplayed * EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS
+                                    }px`,
+                                    left: `${outPointPositionInPixels}px`,
                                 }}
                             />
                             <StyledTimelineRulerBox
