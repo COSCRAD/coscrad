@@ -30,21 +30,8 @@ export const AudioItemDetailFullViewPresenter = ({
     name,
     actions,
     annotations,
+    transcript,
 }: ICategorizableDetailQueryResult<IAudioItemViewModel>): JSX.Element => {
-    // const loadableAudioItems = useLoadableAudioItems();
-
-    // const {
-    //     data: { entities },
-    // } = loadableAudioItems;
-
-    // const thisAudioItem = entities.filter((audioItem) => audioItem.id === id);
-
-    // const { annotations: annotationsFromSlice } = thisAudioItem[0];
-
-    // console.log({ annotationsFromSlice });
-
-    // console.log({ annotations });
-
     const audioRef = useRef(null);
 
     const formatedPlainText = plainText.split('\n').map((line, index) => (
@@ -55,18 +42,13 @@ export const AudioItemDetailFullViewPresenter = ({
 
     return (
         <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.audioItem}>
-            {/* <Stack>
-                {annotations.map((annotation) => (
-                    <div>{findOriginalTextItem(annotation.note).text}</div>
-                ))}
-            </Stack> */}
-
             {actions.some(({ type: commandType }) => commandType === CREATE_NOTE_ABOUT_RESOURCE) ? (
                 <InteractiveAnnotator
                     id={id}
                     audioURL={audioURL}
                     audioRef={audioRef}
                     annotations={annotations}
+                    transcript={transcript}
                 />
             ) : (
                 <AudioPlayer audioUrl={audioURL} />

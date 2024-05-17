@@ -1,4 +1,9 @@
-import { AggregateType, INoteViewModel, ITimeRangeContext } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    INoteViewModel,
+    ITimeRangeContext,
+    ITranscript,
+} from '@coscrad/api-interfaces';
 import { AudioAnnotator, TimeRangeSelection } from '@coscrad/media-player';
 import { isNull, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box, Paper, Typography, styled } from '@mui/material';
@@ -49,6 +54,7 @@ interface InteractiveAnnotatorProps {
     audioURL: string;
     audioRef: RefObject<HTMLAudioElement>;
     annotations: INoteViewModel[];
+    transcript: ITranscript;
 }
 
 export const InteractiveAnnotator = ({
@@ -56,6 +62,7 @@ export const InteractiveAnnotator = ({
     audioURL,
     audioRef,
     annotations,
+    transcript,
 }: InteractiveAnnotatorProps): JSX.Element => {
     const dispatch = useAppDispatch();
 
@@ -103,7 +110,7 @@ export const InteractiveAnnotator = ({
                  */
                 return [
                     buildTimeRangeClip({
-                        name: `${noteId}`,
+                        name: `ann-${noteId}`,
                         noteText: noteOriginal,
                         tip: tipText,
                         inPointMilliseconds: inPointMilliseconds,
@@ -121,8 +128,36 @@ export const InteractiveAnnotator = ({
             timelineTrack: annotationTimeRangeClips,
         };
 
-        setTimelineTracks([annotationTimeLineTrack]);
-    }, [audioRef, annotations]);
+        const transcriptionTimeRangeClips = transcript.items.flatMap(
+            ({ inPointMilliseconds, outPointMilliseconds, text, speakerInitials }) => {
+                const name = `trans-${inPointMilliseconds}`;
+
+                const transcriptText = findOriginalTextItem(text).text;
+
+                const tipText = `[${inPointMilliseconds} ms to ${outPointMilliseconds}][${speakerInitials}] ${transcriptText}`;
+
+                return [
+                    buildTimeRangeClip({
+                        name: `${name}`,
+                        noteText: transcriptText,
+                        tip: tipText,
+                        inPointMilliseconds: inPointMilliseconds,
+                        outPointMilliseconds: outPointMilliseconds,
+                        onClick: (inPointSeconds) => {
+                            audioRef.current.currentTime = inPointSeconds;
+                        },
+                    }),
+                ];
+            }
+        );
+
+        const transcriptTimelineTrack: TimelineTrack = {
+            trackLabel: 'Transcription',
+            timelineTrack: transcriptionTimeRangeClips,
+        };
+
+        setTimelineTracks([annotationTimeLineTrack, transcriptTimelineTrack]);
+    }, [audioRef, annotations, transcript]);
 
     const onAcknowledgeCommandResult = (didCommandSucceed: boolean) => {
         dispatch(clearCommandStatus());
@@ -131,11 +166,6 @@ export const InteractiveAnnotator = ({
 
     return (
         <>
-            {/* <Stack>
-                {timeRangeClips.map((clip) => (
-                    <div>{clip.label}</div>
-                ))}
-            </Stack> */}
             <AudioAnnotator
                 audioUrl={audioURL}
                 selectedTimeRange={timeRange}

@@ -277,7 +277,7 @@ export const Timeline = ({
                 </Tooltip>
             </Box>
             <StyledTimelineBox
-                sx={{ height: `${2 * EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS + 10}px` }}
+                sx={{ height: `${3 * EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS + 10}px` }}
                 data-testid={`timeline:${name}`}
             >
                 <Box
@@ -302,9 +302,8 @@ export const Timeline = ({
                 >
                     <ScrollingBox
                         ref={scrollingBoxRef}
-                        sx={{ height: `${2 * EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS + 20}px` }}
+                        sx={{ height: `${3 * EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS + 20}px` }}
                         data-testid="scroll-container"
-                        // TODO move onClick to timeline and get position via parent(?)
                     >
                         <StyledScrolledTrack
                             data-testid="timeline-ruler"
@@ -336,32 +335,27 @@ export const Timeline = ({
                                 ) : null}
                             </StyledTimelineRulerBox>
                         </StyledScrolledTrack>
-                        {timelineTracks.length !== 0 ? (
-                            <StyledScrolledTrack
-                                data-testid="scrollable-track"
-                                sx={{
-                                    width: `${rulerWidth}px`,
-                                    // backgroundImage: `url(${WAVE_FORM_URL})`,
-                                }}
-                            >
-                                {!isNullOrUndefined(rulerWidth)
-                                    ? timelineTracks.map((timelineTrack) => {
-                                          return timelineTrack.timelineTrack.map(
-                                              (timeRangeClip) => (
-                                                  <RangeBar
-                                                      key={JSON.stringify(
-                                                          timeRangeClip.timeRangeSeconds
-                                                      )}
-                                                      rulerWidth={rulerWidth}
-                                                      timeRangeClip={timeRangeClip}
-                                                      durationSeconds={durationSeconds}
-                                                  />
-                                              )
-                                          );
-                                      })
-                                    : null}
-                            </StyledScrolledTrack>
-                        ) : null}
+                        {!isNullOrUndefined(rulerWidth) && timelineTracks.length !== 0
+                            ? timelineTracks.map(({ trackLabel, timelineTrack }) => (
+                                  <StyledScrolledTrack
+                                      key={trackLabel}
+                                      data-testid={`${trackLabel}-track`}
+                                      sx={{
+                                          width: `${rulerWidth}px`,
+                                          // backgroundImage: `url(${WAVE_FORM_URL})`,
+                                      }}
+                                  >
+                                      {timelineTrack.map((timeRangeClip) => (
+                                          <RangeBar
+                                              key={JSON.stringify(timeRangeClip.timeRangeSeconds)}
+                                              rulerWidth={rulerWidth}
+                                              timeRangeClip={timeRangeClip}
+                                              durationSeconds={durationSeconds}
+                                          />
+                                      ))}
+                                  </StyledScrolledTrack>
+                              ))
+                            : null}
                     </ScrollingBox>
                 </Box>
             </StyledTimelineBox>
