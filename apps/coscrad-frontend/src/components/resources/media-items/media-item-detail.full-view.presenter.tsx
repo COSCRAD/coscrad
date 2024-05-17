@@ -16,6 +16,7 @@ export const MediaItemDetailFullViewPresenter = ({
     titleEnglish,
     url,
 }: ICategorizableDetailQueryResult<IMediaItemViewModel>): JSX.Element => {
+    // remove this!
     const { videoIdToCredits } = useContext(ConfigurableContentContext);
 
     const contributionsMap = new Map<string, string>(

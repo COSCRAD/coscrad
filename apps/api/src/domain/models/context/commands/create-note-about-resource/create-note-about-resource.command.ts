@@ -6,7 +6,7 @@ import {
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
+import { FullReference, NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
 import { LanguageCodeEnum } from '../../../../common/entities/multilingual-text';
 import { AggregateTypeProperty } from '../../../shared/common-commands';
 import { ContextUnionType } from '../../edge-connection-context-union';
@@ -50,6 +50,7 @@ export class CreateNoteAboutResource implements ICommandBase {
     })
     readonly aggregateCompositeIdentifier: EdgeConnectionCompositeIdentifier;
 
+    @FullReference()
     @NestedDataType(ResourceCompositeIdentifier, {
         label: `CompositeIdentifier`,
         description: `system-wide unique identifier for the resource about which we are making a note`,

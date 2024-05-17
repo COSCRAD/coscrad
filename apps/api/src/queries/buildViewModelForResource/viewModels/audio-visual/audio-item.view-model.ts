@@ -10,9 +10,10 @@ import { ApiProperty } from '@nestjs/swagger';
 import { MultilingualText } from '../../../../domain/common/entities/multilingual-text';
 import { AudioItem } from '../../../../domain/models/audio-visual/audio-item/entities/audio-item.entity';
 import { MediaItem } from '../../../../domain/models/media-item/entities/media-item.entity';
-import { BaseViewModel } from '../base.view-model';
+import { CoscradContributor } from '../../../../domain/models/user-management/contributor';
+import { BaseResourceViewModel } from '../base-resource.view-model';
 
-export class AudioItemViewModel extends BaseViewModel implements IAudioItemViewModel {
+export class AudioItemViewModel extends BaseResourceViewModel implements IAudioItemViewModel {
     @NestedDataType(MultilingualText, {
         label: 'name',
         description: 'name of the audio item',
@@ -67,8 +68,12 @@ export class AudioItemViewModel extends BaseViewModel implements IAudioItemViewM
     })
     readonly text: string;
 
-    constructor(audioItem: AudioItem, allMediaItems: MediaItem[]) {
-        super(audioItem);
+    constructor(
+        audioItem: AudioItem,
+        allMediaItems: MediaItem[],
+        allContributors: CoscradContributor[]
+    ) {
+        super(audioItem, allContributors);
 
         const { transcript, mediaItemId, lengthMilliseconds, name } = audioItem;
 

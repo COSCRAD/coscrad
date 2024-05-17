@@ -31,25 +31,32 @@ export class AudioItemQueryService extends ResourceQueryService<AudioItem, IAudi
     }
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
-        const [audioItemSearchResult, mediaItemSearchResult, noteSearchResult] = await Promise.all([
+        const [
+            audioItemSearchResult,
+            mediaItemSearchResult,
+            noteSearchResult,
+            contributorSearchResult,
+        ] = await Promise.all([
             this.repositoryProvider.forResource<AudioItem>(AggregateType.audioItem).fetchMany(),
             this.repositoryProvider.forResource<MediaItem>(AggregateType.mediaItem).fetchMany(),
             // Can we at least put the `fetch notes for` here?
             this.repositoryProvider.getEdgeConnectionRepository().fetchMany(),
+            this.repositoryProvider.getContributorRepository().fetchMany(),
         ]);
 
         return new DeluxeInMemoryStore({
             [AggregateType.audioItem]: audioItemSearchResult.filter(validAggregateOrThrow),
             [AggregateType.mediaItem]: mediaItemSearchResult.filter(validAggregateOrThrow),
             [AggregateType.note]: noteSearchResult.filter(validAggregateOrThrow),
+            [AggregateType.contributor]: contributorSearchResult.filter(validAggregateOrThrow),
         }).fetchFullSnapshotInLegacyFormat();
     }
 
     buildViewModel(
         transcribedAudioInstance: AudioItem,
-        { resources: { mediaItem: mediaItems } }: InMemorySnapshot
+        { resources: { mediaItem: mediaItems }, contributor: allContributors }: InMemorySnapshot
     ): IAudioItemViewModel {
-        return new AudioItemViewModel(transcribedAudioInstance, mediaItems);
+        return new AudioItemViewModel(transcribedAudioInstance, mediaItems, allContributors);
     }
 
     getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {

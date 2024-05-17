@@ -15,8 +15,14 @@ export const VideoDetailFullViewPresenter = ({
     name,
     id,
     videoUrl,
+    contributions,
 }: ICategorizableDetailQueryResult<IVideoViewModel>): JSX.Element => (
-    <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.video}>
+    <ResourceDetailFullViewPresenter
+        name={name}
+        id={id}
+        type={ResourceType.video}
+        contributions={contributions}
+    >
         <SinglePropertyPresenter
             display="Duration"
             value={convertMillisecondsToSeconds(lengthMilliseconds)}

@@ -73,6 +73,7 @@ export const VocabularyListDetailFullViewPresenter = ({
     name,
     entries,
     form,
+    contributions,
 }: ICategorizableDetailQueryResult<IVocabularyListViewModel>): JSX.Element => {
     const [filter, dispatch] = useReducer(filterReducer, {});
 
@@ -90,7 +91,12 @@ export const VocabularyListDetailFullViewPresenter = ({
     const selectedEntries = filterEntriesForSelectedTerms(entries, filterWithoutNullAndUndefined);
 
     return (
-        <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.vocabularyList}>
+        <ResourceDetailFullViewPresenter
+            name={name}
+            id={id}
+            type={ResourceType.vocabularyList}
+            contributions={contributions}
+        >
             <Divider sx={{ marginTop: 2, marginBottom: 2, backgroundColor: 'primary.main' }} />
             <Carousel
                 propsForItems={selectedEntries.map(({ term }) => term)}

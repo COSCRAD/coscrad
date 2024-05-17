@@ -14,6 +14,7 @@ import { ResourceDetailFullViewPresenter } from '../../../utils/generic-componen
 export const CourtCaseBibliographicCitationDetailFullViewPresenter = ({
     id,
     data,
+    contributions,
 }: IBibliographicCitationViewModel<ICourtCaseBibliographicCitationData>): JSX.Element => {
     const keysAndLabels: PropertyLabels<ICourtCaseBibliographicCitationData> = {
         abstract: 'Abstract',
@@ -31,6 +32,7 @@ export const CourtCaseBibliographicCitationDetailFullViewPresenter = ({
             name={name}
             id={id}
             type={ResourceType.bibliographicCitation}
+            contributions={contributions}
         >
             {/* TODO: create label configuration for subtypes */}
             <SinglePropertyPresenter display="Citation Type" value="Court Case" />

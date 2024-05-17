@@ -40,7 +40,13 @@ export const DigitalTextDetailFullViewPresenter = ({
     };
 
     return (
-        <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.digitalText}>
+        <ResourceDetailFullViewPresenter
+            name={name}
+            id={id}
+            type={ResourceType.digitalText}
+            // TODO flow through the contributions
+            contributions={[]}
+        >
             {pages.length > 0 ? (
                 <PagesPresenter
                     pages={pages}

@@ -12,12 +12,15 @@ import {
 export const TermDetailThumbnailPresenter = ({
     id,
     name,
-    contributor,
+    contributions,
     audioURL,
 }: ICategorizableDetailQueryResult<ITermViewModel>): JSX.Element => {
     return (
         <ResourceDetailThumbnailPresenter id={id} name={name} type={ResourceType.term}>
-            <SingleOptionalPropertyPresenter display="Contributor" value={contributor} />
+            <SingleOptionalPropertyPresenter
+                display="Contributors"
+                value={contributions.join(', ')}
+            />
             <div id="media-player">
                 <AudioPlayer audioUrl={audioURL} />
             </div>

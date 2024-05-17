@@ -48,6 +48,7 @@ export const VideoIndexPresenter = ({ entities: videos }: VideoIndexState): JSX.
         },
         { propertyKey: 'name', headingLabel: 'Name' },
         { propertyKey: 'nameEnglish', headingLabel: 'Name (English)' },
+        { propertyKey: 'contributions', headingLabel: 'Contributors' },
     ];
 
     const cellRenderersDefinition: CellRenderersDefinition<VideoTableRow> = {
@@ -57,6 +58,7 @@ export const VideoIndexPresenter = ({ entities: videos }: VideoIndexState): JSX.
         name: ({ name }) => (isNullOrUndefined(name) ? null : renderMultilingualTextItem(name)),
         nameEnglish: ({ nameEnglish }) =>
             isNullOrUndefined(nameEnglish) ? null : renderMultilingualTextItem(nameEnglish),
+        contributions: ({ contributions }) => contributions.join(', '),
     };
 
     // We may want to bring in the full MultilingualText class to the front-end and put this behaviour on a method instead
@@ -83,7 +85,7 @@ export const VideoIndexPresenter = ({ entities: videos }: VideoIndexState): JSX.
             tableData={videos.map(buildTableRow)}
             cellRenderersDefinition={cellRenderersDefinition}
             heading={'Videos'}
-            filterableProperties={['name', 'nameEnglish']}
+            filterableProperties={['name', 'nameEnglish', 'contributions']}
             matchers={matchers}
         />
     );

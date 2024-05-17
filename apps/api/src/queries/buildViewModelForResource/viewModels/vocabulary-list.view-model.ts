@@ -12,13 +12,14 @@ import { MultilingualText } from '../../../domain/common/entities/multilingual-t
 import { AudioItem } from '../../../domain/models/audio-visual/audio-item/entities/audio-item.entity';
 import { MediaItem } from '../../../domain/models/media-item/entities/media-item.entity';
 import { Term } from '../../../domain/models/term/entities/term.entity';
+import { CoscradContributor } from '../../../domain/models/user-management/contributor';
 import { VocabularyListFilterProperty } from '../../../domain/models/vocabulary-list/entities/vocabulary-list-variable.entity';
 import { VocabularyList } from '../../../domain/models/vocabulary-list/entities/vocabulary-list.entity';
 import { VocabularyListVariableValue } from '../../../domain/models/vocabulary-list/types/vocabulary-list-variable-value';
 import { VocabularyListEntry } from '../../../domain/models/vocabulary-list/vocabulary-list-entry.entity';
 import { NotFound } from '../../../lib/types/not-found';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
-import { BaseViewModel } from './base.view-model';
+import { BaseResourceViewModel } from './base-resource.view-model';
 import { TermViewModel } from './term.view-model';
 
 type VariableValues = Record<string, VocabularyListVariableValue>;
@@ -65,7 +66,10 @@ const convertVocabularyListVaraibleToFormElement = ({
     constraints: [],
 });
 
-export class VocabularyListViewModel extends BaseViewModel implements IVocabularyListViewModel {
+export class VocabularyListViewModel
+    extends BaseResourceViewModel
+    implements IVocabularyListViewModel
+{
     // @ApiPropertyOptional({
     //     example: 'Vocabulary List Name (in the language)',
     //     description: 'name of the vocabulary list, in the language',
@@ -107,9 +111,10 @@ export class VocabularyListViewModel extends BaseViewModel implements IVocabular
         vocabularyList: VocabularyList,
         allTerms: Term[],
         allAudioItems: AudioItem[],
-        allMediaItems: MediaItem[]
+        allMediaItems: MediaItem[],
+        contributors: CoscradContributor[]
     ) {
-        super(vocabularyList);
+        super(vocabularyList, contributors);
 
         const { entries, variables } = vocabularyList;
 
@@ -123,7 +128,12 @@ export class VocabularyListViewModel extends BaseViewModel implements IVocabular
 
                 return {
                     term: termSearchResult
-                        ? new TermViewModel(termSearchResult, allAudioItems, allMediaItems)
+                        ? new TermViewModel(
+                              termSearchResult,
+                              allAudioItems,
+                              allMediaItems,
+                              contributors
+                          )
                         : NotFound,
                     variableValues,
                 };
