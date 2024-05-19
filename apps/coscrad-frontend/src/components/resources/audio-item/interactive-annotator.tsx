@@ -18,7 +18,7 @@ import {
 import { idUsed } from '../../../store/slices/id-generation';
 import { NackNotification } from '../../commands/nack-notification';
 import { findOriginalTextItem } from '../../notes/shared/find-original-text-item';
-import { TimelineTrack, buildTimeRangeClip } from '../../timeline';
+import { TimeRangeClip, buildTimeRangeClip } from '../../timeline';
 import { ImmersiveCreateNoteForm } from '../shared/immersive-create-note-form';
 import { MediaCurrentTimeContext } from '../shared/media-currenttime-provider';
 import { convertSecondsToMilliseconds } from '../utils/math/convert-seconds-to-milliseconds';
@@ -49,6 +49,18 @@ const CreateAnnotationForm = styled(Paper)({
     padding: '7px',
 });
 
+enum TimelineTrackName {
+    annotations = 'annotations',
+    transcriptions = 'transcriptions',
+}
+
+// Also in timeline.tsx
+type TimelineTrack = {
+    name: TimelineTrackName;
+    trackLabel: string;
+    timelineTrack: TimeRangeClip[];
+};
+
 interface InteractiveAnnotatorProps {
     id: string;
     audioURL: string;
@@ -72,6 +84,8 @@ export const InteractiveAnnotator = ({
     const [timeRange, setTimeRange] = useState<TimeRangeSelection | null>(null);
 
     const [timelineTracks, setTimelineTracks] = useState<TimelineTrack[]>([]);
+
+    const [timelineTrackName, setTimelineTrackName] = useState<TimelineTrackName | null>(null);
 
     const onTimeRangeSelected = useCallback((selectedTimeRange: TimeRangeSelection | null) => {
         setTimeRange(selectedTimeRange);
@@ -124,6 +138,7 @@ export const InteractiveAnnotator = ({
         );
 
         const annotationTimeLineTrack: TimelineTrack = {
+            name: TimelineTrackName.annotations,
             trackLabel: 'Annotations',
             timelineTrack: annotationTimeRangeClips,
         };
@@ -152,6 +167,7 @@ export const InteractiveAnnotator = ({
         );
 
         const transcriptTimelineTrack: TimelineTrack = {
+            name: TimelineTrackName.transcriptions,
             trackLabel: 'Transcription',
             timelineTrack: transcriptionTimeRangeClips,
         };
@@ -173,6 +189,7 @@ export const InteractiveAnnotator = ({
                 timelineTracks={timelineTracks}
                 audioRef={audioRef}
                 mediaCurrentTimeFromContext={mediaCurrentTimeFromContext}
+                setTimelineTrackName={setTimelineTrackName}
             />
 
             {!isNullOrUndefined(timeRange) || commandResult === Ack || errorInfo !== null ? (

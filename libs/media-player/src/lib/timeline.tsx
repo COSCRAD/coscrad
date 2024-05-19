@@ -106,7 +106,14 @@ export interface TimeRangeClip {
     label: React.ReactNode;
 }
 
+// Also in interactive-annotator.tsx
+export enum TimelineTrackName {
+    annotations = 'annotations',
+    transcriptions = 'transcriptions',
+}
+
 export type TimelineTrack = {
+    name: TimelineTrackName;
     trackLabel: string;
     timelineTrack: TimeRangeClip[];
 };
@@ -121,6 +128,7 @@ interface TimelineProps {
     inPointSeconds: number | null;
     outPointSeconds: number | null;
     mediaCurrentTimeFromContext: number;
+    setTimelineTrackName: (trackName: TimelineTrackName) => void;
 }
 
 export const Timeline = ({
@@ -133,6 +141,7 @@ export const Timeline = ({
     inPointSeconds,
     outPointSeconds,
     mediaCurrentTimeFromContext,
+    setTimelineTrackName,
 }: TimelineProps) => {
     const scrollingBoxRef = useRef<HTMLDivElement>(null);
 
@@ -327,12 +336,12 @@ export const Timeline = ({
         seekInMedia(seekPosition);
     };
 
-    const selectTrack = (event: React.MouseEvent<HTMLDivElement>) => {
-        const targetDiv = event.currentTarget;
-
-        targetDiv.style.backgroundColor = 'blue';
+    const selectTrack = (trackName: TimelineTrackName) => {
+        setTimelineTrackName(trackName);
     };
 
+    const getSelectedClass = (name: TimelineTrackName) => ( === id ? "selected" : "");
+    
     return (
         <>
             <Box>Playhead: {playheadPositionInPixels}</Box>
@@ -387,7 +396,8 @@ export const Timeline = ({
                 >
                     {timelineTracks.map((timelineTrack) => (
                         <StyledTrackLabel
-                            key={timelineTrack.trackLabel}
+                            key={timelineTrack.name}
+                            id={timelineTrack.name}
                             sx={{ fontSize: '10px' }}
                             onClick={selectTrack}
                         >
@@ -456,7 +466,7 @@ export const Timeline = ({
                             </StyledTimelineRulerBox>
                         </StyledScrolledTrack>
                         {!isNullOrUndefined(rulerWidth) && timelineTracks.length !== 0
-                            ? timelineTracks.map(({ trackLabel, timelineTrack }) => (
+                            ? timelineTracks.map(({ name, trackLabel, timelineTrack }) => (
                                   <StyledScrolledTrack
                                       key={trackLabel}
                                       data-testid={`${trackLabel}-track`}
@@ -464,6 +474,8 @@ export const Timeline = ({
                                           width: `${rulerWidth}px`,
                                           // backgroundImage: `url(${WAVE_FORM_URL})`,
                                       }}
+                                      className={`${getSelectedClass(name)}`}
+                                      onClick={() => selectTrack(name)}
                                   >
                                       {timelineTrack.map((timeRangeClip) => (
                                           <RangeBar

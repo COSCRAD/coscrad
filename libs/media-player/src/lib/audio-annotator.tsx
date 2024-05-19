@@ -14,7 +14,7 @@ import {
     TimeRangeSelectionStatus,
     TimeRangeSelectionStatusIndicator,
 } from './time-range-selection-visual';
-import { Timeline, TimelineTrack } from './timeline';
+import { Timeline, TimelineTrack, TimelineTrackName } from './timeline';
 
 export type Nullable<T> = T | null;
 
@@ -68,6 +68,7 @@ interface AudioAnnotatorProps {
     timelineTracks: TimelineTrack[];
     audioRef: RefObject<HTMLAudioElement>;
     mediaCurrentTimeFromContext: number;
+    setTimelineTrackName: (trackName: TimelineTrackName) => void;
 }
 
 export const AudioAnnotator = ({
@@ -78,6 +79,7 @@ export const AudioAnnotator = ({
     timelineTracks,
     audioRef,
     mediaCurrentTimeFromContext,
+    setTimelineTrackName,
 }: AudioAnnotatorProps) => {
     // This is a bit awkward, but it works
     const {
@@ -440,6 +442,7 @@ export const AudioAnnotator = ({
                             inPointSeconds={inPointSeconds}
                             outPointSeconds={outPointSeconds}
                             mediaCurrentTimeFromContext={mediaCurrentTimeFromContext}
+                            setTimelineTrackName={setTimelineTrackName}
                         />
                     </Box>
                 ) : null}

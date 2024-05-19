@@ -29,11 +29,6 @@ export interface TimeRangeClip {
     label: React.ReactNode;
 }
 
-export type TimelineTrack = {
-    trackLabel: string;
-    timelineTrack: TimeRangeClip[];
-};
-
 export const TimeRangeClipLabel = ({
     name,
     noteText,
