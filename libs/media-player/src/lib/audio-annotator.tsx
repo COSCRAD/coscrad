@@ -68,6 +68,7 @@ interface AudioAnnotatorProps {
     timelineTracks: TimelineTrack[];
     audioRef: RefObject<HTMLAudioElement>;
     mediaCurrentTimeFromContext: number;
+    timelineTrackName: TimelineTrackName;
     setTimelineTrackName: (trackName: TimelineTrackName) => void;
 }
 
@@ -79,6 +80,7 @@ export const AudioAnnotator = ({
     timelineTracks,
     audioRef,
     mediaCurrentTimeFromContext,
+    timelineTrackName,
     setTimelineTrackName,
 }: AudioAnnotatorProps) => {
     // This is a bit awkward, but it works
@@ -442,6 +444,7 @@ export const AudioAnnotator = ({
                             inPointSeconds={inPointSeconds}
                             outPointSeconds={outPointSeconds}
                             mediaCurrentTimeFromContext={mediaCurrentTimeFromContext}
+                            timelineTrackName={timelineTrackName}
                             setTimelineTrackName={setTimelineTrackName}
                         />
                     </Box>

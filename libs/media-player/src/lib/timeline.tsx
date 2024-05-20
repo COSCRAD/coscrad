@@ -2,6 +2,7 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { ZoomIn as ZoomInIcon, ZoomOut as ZoomOutIcon } from '@mui/icons-material';
 import { Box, Divider, IconButton, Tooltip, styled } from '@mui/material';
 import { RefObject, useEffect, useRef, useState } from 'react';
+import './interactive-media-player-style.css';
 import { RangeBar } from './range-bar';
 import { asFormattedMediaTimecodeString } from './shared/as-formatted-media-timecode-string';
 import { EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS, ZOOM_LEVELS, ZoomLevels } from './shared/constants';
@@ -37,6 +38,7 @@ const StyledTrackLabel = styled(Box)({
     wordWrap: 'break-word',
     overflow: 'hidden',
     boxSizing: 'border-box',
+    cursor: 'pointer',
 });
 
 const StyledScrolledTrack = styled(Box)({
@@ -128,6 +130,7 @@ interface TimelineProps {
     inPointSeconds: number | null;
     outPointSeconds: number | null;
     mediaCurrentTimeFromContext: number;
+    timelineTrackName: TimelineTrackName;
     setTimelineTrackName: (trackName: TimelineTrackName) => void;
 }
 
@@ -141,6 +144,7 @@ export const Timeline = ({
     inPointSeconds,
     outPointSeconds,
     mediaCurrentTimeFromContext,
+    timelineTrackName,
     setTimelineTrackName,
 }: TimelineProps) => {
     const scrollingBoxRef = useRef<HTMLDivElement>(null);
@@ -336,12 +340,14 @@ export const Timeline = ({
         seekInMedia(seekPosition);
     };
 
+    // Use composition instead of prop drilling?
     const selectTrack = (trackName: TimelineTrackName) => {
         setTimelineTrackName(trackName);
     };
 
-    const getSelectedClass = (name: TimelineTrackName) => ( === id ? "selected" : "");
-    
+    const getSelectedClass = (name: TimelineTrackName) =>
+        timelineTrackName === name ? 'selected' : '';
+
     return (
         <>
             <Box>Playhead: {playheadPositionInPixels}</Box>
@@ -394,15 +400,16 @@ export const Timeline = ({
                         borderRight: '1px solid #666',
                     }}
                 >
-                    {timelineTracks.map((timelineTrack) => (
+                    {timelineTracks.map(({ name, trackLabel }) => (
                         <StyledTrackLabel
-                            key={timelineTrack.name}
-                            id={timelineTrack.name}
+                            key={name}
+                            id={name}
                             sx={{ fontSize: '10px' }}
-                            onClick={selectTrack}
+                            className={`${getSelectedClass(name)}`}
+                            onClick={() => selectTrack(name)}
                         >
                             {/* TODO need an icon here for annotations */}
-                            {timelineTrack.trackLabel}
+                            {trackLabel}
                         </StyledTrackLabel>
                     ))}
                 </Box>
@@ -474,8 +481,6 @@ export const Timeline = ({
                                           width: `${rulerWidth}px`,
                                           // backgroundImage: `url(${WAVE_FORM_URL})`,
                                       }}
-                                      className={`${getSelectedClass(name)}`}
-                                      onClick={() => selectTrack(name)}
                                   >
                                       {timelineTrack.map((timeRangeClip) => (
                                           <RangeBar

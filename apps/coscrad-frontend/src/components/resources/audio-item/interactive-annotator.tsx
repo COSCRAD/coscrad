@@ -19,6 +19,7 @@ import { idUsed } from '../../../store/slices/id-generation';
 import { NackNotification } from '../../commands/nack-notification';
 import { findOriginalTextItem } from '../../notes/shared/find-original-text-item';
 import { TimeRangeClip, buildTimeRangeClip } from '../../timeline';
+import { ImmersiveAddTranscriptItemForm } from '../shared/immersive-add-transcript-item-form';
 import { ImmersiveCreateNoteForm } from '../shared/immersive-create-note-form';
 import { MediaCurrentTimeContext } from '../shared/media-currenttime-provider';
 import { convertSecondsToMilliseconds } from '../utils/math/convert-seconds-to-milliseconds';
@@ -45,16 +46,16 @@ const convertTimeRangeToMilliseconds = (
     };
 };
 
-const CreateAnnotationForm = styled(Paper)({
+const CreateAnnotationOrTranscriptItemForm = styled(Paper)({
     padding: '7px',
 });
 
+// Also in timeline.tsx
 enum TimelineTrackName {
     annotations = 'annotations',
     transcriptions = 'transcriptions',
 }
 
-// Also in timeline.tsx
 type TimelineTrack = {
     name: TimelineTrackName;
     trackLabel: string;
@@ -85,7 +86,7 @@ export const InteractiveAnnotator = ({
 
     const [timelineTracks, setTimelineTracks] = useState<TimelineTrack[]>([]);
 
-    const [timelineTrackName, setTimelineTrackName] = useState<TimelineTrackName | null>(null);
+    const [timelineTrackName, setTimelineTrackName] = useState(null);
 
     const onTimeRangeSelected = useCallback((selectedTimeRange: TimeRangeSelection | null) => {
         setTimeRange(selectedTimeRange);
@@ -149,7 +150,7 @@ export const InteractiveAnnotator = ({
 
                 const transcriptText = findOriginalTextItem(text).text;
 
-                const tipText = `[${inPointMilliseconds} ms to ${outPointMilliseconds}][${speakerInitials}] ${transcriptText}`;
+                const tipText = `[${inPointMilliseconds} ms to ${outPointMilliseconds}] [${speakerInitials}] ${transcriptText}`;
 
                 return [
                     buildTimeRangeClip({
@@ -182,6 +183,7 @@ export const InteractiveAnnotator = ({
 
     return (
         <>
+            <Box>Editing Track: {timelineTrackName}</Box>
             <AudioAnnotator
                 audioUrl={audioURL}
                 selectedTimeRange={timeRange}
@@ -189,55 +191,99 @@ export const InteractiveAnnotator = ({
                 timelineTracks={timelineTracks}
                 audioRef={audioRef}
                 mediaCurrentTimeFromContext={mediaCurrentTimeFromContext}
+                timelineTrackName={timelineTrackName}
                 setTimelineTrackName={setTimelineTrackName}
             />
 
             {!isNullOrUndefined(timeRange) || commandResult === Ack || errorInfo !== null ? (
-                <CreateAnnotationForm data-testid="create-note-about-audio-form">
+                <CreateAnnotationOrTranscriptItemForm data-testid="create-transcript-item-or-note-about-audio-form">
                     {errorInfo !== null ? (
                         <NackNotification
                             _onClick={() => onAcknowledgeCommandResult(false)}
                             errorInfo={errorInfo}
                         />
                     ) : null}
-                    <Box mt={1}>
-                        <Typography variant="h4">Add Audio Annotation</Typography>
-                        <Typography variant="body1" fontSize="3" mb={1}>
-                            Time Range in Milliseconds: {timeRange?.inPointSeconds} &lt;----&gt;{' '}
-                            {timeRange?.outPointSeconds}
-                        </Typography>
-                    </Box>
-                    <ImmersiveCreateNoteForm
-                        onSubmit={(text, languageCode, noteId) => {
-                            setMediaCurrentTimeFromContext(timeRange.outPointSeconds);
+                    {timelineTrackName === TimelineTrackName.annotations ? (
+                        <>
+                            <Box mt={1}>
+                                <Typography variant="h4">Add Audio Annotation</Typography>
+                                <Typography variant="body1" fontSize="3" mb={1}>
+                                    Time Range in Milliseconds: {timeRange?.inPointSeconds}{' '}
+                                    &lt;----&gt; {timeRange?.outPointSeconds}
+                                </Typography>
+                            </Box>
+                            <ImmersiveCreateNoteForm
+                                onSubmit={(text, languageCode, noteId) => {
+                                    setMediaCurrentTimeFromContext(timeRange.outPointSeconds);
 
-                            dispatch(
-                                executeCommand({
-                                    type: 'CREATE_NOTE_ABOUT_RESOURCE',
-                                    payload: {
-                                        aggregateCompositeIdentifier: {
-                                            type: AggregateType.note,
-                                            id: noteId,
-                                        },
-                                        resourceCompositeIdentifier: {
-                                            type: AggregateType.audioItem,
-                                            id,
-                                        },
-                                        text,
-                                        languageCode,
-                                        resourceContext: !isNull(timeRange)
-                                            ? {
-                                                  type: 'timeRange',
-                                                  timeRange:
-                                                      convertTimeRangeToMilliseconds(timeRange),
-                                              }
-                                            : { type: 'general' },
-                                    },
-                                })
-                            );
-                        }}
-                    />
-                </CreateAnnotationForm>
+                                    dispatch(
+                                        executeCommand({
+                                            type: 'CREATE_NOTE_ABOUT_RESOURCE',
+                                            payload: {
+                                                aggregateCompositeIdentifier: {
+                                                    type: AggregateType.note,
+                                                    id: noteId,
+                                                },
+                                                resourceCompositeIdentifier: {
+                                                    type: AggregateType.audioItem,
+                                                    id,
+                                                },
+                                                text,
+                                                languageCode,
+                                                resourceContext: !isNull(timeRange)
+                                                    ? {
+                                                          type: 'timeRange',
+                                                          timeRange:
+                                                              convertTimeRangeToMilliseconds(
+                                                                  timeRange
+                                                              ),
+                                                      }
+                                                    : { type: 'general' },
+                                            },
+                                        })
+                                    );
+                                }}
+                            />
+                        </>
+                    ) : (
+                        <>
+                            <Box mt={1}>
+                                <Typography variant="h4">Add Transcript Item</Typography>
+                                <Typography variant="body1" fontSize="3" mb={1}>
+                                    Time Range in Milliseconds: {timeRange?.inPointSeconds}{' '}
+                                    &lt;----&gt; {timeRange?.outPointSeconds}
+                                </Typography>
+                            </Box>
+                            <ImmersiveAddTranscriptItemForm
+                                transcriptParticipants={transcript.participants}
+                                onSubmit={(text, speakerInitials, languageCode) => {
+                                    const { inPointSeconds, outPointSeconds } = timeRange;
+
+                                    setMediaCurrentTimeFromContext(outPointSeconds);
+
+                                    dispatch(
+                                        executeCommand({
+                                            type: 'ADD_LINE_ITEM_TO_TRANSCRIPT',
+                                            payload: {
+                                                aggregateCompositeIdentifier: {
+                                                    type: AggregateType.audioItem,
+                                                    id,
+                                                },
+                                                inPointMilliseconds:
+                                                    convertSecondsToMilliseconds(inPointSeconds),
+                                                outPointMilliseconds:
+                                                    convertSecondsToMilliseconds(outPointSeconds),
+                                                text,
+                                                languageCode,
+                                                speakerInitials,
+                                            },
+                                        })
+                                    );
+                                }}
+                            />
+                        </>
+                    )}
+                </CreateAnnotationOrTranscriptItemForm>
             ) : null}
         </>
     );
