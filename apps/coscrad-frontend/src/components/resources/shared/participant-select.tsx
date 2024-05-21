@@ -16,6 +16,7 @@ export const ParticipantSelect = ({
             <Select
                 data-testid={`select:participant`}
                 label="Transcript Participant"
+                defaultValue=""
                 onChange={(e) => {
                     onSelectParticipantInitials(e.target.value as string);
                 }}
