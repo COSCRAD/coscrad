@@ -11,7 +11,7 @@ import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import validateCommandPayloadType from '../../../shared/command-handlers/utilities/validateCommandPayloadType';
 import { AddAudioForNote } from './add-audio-for-note.command';
 
-const commandType = 'ADD_AUDIO_FOR_DIGITAL_TEXT_TITLE';
+const commandType = 'ADD_AUDIO_FOR_NOTE';
 
 const dummyFsa = buildTestCommandFsaMap().get(commandType) as CommandFSA<AddAudioForNote>;
 
