@@ -12,6 +12,8 @@ import { TestEventStream } from '../../../test-data/events';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../../../validation';
 import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
 import {
+    AddAudioForNote,
+    AudioAddedForNote,
     ConnectResourcesWithNote,
     CreateNoteAboutResource,
     NoteTranslated,
@@ -100,6 +102,26 @@ const noteTranslated = new TestEventStream()
         },
     });
 
+const audioItemId = buildDummyUuid(12);
+
+const audioAddedForNoteInOriginalLanguage = noteTranslated.andThen<AudioAddedForNote>({
+    type: 'AUDIO_ADDED_FOR_NOTE',
+    payload: {
+        aggregateCompositeIdentifier,
+        audioItemId,
+        languageCode: originalLanguageCode,
+    },
+});
+
+const audioAddedForNoteInTranslationLanguage = noteTranslated.andThen<AudioAddedForNote>({
+    type: 'AUDIO_ADDED_FOR_NOTE',
+    payload: {
+        aggregateCompositeIdentifier,
+        audioItemId,
+        languageCode: translationLanguageCode,
+    },
+});
+
 describe(`EdgeConnection.fromEventHistory`, () => {
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
@@ -122,10 +144,12 @@ describe(`EdgeConnection.fromEventHistory`, () => {
                     CreateNoteAboutResource,
                     ConnectResourcesWithNote,
                     TranslateNote,
+                    AddAudioForNote,
                     // Events
                     NoteAboutResourceCreated,
                     NoteTranslated,
                     ResourcesConnectedWithNote,
+                    AudioAddedForNote,
                 ].map((ctor) => ({
                     provide: ctor,
                     useValue: ctor,
@@ -193,6 +217,52 @@ describe(`EdgeConnection.fromEventHistory`, () => {
                     const { members } = edgeConnection;
 
                     expect(members).toHaveLength(1);
+                });
+            });
+
+            describe(`when there is an update event: AUDIO_ADDED_FOR_NOTE`, () => {
+                describe(`when the audio is in the original language`, () => {
+                    it(`should return the expected edge connection`, () => {
+                        const result = EdgeConnection.fromEventHistory(
+                            audioAddedForNoteInOriginalLanguage.as(aggregateCompositeIdentifier),
+                            edgeConnectionId
+                        );
+
+                        expect(result).toBeInstanceOf(EdgeConnection);
+
+                        const edgeConnection = result as EdgeConnection;
+
+                        const audioIdSearchResult =
+                            edgeConnection.audioForNote.getIdForAudioIn(originalLanguageCode);
+
+                        expect(audioIdSearchResult).toBe(audioItemId);
+
+                        const { members } = edgeConnection;
+
+                        expect(members).toHaveLength(1);
+                    });
+                });
+
+                describe(`when the audio is in the translation language`, () => {
+                    it.only(`should return the expected edge connection`, () => {
+                        const result = EdgeConnection.fromEventHistory(
+                            audioAddedForNoteInTranslationLanguage.as(aggregateCompositeIdentifier),
+                            edgeConnectionId
+                        );
+
+                        expect(result).toBeInstanceOf(EdgeConnection);
+
+                        const edgeConnection = result as EdgeConnection;
+
+                        const audioIdSearchResult =
+                            edgeConnection.audioForNote.getIdForAudioIn(translationLanguageCode);
+
+                        expect(audioIdSearchResult).toBe(audioItemId);
+
+                        const { members } = edgeConnection;
+
+                        expect(members).toHaveLength(1);
+                    });
                 });
             });
         });

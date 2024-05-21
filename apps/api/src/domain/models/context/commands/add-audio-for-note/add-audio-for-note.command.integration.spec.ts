@@ -5,19 +5,26 @@ import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUp
 import { CommandFSA } from '../../../../../app/controllers/command/command-fsa/command-fsa.entity';
 import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
+import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
+import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { clonePlainObjectWithOverrides } from '../../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { ArangoEventRepository } from '../../../../../persistence/repositories/arango-event-repository';
 import { buildTestCommandFsaMap } from '../../../../../test-data/commands';
 import { TestEventStream } from '../../../../../test-data/events';
 import { DynamicDataTypeFinderService } from '../../../../../validation';
+import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
 import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
+import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
+import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
+import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { EdgeConnection } from '../../edge-connection.entity';
 import { NoteAboutResourceCreated } from '../create-note-about-resource/note-about-resource-created.event';
 import { NoteTranslated } from '../translate-note';
@@ -48,7 +55,7 @@ const noteTranslated = noteAboutResourceCreated.andThen<NoteTranslated>({
     },
 });
 
-const _audioAddedForNote = noteTranslated.andThen<AudioAddedForNote>({
+const audioAddedForNote = noteTranslated.andThen<AudioAddedForNote>({
     type: 'AUDIO_ADDED_FOR_NOTE',
     payload: {
         audioItemId,
@@ -123,7 +130,7 @@ describe(commandType, () => {
         });
 
     describe(`when the command is valid`, () => {
-        describe(`when the audio is for the original text note`, () => {
+        describe(`when the audio is for the original language`, () => {
             it(`should succeed`, async () => {
                 const existingEdgeConnection = EdgeConnection.fromEventHistory(
                     validEventHistoryForEdgeConnectionWithNoNoteTranslationAndNoAudio,
@@ -168,6 +175,182 @@ describe(commandType, () => {
                             dummySystemUserId
                         );
                     },
+                });
+            });
+        });
+
+        describe(`when the audio is for the translation language`, () => {
+            it(`should succeed`, async () => {
+                const noteTranslated = noteAboutResourceCreated.andThen<NoteTranslated>({
+                    type: 'NOTE_TRANSLATED',
+                    payload: {
+                        languageCode: languageCodeForNoteTranslation,
+                    },
+                });
+
+                const existingEdgeConnection = EdgeConnection.fromEventHistory(
+                    noteTranslated.as({ id: edgeConnectionId, type: AggregateType.note }),
+                    edgeConnectionId
+                );
+
+                await assertCommandSuccess(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider
+                            .forResource(ResourceType.audioItem)
+                            .create(existingAudioItem);
+
+                        await testRepositoryProvider
+                            .getEdgeConnectionRepository()
+                            .create(existingEdgeConnection as EdgeConnection);
+                    },
+                    buildValidCommandFSA: () =>
+                        commandFsaFactory.build(undefined, {
+                            aggregateCompositeIdentifier: {
+                                id: edgeConnectionId,
+                            },
+                            audioItemId,
+                            languageCode: languageCodeForNoteTranslation,
+                        }),
+                    checkStateOnSuccess: async () => {
+                        const edgeConnectionSearchResult = await testRepositoryProvider
+                            .getEdgeConnectionRepository()
+                            .fetchById(edgeConnectionId);
+
+                        expect(edgeConnectionSearchResult).toBeInstanceOf(EdgeConnection);
+
+                        const updatedEdgeConnection = edgeConnectionSearchResult as EdgeConnection;
+
+                        const audioIdSearchResult = updatedEdgeConnection.getAudioForNoteInLanguage(
+                            languageCodeForNoteTranslation
+                        );
+
+                        expect(audioIdSearchResult).toBe(audioItemId);
+
+                        assertEventRecordPersisted(
+                            updatedEdgeConnection,
+                            'AUDIO_ADDED_FOR_NOTE',
+                            dummySystemUserId
+                        );
+                    },
+                });
+            });
+        });
+    });
+
+    describe(`when the command is invalid`, () => {
+        describe(`when the edge connection does not exist`, () => {
+            it(`should fail with the expected errors`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider.addFullSnapshot(
+                            new DeluxeInMemoryStore({
+                                [AggregateType.audioItem]: [existingAudioItem],
+                            }).fetchFullSnapshotInLegacyFormat()
+                        );
+                    },
+                    buildCommandFSA: () => commandFsaFactory.build(),
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new AggregateNotFoundError(aggregateCompositeIdentifier),
+                            ])
+                        );
+                    },
+                });
+            });
+        });
+
+        describe(`when the audio item does not exist`, () => {
+            it(`should fail with the expected errors`, async () => {
+                const existingEdgeConnection = EdgeConnection.fromEventHistory(
+                    validEventHistoryForEdgeConnectionWithNoNoteTranslationAndNoAudio,
+                    edgeConnectionId
+                ) as EdgeConnection;
+
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        // await app
+                        //     .get(ArangoEventRepository)
+                        //     .appendEvents(
+                        //         validEventHistoryForEdgeConnectionWithNoNoteTranslationAndNoAudio
+                        //     );
+
+                        await testRepositoryProvider
+                            .getEdgeConnectionRepository()
+                            .create(existingEdgeConnection);
+
+                        // we do not add an existing audio item
+                    },
+                    buildCommandFSA: () => commandFsaFactory.build(),
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new InvalidExternalReferenceByAggregateError(
+                                    aggregateCompositeIdentifier,
+                                    [
+                                        {
+                                            type: AggregateType.audioItem,
+                                            id: audioItemId,
+                                        },
+                                    ]
+                                ),
+                            ])
+                        );
+                    },
+                });
+            });
+        });
+
+        describe(`when the note does not have a translation in the given language`, () => {
+            it(`should fail`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider
+                            .forResource(ResourceType.audioItem)
+                            .create(existingAudioItem);
+
+                        await app
+                            .get(ArangoEventRepository)
+                            .appendEvents(
+                                validEventHistoryForEdgeConnectionWithNoNoteTranslationAndNoAudio
+                            );
+                    },
+                    buildCommandFSA: () =>
+                        commandFsaFactory.build(undefined, {
+                            languageCode: LanguageCode.Chinook,
+                        }),
+                });
+            });
+        });
+
+        describe(`when there is already audio for this language`, () => {
+            it(`should fail`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await app.get(ArangoEventRepository).appendEvents(
+                            audioAddedForNote.as({
+                                type: AggregateType.note,
+                                id: edgeConnectionId,
+                            })
+                        );
+
+                        await testRepositoryProvider.addFullSnapshot(
+                            new DeluxeInMemoryStore({
+                                [AggregateType.audioItem]: [existingAudioItem],
+                            }).fetchFullSnapshotInLegacyFormat()
+                        );
+                    },
+                    buildCommandFSA: () =>
+                        commandFsaFactory.build(undefined, {
+                            languageCode: languageCodeForNote,
+                        }),
                 });
             });
         });
