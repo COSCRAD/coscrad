@@ -16,7 +16,8 @@ type ArangoEdgeMemberContext = {
     context: DTO<EdgeConnectionContext>;
 };
 
-// TODO make this extensible!
+// TODO [https://www.pivotaltracker.com/story/show/187358504] make this extensible!
+
 type ArangoEdgeDocumentWithoutSystemAttributes = {
     type: typeof AggregateType.note;
 

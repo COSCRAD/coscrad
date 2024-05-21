@@ -244,7 +244,7 @@ describe(`EdgeConnection.fromEventHistory`, () => {
                 });
 
                 describe(`when the audio is in the translation language`, () => {
-                    it.only(`should return the expected edge connection`, () => {
+                    it(`should return the expected edge connection`, () => {
                         const result = EdgeConnection.fromEventHistory(
                             audioAddedForNoteInTranslationLanguage.as(aggregateCompositeIdentifier),
                             edgeConnectionId
