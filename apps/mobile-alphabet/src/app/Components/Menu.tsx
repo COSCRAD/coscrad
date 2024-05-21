@@ -1,56 +1,40 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Button, Text, View } from 'react-native';
-import config from './Config.json';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../store';
+import { fetchAlphabets } from '../../store/slices/alphabet-slice';
+import { selectAlphabet } from '../../store/slices/selectors';
 
-export interface AlphabetCard {
-    letter: string;
-    word: string;
-    //be careful this is a string, should be parsed
-    sequence_number: string;
-    letter_audio: string;
-    word_audio: string;
-    standalone_image: string;
-    card_image: string;
-}
-export interface AlphabetData {
-    data: {
-        name: string;
-        name_english: string;
-        poster: {
-            name: string;
-            url: string;
-        };
-        alphabet_cards: AlphabetCard[];
-    };
-}
+// TODO import this from lib
+const isNull = (input: unknown): input is null => input === null;
 
 const MenuScreen = ({ navigation }) => {
-    const [alphabetData, setAlphabetData] = useState<AlphabetData | null>(null);
+    const dispatch = useDispatch<AppDispatch>();
+
+    const { isLoading, errorInfo, data: alphabetData } = useSelector(selectAlphabet);
 
     useEffect(() => {
-        //cache this after fetching it once
-        const fetchData = async () => {
-            try {
-                //TODO use context api
-                const response = await fetch(config.apiUrl, {
-                    mode: 'cors',
-                });
-                setAlphabetData(await response.json());
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
+        if (isNull(alphabetData)) dispatch(fetchAlphabets());
+    }, [alphabetData, dispatch]);
 
-        fetchData();
-    }, []);
-
-    if (!alphabetData) {
+    if (isNull(alphabetData)) {
+        // TODO break out a Loading component
         return <Text>Loading...</Text>;
     }
 
-    const {
-        data: { name, name_english, poster, alphabet_cards: alphabetCards },
-    } = alphabetData;
+    if (isLoading) {
+        // TODO break out a Loading component
+        return <Text>Loading...</Text>;
+    }
+
+    if (errorInfo) {
+        return <Text>Justin- Finish this</Text>;
+    }
+
+    // TODO Use the alphabet cards to create a menu
+    // const {
+    //     data: { name, name_english, poster, alphabet_cards: alphabetCards },
+    // } = alphabetData;
 
     return (
         <View>
