@@ -86,7 +86,7 @@ export const InteractiveAnnotator = ({
 
     const [timelineTracks, setTimelineTracks] = useState<TimelineTrack[]>([]);
 
-    const [timelineTrackName, setTimelineTrackName] = useState(null);
+    const [timelineTrackName, setTimelineTrackName] = useState(TimelineTrackName.annotations);
 
     const onTimeRangeSelected = useCallback((selectedTimeRange: TimeRangeSelection | null) => {
         setTimeRange(selectedTimeRange);

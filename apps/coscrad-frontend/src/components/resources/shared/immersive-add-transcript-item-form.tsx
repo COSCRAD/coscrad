@@ -21,7 +21,7 @@ interface FormProps {
     transcriptParticipants: ITranscriptParticipant[];
     onSubmit: (
         text: string,
-        speakerInitials: Pick<ITranscriptParticipant, 'initials'>,
+        speakerInitials: string,
         languageCode: LanguageCode,
         id: string
     ) => void;
@@ -41,8 +41,7 @@ export const ImmersiveAddTranscriptItemForm = ({ transcriptParticipants, onSubmi
 
     const [text, setText] = useState('');
 
-    const [speakerInitials, setSpeakerInitials] =
-        useState<Pick<ITranscriptParticipant, 'initials'>>(undefined);
+    const [speakerInitials, setSpeakerInitials] = useState<string>('');
 
     const { defaultLanguageCode } = useContext(ConfigurableContentContext);
 
@@ -91,9 +90,7 @@ export const ImmersiveAddTranscriptItemForm = ({ transcriptParticipants, onSubmi
                 ></TextField>
             </Box>
             <ParticipantSelect
-                onSelectParticipantInitials={(
-                    initials: Pick<ITranscriptParticipant, 'initials'>
-                ) => {
+                onSelectParticipantInitials={(initials: string) => {
                     setSpeakerInitials(initials);
                 }}
                 transcriptParticipants={transcriptParticipants}
