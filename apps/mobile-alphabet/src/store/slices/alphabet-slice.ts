@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import config from './../../app/Components/Config.json';
+import config from './../../app/Components/config.json';
 import { AlphabetData } from './types';
 
 export const ALPHABET = 'alphabet';

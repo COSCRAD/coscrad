@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store';
 import { selectAlphabet } from '../../store/slices/selectors';
 import { fetchAlphabets } from './../../store/slices/alphabet-slice';
-import config from './Config.json';
+import config from './config.json';
 
 /**
  *
@@ -30,7 +30,7 @@ export function AlphabetCardDetailScreen() {
         if (isNull(alphabetData)) dispatch(fetchAlphabets());
     }, [alphabetData, dispatch]);
 
-    const [audioLoaded, setAudioLoaded] = useState(false);
+    const [hasAudioLoaded, setHasAudioLoaded] = useState(false);
 
     // Sequence numbers are indexed starting at 1
     const [selectedLetterSequenceNumber, setSelectedLetterSequenceNumber] = useState<number>(1);
@@ -93,11 +93,11 @@ export function AlphabetCardDetailScreen() {
         Sound.MAIN_BUNDLE,
         (error) => {
             if (error) {
-                setAudioLoaded(false);
+                setHasAudioLoaded(false);
                 console.log('failed to load word audio', error);
                 return;
             }
-            setAudioLoaded(true);
+            setHasAudioLoaded(true);
         }
     );
 
@@ -134,7 +134,7 @@ export function AlphabetCardDetailScreen() {
 
             <Button testID={`${letter_audio}`} title={'Play Letter'} onPress={playLetter} />
 
-            {wordAudio && audioLoaded && (
+            {wordAudio && hasAudioLoaded && (
                 <Button testID={`${word_audio}`} title={'Play Word'} onPress={playWord} />
             )}
 
