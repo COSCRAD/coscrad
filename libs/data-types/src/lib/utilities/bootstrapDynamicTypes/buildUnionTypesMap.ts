@@ -109,6 +109,10 @@ export const buildUnionTypesMap = <T = unknown>(allCtorCandidates: Ctor<T>[]): U
             ).duplicates;
 
         if (duplicateDiscriminants.length > 0) {
+            // TODO Investigate this further
+            const _areUnionClassesTheSame =
+                discriminantValuesAndCtors[0][0] === discriminantValuesAndCtors[4][0];
+
             throw new Error(
                 `The following values are reused as union data-type discriminants: ${[
                     ...new Set(duplicateDiscriminants),

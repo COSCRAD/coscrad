@@ -1,4 +1,6 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
+import buildDummyUuid from '../../../../../../domain/models/__tests__/utilities/buildDummyUuid';
+import { MultilingualAudio } from '../../../../../../domain/models/shared/multilingual-audio/multilingual-audio.entity';
 import { DTO } from '../../../../../../types/DTO';
 import buildInvariantValidationErrorFactoryFunction from '../../../../../__tests__/utilities/buildInvariantValidationErrorFactoryFunction';
 import { buildMultilingualTextWithSingleItem } from '../../../../../common/build-multilingual-text-with-single-item';
@@ -58,12 +60,20 @@ const buildValidTranscribedAudioConnectionMemberDto = (
     context: validTimeRangeContext,
 });
 
+const audioItemId = buildDummyUuid(555);
+
+const languageCodeForAudio = LanguageCode.English;
+
 const validBookSelfConnection = new EdgeConnection({
     type: AggregateType.note,
     connectionType: EdgeConnectionType.self,
     id: '12345',
     note: buildMultilingualTextWithSingleItem('This is an awesome note', LanguageCode.English),
     members: [buildValidBookEdgeConnectionMemberDto(EdgeConnectionMemberRole.self)],
+    audioForNote: MultilingualAudio.buildEmpty().addAudio(
+        audioItemId,
+        languageCodeForAudio
+    ) as MultilingualAudio,
 });
 
 const validBookToTranscribedAudioDualConnection = new EdgeConnection({
@@ -75,6 +85,10 @@ const validBookToTranscribedAudioDualConnection = new EdgeConnection({
     ],
     id: dummyUuid,
     note: buildMultilingualTextWithSingleItem('These are both about bears', LanguageCode.English),
+    audioForNote: MultilingualAudio.buildEmpty().addAudio(
+        audioItemId,
+        languageCodeForAudio
+    ) as MultilingualAudio,
 }).toDTO();
 
 export default (): EdgeConnectionValidatorTestCase[] => [
@@ -142,6 +156,10 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                         'This is the note',
                         LanguageCode.English
                     ),
+                    audioForNote: MultilingualAudio.buildEmpty().addAudio(
+                        audioItemId,
+                        languageCodeForAudio
+                    ) as MultilingualAudio,
                 },
                 expectedError: buildTopLevelError(dummyUuid, [
                     new InvalidNumberOfMembersInEdgeConnectionError(EdgeConnectionType.self, 0),
@@ -219,6 +237,10 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                         'This is the note',
                         LanguageCode.English
                     ),
+                    audioForNote: MultilingualAudio.buildEmpty().addAudio(
+                        audioItemId,
+                        languageCodeForAudio
+                    ) as MultilingualAudio,
                 },
                 expectedError: buildTopLevelError(dummyUuid, [
                     new InvalidEdgeConnectionMemberRolesError(EdgeConnectionType.dual, [
