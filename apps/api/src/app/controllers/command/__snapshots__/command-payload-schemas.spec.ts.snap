@@ -12,6 +12,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "MediaItemCompositeId",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -167,6 +168,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "SongCompositeId",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -266,6 +268,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "SongCompositeId",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -357,6 +360,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "BibliographicCitationCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -388,6 +392,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": true,
         "isOptional": false,
         "label": "creators",
+        "name": "BibliographicCitationCreator",
         "schema": {
           "name": {
             "coscradDataType": "NON_EMPTY_STRING",
@@ -497,6 +502,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "BibliographicCitationCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -584,6 +590,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "BibliographicCitationCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -615,6 +622,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": true,
         "isOptional": false,
         "label": "creators",
+        "name": "BibliographicCitationCreator",
         "schema": {
           "name": {
             "coscradDataType": "NON_EMPTY_STRING",
@@ -717,6 +725,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "composite identifier",
+        "name": "BibliographicCitationCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -748,6 +757,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "digital representation resource composite identifier",
+        "name": "DigitalTextCompositeId",
         "referenceTo": "_COMPOSITE_IDENTIFIER_",
         "schema": {
           "id": {
@@ -787,6 +797,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "DigitalTextCompositeId",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -871,6 +882,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "DigitalTextCompositeId",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -916,6 +928,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "DigitalTextCompositeId",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -969,6 +982,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "DigitalTextCompositeId",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -1015,6 +1029,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "DigitalTextCompositeId",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -1106,6 +1121,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "DigitalTextCompositeId",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -1190,6 +1206,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "DigitalTextCompositeId",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -1282,6 +1299,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "DigitalTextCompositeId",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -1367,6 +1385,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "UserCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -1419,6 +1438,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "UserGroupCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -1471,6 +1491,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "UserGroupCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -1517,6 +1538,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "UserCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -1578,6 +1600,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "ResourceCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -1664,6 +1687,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "ResourceCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -1742,6 +1766,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "TagCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -1787,6 +1812,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "TagCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -1832,6 +1858,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Tag's Composite Identifier",
+        "name": "TagCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -1863,6 +1890,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Tagged Member's Composite Identifier",
+        "name": "CategorizableCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -1945,6 +1973,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "ContributorCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -2011,6 +2040,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "VideoCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -2110,6 +2140,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "AudioItemCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -2209,6 +2240,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "AudioVisualCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -2251,6 +2283,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "AudioVisualCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -2307,6 +2340,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "AudioVisualCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -2416,6 +2450,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "AudioVisualCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -2451,6 +2486,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": true,
         "isOptional": false,
         "label": "line items",
+        "name": "TranscriptLineItemDto",
         "schema": {
           "inPointMilliseconds": {
             "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
@@ -2534,6 +2570,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "AudioVisualCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -2569,6 +2606,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": true,
         "isOptional": false,
         "label": "translation items",
+        "name": "TranslationItem",
         "schema": {
           "inPointMilliseconds": {
             "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
@@ -2638,6 +2676,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "PlayListCompositeId",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -2722,6 +2761,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "PlayListCompositeId",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -2768,6 +2808,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "PlayListCompositeId",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -2814,6 +2855,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "PlayListCompositeId",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -2898,6 +2940,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "EdgeConnectionCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -2968,6 +3011,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "CompositeIdentifier",
+        "name": "ResourceCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -3081,6 +3125,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
                 "isArray": false,
                 "isOptional": false,
                 "label": "time range",
+                "name": "TimeRange",
                 "schema": {
                   "inPointMilliseconds": {
                     "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
@@ -3195,6 +3240,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "composite identifier",
+        "name": "EdgeConnectionCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -3279,6 +3325,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "EdgeConnectionCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -3364,6 +3411,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "composite identifier",
+        "name": "EdgeConnectionCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -3395,6 +3443,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "from member composite identifier",
+        "name": "ResourceCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -3508,6 +3557,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
                 "isArray": false,
                 "isOptional": false,
                 "label": "time range",
+                "name": "TimeRange",
                 "schema": {
                   "inPointMilliseconds": {
                     "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
@@ -3654,6 +3704,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "to member composite identifier",
+        "name": "ResourceCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -3767,6 +3818,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
                 "isArray": false,
                 "isOptional": false,
                 "label": "time range",
+                "name": "TimeRange",
                 "schema": {
                   "inPointMilliseconds": {
                     "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
@@ -3874,6 +3926,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "composite identifier",
+        "name": "SongCompositeId",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -3958,6 +4011,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "composite identifier",
+        "name": "SongCompositeId",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -4042,6 +4096,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "composite ID (generated)",
+        "name": "TermCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -4140,6 +4195,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "composite ID (generated)",
+        "name": "TermCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -4192,6 +4248,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "composite ID (generated)",
+        "name": "TermCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -4276,6 +4333,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "term composite identifier (generated)",
+        "name": "TermCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -4360,6 +4418,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "term composite identifier",
+        "name": "TermCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -4445,6 +4504,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "composite identifier",
+        "name": "SpatialFeatureCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -4518,6 +4578,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "VocabularyListCompositeId",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -4602,6 +4663,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "AudioVisualCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -4704,6 +4766,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "VocabularyListCompositeId",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -4788,6 +4851,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "VocabularyListCompositeId",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -4859,6 +4923,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "VocabularyListCompositeId",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -4905,6 +4970,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "VocabularyListCompositeId",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -4957,6 +5023,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "VideoCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -5041,6 +5108,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "AudioItemCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -5125,6 +5193,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
+        "name": "DigitalTextCompositeId",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -5219,6 +5288,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isArray": false,
         "isOptional": false,
         "label": "composite identifier",
+        "name": "PhotographCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
