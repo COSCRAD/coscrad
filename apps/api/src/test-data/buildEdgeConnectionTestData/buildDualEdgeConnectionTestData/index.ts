@@ -10,6 +10,7 @@ import {
 } from '../../../domain/models/context/edge-connection.entity';
 import { GeneralContext } from '../../../domain/models/context/general-context/general-context.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
+import { MultilingualAudio } from '../../../domain/models/shared/multilingual-audio/multilingual-audio.entity';
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { InternalError } from '../../../lib/errors/InternalError';
@@ -96,6 +97,7 @@ const generateComprehensiveDualEdgeConnectionTestData = (
             connectionType: EdgeConnectionType.dual,
             // TODO generate this at the top level instead
             id: `${2000 + index}`,
+            audioForNote: MultilingualAudio.buildEmpty(),
             members: [toMember, fromMember],
             note: buildDummyNoteForDualConnection(toMember, fromMember),
         };
@@ -168,7 +170,9 @@ const additionalDualConnectionsForBibliographicCitationDTOs = [
 ];
 
 const additionalDualConnectionsForBibliographicCitations: EdgeConnection[] =
-    additionalDualConnectionsForBibliographicCitationDTOs.map((dto) => new EdgeConnection(dto));
+    additionalDualConnectionsForBibliographicCitationDTOs.map(
+        (dto) => new EdgeConnection({ ...dto, audioForNote: MultilingualAudio.buildEmpty() })
+    );
 
 export default (uniqueIdOffset: number): EdgeConnection[] => [
     /**

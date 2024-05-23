@@ -66,6 +66,11 @@ const validDualConnection: EdgeConnection = new EdgeConnection({
         'this dual connection is legit',
         LanguageCode.English
     ),
+    /**
+     * Note that validating external references is not a responsibility of the
+     * domain model.
+     */
+    audioForNote: MultilingualAudio.buildEmpty(),
 });
 
 const validExternalStateForDualConnection: InMemorySnapshot = new DeluxeInMemoryStore({

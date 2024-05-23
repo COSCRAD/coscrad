@@ -8,6 +8,7 @@ import {
 import { GeneralContext } from '../../../domain/models/context/general-context/general-context.entity';
 import { PageRangeContext } from '../../../domain/models/context/page-range-context/page-range.context.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
+import { MultilingualAudio } from '../../../domain/models/shared/multilingual-audio/multilingual-audio.entity';
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
 
@@ -147,5 +148,6 @@ export default (): EdgeConnection[] =>
                 ...partialDTO,
                 connectionType: EdgeConnectionType.dual,
                 type: AggregateType.note,
+                audioForNote: MultilingualAudio.buildEmpty(),
             })
     );

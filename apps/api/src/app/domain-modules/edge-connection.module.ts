@@ -18,6 +18,9 @@ import { CommandInfoService } from '../controllers/command/services/command-info
 import { EdgeConnectionController } from '../controllers/edge-connection.controller';
 
 import {
+    AddAudioForNote,
+    AddAudioForNoteCommandHandler,
+    AudioAddedForNote,
     ConnectResourcesWithNote,
     ConnectResourcesWithNoteCommandHandler,
     CreateNoteAboutResource,
@@ -53,10 +56,12 @@ import { EdgeConnectionContextUnion } from '../../domain/models/context/edge-con
             CreateNoteAboutResource,
             ConnectResourcesWithNote,
             TranslateNote,
+            AddAudioForNote,
             // Events
             NoteAboutResourceCreated,
             ResourcesConnectedWithNote,
             NoteTranslated,
+            AudioAddedForNote,
         ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
@@ -65,6 +70,7 @@ import { EdgeConnectionContextUnion } from '../../domain/models/context/edge-con
         CreateNoteAboutResourceCommandHandler,
         ConnectResourcesWithNoteCommandHandler,
         TranslateNoteCommandHandler,
+        AddAudioForNoteCommandHandler,
     ],
     exports: [EdgeConnectionQueryService],
 })

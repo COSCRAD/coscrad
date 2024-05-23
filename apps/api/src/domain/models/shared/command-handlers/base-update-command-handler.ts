@@ -55,8 +55,6 @@ export abstract class BaseUpdateCommandHandler<
 
         const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);
 
-        const _repository = this.getRepositoryForCommand(command);
-
         await this.getRepositoryForCommand(command).update(
             instanceToPersistWithUpdatedEventHistory
         );
