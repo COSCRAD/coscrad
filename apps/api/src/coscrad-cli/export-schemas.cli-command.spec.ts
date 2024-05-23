@@ -72,7 +72,7 @@ describe(`CLI Command: **export-schemas**`, () => {
                 `--directory=${outputDir}`,
             ]);
 
-            const commandSchemasDirectoryPath = `${outputDir}/commands`;
+            const commandSchemasDirectoryPath = `${outputDir}`;
 
             const doesDirectoryExist = existsSync(commandSchemasDirectoryPath);
 
