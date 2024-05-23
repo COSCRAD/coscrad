@@ -1,16 +1,17 @@
 import { UniquelyIdentifiableType } from '../../domain/interfaces/id-manager.interface';
+import { UuidEquals } from '../../domain/repositories/specifications/uuid-equals.specification';
 import { AggregateId } from '../../domain/types/AggregateId';
 import { isNullOrUndefined } from '../../domain/utilities/validation/is-null-or-undefined';
 import { InternalError } from '../../lib/errors/InternalError';
 import { IIdRepository } from '../../lib/id-generation/interfaces/id-repository.interface';
-import { UuidDocument } from '../../lib/id-generation/types/UuidDocument';
+import { UuidDto } from '../../lib/id-generation/types/UuidDocument';
 import { Maybe } from '../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
 import { ArangoDatabase } from '../database/arango-database';
 import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../database/database.provider';
 
-type DatabaseUuidDocument = Omit<UuidDocument, 'sequenceNumber' | 'id'> & {
+export type DatabaseUuidDocument = Omit<UuidDto, 'sequenceNumber' | 'id'> & {
     _key: string;
     uuid: string;
 };
@@ -21,7 +22,7 @@ const mapDatabaseDocumentToUuidDocument = ({
     timeUsed,
     usedBy,
     uuid,
-}: DatabaseUuidDocument): UuidDocument => ({
+}: DatabaseUuidDocument): UuidDto => ({
     id: uuid,
     sequenceNumber: _key,
     timeGenerated,
@@ -34,7 +35,7 @@ const mapUuidDocumentToDatabaseDocument = ({
     timeGenerated,
     timeUsed,
     sequenceNumber,
-}: UuidDocument): DatabaseUuidDocument =>
+}: UuidDto): DatabaseUuidDocument =>
     ({
         uuid: id,
         timeGenerated,
@@ -49,11 +50,13 @@ export class ArangoIdRepository implements IIdRepository {
         this.arangoDatabase = databaseProvider.getDBInstance();
     }
 
-    async fetchById(id: AggregateId): Promise<Maybe<UuidDocument>> {
+    async fetchById(id: AggregateId): Promise<Maybe<UuidDto>> {
         const allIds = await this.arangoDatabase.fetchMany<DatabaseUuidDocument>(
-            ArangoCollectionId.uuids
+            ArangoCollectionId.uuids,
+            new UuidEquals(id)
         );
 
+        // this search will be one or none
         const result = allIds.find(({ uuid }) => uuid === id) || NotFound;
 
         if (isNotFound(result)) return NotFound;
@@ -67,7 +70,7 @@ export class ArangoIdRepository implements IIdRepository {
             // we need to be consistent with dates
             timeGenerated: new Date().toISOString(),
             // TODO fix types- there's no sequence number yet on creation
-        } as UuidDocument);
+        } as UuidDto);
 
         await this.arangoDatabase.create(databaseDocument, ArangoCollectionId.uuids);
     }
@@ -79,7 +82,7 @@ export class ArangoIdRepository implements IIdRepository {
                     ({
                         id,
                         timeGenerated: new Date().toISOString,
-                    } as unknown as UuidDocument)
+                    } as unknown as UuidDto)
             )
             .map(mapUuidDocumentToDatabaseDocument);
 
@@ -109,7 +112,7 @@ export class ArangoIdRepository implements IIdRepository {
             throw new InternalError(`Cannot reserve id: ${id} as it is already in use`);
         }
 
-        await this.arangoDatabase.update<Partial<UuidDocument>>(
+        await this.arangoDatabase.update<Partial<UuidDto>>(
             // The sequence number is the Arango document _key
             result.sequenceNumber,
             {

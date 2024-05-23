@@ -10,7 +10,7 @@ import { validAggregateOrThrow } from '../../models/shared/functional';
 import { Term } from '../../models/term/entities/term.entity';
 import { VocabularyList } from '../../models/vocabulary-list/entities/vocabulary-list.entity';
 import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
-import IsPublished from '../../repositories/specifications/isPublished';
+import IsPublished from '../../repositories/specifications/is-published.specification';
 import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
 import { ResourceQueryService } from './resource-query.service';

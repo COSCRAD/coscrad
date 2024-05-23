@@ -1,8 +1,10 @@
+import { AggregateType } from '@coscrad/api-interfaces';
 import { CommandHandler } from '@coscrad/commands';
 import { Valid } from '../../../../../domain/domainModelValidators/Valid';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../../domain/types/ResourceType';
-import { InternalError } from '../../../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
+import { isNotFound } from '../../../../../lib/types/not-found';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
@@ -20,10 +22,26 @@ export class AnalyzeTermInVocabularyListCommandHandler extends BaseUpdateCommand
         return vocabularyList.analyzeEntry(termId, propertyDefinition);
     }
 
-    protected fetchRequiredExternalState(
-        _command: AnalyzeTermInVocabularyList
-    ): Promise<InMemorySnapshot> {
-        return Promise.resolve(new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat());
+    protected async fetchRequiredExternalState({
+        termId,
+    }: AnalyzeTermInVocabularyList): Promise<InMemorySnapshot> {
+        const termSearchResult = await this.repositoryProvider
+            .forResource(AggregateType.term)
+            .fetchById(termId);
+
+        if (isInternalError(termSearchResult)) {
+            throw new InternalError(`Encountered invalid existing state in the database`, [
+                termSearchResult,
+            ]);
+        }
+
+        const terms = isNotFound(termSearchResult) ? [] : [termSearchResult];
+
+        return Promise.resolve(
+            new DeluxeInMemoryStore({
+                [AggregateType.term]: terms,
+            }).fetchFullSnapshotInLegacyFormat()
+        );
     }
 
     protected validateExternalState(
