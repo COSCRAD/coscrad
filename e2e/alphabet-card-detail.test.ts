@@ -41,4 +41,11 @@ describe('Detail', () => {
         await element(by.id('Next')).multiTap(26);
         await expect(element(by.id('apple'))).toBeVisible();
     });
+
+    it('should display the word audio play button', async () => {
+        await element(by.id('w1.mp3')).tap();
+        await expect(element(by.id('w1.mp3'))).toBeVisible();
+    });
+
+    //TODO create a test for error handling if audio is not available
 });

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Image, Text, View } from 'react-native';
+import Sound from 'react-native-sound';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store';
 import { selectAlphabet } from '../../store/slices/selectors';
 import { fetchAlphabets } from './../../store/slices/alphabet-slice';
-import config from './Config.json';
+import config from './config.json';
 
 /**
  *
@@ -28,6 +29,8 @@ export function AlphabetCardDetailScreen() {
     useEffect(() => {
         if (isNull(alphabetData)) dispatch(fetchAlphabets());
     }, [alphabetData, dispatch]);
+
+    const [hasAudioLoaded, setHasAudioLoaded] = useState(false);
 
     // Sequence numbers are indexed starting at 1
     const [selectedLetterSequenceNumber, setSelectedLetterSequenceNumber] = useState<number>(1);
@@ -66,6 +69,46 @@ export function AlphabetCardDetailScreen() {
 
     const apiUrlPrefix = config.apiUrlPrefix;
 
+    const letterAudio = new Sound(
+        `${apiUrlPrefix}${letter_audio.replace('.mp3', '')}`,
+        Sound.MAIN_BUNDLE,
+        (error) => {
+            if (error) {
+                console.log('failed to load letter audio', error);
+                return;
+            }
+        }
+    );
+
+    const playLetter = () => {
+        letterAudio.play((success) => {
+            if (!success) {
+                console.error('Error playing letter audio');
+            }
+        });
+    };
+
+    const wordAudio = new Sound(
+        `${apiUrlPrefix}${word_audio.replace('.mp3', '')}`,
+        Sound.MAIN_BUNDLE,
+        (error) => {
+            if (error) {
+                setHasAudioLoaded(false);
+                console.log('failed to load word audio', error);
+                return;
+            }
+            setHasAudioLoaded(true);
+        }
+    );
+
+    const playWord = () => {
+        wordAudio.play((success) => {
+            if (!success) {
+                console.error('Error playing word audio');
+            }
+        });
+    };
+
     return (
         <View testID="AlphabetCardDetail">
             <Image
@@ -75,6 +118,7 @@ export function AlphabetCardDetailScreen() {
                     uri: `${apiUrlPrefix}${card_image.replace('.png', '')}`,
                 }}
             />
+
             <Text testID={`${letter}`}>Letter: {letter}</Text>
             <Text testID={`${word}`}>Word: {word}</Text>
             <Text testID={`AlphabetCardDetail/${sequence_number}`}>
@@ -83,6 +127,17 @@ export function AlphabetCardDetailScreen() {
             <Text>Letter Audio:{letter_audio}</Text>
             <Text>Word Audio: {word_audio}</Text>
             <Text>Standalone Image: {standalone_image}</Text>
+            <Text>
+                Audio URL: {apiUrlPrefix}
+                {word_audio}
+            </Text>
+
+            <Button testID={`${letter_audio}`} title={'Play Letter'} onPress={playLetter} />
+
+            {wordAudio && hasAudioLoaded && (
+                <Button testID={`${word_audio}`} title={'Play Word'} onPress={playWord} />
+            )}
+
             <Button
                 testID="Back"
                 title="Back"
