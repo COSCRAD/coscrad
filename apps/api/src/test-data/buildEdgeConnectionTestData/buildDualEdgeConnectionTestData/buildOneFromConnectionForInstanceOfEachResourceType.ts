@@ -9,12 +9,15 @@ import { GeneralContext } from '../../../domain/models/context/general-context/g
 import { TextFieldContext } from '../../../domain/models/context/text-field-context/text-field-context.entity';
 import { TimeRangeContext } from '../../../domain/models/context/time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
+import { MultilingualAudio } from '../../../domain/models/shared/multilingual-audio/multilingual-audio.entity';
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { DTO } from '../../../types/DTO';
 
 // type is the same for all, use map to mix this in below
-const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType'>>[] = [
+const dtosWithoutTypeProperty: DTO<
+    Omit<EdgeConnection, 'type' | 'connectionType' | 'audioForNote'>
+>[] = [
     {
         id: '3001',
         note: buildMultilingualTextWithSingleItem(
@@ -92,5 +95,6 @@ export default (): EdgeConnection[] =>
                 ...partialDTO,
                 connectionType: EdgeConnectionType.dual,
                 type: AggregateType.note,
+                audioForNote: MultilingualAudio.buildEmpty(),
             })
     );

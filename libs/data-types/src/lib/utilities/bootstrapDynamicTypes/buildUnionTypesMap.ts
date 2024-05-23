@@ -1,4 +1,5 @@
 import {
+    DiscriminantValue,
     getUnionMemberMetadata,
     getUnionMetadata,
     isUnionMemberMetadata,
@@ -83,30 +84,49 @@ export const buildUnionTypesMap = <T = unknown>(allCtorCandidates: Ctor<T>[]): U
             );
         }
 
-        const duplicateDiscriminants = discriminantValuesAndCtors
-            .map(([_ctor, discriminantValue]) => discriminantValue)
-            .reduce(
-                (acc: { unique: unknown[]; duplicates: unknown[] }, discriminantValue) => {
-                    const { unique, duplicates } = acc;
+        const duplicateDiscriminants = discriminantValuesAndCtors.reduce(
+            (
+                acc: { unique: [unknown, DiscriminantValue][]; duplicates: DiscriminantValue[] },
+                [Ctor, discriminantValue]: [unknown, DiscriminantValue]
+            ) => {
+                const { unique, duplicates } = acc;
 
-                    if (duplicates.includes(discriminantValue)) return acc;
+                if (duplicates.includes(discriminantValue)) return acc;
 
-                    if (unique.includes(discriminantValue))
-                        return {
-                            unique,
-                            duplicates: [...duplicates, discriminantValue],
-                        };
+                if (
+                    unique.some(
+                        ([SeenCtor, seenDiscriminantValue]) =>
+                            /**
+                             * Note that the same class may be imported directly and via IoC system.
+                             * There may be 2 better fixes for this.
+                             * 1. make the corresponding decorator idempotent
+                             * 2. only refer to domain classes via the IoC
+                             * system instead of via bare imports when using, e.g.,
+                             * static methods
+                             */
+                            seenDiscriminantValue === discriminantValue && SeenCtor !== Ctor
+                    )
+                ) {
+                    duplicates.push(discriminantValue);
 
                     return {
+                        unique,
                         duplicates,
-                        unique: [...unique, discriminantValue],
                     };
-                },
-                {
-                    unique: [],
-                    duplicates: [],
                 }
-            ).duplicates;
+
+                unique.push([Ctor, discriminantValue]);
+
+                return {
+                    duplicates,
+                    unique,
+                };
+            },
+            {
+                unique: [],
+                duplicates: [],
+            }
+        ).duplicates;
 
         if (duplicateDiscriminants.length > 0) {
             throw new Error(

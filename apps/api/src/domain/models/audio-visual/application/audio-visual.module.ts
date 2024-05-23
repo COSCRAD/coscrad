@@ -5,6 +5,7 @@ import { IdGenerationModule } from '../../../../lib/id-generation/id-generation.
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import { AudioItemQueryService } from '../../../services/query-services/audio-item-query.service';
 import { VideoQueryService } from '../../../services/query-services/video-query.service';
+import { AudioAddedForNote } from '../../context/commands';
 import {
     AddLineItemToTranscript,
     AddLineItemtoTranscriptCommandHandler,
@@ -61,6 +62,10 @@ import { VideoController } from './video.controller';
         ImportLineItemsToTranscriptCommandHandler,
         ImportTranslationsForTranscript,
         ImportTranslationsForTranscriptCommandHandler,
+        ...[AudioAddedForNote].map((ctor) => ({
+            provide: ctor,
+            useValue: ctor,
+        })),
     ],
     exports: [AudioItemQueryService, VideoQueryService],
 })

@@ -1,5 +1,6 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
+import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import {
     EdgeConnection,
     EdgeConnectionMember,
@@ -9,6 +10,7 @@ import {
 import { PageRangeContext } from '../../../domain/models/context/page-range-context/page-range.context.entity';
 import { TimeRangeContext } from '../../../domain/models/context/time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
+import { MultilingualAudio } from '../../../domain/models/shared/multilingual-audio/multilingual-audio.entity';
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { DTO } from '../../../types/DTO';
@@ -20,6 +22,10 @@ type TestCase = {
     input: DTO<EdgeConnection>;
     expectedResult: ArangoEdgeDocument;
 };
+
+const audioItemId = buildDummyUuid(555);
+
+const languageCodeForAudio = LanguageCode.English;
 
 const selfEdgeConnection = new EdgeConnection({
     id: '123',
@@ -39,6 +45,10 @@ const selfEdgeConnection = new EdgeConnection({
             }).toDTO(),
         },
     ],
+    audioForNote: MultilingualAudio.buildEmpty().addAudio(
+        audioItemId,
+        languageCodeForAudio
+    ) as MultilingualAudio,
 }).toDTO();
 
 const validPageRangeContext = new PageRangeContext({
@@ -86,6 +96,10 @@ const dualEdgeConnection = new EdgeConnection({
     ],
     id: '123',
     note: buildMultilingualTextWithSingleItem('These are both about bears', LanguageCode.English),
+    audioForNote: MultilingualAudio.buildEmpty().addAudio(
+        audioItemId,
+        languageCodeForAudio
+    ) as MultilingualAudio,
 }).toDTO();
 
 const testCases: TestCase[] = [
@@ -102,6 +116,10 @@ const testCases: TestCase[] = [
                 'These pages are about bears',
                 LanguageCode.English
             ),
+            audioForNote: MultilingualAudio.buildEmpty().addAudio(
+                audioItemId,
+                languageCodeForAudio
+            ) as MultilingualAudio,
             type: AggregateType.note,
             members: [
                 {
@@ -124,6 +142,10 @@ const testCases: TestCase[] = [
                 'These are both about bears',
                 LanguageCode.English
             ),
+            audioForNote: MultilingualAudio.buildEmpty().addAudio(
+                audioItemId,
+                languageCodeForAudio
+            ) as MultilingualAudio,
             type: AggregateType.note,
             members: [
                 {

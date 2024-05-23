@@ -30,6 +30,7 @@ const translationOfNote = 'translation of note';
 
 describe(`EdgeConnection.translateNote`, () => {
     beforeAll(() => {
+        // TODO: use the edge connection module as a source of truth context
         bootstrapDynamicTypes([
             EdgeConnectionContextUnion,
             GeneralContext,

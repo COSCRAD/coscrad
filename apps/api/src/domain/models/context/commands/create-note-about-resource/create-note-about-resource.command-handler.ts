@@ -16,6 +16,7 @@ import { InMemorySnapshot } from '../../../../types/ResourceType';
 import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
+import { MultilingualAudio } from '../../../shared/multilingual-audio/multilingual-audio.entity';
 import {
     EdgeConnection,
     EdgeConnectionMemberRole,
@@ -36,6 +37,7 @@ export class CreateNoteAboutResourceCommandHandler extends BaseCreateCommandHand
         const createDto: DTO<EdgeConnection> = {
             type: AggregateType.note,
             id,
+            audioForNote: MultilingualAudio.buildEmpty(),
             connectionType: EdgeConnectionType.self,
             note: new MultilingualText({
                 items: [
