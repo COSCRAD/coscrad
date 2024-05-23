@@ -23,6 +23,7 @@ import {
 } from '../domain/models/context/edge-connection.entity';
 import { TimeRangeContext } from '../domain/models/context/time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from '../domain/models/context/types/EdgeConnectionContextType';
+import { MultilingualAudio } from '../domain/models/shared/multilingual-audio/multilingual-audio.entity';
 import { AggregateType } from '../domain/types/AggregateType';
 import { DeluxeInMemoryStore } from '../domain/types/DeluxeInMemoryStore';
 import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
@@ -155,6 +156,8 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
 
             const idOfNoteForAudiovisualItem = buildDummyUuid(123);
 
+            const audioItemId = buildDummyUuid(555);
+
             const noteForAudiovisualItem = new EdgeConnection({
                 type: AggregateType.note,
                 connectionType: EdgeConnectionType.self,
@@ -167,6 +170,10 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
                 ],
                 note,
                 id: idOfNoteForAudiovisualItem,
+                audioForNote: MultilingualAudio.buildEmpty().addAudio(
+                    audioItemId,
+                    noteLanguageCode
+                ) as MultilingualAudio,
             });
 
             const dummyTag = getValidAggregateInstanceForTest(AggregateType.tag);

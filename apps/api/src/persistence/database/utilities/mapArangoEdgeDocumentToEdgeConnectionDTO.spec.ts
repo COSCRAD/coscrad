@@ -1,6 +1,7 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { isDeepStrictEqual } from 'util';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
+import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import {
     EdgeConnection,
     EdgeConnectionMemberRole,
@@ -9,6 +10,7 @@ import {
 import { GeneralContext } from '../../../domain/models/context/general-context/general-context.entity';
 import { TimeRangeContext } from '../../../domain/models/context/time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
+import { MultilingualAudio } from '../../../domain/models/shared/multilingual-audio/multilingual-audio.entity';
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { DTO } from '../../../types/DTO';
@@ -31,6 +33,15 @@ const timeRangeContext = new TimeRangeContext({
 
 const generalContext = new GeneralContext();
 
+const audioIdForNote = buildDummyUuid(555);
+
+const languageCodeForNote = LanguageCode.English;
+
+const audioForNote = MultilingualAudio.buildEmpty().addAudio(
+    audioIdForNote,
+    languageCodeForNote
+) as MultilingualAudio;
+
 const selfDocument: ArangoEdgeDocument = {
     _key: '5',
     _to: 'audio_items/55',
@@ -38,20 +49,21 @@ const selfDocument: ArangoEdgeDocument = {
     type: AggregateType.note,
     eventHistory: [],
     connectionType: EdgeConnectionType.self,
-    note: buildMultilingualTextWithSingleItem('These pages are about deer', LanguageCode.English),
+    note: buildMultilingualTextWithSingleItem('These pages are about deer', languageCodeForNote),
     members: [
         {
             role: EdgeConnectionMemberRole.self,
             context: timeRangeContext,
         },
     ],
+    audioForNote,
 };
 
 const selfEdgeConnection: DTO<EdgeConnection> = {
     id: '5',
     type: AggregateType.note,
     connectionType: EdgeConnectionType.self,
-    note: buildMultilingualTextWithSingleItem('These pages are about deer', LanguageCode.English),
+    note: buildMultilingualTextWithSingleItem('These pages are about deer', languageCodeForNote),
     members: [
         {
             role: EdgeConnectionMemberRole.self,
@@ -62,6 +74,7 @@ const selfEdgeConnection: DTO<EdgeConnection> = {
             context: timeRangeContext,
         },
     ],
+    audioForNote,
     eventHistory: [],
 };
 
@@ -74,7 +87,7 @@ const dualEdgeDocument: ArangoEdgeDocument = {
     type: AggregateType.note,
     note: buildMultilingualTextWithSingleItem(
         'the elder discusses this book in this part of the recording',
-        LanguageCode.English
+        languageCodeForNote
     ),
     members: [
         {
@@ -86,6 +99,7 @@ const dualEdgeDocument: ArangoEdgeDocument = {
             context: timeRangeContext,
         },
     ],
+    audioForNote,
 };
 
 const dualEdgeConnection: DTO<EdgeConnection> = {
@@ -94,7 +108,7 @@ const dualEdgeConnection: DTO<EdgeConnection> = {
     id: '234',
     note: buildMultilingualTextWithSingleItem(
         'the elder discusses this book in this part of the recording',
-        LanguageCode.English
+        languageCodeForNote
     ),
     members: [
         {
@@ -115,6 +129,7 @@ const dualEdgeConnection: DTO<EdgeConnection> = {
         },
     ],
     eventHistory: [],
+    audioForNote,
 };
 
 const testCases: TestCase[] = [

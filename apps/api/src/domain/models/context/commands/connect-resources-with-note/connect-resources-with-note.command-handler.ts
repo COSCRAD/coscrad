@@ -19,6 +19,7 @@ import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { validAggregateOrThrow } from '../../../shared/functional';
+import { MultilingualAudio } from '../../../shared/multilingual-audio/multilingual-audio.entity';
 import { EdgeConnection } from '../../edge-connection.entity';
 import { ConnectResourcesWithNote } from './connect-resources-with-note.command';
 import { ResourcesConnectedWithNote } from './resources-connected-with-note.event';
@@ -41,6 +42,7 @@ export class ConnectResourcesWithNoteCommandHandler extends BaseCreateCommandHan
         const createDto: DTO<EdgeConnection> = {
             type: AggregateType.note,
             id,
+            audioForNote: MultilingualAudio.buildEmpty(),
             connectionType: EdgeConnectionType.dual,
             // TODO [https://www.pivotaltracker.com/story/show/185394771] make this Multilingual Text
             note: new MultilingualText({

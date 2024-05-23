@@ -49,10 +49,12 @@ import {
 } from '../build-aggregate-root-from-event-history';
 import AggregateNotFoundError from '../shared/common-command-errors/AggregateNotFoundError';
 import { BaseEvent } from '../shared/events/base-event.entity';
-import { NoteTranslated } from './commands';
+import { MultilingualAudio } from '../shared/multilingual-audio/multilingual-audio.entity';
+import { AudioAddedForNote, NoteTranslated } from './commands';
 import { ResourcesConnectedWithNote } from './commands/connect-resources-with-note/resources-connected-with-note.event';
 import { NoteAboutResourceCreated } from './commands/create-note-about-resource/note-about-resource-created.event';
 import { ContextUnionType } from './edge-connection-context-union';
+import { CannnotAddAudioForNoteInGivenLanguageError } from './errors/cannot-add-audio-for-note-in-given-language.error';
 
 export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnectionContext>
     extends BaseDomainModel
@@ -135,18 +137,26 @@ export class EdgeConnection extends Aggregate {
     })
     readonly note: MultilingualText;
 
+    @NestedDataType(MultilingualAudio, {
+        label: 'audio for note',
+        description: 'contains references to audio for the note',
+    })
+    audioForNote: MultilingualAudio;
+
     constructor(dto: DTO<EdgeConnection>) {
         super(dto);
 
         if (!dto) return;
 
-        const { members, note, connectionType: type } = dto;
+        const { members, note, connectionType: type, audioForNote: audioForNoteDto } = dto;
 
         this.connectionType = type;
 
         this.members = members.map((dto) => new EdgeConnectionMember(dto));
 
         this.note = new MultilingualText(note);
+
+        this.audioForNote = audioForNoteDto ? new MultilingualAudio(audioForNoteDto) : undefined;
     }
 
     getName(): MultilingualText {
@@ -213,7 +223,15 @@ export class EdgeConnection extends Aggregate {
     }
 
     getAvailableCommands(): string[] {
-        return [];
+        const allCommands: string[] = [];
+
+        allCommands.push('TRANSLATE_NOTE');
+
+        if (this.note.items.length > this.audioForNote.items.length) {
+            allCommands.push('ADD_AUDIO_FOR_NOTE');
+        }
+
+        return allCommands;
     }
 
     getCompositeIdentifier = () =>
@@ -234,12 +252,46 @@ export class EdgeConnection extends Aggregate {
         });
     }
 
+    @UpdateMethod()
+    addAudioForNote(
+        audioItemId: AggregateId,
+        languageCode: LanguageCode
+    ): ResultOrError<EdgeConnection> {
+        if (!this.note.has(languageCode)) {
+            return new CannnotAddAudioForNoteInGivenLanguageError(
+                this.id,
+                audioItemId,
+                languageCode
+            );
+        }
+
+        const audioUpdateResult = this.audioForNote.addAudio(audioItemId, languageCode);
+
+        if (isInternalError(audioUpdateResult)) {
+            return audioUpdateResult;
+        }
+
+        this.audioForNote = audioUpdateResult;
+
+        return this;
+    }
+
     getMemberWithRole(role: EdgeConnectionMemberRole): Maybe<EdgeConnectionMember> {
         return this.members.find((member) => member.role === role) || NotFound;
     }
 
+    getAudioForNoteInLanguage(languageCode: LanguageCode): Maybe<AggregateId> {
+        const result = this.audioForNote.getIdForAudioIn(languageCode);
+
+        return result;
+    }
+
     handleNoteTranslated({ payload: { text, languageCode } }: NoteTranslated) {
         return this.translateNote(text, languageCode);
+    }
+
+    handleAudioAddedForNote({ payload: { audioItemId, languageCode } }: AudioAddedForNote) {
+        return this.addAudioForNote(audioItemId, languageCode);
     }
 
     static fromEventHistory(
@@ -278,6 +330,7 @@ export class EdgeConnection extends Aggregate {
         const buildResult = new EdgeConnection({
             type: AggregateType.note,
             id,
+            audioForNote: MultilingualAudio.buildEmpty(),
             /**
              * A "self note" is a note about a resource with context, represented
              * as a self connection back to the resource node in the graph.
@@ -321,6 +374,7 @@ export class EdgeConnection extends Aggregate {
         const buildResult = new EdgeConnection({
             type: AggregateType.note,
             id,
+            audioForNote: MultilingualAudio.buildEmpty(),
             note: buildMultilingualTextWithSingleItem(text, languageCode),
             connectionType: EdgeConnectionType.dual,
             members: [

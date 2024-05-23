@@ -1,5 +1,6 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
+import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import {
     EdgeConnection,
     EdgeConnectionMemberRole,
@@ -8,6 +9,7 @@ import {
 import { PageRangeContext } from '../../../domain/models/context/page-range-context/page-range.context.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
 import { Resource } from '../../../domain/models/resource.entity';
+import { MultilingualAudio } from '../../../domain/models/shared/multilingual-audio/multilingual-audio.entity';
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { HasAggregateId } from '../../../domain/types/HasAggregateId';
 import { ResourceType } from '../../../domain/types/ResourceType';
@@ -50,6 +52,10 @@ const edgeConnections: DTO<EdgeConnection>[] = [
                 },
             },
         ],
+        audioForNote: MultilingualAudio.buildEmpty().addAudio(
+            buildDummyUuid(555),
+            LanguageCode.English
+        ) as MultilingualAudio,
         eventHistory: [],
     },
     ...testData.note.map((connection) => connection.toDTO()),

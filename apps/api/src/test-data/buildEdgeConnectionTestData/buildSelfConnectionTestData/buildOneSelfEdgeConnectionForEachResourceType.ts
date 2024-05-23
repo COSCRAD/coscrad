@@ -10,13 +10,17 @@ import { PageRangeContext } from '../../../domain/models/context/page-range-cont
 import { TextFieldContext } from '../../../domain/models/context/text-field-context/text-field-context.entity';
 import { TimeRangeContext } from '../../../domain/models/context/time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
+import { MultilingualAudio } from '../../../domain/models/shared/multilingual-audio/multilingual-audio.entity';
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { DTO } from '../../../types/DTO';
 
 const role = EdgeConnectionMemberRole.self;
 
-const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionType'>[] = [
+const edgeConnectionDTOs: Omit<
+    DTO<EdgeConnection>,
+    'type' | 'id' | 'connectionType' | 'audioForNote'
+>[] = [
     {
         note: buildMultilingualTextWithSingleItem(
             'This is a general note about this digital text',
@@ -373,5 +377,6 @@ export default (uniqueIdOffset: number): EdgeConnection[] =>
             ...dto,
             id: `${index + uniqueIdOffset}`,
             type: AggregateType.note,
+            audioForNote: MultilingualAudio.buildEmpty(),
         }))
         .map((dto) => new EdgeConnection(dto));

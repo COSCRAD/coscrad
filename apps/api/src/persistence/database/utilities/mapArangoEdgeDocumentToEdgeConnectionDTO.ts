@@ -87,7 +87,7 @@ const getCompositeIdentifierForMemberWithRole = (
         : parseResourceCompositeID(_to);
 
 export default (document: ArangoEdgeDocument): DTO<EdgeConnection> => {
-    const { members, note, _key: id, _to, _from, eventHistory } = document;
+    const { members, audioForNote, note, _key: id, _to, _from, eventHistory } = document;
 
     if ([_to, _from, id].some(isNullOrUndefined)) {
         throw new InternalError(`invalid edge document: ${JSON.stringify(document)}`);
@@ -111,6 +111,7 @@ export default (document: ArangoEdgeDocument): DTO<EdgeConnection> => {
     return {
         type: AggregateType.note,
         connectionType: determineEdgeConnectionTypeFromDocument(document),
+        audioForNote,
         id,
         note,
         members: membersForEdgeConnectionDTO,
