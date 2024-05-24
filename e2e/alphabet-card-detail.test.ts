@@ -47,5 +47,23 @@ describe('Detail', () => {
         await expect(element(by.id('w1.mp3'))).toBeVisible();
     });
 
-    //TODO create a test for error handling if audio is not available
+    it('should display an error message if there is a word audio error', async () => {
+        const expectAudioError = true;
+
+        if (expectAudioError) {
+            await expect(element(by.id('wordAudioError'))).toBeVisible();
+        } else {
+            await expect(element(by.id('w1.mp3'))).toBeVisible();
+        }
+    });
+
+    it('should display an error message if there is a letter audio error', async () => {
+        const expectAudioError = true;
+
+        if (expectAudioError) {
+            await expect(element(by.id('letterAudioError'))).toBeVisible();
+        } else {
+            await expect(element(by.id('l1.mp3'))).toBeVisible();
+        }
+    });
 });

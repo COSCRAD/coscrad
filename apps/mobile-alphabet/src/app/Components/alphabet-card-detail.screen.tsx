@@ -132,10 +132,16 @@ export function AlphabetCardDetailScreen() {
                 {word_audio}
             </Text>
 
-            <Button testID={`${letter_audio}`} title={'Play Letter'} onPress={playLetter} />
+            {letterAudio && hasAudioLoaded ? (
+                <Button testID={`${letter_audio}`} title={'Play letter'} onPress={playLetter} />
+            ) : (
+                <Text testID="letterAudioError">Error playing `{letter_audio}`</Text>
+            )}
 
-            {wordAudio && hasAudioLoaded && (
+            {wordAudio && hasAudioLoaded ? (
                 <Button testID={`${word_audio}`} title={'Play Word'} onPress={playWord} />
+            ) : (
+                <Text testID="wordAudioError">Error playing`{word_audio}`</Text>
             )}
 
             <Button
