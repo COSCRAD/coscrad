@@ -35,6 +35,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "isArray": false,
         "isOptional": false,
         "label": "name",
+        "name": "MultilingualText",
         "schema": {
           "items": {
             "complexDataType": "NESTED_TYPE",
@@ -42,6 +43,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "isArray": true,
             "isOptional": false,
             "label": "items",
+            "name": "MultilingualTextItem",
             "schema": {
               "languageCode": {
                 "complexDataType": "ENUM",
@@ -139,6 +141,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "isArray": false,
         "isOptional": false,
         "label": "children",
+        "name": "CategoryTreeViewModel",
         "schema": {
           "id": {
             "coscradDataType": "NON_EMPTY_STRING",
@@ -167,6 +170,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "isArray": false,
             "isOptional": false,
             "label": "name",
+            "name": "MultilingualText",
             "schema": {
               "items": {
                 "complexDataType": "NESTED_TYPE",
@@ -174,6 +178,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                 "isArray": true,
                 "isOptional": false,
                 "label": "items",
+                "name": "MultilingualTextItem",
                 "schema": {
                   "languageCode": {
                     "complexDataType": "ENUM",
@@ -285,6 +290,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "isArray": false,
         "isOptional": false,
         "label": "name",
+        "name": "MultilingualText",
         "schema": {
           "items": {
             "complexDataType": "NESTED_TYPE",
@@ -292,6 +298,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "isArray": true,
             "isOptional": false,
             "label": "items",
+            "name": "MultilingualTextItem",
             "schema": {
               "languageCode": {
                 "complexDataType": "ENUM",
@@ -396,6 +403,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "isArray": false,
         "isOptional": false,
         "label": "name",
+        "name": "MultilingualText",
         "schema": {
           "items": {
             "complexDataType": "NESTED_TYPE",
@@ -403,6 +411,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "isArray": true,
             "isOptional": false,
             "label": "items",
+            "name": "MultilingualTextItem",
             "schema": {
               "languageCode": {
                 "complexDataType": "ENUM",
@@ -491,6 +500,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "isArray": false,
         "isOptional": true,
         "label": "profile",
+        "name": "CoscradUserProfile",
         "schema": {
           "email": {
             "coscradDataType": "NON_EMPTY_STRING",
@@ -505,6 +515,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "isArray": false,
             "isOptional": false,
             "label": "full name",
+            "name": "FullName",
             "schema": {
               "firstName": {
                 "coscradDataType": "NON_EMPTY_STRING",
@@ -590,6 +601,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "isArray": false,
         "isOptional": false,
         "label": "name",
+        "name": "MultilingualText",
         "schema": {
           "items": {
             "complexDataType": "NESTED_TYPE",
@@ -597,6 +609,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "isArray": true,
             "isOptional": false,
             "label": "items",
+            "name": "MultilingualTextItem",
             "schema": {
               "languageCode": {
                 "complexDataType": "ENUM",
@@ -685,6 +698,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "isArray": true,
         "isOptional": false,
         "label": "users",
+        "name": "CoscradUserViewModel",
         "schema": {
           "id": {
             "coscradDataType": "NON_EMPTY_STRING",
@@ -699,6 +713,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "isArray": false,
             "isOptional": false,
             "label": "name",
+            "name": "MultilingualText",
             "schema": {
               "items": {
                 "complexDataType": "NESTED_TYPE",
@@ -706,6 +721,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                 "isArray": true,
                 "isOptional": false,
                 "label": "items",
+                "name": "MultilingualTextItem",
                 "schema": {
                   "languageCode": {
                     "complexDataType": "ENUM",
@@ -794,6 +810,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "isArray": false,
             "isOptional": true,
             "label": "profile",
+            "name": "CoscradUserProfile",
             "schema": {
               "email": {
                 "coscradDataType": "NON_EMPTY_STRING",
@@ -808,6 +825,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                 "isArray": false,
                 "isOptional": false,
                 "label": "full name",
+                "name": "FullName",
                 "schema": {
                   "firstName": {
                     "coscradDataType": "NON_EMPTY_STRING",
@@ -888,6 +906,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "isArray": false,
         "isOptional": false,
         "label": "name",
+        "name": "MultilingualText",
         "schema": {
           "items": {
             "complexDataType": "NESTED_TYPE",
@@ -895,6 +914,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "isArray": true,
             "isOptional": false,
             "label": "items",
+            "name": "MultilingualTextItem",
             "schema": {
               "languageCode": {
                 "complexDataType": "ENUM",

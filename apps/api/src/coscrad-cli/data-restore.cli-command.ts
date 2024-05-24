@@ -9,7 +9,7 @@ import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
     description: 'restores the database state from a snapshot file',
 })
 export class DomainRestoreCliCommand extends CliCommandRunner {
-    dataImporter: DataImporter;
+    private readonly dataImporter: DataImporter;
 
     constructor(
         databaseProvider: ArangoDatabaseProvider,

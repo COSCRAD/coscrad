@@ -8,6 +8,7 @@ exports[`DynamicDataTypeFinderService when there is a valid union type definitio
     "isArray": true,
     "isOptional": false,
     "label": "members",
+    "name": "EdgeConnectionMember",
     "schema": {
       "context": {
         "complexDataType": "UNION_TYPE",

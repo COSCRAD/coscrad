@@ -45,6 +45,7 @@ cypress.env.json
 !.mobile-alphabet.SAMPLE.env
 
 # data for data processing scripts
+__data__/*
 /scripts/data-processing/data
 *.data.* 
 __data__
