@@ -8,6 +8,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "reference data",
+    "name": "BookBibliographicCitationData",
     "schema": {
       "abstract": {
         "coscradDataType": "NON_EMPTY_STRING",
@@ -22,6 +23,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "isArray": true,
         "isOptional": false,
         "label": "creators",
+        "name": "BibliographicCitationCreator",
         "schema": {
           "name": {
             "coscradDataType": "NON_EMPTY_STRING",
@@ -124,6 +126,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "reference data",
+    "name": "CourtCaseBibliographicCitationData",
     "schema": {
       "abstract": {
         "coscradDataType": "NON_EMPTY_STRING",
@@ -187,6 +190,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "reference data",
+    "name": "JournalArticleBibliographicCitationData",
     "schema": {
       "abstract": {
         "coscradDataType": "NON_EMPTY_STRING",
@@ -201,6 +205,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "isArray": true,
         "isOptional": false,
         "label": "creators",
+        "name": "BibliographicCitationCreator",
         "schema": {
           "name": {
             "coscradDataType": "NON_EMPTY_STRING",
@@ -329,6 +334,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": true,
     "label": "date of birth",
+    "name": "CoscradDate",
     "schema": {
       "day": {
         "coscradDataType": "POSITIVE_INTEGER",
@@ -411,6 +417,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "full name",
+    "name": "FullName",
     "schema": {
       "firstName": {
         "coscradDataType": "NON_EMPTY_STRING",
@@ -453,6 +460,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "audio for title",
+    "name": "MultilingualAudio",
     "schema": {
       "items": {
         "complexDataType": "NESTED_TYPE",
@@ -460,6 +468,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "isArray": true,
         "isOptional": false,
         "label": "audio items",
+        "name": "MultilingualAudioItem",
         "schema": {
           "audioItemId": {
             "coscradDataType": "UUID",
@@ -533,6 +542,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": true,
     "isOptional": true,
     "label": "digital text pages",
+    "name": "DigitalTextPage",
     "schema": {
       "audio": {
         "complexDataType": "NESTED_TYPE",
@@ -540,6 +550,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "isArray": false,
         "isOptional": false,
         "label": "multilingual audio",
+        "name": "MultilingualAudio",
         "schema": {
           "items": {
             "complexDataType": "NESTED_TYPE",
@@ -547,6 +558,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "isArray": true,
             "isOptional": false,
             "label": "audio items",
+            "name": "MultilingualAudioItem",
             "schema": {
               "audioItemId": {
                 "coscradDataType": "UUID",
@@ -605,6 +617,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "isArray": false,
         "isOptional": true,
         "label": "content",
+        "name": "MultilingualText",
         "schema": {
           "items": {
             "complexDataType": "NESTED_TYPE",
@@ -612,6 +625,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "isArray": true,
             "isOptional": false,
             "label": "items",
+            "name": "MultilingualTextItem",
             "schema": {
               "languageCode": {
                 "complexDataType": "ENUM",
@@ -716,6 +730,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "title",
+    "name": "MultilingualText",
     "schema": {
       "items": {
         "complexDataType": "NESTED_TYPE",
@@ -723,6 +738,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "isArray": true,
         "isOptional": false,
         "label": "items",
+        "name": "MultilingualTextItem",
         "schema": {
           "languageCode": {
             "complexDataType": "ENUM",
@@ -816,6 +832,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": true,
     "label": "dimensions",
+    "name": "MediaItemDimensions",
     "schema": {
       "heightPx": {
         "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
@@ -947,6 +964,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "audio for note",
+    "name": "MultilingualAudio",
     "schema": {
       "items": {
         "complexDataType": "NESTED_TYPE",
@@ -954,6 +972,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "isArray": true,
         "isOptional": false,
         "label": "audio items",
+        "name": "MultilingualAudioItem",
         "schema": {
           "audioItemId": {
             "coscradDataType": "UUID",
@@ -1038,6 +1057,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": true,
     "isOptional": false,
     "label": "members",
+    "name": "EdgeConnectionMember",
     "schema": {
       "compositeIdentifier": {
         "coscradDataType": "COMPOSITE_IDENTIFIER",
@@ -1094,6 +1114,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "isArray": false,
                 "isOptional": false,
                 "label": "time range",
+                "name": "TimeRange",
                 "schema": {
                   "inPointMilliseconds": {
                     "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
@@ -1219,6 +1240,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "note text",
+    "name": "MultilingualText",
     "schema": {
       "items": {
         "complexDataType": "NESTED_TYPE",
@@ -1226,6 +1248,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "isArray": true,
         "isOptional": false,
         "label": "items",
+        "name": "MultilingualTextItem",
         "schema": {
           "languageCode": {
             "complexDataType": "ENUM",
@@ -1319,6 +1342,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "dimensions",
+    "name": "MediaItemDimensions",
     "schema": {
       "heightPx": {
         "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
@@ -1364,6 +1388,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "title",
+    "name": "MultilingualText",
     "schema": {
       "items": {
         "complexDataType": "NESTED_TYPE",
@@ -1371,6 +1396,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "isArray": true,
         "isOptional": false,
         "label": "items",
+        "name": "MultilingualTextItem",
         "schema": {
           "languageCode": {
             "complexDataType": "ENUM",
@@ -1471,6 +1497,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": true,
     "isOptional": true,
     "label": "playlist items",
+    "name": "PlaylistItem",
     "schema": {
       "resourceCompositeIdentifier": {
         "complexDataType": "NESTED_TYPE",
@@ -1478,6 +1505,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "isArray": false,
         "isOptional": false,
         "label": "resource composite identifier",
+        "name": "PlaylistableResourceCompositeIdentifier",
         "schema": {
           "id": {
             "coscradDataType": "UUID",
@@ -1511,6 +1539,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "name",
+    "name": "MultilingualText",
     "schema": {
       "items": {
         "complexDataType": "NESTED_TYPE",
@@ -1518,6 +1547,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "isArray": true,
         "isOptional": false,
         "label": "items",
+        "name": "MultilingualTextItem",
         "schema": {
           "languageCode": {
             "complexDataType": "ENUM",
@@ -1626,6 +1656,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": true,
     "label": "lyrics",
+    "name": "MultilingualText",
     "schema": {
       "items": {
         "complexDataType": "NESTED_TYPE",
@@ -1633,6 +1664,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "isArray": true,
         "isOptional": false,
         "label": "items",
+        "name": "MultilingualTextItem",
         "schema": {
           "languageCode": {
             "complexDataType": "ENUM",
@@ -1721,6 +1753,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "title",
+    "name": "MultilingualText",
     "schema": {
       "items": {
         "complexDataType": "NESTED_TYPE",
@@ -1728,6 +1761,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "isArray": true,
         "isOptional": false,
         "label": "items",
+        "name": "MultilingualTextItem",
         "schema": {
           "languageCode": {
             "complexDataType": "ENUM",
@@ -1883,6 +1917,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "multilingual audio",
+    "name": "MultilingualAudio",
     "schema": {
       "items": {
         "complexDataType": "NESTED_TYPE",
@@ -1890,6 +1925,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "isArray": true,
         "isOptional": false,
         "label": "audio items",
+        "name": "MultilingualAudioItem",
         "schema": {
           "audioItemId": {
             "coscradDataType": "UUID",
@@ -1976,6 +2012,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "text",
+    "name": "MultilingualText",
     "schema": {
       "items": {
         "complexDataType": "NESTED_TYPE",
@@ -1983,6 +2020,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "isArray": true,
         "isOptional": false,
         "label": "items",
+        "name": "MultilingualTextItem",
         "schema": {
           "languageCode": {
             "complexDataType": "ENUM",
@@ -2098,6 +2136,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "name",
+    "name": "MultilingualText",
     "schema": {
       "items": {
         "complexDataType": "NESTED_TYPE",
@@ -2105,6 +2144,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "isArray": true,
         "isOptional": false,
         "label": "items",
+        "name": "MultilingualTextItem",
         "schema": {
           "languageCode": {
             "complexDataType": "ENUM",
@@ -2193,6 +2233,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": true,
     "label": "items",
+    "name": "Transcript",
     "schema": {
       "items": {
         "complexDataType": "NESTED_TYPE",
@@ -2200,6 +2241,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "isArray": true,
         "isOptional": true,
         "label": "items",
+        "name": "TranscriptItem",
         "schema": {
           "inPointMilliseconds": {
             "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
@@ -2228,6 +2270,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "isArray": false,
             "isOptional": false,
             "label": "text",
+            "name": "MultilingualText",
             "schema": {
               "items": {
                 "complexDataType": "NESTED_TYPE",
@@ -2235,6 +2278,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "isArray": true,
                 "isOptional": false,
                 "label": "items",
+                "name": "MultilingualTextItem",
                 "schema": {
                   "languageCode": {
                     "complexDataType": "ENUM",
@@ -2325,6 +2369,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "isArray": true,
         "isOptional": true,
         "label": "participants",
+        "name": "TranscriptParticipant",
         "schema": {
           "initials": {
             "coscradDataType": "NON_EMPTY_STRING",
@@ -2369,6 +2414,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": true,
     "label": "profile",
+    "name": "CoscradUserProfile",
     "schema": {
       "email": {
         "coscradDataType": "NON_EMPTY_STRING",
@@ -2383,6 +2429,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "isArray": false,
         "isOptional": false,
         "label": "full name",
+        "name": "FullName",
         "schema": {
           "firstName": {
             "coscradDataType": "NON_EMPTY_STRING",
@@ -2498,6 +2545,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "name",
+    "name": "MultilingualText",
     "schema": {
       "items": {
         "complexDataType": "NESTED_TYPE",
@@ -2505,6 +2553,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "isArray": true,
         "isOptional": false,
         "label": "items",
+        "name": "MultilingualTextItem",
         "schema": {
           "languageCode": {
             "complexDataType": "ENUM",
@@ -2593,6 +2642,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": true,
     "label": "items",
+    "name": "Transcript",
     "schema": {
       "items": {
         "complexDataType": "NESTED_TYPE",
@@ -2600,6 +2650,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "isArray": true,
         "isOptional": true,
         "label": "items",
+        "name": "TranscriptItem",
         "schema": {
           "inPointMilliseconds": {
             "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
@@ -2628,6 +2679,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "isArray": false,
             "isOptional": false,
             "label": "text",
+            "name": "MultilingualText",
             "schema": {
               "items": {
                 "complexDataType": "NESTED_TYPE",
@@ -2635,6 +2687,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "isArray": true,
                 "isOptional": false,
                 "label": "items",
+                "name": "MultilingualTextItem",
                 "schema": {
                   "languageCode": {
                     "complexDataType": "ENUM",
@@ -2725,6 +2778,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "isArray": true,
         "isOptional": true,
         "label": "participants",
+        "name": "TranscriptParticipant",
         "schema": {
           "initials": {
             "coscradDataType": "NON_EMPTY_STRING",
@@ -2755,6 +2809,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": true,
     "isOptional": true,
     "label": "entries",
+    "name": "VocabularyListEntry",
     "schema": {
       "termId": {
         "coscradDataType": "NON_EMPTY_STRING",
@@ -2778,6 +2833,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "name",
+    "name": "MultilingualText",
     "schema": {
       "items": {
         "complexDataType": "NESTED_TYPE",
@@ -2785,6 +2841,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "isArray": true,
         "isOptional": false,
         "label": "items",
+        "name": "MultilingualTextItem",
         "schema": {
           "languageCode": {
             "complexDataType": "ENUM",
@@ -2873,6 +2930,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": true,
     "isOptional": true,
     "label": "filters",
+    "name": "VocabularyListFilterProperty",
     "schema": {
       "name": {
         "coscradDataType": "NON_EMPTY_STRING",
