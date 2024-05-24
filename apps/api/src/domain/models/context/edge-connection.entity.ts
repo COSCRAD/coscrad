@@ -28,6 +28,7 @@ export { isEdgeConnectionType } from '@coscrad/api-interfaces';
 export { EdgeConnectionMemberRole, EdgeConnectionType, IEdgeConnectionMember };
 
 import {
+    EdgeConnectionContextType,
     EdgeConnectionMemberRole,
     EdgeConnectionType,
     IEdgeConnectionMember,
@@ -35,6 +36,7 @@ import {
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
 import { Injectable } from '@nestjs/common';
+import { isDeepStrictEqual } from 'util';
 import { Maybe } from '../../../lib/types/maybe';
 import { NotFound } from '../../../lib/types/not-found';
 import formatAggregateCompositeIdentifier from '../../../queries/presentation/formatAggregateCompositeIdentifier';
@@ -180,6 +182,22 @@ export class EdgeConnection extends Aggregate {
             `A connection from ${formatAggregateCompositeIdentifier(
                 fromMemberCompositeIdentifier
             )} to ${formatAggregateCompositeIdentifier(toMemberCompositeIdentifier)}`
+        );
+    }
+
+    isAudioVisualAnnotation(): boolean {
+        return (
+            this.connectionType === EdgeConnectionType.self &&
+            this.members[0].context.type === EdgeConnectionContextType.timeRange &&
+            [AggregateType.audioItem, AggregateType.video].includes(
+                this.members[0].compositeIdentifier.type
+            )
+        );
+    }
+
+    concerns(subjectResourceCompositeIdentifier: ResourceCompositeIdentifier): boolean {
+        return this.members.some(({ compositeIdentifier }) =>
+            isDeepStrictEqual(compositeIdentifier, subjectResourceCompositeIdentifier)
         );
     }
 
