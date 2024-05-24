@@ -44,6 +44,7 @@ Thumbs.db
 cypress.env.json
 
 # data for data processing scripts
+__data__/*
 /scripts/data-processing/data
 *.data.* 
 __data__

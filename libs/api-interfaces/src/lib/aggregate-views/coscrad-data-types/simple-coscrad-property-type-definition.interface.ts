@@ -19,4 +19,10 @@ export interface ISimpleCoscradPropertyTypeDefinition<TDataTypeEnum extends stri
      * some of the payload.
      */
     bindToViewProperty?: string;
+    /**
+     * We avoid storing references to classes to avoid possible circular build dependencies.
+     * However, when the data type is nested, we still need a name for the given class
+     * in order to de-duplicate when exporting the schemas.
+     */
+    name?: string;
 }
