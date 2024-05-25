@@ -23,7 +23,6 @@ interface ContributionPresenterProps {
 const ContributionsPresenter = ({ contributions }: { contributions: string[] }): JSX.Element => (
     <>
         {contributions.map((contributor, index) => (
-            // be sure that the same contributor rcan't come through twice
             <Box>
                 <ContributionPresenter contributor={contributor} key={contributor + index} />
                 <Divider />

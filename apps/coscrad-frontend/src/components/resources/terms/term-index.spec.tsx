@@ -1,5 +1,6 @@
 import {
     AggregateType,
+    ITermViewModel,
     LanguageCode,
     MultilingualTextItemRole,
     ResourceType,
@@ -12,16 +13,19 @@ import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
 import { renderResourceIndexPageForTest } from '../test-utils';
 
-const dummyTerms = [
+const dummyTerms: ITermViewModel[] = [
     {
         id: '12',
+        contributions: ['Jane Doe'],
     },
 
     {
         id: '13',
+        contributions: ['Jane Doe'],
     },
     {
         id: '14',
+        contributions: ['Jane Doe', 'John Doe'],
     },
 ].map((partial) => ({
     ...partial,

@@ -29,7 +29,7 @@ const StyledPlaceIcon = styled('img')({
 });
 
 export const SpatialFeatureDetailFullViewPresenter = (
-    // TODO Flow through the contributions
+    // TODO[https://www.pivotaltracker.com/story/show/187668991] Flow through the contributions
     spatialFeature: ICategorizableDetailQueryResult<ISpatialFeatureViewModel>
 ): JSX.Element => {
     const { id, geometry, properties } = spatialFeature;

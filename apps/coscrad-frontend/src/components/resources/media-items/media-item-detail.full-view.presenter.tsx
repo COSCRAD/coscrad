@@ -4,11 +4,8 @@ import {
     IMediaItemViewModel,
 } from '@coscrad/api-interfaces';
 import { Card, Divider } from '@mui/material';
-import { useContext } from 'react';
-import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { formatBilingualText } from '../vocabulary-lists/utils';
-import { ContributionsHack } from './contributors-hack';
 
 export const MediaItemDetailFullViewPresenter = ({
     id,
@@ -16,13 +13,6 @@ export const MediaItemDetailFullViewPresenter = ({
     titleEnglish,
     url,
 }: ICategorizableDetailQueryResult<IMediaItemViewModel>): JSX.Element => {
-    // remove this!
-    const { videoIdToCredits } = useContext(ConfigurableContentContext);
-
-    const contributionsMap = new Map<string, string>(
-        Object.entries(videoIdToCredits as Record<string, string>)
-    );
-
     return (
         <div
             data-testid={buildDataAttributeForAggregateDetailComponent(AggregateType.mediaItem, id)}
@@ -37,10 +27,6 @@ export const MediaItemDetailFullViewPresenter = ({
                     <source src={url} type="video/webm" />
                     <source src={url} type="video/mp4" />
                 </video>
-
-                <div className="detail-meta">
-                    <ContributionsHack resourceId={id} contributionsMap={contributionsMap} />
-                </div>
             </Card>
         </div>
     );
