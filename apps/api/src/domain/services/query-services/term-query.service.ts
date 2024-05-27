@@ -33,22 +33,27 @@ export class TermQueryService extends ResourceQueryService<Term, ITermViewModel>
          * But we anticipate asynchronously event-sourcing and caching views
          * very soon.
          */
-        const [allAudioItems, allMediaItems] = await Promise.all([
+        const [allAudioItems, allMediaItems, allContributors] = await Promise.all([
             this.repositoryProvider.forResource(ResourceType.audioItem).fetchMany(),
             this.repositoryProvider.forResource(ResourceType.mediaItem).fetchMany(),
+            this.repositoryProvider.getContributorRepository().fetchMany(),
         ]);
 
         return new DeluxeInMemoryStore({
             [AggregateType.audioItem]: allAudioItems.filter(validAggregateOrThrow),
             [AggregateType.mediaItem]: allMediaItems.filter(validAggregateOrThrow),
+            [AggregateType.contributor]: allContributors.filter(validAggregateOrThrow),
         }).fetchFullSnapshotInLegacyFormat();
     }
 
     buildViewModel(
         term: Term,
-        { resources: { audioItem: allAudioItems, mediaItem: allMediaItems } }: InMemorySnapshot
+        {
+            resources: { audioItem: allAudioItems, mediaItem: allMediaItems },
+            contributor: allContributors,
+        }: InMemorySnapshot
     ) {
-        return new TermViewModel(term, allAudioItems, allMediaItems);
+        return new TermViewModel(term, allAudioItems, allMediaItems, allContributors);
     }
 
     getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {

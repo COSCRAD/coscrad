@@ -1,11 +1,4 @@
-import {
-    AggregateType,
-    IVideoViewModel,
-    LanguageCode,
-    MIMEType,
-    MultilingualTextItemRole,
-    ResourceType,
-} from '@coscrad/api-interfaces';
+import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { getConfig } from '../../../config';
 import { assertElementWithEveryIdRenderedForIndex } from '../../../utils/test-utils/assertions/assert-element-with-every-id-rendered-for-index';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
@@ -13,25 +6,9 @@ import { testContainerComponentErrorHandling } from '../../../utils/test-utils/c
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
 import { renderResourceIndexPageForTest } from '../test-utils';
+import { buildDummyVideos } from './test-utils/build-dummy-videos';
 
-const dummyVideos: IVideoViewModel[] = [
-    {
-        id: '123',
-        videoUrl: 'https://www.vidbox.org/123.mp4',
-        lengthMilliseconds: 123000,
-        text: '[0:05] Wah wah wah [0:09]',
-        name: {
-            items: [
-                {
-                    role: MultilingualTextItemRole.original,
-                    languageCode: LanguageCode.Chilcotin,
-                    text: 'Test Video Name in Chilcotin',
-                },
-            ],
-        },
-        mimeType: MIMEType.mp4,
-    },
-];
+const dummyVideos = buildDummyVideos();
 
 const endpoint = `${getConfig().apiUrl}/resources/videos`;
 

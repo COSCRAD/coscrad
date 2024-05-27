@@ -40,7 +40,13 @@ export const DigitalTextDetailFullViewPresenter = ({
     };
 
     return (
-        <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.digitalText}>
+        <ResourceDetailFullViewPresenter
+            name={name}
+            id={id}
+            type={ResourceType.digitalText}
+            // TODO [https://www.pivotaltracker.com/story/show/187668980] flow through the contributions
+            contributions={[]}
+        >
             {pages.length > 0 ? (
                 <PagesPresenter
                     pages={pages}

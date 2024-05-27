@@ -15,6 +15,7 @@ import { CreatorsPresenter } from './shared/creators-presenter';
 export const JournalArticleBibliographicCitationDetailFullViewPresenter = ({
     id,
     data,
+    contributions,
 }: IBibliographicCitationViewModel<IJournalArticleBibliographicCitationData>): JSX.Element => {
     const keysAndLabels: PropertyLabels<IJournalArticleBibliographicCitationData> = {
         abstract: 'Abstract',
@@ -34,6 +35,7 @@ export const JournalArticleBibliographicCitationDetailFullViewPresenter = ({
             name={name}
             id={id}
             type={ResourceType.bibliographicCitation}
+            contributions={contributions}
         >
             {/* TODO: create label configuration for subtypes */}
             <SinglePropertyPresenter display="Citation Type" value="Journal Article" />

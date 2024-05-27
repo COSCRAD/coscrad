@@ -22,7 +22,7 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
         // TODO We need to determine the `term` and `termEnglish` from a multilingual text property
         { propertyKey: 'name', headingLabel: 'Term' },
         { propertyKey: 'audioURL', headingLabel: 'Audio URL' },
-        { propertyKey: 'contributor', headingLabel: 'Contributor' },
+        { propertyKey: 'contributions', headingLabel: 'Contributors' },
     ];
 
     const cellRenderersDefinition: CellRenderersDefinition<ITermViewModel> = {
@@ -35,7 +35,7 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
             ) : (
                 <AudioClipPlayer audioUrl={audioURL} />
             ),
-        contributor: ({ contributor }: ITermViewModel) => contributor,
+        contributions: ({ contributions }: ITermViewModel) => contributions.join(', '),
     };
 
     const matchers: Matchers<ITermViewModel> = {
@@ -49,7 +49,7 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
             tableData={terms}
             cellRenderersDefinition={cellRenderersDefinition}
             heading={'Terms'}
-            filterableProperties={['name', 'contributor']}
+            filterableProperties={['name', 'contributions']}
             matchers={matchers}
         />
     );

@@ -12,19 +12,23 @@ import {
 } from '../../../utils/generic-components/';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 
-// TODO[https://www.pivotaltracker.com/story/show/183681722] expose commands
 export const TermDetailFullViewPresenter = ({
     id,
     name,
-    contributor,
+    contributions,
     audioURL,
 }: ICategorizableDetailQueryResult<ITermViewModel>): JSX.Element => {
     return (
-        <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.term}>
+        <ResourceDetailFullViewPresenter
+            name={name}
+            id={id}
+            type={ResourceType.term}
+            contributions={[]}
+        >
             <Box
                 data-testid={buildDataAttributeForAggregateDetailComponent(AggregateType.term, id)}
             />
-            <SingleOptionalPropertyPresenter display="Contributor" value={contributor} />
+            <SingleOptionalPropertyPresenter display="Contributor" value={contributions} />
             <Box id="media-player">
                 <AudioClipPlayer audioUrl={audioURL} />
             </Box>

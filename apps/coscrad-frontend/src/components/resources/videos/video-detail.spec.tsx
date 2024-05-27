@@ -1,11 +1,4 @@
-import {
-    AggregateType,
-    IVideoViewModel,
-    LanguageCode,
-    MIMEType,
-    MultilingualTextItemRole,
-    ResourceType,
-} from '@coscrad/api-interfaces';
+import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { getConfig } from '../../../config';
 import { assertElementWithTestIdOnScreen, assertNotFound } from '../../../utils/test-utils';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
@@ -15,27 +8,13 @@ import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
 import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
 import { buildMockResourceInfoHandler } from '../../resource-info/build-dummy-resource-info';
 import { buildCategorizableDetailPageRendererForTest } from '../test-utils';
+import { buildDummyVideos } from './test-utils/build-dummy-videos';
 
-const idtoFind = '444';
+const dummyVideos = buildDummyVideos();
 
-const videoToFind: IVideoViewModel = {
-    id: idtoFind,
-    videoUrl: 'https://www.vidbox.org/123.mp4',
-    lengthMilliseconds: 123000,
-    text: '[0:11] Hah mah yah [0:19]',
-    name: {
-        items: [
-            {
-                role: MultilingualTextItemRole.original,
-                languageCode: LanguageCode.Haida,
-                text: 'Test Video Name in Haida',
-            },
-        ],
-    },
-    mimeType: MIMEType.mp4,
-};
+const videoToFind = dummyVideos[0];
 
-const dummyVideos: IVideoViewModel[] = [videoToFind];
+const idtoFind = videoToFind.id;
 
 const endpoint = `${getConfig().apiUrl}/resources/videos`;
 

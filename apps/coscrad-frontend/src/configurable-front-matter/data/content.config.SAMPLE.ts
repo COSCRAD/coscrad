@@ -13,12 +13,6 @@ export const contentConfig: ConfigurableContent = {
     coscradLogoUrl: 'https://coscrad.org/wp-content/uploads/2023/05/COSCRAD-logo-prototype-1.png',
     organizationLogoUrl:
         'https://coscrad.org/wp-content/uploads/2023/05/Coscrad-alt-logo-prototype.png',
-    songIdToCredits: {
-        '1': 'Credits for song 1',
-    },
-    videoIdToCredits: {
-        '2': 'Credits for video 2',
-    },
     indexToDetailFlows: Object.values(CategorizableType)
         .filter((t) => t !== CategorizableType.playlist)
         .map((categorizableType) => ({

@@ -28,6 +28,7 @@ export const AudioItemDetailFullViewPresenter = ({
     text: plainText,
     name,
     actions,
+    contributions,
 }: ICategorizableDetailQueryResult<IAudioItemViewModel>): JSX.Element => {
     const formatedPlainText = plainText.split('\n').map((line, index) => (
         <Box mb={1} key={index}>
@@ -36,7 +37,12 @@ export const AudioItemDetailFullViewPresenter = ({
     ));
 
     return (
-        <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.audioItem}>
+        <ResourceDetailFullViewPresenter
+            name={name}
+            id={id}
+            type={ResourceType.audioItem}
+            contributions={contributions}
+        >
             {actions.some(({ type: commandType }) => commandType === CREATE_NOTE_ABOUT_RESOURCE) ? (
                 <InteractiveAnnotator id={id} audioURL={audioURL} />
             ) : (

@@ -242,6 +242,8 @@ export class DigitalTextViewModel
         }
         /**
          * TODO Event source notes and edge connections for this digital text.
+         *
+         * TODO Event source contributions for this digital text.
          */
 
         return this;

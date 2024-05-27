@@ -5,8 +5,9 @@ import { AudioItem } from '../../../domain/models/audio-visual/audio-item/entiti
 import { MediaItem } from '../../../domain/models/media-item/entities/media-item.entity';
 import { Playlist } from '../../../domain/models/playlist';
 import { PlaylistEpisode } from '../../../domain/models/playlist/entities/playlist-episode.entity';
+import { CoscradContributor } from '../../../domain/models/user-management/contributor';
 import { DeluxeInMemoryStore } from '../../../domain/types/DeluxeInMemoryStore';
-import { BaseViewModel } from './base.view-model';
+import { BaseResourceViewModel } from './base-resource.view-model';
 
 /**
  * Note that in the future we anticipate the Playlist becoming something other
@@ -17,7 +18,7 @@ import { BaseViewModel } from './base.view-model';
  * or notes about the playlist and will only support general context in connections
  * for playlists.
  */
-export class PlaylistViewModel extends BaseViewModel implements IPlayListViewModel {
+export class PlaylistViewModel extends BaseResourceViewModel implements IPlayListViewModel {
     @NestedDataType(MultilingualText, {
         label: 'name',
         description: 'name of the playlist',
@@ -40,8 +41,13 @@ export class PlaylistViewModel extends BaseViewModel implements IPlayListViewMod
     // TODO establish a view model for episodes
     readonly episodes: PlaylistEpisode[];
 
-    constructor(playlist: Playlist, allAudioItems: AudioItem[], allMediaItems: MediaItem[]) {
-        super(playlist);
+    constructor(
+        playlist: Playlist,
+        allAudioItems: AudioItem[],
+        allMediaItems: MediaItem[],
+        allContributors: CoscradContributor[]
+    ) {
+        super(playlist, allContributors);
 
         const { name, items } = playlist;
 

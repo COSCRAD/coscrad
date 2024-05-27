@@ -4,3 +4,7 @@ import { IMultilingualText } from './resources/common';
 export interface IBaseViewModel extends HasId {
     name: IMultilingualText;
 }
+
+export interface IBaseResourceViewModel extends IBaseViewModel {
+    contributions: string[];
+}

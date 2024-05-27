@@ -52,8 +52,6 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     copyrightHolder: string;
     coscradLogoUrl: string;
     organizationLogoUrl: string;
-    songIdToCredits: Record<string, string>;
-    videoIdToCredits: Record<string, string>;
     shouldEnableWebOfKnowledgeForResources: boolean;
     siteCredits: string;
     simulatedKeyboard?: SimulatedKeyboardConfig;
@@ -84,8 +82,6 @@ export const configurableContentPropertiesAndConstraints: {
     copyrightHolder: [CoscradConstraint.isNonEmptyString],
     coscradLogoUrl: [CoscradConstraint.isURL],
     organizationLogoUrl: [CoscradConstraint.isURL],
-    songIdToCredits: [CoscradConstraint.isObject],
-    videoIdToCredits: [CoscradConstraint.isObject],
     shouldEnableWebOfKnowledgeForResources: [CoscradConstraint.isBoolean],
     indexToDetailFlows: [CoscradConstraint.isRequired],
     siteCredits: [CoscradConstraint.isNonEmptyString, CoscradConstraint.isRequired],
