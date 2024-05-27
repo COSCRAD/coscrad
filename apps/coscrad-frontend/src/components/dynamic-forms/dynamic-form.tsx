@@ -64,8 +64,13 @@ export const DynamicForm = ({
                         .filter((field) => field.type !== FormFieldType.populatedFromView)
                         .map((field) => {
                             return (
-                                <Tooltip title={field.description} arrow placement="right">
-                                    <div key={field.name}>
+                                <Tooltip
+                                    key={field.name}
+                                    title={field.description}
+                                    arrow
+                                    placement="right"
+                                >
+                                    <div>
                                         {/* TODO Remove the following once we actually make use of the validation */}
                                         <ConstraintValidationResultPresenter
                                             errorMessages={fieldNameToErrorMessages.get(field.name)}
