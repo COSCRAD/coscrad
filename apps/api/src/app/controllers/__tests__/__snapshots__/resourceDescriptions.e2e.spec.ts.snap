@@ -15,12 +15,12 @@ exports[`GET /resources should return the expected result 1`] = `
         "isOptional": false,
         "label": "audio link",
       },
-      "contributor": {
+      "contributions": {
         "coscradDataType": "NON_EMPTY_STRING",
-        "description": "name of the person who contributed this term",
-        "isArray": false,
+        "description": "list of knowledge keepers who contributed this song",
+        "isArray": true,
         "isOptional": false,
-        "label": "contributor",
+        "label": "contributions",
       },
       "id": {
         "coscradDataType": "NON_EMPTY_STRING",
@@ -142,6 +142,13 @@ exports[`GET /resources should return the expected result 1`] = `
     "link": "/resources/vocabularyLists",
     "pluralLabel": "Vocabulary Lists",
     "schema": {
+      "contributions": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "list of knowledge keepers who contributed this song",
+        "isArray": true,
+        "isOptional": false,
+        "label": "contributions",
+      },
       "entries": {
         "complexDataType": "NESTED_TYPE",
         "description": "all terms in this vocabulary list together with their filter properties",
@@ -165,12 +172,12 @@ exports[`GET /resources should return the expected result 1`] = `
                 "isOptional": false,
                 "label": "audio link",
               },
-              "contributor": {
+              "contributions": {
                 "coscradDataType": "NON_EMPTY_STRING",
-                "description": "name of the person who contributed this term",
-                "isArray": false,
+                "description": "list of knowledge keepers who contributed this song",
+                "isArray": true,
                 "isOptional": false,
-                "label": "contributor",
+                "label": "contributions",
               },
               "id": {
                 "coscradDataType": "NON_EMPTY_STRING",
@@ -407,6 +414,13 @@ exports[`GET /resources should return the expected result 1`] = `
         "isOptional": false,
         "label": "audio link",
       },
+      "contributions": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "list of knowledge keepers who contributed this song",
+        "isArray": true,
+        "isOptional": false,
+        "label": "contributions",
+      },
       "id": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "unique identifier",
@@ -609,6 +623,13 @@ exports[`GET /resources should return the expected result 1`] = `
     "link": "/resources/videos",
     "pluralLabel": "Videos",
     "schema": {
+      "contributions": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "list of knowledge keepers who contributed this song",
+        "isArray": true,
+        "isOptional": false,
+        "label": "contributions",
+      },
       "id": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "unique identifier",
@@ -1206,6 +1227,13 @@ exports[`GET /resources should return the expected result 1`] = `
     "link": "/resources/bibliographicCitations",
     "pluralLabel": "Bibliographic Citations",
     "schema": {
+      "contributions": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "list of knowledge keepers who contributed this song",
+        "isArray": true,
+        "isOptional": false,
+        "label": "contributions",
+      },
       "data": {
         "complexDataType": "UNION_TYPE",
         "description": "citation information for this bibliographic citation",
@@ -2329,6 +2357,13 @@ exports[`GET /resources should return the expected result 1`] = `
     "link": "/resources/playlists",
     "pluralLabel": "Playlists",
     "schema": {
+      "contributions": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "list of knowledge keepers who contributed this song",
+        "isArray": true,
+        "isOptional": false,
+        "label": "contributions",
+      },
       "episodes": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "a summary description of each episode in this playlist",
