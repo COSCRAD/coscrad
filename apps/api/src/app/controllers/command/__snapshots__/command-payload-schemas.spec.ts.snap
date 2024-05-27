@@ -3012,6 +3012,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isOptional": false,
         "label": "CompositeIdentifier",
         "name": "ResourceCompositeIdentifier",
+        "referenceTo": "_COMPOSITE_IDENTIFIER_",
         "schema": {
           "id": {
             "coscradDataType": "UUID",

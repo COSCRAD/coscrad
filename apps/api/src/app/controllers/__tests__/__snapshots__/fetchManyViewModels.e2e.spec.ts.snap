@@ -6,6 +6,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
     {
       "actions": [],
       "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
+      "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
       "lengthMilliseconds": 20000,
       "mimeType": "audio/wav",
@@ -18,13 +19,46 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
           },
         ],
       },
-      "tags": [],
+      "tags": [
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+          "label": "placenames",
+          "members": [
+            {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
+              "type": "photograph",
+            },
+            {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+              "type": "audioItem",
+            },
+            {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112003",
+              "type": "note",
+            },
+            {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
+              "type": "note",
+            },
+          ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "en",
+                "role": "original",
+                "text": "placenames",
+              },
+            ],
+          },
+        },
+      ],
       "text": "[12000] [JHC] There once was a little wooden boy. {en} (role: original) [15550]
 [18300] [JHC] His name was Pinocchio {en} (role: original) [19240]",
     },
     {
       "actions": [],
       "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
+      "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111",
       "lengthMilliseconds": 23409,
       "mimeType": "audio/mpeg",
@@ -45,6 +79,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
     {
       "actions": [],
       "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
+      "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110113",
       "lengthMilliseconds": 32989,
       "mimeType": "audio/wav",
@@ -64,6 +99,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
     {
       "actions": [],
       "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
+      "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110114",
       "lengthMilliseconds": 1000,
       "mimeType": "audio/wav",
@@ -82,6 +118,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
     {
       "actions": [],
       "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav",
+      "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110115",
       "lengthMilliseconds": 10,
       "mimeType": "audio/wav",
@@ -108,6 +145,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
     {
       "actions": [],
       "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
+      "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
       "lengthMilliseconds": 20000,
       "mimeType": "audio/wav",
@@ -120,13 +158,46 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
           },
         ],
       },
-      "tags": [],
+      "tags": [
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+          "label": "placenames",
+          "members": [
+            {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
+              "type": "photograph",
+            },
+            {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+              "type": "audioItem",
+            },
+            {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112003",
+              "type": "note",
+            },
+            {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
+              "type": "note",
+            },
+          ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "en",
+                "role": "original",
+                "text": "placenames",
+              },
+            ],
+          },
+        },
+      ],
       "text": "[12000] [JHC] There once was a little wooden boy. {en} (role: original) [15550]
 [18300] [JHC] His name was Pinocchio {en} (role: original) [19240]",
     },
     {
       "actions": [],
       "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
+      "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111",
       "lengthMilliseconds": 23409,
       "mimeType": "audio/mpeg",
@@ -147,6 +218,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
     {
       "actions": [],
       "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
+      "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110113",
       "lengthMilliseconds": 32989,
       "mimeType": "audio/wav",
@@ -166,6 +238,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
     {
       "actions": [],
       "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
+      "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110114",
       "lengthMilliseconds": 1000,
       "mimeType": "audio/wav",
@@ -184,6 +257,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
     {
       "actions": [],
       "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav",
+      "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110115",
       "lengthMilliseconds": 10,
       "mimeType": "audio/wav",
@@ -209,6 +283,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicCitations 
   "entities": [
     {
       "actions": [],
+      "contributions": [],
       "data": {
         "abstract": "This is the abstract, NOT a general note!",
         "creators": [
@@ -292,6 +367,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicCitations 
     },
     {
       "actions": [],
+      "contributions": [],
       "data": {
         "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
         "creators": [
@@ -322,6 +398,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicCitations 
     },
     {
       "actions": [],
+      "contributions": [],
       "data": {
         "abstract": "Doe, Jane
 - Large Valley
@@ -379,6 +456,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicCitations 
   "entities": [
     {
       "actions": [],
+      "contributions": [],
       "data": {
         "abstract": "This is the abstract, NOT a general note!",
         "creators": [
@@ -462,6 +540,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicCitations 
     },
     {
       "actions": [],
+      "contributions": [],
       "data": {
         "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
         "creators": [
@@ -492,6 +571,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicCitations 
     },
     {
       "actions": [],
+      "contributions": [],
       "data": {
         "abstract": "Doe, Jane
 - Large Valley
@@ -1051,6 +1131,7 @@ exports[`When fetching multiple resources GET /resources/playlists when all of t
   "entities": [
     {
       "actions": [],
+      "contributions": [],
       "episodes": [
         {
           "mediaItemUrl": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
@@ -1109,6 +1190,7 @@ exports[`When fetching multiple resources GET /resources/playlists when some of 
   "entities": [
     {
       "actions": [],
+      "contributions": [],
       "episodes": [
         {
           "mediaItemUrl": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
@@ -1895,6 +1977,7 @@ exports[`When fetching multiple resources GET /resources/videos when all of the 
   "entities": [
     {
       "actions": [],
+      "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
       "lengthMilliseconds": 20000,
       "mimeType": "video/mp4",
@@ -1946,7 +2029,7 @@ exports[`When fetching multiple resources GET /resources/videos when all of the 
           },
         ],
       },
-      "videoUrl": "https://coscrad.org/wp-content/uploads/2023/05/Rexy-and-The-Egg-_3D-Dinosaur-Animation_-_-3D-Animation-_-Maya-3D.mp4",
+      "videoUrl": "/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
     },
   ],
   "indexScopedActions": [],
@@ -1958,6 +2041,7 @@ exports[`When fetching multiple resources GET /resources/videos when some of the
   "entities": [
     {
       "actions": [],
+      "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
       "lengthMilliseconds": 20000,
       "mimeType": "video/mp4",
@@ -2009,7 +2093,7 @@ exports[`When fetching multiple resources GET /resources/videos when some of the
           },
         ],
       },
-      "videoUrl": "https://coscrad.org/wp-content/uploads/2023/05/Rexy-and-The-Egg-_3D-Dinosaur-Animation_-_-3D-Animation-_-Maya-3D.mp4",
+      "videoUrl": "/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
     },
   ],
   "indexScopedActions": [],

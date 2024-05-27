@@ -15,6 +15,7 @@ import { CreatorsPresenter } from './shared/creators-presenter';
 export const BookBibliographicCitationDetailFullViewPresenter = ({
     id,
     data,
+    contributions,
 }: IBibliographicCitationViewModel<IBookBibliographicCitationData>): JSX.Element => {
     const { title, creators, url } = data;
 
@@ -35,6 +36,7 @@ export const BookBibliographicCitationDetailFullViewPresenter = ({
             name={name}
             id={id}
             type={ResourceType.bibliographicCitation}
+            contributions={contributions}
         >
             <SinglePropertyPresenter display="Citation Type" value="Book" />
             <CreatorsPresenter creators={creators} />

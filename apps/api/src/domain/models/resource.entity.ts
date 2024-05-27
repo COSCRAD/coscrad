@@ -73,6 +73,16 @@ export abstract class Resource extends Aggregate {
         return getAllowedContextsForModel(this.type);
     }
 
+    getContributions(): { contributorId: string; eventType: string; date: number }[] {
+        return this.eventHistory.flatMap(({ meta: { contributorIds, dateCreated }, type }) =>
+            contributorIds.map((contributorId) => ({
+                contributorId,
+                eventType: type,
+                date: dateCreated,
+            }))
+        );
+    }
+
     /**
      * Validates that the state of an `EdgeConnectionContext` instance used
      * to contextualize this resource instance is in fact consistent with the state

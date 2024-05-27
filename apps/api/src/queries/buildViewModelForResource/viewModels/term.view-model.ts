@@ -1,35 +1,17 @@
 import { ITermViewModel } from '@coscrad/api-interfaces';
-import { FromDomainModel, NonEmptyString, URL } from '@coscrad/data-types';
+import { FromDomainModel, URL } from '@coscrad/data-types';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { AudioItem } from '../../../domain/models/audio-visual/audio-item/entities/audio-item.entity';
 import { MediaItem } from '../../../domain/models/media-item/entities/media-item.entity';
 import { Term } from '../../../domain/models/term/entities/term.entity';
+import { CoscradContributor } from '../../../domain/models/user-management/contributor';
 import { AggregateId } from '../../../domain/types/AggregateId';
-import { BaseViewModel } from './base.view-model';
-
-// TODO Add proper contributors repository \ collection
-const contributors = {
-    1: 'Bella Alphonse',
-    2: 'William Myers',
-};
-
-const getContributorNameFromId = (id: string): string => contributors[id] || '';
+import { BaseResourceViewModel } from './base-resource.view-model';
 
 const FromTerm = FromDomainModel(Term);
 
-export class TermViewModel extends BaseViewModel implements ITermViewModel {
-    @ApiProperty({
-        example: 'Jane Doe',
-        description: 'The language speaker who contributed the term',
-    })
-    // TODO Use edge-connections with a `Contributor` resource for this instead
-    @NonEmptyString({
-        label: 'contributor',
-        description: 'name of the person who contributed this term',
-    })
-    readonly contributor: string;
-
+export class TermViewModel extends BaseResourceViewModel implements ITermViewModel {
     // We should wrap the API Property using the View Model Schemas!
     @ApiPropertyOptional({
         example: 'https://www.mysound.org/audio/hetellsstories.mp3',
@@ -49,12 +31,15 @@ export class TermViewModel extends BaseViewModel implements ITermViewModel {
     @FromTerm
     readonly sourceProject?: string;
 
-    constructor(term: Term, audioItems: AudioItem[], mediaItems: MediaItem[]) {
-        super(term);
+    constructor(
+        term: Term,
+        audioItems: AudioItem[],
+        mediaItems: MediaItem[],
+        contributors: CoscradContributor[]
+    ) {
+        super(term, contributors);
 
-        const { contributorId, audio, sourceProject, text } = term;
-
-        this.contributor = getContributorNameFromId(contributorId);
+        const { audio, sourceProject, text } = term;
 
         if (sourceProject) this.sourceProject = sourceProject;
 

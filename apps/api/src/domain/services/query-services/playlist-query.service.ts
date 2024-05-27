@@ -25,28 +25,29 @@ export class PlaylistQueryService extends ResourceQueryService<Playlist, IPlayLi
     }
 
     protected override async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
-        const allAudioItems = await this.repositoryProvider
-            .forResource<AudioItem>(ResourceType.audioItem)
-            .fetchMany();
-
-        const allMediaItems = await this.repositoryProvider
-            .forResource<MediaItem>(ResourceType.mediaItem)
-            .fetchMany();
-
-        const allTags = await this.repositoryProvider.getTagRepository().fetchMany();
+        const [allAudioItems, allMediaItems, allTags, allContributors] = await Promise.all([
+            this.repositoryProvider.forResource<AudioItem>(ResourceType.audioItem).fetchMany(),
+            this.repositoryProvider.forResource<MediaItem>(ResourceType.mediaItem).fetchMany(),
+            this.repositoryProvider.getTagRepository().fetchMany(),
+            this.repositoryProvider.getContributorRepository().fetchMany(),
+        ]);
 
         return new DeluxeInMemoryStore({
             [ResourceType.audioItem]: allAudioItems.filter(validAggregateOrThrow),
             [ResourceType.mediaItem]: allMediaItems.filter(validAggregateOrThrow),
             [AggregateType.tag]: allTags.filter(validAggregateOrThrow),
+            [AggregateType.contributor]: allContributors.filter(validAggregateOrThrow),
         }).fetchFullSnapshotInLegacyFormat();
     }
 
     buildViewModel(
         playlist: Playlist,
-        { resources: { audioItem: allAudioItems, mediaItem: allMediaItems } }: InMemorySnapshot
+        {
+            resources: { audioItem: allAudioItems, mediaItem: allMediaItems },
+            contributor: allContributors,
+        }: InMemorySnapshot
     ): IPlayListViewModel {
-        return new PlaylistViewModel(playlist, allAudioItems, allMediaItems);
+        return new PlaylistViewModel(playlist, allAudioItems, allMediaItems, allContributors);
     }
 
     getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {

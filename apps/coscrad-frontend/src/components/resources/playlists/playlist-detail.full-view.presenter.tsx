@@ -16,6 +16,7 @@ export const PlaylistDetailFullViewPresenter = ({
     name,
     id,
     episodes,
+    contributions,
 }: ICategorizableDetailQueryResult<IPlayListViewModel>): JSX.Element => {
     const [_url, setUrl] = useState<string | null>(null);
 
@@ -38,7 +39,12 @@ export const PlaylistDetailFullViewPresenter = ({
     };
 
     return (
-        <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.playlist}>
+        <ResourceDetailFullViewPresenter
+            name={name}
+            id={id}
+            type={ResourceType.playlist}
+            contributions={contributions}
+        >
             <Typography component={'div'}>
                 <Typography variant={'h5'}> Episodes </Typography>
                 <IndexTable

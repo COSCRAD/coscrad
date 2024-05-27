@@ -5,10 +5,11 @@ import { MultilingualText } from '../../../../domain/common/entities/multilingua
 import { Transcript } from '../../../../domain/models/audio-visual/shared/entities/transcript.entity';
 import { Video } from '../../../../domain/models/audio-visual/video/entities/video.entity';
 import { MediaItem } from '../../../../domain/models/media-item/entities/media-item.entity';
+import { CoscradContributor } from '../../../../domain/models/user-management/contributor';
 import { isNullOrUndefined } from '../../../../domain/utilities/validation/is-null-or-undefined';
-import { BaseViewModel } from '../base.view-model';
+import { BaseResourceViewModel } from '../base-resource.view-model';
 
-export class VideoViewModel extends BaseViewModel implements IVideoViewModel {
+export class VideoViewModel extends BaseResourceViewModel implements IVideoViewModel {
     @NestedDataType(MultilingualText, {
         label: 'name',
         description: 'name of the video',
@@ -63,8 +64,8 @@ export class VideoViewModel extends BaseViewModel implements IVideoViewModel {
     })
     readonly transcript: Transcript;
 
-    constructor(video: Video, allMediaItems: MediaItem[]) {
-        super(video);
+    constructor(video: Video, allMediaItems: MediaItem[], contributors: CoscradContributor[]) {
+        super(video, contributors);
 
         const { transcript, mediaItemId, lengthMilliseconds, name } = video;
 
@@ -72,7 +73,13 @@ export class VideoViewModel extends BaseViewModel implements IVideoViewModel {
 
         this.transcript = isNullOrUndefined(transcript) ? null : new Transcript(transcript.toDTO());
 
-        const { url, mimeType } = allMediaItems.find(({ id }) => id === mediaItemId);
+        const mediaItemSearchResult = allMediaItems.find(({ id }) => id === mediaItemId);
+
+        const url = mediaItemSearchResult?.id
+            ? `/resources/mediaItems/download/${mediaItemSearchResult.id}`
+            : undefined;
+
+        const mimeType = mediaItemSearchResult?.mimeType || undefined;
 
         this.videoUrl = url;
 

@@ -25,24 +25,31 @@ export class VideoQueryService extends ResourceQueryService<Video, IVideoViewMod
     }
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
-        const [mediaItemSearchResult, videoSearchResult, noteSearchResult] = await Promise.all([
+        const [
+            mediaItemSearchResult,
+            videoSearchResult,
+            noteSearchResult,
+            contributorSearchResult,
+        ] = await Promise.all([
             this.repositoryProvider.forResource<MediaItem>(AggregateType.mediaItem).fetchMany(),
             this.repositoryProvider.forResource<Video>(AggregateType.video).fetchMany(),
             this.repositoryProvider.getEdgeConnectionRepository().fetchMany(),
+            this.repositoryProvider.getContributorRepository().fetchMany(),
         ]);
 
         return new DeluxeInMemoryStore({
             [AggregateType.mediaItem]: mediaItemSearchResult.filter(validAggregateOrThrow),
             [AggregateType.video]: videoSearchResult.filter(validAggregateOrThrow),
             [AggregateType.note]: noteSearchResult.filter(validAggregateOrThrow),
+            [AggregateType.contributor]: contributorSearchResult.filter(validAggregateOrThrow),
         }).fetchFullSnapshotInLegacyFormat();
     }
 
     buildViewModel(
         videoInstance: Video,
-        { resources: { mediaItem: mediaItems } }: InMemorySnapshot
+        { resources: { mediaItem: mediaItems }, contributor: contributors }: InMemorySnapshot
     ): IVideoViewModel {
-        return new VideoViewModel(videoInstance, mediaItems);
+        return new VideoViewModel(videoInstance, mediaItems, contributors);
     }
 
     getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {
