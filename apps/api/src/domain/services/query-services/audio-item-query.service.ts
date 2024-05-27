@@ -36,12 +36,14 @@ export class AudioItemQueryService extends ResourceQueryService<AudioItem, IAudi
             mediaItemSearchResult,
             noteSearchResult,
             contributorSearchResult,
+            tagSearchResult,
         ] = await Promise.all([
             this.repositoryProvider.forResource<AudioItem>(AggregateType.audioItem).fetchMany(),
             this.repositoryProvider.forResource<MediaItem>(AggregateType.mediaItem).fetchMany(),
             // Can we at least put the `fetch notes for` here?
             this.repositoryProvider.getEdgeConnectionRepository().fetchMany(),
             this.repositoryProvider.getContributorRepository().fetchMany(),
+            this.repositoryProvider.getTagRepository().fetchMany(),
         ]);
 
         return new DeluxeInMemoryStore({
@@ -49,6 +51,7 @@ export class AudioItemQueryService extends ResourceQueryService<AudioItem, IAudi
             [AggregateType.mediaItem]: mediaItemSearchResult.filter(validAggregateOrThrow),
             [AggregateType.note]: noteSearchResult.filter(validAggregateOrThrow),
             [AggregateType.contributor]: contributorSearchResult.filter(validAggregateOrThrow),
+            [AggregateType.tag]: tagSearchResult.filter(validAggregateOrThrow),
         }).fetchFullSnapshotInLegacyFormat();
     }
 

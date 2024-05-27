@@ -30,12 +30,14 @@ export class BibliographicCitationQueryService extends ResourceQueryService<
     }
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
-        const [contributorSearchResult] = await Promise.all([
+        const [contributorSearchResult, tagSearchResult] = await Promise.all([
             this.repositoryProvider.getContributorRepository().fetchMany(),
+            this.repositoryProvider.getTagRepository().fetchMany(),
         ]);
 
         return new DeluxeInMemoryStore({
             [AggregateType.contributor]: contributorSearchResult.filter(validAggregateOrThrow),
+            [AggregateType.tag]: tagSearchResult.filter(validAggregateOrThrow),
         }).fetchFullSnapshotInLegacyFormat();
     }
 

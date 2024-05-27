@@ -4,6 +4,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
 {
   "actions": [],
   "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
+  "contributions": [],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
   "lengthMilliseconds": 20000,
   "mimeType": "audio/wav",
@@ -16,7 +17,39 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
       },
     ],
   },
-  "tags": [],
+  "tags": [
+    {
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+      "label": "placenames",
+      "members": [
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
+          "type": "photograph",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+          "type": "audioItem",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112003",
+          "type": "note",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
+          "type": "note",
+        },
+      ],
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "placenames",
+          },
+        ],
+      },
+    },
+  ],
   "text": "[12000] [JHC] There once was a little wooden boy. {en} (role: original) [15550]
 [18300] [JHC] His name was Pinocchio {en} (role: original) [19240]",
 }
@@ -25,6 +58,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/bibliographicCitations/:id when the resource is published when an resource with the id exists should return the expected response 1`] = `
 {
   "actions": [],
+  "contributions": [],
   "data": {
     "abstract": "This is the abstract, NOT a general note!",
     "creators": [
@@ -56,55 +90,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
       },
     ],
   },
-  "tags": [
-    {
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-      "label": "animals",
-      "members": [
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-          "type": "term",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-          "type": "term",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102",
-          "type": "spatialFeature",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112004",
-          "type": "note",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
-          "type": "note",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-          "type": "bibliographicCitation",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
-          "type": "video",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110951",
-          "type": "digitalText",
-        },
-      ],
-      "name": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "animals",
-          },
-        ],
-      },
-    },
-  ],
+  "tags": [],
 }
 `;
 
@@ -190,6 +176,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/playlists/:id when the resource is published when an resource with the id exists should return the expected response 1`] = `
 {
   "actions": [],
+  "contributions": [],
   "episodes": [
     {
       "mediaItemUrl": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
@@ -316,6 +303,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/videos/:id when the resource is published when an resource with the id exists should return the expected response 1`] = `
 {
   "actions": [],
+  "contributions": [],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
   "lengthMilliseconds": 20000,
   "mimeType": "video/mp4",
@@ -367,6 +355,6 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
       },
     ],
   },
-  "videoUrl": "https://coscrad.org/wp-content/uploads/2023/05/Rexy-and-The-Egg-_3D-Dinosaur-Animation_-_-3D-Animation-_-Maya-3D.mp4",
+  "videoUrl": "/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
 }
 `;
