@@ -33,23 +33,33 @@ export class VocabularyListQueryService extends ResourceQueryService<
         vocabularyList: VocabularyList,
         {
             resources: { term: allTerms, audioItem: allAudioItems, mediaItem: allMediaItems },
+            contributor: allContributors,
         }: InMemorySnapshot
     ): VocabularyListViewModel {
-        return new VocabularyListViewModel(vocabularyList, allTerms, allAudioItems, allMediaItems);
+        return new VocabularyListViewModel(
+            vocabularyList,
+            allTerms,
+            allAudioItems,
+            allMediaItems,
+            allContributors
+        );
     }
 
     override async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
-        const [allTags, allTerms, allAudioItems, allMediaItems] = await Promise.all([
-            this.repositoryProvider.getTagRepository().fetchMany(),
-            this.repositoryProvider
-                .forResource<Term>(ResourceType.term)
-                .fetchMany(new IsPublished(true)),
-            this.repositoryProvider.forResource<AudioItem>(ResourceType.audioItem).fetchMany(),
-            this.repositoryProvider.forResource<MediaItem>(ResourceType.mediaItem).fetchMany(),
-        ]);
+        const [allTags, allTerms, allAudioItems, allMediaItems, allContributors] =
+            await Promise.all([
+                this.repositoryProvider.getTagRepository().fetchMany(),
+                this.repositoryProvider
+                    .forResource<Term>(ResourceType.term)
+                    .fetchMany(new IsPublished(true)),
+                this.repositoryProvider.forResource<AudioItem>(ResourceType.audioItem).fetchMany(),
+                this.repositoryProvider.forResource<MediaItem>(ResourceType.mediaItem).fetchMany(),
+                this.repositoryProvider.getContributorRepository().fetchMany(),
+            ]);
 
         return new DeluxeInMemoryStore({
             tag: allTags.filter(validAggregateOrThrow),
+            contributor: allContributors.filter(validAggregateOrThrow),
             resources: {
                 term: allTerms.filter(validAggregateOrThrow),
                 audioItem: allAudioItems.filter(validAggregateOrThrow),

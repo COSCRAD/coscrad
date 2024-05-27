@@ -43,6 +43,7 @@ const transcribedAudioToFind: IAudioItemViewModel = {
             },
         ],
     },
+    contributions: ['Jimmy Browning'],
     mimeType: MIMEType.mp3,
 };
 
@@ -66,6 +67,7 @@ const dummyTranscribedAudioItems: IAudioItemViewModel[] = [
                 },
             ],
         },
+        contributions: ['Jane Doe', 'Rain Woe'],
         mimeType: MIMEType.mp3,
     },
     transcribedAudioToFind,

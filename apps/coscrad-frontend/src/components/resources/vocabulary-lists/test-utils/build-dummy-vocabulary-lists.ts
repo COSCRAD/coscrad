@@ -22,7 +22,7 @@ const dummyTerms: ITermViewModel[] = [
             ],
         },
         audioURL: 'https://www.mysoundbox.com/foo.mp3',
-        contributor: 'John Doe',
+        contributions: ['John Doe', 'Jane Deer'],
     },
     {
         id: '2',
@@ -40,7 +40,7 @@ const dummyTerms: ITermViewModel[] = [
                 },
             ],
         },
-        contributor: 'Jane Deer',
+        contributions: ['Jane Deer'],
     },
 ];
 
@@ -81,6 +81,7 @@ const dummyVocabularyLists: IVocabularyListViewModel[] = [
                 },
             ],
         },
+        contributions: ['John Doe', 'Jane Deer'],
     },
 ];
 

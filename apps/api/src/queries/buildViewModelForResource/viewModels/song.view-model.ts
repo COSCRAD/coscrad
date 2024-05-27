@@ -1,17 +1,16 @@
 import { ISongViewModel } from '@coscrad/api-interfaces';
-import { FromDomainModel, NonEmptyString, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
+import { FromDomainModel, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
 import { AudioItem } from '../../../domain/models/audio-visual/audio-item/entities/audio-item.entity';
 import { MediaItem } from '../../../domain/models/media-item/entities/media-item.entity';
-import idEquals from '../../../domain/models/shared/functional/idEquals';
 import { Song } from '../../../domain/models/song/song.entity';
 import { CoscradContributor } from '../../../domain/models/user-management/contributor';
-import { BaseViewModel } from './base.view-model';
+import { BaseResourceViewModel } from './base-resource.view-model';
 
 const FromSong = FromDomainModel(Song);
 
-export class SongViewModel extends BaseViewModel implements ISongViewModel {
+export class SongViewModel extends BaseResourceViewModel implements ISongViewModel {
     @FromSong
     readonly lyrics?: MultilingualText;
 
@@ -27,20 +26,13 @@ export class SongViewModel extends BaseViewModel implements ISongViewModel {
     })
     readonly lengthMilliseconds: number;
 
-    @NonEmptyString({
-        label: `contributions`,
-        description: `list of knowledge keepers who contributed this song`,
-        isArray: true,
-    })
-    readonly contributions: string[];
-
     constructor(
         song: Song,
         audioItems: AudioItem[],
         mediaItems: MediaItem[],
         contributors: CoscradContributor[]
     ) {
-        super(song);
+        super(song, contributors);
 
         const { lyrics, audioItemId } = song;
 
@@ -59,12 +51,5 @@ export class SongViewModel extends BaseViewModel implements ISongViewModel {
         this.audioURL = url;
 
         this.lengthMilliseconds = mediaItemSearchResult?.lengthMilliseconds;
-
-        this.contributions = song.eventHistory.flatMap(({ meta: { contributorIds } }) =>
-            contributorIds
-                .map((contributorId) => contributors.find(idEquals(contributorId)))
-                .filter((contributor) => !isNullOrUndefined(contributor))
-                .map((contributor) => contributor.fullName.toString())
-        );
     }
 }
