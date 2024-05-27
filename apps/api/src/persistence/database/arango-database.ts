@@ -295,8 +295,14 @@ export class ArangoDatabase {
                 `You cannot remove document ${id} in collection ${collectionName} as it does not exist`
             );
 
-        if (collectionName !== ArangoCollectionId.migrations) {
-            throw new InternalError('ArangoDatabase.delete Not Implemented except for migrations');
+        if (
+            !([ArangoCollectionId.migrations, ArangoCollectionId.uuids] as string[]).includes(
+                collectionName
+            )
+        ) {
+            throw new InternalError(
+                'ArangoDatabase.delete Not Implemented except for migrations and ID generation'
+            );
         }
 
         const query = `
