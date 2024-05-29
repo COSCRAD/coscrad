@@ -50,6 +50,8 @@ export class CreateTerm implements ICommandBase {
     /**
      * TODO We really want this to be part of the event metadata. We also need
      * a model for contributors.
+     *
+     * TO BE REMOVED
      */
     @NonEmptyString({
         label: 'contributor ID',
