@@ -5,6 +5,7 @@ import {
     AddTermToVocabularyList,
     AnalyzeTermInVocabularyList,
     FilterPropertyType,
+    ImportEntriesToVocabularyList,
     REGISTER_VOCABULARY_LIST_FILTER_PROPERTY,
     RegisterVocabularyListFilterProperty,
     TranslateVocabularyListName,
@@ -93,10 +94,31 @@ const analyzeTermInVocabularyList: CommandFSA<AnalyzeTermInVocabularyList> = {
     },
 };
 
+const importEntriesToVocabularyList: CommandFSA<ImportEntriesToVocabularyList> = {
+    type: 'IMPORT_ENTRIES_TO_VOCABULARY_LIST',
+    payload: {
+        aggregateCompositeIdentifier: {
+            type,
+            id,
+        },
+
+        entries: [
+            {
+                propertyValues: {
+                    person: '11',
+                    positive: true,
+                },
+                termId: buildDummyUuid(56),
+            },
+        ],
+    },
+};
+
 export const buildVocabularyListTestCommandFsas = () => [
     createVocabularyList,
     translateVocabularyListName,
     addTermToVocabularyList,
     registerVocabularyListFilterProperty,
     analyzeTermInVocabularyList,
+    importEntriesToVocabularyList,
 ];

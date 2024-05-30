@@ -172,7 +172,7 @@ describe(`VocabularyList.importEntries`, () => {
         });
 
         describe(`when one of the term ids is an empty string`, () => {
-            it.only(`should fail with the expected error`, () => {
+            it(`should fail with the expected error`, () => {
                 const result = vocabularyList.importEntries([
                     {
                         termId: '',

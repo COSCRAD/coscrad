@@ -32,6 +32,7 @@ import InvalidExternalStateError from '../../shared/common-command-errors/Invali
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import {
+    EntriesImportedToVocabularyList,
     FilterPropertyType,
     TermAddedToVocabularyList,
     TermInVocabularyListAnalyzed,
@@ -450,6 +451,12 @@ export class VocabularyList extends Resource {
         payload: { termId, propertyValues },
     }: TermInVocabularyListAnalyzed) {
         return this.analyzeEntry(termId, propertyValues);
+    }
+
+    handleEntriesImportedToVocabularyList({
+        payload: { entries },
+    }: EntriesImportedToVocabularyList) {
+        return this.importEntries(entries);
     }
 
     static fromEventHistory(
