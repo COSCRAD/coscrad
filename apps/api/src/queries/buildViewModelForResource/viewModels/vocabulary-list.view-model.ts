@@ -122,6 +122,11 @@ export class VocabularyListViewModel
             fields: variables.map(convertVocabularyListVaraibleToFormElement),
         };
 
+        /**
+         * TODO We need to optimize the performance of this. We haven't prioritized
+         * this because we are moving towards eagerly calculating materialized views
+         * via event sourcing.
+         */
         const newEntries = (entries || [])
             .map(({ termId, variableValues }) => {
                 const termSearchResult = allTerms.find((term) => term.id === termId);

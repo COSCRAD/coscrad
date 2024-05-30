@@ -1,1 +1,1 @@
-export * from './fetchVocabularyLists';
+export * from './fetch-vocabulary-lists';
