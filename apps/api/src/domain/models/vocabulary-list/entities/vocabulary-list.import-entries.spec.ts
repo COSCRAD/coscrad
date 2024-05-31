@@ -4,6 +4,11 @@ import InvariantValidationError from '../../../domainModelValidators/errors/Inva
 import { AggregateType } from '../../../types/AggregateType';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { FailedToImportEntriesToVocabularyListError } from '../errors';
+import { CannotImportToVocabularyListWithExistingEntriesError } from '../errors/cannot-import-to-vocabulary-list-with-existing-entries.error';
+import { EmptyVocabularyListImportRequestError } from '../errors/empty-vocabulary-list-import-request.error';
+import { InvalidVocabularyListEntryInImportError } from '../errors/invalid-entry-in-import.error';
+import { InvalidVocabularyListFilterPropertyValueError } from '../errors/invalid-vocabulary-list-filter-property-value.error';
+import { VocabularyListFilterPropertyNotFoundError } from '../errors/vocabulary-list-filter-property-not-found.error';
 import { DropboxOrCheckbox } from '../types/dropbox-or-checkbox';
 import { VocabularyList, VocabularyListEntryImportItem } from './vocabulary-list.entity';
 
@@ -104,30 +109,61 @@ describe(`VocabularyList.importEntries`, () => {
     });
 
     describe(`when the import is invalid`, () => {
-        describe(`when one of the properties has not been reqistered for the vocabulary list`, () => {
+        describe(`when one of the properties has not been registered for the vocabulary list`, () => {
             it(`should fail with the expected error`, () => {
                 const result = vocabularyListWithNoPropertyFilters.importEntries(entriesToImport);
+
+                const expectedInnerErrors = Object.keys(entriesToImport[0].propertyValues).map(
+                    (propertyName) =>
+                        new InvalidVocabularyListEntryInImportError(entriesToImport[0].termId, [
+                            new VocabularyListFilterPropertyNotFoundError(
+                                propertyName,
+                                vocabularyListWithNoPropertyFilters.id
+                            ),
+                        ])
+                );
 
                 assertErrorAsExpected(
                     result,
                     new FailedToImportEntriesToVocabularyListError(
                         vocabularyListWithNoPropertyFilters.id,
-                        []
+                        expectedInnerErrors
                     )
                 );
             });
         });
 
         describe(`when one of the property values is not in the allowed list`, () => {
-            it(`should fail`, () => {
+            it.only(`should fail`, () => {
+                const invalidValue = 'not-known';
+
                 const result = vocabularyList.importEntries(
                     entriesToImport.concat({
                         termId: buildDummyUuid(55),
                         propertyValues: {
-                            person: 'not-known',
+                            person: invalidValue,
                             positive: true,
                         },
                     })
+                );
+
+                const expectedInnerError = new InvalidVocabularyListEntryInImportError(
+                    buildDummyUuid(55),
+                    [
+                        new InvalidVocabularyListFilterPropertyValueError(
+                            'person',
+                            invalidValue,
+                            vocabularyList.id
+                        ),
+                    ]
+                );
+
+                assertErrorAsExpected(
+                    result,
+                    new FailedToImportEntriesToVocabularyListError(
+                        vocabularyListWithNoPropertyFilters.id,
+                        [expectedInnerError]
+                    )
                 );
 
                 assertErrorAsExpected(
@@ -143,7 +179,9 @@ describe(`VocabularyList.importEntries`, () => {
 
                 assertErrorAsExpected(
                     result,
-                    new FailedToImportEntriesToVocabularyListError(vocabularyList.id, [])
+                    new FailedToImportEntriesToVocabularyListError(vocabularyList.id, [
+                        new EmptyVocabularyListImportRequestError(),
+                    ])
                 );
             });
         });
@@ -166,7 +204,9 @@ describe(`VocabularyList.importEntries`, () => {
 
                 assertErrorAsExpected(
                     result,
-                    new FailedToImportEntriesToVocabularyListError(vocabularyList.id, [])
+                    new FailedToImportEntriesToVocabularyListError(vocabularyList.id, [
+                        new CannotImportToVocabularyListWithExistingEntriesError(),
+                    ])
                 );
             });
         });

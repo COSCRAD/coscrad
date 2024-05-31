@@ -50,6 +50,9 @@ import {
     FailedToAnalyzeVocabularyListEntryError,
     FailedToImportEntriesToVocabularyListError,
 } from '../errors';
+import { CannotImportToVocabularyListWithExistingEntriesError } from '../errors/cannot-import-to-vocabulary-list-with-existing-entries.error';
+import { EmptyVocabularyListImportRequestError } from '../errors/empty-vocabulary-list-import-request.error';
+import { InvalidVocabularyListEntryInImportError } from '../errors/invalid-entry-in-import.error';
 import { InvalidVocabularyListFilterPropertyValueError } from '../errors/invalid-vocabulary-list-filter-property-value.error';
 import { VocabularyListEntryNotFoundError } from '../errors/vocabulary-list-entry-not-found.error';
 import { VocabularyListFilterPropertyMustHaveAtLeastOneAllowedValueError } from '../errors/vocabulary-list-filter-property-must-have-at-least-one-allowed-value.error';
@@ -280,29 +283,32 @@ export class VocabularyList extends Resource {
     importEntries(importItems: VocabularyListEntryImportItem[]): ResultOrError<VocabularyList> {
         if (this.entries.length > 0) {
             return new FailedToImportEntriesToVocabularyListError(this.id, [
-                new InternalError(
-                    `you cannot import entries to a vocabulary list that already has entries`
-                ),
+                new CannotImportToVocabularyListWithExistingEntriesError(),
             ]);
         }
 
         if (importItems.length === 0) {
             return new FailedToImportEntriesToVocabularyListError(this.id, [
-                new InternalError(
-                    `you must provide at least one item when importing entries to a vocabulary list`
-                ),
+                new EmptyVocabularyListImportRequestError(),
             ]);
         }
 
         const unknownFilterPropertyErrors = importItems
-            .filter(({ propertyValues }) =>
-                Object.keys(propertyValues).some((key) => !this.hasFilterPropertyNamed(key))
-            )
+            .flatMap(({ termId, propertyValues }) => {
+                const missingProperties = Object.keys(propertyValues).filter(
+                    (propertyValue) => !this.hasFilterPropertyNamed(propertyValue)
+                );
+
+                return missingProperties.map((missingProperty) => ({
+                    termId,
+                    missingProperty,
+                }));
+            })
             .map(
-                ({ termId }) =>
-                    new InternalError(
-                        `failed to import an entry for ${termId} as one of the provided properties has not been registered`
-                    )
+                ({ termId, missingProperty }) =>
+                    new InvalidVocabularyListEntryInImportError(termId, [
+                        new VocabularyListFilterPropertyNotFoundError(missingProperty, this.id),
+                    ])
             );
 
         if (unknownFilterPropertyErrors.length > 0) {
@@ -313,22 +319,34 @@ export class VocabularyList extends Resource {
         }
 
         const unknownPropertyValueErrors = importItems
-            .filter(({ propertyValues }) =>
-                Object.entries(propertyValues).some(([propertyName, propertyValue]) => {
+            .flatMap(({ termId, propertyValues }) =>
+                Object.entries(propertyValues).flatMap(([propertyName, propertyValue]) => {
                     const knownProperty = this.getFilterPropertyByName(
                         propertyName
                     ) as VocabularyListFilterProperty;
 
                     const { validValues } = knownProperty;
 
-                    return !validValues.some(({ value }) => value === propertyValue);
+                    return validValues.some(({ value }) => value === propertyValue)
+                        ? []
+                        : [
+                              {
+                                  propertyName,
+                                  propertyValue,
+                                  termId,
+                              },
+                          ];
                 })
             )
             .map(
-                ({ termId }) =>
-                    new InternalError(
-                        `failed to import an entry for ${termId} as one of the provided property values is not allowed`
-                    )
+                ({ termId, propertyName, propertyValue }) =>
+                    new InvalidVocabularyListEntryInImportError(termId, [
+                        new InvalidVocabularyListFilterPropertyValueError(
+                            propertyName,
+                            propertyValue,
+                            this.id
+                        ),
+                    ])
             );
 
         if (unknownPropertyValueErrors.length > 0) {
