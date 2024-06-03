@@ -23,13 +23,11 @@ export class CreateTermCommandHandler extends BaseCreateCommandHandler<Term> {
         text,
         aggregateCompositeIdentifier: { id },
         languageCode,
-        contributorId,
     }: CreateTerm): ResultOrError<Term> {
         return new Term({
             type: AggregateType.term,
             id,
             text: buildMultilingualTextWithSingleItem(text, languageCode),
-            contributorId,
             // You must run `ADD_AUDIO_FOR_TERM`
             audio: new MultilingualAudio({
                 items: [],

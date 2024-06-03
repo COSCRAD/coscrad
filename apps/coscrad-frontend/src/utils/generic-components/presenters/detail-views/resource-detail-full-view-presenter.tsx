@@ -1,4 +1,4 @@
-import { IMultilingualText, ResourceType } from '@coscrad/api-interfaces';
+import { ContributorWithId, IMultilingualText, ResourceType } from '@coscrad/api-interfaces';
 import { ListRounded, Person } from '@mui/icons-material';
 import {
     Box,
@@ -16,31 +16,38 @@ import { buildDataAttributeForAggregateDetailComponent } from './build-data-attr
 import { ResourceDetailPresenterHeader } from './resource-detail-presenter-header';
 import { ResourcePreviewIconFactory } from './resource-preview-icon';
 
-interface ContributionPresenterProps {
-    contributor: string;
-}
-
-const ContributionsPresenter = ({ contributions }: { contributions: string[] }): JSX.Element => (
-    <>
-        {contributions.map((contributor, index) => (
-            <Box>
-                <ContributionPresenter contributor={contributor} key={contributor + index} />
+const ContributionsPresenter = ({
+    contributions,
+}: {
+    contributions: ContributorWithId[];
+}): JSX.Element => (
+    <List>
+        {contributions.map((contribution) => (
+            <ListItem
+                disableGutters
+                style={{ borderBottom: '1px solid #ccc' }}
+                key={`${contribution.fullName}-${contribution.id}`}
+                data-testid={`${contribution.id}`}
+            >
+                <ContributionPresenter contributor={contribution} />
                 <Divider />
-            </Box>
+            </ListItem>
         ))}
-    </>
+    </List>
 );
 
-const ContributionPresenter = ({ contributor }: ContributionPresenterProps) => {
+interface ContributionPresenterProps {
+    contributor: ContributorWithId;
+}
+
+const ContributionPresenter = ({ contributor: { fullName } }: ContributionPresenterProps) => {
     return (
-        <List>
-            <ListItem disableGutters disablePadding>
-                <ListItemIcon>
-                    <Person color="secondary" />
-                </ListItemIcon>
-                <Typography variant="body1">{contributor}</Typography>
-            </ListItem>
-        </List>
+        <>
+            <ListItemIcon>
+                <Person color="secondary" />
+            </ListItemIcon>
+            <Typography variant="body1">{fullName}</Typography>
+        </>
     );
 };
 
@@ -49,7 +56,7 @@ export interface ResourceDetailFullViewPresenterProps {
     imageUrl?: string;
     videoUrl?: string;
     audioUrl?: string;
-    contributions: string[];
+    contributions: ContributorWithId[];
     // TODO: Refactor the name property to eliminate this conditional type
     name: IMultilingualText | string;
     type: ResourceType;

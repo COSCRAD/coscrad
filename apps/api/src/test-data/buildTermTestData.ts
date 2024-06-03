@@ -36,7 +36,6 @@ const iAmSingingEvents = new TestEventStream()
         type: TERM_CREATED,
         payload: {
             text: 'I am singing (lang)',
-            contributorId: 'Sarah Smith',
             languageCode: LanguageCode.Chilcotin,
         },
     })
@@ -55,7 +54,6 @@ const youAreSingingEvents = new TestEventStream()
         type: TERM_CREATED,
         payload: {
             text: 'You are singing (lang)',
-            contributorId: 'Sarah Smith',
             languageCode: LanguageCode.Chilcotin,
         },
     })
@@ -73,7 +71,6 @@ const sheIsSingingEvents = new TestEventStream()
         type: TERM_CREATED,
         payload: {
             text: 'She is singing (lang)',
-            contributorId: 'Sarah Smith',
             languageCode: LanguageCode.Chilcotin,
         },
     })
@@ -91,7 +88,6 @@ const iAmNotSingingEvents = new TestEventStream()
         type: TERM_CREATED,
         payload: {
             text: 'I am not singing (lang)',
-            contributorId: 'Sarah Smith',
             languageCode: LanguageCode.Chilcotin,
         },
     })
@@ -110,7 +106,6 @@ const youAreNotSingingEvents = new TestEventStream()
         type: TERM_CREATED,
         payload: {
             text: 'You are not singing (lang)',
-            contributorId: 'Sarah Smith',
             languageCode: LanguageCode.Chilcotin,
         },
     })
@@ -146,7 +141,6 @@ const chilcotinOnlyTermEvents = new TestEventStream().andThen<TermCreated>({
     type: TERM_CREATED,
     payload: {
         text: 'Chil-term-no-english',
-        contributorId: 'Jane Deer',
     },
 });
 // not published
@@ -156,7 +150,6 @@ const englishOnlyTermEvents = new TestEventStream()
         type: TERM_CREATED,
         payload: {
             text: 'My Secret Term',
-            contributorId: 'This prop will be removed soon',
         },
     })
     .andThen<ResourceReadAccessGrantedToUser>({

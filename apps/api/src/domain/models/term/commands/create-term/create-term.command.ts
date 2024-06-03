@@ -51,11 +51,11 @@ export class CreateTerm implements ICommandBase {
      * TODO We really want this to be part of the event metadata. We also need
      * a model for contributors.
      */
-    @NonEmptyString({
-        label: 'contributor ID',
-        description: 'The ID of the knowledge keeper who contributed the term',
-    })
-    contributorId: string;
+    // @NonEmptyString({
+    //     label: 'contributor ID',
+    //     description: 'The ID of the knowledge keeper who contributed the term',
+    // })
+    // contributorId: string;
 
     @RawDataObject({
         isOptional: true,
