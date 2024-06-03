@@ -91,7 +91,7 @@ export class ArangoIdRepository implements IIdRepository {
 
     async reserve({
         id,
-        type: _type,
+        type: type,
     }: {
         id: AggregateId;
         type: UniquelyIdentifiableType;
@@ -113,20 +113,20 @@ export class ArangoIdRepository implements IIdRepository {
         }
 
         /**
-         * We are moving away from tracking historical IDs in the actual database
+         * We may want to moving away from tracking historical IDs in the actual database
          * due to performance issues. We should consider moving this info
          * to a logging layer.
          */
-        await this.arangoDatabase.delete(result.sequenceNumber, ArangoCollectionId.uuids);
+        // await this.arangoDatabase.delete(result.sequenceNumber, ArangoCollectionId.uuids);
 
-        // await this.arangoDatabase.update<Partial<UuidDto>>(
-        //     // The sequence number is the Arango document _key
-        //     result.sequenceNumber,
-        //     {
-        //         usedBy: type,
-        //         timeUsed: new Date().toISOString(),
-        //     },
-        //     ArangoCollectionId.uuids
-        // );
+        await this.arangoDatabase.update<Partial<UuidDto>>(
+            // The sequence number is the Arango document _key
+            result.sequenceNumber,
+            {
+                usedBy: type,
+                timeUsed: new Date().toISOString(),
+            },
+            ArangoCollectionId.uuids
+        );
     }
 }

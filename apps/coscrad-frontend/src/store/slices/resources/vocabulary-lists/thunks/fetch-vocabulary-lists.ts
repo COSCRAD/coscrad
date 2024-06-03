@@ -15,6 +15,10 @@ export const fetchVocabularyLists = createFetchThunk<VocabularyListIndexState>(
     ): IIndexQueryResult<WithTags<IVocabularyListViewModel>> => {
         const { apiUrl } = getConfig();
 
+        /**
+         * TODO Phase the following mapping layer out in favour
+         * of doing this work on the server.
+         */
         return {
             ...serverResponse,
             entities: serverResponse.entities.map((entity) => {

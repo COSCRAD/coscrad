@@ -15,6 +15,10 @@ export const fetchTerms = createFetchThunk<TermIndexState>(
     ): IIndexQueryResult<WithTags<ITermViewModel>> => {
         const { apiUrl } = getConfig();
 
+        /**
+         * TODO Phase the following mapping layer out in favour
+         * of doing this work on the server.
+         */
         return {
             ...serverResponse,
             entities: serverResponse.entities.map((entity) => {
