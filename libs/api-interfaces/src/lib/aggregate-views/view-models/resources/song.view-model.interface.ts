@@ -1,4 +1,4 @@
-import { IBaseViewModel } from '../base.view-model.interface';
+import { ContributorWithId, IBaseViewModel } from '../base.view-model.interface';
 import { IMultilingualText } from './common';
 
 export interface ISongViewModel extends IBaseViewModel {
@@ -14,5 +14,5 @@ export interface ISongViewModel extends IBaseViewModel {
 
     lengthMilliseconds: number;
 
-    contributions: string[];
+    contributions: ContributorWithId[];
 }
