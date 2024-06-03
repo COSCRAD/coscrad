@@ -295,8 +295,14 @@ export class ArangoDatabase {
                 `You cannot remove document ${id} in collection ${collectionName} as it does not exist`
             );
 
-        if (collectionName !== ArangoCollectionId.migrations) {
-            throw new InternalError('ArangoDatabase.delete Not Implemented except for migrations');
+        if (
+            !([ArangoCollectionId.migrations, ArangoCollectionId.uuids] as string[]).includes(
+                collectionName
+            )
+        ) {
+            throw new InternalError(
+                'ArangoDatabase.delete Not Implemented except for migrations and ID generation'
+            );
         }
 
         const query = `
@@ -361,10 +367,15 @@ export class ArangoDatabase {
         { criterion: { field, operator, value } }: ISpecification<TModel>,
         docNamePlaceholder: string
     ) {
+        const predicateStatement =
+            operator === QueryOperator.hasOriginalText
+                ? `${docNamePlaceholder}.${field}.items[0].text == @valueToCompare`
+                : `${docNamePlaceholder}.${field} ${interpretQueryOperatorForAQL(
+                      operator
+                  )} @valueToCompare`;
+
         return {
-            query: `FILTER ${docNamePlaceholder}.${field} ${interpretQueryOperatorForAQL(
-                operator
-            )} @valueToCompare`,
+            query: `FILTER ${predicateStatement}`,
             bindVars: {
                 // This prevents AQL injection attacks
                 valueToCompare: value,

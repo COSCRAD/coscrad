@@ -2,7 +2,7 @@ import { isNonEmptyString, isUUID } from '@coscrad/validation-constraints';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { IIdRepository } from '../../../lib/id-generation/interfaces/id-repository.interface';
-import { UuidDocument } from '../../../lib/id-generation/types/UuidDocument';
+import { UuidDto } from '../../../lib/id-generation/types/UuidDocument';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoIdRepository } from '../../../persistence/repositories/arango-id-repository';
@@ -43,7 +43,7 @@ describe('POST /ids', () => {
         it('should correctly persist the ID in the database', async () => {
             const res = await request(app.getHttpServer()).post(`/ids`);
 
-            const persistedId = (await idRepository.fetchById(res.text)) as UuidDocument;
+            const persistedId = (await idRepository.fetchById(res.text)) as UuidDto;
 
             expect(persistedId.id).toBe(res.text);
 
