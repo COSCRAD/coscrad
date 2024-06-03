@@ -1,6 +1,6 @@
 import { AggregateType, ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
+import { NestedDataType, NonEmptyString, RawDataObject, UUID } from '@coscrad/data-types';
 import { LanguageCodeEnum } from '../../../../../domain/common/entities/multilingual-text';
 import { AggregateCompositeIdentifier } from '../../../../../domain/types/AggregateCompositeIdentifier';
 import { AggregateTypeProperty } from '../../../shared/common-commands';
@@ -42,4 +42,12 @@ export class CreateVocabularyList implements ICommandBase {
         description: 'the language in which you are naming the vocabulary list',
     })
     languageCodeForName: LanguageCode;
+
+    @RawDataObject({
+        isOptional: true,
+        label: 'raw data',
+        description:
+            'additional data from a legacy \\ third-party system that is the source of the data',
+    })
+    rawData?: Record<string, unknown>;
 }

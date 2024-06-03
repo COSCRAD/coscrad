@@ -7,5 +7,5 @@ export type TermTranslatedPayload = TranslateTerm;
 
 @CoscradEvent(TERM_TRANSLATED)
 export class TermTranslated extends BaseEvent<TermTranslatedPayload> {
-    type = TERM_TRANSLATED;
+    readonly type = 'TERM_TRANSLATED';
 }

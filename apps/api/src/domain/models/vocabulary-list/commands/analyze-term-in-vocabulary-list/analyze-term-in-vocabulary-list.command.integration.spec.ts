@@ -12,6 +12,7 @@ import { ArangoDatabaseProvider } from '../../../../../persistence/database/data
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestCommandFsaMap } from '../../../../../test-data/commands';
+import { TestEventStream } from '../../../../../test-data/events';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
@@ -20,6 +21,7 @@ import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
+import { TermCreated, TermTranslated } from '../../../term/commands';
 import { VocabularyListFilterProperty } from '../../entities/vocabulary-list-variable.entity';
 import { VocabularyList } from '../../entities/vocabulary-list.entity';
 import {
@@ -34,10 +36,22 @@ import { AnalyzeTermInVocabularyList } from './analyze-term-in-vocabulary-list.c
 
 const commandType = 'ANALYZE_TERM_IN_VOCABULARY_LIST';
 
-const existingTerm = getValidAggregateInstanceForTest(AggregateType.term);
+const termId = buildDummyUuid(123);
+
+const eventHistoryForTerm = new TestEventStream()
+    .andThen<TermCreated>({
+        type: 'TERM_CREATED',
+    })
+    .andThen<TermTranslated>({
+        type: 'TERM_TRANSLATED',
+    })
+    .as({
+        type: AggregateType.term,
+        id: termId,
+    });
 
 const existingEntry = new VocabularyListEntry({
-    termId: existingTerm.id,
+    termId,
     variableValues: {},
 });
 
@@ -115,7 +129,7 @@ const validFsa = {
     ...clonePlainObjectWithOverrides(dummyFsaWithEmptyPropertyDefinitions, {
         payload: {
             aggregateCompositeIdentifier: existingVocabularyList.getCompositeIdentifier(),
-            termId: existingTerm.id,
+            termId,
             propertyValues: {
                 [selectFilterPropertyName]: allowedValueForSelectFilterProperty,
             },
@@ -169,9 +183,15 @@ describe(commandType, () => {
                 await assertCommandSuccess(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     buildValidCommandFSA: () => validFsa,
-                    initialState: new DeluxeInMemoryStore({
-                        [AggregateType.vocabularyList]: [existingVocabularyList],
-                    }).fetchFullSnapshotInLegacyFormat(),
+                    seedInitialState: async () => {
+                        await testRepositoryProvider
+                            .forResource(ResourceType.vocabularyList)
+                            .create(existingVocabularyList);
+
+                        await testRepositoryProvider
+                            .getEventRepository()
+                            .appendEvents(eventHistoryForTerm);
+                    },
                     checkStateOnSuccess: async () => {
                         const searchResult = await testRepositoryProvider
                             .forResource(ResourceType.vocabularyList)
@@ -182,7 +202,7 @@ describe(commandType, () => {
                         const updatedVocabularyList = searchResult as VocabularyList;
 
                         const updatedEntry = updatedVocabularyList.getEntryForTerm(
-                            existingTerm.id
+                            termId
                         ) as VocabularyListEntry;
 
                         expect(
@@ -191,8 +211,6 @@ describe(commandType, () => {
                                 allowedValueForSelectFilterProperty
                             )
                         ).toBe(true);
-
-                        // TODO assert that the command is persisted
                     },
                 });
             });
@@ -203,11 +221,13 @@ describe(commandType, () => {
                 await assertCommandSuccess(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     seedInitialState: async () => {
-                        await testRepositoryProvider.addFullSnapshot(
-                            new DeluxeInMemoryStore({
-                                [AggregateType.vocabularyList]: [existingVocabularyList],
-                            }).fetchFullSnapshotInLegacyFormat()
-                        );
+                        await testRepositoryProvider
+                            .forResource(ResourceType.vocabularyList)
+                            .create(existingVocabularyList);
+
+                        await testRepositoryProvider
+                            .getEventRepository()
+                            .appendEvents(eventHistoryForTerm);
                     },
                     buildValidCommandFSA: () =>
                         fsaFactory.build(undefined, {
@@ -230,6 +250,10 @@ describe(commandType, () => {
                                 [AggregateType.vocabularyList]: [existingVocabularyList],
                             }).fetchFullSnapshotInLegacyFormat()
                         );
+
+                        await testRepositoryProvider
+                            .getEventRepository()
+                            .appendEvents(eventHistoryForTerm);
                     },
                     buildValidCommandFSA: () =>
                         fsaFactory.build(undefined, {
@@ -248,9 +272,9 @@ describe(commandType, () => {
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     seedInitialState: async () => {
-                        await testRepositoryProvider.addFullSnapshot(
-                            new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat()
-                        );
+                        await testRepositoryProvider
+                            .getEventRepository()
+                            .appendEvents(eventHistoryForTerm);
                     },
                     buildCommandFSA: () => fsaFactory.build(undefined, {}),
                     checkError: (error) => {
@@ -267,7 +291,7 @@ describe(commandType, () => {
             });
         });
 
-        describe(`when there is no entry for the given term`, () => {
+        describe(`when there is no term for the given entry`, () => {
             const missingTermId = buildDummyUuid(689);
 
             it(`should return the expected error`, async () => {
@@ -311,6 +335,10 @@ describe(commandType, () => {
                                 [ResourceType.vocabularyList]: [existingVocabularyList],
                             }).fetchFullSnapshotInLegacyFormat()
                         );
+
+                        await testRepositoryProvider
+                            .getEventRepository()
+                            .appendEvents(eventHistoryForTerm);
                     },
                     buildCommandFSA: () =>
                         fsaFactory.build(undefined, {
@@ -345,6 +373,10 @@ describe(commandType, () => {
                                 [ResourceType.vocabularyList]: [existingVocabularyList],
                             }).fetchFullSnapshotInLegacyFormat()
                         );
+
+                        await testRepositoryProvider
+                            .getEventRepository()
+                            .appendEvents(eventHistoryForTerm);
                     },
                     buildCommandFSA: () =>
                         fsaFactory.build(undefined, {
@@ -383,6 +415,10 @@ describe(commandType, () => {
                             }).fetchFullSnapshotInLegacyFormat()
                         );
 
+                        await testRepositoryProvider
+                            .getEventRepository()
+                            .appendEvents(eventHistoryForTerm);
+
                         // Analyze the term once with a different property value
                         await commandHandlerService.execute(
                             fsaFactory.build(undefined, {
@@ -404,7 +440,7 @@ describe(commandType, () => {
                             error,
                             new CommandExecutionError([
                                 new FailedToAnalyzeVocabularyListEntryError(
-                                    existingTerm.id,
+                                    termId,
                                     existingVocabularyList.id,
                                     [
                                         new CannotOverwriteFilterPropertyValueForVocabularyListEntryError(

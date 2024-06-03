@@ -2,9 +2,11 @@ import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { CommandHandler } from '@coscrad/commands';
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { Valid } from '../../../../../domain/domainModelValidators/Valid';
+import { HasName } from '../../../../../domain/repositories/specifications';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../../domain/types/ResourceType';
-import { InternalError } from '../../../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
+import { isNotFound } from '../../../../../lib/types/not-found';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import getInstanceFactoryForResource from '../../../../factories/get-instance-factory-for-resource';
@@ -38,15 +40,43 @@ export class CreateVocabularyListCommandHandler extends BaseCreateCommandHandler
         return newInstanceOrError;
     }
 
-    protected async fetchRequiredExternalState(
-        _command?: CreateVocabularyList
-    ): Promise<InMemorySnapshot> {
-        const allVocabularyLists = await this.repositoryProvider
-            .forResource(AggregateType.vocabularyList)
-            .fetchMany();
+    protected async fetchRequiredExternalState({
+        name,
+        aggregateCompositeIdentifier: { id },
+    }: CreateVocabularyList): Promise<InMemorySnapshot> {
+        const [
+            searchResultForVocabularyListWithSameName,
+            searchResultForExistingVocabularyListWithThisId,
+        ] = await Promise.all([
+            this.repositoryProvider
+                .forResource<VocabularyList>(AggregateType.vocabularyList)
+                .fetchMany(
+                    // @ts-expect-error We need to sort out whether we express these specifications in the persistence or domain model language
+                    new HasName(name)
+                ),
+            this.repositoryProvider.forResource(AggregateType.vocabularyList).fetchById(id),
+        ]);
+
+        const allVocabularyLists = [];
+
+        if (isInternalError(searchResultForExistingVocabularyListWithThisId)) {
+            throw new InternalError(`Encountered invalid existing state in the database`, [
+                searchResultForExistingVocabularyListWithThisId,
+            ]);
+        }
+
+        if (!isNotFound(searchResultForExistingVocabularyListWithThisId)) {
+            allVocabularyLists.push(searchResultForExistingVocabularyListWithThisId);
+        }
+
+        if (searchResultForVocabularyListWithSameName.length > 0) {
+            allVocabularyLists.push(
+                ...searchResultForVocabularyListWithSameName.filter(validAggregateOrThrow)
+            );
+        }
 
         return new DeluxeInMemoryStore({
-            [AggregateType.vocabularyList]: allVocabularyLists.filter(validAggregateOrThrow),
+            [AggregateType.vocabularyList]: allVocabularyLists,
         }).fetchFullSnapshotInLegacyFormat();
     }
 

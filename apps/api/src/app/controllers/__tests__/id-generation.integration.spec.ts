@@ -5,7 +5,7 @@ import { IIdManager } from '../../../domain/interfaces/id-manager.interface';
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { IIdRepository } from '../../../lib/id-generation/interfaces/id-repository.interface';
-import { UuidDocument } from '../../../lib/id-generation/types/UuidDocument';
+import { UuidDto } from '../../../lib/id-generation/types/UuidDocument';
 import { NotAvailable } from '../../../lib/types/not-available';
 import { NotFound } from '../../../lib/types/not-found';
 import { OK } from '../../../lib/types/ok';
@@ -70,9 +70,7 @@ describe('When generating a new ID (POST /ids)', () => {
             it('should correctly persist the ID in the database', async () => {
                 const newId = await idManager.generate();
 
-                const persistedIdDocument = (await testIdRepository.fetchById(
-                    newId
-                )) as UuidDocument;
+                const persistedIdDocument = (await testIdRepository.fetchById(newId)) as UuidDto;
 
                 expect(persistedIdDocument.id).toBe(newId);
 
@@ -94,7 +92,7 @@ describe('When generating a new ID (POST /ids)', () => {
 
                 await idManager.use({ id, type });
 
-                const updatedIdDoc = (await testIdRepository.fetchById(id)) as UuidDocument;
+                const updatedIdDoc = (await testIdRepository.fetchById(id)) as UuidDto;
 
                 expect(updatedIdDoc.id).toBe(id);
 
