@@ -1,3 +1,4 @@
+import { RootStoreContext } from 'app/config';
 import React, { useEffect, useState } from 'react';
 import { Button, Image, Text, View } from 'react-native';
 import Sound from 'react-native-sound';
@@ -5,13 +6,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store';
 import { selectAlphabet } from '../../store/slices/selectors';
 import { fetchAlphabets } from './../../store/slices/alphabet-slice';
-import config from './config.json';
 
 /**
  *
  * TODO Fix the project.json (remove package.json?) so that you can import
  * from libs and then import these from the validation lib.
  */
+
+export const useConfig = () => React.useContext(RootStoreContext).config;
+
 const isNull = (input: unknown): input is null => input === null;
 
 const isUndefined = (input: unknown): input is undefined => typeof input === 'undefined';
@@ -20,6 +23,10 @@ const isNullOrUndefined = (input: unknown): input is null | undefined =>
     isNull(input) || isUndefined(input);
 
 export function AlphabetCardDetailScreen() {
+    const {
+        env: { BASE_API_URL, TARGET_ALPHABET_NAME },
+    } = useConfig();
+
     const dispatch = useDispatch<AppDispatch>();
 
     const { isLoading, errorInfo, data: alphabetData } = useSelector(selectAlphabet);
@@ -67,10 +74,10 @@ export function AlphabetCardDetailScreen() {
         standalone_image,
     } = selectedCard;
 
-    const apiUrlPrefix = config.apiUrlPrefix;
+    const apiUrlPrefix = `${BASE_API_URL}/games/${TARGET_ALPHABET_NAME}`;
 
     const letterAudio = new Sound(
-        `${apiUrlPrefix}${letter_audio.replace('.mp3', '')}`,
+        `${BASE_API_URL}/resources/mediaitems/download?name=${letter_audio.replace('.mp3', '')}`,
         Sound.MAIN_BUNDLE,
         (error) => {
             if (error) {
@@ -89,7 +96,7 @@ export function AlphabetCardDetailScreen() {
     };
 
     const wordAudio = new Sound(
-        `${apiUrlPrefix}${word_audio.replace('.mp3', '')}`,
+        `${BASE_API_URL}/resources/mediaitems/download?name=${word_audio.replace('.mp3', '')}`,
         Sound.MAIN_BUNDLE,
         (error) => {
             if (error) {
@@ -115,10 +122,13 @@ export function AlphabetCardDetailScreen() {
                 style={{ height: 300 }}
                 resizeMode="contain"
                 source={{
-                    uri: `${apiUrlPrefix}${card_image.replace('.png', '')}`,
+                    uri: `${BASE_API_URL}/resources/mediaitems/download?name=${card_image.replace(
+                        '.png',
+                        ''
+                    )}`,
                 }}
             />
-
+            <Text>Base Api Url: {BASE_API_URL}</Text>
             <Text testID={`${letter}`}>Letter: {letter}</Text>
             <Text testID={`${word}`}>Word: {word}</Text>
             <Text testID={`AlphabetCardDetail/${sequence_number}`}>

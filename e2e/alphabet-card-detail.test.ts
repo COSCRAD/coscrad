@@ -2,7 +2,11 @@ import { by, device, element, expect } from 'detox';
 
 describe('Detail', () => {
     beforeAll(async () => {
-        await device.launchApp();
+        await device.launchApp({
+            launchArgs: {
+                configOverrides: {},
+            },
+        });
     });
 
     beforeEach(async () => {
