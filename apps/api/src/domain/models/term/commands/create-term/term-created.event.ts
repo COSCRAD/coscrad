@@ -7,5 +7,5 @@ export type TermCreatedPayload = CreateTerm;
 
 @CoscradEvent(TERM_CREATED)
 export class TermCreated extends BaseEvent<TermCreatedPayload> {
-    type = TERM_CREATED;
+    readonly type = 'TERM_CREATED';
 }
