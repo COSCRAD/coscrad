@@ -5,7 +5,7 @@ import {
     InMemorySnapshotOfResources,
     ResourceType,
 } from '../../domain/types/ResourceType';
-import { UuidDocument } from '../../lib/id-generation/types/UuidDocument';
+import { UuidDto } from '../../lib/id-generation/types/UuidDocument';
 import { ArangoCollectionId } from '../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoEdgeCollectionId } from '../../persistence/database/collection-references/ArangoEdgeCollectionId';
 import { getArangoCollectionIDFromResourceType } from '../../persistence/database/collection-references/getArangoCollectionIDFromResourceType';
@@ -19,7 +19,7 @@ import { DTO } from '../../types/DTO';
 export type InMemoryDatabaseSnapshot = {
     document: {
         [K in Exclude<ArangoCollectionId, 'uuids' | 'migrations'>]: unknown[];
-    } & { uuids: UuidDocument[]; migrations: DTO<ArangoMigrationRecord>[] };
+    } & { uuids: UuidDto[]; migrations: DTO<ArangoMigrationRecord>[] };
 
     edge: {
         [K in ArangoEdgeCollectionId]: Record<string, unknown>[];

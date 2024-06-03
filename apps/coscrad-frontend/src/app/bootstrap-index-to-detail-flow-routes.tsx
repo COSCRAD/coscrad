@@ -28,12 +28,20 @@ export const bootstrapIndexToDetailFlowRoutes = ({
         .reduce((acc, { categorizableType, labelOverrides }) => {
             const route = isNullOrUndefined(labelOverrides) ? null : labelOverrides.route;
 
+            const resolvedRoute =
+                (route && `Resources/${route}`) ||
+                routes.resources.ofType(categorizableType as ResourceType).index;
+
+            console.log({
+                categorizableType,
+                resolvedRoute,
+            });
+
             return {
                 ...acc,
                 [categorizableType]:
-                // we have already filtered out the Notes
-                    (route && `Resources/${route}`) ||
-                    routes.resources.ofType(categorizableType as ResourceType).index,
+                    // we have already filtered out the Notes
+                    resolvedRoute,
             };
         }, {});
 

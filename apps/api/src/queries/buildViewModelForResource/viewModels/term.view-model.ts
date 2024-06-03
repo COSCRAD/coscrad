@@ -61,7 +61,7 @@ export class TermViewModel extends BaseResourceViewModel implements ITermViewMod
                 const mediaItemSearchResult = mediaItems.find(({ id }) => id === mediaItemId);
 
                 if (isNonEmptyString(mediaItemSearchResult?.url)) {
-                    this.audioURL = mediaItemSearchResult.url;
+                    this.audioURL = `/resources/mediaItems/download/${mediaItemSearchResult.id}`;
                 }
             }
         }

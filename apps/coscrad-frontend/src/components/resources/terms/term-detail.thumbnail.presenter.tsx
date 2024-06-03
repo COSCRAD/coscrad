@@ -3,7 +3,8 @@ import {
     ITermViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { AudioPlayer } from '@coscrad/media-player';
+import { AudioClipPlayer } from '@coscrad/media-player';
+import { Box } from '@mui/material';
 import {
     ResourceDetailThumbnailPresenter,
     SingleOptionalPropertyPresenter,
@@ -21,9 +22,9 @@ export const TermDetailThumbnailPresenter = ({
                 display="Contributors"
                 value={contributions.join(', ')}
             />
-            <div id="media-player">
-                <AudioPlayer audioUrl={audioURL} />
-            </div>
+            <Box id="media-player">
+                <AudioClipPlayer audioUrl={audioURL} />
+            </Box>
         </ResourceDetailThumbnailPresenter>
     );
 };

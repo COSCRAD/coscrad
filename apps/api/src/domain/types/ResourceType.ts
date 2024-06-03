@@ -1,4 +1,4 @@
-import { UuidDocument } from '../../lib/id-generation/types/UuidDocument';
+import { UuidDto } from '../../lib/id-generation/types/UuidDocument';
 import { AudioItem } from '../models/audio-visual/audio-item/entities/audio-item.entity';
 import { IBibliographicCitation } from '../models/bibliographic-citation/interfaces/bibliographic-citation.interface';
 import { Category } from '../models/categories/entities/category.entity';
@@ -64,6 +64,6 @@ export type InMemorySnapshot = {
     category: Category[];
     user: CoscradUser[];
     userGroup: CoscradUserGroup[];
-    uuid: UuidDocument[];
+    uuid: UuidDto[];
     contributor: CoscradContributor[];
 };

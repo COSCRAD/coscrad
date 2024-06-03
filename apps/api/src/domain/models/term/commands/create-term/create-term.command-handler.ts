@@ -1,5 +1,7 @@
-import { CommandHandler, ICommand } from '@coscrad/commands';
-import { InternalError } from '../../../../../lib/errors/InternalError';
+import { CommandHandler } from '@coscrad/commands';
+import { HasText } from '../../../../../domain/repositories/specifications';
+import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
+import { isNotFound } from '../../../../../lib/types/not-found';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
 import { Valid } from '../../../../domainModelValidators/Valid';
@@ -38,11 +40,40 @@ export class CreateTermCommandHandler extends BaseCreateCommandHandler<Term> {
         });
     }
 
-    protected async fetchRequiredExternalState(_?: ICommand): Promise<InMemorySnapshot> {
-        const allTerms = await this.repositoryProvider.forResource(AggregateType.term).fetchMany();
+    protected async fetchRequiredExternalState({
+        aggregateCompositeIdentifier: { id },
+        text,
+    }: CreateTerm): Promise<InMemorySnapshot> {
+        const allTerms = [];
+
+        /**
+         * TODO
+         * 1. We need to make specifications composable via Or \ And \ Not so that
+         * we can do this in a single atomic transaction
+         */
+        const [searchForTermsWithSameId, searchForTermsWithSameText] = await Promise.all([
+            this.repositoryProvider.forResource(AggregateType.term).fetchById(id),
+            // @ts-expect-error Fix types here
+            this.repositoryProvider.forResource(AggregateType.term).fetchMany(new HasText(text)),
+        ]);
+
+        if (searchForTermsWithSameText.length > 0) {
+            allTerms.push(...searchForTermsWithSameText.filter(validAggregateOrThrow));
+        }
+
+        if (!isNotFound(searchForTermsWithSameId)) {
+            if (isInternalError(searchForTermsWithSameId)) {
+                throw new InternalError(
+                    `Failed to create a new term due to an invalid existing term with the same ID`,
+                    [searchForTermsWithSameId]
+                );
+            }
+
+            allTerms.push(searchForTermsWithSameId);
+        }
 
         return new DeluxeInMemoryStore({
-            [AggregateType.term]: allTerms.filter(validAggregateOrThrow),
+            [AggregateType.term]: allTerms,
         }).fetchFullSnapshotInLegacyFormat();
     }
 

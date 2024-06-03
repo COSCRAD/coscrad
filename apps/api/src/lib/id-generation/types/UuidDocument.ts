@@ -7,7 +7,8 @@ type ISOTimestamp = string;
  * We may want to make this a class so we can validate invariants (e.g., that
  * dateUsed is undefined if usedBy is as well.)
  */
-export type UuidDocument = {
+export type UuidDto = {
+    // this is a sequential ID that can be used as a readable slug
     id: AggregateId;
 
     sequenceNumber: string;

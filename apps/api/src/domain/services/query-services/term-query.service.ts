@@ -5,8 +5,10 @@ import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
 import { TermViewModel } from '../../../queries/buildViewModelForResource/viewModels';
 import BaseDomainModel from '../../models/BaseDomainModel';
-import { validAggregateOrThrow } from '../../models/shared/functional';
+import { AudioItem } from '../../models/audio-visual/audio-item/entities/audio-item.entity';
+import { MediaItem } from '../../models/media-item/entities/media-item.entity';
 import { Term } from '../../models/term/entities/term.entity';
+import { CoscradContributor } from '../../models/user-management/contributor';
 import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
 import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
@@ -40,9 +42,9 @@ export class TermQueryService extends ResourceQueryService<Term, ITermViewModel>
         ]);
 
         return new DeluxeInMemoryStore({
-            [AggregateType.audioItem]: allAudioItems.filter(validAggregateOrThrow),
-            [AggregateType.mediaItem]: allMediaItems.filter(validAggregateOrThrow),
-            [AggregateType.contributor]: allContributors.filter(validAggregateOrThrow),
+            [AggregateType.audioItem]: allAudioItems as AudioItem[],
+            [AggregateType.mediaItem]: allMediaItems as MediaItem[],
+            [AggregateType.contributor]: allContributors as CoscradContributor[],
         }).fetchFullSnapshotInLegacyFormat();
     }
 
