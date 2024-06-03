@@ -6,10 +6,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { AudioClipPlayer } from '@coscrad/media-player';
 import { Box } from '@mui/material';
-import {
-    ResourceDetailFullViewPresenter,
-    SingleOptionalPropertyPresenter,
-} from '../../../utils/generic-components/';
+import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 
 export const TermDetailFullViewPresenter = ({
@@ -23,12 +20,12 @@ export const TermDetailFullViewPresenter = ({
             name={name}
             id={id}
             type={ResourceType.term}
-            contributions={[]}
+            contributions={contributions}
         >
             <Box
                 data-testid={buildDataAttributeForAggregateDetailComponent(AggregateType.term, id)}
             />
-            <SingleOptionalPropertyPresenter display="Contributor" value={contributions} />
+            {/* <SingleOptionalPropertyPresenter display="Contributor" value={contributions} /> */}
             <Box id="media-player">
                 <AudioClipPlayer audioUrl={audioURL} />
             </Box>
