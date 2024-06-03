@@ -12,6 +12,7 @@ import { ArangoDatabaseProvider } from '../../../../../persistence/database/data
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestCommandFsaMap } from '../../../../../test-data/commands';
+import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
@@ -180,6 +181,30 @@ describe(commandType, () => {
 
                     expect(missingEntries).toEqual([]);
                 },
+            });
+        });
+    });
+
+    describe(`when the command is invalid`, () => {
+        describe(`when one of the terms is missing`, () => {
+            it(`should fail with the expected error`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider
+                            .forResource(ResourceType.vocabularyList)
+                            .create(existingVocabularyList);
+
+                        await testRepositoryProvider
+                            .forResource(ResourceType.term)
+                            // we skip adding the 0th term to the database
+                            .createMany(termsToImport.slice(1))
+                            .catch((e) => {
+                                throw new InternalError(`${e}`);
+                            });
+                    },
+                    buildCommandFSA: () => commandFsaFactory.build(),
+                });
             });
         });
     });

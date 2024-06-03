@@ -27,7 +27,10 @@ export const buildReferenceTree = (Ctor: Object, instance: Object) => {
             // There is no reference to add here
             if (isNullOrUndefined(value) || (isArray && isDeepStrictEqual(value, []))) return acc;
 
-            const allValues = isArray ? (value as CompositeIdentifier<string>[]) : [value];
+            const allValues =
+                isArray || Array.isArray(value)
+                    ? (value as CompositeIdentifier<string>[])
+                    : [value];
 
             if (allValues.every((id): id is string => isNonEmptyString(id))) {
                 return acc.concat(
