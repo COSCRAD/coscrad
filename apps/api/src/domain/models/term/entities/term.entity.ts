@@ -30,6 +30,7 @@ import validateTextFieldContextForModel from '../../shared/contextValidators/val
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import { CannotReuseAudioItemError } from '../../shared/multilingual-audio/errors';
 import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
+import { ContributorAndRole } from '../../song/ContributorAndRole';
 import {
     AudioAddedForTerm,
     PromptTermCreated,
@@ -73,12 +74,7 @@ export class Term extends Resource {
      * the corresponding event will be attributed to the contributor with this ID.
      * Otherwise, it will be attributed to the system user.
      */
-    @NonEmptyString({
-        isOptional: true,
-        label: 'contributor ID',
-        description: 'reference to the contributor for this term',
-    })
-    readonly contributorId?: AggregateId;
+    readonly contributions?: ContributorAndRole[];
 
     @NestedDataType(MultilingualAudio, {
         label: 'multilingual audio',
@@ -103,11 +99,19 @@ export class Term extends Resource {
         // This should only happen in the validation context
         if (isNullOrUndefined(dto)) return;
 
-        const { contributorId, audio: audioDto, sourceProject, text, isPromptTerm } = dto;
+        const {
+            contributions: contributorAndRoles,
+            audio: audioDto,
+            sourceProject,
+            text,
+            isPromptTerm,
+        } = dto;
 
         this.text = new MultilingualText(text);
 
-        this.contributorId = contributorId;
+        this.contributions = (contributorAndRoles || []).map(
+            (contributorAndRoleDTO) => new ContributorAndRole(contributorAndRoleDTO)
+        );
 
         this.audio = isNonEmptyObject(audioDto) ? new MultilingualAudio(audioDto) : undefined;
 
@@ -274,7 +278,7 @@ export class Term extends Resource {
                 aggregateCompositeIdentifier: { id },
                 text,
                 languageCode,
-                contributorId,
+                // contributorId,
             },
         } = event;
 
@@ -282,7 +286,7 @@ export class Term extends Resource {
             type: AggregateType.term,
             id,
             text: buildMultilingualTextWithSingleItem(text, languageCode),
-            contributorId,
+            // contributorId,
             // Terms are not published by default
             published: false,
             audio: new MultilingualAudio({
