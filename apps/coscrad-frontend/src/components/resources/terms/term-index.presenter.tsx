@@ -10,6 +10,7 @@ import { Matchers } from '../../../utils/generic-components/presenters/tables/ge
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { doesSomeMultilingualTextItemInclude } from '../utils/query-matchers';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
+import { renderContributionsTextCell } from '../utils/render-contributions-text-cell';
 import { renderMultilingualTextCell } from '../utils/render-multilingual-text-cell';
 
 export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
@@ -35,7 +36,8 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
             ) : (
                 <AudioClipPlayer audioUrl={audioURL} />
             ),
-        contributions: ({ contributions }: ITermViewModel) => contributions.join(', '),
+        contributions: ({ contributions }: ITermViewModel) =>
+            renderContributionsTextCell(contributions),
     };
 
     const matchers: Matchers<ITermViewModel> = {
