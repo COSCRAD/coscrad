@@ -278,7 +278,6 @@ export class Term extends Resource {
                 aggregateCompositeIdentifier: { id },
                 text,
                 languageCode,
-                // contributorId,
             },
         } = event;
 
@@ -286,7 +285,6 @@ export class Term extends Resource {
             type: AggregateType.term,
             id,
             text: buildMultilingualTextWithSingleItem(text, languageCode),
-            // contributorId,
             // Terms are not published by default
             published: false,
             audio: new MultilingualAudio({
