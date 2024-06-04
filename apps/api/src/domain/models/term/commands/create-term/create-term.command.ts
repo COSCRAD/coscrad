@@ -48,10 +48,9 @@ export class CreateTerm implements ICommandBase {
     languageCode: LanguageCode;
 
     /**
-     * TODO We really want this to be part of the event metadata. We also need
-     * a model for contributors.
+     * TODO [https://www.pivotaltracker.com/story/show/187571980]:
      *
-     * TO BE REMOVED
+     * Remove `contributorId` and use the new contributions model
      */
     @NonEmptyString({
         label: 'contributor ID',
