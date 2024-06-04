@@ -63,6 +63,8 @@ import { TERM_CREATED } from '../../domain/models/term/commands/create-term/cons
 import { TERM_ELICITED_FROM_PROMPT } from '../../domain/models/term/commands/elicit-term-from-prompt/constants';
 import { TERM_TRANSLATED } from '../../domain/models/term/commands/translate-term/constants';
 import {
+    EntriesImportedToVocabularyList,
+    EntriesImportedToVocabularyListPayload,
     FilterPropertyType,
     TermAddedToVocabularyList,
     TermAddedToVocabularyListPayload,
@@ -612,6 +614,29 @@ const buildTermInVocabularyListAnalyzed = (
     );
 };
 
+const buildEntriesImportedToVocabularyList = (
+    payloadOverrides: EntriesImportedToVocabularyListPayload,
+    buildMetadata: EventMetadataBuilder
+) => {
+    const defaultPayload: EntriesImportedToVocabularyListPayload = {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.vocabularyList,
+            id: buildDummyUuid(901),
+        },
+        /**
+         * Note that we leave these empty because there is a property with
+         * dynamic keys that doesn't play nicely with our overrides object.
+         * You must add consistent entries for your given test case.
+         */
+        entries: [],
+    };
+
+    return new EntriesImportedToVocabularyList(
+        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        buildMetadata()
+    );
+};
+
 export class TestEventStream {
     private readonly TIME_OFFSET = 100; // 100 ms between events
 
@@ -679,7 +704,11 @@ export class TestEventStream {
                 buildVocabularyListFilterPropertyRegistered
             )
             .registerBuilder(`TERM_ADDED_TO_VOCABULARY_LIST`, buildTermAddedToVocabularyList)
-            .registerBuilder(`TERM_IN_VOCABULARY_LIST_ANALYZED`, buildTermInVocabularyListAnalyzed);
+            .registerBuilder(`TERM_IN_VOCABULARY_LIST_ANALYZED`, buildTermInVocabularyListAnalyzed)
+            .registerBuilder(
+                'ENTRIES_IMPORTED_TO_VOCABULARY_LIST',
+                buildEntriesImportedToVocabularyList
+            );
 
         [
             ...getTagTestEventBuildersMap(),

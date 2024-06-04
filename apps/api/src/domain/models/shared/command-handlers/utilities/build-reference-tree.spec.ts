@@ -25,6 +25,21 @@ class ResourceCompositeIdentifier {
 }
 
 describe(`getReferenceTree`, () => {
+    class WidgetPart {
+        @ReferenceTo('machine-part')
+        @UUID({
+            label: 'part id',
+            description: 'a reference to a part for this widget',
+        })
+        partId: string;
+
+        @NonEmptyString({
+            label: 'purpose',
+            description: 'the purpose of this part in the widget',
+        })
+        purpose: string;
+    }
+
     class Widget {
         aggregateCompositeIdentifier: {
             type: string;
@@ -60,6 +75,13 @@ describe(`getReferenceTree`, () => {
             isArray: true,
         })
         alternativeRepresentationIds: ResourceCompositeIdentifier[];
+
+        @NestedDataType(WidgetPart, {
+            isArray: true,
+            label: 'parts',
+            description: 'the machine parts used to build this widget',
+        })
+        parts: WidgetPart[];
     }
 
     const aggregateId = buildDummyUuid(333);
@@ -81,6 +103,16 @@ describe(`getReferenceTree`, () => {
             type: 'whobob' as ResourceType,
             id,
         })),
+        parts: [
+            {
+                partId: buildDummyUuid(9),
+                purpose: 'holds the diddly together',
+            },
+            {
+                partId: buildDummyUuid(10),
+                purpose: `keeps the moving parts lubricated`,
+            },
+        ],
     };
 
     describe(`it should identify the references that are contained`, () => {
@@ -90,6 +122,25 @@ describe(`getReferenceTree`, () => {
             const hasBookReference = referenceTree.has('book', bookId);
 
             expect(hasBookReference).toBe(true);
+
+            [2, 3, 4].forEach((fooId) => {
+                expect(referenceTree.has('foo', buildDummyUuid(fooId))).toBe(true);
+            });
+
+            expect(referenceTree.has('whatsit', buildDummyUuid(5))).toBe(true);
+
+            [6, 7, 8].forEach((whobobId) => {
+                expect(referenceTree.has('whobob', buildDummyUuid(whobobId))).toBe(true);
+            });
+
+            [9, 10].forEach((partId) => {
+                expect(referenceTree.has('machine-part', buildDummyUuid(partId))).toBe(true);
+            });
+
+            ['foo', 'whatsit', 'whobob', 'machine-part'].forEach((aggregateType) => {
+                // This ID does not appear in the test instance above
+                expect(referenceTree.has(aggregateType, buildDummyUuid(999))).toBe(false);
+            });
         });
     });
 

@@ -40,8 +40,7 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
                 throw new InternalError(
                     `[Arango Database for Collection]: failed to fetch by ID (${id}) from collection: ${
                         this.#collectionID
-                    }`,
-                    innerErrors
+                    } \n ${innerErrors.map((e) => e.toString()).join(' \n ')}`
                 );
             });
     }

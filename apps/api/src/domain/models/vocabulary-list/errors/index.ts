@@ -6,3 +6,4 @@ export * from './duplicate-vocabulary-list-name.error';
 // TODO make sure the imports are correct
 export * from './cannot-overwrite-filter-property-value-for-vocabulary-list-entry.error';
 export * from './failed-to-analyze-vocabulary-list-entry.error';
+export * from './failed-to-import-entries-to-vocabulary-list.error';

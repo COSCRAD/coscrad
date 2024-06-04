@@ -4,6 +4,7 @@ import { TestEventStream } from '../../../../test-data/events';
 import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import {
+    EntriesImportedToVocabularyList,
     TermAddedToVocabularyList,
     TermInVocabularyListAnalyzed,
     VocabularyListCreated,
@@ -38,13 +39,6 @@ const vocabularyListNameTranslated = vocabularyListCreated.andThen<VocabularyLis
 
 const termIdForEntry = buildDummyUuid(9);
 
-const termAddedToVocabularyList = vocabularyListNameTranslated.andThen<TermAddedToVocabularyList>({
-    type: `TERM_ADDED_TO_VOCABULARY_LIST`,
-    payload: {
-        termId: termIdForEntry,
-    },
-});
-
 const filterPropertyName = 'number';
 
 const filterPropertyValuesAndLabels = [
@@ -63,7 +57,7 @@ const filterPropertyValuesAndLabels = [
 const propertyValueForEntry = filterPropertyValuesAndLabels[0].value;
 
 const vocabularyListFilterPropertyRegistered =
-    termAddedToVocabularyList.andThen<VocabularyListFilterPropertyRegistered>({
+    vocabularyListNameTranslated.andThen<VocabularyListFilterPropertyRegistered>({
         type: 'VOCABULARY_LIST_FILTER_PROPERTY_REGISTERED',
         payload: {
             name: filterPropertyName,
@@ -71,14 +65,37 @@ const vocabularyListFilterPropertyRegistered =
         },
     });
 
+const termAddedToVocabularyList =
+    vocabularyListFilterPropertyRegistered.andThen<TermAddedToVocabularyList>({
+        type: `TERM_ADDED_TO_VOCABULARY_LIST`,
+        payload: {
+            termId: termIdForEntry,
+        },
+    });
+
 const termInVocabularyListAnalyzed =
-    vocabularyListFilterPropertyRegistered.andThen<TermInVocabularyListAnalyzed>({
+    termAddedToVocabularyList.andThen<TermInVocabularyListAnalyzed>({
         type: 'TERM_IN_VOCABULARY_LIST_ANALYZED',
         payload: {
             termId: termIdForEntry,
             propertyValues: {
                 [filterPropertyName]: propertyValueForEntry,
             },
+        },
+    });
+
+const entriesImortedToVocabularyList =
+    vocabularyListFilterPropertyRegistered.andThen<EntriesImportedToVocabularyList>({
+        type: 'ENTRIES_IMPORTED_TO_VOCABULARY_LIST',
+        payload: {
+            entries: [
+                {
+                    termId: termIdForEntry,
+                    propertyValues: {
+                        [filterPropertyName]: propertyValueForEntry,
+                    },
+                },
+            ],
         },
     });
 
@@ -217,6 +234,24 @@ describe(`VocabularyList.fromEventHistory`, () => {
                 );
 
                 expect(unexpectedResults).toEqual([]);
+            });
+        });
+
+        /**
+         * Note that you can only import entries to an empty vocabulary list.
+         */
+        describe(`when entries have been imported to a vocabulary list`, () => {
+            it(`should return a vocabulary list with the expected entries`, () => {
+                const eventHistory = entriesImortedToVocabularyList.as(
+                    vocabularyListCompositeIdentfier
+                );
+
+                const result = VocabularyList.fromEventHistory(
+                    eventHistory,
+                    vocabularyListCompositeIdentfier.id
+                );
+
+                expect(result).toBeInstanceOf(VocabularyList);
             });
         });
     });
