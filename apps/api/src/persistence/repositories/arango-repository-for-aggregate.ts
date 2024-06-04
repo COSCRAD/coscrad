@@ -56,7 +56,11 @@ export class ArangoRepositoryForAggregate<TEntity extends Aggregate>
             .catch((error) => {
                 const innerErrors = error.message ? [new InternalError(error.message)] : [];
 
-                throw new InternalError(`Failed to fetch by id (${id})`, innerErrors);
+                throw new InternalError(
+                    `Failed to fetch by id (${id}) ${innerErrors
+                        .map((e) => e.toString())
+                        .join(' \n ')}`
+                );
             });
 
         return isNotFound(searchResultForDTO)

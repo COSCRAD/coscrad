@@ -4850,6 +4850,70 @@ exports[`command payload schemas Command payload schema should match the snapsho
     "type": "TRANSLATE_VOCABULARY_LIST_NAME",
   },
   {
+    "description": "bulk import entries to an empty vocabulary list",
+    "label": "import entries to a vocabulary list",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "name": "VocabularyListCompositeId",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "must be: vocabularyList",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "vocabularyList",
+                "value": "vocabularyList",
+              },
+            ],
+          },
+        },
+      },
+      "entries": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "entries for import",
+        "isArray": true,
+        "isOptional": false,
+        "label": "entries for import",
+        "name": "VocabularyListEntryImportRecord",
+        "schema": {
+          "propertyValues": {
+            "coscradDataType": "RAW_DATA",
+            "description": "property and value",
+            "isArray": false,
+            "isOptional": false,
+            "label": "property and value",
+          },
+          "termId": {
+            "coscradDataType": "UUID",
+            "description": "the term id",
+            "isArray": false,
+            "isOptional": false,
+            "label": "term id",
+            "referenceTo": "term",
+          },
+        },
+      },
+    },
+    "type": "IMPORT_ENTRIES_TO_VOCABULARY_LIST",
+  },
+  {
     "description": "Register a Vocabulary List Filter Property",
     "label": "Register Vocabulary List Filter Property",
     "schema": {

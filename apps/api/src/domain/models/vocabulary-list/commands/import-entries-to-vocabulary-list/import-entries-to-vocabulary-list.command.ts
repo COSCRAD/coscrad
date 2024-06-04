@@ -22,7 +22,7 @@ class VocabularyListEntryImportRecord {
 @Command({
     type: 'IMPORT_ENTRIES_TO_VOCABULARY_LIST',
     label: 'import entries to a vocabulary list',
-    description: 'add entries to a vocabulary list',
+    description: 'bulk import entries to an empty vocabulary list',
 })
 export class ImportEntriesToVocabularyList implements ICommandBase {
     @NestedDataType(VocabularyListCompositeId, {

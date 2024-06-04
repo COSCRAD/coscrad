@@ -33,4 +33,8 @@ export class InternalError extends Error {
                 : '',
         ].join('\n');
     }
+
+    valueOf(): string {
+        return this.toString();
+    }
 }
