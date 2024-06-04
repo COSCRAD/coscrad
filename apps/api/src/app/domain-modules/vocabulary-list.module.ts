@@ -7,12 +7,14 @@ import {
     AnalyzeTermInVocabularyListCommandHandler,
     CreateVocabularyList,
     CreateVocabularyListCommandHandler,
+    EntriesImportedToVocabularyList,
+    ImportEntriesToVocabularyList,
+    ImportEntriesToVocabularyListCommandHandler,
     RegisterVocabularyListFilterProperty,
     RegisterVocabularyListFilterPropertyCommandHandler,
     TranslateVocabularyListName,
     TranslateVocabularyListNameCommandHandler,
 } from '../../domain/models/vocabulary-list/commands';
-
 import { VocabularyListNameTranslated } from '../../domain/models/vocabulary-list/commands/translate-vocabulary-list-name/vocabulary-list-name-translated.event';
 import { VocabularyListQueryService } from '../../domain/services/query-services/vocabulary-list-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
@@ -32,6 +34,8 @@ import { VocabularyListController } from '../controllers/resources/vocabulary-li
         AnalyzeTermInVocabularyListCommandHandler,
         RegisterVocabularyListFilterPropertyCommandHandler,
         AnalyzeTermInVocabularyList,
+        ImportEntriesToVocabularyList,
+        ImportEntriesToVocabularyListCommandHandler,
         // Data Classes
         ...[
             CreateVocabularyList,
@@ -40,6 +44,7 @@ import { VocabularyListController } from '../controllers/resources/vocabulary-li
             AddTermToVocabularyList,
             RegisterVocabularyListFilterProperty,
             AnalyzeTermInVocabularyList,
+            EntriesImportedToVocabularyList,
         ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,

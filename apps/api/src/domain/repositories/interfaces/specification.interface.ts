@@ -7,7 +7,7 @@ import { Criterion } from './Criterion';
  * a db query in the appropriate layer. I.e. we will make concrete db implementation(s)
  * interpret the criterion.
  */
-export interface ISpecification<TModel, UValue = string | boolean> {
+export interface ISpecification<TModel, UValue = unknown> {
     criterion: Criterion<UValue>;
 
     isSatisfiedBy(model: TModel): boolean;

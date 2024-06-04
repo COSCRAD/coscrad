@@ -2,6 +2,7 @@ import { CompositeIdentifier } from '@coscrad/api-interfaces';
 import { getCoscradDataSchema, getReferencesForCoscradDataSchema } from '@coscrad/data-types';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { isDeepStrictEqual } from 'util';
+import { getDeepPropertyFromObject } from '../../../../../lib/utilities/getDeepPropertyFromObject';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
 import { ReferenceTree } from './reference-tree';
 
@@ -11,11 +12,13 @@ export const buildReferenceTree = (Ctor: Object, instance: Object) => {
     // for every reference property, get the references from the instance
     const allReferences = referenceSpecifications.reduce(
         (acc: CompositeIdentifier<string>[], { type, path, isArray }) => {
-            if (path.includes('.')) {
-                throw new Error(`Nested References are not supported`);
-            }
+            let value: unknown;
 
-            const value = instance[path];
+            if (path.includes('.')) {
+                value = getDeepPropertyFromObject(instance, path);
+            } else {
+                value = instance[path];
+            }
 
             if (isArray && !Array.isArray(value)) {
                 throw new Error(`Expected an array but encountered: ${value}`);
@@ -24,7 +27,10 @@ export const buildReferenceTree = (Ctor: Object, instance: Object) => {
             // There is no reference to add here
             if (isNullOrUndefined(value) || (isArray && isDeepStrictEqual(value, []))) return acc;
 
-            const allValues = isArray ? value : [value];
+            const allValues =
+                isArray || Array.isArray(value)
+                    ? (value as CompositeIdentifier<string>[])
+                    : [value];
 
             if (allValues.every((id): id is string => isNonEmptyString(id))) {
                 return acc.concat(
@@ -44,6 +50,7 @@ export const buildReferenceTree = (Ctor: Object, instance: Object) => {
                     return isNonEmptyString(type) && isNonEmptyString(id);
                 })
             ) {
+                // @ts-expect-error fix types
                 return acc.concat(allValues);
             }
 
