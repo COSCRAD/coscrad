@@ -124,7 +124,6 @@ const [bilingualTerm1Events, bilingualTerm2Events] = ['1', '2'].map((id) =>
             type: PROMPT_TERM_CREATED,
             payload: {
                 text: `Engl-term-${id}`,
-                contributorId: 'John Doe',
             },
         })
         .andThen<TermElicitedFromPrompt>({
