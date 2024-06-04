@@ -367,15 +367,25 @@ export class ArangoDatabase {
         { criterion: { field, operator, value } }: ISpecification<TModel>,
         docNamePlaceholder: string
     ) {
+        const buildQuery = (predicateStatement) => ({
+            query: `FILTER ${predicateStatement}`,
+            bindVars: {
+                // This prevents AQL injection attacks
+                valueToCompare: value,
+            },
+        });
+
         // TODO We need a separate layer for compiling queries
         // TODO We need a unit test of this logic. Currently we are only testing this via e2e tests of command handlers.
         let predicateStatement: string;
 
         if (operator === QueryOperator.hasOriginalText) {
             predicateStatement = `${docNamePlaceholder}.${field}.items[0].text == @valueToCompare`;
+
+            return buildQuery(predicateStatement);
         }
 
-        if (QueryOperator.isIncludedInArray) {
+        if (operator === QueryOperator.isIncludedInArray) {
             /**
              * https://docs.arangodb.com/3.11/aql/functions/array/#contains_array
              * Note that this is an alias for POSITION which has a bit of a
@@ -385,18 +395,16 @@ export class ArangoDatabase {
              * `true` if the array contains the value and `false` otherwise.
              */
             predicateStatement = `CONTAINS_ARRAY(${value},${docNamePlaceholder}.${field})`;
+
+            return buildQuery(predicateStatement);
         }
 
         predicateStatement = `${docNamePlaceholder}.${field} ${interpretQueryOperatorForAQL(
             operator
         )} @valueToCompare`;
 
-        return {
-            query: `FILTER ${predicateStatement}`,
-            bindVars: {
-                // This prevents AQL injection attacks
-                valueToCompare: value,
-            },
-        };
+        const result = buildQuery(predicateStatement);
+
+        return result;
     }
 }
