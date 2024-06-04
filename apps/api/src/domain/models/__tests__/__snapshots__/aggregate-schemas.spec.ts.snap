@@ -1978,13 +1978,6 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
       },
     },
   },
-  "contributorId": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "reference to the contributor for this term",
-    "isArray": false,
-    "isOptional": true,
-    "label": "contributor ID",
-  },
   "id": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",
