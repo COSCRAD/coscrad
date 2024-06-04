@@ -32,6 +32,7 @@ import InvalidExternalStateError from '../../shared/common-command-errors/Invali
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import {
+    EntriesImportedToVocabularyList,
     FilterPropertyType,
     TermAddedToVocabularyList,
     TermInVocabularyListAnalyzed,
@@ -47,7 +48,11 @@ import {
     CannotHaveTwoFilterPropertiesWithTheSameNameError,
     DuplicateVocabularyListNameError,
     FailedToAnalyzeVocabularyListEntryError,
+    FailedToImportEntriesToVocabularyListError,
 } from '../errors';
+import { CannotImportToVocabularyListWithExistingEntriesError } from '../errors/cannot-import-to-vocabulary-list-with-existing-entries.error';
+import { EmptyVocabularyListImportRequestError } from '../errors/empty-vocabulary-list-import-request.error';
+import { InvalidVocabularyListEntryInImportError } from '../errors/invalid-entry-in-import.error';
 import { InvalidVocabularyListFilterPropertyValueError } from '../errors/invalid-vocabulary-list-filter-property-value.error';
 import { VocabularyListEntryNotFoundError } from '../errors/vocabulary-list-entry-not-found.error';
 import { VocabularyListFilterPropertyMustHaveAtLeastOneAllowedValueError } from '../errors/vocabulary-list-filter-property-must-have-at-least-one-allowed-value.error';
@@ -55,6 +60,12 @@ import { VocabularyListFilterPropertyNotFoundError } from '../errors/vocabulary-
 import { DropboxOrCheckbox } from '../types/dropbox-or-checkbox';
 import { VocabularyListEntry } from '../vocabulary-list-entry.entity';
 import { VocabularyListFilterProperty } from './vocabulary-list-variable.entity';
+
+export type VocabularyListEntryImportItem = {
+    termId: AggregateId;
+
+    propertyValues: Record<string, boolean | string>;
+};
 
 // TODO break out this type
 type LabelAndValue<T = string> = {
@@ -268,6 +279,93 @@ export class VocabularyList extends Resource {
         return this;
     }
 
+    @UpdateMethod()
+    importEntries(importItems: VocabularyListEntryImportItem[]): ResultOrError<VocabularyList> {
+        if (this.entries.length > 0) {
+            return new FailedToImportEntriesToVocabularyListError(this.id, [
+                new CannotImportToVocabularyListWithExistingEntriesError(),
+            ]);
+        }
+
+        if (importItems.length === 0) {
+            return new FailedToImportEntriesToVocabularyListError(this.id, [
+                new EmptyVocabularyListImportRequestError(),
+            ]);
+        }
+
+        const unknownFilterPropertyErrors = importItems
+            .flatMap(({ termId, propertyValues }) => {
+                const missingProperties = Object.keys(propertyValues).filter(
+                    (propertyValue) => !this.hasFilterPropertyNamed(propertyValue)
+                );
+
+                return missingProperties.map((missingProperty) => ({
+                    termId,
+                    missingProperty,
+                }));
+            })
+            .map(
+                ({ termId, missingProperty }) =>
+                    new InvalidVocabularyListEntryInImportError(termId, [
+                        new VocabularyListFilterPropertyNotFoundError(missingProperty, this.id),
+                    ])
+            );
+
+        if (unknownFilterPropertyErrors.length > 0) {
+            return new FailedToImportEntriesToVocabularyListError(
+                this.id,
+                unknownFilterPropertyErrors
+            );
+        }
+
+        const unknownPropertyValueErrors = importItems
+            .flatMap(({ termId, propertyValues }) =>
+                Object.entries(propertyValues).flatMap(([propertyName, propertyValue]) => {
+                    const knownProperty = this.getFilterPropertyByName(
+                        propertyName
+                    ) as VocabularyListFilterProperty;
+
+                    const { validValues } = knownProperty;
+
+                    return validValues.some(({ value }) => value === propertyValue)
+                        ? []
+                        : [
+                              {
+                                  propertyName,
+                                  propertyValue,
+                                  termId,
+                              },
+                          ];
+                })
+            )
+            .map(
+                ({ termId, propertyName, propertyValue }) =>
+                    new InvalidVocabularyListEntryInImportError(termId, [
+                        new InvalidVocabularyListFilterPropertyValueError(
+                            propertyName,
+                            propertyValue,
+                            this.id
+                        ),
+                    ])
+            );
+
+        if (unknownPropertyValueErrors.length > 0) {
+            return new FailedToImportEntriesToVocabularyListError(
+                this.id,
+                unknownPropertyValueErrors
+            );
+        }
+
+        this.entries.push(
+            ...importItems.map(
+                ({ termId, propertyValues }) =>
+                    new VocabularyListEntry({ termId, variableValues: propertyValues })
+            )
+        );
+
+        return this;
+    }
+
     protected getResourceSpecificAvailableCommands(): string[] {
         return [
             TRANSLATE_VOCABULARY_LIST_NAME,
@@ -371,6 +469,12 @@ export class VocabularyList extends Resource {
         payload: { termId, propertyValues },
     }: TermInVocabularyListAnalyzed) {
         return this.analyzeEntry(termId, propertyValues);
+    }
+
+    handleEntriesImportedToVocabularyList({
+        payload: { entries },
+    }: EntriesImportedToVocabularyList) {
+        return this.importEntries(entries);
     }
 
     static fromEventHistory(
