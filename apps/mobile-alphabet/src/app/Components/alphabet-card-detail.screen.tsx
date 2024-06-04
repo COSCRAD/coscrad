@@ -1,4 +1,4 @@
-import { RootStoreContext } from 'app/config';
+import { useConfig } from 'app/config';
 import React, { useEffect, useState } from 'react';
 import { Button, Image, Text, View } from 'react-native';
 import Sound from 'react-native-sound';
@@ -12,8 +12,6 @@ import { fetchAlphabets } from './../../store/slices/alphabet-slice';
  * TODO Fix the project.json (remove package.json?) so that you can import
  * from libs and then import these from the validation lib.
  */
-
-export const useConfig = () => React.useContext(RootStoreContext).config;
 
 const isNull = (input: unknown): input is null => input === null;
 
