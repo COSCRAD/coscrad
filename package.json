@@ -72,6 +72,7 @@
         "react-leaflet": "^4.1.0",
         "react-native": "0.71.2",
         "react-native-gesture-handler": "^2.13.4",
+        "react-native-launch-arguments": "^4.0.2",
         "react-native-reanimated": "^3.5.4",
         "react-native-safe-area-context": "^3.4.1",
         "react-native-screens": "^3.27.0",

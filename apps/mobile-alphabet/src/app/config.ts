@@ -22,8 +22,8 @@ export const initialConfig: ConfigStore = {
     },
 };
 
-export const setUpConfig = async (): Promise<ConfigStore> => {
-    return Promise.resolve(initialConfig);
+export const setUpConfig = async (overrides: Partial<ConfigStore> = {}): Promise<ConfigStore> => {
+    return Promise.resolve({ ...initialConfig, ...overrides });
 };
 
 export const RootStoreContext = createContext<ConfigStore>(initialConfig);

@@ -37,6 +37,8 @@ export function AlphabetCardDetailScreen() {
 
     const [hasAudioLoaded, setHasAudioLoaded] = useState(false);
 
+    const [imageError, setImageError] = useState(false);
+
     // Sequence numbers are indexed starting at 1
     const [selectedLetterSequenceNumber, setSelectedLetterSequenceNumber] = useState<number>(1);
 
@@ -116,16 +118,23 @@ export function AlphabetCardDetailScreen() {
 
     return (
         <View testID="AlphabetCardDetail">
-            <Image
-                style={{ height: 300 }}
-                resizeMode="contain"
-                source={{
-                    uri: `${BASE_API_URL}/resources/mediaitems/download?name=${card_image.replace(
-                        '.png',
-                        ''
-                    )}`,
-                }}
-            />
+            {!imageError ? (
+                <Image
+                    style={{ height: 300 }}
+                    testID={`loadedImage`}
+                    onError={() => setImageError(true)}
+                    resizeMode="contain"
+                    source={{
+                        uri: `${BASE_API_URL}/resources/mediaitems/download?name=${card_image.replace(
+                            '.png',
+                            ''
+                        )}`,
+                    }}
+                />
+            ) : (
+                <Text testID={`imageError`}>Error loading image.</Text>
+            )}
+
             <Text>Base Api Url: {BASE_API_URL}</Text>
             <Text testID={`${letter}`}>Letter: {letter}</Text>
             <Text testID={`${word}`}>Word: {word}</Text>
@@ -136,8 +145,8 @@ export function AlphabetCardDetailScreen() {
             <Text>Word Audio: {word_audio}</Text>
             <Text>Standalone Image: {standalone_image}</Text>
             <Text>
-                Audio URL: {apiUrlPrefix}
-                {word_audio}
+                Word Audio URL: {BASE_API_URL}
+                {`/resources/mediaitems/download?name=${word_audio.replace('.mp3', '')}`}
             </Text>
 
             {letterAudio && hasAudioLoaded ? (

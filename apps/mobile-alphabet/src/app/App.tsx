@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
 import { Text } from 'react-native';
 import 'react-native-gesture-handler';
+import { LaunchArguments } from 'react-native-launch-arguments';
 import { Provider } from 'react-redux';
 import { setupStore } from 'store';
 import CreditsScreen from './Components/Credits';
@@ -13,11 +14,16 @@ import { ConfigStore, RootStoreProvider, setUpConfig } from './config';
 
 const Stack = createNativeStackNavigator();
 
+interface AppLaunchArguments {
+    configOverrides?: Partial<ConfigStore>;
+}
+
 const App = () => {
     const [config, setConfig] = useState<null | ConfigStore>(null);
 
     useEffect(() => {
-        setUpConfig().then(setConfig);
+        const configOverrides = LaunchArguments.value<AppLaunchArguments>().configOverrides || {};
+        setUpConfig(configOverrides).then(setConfig);
     }, []);
 
     if (config === null) {
