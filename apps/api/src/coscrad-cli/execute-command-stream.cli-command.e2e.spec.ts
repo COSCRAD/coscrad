@@ -2,6 +2,7 @@ import { TestingModule } from '@nestjs/testing';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
+import { Valid } from '../domain/domainModelValidators/Valid';
 import { VocabularyList } from '../domain/models/vocabulary-list/entities/vocabulary-list.entity';
 import { ResourceType } from '../domain/types/ResourceType';
 import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
@@ -20,6 +21,8 @@ const fixtureName = `users:create-admin`;
 const dataFile = `apps/api/src/coscrad-cli/execute-command-stream.cli-command.valid.SAMPLE.json`;
 
 const dataFileWithJoin = `apps/api/src/coscrad-cli/execute-command-stream.cli-command.valid.with-join.SAMPLE.json`;
+
+const dataFileWithDeepSlugs = `apps/api/src/coscrad-cli/execute-command-stream.cli-command.valid.with-deep-array-of-slugs.SAMPLE.json`;
 
 const invalidDataFile = `apps/api/src/coscrad-cli/execute-command-stream.cli-command.invalid.SAMPLE.json`;
 
@@ -126,6 +129,41 @@ describe(`CLI Command: ${cliCommandName}`, () => {
                     const numberOfEntries = (foundList as VocabularyList).entries.length;
 
                     expect(numberOfEntries).toBe(1);
+                });
+            });
+
+            describe(`when there are generated IDs and joins with deep references (slug-ids on nested array of objects)`, () => {
+                it(`should succeed with the expected updates`, async () => {
+                    await CommandTestFactory.run(commandInstance, [
+                        cliCommandName,
+                        `--data-file=${dataFileWithDeepSlugs}`,
+                    ]);
+
+                    const numberOfTerms = await testRepositoryProvider
+                        .forResource(ResourceType.term)
+                        .getCount();
+
+                    expect(numberOfTerms).toBeGreaterThan(0);
+
+                    const vocabularyLists = await testRepositoryProvider
+                        .forResource(ResourceType.vocabularyList)
+                        .fetchMany();
+
+                    expect(vocabularyLists).toHaveLength(1);
+
+                    const foundList = vocabularyLists[0];
+
+                    expect(foundList).toBeInstanceOf(VocabularyList);
+
+                    const entries = (foundList as VocabularyList).entries;
+
+                    console.log({ entries });
+
+                    const numberOfEntries = entries.length;
+
+                    expect(numberOfEntries).toBe(2);
+
+                    expect((foundList as VocabularyList).validateInvariants()).toBe(Valid);
                 });
             });
         });

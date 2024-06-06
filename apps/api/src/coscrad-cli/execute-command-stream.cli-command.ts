@@ -11,6 +11,7 @@ import { readFileSync } from 'fs';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
 import { GrantUserRole } from '../domain/models/user-management/user/commands/grant-user-role/grant-user-role.command';
 import { RegisterUser } from '../domain/models/user-management/user/commands/register-user/register-user.command';
+import { ImportEntriesToVocabularyList } from '../domain/models/vocabulary-list/commands';
 import { AggregateId } from '../domain/types/AggregateId';
 import { AggregateType } from '../domain/types/AggregateType';
 import { InternalError, isInternalError } from '../lib/errors/InternalError';
@@ -22,17 +23,21 @@ import { ResultOrError } from '../types/ResultOrError';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
 
-type CommandFsa = {
-    type: string;
-    payload: {
-        aggregateCompositeIdentifier: {
-            id: string;
-            type: string;
-        };
+type HasAggregateCompositeIdentifier = {
+    aggregateCompositeIdentifier: {
+        id: string;
+        type: string;
     };
 };
 
-type CommandFsaWithMeta = CommandFsa & {
+type CommandFsa<T extends HasAggregateCompositeIdentifier = HasAggregateCompositeIdentifier> = {
+    type: string;
+    payload: T;
+};
+
+type CommandFsaWithMeta<
+    T extends HasAggregateCompositeIdentifier = HasAggregateCompositeIdentifier
+> = CommandFsa<T> & {
     meta?: Record<string, unknown>;
 };
 
@@ -175,6 +180,8 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
             dataFile: commandFsasFromDataFile,
         }: { name: CommandFsaWithMeta[]; dataFile: CommandFsaWithMeta[] }
     ): Promise<void> {
+        console.log({ runWithDataFile: commandFsasFromDataFile });
+
         if (commandFsasFromDataFile && commandFsasFromFixture) {
             const msg = `You must only specify one of [name, data-file]`;
 
@@ -282,6 +289,8 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
         );
 
         for (const [index, fsa] of commandFsasToExecute.entries()) {
+            console.log({ fsa });
+
             const {
                 type: commandType,
                 payload: {
@@ -313,19 +322,58 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
                 commandTypeToReferentialPropertyPaths.get(commandType).forEach((fullPath) => {
                     const value = getDeepPropertyFromObject(fsaToExecute, fullPath);
 
-                    if (Array.isArray(value)) {
-                        throw new InternalError(
-                            `Using slugs for arrays of references is not yet supported`
-                        );
-                    }
+                    const parseReference = <T = unknown>(value: T): T => {
+                        if (!isString(value) || !value.includes(APPEND_THIS_ID)) {
+                            return value;
+                        }
 
-                    if (isString(value) && value.includes(APPEND_THIS_ID)) {
                         const customIdParseResult = parseSlugDefinition(value);
 
                         const referenceIdToUse = isInternalError(customIdParseResult)
                             ? idOnPayload
                             : // look up the UUID corresponding to this slug
                               idMap.get(customIdParseResult[1]);
+
+                        console.log({
+                            value,
+                            parsedReferenceTo: referenceIdToUse,
+                        });
+
+                        return referenceIdToUse as T;
+                    };
+
+                    if (Array.isArray(value)) {
+                        if (fsa.type !== 'IMPORT_ENTRIES_TO_VOCABULARY_LIST') {
+                            throw new InternalError(
+                                `Not Supported: slug replacement for commands of type: ${fsa.type}`
+                            );
+                        }
+
+                        const importEntriesFsa =
+                            fsa as CommandFsaWithMeta<ImportEntriesToVocabularyList>;
+
+                        fsaToExecute = clonePlainObjectWithOverrides(importEntriesFsa, {
+                            payload: {
+                                aggregateCompositeIdentifier: {
+                                    type: AggregateType.vocabularyList,
+                                    id: parseReference(
+                                        importEntriesFsa.payload.aggregateCompositeIdentifier.id
+                                    ),
+                                },
+                                entries: importEntriesFsa.payload.entries.map(
+                                    ({ termId, propertyValues }) => ({
+                                        termId: parseReference(termId),
+                                        propertyValues,
+                                    })
+                                ),
+                            },
+                        });
+
+                        console.log({ arrayPropDeeplyUpdatedIn: fsaToExecute });
+                    }
+
+                    if (isString(value)) {
+                        const referenceIdToUse = parseReference(value);
 
                         fsaToExecute = cloneWithOverridesByDeepPath(
                             fsaToExecute,
@@ -392,10 +440,14 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
         required: false,
     })
     parseDataFile(value: string): CommandFsaWithMeta[] {
+        console.log({ dataFilePassed: value });
+
         if (!isNonEmptyString(value)) return undefined;
 
         try {
             const parsedCommandFsaStream = JSON.parse(readFileSync(value, { encoding: 'utf-8' }));
+
+            console.log('good file');
 
             return parsedCommandFsaStream;
         } catch (error) {
@@ -405,6 +457,8 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
             );
 
             this.logger.log(customError.toString());
+
+            console.log('bad file');
 
             throw customError;
         }
