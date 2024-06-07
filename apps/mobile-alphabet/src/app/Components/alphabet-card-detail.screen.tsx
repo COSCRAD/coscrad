@@ -35,7 +35,13 @@ export function AlphabetCardDetailScreen() {
         if (isNull(alphabetData)) dispatch(fetchAlphabets());
     }, [alphabetData, dispatch]);
 
+    useEffect(() => {
+        setIsAudioLoading(true);
+    }, []);
+
+    const [isAudioLoading, setIsAudioLoading] = useState(false);
     const [hasAudioLoaded, setHasAudioLoaded] = useState(false);
+    const [isAudioError, setIsAudioError] = useState(false);
 
     const [imageError, setImageError] = useState(false);
 
@@ -81,18 +87,26 @@ export function AlphabetCardDetailScreen() {
         Sound.MAIN_BUNDLE,
         (error) => {
             if (error) {
-                console.log('failed to load letter audio', error);
-                return;
+                setIsAudioLoading(false);
+                setIsAudioError(true);
+            }
+            if (!error) {
+                setHasAudioLoaded(true);
+                setIsAudioLoading(false);
             }
         }
     );
 
     const playLetter = () => {
-        letterAudio.play((success) => {
-            if (!success) {
-                console.error('Error playing letter audio');
-            }
-        });
+        if (hasAudioLoaded) {
+            letterAudio.play((success) => {
+                if (!success) {
+                    setIsAudioError(true);
+                }
+            });
+        } else {
+            setIsAudioLoading(true);
+        }
     };
 
     const wordAudio = new Sound(
@@ -149,11 +163,13 @@ export function AlphabetCardDetailScreen() {
                 {`/resources/mediaitems/download?name=${word_audio.replace('.mp3', '')}`}
             </Text>
 
-            {letterAudio && hasAudioLoaded ? (
+            {isAudioLoading ? (
+                <Text>Loading...</Text>
+            ) : isAudioError ? (
+                <Text testID="letterAudioError">Error playing {letter_audio}</Text>
+            ) : hasAudioLoaded ? (
                 <Button testID={`${letter_audio}`} title={'Play letter'} onPress={playLetter} />
-            ) : (
-                <Text testID="letterAudioError">Error playing `{letter_audio}`</Text>
-            )}
+            ) : null}
 
             {wordAudio && hasAudioLoaded ? (
                 <Button testID={`${word_audio}`} title={'Play Word'} onPress={playWord} />
