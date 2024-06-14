@@ -1,4 +1,3 @@
-import { CategorizableType } from '@coscrad/api-interfaces';
 import { isNull } from '@coscrad/validation-constraints';
 import { NOT_FOUND } from '../../store/slices/interfaces/maybe-loadable.interface';
 import { useLoadableNoteById } from '../../store/slices/notes/hooks';
@@ -32,9 +31,6 @@ export const NoteDetailPageContainer = (): JSX.Element => {
             <SelectedCategorizablesOfMultipleTypesPresenter
                 viewModelSnapshot={loadableCategorizables}
                 presenterFactory={thumbnailCategorizableDetailPresenterFactory}
-                getPluralLabelForCategorizableType={(categorizableType: CategorizableType) =>
-                    `${categorizableType}s`
-                }
             />
         </>
     );

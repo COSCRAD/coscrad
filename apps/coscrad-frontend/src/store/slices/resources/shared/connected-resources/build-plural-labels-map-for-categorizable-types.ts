@@ -9,7 +9,6 @@ const categorizableTypeAndPluralLabel: CategorizableTypeAndPluralLabel = {
     // Resources
     [CategorizableType.bibliographicCitation]: 'Bibliographic Citations',
     [CategorizableType.digitalText]: 'Digital Texts',
-    [CategorizableType.digitalText]: 'Books',
     [CategorizableType.mediaItem]: 'Media Items',
     [CategorizableType.photograph]: 'Photographs',
 

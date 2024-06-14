@@ -92,18 +92,20 @@ export const ResourceDetailFullViewPresenter = ({
 
                 <div data-testid={buildDataAttributeForAggregateDetailComponent(type, id)} />
                 {children}
-                <Box>
-                    <Box elevation={0} component={Paper}>
-                        <IconButton>
-                            <ListRounded />
-                        </IconButton>
-                        Contributions
-                    </Box>
+                {contributions.length > 0 ? (
+                    <Box>
+                        <Box elevation={0} component={Paper}>
+                            <IconButton>
+                                <ListRounded />
+                            </IconButton>
+                            Contributions
+                        </Box>
 
-                    <Box ml={1}>
-                        <ContributionsPresenter contributions={contributions} />
+                        <Box ml={1}>
+                            <ContributionsPresenter contributions={contributions} />
+                        </Box>
                     </Box>
-                </Box>
+                ) : null}
             </Grid>
         </Grid>
     );
