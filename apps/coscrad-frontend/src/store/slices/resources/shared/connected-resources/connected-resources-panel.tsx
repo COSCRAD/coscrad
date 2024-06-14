@@ -25,7 +25,5 @@ export const ConnectedResourcesPanel = ({
     return SelectedCategorizablesOfMultipleTypesPresenter({
         viewModelSnapshot: loadableConnectedResources,
         presenterFactory: thumbnailCategorizableDetailPresenterFactory,
-        // TODO Deal with this properly
-        getPluralLabelForCategorizableType: (categorizableType) => `${categorizableType}s`,
     });
 };

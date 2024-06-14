@@ -21,7 +21,7 @@ const spatialDataFactory: InstanceFactory<ISpatialFeature> = (dto: unknown) => {
 
     if (!isGeometricFeatureType(test?.geometry?.type))
         return new InvariantValidationError({ type: resourceType, id }, [
-            new InternalError(`Invalid gemoetric feature type: ${resourceType}`),
+            new InternalError(`Invalid geometric feature type: ${resourceType}`),
         ]);
 
     const instance = buildSpatialFeatureInstance(dto as DTO<ISpatialFeature>);
