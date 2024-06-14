@@ -14,19 +14,18 @@ import {
 } from './use-loadable-categorizables';
 
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { buildPluralLabelsMapForCategorizableTypes } from '../../store/slices/resources/shared/connected-resources/build-plural-labels-map-for-categorizable-types';
 
 interface SelectedCategorizablesOfMultipleTypesPresenterProps<
     T extends IBaseViewModel = IBaseViewModel
 > {
     viewModelSnapshot: ViewModelDetailSnapshot;
     presenterFactory: ICategorizableDetailPresenterFactory<ICategorizableDetailQueryResult<T>>;
-    getPluralLabelForCategorizableType: (categorizableType: CategorizableType) => string;
 }
 
 export const SelectedCategorizablesOfMultipleTypesPresenter = ({
     viewModelSnapshot,
     presenterFactory,
-    getPluralLabelForCategorizableType,
 }: SelectedCategorizablesOfMultipleTypesPresenterProps): JSX.Element => {
     return (
         <div data-testid="multiple-categorizables-view">
@@ -62,7 +61,7 @@ export const SelectedCategorizablesOfMultipleTypesPresenter = ({
                             <SelectedCategorizablesPresenter
                                 viewModels={queryResult.data}
                                 presenterFactory={presenterFactory}
-                                pluralLabelForCategorizableType={getPluralLabelForCategorizableType(
+                                pluralLabelForCategorizableType={buildPluralLabelsMapForCategorizableTypes().get(
                                     categorizableType
                                 )}
                                 categorizableType={categorizableType}
