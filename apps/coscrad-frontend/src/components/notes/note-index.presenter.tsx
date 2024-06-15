@@ -8,8 +8,10 @@ import {
 } from '@coscrad/api-interfaces';
 import { NoteIndexState } from '../../store/slices/notes/types/note-index-state';
 import { HeadingLabel, IndexTable } from '../../utils/generic-components/presenters/tables';
+import { Matchers } from '../../utils/generic-components/presenters/tables/generic-index-table-presenter/filter-table-data';
 import { CellRenderersDefinition } from '../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { truncateText } from '../../utils/string-processor/shorten-string';
+import { doesSomeMultilingualTextItemInclude } from '../resources/utils/query-matchers';
 import { renderAggregateIdCell } from '../resources/utils/render-aggregate-id-cell';
 import { findOriginalTextItem } from './shared/find-original-text-item';
 
@@ -93,6 +95,10 @@ export const NoteIndexPresenter = ({ entities: notes }: NoteIndexState): JSX.Ele
             connectionType === EdgeConnectionType.self ? 'Single Resource Note' : 'Connecting Note',
     };
 
+    const matchers: Matchers<INoteViewModel> = {
+        note: doesSomeMultilingualTextItemInclude,
+    };
+
     return (
         <IndexTable
             type={AggregateType.note}
@@ -102,6 +108,7 @@ export const NoteIndexPresenter = ({ entities: notes }: NoteIndexState): JSX.Ele
             cellRenderersDefinition={cellRenderersDefinition}
             heading={'Notes'}
             filterableProperties={['connectionType', 'note']}
+            matchers={matchers}
         />
     );
 };
