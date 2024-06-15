@@ -8,15 +8,9 @@ import { ResourceDetailThumbnailPresenter } from '../../../utils/generic-compone
 
 export const PhotographDetailThumbnailPresenter = ({
     id,
+    name,
     photographer,
 }: ICategorizableDetailQueryResult<IPhotographViewModel>): JSX.Element => {
-    /**
-     * Temporary placeholder: I'm putting a name here instead of editing the
-     * view model for photograph.  I assume we'll assign a name property in
-     * the domain first
-     */
-    const name = 'Photograph 1';
-
     return (
         <ResourceDetailThumbnailPresenter id={id} name={name} type={ResourceType.photograph}>
             <SinglePropertyPresenter display="Photographer" value={photographer} />

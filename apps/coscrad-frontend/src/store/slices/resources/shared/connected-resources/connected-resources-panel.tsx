@@ -20,10 +20,17 @@ export const ConnectedResourcesPanel = ({
 
     const loadableConnectedResources = useLoadableCategorizables(compositeIdentifiers);
 
+    const notesById =
+        connections?.map(({ compositeIdentifier: { id }, text }) => ({
+            connectionId: id,
+            connectionNote: text,
+        })) || [];
+
     if (compositeIdentifiers.length === 0) return <>No Connections Found</>;
 
     return SelectedCategorizablesOfMultipleTypesPresenter({
         viewModelSnapshot: loadableConnectedResources,
+        notesByCompositeId: notesById,
         presenterFactory: thumbnailCategorizableDetailPresenterFactory,
     });
 };
