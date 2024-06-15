@@ -1,4 +1,5 @@
 import { isNull } from '@coscrad/validation-constraints';
+import { Divider } from '@mui/material';
 import { NOT_FOUND } from '../../store/slices/interfaces/maybe-loadable.interface';
 import { useLoadableNoteById } from '../../store/slices/notes/hooks';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
@@ -28,6 +29,8 @@ export const NoteDetailPageContainer = (): JSX.Element => {
     return (
         <>
             <NoteDetailPresenter {...loadableNote} />
+            <Divider sx={{ margin: '25px 0' }} />
+            <h3>Connected Resources</h3>
             <SelectedCategorizablesOfMultipleTypesPresenter
                 viewModelSnapshot={loadableCategorizables}
                 presenterFactory={thumbnailCategorizableDetailPresenterFactory}
