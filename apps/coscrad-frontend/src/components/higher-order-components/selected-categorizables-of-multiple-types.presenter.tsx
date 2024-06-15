@@ -2,6 +2,7 @@ import {
     CategorizableType,
     IBaseViewModel,
     ICategorizableDetailQueryResult,
+    IMultilingualText,
 } from '@coscrad/api-interfaces';
 import { ErrorDisplay } from '../error-display/error-display';
 import { Loading } from '../loading';
@@ -16,15 +17,22 @@ import {
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { buildPluralLabelsMapForCategorizableTypes } from '../../store/slices/resources/shared/connected-resources/build-plural-labels-map-for-categorizable-types';
 
+export type NotesById = {
+    connectionId: string;
+    connectionNote: IMultilingualText;
+};
+
 interface SelectedCategorizablesOfMultipleTypesPresenterProps<
     T extends IBaseViewModel = IBaseViewModel
 > {
     viewModelSnapshot: ViewModelDetailSnapshot;
+    notesByCompositeId?: NotesById[];
     presenterFactory: ICategorizableDetailPresenterFactory<ICategorizableDetailQueryResult<T>>;
 }
 
 export const SelectedCategorizablesOfMultipleTypesPresenter = ({
     viewModelSnapshot,
+    notesByCompositeId,
     presenterFactory,
 }: SelectedCategorizablesOfMultipleTypesPresenterProps): JSX.Element => {
     return (
@@ -61,6 +69,7 @@ export const SelectedCategorizablesOfMultipleTypesPresenter = ({
                             <SelectedCategorizablesPresenter
                                 viewModels={queryResult.data}
                                 presenterFactory={presenterFactory}
+                                notesById={notesByCompositeId}
                                 pluralLabelForCategorizableType={buildPluralLabelsMapForCategorizableTypes().get(
                                     categorizableType
                                 )}
