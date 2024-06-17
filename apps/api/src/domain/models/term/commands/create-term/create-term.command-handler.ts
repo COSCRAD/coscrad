@@ -1,5 +1,4 @@
 import { CommandHandler } from '@coscrad/commands';
-import { HasText } from '../../../../../domain/repositories/specifications';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { ResultOrError } from '../../../../../types/ResultOrError';
@@ -11,7 +10,6 @@ import { InMemorySnapshot } from '../../../../types/ResourceType';
 import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
-import { validAggregateOrThrow } from '../../../shared/functional';
 import { MultilingualAudio } from '../../../shared/multilingual-audio/multilingual-audio.entity';
 import { Term } from '../../entities/term.entity';
 import { CreateTerm } from './create-term.command';
@@ -42,24 +40,25 @@ export class CreateTermCommandHandler extends BaseCreateCommandHandler<Term> {
 
     protected async fetchRequiredExternalState({
         aggregateCompositeIdentifier: { id },
-        text,
-    }: CreateTerm): Promise<InMemorySnapshot> {
+    }: // text,
+    CreateTerm): Promise<InMemorySnapshot> {
         const allTerms = [];
+
+        console.log(`fetching external state for term`);
 
         /**
          * TODO
          * 1. We need to make specifications composable via Or \ And \ Not so that
          * we can do this in a single atomic transaction
          */
-        const [searchForTermsWithSameId, searchForTermsWithSameText] = await Promise.all([
+        const [searchForTermsWithSameId] = await Promise.all([
             this.repositoryProvider.forResource(AggregateType.term).fetchById(id),
-            // @ts-expect-error Fix types here
-            this.repositoryProvider.forResource(AggregateType.term).fetchMany(new HasText(text)),
+            // this.repositoryProvider.forResource(AggregateType.term).fetchMany(new HasText(text)),
         ]);
 
-        if (searchForTermsWithSameText.length > 0) {
-            allTerms.push(...searchForTermsWithSameText.filter(validAggregateOrThrow));
-        }
+        // if (searchForTermsWithSameText.length > 0) {
+        //     allTerms.push(...searchForTermsWithSameText.filter(validAggregateOrThrow));
+        // }
 
         if (!isNotFound(searchForTermsWithSameId)) {
             if (isInternalError(searchForTermsWithSameId)) {

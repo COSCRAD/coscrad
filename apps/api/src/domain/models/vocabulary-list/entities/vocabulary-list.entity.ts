@@ -5,6 +5,7 @@ import { InternalError, isInternalError } from '../../../../lib/errors/InternalE
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
+import formatAggregateCompositeIdentifier from '../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
@@ -374,6 +375,7 @@ export class VocabularyList extends Resource {
         ];
     }
 
+    // TODO Is there a test for this?
     protected validateComplexInvariants(): InternalError[] {
         const allErrors: InternalError[] = [];
 
@@ -396,6 +398,37 @@ export class VocabularyList extends Resource {
         );
 
         allErrors.push(...filterPropertyValidationResult);
+
+        const { duplicates } = this.entries.reduce(
+            (
+                { duplicates, seen }: { duplicates: Set<AggregateId>; seen: Set<AggregateId> },
+                { termId }
+            ) => {
+                if (seen.has(termId)) {
+                    duplicates.add(termId);
+                } else {
+                    seen.add(termId);
+                }
+
+                return { duplicates, seen };
+            },
+            {
+                duplicates: new Set<AggregateId>(),
+                seen: new Set<AggregateId>(),
+            }
+        );
+
+        const duplicateTermErrors = Array.from(duplicates).map(
+            (termId) =>
+                new InternalError(
+                    `${formatAggregateCompositeIdentifier({
+                        type: AggregateType.term,
+                        id: termId,
+                    })} appears in multiple vocabulary list entries`
+                )
+        );
+
+        allErrors.concat(...duplicateTermErrors);
 
         return allErrors;
     }

@@ -1,0 +1,121 @@
+[
+    {
+        "type": "CREATE_TERM",
+        "payload": {
+            "aggregateCompositeIdentifier": {
+                "id": "GENERATE_THIS_ID:1",
+                "type": "term"
+            },
+            "text": "I am talking to him (language)",
+            "languageCode": "clc",
+            "contributorId": "1"
+        }
+    },
+    {
+        "type": "TRANSLATE_TERM",
+        "payload": {
+            "aggregateCompositeIdentifier": {
+                "id": "APPEND_THIS_ID:1",
+                "type": "term"
+            },
+            "translation": "I am talking to him (English)",
+            "languageCode": "en"
+        }
+    },
+    {
+        "type": "PUBLISH_RESOURCE",
+        "payload": {
+            "aggregateCompositeIdentifier": {
+                "id": "APPEND_THIS_ID:1",
+                "type": "term"
+            }
+        }
+    },
+    {
+        "type": "CREATE_TERM",
+        "payload": {
+            "aggregateCompositeIdentifier": {
+                "id": "GENERATE_THIS_ID:2",
+                "type": "term"
+            },
+            "text": "You talking to him (language)",
+            "languageCode": "clc",
+            "contributorId": "1"
+        }
+    },
+    {
+        "type": "TRANSLATE_TERM",
+        "payload": {
+            "aggregateCompositeIdentifier": {
+                "id": "APPEND_THIS_ID:2",
+                "type": "term"
+            },
+            "translation": "You are talking to him (English)",
+            "languageCode": "en"
+        }
+    },
+    {
+        "type": "PUBLISH_RESOURCE",
+        "payload": {
+            "aggregateCompositeIdentifier": {
+                "id": "APPEND_THIS_ID:2",
+                "type": "term"
+            }
+        }
+    },
+    {
+        "type": "CREATE_VOCABULARY_LIST",
+        "payload": {
+            "aggregateCompositeIdentifier": {
+                "id": "GENERATE_THIS_ID:v22",
+                "type": "vocabularyList"
+            },
+            "name": "test vocabulary list with joined term",
+            "languageCodeForName": "en"
+        }
+    },
+    {
+        "type": "REGISTER_VOCABULARY_LIST_FILTER_PROPERTY",
+        "payload": {
+            "aggregateCompositeIdentifier": {
+                "id": "APPEND_THIS_ID:v22",
+                "type": "vocabularyList"
+            },
+            "name": "person",
+            "type": "selection",
+            "allowedValuesAndLabels": [
+                {
+                    "value": "11",
+                    "label": "I"
+                },
+                {
+                    "value": "21",
+                    "label": "you"
+                }
+            ]
+        }
+    },
+    {
+        "type": "IMPORT_ENTRIES_TO_VOCABULARY_LIST",
+        "payload": {
+            "aggregateCompositeIdentifier": {
+                "id": "APPEND_THIS_ID:v22",
+                "type": "vocabularyList"
+            },
+            "entries": [
+                {
+                    "termId": "APPEND_THIS_ID:1",
+                    "propertyValues": {
+                        "person": "11"
+                    }
+                },
+                {
+                    "termId": "APPEND_THIS_ID:2",
+                    "propertyValues": {
+                        "person": "21"
+                    }
+                }
+            ]
+        }
+    }
+]
