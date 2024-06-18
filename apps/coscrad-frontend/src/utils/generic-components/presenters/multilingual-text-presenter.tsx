@@ -1,4 +1,4 @@
-import { IMultilingualText } from '@coscrad/api-interfaces';
+import { IMultilingualText, ResourceType } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box } from '@mui/material';
 import { useContext } from 'react';
@@ -10,15 +10,22 @@ import { MultilingualTextWithoutTranslations } from './multilingual-text-without
 
 export interface MultilingualTextPresenterProps {
     text: IMultilingualText;
+    resourceType: ResourceType;
 }
 
 export const MultilingualTextPresenter = ({
     text,
+    resourceType,
 }: MultilingualTextPresenterProps): JSX.Element => {
-    const { defaultLanguageCode } = useContext(ConfigurableContentContext);
+    const { defaultLanguageCode, defaultLanguageCodeForTerms } = useContext(
+        ConfigurableContentContext
+    );
+
+    const defaultLanguageCodeForPresenter =
+        resourceType === ResourceType.term ? defaultLanguageCodeForTerms : defaultLanguageCode;
 
     const textItemWithDefaultLanguage = text.items.find((item) =>
-        isInLanguage(defaultLanguageCode, item)
+        isInLanguage(defaultLanguageCodeForPresenter, item)
     );
 
     const primaryMultilingualTextItem = isNullOrUndefined(textItemWithDefaultLanguage)
@@ -38,6 +45,7 @@ export const MultilingualTextPresenter = ({
             {isTranslated ? (
                 <MultilingualTextWithTranslations
                     primaryMultilingualTextItem={primaryMultilingualTextItem}
+                    resourceType={resourceType}
                     translations={translations}
                 />
             ) : (

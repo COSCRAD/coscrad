@@ -62,6 +62,7 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     themeOverrides: ThemeOverrides;
     resourceIndexLabel: string;
     defaultLanguageCode: LanguageCode;
+    defaultLanguageCodeForTerms: LanguageCode;
     phoneNumber: string;
     email: string;
     address: string;
@@ -93,6 +94,7 @@ export const configurableContentPropertiesAndConstraints: {
     themeOverrides: [CoscradConstraint.isObject],
     resourceIndexLabel: [CoscradConstraint.isString],
     defaultLanguageCode: [CoscradConstraint.isNonEmptyString],
+    defaultLanguageCodeForTerms: [CoscradConstraint.isNonEmptyString],
     phoneNumber: [CoscradConstraint.isString],
     email: [CoscradConstraint.isString],
     address: [CoscradConstraint.isString],

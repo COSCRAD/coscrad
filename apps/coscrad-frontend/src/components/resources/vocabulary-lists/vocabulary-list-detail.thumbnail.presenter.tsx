@@ -25,7 +25,10 @@ export const VocabularyListDetailThumbnailPresenter = ({
         <Link to={`/${routes.resources.ofType(ResourceType.vocabularyList).detail(id)}`}>
             <Card>
                 <CardContent>
-                    <MultilingualTextPresenter text={name} />
+                    <MultilingualTextPresenter
+                        text={name}
+                        resourceType={ResourceType.vocabularyList}
+                    />
                     <Divider />
                     Number of Entries: {entries.length}
                 </CardContent>
