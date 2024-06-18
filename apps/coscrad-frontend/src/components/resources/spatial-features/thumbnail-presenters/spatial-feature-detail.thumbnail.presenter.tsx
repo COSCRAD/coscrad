@@ -54,7 +54,11 @@ export const SpatialFeatureDetailThumbnailPresenter = (
             </Grid>
             <Grid item xs={9}>
                 {/* TODO: consider putting a standardized name property on the view models */}
-                <ResourceNamePresenter name={name} variant="h5" />
+                <ResourceNamePresenter
+                    name={name}
+                    type={ResourceType.spatialFeature}
+                    variant="h5"
+                />
                 <SinglePropertyPresenter display="Description" value={description} />
                 <SinglePropertyPresenter display="Feature Type" value={geometryType} />
             </Grid>

@@ -28,7 +28,7 @@ export const SongDetailFullViewPresenter = ({
             contributions={contributions}
         >
             <Optional predicateValue={lyrics}>
-                <MultilingualTextPresenter text={lyrics} />
+                <MultilingualTextPresenter text={lyrics} resourceType={ResourceType.song} />
             </Optional>
             <Box id="media-player">
                 <AudioClipPlayer audioUrl={audioURL} />
