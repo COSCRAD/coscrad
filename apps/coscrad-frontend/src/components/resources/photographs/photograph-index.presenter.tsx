@@ -1,14 +1,20 @@
 import { AggregateType, IPhotographViewModel } from '@coscrad/api-interfaces';
+import { useContext } from 'react';
+import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import { PhotographIndexState } from '../../../store/slices/resources/photographs/types';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
+import { renderMultilingualTextCell } from '../utils/render-multilingual-text-cell';
 import { renderPhotographThumbnailLinkCell } from '../utils/render-photograph-thumbnail-link-cell';
 
 export const PhotographIndexPresenter = ({ entities: photographs }: PhotographIndexState) => {
+    const { defaultLanguageCode } = useContext(ConfigurableContentContext);
+
     const headingLabels: HeadingLabel<IPhotographViewModel>[] = [
         { propertyKey: 'id', headingLabel: 'Link' },
         { propertyKey: 'imageUrl', headingLabel: 'Image URL' },
+        { propertyKey: 'name', headingLabel: 'Title' },
         { propertyKey: 'photographer', headingLabel: 'Photographer' },
     ];
 
@@ -16,6 +22,8 @@ export const PhotographIndexPresenter = ({ entities: photographs }: PhotographIn
         id: renderAggregateIdCell,
         imageUrl: ({ id, imageUrl }: IPhotographViewModel) =>
             renderPhotographThumbnailLinkCell(id, imageUrl),
+        name: ({ name }: IPhotographViewModel) =>
+            renderMultilingualTextCell(name, defaultLanguageCode),
     };
 
     return (
