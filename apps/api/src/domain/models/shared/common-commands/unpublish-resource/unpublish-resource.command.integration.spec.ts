@@ -5,6 +5,7 @@ import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUp
 import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
+import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import formatAggregateType from '../../../../../queries/presentation/formatAggregateType';
@@ -14,6 +15,8 @@ import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
+import AggregateNotFoundError from '../../common-command-errors/AggregateNotFoundError';
+import CommandExecutionError from '../../common-command-errors/CommandExecutionError';
 import { UnpublishResource } from './unpublish-resource.command';
 
 const commandType = 'UNPUBLISH_RESOURCE';
@@ -56,47 +59,49 @@ describe(commandType, () => {
 
     const resourceId = buildDummyUuid(1);
 
-    Object.values(ResourceType)
-        // TODO support event sourced resources
-        .filter(
-            (resourceType) =>
-                ![ResourceType.term, ResourceType.digitalText, ResourceType.song].includes(
+    describe(`when the command is valid`, () => {
+        Object.values(ResourceType)
+            // TODO support event sourced resources
+            .filter(
+                (resourceType) =>
+                    ![ResourceType.term, ResourceType.digitalText, ResourceType.song].includes(
+                        resourceType
+                    )
+            )
+            .forEach((resourceType) => {
+                const publishedResource = getValidAggregateInstanceForTest(resourceType).clone({
+                    id: resourceId,
+                    published: true,
+                });
+
+                const buildCommandFSA = (): FluxStandardAction<DTO<UnpublishResource>> => ({
+                    type: commandType,
+                    payload: {
+                        aggregateCompositeIdentifier: publishedResource.getCompositeIdentifier(),
+                    },
+                });
+
+                const initialState = new DeluxeInMemoryStore({
+                    [resourceType]: [publishedResource],
+                }).fetchFullSnapshotInLegacyFormat();
+
+                describe(`when unpublishing a resource of type: ${formatAggregateType(
                     resourceType
-                )
-        )
-        .forEach((resourceType) => {
-            const publishedResource = getValidAggregateInstanceForTest(resourceType).clone({
-                id: resourceId,
-                published: true,
-            });
-
-            const buildCommandFSA = (): FluxStandardAction<DTO<UnpublishResource>> => ({
-                type: commandType,
-                payload: {
-                    aggregateCompositeIdentifier: publishedResource.getCompositeIdentifier(),
-                },
-            });
-
-            const initialState = new DeluxeInMemoryStore({
-                [resourceType]: [publishedResource],
-            }).fetchFullSnapshotInLegacyFormat();
-
-            describe(`when unpublishing a resource of type: ${formatAggregateType(
-                resourceType
-            )}`, () => {
-                describe(`when the command is valid`, () => {
-                    it(`should succeed`, async () => {
-                        await assertCommandSuccess(commandAssertionDependencies, {
-                            systemUserId: dummySystemUserId,
-                            buildValidCommandFSA: buildCommandFSA,
-                            seedInitialState: async () => {
-                                await testRepositoryProvider.addFullSnapshot(initialState);
-                            },
+                )}`, () => {
+                    describe(`when the command is valid`, () => {
+                        it(`should succeed`, async () => {
+                            await assertCommandSuccess(commandAssertionDependencies, {
+                                systemUserId: dummySystemUserId,
+                                buildValidCommandFSA: buildCommandFSA,
+                                seedInitialState: async () => {
+                                    await testRepositoryProvider.addFullSnapshot(initialState);
+                                },
+                            });
                         });
                     });
                 });
             });
-        });
+    });
 
     describe(`when the command is invalid`, () => {
         describe(`when the resource is not yet published`, () => {
@@ -132,6 +137,50 @@ describe(commandType, () => {
                                     await testRepositoryProvider
                                         .forResource(resourceType)
                                         .create(unpublishedResource);
+                                },
+                            });
+                        });
+                    });
+                });
+        });
+
+        describe(`when the resource does not exist`, () => {
+            Object.values(ResourceType)
+                // TODO support event sourced resources
+                .filter(
+                    (resourceType) =>
+                        ![ResourceType.term, ResourceType.digitalText, ResourceType.song].includes(
+                            resourceType
+                        )
+                )
+                .forEach((resourceType) => {
+                    describe(`when there is no: ${resourceType}`, () => {
+                        const resourceCompositeIdentifier = {
+                            type: resourceType,
+                            id: buildDummyUuid(5),
+                        };
+
+                        const buildCommandFSA = (): FluxStandardAction<DTO<UnpublishResource>> => ({
+                            type: commandType,
+                            payload: {
+                                aggregateCompositeIdentifier: resourceCompositeIdentifier,
+                            },
+                        });
+
+                        it(`should fail with the expected error`, async () => {
+                            await assertCommandError(commandAssertionDependencies, {
+                                systemUserId: dummySystemUserId,
+                                buildCommandFSA,
+                                seedInitialState: async () => {
+                                    return Promise.resolve();
+                                },
+                                checkError: (result) => {
+                                    assertErrorAsExpected(
+                                        result,
+                                        new CommandExecutionError([
+                                            new AggregateNotFoundError(resourceCompositeIdentifier),
+                                        ])
+                                    );
                                 },
                             });
                         });
