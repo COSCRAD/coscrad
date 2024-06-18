@@ -20,6 +20,7 @@ import { ResourcePublished } from './resource-published.event';
 
 @CommandHandler(PublishResource)
 export class PublishResourceCommandHandler extends BaseCommandHandler<Resource> {
+    // TODO do we keep this?
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN)
         protected readonly repositoryProvider: IRepositoryProvider,

@@ -81,6 +81,7 @@ describe(commandType, () => {
         describe(`when publishing a resource of type: ${formatAggregateType(resourceType)}`, () => {
             describe('when the command is valid', () => {
                 it('should succeed', async () => {
+                    // TODO update this to use the new API
                     await assertCommandSuccess(commandAssertionDependencies, {
                         systemUserId: dummySystemUserId,
                         buildValidCommandFSA: buildCommandFSA,

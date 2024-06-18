@@ -31,7 +31,10 @@ import {
 } from '../../domain/models/digital-text/commands/add-photograph-to-digital-text-page';
 import { getPhotographTestEventBuilders } from '../../domain/models/photograph/test-data';
 import { getPlaylistTestEventBuilderMap } from '../../domain/models/playlist/test-data/events/get-playlist-test-event-builder-map';
-import { ResourceReadAccessGrantedToUser } from '../../domain/models/shared/common-commands';
+import {
+    ResourceReadAccessGrantedToUser,
+    ResourceUnpublished,
+} from '../../domain/models/shared/common-commands';
 import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import { EventRecordMetadata } from '../../domain/models/shared/events/types/EventRecordMetadata';
 import {
@@ -208,6 +211,20 @@ const buildResourcePublishedEvent = (
             {
                 aggregateCompositeIdentifier,
             } as ResourcePublished['payload'],
+            payloadOverrides
+        ),
+        buildMetadata()
+    );
+
+const buildResourceUnpublishedEvent = (
+    payloadOverrides: DeepPartial<ResourceUnpublished['payload']>,
+    buildMetadata: EventMetadataBuilder
+) =>
+    new ResourceUnpublished(
+        clonePlainObjectWithOverrides(
+            {
+                aggregateCompositeIdentifier,
+            } as ResourceUnpublished['payload'],
             payloadOverrides
         ),
         buildMetadata()
@@ -666,6 +683,7 @@ export class TestEventStream {
                 buildResourceReadAccessGrantedToUserEvent
             )
             .registerBuilder('RESOURCE_PUBLISHED', buildResourcePublishedEvent)
+            .registerBuilder('RESOURCE_UNPUBLISHED', buildResourceUnpublishedEvent)
             .registerBuilder(
                 'CONTENT_ADDED_TO_DIGITAL_TEXT_PAGE',
                 buildContentAddedToDigitalTextPage
