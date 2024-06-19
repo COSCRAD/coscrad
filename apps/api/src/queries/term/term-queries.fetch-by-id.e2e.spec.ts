@@ -1,11 +1,11 @@
-import { AggregateType, LanguageCode, ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import httpStatusCodes from '../../app/constants/httpStatusCodes';
 import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
+import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import { TermCreated, TermTranslated } from '../../domain/models/term/commands';
-import { Term } from '../../domain/models/term/entities/term.entity';
 import { AggregateId } from '../../domain/types/AggregateId';
 import { ArangoDatabaseProvider } from '../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../persistence/repositories/__tests__/TestRepositoryProvider';
@@ -46,6 +46,10 @@ const termTranslated = termCreated.andThen<TermTranslated>({
     },
 });
 
+const termPublished = termTranslated.andThen<ResourcePublished>({
+    type: 'RESOURCE_PUBLISHED',
+});
+
 // const promptTermId = buildDummyUuid(2)
 
 describe(`when querying for a term: fetch by Id`, () => {
@@ -82,17 +86,13 @@ describe(`when querying for a term: fetch by Id`, () => {
         describe(`when there is a term with the given Id`, () => {
             describe(`when a term is published`, () => {
                 beforeEach(async () => {
-                    const eventHistoryForTerm = termTranslated.as({
+                    const eventHistoryForTerm = termPublished.as({
                         type: AggregateType.term,
                         id: termId,
                     });
                     // TODO: we need to check that contributors come through
 
                     await app.get(ArangoEventRepository).appendEvents(eventHistoryForTerm);
-
-                    const term = Term.fromEventHistory(eventHistoryForTerm, termId) as Term;
-
-                    await testRepositoryProvider.forResource(ResourceType.term).create(term);
                 });
 
                 it('should return the expected result', async () => {
@@ -105,9 +105,24 @@ describe(`when querying for a term: fetch by Id`, () => {
             });
 
             describe(`when a term is unpublished`, () => {
+                beforeEach(async () => {
+                    // note that there is no publication event in this event history
+                    const eventHistoryForTerm = termTranslated.as({
+                        type: AggregateType.term,
+                        id: termId,
+                    });
+                    // TODO: we need to check that contributors come through
+
+                    await app.get(ArangoEventRepository).appendEvents(eventHistoryForTerm);
+                });
+
                 // We pretend the resource does not exist when the user
                 // does not have access to this term
-                it.todo(`should return not found (404)`);
+                it(`should return not found (404)`, async () => {
+                    const res = await request(app.getHttpServer()).get(buildDetailEndpoint(termId));
+
+                    expect(res.status).toBe(httpStatusCodes.notFound);
+                });
             });
         });
 
