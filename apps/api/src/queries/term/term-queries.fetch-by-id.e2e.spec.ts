@@ -1,16 +1,21 @@
-import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import { AggregateType, CoscradUserRole, LanguageCode } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import httpStatusCodes from '../../app/constants/httpStatusCodes';
 import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
+import { ResourceReadAccessGrantedToUser } from '../../domain/models/shared/common-commands';
 import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import { TermCreated, TermTranslated } from '../../domain/models/term/commands';
+import { CoscradUserGroup } from '../../domain/models/user-management/group/entities/coscrad-user-group.entity';
+import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
+import { CoscradUser } from '../../domain/models/user-management/user/entities/user/coscrad-user.entity';
 import { AggregateId } from '../../domain/types/AggregateId';
 import { ArangoDatabaseProvider } from '../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoEventRepository } from '../../persistence/repositories/arango-event-repository';
+import buildTestDataInFlatFormat from '../../test-data/buildTestDataInFlatFormat';
 import { TestEventStream } from '../../test-data/events';
 import { DynamicDataTypeFinderService } from '../../validation';
 
@@ -18,6 +23,21 @@ import { DynamicDataTypeFinderService } from '../../validation';
 const indexEndpoint = `/resources/terms`;
 
 const buildDetailEndpoint = (id: AggregateId) => `${indexEndpoint}/${id}`;
+
+// We require an existing user for ACL tests
+const dummyQueryUserId = buildDummyUuid(4);
+
+const { user: users, userGroup: userGroups } = buildTestDataInFlatFormat();
+
+const dummyUser = (users as CoscradUser[])[0].clone({
+    authProviderUserId: `auth0|${dummyQueryUserId}`,
+    id: dummyQueryUserId,
+    roles: [CoscradUserRole.viewer],
+});
+
+const dummyGroup = (userGroups as CoscradUserGroup[])[0].clone({ userIds: [dummyUser.id] });
+
+const dummyUserWithGroups = new CoscradUserWithGroups(dummyUser, [dummyGroup]);
 
 // Set up test data (use event sourcing to set up state)
 const termText = `Term (in the language)`;
@@ -43,6 +63,13 @@ const termTranslated = termCreated.andThen<TermTranslated>({
     payload: {
         translation: termTranslation,
         languageCode: translationLanguage,
+    },
+});
+
+const termPrivateThatUserCanAccess = termTranslated.andThen<ResourceReadAccessGrantedToUser>({
+    type: 'RESOURCE_READ_ACCESS_GRANTED_TO_USER',
+    payload: {
+        userId: dummyQueryUserId,
     },
 });
 
@@ -104,7 +131,7 @@ describe(`when querying for a term: fetch by Id`, () => {
                 });
             });
 
-            describe(`when a term is unpublished`, () => {
+            describe(`when a term is not published`, () => {
                 beforeEach(async () => {
                     // note that there is no publication event in this event history
                     const eventHistoryForTerm = termTranslated.as({
@@ -127,68 +154,295 @@ describe(`when querying for a term: fetch by Id`, () => {
         });
 
         describe(`when there is no term with the given Id`, () => {
-            it.todo(`should return not found (404)`);
+            it(`should return not found (404)`, async () => {
+                const res = await request(app.getHttpServer()).get(
+                    buildDetailEndpoint(buildDummyUuid(456))
+                );
+
+                expect(res.status).toBe(httpStatusCodes.notFound);
+            });
         });
     });
 
     describe(`when the user is authenticated`, () => {
         describe(`when the user is a coscrad admin`, () => {
+            beforeAll(async () => {
+                ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
+                    {
+                        ARANGO_DB_NAME: testDatabaseName,
+                    },
+                    {
+                        testUserWithGroups: new CoscradUserWithGroups(
+                            dummyUser.clone({
+                                roles: [CoscradUserRole.superAdmin],
+                            }),
+                            []
+                        ),
+                    }
+                ));
+            });
+
             describe(`when there is a term with the given Id`, () => {
                 describe(`when the term is published`, () => {
-                    it.todo(`should return the expected result`);
+                    beforeEach(async () => {
+                        const eventHistoryForTerm = termPublished.as({
+                            type: AggregateType.term,
+                            id: termId,
+                        });
+                        // TODO: we need to check that contributors come through
+
+                        await app.get(ArangoEventRepository).appendEvents(eventHistoryForTerm);
+                    });
+
+                    it(`should return the expected result`, async () => {
+                        const res = await request(app.getHttpServer()).get(
+                            buildDetailEndpoint(termId)
+                        );
+
+                        expect(res.status).toBe(httpStatusCodes.ok);
+                    });
                 });
 
                 describe(`when the term is not published`, () => {
-                    it.todo(`should return the expected result`);
+                    beforeEach(async () => {
+                        // note that there is no publication event in this event history
+                        const eventHistoryForTerm = termTranslated.as({
+                            type: AggregateType.term,
+                            id: termId,
+                        });
+                        // TODO: we need to check that contributors come through
+
+                        await app.get(ArangoEventRepository).appendEvents(eventHistoryForTerm);
+                    });
+
+                    it(`should return the expected result`, async () => {
+                        const res = await request(app.getHttpServer()).get(
+                            buildDetailEndpoint(termId)
+                        );
+
+                        expect(res.status).toBe(httpStatusCodes.ok);
+                    });
                 });
 
-                describe(`when the term is unpublished but and the user has explicit access`, () => {
-                    it.todo(`should return the expected result`);
+                describe(`when the term is not published but the user has explicit access`, () => {
+                    beforeEach(async () => {
+                        // note that there is no publication event in this event history
+                        const eventHistoryForPrivateTerm = termPrivateThatUserCanAccess.as({
+                            type: AggregateType.term,
+                            id: termId,
+                        });
+                        // TODO: we need to check that contributors come through
+
+                        await app
+                            .get(ArangoEventRepository)
+                            .appendEvents(eventHistoryForPrivateTerm);
+                    });
+
+                    it(`should return the expected result`, async () => {
+                        const res = await request(app.getHttpServer()).get(
+                            buildDetailEndpoint(termId)
+                        );
+
+                        expect(res.status).toBe(httpStatusCodes.ok);
+                    });
                 });
             });
 
             describe(`when there is no term with the given Id`, () => {
-                it.todo(`should return not found (404)`);
+                it(`should return not found (404)`, async () => {
+                    const res = await request(app.getHttpServer()).get(
+                        buildDetailEndpoint(buildDummyUuid(456))
+                    );
+
+                    expect(res.status).toBe(httpStatusCodes.notFound);
+                });
             });
         });
 
         describe(`when the user is a project admin`, () => {
+            beforeAll(async () => {
+                ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
+                    {
+                        ARANGO_DB_NAME: testDatabaseName,
+                    },
+                    {
+                        testUserWithGroups: new CoscradUserWithGroups(
+                            dummyUser.clone({
+                                roles: [CoscradUserRole.projectAdmin],
+                            }),
+                            []
+                        ),
+                    }
+                ));
+            });
+
             describe(`when there is a term with the given Id`, () => {
                 describe(`when the term is published`, () => {
-                    it.todo(`should return the expected result`);
+                    beforeEach(async () => {
+                        const eventHistoryForTerm = termPublished.as({
+                            type: AggregateType.term,
+                            id: termId,
+                        });
+                        // TODO: we need to check that contributors come through
+
+                        await app.get(ArangoEventRepository).appendEvents(eventHistoryForTerm);
+                    });
+
+                    it(`should return the expected result`, async () => {
+                        const res = await request(app.getHttpServer()).get(
+                            buildDetailEndpoint(termId)
+                        );
+
+                        expect(res.status).toBe(httpStatusCodes.ok);
+                    });
                 });
 
                 describe(`when the term is not published`, () => {
-                    it.todo(`should return the expected result`);
+                    beforeEach(async () => {
+                        // note that there is no publication event in this event history
+                        const eventHistoryForTerm = termTranslated.as({
+                            type: AggregateType.term,
+                            id: termId,
+                        });
+                        // TODO: we need to check that contributors come through
+
+                        await app.get(ArangoEventRepository).appendEvents(eventHistoryForTerm);
+                    });
+
+                    it(`should return the expected result`, async () => {
+                        const res = await request(app.getHttpServer()).get(
+                            buildDetailEndpoint(termId)
+                        );
+
+                        expect(res.status).toBe(httpStatusCodes.ok);
+                    });
                 });
 
-                describe(`when the term is unpublished but and the user has explicit access`, () => {
-                    it.todo(`should return the expected result`);
+                describe(`when the term is not published but the user has explicit access`, () => {
+                    // This case is a bit unclear: does this project admin have access to
+                    // the project this term is a part of?
+                    beforeEach(async () => {
+                        // note that there is no publication event in this event history
+                        const eventHistoryForPrivateTerm = termPrivateThatUserCanAccess.as({
+                            type: AggregateType.term,
+                            id: termId,
+                        });
+                        // TODO: we need to check that contributors come through
+
+                        await app
+                            .get(ArangoEventRepository)
+                            .appendEvents(eventHistoryForPrivateTerm);
+                    });
+
+                    it(`should return the expected result`, async () => {
+                        const res = await request(app.getHttpServer()).get(
+                            buildDetailEndpoint(termId)
+                        );
+
+                        expect(res.status).toBe(httpStatusCodes.ok);
+                    });
                 });
             });
 
             describe(`when there is no term with the given Id`, () => {
-                it.todo(`should return not found (404)`);
+                it(`should return not found (404)`, async () => {
+                    const res = await request(app.getHttpServer()).get(
+                        buildDetailEndpoint(buildDummyUuid(456))
+                    );
+
+                    expect(res.status).toBe(httpStatusCodes.notFound);
+                });
             });
         });
 
         describe(`when the user is an ordinary authenticated user`, () => {
+            beforeAll(async () => {
+                ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
+                    {
+                        ARANGO_DB_NAME: testDatabaseName,
+                    },
+                    {
+                        testUserWithGroups: dummyUserWithGroups,
+                    }
+                ));
+            });
+
             describe(`when there is a term with the given Id`, () => {
                 describe(`when the term is published`, () => {
-                    it.todo(`should return the expected result`);
+                    beforeEach(async () => {
+                        const eventHistoryForTerm = termPublished.as({
+                            type: AggregateType.term,
+                            id: termId,
+                        });
+                        // TODO: we need to check that contributors come through
+
+                        await app.get(ArangoEventRepository).appendEvents(eventHistoryForTerm);
+                    });
+
+                    it(`should return the expected result`, async () => {
+                        const res = await request(app.getHttpServer()).get(
+                            buildDetailEndpoint(termId)
+                        );
+
+                        expect(res.status).toBe(httpStatusCodes.ok);
+                    });
                 });
 
                 describe(`when the term is not published and the user does not have access`, () => {
-                    it.todo(`should return the expected result`);
+                    beforeEach(async () => {
+                        // note that there is no publication event in this event history
+                        const eventHistoryForTerm = termTranslated.as({
+                            type: AggregateType.term,
+                            id: termId,
+                        });
+                        // TODO: we need to check that contributors come through
+
+                        await app.get(ArangoEventRepository).appendEvents(eventHistoryForTerm);
+                    });
+
+                    // We pretend the resource does not exist when the user
+                    // does not have access to this term
+                    it(`should return not found (404)`, async () => {
+                        const res = await request(app.getHttpServer()).get(
+                            buildDetailEndpoint(termId)
+                        );
+
+                        expect(res.status).toBe(httpStatusCodes.notFound);
+                    });
                 });
 
-                describe(`when the term is unpublished but the user has access`, () => {
-                    it.todo(`should return the expected result`);
+                describe(`when the term is not published but the user has access`, () => {
+                    beforeEach(async () => {
+                        // note that there is no publication event in this event history
+                        const eventHistoryForPrivateTerm = termPrivateThatUserCanAccess.as({
+                            type: AggregateType.term,
+                            id: termId,
+                        });
+                        // TODO: we need to check that contributors come through
+
+                        await app
+                            .get(ArangoEventRepository)
+                            .appendEvents(eventHistoryForPrivateTerm);
+                    });
+
+                    it(`should return the expected result`, async () => {
+                        const res = await request(app.getHttpServer()).get(
+                            buildDetailEndpoint(termId)
+                        );
+
+                        expect(res.status).toBe(httpStatusCodes.ok);
+                    });
                 });
             });
 
             describe(`when there is no term with the given Id`, () => {
-                it.todo(`should return not found (404)`);
+                it(`should return not found (404)`, async () => {
+                    const res = await request(app.getHttpServer()).get(
+                        buildDetailEndpoint(buildDummyUuid(456))
+                    );
+
+                    expect(res.status).toBe(httpStatusCodes.notFound);
+                });
             });
         });
     });
