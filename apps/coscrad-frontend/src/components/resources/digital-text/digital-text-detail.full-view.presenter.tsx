@@ -51,6 +51,7 @@ export const DigitalTextDetailFullViewPresenter = ({
                 <PagesPresenter
                     pages={pages}
                     currentPageIdentifier={selectedPageIdentifier}
+                    setCurrentIndex={setCurrentIndex}
                     onSubmitNewContent={({ text, languageCode, pageIdentifier }) =>
                         dispatch(
                             executeCommand({

@@ -1,5 +1,5 @@
 import { isNonEmptyString } from '@coscrad/validation-constraints';
-import { Button, Stack, TextField } from '@mui/material';
+import { Box, Button, Stack, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 
 interface NewPageFormProps {
@@ -30,6 +30,9 @@ export const NewPageForm = ({
 
     return (
         <Stack>
+            <Box>
+                <Typography variant="h4">New Page Form</Typography>
+            </Box>
             <TextField
                 data-testid="text:add-page-to-digital-text"
                 onChange={(e) => {
