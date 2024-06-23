@@ -1,5 +1,5 @@
 import { IDigitalTextPage } from '@coscrad/api-interfaces';
-import { Box, FormControlLabel, FormGroup, Switch, Typography, styled } from '@mui/material';
+import { Box, Typography, styled } from '@mui/material';
 import { useState } from 'react';
 import { DigitalTextPageDetailPresenter } from './digital-text-page-detail-presenter';
 import { TextAndLanguage } from './page-content-form';
@@ -7,30 +7,33 @@ import { PageIcon } from './page-icon';
 
 const StyledPages = styled(Box)({
     width: '100%',
-    height: '210px',
+    height: '70px',
     padding: '3px',
     position: 'relative',
-    display: 'block',
+    display: 'inline-block',
     border: '1px solid #666',
+    overflow: 'auto',
 });
-
-interface PagePresenterProps {
-    pages: IDigitalTextPage[];
-    currentPageIdentifier?: string;
-    onSubmitNewContent: (state: TextAndLanguage & { pageIdentifier: string }) => void;
-}
 
 enum PagesViewType {
     singleSelected = 'singleSelected',
     icons = 'icons',
 }
 
+interface PagesPresenterProps {
+    pages: IDigitalTextPage[];
+    currentPageIdentifier?: string;
+    setCurrentIndex: (pageIndex: number) => void;
+    onSubmitNewContent: (state: TextAndLanguage & { pageIdentifier: string }) => void;
+}
+
 export const PagesPresenter = ({
     pages,
     currentPageIdentifier,
+    setCurrentIndex,
     onSubmitNewContent,
-}: PagePresenterProps): JSX.Element => {
-    const [viewType, setViewType] = useState<PagesViewType>(PagesViewType.singleSelected);
+}: PagesPresenterProps): JSX.Element => {
+    const [viewType, setViewType] = useState<PagesViewType>(PagesViewType.icons);
 
     const currentPage = pages.find((page) => page.identifier === currentPageIdentifier);
 
@@ -58,15 +61,18 @@ export const PagesPresenter = ({
                         }
                     />
                 ) : (
-                    pages.map((page) => (
+                    pages.map((page, index) => (
                         <PageIcon
+                            key={page.identifier}
                             page={page}
+                            pageIndex={index}
+                            setCurrentIndex={setCurrentIndex}
                             isSelected={page.identifier === currentPageIdentifier}
                         />
                     ))
                 )}
             </StyledPages>
-            <FormGroup>
+            {/* <FormGroup>
                 <FormControlLabel
                     control={
                         <Switch
@@ -81,7 +87,21 @@ export const PagesPresenter = ({
                     }
                     label={viewType === PagesViewType.icons ? 'icons' : 'page details'}
                 />
-            </FormGroup>
+            </FormGroup> */}
+            <Box sx={{ width: '100%', height: '50vh', border: '1px solid black' }}>
+                <DigitalTextPageDetailPresenter
+                    page={currentPage}
+                    isSelected={currentPageIdentifier === currentPage.identifier}
+                    // Note that we inject the page identifier here
+                    onSubmitNewContent={({ text, languageCode }) =>
+                        onSubmitNewContent({
+                            text,
+                            languageCode,
+                            pageIdentifier: currentPage.identifier,
+                        })
+                    }
+                />
+            </Box>
         </>
     );
 };
