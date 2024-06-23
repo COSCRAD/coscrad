@@ -25,9 +25,12 @@ export const PageContentForm = ({ onSubmitNewContent }: PageContentFormProps) =>
         <>
             <TextField
                 data-testid={`text:add-content-to-page:`}
+                fullWidth
                 onChange={(e) => {
                     setText(e.target.value);
                 }}
+                rows={17}
+                multiline
             ></TextField>
             <LanguageSelect
                 onSelectLanguage={(languageCode: LanguageCode) => {

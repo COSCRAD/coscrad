@@ -5,8 +5,8 @@ import { MultilingualTextPresenter } from '../../../utils/generic-components/pre
 import { PageContentForm, TextAndLanguage } from './page-content-form';
 
 const StyledMuiPage = styled('div')({
-    width: '140px',
-    height: '200px',
+    width: '80%',
+    height: '48vh',
     margin: '2px',
     position: 'relative',
     float: 'left',
