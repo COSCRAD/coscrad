@@ -1,11 +1,12 @@
 import { IDigitalTextPage } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { Notes as NotesIcon } from '@mui/icons-material/';
 import { Typography, styled } from '@mui/material';
 
 const StyledMuiPage = styled('div')({
     width: '40px',
     height: '60px',
-    margin: '2px',
+    margin: '4px',
     position: 'relative',
     float: 'left',
     border: '2px solid #05803b',
@@ -38,11 +39,10 @@ export const PageIcon = ({
                 console.log('double clicked!');
             }}
             // TODO: use primary.main for highlight color
-            sx={{ boxShadow: isSelected ? '0px 0px 15px 0px #6ab9ae' : '0px' }}
+            sx={{ boxShadow: isSelected ? '0px 0px 12px 0px #6ab9ae' : '0px' }}
         >
-            {hasContent ? <Typography variant="body2">...</Typography> : null}
+            {hasContent ? <NotesIcon /> : null}
             <Typography sx={{ bottom: 0, right: 0, mr: 0.5, position: 'absolute' }}>
-                {isSelected ? '**' : ''}
                 {identifier}
             </Typography>
         </StyledMuiPage>
