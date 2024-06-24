@@ -3,7 +3,6 @@ import {
     CoscradUserRole,
     HttpStatusCode,
     LanguageCode,
-    ResourceType,
 } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
@@ -12,8 +11,6 @@ import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrati
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { ResourceReadAccessGrantedToUser } from '../../domain/models/shared/common-commands';
 import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
-import { TagCreated } from '../../domain/models/tag/commands/create-tag/tag-created.event';
-import { ResourceOrNoteTagged } from '../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
 import { TermCreated, TermTranslated } from '../../domain/models/term/commands';
 import { CoscradUserGroup } from '../../domain/models/user-management/group/entities/coscrad-user-group.entity';
 import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
@@ -85,25 +82,6 @@ const termPublished = termTranslated.andThen<ResourcePublished>({
     type: 'RESOURCE_PUBLISHED',
 });
 
-const labelForTagForPrivateTerm = 'animals';
-
-const termPrivateForTagging = new TestEventStream()
-    .andThen<TagCreated>({
-        type: 'TAG_CREATED',
-        payload: {
-            label: labelForTagForPrivateTerm,
-        },
-    })
-    .andThen<ResourceOrNoteTagged>({
-        type: 'RESOURCE_OR_NOTE_TAGGED',
-        payload: {
-            taggedMemberCompositeIdentifier: {
-                type: ResourceType.term,
-                id: termIdUnpublishedWithUserAccessId,
-            },
-        },
-    });
-
 // const promptTermId = buildDummyUuid(2)
 
 describe(`when querying for a term: fetch many`, () => {
@@ -131,7 +109,6 @@ describe(`when querying for a term: fetch many`, () => {
             id: termIdUnpublishedWithUserAccessId,
             type: AggregateType.term,
         }),
-        // ...termPrivateForTagging.as({ id: buildDummyUuid(555), type: AggregateType.term }),
     ];
 
     const eventHistoryForManyWithPublishedTerm = [
