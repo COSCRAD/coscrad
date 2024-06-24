@@ -1,4 +1,10 @@
-import { CoscradUserRole, LanguageCode, ResourceType } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    CoscradUserRole,
+    HttpStatusCode,
+    LanguageCode,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import httpStatusCodes from '../../app/constants/httpStatusCodes';
@@ -18,6 +24,7 @@ import generateDatabaseNameForTestSuite from '../../persistence/repositories/__t
 import { ArangoEventRepository } from '../../persistence/repositories/arango-event-repository';
 import buildTestDataInFlatFormat from '../../test-data/buildTestDataInFlatFormat';
 import { TestEventStream } from '../../test-data/events';
+import { TermViewModel } from '../buildViewModelForResource/viewModels';
 
 const indexEndpoint = `/resources/terms`;
 
@@ -118,22 +125,27 @@ describe(`when querying for a term: fetch many`, () => {
         databaseProvider.close();
     });
 
-    const eventHistoryForMany = [
-        ...termPublished.as({ id: termId }),
-        ...termTranslated.as({ id: termIdUnpublishedNoUserAccessId }),
+    const eventHistoryForManyUnpublished = [
+        ...termTranslated.as({ id: termIdUnpublishedNoUserAccessId, type: AggregateType.term }),
         ...termPrivateThatUserCanAccess.as({
             id: termIdUnpublishedWithUserAccessId,
+            type: AggregateType.term,
         }),
-        ...termPrivateForTagging.as({ id: buildDummyUuid(555) }),
+        // ...termPrivateForTagging.as({ id: buildDummyUuid(555), type: AggregateType.term }),
     ];
 
-    eventHistoryForMany.forEach((event) => {
-        const {
-            payload: { aggregateCompositeIdentifier },
-        } = event;
+    const eventHistoryForManyWithPublishedTerm = [
+        ...eventHistoryForManyUnpublished,
+        ...termPublished.as({ id: termId, type: AggregateType.term }),
+    ];
 
-        console.log({ aggregateCompositeIdentifier });
-    });
+    // eventHistoryForMany.forEach((event) => {
+    //     const {
+    //         payload: { aggregateCompositeIdentifier },
+    //     } = event;
+
+    //     console.log({ aggregateCompositeIdentifier });
+    // });
 
     describe(`when the user is unauthenticated`, () => {
         beforeAll(async () => {
@@ -147,16 +159,155 @@ describe(`when querying for a term: fetch many`, () => {
             await app.init();
         });
 
-        it(`should only return published terms`, async () => {
-            await app.get(ArangoEventRepository).appendEvents(eventHistoryForMany);
+        describe(`when there is a published term in the index view`, () => {
+            it(`should only return published terms`, async () => {
+                await app
+                    .get(ArangoEventRepository)
+                    .appendEvents(eventHistoryForManyWithPublishedTerm);
 
-            const res = await request(app.getHttpServer()).get(indexEndpoint);
+                const res = await request(app.getHttpServer()).get(indexEndpoint);
 
-            expect(res.status).toBe(httpStatusCodes.ok);
+                expect(res.status).toBe(httpStatusCodes.ok);
 
-            const { body } = res;
+                const {
+                    body: { entities },
+                } = res;
 
-            console.log({ body });
+                expect(entities.length).toBeLessThanOrEqual(1);
+
+                // Only one published result should come through from eventHistoryForMany
+                const result = entities[0] as TermViewModel;
+
+                expect(result.id).toBe(termId);
+            });
+        });
+
+        describe(`when there are no published terms`, () => {
+            it(`should return no terms`, async () => {
+                await app.get(ArangoEventRepository).appendEvents(eventHistoryForManyUnpublished);
+
+                const res = await request(app.getHttpServer()).get(indexEndpoint);
+
+                expect(res.status).toBe(httpStatusCodes.ok);
+
+                expect(res.body.entities).toHaveLength(0);
+            });
+        });
+    });
+
+    describe(`when the user is authenticated as a non-admin user`, () => {
+        beforeAll(async () => {
+            ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
+                {
+                    ARANGO_DB_NAME: testDatabaseName,
+                },
+                {
+                    testUserWithGroups: dummyUserWithGroups,
+                }
+            ));
+        });
+
+        describe(`when there is a term that is unpublished`, () => {
+            describe(`when the user does not have read access`, () => {
+                it(`should not return the unpublished term`, async () => {
+                    await app
+                        .get(ArangoEventRepository)
+                        .appendEvents(eventHistoryForManyWithPublishedTerm);
+
+                    const res = await request(app.getHttpServer()).get(indexEndpoint);
+
+                    expect(res.status).toBe(httpStatusCodes.ok);
+
+                    /**
+                     * + private, but user in ACL
+                     * - private, user not in ACL
+                     * + published
+                     */
+                    expect(res.body.entities).toHaveLength(2);
+                });
+            });
+
+            describe(`when the user does have read access`, () => {
+                it(`should return the unpublished term`, async () => {
+                    await app
+                        .get(ArangoEventRepository)
+                        .appendEvents(eventHistoryForManyWithPublishedTerm);
+
+                    const res = await request(app.getHttpServer()).get(indexEndpoint);
+
+                    expect(res.status).toBe(httpStatusCodes.ok);
+
+                    /**
+                     * + published
+                     * + private, but user in ACL
+                     * - private, user not in ACL
+                     */
+
+                    const {
+                        body: { entities },
+                    } = res;
+
+                    const result = entities[0] as TermViewModel;
+
+                    expect(result.id).toBe(termIdUnpublishedWithUserAccessId);
+                });
+            });
+        });
+    });
+
+    (
+        [
+            [CoscradUserRole.superAdmin, 'when the user is a COSCRAD admin'],
+            [CoscradUserRole.projectAdmin, 'when the user is a project admin'],
+        ] as const
+    ).forEach(([userRole, description]) => {
+        describe(description, () => {
+            beforeAll(async () => {
+                ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
+                    {
+                        ARANGO_DB_NAME: testDatabaseName,
+                    },
+                    {
+                        testUserWithGroups: new CoscradUserWithGroups(
+                            dummyUser.clone({
+                                roles: [userRole],
+                            }),
+                            []
+                        ),
+                    }
+                ));
+            });
+
+            it(`should allow the user to access private resources`, async () => {
+                await app.get(ArangoEventRepository).appendEvents(eventHistoryForManyUnpublished);
+
+                const res = await request(app.getHttpServer()).get(indexEndpoint);
+
+                const numberOfPrivateTerms = 2;
+
+                expect(res.status).toBe(HttpStatusCode.ok);
+
+                expect(res.body.entities).toHaveLength(numberOfPrivateTerms);
+
+                /**
+                 * This if statement is effectively a filter for our test
+                 * case builder pattern. We only want to snapshot the response
+                 * once for one specific class of user. We want this to be
+                 * an admin user, because admin users have access to all
+                 * data, including command info (available actions).
+                 * Finally, we do this for the project admin, as queries
+                 * for this user are by far more common than for coscrad admin
+                 * in practice.
+                 */
+                if (userRole === CoscradUserRole.projectAdmin) {
+                    /**
+                     * This is to catch breaking changes in the API contract with
+                     * the client. See the above comment for the corresponding detail
+                     * endpoint test case.
+                     */
+                    expect(res.body).toMatchSnapshot();
+                }
+            });
         });
     });
 });
