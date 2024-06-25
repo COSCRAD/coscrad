@@ -30,7 +30,6 @@ import validateTextFieldContextForModel from '../../shared/contextValidators/val
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import { CannotReuseAudioItemError } from '../../shared/multilingual-audio/errors';
 import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
-import { ContributorAndRole } from '../../song/ContributorAndRole';
 import {
     AudioAddedForTerm,
     PromptTermCreated,
@@ -68,14 +67,6 @@ export class Term extends Resource {
     })
     text: MultilingualText;
 
-    /**
-     * Note  that eventually, we will track contributions as follows. Every
-     * command can be executed `onBehalfOfContributorWithId`. If this is specified,
-     * the corresponding event will be attributed to the contributor with this ID.
-     * Otherwise, it will be attributed to the system user.
-     */
-    readonly contributions?: ContributorAndRole[];
-
     @NestedDataType(MultilingualAudio, {
         label: 'multilingual audio',
         description: 'collection of references to audio for content in available langauges',
@@ -99,19 +90,9 @@ export class Term extends Resource {
         // This should only happen in the validation context
         if (isNullOrUndefined(dto)) return;
 
-        const {
-            contributions: contributorAndRoles,
-            audio: audioDto,
-            sourceProject,
-            text,
-            isPromptTerm,
-        } = dto;
+        const { audio: audioDto, sourceProject, text, isPromptTerm } = dto;
 
         this.text = new MultilingualText(text);
-
-        this.contributions = (contributorAndRoles || []).map(
-            (contributorAndRoleDTO) => new ContributorAndRole(contributorAndRoleDTO)
-        );
 
         this.audio = isNonEmptyObject(audioDto) ? new MultilingualAudio(audioDto) : undefined;
 
