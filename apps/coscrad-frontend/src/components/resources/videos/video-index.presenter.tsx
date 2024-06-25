@@ -17,6 +17,7 @@ import {
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { renderMultilingualTextItem } from '../utils/render-cell-for-single-language';
+import { renderContributionsTextCell } from '../utils/render-contributions-text-cell';
 import { renderMediaLengthInSeconds } from '../utils/render-media-length-in-seconds-cell';
 
 const inLanguage = (languageCodeToFind: LanguageCode, multilingualText: IMultilingualText) =>
@@ -58,7 +59,8 @@ export const VideoIndexPresenter = ({ entities: videos }: VideoIndexState): JSX.
         name: ({ name }) => (isNullOrUndefined(name) ? null : renderMultilingualTextItem(name)),
         nameEnglish: ({ nameEnglish }) =>
             isNullOrUndefined(nameEnglish) ? null : renderMultilingualTextItem(nameEnglish),
-        contributions: ({ contributions }) => contributions.join(', '),
+        contributions: ({ contributions }: VideoTableRow) =>
+            renderContributionsTextCell(contributions),
     };
 
     // We may want to bring in the full MultilingualText class to the front-end and put this behaviour on a method instead

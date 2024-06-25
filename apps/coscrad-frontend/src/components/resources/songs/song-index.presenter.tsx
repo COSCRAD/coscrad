@@ -10,6 +10,7 @@ import { Matchers } from '../../../utils/generic-components/presenters/tables/ge
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { doesSomeMultilingualTextItemInclude } from '../utils/query-matchers';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
+import { renderContributionsTextCell } from '../utils/render-contributions-text-cell';
 import { renderMultilingualTextCell } from '../utils/render-multilingual-text-cell';
 
 export const SongIndexPresenter = (songsIndexResult: SongIndexState) => {
@@ -29,7 +30,8 @@ export const SongIndexPresenter = (songsIndexResult: SongIndexState) => {
         name: ({ name }: ISongViewModel) => renderMultilingualTextCell(name, defaultLanguageCode),
         audioURL: ({ audioURL }: ISongViewModel) =>
             isNullOrUndefined(audioURL) ? <LinkOff /> : <AudioClipPlayer audioUrl={audioURL} />,
-        contributions: ({ contributions }) => (contributions || []).join(`, `),
+        contributions: ({ contributions }: ISongViewModel) =>
+            renderContributionsTextCell(contributions),
     };
 
     const matchers: Matchers<ISongViewModel> = {
