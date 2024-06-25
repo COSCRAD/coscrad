@@ -1757,6 +1757,85 @@ exports[`command payload schemas Command payload schema should match the snapsho
     "type": "PUBLISH_RESOURCE",
   },
   {
+    "description": "Make a resource unpublished to the public",
+    "label": "Unpublish Resource",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "name": "ResourceCompositeIdentifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "One of: term, vocabularyList, audioItem, photograph, spatialFeature, bibliographicCitation, digitalText, song, mediaItem, video, playlist",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "term",
+                "value": "term",
+              },
+              {
+                "label": "vocabularyList",
+                "value": "vocabularyList",
+              },
+              {
+                "label": "audioItem",
+                "value": "audioItem",
+              },
+              {
+                "label": "photograph",
+                "value": "photograph",
+              },
+              {
+                "label": "spatialFeature",
+                "value": "spatialFeature",
+              },
+              {
+                "label": "bibliographicCitation",
+                "value": "bibliographicCitation",
+              },
+              {
+                "label": "digitalText",
+                "value": "digitalText",
+              },
+              {
+                "label": "song",
+                "value": "song",
+              },
+              {
+                "label": "mediaItem",
+                "value": "mediaItem",
+              },
+              {
+                "label": "video",
+                "value": "video",
+              },
+              {
+                "label": "playlist",
+                "value": "playlist",
+              },
+            ],
+          },
+        },
+      },
+    },
+    "type": "UNPUBLISH_RESOURCE",
+  },
+  {
     "description": "Creates a new tag",
     "label": "Create Tag",
     "schema": {

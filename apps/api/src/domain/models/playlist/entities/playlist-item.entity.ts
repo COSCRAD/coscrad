@@ -3,7 +3,7 @@ import { ExternalEnum, NestedDataType, UUID } from '@coscrad/data-types';
 import { DTO } from '../../../../types/DTO';
 import { AggregateId } from '../../../types/AggregateId';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
-import BaseDomainModel from '../../BaseDomainModel';
+import BaseDomainModel from '../../base-domain-model.entity';
 
 export enum PlaylistableResourceType {
     audioItem = ResourceType.audioItem,

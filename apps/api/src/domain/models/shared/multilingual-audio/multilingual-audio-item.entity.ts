@@ -3,7 +3,7 @@ import { ReferenceTo, UUID } from '@coscrad/data-types';
 import { DTO } from '../../../../types/DTO';
 import { LanguageCodeEnum } from '../../../common/entities/multilingual-text';
 import { AggregateId } from '../../../types/AggregateId';
-import BaseDomainModel from '../../BaseDomainModel';
+import BaseDomainModel from '../../base-domain-model.entity';
 
 export class MultilingualAudioItem extends BaseDomainModel {
     @LanguageCodeEnum({

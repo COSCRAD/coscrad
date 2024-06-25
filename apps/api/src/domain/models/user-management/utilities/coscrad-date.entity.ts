@@ -5,7 +5,7 @@ import { NotFound, isNotFound } from '../../../../lib/types/not-found';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { isUndefined } from '../../../utilities/validation/is-null-or-undefined';
-import BaseDomainModel from '../../BaseDomainModel';
+import BaseDomainModel from '../../base-domain-model.entity';
 import { DayOfMonthTooLargeError } from './day-of-month-too-large.error';
 import { InvalidDateError } from './invalid-date.error';
 import { NotALeapYearError } from './not-a-leap-year.error';

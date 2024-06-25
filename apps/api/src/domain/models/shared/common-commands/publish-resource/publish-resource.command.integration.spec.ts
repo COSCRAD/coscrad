@@ -12,7 +12,6 @@ import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { ResourceType, isResourceType } from '../../../../types/ResourceType';
-import ResourceAlreadyPublishedError from '../../../ResourceAlreadyPublishedError';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
@@ -20,6 +19,8 @@ import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import { dummyUuid } from '../../../__tests__/utilities/dummyUuid';
+import ResourceAlreadyPublishedError from '../../../resource-already-published.error';
+import { Resource } from '../../../resource.entity';
 import AggregateNotFoundError from '../../common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../common-command-errors/CommandExecutionError';
 import { PublishResource } from './publish-resource.command';
@@ -81,11 +82,24 @@ describe(commandType, () => {
         describe(`when publishing a resource of type: ${formatAggregateType(resourceType)}`, () => {
             describe('when the command is valid', () => {
                 it('should succeed', async () => {
+                    // TODO update this to use the new API
                     await assertCommandSuccess(commandAssertionDependencies, {
                         systemUserId: dummySystemUserId,
                         buildValidCommandFSA: buildCommandFSA,
-                        initialState,
-                        // TODO check persistence
+                        seedInitialState: async () => {
+                            await testRepositoryProvider.addFullSnapshot(initialState);
+                        },
+                        checkStateOnSuccess: async () => {
+                            const searchResult = await testRepositoryProvider
+                                .forResource(unpublishedResource.type)
+                                .fetchById(unpublishedResource.id);
+
+                            expect(searchResult).not.toBeInstanceOf(Error);
+
+                            const updatedResource = searchResult as Resource;
+
+                            expect(updatedResource.published).toBe(true);
+                        },
                     });
                 });
             });

@@ -1,6 +1,6 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DomainModelCtor } from '../../../../lib/types/DomainModelCtor';
-import BaseDomainModel from '../../../models/BaseDomainModel';
+import BaseDomainModel from '../../../models/base-domain-model.entity';
 import BookBibliographicCitationData from '../../../models/bibliographic-citation/book-bibliographic-citation/entities/book-bibliographic-citation-data.entity';
 import { CourtCaseBibliographicCitationData } from '../../../models/bibliographic-citation/court-case-bibliographic-citation/entities/court-case-bibliographic-citation-data.entity';
 import { IBibliographicCitationData } from '../../../models/bibliographic-citation/interfaces/bibliographic-citation-data.interface';
