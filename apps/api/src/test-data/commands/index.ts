@@ -51,6 +51,9 @@ export const buildTestCommandFsaMap = () => {
 
             return result;
         },
+        has(commandType: string): boolean {
+            return commandTypeToFsa.has(commandType);
+        },
     };
 
     return result;
