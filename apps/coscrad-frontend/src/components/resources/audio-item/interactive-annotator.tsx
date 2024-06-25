@@ -76,6 +76,7 @@ export const InteractiveAnnotator = ({ id, audioURL }: InteractiveAnnotatorProps
                         </Typography>
                     </Box>
                     <ImmersiveCreateNoteForm
+                        buttonLabel="ADD NOTE"
                         onSubmit={(text, languageCode, noteId) => {
                             dispatch(
                                 executeCommand({
