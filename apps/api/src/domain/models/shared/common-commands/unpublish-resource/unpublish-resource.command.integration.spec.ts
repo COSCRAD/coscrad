@@ -61,7 +61,7 @@ describe(commandType, () => {
 
     describe(`when the command is valid`, () => {
         Object.values(ResourceType)
-            // TODO support event sourced resources
+            // TODO [https://www.pivotaltracker.com/story/show/187855311] support event sourced resources
             .filter(
                 (resourceType) =>
                     ![ResourceType.term, ResourceType.digitalText, ResourceType.song].includes(

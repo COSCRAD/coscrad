@@ -3,8 +3,8 @@ import { InternalError } from '../../lib/errors/InternalError';
 import { MultilingualText } from '../common/entities/multilingual-text';
 import { AggregateCompositeIdentifier } from '../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../types/ResourceType';
+import ResourceAlreadyPublishedError from './ResourceAlreadyPublishedError';
 import buildDummyUuid from './__tests__/utilities/buildDummyUuid';
-import ResourceNotYetPublishedError from './resource-not-yet-published.error';
 import { Resource } from './resource.entity';
 
 class Widget extends Resource {
@@ -22,37 +22,36 @@ class Widget extends Resource {
     }
 }
 
-describe(`Resource.unpublished`, () => {
-    const unpublishedWidget = new Widget({
-        type: 'widget' as ResourceType,
-        id: buildDummyUuid(1),
-        published: false,
-        eventHistory: [],
-    });
+const unpublishedWidget = new Widget({
+    type: 'widget' as ResourceType,
+    id: buildDummyUuid(1),
+    published: false,
+    eventHistory: [],
+});
 
-    const publishedWidget = unpublishedWidget.clone({
-        published: true,
-    });
-
-    describe(`when the resource is published`, () => {
-        it(`should return the updated, unpublished resource`, () => {
-            const result = publishedWidget.unpublish();
+describe(`Resource.publish`, () => {
+    describe(`when the resource is not yet published`, () => {
+        it(`should return an updated, published instance`, () => {
+            const result = unpublishedWidget.publish();
 
             expect(result).toBeInstanceOf(Widget);
 
             const updatedWidget = result as Widget;
 
-            expect(updatedWidget.published).toBe(false);
+            expect(updatedWidget.published).toBe(true);
         });
     });
 
-    describe(`when the resource is not yet published`, () => {
+    describe(`when the resource is already pubilshed`, () => {
         it(`should return the expected error`, () => {
-            const result = unpublishedWidget.unpublish();
+            // we already  know this will succeed from the happy path test
+            const publishedWidget = unpublishedWidget.publish() as Widget;
+
+            const result = publishedWidget.publish();
 
             assertErrorAsExpected(
                 result,
-                new ResourceNotYetPublishedError(unpublishedWidget.getCompositeIdentifier())
+                new ResourceAlreadyPublishedError(publishedWidget.getCompositeIdentifier())
             );
         });
     });

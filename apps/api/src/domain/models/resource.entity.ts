@@ -3,6 +3,7 @@ import capitalizeFirstLetter from '../../lib/utilities/strings/capitalizeFirstLe
 import { DeepPartial } from '../../types/DeepPartial';
 import { DTO } from '../../types/DTO';
 import { ResultOrError } from '../../types/ResultOrError';
+import { UpdateMethod } from '../decorators';
 import DisallowedContextTypeForResourceError from '../domainModelValidators/errors/context/invalidContextStateErrors/DisallowedContextTypeForResourceError';
 import { Valid } from '../domainModelValidators/Valid';
 import { AggregateId } from '../types/AggregateId';
@@ -59,6 +60,7 @@ export abstract class Resource extends Aggregate {
         return this.grantReadAccessToUser(userId);
     }
 
+    @UpdateMethod()
     publish<T extends Resource>(this: T): ResultOrError<T> {
         if (this.published) return new ResourceAlreadyPublishedError(this.getCompositeIdentifier());
 
@@ -67,6 +69,7 @@ export abstract class Resource extends Aggregate {
         } as unknown as DeepPartial<DTO<T>>);
     }
 
+    @UpdateMethod()
     unpublish<T extends Resource>(this: T): ResultOrError<T> {
         if (!this.published) return new ResourceNotYetPublishedError(this.getCompositeIdentifier());
 

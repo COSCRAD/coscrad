@@ -20,6 +20,7 @@ import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import { dummyUuid } from '../../../__tests__/utilities/dummyUuid';
+import { Resource } from '../../../resource.entity';
 import AggregateNotFoundError from '../../common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../common-command-errors/CommandExecutionError';
 import { PublishResource } from './publish-resource.command';
@@ -85,8 +86,20 @@ describe(commandType, () => {
                     await assertCommandSuccess(commandAssertionDependencies, {
                         systemUserId: dummySystemUserId,
                         buildValidCommandFSA: buildCommandFSA,
-                        initialState,
-                        // TODO check persistence
+                        seedInitialState: async () => {
+                            await testRepositoryProvider.addFullSnapshot(initialState);
+                        },
+                        checkStateOnSuccess: async () => {
+                            const searchResult = await testRepositoryProvider
+                                .forResource(unpublishedResource.type)
+                                .fetchById(unpublishedResource.id);
+
+                            expect(searchResult).not.toBeInstanceOf(Error);
+
+                            const updatedResource = searchResult as Resource;
+
+                            expect(updatedResource.published).toBe(true);
+                        },
                     });
                 });
             });
