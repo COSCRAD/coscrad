@@ -10,6 +10,7 @@ const StyledMuiPage = styled('div')({
     position: 'relative',
     float: 'left',
     border: '2px solid #05803b',
+    cursor: 'pointer',
 });
 
 interface PageIconProps {
@@ -34,9 +35,6 @@ export const PageIcon = ({
             data-testid={`digital-text.page:${identifier}`}
             onClick={() => {
                 setCurrentIndex(pageIndex);
-            }}
-            onDoubleClick={() => {
-                console.log('double clicked!');
             }}
             // TODO: use primary.main for highlight color
             sx={{ boxShadow: isSelected ? '0px 0px 12px 0px #6ab9ae' : '0px' }}

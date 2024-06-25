@@ -17,7 +17,7 @@ const StyledMuiPage = styled('div')({
 
 interface FullPagePresenterProps {
     page: IDigitalTextPage;
-    onSubmitNewContent: (state: TextAndLanguage) => void;
+    onSubmitNewContent?: (state: TextAndLanguage) => void;
     isAdmin?: boolean;
 }
 
@@ -62,7 +62,7 @@ export const DigitalTextPageDetailPresenter = ({
             >
                 Page: {identifier}
             </Typography>
-            {shouldShowAddContentForm ? (
+            {shouldShowAddContentForm && onSubmitNewContent ? (
                 <PageContentForm onSubmitNewContent={onSubmitNewContent} />
             ) : null}
         </StyledMuiPage>

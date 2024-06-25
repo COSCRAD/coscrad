@@ -1,6 +1,8 @@
 import { IDigitalTextPage } from '@coscrad/api-interfaces';
 import { Box, Typography, styled } from '@mui/material';
 import { DigitalTextPageDetailPresenter } from './digital-text-page-detail-presenter';
+import { NewPageForm } from './new-page-form';
+import { TextAndLanguage } from './page-content-form';
 import { PageIcon } from './page-icon';
 
 const StyledPageIconViewer = styled(Box)({
@@ -12,19 +14,25 @@ const StyledPageIconViewer = styled(Box)({
     overflow: 'auto',
 });
 
-interface PagesPresenterProps {
+interface InteractivePagesPresenterProps {
     id: string;
     pages: IDigitalTextPage[];
     currentPageIdentifier?: string;
     setCurrentIndex: (pageIndex: number) => void;
+    onSubmitPageIdentifier: (pageIdentifier: string) => void;
+    onSubmitNewContent: (state: TextAndLanguage & { pageIdentifier: string }) => void;
 }
 
-export const PagesPresenter = ({
+export const InteractivePagesPresenter = ({
     pages,
     currentPageIdentifier,
     setCurrentIndex,
-}: PagesPresenterProps): JSX.Element => {
+    onSubmitPageIdentifier,
+    onSubmitNewContent,
+}: InteractivePagesPresenterProps): JSX.Element => {
     const currentPage = pages.find((page) => page.identifier === currentPageIdentifier);
+
+    const allExistingPageIdentifiers = pages.map(({ identifier }) => identifier);
 
     /**
      *TODO: sort page identifiers including roman numerals and other formats: 
@@ -47,13 +55,27 @@ export const PagesPresenter = ({
                     />
                 ))}
             </StyledPageIconViewer>
+            <NewPageForm
+                existingPageIdentifiers={allExistingPageIdentifiers}
+                onSubmitPageIdentifier={(pageIdentifier) => onSubmitPageIdentifier(pageIdentifier)}
+            />
             <Box
                 sx={{
                     width: '100%',
                     height: '50vh',
                 }}
             >
-                <DigitalTextPageDetailPresenter page={currentPage} />
+                <DigitalTextPageDetailPresenter
+                    page={currentPage}
+                    // Note that we inject the page identifier here
+                    onSubmitNewContent={({ text, languageCode }) =>
+                        onSubmitNewContent({
+                            text,
+                            languageCode,
+                            pageIdentifier: currentPage.identifier,
+                        })
+                    }
+                />
             </Box>
         </>
     );
