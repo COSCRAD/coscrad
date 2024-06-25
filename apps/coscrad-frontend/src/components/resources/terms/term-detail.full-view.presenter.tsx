@@ -25,7 +25,6 @@ export const TermDetailFullViewPresenter = ({
             <Box
                 data-testid={buildDataAttributeForAggregateDetailComponent(AggregateType.term, id)}
             />
-            {/* <SingleOptionalPropertyPresenter display="Contributor" value={contributions} /> */}
             <Box id="media-player">
                 <AudioClipPlayer audioUrl={audioURL} />
             </Box>

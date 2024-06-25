@@ -1,7 +1,7 @@
-import { ContributorWithId, IBaseViewModel } from '../base.view-model.interface';
+import { IBaseResourceViewModel } from '../base.view-model.interface';
 import { IMultilingualText } from './common';
 
-export interface ISongViewModel extends IBaseViewModel {
+export interface ISongViewModel extends IBaseResourceViewModel {
     // We'll want to replace the following two props with a single `MultilingualText`
     title?: string;
 
@@ -13,6 +13,4 @@ export interface ISongViewModel extends IBaseViewModel {
     audioURL: string;
 
     lengthMilliseconds: number;
-
-    contributions: ContributorWithId[];
 }
