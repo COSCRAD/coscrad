@@ -9,7 +9,7 @@ import {
 } from '@coscrad/data-types';
 import { DTO } from '../../../../../types/DTO';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
-import BaseDomainModel from '../../../BaseDomainModel';
+import BaseDomainModel from '../../../base-domain-model.entity';
 import BibliographicCitationCreator from '../../common/bibliographic-citation-creator.entity';
 import { BibliographicCitationDataUnionMember } from '../../shared/bibliographic-citation-union-data-member.decorator';
 import { BibliographicCitationType } from '../../types/bibliographic-citation-type';

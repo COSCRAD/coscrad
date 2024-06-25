@@ -1,7 +1,7 @@
 import { InternalError } from '../../../../../../lib/errors/InternalError';
 import { DTO } from '../../../../../../types/DTO';
 import { DeepPartial } from '../../../../../../types/DeepPartial';
-import BaseDomainModel from '../../../../BaseDomainModel';
+import BaseDomainModel from '../../../../base-domain-model.entity';
 import { CoscradUserGroup } from '../../../group/entities/coscrad-user-group.entity';
 import { CoscradUser } from './coscrad-user.entity';
 

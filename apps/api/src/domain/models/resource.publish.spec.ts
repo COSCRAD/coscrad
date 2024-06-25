@@ -3,8 +3,8 @@ import { InternalError } from '../../lib/errors/InternalError';
 import { MultilingualText } from '../common/entities/multilingual-text';
 import { AggregateCompositeIdentifier } from '../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../types/ResourceType';
-import ResourceAlreadyPublishedError from './ResourceAlreadyPublishedError';
 import buildDummyUuid from './__tests__/utilities/buildDummyUuid';
+import ResourceAlreadyPublishedError from './resource-already-published.error';
 import { Resource } from './resource.entity';
 
 class Widget extends Resource {

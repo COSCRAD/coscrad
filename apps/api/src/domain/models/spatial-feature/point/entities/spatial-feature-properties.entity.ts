@@ -1,7 +1,7 @@
 import { ISpatialFeatureProperties } from '@coscrad/api-interfaces';
 import { NonEmptyString, URL } from '@coscrad/data-types';
 import { DTO } from '../../../../../types/DTO';
-import BaseDomainModel from '../../../BaseDomainModel';
+import BaseDomainModel from '../../../base-domain-model.entity';
 
 export class SpatialFeatureProperties extends BaseDomainModel implements ISpatialFeatureProperties {
     // TODO Make this multilingual text

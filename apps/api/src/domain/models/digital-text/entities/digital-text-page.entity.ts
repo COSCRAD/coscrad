@@ -11,7 +11,7 @@ import { buildMultilingualTextWithSingleItem } from '../../../common/build-multi
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { AggregateId } from '../../../types/AggregateId';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
-import BaseDomainModel from '../../BaseDomainModel';
+import BaseDomainModel from '../../base-domain-model.entity';
 import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import { CannotAddAudioForMissingContentError } from '../errors';
 import { CannotOverwritePageContentError } from '../errors/cannot-overwrite-page-content.error';

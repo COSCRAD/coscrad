@@ -1,7 +1,7 @@
 import { ResourceCompositeIdentifier } from '@coscrad/api-interfaces';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { ResourceType } from '../../../types/ResourceType';
-import BaseDomainModel from '../../BaseDomainModel';
+import BaseDomainModel from '../../base-domain-model.entity';
 import { Resource } from '../../resource.entity';
 import { IBibliographicCitationData } from './bibliographic-citation-data.interface';
 
