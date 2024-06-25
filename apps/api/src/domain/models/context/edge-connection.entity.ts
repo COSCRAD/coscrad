@@ -16,8 +16,8 @@ import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIden
 import { AggregateType } from '../../types/AggregateType';
 import { ResourceCompositeIdentifier } from '../../types/ResourceCompositeIdentifier';
 import { InMemorySnapshot, ResourceType, isResourceType } from '../../types/ResourceType';
-import BaseDomainModel from '../BaseDomainModel';
 import { Aggregate } from '../aggregate.entity';
+import BaseDomainModel from '../base-domain-model.entity';
 import { Resource } from '../resource.entity';
 import AggregateIdAlreadyInUseError from '../shared/common-command-errors/AggregateIdAlreadyInUseError';
 import InvalidExternalStateError from '../shared/common-command-errors/InvalidExternalStateError';

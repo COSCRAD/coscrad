@@ -4,6 +4,7 @@ import {
     GRANT_RESOURCE_READ_ACCESS_TO_USER,
     GrantResourceReadAccessToUser,
     PublishResource,
+    UnpublishResource,
 } from '../../domain/models/shared/common-commands';
 import { AggregateType } from '../../domain/types/AggregateType';
 
@@ -30,7 +31,18 @@ const grantResourceReadAccessToUser: CommandFSA<GrantResourceReadAccessToUser> =
     },
 };
 
+const unpublishResource: CommandFSA<UnpublishResource> = {
+    type: 'UNPUBLISH_RESOURCE',
+    payload: {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.term,
+            id,
+        },
+    },
+};
+
 export const buildGeneralResourceTestCommandFsas = () => [
     publishResource,
     grantResourceReadAccessToUser,
+    unpublishResource,
 ];

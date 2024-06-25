@@ -4,7 +4,7 @@ import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../types/DTO';
 import { ResultOrError } from '../../../types/ResultOrError';
 import { AggregateId } from '../../types/AggregateId';
-import BaseDomainModel from '../BaseDomainModel';
+import BaseDomainModel from '../base-domain-model.entity';
 import { CannotOverwriteFilterPropertyValueForVocabularyListEntryError } from './errors';
 import { VocabularyListVariableValue } from './types/vocabulary-list-variable-value';
 

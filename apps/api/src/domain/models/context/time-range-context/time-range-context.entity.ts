@@ -6,8 +6,8 @@ import {
     UnionMember,
 } from '@coscrad/data-types';
 import { DTO } from '../../../../types/DTO';
-import BaseDomainModel from '../../BaseDomainModel';
 import { TranscriptItem } from '../../audio-visual/shared/entities/transcript-item.entity';
+import BaseDomainModel from '../../base-domain-model.entity';
 import { EdgeConnectionContext } from '../context.entity';
 import { EDGE_CONNECTION_CONTEXT_UNION } from '../edge-connection-context-union';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';

@@ -4,8 +4,8 @@ import { CommandInfoService } from '../../../app/controllers/command/services/co
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
 import { VideoViewModel } from '../../../queries/buildViewModelForResource/viewModels/audio-visual/video.view-model';
-import BaseDomainModel from '../../models/BaseDomainModel';
 import { Video } from '../../models/audio-visual/video/entities/video.entity';
+import BaseDomainModel from '../../models/base-domain-model.entity';
 import { MediaItem } from '../../models/media-item/entities/media-item.entity';
 import { validAggregateOrThrow } from '../../models/shared/functional';
 import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';

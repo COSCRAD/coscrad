@@ -1,21 +1,24 @@
 import { InternalError } from '../../lib/errors/InternalError';
 import capitalizeFirstLetter from '../../lib/utilities/strings/capitalizeFirstLetter';
-import { DeepPartial } from '../../types/DeepPartial';
 import { DTO } from '../../types/DTO';
+import { DeepPartial } from '../../types/DeepPartial';
 import { ResultOrError } from '../../types/ResultOrError';
-import DisallowedContextTypeForResourceError from '../domainModelValidators/errors/context/invalidContextStateErrors/DisallowedContextTypeForResourceError';
+import { UpdateMethod } from '../decorators';
 import { Valid } from '../domainModelValidators/Valid';
+import DisallowedContextTypeForResourceError from '../domainModelValidators/errors/context/invalidContextStateErrors/DisallowedContextTypeForResourceError';
 import { AggregateId } from '../types/AggregateId';
 import { ResourceType } from '../types/ResourceType';
 import { Aggregate } from './aggregate.entity';
 import { getAllowedContextsForModel } from './allowedContexts/isContextAllowedForGivenResourceType';
 import { EdgeConnectionContext } from './context/context.entity';
 import { EdgeConnectionContextType } from './context/types/EdgeConnectionContextType';
-import ResourceAlreadyPublishedError from './ResourceAlreadyPublishedError';
+import ResourceAlreadyPublishedError from './resource-already-published.error';
+import ResourceNotYetPublishedError from './resource-not-yet-published.error';
 import { AccessControlList } from './shared/access-control/access-control-list.entity';
 import UserAlreadyHasReadAccessError from './shared/common-command-errors/invalid-state-transition-errors/UserAlreadyHasReadAccessError';
 import { ResourceReadAccessGrantedToUser } from './shared/common-commands';
 
+// TODO rename files in this directory
 export abstract class Resource extends Aggregate {
     readonly type: ResourceType;
 
@@ -57,6 +60,7 @@ export abstract class Resource extends Aggregate {
         return this.grantReadAccessToUser(userId);
     }
 
+    @UpdateMethod()
     publish<T extends Resource>(this: T): ResultOrError<T> {
         if (this.published) return new ResourceAlreadyPublishedError(this.getCompositeIdentifier());
 
@@ -65,8 +69,22 @@ export abstract class Resource extends Aggregate {
         } as unknown as DeepPartial<DTO<T>>);
     }
 
+    @UpdateMethod()
+    unpublish<T extends Resource>(this: T): ResultOrError<T> {
+        if (!this.published) return new ResourceNotYetPublishedError(this.getCompositeIdentifier());
+
+        return this.safeClone<T>({
+            published: false,
+        } as unknown as DeepPartial<DTO<T>>);
+    }
+
     handleResourcePublished<T extends Resource>(this: T) {
         return this.publish<T>();
+    }
+
+    // TODO add test coverage
+    handleResourceUnpublished<T extends Resource>(this: T) {
+        return this.unpublish<T>();
     }
 
     getAllowedContextTypes() {

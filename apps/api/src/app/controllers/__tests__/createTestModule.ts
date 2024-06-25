@@ -130,6 +130,9 @@ import {
     PublishResource,
     PublishResourceCommandHandler,
     ResourceReadAccessGrantedToUser,
+    ResourceUnpublished,
+    UnpublishResource,
+    UnpublishResourceCommandHandler,
 } from '../../../domain/models/shared/common-commands';
 import { ResourcePublished } from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import {
@@ -317,6 +320,7 @@ export const buildAllDataClassProviders = () =>
         LyricsAddedForSong,
         SongLyricsTranslated,
         ResourcePublished,
+        ResourceUnpublished,
         TagCreated,
         ResourceOrNoteTagged,
         TermCreated,
@@ -632,6 +636,8 @@ export default async (
             GrantResourceReadAccessToUserCommandHandler,
             PublishResource,
             PublishResourceCommandHandler,
+            UnpublishResource,
+            UnpublishResourceCommandHandler,
             CreateTag,
             CreateTagCommandHandler,
             RelabelTag,

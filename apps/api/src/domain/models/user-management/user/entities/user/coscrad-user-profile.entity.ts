@@ -1,6 +1,6 @@
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { DTO } from '../../../../../../types/DTO';
-import BaseDomainModel from '../../../../BaseDomainModel';
+import BaseDomainModel from '../../../../base-domain-model.entity';
 import { FullName } from './full-name.entity';
 
 export class CoscradUserProfile extends BaseDomainModel {

@@ -2,7 +2,7 @@ import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import { AggregateId } from '../../../types/AggregateId';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
-import BaseDomainModel from '../../BaseDomainModel';
+import BaseDomainModel from '../../base-domain-model.entity';
 
 export class AccessControlList extends BaseDomainModel {
     readonly allowedUserIds: AggregateId[];

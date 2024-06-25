@@ -13,7 +13,7 @@ import {
 } from '../../../../common/entities/multilingual-text';
 import { Valid } from '../../../../domainModelValidators/Valid';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
-import BaseDomainModel from '../../../BaseDomainModel';
+import BaseDomainModel from '../../../base-domain-model.entity';
 
 import { InvalidTimestampOrderError } from '../commands/transcripts/errors';
 import {
