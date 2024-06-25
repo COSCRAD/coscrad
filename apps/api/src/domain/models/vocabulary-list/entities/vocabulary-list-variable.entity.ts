@@ -5,7 +5,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
-import BaseDomainModel from '../../BaseDomainModel';
+import BaseDomainModel from '../../base-domain-model.entity';
 import { DropboxOrCheckbox } from '../../vocabulary-list/types/dropbox-or-checkbox';
 import { VocabularyListVariableValue } from '../../vocabulary-list/types/vocabulary-list-variable-value';
 import { DuplicateValueForVocabularyListFilterPropertyValueError } from '../errors';

@@ -7,7 +7,7 @@ import {
 } from '@coscrad/data-types';
 import { DTO } from '../../../../types/DTO';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
-import BaseDomainModel from '../../BaseDomainModel';
+import BaseDomainModel from '../../base-domain-model.entity';
 
 export default class BibliographicCitationCreator
     extends BaseDomainModel

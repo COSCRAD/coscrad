@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { isInternalError } from '../../../lib/errors/InternalError';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { SongViewModel } from '../../../queries/buildViewModelForResource/viewModels/song.view-model';
-import BaseDomainModel from '../../models/BaseDomainModel';
+import BaseDomainModel from '../../models/base-domain-model.entity';
 import { validAggregateOrThrow } from '../../models/shared/functional';
 import { Song } from '../../models/song/song.entity';
 import { Tag } from '../../models/tag/tag.entity';

@@ -4,7 +4,7 @@ import { CommandInfoService } from '../../../app/controllers/command/services/co
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
 import { BibliographicCitationViewModel } from '../../../queries/buildViewModelForResource/viewModels/bibliographic-citation/bibliographic-citation.view-model';
-import BaseDomainModel from '../../models/BaseDomainModel';
+import BaseDomainModel from '../../models/base-domain-model.entity';
 import { BookBibliographicCitation } from '../../models/bibliographic-citation/book-bibliographic-citation/entities/book-bibliographic-citation.entity';
 import { CourtCaseBibliographicCitation } from '../../models/bibliographic-citation/court-case-bibliographic-citation/entities/court-case-bibliographic-citation.entity';
 import { IBibliographicCitationData } from '../../models/bibliographic-citation/interfaces/bibliographic-citation-data.interface';

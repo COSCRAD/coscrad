@@ -9,7 +9,7 @@ import { DTO } from '../../../../../types/DTO';
 import { DeepPartial } from '../../../../../types/DeepPartial';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { Valid, isValid } from '../../../../domainModelValidators/Valid';
-import BaseDomainModel from '../../../BaseDomainModel';
+import BaseDomainModel from '../../../base-domain-model.entity';
 import {
     ConflictingLineItemsError,
     DuplicateTranscriptParticipantError,

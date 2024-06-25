@@ -1,6 +1,6 @@
 import { IPlaylistEpisode, MIMEType } from '@coscrad/api-interfaces';
 import { DTO } from '../../../../types/DTO';
-import BaseDomainModel from '../../BaseDomainModel';
+import BaseDomainModel from '../../base-domain-model.entity';
 
 export class PlaylistEpisode extends BaseDomainModel implements IPlaylistEpisode {
     readonly name: string;

@@ -1,13 +1,10 @@
 import { CommandHandler, ICommand } from '@coscrad/commands';
-import { Inject } from '@nestjs/common';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
-import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { Valid } from '../../../../domainModelValidators/Valid';
-import { EVENT, IIdManager } from '../../../../interfaces/id-manager.interface';
-import { IRepositoryProvider } from '../../../../repositories/interfaces/repository-provider.interface';
+import { EVENT } from '../../../../interfaces/id-manager.interface';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../types/ResourceType';
 import { Resource } from '../../../resource.entity';
@@ -20,14 +17,6 @@ import { ResourcePublished } from './resource-published.event';
 
 @CommandHandler(PublishResource)
 export class PublishResourceCommandHandler extends BaseCommandHandler<Resource> {
-    constructor(
-        @Inject(REPOSITORY_PROVIDER_TOKEN)
-        protected readonly repositoryProvider: IRepositoryProvider,
-        @Inject('ID_MANAGER') protected readonly idManager: IIdManager
-    ) {
-        super(repositoryProvider, idManager);
-    }
-
     protected async createOrFetchWriteContext({
         aggregateCompositeIdentifier: { type: resourceType, id },
     }: PublishResource): Promise<ResultOrError<Resource>> {

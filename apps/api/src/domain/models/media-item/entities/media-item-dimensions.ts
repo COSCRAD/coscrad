@@ -1,6 +1,6 @@
 import { NonNegativeFiniteNumber } from '@coscrad/data-types';
 import { DTO } from '../../../../types/DTO';
-import BaseDomainModel from '../../BaseDomainModel';
+import BaseDomainModel from '../../base-domain-model.entity';
 
 export class MediaItemDimensions extends BaseDomainModel {
     @NonNegativeFiniteNumber({

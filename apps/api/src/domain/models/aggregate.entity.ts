@@ -15,7 +15,7 @@ import { AggregateType } from '../types/AggregateType';
 import { DeluxeInMemoryStore } from '../types/DeluxeInMemoryStore';
 import { HasAggregateId } from '../types/HasAggregateId';
 import { InMemorySnapshot, isResourceType } from '../types/ResourceType';
-import BaseDomainModel from './BaseDomainModel';
+import BaseDomainModel from './base-domain-model.entity';
 import InvalidExternalReferenceByAggregateError from './categories/errors/InvalidExternalReferenceByAggregateError';
 import AggregateIdAlreadyInUseError from './shared/common-command-errors/AggregateIdAlreadyInUseError';
 import InvalidExternalStateError from './shared/common-command-errors/InvalidExternalStateError';
