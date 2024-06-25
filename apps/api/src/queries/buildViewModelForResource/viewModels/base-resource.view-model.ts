@@ -1,5 +1,6 @@
+import { ContributorWithId } from '@coscrad/api-interfaces';
 import { NonEmptyString } from '@coscrad/data-types';
-import { isNullOrUndefined } from 'util';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import idEquals from '../../../domain/models/shared/functional/idEquals';
 import { CoscradContributor } from '../../../domain/models/user-management/contributor';
 import { BaseViewModel, Nameable } from './base.view-model';
@@ -15,7 +16,7 @@ export class BaseResourceViewModel extends BaseViewModel {
         description: `list of knowledge keepers who contributed this song`,
         isArray: true,
     })
-    readonly contributions: string[];
+    readonly contributions: ContributorWithId[];
 
     constructor(
         domainModel: HasViewModelId & Nameable & Accreditable,
@@ -27,7 +28,7 @@ export class BaseResourceViewModel extends BaseViewModel {
             .getContributions()
             .map(({ contributorId }) => contributors.find(idEquals(contributorId)))
             .filter((contributor) => !isNullOrUndefined(contributor))
-            .map((contributor) => contributor.fullName.toString());
+            .map(({ id, fullName }) => ({ id: id, fullName: fullName.toString() }));
 
         this.contributions = [...new Set(contributionsWithDuplicates)];
     }

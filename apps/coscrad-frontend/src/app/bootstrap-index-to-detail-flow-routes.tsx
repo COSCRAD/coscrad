@@ -32,11 +32,6 @@ export const bootstrapIndexToDetailFlowRoutes = ({
                 (route && `Resources/${route}`) ||
                 routes.resources.ofType(categorizableType as ResourceType).index;
 
-            console.log({
-                categorizableType,
-                resolvedRoute,
-            });
-
             return {
                 ...acc,
                 [categorizableType]:

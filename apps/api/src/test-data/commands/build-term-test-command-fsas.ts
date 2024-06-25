@@ -27,7 +27,6 @@ const createTerm: CommandFSA<CreateTerm> = {
         },
         text: 'I am talking to him (language)',
         languageCode: LanguageCode.Chilcotin,
-        contributorId: `1`,
     },
 };
 

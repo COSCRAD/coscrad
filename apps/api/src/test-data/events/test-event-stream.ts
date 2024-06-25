@@ -360,8 +360,6 @@ const buildTermCreated = (
         },
         text: 'he is jumping',
         languageCode: LanguageCode.Haida,
-        // TODO remove this
-        contributorId: '1',
     };
 
     return new TermCreated(
