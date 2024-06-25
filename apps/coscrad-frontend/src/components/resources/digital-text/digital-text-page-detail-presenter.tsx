@@ -9,21 +9,20 @@ const StyledMuiPage = styled('div')({
     width: '80%',
     height: '48vh',
     margin: '2px',
+    padding: '7px',
     position: 'relative',
     float: 'left',
-    border: '2px solid #05803b',
+    boxShadow: '0px 0px 10px 0px #666',
 });
 
 interface FullPagePresenterProps {
     page: IDigitalTextPage;
-    isSelected: boolean;
     onSubmitNewContent: (state: TextAndLanguage) => void;
     isAdmin?: boolean;
 }
 
 export const DigitalTextPageDetailPresenter = ({
     page,
-    isSelected,
     onSubmitNewContent,
     isAdmin: _isAdmin = false,
 }: FullPagePresenterProps): JSX.Element => {
@@ -56,9 +55,12 @@ export const DigitalTextPageDetailPresenter = ({
                     mr: 1,
                     position: 'absolute',
                     fontFamily: 'Times',
+                    fontWeight: 'bold',
+                    fontSize: '1.2em',
+                    color: 'primary.main',
                 }}
             >
-                {identifier}
+                Page: {identifier}
             </Typography>
             {shouldShowAddContentForm ? (
                 <PageContentForm onSubmitNewContent={onSubmitNewContent} />
