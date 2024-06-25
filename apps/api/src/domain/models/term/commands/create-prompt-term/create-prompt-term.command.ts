@@ -33,7 +33,7 @@ export class CreatePromptTerm implements ICommandBase {
     @NonEmptyString({
         isOptional: true,
         label: 'contributor ID',
-        description: 'The ID of the konwledge kepper who contributed the term',
+        description: 'The ID of the Knowledge Keeper who contributed the term',
     })
     contributorId?: string;
 }

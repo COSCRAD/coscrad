@@ -52,7 +52,7 @@ export class CreatePoint implements ICommandBase {
     })
     readonly longitude: number;
 
-    // TODO support eleveation
+    // TODO support elevation
 
     // TODO add languageCode for name
     @FromDomainModel(SpatialFeatureProperties)

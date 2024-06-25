@@ -5,14 +5,21 @@ import {
     ISpatialFeatureViewModel,
 } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Grid, styled } from '@mui/material';
+import { Box, Grid, styled } from '@mui/material';
+import { useState } from 'react';
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { ResourceNamePresenter } from '../../../utils/generic-components/presenters/resource-name-presenter';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
+import { CoscradLeafletMap } from './leaflet';
+import { SpatialFeatureDetailThumbnailPresenter } from './thumbnail-presenters';
 import { LineTextPresenter } from './thumbnail-presenters/line-text-presenter';
 import { PointTextPresenter } from './thumbnail-presenters/point-text-presenter';
 import { PolygonTextPresenter } from './thumbnail-presenters/polygon-text-presenter';
+
+const StyledCoscradMap = styled(Box)({
+    marginBottom: '20px',
+});
 
 interface HasCoordinates<T = unknown> {
     coordinates: T;
@@ -33,6 +40,8 @@ export const SpatialFeatureDetailFullViewPresenter = (
     spatialFeature: ICategorizableDetailQueryResult<ISpatialFeatureViewModel>
 ): JSX.Element => {
     const { id, geometry, properties } = spatialFeature;
+
+    const [selectedSpatialFeatureId, setSelectedSpatialFeatureId] = useState<string>(id);
 
     if (!geometry) {
         throw new Error(`Spatial Feature: ${id} is missing geometry definition`);
@@ -55,25 +64,35 @@ export const SpatialFeatureDetailFullViewPresenter = (
     }
 
     return (
-        <Grid container spacing={0}>
-            <Grid item xs={3}>
-                <div
-                    data-testid={buildDataAttributeForAggregateDetailComponent(
-                        AggregateType.spatialFeature,
-                        id
-                    )}
+        <>
+            <StyledCoscradMap>
+                <CoscradLeafletMap
+                    spatialFeatures={[spatialFeature]}
+                    onSpatialFeatureSelected={(id: string) => setSelectedSpatialFeatureId(id)}
+                    DetailPresenter={SpatialFeatureDetailThumbnailPresenter}
+                    selectedSpatialFeatureId={selectedSpatialFeatureId}
                 />
-                {/* Preview will eventually include images taken from video or photos, etc. */}
-                <StyledPlaceIcon src={imageUrl} alt={`Spatial Feature ${id}`} />
+            </StyledCoscradMap>
+            <Grid container spacing={0}>
+                <Grid item xs={3}>
+                    <div
+                        data-testid={buildDataAttributeForAggregateDetailComponent(
+                            AggregateType.spatialFeature,
+                            id
+                        )}
+                    />
+                    {/* Preview will eventually include images taken from video or photos, etc. */}
+                    <StyledPlaceIcon src={imageUrl} alt={`Spatial Feature ${id}`} />
+                </Grid>
+                <Grid item xs={9}>
+                    {/* TODO: consider putting a standardized name property on the view models */}
+                    <ResourceNamePresenter name={name} variant="h5" />
+                    <SinglePropertyPresenter display="ID" value={id} />
+                    <SinglePropertyPresenter display="Description" value={description} />
+                    <SinglePropertyPresenter display="Feature Type" value={geometryType} />
+                    <CoordinatesTextPresenter coordinates={coordinates} />
+                </Grid>
             </Grid>
-            <Grid item xs={9}>
-                {/* TODO: consider putting a standardized name property on the view models */}
-                <ResourceNamePresenter name={name} variant="h5" />
-                <SinglePropertyPresenter display="ID" value={id} />
-                <SinglePropertyPresenter display="Description" value={description} />
-                <SinglePropertyPresenter display="Feature Type" value={geometryType} />
-                <CoordinatesTextPresenter coordinates={coordinates} />
-            </Grid>
-        </Grid>
+        </>
     );
 };

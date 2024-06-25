@@ -5,7 +5,7 @@ import {
     isConstraintSatisfied,
     isNullOrUndefined,
 } from '@coscrad/validation-constraints';
-import { Button, Card, CardContent, Divider, Stack, Tooltip } from '@mui/material';
+import { Box, Button, Card, CardContent, Divider, Stack, Tooltip } from '@mui/material';
 import { DynamicFormElement } from './dynamic-form-elements';
 import { ConstraintValidationResultPresenter } from './dynamic-form-elements/constraint-validator';
 
@@ -64,8 +64,13 @@ export const DynamicForm = ({
                         .filter((field) => field.type !== FormFieldType.populatedFromView)
                         .map((field) => {
                             return (
-                                <Tooltip title={field.description} arrow placement="right">
-                                    <div key={field.name}>
+                                <Tooltip
+                                    key={field.name}
+                                    title={field.description}
+                                    arrow
+                                    placement="right"
+                                >
+                                    <Box component={'div'}>
                                         {/* TODO Remove the following once we actually make use of the validation */}
                                         <ConstraintValidationResultPresenter
                                             errorMessages={fieldNameToErrorMessages.get(field.name)}
@@ -79,7 +84,7 @@ export const DynamicForm = ({
                                                 ({ name }) => name === CoscradConstraint.isRequired
                                             )}
                                         />
-                                    </div>
+                                    </Box>
                                 </Tooltip>
                             );
                         })}
