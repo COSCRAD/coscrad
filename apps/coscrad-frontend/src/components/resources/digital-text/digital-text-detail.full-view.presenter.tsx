@@ -5,17 +5,17 @@ import {
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
-import { Button, Typography } from '@mui/material';
+import { Button } from '@mui/material';
 import { useState } from 'react';
 import { useAppDispatch } from '../../../app/hooks';
 import { executeCommand } from '../../../store/slices/command-status';
 import {
     CommaSeparatedList,
     ResourceDetailFullViewPresenter,
+    SinglePropertyPresenter,
 } from '../../../utils/generic-components';
 import { cyclicDecrement, cyclicIncrement } from '../../../utils/math';
 import { ImmersiveCreateNoteForm } from '../shared/immersive-create-note-form';
-import { NewPageForm } from './new-page-form';
 import { PublicationForm } from './page-publication-form';
 import { PagesPresenter } from './pages-presenter';
 
@@ -32,8 +32,6 @@ export const DigitalTextDetailFullViewPresenter = ({
 
     const selectedPageIdentifier = pages.length > 0 ? pages[currentIndex].identifier : undefined;
 
-    const allExistingPageIdentifiers = pages.map(({ identifier }) => identifier);
-
     const aggregateCompositeIdentifier = {
         type: AggregateType.digitalText,
         id,
@@ -48,10 +46,28 @@ export const DigitalTextDetailFullViewPresenter = ({
             contributions={[]}
         >
             {pages.length > 0 ? (
+                /**
+                 * Adding a page or page content re-renders whole page due to re-rendering the
+                 * page icons.  This is the same problem as with the Immersive Audio Annotator.
+                 * Adding a note using the ImmersiveCreateNoteForm does not re-render the page.
+                 */
+
                 <PagesPresenter
+                    id={id}
                     pages={pages}
                     currentPageIdentifier={selectedPageIdentifier}
                     setCurrentIndex={setCurrentIndex}
+                    onSubmitPageIdentifier={(pageIdentifier) => {
+                        dispatch(
+                            executeCommand({
+                                type: 'ADD_PAGE_TO_DIGITAL_TEXT',
+                                payload: {
+                                    aggregateCompositeIdentifier,
+                                    identifier: pageIdentifier,
+                                },
+                            })
+                        );
+                    }}
                     onSubmitNewContent={({ text, languageCode, pageIdentifier }) =>
                         dispatch(
                             executeCommand({
@@ -84,22 +100,6 @@ export const DigitalTextDetailFullViewPresenter = ({
             >
                 {'NEXT >>'}
             </Button>
-            {/* TODO I am a back-end developer */}
-            <br />
-            <NewPageForm
-                existingPageIdentifiers={allExistingPageIdentifiers}
-                onSubmitPageIdentifier={(pageIdentifier) => {
-                    dispatch(
-                        executeCommand({
-                            type: 'ADD_PAGE_TO_DIGITAL_TEXT',
-                            payload: {
-                                aggregateCompositeIdentifier,
-                                identifier: pageIdentifier,
-                            },
-                        })
-                    );
-                }}
-            />
             {!isPublished ? (
                 <PublicationForm
                     onSubmitForPublication={() => {
@@ -114,7 +114,7 @@ export const DigitalTextDetailFullViewPresenter = ({
                     }}
                 />
             ) : (
-                <Typography variant="body2">Published</Typography>
+                <SinglePropertyPresenter display="Status" value="Published" />
             )}
             <br />
             {/* TODO [https://www.pivotaltracker.com/story/show/186539279] Include tags once we make tags event sourced */}
@@ -125,6 +125,7 @@ export const DigitalTextDetailFullViewPresenter = ({
             </CommaSeparatedList>
             <br />
             <ImmersiveCreateNoteForm
+                buttonLabel={`ADD NOTE TO PAGE ${selectedPageIdentifier}`}
                 onSubmit={(text, languageCode, noteId) => {
                     dispatch(
                         executeCommand({

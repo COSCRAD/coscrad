@@ -1,6 +1,6 @@
 import { isNonEmptyString } from '@coscrad/validation-constraints';
-import { Box, Button, Stack, TextField, Typography } from '@mui/material';
-import { useState } from 'react';
+import { Box, Button, TextField, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 
 interface NewPageFormProps {
     onSubmitPageIdentifier: (pageIdentifier: string) => void;
@@ -12,6 +12,8 @@ export const NewPageForm = ({
     existingPageIdentifiers,
 }: NewPageFormProps) => {
     const [pageIdentifier, setPageIdentifier] = useState<string>('');
+
+    const [formFeedback, setFormFeedback] = useState<string>('');
 
     const disallowedCharacters = [' ', '\t', '\n'];
 
@@ -28,17 +30,25 @@ export const NewPageForm = ({
         !isNonEmptyString(pageIdentifier) ||
         existingPageIdentifiers.includes(pageIdentifier);
 
+    useEffect(() => {
+        if (isDisabled && pageIdentifier !== '') {
+            setFormFeedback(
+                'Invalid: Page identifier already exists or contains invalid characters (spaces, new lines)'
+            );
+        } else if ((!isDisabled && pageIdentifier !== '') || pageIdentifier === '') {
+            setFormFeedback('');
+        }
+    }, [pageIdentifier, formFeedback, setFormFeedback, hasValidFormat, isDisabled]);
+
     return (
-        <Stack>
-            <Box>
-                <Typography variant="h4">New Page Form</Typography>
-            </Box>
+        <Box sx={{ height: '120px', '& .MuiTextField-root': { width: '10ch' } }}>
+            <Typography variant="h6">Add New Page</Typography>
             <TextField
                 data-testid="text:add-page-to-digital-text"
                 onChange={(e) => {
-                    console.log({ eTargetValue: e.target.value });
                     setPageIdentifier(e.target.value);
                 }}
+                placeholder="Page Number (e.g., 1 or IX)"
             />
             <Button
                 onClick={() => {
@@ -48,8 +58,11 @@ export const NewPageForm = ({
                 // TODO Is this necessary?
                 aria-disabled={isDisabled}
             >
-                ADD PAGE: {pageIdentifier}
+                ADD
             </Button>
-        </Stack>
+            <Typography variant="body1" sx={{ color: 'warning.main' }}>
+                {formFeedback}
+            </Typography>
+        </Box>
     );
 };

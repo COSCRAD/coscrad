@@ -1,29 +1,25 @@
 import { IDigitalTextPage } from '@coscrad/api-interfaces';
 import { Box, Typography, styled } from '@mui/material';
-import { useState } from 'react';
 import { DigitalTextPageDetailPresenter } from './digital-text-page-detail-presenter';
+import { NewPageForm } from './new-page-form';
 import { TextAndLanguage } from './page-content-form';
 import { PageIcon } from './page-icon';
 
-const StyledPages = styled(Box)({
+const StyledPageIconViewer = styled(Box)({
     width: '100%',
     height: '70px',
-    padding: '3px',
+    marginBottom: '25px',
     position: 'relative',
     display: 'inline-block',
-    border: '1px solid #666',
     overflow: 'auto',
 });
 
-enum PagesViewType {
-    singleSelected = 'singleSelected',
-    icons = 'icons',
-}
-
 interface PagesPresenterProps {
+    id: string;
     pages: IDigitalTextPage[];
     currentPageIdentifier?: string;
     setCurrentIndex: (pageIndex: number) => void;
+    onSubmitPageIdentifier: (pageIdentifier: string) => void;
     onSubmitNewContent: (state: TextAndLanguage & { pageIdentifier: string }) => void;
 }
 
@@ -31,11 +27,12 @@ export const PagesPresenter = ({
     pages,
     currentPageIdentifier,
     setCurrentIndex,
+    onSubmitPageIdentifier,
     onSubmitNewContent,
 }: PagesPresenterProps): JSX.Element => {
-    const [viewType, setViewType] = useState<PagesViewType>(PagesViewType.icons);
-
     const currentPage = pages.find((page) => page.identifier === currentPageIdentifier);
+
+    const allExistingPageIdentifiers = pages.map(({ identifier }) => identifier);
 
     /**
      *TODO: sort page identifiers including roman numerals and other formats: 
@@ -46,52 +43,30 @@ export const PagesPresenter = ({
             <Typography variant="h6" sx={{ mt: 2 }}>
                 Pages:
             </Typography>
-            <StyledPages>
-                {viewType === PagesViewType.singleSelected ? (
-                    <DigitalTextPageDetailPresenter
-                        page={currentPage}
-                        isSelected={currentPageIdentifier === currentPage.identifier}
-                        // Note that we inject the page identifier here
-                        onSubmitNewContent={({ text, languageCode }) =>
-                            onSubmitNewContent({
-                                text,
-                                languageCode,
-                                pageIdentifier: currentPage.identifier,
-                            })
-                        }
+            {/* TODO: need to be able to filter for a page when there are 20 or more */}
+            <StyledPageIconViewer>
+                {pages.map((page, index) => (
+                    <PageIcon
+                        key={page.identifier}
+                        page={page}
+                        pageIndex={index}
+                        setCurrentIndex={setCurrentIndex}
+                        isSelected={page.identifier === currentPageIdentifier}
                     />
-                ) : (
-                    pages.map((page, index) => (
-                        <PageIcon
-                            key={page.identifier}
-                            page={page}
-                            pageIndex={index}
-                            setCurrentIndex={setCurrentIndex}
-                            isSelected={page.identifier === currentPageIdentifier}
-                        />
-                    ))
-                )}
-            </StyledPages>
-            {/* <FormGroup>
-                <FormControlLabel
-                    control={
-                        <Switch
-                            onChange={(_e) =>
-                                setViewType(
-                                    viewType === PagesViewType.singleSelected
-                                        ? PagesViewType.icons
-                                        : PagesViewType.singleSelected
-                                )
-                            }
-                        />
-                    }
-                    label={viewType === PagesViewType.icons ? 'icons' : 'page details'}
-                />
-            </FormGroup> */}
-            <Box sx={{ width: '100%', height: '50vh', border: '1px solid black' }}>
+                ))}
+            </StyledPageIconViewer>
+            <NewPageForm
+                existingPageIdentifiers={allExistingPageIdentifiers}
+                onSubmitPageIdentifier={(pageIdentifier) => onSubmitPageIdentifier(pageIdentifier)}
+            />
+            <Box
+                sx={{
+                    width: '100%',
+                    height: '50vh',
+                }}
+            >
                 <DigitalTextPageDetailPresenter
                     page={currentPage}
-                    isSelected={currentPageIdentifier === currentPage.identifier}
                     // Note that we inject the page identifier here
                     onSubmitNewContent={({ text, languageCode }) =>
                         onSubmitNewContent({

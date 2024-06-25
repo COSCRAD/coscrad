@@ -17,10 +17,11 @@ import { Loading } from '../../loading';
 import { LanguageSelect } from './language-select';
 
 interface FormProps {
+    buttonLabel: string;
     onSubmit: (text: string, languageCode: LanguageCode, id: string) => void;
 }
 
-export const ImmersiveCreateNoteForm = ({ onSubmit }: FormProps) => {
+export const ImmersiveCreateNoteForm = ({ buttonLabel, onSubmit }: FormProps) => {
     const {
         isLoading: isAnotherCommandPending,
         errorInfo: previousCommandErrorInfo,
@@ -42,8 +43,6 @@ export const ImmersiveCreateNoteForm = ({ onSubmit }: FormProps) => {
 
     const dispatch = useAppDispatch();
 
-
-
     if (errorInfo) return <ErrorDisplay {...errorInfo} />;
 
     if (isLoading) return <Loading />;
@@ -61,6 +60,12 @@ export const ImmersiveCreateNoteForm = ({ onSubmit }: FormProps) => {
             />
         );
 
+    /**
+     * To support the immersive interfaces, it would be nice to know which command from
+     * the page returned successfully.  At the moment, the AckNotification component
+     * appears for all forms on the page with this logic because there is no way to
+     * differentiate which form generated which command
+     */
     if (commandResult === Ack)
         return <AckNotification _onClick={() => onAcknowledgeCommandResult(true)} />;
 
@@ -95,7 +100,7 @@ export const ImmersiveCreateNoteForm = ({ onSubmit }: FormProps) => {
                     onSubmit(text, languageCode, generatedId);
                 }}
             >
-                ADD NOTE
+                {buttonLabel}
             </Button>
         </Box>
     );
