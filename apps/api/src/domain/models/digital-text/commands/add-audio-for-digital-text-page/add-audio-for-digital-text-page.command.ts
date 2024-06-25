@@ -4,7 +4,7 @@ import { NestedDataType, NonEmptyString, ReferenceTo, UUID } from '@coscrad/data
 import { LanguageCodeEnum } from '../../../../../domain/common/entities/multilingual-text';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { PageIdentifier } from '../../entities';
-import { DigitalTextCompositeId } from '../create-digital-text.command';
+import { DigitalTextCompositeId } from '../create-digital-text/create-digital-text.command';
 
 @Command({
     type: `ADD_AUDIO_FOR_DIGITAL_TEXT_PAGE`,
