@@ -270,7 +270,7 @@ exports[` 1`] = `
                         role="button"
                         tabindex="0"
                       >
-                        5
+                        10
                       </div>
                       <input
                         aria-hidden="true"
@@ -278,7 +278,7 @@ exports[` 1`] = `
                         class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
                         name="pageSize"
                         tabindex="-1"
-                        value="5"
+                        value="10"
                       />
                       <svg
                         aria-hidden="true"
@@ -630,7 +630,7 @@ exports[` 2`] = `
                         role="button"
                         tabindex="0"
                       >
-                        5
+                        10
                       </div>
                       <input
                         aria-hidden="true"
@@ -638,7 +638,7 @@ exports[` 2`] = `
                         class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
                         name="pageSize"
                         tabindex="-1"
-                        value="5"
+                        value="10"
                       />
                       <svg
                         aria-hidden="true"
@@ -987,7 +987,7 @@ exports[` 2`] = `
                         role="button"
                         tabindex="0"
                       >
-                        5
+                        10
                       </div>
                       <input
                         aria-hidden="true"
@@ -995,7 +995,7 @@ exports[` 2`] = `
                         class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
                         name="pageSize"
                         tabindex="-1"
-                        value="5"
+                        value="10"
                       />
                       <svg
                         aria-hidden="true"
@@ -1347,7 +1347,7 @@ exports[` 3`] = `
                         role="button"
                         tabindex="0"
                       >
-                        5
+                        10
                       </div>
                       <input
                         aria-hidden="true"
@@ -1355,7 +1355,7 @@ exports[` 3`] = `
                         class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
                         name="pageSize"
                         tabindex="-1"
-                        value="5"
+                        value="10"
                       />
                       <svg
                         aria-hidden="true"
@@ -1704,7 +1704,7 @@ exports[` 3`] = `
                         role="button"
                         tabindex="0"
                       >
-                        5
+                        10
                       </div>
                       <input
                         aria-hidden="true"
@@ -1712,7 +1712,7 @@ exports[` 3`] = `
                         class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
                         name="pageSize"
                         tabindex="-1"
-                        value="5"
+                        value="10"
                       />
                       <svg
                         aria-hidden="true"
@@ -2049,7 +2049,7 @@ exports[` 3`] = `
                         role="button"
                         tabindex="0"
                       >
-                        5
+                        10
                       </div>
                       <input
                         aria-hidden="true"
@@ -2057,7 +2057,7 @@ exports[` 3`] = `
                         class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
                         name="pageSize"
                         tabindex="-1"
-                        value="5"
+                        value="10"
                       />
                       <svg
                         aria-hidden="true"
@@ -2457,7 +2457,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                         role="button"
                         tabindex="0"
                       >
-                        5
+                        10
                       </div>
                       <input
                         aria-hidden="true"
@@ -2465,7 +2465,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                         class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
                         name="pageSize"
                         tabindex="-1"
-                        value="5"
+                        value="10"
                       />
                       <svg
                         aria-hidden="true"
@@ -2849,7 +2849,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                         role="button"
                         tabindex="0"
                       >
-                        5
+                        10
                       </div>
                       <input
                         aria-hidden="true"
@@ -2857,7 +2857,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                         class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
                         name="pageSize"
                         tabindex="-1"
-                        value="5"
+                        value="10"
                       />
                       <svg
                         aria-hidden="true"
@@ -3209,7 +3209,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                         role="button"
                         tabindex="0"
                       >
-                        5
+                        10
                       </div>
                       <input
                         aria-hidden="true"
@@ -3217,7 +3217,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                         class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
                         name="pageSize"
                         tabindex="-1"
-                        value="5"
+                        value="10"
                       />
                       <svg
                         aria-hidden="true"
@@ -3566,7 +3566,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                         role="button"
                         tabindex="0"
                       >
-                        5
+                        10
                       </div>
                       <input
                         aria-hidden="true"
@@ -3574,7 +3574,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                         class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
                         name="pageSize"
                         tabindex="-1"
-                        value="5"
+                        value="10"
                       />
                       <svg
                         aria-hidden="true"
@@ -3911,7 +3911,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                         role="button"
                         tabindex="0"
                       >
-                        5
+                        10
                       </div>
                       <input
                         aria-hidden="true"
@@ -3919,7 +3919,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                         class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
                         name="pageSize"
                         tabindex="-1"
-                        value="5"
+                        value="10"
                       />
                       <svg
                         aria-hidden="true"
@@ -4314,7 +4314,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                         role="button"
                         tabindex="0"
                       >
-                        5
+                        10
                       </div>
                       <input
                         aria-hidden="true"
@@ -4322,7 +4322,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                         class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
                         name="pageSize"
                         tabindex="-1"
-                        value="5"
+                        value="10"
                       />
                       <svg
                         aria-hidden="true"
