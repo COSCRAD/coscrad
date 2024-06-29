@@ -1,17 +1,15 @@
 import { IMultilingualTextItem } from '@coscrad/api-interfaces';
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { isString } from '@coscrad/validation-constraints';
 import { Box, Typography } from '@mui/material';
 
 interface DigitalTextPageDetailTextPresenterProps {
-    textItem: IMultilingualTextItem | null;
+    textItem: IMultilingualTextItem | string;
 }
 
 export const DigitalTextPageDetailTextPresenter = ({
     textItem,
 }: DigitalTextPageDetailTextPresenterProps): JSX.Element => {
-    if (isNullOrUndefined(textItem)) return null;
-
-    const { text } = textItem;
+    const text = isString(textItem) ? textItem : textItem.text;
 
     return (
         <Box sx={{ height: '40vh', overflow: 'scroll' }}>

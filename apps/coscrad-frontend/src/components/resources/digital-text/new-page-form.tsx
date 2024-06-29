@@ -32,9 +32,7 @@ export const NewPageForm = ({
 
     useEffect(() => {
         if (isDisabled && pageIdentifier !== '') {
-            setFormFeedback(
-                'Invalid: Page identifier already exists or contains invalid characters (spaces, new lines)'
-            );
+            setFormFeedback(`Page ${pageIdentifier} already exists or contains invalid characters`);
         } else if ((!isDisabled && pageIdentifier !== '') || pageIdentifier === '') {
             setFormFeedback('');
         }

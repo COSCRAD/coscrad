@@ -25,6 +25,7 @@ export const DigitalTextDetailFullViewPresenter = ({
     pages,
     isPublished,
     tags,
+    actions,
 }: ICategorizableDetailQueryResult<IDigitalTextViewModel>): JSX.Element => {
     const dispatch = useAppDispatch();
 
@@ -50,6 +51,7 @@ export const DigitalTextDetailFullViewPresenter = ({
              * page icons.  This is the same problem as with the Immersive Audio Annotator.
              * Adding a note using the ImmersiveCreateNoteForm does not re-render the page.
              */}
+            {/* {actions.some(({ type: commandType }) => commandType === CREATE_NOTE_ABOUT_RESOURCE) ? ( */}
             <Stack>
                 <Box sx={{ mb: 1 }}>
                     <PagesPresenter
@@ -57,32 +59,38 @@ export const DigitalTextDetailFullViewPresenter = ({
                         pages={pages}
                         currentPageIdentifier={selectedPageIdentifier}
                         setCurrentIndex={setCurrentIndex}
-                        onSubmitPageIdentifier={(pageIdentifier) => {
-                            dispatch(
-                                executeCommand({
-                                    type: 'ADD_PAGE_TO_DIGITAL_TEXT',
-                                    payload: {
-                                        aggregateCompositeIdentifier,
-                                        identifier: pageIdentifier,
-                                    },
-                                })
-                            );
-                        }}
-                        onSubmitNewContent={({ text, languageCode, pageIdentifier }) =>
-                            dispatch(
-                                executeCommand({
-                                    type: 'ADD_CONTENT_TO_DIGITAL_TEXT_PAGE',
-                                    payload: {
-                                        aggregateCompositeIdentifier: {
-                                            type: AggregateType.digitalText,
-                                            id,
-                                        },
-                                        text,
-                                        languageCode,
-                                        pageIdentifier,
-                                    },
-                                })
-                            )
+                        onSubmitPageIdentifier={
+                            actions.length > 0
+                                ? (pageIdentifier) =>
+                                      dispatch(
+                                          executeCommand({
+                                              type: 'ADD_PAGE_TO_DIGITAL_TEXT',
+                                              payload: {
+                                                  aggregateCompositeIdentifier,
+                                                  identifier: pageIdentifier,
+                                              },
+                                          })
+                                      )
+                                : null
+                        }
+                        onSubmitNewContent={
+                            actions.length > 0
+                                ? ({ text, languageCode, pageIdentifier }) =>
+                                      dispatch(
+                                          executeCommand({
+                                              type: 'ADD_CONTENT_TO_DIGITAL_TEXT_PAGE',
+                                              payload: {
+                                                  aggregateCompositeIdentifier: {
+                                                      type: AggregateType.digitalText,
+                                                      id,
+                                                  },
+                                                  text,
+                                                  languageCode,
+                                                  pageIdentifier,
+                                              },
+                                          })
+                                      )
+                                : null
                         }
                     />
                 </Box>
@@ -93,8 +101,8 @@ export const DigitalTextDetailFullViewPresenter = ({
                             pagesLength={pages.length}
                             setCurrentIndex={setCurrentIndex}
                         />
-                        <Box sx={{ m: 1 }}>
-                            {!isPublished ? (
+                        <Box sx={{ mb: 1 }}>
+                            {!isPublished && actions.length > 0 ? (
                                 <PublicationForm
                                     onSubmitForPublication={() => {
                                         dispatch(
@@ -113,45 +121,49 @@ export const DigitalTextDetailFullViewPresenter = ({
                             )}
                         </Box>
                         {/* TODO [https://www.pivotaltracker.com/story/show/186539279] Include tags once we make tags event sourced */}
-                        <Box sx={{ m: 1 }}>
+                        <Box sx={{ mb: 1 }}>
                             <CommaSeparatedList>
                                 {tags.map(({ label }) => (
                                     <div>{label}</div>
                                 ))}
                             </CommaSeparatedList>
                         </Box>
-                        <Box sx={{ m: 1 }}>
-                            <ImmersiveCreateNoteForm
-                                buttonLabel={`ADD NOTE TO PAGE ${selectedPageIdentifier}`}
-                                onSubmit={(text, languageCode, noteId) => {
-                                    dispatch(
-                                        executeCommand({
-                                            type: 'CREATE_NOTE_ABOUT_RESOURCE',
-                                            payload: {
-                                                aggregateCompositeIdentifier: {
-                                                    type: AggregateType.note,
-                                                    id: noteId,
+                        {actions.length > 0 ? (
+                            <Box sx={{ mb: 1 }}>
+                                <ImmersiveCreateNoteForm
+                                    buttonLabel={`ADD NOTE TO PAGE ${selectedPageIdentifier}`}
+                                    onSubmit={(text, languageCode, noteId) => {
+                                        dispatch(
+                                            executeCommand({
+                                                type: 'CREATE_NOTE_ABOUT_RESOURCE',
+                                                payload: {
+                                                    aggregateCompositeIdentifier: {
+                                                        type: AggregateType.note,
+                                                        id: noteId,
+                                                    },
+                                                    resourceCompositeIdentifier: {
+                                                        type: AggregateType.digitalText,
+                                                        id,
+                                                    },
+                                                    text,
+                                                    languageCode,
+                                                    resourceContext: isNonEmptyString(
+                                                        selectedPageIdentifier
+                                                    )
+                                                        ? {
+                                                              type: 'pageRange',
+                                                              pageIdentifiers: [
+                                                                  selectedPageIdentifier,
+                                                              ],
+                                                          }
+                                                        : { type: 'general' },
                                                 },
-                                                resourceCompositeIdentifier: {
-                                                    type: AggregateType.digitalText,
-                                                    id,
-                                                },
-                                                text,
-                                                languageCode,
-                                                resourceContext: isNonEmptyString(
-                                                    selectedPageIdentifier
-                                                )
-                                                    ? {
-                                                          type: 'pageRange',
-                                                          pageIdentifiers: [selectedPageIdentifier],
-                                                      }
-                                                    : { type: 'general' },
-                                            },
-                                        })
-                                    );
-                                }}
-                            />
-                        </Box>
+                                            })
+                                        );
+                                    }}
+                                />
+                            </Box>
+                        ) : null}
                     </>
                 ) : null}
             </Stack>

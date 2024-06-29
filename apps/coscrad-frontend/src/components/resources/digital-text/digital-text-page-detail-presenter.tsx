@@ -30,7 +30,7 @@ export const DigitalTextPageDetailPresenter = ({
 
     const hasContent = !isNullOrUndefined(content);
 
-    const shouldShowAddContentForm = !hasContent; // && isAdmin
+    const shouldShowAddContentForm = !hasContent && onSubmitNewContent; // && isAdmin
 
     // HACK: create long text variant of multilingual text?
     // or is this a totally custom implementation with form for
@@ -52,7 +52,7 @@ export const DigitalTextPageDetailPresenter = ({
                     bottom: 0,
                     right: 0,
                     mb: 1,
-                    mr: 1,
+                    mr: 2,
                     position: 'absolute',
                     fontFamily: 'Times',
                     fontWeight: 'bold',
@@ -64,6 +64,8 @@ export const DigitalTextPageDetailPresenter = ({
             </Typography>
             {shouldShowAddContentForm ? (
                 <PageContentForm onSubmitNewContent={onSubmitNewContent} />
+            ) : !hasContent ? (
+                <DigitalTextPageDetailTextPresenter textItem={'Content not yet added to page...'} />
             ) : null}
         </StyledMuiPage>
     );
