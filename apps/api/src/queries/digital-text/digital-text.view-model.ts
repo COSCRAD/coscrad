@@ -287,8 +287,7 @@ export class DigitalTextViewModel
                 identifier: pageIdentifier,
                 audio: new MultilingualAudio({ items: [] }),
             }),
-            // NOTE: this seems to be a UXIX sort: [1, 2, 26, 3, ...]
-        ].sort((a, b) => a.identifier.localeCompare(b.identifier));
+        ].sort((a, b) => parseInt(a.identifier) - parseInt(b.identifier));
 
         this.pages = updatedPages;
 

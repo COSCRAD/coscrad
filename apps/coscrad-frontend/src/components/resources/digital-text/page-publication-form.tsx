@@ -21,7 +21,7 @@ export const PublicationForm = ({ onSubmitForPublication }: PublicationFormProps
                 onSubmitForPublication();
             }}
         >
-            Publish
+            Publish Digital Text
         </Button>
     );
 };
