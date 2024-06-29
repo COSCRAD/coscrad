@@ -1,26 +1,24 @@
 import { IDigitalTextPage } from '@coscrad/api-interfaces';
-import { Box, Typography, styled } from '@mui/material';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { Box, Typography } from '@mui/material';
 import { DigitalTextPageDetailPresenter } from './digital-text-page-detail-presenter';
 import { NewPageForm } from './new-page-form';
 import { TextAndLanguage } from './page-content-form';
 import { PageIcon } from './page-icon';
 
-const StyledPageIconViewer = styled(Box)({
-    width: '100%',
-    height: '70px',
-    marginBottom: '25px',
-    position: 'relative',
-    display: 'inline-block',
-    overflow: 'auto',
-});
+const PAGE_ICON_WIDTH = 40;
+
+const PAGE_ICON_MARGIN = 5;
+
+const PAGE_ICON_BORDER_WIDTH = 2;
 
 interface PagesPresenterProps {
     id: string;
     pages: IDigitalTextPage[];
     currentPageIdentifier?: string;
     setCurrentIndex: (pageIndex: number) => void;
-    onSubmitPageIdentifier: (pageIdentifier: string) => void;
-    onSubmitNewContent: (state: TextAndLanguage & { pageIdentifier: string }) => void;
+    onSubmitPageIdentifier?: (pageIdentifier: string) => void;
+    onSubmitNewContent?: (state: TextAndLanguage & { pageIdentifier: string }) => void;
 }
 
 export const PagesPresenter = ({
@@ -35,6 +33,9 @@ export const PagesPresenter = ({
 
     const allExistingPageIdentifiers = pages.map(({ identifier }) => identifier);
 
+    const pageIconViewerWidth =
+        (PAGE_ICON_WIDTH + (PAGE_ICON_MARGIN + PAGE_ICON_BORDER_WIDTH) * 2) * pages.length;
+
     /**
      *TODO: sort page identifiers including roman numerals and other formats: 
      'I -1', 'A - 1', etc.
@@ -45,23 +46,37 @@ export const PagesPresenter = ({
                 Pages:
             </Typography>
             {/* TODO: need to be able to filter for a page when there are 20 or more */}
-            <StyledPageIconViewer>
-                {pages.length > 0
-                    ? pages.map((page, index) => (
-                          <PageIcon
-                              key={page.identifier}
-                              page={page}
-                              pageIndex={index}
-                              setCurrentIndex={setCurrentIndex}
-                              isSelected={page.identifier === currentPageIdentifier}
-                          />
-                      ))
-                    : null}
-            </StyledPageIconViewer>
-            <NewPageForm
-                existingPageIdentifiers={allExistingPageIdentifiers}
-                onSubmitPageIdentifier={(pageIdentifier) => onSubmitPageIdentifier(pageIdentifier)}
-            />
+            <Box
+                sx={{
+                    width: '100%',
+                    height: '80px',
+                    overflowX: 'scroll',
+                    border: '1px solid #ddd',
+                    mb: 1,
+                }}
+            >
+                <Box sx={{ width: `${pageIconViewerWidth}px` }}>
+                    {pages.length > 0
+                        ? pages.map((page, index) => (
+                              <PageIcon
+                                  key={page.identifier}
+                                  page={page}
+                                  pageIndex={index}
+                                  setCurrentIndex={setCurrentIndex}
+                                  isSelected={page.identifier === currentPageIdentifier}
+                              />
+                          ))
+                        : null}
+                </Box>
+            </Box>
+            {!isNullOrUndefined(onSubmitPageIdentifier) ? (
+                <NewPageForm
+                    existingPageIdentifiers={allExistingPageIdentifiers}
+                    onSubmitPageIdentifier={(pageIdentifier) =>
+                        onSubmitPageIdentifier(pageIdentifier)
+                    }
+                />
+            ) : null}
             {pages.length > 0 ? (
                 <Box
                     sx={{
@@ -72,12 +87,15 @@ export const PagesPresenter = ({
                     <DigitalTextPageDetailPresenter
                         page={currentPage}
                         // Note that we inject the page identifier here
-                        onSubmitNewContent={({ text, languageCode }) =>
-                            onSubmitNewContent({
-                                text,
-                                languageCode,
-                                pageIdentifier: currentPage.identifier,
-                            })
+                        onSubmitNewContent={
+                            !isNullOrUndefined(onSubmitNewContent)
+                                ? ({ text, languageCode }) =>
+                                      onSubmitNewContent({
+                                          text,
+                                          languageCode,
+                                          pageIdentifier: currentPage.identifier,
+                                      })
+                                : null
                         }
                     />
                 </Box>
