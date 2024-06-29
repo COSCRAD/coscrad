@@ -12,7 +12,7 @@ export const PageDetailNavigation = ({
     pagesLength,
     setCurrentIndex,
 }: PageDetailNavigationProps): JSX.Element => (
-    <Box sx={{ m: 1 }}>
+    <Box sx={{ mb: 1 }}>
         <Button
             onClick={() => {
                 setCurrentIndex(cyclicDecrement(currentIndex, pagesLength));
