@@ -30,7 +30,8 @@ export const PagesPresenter = ({
     onSubmitPageIdentifier,
     onSubmitNewContent,
 }: PagesPresenterProps): JSX.Element => {
-    const currentPage = pages.find((page) => page.identifier === currentPageIdentifier);
+    const currentPage =
+        pages.length > 0 ? pages.find((page) => page.identifier === currentPageIdentifier) : null;
 
     const allExistingPageIdentifiers = pages.map(({ identifier }) => identifier);
 
@@ -45,38 +46,46 @@ export const PagesPresenter = ({
             </Typography>
             {/* TODO: need to be able to filter for a page when there are 20 or more */}
             <StyledPageIconViewer>
-                {pages.map((page, index) => (
-                    <PageIcon
-                        key={page.identifier}
-                        page={page}
-                        pageIndex={index}
-                        setCurrentIndex={setCurrentIndex}
-                        isSelected={page.identifier === currentPageIdentifier}
-                    />
-                ))}
+                {pages.length > 0
+                    ? pages.map((page, index) => (
+                          <PageIcon
+                              key={page.identifier}
+                              page={page}
+                              pageIndex={index}
+                              setCurrentIndex={setCurrentIndex}
+                              isSelected={page.identifier === currentPageIdentifier}
+                          />
+                      ))
+                    : null}
             </StyledPageIconViewer>
             <NewPageForm
                 existingPageIdentifiers={allExistingPageIdentifiers}
                 onSubmitPageIdentifier={(pageIdentifier) => onSubmitPageIdentifier(pageIdentifier)}
             />
-            <Box
-                sx={{
-                    width: '100%',
-                    height: '50vh',
-                }}
-            >
-                <DigitalTextPageDetailPresenter
-                    page={currentPage}
-                    // Note that we inject the page identifier here
-                    onSubmitNewContent={({ text, languageCode }) =>
-                        onSubmitNewContent({
-                            text,
-                            languageCode,
-                            pageIdentifier: currentPage.identifier,
-                        })
-                    }
-                />
-            </Box>
+            {pages.length > 0 ? (
+                <Box
+                    sx={{
+                        width: '100%',
+                        height: '50vh',
+                    }}
+                >
+                    <DigitalTextPageDetailPresenter
+                        page={currentPage}
+                        // Note that we inject the page identifier here
+                        onSubmitNewContent={({ text, languageCode }) =>
+                            onSubmitNewContent({
+                                text,
+                                languageCode,
+                                pageIdentifier: currentPage.identifier,
+                            })
+                        }
+                    />
+                </Box>
+            ) : (
+                <Typography variant="h6">
+                    Use the Add Page form to add a new page to this digital text.
+                </Typography>
+            )}
         </>
     );
 };
