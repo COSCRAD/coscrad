@@ -14,26 +14,35 @@ import {
 import { ReactNode } from 'react';
 import { buildDataAttributeForAggregateDetailComponent } from './build-data-attribute-for-aggregate-detail-component';
 import { ResourceDetailPresenterHeader } from './resource-detail-presenter-header';
-import { ResourcePreviewIconFactory } from './resource-preview-icon';
 
-const ContributionsPresenter = ({
+export const ContributionsPresenter = ({
     contributions,
 }: {
     contributions: ContributorWithId[];
 }): JSX.Element => (
-    <List>
-        {contributions.map((contribution) => (
-            <ListItem
-                disableGutters
-                style={{ borderBottom: '1px solid #ccc' }}
-                key={`${contribution.fullName}-${contribution.id}`}
-                data-testid={`${contribution.id}`}
-            >
-                <ContributionPresenter contributor={contribution} />
-                <Divider />
-            </ListItem>
-        ))}
-    </List>
+    <>
+        <Box>
+            <Box elevation={0} component={Paper}>
+                <IconButton>
+                    <ListRounded />
+                </IconButton>
+                Contributions
+            </Box>
+        </Box>
+        <List>
+            {contributions.map((contribution) => (
+                <ListItem
+                    disableGutters
+                    style={{ borderBottom: '1px solid #ccc' }}
+                    key={`${contribution.fullName}-${contribution.id}`}
+                    data-testid={`${contribution.id}`}
+                >
+                    <ContributionPresenter contributor={contribution} />
+                    <Divider />
+                </ListItem>
+            ))}
+        </List>
+    </>
 );
 
 interface ContributionPresenterProps {
@@ -82,9 +91,9 @@ export const ResourceDetailFullViewPresenter = ({
         <Grid container spacing={0} columns={{ xs: 2, sm: 4, md: 12 }}>
             <Grid item xs={2} sm={1} md={2}>
                 {/* Temporary.  We'd like an icon if there's no visual media associated with this resource */}
-                {type !== ResourceType.photograph && (
+                {/* {type !== ResourceType.photograph && (
                     <ResourcePreviewIconFactory resourceType={type} size="lg" />
-                )}
+                )} */}
             </Grid>
             <Grid item xs={2} sm={2} md={8}>
                 {/* TODO: consider putting a standardized name property on the view models */}
@@ -93,18 +102,7 @@ export const ResourceDetailFullViewPresenter = ({
                 <div data-testid={buildDataAttributeForAggregateDetailComponent(type, id)} />
                 {children}
                 {contributions.length > 0 ? (
-                    <Box>
-                        <Box elevation={0} component={Paper}>
-                            <IconButton>
-                                <ListRounded />
-                            </IconButton>
-                            Contributions
-                        </Box>
-
-                        <Box ml={1}>
-                            <ContributionsPresenter contributions={contributions} />
-                        </Box>
-                    </Box>
+                    <ContributionsPresenter contributions={contributions} />
                 ) : null}
             </Grid>
         </Grid>

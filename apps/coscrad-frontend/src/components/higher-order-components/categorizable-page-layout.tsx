@@ -121,7 +121,7 @@ export const CategorizablePageLayout = ({
             <Drawer
                 anchor="right"
                 PaperProps={{
-                    sx: { width: '35vw' },
+                    sx: { width: ['90vw', '35vw'] },
                 }}
                 variant="temporary"
                 data-testid="connected-resources-panel"

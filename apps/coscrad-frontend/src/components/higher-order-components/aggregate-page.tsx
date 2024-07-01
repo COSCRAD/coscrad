@@ -115,7 +115,7 @@ export const AggregatePage = ({
      */
     const resourcesWithCommandsDisabled: AggregateType[] = [
         AggregateType.audioItem,
-        AggregateType.digitalText,
+        // AggregateType.digitalText,
     ];
 
     const shouldShowCommands =
