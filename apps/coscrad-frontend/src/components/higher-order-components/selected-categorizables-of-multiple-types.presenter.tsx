@@ -67,6 +67,7 @@ export const SelectedCategorizablesOfMultipleTypesPresenter = ({
 
                         return (
                             <SelectedCategorizablesPresenter
+                                key={categorizableType}
                                 viewModels={queryResult.data}
                                 presenterFactory={presenterFactory}
                                 notesById={notesByCompositeId}
