@@ -28,7 +28,7 @@ interface CategorizablePageLayoutProps {
 }
 
 const DrawerHeader = styled(Box)(({ theme }) => ({
-    display: 'flex',
+    // display: 'flex',
     alignItems: 'flex-start',
     margin: theme.spacing(2, 4, 0, 4),
     justifyContent: 'space-between',
@@ -168,15 +168,7 @@ export const CategorizablePageLayout = ({
                 open={isPanelOpen('bottom', drawerState)}
             >
                 <DrawerHeader>
-                    <Box sx={{ mb: 2 }}>
-                        <Typography variant="h3" sx={{ mb: 0 }}>
-                            Notes
-                        </Typography>
-                        <Typography variant="subtitle2">
-                            for {resourceType}/{id}
-                        </Typography>
-                    </Box>
-                    <Box>
+                    <Box sx={{ width: '100%', textAlign: 'right' }}>
                         <Tooltip title="Expand/Contract Notes Panel">
                             <IconButton
                                 data-testid="expand-notes-panel-button"
@@ -197,6 +189,14 @@ export const CategorizablePageLayout = ({
                                 <CloseIcon />
                             </IconButton>
                         </Tooltip>
+                    </Box>
+                    <Box sx={{ mb: 2 }}>
+                        <Typography variant="h3" sx={{ mb: 0 }}>
+                            Notes
+                        </Typography>
+                        <Typography variant="subtitle2">
+                            for {resourceType}/{id}
+                        </Typography>
                     </Box>
                 </DrawerHeader>
                 <Divider variant="fullWidth" sx={{ mb: 3 }} />
