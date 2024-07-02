@@ -1,10 +1,11 @@
-import { IDigitalTextPage } from '@coscrad/api-interfaces';
+import { IDigitalTextPage, ResourceCompositeIdentifier } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box, Typography } from '@mui/material';
 import { DigitalTextPageDetailPresenter } from './digital-text-page-detail-presenter';
 import { NewPageForm } from './new-page-form';
 import { TextAndLanguage } from './page-content-form';
 import { PageIcon } from './page-icon';
+import { PageNotesPresenter } from './page-notes-presenter';
 
 const PAGE_ICON_WIDTH = 40;
 
@@ -13,7 +14,7 @@ const PAGE_ICON_MARGIN = 5;
 const PAGE_ICON_BORDER_WIDTH = 2;
 
 interface PagesPresenterProps {
-    id: string;
+    compositeIdentifier: ResourceCompositeIdentifier;
     pages: IDigitalTextPage[];
     currentPageIdentifier?: string;
     setCurrentIndex: (pageIndex: number) => void;
@@ -22,6 +23,7 @@ interface PagesPresenterProps {
 }
 
 export const PagesPresenter = ({
+    compositeIdentifier,
     pages,
     currentPageIdentifier,
     setCurrentIndex,
@@ -78,27 +80,36 @@ export const PagesPresenter = ({
                 />
             ) : null}
             {pages.length > 0 ? (
-                <Box
-                    sx={{
-                        width: '100%',
-                        height: '50vh',
-                    }}
-                >
-                    <DigitalTextPageDetailPresenter
-                        page={currentPage}
-                        // Note that we inject the page identifier here
-                        onSubmitNewContent={
-                            !isNullOrUndefined(onSubmitNewContent)
-                                ? ({ text, languageCode }) =>
-                                      onSubmitNewContent({
-                                          text,
-                                          languageCode,
-                                          pageIdentifier: currentPage.identifier,
-                                      })
-                                : null
-                        }
-                    />
-                </Box>
+                <>
+                    <Box
+                        sx={{
+                            width: '100%',
+                            height: '50vh',
+                            mb: 1,
+                        }}
+                    >
+                        <DigitalTextPageDetailPresenter
+                            page={currentPage}
+                            // Note that we inject the page identifier here
+                            onSubmitNewContent={
+                                !isNullOrUndefined(onSubmitNewContent)
+                                    ? ({ text, languageCode }) =>
+                                          onSubmitNewContent({
+                                              text,
+                                              languageCode,
+                                              pageIdentifier: currentPage.identifier,
+                                          })
+                                    : null
+                            }
+                        />
+                    </Box>
+                    <Box sx={{ mb: 1 }}>
+                        <PageNotesPresenter
+                            compositeIdentifier={compositeIdentifier}
+                            page={currentPage}
+                        />
+                    </Box>
+                </>
             ) : (
                 <Typography variant="h6">
                     Use the Add Page form to add a new page to this digital text.
