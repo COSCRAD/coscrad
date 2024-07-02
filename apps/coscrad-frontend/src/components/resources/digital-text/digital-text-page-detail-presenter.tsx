@@ -8,10 +8,8 @@ import { PageContentForm, TextAndLanguage } from './page-content-form';
 const StyledMuiPage = styled('div')({
     width: '80%',
     height: '48vh',
-    margin: '2px',
     padding: '7px',
     position: 'relative',
-    float: 'left',
     boxShadow: '0px 0px 10px 0px #666',
 });
 

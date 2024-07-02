@@ -11,6 +11,20 @@ declare module '@mui/material/styles' {
         qhd: true;
         uhd: true;
     }
+
+    interface TypographyVariants {
+        strong1: React.CSSProperties;
+    }
+
+    interface TypographyVariantsOptions {
+        strong1?: React.CSSProperties;
+    }
+}
+
+declare module '@mui/material/Typography' {
+    interface TypographyPropsVariantOverrides {
+        strong1: true;
+    }
 }
 
 export const CoscradThemeProvider = ({ children }: CoscradThemeProviderProps): JSX.Element => {
@@ -61,6 +75,9 @@ export const CoscradThemeProvider = ({ children }: CoscradThemeProviderProps): J
                 },
                 body1: {
                     lineHeight: '1.6',
+                },
+                strong1: {
+                    fontWeight: '500',
                 },
             },
             components: {

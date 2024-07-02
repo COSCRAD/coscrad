@@ -55,7 +55,7 @@ export const DigitalTextDetailFullViewPresenter = ({
             <Stack>
                 <Box sx={{ mb: 1 }}>
                     <PagesPresenter
-                        id={id}
+                        compositeIdentifier={aggregateCompositeIdentifier}
                         pages={pages}
                         currentPageIdentifier={selectedPageIdentifier}
                         setCurrentIndex={setCurrentIndex}
