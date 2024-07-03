@@ -51,6 +51,11 @@ export const AudioClipPlayer = ({ audioUrl, UserDefinedPlayButton }: AudioClipPl
          */
         const testAudio = new Audio(audioUrl);
 
+        /**
+         * Without this, the audio will hang with the loading spinner on Safari.
+         */
+        testAudio.load();
+
         testAudio.addEventListener('canplaythrough', onCanPlay);
 
         testAudio.addEventListener('error', onError);
