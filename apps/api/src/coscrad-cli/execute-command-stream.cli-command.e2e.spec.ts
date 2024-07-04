@@ -21,6 +21,9 @@ const dataFile = `apps/api/src/coscrad-cli/execute-command-stream.cli-command.va
 
 const dataFileWithJoin = `apps/api/src/coscrad-cli/execute-command-stream.cli-command.valid.with-join.SAMPLE.json`;
 
+const dataFileWithComplexReferences =
+    'apps/api/src/coscrad-cli/execute-command-stream.cli-command.valid.with-complex-join.SAMPLE.json';
+
 const invalidDataFile = `apps/api/src/coscrad-cli/execute-command-stream.cli-command.invalid.SAMPLE.json`;
 
 describe(`CLI Command: ${cliCommandName}`, () => {
@@ -105,6 +108,35 @@ describe(`CLI Command: ${cliCommandName}`, () => {
                     await CommandTestFactory.run(commandInstance, [
                         cliCommandName,
                         `--data-file=${dataFileWithJoin}`,
+                    ]);
+
+                    const numberOfTerms = await testRepositoryProvider
+                        .forResource(ResourceType.term)
+                        .getCount();
+
+                    expect(numberOfTerms).toBeGreaterThan(0);
+
+                    const vocabularyLists = await testRepositoryProvider
+                        .forResource(ResourceType.vocabularyList)
+                        .fetchMany();
+
+                    expect(vocabularyLists).toHaveLength(1);
+
+                    const foundList = vocabularyLists[0];
+
+                    expect(foundList).toBeInstanceOf(VocabularyList);
+
+                    const numberOfEntries = (foundList as VocabularyList).entries.length;
+
+                    expect(numberOfEntries).toBe(1);
+                });
+            });
+
+            describe(`when there are generated IDs and joins via a nested array property (IMPORT_TERMS_TO_VOCABULARY_LIST)`, () => {
+                it(`should succeed with the expected updates to the database`, async () => {
+                    await CommandTestFactory.run(commandInstance, [
+                        cliCommandName,
+                        `--data-file=${dataFileWithComplexReferences}`,
                     ]);
 
                     const numberOfTerms = await testRepositoryProvider

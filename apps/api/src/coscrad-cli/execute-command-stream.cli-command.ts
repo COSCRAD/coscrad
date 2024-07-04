@@ -11,6 +11,7 @@ import { readFileSync } from 'fs';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
 import { GrantUserRole } from '../domain/models/user-management/user/commands/grant-user-role/grant-user-role.command';
 import { RegisterUser } from '../domain/models/user-management/user/commands/register-user/register-user.command';
+import { ImportEntriesToVocabularyList } from '../domain/models/vocabulary-list/commands';
 import { AggregateId } from '../domain/types/AggregateId';
 import { AggregateType } from '../domain/types/AggregateType';
 import { InternalError, isInternalError } from '../lib/errors/InternalError';
@@ -314,8 +315,36 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
                     const value = getDeepPropertyFromObject(fsaToExecute, fullPath);
 
                     if (Array.isArray(value)) {
-                        throw new InternalError(
-                            `Using slugs for arrays of references is not yet supported`
+                        if (commandType !== 'IMPORT_ENTRIES_TO_VOCABULARY_LIST') {
+                            throw new InternalError(
+                                `Using slugs for arrays of references is not yet supported`
+                            );
+                        }
+
+                        const { entries } = fsa.payload as ImportEntriesToVocabularyList;
+
+                        const entriesWithSlugsReplaced = entries.map((entry) => {
+                            const customIdParseResult = parseSlugDefinition(entry.termId);
+
+                            if (isInternalError(customIdParseResult)) {
+                                throw new InternalError(
+                                    `Failed to parse custom slug on nested array for IMPORT_ENTRIES_TO_VOCABULARY_LIST`,
+                                    [customIdParseResult]
+                                );
+                            }
+
+                            const termIdToUse = idMap.get(customIdParseResult[1]);
+
+                            return {
+                                ...entry,
+                                termId: termIdToUse,
+                            };
+                        });
+
+                        fsaToExecute = cloneWithOverridesByDeepPath(
+                            fsaToExecute,
+                            'payload.entries',
+                            entriesWithSlugsReplaced
                         );
                     }
 
