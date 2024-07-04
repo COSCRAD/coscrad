@@ -8,7 +8,7 @@ import { MockJwtAdminAuthGuard } from '../../../authorization/mock-jwt-admin-aut
 import { MockJwtAuthGuard } from '../../../authorization/mock-jwt-auth-guard';
 import { MockJwtStrategy } from '../../../authorization/mock-jwt.strategy';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
-import { CoscradEventFactory, CoscradEventUnion } from '../../../domain/common';
+import { CoscradEventFactory, CoscradEventUnion, EventModule } from '../../../domain/common';
 import { ID_MANAGER_TOKEN } from '../../../domain/interfaces/id-manager.interface';
 import { AudioItemController } from '../../../domain/models/audio-visual/application/audio-item.controller';
 import { VideoController } from '../../../domain/models/audio-visual/application/video.controller';
@@ -86,14 +86,18 @@ import {
     AddCoverPhotographForDigitalTextCommandHandler,
     AddPageToDigitalTextCommandHandler,
     AudioAddedForDigitalTextPage,
+    AudioAddedForDigitalTextPageEventHandler,
     AudioAddedForDigitalTextTitle,
+    ContentAddedToDigitalTextPageEventHandler,
     CoverPhotographAddedForDigitalText,
     CreateDigitalText,
     CreateDigitalTextCommandHandler,
     DigitalTextCreated,
+    DigitalTextCreatedEventHandler,
     DigitalTextPageContentTranslated,
     DigitalTextTitleTranslated,
     PageAddedToDigitalText,
+    PageAddedToDigitalTextEventHandler,
     TranslateDigitalTextPageContent,
     TranslateDigitalTextPageContentCommandHandler,
     TranslateDigitalTextTitleCommandHandler,
@@ -109,6 +113,7 @@ import {
     AddPhotographToDigitalTextPageCommandHandler,
     PhotographAddedToDigitalTextPage,
 } from '../../../domain/models/digital-text/commands/add-photograph-to-digital-text-page';
+import { DigitalTextPageContentTranslatedEventHandler } from '../../../domain/models/digital-text/commands/events/digital-text-page-content-translated.event-handler';
 import { DigitalText } from '../../../domain/models/digital-text/entities/digital-text.entity';
 import { CreateMediaItem } from '../../../domain/models/media-item/commands/create-media-item/create-media-item.command';
 import { CreateMediaItemCommandHandler } from '../../../domain/models/media-item/commands/create-media-item/create-media-item.command-handler';
@@ -233,6 +238,9 @@ import { MockIdManagementService } from '../../../lib/id-generation/mock-id-mana
 import { Ctor } from '../../../lib/types/Ctor';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
+import { ArangoDatabase } from '../../../persistence/database/arango-database';
+import { ArangoDatabaseForCollection } from '../../../persistence/database/arango-database-for-collection';
+import { ArangoCollectionId } from '../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { ArangoEventRepository } from '../../../persistence/repositories/arango-event-repository';
@@ -240,7 +248,7 @@ import { ArangoIdRepository } from '../../../persistence/repositories/arango-id-
 import { ArangoRepositoryProvider } from '../../../persistence/repositories/arango-repository.provider';
 import { BibliographicCitationViewModel } from '../../../queries/buildViewModelForResource/viewModels/bibliographic-citation/bibliographic-citation.view-model';
 import { DigitalTextQueryService } from '../../../queries/digital-text';
-import { DigitalTextQueryRepository } from '../../../queries/digital-text/digital-text.query-repository';
+import { ArangoDigitalTextQueryRepository } from '../../../queries/digital-text/digital-text.query-repository';
 import { NoteViewModel } from '../../../queries/edgeConnectionViewModels/note.view-model';
 import { DTO } from '../../../types/DTO';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../../../validation';
@@ -342,6 +350,7 @@ export const buildAllDataClassProviders = () =>
 
 const dataClassProviders = buildAllDataClassProviders();
 
+// @deprecated Stick to using Test.createTestingModule and leverage only the modules your test needs
 export default async (
     configOverrides: Partial<DTO<EnvironmentVariables>>,
     userOptions: Partial<CreateTestModuleOptions> = optionDefaults
@@ -359,6 +368,7 @@ export default async (
             CommandModule,
             PassportModule.register({ defaultStrategy: 'jwt' }),
             DynamicDataTypeModule,
+            EventModule,
         ],
         providers: [
             CommandInfoService,
@@ -417,6 +427,17 @@ export default async (
                     CoscradEventFactory,
                     DynamicDataTypeFinderService,
                 ],
+            },
+            {
+                provide: `DIGITAL_TEXT_QUERY_REPOSITORY`,
+                useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
+                    new ArangoDigitalTextQueryRepository(
+                        new ArangoDatabaseForCollection(
+                            new ArangoDatabase(arangoConnectionProvider.getConnection()),
+                            `digital_text_views` as ArangoCollectionId
+                        )
+                    ),
+                inject: [ArangoConnectionProvider],
             },
             {
                 provide: EdgeConnectionQueryService,
@@ -537,17 +558,26 @@ export default async (
                 inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService],
             },
             {
+                /**
+                 * TODO Let's opt out of the `createTestModule` for digital texts.
+                 */
                 provide: DigitalTextQueryService,
                 useFactory: (
-                    eventRepository: ArangoEventRepository,
+                    arangoConnectionProvider: ArangoConnectionProvider,
                     commandInfoService: CommandInfoService
                 ) =>
                     new DigitalTextQueryService(
-                        new DigitalTextQueryRepository(eventRepository),
+                        new ArangoDigitalTextQueryRepository(
+                            new ArangoDatabaseProvider(
+                                arangoConnectionProvider
+                            ).getDatabaseForCollection(
+                                // TODO Deal with this properly
+                                'digital_text_views' as ArangoCollectionId
+                            )
+                        ),
                         commandInfoService
                     ),
-
-                inject: [ArangoEventRepository, CommandInfoService],
+                inject: [ArangoConnectionProvider, CommandInfoService],
             },
             {
                 provide: ID_MANAGER_TOKEN,
@@ -710,6 +740,12 @@ export default async (
             AddContentToDigitalTextPageCommandHandler,
             CreatePhotograph,
             CreatePhotographCommandHandler,
+            // Event Handlers
+            DigitalTextCreatedEventHandler,
+            PageAddedToDigitalTextEventHandler,
+            ContentAddedToDigitalTextPageEventHandler,
+            DigitalTextPageContentTranslatedEventHandler,
+            AudioAddedForDigitalTextPageEventHandler,
         ],
 
         controllers: [

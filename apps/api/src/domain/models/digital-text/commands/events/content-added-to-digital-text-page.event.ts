@@ -1,6 +1,6 @@
 import { CoscradEvent } from '../../../../common';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
-import { AddContentToDigitalTextPage } from './add-content-to-digital-text-page.command';
+import { AddContentToDigitalTextPage } from '../add-content-to-digital-text-page/add-content-to-digital-text-page.command';
 
 export type ContentAddedToDigitalTextPagePayload = AddContentToDigitalTextPage;
 

@@ -6,8 +6,10 @@ import {
     PublishResource,
     PublishResourceCommandHandler,
     ResourceReadAccessGrantedToUser,
+    ResourceReadAccessGrantedToUserEventHandler,
 } from '../../domain/models/shared/common-commands';
 import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
+import { ResourcePublishedEventHandler } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
 import {
     ContributorCreated,
     CreateContributor,
@@ -50,10 +52,13 @@ import { CoscradUserController } from '../controllers/coscrad-user.controller';
         CreateContributor,
         CreateContributorCommandHandler,
         // We include this command here for lack of a better place
+        // These should probably be part of a `ResourcesModule` or `WebOfKnowledgeModule`
         GrantResourceReadAccessToUser,
         GrantResourceReadAccessToUserCommandHandler,
         PublishResource,
         PublishResourceCommandHandler,
+        ResourcePublishedEventHandler,
+        ResourceReadAccessGrantedToUserEventHandler,
         // Events
         ...[ResourcePublished, ResourceReadAccessGrantedToUser, ContributorCreated].map((ctor) => ({
             provide: ctor,
