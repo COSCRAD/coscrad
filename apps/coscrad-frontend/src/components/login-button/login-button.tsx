@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import LoginIcon from '@mui/icons-material/Login';
+import { Login as LoginIcon } from '@mui/icons-material/';
 import { IconButton, Tooltip } from '@mui/material';
 
 const LoginButton = () => {
@@ -7,12 +7,8 @@ const LoginButton = () => {
 
     return (
         <Tooltip title="Log In">
-            <IconButton
-                data-testid="login-button"
-                color="secondary"
-                onClick={() => loginWithRedirect()}
-            >
-                <LoginIcon />
+            <IconButton data-testid="login-button" onClick={() => loginWithRedirect()}>
+                <LoginIcon sx={{ color: 'white' }} />
             </IconButton>
         </Tooltip>
     );

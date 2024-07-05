@@ -2,8 +2,6 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import { Box, Drawer, IconButton, Tooltip } from '@mui/material';
 import { useState } from 'react';
-import AuthenticationButton from '../authentication-button/authentication-button';
-import { CurrentUserInfo } from '../logout-button/current-user-info';
 import { NavItemInfo } from './nav-menu-container';
 import { NavMenuItem } from './nav-menu-item';
 
@@ -24,12 +22,10 @@ export const NavMenuPresenter = ({ navItemInfos }: NavMenuPresenterProps): JSX.E
 
     return (
         <Box columnGap={1} sx={{ display: 'flex', alignItems: 'center' }}>
-            <CurrentUserInfo />
             <Tooltip title="Menu">
                 <IconButton
                     data-testid="nav-menu-icon"
                     id="basic-button"
-                    color="secondary"
                     aria-controls={isOpen ? 'basic-menu' : undefined}
                     aria-haspopup="true"
                     aria-expanded={isOpen ? 'true' : undefined}
@@ -38,7 +34,6 @@ export const NavMenuPresenter = ({ navItemInfos }: NavMenuPresenterProps): JSX.E
                     <MenuRoundedIcon sx={{ color: 'white' }} />
                 </IconButton>
             </Tooltip>
-            <AuthenticationButton />
             <Box>
                 <Drawer anchor="right" open={isOpen} onClose={handleClose}>
                     <Box sx={{ padding: 3 }}>

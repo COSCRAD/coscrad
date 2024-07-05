@@ -37,7 +37,9 @@ export const ImageInContent = ({ image, displayWidth, alignment }: ImageInConten
     const margin = alignment === 'right' ? { marginLeft: '15px' } : { marginRight: '15px' };
 
     return (
-        <StyledContentFigure sx={{ ...margin, width: displayWidth, float: alignment }}>
+        <StyledContentFigure
+            sx={{ ...margin, width: { xs: '100%', sm: displayWidth }, float: alignment }}
+        >
             <StyledImage sx={{ width: '100%', borderRadius: '5px' }} src={src} alt={alt} />
             <figcaption>
                 <Typography variant="caption">{title}</Typography>
