@@ -203,10 +203,16 @@ export const IndexTable = <T,>({
                             justifyItems: 'flex-end',
                         }}
                     >
-                        <Grid container justifyContent="flex-end" spacing={3}>
-                            <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
-                                <Typography component="span" sx={{ mr: 2 }}>
-                                    Rows per page:
+                        <Grid container justifyContent="flex-end" columns={12}>
+                            <Grid
+                                item
+                                sx={{ display: 'flex', alignItems: 'center' }}
+                                xs={5}
+                                sm={4}
+                                md={2.5}
+                            >
+                                <Typography component="span" sx={{ mr: 1 }}>
+                                    Rows:
                                 </Typography>
                                 <FormControl variant="standard" sx={{ m: 1 }}>
                                     <Select
@@ -233,10 +239,22 @@ export const IndexTable = <T,>({
                                     </Select>
                                 </FormControl>
                             </Grid>
-                            <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Grid
+                                item
+                                sx={{ display: 'flex', alignItems: 'center' }}
+                                xs={3}
+                                sm={2}
+                                md={1.5}
+                            >
                                 Page: {currentPageIndex + 1}/{lastPageIndex + 1}
                             </Grid>
-                            <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Grid
+                                item
+                                sx={{ display: 'flex', alignItems: 'center' }}
+                                xs={1}
+                                sm={1}
+                                md={0.5}
+                            >
                                 <IconButton
                                     onClick={() =>
                                         setCurrentPageIndex(

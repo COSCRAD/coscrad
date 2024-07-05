@@ -38,7 +38,7 @@ export class MediaItemController {
         const filePath = searchResult.filepath;
 
         // TODO Make this configurable
-        const STATIC_DIR = `./__static__`;
+        const STATIC_DIR = `${__dirname}/../../../__static__`;
 
         if (!existsSync(`${STATIC_DIR}/${filePath}`)) {
             return sendInternalResultAsHttpResponse(res, NotFound);
