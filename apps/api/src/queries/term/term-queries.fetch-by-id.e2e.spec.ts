@@ -3,13 +3,16 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import httpStatusCodes from '../../app/constants/httpStatusCodes';
 import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
+import getValidAggregateInstanceForTest from '../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { ResourceReadAccessGrantedToUser } from '../../domain/models/shared/common-commands';
 import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import { TermCreated, TermTranslated } from '../../domain/models/term/commands';
+import { CoscradContributor } from '../../domain/models/user-management/contributor';
 import { CoscradUserGroup } from '../../domain/models/user-management/group/entities/coscrad-user-group.entity';
 import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../domain/models/user-management/user/entities/user/coscrad-user.entity';
+import { FullName } from '../../domain/models/user-management/user/entities/user/full-name.entity';
 import { AggregateId } from '../../domain/types/AggregateId';
 import { ArangoDatabaseProvider } from '../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../persistence/repositories/__tests__/TestRepositoryProvider';
@@ -18,6 +21,8 @@ import { ArangoEventRepository } from '../../persistence/repositories/arango-eve
 import buildTestDataInFlatFormat from '../../test-data/buildTestDataInFlatFormat';
 import { TestEventStream } from '../../test-data/events';
 import { DynamicDataTypeFinderService } from '../../validation';
+import { TermViewModel } from '../buildViewModelForResource/viewModels';
+import { BaseResourceViewModel } from '../buildViewModelForResource/viewModels/base-resource.view-model';
 
 // Set up endpoints: index endpoint, id endpoint
 const indexEndpoint = `/resources/terms`;
@@ -50,11 +55,25 @@ const translationLanguage = LanguageCode.English;
 
 const termId = buildDummyUuid(1);
 
+const dummyContributorFirstName = 'Dumb';
+
+const dummyContributorLastName = 'McContributor';
+
+const dummyContributor = getValidAggregateInstanceForTest(AggregateType.contributor).clone({
+    fullName: new FullName({
+        firstName: dummyContributorFirstName,
+        lastName: dummyContributorLastName,
+    }),
+});
+
 const termCreated = new TestEventStream().andThen<TermCreated>({
     type: 'TERM_CREATED',
     payload: {
         text: termText,
         languageCode: originalLanguage,
+    },
+    meta: {
+        contributorIds: [dummyContributor.id],
     },
 });
 
@@ -77,7 +96,19 @@ const termPublished = termTranslated.andThen<ResourcePublished>({
     type: 'RESOURCE_PUBLISHED',
 });
 
+// TODO Add happy path cases for a prompt term
 // const promptTermId = buildDummyUuid(2)
+
+const assertResourceHasContributionFor = (
+    { fullName: { firstName, lastName } }: CoscradContributor,
+    resource: BaseResourceViewModel
+) => {
+    const hasContribution = resource.contributions.some(
+        ({ fullName }) => fullName === `${firstName} ${lastName}`
+    );
+
+    expect(hasContribution).toBe(true);
+};
 
 describe(`when querying for a term: fetch by Id`, () => {
     const testDatabaseName = generateDatabaseNameForTestSuite();
@@ -120,6 +151,10 @@ describe(`when querying for a term: fetch by Id`, () => {
                     // TODO: we need to check that contributors come through
 
                     await app.get(ArangoEventRepository).appendEvents(eventHistoryForTerm);
+
+                    await testRepositoryProvider
+                        .getContributorRepository()
+                        .create(dummyContributor);
                 });
 
                 it('should return the expected result', async () => {
@@ -127,7 +162,11 @@ describe(`when querying for a term: fetch by Id`, () => {
 
                     expect(res.status).toBe(httpStatusCodes.ok);
 
-                    // TODO: Check the state of the response in detail
+                    const result = res.body as TermViewModel;
+
+                    expect(result.id).toBe(termId);
+
+                    assertResourceHasContributionFor(dummyContributor, result);
                 });
             });
 

@@ -50,6 +50,8 @@ export class TermController {
     @UseGuards(OptionalJwtAuthGuard)
     @Get('')
     async fetchMany(@Request() req) {
-        return this.termQueryService.fetchMany(req.user || undefined);
+        const result = await this.termQueryService.fetchMany(req.user || undefined);
+
+        return result;
     }
 }
