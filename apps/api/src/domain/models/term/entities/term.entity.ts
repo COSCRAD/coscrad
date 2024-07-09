@@ -67,19 +67,6 @@ export class Term extends Resource {
     })
     text: MultilingualText;
 
-    /**
-     * Note  that eventually, we will track contributions as follows. Every
-     * command can be executed `onBehalfOfContributorWithId`. If this is specified,
-     * the corresponding event will be attributed to the contributor with this ID.
-     * Otherwise, it will be attributed to the system user.
-     */
-    @NonEmptyString({
-        isOptional: true,
-        label: 'contributor ID',
-        description: 'reference to the contributor for this term',
-    })
-    readonly contributorId?: AggregateId;
-
     @NestedDataType(MultilingualAudio, {
         label: 'multilingual audio',
         description: 'collection of references to audio for content in available langauges',
@@ -103,11 +90,9 @@ export class Term extends Resource {
         // This should only happen in the validation context
         if (isNullOrUndefined(dto)) return;
 
-        const { contributorId, audio: audioDto, sourceProject, text, isPromptTerm } = dto;
+        const { audio: audioDto, sourceProject, text, isPromptTerm } = dto;
 
         this.text = new MultilingualText(text);
-
-        this.contributorId = contributorId;
 
         this.audio = isNonEmptyObject(audioDto) ? new MultilingualAudio(audioDto) : undefined;
 
@@ -274,7 +259,6 @@ export class Term extends Resource {
                 aggregateCompositeIdentifier: { id },
                 text,
                 languageCode,
-                contributorId,
             },
         } = event;
 
@@ -282,7 +266,6 @@ export class Term extends Resource {
             type: AggregateType.term,
             id,
             text: buildMultilingualTextWithSingleItem(text, languageCode),
-            contributorId,
             // Terms are not published by default
             published: false,
             audio: new MultilingualAudio({
