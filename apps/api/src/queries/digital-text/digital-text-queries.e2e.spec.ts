@@ -203,6 +203,8 @@ describe(`When querying for a digital text`, () => {
                 }
                 // no authenticated user
             ));
+
+            await app.init();
         });
 
         describe(`fetch single (by ID)`, () => {

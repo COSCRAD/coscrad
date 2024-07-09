@@ -4202,13 +4202,6 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
         },
       },
-      "contributorId": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "The ID of the knowledge keeper who contributed the term",
-        "isArray": false,
-        "isOptional": false,
-        "label": "contributor ID",
-      },
       "languageCode": {
         "complexDataType": "ENUM",
         "description": "the language of this term",
@@ -4300,13 +4293,6 @@ exports[`command payload schemas Command payload schema should match the snapsho
             ],
           },
         },
-      },
-      "contributorId": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "The ID of the konwledge kepper who contributed the term",
-        "isArray": false,
-        "isOptional": true,
-        "label": "contributor ID",
       },
       "text": {
         "coscradDataType": "NON_EMPTY_STRING",

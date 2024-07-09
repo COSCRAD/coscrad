@@ -29,7 +29,6 @@ export class CreatePromptTermCommandHandler extends BaseCreateCommandHandler<Ter
     protected createNewInstance({
         text: promptText,
         aggregateCompositeIdentifier: { id },
-        contributorId,
     }: CreatePromptTerm): ResultOrError<Term> {
         const text = new MultilingualText({
             items: [
@@ -53,7 +52,6 @@ export class CreatePromptTermCommandHandler extends BaseCreateCommandHandler<Ter
             type: AggregateType.term,
             id,
             text,
-            contributorId,
             published: false,
             isPromptTerm: true,
             audio: new MultilingualAudio({

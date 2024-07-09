@@ -7,8 +7,10 @@
                 "type": "term"
             },
             "text": "I am talking to him (language)",
-            "languageCode": "clc",
-            "contributorId": "1"
+            "languageCode": "clc"
+        },
+        "meta": {
+            "contributorIds": []
         }
     },
     {

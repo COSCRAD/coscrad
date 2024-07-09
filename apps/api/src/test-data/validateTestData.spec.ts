@@ -2,6 +2,7 @@ import { Test } from '@nestjs/testing';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { buildAllDataClassProviders } from '../app/controllers/__tests__/createTestModule';
 import { Valid, isValid } from '../domain/domainModelValidators/Valid';
+import { buildReferenceTree } from '../domain/models/shared/command-handlers/utilities/build-reference-tree';
 import getId from '../domain/models/shared/functional/getId';
 import { AggregateId } from '../domain/types/AggregateId';
 import { AggregateType } from '../domain/types/AggregateType';
@@ -68,6 +69,24 @@ describe('buildTestData', () => {
                     .get('duplicates');
 
                 expect(duplicateIdentifiers).toEqual([]);
+            });
+
+            it(`should contain no invalid references to other aggregates`, () => {
+                const invalidReferences = deluxeInMemoryStore
+                    .fetchAllOfType(aggregateType)
+                    .flatMap((instance) => {
+                        const TargetCtor = Object.getPrototypeOf(instance);
+
+                        const expectedReferences = buildReferenceTree(TargetCtor, instance);
+
+                        const missingReferences = deluxeInMemoryStore
+                            .fetchReferences()
+                            .compare(expectedReferences);
+
+                        return missingReferences;
+                    });
+
+                expect(invalidReferences).toEqual([]);
             });
 
             deluxeInMemoryStore.fetchAllOfType(aggregateType).forEach((aggregate) => {
