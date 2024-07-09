@@ -121,7 +121,7 @@ export const CategorizablePageLayout = ({
             <Drawer
                 anchor="right"
                 PaperProps={{
-                    sx: { width: ['90vw', '35vw'] },
+                    sx: { width: { xs: '90vw', sm: '60vw', md: '45vw' } },
                 }}
                 variant="temporary"
                 data-testid="connected-resources-panel"
@@ -129,6 +129,18 @@ export const CategorizablePageLayout = ({
             >
                 <DrawerHeader>
                     <Box sx={{ mb: 2 }}>
+                        <Box sx={{ width: '100%', textAlign: 'right' }}>
+                            <Tooltip title="Close Panel">
+                                <IconButton
+                                    data-testid="close-connected-resources-panel-button"
+                                    onClick={() => {
+                                        toggleDrawer('right');
+                                    }}
+                                >
+                                    <CloseIcon />
+                                </IconButton>
+                            </Tooltip>
+                        </Box>
                         <Typography variant="h3" sx={{ mb: 0 }}>
                             Connected Resources
                         </Typography>
@@ -137,16 +149,6 @@ export const CategorizablePageLayout = ({
                             for {resourceType}/{id}
                         </Typography>
                     </Box>
-                    <Tooltip title="Close Panel">
-                        <IconButton
-                            data-testid="close-connected-resources-panel-button"
-                            onClick={() => {
-                                toggleDrawer('right');
-                            }}
-                        >
-                            <CloseIcon />
-                        </IconButton>
-                    </Tooltip>
                 </DrawerHeader>
                 <Divider variant="fullWidth" sx={{ mb: 3 }} />
                 <DrawerContentStack>{connectedResourcesList}</DrawerContentStack>

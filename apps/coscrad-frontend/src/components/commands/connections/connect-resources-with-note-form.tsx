@@ -11,9 +11,7 @@ import {
     Typography,
 } from '@mui/material';
 import { useState } from 'react';
-import { AggregateDetailContainer } from '../../higher-order-components/aggregate-detail-container';
 import { GlobalSearch } from '../../higher-order-components/global-search';
-import { thumbnailCategorizableDetailPresenterFactory } from '../../resources/factories/thumbnail-categorizable-detail-presenter-factory';
 
 export interface ConnectResourcesWithNoteFormProps {
     /**
@@ -48,12 +46,16 @@ export const ConnectResourcesWithNoteForm = ({
         <Box>
             <Stack>
                 <Typography variant="h2">Connect Resources with Note</Typography>
-                <Typography variant="h3">From</Typography>
-                <AggregateDetailContainer
-                    compositeIdentifier={fromMemberCompositeIdentifier}
-                    detailPresenterFactory={thumbnailCategorizableDetailPresenterFactory}
-                />
-                <Typography variant="h3">To</Typography>
+                {/* Temporary fix to deal with rendering issue while typing into the 
+                note form field */}
+                {/* <Typography variant="h3">From</Typography>
+                <Box sx={{ mb: 1 }}>
+                    <AggregateDetailContainer
+                        compositeIdentifier={fromMemberCompositeIdentifier}
+                        detailPresenterFactory={thumbnailCategorizableDetailPresenterFactory}
+                    />
+                </Box>
+                <Typography variant="h3">To</Typography> */}
                 <GlobalSearch
                     onNewSelection={(compositeIdentifier) => {
                         setToMemberCompositeIdentifier({ ...compositeIdentifier });

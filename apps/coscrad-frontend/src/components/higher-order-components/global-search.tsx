@@ -2,7 +2,7 @@ import { FormFieldType, ResourceCompositeIdentifier, ResourceType } from '@coscr
 import { Box, MenuItem, Select } from '@mui/material';
 import { useState } from 'react';
 import { DynamicSelect } from '../dynamic-forms/dynamic-form-elements/dynamic-select';
-import { fullViewCategorizablePresenterFactory } from '../resources/factories/full-view-categorizable-presenter-factory';
+import { thumbnailCategorizableDetailPresenterFactory } from '../resources/factories/thumbnail-categorizable-detail-presenter-factory';
 import { AggregateDetailContainer } from './aggregate-detail-container';
 
 interface GlobalSearchProps {
@@ -54,7 +54,7 @@ export const GlobalSearch = ({ onNewSelection }: GlobalSearchProps) => {
             {selectedResourceType && selectedId ? (
                 <AggregateDetailContainer
                     compositeIdentifier={{ type: selectedResourceType, id: selectedId }}
-                    detailPresenterFactory={fullViewCategorizablePresenterFactory}
+                    detailPresenterFactory={thumbnailCategorizableDetailPresenterFactory}
                 />
             ) : null}
         </Box>

@@ -12,7 +12,7 @@ export const Header = (): JSX.Element => {
     const { organizationLogoUrl } = useContext(ConfigurableContentContext);
 
     return (
-        <AppBar position="static" data-testid={'header'}>
+        <AppBar position="fixed" sx={{ zIndex: 500 }} data-testid={'header'}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <Avatar src={organizationLogoUrl} alt={siteTitle} sx={{ mr: 1 }} />

@@ -14,7 +14,7 @@ const StyledFullViewFigure = styled('figure')({
     position: 'relative',
     right: '50%',
     width: '100vw',
-    marginTop: '-7%',
+    marginTop: '-4%',
 });
 
 export const ImageFullPageWidth = ({ image }: FullImageViewProps): JSX.Element => {
