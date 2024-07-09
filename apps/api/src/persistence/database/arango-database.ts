@@ -10,12 +10,8 @@ import { HasAggregateId } from '../../domain/types/HasAggregateId';
 import { InternalError } from '../../lib/errors/InternalError';
 import { Maybe } from '../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
-import {
-    ArangoCollectionId,
-    isArangoCollectionId,
-} from './collection-references/ArangoCollectionId';
 import buildArangoDocumentHandle from './utilities/buildArangoDocumentHandle';
-import { DatabaseDTO } from './utilities/mapEntityDTOToDatabaseDTO';
+import { DatabaseDTO } from './utilities/mapEntityDTOToDatabaseDocument';
 
 type ArangoDTO<T> = T & {
     _key: string;
@@ -54,12 +50,6 @@ export class ArangoDatabase {
     ): Promise<Maybe<TDatabaseDTO>> => {
         if (!isAggregateId(id)) {
             throw new InternalError(`Arango cannot fetchById with invalid id: ${id}`);
-        }
-
-        if (!isArangoCollectionId(collectionName)) {
-            throw new InternalError(
-                `Arango cannot fetchById from an invalid collection: ${collectionName}`
-            );
         }
 
         const allEntities = await this.fetchMany<TDatabaseDTO>(collectionName, new IdEquals(id));
@@ -121,27 +111,14 @@ export class ArangoDatabase {
         return cursor.all();
     };
 
+    // TODO renamme this method to `count`
     getCount = async (collectionName: string): Promise<number> => {
-        if (!isArangoCollectionId(collectionName)) {
-            throw new InternalError(
-                `Arango cannot count for collection with invalid collection name: ${collectionName}`
-            );
-        }
-
         const results = await this.fetchMany(collectionName);
 
         return isNotFound(results) ? 0 : results.length;
     };
 
     create = async <TEntityDTO>(dto: TEntityDTO, collectionName: string): Promise<void> => {
-        /**
-         * Although the caller should ensure this, it's nice to double check here
-         * as a means of making sure our query isn't subject to injection.
-         */
-        if (!isArangoCollectionId(collectionName)) {
-            throw new Error(`Cannot insert into invalid collection: ${collectionName}`);
-        }
-
         const collectionExists = await this.#doesCollectionExist(collectionName);
 
         if (!collectionExists) throw new Error(`Collection ${collectionName} not found!`);
@@ -295,15 +272,15 @@ export class ArangoDatabase {
                 `You cannot remove document ${id} in collection ${collectionName} as it does not exist`
             );
 
-        if (
-            !([ArangoCollectionId.migrations, ArangoCollectionId.uuids] as string[]).includes(
-                collectionName
-            )
-        ) {
-            throw new InternalError(
-                'ArangoDatabase.delete Not Implemented except for migrations and ID generation'
-            );
-        }
+        // if (
+        //     !([ArangoCollectionId.migrations, ArangoCollectionId.uuids] as string[]).includes(
+        //         collectionName
+        //     )
+        // ) {
+        //     throw new InternalError(
+        //         'ArangoDatabase.delete Not Implemented except for migrations and ID generation'
+        //     );
+        // }
 
         const query = `
             REMOVE @id in @@collectionName
@@ -333,10 +310,6 @@ export class ArangoDatabase {
             throw new InternalError(
                 `You can only delete all in a test environment. Your environment is: ${process.env.NODE_ENV}`
             );
-        }
-
-        if (!isArangoCollectionId(collectionName)) {
-            throw new InternalError(`Cannot delete all in invalid collection: ${collectionName}`);
         }
 
         const query = `

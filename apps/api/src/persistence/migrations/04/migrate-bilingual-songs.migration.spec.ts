@@ -17,7 +17,7 @@ import { ArangoCollectionId } from '../../database/collection-references/ArangoC
 import { ArangoDatabaseProvider } from '../../database/database.provider';
 import mapEntityDTOToDatabaseDTO, {
     ArangoDatabaseDocument,
-} from '../../database/utilities/mapEntityDTOToDatabaseDTO';
+} from '../../database/utilities/mapEntityDTOToDatabaseDocument';
 import TestRepositoryProvider from '../../repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../repositories/__tests__/generateDatabaseNameForTestSuite';
 import { MigrateBilingualSongs } from './migrate-bilingual-songs.migration';

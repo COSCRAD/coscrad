@@ -1,7 +1,7 @@
 import { isAggregateId } from '../../../domain/types/AggregateId';
 import { HasAggregateId } from '../../../domain/types/HasAggregateId';
 import { DTO } from '../../../types/DTO';
-import { DatabaseDTO } from './mapEntityDTOToDatabaseDTO';
+import { DatabaseDTO } from './mapEntityDTOToDatabaseDocument';
 
 export default <TEntity extends HasAggregateId>(databaseDTO: DatabaseDTO<TEntity>): DTO<TEntity> =>
     Object.entries(databaseDTO).reduce((accumulatedMappedObject: DTO<TEntity>, [key, value]) => {
