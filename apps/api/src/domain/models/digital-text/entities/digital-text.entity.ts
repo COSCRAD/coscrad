@@ -8,6 +8,7 @@ import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound, isNotFound } from '../../../../lib/types/not-found';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
+import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { AggregateRoot, UpdateMethod } from '../../../decorators';
@@ -54,6 +55,21 @@ import { MissingPageError } from '../errors/missing-page.error';
 import DigitalTextPage from './digital-text-page.entity';
 import { PageIdentifier } from './types/page-identifier';
 
+type DigitalTextPageImport = {
+    pageIdentifier: PageIdentifier;
+
+    text: string;
+
+    languageCodeForText: LanguageCode;
+
+    translation: string;
+
+    languageCodeForTranslation: LanguageCode;
+
+    audioItemId: AggregateId;
+
+    photographId: AggregateId;
+};
 @AggregateRoot(AggregateType.digitalText)
 @RegisterIndexScopedCommands([CREATE_DIGITAL_TEXT])
 export class DigitalText extends Resource {
@@ -334,6 +350,38 @@ export class DigitalText extends Resource {
         }
 
         this.audioForTitle = audioUpdateResult;
+
+        return this;
+    }
+
+    importPages(pagesToImport: DigitalTextPageImport[]): ResultOrError<DigitalText> {
+        this.pages = pagesToImport.map(
+            ({
+                pageIdentifier,
+                photographId,
+                audioItemId,
+                text,
+                translation,
+                languageCodeForText,
+                languageCodeForTranslation,
+            }) =>
+                new DigitalTextPage({
+                    identifier: pageIdentifier,
+                    content: buildMultilingualTextFromBilingualText(
+                        { text, languageCode: languageCodeForText },
+                        { text: translation, languageCode: languageCodeForTranslation }
+                    ),
+                    audio: new MultilingualAudio({
+                        items: [
+                            {
+                                audioItemId,
+                                languageCode: languageCodeForText,
+                            },
+                        ],
+                    }),
+                    photographId,
+                })
+        );
 
         return this;
     }
