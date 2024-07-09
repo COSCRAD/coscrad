@@ -40,13 +40,13 @@ const validPagesToImport = [
             {
                 text: textContent,
                 languageCode: originalLangaugeCode,
-                isOriginalText: true,
+                isOriginalLanguage: true,
                 audioItemId: audioItemIdForOriginalLanguage,
             },
             {
                 text: translation,
                 languageCode: translationLanguageCode,
-                isOriginalText: false,
+                isOriginalLanguage: false,
                 audioItemId: audioItemIdForTranslationLanguage,
             },
         ],
@@ -109,13 +109,13 @@ describe(`DigitalText.ImportPages`, () => {
                         {
                             text: textContent,
                             languageCode: originalLangaugeCode,
-                            isOriginalText: true,
+                            isOriginalLanguage: true,
                             // audioItemId: audioItemIdForOriginalLanguage,
                         },
                         {
                             text: translation,
                             languageCode: translationLanguageCode,
-                            isOriginalText: false,
+                            isOriginalLanguage: false,
                             // audioItemId: audioItemIdForTranslationLanguage,
                         },
                     ],
@@ -199,13 +199,13 @@ describe(`DigitalText.ImportPages`, () => {
                         {
                             text: textContent,
                             languageCode: originalLangaugeCode,
-                            isOriginalText: false,
+                            isOriginalLanguage: false,
                             audioItemId: audioItemIdForOriginalLanguage,
                         },
                         {
                             text: translation,
                             languageCode: translationLanguageCode,
-                            isOriginalText: false,
+                            isOriginalLanguage: false,
                             audioItemId: audioItemIdForTranslationLanguage,
                         },
                     ],
@@ -235,13 +235,13 @@ describe(`DigitalText.ImportPages`, () => {
                         {
                             text: textContent,
                             languageCode: originalLangaugeCode,
-                            isOriginalText: true,
+                            isOriginalLanguage: true,
                             audioItemId: audioItemIdForOriginalLanguage,
                         },
                         {
                             text: translation,
                             languageCode: translationLanguageCode,
-                            isOriginalText: true,
+                            isOriginalLanguage: true,
                             audioItemId: audioItemIdForTranslationLanguage,
                         },
                     ],
@@ -270,13 +270,13 @@ describe(`DigitalText.ImportPages`, () => {
                             {
                                 text: textContent,
                                 languageCode: repeatedLanguageCode,
-                                isOriginalText: true,
+                                isOriginalLanguage: true,
                                 audioItemId: audioItemIdForOriginalLanguage,
                             },
                             {
                                 text: translation,
                                 languageCode: repeatedLanguageCode,
-                                isOriginalText: true,
+                                isOriginalLanguage: true,
                                 audioItemId: audioItemIdForTranslationLanguage,
                             },
                         ],
@@ -300,13 +300,13 @@ describe(`DigitalText.ImportPages`, () => {
                             {
                                 text: '', // not allowed
                                 languageCode: originalLangaugeCode,
-                                isOriginalText: true,
+                                isOriginalLanguage: true,
                                 audioItemId: audioItemIdForOriginalLanguage,
                             },
                             {
                                 text: translation,
                                 languageCode: translationLanguageCode,
-                                isOriginalText: true,
+                                isOriginalLanguage: true,
                                 audioItemId: audioItemIdForTranslationLanguage,
                             },
                         ],
@@ -330,13 +330,13 @@ describe(`DigitalText.ImportPages`, () => {
                             {
                                 text: textContent,
                                 languageCode: originalLangaugeCode,
-                                isOriginalText: true,
+                                isOriginalLanguage: true,
                                 audioItemId: audioItemIdForOriginalLanguage,
                             },
                             {
                                 text: translation,
                                 languageCode: translationLanguageCode,
-                                isOriginalText: true,
+                                isOriginalLanguage: true,
                                 audioItemId: '', // not allowed
                             },
                         ],
@@ -360,13 +360,13 @@ describe(`DigitalText.ImportPages`, () => {
                             {
                                 text: textContent,
                                 languageCode: originalLangaugeCode,
-                                isOriginalText: true,
+                                isOriginalLanguage: true,
                                 audioItemId: audioItemIdForOriginalLanguage,
                             },
                             {
                                 text: translation,
                                 languageCode: translationLanguageCode,
-                                isOriginalText: true,
+                                isOriginalLanguage: true,
                                 audioItemId: audioItemIdForTranslationLanguage,
                             },
                         ],
