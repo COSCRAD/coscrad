@@ -7,5 +7,5 @@ export type DigitalTextCreatedPayload = CreateDigitalText;
 
 @CoscradEvent(DIGITAL_TEXT_CREATED)
 export class DigitalTextCreated extends BaseEvent<DigitalTextCreatedPayload> {
-    type = DIGITAL_TEXT_CREATED;
+    readonly type = 'DIGITAL_TEXT_CREATED';
 }

@@ -1,18 +1,12 @@
 import { ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
+import { BooleanDataType, NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
 import { LanguageCodeEnum } from '../../../../../domain/common/entities/multilingual-text';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { PageIdentifier } from '../../entities';
 import { DigitalTextCompositeId } from '../create-digital-text.command';
 
-class DigitalTextImportRecord {
-    @NonEmptyString({
-        label: 'page identifier',
-        description: 'identifier for the page being imported',
-    })
-    readonly pageIdentifier: PageIdentifier;
-
+class AudioAndTextContentForPage {
     @NonEmptyString({
         label: 'text',
         description: 'text content for the page',
@@ -20,24 +14,10 @@ class DigitalTextImportRecord {
     readonly text: string;
 
     @LanguageCodeEnum({
-        label: 'language code for text',
-        description: 'the language of the text content',
+        label: 'language for the page you are importing',
+        description: 'language for the page you are importing',
     })
-    readonly languageCodeForText: LanguageCode;
-
-    @NonEmptyString({
-        label: 'translation',
-        description: `translation of the page's content`,
-        isOptional: true,
-    })
-    readonly translation?: string;
-
-    @LanguageCodeEnum({
-        label: 'translation language',
-        description: 'the language in which the page content has been translated',
-        isOptional: true,
-    })
-    readonly languageCodeForTranslation?: LanguageCode;
+    readonly languageCode: LanguageCode;
 
     // TODO support audio for multiple languages
     @UUID({
@@ -45,6 +25,27 @@ class DigitalTextImportRecord {
         description: 'a reference to the audio for this page',
     })
     readonly audioItemId?: AggregateId;
+
+    @BooleanDataType({
+        label: 'is original language',
+        description: 'is this text item in the original language (not a translation)',
+    })
+    readonly isOriginalLanguage: boolean;
+}
+
+class DigitalTextPageImportRecord {
+    @NonEmptyString({
+        label: 'page identifier',
+        description: 'identifier for the page being imported',
+    })
+    readonly pageIdentifier: PageIdentifier;
+
+    @NestedDataType(AudioAndTextContentForPage, {
+        label: 'audio and text content for all pages',
+        description: 'list of audio (optional) and multilingual text for every page',
+        isArray: true,
+    })
+    readonly content: AudioAndTextContentForPage[];
 
     @UUID({
         label: 'photograph for page',
@@ -65,12 +66,12 @@ export class ImportPagesToDigitalText implements ICommandBase {
     })
     readonly aggregateCompositeIdentifier: DigitalTextCompositeId;
 
-    @NestedDataType(DigitalTextImportRecord, {
+    @NestedDataType(DigitalTextPageImportRecord, {
         label: 'pages to import',
         description: 'list of all pages to import',
         isArray: true,
         // the array cannot be empty
         isOptional: false,
     })
-    readonly pages: DigitalTextImportRecord[];
+    readonly pages: DigitalTextPageImportRecord[];
 }

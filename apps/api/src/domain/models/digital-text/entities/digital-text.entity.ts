@@ -36,6 +36,7 @@ import {
     DigitalTextPageContentTranslated,
     DigitalTextTitleTranslated,
     PageAddedToDigitalText,
+    PagesImportedToDigitalText,
 } from '../commands';
 import { ContentAddedToDigitalTextPage } from '../commands/add-content-to-digital-text-page';
 import { PhotographAddedToDigitalTextPage } from '../commands/add-photograph-to-digital-text-page';
@@ -72,7 +73,7 @@ type MultilingualAudioItemAndText = {
      * You are required to provide one and only one text item that is considered
      * the original. The rest will be regarded as translations.
      */
-    isOriginalText: boolean;
+    isOriginalLanguage: boolean;
 };
 
 type DigitalTextPageImport = {
@@ -389,7 +390,7 @@ export class DigitalText extends Resource {
                 // languageCodeForTranslation,
             }) => {
                 const originalLanguageImportItemSearchResult = audioAndTextContent.filter(
-                    ({ isOriginalText }) => isOriginalText
+                    ({ isOriginalLanguage: isOriginalText }) => isOriginalText
                 );
 
                 if (originalLanguageImportItemSearchResult.length > 1) {
@@ -422,7 +423,7 @@ export class DigitalText extends Resource {
                 const pageWithTranslationsAndAudio = audioAndTextContent.reduce(
                     (
                         acc: ResultOrError<DigitalTextPage>,
-                        { text, languageCode, isOriginalText, audioItemId }
+                        { text, languageCode, isOriginalLanguage: isOriginalText, audioItemId }
                     ) => {
                         if (isInternalError(acc)) {
                             // A previous update to the page has failed
@@ -598,6 +599,16 @@ export class DigitalText extends Resource {
         payload: { pageIdentifier, translation, languageCode },
     }: DigitalTextPageContentTranslated) {
         return this.translatePageContent(pageIdentifier, translation, languageCode);
+    }
+
+    handlePagesImportedToDigitalText({ payload: { pages } }: PagesImportedToDigitalText) {
+        return this.importPages(
+            pages.map(({ pageIdentifier, content, photographId }) => ({
+                pageIdentifier,
+                audioAndTextContent: content,
+                photographId,
+            }))
+        );
     }
 
     static fromEventHistory(
