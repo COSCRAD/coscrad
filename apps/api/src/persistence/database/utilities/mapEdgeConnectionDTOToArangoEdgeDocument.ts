@@ -2,7 +2,7 @@ import { EdgeConnection } from '../../../domain/models/context/edge-connection.e
 import { DTO } from '../../../types/DTO';
 import { ArangoEdgeDocument } from '../types/ArangoEdgeDocument';
 import getArangoDocumentDirectionAttributesFromEdgeConnectionMembers from './getArangoDocumentDirectionAttributesFromEdgeConnectionMembers';
-import mapEntityDTOToDatabaseDTO from './mapEntityDTOToDatabaseDTO';
+import mapEntityDTOToDatabaseDTO from './mapEntityDTOToDatabaseDocument';
 
 export default (edgeConnection: DTO<EdgeConnection>): ArangoEdgeDocument =>
     mapEntityDTOToDatabaseDTO<Omit<ArangoEdgeDocument, '_key'> & { id: string }>({

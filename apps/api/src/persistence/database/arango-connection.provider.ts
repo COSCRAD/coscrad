@@ -89,6 +89,9 @@ export class ArangoConnectionProvider {
 
         await this.#createAllMissingCollections();
 
+        // TODO discover view collections dynamically
+        await this.#createCollectionIfNotExists('term__VIEWS');
+
         this.isInitialized = true;
     }
 

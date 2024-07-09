@@ -5,7 +5,7 @@ import { ICoscradQueryRunner } from '../migrations/coscrad-query-runner.interfac
 import { ArangoDatabase } from './arango-database';
 import { ArangoCollectionId } from './collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from './database.provider';
-import { ArangoDatabaseDocument } from './utilities/mapEntityDTOToDatabaseDTO';
+import { ArangoDatabaseDocument } from './utilities/mapEntityDTOToDatabaseDocument';
 
 @Injectable()
 export class ArangoQueryRunner implements ICoscradQueryRunner {

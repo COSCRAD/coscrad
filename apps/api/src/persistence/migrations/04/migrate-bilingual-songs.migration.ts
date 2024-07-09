@@ -4,7 +4,7 @@ import { MultilingualText } from '../../../domain/common/entities/multilingual-t
 import { Song } from '../../../domain/models/song/song.entity';
 import { DTO } from '../../../types/DTO';
 import { ArangoCollectionId } from '../../database/collection-references/ArangoCollectionId';
-import { ArangoDatabaseDocument } from '../../database/utilities/mapEntityDTOToDatabaseDTO';
+import { ArangoDatabaseDocument } from '../../database/utilities/mapEntityDTOToDatabaseDocument';
 import { ICoscradMigration } from '../coscrad-migration.interface';
 import { ICoscradQueryRunner } from '../coscrad-query-runner.interface';
 import { Migration } from '../decorators';
