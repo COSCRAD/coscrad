@@ -8,7 +8,6 @@ import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound, isNotFound } from '../../../../lib/types/not-found';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
-import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { AggregateRoot, UpdateMethod } from '../../../decorators';
@@ -55,21 +54,30 @@ import { MissingPageError } from '../errors/missing-page.error';
 import DigitalTextPage from './digital-text-page.entity';
 import { PageIdentifier } from './types/page-identifier';
 
+/**
+ * TODO In the future we may want to consider grouping audio
+ * and multilingual text items into a single structure. This would, for example,
+ * allow for us to use audio in the absence of text for the given language.
+ */
+type MultilingualAudioItemAndText = {
+    text: string;
+    languageCode: LanguageCode;
+    audioItemId?: AggregateId;
+    /**
+     * You are required to provide one and only one text item that is considered
+     * the original. The rest will be regarded as translations.
+     */
+    isOriginalText: boolean;
+};
+
 type DigitalTextPageImport = {
     pageIdentifier: PageIdentifier;
 
-    text: string;
-
-    languageCodeForText: LanguageCode;
-
-    translation: string;
-
-    languageCodeForTranslation: LanguageCode;
-
-    audioItemId: AggregateId;
+    audioAndTextContent: MultilingualAudioItemAndText[];
 
     photographId: AggregateId;
 };
+
 @AggregateRoot(AggregateType.digitalText)
 @RegisterIndexScopedCommands([CREATE_DIGITAL_TEXT])
 export class DigitalText extends Resource {
@@ -354,34 +362,91 @@ export class DigitalText extends Resource {
         return this;
     }
 
+    @UpdateMethod()
     importPages(pagesToImport: DigitalTextPageImport[]): ResultOrError<DigitalText> {
-        this.pages = pagesToImport.map(
+        const pageUpdateResult = pagesToImport.map(
             ({
                 pageIdentifier,
                 photographId,
-                audioItemId,
-                text,
-                translation,
-                languageCodeForText,
-                languageCodeForTranslation,
-            }) =>
-                new DigitalTextPage({
+                audioAndTextContent,
+                // audioItemId,
+                // text,
+                // translation,
+                // languageCodeForText,
+                // languageCodeForTranslation,
+            }) => {
+                const originalLanguageImportItemSearchResult = audioAndTextContent.filter(
+                    ({ isOriginalText }) => isOriginalText
+                );
+
+                // TODO validate language code \ original of input
+                // if(originalLanguageImportItemSearchResult.length >1){
+                //     // TODO break this out into a custom error
+                //     return new InternalError(`You have specified multiple translation languages`)
+                // }
+
+                // TODO handle original not found
+
+                const {
+                    text: originalText,
+                    languageCode: originalLangaugeCode,
+                    // ~~audioItemId~~ we deal with this within the reduce loop below
+                } = originalLanguageImportItemSearchResult[0];
+
+                const pageWithOriginalTextOnly = new DigitalTextPage({
                     identifier: pageIdentifier,
-                    content: buildMultilingualTextFromBilingualText(
-                        { text, languageCode: languageCodeForText },
-                        { text: translation, languageCode: languageCodeForTranslation }
+                    content: buildMultilingualTextWithSingleItem(
+                        originalText,
+                        originalLangaugeCode
                     ),
                     audio: new MultilingualAudio({
-                        items: [
-                            {
-                                audioItemId,
-                                languageCode: languageCodeForText,
-                            },
-                        ],
+                        items: [], // we will add these later
                     }),
                     photographId,
-                })
+                });
+
+                // We need to translate the text before adding audio
+                const pageWithTranslationsAndAudio = audioAndTextContent.reduce(
+                    (
+                        acc: ResultOrError<DigitalTextPage>,
+                        { text, languageCode, isOriginalText, audioItemId }
+                    ) => {
+                        if (isInternalError(acc)) {
+                            // A previous update to the page has failed
+                            return acc;
+                        }
+
+                        const updateTextResult = isOriginalText
+                            ? // if this is the original text, there's nothing to translate
+                              acc
+                            : acc.translateContent(text, languageCode);
+
+                        if (isInternalError(updateTextResult)) {
+                            return updateTextResult;
+                        }
+
+                        if (isNullOrUndefined(audioItemId)) {
+                            return updateTextResult;
+                        }
+
+                        return updateTextResult.addAudio(audioItemId, languageCode);
+                    },
+                    pageWithOriginalTextOnly
+                );
+
+                return pageWithTranslationsAndAudio;
+            }
         );
+
+        const pageImportErrors = pageUpdateResult.filter(isInternalError);
+
+        if (pageImportErrors.length > 0) {
+            // TODO fix this error
+            return new InternalError('foo bar baz');
+        }
+
+        // the filter above ensures that we do not have any Errors in this array
+        this.pages = pageUpdateResult as DigitalTextPage[];
 
         return this;
     }
