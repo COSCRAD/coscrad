@@ -42,8 +42,13 @@ import { PhotographAddedToDigitalTextPage } from '../commands/add-photograph-to-
 import { ADD_PAGE_TO_DIGITAL_TEXT, CREATE_DIGITAL_TEXT } from '../constants';
 import {
     CannotAddPhotographForMissingPageError,
+    CannotImportPagesToNonEmptyDigitalTextError,
     CannotOverrideCoverPhotographError,
+    EmptyPageImportError,
+    FailedToImportPagesToDigitalTextError,
     FailedToUpdateDigitalTextPageError,
+    MissingOriginalTextItemInPageImportError,
+    MultipleOriginalItemsInPageImportError,
 } from '../errors';
 import { CannotAddAudioForTitleInGivenLanguageError } from '../errors/cannot-add-audio-for-title-in-given-language.error';
 import { CannotAddPageWithDuplicateIdentifierError } from '../errors/cannot-add-page-with-duplicate-identifier.error';
@@ -75,7 +80,7 @@ type DigitalTextPageImport = {
 
     audioAndTextContent: MultilingualAudioItemAndText[];
 
-    photographId: AggregateId;
+    photographId?: AggregateId;
 };
 
 @AggregateRoot(AggregateType.digitalText)
@@ -364,6 +369,14 @@ export class DigitalText extends Resource {
 
     @UpdateMethod()
     importPages(pagesToImport: DigitalTextPageImport[]): ResultOrError<DigitalText> {
+        if (pagesToImport.length === 0) {
+            return new EmptyPageImportError();
+        }
+
+        if (this.hasPages()) {
+            return new CannotImportPagesToNonEmptyDigitalTextError(this.pages);
+        }
+
         const pageUpdateResult = pagesToImport.map(
             ({
                 pageIdentifier,
@@ -379,13 +392,13 @@ export class DigitalText extends Resource {
                     ({ isOriginalText }) => isOriginalText
                 );
 
-                // TODO validate language code \ original of input
-                // if(originalLanguageImportItemSearchResult.length >1){
-                //     // TODO break this out into a custom error
-                //     return new InternalError(`You have specified multiple translation languages`)
-                // }
+                if (originalLanguageImportItemSearchResult.length > 1) {
+                    return new MultipleOriginalItemsInPageImportError();
+                }
 
-                // TODO handle original not found
+                if (originalLanguageImportItemSearchResult.length === 0) {
+                    return new MissingOriginalTextItemInPageImportError();
+                }
 
                 const {
                     text: originalText,
@@ -442,7 +455,7 @@ export class DigitalText extends Resource {
 
         if (pageImportErrors.length > 0) {
             // TODO fix this error
-            return new InternalError('foo bar baz');
+            return new FailedToImportPagesToDigitalTextError(this.id, pageImportErrors);
         }
 
         // the filter above ensures that we do not have any Errors in this array
