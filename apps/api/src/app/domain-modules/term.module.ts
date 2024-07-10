@@ -20,9 +20,14 @@ import {
 import { Term } from '../../domain/models/term/entities/term.entity';
 import { TermQueryService } from '../../domain/services/query-services/term-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
+import { ArangoConnectionProvider } from '../../persistence/database/arango-connection.provider';
+import { ArangoDatabase } from '../../persistence/database/arango-database';
+import { ArangoDatabaseForCollection } from '../../persistence/database/arango-database-for-collection';
 import { PersistenceModule } from '../../persistence/persistence.module';
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
 import { TermController } from '../controllers/resources/term.controller';
+
+export const TERM_QUERY_REPOSITORY_TOKEN = 'TERM_QUERY_REPOSITORY_TOKEN';
 
 @Module({
     imports: [PersistenceModule, CommandModule, IdGenerationModule],
@@ -35,6 +40,15 @@ import { TermController } from '../controllers/resources/term.controller';
         TranslateTermCommandHandler,
         ElicitTermFromPromptCommandHandler,
         AddAudioForTermCommandHandler,
+        {
+            provide: TERM_QUERY_REPOSITORY_TOKEN,
+            useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
+                new ArangoDatabaseForCollection(
+                    new ArangoDatabase(arangoConnectionProvider.getConnection()),
+                    'term-views'
+                ),
+            inject: [ArangoConnectionProvider],
+        },
         // Data Classes
         ...[
             // Domain Model

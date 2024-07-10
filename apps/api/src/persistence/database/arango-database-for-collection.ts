@@ -6,8 +6,7 @@ import { InternalError } from '../../lib/errors/InternalError';
 import { Maybe } from '../../lib/types/maybe';
 import { DeepPartial } from '../../types/DeepPartial';
 import { ArangoDatabase } from './arango-database';
-import { ArangoCollectionId } from './collection-references/ArangoCollectionId';
-import { ArangoDatabaseDocument } from './utilities/mapEntityDTOToDatabaseDTO';
+import { ArangoDatabaseDocument } from './utilities/mapEntityDTOToDatabaseDocument';
 
 /**
  * Note that at this level we are working with a `DatabaseDocument` (has _key
@@ -15,11 +14,20 @@ import { ArangoDatabaseDocument } from './utilities/mapEntityDTOToDatabaseDTO';
  * repositories layer.
  */
 export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
-    #collectionID: ArangoCollectionId;
+    #collectionID: string;
 
     #arangoDatabase: ArangoDatabase;
 
-    constructor(arangoDatabase: ArangoDatabase, collectionName: ArangoCollectionId) {
+    /**
+     * We used to type `collectionName: ArangoCollectionName` and enforce this
+     * statically. We found this led to unwanted coupling and unnecessary
+     * complexity. All collections should be created dynamically if missing
+     * after being registered dynamically via annotations.
+     *
+     * At the db implementation level, we can simply check if the collection
+     * exists.
+     */
+    constructor(arangoDatabase: ArangoDatabase, collectionName: string) {
         this.#collectionID = collectionName;
 
         this.#arangoDatabase = arangoDatabase;
@@ -76,6 +84,14 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
                     error?.message ? [new InternalError(error.message)] : []
                 );
             });
+    }
+
+    delete(id: string): Promise<void> {
+        return this.#arangoDatabase.delete(id, this.#collectionID);
+    }
+
+    clear(): Promise<void> {
+        return this.#arangoDatabase.deleteAll(this.#collectionID);
     }
 
     update(id: AggregateId, updateDTO: DeepPartial<ArangoDatabaseDocument<TEntity>>) {

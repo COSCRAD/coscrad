@@ -13,7 +13,7 @@ import { ArangoConnectionProvider } from '../persistence/database/arango-connect
 import { ArangoQueryRunner } from '../persistence/database/arango-query-runner';
 import { ArangoCollectionId } from '../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
-import { ArangoDatabaseDocument } from '../persistence/database/utilities/mapEntityDTOToDatabaseDTO';
+import { ArangoDatabaseDocument } from '../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { BASE_DIGITAL_ASSET_URL } from '../persistence/migrations/01/remove-base-digital-asset-url.migration';
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';

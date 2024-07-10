@@ -20,7 +20,7 @@ import { ArangoDatabaseProvider } from '../database/database.provider';
 import mapArangoEdgeDocumentToEdgeConnectionDTO from '../database/utilities/mapArangoEdgeDocumentToEdgeConnectionDTO';
 import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEdgeConnectionDTOToArangoEdgeDocument from '../database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
-import mapEntityDTOToDatabaseDTO from '../database/utilities/mapEntityDTOToDatabaseDTO';
+import mapEntityDTOToDatabaseDTO from '../database/utilities/mapEntityDTOToDatabaseDocument';
 import ArangoCategoryRepository from './ArangoCategoryRepository';
 import {
     ArangoCommandRepositoryForAggregateRoot,

@@ -1,5 +1,5 @@
 import { HasId } from '@coscrad/api-interfaces';
-import { ArangoDatabaseDocument } from '../database/utilities/mapEntityDTOToDatabaseDTO';
+import { ArangoDatabaseDocument } from '../database/utilities/mapEntityDTOToDatabaseDocument';
 
 export interface UpdateQueryOptions<TOldDocument> {
     propertiesToRemove?: (keyof TOldDocument)[];

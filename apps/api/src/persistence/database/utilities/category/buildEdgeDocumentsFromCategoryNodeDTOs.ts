@@ -1,6 +1,6 @@
 import { Category } from '../../../../domain/models/categories/entities/category.entity';
+import { ArangoDatabaseDocument } from '../mapEntityDTOToDatabaseDocument';
 import buildCategoryDocHandle from './../buildCategoryDocHandle';
-import { ArangoDatabaseDocument } from './../mapEntityDTOToDatabaseDTO';
 
 export default (categoryNodes: Category[]): ArangoDatabaseDocument<Category>[] =>
     categoryNodes.reduce(

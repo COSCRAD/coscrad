@@ -12,7 +12,7 @@ import { ResultOrError } from '../../types/ResultOrError';
 import { ArangoDatabaseForCollection } from '../database/arango-database-for-collection';
 import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../database/database.provider';
-import { ArangoDatabaseDocument } from '../database/utilities/mapEntityDTOToDatabaseDTO';
+import { ArangoDatabaseDocument } from '../database/utilities/mapEntityDTOToDatabaseDocument';
 
 /**
  * TODO We need to add error handling. It is especially important that if
