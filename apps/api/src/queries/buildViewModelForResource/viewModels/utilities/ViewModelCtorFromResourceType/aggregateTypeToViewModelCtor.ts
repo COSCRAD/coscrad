@@ -18,7 +18,7 @@ import { PlaylistViewModel } from '../../playlist.view-model';
 import { SongViewModel } from '../../song.view-model';
 import { SpatialFeatureViewModel } from '../../spatial-data/spatial-feature.view-model';
 import { TagViewModel } from '../../tag.view-model';
-import { TermViewModel } from '../../term.view-model';
+import { TermViewModel } from '../../term.view-model.state-based';
 import { VocabularyListViewModel } from '../../vocabulary-list.view-model';
 
 export const aggregateTypeToViewModelCtor: {
