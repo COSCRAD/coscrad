@@ -25,7 +25,7 @@ const audioItemIdForTranslationLanguage = buildDummyUuid(3);
 
 const photographId = buildDummyUuid(2);
 
-const originalLangaugeCode = LanguageCode.Chinook;
+const originalLanguageCode = LanguageCode.Chinook;
 
 const translationLanguageCode = LanguageCode.Chilcotin;
 
@@ -39,7 +39,7 @@ const validPagesToImport = [
         audioAndTextContent: [
             {
                 text: textContent,
-                languageCode: originalLangaugeCode,
+                languageCode: originalLanguageCode,
                 isOriginalLanguage: true,
                 audioItemId: audioItemIdForOriginalLanguage,
             },
@@ -76,7 +76,7 @@ describe(`DigitalText.ImportPages`, () => {
 
                 expect(originalTextSearch.text).toBe(textContent);
 
-                expect(originalTextSearch.languageCode).toBe(originalLangaugeCode);
+                expect(originalTextSearch.languageCode).toBe(originalLanguageCode);
 
                 const translationTextSearch = pageContent.getTranslation(translationLanguageCode);
 
@@ -89,7 +89,7 @@ describe(`DigitalText.ImportPages`, () => {
 
                 expect(foundTranslationLanguageCode).toBe(translationLanguageCode);
 
-                expect(targetPage.getAudioIn(originalLangaugeCode)).toBe(
+                expect(targetPage.getAudioIn(originalLanguageCode)).toBe(
                     audioItemIdForOriginalLanguage
                 );
 
@@ -108,7 +108,7 @@ describe(`DigitalText.ImportPages`, () => {
                     audioAndTextContent: [
                         {
                             text: textContent,
-                            languageCode: originalLangaugeCode,
+                            languageCode: originalLanguageCode,
                             isOriginalLanguage: true,
                             // audioItemId: audioItemIdForOriginalLanguage,
                         },
@@ -139,7 +139,7 @@ describe(`DigitalText.ImportPages`, () => {
 
             expect(originalTextSearch.text).toBe(textContent);
 
-            expect(originalTextSearch.languageCode).toBe(originalLangaugeCode);
+            expect(originalTextSearch.languageCode).toBe(originalLanguageCode);
 
             const translationTextSearch = pageContent.getTranslation(translationLanguageCode);
 
@@ -152,7 +152,7 @@ describe(`DigitalText.ImportPages`, () => {
 
             expect(foundTranslationLanguageCode).toBe(translationLanguageCode);
 
-            expect(targetPage.hasAudioIn(originalLangaugeCode)).toBe(false);
+            expect(targetPage.hasAudioIn(originalLanguageCode)).toBe(false);
 
             expect(targetPage.hasAudioIn(translationLanguageCode)).toBe(false);
 
@@ -198,7 +198,7 @@ describe(`DigitalText.ImportPages`, () => {
                     audioAndTextContent: [
                         {
                             text: textContent,
-                            languageCode: originalLangaugeCode,
+                            languageCode: originalLanguageCode,
                             isOriginalLanguage: false,
                             audioItemId: audioItemIdForOriginalLanguage,
                         },
@@ -234,7 +234,7 @@ describe(`DigitalText.ImportPages`, () => {
                     audioAndTextContent: [
                         {
                             text: textContent,
-                            languageCode: originalLangaugeCode,
+                            languageCode: originalLanguageCode,
                             isOriginalLanguage: true,
                             audioItemId: audioItemIdForOriginalLanguage,
                         },
@@ -299,7 +299,7 @@ describe(`DigitalText.ImportPages`, () => {
                         audioAndTextContent: [
                             {
                                 text: '', // not allowed
-                                languageCode: originalLangaugeCode,
+                                languageCode: originalLanguageCode,
                                 isOriginalLanguage: true,
                                 audioItemId: audioItemIdForOriginalLanguage,
                             },
@@ -329,7 +329,7 @@ describe(`DigitalText.ImportPages`, () => {
                         audioAndTextContent: [
                             {
                                 text: textContent,
-                                languageCode: originalLangaugeCode,
+                                languageCode: originalLanguageCode,
                                 isOriginalLanguage: true,
                                 audioItemId: audioItemIdForOriginalLanguage,
                             },
@@ -359,7 +359,7 @@ describe(`DigitalText.ImportPages`, () => {
                         audioAndTextContent: [
                             {
                                 text: textContent,
-                                languageCode: originalLangaugeCode,
+                                languageCode: originalLanguageCode,
                                 isOriginalLanguage: true,
                                 audioItemId: audioItemIdForOriginalLanguage,
                             },
