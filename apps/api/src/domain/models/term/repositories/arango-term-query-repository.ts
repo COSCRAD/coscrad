@@ -1,4 +1,9 @@
-import { ICommandFormAndLabels, IDetailQueryResult, ITermViewModel } from '@coscrad/api-interfaces';
+import {
+    ICommandFormAndLabels,
+    IDetailQueryResult,
+    IMultilingualTextItem,
+    ITermViewModel,
+} from '@coscrad/api-interfaces';
 import { Maybe } from '../../../../lib/types/maybe';
 import { isNotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
@@ -27,6 +32,10 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
 
     async delete(id: AggregateId): Promise<void> {
         return this.database.delete(id);
+    }
+
+    async translate(_id: AggregateId, _translationItem: IMultilingualTextItem): Promise<void> {
+        throw new Error('not implemented!');
     }
 
     async fetchById(

@@ -1,4 +1,4 @@
-import { IDetailQueryResult, ITermViewModel } from '@coscrad/api-interfaces';
+import { IDetailQueryResult, IMultilingualTextItem, ITermViewModel } from '@coscrad/api-interfaces';
 import { Maybe } from '../../../../lib/types/maybe';
 import { AggregateId } from '../../../types/AggregateId';
 
@@ -21,6 +21,8 @@ export interface ITermQueryRepository {
     fetchById(id: AggregateId): Promise<Maybe<TermQueryModel>>;
 
     fetchMany(): Promise<TermQueryModel[]>;
+
+    translate(id: AggregateId, translationItem: IMultilingualTextItem): Promise<void>;
 
     count(): Promise<number>;
 }

@@ -1,17 +1,24 @@
-import { IDetailQueryResult, ITermViewModel, LanguageCode } from '@coscrad/api-interfaces';
+import {
+    IDetailQueryResult,
+    ITermViewModel,
+    LanguageCode,
+    MultilingualTextItemRole,
+} from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../app/config/constants/Environment';
-import { NotFound } from '../../../../lib/types/not-found';
+import { InternalError } from '../../../../lib/errors/InternalError';
+import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
+import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { ITermQueryRepository } from '../queries/term-query-repository.interface';
 import { ArangoTermQueryRepository } from './arango-term-query-repository';
@@ -68,6 +75,10 @@ describe(`ArangoTermQueryRepository`, () => {
     const termText = buildTermText(termIds[0]);
 
     const originalLanguageCode = LanguageCode.Chilcotin;
+
+    const translationLangaugeCode = LanguageCode.English;
+
+    const textTranslation = 'foobar';
 
     const termViews = termIds.map((id) => ({
         id,
@@ -155,6 +166,46 @@ describe(`ArangoTermQueryRepository`, () => {
 
                 expect(result).toBe(0);
             });
+        });
+    });
+
+    describe(`translate`, () => {
+        const targetTerm = termViews[0];
+
+        beforeEach(async () => {
+            await arangoDatabaseForCollection.clear();
+
+            await testQueryRepository.create(targetTerm);
+        });
+
+        it(`should append the expected multilingual text item`, async () => {
+            const targetTranslationRole = MultilingualTextItemRole.freeTranslation;
+
+            await testQueryRepository.translate(targetTerm.id, {
+                text: textTranslation,
+                languageCode: translationLangaugeCode,
+                role: targetTranslationRole,
+            });
+
+            const updatedTerm = await testQueryRepository.fetchById(targetTerm.id);
+
+            if (isNotFound(updatedTerm)) {
+                expect(updatedTerm).not.toBe(NotFound);
+
+                throw new InternalError('test failed');
+            }
+
+            const updatedName = new MultilingualText(updatedTerm.name); // we want an instance (not a DTO) for the query methods
+
+            const searchResultForTranslation = updatedName.getTranslation(translationLangaugeCode);
+
+            expect(searchResultForTranslation).not.toBe(NotFound);
+
+            const foundTranslation = searchResultForTranslation as MultilingualTextItem;
+
+            expect(foundTranslation.text).toBe(textTranslation);
+
+            expect(foundTranslation.role).toBe(targetTranslationRole);
         });
     });
 });
