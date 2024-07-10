@@ -3,6 +3,8 @@ import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { CommandFSA } from '../../../../../app/controllers/command/command-fsa/command-fsa.entity';
+import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
+import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import {
     MultilingualText,
     MultilingualTextItem,
@@ -22,6 +24,7 @@ import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
+import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { DigitalText } from '../../entities';
@@ -39,6 +42,20 @@ const digitalTextId = buildDummyUuid(2);
 const audioItemIdForOriginalLanguage = buildDummyUuid(3);
 
 const audioItemIdForTranslationLanguage = buildDummyUuid(4);
+
+const dummyAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem);
+
+// TODO event source these
+const audioItems = [audioItemIdForOriginalLanguage, audioItemIdForTranslationLanguage].map((id) =>
+    dummyAudioItem.clone({
+        id,
+        name: buildMultilingualTextWithSingleItem(`audio number: ${id}`),
+    })
+);
+
+const photograph = getValidAggregateInstanceForTest(AggregateType.photograph).clone({
+    id: photographId,
+});
 
 const digitalTextCreated = new TestEventStream().andThen<DigitalTextCreated>({
     type: 'DIGITAL_TEXT_CREATED',
@@ -140,6 +157,10 @@ describe(commandType, () => {
 
     const seedValidInitialState = async () => {
         await app.get(ArangoEventRepository).appendEvents(eventHistoryForDigitalText);
+
+        await testRepositoryProvider.forResource(AggregateType.audioItem).createMany(audioItems);
+
+        await testRepositoryProvider.forResource(AggregateType.photograph).create(photograph);
     };
 
     describe(`when the command is valid`, () => {
@@ -222,7 +243,13 @@ describe(commandType, () => {
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     seedInitialState: async () => {
-                        return Promise.resolve();
+                        await testRepositoryProvider
+                            .forResource(AggregateType.audioItem)
+                            .createMany(audioItems);
+
+                        await testRepositoryProvider
+                            .forResource(AggregateType.photograph)
+                            .create(photograph);
                     },
                     buildCommandFSA: () => commandFsaFactory.build(),
                     checkError: (result) => {
@@ -279,7 +306,7 @@ describe(commandType, () => {
         });
 
         describe(`when an audio item ID is provided and the audio item does not exist`, () => {
-            it.only(`should fail`, async () => {
+            it(`should fail`, async () => {
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     seedInitialState: async () => {
@@ -287,9 +314,9 @@ describe(commandType, () => {
                             .get(ArangoEventRepository)
                             .appendEvents(eventHistoryForDigitalText);
 
-                        // Note that we do note add audio here
-
-                        // TODO seed photograph
+                        await testRepositoryProvider
+                            .forResource(AggregateType.photograph)
+                            .create(photograph);
                     },
                     buildCommandFSA: () =>
                         commandFsaFactory.build(undefined, {
@@ -312,8 +339,50 @@ describe(commandType, () => {
                         assertErrorAsExpected(
                             result,
                             new CommandExecutionError([
-                                new AggregateNotFoundError(
-                                    existingDigitalText.getCompositeIdentifier()
+                                new InvalidExternalReferenceByAggregateError(
+                                    existingDigitalText.getCompositeIdentifier(),
+                                    [
+                                        {
+                                            type: AggregateType.audioItem,
+                                            id: audioItemIdForOriginalLanguage,
+                                        },
+                                    ]
+                                ),
+                            ])
+                        );
+                    },
+                });
+            });
+        });
+
+        describe(`when a photograph ID is provided and the photograph does not exist`, () => {
+            it(`should fail with the expected error`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await app
+                            .get(ArangoEventRepository)
+                            .appendEvents(eventHistoryForDigitalText);
+
+                        await testRepositoryProvider
+                            .forResource(AggregateType.audioItem)
+                            .createMany(audioItems);
+
+                        // no photographs
+                    },
+                    buildCommandFSA: () => commandFsaFactory.build(),
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new InvalidExternalReferenceByAggregateError(
+                                    existingDigitalText.getCompositeIdentifier(),
+                                    [
+                                        {
+                                            type: AggregateType.photograph,
+                                            id: photographId,
+                                        },
+                                    ]
                                 ),
                             ])
                         );

@@ -394,7 +394,7 @@ export class ArangoDatabase {
              * instead of a boolean. We are using the version that returns
              * `true` if the array contains the value and `false` otherwise.
              */
-            predicateStatement = `CONTAINS_ARRAY(${value},${docNamePlaceholder}.${field})`;
+            predicateStatement = `CONTAINS_ARRAY("${value}",${docNamePlaceholder}.${field})`;
 
             return buildQuery(predicateStatement);
         }

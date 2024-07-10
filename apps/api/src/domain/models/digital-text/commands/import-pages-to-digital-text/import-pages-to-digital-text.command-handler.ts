@@ -36,12 +36,25 @@ export class ImportPagesToDigitalTextCommandHandler extends BaseUpdateCommandHan
             page.content.map(({ audioItemId }) => audioItemId)
         );
 
+        // todo leverage this
+        const _audioItemSpec = new IsInArray('id', audioItemIds);
+
         const relevantAudioItems = await this.repositoryProvider
             .forResource(AggregateType.audioItem)
-            .fetchMany(new IsInArray('id', audioItemIds));
+            .fetchMany();
+
+        // const photographIds = pages.flatMap(({ photographId }) =>
+        //     isNullOrUndefined(photographId) ? [] : [photographId]
+        // );
+
+        // todo add a filter and parallelize with the audio query
+        const relevantPhotographs = await this.repositoryProvider
+            .forResource(AggregateType.photograph)
+            .fetchMany();
 
         return new DeluxeInMemoryStore({
             [AggregateType.audioItem]: relevantAudioItems.filter(validAggregateOrThrow),
+            [AggregateType.photograph]: relevantPhotographs.filter(validAggregateOrThrow),
         }).fetchFullSnapshotInLegacyFormat();
     }
 
