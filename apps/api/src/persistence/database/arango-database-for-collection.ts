@@ -1,3 +1,4 @@
+import { AqlQuery } from 'arangojs/aql';
 import { isArangoDatabase } from 'arangojs/database';
 import { ISpecification } from '../../domain/repositories/interfaces/specification.interface';
 import { AggregateId } from '../../domain/types/AggregateId';
@@ -96,5 +97,9 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
 
     update(id: AggregateId, updateDTO: DeepPartial<ArangoDatabaseDocument<TEntity>>) {
         return this.#arangoDatabase.update(id, updateDTO, this.#collectionID);
+    }
+
+    query(aqlQuery: AqlQuery) {
+        return this.#arangoDatabase.query(aqlQuery);
     }
 }

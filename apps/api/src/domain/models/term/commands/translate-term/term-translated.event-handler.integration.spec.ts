@@ -8,26 +8,26 @@ import {
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
-import {
-    MultilingualText,
-    MultilingualTextItem,
-} from 'apps/api/src/domain/common/entities/multilingual-text';
-import { InternalError } from 'apps/api/src/lib/errors/InternalError';
-import { isNotFound, NotFound } from 'apps/api/src/lib/types/not-found';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/Environment';
+import {
+    MultilingualText,
+    MultilingualTextItem,
+} from '../../../../../domain/common/entities/multilingual-text';
+import { InternalError } from '../../../../../lib/errors/InternalError';
+import { isNotFound, NotFound } from '../../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { TermViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { TestEventStream } from '../../../../../test-data/events';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { ITermQueryRepository } from '../../queries';
 import { ArangoTermQueryRepository } from '../../repositories/arango-term-query-repository';
 import { TermCreated } from '../create-term';
-import { TermCreatedEventHandler } from '../create-term/term-created.event-handler';
 import { TermTranslated } from './term-translated.event';
 import { TermTranslatedEventHandler } from './term-translated.event-handler';
 
@@ -57,14 +57,14 @@ const termCreated = new TestEventStream().andThen<TermCreated>({
 const termTranslated = termCreated.andThen<TermTranslated>({
     type: 'TERM_TRANSLATED',
     payload: {
-        translation: {
-            text: translationText,
-            languageCode: translationLanguageCode,
-            // TODO can we omit this and use the test data for this prop?
-            role: MultilingualTextItemRole.freeTranslation,
-        },
+        translation: translationText,
+        languageCode: translationLanguageCode,
     },
 });
+
+const eventHistory = termTranslated.as(compositeId);
+
+const [creationEvent, translationEvent] = eventHistory;
 
 describe(`TermTranslatedEventHandler.handle`, () => {
     let testQueryRepository: ITermQueryRepository;
@@ -76,8 +76,6 @@ describe(`TermTranslatedEventHandler.handle`, () => {
     >;
 
     let app: INestApplication;
-
-    let termCreatedEventHandler: TermCreatedEventHandler;
 
     let termTranslatedEventHandler: TermTranslatedEventHandler;
 
@@ -110,8 +108,6 @@ describe(`TermTranslatedEventHandler.handle`, () => {
 
         testQueryRepository = new ArangoTermQueryRepository(connectionProvider);
 
-        termCreatedEventHandler = new TermCreatedEventHandler(testQueryRepository);
-
         termTranslatedEventHandler = new TermTranslatedEventHandler(testQueryRepository);
     });
 
@@ -122,16 +118,22 @@ describe(`TermTranslatedEventHandler.handle`, () => {
     beforeEach(async () => {
         arangoDatabaseForCollection.clear();
 
-        // Arrange
-        // @ts-expect-error Fix this issue
-        termCreatedEventHandler.handle(termCreated.as(compositeId)[0]);
+        const existingView = TermViewModel.fromTermCreated(creationEvent as TermCreated);
+
+        /**
+         * We attempted to use "handle" on a creation event for the test
+         * setup, but it failed due to an apparent race condition.
+         *
+         * We should investigate this further.
+         */
+        await testQueryRepository.create(existingView);
     });
 
     describe(`when there is an existing term`, () => {
         it(`should update the corresponding view with the translation`, async () => {
             // Act
             // @ts-expect-error fix this issue
-            await termTranslatedEventHandler.handle(termTranslated.as(compositeId)[1]);
+            await termTranslatedEventHandler.handle(translationEvent);
 
             // Assert
             const updatedView = await testQueryRepository.fetchById(termId);

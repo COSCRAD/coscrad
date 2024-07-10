@@ -52,6 +52,7 @@ export class ArangoDatabase {
             throw new InternalError(`Arango cannot fetchById with invalid id: ${id}`);
         }
 
+        // TODO optimize this! Do the fetch by ID in actual AQL
         const allEntities = await this.fetchMany<TDatabaseDTO>(collectionName, new IdEquals(id));
 
         if (allEntities.length === 0) return NotFound;
@@ -325,6 +326,14 @@ export class ArangoDatabase {
             throw new Error(`failed to delete all in collection: ${collectionName}. ${error}`);
         });
     };
+
+    /**
+     * We provide this escape hatch to get around our abstraction layers if
+     * necessary.
+     */
+    async query(aqlQuery: AqlQuery) {
+        return this.db.query(aqlQuery);
+    }
 
     #getKeyOfDocument = <TEntityDTO>(document: ArangoDTO<TEntityDTO>): Maybe<string> =>
         typeof document._key === 'string' ? document._key : NotFound;
