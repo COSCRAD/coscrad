@@ -27,10 +27,15 @@ export const buildReferenceTree = (Ctor: Object, instance: Object) => {
             // There is no reference to add here
             if (isNullOrUndefined(value) || (isArray && isDeepStrictEqual(value, []))) return acc;
 
-            const allValues =
+            let allValues =
                 isArray || Array.isArray(value)
                     ? (value as CompositeIdentifier<string>[])
                     : [value];
+
+            // this is getting very complex. we need to deal with this
+            if (allValues.every((v): v is string[] => Array.isArray(v))) {
+                allValues = allValues.flatMap((v) => v);
+            }
 
             if (allValues.every((id): id is string => isNonEmptyString(id))) {
                 return acc.concat(

@@ -54,6 +54,7 @@ class DigitalTextPageImportRecord {
     })
     readonly content: AudioAndTextContentForPage[];
 
+    @ReferenceTo(AggregateType.photograph)
     @UUID({
         label: 'photograph for page',
         description: 'a reference to the photograph for this page',

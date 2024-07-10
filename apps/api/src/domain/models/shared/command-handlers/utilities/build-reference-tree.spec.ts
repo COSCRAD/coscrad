@@ -40,6 +40,22 @@ describe(`getReferenceTree`, () => {
         purpose: string;
     }
 
+    // ensure that an array of arrays of objects with references work
+    class SpecialPartGroup {
+        @NestedDataType(WidgetPart, {
+            isArray: true,
+            label: 'parts',
+            description: 'the parts that are included in this group of special parts',
+        })
+        parts: WidgetPart[];
+
+        @NonEmptyString({
+            label: 'name',
+            description: 'the group name',
+        })
+        name: string;
+    }
+
     class Widget {
         aggregateCompositeIdentifier: {
             type: string;
@@ -82,6 +98,13 @@ describe(`getReferenceTree`, () => {
             description: 'the machine parts used to build this widget',
         })
         parts: WidgetPart[];
+
+        @NestedDataType(SpecialPartGroup, {
+            isArray: true,
+            label: 'special part groups',
+            description: 'groups of parts which require special handling',
+        })
+        specialPartGroups: SpecialPartGroup[];
     }
 
     const aggregateId = buildDummyUuid(333);
@@ -113,6 +136,21 @@ describe(`getReferenceTree`, () => {
                 purpose: `keeps the moving parts lubricated`,
             },
         ],
+        specialPartGroups: [
+            {
+                name: 'select parts',
+                parts: [
+                    {
+                        partId: buildDummyUuid(11),
+                        purpose: 'must be sourced from Germany',
+                    },
+                    {
+                        partId: buildDummyUuid(12),
+                        purpose: 'uses a rare kind of oil',
+                    },
+                ],
+            },
+        ],
     };
 
     describe(`it should identify the references that are contained`, () => {
@@ -135,6 +173,10 @@ describe(`getReferenceTree`, () => {
 
             [9, 10].forEach((partId) => {
                 expect(referenceTree.has('machine-part', buildDummyUuid(partId))).toBe(true);
+            });
+
+            [11, 12].forEach((partId) => {
+                expect(referenceTree.has(`machine-part`, buildDummyUuid(partId))).toBe(true);
             });
 
             ['foo', 'whatsit', 'whobob', 'machine-part'].forEach((aggregateType) => {
