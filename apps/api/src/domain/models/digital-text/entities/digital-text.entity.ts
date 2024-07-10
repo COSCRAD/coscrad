@@ -379,16 +379,7 @@ export class DigitalText extends Resource {
         }
 
         const pageUpdateResult = pagesToImport.map(
-            ({
-                pageIdentifier,
-                photographId,
-                audioAndTextContent,
-                // audioItemId,
-                // text,
-                // translation,
-                // languageCodeForText,
-                // languageCodeForTranslation,
-            }) => {
+            ({ pageIdentifier, photographId, audioAndTextContent }) => {
                 const originalLanguageImportItemSearchResult = audioAndTextContent.filter(
                     ({ isOriginalLanguage: isOriginalText }) => isOriginalText
                 );

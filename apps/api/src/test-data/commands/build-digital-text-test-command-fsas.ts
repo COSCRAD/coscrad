@@ -7,6 +7,7 @@ import {
     AddCoverPhotographForDigitalText,
     AddPageToDigitalText,
     CreateDigitalText,
+    ImportPagesToDigitalText,
     TranslateDigitalTextPageContent,
     TranslateDigitalTextTitle,
 } from '../../domain/models/digital-text/commands';
@@ -104,6 +105,26 @@ const translateDigitalTextTitle: CommandFSA<TranslateDigitalTextTitle> = {
     },
 };
 
+const importPagesToDigitalText: CommandFSA<ImportPagesToDigitalText> = {
+    type: 'IMPORT_PAGES_TO_DIGITAL_TEXT',
+    payload: {
+        aggregateCompositeIdentifier: { id, type },
+        pages: [
+            {
+                pageIdentifier: '1v',
+                content: [
+                    {
+                        text: 'hello world',
+                        languageCode: LanguageCode.Chilcotin,
+                        isOriginalLanguage: true,
+                    },
+                ],
+                photographId: buildDummyUuid(23),
+            },
+        ],
+    },
+};
+
 export const buildDigitalTextCommandFsas = () => [
     createDigitalText,
     addPageToDigitalText,
@@ -114,4 +135,5 @@ export const buildDigitalTextCommandFsas = () => [
     addCoverPhotographForDigitalText,
     addPhotographToDigitalTextPage,
     translateDigitalTextTitle,
+    importPagesToDigitalText,
 ];
