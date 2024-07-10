@@ -1,6 +1,12 @@
-import { ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
+import { AggregateType, ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { BooleanDataType, NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
+import {
+    BooleanDataType,
+    NestedDataType,
+    NonEmptyString,
+    ReferenceTo,
+    UUID,
+} from '@coscrad/data-types';
 import { LanguageCodeEnum } from '../../../../../domain/common/entities/multilingual-text';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { PageIdentifier } from '../../entities';
@@ -20,6 +26,7 @@ class AudioAndTextContentForPage {
     readonly languageCode: LanguageCode;
 
     // TODO support audio for multiple languages
+    @ReferenceTo(AggregateType.audioItem)
     @UUID({
         label: 'audio item for page',
         description: 'a reference to the audio for this page',

@@ -8,6 +8,7 @@ import {
     MultilingualTextItem,
 } from '../../../../../domain/common/entities/multilingual-text';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
+import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { clonePlainObjectWithOverrides } from '../../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -15,13 +16,17 @@ import TestRepositoryProvider from '../../../../../persistence/repositories/__te
 import { ArangoEventRepository } from '../../../../../persistence/repositories/arango-event-repository';
 import { buildTestCommandFsaMap } from '../../../../../test-data/commands';
 import { TestEventStream } from '../../../../../test-data/events';
+import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
+import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
+import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { DigitalText } from '../../entities';
 import DigitalTextPage from '../../entities/digital-text-page.entity';
+import { PageAddedToDigitalText } from '../add-page-to-digital-text/page-added-to-digital-text.event';
 import { DigitalTextCreated } from '../digital-text-created.event';
 import { ImportPagesToDigitalText } from './import-pages-to-digital-text.command';
 
@@ -35,15 +40,20 @@ const audioItemIdForOriginalLanguage = buildDummyUuid(3);
 
 const audioItemIdForTranslationLanguage = buildDummyUuid(4);
 
-const eventHistoryForDigitalText = new TestEventStream()
-    .andThen<DigitalTextCreated>({
-        type: 'DIGITAL_TEXT_CREATED',
-    })
+const digitalTextCreated = new TestEventStream().andThen<DigitalTextCreated>({
+    type: 'DIGITAL_TEXT_CREATED',
+});
+
+const eventHistoryForDigitalText =
     // note the absence of a `PAGE_ADDED_TO_DIGITAL_TEXT`- we need this digital text to be empty for the import to work
-    .as({
+    digitalTextCreated.as({
         type: AggregateType.digitalText,
         id: digitalTextId,
     });
+
+const pageAddedToDigitalText = digitalTextCreated.andThen<PageAddedToDigitalText>({
+    type: 'PAGE_ADDED_TO_DIGITAL_TEXT',
+});
 
 const textContent = 'hello world';
 
@@ -185,6 +195,130 @@ describe(commandType, () => {
 
                     expect(targetPage.photographId).toBe(photographId);
                 },
+            });
+        });
+    });
+
+    describe(`when the command is invalid`, () => {
+        describe(`when the digital text already has pages`, () => {
+            it(`should fail`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        app.get(ArangoEventRepository).appendEvents(
+                            pageAddedToDigitalText.as({
+                                id: digitalTextId,
+                                type: AggregateType.digitalText,
+                            })
+                        );
+                    },
+                    buildCommandFSA: () => commandFsaFactory.build(),
+                });
+            });
+        });
+
+        describe(`when the digital text does not exist`, () => {
+            it(`should fail`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        return Promise.resolve();
+                    },
+                    buildCommandFSA: () => commandFsaFactory.build(),
+                    checkError: (result) => {
+                        assertErrorAsExpected(
+                            result,
+                            new CommandExecutionError([
+                                new AggregateNotFoundError(
+                                    existingDigitalText.getCompositeIdentifier()
+                                ),
+                            ])
+                        );
+                    },
+                });
+            });
+        });
+
+        describe(`when no pages are provided`, () => {
+            it(`should fail`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: seedValidInitialState,
+                    buildCommandFSA: () =>
+                        commandFsaFactory.build(undefined, {
+                            pages: [],
+                        }),
+                });
+            });
+        });
+
+        describe(`when the translation language is the same as the original language`, () => {
+            it(`should fail`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: seedValidInitialState,
+                    buildCommandFSA: () =>
+                        commandFsaFactory.build(undefined, {
+                            pages: [{ originalLangaugeCode }],
+                        }),
+                });
+            });
+        });
+
+        describe(`when no translation item is marked as the original`, () => {
+            it(`should fail`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: seedValidInitialState,
+                    buildCommandFSA: () =>
+                        commandFsaFactory.build(undefined, {
+                            pages: [{ translationLanguageCode }],
+                        }),
+                });
+            });
+        });
+
+        describe(`when an audio item ID is provided and the audio item does not exist`, () => {
+            it.only(`should fail`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await app
+                            .get(ArangoEventRepository)
+                            .appendEvents(eventHistoryForDigitalText);
+
+                        // Note that we do note add audio here
+
+                        // TODO seed photograph
+                    },
+                    buildCommandFSA: () =>
+                        commandFsaFactory.build(undefined, {
+                            pages: [
+                                {
+                                    pageIdentifier,
+                                    content: [
+                                        {
+                                            text: textContent,
+                                            languageCode: originalLangaugeCode,
+                                            audioItemId: audioItemIdForOriginalLanguage,
+                                            isOriginalLanguage: true,
+                                        },
+                                    ],
+                                    photographId,
+                                },
+                            ],
+                        }),
+                    checkError: (result) => {
+                        assertErrorAsExpected(
+                            result,
+                            new CommandExecutionError([
+                                new AggregateNotFoundError(
+                                    existingDigitalText.getCompositeIdentifier()
+                                ),
+                            ])
+                        );
+                    },
+                });
             });
         });
     });

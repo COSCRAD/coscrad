@@ -1,5 +1,7 @@
+import { AggregateType } from '@coscrad/api-interfaces';
 import { CommandHandler } from '@coscrad/commands';
 import { Valid } from '../../../../../domain/domainModelValidators/Valid';
+import IsInArray from '../../../../../domain/repositories/specifications/array-includes.specification';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../../domain/types/ResourceType';
 import { InternalError } from '../../../../../lib/errors/InternalError';
@@ -7,6 +9,7 @@ import { BaseEvent } from '../../../../../queries/event-sourcing';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
+import { validAggregateOrThrow } from '../../../shared/functional';
 import { DigitalText } from '../../entities';
 import { ImportPagesToDigitalText } from './import-pages-to-digital-text.command';
 import { PagesImportedToDigitalText } from './import-pages-to-digital-text.event';
@@ -26,10 +29,20 @@ export class ImportPagesToDigitalTextCommandHandler extends BaseUpdateCommandHan
         );
     }
 
-    protected async fetchRequiredExternalState(
-        _command?: ImportPagesToDigitalText
-    ): Promise<InMemorySnapshot> {
-        return new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat();
+    protected async fetchRequiredExternalState({
+        pages,
+    }: ImportPagesToDigitalText): Promise<InMemorySnapshot> {
+        const audioItemIds = pages.flatMap((page) =>
+            page.content.map(({ audioItemId }) => audioItemId)
+        );
+
+        const relevantAudioItems = await this.repositoryProvider
+            .forResource(AggregateType.audioItem)
+            .fetchMany(new IsInArray('id', audioItemIds));
+
+        return new DeluxeInMemoryStore({
+            [AggregateType.audioItem]: relevantAudioItems.filter(validAggregateOrThrow),
+        }).fetchFullSnapshotInLegacyFormat();
     }
 
     protected validateExternalState(

@@ -4,7 +4,7 @@ import formatAggregateCompositeIdentifier from '../../../../queries/presentation
 import { formatLanguageCode } from '../../../../queries/presentation/formatLanguageCode';
 import { AggregateId } from '../../../types/AggregateId';
 
-export class CannnotAddAudioForNoteInGivenLanguageError extends InternalError {
+export class CannotAddAudioForNoteInGivenLanguageError extends InternalError {
     constructor(
         edgeConnectionId: AggregateId,
         audioItemId: AggregateId,
