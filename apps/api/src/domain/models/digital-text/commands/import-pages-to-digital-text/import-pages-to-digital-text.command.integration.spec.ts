@@ -3,6 +3,10 @@ import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { CommandFSA } from '../../../../../app/controllers/command/command-fsa/command-fsa.entity';
+import {
+    MultilingualText,
+    MultilingualTextItem,
+} from '../../../../../domain/common/entities/multilingual-text';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
 import { clonePlainObjectWithOverrides } from '../../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
@@ -17,16 +21,19 @@ import { CommandAssertionDependencies } from '../../../__tests__/command-helpers
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import { DigitalText } from '../../entities';
+import DigitalTextPage from '../../entities/digital-text-page.entity';
 import { DigitalTextCreated } from '../digital-text-created.event';
 import { ImportPagesToDigitalText } from './import-pages-to-digital-text.command';
 
 const commandType = 'IMPORT_PAGES_TO_DIGITAL_TEXT';
 
-const audioItemId = buildDummyUuid(1);
+const photographId = buildDummyUuid(1);
 
-const photographId = buildDummyUuid(2);
+const digitalTextId = buildDummyUuid(2);
 
-const digitalTextId = buildDummyUuid(3);
+const audioItemIdForOriginalLanguage = buildDummyUuid(3);
+
+const audioItemIdForTranslationLanguage = buildDummyUuid(4);
 
 const eventHistoryForDigitalText = new TestEventStream()
     .andThen<DigitalTextCreated>({
@@ -40,7 +47,11 @@ const eventHistoryForDigitalText = new TestEventStream()
 
 const textContent = 'hello world';
 
+const translation = 'hello world translated';
+
 const originalLangaugeCode = LanguageCode.Chilcotin;
+
+const translationLanguageCode = LanguageCode.Chinook;
 
 const pageIdentifier = '1v';
 
@@ -62,8 +73,14 @@ const commandFsaFactory = new DummyCommandFsaFactory<ImportPagesToDigitalText>((
                         {
                             text: textContent,
                             languageCode: originalLangaugeCode,
-                            audioItemId,
+                            audioItemId: audioItemIdForOriginalLanguage,
                             isOriginalLanguage: true,
+                        },
+                        {
+                            text: translation,
+                            languageCode: translationLanguageCode,
+                            isOriginalLanguage: false,
+                            audioItemId: audioItemIdForTranslationLanguage,
                         },
                     ],
                     photographId,
@@ -127,6 +144,46 @@ describe(commandType, () => {
                         .fetchById(digitalTextId);
 
                     expect(digitalTextSearchResult).toBeInstanceOf(DigitalText);
+
+                    const updatedDigitalText = digitalTextSearchResult as DigitalText;
+
+                    const pageSearch = updatedDigitalText.getPage(pageIdentifier);
+
+                    expect(pageSearch).toBeInstanceOf(DigitalTextPage);
+
+                    const targetPage = pageSearch as DigitalTextPage;
+
+                    const pageContent = targetPage.getContent() as MultilingualText;
+
+                    const originalTextSearch = pageContent.getOriginalTextItem();
+
+                    expect(originalTextSearch.text).toBe(textContent);
+
+                    expect(originalTextSearch.languageCode).toBe(originalLangaugeCode);
+
+                    const translationTextSearch =
+                        pageContent.getTranslation(translationLanguageCode);
+
+                    expect(translationTextSearch).toBeInstanceOf(MultilingualTextItem);
+
+                    const {
+                        text: foundTranslationText,
+                        languageCode: foundTranslationLanguageCode,
+                    } = translationTextSearch as MultilingualTextItem;
+
+                    expect(foundTranslationText).toBe(translation);
+
+                    expect(foundTranslationLanguageCode).toBe(translationLanguageCode);
+
+                    expect(targetPage.getAudioIn(originalLangaugeCode)).toBe(
+                        audioItemIdForOriginalLanguage
+                    );
+
+                    expect(targetPage.getAudioIn(translationLanguageCode)).toBe(
+                        audioItemIdForTranslationLanguage
+                    );
+
+                    expect(targetPage.photographId).toBe(photographId);
                 },
             });
         });
