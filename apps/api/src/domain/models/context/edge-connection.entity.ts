@@ -54,7 +54,7 @@ import { AudioAddedForNote, NoteTranslated } from './commands';
 import { ResourcesConnectedWithNote } from './commands/connect-resources-with-note/resources-connected-with-note.event';
 import { NoteAboutResourceCreated } from './commands/create-note-about-resource/note-about-resource-created.event';
 import { ContextUnionType } from './edge-connection-context-union';
-import { CannnotAddAudioForNoteInGivenLanguageError } from './errors/cannot-add-audio-for-note-in-given-language.error';
+import { CannotAddAudioForNoteInGivenLanguageError } from './errors/cannot-add-audio-for-note-in-given-language.error';
 
 export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnectionContext>
     extends BaseDomainModel
@@ -258,7 +258,7 @@ export class EdgeConnection extends Aggregate {
         languageCode: LanguageCode
     ): ResultOrError<EdgeConnection> {
         if (!this.note.has(languageCode)) {
-            return new CannnotAddAudioForNoteInGivenLanguageError(
+            return new CannotAddAudioForNoteInGivenLanguageError(
                 this.id,
                 audioItemId,
                 languageCode
