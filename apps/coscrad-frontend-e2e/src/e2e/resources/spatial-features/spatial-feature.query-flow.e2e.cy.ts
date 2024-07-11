@@ -93,4 +93,65 @@ describe(`Spatial Feature index-to-detail flow`, () => {
             });
         });
     });
+
+    describe.only(`the spatial feature detail page`, () => {
+        const compositeIdentifierOfSpatialFeatureToView = buildDummyAggregateCompositeIdentifier(
+            AggregateType.spatialFeature,
+            3
+        );
+
+        const { id: idForSpatialFeatureToView } = compositeIdentifierOfSpatialFeatureToView;
+
+        const lattitudeForSpatialFeatureToView = 51.30432546538306;
+
+        const longitudeForSpatialFeatureToView = -132.2280330877075;
+
+        const nameOfSpatialFeatureToView = 'west coast place';
+
+        const descriptionOfSpatialFeatureToView =
+            'This spatial feature is on the west coast of the islands';
+
+        const imageUrlOfSpatialFeatureToView =
+            'https://en.wikipedia.org/wiki/Haida_Gwaii#/media/File:Gwaii_Haanas_(26924832433).jpg';
+
+        const noteText = 'This is an important place for the Raven clan.';
+
+        before(() => {
+            cy.seedDataWithCommand(`CREATE_POINT`, {
+                aggregateCompositeIdentifier: compositeIdentifierOfSpatialFeatureToView,
+                lattitude: lattitudeForSpatialFeatureToView,
+                longitude: longitudeForSpatialFeatureToView,
+                name: nameOfSpatialFeatureToView,
+                description: descriptionOfSpatialFeatureToView,
+                imageUrl: imageUrlOfSpatialFeatureToView,
+            });
+
+            cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+                aggregateCompositeIdentifier: compositeIdentifierOfSpatialFeatureToView,
+            });
+
+            cy.seedDataWithCommand(`CREATE_NOTE_ABOUT_RESOURCE`, {
+                aggregateCompositeIdentifier: buildDummyAggregateCompositeIdentifier(
+                    AggregateType.note,
+                    78
+                ),
+                resourceCompositeIdentifier: compositeIdentifierOfSpatialFeatureToView,
+                text: noteText,
+            });
+        });
+
+        beforeEach(() => {
+            cy.visit(`/Resources/Map/${idForSpatialFeatureToView}`);
+        });
+
+        it('should load the map container', () => {
+            cy.get('[data-cy="Map Container"]').should('exist');
+        });
+
+        describe('the popup for the spatial feature', () => {
+            it(`should be popped up and display the text for spatial feature ${idForSpatialFeatureToView}`, () => {
+                cy.contains(nameOfSpatialFeatureToView);
+            });
+        });
+    });
 });
