@@ -1,4 +1,9 @@
-import { IDetailQueryResult, ITermViewModel } from '@coscrad/api-interfaces';
+import {
+    IDetailQueryResult,
+    IMultilingualTextItem,
+    ITermViewModel,
+    LanguageCode,
+} from '@coscrad/api-interfaces';
 import { Maybe } from '../../../../lib/types/maybe';
 import { AggregateId } from '../../../types/AggregateId';
 
@@ -21,6 +26,10 @@ export interface ITermQueryRepository {
     fetchById(id: AggregateId): Promise<Maybe<TermQueryModel>>;
 
     fetchMany(): Promise<TermQueryModel[]>;
+
+    translate(id: AggregateId, translationItem: IMultilingualTextItem): Promise<void>;
+
+    addAudio(id: AggregateId, languageCode: LanguageCode, audioItemUrl: string): Promise<void>;
 
     count(): Promise<number>;
 }

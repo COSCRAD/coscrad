@@ -1,69 +1,126 @@
-import { ITermViewModel } from '@coscrad/api-interfaces';
-import { FromDomainModel, URL } from '@coscrad/data-types';
-import { isNonEmptyString } from '@coscrad/validation-constraints';
-import { ApiPropertyOptional } from '@nestjs/swagger';
-import { AudioItem } from '../../../domain/models/audio-visual/audio-item/entities/audio-item.entity';
-import { MediaItem } from '../../../domain/models/media-item/entities/media-item.entity';
-import { Term } from '../../../domain/models/term/entities/term.entity';
-import { CoscradContributor } from '../../../domain/models/user-management/contributor';
+import {
+    AggregateType,
+    ICommandFormAndLabels,
+    IDetailQueryResult,
+    IMultilingualText,
+    ITermViewModel,
+    LanguageCode,
+    MultilingualTextItemRole,
+} from '@coscrad/api-interfaces';
+import { ICoscradEvent } from '../../../domain/common';
+import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
+import {
+    PromptTermCreated,
+    TermCreated,
+    TermTranslated,
+} from '../../../domain/models/term/commands';
 import { AggregateId } from '../../../domain/types/AggregateId';
-import { BaseResourceViewModel } from './base-resource.view-model';
 
-const FromTerm = FromDomainModel(Term);
+/**
+ * This is the first view model leveraging a new approach that involves denormalized,
+ * event-sourced, materialized views.
+ */
+export class TermViewModel implements IDetailQueryResult<ITermViewModel> {
+    contributions: string[];
 
-export class TermViewModel extends BaseResourceViewModel implements ITermViewModel {
-    // We should wrap the API Property using the View Model Schemas!
-    @ApiPropertyOptional({
-        example: 'https://www.mysound.org/audio/hetellsstories.mp3',
-        description: 'a url for an audio recording of the given term in the language',
-    })
-    @URL({
-        label: 'audio link',
-        description: "a web link to a digital audio recording of this term's pronunciation",
-    })
-    readonly audioURL?: string;
+    name: IMultilingualText;
 
-    @ApiPropertyOptional({
-        example: 'Digital Verb Book v 1.0',
-        description:
-            'the name of the project through which this term was documented (if applicable)',
-    })
-    @FromTerm
-    readonly sourceProject?: string;
+    id: AggregateId;
 
-    constructor(
-        term: Term,
-        audioItems: AudioItem[],
-        mediaItems: MediaItem[],
-        contributors: CoscradContributor[]
-    ) {
-        super(term, contributors);
+    // TODO Should this be multilingual audio?
+    audioURL: string;
 
-        const { audio, sourceProject, text } = term;
+    actions: ICommandFormAndLabels[];
 
-        if (sourceProject) this.sourceProject = sourceProject;
+    // notes
 
-        const originalLanguageCode = text.getOriginalTextItem().languageCode;
+    // tags
 
-        /**
-         * TODO Expose the full multilingual audio
-         */
-        const audioItemId = audio.hasAudioIn(originalLanguageCode)
-            ? (audio.getIdForAudioIn(originalLanguageCode) as AggregateId)
-            : undefined;
+    // events ?
 
-        if (isNonEmptyString(audioItemId)) {
-            const audioSearchResult = audioItems.find(({ id }) => id === audioItemId);
+    // revision ?
 
-            if (audioSearchResult) {
-                const { mediaItemId } = audioSearchResult;
+    static fromTermCreated({
+        payload: {
+            text,
+            languageCode,
+            aggregateCompositeIdentifier: { id: termId },
+        },
+        meta: { contributorIds },
+    }: TermCreated): TermViewModel {
+        const term = new TermViewModel();
 
-                const mediaItemSearchResult = mediaItems.find(({ id }) => id === mediaItemId);
+        term.name = buildMultilingualTextWithSingleItem(text, languageCode);
 
-                if (isNonEmptyString(mediaItemSearchResult?.url)) {
-                    this.audioURL = `/resources/mediaItems/download/${mediaItemSearchResult.id}`;
-                }
-            }
+        term.id = termId;
+
+        term.contributions = contributorIds; // TODO join in contributors fully instead of by reference
+
+        term.actions = []; // TODO build all actions here
+
+        // term.notes = []; // there are no notes when the term is first created
+
+        // term.tags = []; // there are no tags with the term is first created
+
+        // set term.events here by applying the first event
+
+        return term;
+    }
+
+    static fromPromptTermCreated({
+        payload: {
+            text,
+            aggregateCompositeIdentifier: { id: termId },
+        },
+        meta: { contributorIds },
+    }: PromptTermCreated): TermViewModel {
+        const term = new TermViewModel();
+
+        term.id = termId;
+
+        // currently, prompts are in English- should we hard wire this on the event payload to be future safe?
+        term.name = buildMultilingualTextWithSingleItem(text, LanguageCode.English);
+
+        term.contributions = contributorIds; // TODO join in the contributor names
+
+        term.actions = []; // TODO build these here
+
+        // term.notes = []
+
+        // term.tags = []
+
+        return term;
+    }
+
+    apply(event: ICoscradEvent): TermViewModel {
+        if (
+            !event.isFor({
+                type: AggregateType.term,
+                id: this.id,
+            })
+        )
+            return this;
+
+        if (event.isOfType('TERM_TRANSLATED')) {
+            const {
+                payload: { translation, languageCode },
+            } = event as TermTranslated;
+
+            this.name.items.push({
+                text: translation,
+                languageCode,
+                role: MultilingualTextItemRole.freeTranslation,
+            });
+
+            return this;
         }
+
+        if (event.isOfType('AUDIO_ADDED_FOR_TERM')) {
+            // const {payload: {audioItemId}} = event as AudioAddedForTerm
+            throw new Error(`Not implemented`);
+        }
+
+        // there is no handler for this event
+        return this;
     }
 }

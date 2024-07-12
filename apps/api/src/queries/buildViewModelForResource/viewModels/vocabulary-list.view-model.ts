@@ -20,7 +20,7 @@ import { VocabularyListEntry } from '../../../domain/models/vocabulary-list/voca
 import { NotFound } from '../../../lib/types/not-found';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { BaseResourceViewModel } from './base-resource.view-model';
-import { TermViewModel } from './term.view-model';
+import { TermViewModel } from './term.view-model.state-based';
 
 type VariableValues = Record<string, VocabularyListVariableValue>;
 
