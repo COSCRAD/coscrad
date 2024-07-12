@@ -4,7 +4,7 @@ import { ResourceType } from '../../../../../domain/types/ResourceType';
 import { Ctor } from '../../../../../lib/types/Ctor';
 import { DigitalTextViewModel } from '../../../../digital-text';
 import { NoteViewModel } from '../../../../edgeConnectionViewModels/note.view-model';
-import { AudioItemViewModel } from '../../audio-visual/audio-item.view-model';
+import { StateBasedAudioItemViewModel } from '../../audio-visual/audio-item.view-model.state-based';
 import { VideoViewModel } from '../../audio-visual/video.view-model';
 import { BaseViewModel } from '../../base.view-model';
 import { BibliographicCitationViewModel } from '../../bibliographic-citation/bibliographic-citation.view-model';
@@ -31,7 +31,7 @@ export const aggregateTypeToViewModelCtor: {
     [ResourceType.song]: SongViewModel,
     [ResourceType.spatialFeature]: SpatialFeatureViewModel,
     [ResourceType.term]: TermViewModel,
-    [ResourceType.audioItem]: AudioItemViewModel,
+    [ResourceType.audioItem]: StateBasedAudioItemViewModel,
     [ResourceType.video]: VideoViewModel,
     [ResourceType.vocabularyList]: VocabularyListViewModel,
     [ResourceType.playlist]: PlaylistViewModel,
