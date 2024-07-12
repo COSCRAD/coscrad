@@ -3,6 +3,7 @@ import {
     IDetailQueryResult,
     IMultilingualTextItem,
     ITermViewModel,
+    LanguageCode,
 } from '@coscrad/api-interfaces';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
@@ -63,12 +64,6 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             languageCode: languageCode,
         };
 
-        console.log({
-            query,
-            bindVars,
-            you: 'SUCK!',
-        });
-
         const cursor = await this.database
             .query({
                 query,
@@ -78,9 +73,38 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
                 throw new InternalError(`Failed to translate term via TermRepository: ${reason}`);
             });
 
-        const result = await cursor.all();
+        await cursor.all();
+    }
 
-        console.log({ result });
+    async addAudio(id: AggregateId, _languageCode: LanguageCode, audioUrl: string) {
+        // note the casing here on `audioURL`
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+        UPDATE doc WITH {
+            audioURL: @audioUrl
+        } IN @@collectionName
+         RETURN OLD
+        `;
+
+        const bindVars = {
+            '@collectionName': 'term__VIEWS',
+            id,
+            audioUrl,
+        };
+
+        const cursor = await this.database
+            .query({
+                query,
+                bindVars,
+            })
+            .catch((reason) => {
+                throw new InternalError(
+                    `Failed to add audio for term via term query repository: ${reason}`
+                );
+            });
+
+        await cursor.all();
     }
 
     async fetchById(
