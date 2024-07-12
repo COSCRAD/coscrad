@@ -92,6 +92,8 @@ export class ArangoConnectionProvider {
         // TODO discover view collections dynamically
         await this.#createCollectionIfNotExists('term__VIEWS');
 
+        await this.#createCollectionIfNotExists('audioItem__VIEWS');
+
         this.isInitialized = true;
     }
 

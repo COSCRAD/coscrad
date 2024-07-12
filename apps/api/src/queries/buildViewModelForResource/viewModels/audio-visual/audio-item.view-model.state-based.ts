@@ -13,7 +13,10 @@ import { MediaItem } from '../../../../domain/models/media-item/entities/media-i
 import { CoscradContributor } from '../../../../domain/models/user-management/contributor';
 import { BaseResourceViewModel } from '../base-resource.view-model';
 
-export class AudioItemViewModel extends BaseResourceViewModel implements IAudioItemViewModel {
+export class StateBasedAudioItemViewModel
+    extends BaseResourceViewModel
+    implements IAudioItemViewModel
+{
     @NestedDataType(MultilingualText, {
         label: 'name',
         description: 'name of the audio item',
