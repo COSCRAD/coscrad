@@ -17,6 +17,7 @@ import { ArangoDatabaseForCollection } from '../../../../persistence/database/ar
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
@@ -206,6 +207,29 @@ describe(`ArangoTermQueryRepository`, () => {
             expect(foundTranslation.text).toBe(textTranslation);
 
             expect(foundTranslation.role).toBe(targetTranslationRole);
+        });
+    });
+
+    describe(`add audio`, () => {
+        const targetTerm = termViews[0];
+
+        const audioUrl = 'https://www.coscrad.org/test123.mp3';
+
+        beforeEach(async () => {
+            await arangoDatabaseForCollection.clear();
+
+            await testQueryRepository.create(targetTerm);
+        });
+
+        it(`should append the audio item`, async () => {
+            await testQueryRepository.addAudio(targetTerm.id, originalLanguageCode, audioUrl);
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetTerm.id
+            )) as TermViewModel;
+
+            // TODO In the future, we should use multilingual audio for terms
+            expect(updatedView.audioURL).toBe(audioUrl);
         });
     });
 });
