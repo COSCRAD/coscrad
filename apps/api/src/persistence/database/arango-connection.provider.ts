@@ -89,7 +89,10 @@ export class ArangoConnectionProvider {
 
         await this.#createAllMissingCollections();
 
-        // TODO discover view collections dynamically
+        /**
+         * TODO[https://www.pivotaltracker.com/story/show/187960041]
+         * Discover view collections dynamically.
+         */
         await this.#createCollectionIfNotExists('term__VIEWS');
 
         this.isInitialized = true;

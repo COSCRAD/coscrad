@@ -157,4 +157,139 @@ describe(`ArangoTermQueryRepository`, () => {
             });
         });
     });
+
+    describe(`translate`, () => {
+        const targetTerm = termViews[0];
+
+        beforeEach(async () => {
+            await arangoDatabaseForCollection.clear();
+
+            await testQueryRepository.create(targetTerm);
+        });
+
+        it(`should append the expected multilingual text item`, async () => {
+            const targetTranslationRole = MultilingualTextItemRole.freeTranslation;
+
+            await testQueryRepository.translate(targetTerm.id, {
+                text: textTranslation,
+                languageCode: translationLangaugeCode,
+                role: targetTranslationRole,
+            });
+
+            const updatedTerm = await testQueryRepository.fetchById(targetTerm.id);
+
+            if (isNotFound(updatedTerm)) {
+                expect(updatedTerm).not.toBe(NotFound);
+
+                throw new InternalError('test failed');
+            }
+
+            const updatedName = new MultilingualText(updatedTerm.name); // we want an instance (not a DTO) for the query methods
+
+            const searchResultForTranslation = updatedName.getTranslation(translationLangaugeCode);
+
+            expect(searchResultForTranslation).not.toBe(NotFound);
+
+            const foundTranslation = searchResultForTranslation as MultilingualTextItem;
+
+            expect(foundTranslation.text).toBe(textTranslation);
+
+            expect(foundTranslation.role).toBe(targetTranslationRole);
+        });
+    });
+
+    describe(`addAudio`, () => {
+        const targetTerm = termViews[0];
+
+        const audioUrl = 'https://www.coscrad.org/test123.mp3';
+
+        beforeEach(async () => {
+            await arangoDatabaseForCollection.clear();
+
+            await testQueryRepository.create(targetTerm);
+        });
+
+        it(`should append the audio item`, async () => {
+            await testQueryRepository.addAudio(targetTerm.id, originalLanguageCode, audioUrl);
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetTerm.id
+            )) as TermViewModel;
+
+            // TODO In the future, we should use multilingual audio for terms
+            expect(updatedView.audioURL).toBe(audioUrl);
+        });
+    });
+
+    describe(`delete`, () => {
+        beforeEach(async () => {
+            await arangoDatabaseForCollection.clear();
+
+            await testQueryRepository.createMany(termViews);
+        });
+
+        it(`should remove the given term`, async () => {
+            const targetTermViewId = termIds[0];
+
+            const expectedNumberOfTermsAfterDelete = termViews.length - 1;
+
+            await testQueryRepository.delete(targetTermViewId);
+
+            const actualNumberOfTerms = await testQueryRepository.count();
+
+            expect(actualNumberOfTerms).toBe(expectedNumberOfTermsAfterDelete);
+        });
+    });
+
+    describe(`count`, () => {
+        beforeEach(async () => {
+            await arangoDatabaseForCollection.clear();
+
+            await testQueryRepository.createMany(termViews);
+        });
+
+        it(`should return the correct count`, async () => {
+            const result = await testQueryRepository.count();
+
+            expect(result).toBe(termViews.length);
+        });
+    });
+
+    describe(`create`, () => {
+        beforeEach(async () => {
+            await arangoDatabaseForCollection.clear();
+        });
+
+        it(`should create the correct term view`, async () => {
+            const termToCreate = termViews[0];
+
+            // act
+            await testQueryRepository.create(termToCreate);
+
+            const searchResult = await testQueryRepository.fetchById(termToCreate.id);
+
+            expect(searchResult).not.toBe(NotFound);
+
+            const foundTermView = searchResult as TermViewModel;
+
+            const name = new MultilingualText(foundTermView.name);
+
+            expect(name.getOriginalTextItem().text).toBe(termText);
+        });
+    });
+
+    describe(`createMany`, () => {
+        beforeEach(async () => {
+            await arangoDatabaseForCollection.clear();
+        });
+
+        it(`should create the expected term views`, async () => {
+            // act
+            await testQueryRepository.createMany(termViews);
+
+            const actualCount = await testQueryRepository.count();
+
+            expect(actualCount).toBe(termViews.length);
+        });
+    });
 });
