@@ -23,6 +23,8 @@ export const AUDIO_QUERY_REPOSITORY_TOKEN = 'AUDIO_QUERY_REPOSITORY_TOKEN';
 export interface IAudioItemQueryRepository {
     create(view: IAudioItemQueryModel): Promise<void>;
 
+    createMany(view: IAudioItemQueryModel[]): Promise<void>;
+
     delete(id: AggregateId): Promise<void>;
 
     fetchById(id: AggregateId): Promise<Maybe<IAudioItemQueryModel>>;

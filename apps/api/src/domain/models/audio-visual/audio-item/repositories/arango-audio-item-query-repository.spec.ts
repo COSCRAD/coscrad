@@ -2,6 +2,7 @@ import { AggregateType, IAudioItemViewModel, IDetailQueryResult } from '@coscrad
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
+import { MultilingualText } from 'apps/api/src/domain/common/entities/multilingual-text';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/Environment';
@@ -20,7 +21,7 @@ import { ArangoAudioItemQueryRepository } from './arango-audio-item-query-reposi
 
 const audioItemId = buildDummyUuid(1);
 
-const compositeId = {
+const compositeIdForSingleTerm = {
     type: AggregateType.audioItem,
     id: audioItemId,
 };
@@ -61,7 +62,7 @@ describe(`ArangoAudioItemQueryRepository`, () => {
 
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
 
-        arangoDatabaseForCollection = databaseProvider.getDatabaseForCollection('term__VIEWS');
+        arangoDatabaseForCollection = databaseProvider.getDatabaseForCollection('audioItem__VIEWS');
 
         testQueryRepository = new ArangoAudioItemQueryRepository(connectionProvider);
     });
@@ -78,7 +79,23 @@ describe(`ArangoAudioItemQueryRepository`, () => {
         type: 'AUDIO_ITEM_CREATED',
     });
 
-    const [creationEvent] = audioItemCreated.as(compositeId) as [AudioItemCreated];
+    const [creationEvent] = audioItemCreated.as(compositeIdForSingleTerm) as [AudioItemCreated];
+
+    const additionalAudioItems = [101, 102, 103].map((sequenceNumber) => {
+        const creationEvent = new TestEventStream()
+            .andThen<AudioItemCreated>({
+                type: 'AUDIO_ITEM_CREATED',
+                payload: {
+                    name: `audio item number: ${sequenceNumber}`,
+                },
+            })
+            .as({
+                type: AggregateType.audioItem,
+                id: buildDummyUuid(sequenceNumber),
+            })[0] as AudioItemCreated;
+
+        return EventSourcedAudioItemViewModel.fromAudioItemCreated(creationEvent);
+    });
 
     describe(`ArangoAudioItemQueryRepository.fetchById`, () => {
         describe(`when there is an audio item with the given ID`, () => {
@@ -105,19 +122,69 @@ describe(`ArangoAudioItemQueryRepository`, () => {
     });
 
     describe(`ArangoAudioItemQueryRepository.fetchMany`, () => {
-        it.todo(`should have a test`);
+        beforeEach(async () => {
+            await testQueryRepository.createMany(additionalAudioItems);
+        });
+
+        it(`should return the expected audio item views`, async () => {
+            // act
+            await testQueryRepository.fetchMany();
+
+            const actualCount = await testQueryRepository.count();
+
+            expect(actualCount).toBe(additionalAudioItems.length);
+        });
     });
 
     describe(`ArangoAudioItemQueryRepository.count`, () => {
-        it.todo(`should have a test`);
+        beforeEach(async () => {
+            await testQueryRepository.createMany(additionalAudioItems);
+        });
+
+        it(`should return the correct count`, async () => {
+            const result = await testQueryRepository.count();
+
+            expect(result).toBe(additionalAudioItems.length);
+        });
     });
 
     describe(`ArangoAudioItemQueryRepository.create`, () => {
-        it.todo(`should have a test`);
+        it(`should create the expected audio item view`, async () => {
+            const targetAudioItem = additionalAudioItems[0];
+
+            await testQueryRepository.create(targetAudioItem);
+
+            const searchResult = await testQueryRepository.fetchById(targetAudioItem.id);
+
+            expect(searchResult).not.toBe(NotFound);
+
+            const foundView = searchResult as EventSourcedAudioItemViewModel;
+
+            const name = new MultilingualText(foundView.name);
+
+            expect(name.getOriginalTextItem().text).toBe(`audio item number: 101`);
+        });
     });
 
     describe(`ArangoAudioItemQueryRepository.delete`, () => {
-        it.todo(`should have a test`);
+        beforeEach(async () => {
+            await testQueryRepository.createMany(additionalAudioItems);
+        });
+
+        it(`should delete the expected audio item`, async () => {
+            const targetAudioItemId = additionalAudioItems[0].id;
+
+            // act
+            await testQueryRepository.delete(targetAudioItemId);
+
+            const newCount = await testQueryRepository.count();
+
+            expect(newCount).toBe(2);
+
+            const searchResult = await testQueryRepository.fetchById(targetAudioItemId);
+
+            expect(searchResult).toBe(NotFound);
+        });
     });
 
     describe(`ArangoAudioItemQueryRepository.translateName`, () => {

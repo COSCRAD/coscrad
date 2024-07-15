@@ -32,8 +32,16 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
         await this.database.create(mapEntityDTOToDatabaseDocument(view));
     }
 
+    async createMany(
+        views: (IAudioItemViewModel & { actions: ICommandFormAndLabels[] } & {
+            actions: ICommandFormAndLabels[];
+        })[]
+    ): Promise<void> {
+        await this.database.createMany(views.map(mapEntityDTOToDatabaseDocument));
+    }
+
     delete(_id: AggregateId): Promise<void> {
-        throw new Error('Method not implemented.');
+        throw new Error('Method delete not implemented.');
     }
 
     async fetchById(
@@ -47,15 +55,17 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
         return mapDatabaseDocumentToAggregateDTO(result);
     }
 
-    fetchMany(): Promise<(IAudioItemViewModel & { actions: ICommandFormAndLabels[] })[]> {
-        throw new Error('Method not implemented.');
+    async fetchMany(): Promise<(IAudioItemViewModel & { actions: ICommandFormAndLabels[] })[]> {
+        const documents = await this.database.fetchMany();
+
+        return documents.map(mapDatabaseDocumentToAggregateDTO);
     }
 
     translateName(_id: AggregateId, _translationItem: IMultilingualTextItem): Promise<void> {
-        throw new Error('Method not implemented.');
+        throw new Error('Method translate name not implemented.');
     }
 
-    count(): Promise<number> {
-        throw new Error('Method not implemented.');
+    async count(): Promise<number> {
+        return this.database.getCount();
     }
 }

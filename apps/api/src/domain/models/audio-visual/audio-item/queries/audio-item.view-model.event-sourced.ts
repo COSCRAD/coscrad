@@ -1,4 +1,5 @@
 import {
+    ContributorWithId,
     IAudioItemViewModel,
     ICommandFormAndLabels,
     IDetailQueryResult,
@@ -15,7 +16,7 @@ export class EventSourcedAudioItemViewModel implements IDetailQueryResult<IAudio
     mimeType: MIMEType;
     lengthMilliseconds: number;
     text: string;
-    contributions: string[];
+    contributions: ContributorWithId[];
     id: string;
 
     static fromAudioItemCreated({
@@ -34,7 +35,10 @@ export class EventSourcedAudioItemViewModel implements IDetailQueryResult<IAudio
         audioItem.name = buildMultilingualTextWithSingleItem(name, languageCodeForName);
 
         // TODO join in contributors properly
-        audioItem.contributions = contributorIds;
+        audioItem.contributions = contributorIds.map((contributorId) => ({
+            id: contributorId,
+            fullName: contributorId,
+        }));
 
         return audioItem;
     }
