@@ -22,7 +22,7 @@ const photographHeight = 300;
 
 const photographTitle = 'A Good Drawing';
 
-const originalLangaugeCodeForTitle = LanguageCode.English;
+const originalLanguageCodeForTitle = LanguageCode.English;
 
 const photographCreated = new TestEventStream().andThen<PhotographCreated>({
     type: 'PHOTOGRAPH_CREATED',
@@ -32,7 +32,7 @@ const photographCreated = new TestEventStream().andThen<PhotographCreated>({
         widthPx: photographWidth,
         heightPx: photographHeight,
         title: photographTitle,
-        languageCodeForTitle: originalLangaugeCodeForTitle,
+        languageCodeForTitle: originalLanguageCodeForTitle,
     },
 });
 
@@ -68,7 +68,7 @@ describe(`Photograph.fromEventHistory`, () => {
 
                 expect(foundText).toBe(photographTitle);
 
-                expect(foundLanguageCode).toBe(originalLangaugeCodeForTitle);
+                expect(foundLanguageCode).toBe(originalLanguageCodeForTitle);
             });
         });
     });

@@ -18,6 +18,7 @@ import {
     TranslateTermCommandHandler,
 } from '../../domain/models/term/commands';
 import { Term } from '../../domain/models/term/entities/term.entity';
+import { TERM_QUERY_REPOSITORY_TOKEN } from '../../domain/models/term/queries';
 import { TermQueryService } from '../../domain/services/query-services/term-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { ArangoConnectionProvider } from '../../persistence/database/arango-connection.provider';
@@ -26,8 +27,6 @@ import { ArangoDatabaseForCollection } from '../../persistence/database/arango-d
 import { PersistenceModule } from '../../persistence/persistence.module';
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
 import { TermController } from '../controllers/resources/term.controller';
-
-export const TERM_QUERY_REPOSITORY_TOKEN = 'TERM_QUERY_REPOSITORY_TOKEN';
 
 @Module({
     imports: [PersistenceModule, CommandModule, IdGenerationModule],

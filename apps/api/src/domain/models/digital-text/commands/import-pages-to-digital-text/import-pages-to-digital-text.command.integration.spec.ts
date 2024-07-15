@@ -79,7 +79,7 @@ const textContent = 'hello world';
 
 const translation = 'hello world translated';
 
-const originalLangaugeCode = LanguageCode.Chilcotin;
+const originalLanguageCode = LanguageCode.Chilcotin;
 
 const translationLanguageCode = LanguageCode.Chinook;
 
@@ -98,7 +98,7 @@ const multiplePagesToImport: DigitalTextPageImportRecord[] = ['X', 'XI', 'XII', 
         content: [
             {
                 text: `text for page: ${pageIdentifier}`,
-                languageCode: originalLangaugeCode,
+                languageCode: originalLanguageCode,
                 isOriginalLanguage: true,
                 // no audioItemId
             },
@@ -122,7 +122,7 @@ const commandFsaFactory = new DummyCommandFsaFactory<ImportPagesToDigitalText>((
                     content: [
                         {
                             text: textContent,
-                            languageCode: originalLangaugeCode,
+                            languageCode: originalLanguageCode,
                             audioItemId: audioItemIdForOriginalLanguage,
                             isOriginalLanguage: true,
                         },
@@ -214,7 +214,7 @@ describe(commandType, () => {
 
                         expect(originalTextSearch.text).toBe(textContent);
 
-                        expect(originalTextSearch.languageCode).toBe(originalLangaugeCode);
+                        expect(originalTextSearch.languageCode).toBe(originalLanguageCode);
 
                         const translationTextSearch =
                             pageContent.getTranslation(translationLanguageCode);
@@ -230,7 +230,7 @@ describe(commandType, () => {
 
                         expect(foundTranslationLanguageCode).toBe(translationLanguageCode);
 
-                        expect(targetPage.getAudioIn(originalLangaugeCode)).toBe(
+                        expect(targetPage.getAudioIn(originalLanguageCode)).toBe(
                             audioItemIdForOriginalLanguage
                         );
 
@@ -341,7 +341,7 @@ describe(commandType, () => {
                     seedInitialState: seedValidInitialState,
                     buildCommandFSA: () =>
                         commandFsaFactory.build(undefined, {
-                            pages: [{ originalLangaugeCode }],
+                            pages: [{ originalLanguageCode }],
                         }),
                 });
             });
@@ -381,7 +381,7 @@ describe(commandType, () => {
                                     content: [
                                         {
                                             text: textContent,
-                                            languageCode: originalLangaugeCode,
+                                            languageCode: originalLanguageCode,
                                             audioItemId: audioItemIdForOriginalLanguage,
                                             isOriginalLanguage: true,
                                         },

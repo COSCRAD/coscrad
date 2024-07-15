@@ -21,6 +21,8 @@ export const TERM_QUERY_REPOSITORY_TOKEN = 'TERM_QUERY_REPOSITORY_TOKEN';
 export interface ITermQueryRepository {
     create(view: TermQueryModel): Promise<void>;
 
+    createMany(views: TermQueryModel[]): Promise<void>;
+
     delete(id: AggregateId): Promise<void>;
 
     fetchById(id: AggregateId): Promise<Maybe<TermQueryModel>>;
