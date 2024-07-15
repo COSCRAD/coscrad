@@ -12,7 +12,7 @@ import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { PageIdentifier } from '../../entities';
 import { DigitalTextCompositeId } from '../create-digital-text.command';
 
-class AudioAndTextContentForPage {
+export class AudioAndTextContentForPage {
     @NonEmptyString({
         label: 'text',
         description: 'text content for the page',
@@ -25,11 +25,11 @@ class AudioAndTextContentForPage {
     })
     readonly languageCode: LanguageCode;
 
-    // TODO support audio for multiple languages
     @ReferenceTo(AggregateType.audioItem)
     @UUID({
         label: 'audio item for page',
         description: 'a reference to the audio for this page',
+        isOptional: true,
     })
     readonly audioItemId?: AggregateId;
 
@@ -40,7 +40,7 @@ class AudioAndTextContentForPage {
     readonly isOriginalLanguage: boolean;
 }
 
-class DigitalTextPageImportRecord {
+export class DigitalTextPageImportRecord {
     @NonEmptyString({
         label: 'page identifier',
         description: 'identifier for the page being imported',
@@ -58,6 +58,8 @@ class DigitalTextPageImportRecord {
     @UUID({
         label: 'photograph for page',
         description: 'a reference to the photograph for this page',
+        // TODO can't we get this from the TypeScript type?
+        isOptional: true,
     })
     readonly photographId?: AggregateId;
 }

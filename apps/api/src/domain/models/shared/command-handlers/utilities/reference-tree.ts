@@ -16,6 +16,17 @@ export class ReferenceTree {
         return result;
     }
 
+    get length(): number {
+        return [...this.references.values()].reduce(
+            (runningTotal, v) => runningTotal + v.length,
+            0
+        );
+    }
+
+    isEmpty(): boolean {
+        return this.length === 0;
+    }
+
     append(type: string, id: string): ReferenceTree;
     append(type: string, ids: string[]): ReferenceTree;
     append(type: string, input: string | string[]): ReferenceTree {

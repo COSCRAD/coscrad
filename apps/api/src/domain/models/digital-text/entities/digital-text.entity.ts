@@ -76,7 +76,7 @@ type MultilingualAudioItemAndText = {
     isOriginalLanguage: boolean;
 };
 
-type DigitalTextPageImport = {
+export type DigitalTextPageImport = {
     pageIdentifier: PageIdentifier;
 
     audioAndTextContent: MultilingualAudioItemAndText[];
@@ -492,6 +492,10 @@ export class DigitalText extends Resource {
 
         // We avoid shared references by cloning
         return searchResult.clone({});
+    }
+
+    numberOfPages(): number {
+        return this.pages.length;
     }
 
     hasAudioForTitle(): boolean {

@@ -6,6 +6,7 @@ export interface ReferenceSpecification {
     type: string;
     path: string;
     isArray: boolean;
+    isOptional: boolean;
 }
 
 export const getReferencesForCoscradDataSchema = (
@@ -14,8 +15,18 @@ export const getReferencesForCoscradDataSchema = (
 ): ReferenceSpecification[] =>
     Object.entries(schema).reduce(
         (acc: ReferenceSpecification[], [propertyKey, typeDefinition]) => {
-            // @ts-expect-error TODO We need to improve type safety of @coscrad/data-types
-            const { referenceTo, isArray, complexDataType, schema: nestedSchema } = typeDefinition;
+            const {
+                // @ts-expect-error TODO We need to improve type safety of @coscrad/data-types
+                referenceTo,
+                isArray,
+                // @ts-expect-error TODO We need to improve type safety of @coscrad/data-types
+
+                complexDataType,
+                // @ts-expect-error TODO We need to improve type safety of @coscrad/data-types
+
+                schema: nestedSchema,
+                isOptional,
+            } = typeDefinition;
 
             const fullPath = isNonEmptyString(basePath)
                 ? `${basePath}.${propertyKey}`
@@ -27,6 +38,7 @@ export const getReferencesForCoscradDataSchema = (
                         type: referenceTo,
                         path: fullPath,
                         isArray,
+                        isOptional,
                     },
                 ]);
 

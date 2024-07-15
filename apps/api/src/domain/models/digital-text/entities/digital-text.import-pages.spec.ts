@@ -1,5 +1,5 @@
 import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
-import { DigitalText } from '.';
+import { DigitalText, DigitalTextPageImport } from '.';
 import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpected';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
@@ -33,6 +33,26 @@ const existingDigitalText = getValidAggregateInstanceForTest(AggregateType.digit
     pages: [],
 });
 
+const additionalPagesToImport = [11, 12, 13].map((pageNumber): DigitalTextPageImport => {
+    const pageIdentifier = pageNumber.toString();
+
+    return {
+        pageIdentifier,
+        audioAndTextContent: [
+            {
+                text: `text for page: ${pageIdentifier}`,
+                languageCode: originalLangaugeCode,
+                isOriginalLanguage: true,
+            },
+            {
+                text: `translation for page: ${pageIdentifier}`,
+                languageCode: translationLanguageCode,
+                isOriginalLanguage: false,
+            },
+        ],
+    };
+});
+
 const validPagesToImport = [
     {
         pageIdentifier,
@@ -52,6 +72,7 @@ const validPagesToImport = [
         ],
         photographId,
     },
+    ...additionalPagesToImport,
 ];
 
 describe(`DigitalText.ImportPages`, () => {
@@ -372,6 +393,7 @@ describe(`DigitalText.ImportPages`, () => {
                         ],
                         photographId: '', // not allowed
                     },
+                    ...additionalPagesToImport,
                 ]);
 
                 assertErrorAsExpected(

@@ -11,13 +11,27 @@ export const buildReferenceTree = (Ctor: Object, instance: Object) => {
 
     // for every reference property, get the references from the instance
     const allReferences = referenceSpecifications.reduce(
-        (acc: CompositeIdentifier<string>[], { type, path, isArray }) => {
+        (acc: CompositeIdentifier<string>[], { type, path, isArray, isOptional }) => {
             let value: unknown;
 
             if (path.includes('.')) {
                 value = getDeepPropertyFromObject(instance, path);
             } else {
                 value = instance[path];
+            }
+
+            if (isOptional && isNullOrUndefined(value)) {
+                // an optional referential property was omitted
+                return acc;
+            }
+
+            if (isOptional && Array.isArray(value)) {
+                // remove optionally omitted values
+                value = value.flatMap((element) =>
+                    (Array.isArray(element) ? element : [element]).filter(
+                        (nestedElement) => !isNullOrUndefined(nestedElement)
+                    )
+                );
             }
 
             if (isArray && !Array.isArray(value)) {
@@ -32,6 +46,10 @@ export const buildReferenceTree = (Ctor: Object, instance: Object) => {
                     ? (value as CompositeIdentifier<string>[])
                     : [value];
 
+            if (isOptional) {
+                allValues = allValues.filter((v) => !isNullOrUndefined(v));
+            }
+
             // this is getting very complex. we need to deal with this
             if (allValues.every((v): v is string[] => Array.isArray(v))) {
                 allValues = allValues.flatMap((v) => v);
@@ -39,10 +57,12 @@ export const buildReferenceTree = (Ctor: Object, instance: Object) => {
 
             if (allValues.every((id): id is string => isNonEmptyString(id))) {
                 return acc.concat(
-                    allValues.map((id) => ({
-                        type,
-                        id,
-                    }))
+                    allValues
+                        .filter((id) => !isNullOrUndefined(id))
+                        .map((id) => ({
+                            type,
+                            id,
+                        }))
                 );
             }
 

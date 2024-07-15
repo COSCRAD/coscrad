@@ -31,7 +31,10 @@ import { DigitalText } from '../../entities';
 import DigitalTextPage from '../../entities/digital-text-page.entity';
 import { PageAddedToDigitalText } from '../add-page-to-digital-text/page-added-to-digital-text.event';
 import { DigitalTextCreated } from '../digital-text-created.event';
-import { ImportPagesToDigitalText } from './import-pages-to-digital-text.command';
+import {
+    DigitalTextPageImportRecord,
+    ImportPagesToDigitalText,
+} from './import-pages-to-digital-text.command';
 
 const commandType = 'IMPORT_PAGES_TO_DIGITAL_TEXT';
 
@@ -88,6 +91,26 @@ const existingDigitalText = DigitalText.fromEventHistory(
 ) as DigitalText;
 
 const dummyFsa = buildTestCommandFsaMap().get(commandType) as CommandFSA<ImportPagesToDigitalText>;
+
+const multiplePagesToImport: DigitalTextPageImportRecord[] = ['X', 'XI', 'XII', 'XIII'].map(
+    (pageIdentifier) => ({
+        pageIdentifier,
+        content: [
+            {
+                text: `text for page: ${pageIdentifier}`,
+                languageCode: originalLangaugeCode,
+                isOriginalLanguage: true,
+                // no audioItemId
+            },
+            {
+                text: `translation for page: ${pageIdentifier}`,
+                languageCode: translationLanguageCode,
+                isOriginalLanguage: false,
+            },
+        ],
+        // no photographId
+    })
+);
 
 const commandFsaFactory = new DummyCommandFsaFactory<ImportPagesToDigitalText>(() =>
     clonePlainObjectWithOverrides(dummyFsa, {
@@ -164,58 +187,87 @@ describe(commandType, () => {
     };
 
     describe(`when the command is valid`, () => {
-        it(`should succeed`, async () => {
-            await assertCommandSuccess(commandAssertionDependencies, {
-                systemUserId: dummySystemUserId,
-                buildValidCommandFSA: () => commandFsaFactory.build(),
-                seedInitialState: seedValidInitialState,
-                checkStateOnSuccess: async () => {
-                    const digitalTextSearchResult = await testRepositoryProvider
-                        .forResource(ResourceType.digitalText)
-                        .fetchById(digitalTextId);
+        describe(`when all properties are specified`, () => {
+            it(`should succeed`, async () => {
+                await assertCommandSuccess(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    buildValidCommandFSA: () => commandFsaFactory.build(),
+                    seedInitialState: seedValidInitialState,
+                    checkStateOnSuccess: async () => {
+                        const digitalTextSearchResult = await testRepositoryProvider
+                            .forResource(ResourceType.digitalText)
+                            .fetchById(digitalTextId);
 
-                    expect(digitalTextSearchResult).toBeInstanceOf(DigitalText);
+                        expect(digitalTextSearchResult).toBeInstanceOf(DigitalText);
 
-                    const updatedDigitalText = digitalTextSearchResult as DigitalText;
+                        const updatedDigitalText = digitalTextSearchResult as DigitalText;
 
-                    const pageSearch = updatedDigitalText.getPage(pageIdentifier);
+                        const pageSearch = updatedDigitalText.getPage(pageIdentifier);
 
-                    expect(pageSearch).toBeInstanceOf(DigitalTextPage);
+                        expect(pageSearch).toBeInstanceOf(DigitalTextPage);
 
-                    const targetPage = pageSearch as DigitalTextPage;
+                        const targetPage = pageSearch as DigitalTextPage;
 
-                    const pageContent = targetPage.getContent() as MultilingualText;
+                        const pageContent = targetPage.getContent() as MultilingualText;
 
-                    const originalTextSearch = pageContent.getOriginalTextItem();
+                        const originalTextSearch = pageContent.getOriginalTextItem();
 
-                    expect(originalTextSearch.text).toBe(textContent);
+                        expect(originalTextSearch.text).toBe(textContent);
 
-                    expect(originalTextSearch.languageCode).toBe(originalLangaugeCode);
+                        expect(originalTextSearch.languageCode).toBe(originalLangaugeCode);
 
-                    const translationTextSearch =
-                        pageContent.getTranslation(translationLanguageCode);
+                        const translationTextSearch =
+                            pageContent.getTranslation(translationLanguageCode);
 
-                    expect(translationTextSearch).toBeInstanceOf(MultilingualTextItem);
+                        expect(translationTextSearch).toBeInstanceOf(MultilingualTextItem);
 
-                    const {
-                        text: foundTranslationText,
-                        languageCode: foundTranslationLanguageCode,
-                    } = translationTextSearch as MultilingualTextItem;
+                        const {
+                            text: foundTranslationText,
+                            languageCode: foundTranslationLanguageCode,
+                        } = translationTextSearch as MultilingualTextItem;
 
-                    expect(foundTranslationText).toBe(translation);
+                        expect(foundTranslationText).toBe(translation);
 
-                    expect(foundTranslationLanguageCode).toBe(translationLanguageCode);
+                        expect(foundTranslationLanguageCode).toBe(translationLanguageCode);
 
-                    expect(targetPage.getAudioIn(originalLangaugeCode)).toBe(
-                        audioItemIdForOriginalLanguage
-                    );
+                        expect(targetPage.getAudioIn(originalLangaugeCode)).toBe(
+                            audioItemIdForOriginalLanguage
+                        );
 
-                    expect(targetPage.getAudioIn(translationLanguageCode)).toBe(
-                        audioItemIdForTranslationLanguage
-                    );
+                        expect(targetPage.getAudioIn(translationLanguageCode)).toBe(
+                            audioItemIdForTranslationLanguage
+                        );
 
-                    expect(targetPage.photographId).toBe(photographId);
-                },
+                        expect(targetPage.photographId).toBe(photographId);
+                    },
+                });
+            });
+        });
+
+        describe(`when optional properties are omitted`, () => {
+            it(`should succeed`, async () => {
+                await assertCommandSuccess(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    buildValidCommandFSA: () =>
+                        commandFsaFactory.build(undefined, {
+                            // note that these omit the optional props photographId and audioId
+                            pages: multiplePagesToImport,
+                        }),
+                    seedInitialState: seedValidInitialState,
+                    checkStateOnSuccess: async () => {
+                        const digitalTextSearchResult = await testRepositoryProvider
+                            .forResource(ResourceType.digitalText)
+                            .fetchById(digitalTextId);
+
+                        expect(digitalTextSearchResult).toBeInstanceOf(DigitalText);
+
+                        const updatedDigitalText = digitalTextSearchResult as DigitalText;
+
+                        expect(updatedDigitalText.numberOfPages()).toBe(
+                            multiplePagesToImport.length
+                        );
+                    },
+                });
             });
         });
     });
