@@ -1197,6 +1197,141 @@ exports[`command payload schemas Command payload schema should match the snapsho
     "type": "TRANSLATE_DIGITAL_TEXT_TITLE",
   },
   {
+    "description": "imports pages to a digital text",
+    "label": "Import Pages to Digital Text",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "name": "DigitalTextCompositeId",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "must be: digitalText",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "digitalText",
+                "value": "digitalText",
+              },
+            ],
+          },
+        },
+      },
+      "pages": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "list of all pages to import",
+        "isArray": true,
+        "isOptional": false,
+        "label": "pages to import",
+        "name": "DigitalTextPageImportRecord",
+        "schema": {
+          "content": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "list of audio (optional) and multilingual text for every page",
+            "isArray": true,
+            "isOptional": false,
+            "label": "audio and text content for all pages",
+            "name": "AudioAndTextContentForPage",
+            "schema": {
+              "audioItemId": {
+                "coscradDataType": "UUID",
+                "description": "a reference to the audio for this page",
+                "isArray": false,
+                "isOptional": true,
+                "label": "audio item for page",
+                "referenceTo": "audioItem",
+              },
+              "isOriginalLanguage": {
+                "coscradDataType": "BOOLEAN",
+                "description": "is this text item in the original language (not a translation)",
+                "isArray": false,
+                "isOptional": false,
+                "label": "is original language",
+              },
+              "languageCode": {
+                "complexDataType": "ENUM",
+                "description": "language for the page you are importing",
+                "enumLabel": "language code",
+                "enumName": "LanguageCode",
+                "isArray": false,
+                "isOptional": false,
+                "label": "language for the page you are importing",
+                "labelsAndValues": [
+                  {
+                    "label": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "label": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "label": "English",
+                    "value": "en",
+                  },
+                  {
+                    "label": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "label": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "label": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "label": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+              },
+              "text": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "text content for the page",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text",
+              },
+            },
+          },
+          "pageIdentifier": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "identifier for the page being imported",
+            "isArray": false,
+            "isOptional": false,
+            "label": "page identifier",
+          },
+          "photographId": {
+            "coscradDataType": "UUID",
+            "description": "a reference to the photograph for this page",
+            "isArray": false,
+            "isOptional": true,
+            "label": "photograph for page",
+            "referenceTo": "photograph",
+          },
+        },
+      },
+    },
+    "type": "IMPORT_PAGES_TO_DIGITAL_TEXT",
+  },
+  {
     "description": "add audio for a digital text page",
     "label": "Add Audio for Digital Text Page",
     "schema": {

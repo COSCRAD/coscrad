@@ -295,6 +295,9 @@ describe(commandType, () => {
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     seedInitialState: async () => {
+                        // TODO why isn't the before each working?
+                        await testRepositoryProvider.testSetup();
+
                         await testRepositoryProvider
                             .forResource(AggregateType.audioItem)
                             .createMany(audioItems);
