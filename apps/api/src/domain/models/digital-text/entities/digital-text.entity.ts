@@ -36,14 +36,20 @@ import {
     DigitalTextPageContentTranslated,
     DigitalTextTitleTranslated,
     PageAddedToDigitalText,
+    PagesImportedToDigitalText,
 } from '../commands';
 import { ContentAddedToDigitalTextPage } from '../commands/add-content-to-digital-text-page';
 import { PhotographAddedToDigitalTextPage } from '../commands/add-photograph-to-digital-text-page';
 import { ADD_PAGE_TO_DIGITAL_TEXT, CREATE_DIGITAL_TEXT } from '../constants';
 import {
     CannotAddPhotographForMissingPageError,
+    CannotImportPagesToNonEmptyDigitalTextError,
     CannotOverrideCoverPhotographError,
+    EmptyPageImportError,
+    FailedToImportPagesToDigitalTextError,
     FailedToUpdateDigitalTextPageError,
+    MissingOriginalTextItemInPageImportError,
+    MultipleOriginalItemsInPageImportError,
 } from '../errors';
 import { CannotAddAudioForTitleInGivenLanguageError } from '../errors/cannot-add-audio-for-title-in-given-language.error';
 import { CannotAddPageWithDuplicateIdentifierError } from '../errors/cannot-add-page-with-duplicate-identifier.error';
@@ -53,6 +59,30 @@ import { MissingPageContentError } from '../errors/missing-page-content.error';
 import { MissingPageError } from '../errors/missing-page.error';
 import DigitalTextPage from './digital-text-page.entity';
 import { PageIdentifier } from './types/page-identifier';
+
+/**
+ * TODO In the future we may want to consider grouping audio
+ * and multilingual text items into a single structure. This would, for example,
+ * allow for us to use audio in the absence of text for the given language.
+ */
+type MultilingualAudioItemAndText = {
+    text: string;
+    languageCode: LanguageCode;
+    audioItemId?: AggregateId;
+    /**
+     * You are required to provide one and only one text item that is considered
+     * the original. The rest will be regarded as translations.
+     */
+    isOriginalLanguage: boolean;
+};
+
+export type DigitalTextPageImport = {
+    pageIdentifier: PageIdentifier;
+
+    audioAndTextContent: MultilingualAudioItemAndText[];
+
+    photographId?: AggregateId;
+};
 
 @AggregateRoot(AggregateType.digitalText)
 @RegisterIndexScopedCommands([CREATE_DIGITAL_TEXT])
@@ -338,6 +368,94 @@ export class DigitalText extends Resource {
         return this;
     }
 
+    @UpdateMethod()
+    importPages(pagesToImport: DigitalTextPageImport[]): ResultOrError<DigitalText> {
+        if (pagesToImport.length === 0) {
+            return new EmptyPageImportError();
+        }
+
+        if (this.hasPages()) {
+            return new CannotImportPagesToNonEmptyDigitalTextError(this.pages);
+        }
+
+        const pageUpdateResult = pagesToImport.map(
+            ({ pageIdentifier, photographId, audioAndTextContent }) => {
+                const originalLanguageImportItemSearchResult = audioAndTextContent.filter(
+                    ({ isOriginalLanguage: isOriginalText }) => isOriginalText
+                );
+
+                if (originalLanguageImportItemSearchResult.length > 1) {
+                    return new MultipleOriginalItemsInPageImportError();
+                }
+
+                if (originalLanguageImportItemSearchResult.length === 0) {
+                    return new MissingOriginalTextItemInPageImportError();
+                }
+
+                const {
+                    text: originalText,
+                    languageCode: originalLangaugeCode,
+                    // ~~audioItemId~~ we deal with this within the reduce loop below
+                } = originalLanguageImportItemSearchResult[0];
+
+                const pageWithOriginalTextOnly = new DigitalTextPage({
+                    identifier: pageIdentifier,
+                    content: buildMultilingualTextWithSingleItem(
+                        originalText,
+                        originalLangaugeCode
+                    ),
+                    audio: new MultilingualAudio({
+                        items: [], // we will add these later
+                    }),
+                    photographId,
+                });
+
+                // We need to translate the text before adding audio
+                const pageWithTranslationsAndAudio = audioAndTextContent.reduce(
+                    (
+                        acc: ResultOrError<DigitalTextPage>,
+                        { text, languageCode, isOriginalLanguage: isOriginalText, audioItemId }
+                    ) => {
+                        if (isInternalError(acc)) {
+                            // A previous update to the page has failed
+                            return acc;
+                        }
+
+                        const updateTextResult = isOriginalText
+                            ? // if this is the original text, there's nothing to translate
+                              acc
+                            : acc.translateContent(text, languageCode);
+
+                        if (isInternalError(updateTextResult)) {
+                            return updateTextResult;
+                        }
+
+                        if (isNullOrUndefined(audioItemId)) {
+                            return updateTextResult;
+                        }
+
+                        return updateTextResult.addAudio(audioItemId, languageCode);
+                    },
+                    pageWithOriginalTextOnly
+                );
+
+                return pageWithTranslationsAndAudio;
+            }
+        );
+
+        const pageImportErrors = pageUpdateResult.filter(isInternalError);
+
+        if (pageImportErrors.length > 0) {
+            // TODO fix this error
+            return new FailedToImportPagesToDigitalTextError(this.id, pageImportErrors);
+        }
+
+        // the filter above ensures that we do not have any Errors in this array
+        this.pages = pageUpdateResult as DigitalTextPage[];
+
+        return this;
+    }
+
     /**
      *
      * @param pageIdentifiers list of all page identifiers that must be included
@@ -374,6 +492,10 @@ export class DigitalText extends Resource {
 
         // We avoid shared references by cloning
         return searchResult.clone({});
+    }
+
+    numberOfPages(): number {
+        return this.pages.length;
     }
 
     hasAudioForTitle(): boolean {
@@ -472,6 +594,16 @@ export class DigitalText extends Resource {
         payload: { pageIdentifier, translation, languageCode },
     }: DigitalTextPageContentTranslated) {
         return this.translatePageContent(pageIdentifier, translation, languageCode);
+    }
+
+    handlePagesImportedToDigitalText({ payload: { pages } }: PagesImportedToDigitalText) {
+        return this.importPages(
+            pages.map(({ pageIdentifier, content, photographId }) => ({
+                pageIdentifier,
+                audioAndTextContent: content,
+                photographId,
+            }))
+        );
     }
 
     static fromEventHistory(

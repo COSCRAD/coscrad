@@ -20,6 +20,8 @@ import {
     DigitalTextTitleTranslated,
     DigitalTextTitleTranslatedPayload,
     PageAddedToDigitalText,
+    PagesImportedToDigitalText,
+    PagesImportedToDigitalTextPayload,
 } from '../../domain/models/digital-text/commands';
 import {
     ContentAddedToDigitalTextPage,
@@ -652,6 +654,42 @@ const buildEntriesImportedToVocabularyList = (
     );
 };
 
+const buildPagesImportedToDigitalText = (
+    payloadOverrides: PagesImportedToDigitalTextPayload,
+    buildMetadata: EventMetadataBuilder
+) => {
+    const defaultPayload: PagesImportedToDigitalTextPayload = {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.digitalText,
+            id: buildDummyUuid(902),
+        },
+        pages: [
+            {
+                pageIdentifier: 'v',
+                content: [
+                    {
+                        text: 'Hello world',
+                        languageCode: LanguageCode.Chilcotin,
+                        isOriginalLanguage: true,
+                        audioItemId: buildDummyUuid(1),
+                    },
+                    {
+                        text: 'Hello world translated',
+                        languageCode: LanguageCode.Chinook,
+                        isOriginalLanguage: false,
+                        audioItemId: buildDummyUuid(3),
+                    },
+                ],
+            },
+        ],
+    };
+
+    return new PagesImportedToDigitalText(
+        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        buildMetadata()
+    );
+};
+
 export class TestEventStream {
     private readonly TIME_OFFSET = 100; // 100 ms between events
 
@@ -724,7 +762,8 @@ export class TestEventStream {
             .registerBuilder(
                 'ENTRIES_IMPORTED_TO_VOCABULARY_LIST',
                 buildEntriesImportedToVocabularyList
-            );
+            )
+            .registerBuilder('PAGES_IMPORTED_TO_DIGITAL_TEXT', buildPagesImportedToDigitalText);
 
         [
             ...getTagTestEventBuildersMap(),
