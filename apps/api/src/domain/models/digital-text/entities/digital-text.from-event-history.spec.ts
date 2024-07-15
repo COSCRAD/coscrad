@@ -30,6 +30,7 @@ import {
     DigitalTextPageContentTranslated,
     DigitalTextTitleTranslated,
     PageAddedToDigitalText,
+    PagesImportedToDigitalText,
 } from '../commands';
 import {
     AddContentToDigitalTextPage,
@@ -201,7 +202,63 @@ const digitalTextPageContentTranslated = new DigitalTextPageContentTranslated(
     { id: buildDummyUuid(581), userId: dummySystemUserId, dateCreated: dummyDateManager.next() }
 );
 
-const audioItemId = buildDummyUuid(680);
+const audioItemIdForOriginalLanguage = buildDummyUuid(680);
+
+const audioItemIdForTranslationLanguage = buildDummyUuid(681);
+
+const photographId = buildDummyUuid(100);
+
+const multiplePagesToImport = ['v', 'vi', 'vii'].map((pageIdentifier) => ({
+    pageIdentifier,
+    content: [
+        {
+            text: `text for page: ${pageIdentifier}`,
+            languageCode: originalLanguageCodeForContent,
+            isOriginalLanguage: true,
+        },
+    ],
+}));
+
+// TODO use TestEventStream for all test data setup in this test
+const digitalTextCreatedEventStream = new TestEventStream().andThen<DigitalTextCreated>({
+    type: 'DIGITAL_TEXT_CREATED',
+});
+
+const singlePageImportedToDigitalText =
+    // this is the page we will check in detail
+    digitalTextCreatedEventStream.andThen<PagesImportedToDigitalText>({
+        type: 'PAGES_IMPORTED_TO_DIGITAL_TEXT',
+        payload: {
+            pages: [
+                {
+                    pageIdentifier: dummyPageIdentifier,
+                    photographId,
+                    content: [
+                        {
+                            text: originalTextContent,
+                            languageCode: originalLanguageCodeForContent,
+                            audioItemId: audioItemIdForOriginalLanguage,
+                            isOriginalLanguage: true,
+                        },
+                        {
+                            text: translationText,
+                            languageCode: translationLanguageCodeForContent,
+                            audioItemId: audioItemIdForTranslationLanguage,
+                            isOriginalLanguage: false,
+                        },
+                    ],
+                },
+            ],
+        },
+    });
+
+const multiplePagesImportedToDigitalText =
+    digitalTextCreatedEventStream.andThen<PagesImportedToDigitalText>({
+        type: 'PAGES_IMPORTED_TO_DIGITAL_TEXT',
+        payload: {
+            pages: multiplePagesToImport,
+        },
+    });
 
 const audioAddedForDigitalTextPage = new TestEventStream()
     .andThen<AudioAddedForDigitalTextPage>({
@@ -209,7 +266,7 @@ const audioAddedForDigitalTextPage = new TestEventStream()
         payload: {
             pageIdentifier: dummyPageIdentifier,
             languageCode: originalLanguageCodeForContent,
-            audioItemId,
+            audioItemId: audioItemIdForOriginalLanguage,
         },
     })
     .as({
@@ -456,7 +513,7 @@ describe(`DigitalText.fromEventHistory`, () => {
 
                 expect(audioSearchResult).not.toBeInstanceOf(InternalError);
 
-                expect(audioSearchResult).toBe(audioItemId);
+                expect(audioSearchResult).toBe(audioItemIdForOriginalLanguage);
             });
         });
 
@@ -513,6 +570,85 @@ describe(`DigitalText.fromEventHistory`, () => {
                 expect(
                     digitalText.queryAccessControlList.canUser(idForUserWithAccessToDigitalText)
                 ).toBe(true);
+            });
+        });
+
+        describe(`when pages have been imported`, () => {
+            describe(`when one page has been imported`, () => {
+                it(`should succeed`, () => {
+                    const eventStream = singlePageImportedToDigitalText.as({
+                        type: AggregateType.digitalText,
+                        id,
+                    });
+
+                    const digitalTextBuildResult = DigitalText.fromEventHistory(eventStream, id);
+
+                    expect(digitalTextBuildResult).toBeInstanceOf(DigitalText);
+
+                    const updatedText = digitalTextBuildResult as DigitalText;
+
+                    const pageSearch = updatedText.getPage(dummyPageIdentifier);
+
+                    expect(pageSearch).toBeInstanceOf(DigitalTextPage);
+
+                    const targetPage = pageSearch as DigitalTextPage;
+
+                    const pageContent = targetPage.getContent() as MultilingualText;
+
+                    const originalTextSearch = pageContent.getOriginalTextItem();
+
+                    expect(originalTextSearch.text).toBe(originalTextContent);
+
+                    expect(originalTextSearch.languageCode).toBe(originalLanguageCodeForContent);
+
+                    const translationTextSearch = pageContent.getTranslation(
+                        translationLanguageCodeForContent
+                    );
+
+                    expect(translationTextSearch).toBeInstanceOf(MultilingualTextItem);
+
+                    const {
+                        text: foundTranslationText,
+                        languageCode: foundTranslationLanguageCode,
+                    } = translationTextSearch as MultilingualTextItem;
+
+                    expect(foundTranslationText).toBe(translationText);
+
+                    expect(foundTranslationLanguageCode).toBe(translationLanguageCodeForContent);
+
+                    expect(targetPage.getAudioIn(originalLanguageCodeForContent)).toBe(
+                        audioItemIdForOriginalLanguage
+                    );
+
+                    expect(targetPage.getAudioIn(translationLanguageCodeForContent)).toBe(
+                        audioItemIdForTranslationLanguage
+                    );
+
+                    expect(targetPage.photographId).toBe(photographId);
+                });
+            });
+
+            describe(`when many pages have been imported`, () => {
+                it('should succeed', () => {
+                    const eventStream = multiplePagesImportedToDigitalText.as({
+                        type: AggregateType.digitalText,
+                        id,
+                    });
+
+                    const digitalTextBuildResult = DigitalText.fromEventHistory(eventStream, id);
+
+                    expect(digitalTextBuildResult).toBeInstanceOf(DigitalText);
+
+                    const builtDigitalText = digitalTextBuildResult as DigitalText;
+
+                    expect(builtDigitalText.numberOfPages()).toBe(multiplePagesToImport.length);
+
+                    const missingPages = multiplePagesToImport.filter(
+                        ({ pageIdentifier }) => !builtDigitalText.hasPage(pageIdentifier)
+                    );
+
+                    expect(missingPages).toHaveLength(0);
+                });
             });
         });
     });

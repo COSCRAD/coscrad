@@ -6,7 +6,7 @@ import getValidAggregateInstanceForTest from '../../__tests__/utilities/getValid
 import { buildMultilingualTextFromBilingualText } from '../../common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
-import { CannnotAddAudioForNoteInGivenLanguageError } from '../context/errors';
+import { CannotAddAudioForNoteInGivenLanguageError } from '../context/errors';
 import { CannotOverrideAudioForLanguageError } from '../shared/multilingual-audio/errors';
 import { MultilingualAudio } from '../shared/multilingual-audio/multilingual-audio.entity';
 import { EdgeConnectionContextUnion } from './edge-connection-context-union';
@@ -102,7 +102,7 @@ describe(`EdgeConnection.AddAudioForNote`, () => {
 
                 assertErrorAsExpected(
                     result,
-                    new CannnotAddAudioForNoteInGivenLanguageError(
+                    new CannotAddAudioForNoteInGivenLanguageError(
                         existingEdgeConnectionWithoutAudioForNote.id,
                         audioItemId,
                         languageCodeWithNoNoteTranslation

@@ -24,20 +24,44 @@ class ResourceCompositeIdentifier {
     id: string;
 }
 
-describe(`getReferenceTree`, () => {
+describe(`buildReferenceTree`, () => {
     class WidgetPart {
+        @NonEmptyString({
+            label: 'name',
+            description: 'name of this widget part',
+        })
+        name: string;
+
         @ReferenceTo('machine-part')
         @UUID({
             label: 'part id',
             description: 'a reference to a part for this widget',
+            // we want to test that nested optional properties can be safely omitted
+            isOptional: true,
         })
-        partId: string;
+        partId?: string;
 
         @NonEmptyString({
             label: 'purpose',
             description: 'the purpose of this part in the widget',
         })
         purpose: string;
+    }
+
+    // ensure that an array of arrays of objects with references work
+    class SpecialPartGroup {
+        @NestedDataType(WidgetPart, {
+            isArray: true,
+            label: 'parts',
+            description: 'the parts that are included in this group of special parts',
+        })
+        parts: WidgetPart[];
+
+        @NonEmptyString({
+            label: 'name',
+            description: 'the group name',
+        })
+        name: string;
     }
 
     class Widget {
@@ -82,6 +106,13 @@ describe(`getReferenceTree`, () => {
             description: 'the machine parts used to build this widget',
         })
         parts: WidgetPart[];
+
+        @NestedDataType(SpecialPartGroup, {
+            isArray: true,
+            label: 'special part groups',
+            description: 'groups of parts which require special handling',
+        })
+        specialPartGroups: SpecialPartGroup[];
     }
 
     const aggregateId = buildDummyUuid(333);
@@ -105,20 +136,39 @@ describe(`getReferenceTree`, () => {
         })),
         parts: [
             {
+                name: 'diddly holder',
                 partId: buildDummyUuid(9),
                 purpose: 'holds the diddly together',
             },
             {
+                name: 'oil',
                 partId: buildDummyUuid(10),
                 purpose: `keeps the moving parts lubricated`,
+            },
+        ],
+        specialPartGroups: [
+            {
+                name: 'select parts',
+                parts: [
+                    {
+                        name: 'prestige part',
+                        partId: buildDummyUuid(11),
+                        purpose: 'must be sourced from Germany',
+                    },
+                    {
+                        name: 'snake oil',
+                        partId: buildDummyUuid(12),
+                        purpose: 'uses a rare kind of oil',
+                    },
+                ],
             },
         ],
     };
 
     describe(`it should identify the references that are contained`, () => {
-        const referenceTree = buildReferenceTree(Widget, existingWidget);
-
         it(`should have all references`, () => {
+            const referenceTree = buildReferenceTree(Widget, existingWidget);
+
             const hasBookReference = referenceTree.has('book', bookId);
 
             expect(hasBookReference).toBe(true);
@@ -137,10 +187,54 @@ describe(`getReferenceTree`, () => {
                 expect(referenceTree.has('machine-part', buildDummyUuid(partId))).toBe(true);
             });
 
+            [11, 12].forEach((partId) => {
+                expect(referenceTree.has(`machine-part`, buildDummyUuid(partId))).toBe(true);
+            });
+
             ['foo', 'whatsit', 'whobob', 'machine-part'].forEach((aggregateType) => {
                 // This ID does not appear in the test instance above
                 expect(referenceTree.has(aggregateType, buildDummyUuid(999))).toBe(false);
             });
+        });
+    });
+
+    describe(`when there is a nested optional id-valued property on an array of objects`, () => {
+        class Whatsit {
+            aggregateCompositeIdentifier: {
+                type: string;
+                id: string;
+            };
+
+            @NestedDataType(WidgetPart, {
+                isArray: true,
+                label: 'parts',
+                description: 'the machine parts used to build this widget',
+            })
+            parts: WidgetPart[];
+        }
+
+        const testWhatsit: Whatsit = {
+            aggregateCompositeIdentifier: {
+                type: 'foo',
+                id: aggregateId,
+            },
+            parts: [
+                {
+                    name: 'snake oil',
+                    partId: buildDummyUuid(12),
+                    purpose: 'uses a rare kind of oil',
+                },
+                {
+                    name: 'this part has no partId',
+                    purpose: 'to show that we can omit the optional partId property!',
+                },
+            ],
+        };
+
+        it(`should return the expected result`, () => {
+            const result = buildReferenceTree(Whatsit, testWhatsit);
+
+            expect(result.length).toBe(1);
         });
     });
 

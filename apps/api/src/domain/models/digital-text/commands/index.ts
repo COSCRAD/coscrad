@@ -7,5 +7,6 @@ export * from './add-page-to-digital-text/page-added-to-digital-text.event';
 export * from './create-digital-text.command';
 export * from './create-digital-text.command-handler';
 export * from './digital-text-created.event';
+export * from './import-pages-to-digital-text';
 export * from './translate-digital-text-page-content';
 export * from './translate-digital-text-title';
