@@ -1,11 +1,11 @@
 import { useConfig } from 'app/config';
 import React, { useEffect, useState } from 'react';
 import { Button, Image, Text, View } from 'react-native';
-import Sound from 'react-native-sound';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store';
 import { selectAlphabet } from '../../store/slices/selectors';
 import { fetchAlphabets } from './../../store/slices/alphabet-slice';
+import { AppAudio } from './audio';
 
 /**
  *
@@ -35,14 +35,6 @@ export function AlphabetCardDetailScreen() {
         if (isNull(alphabetData)) dispatch(fetchAlphabets());
     }, [alphabetData, dispatch]);
 
-    useEffect(() => {
-        setIsAudioLoading(true);
-    }, []);
-
-    const [isAudioLoading, setIsAudioLoading] = useState(false);
-    const [hasAudioLoaded, setHasAudioLoaded] = useState(false);
-    const [isAudioError, setIsAudioError] = useState(false);
-
     const [imageError, setImageError] = useState(false);
 
     // Sequence numbers are indexed starting at 1
@@ -53,7 +45,8 @@ export function AlphabetCardDetailScreen() {
     }
 
     if (!isNullOrUndefined(errorInfo)) {
-        return <Text>Error loading data.</Text>;
+        // TODO display error code
+        return <Text>Error: {errorInfo.message}</Text>;
     }
 
     const {
@@ -81,54 +74,6 @@ export function AlphabetCardDetailScreen() {
     } = selectedCard;
 
     const apiUrlPrefix = `${BASE_API_URL}/games/${TARGET_ALPHABET_NAME}`;
-
-    const letterAudio = new Sound(
-        `${BASE_API_URL}/resources/mediaitems/download?name=${letter_audio.replace('.mp3', '')}`,
-        Sound.MAIN_BUNDLE,
-        (error) => {
-            if (error) {
-                setIsAudioLoading(false);
-                setIsAudioError(true);
-            }
-            if (!error) {
-                setHasAudioLoaded(true);
-                setIsAudioLoading(false);
-            }
-        }
-    );
-
-    const playLetter = () => {
-        if (hasAudioLoaded) {
-            letterAudio.play((success) => {
-                if (!success) {
-                    setIsAudioError(true);
-                }
-            });
-        } else {
-            setIsAudioLoading(true);
-        }
-    };
-
-    const wordAudio = new Sound(
-        `${BASE_API_URL}/resources/mediaitems/download?name=${word_audio.replace('.mp3', '')}`,
-        Sound.MAIN_BUNDLE,
-        (error) => {
-            if (error) {
-                setHasAudioLoaded(false);
-                console.log('failed to load word audio', error);
-                return;
-            }
-            setHasAudioLoaded(true);
-        }
-    );
-
-    const playWord = () => {
-        wordAudio.play((success) => {
-            if (!success) {
-                console.error('Error playing word audio');
-            }
-        });
-    };
 
     return (
         <View testID="AlphabetCardDetail">
@@ -163,19 +108,21 @@ export function AlphabetCardDetailScreen() {
                 {`/resources/mediaitems/download?name=${word_audio.replace('.mp3', '')}`}
             </Text>
 
-            {isAudioLoading ? (
-                <Text>Loading...</Text>
-            ) : isAudioError ? (
-                <Text testID="letterAudioError">Error playing {letter_audio}</Text>
-            ) : hasAudioLoaded ? (
-                <Button testID={`${letter_audio}`} title={'Play letter'} onPress={playLetter} />
-            ) : null}
+            <AppAudio
+                message="Play Letter"
+                url={`${BASE_API_URL}/resources/mediaitems/download?name=${letter_audio.replace(
+                    '.mp3',
+                    ''
+                )}`}
+            />
 
-            {wordAudio && hasAudioLoaded ? (
-                <Button testID={`${word_audio}`} title={'Play Word'} onPress={playWord} />
-            ) : (
-                <Text testID="wordAudioError">Error playing`{word_audio}`</Text>
-            )}
+            <AppAudio
+                message="Play Word"
+                url={`${BASE_API_URL}/resources/mediaitems/download?name=${word_audio.replace(
+                    '.mp3',
+                    ''
+                )}`}
+            />
 
             <Button
                 testID="Back"
