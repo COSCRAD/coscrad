@@ -4,8 +4,8 @@ import {
     IDetailQueryResult,
     IMultilingualTextItem,
 } from '@coscrad/api-interfaces';
-import { InternalError } from 'apps/api/src/lib/errors/InternalError';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
+import { InternalError } from '../../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../../lib/types/maybe';
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
