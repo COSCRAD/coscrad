@@ -4,6 +4,7 @@ import {
     IDetailQueryResult,
     IMultilingualTextItem,
 } from '@coscrad/api-interfaces';
+import { InternalError } from 'apps/api/src/lib/errors/InternalError';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { Maybe } from '../../../../../lib/types/maybe';
 import { isNotFound } from '../../../../../lib/types/not-found';
@@ -40,8 +41,8 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
         await this.database.createMany(views.map(mapEntityDTOToDatabaseDocument));
     }
 
-    delete(_id: AggregateId): Promise<void> {
-        throw new Error('Method delete not implemented.');
+    async delete(id: AggregateId): Promise<void> {
+        return this.database.delete(id);
     }
 
     async fetchById(
@@ -61,8 +62,45 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
         return documents.map(mapDatabaseDocumentToAggregateDTO);
     }
 
-    translateName(_id: AggregateId, _translationItem: IMultilingualTextItem): Promise<void> {
-        throw new Error('Method translate name not implemented.');
+    async translateName(
+        id: AggregateId,
+        { text, languageCode, role }: IMultilingualTextItem
+    ): Promise<void> {
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+        let newItem = {
+                    text: @text,
+                    languageCode: @languageCode,
+                    role: @role
+        }
+        UPDATE doc WITH {
+            name: {
+                items: APPEND(doc.name.items,newItem)
+            }
+        } IN @@collectionName
+         RETURN OLD
+        `;
+
+        const bindVars = {
+            // TODO save this as an instance variable or global constant
+            '@collectionName': 'audioItem__VIEWS',
+            id: id,
+            text: text,
+            role: role,
+            languageCode: languageCode,
+        };
+
+        const cursor = await this.database
+            .query({
+                query,
+                bindVars,
+            })
+            .catch((reason) => {
+                throw new InternalError(`Failed to translate term via TermRepository: ${reason}`);
+            });
+
+        await cursor.all();
     }
 
     async count(): Promise<number> {

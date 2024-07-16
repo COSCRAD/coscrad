@@ -1,11 +1,20 @@
-import { AggregateType, IAudioItemViewModel, IDetailQueryResult } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    IAudioItemViewModel,
+    IDetailQueryResult,
+    LanguageCode,
+    MultilingualTextItemRole,
+} from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
-import { MultilingualText } from 'apps/api/src/domain/common/entities/multilingual-text';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/Environment';
+import {
+    MultilingualText,
+    MultilingualTextItem,
+} from '../../../../../domain/common/entities/multilingual-text';
 import { NotFound } from '../../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
@@ -81,12 +90,17 @@ describe(`ArangoAudioItemQueryRepository`, () => {
 
     const [creationEvent] = audioItemCreated.as(compositeIdForSingleTerm) as [AudioItemCreated];
 
+    const originalLanguageCode = LanguageCode.Chilcotin;
+
+    const translationLanguageCode = LanguageCode.English;
+
     const additionalAudioItems = [101, 102, 103].map((sequenceNumber) => {
         const creationEvent = new TestEventStream()
             .andThen<AudioItemCreated>({
                 type: 'AUDIO_ITEM_CREATED',
                 payload: {
                     name: `audio item number: ${sequenceNumber}`,
+                    languageCodeForName: originalLanguageCode,
                 },
             })
             .as({
@@ -188,6 +202,38 @@ describe(`ArangoAudioItemQueryRepository`, () => {
     });
 
     describe(`ArangoAudioItemQueryRepository.translateName`, () => {
-        it.todo(`should have a test`);
+        const targetAudioItem = additionalAudioItems[0];
+
+        beforeEach(async () => {
+            await testQueryRepository.create(targetAudioItem);
+        });
+
+        it(`should update the audio item's name`, async () => {
+            const translationOfName = 'translation of audio item name';
+
+            const role = MultilingualTextItemRole.freeTranslation;
+
+            await testQueryRepository.translateName(targetAudioItem.id, {
+                text: translationOfName,
+                languageCode: translationLanguageCode,
+                role,
+            });
+
+            const searchResult = await testQueryRepository.fetchById(targetAudioItem.id);
+
+            expect(searchResult).not.toBe(NotFound);
+
+            const updatedView = searchResult as IDetailQueryResult<IAudioItemViewModel>;
+
+            const name = new MultilingualText(updatedView.name);
+
+            const { role: foundTextRole, text: foundText } = name.getTranslation(
+                translationLanguageCode
+            ) as MultilingualTextItem;
+
+            expect(foundTextRole).toBe(role);
+
+            expect(foundText).toBe(translationOfName);
+        });
     });
 });
