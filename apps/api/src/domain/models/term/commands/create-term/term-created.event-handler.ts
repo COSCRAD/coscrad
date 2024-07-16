@@ -10,6 +10,9 @@ export class TermCreatedEventHandler implements ICoscradEventHandler {
     ) {}
 
     async handle(event: TermCreated): Promise<void> {
+        // TODO use dynamic registration
+        if (!event.isOfType('TERM_CREATED')) return;
+
         const term = TermViewModel.fromTermCreated(event);
 
         await this.termRepository.create(term);

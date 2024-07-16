@@ -7,6 +7,7 @@ import {
     LanguageCode,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
+import { AccessControlList } from 'apps/api/src/domain/models/shared/access-control/access-control-list.entity';
 import { ICoscradEvent } from '../../../domain/common';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
 import {
@@ -30,6 +31,8 @@ export class TermViewModel implements IDetailQueryResult<ITermViewModel> {
     mediaItemId?: string;
 
     actions: ICommandFormAndLabels[];
+
+    accessControlList: AccessControlList;
 
     // notes
 
@@ -59,6 +62,11 @@ export class TermViewModel implements IDetailQueryResult<ITermViewModel> {
         })); // TODO join in contributors fully instead of by reference
 
         term.actions = []; // TODO build all actions here
+
+        /**
+         * The contributor should have access.
+         */
+        term.accessControlList = new AccessControlList().allowUsers(contributorIds);
 
         // term.notes = []; // there are no notes when the term is first created
 

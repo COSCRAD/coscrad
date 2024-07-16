@@ -142,6 +142,37 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         await cursor.all();
     }
 
+    // note that it is important to pass APPEND an array of items to append when appending a string value to an existing array
+    async allowUser(termId: AggregateId, userId: AggregateId): Promise<void> {
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+        UPDATE doc WITH {
+            accessControlList: {
+                allowedUserIds: APPEND(doc.accessControlList.allowedUserIds,[@userId])
+            }
+        } IN @@collectionName
+         RETURN OLD
+        `;
+
+        const bindVars = {
+            '@collectionName': 'term__VIEWS',
+            id: termId,
+            userId,
+        };
+
+        const cursor = await this.database
+            .query({
+                query,
+                bindVars,
+            })
+            .catch((reason) => {
+                throw new InternalError(`Failed to translate term via TermRepository: ${reason}`);
+            });
+
+        await cursor.all();
+    }
+
     async fetchById(
         id: AggregateId
     ): Promise<Maybe<ITermViewModel & { actions: ICommandFormAndLabels[] }>> {

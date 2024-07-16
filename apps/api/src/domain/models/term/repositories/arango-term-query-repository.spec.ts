@@ -18,7 +18,7 @@ import { ArangoDatabaseForCollection } from '../../../../persistence/database/ar
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
+import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { TestEventStream } from '../../../../test-data/events';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
@@ -27,6 +27,7 @@ import { AudioItemCreated } from '../../audio-visual/audio-item/commands/create-
 import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
 import { IAudioItemQueryRepository } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ArangoAudioItemQueryRepository } from '../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
+import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import { ITermQueryRepository } from '../queries/term-query-repository.interface';
 import { ArangoTermQueryRepository } from './arango-term-query-repository';
 
@@ -267,6 +268,35 @@ describe(`ArangoTermQueryRepository`, () => {
 
             // TODO In the future, we should use multilingual audio for terms
             expect(updatedView.mediaItemId).toBe(mediaItemId);
+        });
+    });
+
+    describe(`allowUser`, () => {
+        const targetTerm = termViews[0];
+
+        beforeEach(async () => {
+            // clear existing term views
+            await arangoDatabaseForCollection.clear();
+
+            // clear existing audio item views
+
+            await testQueryRepository.create(targetTerm);
+        });
+
+        it(`should add the user to the ACL`, async () => {
+            const userId = buildDummyUuid(456);
+
+            await testQueryRepository.allowUser(targetTerm.id, userId);
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetTerm.id
+            )) as TermViewModel;
+
+            const updatedAcl = new AccessControlList(updatedView.accessControlList);
+
+            const canUser = updatedAcl.canUser(userId);
+
+            expect(canUser).toBe(true);
         });
     });
 

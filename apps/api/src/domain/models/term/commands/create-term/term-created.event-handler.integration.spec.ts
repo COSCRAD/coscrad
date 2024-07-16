@@ -21,6 +21,7 @@ import generateDatabaseNameForTestSuite from '../../../../../persistence/reposit
 import { TermViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { TestEventStream } from '../../../../../test-data/events';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { ArangoAudioItemQueryRepository } from '../../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { ITermQueryRepository } from '../../queries';
 import { ArangoTermQueryRepository } from '../../repositories/arango-term-query-repository';
 import { TermCreated } from './term-created.event';
@@ -88,7 +89,10 @@ describe(`TermCreatedEventHandler`, () => {
 
         arangoDatabaseForCollection = databaseProvider.getDatabaseForCollection('term__VIEWS');
 
-        testQueryRepository = new ArangoTermQueryRepository(connectionProvider);
+        testQueryRepository = new ArangoTermQueryRepository(
+            connectionProvider,
+            new ArangoAudioItemQueryRepository(connectionProvider)
+        );
     });
 
     afterAll(async () => {
@@ -131,9 +135,11 @@ describe(`TermCreatedEventHandler`, () => {
             expect(
                 contributions.some(
                     // this should actually be the name and ID
-                    (c) => c === dummyContributor.id
+                    (c) => c.id === dummyContributor.id
                 )
             );
+
+            // TODO check the contributor's full name as well
         });
     });
 });

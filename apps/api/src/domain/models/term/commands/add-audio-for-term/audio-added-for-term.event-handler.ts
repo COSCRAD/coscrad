@@ -8,13 +8,17 @@ export class AudioAddedForTermEventHandler implements ICoscradEventHandler {
         @Inject(TERM_QUERY_REPOSITORY_TOKEN) private readonly repository: ITermQueryRepository
     ) {}
 
-    async handle({
-        payload: {
-            audioItemId,
-            languageCode,
-            aggregateCompositeIdentifier: { id: termId },
-        },
-    }: AudioAddedForTerm): Promise<void> {
+    async handle(event: AudioAddedForTerm): Promise<void> {
+        if (!event.isOfType('AUDIO_ADDED_FOR_TERM')) return;
+
+        const {
+            payload: {
+                audioItemId,
+                languageCode,
+                aggregateCompositeIdentifier: { id: termId },
+            },
+        } = event;
+
         await this.repository.addAudio(termId, languageCode, audioItemId);
     }
 }

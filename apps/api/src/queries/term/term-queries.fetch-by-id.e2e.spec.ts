@@ -4,10 +4,18 @@ import * as request from 'supertest';
 import httpStatusCodes from '../../app/constants/httpStatusCodes';
 import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
 import getValidAggregateInstanceForTest from '../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
+import { ICoscradEvent, ICoscradEventHandler } from '../../domain/common';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { ResourceReadAccessGrantedToUser } from '../../domain/models/shared/common-commands';
 import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import { TermCreated, TermTranslated } from '../../domain/models/term/commands';
+import { AudioAddedForTermEventHandler } from '../../domain/models/term/commands/add-audio-for-term/audio-added-for-term.event-handler';
+import { TermCreatedEventHandler } from '../../domain/models/term/commands/create-term/term-created.event-handler';
+import { TermTranslatedEventHandler } from '../../domain/models/term/commands/translate-term/term-translated.event-handler';
+import {
+    ITermQueryRepository,
+    TERM_QUERY_REPOSITORY_TOKEN,
+} from '../../domain/models/term/queries';
 import { CoscradContributor } from '../../domain/models/user-management/contributor';
 import { CoscradUserGroup } from '../../domain/models/user-management/group/entities/coscrad-user-group.entity';
 import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
@@ -100,11 +108,13 @@ const termPublished = termTranslated.andThen<ResourcePublished>({
 // const promptTermId = buildDummyUuid(2)
 
 const assertResourceHasContributionFor = (
-    { fullName: { firstName, lastName } }: CoscradContributor,
+    { id: contributorId }: CoscradContributor,
     resource: BaseResourceViewModel
 ) => {
     const hasContribution = resource.contributions.some(
-        ({ fullName }) => fullName === `${firstName} ${lastName}`
+        ({ id }) => id === contributorId
+        // TODO support joining in contributors
+        // && fullName === `${firstName} ${lastName}`
     );
 
     expect(hasContribution).toBe(true);
@@ -119,8 +129,16 @@ describe(`when querying for a term: fetch by Id`, () => {
 
     let databaseProvider: ArangoDatabaseProvider;
 
+    let termQueryRepository: ITermQueryRepository;
+
+    let handlers: ICoscradEventHandler[];
+
+    let seedTerms: (eventHistory: ICoscradEvent[]) => Promise<void>;
+
     beforeEach(async () => {
         await testRepositoryProvider.testSetup();
+
+        await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
     });
 
     afterAll(async () => {
@@ -138,7 +156,27 @@ describe(`when querying for a term: fetch by Id`, () => {
                 // no authenticated user
             ));
 
+            termQueryRepository = app.get(TERM_QUERY_REPOSITORY_TOKEN);
+
             await app.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
+
+            /**
+             * TODO We need to find a more maintainable way of
+             * seeding the required initial state.
+             */
+            handlers = [
+                new TermCreatedEventHandler(termQueryRepository),
+                new TermTranslatedEventHandler(termQueryRepository),
+                new AudioAddedForTermEventHandler(termQueryRepository),
+            ];
+
+            seedTerms = async (events: ICoscradEvent[]) => {
+                for (const e of events) {
+                    for (const h of handlers) {
+                        await h.handle(e);
+                    }
+                }
+            };
         });
 
         describe(`when there is a term with the given Id`, () => {
@@ -150,7 +188,7 @@ describe(`when querying for a term: fetch by Id`, () => {
                     });
                     // TODO: we need to check that contributors come through
 
-                    await app.get(ArangoEventRepository).appendEvents(eventHistoryForTerm);
+                    await seedTerms(eventHistoryForTerm);
 
                     await testRepositoryProvider
                         .getContributorRepository()
@@ -179,7 +217,7 @@ describe(`when querying for a term: fetch by Id`, () => {
                     });
                     // TODO: we need to check that contributors come through
 
-                    await app.get(ArangoEventRepository).appendEvents(eventHistoryForTerm);
+                    await seedTerms(eventHistoryForTerm);
                 });
 
                 // We pretend the resource does not exist when the user

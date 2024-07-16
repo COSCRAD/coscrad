@@ -3,6 +3,10 @@ import { bootstrapDynamicTypes } from '@coscrad/data-types';
 import { ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { Test } from '@nestjs/testing';
+import {
+    ITermQueryRepository,
+    TERM_QUERY_REPOSITORY_TOKEN,
+} from 'apps/api/src/domain/models/term/queries';
 import { JwtStrategy } from '../../../authorization/jwt.strategy';
 import { MockJwtAdminAuthGuard } from '../../../authorization/mock-jwt-admin-auth-guard';
 import { MockJwtAuthGuard } from '../../../authorization/mock-jwt-auth-guard';
@@ -24,6 +28,11 @@ import {
     TranslateLineItem,
     TranslateLineItemCommandHandler,
 } from '../../../domain/models/audio-visual/audio-item/commands';
+import {
+    AUDIO_QUERY_REPOSITORY_TOKEN,
+    IAudioItemQueryRepository,
+} from '../../../domain/models/audio-visual/audio-item/queries/audio-item-query-repository.interface';
+import { ArangoAudioItemQueryRepository } from '../../../domain/models/audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import {
     ImportLineItemsToTranscript,
     ImportLineItemsToTranscriptCommandHandler,
@@ -184,6 +193,7 @@ import {
     TranslateTermCommandHandler,
 } from '../../../domain/models/term/commands';
 import { Term } from '../../../domain/models/term/entities/term.entity';
+import { ArangoTermQueryRepository } from '../../../domain/models/term/repositories/arango-term-query-repository';
 import {
     ContributorCreated,
     CreateContributor,
@@ -460,12 +470,30 @@ export default async (
                 inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService],
             },
             {
+                provide: AUDIO_QUERY_REPOSITORY_TOKEN,
+                useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
+                    new ArangoAudioItemQueryRepository(arangoConnectionProvider),
+                inject: [ArangoConnectionProvider],
+            },
+            {
+                provide: TERM_QUERY_REPOSITORY_TOKEN,
+                useFactory: (
+                    arangoConnectionProvider: ArangoConnectionProvider,
+                    audioItemQueryRepository: IAudioItemQueryRepository
+                ) =>
+                    new ArangoTermQueryRepository(
+                        arangoConnectionProvider,
+                        audioItemQueryRepository
+                    ),
+                inject: [ArangoConnectionProvider, AUDIO_QUERY_REPOSITORY_TOKEN],
+            },
+            {
                 provide: TermQueryService,
                 useFactory: (
-                    repositoryProvider: ArangoRepositoryProvider,
+                    termQueryRepository: ITermQueryRepository,
                     commandInfoService: CommandInfoService
-                ) => new TermQueryService(repositoryProvider, commandInfoService),
-                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService, ConfigService],
+                ) => new TermQueryService(termQueryRepository, commandInfoService),
+                inject: [TERM_QUERY_REPOSITORY_TOKEN, CommandInfoService],
             },
             {
                 provide: VocabularyListQueryService,

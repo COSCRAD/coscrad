@@ -29,6 +29,8 @@ export interface ITermQueryRepository {
 
     fetchMany(): Promise<TermQueryModel[]>;
 
+    allowUser(id: AggregateId, userId: AggregateId): Promise<void>;
+
     translate(id: AggregateId, translationItem: IMultilingualTextItem): Promise<void>;
 
     // TODO Is it the ID that we want here or the URL?
