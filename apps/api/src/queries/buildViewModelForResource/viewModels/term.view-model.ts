@@ -21,14 +21,13 @@ import { AggregateId } from '../../../domain/types/AggregateId';
  * event-sourced, materialized views.
  */
 export class TermViewModel implements IDetailQueryResult<ITermViewModel> {
-    contributions: string[];
+    contributions: { id: string; fullName: string }[];
 
     name: IMultilingualText;
 
     id: AggregateId;
 
-    // TODO Should this be multilingual audio?
-    audioURL: string;
+    mediaItemId?: string;
 
     actions: ICommandFormAndLabels[];
 
@@ -54,7 +53,10 @@ export class TermViewModel implements IDetailQueryResult<ITermViewModel> {
 
         term.id = termId;
 
-        term.contributions = contributorIds; // TODO join in contributors fully instead of by reference
+        term.contributions = contributorIds.map((contributorId) => ({
+            id: contributorId,
+            fullName: contributorId,
+        })); // TODO join in contributors fully instead of by reference
 
         term.actions = []; // TODO build all actions here
 
@@ -81,7 +83,12 @@ export class TermViewModel implements IDetailQueryResult<ITermViewModel> {
         // currently, prompts are in English- should we hard wire this on the event payload to be future safe?
         term.name = buildMultilingualTextWithSingleItem(text, LanguageCode.English);
 
-        term.contributions = contributorIds; // TODO join in the contributor names
+        // TODO join in the contributor names
+        // TODO ensure this is part of the query repository test
+        term.contributions = contributorIds.map((contributorId) => ({
+            id: contributorId,
+            fullName: contributorId,
+        }));
 
         term.actions = []; // TODO build these here
 

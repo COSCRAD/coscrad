@@ -258,7 +258,7 @@ describe(`ArangoTermQueryRepository`, () => {
             await audioItemQueryRepository.create(targetAudioItemView);
         });
 
-        it.only(`should append the audio item`, async () => {
+        it(`should append the audio item`, async () => {
             await testQueryRepository.addAudio(targetTerm.id, originalLanguageCode, audioItemId);
 
             const updatedView = (await testQueryRepository.fetchById(

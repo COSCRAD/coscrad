@@ -105,9 +105,9 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             return;
         }
 
-        const { mediaItemId, mimeType } = audioItemSearchResult;
+        const { mediaItemId } = audioItemSearchResult;
 
-        if (isNullOrUndefined(mediaItemId) || isNullOrUndefined(mimeType)) {
+        if (isNullOrUndefined(mediaItemId)) {
             // TODO log error but fail gracefully
             return;
         }
@@ -118,7 +118,6 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         FILTER doc._key == @id
         UPDATE doc WITH {
             mediaItemId: @mediaItemId,
-            mimeType: @mimeType
         } IN @@collectionName
          RETURN OLD
         `;
@@ -127,7 +126,6 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             '@collectionName': 'term__VIEWS',
             id: termId,
             mediaItemId,
-            mimeType,
         };
 
         const cursor = await this.database
