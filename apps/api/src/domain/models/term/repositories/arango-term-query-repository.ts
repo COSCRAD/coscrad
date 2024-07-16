@@ -49,6 +49,12 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         return this.database.createMany(views.map(mapEntityDTOToDatabaseDocument));
     }
 
+    async publish(id: AggregateId): Promise<void> {
+        return this.database.update(id, {
+            isPublished: true,
+        });
+    }
+
     async delete(id: AggregateId): Promise<void> {
         return this.database.delete(id);
     }

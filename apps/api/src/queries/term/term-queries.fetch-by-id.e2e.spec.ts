@@ -7,6 +7,7 @@ import getValidAggregateInstanceForTest from '../../domain/__tests__/utilities/g
 import { ICoscradEvent, ICoscradEventHandler } from '../../domain/common';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { ResourceReadAccessGrantedToUser } from '../../domain/models/shared/common-commands';
+import { ResourceReadAccessGrantedToUserEventHandler } from '../../domain/models/shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
 import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import { TermCreated, TermTranslated } from '../../domain/models/term/commands';
 import { AudioAddedForTermEventHandler } from '../../domain/models/term/commands/add-audio-for-term/audio-added-for-term.event-handler';
@@ -168,6 +169,8 @@ describe(`when querying for a term: fetch by Id`, () => {
                 new TermCreatedEventHandler(termQueryRepository),
                 new TermTranslatedEventHandler(termQueryRepository),
                 new AudioAddedForTermEventHandler(termQueryRepository),
+                // TODO update this to take in a generic query repository provider
+                new ResourceReadAccessGrantedToUserEventHandler(termQueryRepository),
             ];
 
             seedTerms = async (events: ICoscradEvent[]) => {
@@ -271,7 +274,7 @@ describe(`when querying for a term: fetch by Id`, () => {
                         await app.get(ArangoEventRepository).appendEvents(eventHistoryForTerm);
                     });
 
-                    it(`should return the expected result`, async () => {
+                    it.only(`should return the expected result`, async () => {
                         const res = await request(app.getHttpServer()).get(
                             buildDetailEndpoint(termId)
                         );

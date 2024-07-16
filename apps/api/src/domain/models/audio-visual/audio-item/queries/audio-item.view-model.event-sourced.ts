@@ -8,6 +8,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
+import { AccessControlList } from '../../../shared/access-control/access-control-list.entity';
 import { AudioItemCreated } from '../commands/create-audio-item/transcript-created.event';
 
 export class EventSourcedAudioItemViewModel implements IDetailQueryResult<IAudioItemViewModel> {
@@ -19,6 +20,8 @@ export class EventSourcedAudioItemViewModel implements IDetailQueryResult<IAudio
     text: string;
     contributions: ContributorWithId[];
     id: string;
+    accessControlList: { allowedUserIds: string[]; allowedGroupIds: string[] };
+    isPublished: boolean;
 
     static fromAudioItemCreated({
         payload: {
@@ -42,6 +45,10 @@ export class EventSourcedAudioItemViewModel implements IDetailQueryResult<IAudio
         }));
 
         audioItem.mediaItemId = mediaItemId;
+
+        audioItem.accessControlList = new AccessControlList();
+
+        audioItem.isPublished = false;
 
         return audioItem;
     }

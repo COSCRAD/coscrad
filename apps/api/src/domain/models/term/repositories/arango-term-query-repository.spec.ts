@@ -101,6 +101,8 @@ describe(`ArangoTermQueryRepository`, () => {
         contributions: [],
         name: buildMultilingualTextWithSingleItem(buildTermText(id), originalLanguageCode),
         actions: [],
+        isPublished: false,
+        accessControlList: new AccessControlList(),
     }));
 
     describe(`fetchById`, () => {
@@ -369,6 +371,24 @@ describe(`ArangoTermQueryRepository`, () => {
             const actualCount = await testQueryRepository.count();
 
             expect(actualCount).toBe(termViews.length);
+        });
+    });
+
+    describe('publish', () => {
+        const targetTerm = termViews[0];
+
+        beforeEach(async () => {
+            await arangoDatabaseForCollection.clear();
+
+            await testQueryRepository.create(targetTerm);
+
+            await testQueryRepository.publish(targetTerm.id);
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetTerm.id
+            )) as TermViewModel;
+
+            expect(updatedView.isPublished).toBe(true);
         });
     });
 });

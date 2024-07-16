@@ -7,9 +7,9 @@ import {
     LanguageCode,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
-import { AccessControlList } from 'apps/api/src/domain/models/shared/access-control/access-control-list.entity';
 import { ICoscradEvent } from '../../../domain/common';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
+import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
 import {
     PromptTermCreated,
     TermCreated,
@@ -27,6 +27,8 @@ export class TermViewModel implements IDetailQueryResult<ITermViewModel> {
     name: IMultilingualText;
 
     id: AggregateId;
+
+    isPublished: boolean;
 
     mediaItemId?: string;
 
@@ -74,6 +76,8 @@ export class TermViewModel implements IDetailQueryResult<ITermViewModel> {
 
         // set term.events here by applying the first event
 
+        term.isPublished = false;
+
         return term;
     }
 
@@ -87,6 +91,8 @@ export class TermViewModel implements IDetailQueryResult<ITermViewModel> {
         const term = new TermViewModel();
 
         term.id = termId;
+
+        term.isPublished = false;
 
         // currently, prompts are in English- should we hard wire this on the event payload to be future safe?
         term.name = buildMultilingualTextWithSingleItem(text, LanguageCode.English);

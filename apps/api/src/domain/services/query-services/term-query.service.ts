@@ -1,5 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
+import { isNotFound, NotFound } from '../../../lib/types/not-found';
+import { AccessControlList } from '../../models/shared/access-control/access-control-list.entity';
 import { ITermQueryRepository, TERM_QUERY_REPOSITORY_TOKEN } from '../../models/term/queries';
 import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';
 import { AggregateId } from '../../types/AggregateId';
@@ -16,8 +18,23 @@ export class TermQueryService {
     ) {}
 
     // todo add explicit return type
-    async fetchById(id: AggregateId, _userWithGroups?: CoscradUserWithGroups) {
+    async fetchById(id: AggregateId, userWithGroups?: CoscradUserWithGroups) {
         const result = await this.termQueryRepository.fetchById(id);
+
+        if (isNotFound(result)) return result;
+
+        if (result.isPublished) return result;
+
+        const acl = new AccessControlList(result.accessControlList);
+
+        if (
+            acl.canUser(userWithGroups.id) ||
+            userWithGroups.groups.some(({ id: groupId }) => acl.canGroup(groupId))
+        ) {
+            return result;
+        }
+
+        return NotFound;
     }
 
     // TODO should we support specifications \ custom filters?
