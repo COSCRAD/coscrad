@@ -31,7 +31,8 @@ export interface ITermQueryRepository {
 
     translate(id: AggregateId, translationItem: IMultilingualTextItem): Promise<void>;
 
-    addAudio(id: AggregateId, languageCode: LanguageCode, audioItemUrl: string): Promise<void>;
+    // TODO Is it the ID that we want here or the URL?
+    addAudio(id: AggregateId, languageCode: LanguageCode, audioItemId: string): Promise<void>;
 
     count(): Promise<number>;
 }

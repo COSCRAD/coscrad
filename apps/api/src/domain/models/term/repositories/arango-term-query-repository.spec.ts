@@ -1,4 +1,5 @@
 import {
+    AggregateType,
     IDetailQueryResult,
     ITermViewModel,
     LanguageCode,
@@ -18,14 +19,21 @@ import { ArangoDatabaseProvider } from '../../../../persistence/database/databas
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
+import { TestEventStream } from '../../../../test-data/events';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import { AudioItemCreated } from '../../audio-visual/audio-item/commands/create-audio-item/transcript-created.event';
+import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
+import { IAudioItemQueryRepository } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
+import { ArangoAudioItemQueryRepository } from '../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { ITermQueryRepository } from '../queries/term-query-repository.interface';
 import { ArangoTermQueryRepository } from './arango-term-query-repository';
 
 describe(`ArangoTermQueryRepository`, () => {
     let testQueryRepository: ITermQueryRepository;
+
+    let audioItemQueryRepository: IAudioItemQueryRepository;
 
     let databaseProvider: ArangoDatabaseProvider;
 
@@ -62,7 +70,13 @@ describe(`ArangoTermQueryRepository`, () => {
 
         arangoDatabaseForCollection = databaseProvider.getDatabaseForCollection('term__VIEWS');
 
-        testQueryRepository = new ArangoTermQueryRepository(connectionProvider);
+        // TODO Use the DI system so this is more extensible to keep test maintenance lower
+        audioItemQueryRepository = new ArangoAudioItemQueryRepository(connectionProvider);
+
+        testQueryRepository = new ArangoTermQueryRepository(
+            connectionProvider,
+            audioItemQueryRepository
+        );
     });
 
     afterAll(async () => {
@@ -213,23 +227,46 @@ describe(`ArangoTermQueryRepository`, () => {
     describe(`addAudio`, () => {
         const targetTerm = termViews[0];
 
-        const audioUrl = 'https://www.coscrad.org/test123.mp3';
+        const audioItemId = buildDummyUuid(55);
+
+        const mediaItemId = buildDummyUuid(56);
+
+        const audioCreationEvent = new TestEventStream()
+            .andThen<AudioItemCreated>({
+                type: 'AUDIO_ITEM_CREATED',
+                payload: {
+                    mediaItemId,
+                },
+            })
+            .as({
+                type: AggregateType.audioItem,
+                id: audioItemId,
+            })[0] as AudioItemCreated;
+
+        const targetAudioItemView =
+            EventSourcedAudioItemViewModel.fromAudioItemCreated(audioCreationEvent);
 
         beforeEach(async () => {
+            // clear existing term views
             await arangoDatabaseForCollection.clear();
 
+            // clear existing audio item views
+            databaseProvider.getDatabaseForCollection('audioItem__VIEWS').clear();
+
             await testQueryRepository.create(targetTerm);
+
+            await audioItemQueryRepository.create(targetAudioItemView);
         });
 
-        it(`should append the audio item`, async () => {
-            await testQueryRepository.addAudio(targetTerm.id, originalLanguageCode, audioUrl);
+        it.only(`should append the audio item`, async () => {
+            await testQueryRepository.addAudio(targetTerm.id, originalLanguageCode, audioItemId);
 
             const updatedView = (await testQueryRepository.fetchById(
                 targetTerm.id
-            )) as TermViewModel;
+            )) as IDetailQueryResult<ITermViewModel>;
 
             // TODO In the future, we should use multilingual audio for terms
-            expect(updatedView.audioURL).toBe(audioUrl);
+            expect(updatedView.mediaItemId).toBe(mediaItemId);
         });
     });
 

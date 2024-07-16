@@ -5,6 +5,8 @@ import {
     ITermViewModel,
     LanguageCode,
 } from '@coscrad/api-interfaces';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { Inject } from '@nestjs/common';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { isNotFound } from '../../../../lib/types/not-found';
@@ -14,6 +16,10 @@ import { ArangoDatabaseForCollection } from '../../../../persistence/database/ar
 import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { AggregateId } from '../../../types/AggregateId';
+import {
+    AUDIO_QUERY_REPOSITORY_TOKEN,
+    IAudioItemQueryRepository,
+} from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ITermQueryRepository } from '../queries';
 
 export class ArangoTermQueryRepository implements ITermQueryRepository {
@@ -21,7 +27,12 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         IDetailQueryResult<ITermViewModel & { actions: ICommandFormAndLabels[] }>
     >;
 
-    constructor(arangoConnectionProvider: ArangoConnectionProvider) {
+    constructor(
+        arangoConnectionProvider: ArangoConnectionProvider,
+        // AUDIO_ITEM_QUERY_REPOSITORY?
+        @Inject(AUDIO_QUERY_REPOSITORY_TOKEN)
+        private readonly audioItemQueryRepository: IAudioItemQueryRepository
+    ) {
         this.database = new ArangoDatabaseForCollection(
             new ArangoDatabase(arangoConnectionProvider.getConnection()),
             'term__VIEWS'
@@ -82,21 +93,41 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         await cursor.all();
     }
 
-    async addAudio(id: AggregateId, _languageCode: LanguageCode, audioUrl: string) {
+    async addAudio(termId: AggregateId, _languageCode: LanguageCode, audioItemId: string) {
+        /**
+         * TODO Include this in a single query below to ensure this operation
+         * is transactional.
+         */
+        const audioItemSearchResult = await this.audioItemQueryRepository.fetchById(audioItemId);
+
+        if (isNotFound(audioItemSearchResult)) {
+            // TODO log error but still fail gracefully
+            return;
+        }
+
+        const { mediaItemId, mimeType } = audioItemSearchResult;
+
+        if (isNullOrUndefined(mediaItemId) || isNullOrUndefined(mimeType)) {
+            // TODO log error but fail gracefully
+            return;
+        }
+
         // note the casing here on `audioURL`
         const query = `
         FOR doc IN @@collectionName
         FILTER doc._key == @id
         UPDATE doc WITH {
-            audioURL: @audioUrl
+            mediaItemId: @mediaItemId,
+            mimeType: @mimeType
         } IN @@collectionName
          RETURN OLD
         `;
 
         const bindVars = {
             '@collectionName': 'term__VIEWS',
-            id,
-            audioUrl,
+            id: termId,
+            mediaItemId,
+            mimeType,
         };
 
         const cursor = await this.database

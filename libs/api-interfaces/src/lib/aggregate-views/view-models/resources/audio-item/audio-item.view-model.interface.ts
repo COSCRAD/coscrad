@@ -5,7 +5,8 @@ import { MIMEType } from '../media-items';
 export interface IAudioItemViewModel extends IBaseResourceViewModel {
     name: IMultilingualText;
 
-    audioURL: string;
+    // aggregate ID
+    mediaItemId: string;
 
     mimeType: MIMEType;
 

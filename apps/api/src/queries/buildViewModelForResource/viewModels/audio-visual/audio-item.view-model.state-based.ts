@@ -5,6 +5,7 @@ import {
     NonEmptyString,
     NonNegativeFiniteNumber,
     URL,
+    UUID,
 } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { MultilingualText } from '../../../../domain/common/entities/multilingual-text';
@@ -32,6 +33,12 @@ export class StateBasedAudioItemViewModel
         description: 'a web link to an accompanying digital audio file',
     })
     readonly audioURL: string;
+
+    @UUID({
+        label: 'media item',
+        description: 'a reference to the raw media item for this audio item',
+    })
+    readonly mediaItemId: string;
 
     @ExternalEnum(
         {

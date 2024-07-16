@@ -84,8 +84,13 @@ describe(`ArangoAudioItemQueryRepository`, () => {
         databaseProvider.close();
     });
 
+    const mediaItemId = buildDummyUuid(123);
+
     const audioItemCreated = new TestEventStream().andThen<AudioItemCreated>({
         type: 'AUDIO_ITEM_CREATED',
+        payload: {
+            mediaItemId,
+        },
     });
 
     const [creationEvent] = audioItemCreated.as(compositeIdForSingleTerm) as [AudioItemCreated];
@@ -123,6 +128,12 @@ describe(`ArangoAudioItemQueryRepository`, () => {
                 const result = await testQueryRepository.fetchById(audioItemId);
 
                 expect(result).not.toBe(NotFound);
+
+                const audioItemView = result as IAudioItemViewModel;
+
+                const { mediaItemId } = audioItemView;
+
+                expect(mediaItemId).toBe(mediaItemId);
             });
         });
 

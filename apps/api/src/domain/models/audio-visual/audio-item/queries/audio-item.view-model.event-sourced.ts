@@ -7,12 +7,13 @@ import {
     MIMEType,
 } from '@coscrad/api-interfaces';
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
+import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { AudioItemCreated } from '../commands/create-audio-item/transcript-created.event';
 
 export class EventSourcedAudioItemViewModel implements IDetailQueryResult<IAudioItemViewModel> {
     actions: ICommandFormAndLabels[];
     name: IMultilingualText;
-    audioURL: string;
+    mediaItemId: AggregateId;
     mimeType: MIMEType;
     lengthMilliseconds: number;
     text: string;
@@ -24,7 +25,7 @@ export class EventSourcedAudioItemViewModel implements IDetailQueryResult<IAudio
             aggregateCompositeIdentifier: { id: audioItemId },
             name,
             languageCodeForName,
-            // mediaItemId, TODO deal with this
+            mediaItemId,
         },
         meta: { contributorIds },
     }: AudioItemCreated): EventSourcedAudioItemViewModel {
@@ -39,6 +40,8 @@ export class EventSourcedAudioItemViewModel implements IDetailQueryResult<IAudio
             id: contributorId,
             fullName: contributorId,
         }));
+
+        audioItem.mediaItemId = mediaItemId;
 
         return audioItem;
     }
