@@ -1,4 +1,5 @@
 export * from './constants';
+export * from './coscrad-event-consumer.decorator';
 export * from './coscrad-event-factory';
 export * from './coscrad-event-handler.interface';
 export * from './coscrad-event-union';
