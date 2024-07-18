@@ -32,7 +32,7 @@ import { ICoscradEventPublisher } from './interfaces';
                 ),
         },
     ],
-    exports: [CoscradEventFactory],
+    exports: [CoscradEventFactory, EVENT_PUBLISHER_TOKEN],
 })
 export class EventModule {
     constructor(

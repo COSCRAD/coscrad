@@ -1,6 +1,6 @@
 import { ResourceType } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
-import { ICoscradEventHandler } from '../../../../../domain/common';
+import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { ResourcePublished } from './resource-published.event';
 
@@ -12,6 +12,7 @@ interface IQueryRepositoryProvider {
     forResource(resourceType: ResourceType): IPublishable;
 }
 
+@CoscradEventConsumer('RESOURCE_PUBLISHED')
 export class ResourcePublishedEventHandler implements ICoscradEventHandler {
     constructor(
         @Inject('QUERY_REPOSITORY_PROVIDER')

@@ -1,5 +1,5 @@
 import { Inject } from '@nestjs/common';
-import { ICoscradEventHandler } from '../../../../../domain/common';
+import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
 import {
     MultilingualTextItem,
     MultilingualTextItemRole,
@@ -7,6 +7,7 @@ import {
 import { ITermQueryRepository, TERM_QUERY_REPOSITORY_TOKEN } from '../../queries';
 import { TermTranslated } from './term-translated.event';
 
+@CoscradEventConsumer('TERM_TRANSLATED')
 export class TermTranslatedEventHandler implements ICoscradEventHandler {
     constructor(
         @Inject(TERM_QUERY_REPOSITORY_TOKEN) private readonly termRepository: ITermQueryRepository
