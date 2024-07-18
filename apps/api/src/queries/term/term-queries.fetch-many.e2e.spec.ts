@@ -3,24 +3,35 @@ import {
     CoscradUserRole,
     HttpStatusCode,
     LanguageCode,
+    ResourceType,
 } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import httpStatusCodes from '../../app/constants/httpStatusCodes';
 import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
 import getValidAggregateInstanceForTest from '../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
+import { ICoscradEvent, ICoscradEventHandler } from '../../domain/common';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { ResourceReadAccessGrantedToUser } from '../../domain/models/shared/common-commands';
+import { ResourceReadAccessGrantedToUserEventHandler } from '../../domain/models/shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
 import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
+import { ResourcePublishedEventHandler } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
 import { TermCreated, TermTranslated } from '../../domain/models/term/commands';
+import { AudioAddedForTermEventHandler } from '../../domain/models/term/commands/add-audio-for-term/audio-added-for-term.event-handler';
+import { TermCreatedEventHandler } from '../../domain/models/term/commands/create-term/term-created.event-handler';
+import { TermTranslatedEventHandler } from '../../domain/models/term/commands/translate-term/term-translated.event-handler';
+import {
+    ITermQueryRepository,
+    TERM_QUERY_REPOSITORY_TOKEN,
+} from '../../domain/models/term/queries';
 import { CoscradUserGroup } from '../../domain/models/user-management/group/entities/coscrad-user-group.entity';
 import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../domain/models/user-management/user/entities/user/coscrad-user.entity';
 import { FullName } from '../../domain/models/user-management/user/entities/user/full-name.entity';
+import { InternalError } from '../../lib/errors/InternalError';
 import { ArangoDatabaseProvider } from '../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { ArangoEventRepository } from '../../persistence/repositories/arango-event-repository';
 import buildTestDataInFlatFormat from '../../test-data/buildTestDataInFlatFormat';
 import { TestEventStream } from '../../test-data/events';
 import { TermViewModel } from '../buildViewModelForResource/viewModels';
@@ -101,6 +112,30 @@ const termPublished = termTranslated.andThen<ResourcePublished>({
 
 // const promptTermId = buildDummyUuid(2)
 
+/**
+ * TODO We need to find a more maintainable way of
+ * seeding the required initial state.
+ */
+const buildEventHandlers = (termQueryRepository: ITermQueryRepository) => [
+    new TermCreatedEventHandler(termQueryRepository),
+    new TermTranslatedEventHandler(termQueryRepository),
+    new AudioAddedForTermEventHandler(termQueryRepository),
+    // TODO update this to take in a generic query repository provider
+    new ResourceReadAccessGrantedToUserEventHandler(termQueryRepository),
+    new ResourcePublishedEventHandler({
+        // TODO break this out into an ArangoQueryRepositoryProvider
+        forResource(resourceType: ResourceType) {
+            if (resourceType === ResourceType.term) {
+                return termQueryRepository;
+            }
+
+            throw new InternalError(
+                `Resource Type: ${resourceType} is not supported by the query repository provider`
+            );
+        },
+    }),
+];
+
 describe(`when querying for a term: fetch many`, () => {
     const testDatabaseName = generateDatabaseNameForTestSuite();
 
@@ -108,10 +143,18 @@ describe(`when querying for a term: fetch many`, () => {
 
     let testRepositoryProvider: TestRepositoryProvider;
 
+    let termQueryRepository: ITermQueryRepository;
+
     let databaseProvider: ArangoDatabaseProvider;
+
+    let handlers: ICoscradEventHandler[];
+
+    let seedTerms: (eventHistory: ICoscradEvent[]) => Promise<void>;
 
     beforeEach(async () => {
         await testRepositoryProvider.testSetup();
+
+        await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
     });
 
     afterAll(async () => {
@@ -143,13 +186,24 @@ describe(`when querying for a term: fetch many`, () => {
             ));
 
             await app.init();
+
+            termQueryRepository = app.get(TERM_QUERY_REPOSITORY_TOKEN);
+
+            handlers = buildEventHandlers(termQueryRepository);
+
+            seedTerms = async (events: ICoscradEvent[]) => {
+                for (const e of events) {
+                    for (const h of handlers) {
+                        await h.handle(e);
+                    }
+                }
+            };
         });
 
         describe(`when there is a published term in the index view`, () => {
             it(`should only return published terms`, async () => {
-                await app
-                    .get(ArangoEventRepository)
-                    .appendEvents(eventHistoryForManyWithPublishedTerm);
+                // TODO -> beforeEach
+                await seedTerms(eventHistoryForManyWithPublishedTerm);
 
                 await testRepositoryProvider.getContributorRepository().create(dummyContributor);
 
@@ -161,6 +215,7 @@ describe(`when querying for a term: fetch many`, () => {
                     body: { entities },
                 } = res;
 
+                // TODO check that the actions are correct !!!!!
                 expect(entities).toHaveLength(1);
 
                 // Only one published result should come through from eventHistoryForMany
@@ -183,7 +238,8 @@ describe(`when querying for a term: fetch many`, () => {
 
         describe(`when there are no published terms`, () => {
             it(`should return no terms`, async () => {
-                await app.get(ArangoEventRepository).appendEvents(eventHistoryForManyUnpublished);
+                // -> beforeEach
+                await seedTerms(eventHistoryForManyUnpublished);
 
                 const res = await request(app.getHttpServer()).get(indexEndpoint);
 
@@ -204,14 +260,25 @@ describe(`when querying for a term: fetch many`, () => {
                     testUserWithGroups: dummyUserWithGroups,
                 }
             ));
+
+            termQueryRepository = app.get(TERM_QUERY_REPOSITORY_TOKEN);
+
+            handlers = buildEventHandlers(termQueryRepository);
+
+            seedTerms = async (events: ICoscradEvent[]) => {
+                for (const e of events) {
+                    for (const h of handlers) {
+                        await h.handle(e);
+                    }
+                }
+            };
         });
 
         describe(`when there is a term that is unpublished`, () => {
             describe(`when the user does not have read access`, () => {
                 it(`should not return the unpublished term`, async () => {
-                    await app
-                        .get(ArangoEventRepository)
-                        .appendEvents(eventHistoryForManyWithPublishedTerm);
+                    // -> beforeEach
+                    await seedTerms(eventHistoryForManyWithPublishedTerm);
 
                     const res = await request(app.getHttpServer()).get(indexEndpoint);
 
@@ -228,9 +295,7 @@ describe(`when querying for a term: fetch many`, () => {
 
             describe(`when the user does have read access`, () => {
                 it(`should return the unpublished term`, async () => {
-                    await app
-                        .get(ArangoEventRepository)
-                        .appendEvents(eventHistoryForManyWithPublishedTerm);
+                    await seedTerms(eventHistoryForManyWithPublishedTerm);
 
                     const res = await request(app.getHttpServer()).get(indexEndpoint);
 
@@ -275,10 +340,23 @@ describe(`when querying for a term: fetch many`, () => {
                         ),
                     }
                 ));
+
+                termQueryRepository = app.get(TERM_QUERY_REPOSITORY_TOKEN);
+
+                handlers = buildEventHandlers(termQueryRepository);
+
+                seedTerms = async (events: ICoscradEvent[]) => {
+                    for (const e of events) {
+                        for (const h of handlers) {
+                            await h.handle(e);
+                        }
+                    }
+                };
             });
 
             it(`should allow the user to access private resources`, async () => {
-                await app.get(ArangoEventRepository).appendEvents(eventHistoryForManyUnpublished);
+                // -> beforeEach
+                await seedTerms(eventHistoryForManyUnpublished);
 
                 const res = await request(app.getHttpServer()).get(indexEndpoint);
 

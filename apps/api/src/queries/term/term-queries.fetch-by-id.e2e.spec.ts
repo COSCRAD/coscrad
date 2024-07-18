@@ -187,8 +187,6 @@ describe(`when querying for a term: fetch by Id`, () => {
                 // no authenticated user
             ));
 
-            termQueryRepository = app.get(TERM_QUERY_REPOSITORY_TOKEN);
-
             await app.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
 
             handlers = buildEventHandlers(termQueryRepository);

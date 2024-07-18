@@ -1,12 +1,18 @@
+import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject, Injectable } from '@nestjs/common';
-import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
+import {
+    CommandContext,
+    CommandInfoService,
+} from '../../../app/controllers/command/services/command-info-service';
 import { isNotFound, NotFound } from '../../../lib/types/not-found';
 import { AccessControlList } from '../../models/shared/access-control/access-control-list.entity';
+import { Term } from '../../models/term/entities/term.entity';
 import { ITermQueryRepository, TERM_QUERY_REPOSITORY_TOKEN } from '../../models/term/queries';
 import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';
 import { AggregateId } from '../../types/AggregateId';
 import { ResourceType } from '../../types/ResourceType';
+import { fetchActionsForUser } from './utilities/fetch-actions-for-user';
 
 @Injectable()
 export class TermQueryService {
@@ -15,7 +21,7 @@ export class TermQueryService {
     constructor(
         @Inject(TERM_QUERY_REPOSITORY_TOKEN)
         private readonly termQueryRepository: ITermQueryRepository,
-        @Inject(CommandInfoService) _commandInfoService: CommandInfoService
+        @Inject(CommandInfoService) private readonly commandInfoService: CommandInfoService
     ) {}
 
     // todo add explicit return type
@@ -44,7 +50,41 @@ export class TermQueryService {
     }
 
     // TODO should we support specifications \ custom filters?
-    async fetchMany(_userWithGroups?: CoscradUserWithGroups) {
-        return this.termQueryRepository.fetchMany();
+    async fetchMany(userWithGroups?: CoscradUserWithGroups) {
+        // TODO consider filtering for user access in the DB
+        const entities = await this.termQueryRepository.fetchMany();
+
+        // TODO use SSOT utility function \ method for this
+        const availableEntities = entities.filter((entity) => {
+            if (entity.isPublished) return true;
+
+            // the public can only access published resources
+            if (isNullOrUndefined(userWithGroups)) return false;
+
+            if (userWithGroups.isAdmin()) return true;
+
+            const acl = new AccessControlList(entity.accessControlList);
+
+            return (
+                acl.canUser(userWithGroups.id) ||
+                userWithGroups.groups.some(({ id: groupId }) => acl.canGroup(groupId))
+            );
+        });
+
+        return {
+            // TODO ensure actions show up on entities
+            entities: availableEntities,
+            // TODO Should we register index-scoped commands in the view layer instead?
+            indexScopedActions: this.fetchUserActions(userWithGroups, [Term]),
+        };
+    }
+
+    private fetchUserActions(
+        systemUser: CoscradUserWithGroups,
+        commandContexts: CommandContext[]
+    ): ICommandFormAndLabels[] {
+        return commandContexts.flatMap((commandContext) =>
+            fetchActionsForUser(this.commandInfoService, systemUser, commandContext)
+        );
     }
 }

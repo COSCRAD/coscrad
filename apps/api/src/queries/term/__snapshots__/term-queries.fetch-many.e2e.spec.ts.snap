@@ -4,135 +4,21 @@ exports[`when querying for a term: fetch many when the user is a project admin s
 {
   "entities": [
     {
-      "actions": [
+      "_id": "term__VIEWS/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+      "_rev": "_iKa-uqi---",
+      "accessControlList": {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "actions": [],
+      "contributions": [
         {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": {
-            "fields": [
-              {
-                "constraints": [
-                  {
-                    "message": "must be a UUID",
-                    "name": "UUID",
-                  },
-                  {
-                    "message": "must be a defined value",
-                    "name": "defined value",
-                  },
-                ],
-                "description": "the ID of the user who will be given permission to view this resource",
-                "label": "userId",
-                "name": "userId",
-                "options": {
-                  "aggregateType": "user",
-                },
-                "type": "DYNAMIC_SELECT",
-              },
-            ],
-            "prepopulatedFields": {
-              "aggregateCompositeIdentifier": {
-                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
-                "type": "term",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-        {
-          "description": "Make a resource visible to the public",
-          "form": {
-            "fields": [],
-            "prepopulatedFields": {
-              "aggregateCompositeIdentifier": {
-                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
-                "type": "term",
-              },
-            },
-          },
-          "label": "Publish Resource",
-          "type": "PUBLISH_RESOURCE",
-        },
-        {
-          "description": "Translate an existing term (typically from the language to English)",
-          "form": {
-            "fields": [
-              {
-                "constraints": [
-                  {
-                    "message": "must be a non-empty string",
-                    "name": "non-empty string",
-                  },
-                  {
-                    "message": "must be a defined value",
-                    "name": "defined value",
-                  },
-                ],
-                "description": "translation for the given term",
-                "label": "translation",
-                "name": "translation",
-                "type": "TEXT_FIELD",
-              },
-              {
-                "constraints": [
-                  {
-                    "message": "Must be a valid \${propertyLabel}",
-                    "name": "IS_ENUM",
-                  },
-                  {
-                    "message": "Required",
-                    "name": "defined value",
-                  },
-                ],
-                "description": "language in which you are translating the term (typically English)",
-                "label": "language code",
-                "name": "languageCode",
-                "options": [
-                  {
-                    "display": "Chilcotin",
-                    "value": "clc",
-                  },
-                  {
-                    "display": "Haida",
-                    "value": "hai",
-                  },
-                  {
-                    "display": "English",
-                    "value": "en",
-                  },
-                  {
-                    "display": "French",
-                    "value": "fra",
-                  },
-                  {
-                    "display": "Chinook",
-                    "value": "chn",
-                  },
-                  {
-                    "display": "Zapotec",
-                    "value": "zap",
-                  },
-                  {
-                    "display": "Spanish",
-                    "value": "spa",
-                  },
-                ],
-                "type": "STATIC_SELECT",
-              },
-            ],
-            "prepopulatedFields": {
-              "aggregateCompositeIdentifier": {
-                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
-                "type": "term",
-              },
-            },
-          },
-          "label": "Translate Term",
-          "type": "TRANSLATE_TERM",
+          "fullName": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110901",
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110901",
         },
       ],
-      "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+      "isPublished": false,
       "name": {
         "items": [
           {
@@ -147,138 +33,25 @@ exports[`when querying for a term: fetch many when the user is a project admin s
           },
         ],
       },
-      "tags": [],
     },
     {
-      "actions": [
+      "_id": "term__VIEWS/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
+      "_rev": "_iKa-uq6---",
+      "accessControlList": {
+        "allowedGroupIds": [],
+        "allowedUserIds": [
+          "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100004",
+        ],
+      },
+      "actions": [],
+      "contributions": [
         {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": {
-            "fields": [
-              {
-                "constraints": [
-                  {
-                    "message": "must be a UUID",
-                    "name": "UUID",
-                  },
-                  {
-                    "message": "must be a defined value",
-                    "name": "defined value",
-                  },
-                ],
-                "description": "the ID of the user who will be given permission to view this resource",
-                "label": "userId",
-                "name": "userId",
-                "options": {
-                  "aggregateType": "user",
-                },
-                "type": "DYNAMIC_SELECT",
-              },
-            ],
-            "prepopulatedFields": {
-              "aggregateCompositeIdentifier": {
-                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
-                "type": "term",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-        {
-          "description": "Make a resource visible to the public",
-          "form": {
-            "fields": [],
-            "prepopulatedFields": {
-              "aggregateCompositeIdentifier": {
-                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
-                "type": "term",
-              },
-            },
-          },
-          "label": "Publish Resource",
-          "type": "PUBLISH_RESOURCE",
-        },
-        {
-          "description": "Translate an existing term (typically from the language to English)",
-          "form": {
-            "fields": [
-              {
-                "constraints": [
-                  {
-                    "message": "must be a non-empty string",
-                    "name": "non-empty string",
-                  },
-                  {
-                    "message": "must be a defined value",
-                    "name": "defined value",
-                  },
-                ],
-                "description": "translation for the given term",
-                "label": "translation",
-                "name": "translation",
-                "type": "TEXT_FIELD",
-              },
-              {
-                "constraints": [
-                  {
-                    "message": "Must be a valid \${propertyLabel}",
-                    "name": "IS_ENUM",
-                  },
-                  {
-                    "message": "Required",
-                    "name": "defined value",
-                  },
-                ],
-                "description": "language in which you are translating the term (typically English)",
-                "label": "language code",
-                "name": "languageCode",
-                "options": [
-                  {
-                    "display": "Chilcotin",
-                    "value": "clc",
-                  },
-                  {
-                    "display": "Haida",
-                    "value": "hai",
-                  },
-                  {
-                    "display": "English",
-                    "value": "en",
-                  },
-                  {
-                    "display": "French",
-                    "value": "fra",
-                  },
-                  {
-                    "display": "Chinook",
-                    "value": "chn",
-                  },
-                  {
-                    "display": "Zapotec",
-                    "value": "zap",
-                  },
-                  {
-                    "display": "Spanish",
-                    "value": "spa",
-                  },
-                ],
-                "type": "STATIC_SELECT",
-              },
-            ],
-            "prepopulatedFields": {
-              "aggregateCompositeIdentifier": {
-                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
-                "type": "term",
-              },
-            },
-          },
-          "label": "Translate Term",
-          "type": "TRANSLATE_TERM",
+          "fullName": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110901",
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110901",
         },
       ],
-      "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
+      "isPublished": false,
       "name": {
         "items": [
           {
@@ -293,7 +66,6 @@ exports[`when querying for a term: fetch many when the user is a project admin s
           },
         ],
       },
-      "tags": [],
     },
   ],
   "indexScopedActions": [
