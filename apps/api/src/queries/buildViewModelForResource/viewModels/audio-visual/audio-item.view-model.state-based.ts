@@ -11,6 +11,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { MultilingualText } from '../../../../domain/common/entities/multilingual-text';
 import { AudioItem } from '../../../../domain/models/audio-visual/audio-item/entities/audio-item.entity';
 import { MediaItem } from '../../../../domain/models/media-item/entities/media-item.entity';
+import { AccessControlList } from '../../../../domain/models/shared/access-control/access-control-list.entity';
 import { CoscradContributor } from '../../../../domain/models/user-management/contributor';
 import { BaseResourceViewModel } from '../base-resource.view-model';
 
@@ -77,6 +78,11 @@ export class StateBasedAudioItemViewModel
         description: 'a plain-text representation of the transcript',
     })
     readonly text: string;
+
+    readonly accessControlList: { allowedUserIds: string[]; allowedGroupIds: string[] } =
+        new AccessControlList();
+
+    readonly isPublished: boolean = false;
 
     constructor(
         audioItem: AudioItem,

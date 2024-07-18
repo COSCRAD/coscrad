@@ -1,4 +1,9 @@
-import { AggregateType, CoscradUserRole, LanguageCode } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    CoscradUserRole,
+    LanguageCode,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import httpStatusCodes from '../../app/constants/httpStatusCodes';
@@ -9,6 +14,7 @@ import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUu
 import { ResourceReadAccessGrantedToUser } from '../../domain/models/shared/common-commands';
 import { ResourceReadAccessGrantedToUserEventHandler } from '../../domain/models/shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
 import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
+import { ResourcePublishedEventHandler } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
 import { TermCreated, TermTranslated } from '../../domain/models/term/commands';
 import { AudioAddedForTermEventHandler } from '../../domain/models/term/commands/add-audio-for-term/audio-added-for-term.event-handler';
 import { TermCreatedEventHandler } from '../../domain/models/term/commands/create-term/term-created.event-handler';
@@ -23,10 +29,10 @@ import { CoscradUserWithGroups } from '../../domain/models/user-management/user/
 import { CoscradUser } from '../../domain/models/user-management/user/entities/user/coscrad-user.entity';
 import { FullName } from '../../domain/models/user-management/user/entities/user/full-name.entity';
 import { AggregateId } from '../../domain/types/AggregateId';
+import { InternalError } from '../../lib/errors/InternalError';
 import { ArangoDatabaseProvider } from '../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { ArangoEventRepository } from '../../persistence/repositories/arango-event-repository';
 import buildTestDataInFlatFormat from '../../test-data/buildTestDataInFlatFormat';
 import { TestEventStream } from '../../test-data/events';
 import { DynamicDataTypeFinderService } from '../../validation';
@@ -94,7 +100,7 @@ const termTranslated = termCreated.andThen<TermTranslated>({
     },
 });
 
-const termPrivateThatUserCanAccess = termTranslated.andThen<ResourceReadAccessGrantedToUser>({
+const privateTermThatUserCanAccess = termTranslated.andThen<ResourceReadAccessGrantedToUser>({
     type: 'RESOURCE_READ_ACCESS_GRANTED_TO_USER',
     payload: {
         userId: dummyQueryUserId,
@@ -120,6 +126,30 @@ const assertResourceHasContributionFor = (
 
     expect(hasContribution).toBe(true);
 };
+
+/**
+ * TODO We need to find a more maintainable way of
+ * seeding the required initial state.
+ */
+const buildEventHandlers = (termQueryRepository: ITermQueryRepository) => [
+    new TermCreatedEventHandler(termQueryRepository),
+    new TermTranslatedEventHandler(termQueryRepository),
+    new AudioAddedForTermEventHandler(termQueryRepository),
+    // TODO update this to take in a generic query repository provider
+    new ResourceReadAccessGrantedToUserEventHandler(termQueryRepository),
+    new ResourcePublishedEventHandler({
+        // TODO break this out into an ArangoQueryRepositoryProvider
+        forResource(resourceType: ResourceType) {
+            if (resourceType === ResourceType.term) {
+                return termQueryRepository;
+            }
+
+            throw new InternalError(
+                `Resource Type: ${resourceType} is not supported by the query repository provider`
+            );
+        },
+    }),
+];
 
 describe(`when querying for a term: fetch by Id`, () => {
     const testDatabaseName = generateDatabaseNameForTestSuite();
@@ -161,17 +191,7 @@ describe(`when querying for a term: fetch by Id`, () => {
 
             await app.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
 
-            /**
-             * TODO We need to find a more maintainable way of
-             * seeding the required initial state.
-             */
-            handlers = [
-                new TermCreatedEventHandler(termQueryRepository),
-                new TermTranslatedEventHandler(termQueryRepository),
-                new AudioAddedForTermEventHandler(termQueryRepository),
-                // TODO update this to take in a generic query repository provider
-                new ResourceReadAccessGrantedToUserEventHandler(termQueryRepository),
-            ];
+            handlers = buildEventHandlers(termQueryRepository);
 
             seedTerms = async (events: ICoscradEvent[]) => {
                 for (const e of events) {
@@ -198,6 +218,10 @@ describe(`when querying for a term: fetch by Id`, () => {
                         .create(dummyContributor);
                 });
 
+                /**
+                 * TODO We need a contract test that will warn us if we potentially
+                 * break the client via breaking chagnes to the API.
+                 */
                 it('should return the expected result', async () => {
                     const res = await request(app.getHttpServer()).get(buildDetailEndpoint(termId));
 
@@ -227,6 +251,8 @@ describe(`when querying for a term: fetch by Id`, () => {
                 // does not have access to this term
                 it(`should return not found (404)`, async () => {
                     const res = await request(app.getHttpServer()).get(buildDetailEndpoint(termId));
+
+                    const _foo = res.body;
 
                     expect(res.status).toBe(httpStatusCodes.notFound);
                 });
@@ -260,6 +286,22 @@ describe(`when querying for a term: fetch by Id`, () => {
                         ),
                     }
                 ));
+
+                termQueryRepository = app.get(TERM_QUERY_REPOSITORY_TOKEN);
+
+                /**
+                 * TODO We need to find a more maintainable way of
+                 * seeding the required initial state.
+                 */
+                handlers = buildEventHandlers(termQueryRepository);
+
+                seedTerms = async (events: ICoscradEvent[]) => {
+                    for (const e of events) {
+                        for (const h of handlers) {
+                            await h.handle(e);
+                        }
+                    }
+                };
             });
 
             describe(`when there is a term with the given Id`, () => {
@@ -269,12 +311,12 @@ describe(`when querying for a term: fetch by Id`, () => {
                             type: AggregateType.term,
                             id: termId,
                         });
-                        // TODO: we need to check that contributors come through
 
-                        await app.get(ArangoEventRepository).appendEvents(eventHistoryForTerm);
+                        // TODO: we need to check that contributors come through
+                        await seedTerms(eventHistoryForTerm);
                     });
 
-                    it.only(`should return the expected result`, async () => {
+                    it(`should return the expected result`, async () => {
                         const res = await request(app.getHttpServer()).get(
                             buildDetailEndpoint(termId)
                         );
@@ -292,7 +334,7 @@ describe(`when querying for a term: fetch by Id`, () => {
                         });
                         // TODO: we need to check that contributors come through
 
-                        await app.get(ArangoEventRepository).appendEvents(eventHistoryForTerm);
+                        await seedTerms(eventHistoryForTerm);
                     });
 
                     it(`should return the expected result`, async () => {
@@ -307,15 +349,13 @@ describe(`when querying for a term: fetch by Id`, () => {
                 describe(`when the term is not published but the user has explicit access`, () => {
                     beforeEach(async () => {
                         // note that there is no publication event in this event history
-                        const eventHistoryForPrivateTerm = termPrivateThatUserCanAccess.as({
+                        const eventHistoryForPrivateTerm = privateTermThatUserCanAccess.as({
                             type: AggregateType.term,
                             id: termId,
                         });
                         // TODO: we need to check that contributors come through
 
-                        await app
-                            .get(ArangoEventRepository)
-                            .appendEvents(eventHistoryForPrivateTerm);
+                        await seedTerms(eventHistoryForPrivateTerm);
                     });
 
                     it(`should return the expected result`, async () => {
@@ -354,6 +394,22 @@ describe(`when querying for a term: fetch by Id`, () => {
                         ),
                     }
                 ));
+
+                termQueryRepository = app.get(TERM_QUERY_REPOSITORY_TOKEN);
+
+                /**
+                 * TODO We need to find a more maintainable way of
+                 * seeding the required initial state.
+                 */
+                handlers = buildEventHandlers(termQueryRepository);
+
+                seedTerms = async (events: ICoscradEvent[]) => {
+                    for (const e of events) {
+                        for (const h of handlers) {
+                            await h.handle(e);
+                        }
+                    }
+                };
             });
 
             describe(`when there is a term with the given Id`, () => {
@@ -365,7 +421,7 @@ describe(`when querying for a term: fetch by Id`, () => {
                         });
                         // TODO: we need to check that contributors come through
 
-                        await app.get(ArangoEventRepository).appendEvents(eventHistoryForTerm);
+                        await seedTerms(eventHistoryForTerm);
                     });
 
                     it(`should return the expected result`, async () => {
@@ -386,7 +442,7 @@ describe(`when querying for a term: fetch by Id`, () => {
                         });
                         // TODO: we need to check that contributors come through
 
-                        await app.get(ArangoEventRepository).appendEvents(eventHistoryForTerm);
+                        await seedTerms(eventHistoryForTerm);
                     });
 
                     it(`should return the expected result`, async () => {
@@ -403,15 +459,13 @@ describe(`when querying for a term: fetch by Id`, () => {
                     // the project this term is a part of?
                     beforeEach(async () => {
                         // note that there is no publication event in this event history
-                        const eventHistoryForPrivateTerm = termPrivateThatUserCanAccess.as({
+                        const eventHistoryForPrivateTerm = privateTermThatUserCanAccess.as({
                             type: AggregateType.term,
                             id: termId,
                         });
                         // TODO: we need to check that contributors come through
 
-                        await app
-                            .get(ArangoEventRepository)
-                            .appendEvents(eventHistoryForPrivateTerm);
+                        await seedTerms(eventHistoryForPrivateTerm);
                     });
 
                     it(`should return the expected result`, async () => {
@@ -445,6 +499,22 @@ describe(`when querying for a term: fetch by Id`, () => {
                         testUserWithGroups: dummyUserWithGroups,
                     }
                 ));
+
+                termQueryRepository = app.get(TERM_QUERY_REPOSITORY_TOKEN);
+
+                /**
+                 * TODO We need to find a more maintainable way of
+                 * seeding the required initial state.
+                 */
+                handlers = buildEventHandlers(termQueryRepository);
+
+                seedTerms = async (events: ICoscradEvent[]) => {
+                    for (const e of events) {
+                        for (const h of handlers) {
+                            await h.handle(e);
+                        }
+                    }
+                };
             });
 
             describe(`when there is a term with the given Id`, () => {
@@ -456,7 +526,7 @@ describe(`when querying for a term: fetch by Id`, () => {
                         });
                         // TODO: we need to check that contributors come through
 
-                        await app.get(ArangoEventRepository).appendEvents(eventHistoryForTerm);
+                        await seedTerms(eventHistoryForTerm);
                     });
 
                     it(`should return the expected result`, async () => {
@@ -477,7 +547,7 @@ describe(`when querying for a term: fetch by Id`, () => {
                         });
                         // TODO: we need to check that contributors come through
 
-                        await app.get(ArangoEventRepository).appendEvents(eventHistoryForTerm);
+                        await seedTerms(eventHistoryForTerm);
                     });
 
                     // We pretend the resource does not exist when the user
@@ -494,15 +564,13 @@ describe(`when querying for a term: fetch by Id`, () => {
                 describe(`when the term is not published but the user has access`, () => {
                     beforeEach(async () => {
                         // note that there is no publication event in this event history
-                        const eventHistoryForPrivateTerm = termPrivateThatUserCanAccess.as({
+                        const eventHistoryForPrivateTerm = privateTermThatUserCanAccess.as({
                             type: AggregateType.term,
                             id: termId,
                         });
                         // TODO: we need to check that contributors come through
 
-                        await app
-                            .get(ArangoEventRepository)
-                            .appendEvents(eventHistoryForPrivateTerm);
+                        await seedTerms(eventHistoryForPrivateTerm);
                     });
 
                     it(`should return the expected result`, async () => {

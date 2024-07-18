@@ -31,6 +31,12 @@ export class TermViewModel extends BaseResourceViewModel implements ITermViewMod
     @FromTerm
     readonly sourceProject?: string;
 
+    readonly mediaItemId?: string;
+
+    readonly isPublished: boolean;
+
+    readonly accessControlList: { allowedUserIds: string[]; allowedGroupIds: string[] };
+
     constructor(
         term: Term,
         audioItems: AudioItem[],
@@ -39,9 +45,13 @@ export class TermViewModel extends BaseResourceViewModel implements ITermViewMod
     ) {
         super(term, contributors);
 
-        const { audio, sourceProject, text } = term;
+        const { audio, sourceProject, text, queryAccessControlList, published } = term;
+
+        this.isPublished = published;
 
         if (sourceProject) this.sourceProject = sourceProject;
+
+        this.accessControlList = queryAccessControlList.clone();
 
         const originalLanguageCode = text.getOriginalTextItem().languageCode;
 

@@ -381,7 +381,9 @@ describe(`ArangoTermQueryRepository`, () => {
             await arangoDatabaseForCollection.clear();
 
             await testQueryRepository.create(targetTerm);
+        });
 
+        it(`should publish the given term`, async () => {
             await testQueryRepository.publish(targetTerm.id);
 
             const updatedView = (await testQueryRepository.fetchById(

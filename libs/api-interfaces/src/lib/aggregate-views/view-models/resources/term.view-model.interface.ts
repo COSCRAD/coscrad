@@ -1,11 +1,6 @@
 import { IBaseResourceViewModel } from '../base.view-model.interface';
 
 export interface ITermViewModel extends IBaseResourceViewModel {
-    accessControlList: {
-        allowedUserIds: string[];
-        allowedGroupIds: string[];
-    };
-
     audioURL?: string;
 
     mediaItemId?: string;
@@ -13,4 +8,12 @@ export interface ITermViewModel extends IBaseResourceViewModel {
     // mimeType?: MIMEType; Do we want this?
 
     sourceProject?: string;
+
+    // TODO put this on the base interface
+    isPublished: boolean;
+
+    accessControlList: {
+        allowedUserIds: string[];
+        allowedGroupIds: string[];
+    };
 }

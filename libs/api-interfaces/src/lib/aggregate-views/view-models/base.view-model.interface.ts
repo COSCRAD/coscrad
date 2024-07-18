@@ -12,6 +12,4 @@ export interface IBaseViewModel extends HasId {
 
 export interface IBaseResourceViewModel extends IBaseViewModel {
     contributions: ContributorWithId[];
-
-    isPublished: boolean;
 }

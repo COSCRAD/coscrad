@@ -8,6 +8,8 @@ export interface IAudioItemViewModel extends IBaseResourceViewModel {
         allowedGroupIds: string[];
     };
 
+    isPublished: boolean;
+
     name: IMultilingualText;
 
     // aggregate ID

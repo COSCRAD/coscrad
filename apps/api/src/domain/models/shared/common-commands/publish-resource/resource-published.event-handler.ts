@@ -1,9 +1,11 @@
 import { ResourceType } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
-import { ICoscradEvent, ICoscradEventHandler } from '../../../../../domain/common';
+import { ICoscradEventHandler } from '../../../../../domain/common';
+import { AggregateId } from '../../../../../domain/types/AggregateId';
+import { ResourcePublished } from './resource-published.event';
 
 export interface IPublishable {
-    publish(): Promise<void>;
+    publish(id: AggregateId): Promise<void>;
 }
 
 interface IQueryRepositoryProvider {
@@ -16,7 +18,16 @@ export class ResourcePublishedEventHandler implements ICoscradEventHandler {
         private readonly queryRepositoryProvider: IQueryRepositoryProvider
     ) {}
 
-    async handle(_event: ICoscradEvent): Promise<void> {
-        throw new Error(`not implemente-d resource published event handler`);
+    async handle(event: ResourcePublished): Promise<void> {
+        // TODO move this responsibility elsewhere it is very dangerous and easy to miss
+        if (!event.isOfType('RESOURCE_PUBLISHED')) return;
+
+        const {
+            payload: {
+                aggregateCompositeIdentifier: { type: resourceType, id },
+            },
+        } = event;
+
+        await this.queryRepositoryProvider.forResource(resourceType).publish(id);
     }
 }

@@ -1,3 +1,4 @@
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject, Injectable } from '@nestjs/common';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { isNotFound, NotFound } from '../../../lib/types/not-found';
@@ -27,7 +28,12 @@ export class TermQueryService {
 
         const acl = new AccessControlList(result.accessControlList);
 
+        if (isNullOrUndefined(userWithGroups)) {
+            return NotFound;
+        }
+
         if (
+            userWithGroups?.isAdmin() ||
             acl.canUser(userWithGroups.id) ||
             userWithGroups.groups.some(({ id: groupId }) => acl.canGroup(groupId))
         ) {
