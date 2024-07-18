@@ -179,6 +179,43 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         await cursor.all();
     }
 
+    async attribute(termId: AggregateId, contributorIds: AggregateId[]): Promise<void> {
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+        LET newContributions = (
+            FOR contributorId IN @contributorIds
+                FOR c in contributors
+                    FILTER c._key == contributorId
+                    return {
+                        id: c._key,
+                        fullName: CONCAT(CONCAT(c.fullName.firstName,' '),c.fullName.lastName)
+                    }
+        )
+        UPDATE doc WITH {
+            contributions: APPEND(doc.contributions,newContributions)
+        } IN @@collectionName
+         RETURN OLD
+        `;
+
+        const bindVars = {
+            '@collectionName': 'term__VIEWS',
+            id: termId,
+            contributorIds,
+        };
+
+        const cursor = await this.database
+            .query({
+                query,
+                bindVars,
+            })
+            .catch((reason) => {
+                throw new InternalError(`Failed to translate term via TermRepository: ${reason}`);
+            });
+
+        await cursor.all();
+    }
+
     async fetchById(
         id: AggregateId
     ): Promise<Maybe<ITermViewModel & { actions: ICommandFormAndLabels[] }>> {

@@ -35,6 +35,13 @@ export interface ITermQueryRepository {
 
     publish(id: AggregateId): Promise<void>;
 
+    /**
+     * A better approach would be to do this atomically as part of
+     * each update query. We need to find a performant and extensible way to
+     * do this.
+     */
+    attribute(termId: AggregateId, contributorIds: AggregateId[]): Promise<void>;
+
     // TODO Is it the ID that we want here or the URL?
     addAudio(id: AggregateId, languageCode: LanguageCode, audioItemId: string): Promise<void>;
 

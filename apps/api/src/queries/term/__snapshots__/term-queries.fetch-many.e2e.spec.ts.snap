@@ -5,7 +5,7 @@ exports[`when querying for a term: fetch many when the user is a project admin s
   "entities": [
     {
       "_id": "term__VIEWS/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
-      "_rev": "_iKa-uqi---",
+      "_rev": "_iKamXSW---",
       "accessControlList": {
         "allowedGroupIds": [],
         "allowedUserIds": [],
@@ -36,7 +36,7 @@ exports[`when querying for a term: fetch many when the user is a project admin s
     },
     {
       "_id": "term__VIEWS/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
-      "_rev": "_iKa-uq6---",
+      "_rev": "_iKamXS6---",
       "accessControlList": {
         "allowedGroupIds": [],
         "allowedUserIds": [

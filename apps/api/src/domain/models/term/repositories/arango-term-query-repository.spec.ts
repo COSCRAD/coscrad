@@ -15,19 +15,28 @@ import { InternalError } from '../../../../lib/errors/InternalError';
 import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
+import { ArangoCollectionId } from '../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
+import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
+import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { ArangoRepositoryForAggregate } from '../../../../persistence/repositories/arango-repository-for-aggregate';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { TestEventStream } from '../../../../test-data/events';
+import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
+import buildInstanceFactory from '../../../factories/utilities/buildInstanceFactory';
+import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { AudioItemCreated } from '../../audio-visual/audio-item/commands/create-audio-item/transcript-created.event';
 import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
 import { IAudioItemQueryRepository } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ArangoAudioItemQueryRepository } from '../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
+import { CoscradContributor } from '../../user-management/contributor';
+import { FullName } from '../../user-management/user/entities/user/full-name.entity';
 import { ITermQueryRepository } from '../queries/term-query-repository.interface';
 import { ArangoTermQueryRepository } from './arango-term-query-repository';
 
@@ -41,6 +50,8 @@ describe(`ArangoTermQueryRepository`, () => {
     let arangoDatabaseForCollection: ArangoDatabaseForCollection<
         IDetailQueryResult<ITermViewModel>
     >;
+
+    let contributorRepository: IRepositoryForAggregate<CoscradContributor>;
 
     let app: INestApplication;
 
@@ -78,6 +89,17 @@ describe(`ArangoTermQueryRepository`, () => {
             connectionProvider,
             audioItemQueryRepository
         );
+
+        /**
+         * Currently, the contributors are snapshot based (not event sourced).
+         */
+        contributorRepository = new ArangoRepositoryForAggregate(
+            databaseProvider,
+            ArangoCollectionId.contributors,
+            buildInstanceFactory(CoscradContributor),
+            mapDatabaseDocumentToAggregateDTO,
+            mapEntityDTOToDatabaseDocument
+        );
     });
 
     afterAll(async () => {
@@ -95,6 +117,25 @@ describe(`ArangoTermQueryRepository`, () => {
     const translationLangaugeCode = LanguageCode.English;
 
     const textTranslation = 'foobar';
+
+    const dummyContributor = getValidAggregateInstanceForTest(AggregateType.contributor);
+
+    const contributorIds = [101, 102, 103].map(buildDummyUuid);
+
+    const contributorIdsAndNames = contributorIds.map((contributorId) => ({
+        contributorId,
+        fullName: new FullName({
+            firstName: `user`,
+            lastName: contributorId,
+        }),
+    }));
+
+    const testContributors = contributorIdsAndNames.map(({ contributorId, fullName }) =>
+        dummyContributor.clone({
+            id: contributorId,
+            fullName,
+        })
+    );
 
     const termViews = termIds.map((id) => ({
         id,
@@ -391,6 +432,48 @@ describe(`ArangoTermQueryRepository`, () => {
             )) as TermViewModel;
 
             expect(updatedView.isPublished).toBe(true);
+        });
+    });
+
+    describe(`attribute`, () => {
+        const targetTerm = termViews[0];
+
+        beforeEach(async () => {
+            await arangoDatabaseForCollection.clear();
+
+            await databaseProvider.getDatabaseForCollection('contributors').clear();
+
+            await testQueryRepository.create(targetTerm);
+
+            await contributorRepository.createMany(testContributors);
+        });
+
+        it(`should add the given contributions`, async () => {
+            await testQueryRepository.attribute(
+                targetTerm.id,
+                testContributors.map((c) => c.id)
+            );
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetTerm.id
+            )) as TermViewModel;
+
+            const missingAttributions = updatedView.contributions.filter(
+                ({ id }) => !contributorIds.includes(id)
+            );
+
+            expect(missingAttributions).toHaveLength(0);
+
+            const { contributorId: targetContributorId, fullName: expectedFullName } =
+                contributorIdsAndNames[0];
+
+            const contributionForFirstUser = updatedView.contributions.find(
+                ({ id }) => id === targetContributorId
+            );
+
+            expect(contributionForFirstUser.fullName).toBe(
+                `${expectedFullName.firstName} ${expectedFullName.lastName}`
+            );
         });
     });
 });
