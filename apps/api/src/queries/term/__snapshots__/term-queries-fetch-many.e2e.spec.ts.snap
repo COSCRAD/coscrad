@@ -5,18 +5,12 @@ exports[`when querying for a term: fetch many when the user is a project admin s
   "entities": [
     {
       "_id": "term__VIEWS/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
-      "_rev": "_iKamXSW---",
       "accessControlList": {
         "allowedGroupIds": [],
         "allowedUserIds": [],
       },
       "actions": [],
-      "contributions": [
-        {
-          "fullName": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110901",
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110901",
-        },
-      ],
+      "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
       "isPublished": false,
       "name": {
@@ -36,7 +30,6 @@ exports[`when querying for a term: fetch many when the user is a project admin s
     },
     {
       "_id": "term__VIEWS/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
-      "_rev": "_iKamXS6---",
       "accessControlList": {
         "allowedGroupIds": [],
         "allowedUserIds": [
@@ -44,14 +37,34 @@ exports[`when querying for a term: fetch many when the user is a project admin s
         ],
       },
       "actions": [],
-      "contributions": [
-        {
-          "fullName": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110901",
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110901",
-        },
-      ],
+      "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
       "isPublished": false,
+      "name": {
+        "items": [
+          {
+            "languageCode": "hai",
+            "role": "original",
+            "text": "Term (in the language)",
+          },
+          {
+            "languageCode": "en",
+            "role": "free translation",
+            "text": "Term (in English)",
+          },
+        ],
+      },
+    },
+    {
+      "_id": "term__VIEWS/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+      "accessControlList": {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "actions": [],
+      "contributions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+      "isPublished": true,
       "name": {
         "items": [
           {

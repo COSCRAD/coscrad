@@ -192,19 +192,21 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
                         fullName: CONCAT(CONCAT(c.fullName.firstName,' '),c.fullName.lastName)
                     }
         )
+        LET updatedContributions = APPEND(doc.contributions,newContributions)
         UPDATE doc WITH {
-            contributions: APPEND(doc.contributions,newContributions)
+            contributions: updatedContributions
         } IN @@collectionName
-         RETURN OLD
+         RETURN updatedContributions
         `;
 
         const bindVars = {
+            // todo is this necessary?
             '@collectionName': 'term__VIEWS',
             id: termId,
             contributorIds,
         };
 
-        const cursor = await this.database
+        await this.database
             .query({
                 query,
                 bindVars,
@@ -212,8 +214,6 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             .catch((reason) => {
                 throw new InternalError(`Failed to translate term via TermRepository: ${reason}`);
             });
-
-        await cursor.all();
     }
 
     async fetchById(

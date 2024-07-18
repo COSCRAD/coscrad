@@ -13,8 +13,13 @@ export class TermCreatedEventHandler implements ICoscradEventHandler {
         // TODO use dynamic registration
         if (!event.isOfType('TERM_CREATED')) return;
 
+        const { meta: { contributorIds = [] } = { contributorIds: [] } } = event;
+
         const term = TermViewModel.fromTermCreated(event);
 
         await this.termRepository.create(term);
+
+        // TODO make this operation atomic, extensible
+        await this.termRepository.attribute(term.id, contributorIds);
     }
 }

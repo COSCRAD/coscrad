@@ -29,6 +29,7 @@ import { CoscradUserWithGroups } from '../../domain/models/user-management/user/
 import { CoscradUser } from '../../domain/models/user-management/user/entities/user/coscrad-user.entity';
 import { FullName } from '../../domain/models/user-management/user/entities/user/full-name.entity';
 import { InternalError } from '../../lib/errors/InternalError';
+import { ArangoCollectionId } from '../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -151,24 +152,25 @@ describe(`when querying for a term: fetch many`, () => {
 
     let seedTerms: (eventHistory: ICoscradEvent[]) => Promise<void>;
 
-    beforeEach(async () => {
-        await testRepositoryProvider.testSetup();
-
-        await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
-    });
-
     afterAll(async () => {
         await app.close();
 
         databaseProvider.close();
     });
 
+    const eventsForPrivateTermUserCannotAccess = termTranslated.as({
+        id: termIdUnpublishedNoUserAccessId,
+        type: AggregateType.term,
+    });
+
+    const eventsForPrivateTermUserCanAccess = termPrivateThatUserCanAccess.as({
+        id: termIdUnpublishedWithUserAccessId,
+        type: AggregateType.term,
+    });
+
     const eventHistoryForManyUnpublished = [
-        ...termTranslated.as({ id: termIdUnpublishedNoUserAccessId, type: AggregateType.term }),
-        ...termPrivateThatUserCanAccess.as({
-            id: termIdUnpublishedWithUserAccessId,
-            type: AggregateType.term,
-        }),
+        ...eventsForPrivateTermUserCannotAccess,
+        ...eventsForPrivateTermUserCanAccess,
     ];
 
     const eventHistoryForManyWithPublishedTerm = [
@@ -201,12 +203,19 @@ describe(`when querying for a term: fetch many`, () => {
         });
 
         describe(`when there is a published term in the index view`, () => {
-            it(`should only return published terms`, async () => {
-                // TODO -> beforeEach
-                await seedTerms(eventHistoryForManyWithPublishedTerm);
+            beforeEach(async () => {
+                await databaseProvider
+                    .getDatabaseForCollection(ArangoCollectionId.contributors)
+                    .clear();
+
+                await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
 
                 await testRepositoryProvider.getContributorRepository().create(dummyContributor);
 
+                await seedTerms(eventHistoryForManyWithPublishedTerm);
+            });
+
+            it(`should only return published terms`, async () => {
                 const res = await request(app.getHttpServer()).get(indexEndpoint);
 
                 expect(res.status).toBe(httpStatusCodes.ok);
@@ -223,6 +232,10 @@ describe(`when querying for a term: fetch many`, () => {
 
                 expect(result.id).toBe(termId);
 
+                const _knownContributors = await testRepositoryProvider
+                    .getContributorRepository()
+                    .fetchMany();
+
                 expect(
                     result.contributions.some(({ fullName, id: foundContributorId }) => {
                         return (
@@ -237,10 +250,19 @@ describe(`when querying for a term: fetch many`, () => {
         });
 
         describe(`when there are no published terms`, () => {
-            it(`should return no terms`, async () => {
-                // -> beforeEach
-                await seedTerms(eventHistoryForManyUnpublished);
+            beforeEach(async () => {
+                await databaseProvider
+                    .getDatabaseForCollection(ArangoCollectionId.contributors)
+                    .clear();
 
+                await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
+
+                await testRepositoryProvider.getContributorRepository().create(dummyContributor);
+
+                await seedTerms(eventHistoryForManyUnpublished);
+            });
+
+            it(`should return no terms`, async () => {
                 const res = await request(app.getHttpServer()).get(indexEndpoint);
 
                 expect(res.status).toBe(httpStatusCodes.ok);
@@ -276,10 +298,21 @@ describe(`when querying for a term: fetch many`, () => {
 
         describe(`when there is a term that is unpublished`, () => {
             describe(`when the user does not have read access`, () => {
-                it(`should not return the unpublished term`, async () => {
-                    // -> beforeEach
+                beforeEach(async () => {
+                    await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
+
+                    await databaseProvider
+                        .getDatabaseForCollection(ArangoCollectionId.contributors)
+                        .clear();
+
                     await seedTerms(eventHistoryForManyWithPublishedTerm);
 
+                    await testRepositoryProvider
+                        .getContributorRepository()
+                        .create(dummyContributor);
+                });
+
+                it(`should not return the unpublished term`, async () => {
                     const res = await request(app.getHttpServer()).get(indexEndpoint);
 
                     expect(res.status).toBe(httpStatusCodes.ok);
@@ -294,9 +327,21 @@ describe(`when querying for a term: fetch many`, () => {
             });
 
             describe(`when the user does have read access`, () => {
-                it(`should return the unpublished term`, async () => {
-                    await seedTerms(eventHistoryForManyWithPublishedTerm);
+                beforeEach(async () => {
+                    await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
 
+                    await databaseProvider
+                        .getDatabaseForCollection(ArangoCollectionId.contributors)
+                        .clear();
+
+                    await seedTerms(eventHistoryForManyUnpublished);
+
+                    await testRepositoryProvider
+                        .getContributorRepository()
+                        .create(dummyContributor);
+                });
+
+                it(`should return the unpublished term`, async () => {
                     const res = await request(app.getHttpServer()).get(indexEndpoint);
 
                     expect(res.status).toBe(httpStatusCodes.ok);
@@ -354,17 +399,28 @@ describe(`when querying for a term: fetch many`, () => {
                 };
             });
 
-            it(`should allow the user to access private resources`, async () => {
-                // -> beforeEach
-                await seedTerms(eventHistoryForManyUnpublished);
+            beforeEach(async () => {
+                await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
 
+                await databaseProvider
+                    .getDatabaseForCollection(ArangoCollectionId.contributors)
+                    .clear();
+
+                await seedTerms(eventHistoryForManyWithPublishedTerm);
+
+                await testRepositoryProvider.getContributorRepository().create(dummyContributor);
+            });
+
+            it(`should allow the user to access private resources`, async () => {
                 const res = await request(app.getHttpServer()).get(indexEndpoint);
 
                 const numberOfPrivateTerms = 2;
 
+                const numberOfPublicTerms = 1;
+
                 expect(res.status).toBe(HttpStatusCode.ok);
 
-                expect(res.body.entities).toHaveLength(numberOfPrivateTerms);
+                expect(res.body.entities).toHaveLength(numberOfPrivateTerms + numberOfPublicTerms);
 
                 /**
                  * This if statement is effectively a filter for our test

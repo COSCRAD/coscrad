@@ -58,12 +58,9 @@ export class TermViewModel implements IDetailQueryResult<ITermViewModel> {
 
         term.id = termId;
 
-        term.contributions = contributorIds.map((contributorId) => ({
-            id: contributorId,
-            fullName: contributorId,
-        })); // TODO join in contributors fully instead of by reference
-
         term.actions = []; // TODO build all actions here
+
+        term.contributions = [];
 
         /**
          * The contributor should have access.
