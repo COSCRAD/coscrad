@@ -1,6 +1,7 @@
 import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import {
     CommandContext,
     CommandInfoService,
@@ -16,13 +17,22 @@ import { fetchActionsForUser } from './utilities/fetch-actions-for-user';
 
 @Injectable()
 export class TermQueryService {
+    private readonly audioUrlPrefix: string;
+
     protected readonly type = ResourceType.term;
 
     constructor(
         @Inject(TERM_QUERY_REPOSITORY_TOKEN)
         private readonly termQueryRepository: ITermQueryRepository,
-        @Inject(CommandInfoService) private readonly commandInfoService: CommandInfoService
-    ) {}
+        @Inject(CommandInfoService) private readonly commandInfoService: CommandInfoService,
+        private readonly configService: ConfigService
+    ) {
+        // TODO we need the base URL as part of the config
+        // this.audioUrlPrefix = `http://localhost:${this.configService.get(
+        //     'NODE_PORT'
+        // )}/${this.configService.get('GLOBAL_PREFIX')}/resources/mediaItems/download`;
+        this.audioUrlPrefix = `/resources/mediaItems/download`;
+    }
 
     // todo add explicit return type
     async fetchById(id: AggregateId, userWithGroups?: CoscradUserWithGroups) {
@@ -30,20 +40,26 @@ export class TermQueryService {
 
         if (isNotFound(result)) return result;
 
-        if (result.isPublished) return result;
-
         const acl = new AccessControlList(result.accessControlList);
 
-        if (isNullOrUndefined(userWithGroups)) {
+        if (isNullOrUndefined(userWithGroups) && !result.isPublished) {
             return NotFound;
         }
 
         if (
+            result.isPublished ||
             userWithGroups?.isAdmin() ||
             acl.canUser(userWithGroups.id) ||
             userWithGroups.groups.some(({ id: groupId }) => acl.canGroup(groupId))
         ) {
-            return result;
+            const { mediaItemId } = result;
+
+            const audioItemURL = isNullOrUndefined(mediaItemId)
+                ? undefined
+                : this.buildAudioUrl(mediaItemId);
+
+            // TODO do this more efficiently
+            return { ...result, audioItemURL };
         }
 
         return NotFound;
@@ -73,7 +89,16 @@ export class TermQueryService {
 
         return {
             // TODO ensure actions show up on entities
-            entities: availableEntities,
+            entities: availableEntities.map((entity) => {
+                Object.assign(entity, { audioURL: this.buildAudioUrl(entity.mediaItemId) });
+
+                console.log({ fullEntity: entity });
+
+                return {
+                    ...entity,
+                    audioURL: this.buildAudioUrl(entity.mediaItemId),
+                };
+            }),
             // TODO Should we register index-scoped commands in the view layer instead?
             indexScopedActions: this.fetchUserActions(userWithGroups, [Term]),
         };
@@ -86,5 +111,11 @@ export class TermQueryService {
         return commandContexts.flatMap((commandContext) =>
             fetchActionsForUser(this.commandInfoService, systemUser, commandContext)
         );
+    }
+
+    private buildAudioUrl(mediaItemId?: AggregateId): string | undefined {
+        if (isNullOrUndefined(mediaItemId)) return undefined;
+
+        return `${this.audioUrlPrefix}/${mediaItemId}`;
     }
 }

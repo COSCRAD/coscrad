@@ -114,12 +114,19 @@ export class ArangoDatabase {
 
     // TODO renamme this method to `count`
     getCount = async (collectionName: string): Promise<number> => {
+        // TODO Use direct count query instead for efficiency
         const results = await this.fetchMany(collectionName);
 
         return isNotFound(results) ? 0 : results.length;
     };
 
     create = async <TEntityDTO>(dto: TEntityDTO, collectionName: string): Promise<void> => {
+        const _dbName = this.getDatabaseName();
+
+        if (_dbName.includes('term')) {
+            console.log({ _dbName });
+        }
+
         const collectionExists = await this.#doesCollectionExist(collectionName);
 
         if (!collectionExists) throw new Error(`Collection ${collectionName} not found!`);
@@ -134,10 +141,20 @@ export class ArangoDatabase {
             '@collectionName': collectionName,
         };
 
-        await this.db.query({
-            query,
-            bindVars,
-        });
+        const cursor = await this.db
+            .query({
+                query,
+                bindVars,
+            })
+            .catch((error) => {
+                throw new InternalError(
+                    `failed to create in Arango database: ${JSON.stringify(
+                        dto
+                    )}. Arango error: \n ${error}"`
+                );
+            });
+
+        await cursor.all();
     };
 
     createMany = async <TEntityDTO>(dtos: TEntityDTO[], collectionName: string): Promise<void> => {
@@ -307,7 +324,7 @@ export class ArangoDatabase {
     // TODO We only want this power within test utilities!
     deleteAll = async (collectionName: string): Promise<void> => {
         // TODO make this or Environment.e2e ?
-        if (!isTestEnvironment(process.env.NODE_ENV)) {
+        if (!isTestEnvironment(process.env.NODE_ENV) && !collectionName.includes('VIEW')) {
             throw new InternalError(
                 `You can only delete all in a test environment. Your environment is: ${process.env.NODE_ENV}`
             );

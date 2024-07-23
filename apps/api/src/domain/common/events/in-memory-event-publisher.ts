@@ -31,7 +31,9 @@ export class InMemoryEventPublisher
         const subscription = this.ofEventType(eventType)
             .pipe(
                 mergeMap((event) =>
-                    defer(() => Promise.resolve(handler.handle(event))).pipe(
+                    defer(async () => {
+                        return handler.handle(event);
+                    }).pipe(
                         catchError((error) => {
                             const unhandledError = new InternalError(
                                 `Event handler: ${handler.constructor.name} for event: ${eventType} has thrown an unknown error`,

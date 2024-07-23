@@ -7,6 +7,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
+import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from '../../../../coscrad-cli/logging';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { isNotFound } from '../../../../lib/types/not-found';
@@ -31,7 +32,8 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         arangoConnectionProvider: ArangoConnectionProvider,
         // AUDIO_ITEM_QUERY_REPOSITORY?
         @Inject(AUDIO_QUERY_REPOSITORY_TOKEN)
-        private readonly audioItemQueryRepository: IAudioItemQueryRepository
+        private readonly audioItemQueryRepository: IAudioItemQueryRepository,
+        @Inject(COSCRAD_LOGGER_TOKEN) private readonly logger: ICoscradLogger
     ) {
         this.database = new ArangoDatabaseForCollection(
             new ArangoDatabase(arangoConnectionProvider.getConnection()),
@@ -40,7 +42,10 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
     }
 
     async create(view: ITermViewModel & { actions: ICommandFormAndLabels[] }): Promise<void> {
-        return this.database.create(mapEntityDTOToDatabaseDocument(view));
+        await this.database.create(mapEntityDTOToDatabaseDocument(view)).catch((error) => {
+            console.warn({ error });
+            throw new InternalError(error);
+        });
     }
 
     async createMany(
@@ -107,7 +112,9 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         const audioItemSearchResult = await this.audioItemQueryRepository.fetchById(audioItemId);
 
         if (isNotFound(audioItemSearchResult)) {
-            // TODO log error but still fail gracefully
+            this.logger.log(
+                `Failed to add audio for term: ${termId}. Audio item: ${audioItemId} not found.`
+            );
             return;
         }
 
@@ -225,13 +232,15 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
 
         const asView = mapDatabaseDocumentToAggregateDTO(result);
 
-        return asView;
+        return asView as ITermViewModel & { actions: ICommandFormAndLabels[] };
     }
 
     async fetchMany(): Promise<(ITermViewModel & { actions: ICommandFormAndLabels[] })[]> {
         const result = await this.database.fetchMany();
 
-        return result.map(mapDatabaseDocumentToAggregateDTO);
+        return result.map(mapDatabaseDocumentToAggregateDTO) as (ITermViewModel & {
+            actions: ICommandFormAndLabels[];
+        })[];
     }
 
     async count(): Promise<number> {

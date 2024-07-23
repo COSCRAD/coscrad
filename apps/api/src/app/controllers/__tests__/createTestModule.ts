@@ -1,17 +1,15 @@
+import { ResourceType } from '@coscrad/api-interfaces';
 import { CommandModule } from '@coscrad/commands';
 import { bootstrapDynamicTypes } from '@coscrad/data-types';
 import { ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { Test } from '@nestjs/testing';
-import {
-    ITermQueryRepository,
-    TERM_QUERY_REPOSITORY_TOKEN,
-} from 'apps/api/src/domain/models/term/queries';
 import { JwtStrategy } from '../../../authorization/jwt.strategy';
 import { MockJwtAdminAuthGuard } from '../../../authorization/mock-jwt-admin-auth-guard';
 import { MockJwtAuthGuard } from '../../../authorization/mock-jwt-auth-guard';
 import { MockJwtStrategy } from '../../../authorization/mock-jwt.strategy';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
+import { ConsoleCoscradCliLogger } from '../../../coscrad-cli/logging';
 import { CoscradEventFactory, CoscradEventUnion } from '../../../domain/common';
 import { ID_MANAGER_TOKEN } from '../../../domain/interfaces/id-manager.interface';
 import { AudioItemController } from '../../../domain/models/audio-visual/application/audio-item.controller';
@@ -146,6 +144,7 @@ import {
     UnpublishResourceCommandHandler,
 } from '../../../domain/models/shared/common-commands';
 import { ResourcePublished } from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event';
+import { IQueryRepositoryProvider } from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
 import {
     AddLyricsForSong,
     AddLyricsForSongCommandHandler,
@@ -193,6 +192,10 @@ import {
     TranslateTermCommandHandler,
 } from '../../../domain/models/term/commands';
 import { Term } from '../../../domain/models/term/entities/term.entity';
+import {
+    ITermQueryRepository,
+    TERM_QUERY_REPOSITORY_TOKEN,
+} from '../../../domain/models/term/queries';
 import { ArangoTermQueryRepository } from '../../../domain/models/term/repositories/arango-term-query-repository';
 import {
     ContributorCreated,
@@ -483,17 +486,45 @@ export default async (
                 ) =>
                     new ArangoTermQueryRepository(
                         arangoConnectionProvider,
-                        audioItemQueryRepository
+                        audioItemQueryRepository,
+                        new ConsoleCoscradCliLogger()
                     ),
                 inject: [ArangoConnectionProvider, AUDIO_QUERY_REPOSITORY_TOKEN],
+            },
+            {
+                //  TODO use a const for this
+                provide: 'QUERY_REPOSITORY_PROVIDER',
+                useFactory: (
+                    termQueryRepository: ArangoTermQueryRepository,
+                    audioItemQueryRepository: ArangoAudioItemQueryRepository
+                ): IQueryRepositoryProvider => {
+                    return {
+                        // @ts-expect-error TODO troubleshoot this error
+                        forResource: (resourceType: ResourceType) => {
+                            if (resourceType === ResourceType.term) {
+                                return termQueryRepository;
+                            }
+
+                            if (resourceType === ResourceType.audioItem) {
+                                return audioItemQueryRepository;
+                            }
+
+                            throw new InternalError(
+                                `Query Repository not available for unsupported resource type: ${resourceType}`
+                            );
+                        },
+                    };
+                },
+                inject: [TERM_QUERY_REPOSITORY_TOKEN, AUDIO_QUERY_REPOSITORY_TOKEN],
             },
             {
                 provide: TermQueryService,
                 useFactory: (
                     termQueryRepository: ITermQueryRepository,
-                    commandInfoService: CommandInfoService
-                ) => new TermQueryService(termQueryRepository, commandInfoService),
-                inject: [TERM_QUERY_REPOSITORY_TOKEN, CommandInfoService],
+                    commandInfoService: CommandInfoService,
+                    configService: ConfigService
+                ) => new TermQueryService(termQueryRepository, commandInfoService, configService),
+                inject: [TERM_QUERY_REPOSITORY_TOKEN, CommandInfoService, ConfigService],
             },
             {
                 provide: VocabularyListQueryService,

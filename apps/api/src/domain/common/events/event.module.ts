@@ -11,8 +11,8 @@ import {
 import { CoscradEventFactory } from './coscrad-event-factory';
 import { ICoscradEventHandler } from './coscrad-event-handler.interface';
 import { CoscradEventUnion } from './coscrad-event-union';
-import { InMemoryEventPublisher } from './in-memory-event-publisher';
 import { ICoscradEventPublisher } from './interfaces';
+import { SyncInMemoryEventPublisher } from './sync-in-memory-event-publisher';
 
 // TODO Should this be it's own lib or maybe part of the commands (CQRS now?) lib?
 @Module({
@@ -25,11 +25,11 @@ import { ICoscradEventPublisher } from './interfaces';
         },
         {
             provide: EVENT_PUBLISHER_TOKEN,
-            useFactory: () =>
-                new InMemoryEventPublisher(
-                    // TODO We need to work on our logging strategy
-                    new ConsoleCoscradCliLogger()
-                ),
+            useFactory: () => new SyncInMemoryEventPublisher(new ConsoleCoscradCliLogger()),
+            // new InMemoryEventPublisher(
+            //     // TODO We need to work on our logging strategy
+            //     new ConsoleCoscradCliLogger()
+            // ),
         },
     ],
     exports: [CoscradEventFactory, EVENT_PUBLISHER_TOKEN],

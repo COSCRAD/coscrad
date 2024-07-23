@@ -45,6 +45,12 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
         return this.database.delete(id);
     }
 
+    async publish(id: AggregateId): Promise<void> {
+        await this.database.update(id, {
+            isPublished: true,
+        });
+    }
+
     async fetchById(
         id: AggregateId
     ): Promise<Maybe<IAudioItemViewModel & { actions: ICommandFormAndLabels[] }>> {
@@ -53,13 +59,17 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
         if (isNotFound(result)) return result;
 
         // should we rename this helper method?
-        return mapDatabaseDocumentToAggregateDTO(result);
+        return mapDatabaseDocumentToAggregateDTO(result) as IAudioItemViewModel & {
+            actions: ICommandFormAndLabels[];
+        };
     }
 
     async fetchMany(): Promise<(IAudioItemViewModel & { actions: ICommandFormAndLabels[] })[]> {
         const documents = await this.database.fetchMany();
 
-        return documents.map(mapDatabaseDocumentToAggregateDTO);
+        return documents.map(mapDatabaseDocumentToAggregateDTO) as (IAudioItemViewModel & {
+            actions: ICommandFormAndLabels[];
+        })[];
     }
 
     async translateName(

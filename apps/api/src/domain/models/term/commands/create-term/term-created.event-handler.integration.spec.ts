@@ -10,6 +10,7 @@ import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/Environment';
+import { ConsoleCoscradCliLogger } from '../../../../../coscrad-cli/logging';
 import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
 import { NotFound } from '../../../../../lib/types/not-found';
@@ -91,7 +92,8 @@ describe(`TermCreatedEventHandler`, () => {
 
         testQueryRepository = new ArangoTermQueryRepository(
             connectionProvider,
-            new ArangoAudioItemQueryRepository(connectionProvider)
+            new ArangoAudioItemQueryRepository(connectionProvider),
+            new ConsoleCoscradCliLogger()
         );
     });
 

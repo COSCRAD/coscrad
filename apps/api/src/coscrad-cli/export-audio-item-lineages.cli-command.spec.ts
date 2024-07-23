@@ -13,7 +13,7 @@ import getValidAggregateInstanceForTest from '../domain/__tests__/utilities/getV
 import { CoscradEventFactory, EventModule } from '../domain/common';
 import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
 import { AudioVisualModule } from '../domain/models/audio-visual/application/audio-visual.module';
-import { AudioItemCreated } from '../domain/models/audio-visual/audio-item/commands/create-audio-item/transcript-created.event';
+import { AudioItemCreated } from '../domain/models/audio-visual/audio-item/commands/create-audio-item/audio-item-created.event';
 import { AudioItem } from '../domain/models/audio-visual/audio-item/entities/audio-item.entity';
 import { MediaItem } from '../domain/models/media-item/entities/media-item.entity';
 import { ResourcePublished } from '../domain/models/shared/common-commands/publish-resource/resource-published.event';

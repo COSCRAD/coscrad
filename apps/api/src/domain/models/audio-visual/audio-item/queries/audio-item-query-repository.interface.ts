@@ -6,6 +6,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { Maybe } from '../../../../../lib/types/maybe';
 import { AggregateId } from '../../../../types/AggregateId';
+import { IPublishable } from '../../../shared/common-commands/publish-resource/resource-published.event-handler';
 
 /**
  * TODO reconsider this. It feels awkward.
@@ -20,7 +21,7 @@ type IAudioItemQueryModel = IDetailQueryResult<IAudioItemViewModel> & {
 
 export const AUDIO_QUERY_REPOSITORY_TOKEN = 'AUDIO_QUERY_REPOSITORY_TOKEN';
 
-export interface IAudioItemQueryRepository {
+export interface IAudioItemQueryRepository extends IPublishable {
     create(view: IAudioItemQueryModel): Promise<void>;
 
     createMany(view: IAudioItemQueryModel[]): Promise<void>;

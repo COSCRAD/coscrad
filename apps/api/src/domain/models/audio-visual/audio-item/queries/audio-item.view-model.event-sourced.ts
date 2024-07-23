@@ -9,7 +9,7 @@ import {
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { AccessControlList } from '../../../shared/access-control/access-control-list.entity';
-import { AudioItemCreated } from '../commands/create-audio-item/transcript-created.event';
+import { AudioItemCreated } from '../commands/create-audio-item/audio-item-created.event';
 
 export class EventSourcedAudioItemViewModel implements IDetailQueryResult<IAudioItemViewModel> {
     actions: ICommandFormAndLabels[];

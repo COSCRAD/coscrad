@@ -1,5 +1,5 @@
-import { ICoscradEventHandler } from './coscrad-event-handler.interface';
-import { ICoscradEvent } from './coscrad-event.interface';
+import { ICoscradEventHandler } from '../coscrad-event-handler.interface';
+import { ICoscradEvent } from '../coscrad-event.interface';
 
 export interface ICoscradEventPublisher {
     publish(eventsToPublish: ICoscradEvent | ICoscradEvent[]): void;

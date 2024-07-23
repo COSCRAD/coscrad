@@ -67,12 +67,18 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
     }
 
     // Commands (mutate state)
-    create(databaseDocument: ArangoDatabaseDocument<TEntity>) {
+    async create(databaseDocument: ArangoDatabaseDocument<TEntity>) {
         // Handle the difference in _id \ _key between model and database
-        return this.#arangoDatabase.create(databaseDocument, this.#collectionID);
+        return this.#arangoDatabase.create(databaseDocument, this.#collectionID).catch((error) => {
+            throw new InternalError(
+                `ArangoDatabase for collection: ${
+                    this.#collectionID
+                } failed to create: ${databaseDocument}. \n Arango Error: ${error}`
+            );
+        });
     }
 
-    createMany(databaseDocuments: ArangoDatabaseDocument<TEntity>[]) {
+    async createMany(databaseDocuments: ArangoDatabaseDocument<TEntity>[]) {
         return this.#arangoDatabase
             .createMany(databaseDocuments, this.#collectionID)
             .catch((error) => {

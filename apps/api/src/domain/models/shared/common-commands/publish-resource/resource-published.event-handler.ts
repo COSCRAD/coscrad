@@ -2,13 +2,14 @@ import { ResourceType } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
+import { InternalError } from '../../../../../lib/errors/InternalError';
 import { ResourcePublished } from './resource-published.event';
 
 export interface IPublishable {
     publish(id: AggregateId): Promise<void>;
 }
 
-interface IQueryRepositoryProvider {
+export interface IQueryRepositoryProvider {
     forResource(resourceType: ResourceType): IPublishable;
 }
 
@@ -29,6 +30,18 @@ export class ResourcePublishedEventHandler implements ICoscradEventHandler {
             },
         } = event;
 
-        await this.queryRepositoryProvider.forResource(resourceType).publish(id);
+        const queryRepository = this.queryRepositoryProvider.forResource(resourceType);
+
+        if (typeof queryRepository.publish !== 'function') {
+            throw new InternalError(
+                `Failed to obtain a query repository with a publish method from query repository provider: ${JSON.stringify(
+                    this.queryRepositoryProvider
+                )} \n Received the query repository: ${JSON.stringify(queryRepository)} [${
+                    Object.getPrototypeOf(queryRepository).constructor.name
+                }]`
+            );
+        }
+
+        await queryRepository.publish(id);
     }
 }

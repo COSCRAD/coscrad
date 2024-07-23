@@ -1,13 +1,16 @@
 import { AggregateType } from '@coscrad/api-interfaces';
+import { CommandModule } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import buildMockConfigService from '../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../app/config/buildConfigFilePath';
 import { Environment } from '../app/config/constants/Environment';
-import { CoscradEventFactory } from '../domain/common';
+import { TermModule } from '../app/domain-modules/term.module';
+import { UserManagementModule } from '../app/domain-modules/user-management.module';
+import { CoscradEventFactory, EventModule } from '../domain/common';
 import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
 import { ArangoAudioItemQueryRepository } from '../domain/models/audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { ResourcePublished } from '../domain/models/shared/common-commands/publish-resource/resource-published.event';
@@ -62,7 +65,18 @@ describe(`CLI Command: **${CLI_COMMAND_NAME}**`, () => {
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
-            imports: [PersistenceModule.forRootAsync()],
+            imports: [
+                ConfigModule.forRoot({
+                    isGlobal: true,
+                    envFilePath: buildConfigFilePath(process.env.NODE_ENV),
+                    cache: false,
+                }),
+                PersistenceModule.forRootAsync(),
+                CommandModule,
+                EventModule,
+                UserManagementModule,
+                TermModule,
+            ],
         })
             .overrideProvider(ConfigService)
             .useValue(
@@ -108,6 +122,9 @@ describe(`CLI Command: **${CLI_COMMAND_NAME}**`, () => {
             .useValue(mockLogger)
             .overrideProvider(REPOSITORY_PROVIDER_TOKEN)
             .useValue(testRepositoryProvider)
+            // TODO why is this necessary?
+            .overrideProvider(ArangoConnectionProvider)
+            .useValue(app.get(ArangoConnectionProvider))
             .compile();
     });
 

@@ -23,7 +23,7 @@ import { PersistenceModule } from '../../../../../persistence/persistence.module
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { TestEventStream } from '../../../../../test-data/events';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
-import { AudioItemCreated } from '../commands/create-audio-item/transcript-created.event';
+import { AudioItemCreated } from '../commands/create-audio-item/audio-item-created.event';
 import { EventSourcedAudioItemViewModel } from '../queries';
 import { IAudioItemQueryRepository } from '../queries/audio-item-query-repository.interface';
 import { ArangoAudioItemQueryRepository } from './arango-audio-item-query-repository';
@@ -245,6 +245,24 @@ describe(`ArangoAudioItemQueryRepository`, () => {
             expect(foundTextRole).toBe(role);
 
             expect(foundText).toBe(translationOfName);
+        });
+    });
+
+    describe(`publish`, () => {
+        const targetAudioItem = additionalAudioItems[0];
+
+        beforeEach(async () => {
+            await testQueryRepository.create(targetAudioItem);
+        });
+
+        it(`should publish the audio item`, async () => {
+            await testQueryRepository.publish(targetAudioItem.id);
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetAudioItem.id
+            )) as EventSourcedAudioItemViewModel;
+
+            expect(updatedView.isPublished).toBe(true);
         });
     });
 });
