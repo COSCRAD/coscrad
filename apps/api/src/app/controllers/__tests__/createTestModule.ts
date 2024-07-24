@@ -498,8 +498,8 @@ export default async (
                     termQueryRepository: ArangoTermQueryRepository,
                     audioItemQueryRepository: ArangoAudioItemQueryRepository
                 ): IQueryRepositoryProvider => {
+                    // TODO use actual class for this
                     return {
-                        // @ts-expect-error TODO troubleshoot this error
                         forResource: (resourceType: ResourceType) => {
                             if (resourceType === ResourceType.term) {
                                 return termQueryRepository;

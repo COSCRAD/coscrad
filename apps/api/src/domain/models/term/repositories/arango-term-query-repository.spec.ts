@@ -11,6 +11,7 @@ import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../app/config/constants/Environment';
+import { ConsoleCoscradCliLogger } from '../../../../coscrad-cli/logging';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
@@ -87,7 +88,8 @@ describe(`ArangoTermQueryRepository`, () => {
 
         testQueryRepository = new ArangoTermQueryRepository(
             connectionProvider,
-            audioItemQueryRepository
+            audioItemQueryRepository,
+            new ConsoleCoscradCliLogger()
         );
 
         /**

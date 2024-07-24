@@ -17,10 +17,13 @@ import { PhotographViewModel } from '../../photograph.view-model';
 import { PlaylistViewModel } from '../../playlist.view-model';
 import { SongViewModel } from '../../song.view-model';
 import { SpatialFeatureViewModel } from '../../spatial-data/spatial-feature.view-model';
+import { VocabularyListViewModel } from '../../state-based-vocabulary-list.view-model';
 import { TagViewModel } from '../../tag.view-model';
 import { TermViewModel } from '../../term.view-model.state-based';
-import { VocabularyListViewModel } from '../../vocabulary-list.view-model';
 
+/**
+ * TODO Remove this once all resource views are event sourced.
+ */
 export const aggregateTypeToViewModelCtor: {
     [K in AggregateType]: Ctor<BaseViewModel>;
 } = {

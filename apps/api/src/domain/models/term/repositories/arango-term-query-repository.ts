@@ -186,6 +186,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         await cursor.all();
     }
 
+    // TODO share this with other resources
     async attribute(termId: AggregateId, contributorIds: AggregateId[]): Promise<void> {
         const query = `
         FOR doc IN @@collectionName
