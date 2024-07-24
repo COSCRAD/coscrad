@@ -2,6 +2,8 @@ import { IDetailQueryResult, IVocabularyListViewModel } from '@coscrad/api-inter
 import { Maybe } from '../../../../lib/types/maybe';
 import { AggregateId } from '../../../types/AggregateId';
 
+export const VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN = 'VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN';
+
 /**
  * TODO Absorb the detail query response piece into the view model interface.
  * However, there may be a case that these interfaces are actually the types
