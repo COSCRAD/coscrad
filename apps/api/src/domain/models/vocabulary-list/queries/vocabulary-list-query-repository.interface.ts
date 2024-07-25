@@ -1,4 +1,8 @@
-import { IDetailQueryResult, IVocabularyListViewModel } from '@coscrad/api-interfaces';
+import {
+    IDetailQueryResult,
+    IMultilingualTextItem,
+    IVocabularyListViewModel,
+} from '@coscrad/api-interfaces';
 import { Maybe } from '../../../../lib/types/maybe';
 import { AggregateId } from '../../../types/AggregateId';
 
@@ -38,5 +42,7 @@ export interface IVocabularyListQueryRepository {
      * each update query. We need to find a performant and extensible way to
      * do this.
      */
-    attribute(termId: AggregateId, contributorIds: AggregateId[]): Promise<void>;
+    attribute(id: AggregateId, contributorIds: AggregateId[]): Promise<void>;
+
+    translateName(id: AggregateId, translationItem: IMultilingualTextItem): Promise<void>;
 }

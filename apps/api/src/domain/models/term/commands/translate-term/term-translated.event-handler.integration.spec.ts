@@ -11,6 +11,7 @@ import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/Environment';
+import { ConsoleCoscradCliLogger } from '../../../../../coscrad-cli/logging';
 import {
     MultilingualText,
     MultilingualTextItem,
@@ -25,6 +26,7 @@ import generateDatabaseNameForTestSuite from '../../../../../persistence/reposit
 import { TermViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { TestEventStream } from '../../../../../test-data/events';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { ArangoAudioItemQueryRepository } from '../../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { ITermQueryRepository } from '../../queries';
 import { ArangoTermQueryRepository } from '../../repositories/arango-term-query-repository';
 import { TermCreated } from '../create-term';
@@ -106,7 +108,11 @@ describe(`TermTranslatedEventHandler.handle`, () => {
 
         arangoDatabaseForCollection = databaseProvider.getDatabaseForCollection('term__VIEWS');
 
-        testQueryRepository = new ArangoTermQueryRepository(connectionProvider);
+        testQueryRepository = new ArangoTermQueryRepository(
+            connectionProvider,
+            new ArangoAudioItemQueryRepository(connectionProvider),
+            new ConsoleCoscradCliLogger()
+        );
 
         termTranslatedEventHandler = new TermTranslatedEventHandler(testQueryRepository);
     });

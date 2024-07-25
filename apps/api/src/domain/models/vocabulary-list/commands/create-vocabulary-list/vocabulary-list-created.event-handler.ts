@@ -1,5 +1,5 @@
 import { Inject } from '@nestjs/common';
-import { ICoscradEventHandler } from '../../../../../domain/common';
+import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
 import { EventSourcedVocabularyListViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
 import {
     IVocabularyListQueryRepository,
@@ -7,6 +7,7 @@ import {
 } from '../../queries';
 import { VocabularyListCreated } from './vocabulary-list-created.event';
 
+@CoscradEventConsumer('VOCABULARY_LIST_CREATED')
 export class VocabularyListCreatedEventHandler implements ICoscradEventHandler {
     constructor(
         @Inject(VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN)

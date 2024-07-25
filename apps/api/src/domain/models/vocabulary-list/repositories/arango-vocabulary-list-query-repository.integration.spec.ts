@@ -1,4 +1,10 @@
-import { AggregateType, IVocabularyListViewModel, LanguageCode } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    IMultilingualTextItem,
+    IVocabularyListViewModel,
+    LanguageCode,
+    MultilingualTextItemRole,
+} from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -34,6 +40,8 @@ import { ArangoVocabularyListQueryRepository } from './arango-vocabulary-list-qu
 const vocabularyListIds = [123, 124, 125].map(buildDummyUuid);
 
 const originalLanguageCode = LanguageCode.Chilcotin;
+
+const translationLanguageCode = LanguageCode.English;
 
 const buildVocabularyListEventHistory = (
     id: AggregateId,
@@ -274,7 +282,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
         });
     });
 
-    describe(`allow user`, () => {
+    describe(`allowUser`, () => {
         const targetView = vocabularyListViews[0];
 
         const user = getValidAggregateInstanceForTest(AggregateType.user);
@@ -334,6 +342,47 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
             );
 
             expect(missingContributions).toEqual([]);
+        });
+    });
+
+    describe(`translateName`, () => {
+        const targetView = vocabularyListViews[0];
+
+        const translationText = 'name in translation langauge';
+
+        const translationRole = MultilingualTextItemRole.freeTranslation;
+
+        beforeEach(async () => {
+            await testQueryRepository.create(targetView);
+
+            await contributorRepository.createMany(testContributors);
+        });
+
+        it(`should translate the name for the given vocabulary list`, async () => {
+            // Act
+            await testQueryRepository.translateName(targetView.id, {
+                text: translationText,
+                languageCode: translationLanguageCode,
+                role: MultilingualTextItemRole.freeTranslation,
+            });
+
+            // Assert
+            const updatedView = (await testQueryRepository.fetchById(
+                targetView.id
+            )) as IVocabularyListViewModel;
+
+            const translationItemSearchResult = new MultilingualText(
+                updatedView.name
+            ).getTranslation(translationLanguageCode);
+
+            expect(translationItemSearchResult).not.toBe(NotFound);
+
+            const { text: foundText, role: foundRole } =
+                translationItemSearchResult as IMultilingualTextItem;
+
+            expect(foundText).toBe(translationText);
+
+            expect(foundRole).toBe(translationRole);
         });
     });
 });
