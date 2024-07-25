@@ -1,6 +1,7 @@
 import {
     ICommandFormAndLabels,
     IMultilingualTextItem,
+    IValueAndDisplay,
     IVocabularyListViewModel,
 } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
@@ -13,6 +14,7 @@ import { ArangoDatabaseProvider } from '../../../../persistence/database/databas
 import mapDatabaseDocumentToEntityDto from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDtoToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { AggregateId } from '../../../types/AggregateId';
+import { FilterPropertyType } from '../commands';
 import { IVocabularyListQueryRepository } from '../queries/vocabulary-list-query-repository.interface';
 
 export class ArangoVocabularyListQueryRepository implements IVocabularyListQueryRepository {
@@ -179,6 +181,56 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
             text: text,
             role: role,
             languageCode: languageCode,
+        };
+
+        const cursor = await this.database
+            .query({
+                query,
+                bindVars,
+            })
+            .catch((reason) => {
+                throw new InternalError(`Failed to translate term via TermRepository: ${reason}`);
+            });
+
+        await cursor.all();
+    }
+
+    async registerFilterProperty(
+        id: AggregateId,
+        name: string,
+        type: FilterPropertyType,
+        allowedValuesAndLabels: { value: string | boolean; label: string }[]
+    ) {
+        const options: IValueAndDisplay<string | boolean>[] = allowedValuesAndLabels.map(
+            // this mapping layer is a bit unfortunate
+            ({ value, label }) => ({
+                value,
+                display: label,
+            })
+        );
+
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+        let newField = {
+                    name: @name,
+                    type: @type,
+                    options: @options
+        }
+        UPDATE doc WITH {
+            form: {
+                fields: APPEND(doc.form.fields,newField)
+            }
+        } IN @@collectionName
+         RETURN OLD
+        `;
+
+        const bindVars = {
+            '@collectionName': 'vocabularyList__VIEWS',
+            id,
+            name,
+            type,
+            options,
         };
 
         const cursor = await this.database

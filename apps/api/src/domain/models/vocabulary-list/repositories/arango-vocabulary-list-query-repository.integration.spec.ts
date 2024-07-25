@@ -1,6 +1,7 @@
 import {
     AggregateType,
     IMultilingualTextItem,
+    IValueAndDisplay,
     IVocabularyListViewModel,
     LanguageCode,
     MultilingualTextItemRole,
@@ -33,7 +34,7 @@ import { AccessControlList } from '../../shared/access-control/access-control-li
 import idEquals from '../../shared/functional/idEquals';
 import { CoscradContributor } from '../../user-management/contributor';
 import { FullName } from '../../user-management/user/entities/user/full-name.entity';
-import { VocabularyListCreated } from '../commands';
+import { FilterPropertyType, VocabularyListCreated } from '../commands';
 import { IVocabularyListQueryRepository } from '../queries';
 import { ArangoVocabularyListQueryRepository } from './arango-vocabulary-list-query-repository';
 
@@ -383,6 +384,75 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
             expect(foundText).toBe(translationText);
 
             expect(foundRole).toBe(translationRole);
+        });
+    });
+
+    describe(`registerFilterProperty`, () => {
+        const targetView = vocabularyListViews[0];
+
+        const filterPropertyName = 'aspect';
+
+        // TODO checkbox test case
+        const filterPropertyType = FilterPropertyType.selection;
+
+        const allowedValuesAndLabels = [
+            {
+                value: '1',
+                label: 'progressive',
+            },
+            {
+                value: '2',
+                label: 'perfective',
+            },
+            {
+                value: '3',
+                label: 'inceptive-progressive',
+            },
+        ];
+
+        beforeEach(async () => {
+            await testQueryRepository.create(targetView);
+
+            await contributorRepository.createMany(testContributors);
+        });
+        describe(`when there is an existing vocabulary list`, () => {
+            it(`should register the given filter property`, async () => {
+                await testQueryRepository.registerFilterProperty(
+                    targetView.id,
+                    filterPropertyName,
+                    filterPropertyType,
+                    allowedValuesAndLabels
+                );
+
+                const updatedView = (await testQueryRepository.fetchById(
+                    targetView.id
+                )) as IVocabularyListViewModel;
+
+                const {
+                    form: { fields },
+                } = updatedView;
+
+                const formFieldSearchResult = fields.find(
+                    ({ name }) => name === filterPropertyName
+                );
+
+                expect(formFieldSearchResult).toBeTruthy();
+
+                const foundOptions = formFieldSearchResult.options as IValueAndDisplay<
+                    string | boolean
+                >[];
+
+                expect(foundOptions).toHaveLength(allowedValuesAndLabels.length);
+
+                const missingOptions = foundOptions.filter(
+                    (option) =>
+                        !allowedValuesAndLabels.some(
+                            ({ value, label }) => value === option.value && label === option.display
+                        )
+                );
+
+                expect(missingOptions).toEqual([]);
+            });
         });
     });
 });

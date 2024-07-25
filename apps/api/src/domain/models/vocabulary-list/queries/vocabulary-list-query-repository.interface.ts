@@ -5,6 +5,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { Maybe } from '../../../../lib/types/maybe';
 import { AggregateId } from '../../../types/AggregateId';
+import { FilterPropertyType } from '../commands';
 
 export const VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN = 'VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN';
 
@@ -45,4 +46,11 @@ export interface IVocabularyListQueryRepository {
     attribute(id: AggregateId, contributorIds: AggregateId[]): Promise<void>;
 
     translateName(id: AggregateId, translationItem: IMultilingualTextItem): Promise<void>;
+
+    registerFilterProperty(
+        id: AggregateId,
+        name: string,
+        type: FilterPropertyType,
+        allowedValuesAndLabels: { value: string | boolean; label: string }[]
+    );
 }
