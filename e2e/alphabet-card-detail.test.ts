@@ -108,8 +108,13 @@ describe('Detail with error', () => {
             await expect(element(by.id('imageError'))).toBeVisible();
         });
 
-        it('should display an error message if there is an audio error', async () => {
+        it('should display an error message if there is an letter audio error', async () => {
             await expect(element(by.id('audioError')).atIndex(0)).toBeVisible();
+            await expect(element(by.text('Error loading Play Letter audio'))).toBeVisible();
+        });
+        it('should display an error message if there is an word audio error', async () => {
+            await expect(element(by.id('audioError')).atIndex(0)).toBeVisible();
+            await expect(element(by.text('Error loading Play Word audio'))).toBeVisible();
         });
     });
 });
