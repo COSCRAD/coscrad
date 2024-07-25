@@ -17,6 +17,7 @@ import {
     TranslateVocabularyListNameCommandHandler,
     VocabularyListCreatedEventHandler,
 } from '../../domain/models/vocabulary-list/commands';
+import { TermAddedToVocabularyListEventHandler } from '../../domain/models/vocabulary-list/commands/add-term-to-vocabulary-list/term-added-to-vocabulary-list.event-handler';
 import { VocabularyListNameTranslated } from '../../domain/models/vocabulary-list/commands/translate-vocabulary-list-name/vocabulary-list-name-translated.event';
 import { VocabularyListNameTranslatedEventHandler } from '../../domain/models/vocabulary-list/commands/translate-vocabulary-list-name/vocabulary-list-name-translated.event-handler';
 import { VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN } from '../../domain/models/vocabulary-list/queries';
@@ -54,6 +55,7 @@ import { VocabularyListController } from '../controllers/resources/vocabulary-li
         // Event Handlers
         VocabularyListCreatedEventHandler,
         VocabularyListNameTranslatedEventHandler,
+        TermAddedToVocabularyListEventHandler,
         // Data Classes
         ...[
             CreateVocabularyList,

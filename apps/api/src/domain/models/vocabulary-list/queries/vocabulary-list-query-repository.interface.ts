@@ -52,5 +52,7 @@ export interface IVocabularyListQueryRepository {
         name: string,
         type: FilterPropertyType,
         allowedValuesAndLabels: { value: string | boolean; label: string }[]
-    );
+    ): Promise<void>;
+
+    addTerm(vocabularyListId: AggregateId, termId: AggregateId): Promise<void>;
 }

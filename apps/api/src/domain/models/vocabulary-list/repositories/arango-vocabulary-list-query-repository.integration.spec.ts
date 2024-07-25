@@ -23,6 +23,7 @@ import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoRepositoryForAggregate } from '../../../../persistence/repositories/arango-repository-for-aggregate';
 import { EventSourcedVocabularyListViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
+import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { TestEventStream } from '../../../../test-data/events';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
@@ -30,8 +31,12 @@ import buildInstanceFactory from '../../../factories/utilities/buildInstanceFact
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { AggregateId } from '../../../types/AggregateId';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import { ArangoAudioItemQueryRepository } from '../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import idEquals from '../../shared/functional/idEquals';
+import { TermCreated } from '../../term/commands';
+import { ITermQueryRepository } from '../../term/queries';
+import { ArangoTermQueryRepository } from '../../term/repositories';
 import { CoscradContributor } from '../../user-management/contributor';
 import { FullName } from '../../user-management/user/entities/user/full-name.entity';
 import { FilterPropertyType, VocabularyListCreated } from '../commands';
@@ -96,8 +101,29 @@ const testContributors = contributorIdsAndNames.map(({ contributorId, fullName }
     })
 );
 
+const termId = buildDummyUuid(777);
+
+const originalTextForTerm = 'apple';
+
+const termCreated = new TestEventStream().andThen<TermCreated>({
+    type: 'TERM_CREATED',
+    payload: {
+        text: originalTextForTerm,
+        languageCode: originalLanguageCode,
+    },
+});
+
+const [termCreationEvent] = termCreated.as({
+    type: AggregateType.term,
+    id: termId,
+}) as [TermCreated];
+
+const existingTerm = TermViewModel.fromTermCreated(termCreationEvent);
+
 describe(`ArangoVocabularyListQueryRepository`, () => {
     let testQueryRepository: IVocabularyListQueryRepository;
+
+    let termQueryRepository: ITermQueryRepository;
 
     let databaseProvider: ArangoDatabaseProvider;
 
@@ -132,6 +158,12 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
 
         testQueryRepository = new ArangoVocabularyListQueryRepository(
             databaseProvider,
+            new ConsoleCoscradCliLogger()
+        );
+
+        termQueryRepository = new ArangoTermQueryRepository(
+            connectionProvider,
+            new ArangoAudioItemQueryRepository(connectionProvider),
             new ConsoleCoscradCliLogger()
         );
 
@@ -453,6 +485,45 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
 
                 expect(missingOptions).toEqual([]);
             });
+        });
+    });
+
+    describe(`addTerm`, () => {
+        const targetView = vocabularyListViews[0];
+
+        beforeEach(async () => {
+            await testQueryRepository.create(targetView);
+
+            await contributorRepository.createMany(testContributors);
+
+            await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
+
+            await termQueryRepository.create(existingTerm);
+        });
+
+        it(`should add the expected term`, async () => {
+            await testQueryRepository.addTerm(targetView.id, existingTerm.id);
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetView.id
+            )) as IVocabularyListViewModel;
+
+            const entrySearchResult = updatedView.entries.find(
+                ({ term }) => term.id === existingTerm.id
+            );
+
+            expect(entrySearchResult).toBeTruthy();
+
+            const termText = new MultilingualText(entrySearchResult.term.name);
+
+            const { text: foundText, languageCode: foundLanguageCode } =
+                termText.getOriginalTextItem();
+
+            expect(foundText).toBe(originalTextForTerm);
+
+            expect(foundLanguageCode).toBe(originalLanguageCode);
+
+            // TODO verify additional properties
         });
     });
 });

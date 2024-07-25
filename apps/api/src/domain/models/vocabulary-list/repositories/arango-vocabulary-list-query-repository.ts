@@ -239,8 +239,52 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
                 bindVars,
             })
             .catch((reason) => {
-                throw new InternalError(`Failed to translate term via TermRepository: ${reason}`);
+                // TODO fix all error messages
+                throw new InternalError(
+                    `Failed to register vocabulary list filter property via TermRepository: ${reason}`
+                );
             });
+
+        await cursor.all();
+    }
+
+    async addTerm(vocabularyListId: AggregateId, termId: AggregateId): Promise<void> {
+        /**
+         * TODO We need to decide where to implement the "thin mapping layer"
+         * to convert Arango documents to view models (e.g., _key -> id) for
+         * eagerly joined data. See the way term ID is handled below.
+         *
+         * Because we are aiming to only send the "deltas" to the database
+         * in the query layer (with no fetching \ hydration of instances), we
+         * have to repeat `mapDatabaseDocumentToEntityDto` here. It feels more
+         * natural to do this in the query service.
+         */
+        const query = `
+            for v in @@collectionName
+            filter v._key == @id
+            for t in term__VIEWS
+            filter t._key == @termId
+            let newEntry = {
+                term: MERGE(t,{id: t._key}),
+                variableValues: {}
+            }
+            update v with {
+                entries: APPEND(v.entries,newEntry)
+            } in @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'vocabularyList__VIEWS',
+            id: vocabularyListId,
+            termId,
+        };
+
+        const cursor = await this.database.query({ query, bindVars }).catch((error) => {
+            throw new InternalError(
+                `failed to add term: ${termId} to vocabulary list: ${vocabularyListId}`,
+                [error]
+            );
+        });
 
         await cursor.all();
     }

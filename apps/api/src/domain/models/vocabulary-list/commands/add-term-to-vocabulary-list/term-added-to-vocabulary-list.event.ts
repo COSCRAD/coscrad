@@ -6,5 +6,5 @@ export type TermAddedToVocabularyListPayload = AddTermToVocabularyList;
 
 @CoscradEvent('TERM_ADDED_TO_VOCABULARY_LIST')
 export class TermAddedToVocabularyList extends BaseEvent<TermAddedToVocabularyListPayload> {
-    type = 'TERM_ADDED_TO_VOCABULARY_LIST';
+    readonly type = 'TERM_ADDED_TO_VOCABULARY_LIST';
 }
