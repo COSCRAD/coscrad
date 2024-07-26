@@ -61,6 +61,16 @@ export class EventSourcedVocabularyListViewModel
         return view;
     }
 
+    /**
+     * TODO If we really want to do this, we need to find a way to share the
+     * logic with the event consumers. Unfortunately, the latter simply emit
+     * deltas to the database with no up-front reads. It seems that we might
+     * want a pattern where we calculate the delta to the view model for a given
+     * event, and apply simply becomes pattern match + left fold over these deltas.
+     *
+     * For now, since the only use case is using event-sourced instead of state-based test setup,
+     * we have decided to simpy change our approach to state based.
+     */
     apply(event: ICoscradEvent) {
         if (event.isOfType('VOCABULARY_LIST_PROPERTY_FILTER_REGISTERED')) {
             const {

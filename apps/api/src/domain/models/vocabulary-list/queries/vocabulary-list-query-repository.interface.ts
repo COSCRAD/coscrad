@@ -55,4 +55,10 @@ export interface IVocabularyListQueryRepository {
     ): Promise<void>;
 
     addTerm(vocabularyListId: AggregateId, termId: AggregateId): Promise<void>;
+
+    analyzeTerm(
+        vocabularyListId: AggregateId,
+        termId: AggregateId,
+        propertyValues: Record<string, string | boolean>
+    ): Promise<void>;
 }

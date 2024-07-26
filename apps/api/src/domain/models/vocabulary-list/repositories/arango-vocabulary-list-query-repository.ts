@@ -288,4 +288,43 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
 
         await cursor.all();
     }
+
+    async analyzeTerm(
+        vocabularyListId: AggregateId,
+        termId: AggregateId,
+        propertyValues: Record<string, string | boolean>
+    ): Promise<void> {
+        const query = `
+        for v in @@collectionName
+        filter v._key == @vocabularyListId
+        let newEntries = (
+            for e in v.entries
+            let propertyValueUpdates = e.term.id == @termId ? @propertyValues : {}
+            return MERGE(e,{ variableValues: MERGE(e.variableValues,propertyValueUpdates)})
+        ) 
+        update v with {
+            entries: newEntries
+        } in @@collectionName
+        return OLD
+        `;
+
+        const cursor = await this.database
+            .query({
+                query,
+                bindVars: {
+                    '@collectionName': 'vocabularyList__VIEWS',
+                    vocabularyListId,
+                    termId,
+                    propertyValues,
+                },
+            })
+            .catch((error) => {
+                throw new InternalError(
+                    `Failed to analyze entry (term: ${termId}) in vocabulary list: ${vocabularyListId}`,
+                    [error]
+                );
+            });
+
+        await cursor.all();
+    }
 }

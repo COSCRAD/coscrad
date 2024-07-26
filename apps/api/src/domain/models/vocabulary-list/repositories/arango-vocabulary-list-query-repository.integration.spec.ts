@@ -1,5 +1,7 @@
 import {
     AggregateType,
+    FormFieldType,
+    IDetailQueryResult,
     IMultilingualTextItem,
     IValueAndDisplay,
     IVocabularyListViewModel,
@@ -26,6 +28,7 @@ import { EventSourcedVocabularyListViewModel } from '../../../../queries/buildVi
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { TestEventStream } from '../../../../test-data/events';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import buildInstanceFactory from '../../../factories/utilities/buildInstanceFactory';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
@@ -119,6 +122,26 @@ const [termCreationEvent] = termCreated.as({
 }) as [TermCreated];
 
 const existingTerm = TermViewModel.fromTermCreated(termCreationEvent);
+
+const filterPropertyName = 'aspect';
+
+// TODO checkbox test case
+const filterPropertyType: FilterPropertyType = FilterPropertyType.selection;
+
+const allowedValuesAndLabels = [
+    {
+        value: '1',
+        label: 'progressive',
+    },
+    {
+        value: '2',
+        label: 'perfective',
+    },
+    {
+        value: '3',
+        label: 'inceptive-progressive',
+    },
+];
 
 describe(`ArangoVocabularyListQueryRepository`, () => {
     let testQueryRepository: IVocabularyListQueryRepository;
@@ -422,26 +445,6 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
     describe(`registerFilterProperty`, () => {
         const targetView = vocabularyListViews[0];
 
-        const filterPropertyName = 'aspect';
-
-        // TODO checkbox test case
-        const filterPropertyType = FilterPropertyType.selection;
-
-        const allowedValuesAndLabels = [
-            {
-                value: '1',
-                label: 'progressive',
-            },
-            {
-                value: '2',
-                label: 'perfective',
-            },
-            {
-                value: '3',
-                label: 'inceptive-progressive',
-            },
-        ];
-
         beforeEach(async () => {
             await testQueryRepository.create(targetView);
 
@@ -524,6 +527,98 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
             expect(foundLanguageCode).toBe(originalLanguageCode);
 
             // TODO verify additional properties
+        });
+    });
+
+    describe(`analyzeTerm`, () => {
+        describe(`when there is an entry for an existing term, but no existing analysis (property values)`, () => {
+            const targetVocabularyListId = buildDummyUuid(987);
+
+            // TODO deal with this awkward type
+            const targetView: IDetailQueryResult<IVocabularyListViewModel> = {
+                id: targetVocabularyListId,
+                name: buildMultilingualTextWithSingleItem(
+                    'vocabulary list with existing entry',
+                    LanguageCode.English
+                ),
+                form: {
+                    fields: [
+                        {
+                            name: filterPropertyName,
+                            label: 'who is doing the action',
+                            description: 'select the subject of the verb in the paradigm',
+                            constraints: [],
+                            type:
+                                filterPropertyType === FilterPropertyType.selection
+                                    ? FormFieldType.staticSelect
+                                    : FormFieldType.switch,
+                            options: allowedValuesAndLabels.map(({ label, value }) => ({
+                                display: label,
+                                value,
+                            })),
+                        },
+                    ],
+                },
+                isPublished: false,
+                accessControlList: new AccessControlList(),
+                contributions: [],
+
+                entries: [
+                    {
+                        term: existingTerm,
+                        variableValues: {},
+                    },
+                ],
+                actions: [],
+            };
+
+            beforeEach(async () => {
+                await testQueryRepository.create(targetView);
+
+                await contributorRepository.createMany(testContributors);
+
+                await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
+
+                await termQueryRepository.create(existingTerm);
+            });
+
+            it(`should add the filter property values for the given entry`, async () => {
+                const valueForProperty = allowedValuesAndLabels[0].value;
+
+                // act
+                await testQueryRepository.analyzeTerm(targetView.id, existingTerm.id, {
+                    // TODO add test case where mutliple properties are analyzed
+                    // TODO add test case where there are existing properties with values for this entry
+                    [filterPropertyName]: valueForProperty,
+                });
+
+                const updatedView = (await testQueryRepository.fetchById(
+                    targetView.id
+                )) as IVocabularyListViewModel;
+
+                const targetEntry = updatedView.entries.find(
+                    ({ term }) => term.id === existingTerm.id
+                );
+
+                expect(targetEntry).toBeTruthy();
+
+                expect([...Object.entries(targetEntry.variableValues)]).toHaveLength(1);
+
+                expect(
+                    Object.entries(targetEntry.variableValues).some(
+                        ([foundName, foundValue]) =>
+                            foundName === filterPropertyName && foundValue === valueForProperty
+                    )
+                );
+            });
+        });
+
+        describe(`when there is an entry for an existing term and it has some existing analysis (property values)`, () => {
+            /**
+             * We need to revisit the domain logic and make sure we are handling
+             * use cases that will actually happen with the real data.
+             */
+            it.todo('should merge the new property values with the old');
         });
     });
 });
