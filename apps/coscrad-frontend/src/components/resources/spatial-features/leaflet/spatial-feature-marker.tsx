@@ -78,9 +78,9 @@ const lookupTable: {
     ),
 };
 
-const iconUrl = 'https://www.digiteched.com/content/images/2022/12/marker-icon.png';
+const iconUrl = 'https://coscrad.org/wp-content/uploads/2024/07/marker-icon-2x.png';
 
-const shadowUrl = 'https://www.digiteched.com/content/images/2022/12/marker-shadow.png';
+const shadowUrl = 'https://coscrad.org/wp-content/uploads/2024/07/marker-shadow.png';
 
 interface Props {
     spatialFeature: ISpatialFeatureViewModel;
@@ -123,8 +123,10 @@ export const buildSpatialFeatureMarker =
         const DefaultIcon = new LeafletIcon({
             iconUrl,
             shadowUrl,
-            iconAnchor: [12, 41],
-            shadowAnchor: [10, 42],
+            iconSize: [20, 30],
+            shadowSize: [35, 50],
+            iconAnchor: [10, 29],
+            shadowAnchor: [11, 50],
         });
 
         // TODO Fix this hack
