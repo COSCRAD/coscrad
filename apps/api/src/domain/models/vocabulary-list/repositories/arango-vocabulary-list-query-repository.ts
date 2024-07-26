@@ -15,6 +15,7 @@ import mapDatabaseDocumentToEntityDto from '../../../../persistence/database/uti
 import mapEntityDtoToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { AggregateId } from '../../../types/AggregateId';
 import { FilterPropertyType } from '../commands';
+import { VocabularyListEntryImportItem } from '../entities/vocabulary-list.entity';
 import { IVocabularyListQueryRepository } from '../queries/vocabulary-list-query-repository.interface';
 
 export class ArangoVocabularyListQueryRepository implements IVocabularyListQueryRepository {
@@ -91,7 +92,6 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
             allowedUserIds: APPEND(doc.accessControlList.allowedUserIds,[@userId])
         }
     } IN @@collectionName
-     RETURN OLD
     `;
 
         const bindVars = {
@@ -321,6 +321,53 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
             .catch((error) => {
                 throw new InternalError(
                     `Failed to analyze entry (term: ${termId}) in vocabulary list: ${vocabularyListId}`,
+                    [error]
+                );
+            });
+
+        await cursor.all();
+    }
+
+    /**
+     * TODO change ~~variableValues~~ to ~~propertyValues~~ (breaking change to contract with client)
+     */
+    async importEntries(
+        vocabularyListId: AggregateId,
+        entries: VocabularyListEntryImportItem[]
+    ): Promise<void> {
+        const query = `
+        for v in @@collectionName
+        filter v._key == @vocabularyListId
+        let newEntries = (
+            for e in @entries
+            for t in term__VIEWS
+            filter t._key == e.termId
+            return {
+                term: MERGE(t,{
+                    id: t._key
+                }),
+                variableValues: e.propertyValues
+            }
+        )
+        update v with {
+            entries: APPEND(v.entries,newEntries)
+        } in @@collectionName
+        `;
+
+        const cursor = await this.database
+            .query({
+                query,
+                bindVars: {
+                    '@collectionName': 'vocabularyList__VIEWS',
+                    vocabularyListId,
+                    entries,
+                },
+            })
+            .catch((error) => {
+                throw new InternalError(
+                    `Failed to import entries (${JSON.stringify(
+                        entries
+                    )}) to vocabulary list: ${vocabularyListId}`,
                     [error]
                 );
             });

@@ -614,11 +614,88 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
         });
 
         describe(`when there is an entry for an existing term and it has some existing analysis (property values)`, () => {
+            const targetVocabularyListId = buildDummyUuid(987);
+
+            // TODO deal with this awkward type
+            const targetView: IDetailQueryResult<IVocabularyListViewModel> = {
+                id: targetVocabularyListId,
+                name: buildMultilingualTextWithSingleItem(
+                    'vocabulary list with existing entry',
+                    LanguageCode.English
+                ),
+                form: {
+                    fields: [
+                        {
+                            name: filterPropertyName,
+                            label: 'who is doing the action',
+                            description: 'select the subject of the verb in the paradigm',
+                            constraints: [],
+                            type:
+                                filterPropertyType === FilterPropertyType.selection
+                                    ? FormFieldType.staticSelect
+                                    : FormFieldType.switch,
+                            options: allowedValuesAndLabels.map(({ label, value }) => ({
+                                display: label,
+                                value,
+                            })),
+                        },
+                    ],
+                },
+                isPublished: false,
+                accessControlList: new AccessControlList(),
+                contributions: [],
+
+                entries: [
+                    // empty
+                ],
+                actions: [],
+            };
+
+            beforeEach(async () => {
+                await testQueryRepository.create(targetView);
+
+                await contributorRepository.createMany(testContributors);
+
+                await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
+
+                await termQueryRepository.create(existingTerm);
+            });
+
             /**
              * We need to revisit the domain logic and make sure we are handling
              * use cases that will actually happen with the real data.
              */
-            it.todo('should merge the new property values with the old');
+            it('should merge the new property values with the old', async () => {
+                const selectedFilterPropertyValue = allowedValuesAndLabels[0].value;
+
+                await testQueryRepository.importEntries(targetView.id, [
+                    {
+                        termId: existingTerm.id,
+                        propertyValues: {
+                            [filterPropertyName]: selectedFilterPropertyValue,
+                        },
+                        // TODO add additional terms here
+                    },
+                ]);
+
+                const updatedView = (await testQueryRepository.fetchById(
+                    targetView.id
+                )) as IVocabularyListViewModel;
+
+                const { entries } = updatedView;
+
+                expect(entries).toHaveLength(1);
+
+                const searchResult = entries.find(({ term }) => term.id == existingTerm.id);
+
+                expect(searchResult).toBeTruthy();
+
+                expect([...Object.keys(searchResult.variableValues)]).toHaveLength(1);
+
+                expect(searchResult.variableValues[filterPropertyName]).toBe(
+                    selectedFilterPropertyValue
+                );
+            });
         });
     });
 });

@@ -6,6 +6,7 @@ import {
 import { Maybe } from '../../../../lib/types/maybe';
 import { AggregateId } from '../../../types/AggregateId';
 import { FilterPropertyType } from '../commands';
+import { VocabularyListEntryImportItem } from '../entities/vocabulary-list.entity';
 
 export const VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN = 'VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN';
 
@@ -60,5 +61,10 @@ export interface IVocabularyListQueryRepository {
         vocabularyListId: AggregateId,
         termId: AggregateId,
         propertyValues: Record<string, string | boolean>
+    ): Promise<void>;
+
+    importEntries(
+        vocabularyListId: AggregateId,
+        entries: VocabularyListEntryImportItem[]
     ): Promise<void>;
 }
