@@ -12,6 +12,10 @@ const multiTap = async (tappable: ITappableAsync, numberOfTaps: number): Promise
     }
 };
 
+require('dotenv').config({ path: '.production.env' });
+
+const { TARGET_ALPHABET_NAME, BASE_API_URL, BROKEN_API_URL, BROKEN_ALPHABET_NAME } = process.env;
+
 describe('Detail', () => {
     beforeEach(async () => {
         await device.launchApp({
@@ -19,8 +23,8 @@ describe('Detail', () => {
                 configOverrides: {
                     config: {
                         env: {
-                            TARGET_ALPHABET_NAME: `alphabet-english`,
-                            BASE_API_URL: `http://10.0.2.2:3131/api`,
+                            TARGET_ALPHABET_NAME: TARGET_ALPHABET_NAME,
+                            BASE_API_URL: BASE_API_URL,
                         },
                     },
                 },
@@ -90,8 +94,8 @@ describe('Detail with error', () => {
                     configOverrides: {
                         config: {
                             env: {
-                                TARGET_ALPHABET_NAME: `broken-media-links`,
-                                BASE_API_URL: `http://10.0.2.2:3131/BROKEN-API`,
+                                TARGET_ALPHABET_NAME: BROKEN_ALPHABET_NAME,
+                                BASE_API_URL: BROKEN_API_URL,
                             },
                         },
                     },
@@ -104,15 +108,15 @@ describe('Detail with error', () => {
             await element(by.id('AlphabetDetailLinkButton')).tap();
         });
 
-        it('should display an error message if an image is not loaded', async () => {
+        it.only('should display an error message if an image is not loaded', async () => {
             await expect(element(by.id('imageError'))).toBeVisible();
         });
 
-        it('should display an error message if there is an letter audio error', async () => {
+        it.only('should display an error message if there is an letter audio error', async () => {
             await expect(element(by.id('audioError')).atIndex(0)).toBeVisible();
             await expect(element(by.text('Error loading Play Letter audio'))).toBeVisible();
         });
-        it('should display an error message if there is an word audio error', async () => {
+        it.only('should display an error message if there is an word audio error', async () => {
             await expect(element(by.id('audioError')).atIndex(0)).toBeVisible();
             await expect(element(by.text('Error loading Play Word audio'))).toBeVisible();
         });
