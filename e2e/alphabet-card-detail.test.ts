@@ -108,15 +108,15 @@ describe('Detail with error', () => {
             await element(by.id('AlphabetDetailLinkButton')).tap();
         });
 
-        it.only('should display an error message if an image is not loaded', async () => {
+        it('should display an error message if an image is not loaded', async () => {
             await expect(element(by.id('imageError'))).toBeVisible();
         });
 
-        it.only('should display an error message if there is an letter audio error', async () => {
+        it('should display an error message if there is an letter audio error', async () => {
             await expect(element(by.id('audioError')).atIndex(0)).toBeVisible();
             await expect(element(by.text('Error loading Play Letter audio'))).toBeVisible();
         });
-        it.only('should display an error message if there is an word audio error', async () => {
+        it('should display an error message if there is an word audio error', async () => {
             await expect(element(by.id('audioError')).atIndex(0)).toBeVisible();
             await expect(element(by.text('Error loading Play Word audio'))).toBeVisible();
         });
