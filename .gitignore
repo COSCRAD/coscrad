@@ -41,6 +41,7 @@ Thumbs.db
 # environment files
 *.env
 cypress.env.json
+!.mobile-alphabet.SAMPLE.env
 
 # data for data processing scripts
 /scripts/data-processing/data
