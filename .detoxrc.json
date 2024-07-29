@@ -47,7 +47,7 @@
         "emulator": {
             "type": "android.emulator",
             "device": {
-                "avdName": "Pixel_7_Pro_Edited_API_34"
+                "avdName": "Pixel_7_Pro_Edited_API_35"
             }
         }
     },

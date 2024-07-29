@@ -12,20 +12,13 @@ const multiTap = async (tappable: ITappableAsync, numberOfTaps: number): Promise
     }
 };
 
+const BROKEN_API_URL = `http://10.0.2.2:3131/BROKEN-API`;
+
+const BROKEN_ALPHABET_NAME = `broken-media-links`;
+
 describe('Detail', () => {
     beforeEach(async () => {
-        await device.launchApp({
-            launchArgs: {
-                configOverrides: {
-                    config: {
-                        env: {
-                            TARGET_ALPHABET_NAME: `alphabet-english`,
-                            BASE_API_URL: `http://10.0.2.2:3131/api`,
-                        },
-                    },
-                },
-            },
-        });
+        await device.launchApp();
 
         await device.reloadReactNative();
 
@@ -90,8 +83,8 @@ describe('Detail with error', () => {
                     configOverrides: {
                         config: {
                             env: {
-                                TARGET_ALPHABET_NAME: `broken-media-links`,
-                                BASE_API_URL: `http://10.0.2.2:3131/BROKEN-API`,
+                                TARGET_ALPHABET_NAME: BROKEN_ALPHABET_NAME,
+                                BASE_API_URL: BROKEN_API_URL,
                             },
                         },
                     },
