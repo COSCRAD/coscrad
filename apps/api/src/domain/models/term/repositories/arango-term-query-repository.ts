@@ -42,10 +42,15 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
     }
 
     async create(view: ITermViewModel & { actions: ICommandFormAndLabels[] }): Promise<void> {
-        await this.database.create(mapEntityDTOToDatabaseDocument(view)).catch((error) => {
+        const document = mapEntityDTOToDatabaseDocument(view);
+
+        await this.database.create(document).catch((error) => {
             console.warn({ error });
             throw new InternalError(error);
         });
+
+        // TODO remove this line
+        console.log('done');
     }
 
     async createMany(

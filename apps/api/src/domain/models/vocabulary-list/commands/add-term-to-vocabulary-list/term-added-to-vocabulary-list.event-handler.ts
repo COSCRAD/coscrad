@@ -1,11 +1,12 @@
 import { Inject } from '@nestjs/common';
-import { ICoscradEventHandler } from '../../../../../domain/common';
+import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
 import {
     IVocabularyListQueryRepository,
     VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
 } from '../../queries';
 import { TermAddedToVocabularyList } from './term-added-to-vocabulary-list.event';
 
+@CoscradEventConsumer('TERM_ADDED_TO_VOCABULARY_LIST')
 export class TermAddedToVocabularyListEventHandler implements ICoscradEventHandler {
     constructor(
         @Inject(VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN)

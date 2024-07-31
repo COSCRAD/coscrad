@@ -228,6 +228,11 @@ import {
     TranslateVocabularyListName,
     TranslateVocabularyListNameCommandHandler,
 } from '../../../domain/models/vocabulary-list/commands';
+import {
+    IVocabularyListQueryRepository,
+    VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
+} from '../../../domain/models/vocabulary-list/queries';
+import { ArangoVocabularyListQueryRepository } from '../../../domain/models/vocabulary-list/repositories';
 import { AudioItemQueryService } from '../../../domain/services/query-services/audio-item-query.service';
 import { BibliographicCitationQueryService } from '../../../domain/services/query-services/bibliographic-citation-query.service';
 import { CoscradUserGroupQueryService } from '../../../domain/services/query-services/coscrad-user-group-query.service';
@@ -492,6 +497,16 @@ export default async (
                 inject: [ArangoConnectionProvider, AUDIO_QUERY_REPOSITORY_TOKEN],
             },
             {
+                provide: VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
+                useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
+                    new ArangoVocabularyListQueryRepository(
+                        arangoConnectionProvider,
+                        new ConsoleCoscradCliLogger()
+                    ),
+                inject: [ArangoConnectionProvider],
+            },
+
+            {
                 //  TODO use a const for this
                 provide: 'QUERY_REPOSITORY_PROVIDER',
                 useFactory: (
@@ -529,10 +544,14 @@ export default async (
             {
                 provide: VocabularyListQueryService,
                 useFactory: (
-                    repositoryProvider: ArangoRepositoryProvider,
+                    vocabularyListQueryRepository: IVocabularyListQueryRepository,
                     commandInfoService: CommandInfoService
-                ) => new VocabularyListQueryService(repositoryProvider, commandInfoService),
-                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService, ConfigService],
+                ) =>
+                    new VocabularyListQueryService(
+                        vocabularyListQueryRepository,
+                        commandInfoService
+                    ),
+                inject: [VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN, CommandInfoService],
             },
             {
                 provide: AudioItemQueryService,

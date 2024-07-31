@@ -9,8 +9,9 @@ import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from '../../../../coscrad-cli/lo
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { isNotFound } from '../../../../lib/types/not-found';
+import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
+import { ArangoDatabase } from '../../../../persistence/database/arango-database';
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
-import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import mapDatabaseDocumentToEntityDto from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDtoToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { AggregateId } from '../../../types/AggregateId';
@@ -22,10 +23,14 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
     private readonly database: ArangoDatabaseForCollection<IVocabularyListViewModel>;
 
     constructor(
-        databaseProvider: ArangoDatabaseProvider,
+        arangoConnectionProvider: ArangoConnectionProvider,
         @Inject(COSCRAD_LOGGER_TOKEN) _logger: ICoscradLogger
     ) {
-        this.database = databaseProvider.getDatabaseForCollection('vocabularyList__VIEWS');
+        // why not do this in the module instead of here?
+        this.database = new ArangoDatabaseForCollection(
+            new ArangoDatabase(arangoConnectionProvider.getConnection()),
+            'vocabularyList__VIEWS'
+        );
     }
 
     async fetchById(

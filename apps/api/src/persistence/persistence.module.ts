@@ -11,6 +11,10 @@ import { IQueryRepositoryProvider } from '../domain/models/shared/common-command
 import { ITermQueryRepository, TERM_QUERY_REPOSITORY_TOKEN } from '../domain/models/term/queries';
 import { ArangoTermQueryRepository } from '../domain/models/term/repositories';
 import { ArangoQueryRepositoryProvider } from '../domain/models/term/repositories/arango-query-repository-provider';
+import {
+    IVocabularyListQueryRepository,
+    VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
+} from '../domain/models/vocabulary-list/queries';
 import { ID_RESPOSITORY_TOKEN } from '../lib/id-generation/interfaces/id-repository.interface';
 import { DigitalTextQueryRepository } from '../queries/digital-text/digital-text.query-repository';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../validation';
@@ -146,10 +150,19 @@ export class PersistenceModule implements OnApplicationShutdown {
             provide: 'QUERY_REPOSITORY_PROVIDER',
             useFactory: (
                 termQueryRepository: ITermQueryRepository,
-                audioItemQueryRepository: IAudioItemQueryRepository
+                audioItemQueryRepository: IAudioItemQueryRepository,
+                vocabularyListQueryRepository: IVocabularyListQueryRepository
             ): IQueryRepositoryProvider =>
-                new ArangoQueryRepositoryProvider(termQueryRepository, audioItemQueryRepository),
-            inject: [TERM_QUERY_REPOSITORY_TOKEN, AUDIO_QUERY_REPOSITORY_TOKEN],
+                new ArangoQueryRepositoryProvider(
+                    termQueryRepository,
+                    audioItemQueryRepository,
+                    vocabularyListQueryRepository
+                ),
+            inject: [
+                TERM_QUERY_REPOSITORY_TOKEN,
+                AUDIO_QUERY_REPOSITORY_TOKEN,
+                VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
+            ],
         };
 
         return {

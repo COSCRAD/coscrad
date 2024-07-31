@@ -7,7 +7,7 @@ import { CoscradEventConsumer } from './coscrad-event-consumer.decorator';
 import { CoscradEvent } from './coscrad-event.decorator';
 import { ICoscradEvent } from './coscrad-event.interface';
 import { EventModule } from './event.module';
-import { InMemoryEventPublisher } from './in-memory-event-publisher';
+import { ObservableInMemoryEventPublisher } from './in-memory-event-publisher';
 
 @CoscradEvent(`WIDGET_CREATED`)
 class WidgetCreated implements ICoscradEvent {
@@ -95,7 +95,7 @@ describe(`InMemoryEventPublisher`, () => {
 
     let widgetRepository: WidgetRepository;
 
-    let eventPublisher: InMemoryEventPublisher;
+    let eventPublisher: ObservableInMemoryEventPublisher;
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({

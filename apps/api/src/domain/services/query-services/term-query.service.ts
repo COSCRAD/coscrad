@@ -92,8 +92,6 @@ export class TermQueryService {
             entities: availableEntities.map((entity) => {
                 Object.assign(entity, { audioURL: this.buildAudioUrl(entity.mediaItemId) });
 
-                console.log({ fullEntity: entity });
-
                 return {
                     ...entity,
                     audioURL: this.buildAudioUrl(entity.mediaItemId),
@@ -104,6 +102,7 @@ export class TermQueryService {
         };
     }
 
+    // TODO share this code with other query services
     private fetchUserActions(
         systemUser: CoscradUserWithGroups,
         commandContexts: CommandContext[]

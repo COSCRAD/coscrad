@@ -7,7 +7,7 @@ import { ICoscradEvent } from './coscrad-event.interface';
 import { ICoscradEventPublisher } from './interfaces';
 import { ObservableBus } from './utils';
 
-export class InMemoryEventPublisher
+export class ObservableInMemoryEventPublisher
     extends ObservableBus<ICoscradEvent>
     implements ICoscradEventPublisher, OnModuleDestroy
 {
