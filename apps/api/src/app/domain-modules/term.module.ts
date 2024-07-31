@@ -16,11 +16,13 @@ import {
     PromptTermCreated,
     TermCreated,
     TermElicitedFromPrompt,
+    TermElicitedFromPromptEventHandler,
     TermTranslated,
     TranslateTerm,
     TranslateTermCommandHandler,
 } from '../../domain/models/term/commands';
 import { AudioAddedForTermEventHandler } from '../../domain/models/term/commands/add-audio-for-term/audio-added-for-term.event-handler';
+import { PromptTermCreatedEventHandler } from '../../domain/models/term/commands/create-prompt-term/prompt-term-created.event-handler';
 import { TermCreatedEventHandler } from '../../domain/models/term/commands/create-term/term-created.event-handler';
 import { TermTranslatedEventHandler } from '../../domain/models/term/commands/translate-term/term-translated.event-handler';
 import { Term } from '../../domain/models/term/entities/term.entity';
@@ -86,6 +88,8 @@ import { TermController } from '../controllers/resources/term.controller';
         // Event Handlers
         TermCreatedEventHandler,
         TermTranslatedEventHandler,
+        PromptTermCreatedEventHandler,
+        TermElicitedFromPromptEventHandler,
         AudioAddedForTermEventHandler,
     ],
 })
