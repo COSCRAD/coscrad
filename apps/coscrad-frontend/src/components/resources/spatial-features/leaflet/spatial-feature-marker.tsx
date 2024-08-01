@@ -78,7 +78,13 @@ const lookupTable: {
     ),
 };
 
-const iconUrl = 'https://coscrad.org/wp-content/uploads/2024/07/marker-icon-2x.png';
+/**
+ * Would be good to make this a custom marker image as well for each spatial
+ * feature.  So instead of `imageUrl`, there could be `markerIconImageUrl` and
+ * `previewIconImageUrl`
+ */
+
+const iconUrl = 'http://coscrad.org/wp-content/uploads/2024/07/XK-Xuuya.png';
 
 const shadowUrl = 'https://coscrad.org/wp-content/uploads/2024/07/marker-shadow.png';
 

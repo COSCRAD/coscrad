@@ -2,7 +2,7 @@ import { IValueAndDisplay } from '@coscrad/api-interfaces';
 import { Grid } from '@mui/material';
 import { truncateText } from '../../string-processor/shorten-string';
 
-const MAXIMUM_NUMBER_OF_CHARACTERS = 70;
+const MAXIMUM_NUMBER_OF_CHARACTERS = 170;
 
 /**
  * Provides a standard presentation for a single property on a view model
