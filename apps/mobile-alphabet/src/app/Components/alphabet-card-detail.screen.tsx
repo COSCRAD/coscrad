@@ -20,7 +20,7 @@ const isUndefined = (input: unknown): input is undefined => typeof input === 'un
 const isNullOrUndefined = (input: unknown): input is null | undefined =>
     isNull(input) || isUndefined(input);
 
-export function AlphabetCardDetailScreen() {
+export function AlphabetCardDetailScreen({ route }) {
     const {
         env: { BASE_API_URL, TARGET_ALPHABET_NAME },
     } = useConfig();
@@ -28,6 +28,8 @@ export function AlphabetCardDetailScreen() {
     const dispatch = useDispatch<AppDispatch>();
 
     const { isLoading, errorInfo, data: alphabetData } = useSelector(selectAlphabet);
+
+    const initialCardNumber = route.params.selectedCardNumber || 1;
 
     // TODO create a `useLoadableAlphabet` hook
     // Better yet, createa  `useLoadableCardBySequenceNumber` hooks
@@ -38,7 +40,8 @@ export function AlphabetCardDetailScreen() {
     const [imageError, setImageError] = useState(false);
 
     // Sequence numbers are indexed starting at 1
-    const [selectedLetterSequenceNumber, setSelectedLetterSequenceNumber] = useState<number>(1);
+    const [selectedLetterSequenceNumber, setSelectedLetterSequenceNumber] =
+        useState<number>(initialCardNumber);
 
     if (isLoading || isNull(alphabetData)) {
         return <Text>Loading...</Text>;
@@ -72,8 +75,6 @@ export function AlphabetCardDetailScreen() {
         word_audio,
         standalone_image,
     } = selectedCard;
-
-    const apiUrlPrefix = `${BASE_API_URL}/games/${TARGET_ALPHABET_NAME}`;
 
     return (
         <View testID="AlphabetCardDetail">
