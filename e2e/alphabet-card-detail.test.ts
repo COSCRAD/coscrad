@@ -23,11 +23,35 @@ describe('Detail', () => {
         await device.reloadReactNative();
 
         await element(by.id('Menu')).tap();
-        await element(by.id('AlphabetDetailLinkButton')).tap();
+        await element(by.id('1')).tap();
     });
 
     afterAll(async () => {
         await device.terminateApp();
+    });
+
+    describe('Selecting a letter', () => {
+        beforeEach(async () => {
+            await device.launchApp();
+
+            await device.reloadReactNative();
+
+            await element(by.id('Menu')).tap();
+        });
+
+        afterAll(async () => {
+            await device.terminateApp();
+        });
+        it('should navigate to the letter B', async () => {
+            await element(by.id('2')).tap();
+
+            await expect(element(by.id('banana'))).toBeVisible();
+        });
+        it('should navigate to the letter S', async () => {
+            await element(by.id('19')).tap();
+
+            await expect(element(by.id('sheep'))).toBeVisible();
+        });
     });
 
     describe('when all media is available', () => {
@@ -94,7 +118,7 @@ describe('Detail with error', () => {
             await device.reloadReactNative();
 
             await element(by.id('Menu')).tap();
-            await element(by.id('AlphabetDetailLinkButton')).tap();
+            await element(by.id('1')).tap();
         });
 
         it('should display an error message if an image is not loaded', async () => {
