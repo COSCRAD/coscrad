@@ -17,6 +17,7 @@ import { SpatialFeatureDetailThumbnailPresenter } from './thumbnail-presenters';
 import { LineTextPresenter } from './thumbnail-presenters/line-text-presenter';
 import { PointTextPresenter } from './thumbnail-presenters/point-text-presenter';
 import { PolygonTextPresenter } from './thumbnail-presenters/polygon-text-presenter';
+import { Position2D } from './types';
 
 const StyledCoscradMap = styled(Box)({
     marginBottom: '20px',
@@ -56,6 +57,8 @@ export const SpatialFeatureDetailFullViewPresenter = (
 
     const { type: geometryType, coordinates } = geometry;
 
+    // const [latitude, longitude] = coordinates as Position2D
+
     const CoordinatesTextPresenter = lookupTable[geometryType];
 
     if (isNullOrUndefined(CoordinatesTextPresenter)) {
@@ -68,10 +71,12 @@ export const SpatialFeatureDetailFullViewPresenter = (
         <>
             <StyledCoscradMap>
                 <CoscradLeafletMap
+                    initialZoom={13}
+                    initialCentre={coordinates as Position2D}
                     spatialFeatures={[spatialFeature]}
                     onSpatialFeatureSelected={(id: string) => setSelectedSpatialFeatureId(id)}
                     DetailPresenter={SpatialFeatureDetailThumbnailPresenter}
-                    selectedSpatialFeatureId={selectedSpatialFeatureId}
+                    selectedSpatialFeatureId={null}
                 />
             </StyledCoscradMap>
             <Grid container spacing={0}>

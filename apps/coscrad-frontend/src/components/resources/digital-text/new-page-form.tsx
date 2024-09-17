@@ -46,7 +46,7 @@ export const NewPageForm = ({
                 onChange={(e) => {
                     setPageIdentifier(e.target.value);
                 }}
-                placeholder="Page Number (e.g., 1 or IX)"
+                placeholder="Page # (e.g., 1 or IX)"
             />
             <Button
                 onClick={() => {
