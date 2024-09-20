@@ -14,6 +14,7 @@ import {
     Grid,
     Typography,
 } from '@mui/material';
+import { useRef } from 'react';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 import { SinglePropertyPresenter } from '../../../utils/generic-components/presenters/single-property-presenter';
 import { convertMillisecondsToSeconds } from '../utils/math';
@@ -29,7 +30,11 @@ export const AudioItemDetailFullViewPresenter = ({
     name,
     actions,
     contributions,
+    annotations,
+    transcript,
 }: ICategorizableDetailQueryResult<IAudioItemViewModel>): JSX.Element => {
+    const audioRef = useRef(null);
+
     const formatedPlainText = plainText.split('\n').map((line, index) => (
         <Box mb={1} key={index}>
             {line}
@@ -44,7 +49,13 @@ export const AudioItemDetailFullViewPresenter = ({
             contributions={contributions}
         >
             {actions.some(({ type: commandType }) => commandType === CREATE_NOTE_ABOUT_RESOURCE) ? (
-                <InteractiveAnnotator id={id} audioURL={audioURL} />
+                <InteractiveAnnotator
+                    id={id}
+                    audioURL={audioURL}
+                    audioRef={audioRef}
+                    annotations={annotations}
+                    transcript={transcript}
+                />
             ) : (
                 <AudioPlayer audioUrl={audioURL} />
             )}
