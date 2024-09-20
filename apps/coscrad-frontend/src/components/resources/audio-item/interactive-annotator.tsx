@@ -98,6 +98,8 @@ export const InteractiveAnnotator = ({
 
             if (!isNull(mediaCurrentTimeFromContext)) {
                 audioRef.current.currentTime = mediaCurrentTimeFromContext;
+
+                console.log({ audioreftime: audioRef.current.currentTime });
             }
         }
     }, [setTimeRange, errorInfo, commandResult, audioRef, mediaCurrentTimeFromContext]);
@@ -178,6 +180,7 @@ export const InteractiveAnnotator = ({
         dispatch(clearCommandStatus());
         if (didCommandSucceed) dispatch(idUsed());
     };
+
     return (
         <>
             <Box>Editing Track: {timelineTrackName}</Box>
