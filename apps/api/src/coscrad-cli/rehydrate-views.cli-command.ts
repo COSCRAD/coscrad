@@ -36,6 +36,10 @@ export class RehydrateViewsCliCommand extends CliCommandRunner {
 
         await this.databaseProvider.getDatabaseForCollection('audioItem__VIEWS').clear();
 
+        this.logger.log('clearing existing vocabulary list views');
+
+        await this.databaseProvider.getDatabaseForCollection('vocabularyList__VIEWS').clear();
+
         const events = await this.eventRepository.fetchEvents();
 
         this.eventPublisher.publish(events);

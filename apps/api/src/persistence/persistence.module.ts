@@ -15,6 +15,7 @@ import {
     IVocabularyListQueryRepository,
     VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
 } from '../domain/models/vocabulary-list/queries';
+import { ArangoVocabularyListQueryRepository } from '../domain/models/vocabulary-list/repositories';
 import { ID_RESPOSITORY_TOKEN } from '../lib/id-generation/interfaces/id-repository.interface';
 import { DigitalTextQueryRepository } from '../queries/digital-text/digital-text.query-repository';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../validation';
@@ -121,6 +122,12 @@ export class PersistenceModule implements OnApplicationShutdown {
             inject: [ArangoDatabaseProvider, CoscradEventFactory],
         };
 
+        /**
+         * TODO We shouldn't expose the resource-specific repositories here.
+         * Instead, we should inject the required Arango infrastructure into
+         * the corresponding resource module. This will keep the modules
+         * independent and loosely coupled.
+         */
         const audioQueryRepositoryProvider = {
             provide: AUDIO_QUERY_REPOSITORY_TOKEN,
             useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
@@ -142,6 +149,16 @@ export class PersistenceModule implements OnApplicationShutdown {
 
                 return singleton;
             },
+            inject: [ArangoConnectionProvider, AUDIO_QUERY_REPOSITORY_TOKEN],
+        };
+
+        const vocabularyListQueryRepository = {
+            provide: VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
+            useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
+                new ArangoVocabularyListQueryRepository(
+                    arangoConnectionProvider,
+                    new ConsoleCoscradCliLogger()
+                ),
             inject: [ArangoConnectionProvider, AUDIO_QUERY_REPOSITORY_TOKEN],
         };
 
@@ -179,6 +196,7 @@ export class PersistenceModule implements OnApplicationShutdown {
                 digitalTextQueryRepositoryProvider,
                 audioQueryRepositoryProvider,
                 termQueryRepositoryProvider,
+                vocabularyListQueryRepository,
                 queryRepositoryProvider,
             ],
             exports: [

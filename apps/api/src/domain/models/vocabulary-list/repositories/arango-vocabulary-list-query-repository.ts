@@ -246,7 +246,7 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
             .catch((reason) => {
                 // TODO fix all error messages
                 throw new InternalError(
-                    `Failed to register vocabulary list filter property via TermRepository: ${reason}`
+                    `Failed to register vocabulary list filter property via VocabularyListRepository: ${reason}`
                 );
             });
 

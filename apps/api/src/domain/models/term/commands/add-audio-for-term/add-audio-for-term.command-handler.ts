@@ -37,6 +37,11 @@ export class AddAudioForTermCommandHandler extends BaseUpdateCommandHandler<Term
 
         const allAudioItems = isNotFound(audioItemSearchResult) ? [] : [audioItemSearchResult];
 
+        // TODO remove this
+        if (isNotFound(audioItemSearchResult)) {
+            throw new InternalError(`Failed to find audio item: ${audioItemId}`);
+        }
+
         return new DeluxeInMemoryStore({
             [AggregateType.audioItem]: allAudioItems,
         }).fetchFullSnapshotInLegacyFormat();
