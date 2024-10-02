@@ -131,25 +131,27 @@ const assertResourceHasContributionFor = (
  * TODO We need to find a more maintainable way of
  * seeding the required initial state.
  */
-const buildEventHandlers = (termQueryRepository: ITermQueryRepository) => [
-    new TermCreatedEventHandler(termQueryRepository),
-    new TermTranslatedEventHandler(termQueryRepository),
-    new AudioAddedForTermEventHandler(termQueryRepository),
-    // TODO update this to take in a generic query repository provider
-    new ResourceReadAccessGrantedToUserEventHandler(termQueryRepository),
-    new ResourcePublishedEventHandler({
-        // TODO break this out into an ArangoQueryRepositoryProvider
-        forResource(resourceType: ResourceType) {
-            if (resourceType === ResourceType.term) {
-                return termQueryRepository;
-            }
+const buildEventHandlers = (termQueryRepository: ITermQueryRepository) => {
+    return [
+        new TermCreatedEventHandler(termQueryRepository),
+        new TermTranslatedEventHandler(termQueryRepository),
+        new AudioAddedForTermEventHandler(termQueryRepository),
+        // TODO update this to take in a generic query repository provider
+        new ResourceReadAccessGrantedToUserEventHandler(termQueryRepository),
+        new ResourcePublishedEventHandler({
+            // TODO break this out into an ArangoQueryRepositoryProvider
+            forResource(resourceType: ResourceType) {
+                if (resourceType === ResourceType.term) {
+                    return termQueryRepository;
+                }
 
-            throw new InternalError(
-                `Resource Type: ${resourceType} is not supported by the query repository provider`
-            );
-        },
-    }),
-];
+                throw new InternalError(
+                    `Resource Type: ${resourceType} is not supported by the query repository provider`
+                );
+            },
+        }),
+    ];
+};
 
 describe(`when querying for a term: fetch by Id`, () => {
     const testDatabaseName = generateDatabaseNameForTestSuite();
@@ -189,6 +191,8 @@ describe(`when querying for a term: fetch by Id`, () => {
 
             await app.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
 
+            termQueryRepository = app.get(TERM_QUERY_REPOSITORY_TOKEN);
+
             handlers = buildEventHandlers(termQueryRepository);
 
             seedTerms = async (events: ICoscradEvent[]) => {
@@ -207,13 +211,17 @@ describe(`when querying for a term: fetch by Id`, () => {
                         type: AggregateType.term,
                         id: termId,
                     });
-                    // TODO: we need to check that contributors come through
 
-                    await seedTerms(eventHistoryForTerm);
-
+                    /**
+                     * It is important that we do this before allowing the event
+                     * handlers to run, as they will only add contributions
+                     * if the corresponding contributor exists.
+                     */
                     await testRepositoryProvider
                         .getContributorRepository()
                         .create(dummyContributor);
+
+                    await seedTerms(eventHistoryForTerm);
                 });
 
                 /**

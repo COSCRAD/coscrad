@@ -219,14 +219,20 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             contributorIds,
         };
 
-        await this.database
+        const cursor = await this.database
             .query({
                 query,
                 bindVars,
             })
             .catch((reason) => {
-                throw new InternalError(`Failed to translate term via TermRepository: ${reason}`);
+                throw new InternalError(
+                    `Failed to add attribution for term via TermRepository: ${reason}`
+                );
             });
+
+        const result = await cursor.all();
+
+        console.log({ result });
     }
 
     async fetchById(
