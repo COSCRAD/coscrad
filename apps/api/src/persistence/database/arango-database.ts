@@ -121,12 +121,6 @@ export class ArangoDatabase {
     };
 
     create = async <TEntityDTO>(dto: TEntityDTO, collectionName: string): Promise<void> => {
-        const _dbName = this.getDatabaseName();
-
-        if (_dbName.includes('term')) {
-            console.log({ _dbName });
-        }
-
         const collectionExists = await this.#doesCollectionExist(collectionName);
 
         if (!collectionExists) throw new Error(`Collection ${collectionName} not found!`);
