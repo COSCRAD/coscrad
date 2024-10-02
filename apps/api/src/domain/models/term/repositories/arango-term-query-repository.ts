@@ -45,12 +45,8 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         const document = mapEntityDTOToDatabaseDocument(view);
 
         await this.database.create(document).catch((error) => {
-            console.warn({ error });
             throw new InternalError(error);
         });
-
-        // TODO remove this line
-        console.log('done');
     }
 
     async createMany(
@@ -172,6 +168,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         } IN @@collectionName
          RETURN OLD
         `;
+        // TODO remove return value?
 
         const bindVars = {
             '@collectionName': 'term__VIEWS',
@@ -219,7 +216,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             contributorIds,
         };
 
-        const cursor = await this.database
+        await this.database
             .query({
                 query,
                 bindVars,
@@ -229,10 +226,6 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
                     `Failed to add attribution for term via TermRepository: ${reason}`
                 );
             });
-
-        const result = await cursor.all();
-
-        console.log({ result });
     }
 
     async fetchById(
