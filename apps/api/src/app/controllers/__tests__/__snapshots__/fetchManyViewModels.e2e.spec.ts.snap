@@ -4,10 +4,15 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
 {
   "entities": [
     {
+      "accessControlList": {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
       "actions": [],
       "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+      "isPublished": false,
       "lengthMilliseconds": 20000,
       "mimeType": "audio/wav",
       "name": {
@@ -56,10 +61,15 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
 [18300] [JHC] His name was Pinocchio {en} (role: original) [19240]",
     },
     {
+      "accessControlList": {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
       "actions": [],
       "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111",
+      "isPublished": false,
       "lengthMilliseconds": 23409,
       "mimeType": "audio/mpeg",
       "name": {
@@ -77,10 +87,15 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
 [4010] [BL] These were the types of problems we had. {en} (role: original) [4290]",
     },
     {
+      "accessControlList": {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
       "actions": [],
       "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110113",
+      "isPublished": false,
       "lengthMilliseconds": 32989,
       "mimeType": "audio/wav",
       "name": {
@@ -97,10 +112,15 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
 [930] [E2] by members of the opposite clan of the house chief {en} (role: original) [1080]",
     },
     {
+      "accessControlList": {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
       "actions": [],
       "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110114",
+      "isPublished": false,
       "lengthMilliseconds": 1000,
       "mimeType": "audio/wav",
       "name": {
@@ -116,10 +136,15 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
       "text": "",
     },
     {
+      "accessControlList": {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
       "actions": [],
       "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav",
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110115",
+      "isPublished": false,
       "lengthMilliseconds": 10,
       "mimeType": "audio/wav",
       "name": {
@@ -143,10 +168,15 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
 {
   "entities": [
     {
+      "accessControlList": {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
       "actions": [],
       "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+      "isPublished": false,
       "lengthMilliseconds": 20000,
       "mimeType": "audio/wav",
       "name": {
@@ -195,10 +225,15 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
 [18300] [JHC] His name was Pinocchio {en} (role: original) [19240]",
     },
     {
+      "accessControlList": {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
       "actions": [],
       "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111",
+      "isPublished": false,
       "lengthMilliseconds": 23409,
       "mimeType": "audio/mpeg",
       "name": {
@@ -216,10 +251,15 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
 [4010] [BL] These were the types of problems we had. {en} (role: original) [4290]",
     },
     {
+      "accessControlList": {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
       "actions": [],
       "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110113",
+      "isPublished": false,
       "lengthMilliseconds": 32989,
       "mimeType": "audio/wav",
       "name": {
@@ -236,10 +276,15 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
 [930] [E2] by members of the opposite clan of the house chief {en} (role: original) [1080]",
     },
     {
+      "accessControlList": {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
       "actions": [],
       "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110114",
+      "isPublished": false,
       "lengthMilliseconds": 1000,
       "mimeType": "audio/wav",
       "name": {
@@ -255,10 +300,15 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
       "text": "",
     },
     {
+      "accessControlList": {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
       "actions": [],
       "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav",
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110115",
+      "isPublished": false,
       "lengthMilliseconds": 10,
       "mimeType": "audio/wav",
       "name": {
