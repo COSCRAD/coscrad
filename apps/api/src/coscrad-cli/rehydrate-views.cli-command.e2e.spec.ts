@@ -25,7 +25,7 @@ import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRe
 import { TestEventStream } from '../test-data/events';
 import { DynamicDataTypeFinderService } from '../validation';
 import { CoscradCliModule } from './coscrad-cli.module';
-import { COSCRAD_LOGGER_TOKEN } from './logging';
+import { ConsoleCoscradCliLogger, COSCRAD_LOGGER_TOKEN } from './logging';
 import { buildMockLogger } from './logging/__tests__';
 
 const translatedTermId = buildDummyUuid(1);
@@ -104,7 +104,8 @@ describe(`CLI Command: **${CLI_COMMAND_NAME}**`, () => {
 
         termQueryRepository = new ArangoTermQueryRepository(
             arangoConnectionProvider,
-            audioQueryRepository
+            audioQueryRepository,
+            new ConsoleCoscradCliLogger()
         );
 
         testRepositoryProvider = new TestRepositoryProvider(
