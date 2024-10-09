@@ -2,10 +2,15 @@
 
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/audioItems/:id when the resource is published when an resource with the id exists should return the expected response 1`] = `
 {
+  "accessControlList": {
+    "allowedGroupIds": [],
+    "allowedUserIds": [],
+  },
   "actions": [],
   "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
   "contributions": [],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+  "isPublished": false,
   "lengthMilliseconds": 20000,
   "mimeType": "audio/wav",
   "name": {
