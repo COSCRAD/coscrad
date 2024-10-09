@@ -13,6 +13,7 @@ import { getAllowedContextsForModel } from './allowedContexts/isContextAllowedFo
 import { EdgeConnectionContext } from './context/context.entity';
 import { EdgeConnectionContextType } from './context/types/EdgeConnectionContextType';
 import ResourceAlreadyPublishedError from './resource-already-published.error';
+import ResourceDeletedError from './resource-deleted.error';
 import ResourceNotYetPublishedError from './resource-not-yet-published.error';
 import { AccessControlList } from './shared/access-control/access-control-list.entity';
 import UserAlreadyHasReadAccessError from './shared/common-command-errors/invalid-state-transition-errors/UserAlreadyHasReadAccessError';
@@ -75,6 +76,15 @@ export abstract class Resource extends Aggregate {
 
         return this.safeClone<T>({
             published: false,
+        } as unknown as DeepPartial<DTO<T>>);
+    }
+
+    @UpdateMethod()
+    delete<T extends Resource>(this: T): ResultOrError<T> {
+        if (!this.delete) return new ResourceDeletedError(this.getCompositeIdentifier());
+
+        return this.safeClone<T>({
+            delete: false,
         } as unknown as DeepPartial<DTO<T>>);
     }
 
