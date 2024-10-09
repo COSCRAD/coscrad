@@ -17,7 +17,7 @@ import { ArangoDatabaseProvider } from '../../database/database.provider';
 import mapEntityDTOToDatabaseDTO, {
     ArangoDatabaseDocument,
     DatabaseDTO,
-} from '../../database/utilities/mapEntityDTOToDatabaseDTO';
+} from '../../database/utilities/mapEntityDTOToDatabaseDocument';
 import TestRepositoryProvider from '../../repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../repositories/__tests__/generateDatabaseNameForTestSuite';
 import { MigrateBilingualTermsAndVocabularyLists } from './migrate-bilingual-terms-and-vocabulary-lists.migration';

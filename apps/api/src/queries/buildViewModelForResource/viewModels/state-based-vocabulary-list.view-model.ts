@@ -11,6 +11,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
 import { AudioItem } from '../../../domain/models/audio-visual/audio-item/entities/audio-item.entity';
 import { MediaItem } from '../../../domain/models/media-item/entities/media-item.entity';
+import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
 import { Term } from '../../../domain/models/term/entities/term.entity';
 import { CoscradContributor } from '../../../domain/models/user-management/contributor';
 import { VocabularyListFilterProperty } from '../../../domain/models/vocabulary-list/entities/vocabulary-list-variable.entity';
@@ -20,11 +21,13 @@ import { VocabularyListEntry } from '../../../domain/models/vocabulary-list/voca
 import { NotFound } from '../../../lib/types/not-found';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { BaseResourceViewModel } from './base-resource.view-model';
-import { TermViewModel } from './term.view-model';
+import { TermViewModel } from './term.view-model.state-based';
 
 type VariableValues = Record<string, VocabularyListVariableValue>;
 
-class VocabularyListEntryViewModel implements IVocabularyListEntry<VocabularyListVariableValue> {
+class StateBasedVocabularyListEntryViewModel
+    implements IVocabularyListEntry<VocabularyListVariableValue>
+{
     @ApiProperty({
         type: TermViewModel,
     })
@@ -86,6 +89,10 @@ export class VocabularyListViewModel
 
     readonly name: MultilingualText;
 
+    readonly isPublished: boolean;
+
+    readonly accessControlList: { allowedUserIds: string[]; allowedGroupIds: string[] };
+
     @ApiProperty({
         type: VocabularyListEntry,
         isArray: true,
@@ -93,12 +100,12 @@ export class VocabularyListViewModel
         description:
             'an entry combines a term with a set of "variable values" parametrizing it within the given vocabulary list',
     })
-    @NestedDataType(VocabularyListEntryViewModel, {
+    @NestedDataType(StateBasedVocabularyListEntryViewModel, {
         isArray: true,
         label: 'entries',
         description: 'all terms in this vocabulary list together with their filter properties',
     })
-    readonly entries: VocabularyListEntryViewModel[];
+    readonly entries: StateBasedVocabularyListEntryViewModel[];
 
     // @ApiProperty({
     //     type: VocabularyListVariable,
@@ -116,7 +123,11 @@ export class VocabularyListViewModel
     ) {
         super(vocabularyList, contributors);
 
-        const { entries, variables } = vocabularyList;
+        const { entries, variables, published, queryAccessControlList } = vocabularyList;
+
+        this.isPublished = published;
+
+        this.accessControlList = new AccessControlList(queryAccessControlList);
 
         this.form = {
             fields: variables.map(convertVocabularyListVaraibleToFormElement),
@@ -145,6 +156,6 @@ export class VocabularyListViewModel
             })
             .filter(({ term }) => term !== NotFound);
 
-        this.entries = newEntries as VocabularyListEntryViewModel[];
+        this.entries = newEntries as StateBasedVocabularyListEntryViewModel[];
     }
 }

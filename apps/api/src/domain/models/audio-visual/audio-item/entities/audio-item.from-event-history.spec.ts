@@ -13,7 +13,7 @@ import { LineItemsImportedToTranscript } from '../../shared/commands/transcripts
 import { TranscriptItem } from '../../shared/entities/transcript-item.entity';
 import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
 import { LineItemTranslated, TranslationsImportedForTranscript } from '../commands';
-import { AudioItemCreated } from '../commands/create-audio-item/transcript-created.event';
+import { AudioItemCreated } from '../commands/create-audio-item/audio-item-created.event';
 import { AudioItemNameTranslated } from '../commands/translate-audio-item-name/audio-item-name-translated-event';
 import { AudioItem } from './audio-item.entity';
 

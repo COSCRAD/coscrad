@@ -1,5 +1,5 @@
 import { Resource } from '../../../domain/models/resource.entity';
-import mapEntityDTOToDatabaseDTO from './mapEntityDTOToDatabaseDTO';
+import mapEntityDTOToDatabaseDTO from './mapEntityDTOToDatabaseDocument';
 
 describe('mapEntityDTOToDatabaseDTO', () => {
     const dtoWithValidID = {

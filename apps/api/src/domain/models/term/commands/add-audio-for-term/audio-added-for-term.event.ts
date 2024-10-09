@@ -6,5 +6,5 @@ export type AudioAddedForTermPayload = AddAudioForTerm;
 
 @CoscradEvent(`AUDIO_ADDED_FOR_TERM`)
 export class AudioAddedForTerm extends BaseEvent<AudioAddedForTermPayload> {
-    type = 'AUDIO_ADDED_FOR_TERM';
+    readonly type = 'AUDIO_ADDED_FOR_TERM';
 }

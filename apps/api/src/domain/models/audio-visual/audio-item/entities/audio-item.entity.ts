@@ -45,7 +45,7 @@ import {
     importTranslationsForTranscriptImplementation,
 } from '../../shared/methods/import-translations-for-transcript';
 import { translateLineItemImplementation } from '../../shared/methods/translate-line-item';
-import { AudioItemCreated } from '../commands/create-audio-item/transcript-created.event';
+import { AudioItemCreated } from '../commands/create-audio-item/audio-item-created.event';
 import { InvalidMIMETypeForAudiovisualResourceError } from '../commands/errors';
 import { AudioItemNameTranslated } from '../commands/translate-audio-item-name/audio-item-name-translated-event';
 

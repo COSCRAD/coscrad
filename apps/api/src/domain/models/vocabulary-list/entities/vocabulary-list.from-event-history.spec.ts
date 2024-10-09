@@ -58,7 +58,7 @@ const propertyValueForEntry = filterPropertyValuesAndLabels[0].value;
 
 const vocabularyListFilterPropertyRegistered =
     vocabularyListNameTranslated.andThen<VocabularyListFilterPropertyRegistered>({
-        type: 'VOCABULARY_LIST_FILTER_PROPERTY_REGISTERED',
+        type: 'VOCABULARY_LIST_PROPERTY_FILTER_REGISTERED',
         payload: {
             name: filterPropertyName,
             allowedValuesAndLabels: filterPropertyValuesAndLabels,

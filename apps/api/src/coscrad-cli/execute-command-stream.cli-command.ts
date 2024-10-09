@@ -5,12 +5,13 @@ import {
     getCoscradDataSchema,
     getReferencesForCoscradDataSchema,
 } from '@coscrad/data-types';
-import { isNonEmptyString, isString } from '@coscrad/validation-constraints';
+import { isNonEmptyString, isNullOrUndefined, isString } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { readFileSync } from 'fs';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
 import { GrantUserRole } from '../domain/models/user-management/user/commands/grant-user-role/grant-user-role.command';
 import { RegisterUser } from '../domain/models/user-management/user/commands/register-user/register-user.command';
+import { ImportEntriesToVocabularyList } from '../domain/models/vocabulary-list/commands';
 import { AggregateId } from '../domain/types/AggregateId';
 import { AggregateType } from '../domain/types/AggregateType';
 import { InternalError, isInternalError } from '../lib/errors/InternalError';
@@ -314,9 +315,50 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
                     const value = getDeepPropertyFromObject(fsaToExecute, fullPath);
 
                     if (Array.isArray(value)) {
-                        throw new InternalError(
-                            `Using slugs for arrays of references is not yet supported`
-                        );
+                        /**
+                         * This is a major hack. We need to find a better way
+                         * to deal with joining in slug references in general.
+                         */
+                        if (!['IMPORT_ENTRIES_TO_VOCABULARY_LIST'].includes(fsa.type)) {
+                            throw new InternalError(
+                                `Using slugs for arrays of references is not yet supported. Found array with references: ${
+                                    isNullOrUndefined(value) ? '' : JSON.stringify(value)
+                                } on command FSA: ${JSON.stringify(fsaToExecute)}`
+                            );
+                        }
+
+                        if (fsa.type === 'IMPORT_ENTRIES_TO_VOCABULARY_LIST') {
+                            const newEntries = (
+                                fsaToExecute.payload as ImportEntriesToVocabularyList
+                            ).entries.map((entry) => {
+                                const customIdParseResult = parseSlugDefinition(entry.termId);
+
+                                const referenceIdToUse = isInternalError(customIdParseResult)
+                                    ? idOnPayload
+                                    : // look up the UUID corresponding to this slug
+                                      idMap.get(customIdParseResult[1]);
+
+                                return {
+                                    propertyValues: entry.propertyValues,
+                                    termId: referenceIdToUse,
+                                };
+                            });
+
+                            fsaToExecute = cloneWithOverridesByDeepPath(
+                                fsaToExecute,
+                                // payload.entries
+                                'payload.entries',
+                                newEntries
+                            );
+
+                            this.logger.log(
+                                `Updated FSA with nested array of references: ${JSON.stringify(
+                                    fsaToExecute
+                                )} to add new entries: ${JSON.stringify(
+                                    newEntries
+                                )} at path: ${fullPath}`
+                            );
+                        }
                     }
 
                     if (isString(value) && value.includes(APPEND_THIS_ID)) {
@@ -333,8 +375,6 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
                             referenceIdToUse
                         );
                     }
-
-                    console.log(fsaToExecute);
                 });
             }
 

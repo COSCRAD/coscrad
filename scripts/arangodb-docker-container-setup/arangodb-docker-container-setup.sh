@@ -171,8 +171,8 @@ then
   if [ -z "${DOCKER_PS##*$ARANGO_DB_SERVER*}" ];
   then
     echo "stop & remove old instance of docker arango $ARANGO_DB_SERVER container";
-    (sudo -u root docker container stop $ARANGO_DB_SERVER || :) && \
-      sudo -u root docker container rm $ARANGO_DB_SERVER
+    # (sudo -u root docker container stop $ARANGO_DB_SERVER || :) && \
+    #   sudo -u root docker container rm $ARANGO_DB_SERVER
   else
     echo "Unknown arango container already running on port $ARANGO_DB_HOST_PORT";
     echo "";
@@ -200,8 +200,7 @@ sudo -u root docker run \
 -e ARANGO_DB_RUN_WITH_TEST_DATA=$ARANGO_DB_RUN_WITH_TEST_DATA \
 -e ARANGODB_DESTINATION_CONTAINER_DOCKER_SHARED_VOLUME_SCRIPTS_PATH=$ARANGODB_DESTINATION_CONTAINER_DOCKER_SHARED_VOLUME_SCRIPTS_PATH \
 -e COSCRAD_ENVIRONMENT=$COSCRAD_ENVIRONMENT \
--d$ARANGO_LOCAL_VOLUME_PATH_CMD arangodb:3.8
-# We pin to this due to a known issue on 3.9
+-d $ARANGO_LOCAL_VOLUME_PATH_CMD arangodb/arangodb:3.9.2-noavx
 
 
 

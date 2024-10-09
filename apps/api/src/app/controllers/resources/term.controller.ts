@@ -40,7 +40,8 @@ export class TermController {
     @ApiParam(buildByIdApiParamMetadata())
     @ApiOkResponse({ type: TermViewModel })
     @Get(`/:id`)
-    async fetchById(@Request() req, @Res() res, @Param('id') id: unknown) {
+    // TODO be sure to validate that ID is a string
+    async fetchById(@Request() req, @Res() res, @Param('id') id: string) {
         const searchResult = await this.termQueryService.fetchById(id, req.user || undefined);
 
         return sendInternalResultAsHttpResponse(res, searchResult);

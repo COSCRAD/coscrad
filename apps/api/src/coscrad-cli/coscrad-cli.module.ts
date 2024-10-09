@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { AppModule } from '../app/app.module';
 import { EdgeConnectionModule } from '../app/domain-modules/edge-connection.module';
 import { MediaItemModule } from '../app/domain-modules/media-item.module';
+import { EventModule } from '../domain/common';
 import { AudioVisualModule } from '../domain/models/audio-visual/application/audio-visual.module';
 import { IdGenerationModule } from '../lib/id-generation/id-generation.module';
 import { MigrationModule } from '../persistence/migrations';
@@ -17,6 +18,7 @@ import { ExportSchemasCliCommand } from './export-schemas.cli-command';
 import { IngestMediaItemsCliCommand } from './ingest-media-items.cli-command';
 import { ListMigrationsCliCommand } from './list-migrations.cli-command';
 import { ConsoleCoscradCliLogger, COSCRAD_LOGGER_TOKEN } from './logging';
+import { RehydrateViewsCliCommand } from './rehydrate-views.cli-command';
 import { RevertLatestMigrationCliCommand } from './revert-latest-migration';
 import { RunMigrationsCliCommand } from './run-migrations.cli-command';
 import { SeedTestDataWithCommand } from './seed-test-data-with-command.cli-command';
@@ -39,6 +41,7 @@ import { ValidateInvariantsCliCommand } from './validate-invariants.cli-command'
         ExportMediaAnnotationsCliCommand,
         ExportAudioItemLineagesCliCommand,
         ExportSchemasCliCommand,
+        RehydrateViewsCliCommand,
         {
             provide: COSCRAD_LOGGER_TOKEN,
             useClass: ConsoleCoscradCliLogger,
@@ -53,6 +56,7 @@ import { ValidateInvariantsCliCommand } from './validate-invariants.cli-command'
         AudioVisualModule,
         MediaItemModule,
         EdgeConnectionModule,
+        EventModule,
     ],
 })
 export class CoscradCliModule {}

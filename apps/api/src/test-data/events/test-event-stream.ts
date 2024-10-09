@@ -754,7 +754,7 @@ export class TestEventStream {
             .registerBuilder(`VOCABULARY_LIST_CREATED`, buildVocabularyListCreated)
             .registerBuilder(`VOCABULARY_LIST_NAME_TRANSLATED`, buildVocabularyListNameTranslated)
             .registerBuilder(
-                `VOCABULARY_LIST_FILTER_PROPERTY_REGISTERED`,
+                `VOCABULARY_LIST_PROPERTY_FILTER_REGISTERED`,
                 buildVocabularyListFilterPropertyRegistered
             )
             .registerBuilder(`TERM_ADDED_TO_VOCABULARY_LIST`, buildTermAddedToVocabularyList)

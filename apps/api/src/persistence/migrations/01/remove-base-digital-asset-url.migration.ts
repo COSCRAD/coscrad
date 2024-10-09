@@ -4,7 +4,7 @@ import { Term } from '../../../domain/models/term/entities/term.entity';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { DTO } from '../../../types/DTO';
 import { ArangoCollectionId } from '../../database/collection-references/ArangoCollectionId';
-import { ArangoDatabaseDocument } from '../../database/utilities/mapEntityDTOToDatabaseDTO';
+import { ArangoDatabaseDocument } from '../../database/utilities/mapEntityDTOToDatabaseDocument';
 import { ICoscradMigration } from '../coscrad-migration.interface';
 import { ICoscradQueryRunner } from '../coscrad-query-runner.interface';
 import { Migration } from '../decorators/migration.decorator';

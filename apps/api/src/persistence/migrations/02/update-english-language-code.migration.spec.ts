@@ -12,7 +12,7 @@ import { ArangoConnectionProvider } from '../../database/arango-connection.provi
 import { ArangoQueryRunner } from '../../database/arango-query-runner';
 import { ArangoCollectionId } from '../../database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../database/database.provider';
-import { DatabaseDTO } from '../../database/utilities/mapEntityDTOToDatabaseDTO';
+import { DatabaseDTO } from '../../database/utilities/mapEntityDTOToDatabaseDocument';
 import TestRepositoryProvider from '../../repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../repositories/__tests__/generateDatabaseNameForTestSuite';
 import { UpdateEnglishLanguageCode } from './update-english-language-code.migration';

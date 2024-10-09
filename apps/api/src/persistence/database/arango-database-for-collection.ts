@@ -1,3 +1,4 @@
+import { AqlQuery } from 'arangojs/aql';
 import { isArangoDatabase } from 'arangojs/database';
 import { ISpecification } from '../../domain/repositories/interfaces/specification.interface';
 import { AggregateId } from '../../domain/types/AggregateId';
@@ -6,8 +7,7 @@ import { InternalError } from '../../lib/errors/InternalError';
 import { Maybe } from '../../lib/types/maybe';
 import { DeepPartial } from '../../types/DeepPartial';
 import { ArangoDatabase } from './arango-database';
-import { ArangoCollectionId } from './collection-references/ArangoCollectionId';
-import { ArangoDatabaseDocument } from './utilities/mapEntityDTOToDatabaseDTO';
+import { ArangoDatabaseDocument } from './utilities/mapEntityDTOToDatabaseDocument';
 
 /**
  * Note that at this level we are working with a `DatabaseDocument` (has _key
@@ -15,11 +15,20 @@ import { ArangoDatabaseDocument } from './utilities/mapEntityDTOToDatabaseDTO';
  * repositories layer.
  */
 export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
-    #collectionID: ArangoCollectionId;
+    #collectionID: string;
 
     #arangoDatabase: ArangoDatabase;
 
-    constructor(arangoDatabase: ArangoDatabase, collectionName: ArangoCollectionId) {
+    /**
+     * We used to type `collectionName: ArangoCollectionName` and enforce this
+     * statically. We found this led to unwanted coupling and unnecessary
+     * complexity. All collections should be created dynamically if missing
+     * after being registered dynamically via annotations.
+     *
+     * At the db implementation level, we can simply check if the collection
+     * exists.
+     */
+    constructor(arangoDatabase: ArangoDatabase, collectionName: string) {
         this.#collectionID = collectionName;
 
         this.#arangoDatabase = arangoDatabase;
@@ -58,12 +67,18 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
     }
 
     // Commands (mutate state)
-    create(databaseDocument: ArangoDatabaseDocument<TEntity>) {
+    async create(databaseDocument: ArangoDatabaseDocument<TEntity>) {
         // Handle the difference in _id \ _key between model and database
-        return this.#arangoDatabase.create(databaseDocument, this.#collectionID);
+        return this.#arangoDatabase.create(databaseDocument, this.#collectionID).catch((error) => {
+            throw new InternalError(
+                `ArangoDatabase for collection: ${
+                    this.#collectionID
+                } failed to create: ${databaseDocument}. \n Arango Error: ${error}`
+            );
+        });
     }
 
-    createMany(databaseDocuments: ArangoDatabaseDocument<TEntity>[]) {
+    async createMany(databaseDocuments: ArangoDatabaseDocument<TEntity>[]) {
         return this.#arangoDatabase
             .createMany(databaseDocuments, this.#collectionID)
             .catch((error) => {
@@ -78,7 +93,19 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
             });
     }
 
+    delete(id: string): Promise<void> {
+        return this.#arangoDatabase.delete(id, this.#collectionID);
+    }
+
+    clear(): Promise<void> {
+        return this.#arangoDatabase.deleteAll(this.#collectionID);
+    }
+
     update(id: AggregateId, updateDTO: DeepPartial<ArangoDatabaseDocument<TEntity>>) {
         return this.#arangoDatabase.update(id, updateDTO, this.#collectionID);
+    }
+
+    query(aqlQuery: AqlQuery) {
+        return this.#arangoDatabase.query(aqlQuery);
     }
 }
