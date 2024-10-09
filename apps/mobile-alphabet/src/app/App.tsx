@@ -11,6 +11,7 @@ import HomeScreen from './Components/Home';
 import MenuScreen from './Components/Menu';
 import { AlphabetCardDetailScreen } from './Components/alphabet-card-detail.screen';
 import { ConfigStore, RootStoreProvider, setUpConfig } from './config';
+import { colors } from './styles';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,7 +35,15 @@ const App = () => {
         <RootStoreProvider value={config}>
             <Provider store={setupStore()}>
                 <NavigationContainer>
-                    <Stack.Navigator>
+                    <Stack.Navigator
+                        screenOptions={{
+                            headerTitleAlign: 'center',
+                            headerTintColor: colors.text,
+                            headerStyle: {
+                                backgroundColor: colors.primary,
+                            },
+                        }}
+                    >
                         <Stack.Screen name="Home" component={HomeScreen} />
                         <Stack.Screen name="Menu" component={MenuScreen} />
                         <Stack.Screen name="Detail" component={AlphabetCardDetailScreen} />

@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect } from 'react';
-import { Button, ScrollView, Text } from 'react-native';
+import { Pressable, ScrollView, Text } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store';
 import { fetchAlphabets } from '../../store/slices/alphabet-slice';
@@ -44,18 +44,21 @@ const MenuScreen = ({ navigation }: NativeStackScreenProps<NavigationState, 'Det
     } = alphabetData;
 
     return (
-        <ScrollView>
+        <ScrollView style={{ backgroundColor: 'white' }}>
             {alphabetCards.map(({ letter, sequence_number: sequenceNumber }) => (
-                <Button
+                <Pressable
                     key={letter}
                     testID={sequenceNumber}
-                    title={letter}
                     onPress={() => {
                         navigation.navigate('Detail', {
                             selectedCardNumber: parseInt(sequenceNumber),
                         });
                     }}
-                />
+                >
+                    <Text style={{ fontSize: 30, fontFamily: 'arial', textAlign: 'center' }}>
+                        {letter}
+                    </Text>
+                </Pressable>
             ))}
         </ScrollView>
     );
