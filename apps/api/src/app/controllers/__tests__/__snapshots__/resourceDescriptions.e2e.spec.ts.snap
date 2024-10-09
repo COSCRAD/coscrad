@@ -155,7 +155,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "isArray": true,
         "isOptional": false,
         "label": "entries",
-        "name": "VocabularyListEntryViewModel",
+        "name": "StateBasedVocabularyListEntryViewModel",
         "schema": {
           "term": {
             "complexDataType": "NESTED_TYPE",
@@ -434,6 +434,13 @@ exports[`GET /resources should return the expected result 1`] = `
         "isArray": false,
         "isOptional": false,
         "label": "length (ms)",
+      },
+      "mediaItemId": {
+        "coscradDataType": "UUID",
+        "description": "a reference to the raw media item for this audio item",
+        "isArray": false,
+        "isOptional": false,
+        "label": "media item",
       },
       "mimeType": {
         "complexDataType": "ENUM",

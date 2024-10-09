@@ -89,7 +89,7 @@ describe(`VocabularyListNameTranslatedEventHandler`, () => {
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
 
         testQueryRepository = new ArangoVocabularyListQueryRepository(
-            databaseProvider,
+            connectionProvider,
             new ConsoleCoscradCliLogger()
         );
 

@@ -10,6 +10,7 @@ import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/Environment';
+import { ConsoleCoscradCliLogger } from '../../../../../coscrad-cli/logging';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
@@ -103,7 +104,8 @@ describe(`ResourceReadAccessGrantedToUserEventHandler.handle`, () => {
 
         testQueryRepository = new ArangoTermQueryRepository(
             connectionProvider,
-            new ArangoAudioItemQueryRepository(connectionProvider)
+            new ArangoAudioItemQueryRepository(connectionProvider),
+            new ConsoleCoscradCliLogger()
         );
 
         readAccessEventHandler = new ResourceReadAccessGrantedToUserEventHandler(

@@ -111,7 +111,7 @@ describe(`VocabularyListFilterPropertyRegistered.handle`, () => {
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
 
         testQueryRepository = new ArangoVocabularyListQueryRepository(
-            databaseProvider,
+            connectionProvider,
             new ConsoleCoscradCliLogger()
         );
 
