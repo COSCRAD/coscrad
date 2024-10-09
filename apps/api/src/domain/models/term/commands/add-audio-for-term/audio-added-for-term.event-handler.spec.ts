@@ -5,6 +5,7 @@ import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/Environment';
+import { ConsoleCoscradCliLogger } from '../../../../../coscrad-cli/logging';
 import { NotFound } from '../../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
@@ -14,6 +15,7 @@ import generateDatabaseNameForTestSuite from '../../../../../persistence/reposit
 import { TermViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { TestEventStream } from '../../../../../test-data/events';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { AUDIO_QUERY_REPOSITORY_TOKEN } from '../../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { AudioAddedForDigitalTextPage } from '../../../digital-text/commands';
 import { ITermQueryRepository } from '../../queries';
 import { ArangoTermQueryRepository } from '../../repositories/arango-term-query-repository';
@@ -93,7 +95,11 @@ describe('AudioAddedForTermEventHandler.handle', () => {
 
         arangoDatabaseForCollection = databaseProvider.getDatabaseForCollection('term__VIEWS');
 
-        testQueryRepository = new ArangoTermQueryRepository(connectionProvider);
+        testQueryRepository = new ArangoTermQueryRepository(
+            connectionProvider,
+            app.get(AUDIO_QUERY_REPOSITORY_TOKEN),
+            new ConsoleCoscradCliLogger()
+        );
 
         audioAddedForTermEventHandler = new AudioAddedForTermEventHandler(testQueryRepository);
     });
@@ -127,7 +133,11 @@ describe('AudioAddedForTermEventHandler.handle', () => {
 
             const updatedTerm = result as TermViewModel;
 
-            expect(updatedTerm.audioURL).toBe();
+            /**
+             * We need to ensure that the media item ID comes through
+             * the eager joins.
+             */
+            expect(updatedTerm.mediaItemId).toBe('fix-this-test');
         });
     });
 });

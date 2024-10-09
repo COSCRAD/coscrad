@@ -11,17 +11,22 @@ import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/Environment';
+import { ConsoleCoscradCliLogger } from '../../../../../coscrad-cli/logging';
 import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
+import { IRepositoryProvider } from '../../../../../domain/repositories/interfaces/repository-provider.interface';
 import { NotFound } from '../../../../../lib/types/not-found';
+import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
+import { ArangoCollectionId } from '../../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { TermViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { TestEventStream } from '../../../../../test-data/events';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { AUDIO_QUERY_REPOSITORY_TOKEN } from '../../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ITermQueryRepository } from '../../queries';
 import { ArangoTermQueryRepository } from '../../repositories/arango-term-query-repository';
 import { PromptTermCreated } from './prompt-term-created.event';
@@ -81,11 +86,22 @@ describe(`PromptTermCreatedEventHandler.handle`, () => {
 
         arangoDatabaseForCollection = databaseProvider.getDatabaseForCollection('term__VIEWS');
 
-        testQueryRepository = new ArangoTermQueryRepository(connectionProvider);
+        testQueryRepository = new ArangoTermQueryRepository(
+            connectionProvider,
+            app.get(AUDIO_QUERY_REPOSITORY_TOKEN),
+            new ConsoleCoscradCliLogger()
+        );
     });
 
     beforeEach(async () => {
         await arangoDatabaseForCollection.clear();
+
+        await databaseProvider.getDatabaseForCollection(ArangoCollectionId.contributors).clear();
+
+        await app
+            .get<IRepositoryProvider>(REPOSITORY_PROVIDER_TOKEN)
+            .getContributorRepository()
+            .create(dummyContributor);
     });
 
     afterAll(async () => {
@@ -103,7 +119,12 @@ describe(`PromptTermCreatedEventHandler.handle`, () => {
 
         const termView = searchResult as TermViewModel;
 
-        expect(termView.contributions).toEqual([dummyContributor.id]);
+        expect(termView.contributions).toEqual([
+            {
+                fullName: dummyContributor.fullName.toString(),
+                id: dummyContributor.id,
+            },
+        ]);
 
         const name = new MultilingualText(termView.name);
 

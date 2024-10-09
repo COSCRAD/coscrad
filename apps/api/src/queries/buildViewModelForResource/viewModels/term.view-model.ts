@@ -83,7 +83,6 @@ export class TermViewModel implements IDetailQueryResult<ITermViewModel> {
             text,
             aggregateCompositeIdentifier: { id: termId },
         },
-        meta: { contributorIds },
     }: PromptTermCreated): TermViewModel {
         const term = new TermViewModel();
 
@@ -94,12 +93,10 @@ export class TermViewModel implements IDetailQueryResult<ITermViewModel> {
         // currently, prompts are in English- should we hard wire this on the event payload to be future safe?
         term.name = buildMultilingualTextWithSingleItem(text, LanguageCode.English);
 
-        // TODO join in the contributor names
-        // TODO ensure this is part of the query repository test
-        term.contributions = contributorIds.map((contributorId) => ({
-            id: contributorId,
-            fullName: contributorId,
-        }));
+        /**
+         *  Note that the contributions must be handled separately as we need
+         * to access the db to join in contributor names
+         */
 
         term.actions = []; // TODO build these here
 
