@@ -37,6 +37,7 @@ import {
     ResourceReadAccessGrantedToUser,
     ResourceUnpublished,
 } from '../../domain/models/shared/common-commands';
+import { ResourceDeleted } from '../../domain/models/shared/common-commands/delete-resource/resource-deleted.event';
 import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import { EventRecordMetadata } from '../../domain/models/shared/events/types/EventRecordMetadata';
 import {
@@ -227,6 +228,20 @@ const buildResourceUnpublishedEvent = (
             {
                 aggregateCompositeIdentifier,
             } as ResourceUnpublished['payload'],
+            payloadOverrides
+        ),
+        buildMetadata()
+    );
+
+const buildResourceDeletedEvent = (
+    payloadOverrides: DeepPartial<ResourceDeleted['payload']>,
+    buildMetadata: EventMetadataBuilder
+) =>
+    new ResourceDeleted(
+        clonePlainObjectWithOverrides(
+            {
+                aggregateCompositeIdentifier,
+            } as ResourceDeleted['payload'],
             payloadOverrides
         ),
         buildMetadata()
@@ -720,6 +735,7 @@ export class TestEventStream {
             )
             .registerBuilder('RESOURCE_PUBLISHED', buildResourcePublishedEvent)
             .registerBuilder('RESOURCE_UNPUBLISHED', buildResourceUnpublishedEvent)
+            .registerBuilder('RESOURCE_DELETED', buildResourceDeletedEvent)
             .registerBuilder(
                 'CONTENT_ADDED_TO_DIGITAL_TEXT_PAGE',
                 buildContentAddedToDigitalTextPage
