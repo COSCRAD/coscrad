@@ -1,4 +1,3 @@
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box, SxProps } from '@mui/material';
 import { Canvas, Draw } from './canvas';
 import {
@@ -7,6 +6,7 @@ import {
     RULER_TICK_HEIGHT_IN_PIXELS,
     RULER_TICK_WITH_NUMBER_HEIGHT_IN_PIXELS,
 } from './shared/constants';
+import { isNullOrUndefined } from './shared/validation';
 import { TimelineTimecodeProps } from './timeline-ruler';
 
 interface TimelineCanvasProps {

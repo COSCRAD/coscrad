@@ -1,4 +1,3 @@
-import { isNull } from '@coscrad/validation-constraints';
 import { Box } from '@mui/material';
 import { useEffect } from 'react';
 import { RULER_TICKS_AND_NUMBERS_COLOR } from './ruler-tick';
@@ -8,6 +7,7 @@ import {
     RULER_TICK_WIDTH_IN_PIXELS,
     ZoomLevels,
 } from './shared/constants';
+import { isNull } from './shared/validation';
 import { TimelineCanvas } from './timeline-canvas';
 
 const getNumberOfCanvases = (lastCanvasWidth: number, numberOfWholeCanvases: number) => {

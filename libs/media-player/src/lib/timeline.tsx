@@ -1,6 +1,16 @@
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { ZoomIn as ZoomInIcon, ZoomOut as ZoomOutIcon } from '@mui/icons-material';
-import { Box, Divider, IconButton, Tooltip, styled } from '@mui/material';
+import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material/';
+import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+    Box,
+    Divider,
+    IconButton,
+    Tooltip,
+    Typography,
+    styled,
+} from '@mui/material';
 import { RefObject, useEffect, useRef, useState } from 'react';
 import './interactive-media-player-style.css';
 import { RangeBar } from './range-bar';
@@ -9,9 +19,9 @@ import { EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS, ZOOM_LEVELS, ZoomLevels } from './sh
 import { convertTimecodeToTimelineUnits } from './shared/convert-timecode-to-timeline-units';
 import { convertTimelineUnitsToTimecode } from './shared/convert-timeline-units-to-timecode';
 import { getZoomLevelConfig } from './shared/get-zoom-level';
+import { isNullOrUndefined } from './shared/validation';
 import { TimelineRuler } from './timeline-ruler';
-
-const WAVE_FORM_URL = 'https://guujaaw.info/images/audio-wave-form.png';
+import { TrackLabelIconPresenter } from './track-label-icon-presenter';
 
 const EDITOR_MARKER_PIXEL_WIDTH = 20;
 
@@ -19,8 +29,9 @@ const StyledTimelineBox = styled(Box)({
     width: '99%',
     paddingTop: `2px`,
     paddingBottom: `2px`,
-    border: '1px solid #666',
+    border: '1px solid #bfbfbf',
     backgroundColor: '#ddd',
+    borderRadius: '7px',
     display: 'flex',
     boxSizing: 'border-box',
 });
@@ -34,7 +45,9 @@ const ScrollingBox = styled('div')({
 
 const StyledTrackLabel = styled(Box)({
     height: `${EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS}px`,
-    padding: '2px',
+    padding: '0px',
+    color: '#626262',
+    textAlign: 'center',
     wordWrap: 'break-word',
     overflow: 'hidden',
     boxSizing: 'border-box',
@@ -46,8 +59,7 @@ const StyledScrolledTrack = styled(Box)({
     position: 'relative',
     display: 'flex',
     height: `${EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS}px`,
-    border: '1px solid #666',
-    borderRadius: '7px',
+    border: '1px solid #a2a2a2',
     backgroundBlendMode: 'saturation',
     backgroundSize: `auto ${EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS + 5}px`,
     boxSizing: 'border-box',
@@ -231,17 +243,9 @@ export const Timeline = ({
 
     useEffect(() => {
         // Set in and out points from annotator component
+        if (isNullOrUndefined(inPointSeconds)) return;
+
         if (isNullOrUndefined(inPointRef.current)) return;
-
-        const inPointMarker = inPointRef.current;
-
-        if (isNullOrUndefined(inPointSeconds)) {
-            inPointMarker.style.visibility = 'hidden';
-
-            return;
-        }
-
-        inPointMarker.style.visibility = 'visible';
 
         const currentInPointPositionInPixels = convertTimecodeToTimelineUnits(
             rulerWidth,
@@ -251,17 +255,9 @@ export const Timeline = ({
 
         setInPointPositionInPixels(currentInPointPositionInPixels);
 
+        if (isNullOrUndefined(outPointSeconds)) return;
+
         if (isNullOrUndefined(outPointRef.current)) return;
-
-        const outPointMarker = outPointRef.current;
-
-        if (isNullOrUndefined(outPointSeconds)) {
-            outPointMarker.style.visibility = 'hidden';
-
-            return;
-        }
-
-        outPointMarker.style.visibility = 'visible';
 
         const currentOutPointPositionInPixels = convertTimecodeToTimelineUnits(
             rulerWidth,
@@ -278,6 +274,34 @@ export const Timeline = ({
         setInPointPositionInPixels,
         setOutPointPositionInPixels,
     ]);
+
+    useEffect(() => {
+        // Toggle in point marker visibility
+        if (isNullOrUndefined(inPointRef.current)) return;
+
+        if (isNullOrUndefined(inPointSeconds)) {
+            inPointRef.current.style.visibility = 'hidden';
+
+            return;
+        }
+
+        inPointRef.current.style.visibility = 'visible';
+    }, [inPointRef, inPointSeconds]);
+
+    useEffect(() => {
+        // Toggle out point marker visibility
+        if (isNullOrUndefined(outPointRef.current)) return;
+
+        if (isNullOrUndefined(outPointSeconds)) {
+            outPointRef.current.style.visibility = 'hidden';
+
+            return;
+        }
+
+        console.log({ outPointSeconds });
+
+        outPointRef.current.style.visibility = 'visible';
+    }, [outPointRef, outPointSeconds]);
 
     const zoomIn = () => {
         console.log(`Zoom in at level: ${zoomLevel}`);
@@ -320,10 +344,6 @@ export const Timeline = ({
 
         const scrollLeftOfScrollableDiv = scrollableDivParent.scrollLeft;
 
-        // console.log({
-        //     scrollLeftOfScrollableDiv: scrollLeftOfScrollableDiv,
-        // });
-
         const clickPositionInTimelineUnits =
             mouseClickViewportPositionX -
             offSetLeftFromViewPortOfScrollableDivParent +
@@ -350,18 +370,29 @@ export const Timeline = ({
 
     return (
         <>
-            <Box>Playhead: {playheadPositionInPixels}</Box>
-            <Box>Ruler Width: {rulerWidth}</Box>
-            <Box>Seconds On Timeline: {secondsOnTimeline}</Box>
-            <Box>
-                Current Time:{' '}
-                {!isNullOrUndefined(currentTime) ? asFormattedMediaTimecodeString(currentTime) : ''}
-            </Box>
-            <Box>
-                Duration from Player: {durationSeconds} /{' '}
-                {asFormattedMediaTimecodeString(durationSeconds)}
-            </Box>
-            <Box>ZoomLevel From Config: {zoomLevelConfig.zoomLevel}</Box>
+            <Accordion elevation={0}>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography variant="body1" fontWeight="bold">
+                        Debug Details
+                    </Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                    <Box>Playhead: {playheadPositionInPixels}</Box>
+                    <Box>Ruler Width: {rulerWidth}</Box>
+                    <Box>Seconds On Timeline: {secondsOnTimeline}</Box>
+                    <Box>
+                        Current Time:{' '}
+                        {!isNullOrUndefined(currentTime)
+                            ? asFormattedMediaTimecodeString(currentTime)
+                            : ''}
+                    </Box>
+                    <Box>
+                        Duration from Player: {durationSeconds} /{' '}
+                        {asFormattedMediaTimecodeString(durationSeconds)}
+                    </Box>
+                    <Box>ZoomLevel From Config: {zoomLevelConfig.zoomLevel}</Box>
+                </AccordionDetails>
+            </Accordion>
             <Divider />
             <Box>
                 <Tooltip title="Zoom In">
@@ -395,9 +426,9 @@ export const Timeline = ({
                     data-testid="timeline-left-side-labels"
                     sx={{
                         paddingTop: `${EDITOR_SOUND_BAR_HEIGHT_IN_PIXELS}px`,
-                        width: '6%',
-                        maxWidth: '45px',
-                        borderRight: '1px solid #666',
+                        width: '8%',
+                        maxWidth: '51px',
+                        borderRight: '1px solid #bfbfbf',
                     }}
                 >
                     {timelineTracks.map(({ name, trackLabel }) => (
@@ -409,14 +440,13 @@ export const Timeline = ({
                             className={`${getSelectedClass(name)}`}
                             onClick={() => selectTrack(name)}
                         >
-                            {/* TODO need an icon here for annotations */}
-                            {trackLabel}
+                            <TrackLabelIconPresenter trackLabel={trackLabel} />
                         </StyledTrackLabel>
                     ))}
                 </Box>
                 <Box
                     data-testid="tracks-container"
-                    sx={{ flexGrow: 1, width: '94%', position: 'relative' }}
+                    sx={{ flexGrow: 1, width: '92%', position: 'relative' }}
                 >
                     <ScrollingBox
                         ref={scrollingBoxRef}
@@ -480,6 +510,8 @@ export const Timeline = ({
                                       data-testid={`${trackLabel}-track`}
                                       sx={{
                                           width: `${rulerWidth}px`,
+                                          borderRadius: '7px',
+                                          backgroundColor: '#a9cedd',
                                           // backgroundImage: `url(${WAVE_FORM_URL})`,
                                       }}
                                   >

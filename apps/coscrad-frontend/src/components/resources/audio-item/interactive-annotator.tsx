@@ -183,7 +183,6 @@ export const InteractiveAnnotator = ({
 
     return (
         <>
-            <Box>Editing Track: {timelineTrackName}</Box>
             <AudioAnnotator
                 audioUrl={audioURL}
                 selectedTimeRange={timeRange}

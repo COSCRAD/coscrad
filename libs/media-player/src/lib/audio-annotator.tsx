@@ -2,18 +2,27 @@ import {
     ArrowLeft as ArrowLeftIcon,
     ArrowRight as ArrowRightIcon,
     Clear as ClearIcon,
+    ExpandMore as ExpandMoreIcon,
 } from '@mui/icons-material/';
-import { Box, IconButton, Paper, Stack, Tooltip, Typography, styled } from '@mui/material';
+import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+    Box,
+    IconButton,
+    Paper,
+    Stack,
+    Tooltip,
+    Typography,
+    styled,
+} from '@mui/material';
 import { RefObject, SyntheticEvent, useEffect, useState } from 'react';
 import { asFormattedMediaTimecodeString } from './shared/as-formatted-media-timecode-string';
 import { AudioMIMEType } from './shared/audio-mime-type.enum';
 import { isAudioMIMEType } from './shared/is-audio-mime-type';
 import { KeyboardKey, useKeyDown } from './shared/use-key-down';
 import { isNull, isNullOrUndefined } from './shared/validation';
-import {
-    TimeRangeSelectionStatus,
-    TimeRangeSelectionStatusIndicator,
-} from './time-range-selection-visual';
+import { TimeRangeSelectionStatus } from './time-range-selection-visual';
 import { Timeline, TimelineTrack, TimelineTrackName } from './timeline';
 
 export type Nullable<T> = T | null;
@@ -305,130 +314,148 @@ export const AudioAnnotator = ({
     return (
         <AudioAnnotatorBox>
             <Stack mb={2}>
-                <StyledAudioElement
-                    ref={audioRef}
-                    onLoadedData={onLoadedData}
-                    onCanPlay={onCanplay}
-                    onCanPlayThrough={onCanPlayThrough}
-                    onPlay={blurAudioPlayer}
-                    onPlaying={onPlaying}
-                    onPause={onPause}
-                    onTimeUpdate={updateCurrentTime}
-                    onSeeked={blurAudioPlayer}
-                    onVolumeChange={blurAudioPlayer}
-                    controls
-                >
-                    {isAudioMIMEType(mimeType) ? (
-                        <source key={mimeType} src={audioUrl} type={mimeType} />
-                    ) : (
-                        <>
-                            {Object.values(AudioMIMEType).map((mimeType) => (
+                <Accordion elevation={0}>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                        <Typography variant="body1" fontWeight="bold">
+                            Browser Audio Player
+                        </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <StyledAudioElement
+                            ref={audioRef}
+                            onLoadedData={onLoadedData}
+                            onCanPlay={onCanplay}
+                            onCanPlayThrough={onCanPlayThrough}
+                            onPlay={blurAudioPlayer}
+                            onPlaying={onPlaying}
+                            onPause={onPause}
+                            onTimeUpdate={updateCurrentTime}
+                            onSeeked={blurAudioPlayer}
+                            onVolumeChange={blurAudioPlayer}
+                            controls
+                        >
+                            {isAudioMIMEType(mimeType) ? (
                                 <source key={mimeType} src={audioUrl} type={mimeType} />
-                            ))}
-                        </>
-                    )}
-                    Your browser does not support the audio element.
-                </StyledAudioElement>
-                <Box sx={{ height: '12px' }}>
-                    <Typography
-                        data-testid="audio-error-message"
-                        variant="body2"
-                        sx={{ color: '#A40011', fontWeight: 'bold', m: 1 }}
-                    >
-                        {errorMessage !== '' ? (
-                            <span>{errorMessage}</span>
-                        ) : (
-                            <span>
-                                Use the Marker Buttons to select a time range for an annotation
-                            </span>
-                        )}
-                    </Typography>
-                </Box>
-                <Box mt={1}>
-                    <Stack>
-                        <Box display="inline-flex" alignItems="center" boxSizing="border-box">
-                            <Tooltip title="Mark In Point">
-                                <span>
-                                    <IconButton
-                                        data-testid="in-point-marker-button"
-                                        onClick={markInPoint}
-                                        disabled={!isPlayable}
-                                    >
-                                        <ArrowRightIcon />
-                                    </IconButton>
-                                </span>
-                            </Tooltip>
-                            <Tooltip title="Mark Out Point">
-                                <span>
-                                    <IconButton
-                                        data-testid="out-point-marker-button"
-                                        onClick={markOutPoint}
-                                        disabled={inPointSeconds === null}
-                                    >
-                                        <ArrowLeftIcon />
-                                    </IconButton>
-                                </span>
-                            </Tooltip>
-                            {!isNullOrUndefined(currentTime) ? (
-                                <Box minWidth="60%">
-                                    <Typography variant="body1">
-                                        Current Time in Seconds: {currentTime}
-                                    </Typography>
-                                </Box>
-                            ) : null}
-                        </Box>
-                    </Stack>
-                    <Stack>
-                        <Box display="inline-flex" alignItems="center" width="80%" margin="0 auto">
-                            <Box width="70px">
-                                {!isNullOrUndefined(inPointSeconds) ? (
-                                    <Typography
-                                        data-testid="in-point-selection-time-code"
-                                        variant="body1"
-                                    >
-                                        {asFormattedMediaTimecodeString(inPointSeconds)}
-                                    </Typography>
-                                ) : null}
-                            </Box>
-                            <Box width="160px" height="20px" padding="0 20px">
-                                <TimeRangeSelectionStatusIndicator
-                                    timeRangeSelectionStatus={timeRangeSelectionStatus}
-                                />
-                            </Box>
-                            <Box width="70px">
-                                {!isNullOrUndefined(outPointSeconds) ? (
-                                    <Typography
-                                        data-testid="out-point-selection-time-code"
-                                        variant="body1"
-                                    >
-                                        {asFormattedMediaTimecodeString(outPointSeconds)}
-                                    </Typography>
-                                ) : null}
-                            </Box>
-                            <Box width="70px">
-                                <Tooltip title="Clear Time Range Selection">
+                            ) : (
+                                <>
+                                    {Object.values(AudioMIMEType).map((mimeType) => (
+                                        <source key={mimeType} src={audioUrl} type={mimeType} />
+                                    ))}
+                                </>
+                            )}
+                            Your browser does not support the audio element.
+                        </StyledAudioElement>
+                        <Box sx={{ height: '12px' }}>
+                            <Typography
+                                data-testid="audio-error-message"
+                                variant="body2"
+                                sx={{ color: '#A40011', fontWeight: 'bold', m: 1 }}
+                            >
+                                {errorMessage !== '' ? (
+                                    <span>{errorMessage}</span>
+                                ) : (
                                     <span>
-                                        <IconButton
-                                            data-testid="clear-selected-time-range-button"
-                                            onClick={clearMarkers}
-                                            sx={{
-                                                visibility:
-                                                    inPointSeconds === null ? 'hidden' : 'visible',
-                                            }}
-                                        >
-                                            <ClearIcon />
-                                        </IconButton>
+                                        Use the Marker Buttons to select a time range for an
+                                        annotation
                                     </span>
-                                </Tooltip>
-                            </Box>
+                                )}
+                            </Typography>
                         </Box>
-                    </Stack>
-                </Box>
+                        <Box mt={1}>
+                            <Stack>
+                                <Box
+                                    display="inline-flex"
+                                    alignItems="center"
+                                    boxSizing="border-box"
+                                >
+                                    <Tooltip title="Mark In Point">
+                                        <span>
+                                            <IconButton
+                                                data-testid="in-point-marker-button"
+                                                onClick={markInPoint}
+                                                disabled={!isPlayable}
+                                            >
+                                                <ArrowRightIcon />
+                                            </IconButton>
+                                        </span>
+                                    </Tooltip>
+                                    <Tooltip title="Mark Out Point">
+                                        <span>
+                                            <IconButton
+                                                data-testid="out-point-marker-button"
+                                                onClick={markOutPoint}
+                                                disabled={inPointSeconds === null}
+                                            >
+                                                <ArrowLeftIcon />
+                                            </IconButton>
+                                        </span>
+                                    </Tooltip>
+                                    {!isNullOrUndefined(currentTime) ? (
+                                        <Box minWidth="60%">
+                                            <Typography variant="body1">
+                                                Current Time in Seconds: {currentTime}
+                                            </Typography>
+                                        </Box>
+                                    ) : null}
+                                </Box>
+                            </Stack>
+                            <Stack>
+                                <Box
+                                    display="inline-flex"
+                                    alignItems="center"
+                                    width="80%"
+                                    margin="0 auto"
+                                >
+                                    <Box width="70px">
+                                        {!isNullOrUndefined(inPointSeconds) ? (
+                                            <Typography
+                                                data-testid="in-point-selection-time-code"
+                                                variant="body1"
+                                            >
+                                                {asFormattedMediaTimecodeString(inPointSeconds)}
+                                            </Typography>
+                                        ) : null}
+                                    </Box>
+                                    <Box width="160px" height="20px" padding="0 20px">
+                                        {/* <TimeRangeSelectionStatusIndicator
+                                            timeRangeSelectionStatus={timeRangeSelectionStatus}
+                                        /> */}
+                                    </Box>
+                                    <Box width="70px">
+                                        {!isNullOrUndefined(outPointSeconds) ? (
+                                            <Typography
+                                                data-testid="out-point-selection-time-code"
+                                                variant="body1"
+                                            >
+                                                {asFormattedMediaTimecodeString(outPointSeconds)}
+                                            </Typography>
+                                        ) : null}
+                                    </Box>
+                                    <Box width="70px">
+                                        <Tooltip title="Clear Time Range Selection">
+                                            <span>
+                                                <IconButton
+                                                    data-testid="clear-selected-time-range-button"
+                                                    onClick={clearMarkers}
+                                                    sx={{
+                                                        visibility:
+                                                            inPointSeconds === null
+                                                                ? 'hidden'
+                                                                : 'visible',
+                                                    }}
+                                                >
+                                                    <ClearIcon />
+                                                </IconButton>
+                                            </span>
+                                        </Tooltip>
+                                    </Box>
+                                </Box>
+                            </Stack>
+                        </Box>
+                    </AccordionDetails>
+                </Accordion>
                 {!isNullOrUndefined(durationSeconds) ? (
                     <Box>
-                        <Typography sx={{ mt: 1 }} variant="h5">
-                            Annotation Track
-                        </Typography>
                         <Box>
                             <Typography variant="h6">
                                 Context Time: {mediaCurrentTimeFromContext}

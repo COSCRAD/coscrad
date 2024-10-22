@@ -1,5 +1,5 @@
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { useEffect, useRef } from 'react';
+import { isNullOrUndefined } from '../shared/validation';
 
 export type Draw = (context: CanvasRenderingContext2D) => void;
 
