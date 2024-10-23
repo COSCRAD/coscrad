@@ -1,6 +1,10 @@
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useConfig } from 'app/config';
+import { alphabetDetailStyle, colors, detailStyles } from 'app/styles';
 import React, { useEffect, useState } from 'react';
-import { Button, Image, Text, View } from 'react-native';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store';
 import { selectAlphabet } from '../../store/slices/selectors';
@@ -77,13 +81,13 @@ export function AlphabetCardDetailScreen({ route }) {
     } = selectedCard;
 
     return (
-        <View testID="AlphabetCardDetail">
+        <View style={detailStyles.background} testID="AlphabetCardDetail">
             {!imageError ? (
                 <Image
-                    style={{ height: 300 }}
+                    style={{ height: 200 }}
                     testID={`loadedImage`}
                     onError={() => setImageError(true)}
-                    resizeMode="contain"
+                    resizeMode="center"
                     source={{
                         uri: `${BASE_API_URL}/resources/mediaitems/download?name=${card_image.replace(
                             '.png',
@@ -95,56 +99,65 @@ export function AlphabetCardDetailScreen({ route }) {
                 <Text testID={`imageError`}>Error loading image.</Text>
             )}
 
-            <Text>Base Api Url: {BASE_API_URL}</Text>
-            <Text testID={`${letter}`}>Letter: {letter}</Text>
-            <Text testID={`${word}`}>Word: {word}</Text>
-            <Text testID={`AlphabetCardDetail/${sequence_number}`}>
-                Sequence #: {sequence_number}
-            </Text>
-            <Text>Letter Audio:{letter_audio}</Text>
-            <Text>Word Audio: {word_audio}</Text>
-            <Text>Standalone Image: {standalone_image}</Text>
-            <Text>
-                Word Audio URL: {BASE_API_URL}
-                {`/resources/mediaitems/download?name=${word_audio.replace('.mp3', '')}`}
-            </Text>
+            <View style={alphabetDetailStyle.layout}>
+                <View style={alphabetDetailStyle.flexLayout}></View>
+                <View style={alphabetDetailStyle.flexLayout}>
+                    <Text style={alphabetDetailStyle.letter} testID={`${letter}`}>
+                        {letter}
+                    </Text>
+                </View>
+                <View style={alphabetDetailStyle.appAudio}>
+                    <AppAudio
+                        message={letter}
+                        url={`${BASE_API_URL}/resources/mediaitems/download?name=${letter_audio.replace(
+                            '.mp3',
+                            ''
+                        )}`}
+                    />
+                </View>
+            </View>
+            <View style={alphabetDetailStyle.layout}>
+                <View style={alphabetDetailStyle.flexLayout}></View>
+                <View style={alphabetDetailStyle.flexLayout}>
+                    <Text style={alphabetDetailStyle.word} testID={`${word}`}>
+                        {word}
+                    </Text>
+                </View>
+                <View style={alphabetDetailStyle.appAudio}>
+                    <AppAudio
+                        message={word}
+                        url={`${BASE_API_URL}/resources/mediaitems/download?name=${word_audio.replace(
+                            '.mp3',
+                            ''
+                        )}`}
+                    />
+                </View>
+            </View>
 
-            <AppAudio
-                message="Play Letter"
-                url={`${BASE_API_URL}/resources/mediaitems/download?name=${letter_audio.replace(
-                    '.mp3',
-                    ''
-                )}`}
-            />
-
-            <AppAudio
-                message="Play Word"
-                url={`${BASE_API_URL}/resources/mediaitems/download?name=${word_audio.replace(
-                    '.mp3',
-                    ''
-                )}`}
-            />
-
-            <Button
-                testID="Back"
-                title="Back"
-                onPress={() => {
-                    setSelectedLetterSequenceNumber(
-                        ((selectedLetterSequenceNumber - 2 + alphabetCards.length) %
-                            alphabetCards.length) +
-                            1
-                    );
-                }}
-            />
-            <Button
-                testID="Next"
-                title="Next"
-                onPress={() => {
-                    setSelectedLetterSequenceNumber(
-                        (selectedLetterSequenceNumber % alphabetCards.length) + 1
-                    );
-                }}
-            />
+            <View style={alphabetDetailStyle.navigationButtons}>
+                <TouchableOpacity
+                    style={{ padding: 20 }}
+                    onPress={() => {
+                        setSelectedLetterSequenceNumber(
+                            ((selectedLetterSequenceNumber - 2 + alphabetCards.length) %
+                                alphabetCards.length) +
+                                1
+                        );
+                    }}
+                >
+                    <FontAwesomeIcon color={colors.primary} size={70} icon={faChevronLeft} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={{ padding: 20 }}
+                    onPress={() => {
+                        setSelectedLetterSequenceNumber(
+                            (selectedLetterSequenceNumber % alphabetCards.length) + 1
+                        );
+                    }}
+                >
+                    <FontAwesomeIcon color={colors.primary} size={70} icon={faChevronRight} />
+                </TouchableOpacity>
+            </View>
         </View>
     );
 }
