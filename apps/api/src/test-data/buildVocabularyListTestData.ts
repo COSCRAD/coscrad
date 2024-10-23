@@ -105,7 +105,7 @@ const vocabularyListDTOs = [
             }
         ),
         published: true,
-        isDeleted: false,
+        hasBeenDeleted: false,
         entries: [
             {
                 termId: convertSequenceNumberToUuid(1),
@@ -145,7 +145,7 @@ const vocabularyListDTOs = [
             LanguageCode.Haida
         ),
         published: true,
-        isDeleted: false,
+        hasBeenDeleted: false,
         entries: [
             {
                 termId: convertSequenceNumberToUuid(2),

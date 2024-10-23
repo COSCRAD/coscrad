@@ -25,6 +25,8 @@ export class DeleteResourceCommandHandler extends BaseCommandHandler<Resource> {
         if (isNotFound(searchResult)) {
             return new AggregateNotFoundError({ type: resourceType, id });
         }
+
+        return searchResult;
     }
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {

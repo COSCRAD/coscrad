@@ -156,7 +156,7 @@ describe(`Term.fromEventHistory`, () => {
             });
 
             describe(`when a term has been deleted`, () => {
-                it.only('should return the expected term', () => {
+                it('should return the expected term', () => {
                     const result = Term.fromEventHistory(
                         termTranslated
                             .andThen<ResourceDeleted>({
@@ -170,7 +170,7 @@ describe(`Term.fromEventHistory`, () => {
 
                     const updatedTerm = result as Term;
 
-                    expect(updatedTerm.delete).toBe(true);
+                    expect(updatedTerm.hasBeenDeleted).toBe(true);
                 });
             });
 
