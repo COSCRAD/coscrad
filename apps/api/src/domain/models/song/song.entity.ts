@@ -225,6 +225,7 @@ export class Song extends Resource {
             published: false,
             title: buildMultilingualTextWithSingleItem(title, languageCodeForTitle),
             eventHistory: [creationEvent],
+            hasBeenDeleted: false,
         });
 
         const newSong = updateEvents.reduce(

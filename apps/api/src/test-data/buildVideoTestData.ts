@@ -16,6 +16,7 @@ const partialDtos: DTO<Omit<Video, 'type'>>[] = [
         mediaItemId: mediaItems[1].id,
         lengthMilliseconds: 20000,
         published: true,
+        hasBeenDeleted: false,
         transcript: new Transcript({
             participants: [
                 {

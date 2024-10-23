@@ -203,6 +203,7 @@ export class Playlist extends Resource {
             published: false,
             items: [],
             name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
+            hasBeenDeleted: false,
         });
 
         const invariantValidationResult = buildResult.validateInvariants();

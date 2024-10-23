@@ -134,6 +134,8 @@ import {
     TranslatePlaylistNameCommandHandler,
 } from '../../../domain/models/playlist/commands';
 import {
+    DeleteResource,
+    DeleteResourceCommandHandler,
     GrantResourceReadAccessToUser,
     GrantResourceReadAccessToUserCommandHandler,
     PublishResource,
@@ -143,6 +145,7 @@ import {
     UnpublishResource,
     UnpublishResourceCommandHandler,
 } from '../../../domain/models/shared/common-commands';
+import { ResourceDeleted } from '../../../domain/models/shared/common-commands/delete-resource/resource-deleted.event';
 import { ResourcePublished } from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import { IQueryRepositoryProvider } from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
 import {
@@ -342,6 +345,7 @@ export const buildAllDataClassProviders = () =>
         SongLyricsTranslated,
         ResourcePublished,
         ResourceUnpublished,
+        ResourceDeleted,
         TagCreated,
         ResourceOrNoteTagged,
         TermCreated,
@@ -721,6 +725,8 @@ export default async (
             PublishResourceCommandHandler,
             UnpublishResource,
             UnpublishResourceCommandHandler,
+            DeleteResource,
+            DeleteResourceCommandHandler,
             CreateTag,
             CreateTagCommandHandler,
             RelabelTag,

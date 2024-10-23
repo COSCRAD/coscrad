@@ -152,6 +152,7 @@ export class Point extends Resource implements ISpatialFeature {
                 description,
             },
             published: false,
+            hasBeenDeleted: false,
         });
 
         const invariantValidationResult = buildResult.validateInvariants();

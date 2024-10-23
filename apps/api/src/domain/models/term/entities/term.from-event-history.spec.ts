@@ -8,6 +8,7 @@ import {
     RESOURCE_READ_ACCESS_GRANTED_TO_USER,
     ResourceReadAccessGrantedToUser,
 } from '../../shared/common-commands';
+import { ResourceDeleted } from '../../shared/common-commands/delete-resource/resource-deleted.event';
 import { ResourcePublished } from '../../shared/common-commands/publish-resource/resource-published.event';
 import {
     AudioAddedForTerm,
@@ -135,7 +136,7 @@ describe(`Term.fromEventHistory`, () => {
                 });
             });
 
-            describe(`When a translated term is pulbished`, () => {
+            describe(`When a translated term is published`, () => {
                 it(`should return the appropriate term`, () => {
                     const result = Term.fromEventHistory(
                         termTranslated
@@ -151,6 +152,25 @@ describe(`Term.fromEventHistory`, () => {
                     const updatedTerm = result as Term;
 
                     expect(updatedTerm.published).toBe(true);
+                });
+            });
+
+            describe(`when a term has been deleted`, () => {
+                it('should return the expected term', () => {
+                    const result = Term.fromEventHistory(
+                        termTranslated
+                            .andThen<ResourceDeleted>({
+                                type: `RESOURCE_DELETED`,
+                            })
+                            .as({ type: AggregateType.term, id: termId }),
+                        termId
+                    );
+
+                    expect(result).toBeInstanceOf(Term);
+
+                    const updatedTerm = result as Term;
+
+                    expect(updatedTerm.hasBeenDeleted).toBe(true);
                 });
             });
 

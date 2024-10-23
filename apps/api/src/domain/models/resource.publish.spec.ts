@@ -27,6 +27,7 @@ const unpublishedWidget = new Widget({
     id: buildDummyUuid(1),
     published: false,
     eventHistory: [],
+    hasBeenDeleted: false,
 });
 
 describe(`Resource.publish`, () => {

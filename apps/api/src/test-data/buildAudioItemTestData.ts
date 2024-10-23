@@ -33,6 +33,7 @@ const partialDtos: DTO<Omit<AudioItem, 'type'>>[] = [
         mediaItemId: mediaItems[0].id,
         lengthMilliseconds: 20000,
         published: true,
+        hasBeenDeleted: false,
         transcript: new Transcript({
             participants: [
                 {
@@ -100,6 +101,7 @@ const partialDtos: DTO<Omit<AudioItem, 'type'>>[] = [
         mediaItemId: mediaItems[2].id,
         lengthMilliseconds: 23409,
         published: true,
+        hasBeenDeleted: false,
     },
     {
         id: '113',
@@ -136,6 +138,7 @@ const partialDtos: DTO<Omit<AudioItem, 'type'>>[] = [
         mediaItemId: mediaItems[0].id,
         lengthMilliseconds: 32989,
         published: true,
+        hasBeenDeleted: false,
     },
     {
         id: '114',
@@ -144,6 +147,7 @@ const partialDtos: DTO<Omit<AudioItem, 'type'>>[] = [
         // TODO use real value here
         lengthMilliseconds: 1000,
         published: true,
+        hasBeenDeleted: false,
     },
     {
         id: '115',
@@ -151,6 +155,7 @@ const partialDtos: DTO<Omit<AudioItem, 'type'>>[] = [
         mediaItemId: mediaItems[8].id,
         lengthMilliseconds: 10,
         published: true,
+        hasBeenDeleted: false,
     },
 ];
 

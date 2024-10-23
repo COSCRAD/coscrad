@@ -56,6 +56,7 @@ export class CreatePlayListCommandHandler extends BaseCreateCommandHandler<Playl
             name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
             items: [],
             published: false,
+            hasBeenDeleted: false,
         };
 
         const newInstanceOrError = getInstanceFactoryForResource<Playlist>(ResourceType.playlist)(
