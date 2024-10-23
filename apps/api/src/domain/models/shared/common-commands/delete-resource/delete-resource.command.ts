@@ -5,7 +5,7 @@ import { ResourceCompositeIdentifier } from '../publish-resource';
 
 @Command({
     type: 'DELETE_RESOURCE',
-    label: 'Publish Resource',
+    label: 'Delete Resource',
     description: 'Make a resource invisible to the public',
 })
 export class DeleteResource implements ICommandBase {
