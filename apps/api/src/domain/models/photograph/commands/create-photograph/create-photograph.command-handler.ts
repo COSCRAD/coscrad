@@ -37,6 +37,7 @@ export class CreatePhotographCommandHandler extends BaseCreateCommandHandler<Pho
             }),
             photographer,
             published: false,
+            hasBeenDeleted: false,
         });
 
         /**

@@ -37,6 +37,7 @@ export class CreatePointCommandHandler extends BaseCreateCommandHandler<Point> {
             },
             // You must run a `PUBLISH_RESOURCE` command to publish this point
             published: false,
+            hasBeenDeleted: false,
         });
     }
 

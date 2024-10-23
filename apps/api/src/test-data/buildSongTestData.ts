@@ -44,6 +44,7 @@ const songDtos: DTO<Omit<Song, 'id'>>[] = [
         ),
         audioItemId: '9',
         published: true,
+        hasBeenDeleted: false,
         contributions: [
             {
                 contributorId: '1',
@@ -72,6 +73,7 @@ const songDtos: DTO<Omit<Song, 'id'>>[] = [
         // audioURL:
         //     'https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav',
         published: false,
+        hasBeenDeleted: false,
         queryAccessControlList: {
             allowedUserIds: ['1'],
             allowedGroupIds: [],

@@ -23,6 +23,7 @@ const dtos: Omit<DTO<Point>, 'properties'>[] = pointCoordinates.map((point, inde
         coordinates: point,
     },
     published: true,
+    isDeleted: false,
 }));
 
 export default (): Point[] =>

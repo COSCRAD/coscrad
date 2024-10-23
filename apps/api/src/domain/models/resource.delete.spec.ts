@@ -1,59 +1,64 @@
+import { ResourceType } from '@coscrad/api-interfaces';
 import assertErrorAsExpected from '../../lib/__tests__/assertErrorAsExpected';
 import { InternalError } from '../../lib/errors/InternalError';
 import { MultilingualText } from '../common/entities/multilingual-text';
 import { AggregateCompositeIdentifier } from '../types/AggregateCompositeIdentifier';
-import { ResourceType } from '../types/ResourceType';
 import buildDummyUuid from './__tests__/utilities/buildDummyUuid';
-import ResourceNotYetPublishedError from './resource-not-yet-published.error';
+import ResourceNotFoundError from './resource-not-found.error';
 import { Resource } from './resource.entity';
 
 class Widget extends Resource {
     protected getResourceSpecificAvailableCommands(): string[] {
         throw new Error('Method not implemented.');
     }
+
     protected validateComplexInvariants(): InternalError[] {
         return [];
     }
+
     getName(): MultilingualText {
         throw new Error('Method not implemented.');
     }
+
     protected getExternalReferences(): AggregateCompositeIdentifier[] {
         throw new Error('Method not implemented.');
     }
 }
 
-describe(`Resource.unpublished`, () => {
-    const unpublishedWidget = new Widget({
-        type: 'widget' as ResourceType,
-        id: buildDummyUuid(1),
-        published: false,
-        eventHistory: [],
-        hasBeenDeleted: false,
-    });
+const deletedWidget = new Widget({
+    type: 'widget' as ResourceType,
+    id: buildDummyUuid(1),
+    published: true,
+    eventHistory: [],
+    hasBeenDeleted: true,
+});
 
-    const publishedWidget = unpublishedWidget.clone({
-        published: true,
-    });
+const existingWidget = deletedWidget.clone({
+    hasBeenDeleted: false,
+});
 
-    describe(`when the resource is published`, () => {
-        it(`should return the updated, unpublished resource`, () => {
-            const result = publishedWidget.unpublish();
+describe(`Resource.delete`, () => {
+    describe(`when the resource is not yet deleted`, () => {
+        it(`should return an updated, deleted resource`, () => {
+            const result = existingWidget.delete();
 
             expect(result).toBeInstanceOf(Widget);
 
             const updatedWidget = result as Widget;
 
-            expect(updatedWidget.published).toBe(false);
+            expect(updatedWidget.hasBeenDeleted).toBe(true);
         });
     });
 
-    describe(`when the resource is not yet published`, () => {
+    describe(`when the resource has been deleted`, () => {
         it(`should return the expected error`, () => {
-            const result = unpublishedWidget.unpublish();
+            const deletedWidget = existingWidget.delete() as Widget;
+
+            const result = deletedWidget.delete();
 
             assertErrorAsExpected(
                 result,
-                new ResourceNotYetPublishedError(unpublishedWidget.getCompositeIdentifier())
+                new ResourceNotFoundError(deletedWidget.getCompositeIdentifier())
             );
         });
     });

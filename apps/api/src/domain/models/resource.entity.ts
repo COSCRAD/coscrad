@@ -13,7 +13,7 @@ import { getAllowedContextsForModel } from './allowedContexts/isContextAllowedFo
 import { EdgeConnectionContext } from './context/context.entity';
 import { EdgeConnectionContextType } from './context/types/EdgeConnectionContextType';
 import ResourceAlreadyPublishedError from './resource-already-published.error';
-import ResourceDeletedError from './resource-deleted.error';
+import ResourceNotFoundError from './resource-not-found.error';
 import ResourceNotYetPublishedError from './resource-not-yet-published.error';
 import { AccessControlList } from './shared/access-control/access-control-list.entity';
 import UserAlreadyHasReadAccessError from './shared/common-command-errors/invalid-state-transition-errors/UserAlreadyHasReadAccessError';
@@ -25,6 +25,8 @@ export abstract class Resource extends Aggregate {
 
     // TODO: Rename this 'isPublished' - db migration
     readonly published: boolean;
+
+    readonly hasBeenDeleted: boolean;
 
     /**
      * TODO We need a migration to make the acl required. We'll also need to
@@ -38,11 +40,13 @@ export abstract class Resource extends Aggregate {
         // This should only happen in the validation flow
         if (!dto) return;
 
-        const { published, queryAccessControlList: aclDto } = dto;
+        const { published, queryAccessControlList: aclDto, hasBeenDeleted: isDeleted } = dto;
 
         this.published = typeof published === 'boolean' ? published : false;
 
         this.queryAccessControlList = new AccessControlList(aclDto);
+
+        this.hasBeenDeleted = typeof isDeleted === 'boolean' ? isDeleted : true;
     }
 
     grantReadAccessToUser<T extends Resource>(this: T, userId: AggregateId): ResultOrError<T> {
@@ -81,10 +85,10 @@ export abstract class Resource extends Aggregate {
 
     @UpdateMethod()
     delete<T extends Resource>(this: T): ResultOrError<T> {
-        if (!this.delete) return new ResourceDeletedError(this.getCompositeIdentifier());
+        if (this.hasBeenDeleted) return new ResourceNotFoundError(this.getCompositeIdentifier());
 
         return this.safeClone<T>({
-            delete: false,
+            hasBeenDeleted: true,
         } as unknown as DeepPartial<DTO<T>>);
     }
 
@@ -95,6 +99,10 @@ export abstract class Resource extends Aggregate {
     // TODO add test coverage
     handleResourceUnpublished<T extends Resource>(this: T) {
         return this.unpublish<T>();
+    }
+
+    handleResourceHasBeenDeleted<T extends Resource>(this: T) {
+        return this.delete<T>();
     }
 
     getAllowedContextTypes() {

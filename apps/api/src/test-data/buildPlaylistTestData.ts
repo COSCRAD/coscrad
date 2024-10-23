@@ -26,6 +26,7 @@ const partialDtos: Omit<DTO<Playlist>, 'type'>[] = [
             },
         ],
         published: true,
+        hasBeenDeleted: false,
     },
 ];
 

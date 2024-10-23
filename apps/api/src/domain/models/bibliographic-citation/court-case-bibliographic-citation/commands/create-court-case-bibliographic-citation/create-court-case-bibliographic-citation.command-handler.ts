@@ -46,6 +46,7 @@ export class CreateCourtCaseBibliographicCitationCommandHandler extends BaseCrea
             id,
             // a separate publication command is required
             published: false,
+            hasBeenDeleted: false,
             data: {
                 type: BibliographicCitationType.courtCase,
                 caseName,

@@ -85,6 +85,7 @@ const detailedVocabularyList: DTO<VocabularyList> = {
     entries,
     variables: [formFieldForPositive, formFieldForPerson],
     published: true,
+    hasBeenDeleted: false,
     type: ResourceType.vocabularyList,
 };
 
@@ -104,6 +105,7 @@ const vocabularyListDTOs = [
             }
         ),
         published: true,
+        isDeleted: false,
         entries: [
             {
                 termId: convertSequenceNumberToUuid(1),
@@ -143,6 +145,7 @@ const vocabularyListDTOs = [
             LanguageCode.Haida
         ),
         published: true,
+        isDeleted: false,
         entries: [
             {
                 termId: convertSequenceNumberToUuid(2),
