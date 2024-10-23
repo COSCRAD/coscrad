@@ -46,6 +46,7 @@ export class CreateVideoCommandHandler extends BaseCreateCommandHandler<Video> {
             mediaItemId,
             lengthMilliseconds,
             published: false,
+            hasBeenDeleted: false,
         };
 
         // the cast is necessary due to loss of type-safety from using a mixin

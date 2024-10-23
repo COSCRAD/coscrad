@@ -112,6 +112,7 @@ export class CourtCaseBibliographicCitation
             type: AggregateType.bibliographicCitation,
             id,
             published: false,
+            hasBeenDeleted: false,
             data: {
                 type: BibliographicCitationType.courtCase,
                 caseName,

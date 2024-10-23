@@ -32,6 +32,7 @@ export class CreateVocabularyListCommandHandler extends BaseCreateCommandHandler
             entries: [],
             variables: [],
             published: false,
+            hasBeenDeleted: false,
         };
 
         const newInstanceOrError = getInstanceFactoryForResource<VocabularyList>(

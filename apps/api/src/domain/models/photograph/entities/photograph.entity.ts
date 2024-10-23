@@ -236,6 +236,7 @@ export class Photograph extends Resource implements Boundable2D {
             },
             mediaItemId,
             published: false,
+            hasBeenDeleted: false,
         });
 
         const invariantValidationResult = buildResult.validateInvariants();

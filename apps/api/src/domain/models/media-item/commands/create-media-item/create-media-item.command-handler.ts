@@ -38,6 +38,7 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
             mimeType: mimeType,
             // You must execute `PUBLISH_MEDIA_ITEM` to publish
             published: false,
+            hasBeenDeleted: false,
             /**
              * TODO Make this required for an audio or video. Eventually we may
              * want to populate this by injecting the media prober into this

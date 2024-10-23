@@ -26,6 +26,7 @@ const dtos: DTO<JournalArticleBibliographicCitation>[] = [
             doi: '10.14288/bcs.v0i19.784',
         },
         published: true,
+        hasBeenDeleted: false,
         id: '23',
     },
 ];

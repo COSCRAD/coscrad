@@ -514,6 +514,7 @@ export class VocabularyList extends Resource {
             entries: [],
             variables: [],
             published: false,
+            hasBeenDeleted: false,
         });
     }
 }

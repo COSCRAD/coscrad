@@ -2,7 +2,7 @@ import { InternalError } from '../../lib/errors/InternalError';
 import formatResourceCompositeIdentifier from '../../queries/presentation/formatAggregateCompositeIdentifier';
 import { ResourceCompositeIdentifier } from '../types/ResourceCompositeIdentifier';
 
-export default class ResourceDeletedError extends InternalError {
+export default class ResourceNotFoundError extends InternalError {
     constructor(compositeIdentifier: ResourceCompositeIdentifier) {
         const msg = `You cannot delete ${formatResourceCompositeIdentifier(
             compositeIdentifier

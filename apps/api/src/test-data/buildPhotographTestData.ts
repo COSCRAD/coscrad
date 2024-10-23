@@ -8,7 +8,7 @@ import {
     convertSequenceNumberToUuid,
 } from './utilities/convertSequentialIdToUuid';
 
-const dtos: DTO<Omit<Photograph, 'id' | 'published' | 'type'>>[] = [
+const dtos: DTO<Omit<Photograph, 'id' | 'published' | 'isDeleted' | 'type'>>[] = [
     {
         mediaItemId: '5',
         title: buildMultilingualTextWithSingleItem('Adiitsii Running', LanguageCode.English),
@@ -49,6 +49,7 @@ export default (): Photograph[] =>
                     ...dto,
                     id: `${index}`,
                     published: true,
+                    hasBeenDeleted: false,
                     type: ResourceType.photograph,
                     mediaItemId: convertSequenceNumberToUuid(parseInt(dto.mediaItemId)),
                 })

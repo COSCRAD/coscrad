@@ -26,21 +26,26 @@ export class DeleteResourceCommandHandler extends BaseCommandHandler<Resource> {
             return new AggregateNotFoundError({ type: resourceType, id });
         }
     }
+
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
         return new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat();
     }
+
     protected actOnInstance(instance: Resource, _: ICommand): ResultOrError<Resource> {
         return instance.delete();
     }
+
     protected validateExternalState(
         _state: InMemorySnapshot,
         _instance: Resource
     ): Valid | InternalError {
         return Valid;
     }
+
     protected buildEvent(command: DeleteResource, eventMeta: EventRecordMetadata): BaseEvent {
         return new ResourceDeleted(command, eventMeta);
     }
+
     protected async persist(
         instance: Resource,
         command: DeleteResource,
