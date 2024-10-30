@@ -42,6 +42,10 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
         return aggregateCompositeIdentifier;
     }
 
+    /**
+     * Is there a better way we can inject a resource specific repository as a
+     * single command-scoped dependency without reproducing the factory here?
+     */
     protected getRepositoryForCommand<T extends Aggregate = Aggregate>(
         command: ICommandBase
     ): IRepositoryForAggregate<T> {

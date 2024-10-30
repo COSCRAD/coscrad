@@ -142,7 +142,7 @@ describe(commandType, () => {
                         }
                     );
 
-                    describe.only('when there is a bogusProperty', () => {
+                    describe('when there is a bogusProperty', () => {
                         it('should fail with the expected error', async () => {
                             await assertCommandFailsDueToTypeError(
                                 commandAssertionDependencies,
