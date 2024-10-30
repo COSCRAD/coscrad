@@ -167,7 +167,7 @@ describe('AudioAddedForTermEventHandler.handle', () => {
              * We need to ensure that the media item ID comes through
              * the eager joins.
              */
-            expect(updatedTerm.mediaItemId).toBe(audioItemId);
+            expect(updatedTerm.mediaItemId).toBe(mediaItemId);
         });
     });
 });
