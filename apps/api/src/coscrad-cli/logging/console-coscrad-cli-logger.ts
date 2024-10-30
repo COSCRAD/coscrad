@@ -7,7 +7,7 @@ export interface CoscradLoggerOptions {
 
 @Injectable()
 export class ConsoleCoscradCliLogger implements ICoscradLogger {
-    log(message: string) {
+    log(_message: string) {
         return;
     }
 }
