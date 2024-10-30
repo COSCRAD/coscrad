@@ -81,7 +81,7 @@ pipeline {
                 /* groovylint-disable-next-line LineLength */
                     sh 'touch apps/api/src/app/config/test.env'
 
-                    sh 'npx nx test api --skip-nx-cache --detectOpenHandles'
+                    sh 'npx nx test api --skip-nx-cache'
             }
             }
         }
