@@ -201,6 +201,9 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
         await cursor.all();
     }
 
+    /**
+     * TODO We need to opt back into the test for this.
+     */
     async registerFilterProperty(
         id: AggregateId,
         name: string,

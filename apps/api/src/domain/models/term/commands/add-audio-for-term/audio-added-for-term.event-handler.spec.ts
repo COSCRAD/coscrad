@@ -15,14 +15,25 @@ import generateDatabaseNameForTestSuite from '../../../../../persistence/reposit
 import { TermViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { TestEventStream } from '../../../../../test-data/events';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
-import { AUDIO_QUERY_REPOSITORY_TOKEN } from '../../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
-import { AudioAddedForDigitalTextPage } from '../../../digital-text/commands';
+import { AudioItemCreated } from '../../../audio-visual/audio-item/commands/create-audio-item/audio-item-created.event';
+import { EventSourcedAudioItemViewModel } from '../../../audio-visual/audio-item/queries';
+import {
+    AUDIO_QUERY_REPOSITORY_TOKEN,
+    IAudioItemQueryRepository,
+} from '../../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ITermQueryRepository } from '../../queries';
 import { ArangoTermQueryRepository } from '../../repositories/arango-term-query-repository';
 import { TermCreated } from '../create-term';
 import { TermTranslated } from '../translate-term';
 import { AudioAddedForTerm } from './audio-added-for-term.event';
 import { AudioAddedForTermEventHandler } from './audio-added-for-term.event-handler';
+
+const audioItemId = buildDummyUuid(88);
+
+const audioItemCompositeId = {
+    type: AggregateType.audioItem,
+    id: audioItemId,
+};
 
 const termId = buildDummyUuid(1);
 
@@ -39,10 +50,8 @@ const termTranslated = termCreated.andThen<TermTranslated>({
     type: 'TERM_TRANSLATED',
 });
 
-const audioItemId = buildDummyUuid(1);
-
-const audioAddedForTerm = termTranslated.andThen<AudioAddedForDigitalTextPage>({
-    type: 'AUDIO_ADDED_FOR_DIGITAL_TEXT_PAGE',
+const audioAddedForTerm = termTranslated.andThen<AudioAddedForTerm>({
+    type: 'AUDIO_ADDED_FOR_TERM',
     payload: {
         audioItemId,
     },
@@ -55,8 +64,23 @@ const initialView = TermViewModel.fromTermCreated(creationEvent as TermCreated).
     translationEvent
 );
 
+const mediaItemId = buildDummyUuid(77);
+
+const [audioItemCreated] = new TestEventStream()
+    .andThen<AudioItemCreated>({
+        type: 'AUDIO_ITEM_CREATED',
+        payload: {
+            mediaItemId,
+        },
+    })
+    .as(audioItemCompositeId) as [AudioItemCreated];
+
+const relatedAudioItem = EventSourcedAudioItemViewModel.fromAudioItemCreated(audioItemCreated);
+
 describe('AudioAddedForTermEventHandler.handle', () => {
     let testQueryRepository: ITermQueryRepository;
+
+    let audioRepository: IAudioItemQueryRepository;
 
     let databaseProvider: ArangoDatabaseProvider;
 
@@ -93,9 +117,11 @@ describe('AudioAddedForTermEventHandler.handle', () => {
 
         arangoDatabaseForCollection = databaseProvider.getDatabaseForCollection('term__VIEWS');
 
+        audioRepository = app.get(AUDIO_QUERY_REPOSITORY_TOKEN);
+
         testQueryRepository = new ArangoTermQueryRepository(
             connectionProvider,
-            app.get(AUDIO_QUERY_REPOSITORY_TOKEN),
+            audioRepository,
             new ConsoleCoscradCliLogger()
         );
 
@@ -107,7 +133,9 @@ describe('AudioAddedForTermEventHandler.handle', () => {
     });
 
     beforeEach(async () => {
-        arangoDatabaseForCollection.clear();
+        await arangoDatabaseForCollection.clear();
+
+        await databaseProvider.getDatabaseForCollection('audioItem__VIEWS').clear();
 
         /**
          * We attempted to use "handle" on a creation event for the test
@@ -116,6 +144,10 @@ describe('AudioAddedForTermEventHandler.handle', () => {
          * We should investigate this further.
          */
         await testQueryRepository.create(initialView);
+
+        await audioRepository.create(relatedAudioItem);
+
+        console.log('done');
     });
 
     describe(`when there is an existing term`, () => {
@@ -135,7 +167,7 @@ describe('AudioAddedForTermEventHandler.handle', () => {
              * We need to ensure that the media item ID comes through
              * the eager joins.
              */
-            expect(updatedTerm.mediaItemId).toBe('fix-this-test');
+            expect(updatedTerm.mediaItemId).toBe(audioItemId);
         });
     });
 });

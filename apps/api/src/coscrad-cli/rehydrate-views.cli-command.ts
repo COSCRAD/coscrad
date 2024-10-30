@@ -28,6 +28,10 @@ export class RehydrateViewsCliCommand extends CliCommandRunner {
 
     async run(_passedParams: string[], _options: unknown): Promise<void> {
         // TODO ensure there are existing views in the test setup
+        /**
+         * TODO allow the user to select which views to refresh
+         * TODO clear views in one operation
+         */
         this.logger.log(`clearing existing term views`);
 
         await this.databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
