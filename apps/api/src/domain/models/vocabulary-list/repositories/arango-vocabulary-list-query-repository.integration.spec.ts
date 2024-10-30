@@ -163,8 +163,6 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
                 buildMockConfigService(
                     {
                         ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
-                        // TODO this shouldn't be necessary
-                        ARANGO_DB_HOST_PORT: 8551,
                     },
                     buildConfigFilePath(Environment.test)
                 )
