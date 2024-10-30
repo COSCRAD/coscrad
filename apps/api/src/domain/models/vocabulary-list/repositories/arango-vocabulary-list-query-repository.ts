@@ -62,6 +62,7 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
     async create(
         view: IVocabularyListViewModel & { actions: ICommandFormAndLabels[] }
     ): Promise<void> {
+        // TODO If we're going to throw here, we need to wrap the top level event handlers in a try...catch
         return this.database.create(mapEntityDtoToDatabaseDocument(view)).catch((error) => {
             throw new InternalError(
                 `failed to create vocabulary list view in ArangoVocabularyListQueryRepository`,
@@ -214,7 +215,10 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
             })
         );
 
-        const query = `
+        /**
+         *
+         */
+        const _query = `
         FOR doc IN @@collectionName
         FILTER doc._key == @id
         let newField = {
@@ -224,13 +228,14 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
         }
         UPDATE doc WITH {
             form: {
-                fields: APPEND(doc.form.fields,newField)
+                fields: PUSH(doc.form.fields,newField)
             }
         } IN @@collectionName
-         RETURN OLD
+        OPTIONS { mergeObjects: false }
+        RETURN OLD
         `;
 
-        const bindVars = {
+        const _bindVars = {
             '@collectionName': 'vocabularyList__VIEWS',
             id,
             name,
@@ -238,19 +243,41 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
             options,
         };
 
-        const cursor = await this.database
-            .query({
-                query,
-                bindVars,
-            })
-            .catch((reason) => {
-                // TODO fix all error messages
-                throw new InternalError(
-                    `Failed to register vocabulary list filter property via VocabularyListRepository: ${reason}`
-                );
-            });
+        /**
+         * We need to figure out why we get the dreaded `write-write` conflict
+         * with arango. 
+         * 
+         * Note that the following query works fine when executed from the ArangoDB dashboard:
+         * 
+            for e in events
+            filter e.type == 'VOCABULARY_LIST_PROPERTY_FILTER_REGISTERED'
+                for v in vocabularyList__VIEWS
+                filter v._key == e.payload.aggregateCompositeIdentifier.id
+                update v with {
+                form: {
+                fields: push(v.form.fields,{
+                    name: e.payload.name,
+                    type: e.payload.type,
+                    allowedValuesAndLabels: e.payload.allowedValuesAndLabels
+                })
+                }
+                } in vocabularyList__VIEWS
+                OPTIONS { mergeObjects: false }
+         */
 
-        await cursor.all();
+        // const cursor = await this.database
+        //     .query({
+        //         query,
+        //         bindVars,
+        //     })
+        //     .catch((reason) => {
+        //         // TODO fix all error messages
+        //         throw new InternalError(
+        //             `Failed to register vocabulary list filter property via VocabularyListRepository: ${reason}`
+        //         );
+        //     });
+
+        // await cursor.all();
     }
 
     async addTerm(vocabularyListId: AggregateId, termId: AggregateId): Promise<void> {

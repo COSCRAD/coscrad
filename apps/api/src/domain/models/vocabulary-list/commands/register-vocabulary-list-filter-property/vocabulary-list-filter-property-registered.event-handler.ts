@@ -21,6 +21,7 @@ export class VocabularyListFilterPropertyRegisteredEventHandler implements ICosc
             allowedValuesAndLabels,
         },
     }: VocabularyListFilterPropertyRegistered): Promise<void> {
+        // TODO translate checkbox -> switch
         this.queryRepository.registerFilterProperty(id, name, type, allowedValuesAndLabels);
     }
 }
