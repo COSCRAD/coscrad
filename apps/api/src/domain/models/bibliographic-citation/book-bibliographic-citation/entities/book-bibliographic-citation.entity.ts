@@ -137,6 +137,7 @@ export class BookBibliographicCitation
                 isbn,
             }),
             published: false,
+            hasBeenDeleted: false,
         });
 
         const invariantValidationResult = instance.validateInvariants();

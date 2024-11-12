@@ -29,6 +29,7 @@ export default (): Polygon[] =>
                 type: ResourceType.spatialFeature,
                 id: `${index + 300}`,
                 published: true,
+                hasBeenDeleted: false,
                 properties: {
                     name: `Point with ID: ${`${index + 300}`} Name`,
                     description: `Description for polygon ${`${index + 300}`}`,

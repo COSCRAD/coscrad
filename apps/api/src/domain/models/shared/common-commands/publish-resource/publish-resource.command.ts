@@ -4,7 +4,8 @@ import { ExternalEnum, NestedDataType, UUID } from '@coscrad/data-types';
 import formatAggregateType from '../../../../../queries/presentation/formatAggregateType';
 import { AggregateId } from '../../../../types/AggregateId';
 
-class ResourceCompositeIdentifier {
+// TODO where does this belong?
+export class ResourceCompositeIdentifier {
     @ExternalEnum(
         {
             enumLabel: 'resource type',

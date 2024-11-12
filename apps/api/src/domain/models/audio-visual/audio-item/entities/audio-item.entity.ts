@@ -349,6 +349,7 @@ export class AudioItem extends Resource implements IRadioPublishableResource {
             mediaItemId,
             name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
             lengthMilliseconds,
+            hasBeenDeleted: false,
         });
 
         const invariantValidationResult = newInstance.validateInvariants();

@@ -22,7 +22,10 @@ export abstract class BaseUpdateCommandHandler<
     ): Promise<ResultOrError<TAggregate>> {
         const { id, type: aggregateType } = this.getAggregateIdFromCommand(command);
 
-        const searchResult = await this.getRepositoryForCommand(command).fetchById(id);
+        // TODO remove this
+        const repo = this.getRepositoryForCommand(command);
+
+        const searchResult = await repo.fetchById(id);
 
         if (isNotFound(searchResult))
             return new AggregateNotFoundError({ type: aggregateType, id });
