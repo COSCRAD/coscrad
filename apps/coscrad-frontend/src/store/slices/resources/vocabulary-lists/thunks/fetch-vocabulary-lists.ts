@@ -28,7 +28,7 @@ export const fetchVocabularyLists = createFetchThunk<VocabularyListIndexState>(
                         ...entry,
                         term: {
                             ...entry.term,
-                            audioURL: `${apiUrl}${entry.term.audioURL}`,
+                            audioURL: `${apiUrl}/resources/mediaItems/download/${entry.term.mediaItemId}`,
                         },
                     })),
                 };

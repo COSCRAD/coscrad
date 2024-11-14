@@ -394,7 +394,7 @@ export class DigitalText extends Resource {
 
                 const {
                     text: originalText,
-                    languageCode: originalLangaugeCode,
+                    languageCode: originalLanguageCode,
                     // ~~audioItemId~~ we deal with this within the reduce loop below
                 } = originalLanguageImportItemSearchResult[0];
 
@@ -402,7 +402,7 @@ export class DigitalText extends Resource {
                     identifier: pageIdentifier,
                     content: buildMultilingualTextWithSingleItem(
                         originalText,
-                        originalLangaugeCode
+                        originalLanguageCode
                     ),
                     audio: new MultilingualAudio({
                         items: [], // we will add these later

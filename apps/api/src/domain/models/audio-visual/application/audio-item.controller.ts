@@ -8,7 +8,7 @@ import { RESOURCES_ROUTE_PREFIX } from '../../../../app/controllers/resources/co
 import buildViewModelPathForResourceType from '../../../../app/controllers/utilities/buildIndexPathForResourceType';
 import { OptionalJwtAuthGuard } from '../../../../authorization/optional-jwt-auth-guard';
 import { isNotFound } from '../../../../lib/types/not-found';
-import { AudioItemViewModel } from '../../../../queries/buildViewModelForResource/viewModels/audio-visual/audio-item.view-model';
+import { StateBasedAudioItemViewModel } from '../../../../queries/buildViewModelForResource/viewModels/audio-visual/audio-item.view-model.state-based';
 import { AudioItemQueryService } from '../../../services/query-services/audio-item-query.service';
 import { ResourceType } from '../../../types/ResourceType';
 
@@ -38,7 +38,7 @@ export class AudioItemController {
     @ApiBearerAuth('JWT')
     @UseGuards(OptionalJwtAuthGuard)
     @ApiParam(buildByIdApiParamMetadata())
-    @ApiOkResponse({ type: AudioItemViewModel })
+    @ApiOkResponse({ type: StateBasedAudioItemViewModel })
     @Get(`/:id`)
     async fetchById(@Request() req, @Res() res, @Param('id') id: unknown) {
         const searchResult = await this.audioItemQueryService.fetchById(id, req.user || undefined);

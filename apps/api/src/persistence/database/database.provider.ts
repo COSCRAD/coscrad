@@ -3,7 +3,6 @@ import { HasAggregateId } from '../../domain/types/HasAggregateId';
 import { ArangoConnection, ArangoConnectionProvider } from './arango-connection.provider';
 import { ArangoDatabase } from './arango-database';
 import { ArangoDatabaseForCollection } from './arango-database-for-collection';
-import { ArangoCollectionId } from './collection-references/ArangoCollectionId';
 
 @Injectable()
 export class ArangoDatabaseProvider {
@@ -25,7 +24,7 @@ export class ArangoDatabaseProvider {
 
     // TODO [type-safety] Can we correlate entity `DTOs` with `collection IDs`?
     getDatabaseForCollection = <TEntity extends HasAggregateId>(
-        collectionName: ArangoCollectionId
+        collectionName: string
     ): ArangoDatabaseForCollection<TEntity> => {
         if (!this.arangoInstance)
             // TODO should we inject this?

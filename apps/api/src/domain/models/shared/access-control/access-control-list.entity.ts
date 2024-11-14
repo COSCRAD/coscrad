@@ -42,6 +42,12 @@ export class AccessControlList extends BaseDomainModel {
         });
     }
 
+    allowUsers(userIds: AggregateId[]): AccessControlList {
+        userIds.forEach((userId) => this.allowUser(userId));
+
+        return this;
+    }
+
     allowGroup(groupId: AggregateId): AccessControlList {
         if (this.allowedGroupIds.includes(groupId)) {
             throw new InternalError(`The group with ID: ${groupId} is already allowed`);

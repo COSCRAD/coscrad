@@ -8,6 +8,7 @@ import {
     ResourceReadAccessGrantedToUser,
 } from '../../domain/models/shared/common-commands';
 import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
+import { ResourcePublishedEventHandler } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
 import {
     ContributorCreated,
     CreateContributor,
@@ -59,6 +60,8 @@ import { CoscradUserController } from '../controllers/coscrad-user.controller';
             provide: ctor,
             useValue: ctor,
         })),
+        // Event Handlers
+        ResourcePublishedEventHandler,
     ],
 })
 export class UserManagementModule {}

@@ -2,7 +2,7 @@ import { Category } from '../../../../domain/models/categories/entities/category
 import { AggregateType } from '../../../../domain/types/AggregateType';
 import { DTO } from '../../../../types/DTO';
 import { CategoryDocument } from '../../types/CategoryDocument';
-import mapEntityDTOToDatabaseDTO from '../mapEntityDTOToDatabaseDTO';
+import mapEntityDTOToDatabaseDTO from '../mapEntityDTOToDatabaseDocument';
 
 /**
  * TODO [https://www.pivotaltracker.com/story/show/182200005]
