@@ -6,5 +6,5 @@ export type TermInVocabularyListAnalyzedPayload = AnalyzeTermInVocabularyList;
 
 @CoscradEvent('TERM_IN_VOCABULARY_LIST_ANALYZED')
 export class TermInVocabularyListAnalyzed extends BaseEvent<TermInVocabularyListAnalyzedPayload> {
-    type = 'TERM_IN_VOCABULARY_LIST_ANALYZED';
+    readonly type = 'TERM_IN_VOCABULARY_LIST_ANALYZED';
 }

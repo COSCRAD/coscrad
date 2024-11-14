@@ -6,5 +6,5 @@ export type VocabularyListFilterPropertyRegisteredPayload = RegisterVocabularyLi
 
 @CoscradEvent('VOCABULARY_LIST_PROPERTY_FILTER_REGISTERED')
 export class VocabularyListFilterPropertyRegistered extends BaseEvent<VocabularyListFilterPropertyRegisteredPayload> {
-    type = 'VOCABULARY_LIST_PROPERTY_FILTER_REGISTERED';
+    readonly type = 'VOCABULARY_LIST_PROPERTY_FILTER_REGISTERED';
 }

@@ -1,69 +1,141 @@
-import { ITermViewModel } from '@coscrad/api-interfaces';
-import { FromDomainModel, URL } from '@coscrad/data-types';
-import { isNonEmptyString } from '@coscrad/validation-constraints';
-import { ApiPropertyOptional } from '@nestjs/swagger';
-import { AudioItem } from '../../../domain/models/audio-visual/audio-item/entities/audio-item.entity';
-import { MediaItem } from '../../../domain/models/media-item/entities/media-item.entity';
-import { Term } from '../../../domain/models/term/entities/term.entity';
-import { CoscradContributor } from '../../../domain/models/user-management/contributor';
+import {
+    AggregateType,
+    ICommandFormAndLabels,
+    IDetailQueryResult,
+    IMultilingualText,
+    ITermViewModel,
+    LanguageCode,
+    MultilingualTextItemRole,
+} from '@coscrad/api-interfaces';
+import { ICoscradEvent } from '../../../domain/common';
+import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
+import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
+import {
+    PromptTermCreated,
+    TermCreated,
+    TermTranslated,
+} from '../../../domain/models/term/commands';
 import { AggregateId } from '../../../domain/types/AggregateId';
-import { BaseResourceViewModel } from './base-resource.view-model';
 
-const FromTerm = FromDomainModel(Term);
+/**
+ * This is the first view model leveraging a new approach that involves denormalized,
+ * event-sourced, materialized views.
+ */
+export class TermViewModel implements IDetailQueryResult<ITermViewModel> {
+    contributions: { id: string; fullName: string }[];
 
-export class TermViewModel extends BaseResourceViewModel implements ITermViewModel {
-    // We should wrap the API Property using the View Model Schemas!
-    @ApiPropertyOptional({
-        example: 'https://www.mysound.org/audio/hetellsstories.mp3',
-        description: 'a url for an audio recording of the given term in the language',
-    })
-    @URL({
-        label: 'audio link',
-        description: "a web link to a digital audio recording of this term's pronunciation",
-    })
-    readonly audioURL?: string;
+    name: IMultilingualText;
 
-    @ApiPropertyOptional({
-        example: 'Digital Verb Book v 1.0',
-        description:
-            'the name of the project through which this term was documented (if applicable)',
-    })
-    @FromTerm
-    readonly sourceProject?: string;
+    id: AggregateId;
 
-    constructor(
-        term: Term,
-        audioItems: AudioItem[],
-        mediaItems: MediaItem[],
-        contributors: CoscradContributor[]
-    ) {
-        super(term, contributors);
+    isPublished: boolean;
 
-        const { audio, sourceProject, text } = term;
+    mediaItemId?: string;
 
-        if (sourceProject) this.sourceProject = sourceProject;
+    actions: ICommandFormAndLabels[];
 
-        const originalLanguageCode = text.getOriginalTextItem().languageCode;
+    accessControlList: AccessControlList;
+
+    // notes
+
+    // tags
+
+    // events ?
+
+    // revision ?
+
+    static fromTermCreated({
+        payload: {
+            text,
+            languageCode,
+            aggregateCompositeIdentifier: { id: termId },
+        },
+        meta: { contributorIds },
+    }: TermCreated): TermViewModel {
+        const term = new TermViewModel();
+
+        term.name = buildMultilingualTextWithSingleItem(text, languageCode);
+
+        term.id = termId;
+
+        term.actions = []; // TODO build all actions here
+
+        term.contributions = [];
 
         /**
-         * TODO Expose the full multilingual audio
+         * The contributor should have access.
          */
-        const audioItemId = audio.hasAudioIn(originalLanguageCode)
-            ? (audio.getIdForAudioIn(originalLanguageCode) as AggregateId)
-            : undefined;
+        term.accessControlList = new AccessControlList().allowUsers(contributorIds);
 
-        if (isNonEmptyString(audioItemId)) {
-            const audioSearchResult = audioItems.find(({ id }) => id === audioItemId);
+        // term.notes = []; // there are no notes when the term is first created
 
-            if (audioSearchResult) {
-                const { mediaItemId } = audioSearchResult;
+        // term.tags = []; // there are no tags with the term is first created
 
-                const mediaItemSearchResult = mediaItems.find(({ id }) => id === mediaItemId);
+        // set term.events here by applying the first event
 
-                if (isNonEmptyString(mediaItemSearchResult?.url)) {
-                    this.audioURL = `/resources/mediaItems/download/${mediaItemSearchResult.id}`;
-                }
-            }
+        term.isPublished = false;
+
+        return term;
+    }
+
+    static fromPromptTermCreated({
+        payload: {
+            text,
+            aggregateCompositeIdentifier: { id: termId },
+        },
+    }: PromptTermCreated): TermViewModel {
+        const term = new TermViewModel();
+
+        term.id = termId;
+
+        term.isPublished = false;
+
+        // currently, prompts are in English- should we hard wire this on the event payload to be future safe?
+        term.name = buildMultilingualTextWithSingleItem(text, LanguageCode.English);
+
+        /**
+         *  Note that the contributions must be handled separately as we need
+         * to access the db to join in contributor names
+         */
+
+        term.actions = []; // TODO build these here
+
+        // term.notes = []
+
+        // term.tags = []
+
+        return term;
+    }
+
+    apply(event: ICoscradEvent): TermViewModel {
+        if (
+            !event.isFor({
+                type: AggregateType.term,
+                id: this.id,
+            })
+        )
+            return this;
+
+        if (event.isOfType('TERM_TRANSLATED')) {
+            const {
+                payload: { translation, languageCode },
+            } = event as TermTranslated;
+
+            this.name.items.push({
+                text: translation,
+                languageCode,
+                role: MultilingualTextItemRole.freeTranslation,
+            });
+
+            return this;
         }
+
+        if (event.isOfType('AUDIO_ADDED_FOR_TERM')) {
+            // const {payload: {audioItemId}} = event as AudioAddedForTerm
+            throw new Error(`Not implemented`);
+        }
+
+        // there is no handler for this event
+        return this;
     }
 }

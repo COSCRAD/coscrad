@@ -17,8 +17,8 @@ import { BaseCreateCommandHandler } from '../../../../shared/command-handlers/ba
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../../shared/events/types/EventRecordMetadata';
 import { AudioItem } from '../../entities/audio-item.entity';
+import { AudioItemCreated } from './audio-item-created.event';
 import { CreateAudioItem } from './create-audio-item.command';
-import { AudioItemCreated } from './transcript-created.event';
 
 @CommandHandler(CreateAudioItem)
 export class CreateAudioItemCommandHandler extends BaseCreateCommandHandler<AudioItem> {

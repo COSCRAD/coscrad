@@ -6,7 +6,7 @@ import { DeepPartial } from '../../../../../../../types/DeepPartial';
 import {
     AudioItemCreated,
     AudioItemCreatedPayload,
-} from '../../../commands/create-audio-item/transcript-created.event';
+} from '../../../commands/create-audio-item/audio-item-created.event';
 
 export const buildAudioItemCreated = (
     payloadOverrides: DeepPartial<AudioItemCreatedPayload>,

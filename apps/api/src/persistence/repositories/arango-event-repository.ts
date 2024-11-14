@@ -7,7 +7,7 @@ import { ArangoDatabaseForCollection } from '../database/arango-database-for-col
 import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../database/database.provider';
 import mapDatabaseDocumentToAggregateDTO from '../database/utilities/mapDatabaseDocumentToAggregateDTO';
-import mapEntityDTOToDatabaseDTO from '../database/utilities/mapEntityDTOToDatabaseDTO';
+import mapEntityDTOToDatabaseDTO from '../database/utilities/mapEntityDTOToDatabaseDocument';
 import { IEventRepository } from './arango-command-repository-for-aggregate-root';
 
 @Injectable()

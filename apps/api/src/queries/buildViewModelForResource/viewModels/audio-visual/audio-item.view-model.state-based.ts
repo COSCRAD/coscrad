@@ -5,15 +5,20 @@ import {
     NonEmptyString,
     NonNegativeFiniteNumber,
     URL,
+    UUID,
 } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { MultilingualText } from '../../../../domain/common/entities/multilingual-text';
 import { AudioItem } from '../../../../domain/models/audio-visual/audio-item/entities/audio-item.entity';
 import { MediaItem } from '../../../../domain/models/media-item/entities/media-item.entity';
+import { AccessControlList } from '../../../../domain/models/shared/access-control/access-control-list.entity';
 import { CoscradContributor } from '../../../../domain/models/user-management/contributor';
 import { BaseResourceViewModel } from '../base-resource.view-model';
 
-export class AudioItemViewModel extends BaseResourceViewModel implements IAudioItemViewModel {
+export class StateBasedAudioItemViewModel
+    extends BaseResourceViewModel
+    implements IAudioItemViewModel
+{
     @NestedDataType(MultilingualText, {
         label: 'name',
         description: 'name of the audio item',
@@ -29,6 +34,12 @@ export class AudioItemViewModel extends BaseResourceViewModel implements IAudioI
         description: 'a web link to an accompanying digital audio file',
     })
     readonly audioURL: string;
+
+    @UUID({
+        label: 'media item',
+        description: 'a reference to the raw media item for this audio item',
+    })
+    readonly mediaItemId: string;
 
     @ExternalEnum(
         {
@@ -67,6 +78,11 @@ export class AudioItemViewModel extends BaseResourceViewModel implements IAudioI
         description: 'a plain-text representation of the transcript',
     })
     readonly text: string;
+
+    readonly accessControlList: { allowedUserIds: string[]; allowedGroupIds: string[] } =
+        new AccessControlList();
+
+    readonly isPublished: boolean = false;
 
     constructor(
         audioItem: AudioItem,
