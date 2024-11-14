@@ -1,74 +1,92 @@
+import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject, Injectable } from '@nestjs/common';
-import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
-import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
-import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
-import { VocabularyListViewModel } from '../../../queries/buildViewModelForResource/viewModels';
-import { AudioItem } from '../../models/audio-visual/audio-item/entities/audio-item.entity';
-import BaseDomainModel from '../../models/base-domain-model.entity';
-import { MediaItem } from '../../models/media-item/entities/media-item.entity';
-import { validAggregateOrThrow } from '../../models/shared/functional';
-import { Term } from '../../models/term/entities/term.entity';
+import {
+    CommandContext,
+    CommandInfoService,
+} from '../../../app/controllers/command/services/command-info-service';
+import { isNotFound, NotFound } from '../../../lib/types/not-found';
+import { AccessControlList } from '../../models/shared/access-control/access-control-list.entity';
+import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';
 import { VocabularyList } from '../../models/vocabulary-list/entities/vocabulary-list.entity';
-import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
-import IsPublished from '../../repositories/specifications/is-published.specification';
-import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
-import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
-import { ResourceQueryService } from './resource-query.service';
+import {
+    IVocabularyListQueryRepository,
+    VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
+} from '../../models/vocabulary-list/queries';
+import { AggregateId } from '../../types/AggregateId';
+import { ResourceType } from '../../types/ResourceType';
+import { fetchActionsForUser } from './utilities/fetch-actions-for-user';
 
 @Injectable()
-export class VocabularyListQueryService extends ResourceQueryService<
-    VocabularyList,
-    VocabularyListViewModel
-> {
+export class VocabularyListQueryService {
     protected readonly type = ResourceType.vocabularyList;
 
     constructor(
-        @Inject(REPOSITORY_PROVIDER_TOKEN) repositoryProvider: IRepositoryProvider,
-        @Inject(CommandInfoService) commandInfoService: CommandInfoService
-    ) {
-        super(repositoryProvider, commandInfoService);
+        @Inject(VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN)
+        private readonly repository: IVocabularyListQueryRepository,
+        @Inject(CommandInfoService) private readonly commandInfoService: CommandInfoService
+    ) {}
+
+    // todo add explicit return type
+    async fetchById(id: AggregateId, userWithGroups?: CoscradUserWithGroups) {
+        const result = await this.repository.fetchById(id);
+
+        if (isNotFound(result)) return result;
+
+        const acl = new AccessControlList(result.accessControlList);
+
+        if (isNullOrUndefined(userWithGroups) && !result.isPublished) {
+            return NotFound;
+        }
+
+        if (
+            result.isPublished ||
+            userWithGroups?.isAdmin() ||
+            acl.canUser(userWithGroups.id) ||
+            userWithGroups.groups.some(({ id: groupId }) => acl.canGroup(groupId))
+        ) {
+            return result;
+        }
+
+        return NotFound;
     }
 
-    buildViewModel(
-        vocabularyList: VocabularyList,
-        {
-            resources: { term: allTerms, audioItem: allAudioItems, mediaItem: allMediaItems },
-            contributor: allContributors,
-        }: InMemorySnapshot
-    ): VocabularyListViewModel {
-        return new VocabularyListViewModel(
-            vocabularyList,
-            allTerms,
-            allAudioItems,
-            allMediaItems,
-            allContributors
+    async fetchMany(userWithGroups?: CoscradUserWithGroups) {
+        // TODO consider filtering for user access in the DB
+        const entities = await this.repository.fetchMany();
+
+        // TODO use SSOT utility function \ method for this
+        const availableEntities = entities.filter((entity) => {
+            if (entity.isPublished) return true;
+
+            // the public can only access published resources
+            if (isNullOrUndefined(userWithGroups)) return false;
+
+            if (userWithGroups.isAdmin()) return true;
+
+            const acl = new AccessControlList(entity.accessControlList);
+
+            return (
+                acl.canUser(userWithGroups.id) ||
+                userWithGroups.groups.some(({ id: groupId }) => acl.canGroup(groupId))
+            );
+        });
+
+        return {
+            // TODO ensure actions show up on entities
+            entities: availableEntities,
+            // TODO Should we register index-scoped commands in the view layer instead?
+            indexScopedActions: this.fetchUserActions(userWithGroups, [VocabularyList]),
+        };
+    }
+
+    // TODO share this code with other query services
+    private fetchUserActions(
+        systemUser: CoscradUserWithGroups,
+        commandContexts: CommandContext[]
+    ): ICommandFormAndLabels[] {
+        return commandContexts.flatMap((commandContext) =>
+            fetchActionsForUser(this.commandInfoService, systemUser, commandContext)
         );
-    }
-
-    override async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
-        const [allTags, allTerms, allAudioItems, allMediaItems, allContributors] =
-            await Promise.all([
-                this.repositoryProvider.getTagRepository().fetchMany(),
-                this.repositoryProvider
-                    .forResource<Term>(ResourceType.term)
-                    .fetchMany(new IsPublished(true)),
-                this.repositoryProvider.forResource<AudioItem>(ResourceType.audioItem).fetchMany(),
-                this.repositoryProvider.forResource<MediaItem>(ResourceType.mediaItem).fetchMany(),
-                this.repositoryProvider.getContributorRepository().fetchMany(),
-            ]);
-
-        return new DeluxeInMemoryStore({
-            tag: allTags.filter(validAggregateOrThrow),
-            contributor: allContributors.filter(validAggregateOrThrow),
-            resources: {
-                term: allTerms.filter(validAggregateOrThrow),
-                audioItem: allAudioItems.filter(validAggregateOrThrow),
-                mediaItem: allMediaItems.filter(validAggregateOrThrow),
-            },
-        }).fetchFullSnapshotInLegacyFormat();
-    }
-
-    getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {
-        return [VocabularyList];
     }
 }

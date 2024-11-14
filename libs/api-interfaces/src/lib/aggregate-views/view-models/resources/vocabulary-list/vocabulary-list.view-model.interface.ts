@@ -8,4 +8,11 @@ export interface IVocabularyListViewModel extends IBaseResourceViewModel {
     entries: IVocabularyListEntry<VariableValueType>[];
 
     form: IDynamicForm;
+
+    isPublished: boolean;
+
+    accessControlList: {
+        allowedUserIds: string[];
+        allowedGroupIds: string[];
+    };
 }

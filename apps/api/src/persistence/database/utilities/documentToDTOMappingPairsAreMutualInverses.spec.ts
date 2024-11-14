@@ -19,7 +19,7 @@ import { ArangoEdgeDocument } from '../types/ArangoEdgeDocument';
 import mapArangoEdgeDocumentToEdgeConnectionDTO from './mapArangoEdgeDocumentToEdgeConnectionDTO';
 import mapDatabaseDTOToAggregateDTO from './mapDatabaseDocumentToAggregateDTO';
 import mapEdgeConnectionDTOToArangoEdgeDocument from './mapEdgeConnectionDTOToArangoEdgeDocument';
-import mapEntityDTOToDatabaseDTO, { DatabaseDTO } from './mapEntityDTOToDatabaseDTO';
+import mapEntityDTOToDatabaseDTO, { DatabaseDTO } from './mapEntityDTOToDatabaseDocument';
 
 type TestCase<TInput, UOutput> = {
     description: string;

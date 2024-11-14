@@ -1,4 +1,4 @@
-import { DatabaseDTO } from '../../../persistence/database/utilities/mapEntityDTOToDatabaseDTO';
+import { DatabaseDTO } from '../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { VocabularyList } from '../../models/vocabulary-list/entities/vocabulary-list.entity';
 import { Criterion } from '../interfaces/Criterion';
 import { QueryOperator } from '../interfaces/QueryOperator';

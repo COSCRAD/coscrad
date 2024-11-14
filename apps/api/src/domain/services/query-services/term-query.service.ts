@@ -1,64 +1,120 @@
-import { AggregateType, ITermViewModel } from '@coscrad/api-interfaces';
+import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject, Injectable } from '@nestjs/common';
-import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
-import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
-import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
-import { TermViewModel } from '../../../queries/buildViewModelForResource/viewModels';
-import { AudioItem } from '../../models/audio-visual/audio-item/entities/audio-item.entity';
-import BaseDomainModel from '../../models/base-domain-model.entity';
-import { MediaItem } from '../../models/media-item/entities/media-item.entity';
+import { ConfigService } from '@nestjs/config';
+import {
+    CommandContext,
+    CommandInfoService,
+} from '../../../app/controllers/command/services/command-info-service';
+import { isNotFound, NotFound } from '../../../lib/types/not-found';
+import { AccessControlList } from '../../models/shared/access-control/access-control-list.entity';
 import { Term } from '../../models/term/entities/term.entity';
-import { CoscradContributor } from '../../models/user-management/contributor';
-import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
-import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
-import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
-import { ResourceQueryService } from './resource-query.service';
+import { ITermQueryRepository, TERM_QUERY_REPOSITORY_TOKEN } from '../../models/term/queries';
+import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';
+import { AggregateId } from '../../types/AggregateId';
+import { ResourceType } from '../../types/ResourceType';
+import { fetchActionsForUser } from './utilities/fetch-actions-for-user';
 
 @Injectable()
-export class TermQueryService extends ResourceQueryService<Term, ITermViewModel> {
+export class TermQueryService {
+    private readonly audioUrlPrefix: string;
+
     protected readonly type = ResourceType.term;
 
     constructor(
-        @Inject(REPOSITORY_PROVIDER_TOKEN) repositoryProvider: IRepositoryProvider,
-        @Inject(CommandInfoService) commandInfoService: CommandInfoService
+        @Inject(TERM_QUERY_REPOSITORY_TOKEN)
+        private readonly termQueryRepository: ITermQueryRepository,
+        @Inject(CommandInfoService) private readonly commandInfoService: CommandInfoService,
+        private readonly configService: ConfigService
     ) {
-        super(repositoryProvider, commandInfoService);
+        // TODO we need the base URL as part of the config
+        // this.audioUrlPrefix = `http://localhost:${this.configService.get(
+        //     'NODE_PORT'
+        // )}/${this.configService.get('GLOBAL_PREFIX')}/resources/mediaItems/download`;
+        this.audioUrlPrefix = `/resources/mediaItems/download`;
     }
 
-    protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
-        /**
-         * TODO If we continue to do joins this way, we should inject the aggregate(s)
-         * into this method and fetch all its references via `buildReferenceTree`
-         * and fetch only what we need from the database. This is especially true
-         * for `fetchById`.
-         *
-         * But we anticipate asynchronously event-sourcing and caching views
-         * very soon.
-         */
-        const [allAudioItems, allMediaItems, allContributors] = await Promise.all([
-            this.repositoryProvider.forResource(ResourceType.audioItem).fetchMany(),
-            this.repositoryProvider.forResource(ResourceType.mediaItem).fetchMany(),
-            this.repositoryProvider.getContributorRepository().fetchMany(),
-        ]);
+    // todo add explicit return type
+    async fetchById(id: AggregateId, userWithGroups?: CoscradUserWithGroups) {
+        const result = await this.termQueryRepository.fetchById(id);
 
-        return new DeluxeInMemoryStore({
-            [AggregateType.audioItem]: allAudioItems as AudioItem[],
-            [AggregateType.mediaItem]: allMediaItems as MediaItem[],
-            [AggregateType.contributor]: allContributors as CoscradContributor[],
-        }).fetchFullSnapshotInLegacyFormat();
+        if (isNotFound(result)) return result;
+
+        const acl = new AccessControlList(result.accessControlList);
+
+        if (isNullOrUndefined(userWithGroups) && !result.isPublished) {
+            return NotFound;
+        }
+
+        if (
+            result.isPublished ||
+            userWithGroups?.isAdmin() ||
+            acl.canUser(userWithGroups.id) ||
+            userWithGroups.groups.some(({ id: groupId }) => acl.canGroup(groupId))
+        ) {
+            const { mediaItemId } = result;
+
+            const audioItemURL = isNullOrUndefined(mediaItemId)
+                ? undefined
+                : this.buildAudioUrl(mediaItemId);
+
+            // TODO do this more efficiently
+            return { ...result, audioItemURL };
+        }
+
+        return NotFound;
     }
 
-    buildViewModel(
-        term: Term,
-        {
-            resources: { audioItem: allAudioItems, mediaItem: allMediaItems },
-            contributor: allContributors,
-        }: InMemorySnapshot
-    ) {
-        return new TermViewModel(term, allAudioItems, allMediaItems, allContributors);
+    // TODO should we support specifications \ custom filters?
+    async fetchMany(userWithGroups?: CoscradUserWithGroups) {
+        // TODO consider filtering for user access in the DB
+        const entities = await this.termQueryRepository.fetchMany();
+
+        // TODO use SSOT utility function \ method for this
+        const availableEntities = entities.filter((entity) => {
+            if (entity.isPublished) return true;
+
+            // the public can only access published resources
+            if (isNullOrUndefined(userWithGroups)) return false;
+
+            if (userWithGroups.isAdmin()) return true;
+
+            const acl = new AccessControlList(entity.accessControlList);
+
+            return (
+                acl.canUser(userWithGroups.id) ||
+                userWithGroups.groups.some(({ id: groupId }) => acl.canGroup(groupId))
+            );
+        });
+
+        return {
+            // TODO ensure actions show up on entities
+            entities: availableEntities.map((entity) => {
+                Object.assign(entity, { audioURL: this.buildAudioUrl(entity.mediaItemId) });
+
+                return {
+                    ...entity,
+                    audioURL: this.buildAudioUrl(entity.mediaItemId),
+                };
+            }),
+            // TODO Should we register index-scoped commands in the view layer instead?
+            indexScopedActions: this.fetchUserActions(userWithGroups, [Term]),
+        };
     }
 
-    getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {
-        return [Term];
+    // TODO share this code with other query services
+    private fetchUserActions(
+        systemUser: CoscradUserWithGroups,
+        commandContexts: CommandContext[]
+    ): ICommandFormAndLabels[] {
+        return commandContexts.flatMap((commandContext) =>
+            fetchActionsForUser(this.commandInfoService, systemUser, commandContext)
+        );
+    }
+
+    private buildAudioUrl(mediaItemId?: AggregateId): string | undefined {
+        if (isNullOrUndefined(mediaItemId)) return undefined;
+
+        return `${this.audioUrlPrefix}/${mediaItemId}`;
     }
 }

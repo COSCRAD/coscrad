@@ -19,7 +19,7 @@ export class VocabularyListController {
     @ApiParam(buildByIdApiParamMetadata())
     @ApiOkResponse({ type: VocabularyListViewModel })
     @Get(`/:id`)
-    async fetchById(@Request() req, @Res() res, @Param('id') id: unknown) {
+    async fetchById(@Request() req, @Res() res, @Param('id') id: string) {
         const searchResult = await this.vocabularyListQueryService.fetchById(
             id,
             req.user || undefined

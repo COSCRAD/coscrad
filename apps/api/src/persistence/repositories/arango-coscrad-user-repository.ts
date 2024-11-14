@@ -7,7 +7,7 @@ import { NotFound } from '../../lib/types/not-found';
 import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../database/database.provider';
 import mapDatabaseDocumentToAggregateDTO from '../database/utilities/mapDatabaseDocumentToAggregateDTO';
-import mapEntityDTOToDatabaseDTO from '../database/utilities/mapEntityDTOToDatabaseDTO';
+import mapEntityDTOToDatabaseDTO from '../database/utilities/mapEntityDTOToDatabaseDocument';
 import { ArangoRepositoryForAggregate } from './arango-repository-for-aggregate';
 
 export class ArangoCoscradUserRepository

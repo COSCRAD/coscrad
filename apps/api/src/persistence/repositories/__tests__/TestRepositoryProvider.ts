@@ -15,7 +15,7 @@ import { getAllArangoEdgeCollectionIDs } from '../../database/collection-referen
 import { getArangoCollectionIDFromResourceType } from '../../database/collection-references/getArangoCollectionIDFromResourceType';
 import { ArangoDatabaseProvider } from '../../database/database.provider';
 import buildEdgeDocumentsFromCategoryNodeDTOs from '../../database/utilities/category/buildEdgeDocumentsFromCategoryNodeDTOs';
-import mapEntityDTOToDatabaseDTO from '../../database/utilities/mapEntityDTOToDatabaseDTO';
+import mapEntityDTOToDatabaseDTO from '../../database/utilities/mapEntityDTOToDatabaseDocument';
 import { ArangoRepositoryProvider } from '../arango-repository.provider';
 
 export default class TestRepositoryProvider extends ArangoRepositoryProvider {
