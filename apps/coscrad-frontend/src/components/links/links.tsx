@@ -11,9 +11,6 @@ const LinkPresenter = ({ title, url, description }: ExternalLink) => {
             <Typography mb={0.5} variant="h3">
                 {title}
             </Typography>
-            <Typography variant="body1" color="text.secondary">
-                {url}
-            </Typography>
             <Typography variant="body1">{description}</Typography>
             <Typography
                 component={Link}
