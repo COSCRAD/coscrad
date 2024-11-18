@@ -80,7 +80,7 @@ const existingView = EventSourcedVocabularyListViewModel.fromVocabularyListCreat
  * TODO opt back into this test once we solve the issue
  * with the dreaded Arango `write-write` error.
  */
-describe.skip(`VocabularyListFilterPropertyRegistered.handle`, () => {
+describe(`VocabularyListFilterPropertyRegistered.handle`, () => {
     let testQueryRepository: IVocabularyListQueryRepository;
 
     let databaseProvider: ArangoDatabaseProvider;
