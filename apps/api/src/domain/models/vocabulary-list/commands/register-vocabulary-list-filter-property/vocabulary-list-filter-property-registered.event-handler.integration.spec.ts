@@ -80,6 +80,11 @@ const existingView = EventSourcedVocabularyListViewModel.fromVocabularyListCreat
  * TODO opt back into this test once we solve the issue
  * with the dreaded Arango `write-write` error.
  */
+/**
+ * TODO there should be 2 test cases at least
+ * 1. When there are no existing filter props registered
+ * 2. When there is at least 1 existing filter prop registered
+ */
 describe(`VocabularyListFilterPropertyRegistered.handle`, () => {
     let testQueryRepository: IVocabularyListQueryRepository;
 
