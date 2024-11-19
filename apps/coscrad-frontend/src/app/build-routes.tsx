@@ -4,6 +4,7 @@ import { About } from '../components/about/about';
 import { Credits } from '../components/credits/credits';
 import { AggregatePage } from '../components/higher-order-components/aggregate-page';
 import { Home } from '../components/home/home';
+import { Links } from '../components/links/links';
 import { ListenLivePage } from '../components/listen-live-page/listen-live-page';
 import { NotFoundPresenter } from '../components/not-found';
 import { NoteDetailPageContainer } from '../components/notes/note-detail-page.container';
@@ -30,6 +31,7 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
         shouldEnableWebOfKnowledgeForResources,
         listenLive,
         resourceIndexLabel,
+        externalLinks,
     } = contentConfig;
 
     const noteIndexToDetailConfig = indexToDetailFlows.find(
@@ -72,6 +74,14 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
             () => ({
                 path: `${notesRoute}/:id`,
                 element: <NoteDetailPageContainer />,
+            }),
+        ],
+        [
+            !isNullOrUndefined(externalLinks),
+            () => ({
+                path: 'Links',
+                label: 'Links',
+                element: <Links />,
             }),
         ],
         [

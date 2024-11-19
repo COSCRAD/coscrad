@@ -15,6 +15,7 @@ const expectedOrder = [
     'About',
     'Resources',
     'Notes',
+    'Links',
     'TreeOfKnowledge',
     'Tags',
     liveRoute,

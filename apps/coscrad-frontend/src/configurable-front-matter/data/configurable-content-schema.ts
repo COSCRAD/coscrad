@@ -24,6 +24,12 @@ export type SimulatedKeyboardConfig = {
 
 export type ThemeOverrides = Pick<ThemeOptions, 'palette'>;
 
+export type ExternalLink = {
+    title: string;
+    url: string;
+    description: string;
+};
+
 export type InternalLink = {
     url: string;
 
@@ -41,6 +47,7 @@ export type SocialMediaLinks = {
 };
 
 export type ConfigurableContent<T extends CategorizableType = CategorizableType> = {
+    // TODO sort all dummy data and this type alphabetically by field names
     indexToDetailFlows: IndexToDetailFlowDefinition<T>[];
     siteTitle: string;
     subTitle: string;
@@ -66,9 +73,11 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     email: string;
     address: string;
     internalLinks: InternalLink[];
+    externalLinks: ExternalLink[];
     socialMediaLinks: SocialMediaLinks;
 };
 
+// is this still necessary?
 export const configurableContentPropertiesAndConstraints: {
     [K in keyof ConfigurableContent]: CoscradConstraint[];
 } = {
@@ -97,6 +106,7 @@ export const configurableContentPropertiesAndConstraints: {
     email: [CoscradConstraint.isString],
     address: [CoscradConstraint.isString],
     internalLinks: [],
+    externalLinks: [],
     socialMediaLinks: [CoscradConstraint.isObject],
 };
 
