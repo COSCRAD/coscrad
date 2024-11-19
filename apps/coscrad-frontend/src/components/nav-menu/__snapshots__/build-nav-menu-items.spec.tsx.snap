@@ -19,6 +19,10 @@ exports[`dynamic navigation menu when all properties are provided should return 
     "link": "Notes",
   },
   {
+    "label": "Links",
+    "link": "Links",
+  },
+  {
     "label": "Tree of Knowledge",
     "link": "TreeOfKnowledge",
   },

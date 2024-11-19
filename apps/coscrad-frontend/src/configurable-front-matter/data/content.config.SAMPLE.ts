@@ -97,6 +97,13 @@ export const contentConfig: ConfigurableContent = {
             description: 'Coscrad',
         },
     ],
+    externalLinks: [
+        {
+            title: 'Language Hub',
+            url: 'https://www.tsilhqotinlanguage.ca',
+            description: 'This is a cool website.',
+        },
+    ],
     socialMediaLinks: {
         facebook: 'https://www.facebook.com/',
         twitter: 'https://twitter.com/',

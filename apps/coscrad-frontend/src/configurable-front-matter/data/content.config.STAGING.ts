@@ -19,6 +19,13 @@ export const contentConfig: ConfigurableContent = {
             categorizableType,
             detailViewType: DetailViewType.fullView,
         })),
+    externalLinks: [
+        {
+            title: 'Language Hub',
+            url: 'https://www.tsilhqotinlanguage.ca',
+            description: 'This is a cool website.',
+        },
+    ],
     shouldEnableWebOfKnowledgeForResources: true,
     siteCredits: 'Credits here',
     simulatedKeyboard: {
