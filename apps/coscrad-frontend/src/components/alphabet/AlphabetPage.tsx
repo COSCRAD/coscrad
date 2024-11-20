@@ -22,15 +22,20 @@ export const AlphabetPage = (): JSX.Element => {
                 ...alphabetData,
                 data: {
                     ...alphabetData.data,
-                    alphabet_cards: alphabetData.data.alphabet_cards.map((card) => ({
-                        ...card,
-                        card_image: `${baseMediaUrl}${card.card_image}`,
-                        standalone_image: `${baseMediaUrl}${card.standalone_image}`,
+                    alphabet_cards: alphabetData.data.alphabet_cards
+                        .map((card) => ({
+                            ...card,
+                            card_image: `${baseMediaUrl}${card.card_image}`,
+                            standalone_image: `${baseMediaUrl}${card.standalone_image}`,
 
-                        word_audio: `${baseMediaUrl}${card.word_audio}`,
+                            word_audio: `${baseMediaUrl}${card.word_audio}`,
 
-                        letter_audio: `${baseMediaUrl}${card.letter_audio}`,
-                    })),
+                            letter_audio: `${baseMediaUrl}${card.letter_audio}`,
+                        }))
+                        .sort(
+                            (cardA, cardB) =>
+                                parseInt(cardA.sequence_number) - parseInt(cardB.sequence_number)
+                        ),
                 },
             };
 

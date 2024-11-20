@@ -40,18 +40,26 @@ export const AlphabetCardPresenter = ({
         </Typography>
     );
 
+    const ClickableImageForThisWord = ({ onButtonClick }) => (
+        <CardMedia
+            loading="eager"
+            component="img"
+            height="auto"
+            image={standalone_image}
+            alt={'alt'}
+            title={word}
+            sx={{ objectFit: 'cover' }}
+            onClick={onButtonClick}
+        />
+    );
+
     return (
         <Card>
             <CardContent>
                 <AudioClipPlayer audioUrl={letter_audio} UserDefinedPlayButton={PlayLetterButton} />
-
-                <CardMedia
-                    component="img"
-                    height="auto"
-                    image={standalone_image}
-                    alt={'alt'}
-                    title={word}
-                    sx={{ objectFit: 'cover' }}
+                <AudioClipPlayer
+                    audioUrl={word_audio}
+                    UserDefinedPlayButton={ClickableImageForThisWord}
                 />
                 <AudioClipPlayer audioUrl={word_audio} UserDefinedPlayButton={PlayWordButton} />
             </CardContent>
