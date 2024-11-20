@@ -1,6 +1,6 @@
 import { IAlphabetCard } from './alphabet-card.interface';
 
-export interface AlphabetChart {
+export interface IAlphabetChart {
     data: {
         name: string;
         name_english: string;

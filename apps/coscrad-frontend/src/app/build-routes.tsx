@@ -14,6 +14,7 @@ import { TagDetailPresenter } from '../components/tags/tag-detail.presenter';
 import { TagIndexContainer } from '../components/tags/tag-index.container';
 import { CategoryTreeContainer } from '../components/tree-of-knowledge/category-tree.container';
 import { ConfigurableContent } from '../configurable-front-matter/data/configurable-content-schema';
+import { AlphabetPage } from './../components/alphabet/AlphabetPage';
 import { bootstrapIndexToDetailFlowRoutes } from './bootstrap-index-to-detail-flow-routes';
 
 export type CoscradRoute = {
@@ -129,6 +130,11 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
         {
             path: '*',
             element: <NotFoundPresenter />,
+        },
+        {
+            path: 'Alphabet',
+            label: 'Alphabet',
+            element: <AlphabetPage />,
         },
     ];
 
