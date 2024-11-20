@@ -13,6 +13,8 @@ export const AlphabetPage = (): JSX.Element => {
 
     useEffect(() => {
         fetch(endpoint).then(async (result) => {
+            if (alphabet !== null) return;
+
             const alphabetData = (await result.json()) as unknown as IAlphabetChart;
             console.log({ alphabetData });
 
@@ -32,7 +34,7 @@ export const AlphabetPage = (): JSX.Element => {
                 },
             };
 
-            if (alphabet === null) setAlphabet(dataWithFullUrls);
+            setAlphabet(dataWithFullUrls);
         });
     }, [alphabet, baseMediaUrl, endpoint]);
 

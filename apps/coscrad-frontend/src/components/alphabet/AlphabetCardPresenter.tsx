@@ -7,11 +7,9 @@ type AlphabetCardPresenterProps = IAlphabetCard;
 export const AlphabetCardPresenter = ({
     letter,
     word,
-    sequence_number,
     letter_audio,
     word_audio,
     standalone_image,
-    card_image,
 }: AlphabetCardPresenterProps): JSX.Element => {
     const PlayLetterButton = ({ onButtonClick }) => (
         <Typography variant={'h1'} component={Box} onClick={onButtonClick}>
@@ -35,7 +33,7 @@ export const AlphabetCardPresenter = ({
                     height="auto"
                     image={standalone_image}
                     alt={'alt'}
-                    title={'titleasdasdsada'}
+                    title={word}
                     sx={{ objectFit: 'cover' }}
                 />
                 <AudioClipPlayer audioUrl={word_audio} UserDefinedPlayButton={PlayWordButton} />
