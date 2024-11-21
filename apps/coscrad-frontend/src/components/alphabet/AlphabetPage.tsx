@@ -1,19 +1,28 @@
 import { IAlphabetChart } from '@coscrad/api-interfaces';
+import { isNonEmptyObject, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { getConfig } from '../../config';
+import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { Loading } from '../loading';
+import { NotFoundPresenter } from '../not-found';
 import { AlphabetPresenter } from './AlphabetPresenter';
 
 export const AlphabetPage = (): JSX.Element => {
-    const endpoint = `https://coscradapi.tsilhqotinlanguage.ca/api/games/alphabet`;
+    const { alphabetConfig } = useContext(ConfigurableContentContext);
 
-    const baseMediaUrl = `https://coscradapi.tsilhqotinlanguage.ca/api/resources/mediaItems/download?name=`;
+    const baseUrl = getConfig().apiUrl;
+
+    const endpoint = `${baseUrl}/games/alphabet`;
+
+    const baseMediaUrl = `${baseUrl}/resources/mediaItems/download?name=`;
 
     const [alphabet, setAlphabet] = useState<IAlphabetChart | null>(null);
 
     useEffect(() => {
         fetch(endpoint).then(async (result) => {
-            if (alphabet !== null) return;
+            // don't fetch if the alphabet has been fetched or if the alphabet has not been configured
+            if (alphabet !== null || !isNonEmptyObject(alphabetConfig)) return;
 
             const alphabetData = (await result.json()) as unknown as IAlphabetChart;
             console.log({ alphabetData });
@@ -41,7 +50,11 @@ export const AlphabetPage = (): JSX.Element => {
 
             setAlphabet(dataWithFullUrls);
         });
-    }, [alphabet, baseMediaUrl, endpoint]);
+    }, [alphabet, baseMediaUrl, endpoint, alphabetConfig]);
+
+    if (isNullOrUndefined(alphabetConfig)) {
+        return <NotFoundPresenter />;
+    }
 
     if (alphabet === null) {
         return <Loading />;
