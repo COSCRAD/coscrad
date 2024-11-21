@@ -218,27 +218,7 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
             })
         );
 
-        /**
-         *
-         */
-        const _query = `
-        FOR doc IN @@collectionName
-        FILTER doc._key == @id
-        let newField = {
-                    name: @name,
-                    type: @type,
-                    options: @options
-        }
-        UPDATE doc WITH {
-            form: {
-                fields: PUSH(doc.form.fields,newField)
-            }
-        } IN @@collectionName
-        OPTIONS { mergeObjects: false }
-        RETURN OLD
-        `;
-
-        const _bindVars = {
+        const bindVars = {
             '@collectionName': 'vocabularyList__VIEWS',
             id,
             name,
@@ -248,39 +228,39 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
 
         /**
          * We need to figure out why we get the dreaded `write-write` conflict
-         * with arango. 
-         * 
+         * with arango.
+         *
          * Note that the following query works fine when executed from the ArangoDB dashboard:
-         * 
-            for e in events
-            filter e.type == 'VOCABULARY_LIST_PROPERTY_FILTER_REGISTERED'
-                for v in vocabularyList__VIEWS
-                filter v._key == e.payload.aggregateCompositeIdentifier.id
+         *
+         * **/
+        const query = `
+            for v in @@collectionName
+                filter v._key == @id
                 update v with {
                 form: {
                 fields: push(v.form.fields,{
-                    name: e.payload.name,
-                    type: e.payload.type,
-                    allowedValuesAndLabels: e.payload.allowedValuesAndLabels
+                    name: @name,
+                    type: @type,
+                    options: @options
                 })
                 }
-                } in vocabularyList__VIEWS
+                } in @@collectionName
                 OPTIONS { mergeObjects: false }
-         */
+        `;
 
-        // const cursor = await this.database
-        //     .query({
-        //         query,
-        //         bindVars,
-        //     })
-        //     .catch((reason) => {
-        //         // TODO fix all error messages
-        //         throw new InternalError(
-        //             `Failed to register vocabulary list filter property via VocabularyListRepository: ${reason}`
-        //         );
-        //     });
+        const cursor = await this.database
+            .query({
+                query,
+                bindVars,
+            })
+            .catch((reason) => {
+                // TODO fix all error messages
+                throw new InternalError(
+                    `Failed to register vocabulary list filter property via VocabularyListRepository: ${reason}`
+                );
+            });
 
-        // await cursor.all();
+        await cursor.all();
     }
 
     async addTerm(vocabularyListId: AggregateId, termId: AggregateId): Promise<void> {
