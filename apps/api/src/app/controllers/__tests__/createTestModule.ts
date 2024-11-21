@@ -465,9 +465,15 @@ export default async (
                 provide: MediaItemQueryService,
                 useFactory: (
                     repositoryProvider: ArangoRepositoryProvider,
+                    arangoConnectionProvider: ArangoConnectionProvider,
                     commandInfoService: CommandInfoService
-                ) => new MediaItemQueryService(repositoryProvider, commandInfoService),
-                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService],
+                ) =>
+                    new MediaItemQueryService(
+                        repositoryProvider,
+                        new ArangoDatabaseProvider(arangoConnectionProvider),
+                        commandInfoService
+                    ),
+                inject: [REPOSITORY_PROVIDER_TOKEN, ArangoConnectionProvider, CommandInfoService],
             },
             {
                 provide: SongQueryService,
