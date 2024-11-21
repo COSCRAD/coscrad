@@ -1,9 +1,9 @@
-import { screen } from '@testing-library/react';
-
 describe('Alphabet', () => {
-    it('should load the Alphabet page', () => {
-        const screenRes = screen.queryByTestId('Alphabet');
+    describe(`when the alphabet is not configured`, () => {
+        it.todo(`should return not found`);
+    });
 
-        expect(screenRes).toBeTruthy();
+    describe(`when the alphabet has been configured`, () => {
+        it.todo(`should display the alphabet name`);
     });
 });

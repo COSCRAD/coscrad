@@ -1,5 +1,5 @@
 import { AggregateType, CategorizableType } from '@coscrad/api-interfaces';
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { isNonEmptyObject, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { About } from '../components/about/about';
 import { Credits } from '../components/credits/credits';
 import { AggregatePage } from '../components/higher-order-components/aggregate-page';
@@ -131,11 +131,14 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
             path: '*',
             element: <NotFoundPresenter />,
         },
-        {
-            path: 'Alphabet',
-            label: 'Alphabet',
-            element: <AlphabetPage />,
-        },
+        [
+            isNonEmptyObject(contentConfig.alphabetConfig),
+            (_contentConfig: ConfigurableContent) => ({
+                path: 'Alphabet',
+                label: 'Alphabet',
+                element: <AlphabetPage />,
+            }),
+        ],
     ];
 
     return routeDefinitions
