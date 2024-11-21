@@ -1,3 +1,4 @@
+import { IDetailQueryResult } from '@coscrad/api-interfaces';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Controller, Get, Param, Query, Request, Res, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
@@ -29,7 +30,10 @@ export class MediaItemController {
      * TODO Move this logic to the service layer.
      */
     async fetchBinary(@Request() req, @Res() res, @Param('id') id: unknown) {
-        const searchResult = await this.mediaItemQueryService.fetchById(id, req.user || undefined);
+        const searchResult = (await this.mediaItemQueryService.fetchById(
+            id,
+            req.user || undefined
+        )) as unknown as IDetailQueryResult<MediaItemViewModel>;
 
         // TODO do we want to throw if there is an error?
         if (isInternalError(searchResult) || isNotFound(searchResult))
@@ -56,6 +60,7 @@ export class MediaItemController {
         return res.sendFile(filePath, options);
     }
 
+    // TODO move the logic to the MediaItemQueryService
     // /download?name=C1
     @ApiBearerAuth('JWT')
     @UseGuards(OptionalJwtAuthGuard)
@@ -68,10 +73,11 @@ export class MediaItemController {
             );
         }
 
-        const searchResult = await this.mediaItemQueryService.fetchByName(
+        const searchResult = (await this.mediaItemQueryService.fetchByName(
             name,
             req.user || undefined
-        );
+            // note filepath is a hidden implementation detail that isn't exposed to the user
+        )) as unknown as IDetailQueryResult<MediaItemViewModel>;
 
         if (isInternalError(searchResult)) {
             throw new InternalError(`failed to fetch binary for media item with name: ${name}`, [
