@@ -147,7 +147,7 @@ const allowedValuesAndLabels = [
  * TODO Opt back into this test once we get to the bottom
  * of the dreaded `write-write` error in Arango.
  */
-describe.skip(`ArangoVocabularyListQueryRepository`, () => {
+describe(`ArangoVocabularyListQueryRepository`, () => {
     let testQueryRepository: IVocabularyListQueryRepository;
 
     let termQueryRepository: ITermQueryRepository;
@@ -453,7 +453,7 @@ describe.skip(`ArangoVocabularyListQueryRepository`, () => {
             await contributorRepository.createMany(testContributors);
         });
         describe(`when there is an existing vocabulary list`, () => {
-            it(`should register the given filter property`, async () => {
+            it.only(`should register the given filter property`, async () => {
                 await testQueryRepository.registerFilterProperty(
                     targetView.id,
                     filterPropertyName,
