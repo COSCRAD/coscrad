@@ -1,5 +1,5 @@
 import { AggregateType, CategorizableType } from '@coscrad/api-interfaces';
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { isNonEmptyObject, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { About } from '../components/about/about';
 import { Credits } from '../components/credits/credits';
 import { AggregatePage } from '../components/higher-order-components/aggregate-page';
@@ -14,6 +14,7 @@ import { TagDetailPresenter } from '../components/tags/tag-detail.presenter';
 import { TagIndexContainer } from '../components/tags/tag-index.container';
 import { CategoryTreeContainer } from '../components/tree-of-knowledge/category-tree.container';
 import { ConfigurableContent } from '../configurable-front-matter/data/configurable-content-schema';
+import { AlphabetPage } from './../components/alphabet/AlphabetPage';
 import { bootstrapIndexToDetailFlowRoutes } from './bootstrap-index-to-detail-flow-routes';
 
 export type CoscradRoute = {
@@ -130,6 +131,14 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
             path: '*',
             element: <NotFoundPresenter />,
         },
+        [
+            isNonEmptyObject(contentConfig.alphabetConfig),
+            (_contentConfig: ConfigurableContent) => ({
+                path: 'Alphabet',
+                label: 'Alphabet',
+                element: <AlphabetPage />,
+            }),
+        ],
     ];
 
     return routeDefinitions

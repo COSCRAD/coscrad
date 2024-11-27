@@ -38,5 +38,9 @@ exports[`dynamic navigation menu when all properties are provided should return 
     "label": "Credits",
     "link": "Credits",
   },
+  {
+    "label": "Alphabet",
+    "link": "Alphabet",
+  },
 ]
 `;
