@@ -5,6 +5,7 @@ export * from './command-base.interface';
 export * from './command-info.interface';
 export * from './commands';
 export * from './composite-identifier.interface';
+export * from './content-container-views';
 export * from './data-types';
 export * from './detail-query-result.interface';
 export * from './flux-standard-action.interface';

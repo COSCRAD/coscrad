@@ -21,6 +21,7 @@ import { ConsoleCoscradCliLogger, COSCRAD_LOGGER_TOKEN } from './logging';
 import { RehydrateViewsCliCommand } from './rehydrate-views.cli-command';
 import { RevertLatestMigrationCliCommand } from './revert-latest-migration';
 import { RunMigrationsCliCommand } from './run-migrations.cli-command';
+import { SeedDatabaseCliCommand } from './seed-database.cli-command';
 import { SeedTestDataWithCommand } from './seed-test-data-with-command.cli-command';
 import { SeedTestUuids } from './seed-test-uuids.cli-command';
 import { ValidateInvariantsCliCommand } from './validate-invariants.cli-command';
@@ -35,6 +36,7 @@ import { ValidateInvariantsCliCommand } from './validate-invariants.cli-command'
         ValidateInvariantsCliCommand,
         ClearDatabaseCliCommand,
         ExecuteCommandStreamCliCommand,
+        SeedDatabaseCliCommand,
         SeedTestDataWithCommand,
         SeedTestUuids,
         IngestMediaItemsCliCommand,

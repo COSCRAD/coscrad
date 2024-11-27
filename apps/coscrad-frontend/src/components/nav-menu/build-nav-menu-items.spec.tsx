@@ -20,6 +20,7 @@ const expectedOrder = [
     'Tags',
     liveRoute,
     'Credits',
+    'Alphabet',
 ];
 
 const assertExpectedOrder = (info: NavItemInfo[]) => {
@@ -89,6 +90,19 @@ describe(`dynamic navigation menu`, () => {
 
         it(`should have the expected order`, () => {
             assertExpectedOrder(result);
+        });
+    });
+
+    describe(`When the alphabet chart is not provided`, () => {
+        const contentConfig = buildDummyConfig({
+            shouldEnableWebOfKnowledgeForResources: false,
+            alphabetConfig: null,
+        });
+
+        const result = buildNavMenuItems(contentConfig);
+
+        it(`should not render the Alphabet link`, () => {
+            expect(result.some(({ label }) => label === 'Alphabet')).toBe(false);
         });
     });
 });

@@ -22,6 +22,10 @@ export type SimulatedKeyboardConfig = {
     specialCharacterReplacements: Record<string, string>;
 };
 
+export type AlphabetConfig = {
+    alphabetChartName: string;
+};
+
 export type ThemeOverrides = Pick<ThemeOptions, 'palette'>;
 
 export type ExternalLink = {
@@ -75,6 +79,7 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     internalLinks: InternalLink[];
     externalLinks: ExternalLink[];
     socialMediaLinks: SocialMediaLinks;
+    alphabetConfig?: AlphabetConfig;
 };
 
 // is this still necessary?
@@ -108,6 +113,7 @@ export const configurableContentPropertiesAndConstraints: {
     internalLinks: [],
     externalLinks: [],
     socialMediaLinks: [CoscradConstraint.isObject],
+    alphabetConfig: [CoscradConstraint.isObject],
 };
 
 export type ConfigurableContentSchema = typeof configurableContentPropertiesAndConstraints;
