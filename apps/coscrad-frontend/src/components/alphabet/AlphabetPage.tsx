@@ -11,9 +11,9 @@ import { AlphabetPresenter } from './AlphabetPresenter';
 export const AlphabetPage = (): JSX.Element => {
     const { alphabetConfig } = useContext(ConfigurableContentContext);
 
-    const baseUrl = getConfig().apiUrl;
+    const { apiUrl: baseUrl } = getConfig();
 
-    const endpoint = `${baseUrl}/games/alphabet`;
+    const endpoint = `${baseUrl}/games/${alphabetConfig.alphabetChartName}`;
 
     const baseMediaUrl = `${baseUrl}/resources/mediaItems/download?name=`;
 
