@@ -1,4 +1,5 @@
 import { AggregateType, CoscradUserRole, HttpStatusCode, MIMEType } from '@coscrad/api-interfaces';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { INestApplication } from '@nestjs/common';
 import { copyFileSync, existsSync, mkdirSync } from 'fs';
 import * as request from 'supertest';
@@ -38,7 +39,7 @@ const userId = buildDummyUuid(117);
 
 const groupId = buildDummyUuid(118);
 
-const user = new CoscradUser({
+const dummyUser = new CoscradUser({
     type: AggregateType.user,
     id: userId,
     username: 'Blake',
@@ -102,6 +103,10 @@ describe('when querying for a media item by name (/resources/mediaItems/download
 
     const testCases = [
         {
+            description: 'when the user is public',
+            expectedPrivateResourceResult: HttpStatusCode.notFound,
+        },
+        {
             description: 'when the user is an ordinary viewer (non admin)',
             userRole: CoscradUserRole.viewer,
             expectedPrivateResourceResult: HttpStatusCode.notFound,
@@ -119,15 +124,18 @@ describe('when querying for a media item by name (/resources/mediaItems/download
     ];
 
     describe(`when the media item exists`, () => {
-        testCases.forEach(({ description, userRole, expectedPrivateResourceResult }) => {
+        testCases.forEach((testCase) => {
+            const { description, userRole, expectedPrivateResourceResult } = testCase;
+
+            const user = isNullOrUndefined(userRole)
+                ? undefined
+                : dummyUser.clone({
+                      roles: [userRole],
+                  });
+
             describe(description, () => {
                 beforeAll(async () => {
-                    const testUserWithGroups = new CoscradUserWithGroups(
-                        user.clone({
-                            roles: [userRole],
-                        }),
-                        [userGroup]
-                    );
+                    const testUserWithGroups = user && new CoscradUserWithGroups(user, [userGroup]);
 
                     ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
                         {
