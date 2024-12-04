@@ -5,6 +5,7 @@ import {
     IMediaItemViewModel,
     WithTags,
 } from '@coscrad/api-interfaces';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject, Injectable } from '@nestjs/common';
 import {
     CommandContext,
@@ -160,12 +161,13 @@ export class MediaItemQueryService {
 
         const acl = new AccessControlList(mediaItemDocument.queryAccessControlList);
 
-        if (
-            userWithGroups.isAdmin() ||
-            mediaItemDocument.published ||
-            acl.canUser(userWithGroups.id) ||
-            userWithGroups.groups.some((group) => acl.canGroup(group.id))
-        ) {
+        const doesUserHavePriviligedAccess =
+            !isNullOrUndefined(userWithGroups) &&
+            (userWithGroups.isAdmin() ||
+                acl.canUser(userWithGroups.id) ||
+                userWithGroups.groups.some((group) => acl.canGroup(group.id)));
+
+        if (mediaItemDocument.published || doesUserHavePriviligedAccess) {
             return {
                 ...this.buildViewModel(
                     new MediaItem(mapDatabaseDocumentToAggregateDTO(mediaItemDocument))
