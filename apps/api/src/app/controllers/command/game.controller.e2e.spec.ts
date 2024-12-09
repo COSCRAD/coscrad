@@ -37,6 +37,7 @@ describe(`/games`, () => {
         const mockConfigService = buildMockConfigService(
             {
                 ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+                SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT: 'true',
             },
             buildConfigFilePath(Environment.test)
         );
@@ -79,23 +80,27 @@ describe(`/games`, () => {
         databaseProvider.close();
     });
 
-    describe(`when there is a document with the given name`, () => {
-        it('should return a 200', async () => {
-            const res = await request(app.getHttpServer()).get(
-                `${endpointUnderTest}/${targetName}`
-            );
+    describe(`when the legacy games endpoint is enabled`, () => {
+        describe(`when there is a document with the given name`, () => {
+            it('should return a 200', async () => {
+                const res = await request(app.getHttpServer()).get(
+                    `${endpointUnderTest}/${targetName}`
+                );
 
-            expect(res.statusCode).toBe(HttpStatusCode.ok);
+                expect(res.statusCode).toBe(HttpStatusCode.ok);
+            });
         });
-    });
 
-    describe(`when there is no document with the given name`, () => {
-        const bogusName = 'foobarbaz';
+        describe(`when there is no document with the given name`, () => {
+            const bogusName = 'foobarbaz';
 
-        it(`should return a 404`, async () => {
-            const res = await request(app.getHttpServer()).get(`${endpointUnderTest}/${bogusName}`);
+            it(`should return a 404`, async () => {
+                const res = await request(app.getHttpServer()).get(
+                    `${endpointUnderTest}/${bogusName}`
+                );
 
-            expect(res.statusCode).toBe(HttpStatusCode.notFound);
+                expect(res.statusCode).toBe(HttpStatusCode.notFound);
+            });
         });
     });
 });
