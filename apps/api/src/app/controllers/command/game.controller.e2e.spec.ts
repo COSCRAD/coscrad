@@ -1,20 +1,19 @@
+import { HttpStatusCode } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
-import { CoscradEventFactory } from '../../../domain/common';
 import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
-import { DynamicDataTypeFinderService } from '../../../validation';
 import buildMockConfigService from '../../config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../config/buildConfigFilePath';
 import { Environment } from '../../config/constants/Environment';
+import { GameController } from './game.controller';
 
-const endpointUnderTest = '/api/games';
+const endpointUnderTest = '/games';
 
 const targetName = 'alphabet';
 
@@ -30,8 +29,6 @@ const dummyDocument = {
 };
 
 describe(`/games`, () => {
-    let testRepositoryProvider: TestRepositoryProvider;
-
     let databaseProvider: ArangoDatabaseProvider;
 
     let app: INestApplication;
@@ -52,7 +49,11 @@ describe(`/games`, () => {
                 },
             ],
             imports: [PersistenceModule.forRootAsync()],
-        }).compile();
+            controllers: [GameController],
+        })
+            .overrideProvider(ConfigService)
+            .useValue(mockConfigService)
+            .compile();
 
         app = testAppModule.createNestApplication();
 
@@ -63,25 +64,11 @@ describe(`/games`, () => {
 
         databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
 
-        const dynamicDataTypeFinderService = testAppModule.get(DynamicDataTypeFinderService);
-
-        await dynamicDataTypeFinderService.bootstrapDynamicTypes();
-
-        databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
-
-        const coscradEventFactory = testAppModule.get(CoscradEventFactory);
-
-        testRepositoryProvider = new TestRepositoryProvider(
-            databaseProvider,
-            coscradEventFactory,
-            dynamicDataTypeFinderService
-        );
-
         process.env.NODE_ENV = 'e2e';
     });
 
     beforeEach(async () => {
-        await testRepositoryProvider.testSetup();
+        await databaseProvider.getDatabaseForCollection('games').clear();
 
         await databaseProvider.getDatabaseForCollection('games').create(dummyDocument);
     });
@@ -93,7 +80,13 @@ describe(`/games`, () => {
     });
 
     describe(`when there is a document with the given name`, () => {
-        it.todo(`should have a test`);
+        it('should return a 200', async () => {
+            const res = await request(app.getHttpServer()).get(
+                `${endpointUnderTest}/${targetName}`
+            );
+
+            expect(res.statusCode).toBe(HttpStatusCode.ok);
+        });
     });
 
     describe(`when there is no document with the given name`, () => {
@@ -102,7 +95,7 @@ describe(`/games`, () => {
         it(`should return a 404`, async () => {
             const res = await request(app.getHttpServer()).get(`${endpointUnderTest}/${bogusName}`);
 
-            expect(res).toBe(false);
+            expect(res.statusCode).toBe(HttpStatusCode.notFound);
         });
     });
 });
