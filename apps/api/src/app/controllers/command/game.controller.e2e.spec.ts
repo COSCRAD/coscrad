@@ -103,4 +103,8 @@ describe(`/games`, () => {
             });
         });
     });
+
+    describe(`when the legacy games endpoint is not enabled`, () => {
+        it.todo(`should return not availabale`);
+    });
 });
