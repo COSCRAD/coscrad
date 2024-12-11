@@ -4,6 +4,8 @@ import { Box } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { getConfig } from '../../config';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
+import { Loading } from '../loading';
+import { NotFoundPresenter } from '../not-found';
 import { AlphabetPresenter } from './AlphabetPresenter';
 
 export const AlphabetPage = (): JSX.Element => {
@@ -30,6 +32,7 @@ export const AlphabetPage = (): JSX.Element => {
             if (alphabet !== null || !isNonEmptyObject(alphabetConfig)) return;
 
             console.log({ result });
+
             if (result.status !== 200) {
                 setIsError(true);
                 setIsLoading(false);
@@ -65,17 +68,17 @@ export const AlphabetPage = (): JSX.Element => {
         });
     }, [alphabet, baseMediaUrl, endpoint, alphabetConfig]);
 
-    // if (isError) {
-    //     return <Box>No alphabet chart</Box>;
-    // }
+    if (isError) {
+        return <Box>No alphabet chart</Box>;
+    }
 
-    // if (isLoading) {
-    //     return <Loading />;
-    // }
+    if (isLoading) {
+        return <Loading />;
+    }
 
-    // if (isNullOrUndefined(alphabetConfig)) {
-    //     return <NotFoundPresenter />;
-    // }
+    if (isNullOrUndefined(alphabetConfig)) {
+        return <NotFoundPresenter />;
+    }
 
     return (
         <Box>

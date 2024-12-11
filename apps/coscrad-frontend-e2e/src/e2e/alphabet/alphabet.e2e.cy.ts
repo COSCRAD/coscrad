@@ -942,9 +942,15 @@ describe('alphabet', () => {
         });
 
         describe('The alphabet carousel', () => {
-            it('should load the first card', () => {
+            beforeEach(() => {
                 cy.visit('/Alphabet');
+            });
 
+            it('should display loading component initially', () => {
+                cy.getLoading();
+            });
+
+            it('should load the first card', () => {
                 cy.contains(firstWord);
             });
         });
