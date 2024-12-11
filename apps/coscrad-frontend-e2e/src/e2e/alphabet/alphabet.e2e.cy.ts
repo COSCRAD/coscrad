@@ -1,5 +1,11 @@
 const firstWord = 'apple';
 
+const secondWord = 'banana';
+
+const lastWord = 'zebra';
+
+const fifthWord = 'ear';
+
 const testAlphabetCharts = [
     {
         _key: '19108083',
@@ -50,7 +56,7 @@ const testAlphabetCharts = [
                 },
                 {
                     letter: 'b',
-                    word: 'banana',
+                    word: secondWord,
                     credits: {
                         audio: 'Aaron Plahn',
                         spelling: 'Justin Bambrick',
@@ -95,7 +101,7 @@ const testAlphabetCharts = [
                 },
                 {
                     letter: 'e',
-                    word: 'ear',
+                    word: fifthWord,
                     credits: {
                         audio: 'Aaron Plahn',
                         spelling: 'Justin Bambrick',
@@ -410,7 +416,7 @@ const testAlphabetCharts = [
                 },
                 {
                     letter: 'z',
-                    word: 'zebra',
+                    word: lastWord,
                     credits: {
                         audio: 'Aaron Plahn',
                         spelling: 'Justin Bambrick',
@@ -953,6 +959,43 @@ describe('alphabet', () => {
             it('should load the first card', () => {
                 cy.contains(firstWord);
             });
+
+            //TODO check network error case
+
+            //click several times math.min(5,)
+
+            // click once
+
+            it('should navigate to the next card', () => {
+                cy.getByDataAttribute('NEXT').click();
+
+                cy.contains(secondWord);
+            });
+
+            it('should navigate to the last card', () => {
+                cy.getByDataAttribute('PREV').click();
+
+                cy.contains(lastWord);
+            });
+
+            it('should navigate to the last card and back to the first card', () => {
+                cy.getByDataAttribute('PREV').click();
+
+                cy.getByDataAttribute('NEXT').click();
+
+                cy.contains(firstWord);
+            });
+
+            it('should navigate to the fifth card', () => {
+                cy.getByDataAttribute('NEXT').click();
+                cy.getByDataAttribute('NEXT').click();
+
+                cy.getByDataAttribute('NEXT').click();
+
+                cy.getByDataAttribute('NEXT').click();
+
+                cy.contains(fifthWord);
+            });
         });
     });
 
@@ -962,6 +1005,7 @@ describe('alphabet', () => {
 
             cy.seedDatabase(`games`, noTestAlphabetCharts);
         });
+
         it('should return a fallback message', () => {
             cy.visit('/Alphabet');
 
