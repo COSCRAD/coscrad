@@ -24,6 +24,7 @@ export type SimulatedKeyboardConfig = {
 
 export type AlphabetConfig = {
     alphabetChartName: string;
+    baseDigitalAssetUrl: string;
 };
 
 export type ThemeOverrides = Pick<ThemeOptions, 'palette'>;

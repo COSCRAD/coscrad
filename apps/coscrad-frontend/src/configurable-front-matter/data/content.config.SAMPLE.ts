@@ -113,5 +113,6 @@ export const contentConfig: ConfigurableContent = {
     },
     alphabetConfig: {
         alphabetChartName: 'alphabet',
+        baseDigitalAssetUrl: 'https://www.mediafortests.com/api',
     },
 };

@@ -4,8 +4,6 @@ import { Box } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { getConfig } from '../../config';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
-import { Loading } from '../loading';
-import { NotFoundPresenter } from '../not-found';
 import { AlphabetPresenter } from './AlphabetPresenter';
 
 export const AlphabetPage = (): JSX.Element => {
@@ -15,17 +13,30 @@ export const AlphabetPage = (): JSX.Element => {
 
     const endpoint = `${baseUrl}/games/${alphabetConfig.alphabetChartName}`;
 
-    const baseMediaUrl = `${baseUrl}/resources/mediaItems/download?name=`;
+    const baseMediaUrl = `${alphabetConfig.baseDigitalAssetUrl}`;
 
     const [alphabet, setAlphabet] = useState<IAlphabetChart | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isError, setIsError] = useState(false);
 
     useEffect(() => {
+        if (!isNullOrUndefined(alphabet)) {
+            return;
+        }
+
+        console.log(`fetching`);
         fetch(endpoint).then(async (result) => {
             // don't fetch if the alphabet has been fetched or if the alphabet has not been configured
             if (alphabet !== null || !isNonEmptyObject(alphabetConfig)) return;
 
+            console.log({ result });
+            if (result.status !== 200) {
+                setIsError(true);
+                setIsLoading(false);
+                return;
+            }
+
             const alphabetData = (await result.json()) as unknown as IAlphabetChart;
-            console.log({ alphabetData });
 
             const dataWithFullUrls: IAlphabetChart = {
                 ...alphabetData,
@@ -49,16 +60,22 @@ export const AlphabetPage = (): JSX.Element => {
             };
 
             setAlphabet(dataWithFullUrls);
+
+            setIsLoading(false);
         });
     }, [alphabet, baseMediaUrl, endpoint, alphabetConfig]);
 
-    if (isNullOrUndefined(alphabetConfig)) {
-        return <NotFoundPresenter />;
-    }
+    // if (isError) {
+    //     return <Box>No alphabet chart</Box>;
+    // }
 
-    if (alphabet === null) {
-        return <Loading />;
-    }
+    // if (isLoading) {
+    //     return <Loading />;
+    // }
+
+    // if (isNullOrUndefined(alphabetConfig)) {
+    //     return <NotFoundPresenter />;
+    // }
 
     return (
         <Box>

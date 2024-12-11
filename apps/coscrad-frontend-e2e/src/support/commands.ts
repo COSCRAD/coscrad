@@ -26,6 +26,8 @@ declare namespace Cypress {
 
         seedDataWithCommand(type: string, payloadOverrides: Record<string, unknown>): void;
 
+        seedDatabase(collectionName: string, documents: unknown[]): void;
+
         seedTestUuids(quantity: number): void;
 
         acknowledgeCommandResult(): void;
@@ -187,6 +189,17 @@ Cypress.Commands.add(
         });
     }
 );
+
+Cypress.Commands.add(`seedDatabase`, (collectionName: string, documents: unknown) => {
+    const serializedDocuments = JSON.stringify(documents);
+
+    const command = `node ../../dist/apps/coscrad-cli/main.js seed-database --collectionName=${collectionName} --docs="${serializedDocuments.replace(
+        /"/g,
+        `\\"`
+    )}"`;
+
+    cy.exec(command);
+});
 
 Cypress.Commands.add(`seedTestUuids`, (quantity: number) => {
     cy.exec(`node ../../dist/apps/coscrad-cli/main.js seed-test-uuids --quantity=${quantity}`);
