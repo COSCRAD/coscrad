@@ -159,9 +159,9 @@ export class ArangoConnectionProvider {
 
     async #createAllMissingCollections(): Promise<void> {
         await Promise.all(
-            getAllArangoCollectionIDs().map((collectionName) =>
-                this.#createCollectionIfNotExists(collectionName)
-            )
+            getAllArangoCollectionIDs()
+                .concat('games' as ArangoCollectionId)
+                .map((collectionName) => this.#createCollectionIfNotExists(collectionName))
         );
     }
 
