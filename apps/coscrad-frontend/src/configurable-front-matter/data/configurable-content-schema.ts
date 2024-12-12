@@ -3,6 +3,7 @@ import {
     CategorizableType,
     ICategorizableDetailQueryResult,
     LanguageCode,
+    MIMEType,
 } from '@coscrad/api-interfaces';
 import { CoscradConstraint } from '@coscrad/validation-constraints';
 import { ThemeOptions } from '@mui/material';
@@ -51,6 +52,20 @@ export type SocialMediaLinks = {
     instagram?: string;
 };
 
+export type AdditionalMaterialItem = {
+    pdf?: {
+        url: string;
+        name: string;
+        description: string;
+    };
+    media?: {
+        url: string;
+        mimeType: MIMEType;
+        name: string;
+        description: string;
+    };
+};
+
 export type ConfigurableContent<T extends CategorizableType = CategorizableType> = {
     // TODO sort all dummy data and this type alphabetically by field names
     indexToDetailFlows: IndexToDetailFlowDefinition<T>[];
@@ -81,6 +96,7 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     externalLinks: ExternalLink[];
     socialMediaLinks: SocialMediaLinks;
     alphabetConfig?: AlphabetConfig;
+    additionalMaterials: AdditionalMaterialItem[];
 };
 
 // is this still necessary?
@@ -115,6 +131,7 @@ export const configurableContentPropertiesAndConstraints: {
     externalLinks: [],
     socialMediaLinks: [CoscradConstraint.isObject],
     alphabetConfig: [CoscradConstraint.isObject],
+    additionalMaterials: [],
 };
 
 export type ConfigurableContentSchema = typeof configurableContentPropertiesAndConstraints;

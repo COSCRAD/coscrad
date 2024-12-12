@@ -105,4 +105,5 @@ export const contentConfig: ConfigurableContent = {
         youtube: 'https://www.youtube.com/',
         instagram: 'https://www.instagram.com/',
     },
+    additionalMaterials: [],
 };
