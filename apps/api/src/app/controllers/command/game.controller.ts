@@ -47,7 +47,7 @@ export class GameController {
         // Note that the config is technically a string 'false', we should deal with this later
         if (this.configService.get<string>('SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT') === 'false')
             // TODO Send correct error code do this now
-            return 'Not Available';
+            return NotFound;
 
         // we should search in the database
         // why not have a `fetchByName` or `fetchId` or `fetchOne`

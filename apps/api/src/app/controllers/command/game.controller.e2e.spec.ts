@@ -33,40 +33,7 @@ describe(`/games`, () => {
 
     let app: INestApplication;
 
-    beforeAll(async () => {
-        const mockConfigService = buildMockConfigService(
-            {
-                ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
-                SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT: 'true',
-            },
-            buildConfigFilePath(Environment.test)
-        );
-
-        const testAppModule = await Test.createTestingModule({
-            providers: [
-                {
-                    provide: ConfigService,
-                    useValue: mockConfigService,
-                },
-            ],
-            imports: [PersistenceModule.forRootAsync()],
-            controllers: [GameController],
-        })
-            .overrideProvider(ConfigService)
-            .useValue(mockConfigService)
-            .compile();
-
-        app = testAppModule.createNestApplication();
-
-        await app.init();
-
-        const arangoConnectionProvider =
-            testAppModule.get<ArangoConnectionProvider>(ArangoConnectionProvider);
-
-        databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
-
-        process.env.NODE_ENV = 'e2e';
-    });
+    let mockConfigService: { get: jest.Mock };
 
     beforeEach(async () => {
         await databaseProvider.getDatabaseForCollection('games').clear();
@@ -81,6 +48,41 @@ describe(`/games`, () => {
     });
 
     describe(`when the legacy games endpoint is enabled`, () => {
+        beforeAll(async () => {
+            mockConfigService = buildMockConfigService(
+                {
+                    ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+                    SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT: 'true',
+                },
+                buildConfigFilePath(Environment.test)
+            );
+
+            const testAppModule = await Test.createTestingModule({
+                providers: [
+                    {
+                        provide: ConfigService,
+                        useValue: mockConfigService,
+                    },
+                ],
+                imports: [PersistenceModule.forRootAsync()],
+                controllers: [GameController],
+            })
+                .overrideProvider(ConfigService)
+                .useValue(mockConfigService)
+                .compile();
+
+            app = testAppModule.createNestApplication();
+
+            await app.init();
+
+            const arangoConnectionProvider =
+                testAppModule.get<ArangoConnectionProvider>(ArangoConnectionProvider);
+
+            databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
+
+            process.env.NODE_ENV = 'e2e';
+        });
+
         describe(`when there is a document with the given name`, () => {
             it('should return a 200', async () => {
                 const res = await request(app.getHttpServer()).get(
@@ -105,6 +107,47 @@ describe(`/games`, () => {
     });
 
     describe(`when the legacy games endpoint is not enabled`, () => {
-        it.todo(`should return not availabale`);
+        beforeAll(async () => {
+            mockConfigService = buildMockConfigService(
+                {
+                    ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+                    SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT: 'false',
+                },
+                buildConfigFilePath(Environment.test)
+            );
+
+            const testAppModule = await Test.createTestingModule({
+                providers: [
+                    {
+                        provide: ConfigService,
+                        useValue: mockConfigService,
+                    },
+                ],
+                imports: [PersistenceModule.forRootAsync()],
+                controllers: [GameController],
+            })
+                .overrideProvider(ConfigService)
+                .useValue(mockConfigService)
+                .compile();
+
+            app = testAppModule.createNestApplication();
+
+            await app.init();
+
+            const arangoConnectionProvider =
+                testAppModule.get<ArangoConnectionProvider>(ArangoConnectionProvider);
+
+            databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
+
+            process.env.NODE_ENV = 'e2e';
+        });
+
+        it(`should return a 404`, async () => {
+            const res = await request(app.getHttpServer()).get(
+                `${endpointUnderTest}/${targetName}`
+            );
+
+            expect(res.statusCode).toBe(HttpStatusCode.notFound);
+        });
     });
 });
