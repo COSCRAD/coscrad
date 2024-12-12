@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, UseFilters, UseInterceptors } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AggregateId } from '../../../domain/types/AggregateId';
 import { isNullOrUndefined } from '../../../domain/utilities/validation/is-null-or-undefined';
@@ -6,6 +6,12 @@ import { NotFound } from '../../../lib/types/not-found';
 import { ArangoDatabaseForCollection } from '../../../persistence/database/arango-database-for-collection';
 import { ArangoCollectionId } from '../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
+import { QueryResponseTransformInterceptor } from '../response-mapping';
+import {
+    CoscradInternalErrorFilter,
+    CoscradInvalidUserInputFilter,
+    CoscradNotFoundFilter,
+} from '../response-mapping/CoscradExceptions/exception-filters';
 
 type GameDto = {
     id: AggregateId;
@@ -17,6 +23,12 @@ type GameDto = {
  * In the future we would have dedicated domain and view models or possibly
  * a separate back-end for game data.
  */
+@UseFilters(
+    new CoscradNotFoundFilter(),
+    new CoscradInvalidUserInputFilter(),
+    new CoscradInternalErrorFilter()
+)
+@UseInterceptors(QueryResponseTransformInterceptor)
 @Controller('games')
 export class GameController {
     private readonly gamesDatabase: ArangoDatabaseForCollection<GameDto>;
@@ -34,9 +46,10 @@ export class GameController {
     async fetchGame(@Param('name') nameToFind: string) {
         // Note that the config is technically a string 'false', we should deal with this later
         if (this.configService.get<string>('SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT') === 'false')
-            // TODO Send correct error code
-            return 'Not Available';
+            // TODO Send correct error code do this now
+            return NotFound;
 
+        // we should search in the database
         // why not have a `fetchByName` or `fetchId` or `fetchOne`
         // Note that we bypass any kind of repository \ validation layers for this quick-and-dirty support for legacy data
         const allGames = await this.gamesDatabase.fetchMany();
