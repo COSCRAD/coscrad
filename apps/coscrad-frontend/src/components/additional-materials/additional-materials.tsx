@@ -21,7 +21,7 @@ const MediaItemPresenter = ({
     }
 
     return (
-        <Box mb={2} p={2} component={Paper}>
+        <Box component={'div'}>
             <Typography variant={'h3'} color={'primary.main'}>
                 <IconButton>
                     <TranscribeIcon
@@ -39,20 +39,27 @@ const MediaItemPresenter = ({
 
 const PdfPresenter = ({ url, name, description }: AdditionalMaterialItem['pdf']): JSX.Element => {
     return (
-        <Box p={2} component={Paper}>
-            <Typography variant="h3" color={'primary.main'}>
-                <IconButton>
-                    <ArticleIcon
-                        fontSize="large"
-                        sx={{ color: 'secondary.main', verticalAlign: 'middle' }}
-                    />
-                </IconButton>
-                pdf
+        <Box component={'div'}>
+            <Typography variant={'h3'}>
+                <Box
+                    component={'a'}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    color={'primary.main'}
+                    textTransform={'capitalize'}
+                >
+                    <IconButton>
+                        <ArticleIcon
+                            fontSize="large"
+                            sx={{ color: 'secondary.main', verticalAlign: 'middle' }}
+                        />
+                    </IconButton>
+                    {name}
+                </Box>
             </Typography>
-            <Box component={'a'} href={url} target="_blank" rel="noopener noreferrer">
-                {name}
-            </Box>
-            <Typography mb={2} mt={2} variant={'body1'} color={'text.secondary'}>
+
+            <Typography variant={'body1'} color={'text.secondary'}>
                 {description}
             </Typography>
         </Box>
@@ -69,7 +76,7 @@ export const AdditionalMaterials = (): JSX.Element => {
             {additionalMaterials
                 .filter(({ pdf, media }) => !isNullOrUndefined(pdf) || !isNullOrUndefined(media))
                 .map(({ pdf, media }) => (
-                    <Box component={'div'}>
+                    <Box p={2} component={Paper}>
                         {isNullOrUndefined(media) ? null : <MediaItemPresenter {...media} />}
                         {isNullOrUndefined(pdf) ? null : <PdfPresenter {...pdf} />}
                     </Box>
