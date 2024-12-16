@@ -14,9 +14,11 @@ export const AlphabetCardPresenter = ({
     standalone_image,
 }: AlphabetCardPresenterProps): JSX.Element => {
     const [isLoading, setIsLoading] = useState(true);
+    // const [isError, setIsError] = useState(true);
 
     useEffect(() => {
         setIsLoading(true);
+        // setIsError(false);
         const image = new Image();
 
         image.src = standalone_image;
@@ -24,9 +26,20 @@ export const AlphabetCardPresenter = ({
         image.onload = () => {
             setIsLoading(false);
         };
+        // image.onerror = () => {
+        //     setIsError(true);
+        //     setIsLoading(false);
+        // };
     }, [standalone_image]);
 
     if (isLoading) return <Loading />;
+
+    // if (isError)
+    //     return (
+    //         <Box m={4} sx={{ textAlign: 'center' }}>
+    //             No alphabet chart
+    //         </Box>
+    //     );
 
     const PlayLetterButton = ({ onButtonClick }) => (
         <Typography variant={'h1'} component={Box} onClick={onButtonClick}>

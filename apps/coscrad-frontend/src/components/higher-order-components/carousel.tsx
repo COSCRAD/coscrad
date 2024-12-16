@@ -36,6 +36,7 @@ export const Carousel = <T,>({ propsForItems, Presenter }: CarouselProps<T>) => 
             <Presenter {...propsForSelectedItem} />
             <Box sx={{ textAlign: 'center' }}>
                 <Button
+                    data-testid="PREV"
                     color="primary"
                     variant="outlined"
                     sx={{ borderRadius: '20px 0px 0px 20px' }}
@@ -44,6 +45,7 @@ export const Carousel = <T,>({ propsForItems, Presenter }: CarouselProps<T>) => 
                     <ArrowBackIosIcon sx={{ fontSize: '2em' }} />
                 </Button>
                 <Button
+                    data-testid="NEXT"
                     color="primary"
                     variant="outlined"
                     sx={{ borderRadius: '0px 20px 20px 0px' }}
