@@ -6,6 +6,10 @@ const lastWord = 'zebra';
 
 const fifthWord = 'ear';
 
+/**
+ * TODO Move this to a fixture data, using a pattern that
+ * allows us to override select props for the purpose of the test.
+ */
 const testAlphabetCharts = [
     {
         _key: '19108083',
@@ -22,31 +26,31 @@ const testAlphabetCharts = [
             },
             credits: {
                 images: 'Pixabay (CC0 sources), and Shutterstock (paid license)',
-                'spelling by': 'Justin Bambrick',
+                'spelling by': 'Barb Speller',
                 'app development': {
                     backend: {
-                        'Builds and Deployment': 'Aaron Plahn',
-                        'Database Administration': 'Aaron Plahn',
-                        'API design and development': 'Aaron Plahn',
+                        'Builds and Deployment': 'John Dog',
+                        'Database Administration': 'John Dog',
+                        'API design and development': 'John Dog',
                     },
                     frontend: {
-                        styling: 'Justin Bambrick',
-                        'UI and UX': 'Justin Bambrick',
-                        mobile: 'Justin Bambrick',
+                        styling: 'Barb Speller',
+                        'UI and UX': 'Barb Speller',
+                        mobile: 'Barb Speller',
                     },
                 },
-                'images edited by': 'Justin Bambrick',
-                'word list compiled by': 'Justin Bambrick with assistance from Aaron Plahn',
+                'images edited by': 'Barb Speller',
+                'word list compiled by': 'Barb Speller with assistance from John Dog',
             },
             alphabet_cards: [
                 {
                     letter: 'a',
                     word: firstWord,
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     sequence_number: '1',
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c1',
@@ -58,10 +62,10 @@ const testAlphabetCharts = [
                     letter: 'b',
                     word: secondWord,
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     sequence_number: '2',
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c2',
@@ -73,10 +77,10 @@ const testAlphabetCharts = [
                     letter: 'c',
                     word: 'car',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     sequence_number: '3',
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c3',
@@ -88,10 +92,10 @@ const testAlphabetCharts = [
                     letter: 'd',
                     word: 'deer',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     sequence_number: '4',
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c4',
@@ -103,10 +107,10 @@ const testAlphabetCharts = [
                     letter: 'e',
                     word: fifthWord,
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     sequence_number: '5',
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c5',
@@ -118,10 +122,10 @@ const testAlphabetCharts = [
                     letter: 'f',
                     word: 'fork',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     sequence_number: '6',
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c6',
@@ -133,10 +137,10 @@ const testAlphabetCharts = [
                     letter: 'g',
                     word: 'goat',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     sequence_number: '7',
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c7',
@@ -148,10 +152,10 @@ const testAlphabetCharts = [
                     letter: 'h',
                     word: 'horse',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     sequence_number: '8',
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c8',
@@ -163,10 +167,10 @@ const testAlphabetCharts = [
                     letter: 'i',
                     word: 'insect',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     sequence_number: '9',
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c9',
@@ -178,10 +182,10 @@ const testAlphabetCharts = [
                     letter: 'j',
                     word: 'jacket',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     sequence_number: '10',
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c10',
@@ -193,10 +197,10 @@ const testAlphabetCharts = [
                     letter: 'k',
                     word: 'knife',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     sequence_number: '11',
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c11',
@@ -208,10 +212,10 @@ const testAlphabetCharts = [
                     letter: 'l',
                     word: 'lion',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     sequence_number: '12',
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c12',
@@ -223,10 +227,10 @@ const testAlphabetCharts = [
                     letter: 'm',
                     word: 'moose',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     sequence_number: '13',
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c13',
@@ -238,10 +242,10 @@ const testAlphabetCharts = [
                     letter: 'n',
                     word: 'nose',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     sequence_number: '14',
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c14',
@@ -253,10 +257,10 @@ const testAlphabetCharts = [
                     letter: 'o',
                     word: 'orange',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     sequence_number: '15',
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c15',
@@ -268,10 +272,10 @@ const testAlphabetCharts = [
                     letter: 'p',
                     word: 'phone',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     sequence_number: '16',
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c16',
@@ -283,10 +287,10 @@ const testAlphabetCharts = [
                     letter: 'q',
                     word: 'quilt',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     sequence_number: '17',
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c17',
@@ -298,10 +302,10 @@ const testAlphabetCharts = [
                     letter: 'r',
                     word: 'rope',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     sequence_number: '18',
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c18',
@@ -313,10 +317,10 @@ const testAlphabetCharts = [
                     letter: 's',
                     word: 'sheep',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     sequence_number: '19',
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c19',
@@ -328,10 +332,10 @@ const testAlphabetCharts = [
                     letter: 't',
                     word: 'tomato',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     sequence_number: '20',
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c20',
@@ -343,10 +347,10 @@ const testAlphabetCharts = [
                     letter: 'u',
                     word: 'umbrella',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     sequence_number: '21',
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c21',
@@ -358,10 +362,10 @@ const testAlphabetCharts = [
                     letter: 'v',
                     word: 'vest',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     sequence_number: '22',
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c22',
@@ -373,10 +377,10 @@ const testAlphabetCharts = [
                     letter: 'w',
                     word: 'wolf',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     sequence_number: '23',
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c23',
@@ -388,10 +392,10 @@ const testAlphabetCharts = [
                     letter: 'x',
                     word: 'xylophone',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     sequence_number: '24',
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c24',
@@ -403,10 +407,10 @@ const testAlphabetCharts = [
                     letter: 'y',
                     word: 'yellow',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     sequence_number: '25',
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c25',
@@ -418,10 +422,10 @@ const testAlphabetCharts = [
                     letter: 'z',
                     word: lastWord,
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     sequence_number: '26',
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c26',
@@ -442,10 +446,10 @@ const testAlphabetCharts = [
                 {
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c1',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     letter: 'a',
                     letter_audio:
@@ -460,10 +464,10 @@ const testAlphabetCharts = [
                 {
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c2',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     letter: 'b',
                     letter_audio:
@@ -478,10 +482,10 @@ const testAlphabetCharts = [
                 {
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c3',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     letter: 'c',
                     letter_audio:
@@ -496,10 +500,10 @@ const testAlphabetCharts = [
                 {
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c4',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     letter: 'd',
                     letter_audio:
@@ -514,10 +518,10 @@ const testAlphabetCharts = [
                 {
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c5',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     letter: 'e',
                     letter_audio:
@@ -532,10 +536,10 @@ const testAlphabetCharts = [
                 {
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c6',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     letter: 'f',
                     letter_audio:
@@ -550,10 +554,10 @@ const testAlphabetCharts = [
                 {
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c7',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     letter: 'g',
                     letter_audio:
@@ -568,10 +572,10 @@ const testAlphabetCharts = [
                 {
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c8',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     letter: 'h',
                     letter_audio:
@@ -586,10 +590,10 @@ const testAlphabetCharts = [
                 {
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c9',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     letter: 'i',
                     letter_audio:
@@ -604,10 +608,10 @@ const testAlphabetCharts = [
                 {
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c10',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     letter: 'j',
                     letter_audio:
@@ -622,10 +626,10 @@ const testAlphabetCharts = [
                 {
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c11',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     letter: 'k',
                     letter_audio:
@@ -640,10 +644,10 @@ const testAlphabetCharts = [
                 {
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c12',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     letter: 'l',
                     letter_audio:
@@ -658,10 +662,10 @@ const testAlphabetCharts = [
                 {
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c13',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     letter: 'm',
                     letter_audio:
@@ -676,10 +680,10 @@ const testAlphabetCharts = [
                 {
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c14',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     letter: 'n',
                     letter_audio:
@@ -694,10 +698,10 @@ const testAlphabetCharts = [
                 {
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c15',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     letter: 'o',
                     letter_audio:
@@ -712,10 +716,10 @@ const testAlphabetCharts = [
                 {
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c16',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     letter: 'p',
                     letter_audio:
@@ -730,10 +734,10 @@ const testAlphabetCharts = [
                 {
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c17',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     letter: 'q',
                     letter_audio:
@@ -748,10 +752,10 @@ const testAlphabetCharts = [
                 {
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c18',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     letter: 'r',
                     letter_audio:
@@ -766,10 +770,10 @@ const testAlphabetCharts = [
                 {
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c19',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     letter: 's',
                     letter_audio:
@@ -784,10 +788,10 @@ const testAlphabetCharts = [
                 {
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c20',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     letter: 't',
                     letter_audio:
@@ -802,10 +806,10 @@ const testAlphabetCharts = [
                 {
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c21',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     letter: 'u',
                     letter_audio:
@@ -820,10 +824,10 @@ const testAlphabetCharts = [
                 {
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c22',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     letter: 'v',
                     letter_audio:
@@ -838,10 +842,10 @@ const testAlphabetCharts = [
                 {
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c23',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     letter: 'w',
                     letter_audio:
@@ -856,10 +860,10 @@ const testAlphabetCharts = [
                 {
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c24',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     letter: 'x',
                     letter_audio:
@@ -874,10 +878,10 @@ const testAlphabetCharts = [
                 {
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c25',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     letter: 'y',
                     letter_audio:
@@ -892,10 +896,10 @@ const testAlphabetCharts = [
                 {
                     card_image: 'English_Alphabet_Plahn_Aaron_2024_c26',
                     credits: {
-                        audio: 'Aaron Plahn',
-                        spelling: 'Justin Bambrick',
-                        'audio edited by': 'Nikhilesh Kondur',
-                        'image edited by': 'Aaron Plahn',
+                        audio: 'John Dog',
+                        spelling: 'Barb Speller',
+                        'audio edited by': 'Nick DeAudioguy',
+                        'image edited by': 'John Dog',
                     },
                     letter: 'z',
                     letter_audio:
@@ -910,21 +914,21 @@ const testAlphabetCharts = [
             ],
             credits: {
                 images: 'Pixabay (CC0 sources), and Shutterstock (paid license)',
-                'spelling by': 'Justin Bambrick',
+                'spelling by': 'Barb Speller',
                 'app development': {
                     backend: {
-                        'Builds and Deployment': 'Aaron Plahn',
-                        'Database Administration': 'Aaron Plahn',
-                        'API design and development': 'Aaron Plahn',
+                        'Builds and Deployment': 'John Dog',
+                        'Database Administration': 'John Dog',
+                        'API design and development': 'John Dog',
                     },
                     frontend: {
-                        styling: 'Justin Bambrick',
-                        'UI and UX': 'Justin Bambrick',
-                        mobile: 'Justin Bambrick',
+                        styling: 'Barb Speller',
+                        'UI and UX': 'Barb Speller',
+                        mobile: 'Barb Speller',
                     },
                 },
-                'images edited by': 'Justin Bambrick',
-                'word list compiled by': 'Justin Bambrick with assistance from Aaron Plahn',
+                'images edited by': 'Barb Speller',
+                'word list compiled by': 'Barb Speller with assistance from John Dog',
             },
             id: 3,
             name: 'Alphabet with broken media links',
@@ -962,10 +966,6 @@ describe('alphabet', () => {
 
             //TODO check network error case
 
-            //click several times math.min(5,)
-
-            // click once
-
             it('should navigate to the next card', () => {
                 cy.getByDataAttribute('NEXT').click();
 
@@ -988,6 +988,7 @@ describe('alphabet', () => {
 
             it('should navigate to the fifth card', () => {
                 cy.getByDataAttribute('NEXT').click();
+
                 cy.getByDataAttribute('NEXT').click();
 
                 cy.getByDataAttribute('NEXT').click();
