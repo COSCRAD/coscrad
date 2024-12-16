@@ -58,9 +58,11 @@ export class DataImporter {
         );
 
         await Promise.all(
-            Object.values(ArangoCollectionId).map((collectionName) =>
-                this.databaseProvider.getDBInstance().deleteAll(collectionName)
-            )
+            Object.values(ArangoCollectionId)
+                .concat('games' as ArangoCollectionId)
+                .map((collectionName) =>
+                    this.databaseProvider.getDBInstance().deleteAll(collectionName)
+                )
         );
     }
 }
