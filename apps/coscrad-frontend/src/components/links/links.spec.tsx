@@ -16,6 +16,7 @@ describe('Links', () => {
             const linkToFind: ExternalLink = {
                 description: dummyDescription,
                 url: dummyUrl,
+                title: 'my link',
             };
 
             const externalLinks: ExternalLink[] = [
@@ -23,6 +24,7 @@ describe('Links', () => {
                 {
                     description: 'another link',
                     url: 'https://www.coscrad.org',
+                    title: 'my link',
                 },
             ];
 

@@ -16,6 +16,7 @@ const expectedOrder = [
     'Resources',
     'Notes',
     'Links',
+    'Additional Materials',
     'TreeOfKnowledge',
     'Tags',
     liveRoute,
@@ -103,6 +104,18 @@ describe(`dynamic navigation menu`, () => {
 
         it(`should not render the Alphabet link`, () => {
             expect(result.some(({ label }) => label === 'Alphabet')).toBe(false);
+        });
+    });
+
+    describe(`when there are no additional materials specified`, () => {
+        it(`should not render the Alphabet link`, () => {
+            const contentConfig = buildDummyConfig({
+                additionalMaterials: [],
+            });
+
+            const result = buildNavMenuItems(contentConfig);
+
+            expect(result.some(({ label }) => label === 'Additional Materials')).toBe(false);
         });
     });
 });
