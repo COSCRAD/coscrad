@@ -1,6 +1,7 @@
 import { AggregateType, CategorizableType } from '@coscrad/api-interfaces';
 import { isNonEmptyObject, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { About } from '../components/about/about';
+import { AdditionalMaterials } from '../components/additional-materials/additional-materials';
 import { Credits } from '../components/credits/credits';
 import { AggregatePage } from '../components/higher-order-components/aggregate-page';
 import { Home } from '../components/home/home';
@@ -33,6 +34,7 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
         listenLive,
         resourceIndexLabel,
         externalLinks,
+        additionalMaterials,
     } = contentConfig;
 
     const noteIndexToDetailConfig = indexToDetailFlows.find(
@@ -83,6 +85,15 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
                 path: 'Links',
                 label: 'Links',
                 element: <Links />,
+            }),
+        ],
+        [
+            additionalMaterials.length > 0,
+            () => ({
+                path: 'Additional Materials',
+                // TODO pull this label from the config
+                label: 'Additional Materials',
+                element: <AdditionalMaterials />,
             }),
         ],
         [
