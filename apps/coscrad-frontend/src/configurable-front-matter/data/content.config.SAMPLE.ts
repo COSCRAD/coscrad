@@ -1,4 +1,4 @@
-import { CategorizableType, LanguageCode } from '@coscrad/api-interfaces';
+import { CategorizableType, LanguageCode, MIMEType } from '@coscrad/api-interfaces';
 import { ConfigurableContent, DetailViewType } from './configurable-content-schema';
 
 export const contentConfig: ConfigurableContent = {
@@ -115,4 +115,19 @@ export const contentConfig: ConfigurableContent = {
         alphabetChartName: 'alphabet',
         baseDigitalAssetUrl: 'https://www.mediafortests.com/api',
     },
+    additionalMaterials: [
+        {
+            media: {
+                name: 'my featured song',
+                url: 'www.songs.com/123.mp3',
+                description: 'I want to show this off ASAP',
+                mimeType: MIMEType.mp3,
+            },
+            pdf: {
+                name: 'lyrics pdf',
+                description: 'this has the lyrics, written by Willy Workhard',
+                url: 'www.mysite.com/mytext.pdf',
+            },
+        },
+    ],
 };
