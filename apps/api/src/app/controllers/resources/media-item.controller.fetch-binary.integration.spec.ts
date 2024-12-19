@@ -12,6 +12,7 @@ import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-g
 import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { CoscradEventFactory } from '../../../domain/common';
 import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
+import { getExtensionForMimeType } from '../../../domain/models/media-item/entities/get-extension-for-mime-type';
 import { MediaItem } from '../../../domain/models/media-item/entities/media-item.entity';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../../domain/models/user-management/user/entities/user/coscrad-user.entity';
@@ -61,7 +62,7 @@ describe(`MediaItemController.fetchBinary`, () => {
         userDescription: string;
         mediaItem: MediaItem;
         mediaItemDescription: string;
-        expectedStatusCode: HttpStatusCode;
+        assertExpectedResponse: (response: any, mediaItem: MediaItem) => void;
     };
 
     const publicUser = undefined;
@@ -81,8 +82,8 @@ describe(`MediaItemController.fetchBinary`, () => {
     const usersAndDescriptions = [
         [publicUser, 'publicUser'],
         [nonAdminUser, 'authenticated, non-admin'],
-        [projectAdmin, 'authenticated, non-admin'],
-        [coscradAdmin, 'authenticated, non-admin'],
+        [projectAdmin, 'authenticated, project admin'],
+        [coscradAdmin, 'authenticated, COSCRAD'],
     ] as const;
 
     const publicMediaItem = existingMediaItem.clone({
@@ -100,12 +101,36 @@ describe(`MediaItemController.fetchBinary`, () => {
         published: false,
     });
 
+    const assertResponseWithMediaItem = (res, mediaItem: MediaItem) => {
+        expect(res.status).toBe(HttpStatusCode.ok);
+
+        const disposition = res.header['content-disposition'];
+
+        expect(disposition).toBe(
+            // TODO just specify this on the test case manually- we're copying implementation logic here
+            /**
+             * The linter is confused because this escape character applies at
+             * the level of HTTP responses to be interpreted by the browser. A pair of
+             * `\"`s are is necessary in the result.
+             */
+            // eslint-disable-next-line no-useless-escape
+            `attachment; filename=\"${
+                mediaItem.getName().getOriginalTextItem().text
+                // eslint-disable-next-line no-useless-escape
+            }.${getExtensionForMimeType(mediaItem.mimeType)}\"`
+        );
+    };
+
+    const assertNotFoundResponse = (res) => {
+        expect(res.status).toBe(HttpStatusCode.notFound);
+    };
+
     const publicTestCases: TestCase[] = usersAndDescriptions.map(([user, userDescription]) => ({
         user,
         userDescription,
         mediaItem: publicMediaItem,
         mediaItemDescription: 'public media item',
-        expectedStatusCode: HttpStatusCode.ok,
+        assertExpectedResponse: assertResponseWithMediaItem,
     }));
 
     const privilegedAccessTestCases: TestCase[] = [
@@ -115,15 +140,15 @@ describe(`MediaItemController.fetchBinary`, () => {
             userDescription: 'project admin',
             mediaItem: privateMediaItem,
             mediaItemDescription: 'private media item',
-            expectedStatusCode: HttpStatusCode.ok,
+            assertExpectedResponse: assertResponseWithMediaItem,
         },
         {
             user: coscradAdmin,
             // TODO make this the username
-            userDescription: 'project admin',
+            userDescription: 'coscrad admin',
             mediaItem: privateMediaItem,
             mediaItemDescription: 'private media item',
-            expectedStatusCode: HttpStatusCode.ok,
+            assertExpectedResponse: assertResponseWithMediaItem,
         },
         {
             user: nonAdminUser,
@@ -135,7 +160,7 @@ describe(`MediaItemController.fetchBinary`, () => {
                 },
             }),
             mediaItemDescription: 'private media item with user in the ACL',
-            expectedStatusCode: HttpStatusCode.ok,
+            assertExpectedResponse: assertResponseWithMediaItem,
         },
     ];
 
@@ -146,19 +171,20 @@ describe(`MediaItemController.fetchBinary`, () => {
             mediaItem: privateMediaItem,
             mediaItemDescription: 'private media item',
             // we return a not found in this case for obscurity
-            expectedStatusCode: HttpStatusCode.notFound,
+            assertExpectedResponse: assertNotFoundResponse,
         },
         {
             user: nonAdminUser,
             userDescription: 'authenticated non-admin user',
             mediaItem: privateMediaItem,
             mediaItemDescription: 'private media item (user not in ACL)',
-            expectedStatusCode: HttpStatusCode.notFound,
+            // we return a not found in this case for obscurity
+            assertExpectedResponse: assertNotFoundResponse,
         },
     ];
 
     [...publicTestCases, ...privilegedAccessTestCases, ...forbiddenTestCases].forEach(
-        ({ user, userDescription, mediaItem, mediaItemDescription, expectedStatusCode }) => {
+        ({ user, userDescription, mediaItem, mediaItemDescription, assertExpectedResponse }) => {
             const testUserWithGroups = user && new CoscradUserWithGroups(user, []);
 
             describe(`when the user is a: ${userDescription}`, () => {
@@ -227,12 +253,7 @@ describe(`MediaItemController.fetchBinary`, () => {
 
                         const res = await request(app.getHttpServer()).get(fullUrl);
 
-                        expect(res.status).toBe(expectedStatusCode);
-
-                        /**
-                         * TODO tighten up the test up the expectation. How can
-                         * we be confident the right binary file is sent?
-                         */
+                        assertExpectedResponse(res, mediaItem);
                     });
                 });
             });
