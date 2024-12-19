@@ -259,4 +259,8 @@ describe(`MediaItemController.fetchBinary`, () => {
             });
         }
     );
+
+    describe(`when the media item is an audio or video item`, () => {
+        it.todo(`should return a content-disposition of inline`);
+    });
 });

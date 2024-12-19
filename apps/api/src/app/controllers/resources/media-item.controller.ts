@@ -5,6 +5,8 @@ import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger
 import { existsSync } from 'fs';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
+import { isAudioMimeType } from '../../../domain/models/audio-visual/audio-item/entities/audio-item.entity';
+import { isVideoMimeType } from '../../../domain/models/audio-visual/video/entities/video.entity';
 import { getExtensionForMimeType } from '../../../domain/models/media-item/entities/get-extension-for-mime-type';
 import { MediaItemQueryService } from '../../../domain/services/query-services/media-management/media-item-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
@@ -153,7 +155,10 @@ export class MediaItemController {
         mimeType: MIMEType;
         name: string;
     }): Record<string, unknown> {
-        const disposition = `attachment; filename="${name}.${getExtensionForMimeType(mimeType)}"`;
+        const disposition =
+            isAudioMimeType(mimeType) || isVideoMimeType(mimeType)
+                ? `inline`
+                : `attachment; filename="${name}.${getExtensionForMimeType(mimeType)}"`;
 
         return {
             'x-timestamp': Date.now(),
