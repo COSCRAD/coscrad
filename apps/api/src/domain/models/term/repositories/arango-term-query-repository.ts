@@ -22,6 +22,7 @@ import {
     IAudioItemQueryRepository,
 } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ITermQueryRepository } from '../queries';
+import { ChilcotinTextParser } from './chilcotin-text-parser';
 
 export class ArangoTermQueryRepository implements ITermQueryRepository {
     private readonly database: ArangoDatabaseForCollection<
@@ -33,7 +34,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         // AUDIO_ITEM_QUERY_REPOSITORY?
         @Inject(AUDIO_QUERY_REPOSITORY_TOKEN)
         private readonly audioItemQueryRepository: IAudioItemQueryRepository,
-        @Inject(COSCRAD_LOGGER_TOKEN) private readonly logger: ICoscradLogger
+        @Inject(COSCRAD_LOGGER_TOKEN) private readonly logger: ICoscradLogger // config -> alphabet
     ) {
         this.database = new ArangoDatabaseForCollection(
             new ArangoDatabase(arangoConnectionProvider.getConnection()),
@@ -69,11 +70,17 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         id: AggregateId,
         { text, languageCode, role }: IMultilingualTextItem
     ): Promise<void> {
+        const textBySymbol =
+            languageCode !== LanguageCode.Chilcotin
+                ? []
+                : new ChilcotinTextParser().getSymbols(text);
+
         const query = `
         FOR doc IN @@collectionName
         FILTER doc._key == @id
         let newItem = {
                     text: @text,
+                    textBySymbol: @textBySymbol,
                     languageCode: @languageCode,
                     role: @role
         }
@@ -89,6 +96,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             '@collectionName': 'term__VIEWS',
             id: id,
             text: text,
+            textBySymbol,
             role: role,
             languageCode: languageCode,
         };
