@@ -18,7 +18,9 @@ interface IUnionFactory<_T = unknown, UProduct = unknown> {
 export class DynamicDataTypeFinderService {
     public unionFactory: IUnionFactory;
 
-    constructor(private readonly discoverService: DiscoveryService) {}
+    constructor(private readonly discoverService: DiscoveryService) {
+        console.log('here');
+    }
 
     async bootstrapDynamicTypes() {
         const unionProviders = await this.getAllDataClassCtors();
@@ -28,6 +30,11 @@ export class DynamicDataTypeFinderService {
         if (!this.unionFactory) {
             const dataClassCtors = await this.getAllDataClassCtors();
 
+            /**
+             * What we really want to do here is to discover all union types
+             * and eagerly create their factories, keeping them in a
+             * lookup table.
+             */
             this.unionFactory = new UnionFactory(
                 dataClassCtors as Ctor<unknown>[],
                 // TODO This doesn't belong here...

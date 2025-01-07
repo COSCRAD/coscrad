@@ -60,6 +60,11 @@ export default async (
         throw new InternalError(`Failed to initialize a testing module.`);
     }
 
+    /**
+     * This ensures that union types, for example, are resolved.
+     */
+    await app.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
+
     return {
         databaseProvider,
         testRepositoryProvider,
