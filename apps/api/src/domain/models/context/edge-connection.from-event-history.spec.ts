@@ -10,6 +10,7 @@ import { NotFound } from '../../../lib/types/not-found';
 import { NoteViewModel } from '../../../queries/edgeConnectionViewModels/note.view-model';
 import { TestEventStream } from '../../../test-data/events';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../../../validation';
+import { CoscradEventUnion } from '../../common';
 import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
 import {
     AddAudioForNote,
@@ -146,6 +147,7 @@ describe(`EdgeConnection.fromEventHistory`, () => {
                     TranslateNote,
                     AddAudioForNote,
                     // Events
+                    CoscradEventUnion,
                     NoteAboutResourceCreated,
                     NoteTranslated,
                     ResourcesConnectedWithNote,

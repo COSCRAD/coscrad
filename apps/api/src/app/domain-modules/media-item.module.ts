@@ -1,5 +1,6 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
+import { MediaItemCreated } from '../../domain/models/media-item/commands/create-media-item';
 import { CreateMediaItem } from '../../domain/models/media-item/commands/create-media-item/create-media-item.command';
 import { CreateMediaItemCommandHandler } from '../../domain/models/media-item/commands/create-media-item/create-media-item.command-handler';
 import {
@@ -20,6 +21,12 @@ import { MediaItemController } from '../controllers/resources/media-item.control
         CommandInfoService,
         CreateMediaItem,
         CreateMediaItemCommandHandler,
+        // Data Type Ctors
+        // Events
+        ...[MediaItemCreated].map((Ctor) => ({
+            provide: Ctor,
+            useValue: Ctor,
+        })),
         {
             provide: MEDIA_PROBER_TOKEN,
             useClass: FsMediaProber,

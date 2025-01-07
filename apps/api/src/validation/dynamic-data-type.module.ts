@@ -4,7 +4,6 @@ import { DynamicDataTypeFinderService } from './dynamic-data-type-finder.service
 
 @Module({
     imports: [DiscoveryModule],
-    // Is EmptyDtoProvider still needed?
     providers: [DynamicDataTypeFinderService],
     exports: [DynamicDataTypeFinderService],
 })
