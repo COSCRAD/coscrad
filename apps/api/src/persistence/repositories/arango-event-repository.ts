@@ -38,12 +38,8 @@ export class ArangoEventRepository implements IEventRepository {
 
         const allEventDtos = allEventDocuments.map(mapDatabaseDocumentToAggregateDTO);
 
-        /**
-         * TODO Ideally, we would use the `Specification` API and do this
-         * at the level of the database. However, this class is concrete with
-         * respect to Arango, so there's not a lot of value in building in complex
-         * query support for this right now.
-         */
+        // const cursor = await this.arangoEventDatabase.query();
+
         const filteredEventDtos = aggregateContextIdentifier
             ? allEventDtos.filter(
                   ({
