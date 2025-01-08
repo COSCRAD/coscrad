@@ -1,6 +1,8 @@
 import {
     AggregateType,
     CoscradUserRole,
+    IDetailQueryResult,
+    ITermViewModel,
     LanguageCode,
     ResourceType,
 } from '@coscrad/api-interfaces';
@@ -8,6 +10,7 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import httpStatusCodes from '../../app/constants/httpStatusCodes';
 import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
+import { CommandInfoService } from '../../app/controllers/command/services/command-info-service';
 import getValidAggregateInstanceForTest from '../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { ICoscradEvent, ICoscradEventHandler } from '../../domain/common';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
@@ -36,7 +39,6 @@ import generateDatabaseNameForTestSuite from '../../persistence/repositories/__t
 import buildTestDataInFlatFormat from '../../test-data/buildTestDataInFlatFormat';
 import { TestEventStream } from '../../test-data/events';
 import { DynamicDataTypeFinderService } from '../../validation';
-import { TermViewModel } from '../buildViewModelForResource/viewModels';
 import { BaseResourceViewModel } from '../buildViewModelForResource/viewModels/base-resource.view-model';
 
 // Set up endpoints: index endpoint, id endpoint
@@ -131,9 +133,12 @@ const assertResourceHasContributionFor = (
  * TODO We need to find a more maintainable way of
  * seeding the required initial state.
  */
-const buildEventHandlers = (termQueryRepository: ITermQueryRepository) => {
+const buildEventHandlers = (
+    termQueryRepository: ITermQueryRepository,
+    commandInfoService: CommandInfoService
+) => {
     return [
-        new TermCreatedEventHandler(termQueryRepository),
+        new TermCreatedEventHandler(termQueryRepository, commandInfoService),
         new TermTranslatedEventHandler(termQueryRepository),
         new AudioAddedForTermEventHandler(termQueryRepository),
         // TODO update this to take in a generic query repository provider
@@ -193,7 +198,7 @@ describe(`when querying for a term: fetch by Id`, () => {
 
             termQueryRepository = app.get(TERM_QUERY_REPOSITORY_TOKEN);
 
-            handlers = buildEventHandlers(termQueryRepository);
+            handlers = buildEventHandlers(termQueryRepository, app.get(CommandInfoService));
 
             seedTerms = async (events: ICoscradEvent[]) => {
                 for (const e of events) {
@@ -233,9 +238,12 @@ describe(`when querying for a term: fetch by Id`, () => {
 
                     expect(res.status).toBe(httpStatusCodes.ok);
 
-                    const result = res.body as TermViewModel;
+                    const result = res.body as IDetailQueryResult<ITermViewModel>;
 
                     expect(result.id).toBe(termId);
+
+                    // We don't expose actions to non-admin users
+                    expect(result.actions).toEqual([]);
 
                     assertResourceHasContributionFor(dummyContributor, result);
                 });
@@ -299,7 +307,7 @@ describe(`when querying for a term: fetch by Id`, () => {
                  * TODO We need to find a more maintainable way of
                  * seeding the required initial state.
                  */
-                handlers = buildEventHandlers(termQueryRepository);
+                handlers = buildEventHandlers(termQueryRepository, app.get(CommandInfoService));
 
                 seedTerms = async (events: ICoscradEvent[]) => {
                     for (const e of events) {
@@ -328,6 +336,9 @@ describe(`when querying for a term: fetch by Id`, () => {
                         );
 
                         expect(res.status).toBe(httpStatusCodes.ok);
+
+                        // Commands should be visible to admin
+                        expect(res.body.actions).not.toEqual([]);
                     });
                 });
 
@@ -349,6 +360,9 @@ describe(`when querying for a term: fetch by Id`, () => {
                         );
 
                         expect(res.status).toBe(httpStatusCodes.ok);
+
+                        // Commands should be visible to admin
+                        expect(res.body.actions).not.toEqual([]);
                     });
                 });
 
@@ -370,6 +384,9 @@ describe(`when querying for a term: fetch by Id`, () => {
                         );
 
                         expect(res.status).toBe(httpStatusCodes.ok);
+
+                        // Commands should be visible to admin
+                        expect(res.body.actions).not.toEqual([]);
                     });
                 });
             });
@@ -407,7 +424,7 @@ describe(`when querying for a term: fetch by Id`, () => {
                  * TODO We need to find a more maintainable way of
                  * seeding the required initial state.
                  */
-                handlers = buildEventHandlers(termQueryRepository);
+                handlers = buildEventHandlers(termQueryRepository, app.get(CommandInfoService));
 
                 seedTerms = async (events: ICoscradEvent[]) => {
                     for (const e of events) {
@@ -436,6 +453,20 @@ describe(`when querying for a term: fetch by Id`, () => {
                         );
 
                         expect(res.status).toBe(httpStatusCodes.ok);
+
+                        const term = res.body as IDetailQueryResult<ITermViewModel>;
+
+                        const { actions } = term;
+
+                        // admin should see commands
+                        expect(actions).not.toHaveLength(0);
+
+                        /**
+                         * TODO We should add a separate test that checks
+                         * that the correct actions come through in different
+                         * scenarios.
+                         */
+                        expect(actions).toMatchSnapshot();
                     });
                 });
 
@@ -457,6 +488,9 @@ describe(`when querying for a term: fetch by Id`, () => {
                         );
 
                         expect(res.status).toBe(httpStatusCodes.ok);
+
+                        // Commands should be visible to admin
+                        expect(res.body.actions).not.toEqual([]);
                     });
                 });
 
@@ -480,6 +514,9 @@ describe(`when querying for a term: fetch by Id`, () => {
                         );
 
                         expect(res.status).toBe(httpStatusCodes.ok);
+
+                        // Commands should be visible to admin
+                        expect(res.body.actions).not.toEqual([]);
                     });
                 });
             });
@@ -512,7 +549,7 @@ describe(`when querying for a term: fetch by Id`, () => {
                  * TODO We need to find a more maintainable way of
                  * seeding the required initial state.
                  */
-                handlers = buildEventHandlers(termQueryRepository);
+                handlers = buildEventHandlers(termQueryRepository, app.get(CommandInfoService));
 
                 seedTerms = async (events: ICoscradEvent[]) => {
                     for (const e of events) {
@@ -541,6 +578,9 @@ describe(`when querying for a term: fetch by Id`, () => {
                         );
 
                         expect(res.status).toBe(httpStatusCodes.ok);
+
+                        // We don't expose actions to non-admin users
+                        expect(res.body.actions).toEqual([]);
                     });
                 });
 
@@ -585,6 +625,9 @@ describe(`when querying for a term: fetch by Id`, () => {
                         );
 
                         expect(res.status).toBe(httpStatusCodes.ok);
+
+                        // We don't expose actions to non-admin users
+                        expect(res.body.actions).toEqual([]);
                     });
                 });
             });

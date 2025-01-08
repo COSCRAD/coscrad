@@ -1,0 +1,83 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`when querying for a term: fetch by Id when the user is authenticated when the user is a project admin when there is a term with the given Id when the term is published should return the expected result 1`] = `
+[
+  {
+    "description": "Translate an existing term (typically from the language to English)",
+    "form": {
+      "fields": [
+        {
+          "constraints": [
+            {
+              "message": "must be a non-empty string",
+              "name": "non-empty string",
+            },
+            {
+              "message": "must be a defined value",
+              "name": "defined value",
+            },
+          ],
+          "description": "translation for the given term",
+          "label": "translation",
+          "name": "translation",
+          "type": "TEXT_FIELD",
+        },
+        {
+          "constraints": [
+            {
+              "message": "Must be a valid \${propertyLabel}",
+              "name": "IS_ENUM",
+            },
+            {
+              "message": "Required",
+              "name": "defined value",
+            },
+          ],
+          "description": "language in which you are translating the term (typically English)",
+          "label": "language code",
+          "name": "languageCode",
+          "options": [
+            {
+              "display": "Chilcotin",
+              "value": "clc",
+            },
+            {
+              "display": "Haida",
+              "value": "hai",
+            },
+            {
+              "display": "English",
+              "value": "en",
+            },
+            {
+              "display": "French",
+              "value": "fra",
+            },
+            {
+              "display": "Chinook",
+              "value": "chn",
+            },
+            {
+              "display": "Zapotec",
+              "value": "zap",
+            },
+            {
+              "display": "Spanish",
+              "value": "spa",
+            },
+          ],
+          "type": "STATIC_SELECT",
+        },
+      ],
+      "prepopulatedFields": {
+        "aggregateCompositeIdentifier": {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
+          "type": "term",
+        },
+      },
+    },
+    "label": "Translate Term",
+    "type": "TRANSLATE_TERM",
+  },
+]
+`;

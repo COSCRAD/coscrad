@@ -81,7 +81,7 @@ export class CommandInfoService {
     getCommandForms(context?: CommandContext): ICommandFormAndLabels[] {
         const commandTypeFilter = buildCommandTypeFilter(context);
 
-        return this.getCommandSchemasWithMetadata()
+        const result = this.getCommandSchemasWithMetadata()
             .filter(({ type }) => commandTypeFilter(type))
             .map(({ label, description, schema, type }) => ({
                 label,
@@ -89,5 +89,7 @@ export class CommandInfoService {
                 type,
                 form: buildCommandForm(schema, context),
             }));
+
+        return result;
     }
 }
