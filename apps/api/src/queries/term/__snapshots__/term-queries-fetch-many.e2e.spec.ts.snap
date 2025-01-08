@@ -9,7 +9,85 @@ exports[`when querying for a term: fetch many when the user is a project admin s
         "allowedGroupIds": [],
         "allowedUserIds": [],
       },
-      "actions": [],
+      "actions": [
+        {
+          "description": "Translate an existing term (typically from the language to English)",
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
+                    "message": "must be a non-empty string",
+                    "name": "non-empty string",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "translation for the given term",
+                "label": "translation",
+                "name": "translation",
+                "type": "TEXT_FIELD",
+              },
+              {
+                "constraints": [
+                  {
+                    "message": "Must be a valid \${propertyLabel}",
+                    "name": "IS_ENUM",
+                  },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "language in which you are translating the term (typically English)",
+                "label": "language code",
+                "name": "languageCode",
+                "options": [
+                  {
+                    "display": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "display": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "display": "English",
+                    "value": "en",
+                  },
+                  {
+                    "display": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "display": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "display": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "display": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+                "type": "STATIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+                "type": "term",
+              },
+            },
+          },
+          "label": "Translate Term",
+          "type": "TRANSLATE_TERM",
+        },
+      ],
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
       "isPublished": false,
@@ -36,7 +114,85 @@ exports[`when querying for a term: fetch many when the user is a project admin s
           "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100004",
         ],
       },
-      "actions": [],
+      "actions": [
+        {
+          "description": "Translate an existing term (typically from the language to English)",
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
+                    "message": "must be a non-empty string",
+                    "name": "non-empty string",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "translation for the given term",
+                "label": "translation",
+                "name": "translation",
+                "type": "TEXT_FIELD",
+              },
+              {
+                "constraints": [
+                  {
+                    "message": "Must be a valid \${propertyLabel}",
+                    "name": "IS_ENUM",
+                  },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "language in which you are translating the term (typically English)",
+                "label": "language code",
+                "name": "languageCode",
+                "options": [
+                  {
+                    "display": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "display": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "display": "English",
+                    "value": "en",
+                  },
+                  {
+                    "display": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "display": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "display": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "display": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+                "type": "STATIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
+                "type": "term",
+              },
+            },
+          },
+          "label": "Translate Term",
+          "type": "TRANSLATE_TERM",
+        },
+      ],
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
       "isPublished": false,
@@ -61,7 +217,85 @@ exports[`when querying for a term: fetch many when the user is a project admin s
         "allowedGroupIds": [],
         "allowedUserIds": [],
       },
-      "actions": [],
+      "actions": [
+        {
+          "description": "Translate an existing term (typically from the language to English)",
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
+                    "message": "must be a non-empty string",
+                    "name": "non-empty string",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "translation for the given term",
+                "label": "translation",
+                "name": "translation",
+                "type": "TEXT_FIELD",
+              },
+              {
+                "constraints": [
+                  {
+                    "message": "Must be a valid \${propertyLabel}",
+                    "name": "IS_ENUM",
+                  },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "language in which you are translating the term (typically English)",
+                "label": "language code",
+                "name": "languageCode",
+                "options": [
+                  {
+                    "display": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "display": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "display": "English",
+                    "value": "en",
+                  },
+                  {
+                    "display": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "display": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "display": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "display": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+                "type": "STATIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+                "type": "term",
+              },
+            },
+          },
+          "label": "Translate Term",
+          "type": "TRANSLATE_TERM",
+        },
+      ],
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
       "isPublished": true,

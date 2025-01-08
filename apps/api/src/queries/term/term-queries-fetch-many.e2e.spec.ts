@@ -9,6 +9,7 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import httpStatusCodes from '../../app/constants/httpStatusCodes';
 import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
+import { CommandInfoService } from '../../app/controllers/command/services/command-info-service';
 import getValidAggregateInstanceForTest from '../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { ICoscradEvent, ICoscradEventHandler } from '../../domain/common';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
@@ -117,8 +118,11 @@ const termPublished = termTranslated.andThen<ResourcePublished>({
  * TODO We need to find a more maintainable way of
  * seeding the required initial state.
  */
-const buildEventHandlers = (termQueryRepository: ITermQueryRepository) => [
-    new TermCreatedEventHandler(termQueryRepository),
+const buildEventHandlers = (
+    termQueryRepository: ITermQueryRepository,
+    commandInfoService: CommandInfoService
+) => [
+    new TermCreatedEventHandler(termQueryRepository, commandInfoService),
     new TermTranslatedEventHandler(termQueryRepository),
     new AudioAddedForTermEventHandler(termQueryRepository),
     // TODO update this to take in a generic query repository provider
@@ -191,7 +195,7 @@ describe(`when querying for a term: fetch many`, () => {
 
             termQueryRepository = app.get(TERM_QUERY_REPOSITORY_TOKEN);
 
-            handlers = buildEventHandlers(termQueryRepository);
+            handlers = buildEventHandlers(termQueryRepository, app.get(CommandInfoService));
 
             seedTerms = async (events: ICoscradEvent[]) => {
                 for (const e of events) {
@@ -285,7 +289,7 @@ describe(`when querying for a term: fetch many`, () => {
 
             termQueryRepository = app.get(TERM_QUERY_REPOSITORY_TOKEN);
 
-            handlers = buildEventHandlers(termQueryRepository);
+            handlers = buildEventHandlers(termQueryRepository, app.get(CommandInfoService));
 
             seedTerms = async (events: ICoscradEvent[]) => {
                 for (const e of events) {
@@ -388,7 +392,7 @@ describe(`when querying for a term: fetch many`, () => {
 
                 termQueryRepository = app.get(TERM_QUERY_REPOSITORY_TOKEN);
 
-                handlers = buildEventHandlers(termQueryRepository);
+                handlers = buildEventHandlers(termQueryRepository, app.get(CommandInfoService));
 
                 seedTerms = async (events: ICoscradEvent[]) => {
                     for (const e of events) {

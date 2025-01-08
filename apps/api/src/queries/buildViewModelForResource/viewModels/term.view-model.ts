@@ -107,6 +107,20 @@ export class TermViewModel implements IDetailQueryResult<ITermViewModel> {
         return term;
     }
 
+    appendAction(action: ICommandFormAndLabels): TermViewModel {
+        this.actions.push(action);
+
+        return this;
+    }
+
+    appendActions(actions: ICommandFormAndLabels[]): TermViewModel {
+        for (const a of actions) {
+            this.actions.push(a);
+        }
+
+        return this;
+    }
+
     apply(event: ICoscradEvent): TermViewModel {
         if (
             !event.isFor({

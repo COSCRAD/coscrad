@@ -4,22 +4,12 @@ import { ConsoleCoscradCliLogger } from '../../coscrad-cli/logging';
 import { AUDIO_QUERY_REPOSITORY_TOKEN } from '../../domain/models/audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ArangoAudioItemQueryRepository } from '../../domain/models/audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import {
-    AddAudioForTerm,
-    AddAudioForTermCommandHandler,
     AudioAddedForTerm,
-    CreatePromptTerm,
-    CreatePromptTermCommandHandler,
-    CreateTerm,
-    CreateTermCommandHandler,
-    ElicitTermFromPrompt,
-    ElicitTermFromPromptCommandHandler,
     PromptTermCreated,
     TermCreated,
     TermElicitedFromPrompt,
     TermElicitedFromPromptEventHandler,
     TermTranslated,
-    TranslateTerm,
-    TranslateTermCommandHandler,
 } from '../../domain/models/term/commands';
 import { AudioAddedForTermEventHandler } from '../../domain/models/term/commands/add-audio-for-term/audio-added-for-term.event-handler';
 import { PromptTermCreatedEventHandler } from '../../domain/models/term/commands/create-prompt-term/prompt-term-created.event-handler';
@@ -34,18 +24,14 @@ import { ArangoConnectionProvider } from '../../persistence/database/arango-conn
 import { PersistenceModule } from '../../persistence/persistence.module';
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
 import { TermController } from '../controllers/resources/term.controller';
+import { TermCommandsModule } from './term.commands.module';
 
 @Module({
-    imports: [PersistenceModule, CommandModule, IdGenerationModule],
+    imports: [PersistenceModule, CommandModule, IdGenerationModule, TermCommandsModule],
     controllers: [TermController],
     providers: [
         CommandInfoService,
         TermQueryService,
-        CreateTermCommandHandler,
-        CreatePromptTermCommandHandler,
-        TranslateTermCommandHandler,
-        ElicitTermFromPromptCommandHandler,
-        AddAudioForTermCommandHandler,
         {
             provide: AUDIO_QUERY_REPOSITORY_TOKEN,
             useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
@@ -69,12 +55,6 @@ import { TermController } from '../controllers/resources/term.controller';
         ...[
             // Domain Model
             Term,
-            // Commands
-            CreateTerm,
-            CreatePromptTerm,
-            TranslateTerm,
-            ElicitTermFromPrompt,
-            AddAudioForTerm,
             // Events
             TermCreated,
             PromptTermCreated,
