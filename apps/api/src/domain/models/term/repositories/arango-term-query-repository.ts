@@ -16,6 +16,7 @@ import { ArangoDatabase } from '../../../../persistence/database/arango-database
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
 import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
+import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { AggregateId } from '../../../types/AggregateId';
 import {
     AUDIO_QUERY_REPOSITORY_TOKEN,
@@ -228,9 +229,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             });
     }
 
-    async fetchById(
-        id: AggregateId
-    ): Promise<Maybe<ITermViewModel & { actions: ICommandFormAndLabels[] }>> {
+    async fetchById(id: AggregateId): Promise<Maybe<ITermViewModel>> {
         const result = await this.database.fetchById(id);
 
         if (isNotFound(result)) return result;
@@ -243,9 +242,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
     async fetchMany(): Promise<(ITermViewModel & { actions: ICommandFormAndLabels[] })[]> {
         const result = await this.database.fetchMany();
 
-        return result.map(mapDatabaseDocumentToAggregateDTO) as (ITermViewModel & {
-            actions: ICommandFormAndLabels[];
-        })[];
+        return result.map((doc) => TermViewModel.fromDto(mapDatabaseDocumentToAggregateDTO(doc)));
     }
 
     async count(): Promise<number> {
