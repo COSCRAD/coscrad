@@ -53,6 +53,7 @@ describe(`CLI Command: **ingest-media-items**`, () => {
                 EventModule,
                 DynamicDataTypeModule,
                 PersistenceModule.forRootAsync(),
+                EventModule,
                 MediaItemModule,
             ],
             providers: [
@@ -105,6 +106,8 @@ describe(`CLI Command: **ingest-media-items**`, () => {
         })
             .overrideProvider(AppModule)
             .useValue(testAppModule)
+            .overrideProvider(DynamicDataTypeModule)
+            .useValue(testAppModule.get(DynamicDataTypeModule))
             .overrideProvider(ArangoDatabaseProvider)
             .useValue(databaseProvider)
             .compile();

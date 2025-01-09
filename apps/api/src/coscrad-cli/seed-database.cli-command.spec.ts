@@ -6,6 +6,7 @@ import buildMockConfigService from '../app/config/__tests__/utilities/buildMockC
 import buildConfigFilePath from '../app/config/buildConfigFilePath';
 import { Environment } from '../app/config/constants/Environment';
 import { CoscradEventFactory, CoscradEventUnion } from '../domain/common';
+import { TermCreated } from '../domain/models/term/commands';
 import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
 import { PersistenceModule } from '../persistence/persistence.module';
@@ -41,10 +42,14 @@ describe(`**${cliCommandName}**`, () => {
                     provide: ConfigService,
                     useValue: mockConfigService,
                 },
-                {
-                    provide: CoscradEventUnion,
-                    useValue: CoscradEventUnion,
-                },
+                /**
+                 * We need to register at least one event here for this to work.
+                 * Consider not including the domain here at all.
+                 */
+                ...[CoscradEventUnion, TermCreated].map((Ctor) => ({
+                    provide: Ctor,
+                    useValue: Ctor,
+                })),
             ],
             imports: [DynamicDataTypeModule, PersistenceModule.forRootAsync()],
         }).compile();
@@ -73,6 +78,8 @@ describe(`**${cliCommandName}**`, () => {
         })
             .overrideProvider(AppModule)
             .useValue(testAppModule)
+            .overrideProvider(DynamicDataTypeModule)
+            .useValue(testAppModule.get(DynamicDataTypeModule))
             .overrideProvider(CoscradEventFactory)
             .useValue(coscradEventFactory)
             .overrideProvider(ArangoDatabaseProvider)

@@ -9,6 +9,7 @@ import { ArangoConnectionProvider } from '../persistence/database/arango-connect
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../validation';
 import { CoscradCliModule } from './coscrad-cli.module';
 import { COSCRAD_LOGGER_TOKEN } from './logging';
 import { buildMockLogger } from './logging/__tests__';
@@ -52,11 +53,15 @@ describe(`CLI Command: ${cliCommandName}`, () => {
         })
             .overrideProvider(AppModule)
             .useValue(testAppModule)
+            .overrideProvider(DynamicDataTypeModule)
+            .useValue(DynamicDataTypeModule)
             .overrideProvider(REPOSITORY_PROVIDER_TOKEN)
             .useValue(testRepositoryProvider)
             .overrideProvider(COSCRAD_LOGGER_TOKEN)
             .useValue(mockLogger)
             .compile();
+
+        await testAppModule.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
 
         await testRepositoryProvider.testTeardown();
 

@@ -7,8 +7,14 @@ import { ArangoDatabaseForCollection } from '../database/arango-database-for-col
 import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../database/database.provider';
 import mapDatabaseDocumentToAggregateDTO from '../database/utilities/mapDatabaseDocumentToAggregateDTO';
-import mapEntityDTOToDatabaseDTO from '../database/utilities/mapEntityDTOToDatabaseDocument';
+import mapEntityDTOToDatabaseDTO, {
+    DatabaseDTO,
+} from '../database/utilities/mapEntityDTOToDatabaseDocument';
 import { IEventRepository } from './arango-command-repository-for-aggregate-root';
+
+type AggregateContextIdentifier =
+    | AggregateCompositeIdentifier
+    | Pick<AggregateCompositeIdentifier, 'type'>;
 
 @Injectable()
 export class ArangoEventRepository implements IEventRepository {
@@ -30,53 +36,26 @@ export class ArangoEventRepository implements IEventRepository {
      * TODO Should the following simply be an `EventFilter`? or a `Specification`?
      */
     async fetchEvents(
-        aggregateContextIdentifier?:
-            | AggregateCompositeIdentifier
-            | Pick<AggregateCompositeIdentifier, 'type'>
+        aggregateContextIdentifier?: AggregateContextIdentifier
     ): Promise<BaseEvent[]> {
-        const allEventDocuments = await this.arangoEventDatabase.fetchMany();
+        const docRef = 'e';
 
-        const allEventDtos = allEventDocuments.map(mapDatabaseDocumentToAggregateDTO);
+        const aqlQuery = `
+            FOR ${docRef} in events
+            ${this.buildAggregateFilter(docRef, aggregateContextIdentifier)}
+            return e
+        `;
 
-        /**
-         * TODO Ideally, we would use the `Specification` API and do this
-         * at the level of the database. However, this class is concrete with
-         * respect to Arango, so there's not a lot of value in building in complex
-         * query support for this right now.
-         */
-        const filteredEventDtos = aggregateContextIdentifier
-            ? allEventDtos.filter(
-                  ({
-                      payload: {
-                          aggregateCompositeIdentifier: { type, id },
-                      },
-                  }) => {
-                      if (type !== aggregateContextIdentifier.type) return false;
+        const cursor = await this.arangoEventDatabase.query({
+            query: aqlQuery,
+            // TODO id? type?
+            bindVars: {},
+        });
 
-                      const { id: contextId } =
-                          aggregateContextIdentifier as AggregateCompositeIdentifier;
+        const allEventDocuments = (await cursor.all()) as DatabaseDTO<BaseEvent>[];
 
-                      const didUserSpecifyIdFilter = !isNullOrUndefined(contextId);
-
-                      if (!didUserSpecifyIdFilter) return true;
-
-                      return id === contextId;
-                  }
-              )
-            : /**
-               * Currently, we leverage the event repository for the query
-               * layer as well. Eventually, we will sync a separate query DB
-               * by publishing events on a messaging queue. In the meantime, we
-               * expose the ability to fetch all events so as to perform "joins"
-               * via event sourcing.
-               */
-              allEventDtos;
-
-        const eventInstances = await Promise.all(
-            filteredEventDtos
-                // The event repository has the responsibility of sorting events chronologically for once and for all
-                .sort((eventA, eventB) => eventA.meta.dateCreated - eventB.meta.dateCreated)
-                .map((eventDocument) => this.coscradEventFactory.build(eventDocument))
+        const eventInstances = allEventDocuments.map((eventDocument) =>
+            this.coscradEventFactory.build(mapDatabaseDocumentToAggregateDTO(eventDocument))
         );
 
         return eventInstances;
@@ -101,5 +80,27 @@ export class ArangoEventRepository implements IEventRepository {
         }));
 
         await this.arangoEventDatabase.createMany(documents);
+    }
+
+    private buildAggregateFilter(
+        docRef: string,
+        aggregateContextIdentifier?: AggregateContextIdentifier
+    ): string {
+        if (isNullOrUndefined(aggregateContextIdentifier)) {
+            return '';
+        }
+
+        const { id, type } = aggregateContextIdentifier as AggregateCompositeIdentifier;
+
+        const idClause = isNullOrUndefined(id)
+            ? ''
+            : `FILTER ${docRef}.payload.aggregateCompositeIdentifier.id == "${id}"`;
+
+        const typeClause = `FILTER ${docRef}.payload.aggregateCompositeIdentifier.type == "${type}"`;
+
+        return `
+        ${typeClause}
+         ${idClause}
+        `;
     }
 }

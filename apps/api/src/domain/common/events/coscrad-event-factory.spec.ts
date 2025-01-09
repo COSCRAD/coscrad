@@ -1,4 +1,4 @@
-import { bootstrapDynamicTypes } from '@coscrad/data-types';
+import { bootstrapDynamicTypes, UnionFactory } from '@coscrad/data-types';
 import buildDummyUuid from '../../models/__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../models/__tests__/utilities/dummyDateNow';
 import { dummySystemUserId } from '../../models/__tests__/utilities/dummySystemUserId';
@@ -34,6 +34,11 @@ const mockDataFinderService = {
         throw new Error(`Not Implemented`);
     },
     getAllDataClassCtors: async () => allCtors,
+    unionFactory: new UnionFactory(
+        allCtors,
+        // TODO This doesn't belong here...
+        'COSCRAD_EVENT_UNION'
+    ),
 };
 
 describe(`CoscradEventFactory`, () => {
