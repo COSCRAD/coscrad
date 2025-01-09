@@ -132,7 +132,14 @@ describe(`TermCreatedEventHandler`, () => {
 
             expect(originalTextItem.languageCode).toBe(languageCode);
 
-            expect(actions).not.toEqual([]);
+            expect(actions).toContain('TRANSLATE_TERM');
+            expect(actions).not.toContain('ELICIT_TERM_FROM_PROMPT');
+
+            expect(actions).toContain('TAG_RESOURCE');
+            expect(actions).toContain('CREATE_NOTE_ABOUT_RESOURCE');
+            expect(actions).toContain('CONNECT_RESOURCES_WITH_NOTE');
+            expect(actions).toContain('PUBLISH_RESOURCE');
+            expect(actions).toContain('ADD_AUDIO_FOR_TERM');
 
             // expect tags to be empty
             // expect categories to be empty
