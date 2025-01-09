@@ -1,4 +1,3 @@
-import { AggregateType, ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { CommandInfoService } from '../../../../../app/controllers/command/services/command-info-service';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
@@ -25,20 +24,10 @@ export class TermCreatedEventHandler implements ICoscradEventHandler {
         const availableCommandTypes: string[] = ['TRANSLATE_TERM'];
 
         /**
-         * TODO We want to introduce a new method
-         * commandInfoService.find()
-         * that filters out just the action we are currently adding
-         * or removing.
+         * It is the responsiblity of the query service to "join in"
+         * the command forms.
          */
-        const actions: ICommandFormAndLabels[] = this.commandInfoService.getCommandForms({
-            getAvailableCommands: () => availableCommandTypes,
-            getCompositeIdentifier: () => ({
-                type: AggregateType.term,
-                id: term.id,
-            }),
-        });
-
-        term.appendActions(actions);
+        term.appendActions(availableCommandTypes);
 
         await this.termRepository.create(term);
 

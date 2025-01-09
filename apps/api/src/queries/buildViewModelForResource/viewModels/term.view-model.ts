@@ -1,12 +1,11 @@
 import {
     AggregateType,
-    ICommandFormAndLabels,
-    IDetailQueryResult,
     IMultilingualText,
     ITermViewModel,
     LanguageCode,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { ICoscradEvent } from '../../../domain/common';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
 import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
@@ -16,12 +15,13 @@ import {
     TermTranslated,
 } from '../../../domain/models/term/commands';
 import { AggregateId } from '../../../domain/types/AggregateId';
+import { DTO } from '../../../types/DTO';
 
 /**
  * This is the first view model leveraging a new approach that involves denormalized,
  * event-sourced, materialized views.
  */
-export class TermViewModel implements IDetailQueryResult<ITermViewModel> {
+export class TermViewModel implements ITermViewModel {
     contributions: { id: string; fullName: string }[];
 
     name: IMultilingualText;
@@ -32,7 +32,7 @@ export class TermViewModel implements IDetailQueryResult<ITermViewModel> {
 
     mediaItemId?: string;
 
-    actions: ICommandFormAndLabels[];
+    actions: string[];
 
     accessControlList: AccessControlList;
 
@@ -107,13 +107,40 @@ export class TermViewModel implements IDetailQueryResult<ITermViewModel> {
         return term;
     }
 
-    appendAction(action: ICommandFormAndLabels): TermViewModel {
+    static fromDto(dto: DTO<TermViewModel>): TermViewModel {
+        const term = new TermViewModel();
+
+        const { contributions, name, id, actions, accessControlList, mediaItemId, isPublished } =
+            dto;
+
+        term.contributions = contributions;
+
+        term.name = name;
+
+        term.id = id;
+
+        term.actions = actions;
+
+        if (!isNullOrUndefined(mediaItemId)) {
+            term.mediaItemId = mediaItemId;
+        }
+
+        term.accessControlList = new AccessControlList(accessControlList);
+
+        term.actions = actions;
+
+        term.isPublished = isNullOrUndefined(isPublished) ? false : isPublished; // we want to be extra careful here
+
+        return term;
+    }
+
+    appendAction(action: string): TermViewModel {
         this.actions.push(action);
 
         return this;
     }
 
-    appendActions(actions: ICommandFormAndLabels[]): TermViewModel {
+    appendActions(actions: string[]): TermViewModel {
         for (const a of actions) {
             this.actions.push(a);
         }
@@ -151,5 +178,16 @@ export class TermViewModel implements IDetailQueryResult<ITermViewModel> {
 
         // there is no handler for this event
         return this;
+    }
+
+    public getAvailableCommands() {
+        return this.actions;
+    }
+
+    public getCompositeIdentifier() {
+        return {
+            type: AggregateType.term,
+            id: this.id,
+        };
     }
 }

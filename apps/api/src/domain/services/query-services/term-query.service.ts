@@ -68,7 +68,7 @@ export class TermQueryService {
                  * In the future, command permissions may depend on the command
                  * or the resource (row-level write permissions).
                  */
-                actions: userWithGroups?.isAdmin() ? result.actions : [],
+                actions: this.fetchUserActions(userWithGroups, [result]),
             };
         }
 
@@ -108,7 +108,7 @@ export class TermQueryService {
                     /**
                      * See comment in `fetchById` about current RBAC for command execution.
                      */
-                    actions: userWithGroups?.isAdmin() ? entity.actions : [],
+                    actions: this.fetchUserActions(userWithGroups, [entity]),
                 };
             }),
             // TODO Should we register index-scoped commands in the view layer instead?
