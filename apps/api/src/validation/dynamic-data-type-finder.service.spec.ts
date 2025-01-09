@@ -10,6 +10,13 @@ import {
 import { Test } from '@nestjs/testing';
 import { DynamicDataTypeFinderService } from './dynamic-data-type-finder.service';
 import { DynamicDataTypeModule } from './dynamic-data-type.module';
+@Union(`COSCRAD_EVENT_UNION`, `type`)
+class CoscradEventUnion {}
+
+@UnionMember('COSCRAD_EVENT_UNION', 'TOY_BUILT')
+class ToyEvent {
+    readonly type = 'TOY_BUILT';
+}
 
 describe('DynamicDataTypeFinderService', () => {
     let dynamicDataTypeFinderService: DynamicDataTypeFinderService;
@@ -73,6 +80,8 @@ describe('DynamicDataTypeFinderService', () => {
                 EdgeConnectionMember,
                 Context1,
                 Context2,
+                CoscradEventUnion,
+                ToyEvent,
             ].map((ctor) => ({
                 provide: ctor,
                 useValue: ctor,

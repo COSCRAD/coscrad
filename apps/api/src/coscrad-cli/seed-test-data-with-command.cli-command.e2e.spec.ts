@@ -20,6 +20,7 @@ import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRe
 import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoIdRepository } from '../persistence/repositories/arango-id-repository';
 import { DeepPartial } from '../types/DeepPartial';
+import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../validation';
 import { CoscradCliModule } from './coscrad-cli.module';
 import { COSCRAD_LOGGER_TOKEN } from './logging';
 import { buildMockLogger } from './logging/__tests__';
@@ -81,6 +82,8 @@ describe(`CLI Command: ${cliCommandName}`, () => {
         })
             .overrideProvider(AppModule)
             .useValue(testAppModule)
+            .overrideProvider(DynamicDataTypeModule)
+            .useValue(testAppModule.get(DynamicDataTypeModule))
             .overrideProvider(REPOSITORY_PROVIDER_TOKEN)
             .useValue(testRepositoryProvider)
             .overrideProvider(ID_MANAGER_TOKEN)
@@ -88,6 +91,8 @@ describe(`CLI Command: ${cliCommandName}`, () => {
             .overrideProvider(COSCRAD_LOGGER_TOKEN)
             .useValue(mockLogger)
             .compile();
+
+        await testAppModule.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
     });
 
     beforeEach(async () => {

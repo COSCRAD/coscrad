@@ -1,3 +1,4 @@
+import { AggregateCompositeIdentifier } from '@coscrad/api-interfaces';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildMockConfigServiceSpec from '../../app/config/__tests__/utilities/buildMockConfigService';
@@ -15,7 +16,9 @@ import { CreateSong } from '../../domain/models/song/commands';
 import { SongCreated } from '../../domain/models/song/commands/song-created.event';
 import { AggregateType } from '../../domain/types/AggregateType';
 import { InternalError } from '../../lib/errors/InternalError';
+import { BaseEvent } from '../../queries/event-sourcing';
 import { buildTestCommandFsaMap } from '../../test-data/commands';
+import { DTO } from '../../types/DTO';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../../validation';
 import { ArangoDatabaseProvider } from '../database/database.provider';
 import { PersistenceModule } from '../persistence.module';
@@ -123,6 +126,154 @@ describe(`Arango Event Repository`, () => {
             expect(event.payload).toEqual(songCreated.payload);
 
             expect(event.meta).toEqual(songCreated.meta);
+        });
+    });
+
+    describe(`fetchMany`, () => {
+        const targetCompositeIdentifier = {
+            type: 'widget' as AggregateType,
+            id: buildDummyUuid(33),
+        };
+
+        const nonTargetCompositeId = {
+            type: 'widget' as AggregateType,
+            id: buildDummyUuid(34),
+        };
+
+        const differentTypeCompositeId = {
+            type: 'whatsit' as AggregateType,
+            id: buildDummyUuid(43),
+        };
+
+        const dummyAdminUserId = buildDummyUuid(456);
+
+        type DummyPayload = {
+            aggregateCompositeIdentifier: AggregateCompositeIdentifier;
+            foo?: number;
+            bar?: string;
+            baz?: string[];
+        };
+
+        const eventsForTargetAggregate: DTO<BaseEvent<DummyPayload>>[] = [
+            {
+                id: targetCompositeIdentifier.id,
+                type: 'SONG_CREATED',
+                payload: {
+                    aggregateCompositeIdentifier: targetCompositeIdentifier,
+                    foo: 22,
+                },
+            },
+            {
+                id: targetCompositeIdentifier.id,
+                type: 'LYRICS_ADDED_FOR_SONG',
+                payload: {
+                    aggregateCompositeIdentifier: targetCompositeIdentifier,
+                    bar: 'new place',
+                },
+            },
+            {
+                id: targetCompositeIdentifier.id,
+                type: 'SONG_TITLE_TRANSLATED',
+                payload: {
+                    aggregateCompositeIdentifier: targetCompositeIdentifier,
+                    baz: ['a', 'b', 'c'],
+                },
+            },
+        ].map((eventRecord, index) => ({
+            ...eventRecord,
+            id: buildDummyUuid(200 + index),
+            meta: {
+                userId: buildDummyUuid(33),
+                id: buildDummyUuid(200 + index),
+                dateCreated: dummyDateNow + index,
+            },
+        }));
+
+        const eventsForOtherAggregates: DTO<BaseEvent<DummyPayload>>[] = [
+            {
+                id: targetCompositeIdentifier.id,
+                type: 'SONG_CREATED',
+                payload: {
+                    aggregateCompositeIdentifier: nonTargetCompositeId,
+                    foo: 22,
+                },
+                meta: {
+                    dateCreated: dummyDateNow,
+                    id: targetCompositeIdentifier.id,
+                    userId: dummyAdminUserId,
+                },
+            },
+            {
+                id: targetCompositeIdentifier.id,
+                type: 'SONG_TITLE_TRANSLATED',
+                payload: {
+                    aggregateCompositeIdentifier: nonTargetCompositeId,
+                    bar: 'new place',
+                },
+                meta: {
+                    dateCreated: dummyDateNow + 2,
+                    id: targetCompositeIdentifier.id,
+                    userId: dummyAdminUserId,
+                },
+            },
+            {
+                id: nonTargetCompositeId.id,
+                type: 'LYRICS_ADDED_FOR_SONG',
+                payload: {
+                    aggregateCompositeIdentifier: nonTargetCompositeId,
+                    baz: ['a', 'b', 'c'],
+                },
+                meta: {
+                    dateCreated: dummyDateNow + 1,
+                    id: buildDummyUuid(110),
+                    userId: dummyAdminUserId,
+                },
+            },
+            {
+                id: differentTypeCompositeId.id,
+                type: 'LYRICS_ADDED_FOR_SONG',
+                payload: {
+                    aggregateCompositeIdentifier: differentTypeCompositeId,
+                    foo: 22,
+                },
+                meta: {
+                    dateCreated: dummyDateNow,
+                    id: targetCompositeIdentifier.id,
+                    userId: dummyAdminUserId,
+                },
+            },
+        ].map((eventRecord, index) => ({
+            ...eventRecord,
+            id: buildDummyUuid(300 + index),
+            meta: {
+                userId: buildDummyUuid(33),
+                id: buildDummyUuid(200 + index),
+                dateCreated: dummyDateNow + index,
+            },
+        }));
+
+        const allEvents = [...eventsForTargetAggregate, ...eventsForOtherAggregates];
+
+        beforeEach(async () => {
+            await arangoEventRepository.appendEvents(allEvents);
+        });
+
+        describe(`when an aggregate composite identifier is provided`, () => {
+            it(`should return only the events for the requested aggregate`, async () => {
+                const foundEvents = await arangoEventRepository.fetchEvents(
+                    targetCompositeIdentifier
+                );
+
+                expect(foundEvents).toHaveLength(eventsForTargetAggregate.length);
+            });
+        });
+
+        describe(`when all events are requested`, () => {
+            it(`should return all events`, async () => {
+                const foundEvents = await arangoEventRepository.fetchEvents();
+
+                expect(foundEvents.length).toBe(allEvents.length);
+            });
         });
     });
 });

@@ -6,6 +6,7 @@ import buildMockConfigService from '../app/config/__tests__/utilities/buildMockC
 import buildConfigFilePath from '../app/config/buildConfigFilePath';
 import { Environment } from '../app/config/constants/Environment';
 import { CoscradEventFactory, CoscradEventUnion } from '../domain/common';
+import { TermCreated } from '../domain/models/term/commands';
 import { DeluxeInMemoryStore } from '../domain/types/DeluxeInMemoryStore';
 import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
 import { ArangoCollectionId } from '../persistence/database/collection-references/ArangoCollectionId';
@@ -47,6 +48,15 @@ describe(`CLI Command: **clear-database**`, () => {
                     provide: CoscradEventUnion,
                     useValue: CoscradEventUnion,
                 },
+                /**
+                 * TODO We might not want to use the test snapshot or include
+                 * the domain here at all. But if we do, we must register at
+                 * least one event in order for things to work.
+                 */
+                {
+                    provide: TermCreated,
+                    useValue: TermCreated,
+                },
             ],
             imports: [DynamicDataTypeModule, PersistenceModule.forRootAsync()],
         }).compile();
@@ -75,6 +85,8 @@ describe(`CLI Command: **clear-database**`, () => {
         })
             .overrideProvider(AppModule)
             .useValue(testAppModule)
+            .overrideProvider(DynamicDataTypeModule)
+            .useValue(testAppModule.get(DynamicDataTypeModule))
             .overrideProvider(CoscradEventFactory)
             .useValue(coscradEventFactory)
             .overrideProvider(ArangoDatabaseProvider)
