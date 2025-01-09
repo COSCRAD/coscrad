@@ -15,6 +15,7 @@ import { BaseResourceViewModel } from './base-resource.view-model';
 
 const FromTerm = FromDomainModel(Term);
 
+// TODO remove this
 export class TermViewModel extends BaseResourceViewModel implements ITermViewModel {
     // We should wrap the API Property using the View Model Schemas!
     @ApiPropertyOptional({

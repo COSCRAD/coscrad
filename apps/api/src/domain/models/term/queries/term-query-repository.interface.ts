@@ -1,23 +1,35 @@
-import { IMultilingualTextItem, ITermViewModel, LanguageCode } from '@coscrad/api-interfaces';
+import { IMultilingualTextItem, LanguageCode } from '@coscrad/api-interfaces';
 import { Maybe } from '../../../../lib/types/maybe';
+import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { AggregateId } from '../../../types/AggregateId';
 
 export const TERM_QUERY_REPOSITORY_TOKEN = 'TERM_QUERY_REPOSITORY_TOKEN';
 
+/**
+ * Note that we are abstracting over the database, not the view model so
+ * we program to the concrete view model type. `ITermViewModel` is only meant
+ * to serve as a constraint for the return of the query service and represents
+ * a contract with the client.
+ */
 export interface ITermQueryRepository {
-    create(view: ITermViewModel): Promise<void>;
+    create(view: TermViewModel): Promise<void>;
 
-    createMany(views: ITermViewModel[]): Promise<void>;
+    createMany(views: TermViewModel[]): Promise<void>;
 
     delete(id: AggregateId): Promise<void>;
 
-    fetchById(id: AggregateId): Promise<Maybe<ITermViewModel>>;
+    fetchById(id: AggregateId): Promise<Maybe<TermViewModel>>;
 
-    fetchMany(): Promise<ITermViewModel[]>;
+    fetchMany(): Promise<TermViewModel[]>;
 
     allowUser(id: AggregateId, userId: AggregateId): Promise<void>;
 
     translate(id: AggregateId, translationItem: IMultilingualTextItem): Promise<void>;
+
+    elicitFromPrompt(
+        id: AggregateId,
+        translationItem: Omit<IMultilingualTextItem, 'role'>
+    ): Promise<void>;
 
     publish(id: AggregateId): Promise<void>;
 
