@@ -21,14 +21,6 @@ export class TermCreatedEventHandler implements ICoscradEventHandler {
 
         const term = TermViewModel.fromTermCreated(event);
 
-        const availableCommandTypes: string[] = ['TRANSLATE_TERM'];
-
-        /**
-         * It is the responsiblity of the query service to "join in"
-         * the command forms.
-         */
-        term.appendActions(availableCommandTypes);
-
         await this.termRepository.create(term);
 
         // TODO make this operation atomic, extensible

@@ -15,13 +15,14 @@ import {
     TermTranslated,
 } from '../../../domain/models/term/commands';
 import { AggregateId } from '../../../domain/types/AggregateId';
+import { HasAggregateId } from '../../../domain/types/HasAggregateId';
 import { DTO } from '../../../types/DTO';
 
 /**
  * This is the first view model leveraging a new approach that involves denormalized,
  * event-sourced, materialized views.
  */
-export class TermViewModel implements ITermViewModel {
+export class TermViewModel implements ITermViewModel, HasAggregateId {
     contributions: { id: string; fullName: string }[];
 
     name: IMultilingualText;
@@ -75,6 +76,15 @@ export class TermViewModel implements ITermViewModel {
 
         term.isPublished = false;
 
+        term.actions = [
+            'TRANSLATE_TERM',
+            'PUBLISH_RESOURCE',
+            'ADD_AUDIO_FOR_TERM',
+            'TAG_RESOURCE',
+            'CONNECT_RESOURCES_WITH_NOTE',
+            'CREATE_NOTE_ABOUT_RESOURCE',
+        ];
+
         return term;
     }
 
@@ -98,7 +108,14 @@ export class TermViewModel implements ITermViewModel {
          * to access the db to join in contributor names
          */
 
-        term.actions = []; // TODO build these here
+        term.actions = [
+            'ELICIT_TERM_FROM_PROMPT',
+            'PUBLISH_RESOURCE',
+            'ADD_AUDIO_FOR_TERM',
+            'TAG_RESOURCE',
+            'CONNECT_RESOURCES_WITH_NOTE',
+            'CREATE_NOTE_ABOUT_RESOURCE',
+        ];
 
         // term.notes = []
 
