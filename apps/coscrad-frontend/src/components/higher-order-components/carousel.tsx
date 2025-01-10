@@ -47,8 +47,6 @@ export const Carousel = <T,>({ propsForItems, Presenter }: CarouselProps<T>) => 
                     data-testid="NEXT"
                     color="primary"
                     sx={{ fontSize: 20 }}
-                    // variant="outlined"
-                    // sx={{ borderRadius: '0px 20px 20px 0px' }}
                     onClick={(_) => setIndex(cyclicIncrement(indexToUse, numberOfItems))}
                 >
                     <ArrowForwardIosIcon sx={{ fontSize: '2em' }} />
