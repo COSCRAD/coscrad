@@ -1,6 +1,6 @@
 import { IAlphabetCard } from '@coscrad/api-interfaces';
 import { AudioClipPlayer } from '@coscrad/media-player';
-import { Box, Card, CardContent, CardMedia, Typography } from '@mui/material';
+import { Box, Card, CardMedia, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Loading } from '../loading';
 
@@ -14,11 +14,10 @@ export const AlphabetCardPresenter = ({
     standalone_image,
 }: AlphabetCardPresenterProps): JSX.Element => {
     const [isLoading, setIsLoading] = useState(true);
-    // const [isError, setIsError] = useState(true);
 
     useEffect(() => {
         setIsLoading(true);
-        // setIsError(false);
+
         const image = new Image();
 
         image.src = standalone_image;
@@ -26,56 +25,77 @@ export const AlphabetCardPresenter = ({
         image.onload = () => {
             setIsLoading(false);
         };
-        // image.onerror = () => {
-        //     setIsError(true);
-        //     setIsLoading(false);
-        // };
     }, [standalone_image]);
 
     if (isLoading) return <Loading />;
 
-    // if (isError)
-    //     return (
-    //         <Box m={4} sx={{ textAlign: 'center' }}>
-    //             No alphabet chart
-    //         </Box>
-    //     );
-
     const PlayLetterButton = ({ onButtonClick }) => (
-        <Typography variant={'h1'} component={Box} onClick={onButtonClick}>
+        <Box margin={0} padding={0} component={'h1'} onClick={onButtonClick}>
             {letter}
-        </Typography>
+        </Box>
     );
 
     const PlayWordButton = ({ onButtonClick }) => (
-        <Typography variant={'h1'} component={Box} onClick={onButtonClick}>
+        <Box
+            fontWeight={100}
+            margin={0}
+            sx={{ paddingBottom: 1.5, paddingTop: 0.5 }}
+            component={'h1'}
+            onClick={onButtonClick}
+        >
             {word}
-        </Typography>
+        </Box>
     );
+
+    const cardStyle = {
+        background: '#ffff',
+        border: '2.5px solid black',
+        width: { xs: '100%', sm: '400px', md: '400px', lg: '400px' },
+        margin: '0 auto',
+        borderRadius: 10,
+    };
+
+    const imageStyle = {
+        width: '100%',
+        height: 'auto',
+        maxHeight: { xs: '183px', sm: '163px', md: '170px', lg: '160px' },
+        objectFit: 'contain',
+        cursor: 'pointer',
+    };
 
     const ClickableImageForThisWord = ({ onButtonClick }) => (
         <CardMedia
             loading="eager"
             component="img"
-            height="auto"
             image={standalone_image}
-            alt={'alt'}
-            title={word}
-            sx={{ objectFit: 'cover' }}
+            alt={word}
+            height={140}
+            sx={imageStyle}
             onClick={onButtonClick}
         />
     );
 
     return (
-        <Card>
-            <CardContent>
-                <AudioClipPlayer audioUrl={letter_audio} UserDefinedPlayButton={PlayLetterButton} />
-                <AudioClipPlayer
-                    audioUrl={word_audio}
-                    UserDefinedPlayButton={ClickableImageForThisWord}
-                />
-                <AudioClipPlayer audioUrl={word_audio} UserDefinedPlayButton={PlayWordButton} />
-            </CardContent>
-        </Card>
+        <Box>
+            <Typography variant="h2">Alphabet</Typography>
+            <Card sx={cardStyle}>
+                <Box sx={{ cursor: 'pointer' }} ml={8} pt={1} pb={1}>
+                    <AudioClipPlayer
+                        audioUrl={letter_audio}
+                        UserDefinedPlayButton={PlayLetterButton}
+                    />
+                </Box>
+                <Box>
+                    <AudioClipPlayer
+                        audioUrl={word_audio}
+                        UserDefinedPlayButton={ClickableImageForThisWord}
+                    />
+                </Box>
+
+                <Box sx={{ cursor: 'pointer' }} textAlign={'center'}>
+                    <AudioClipPlayer audioUrl={word_audio} UserDefinedPlayButton={PlayWordButton} />
+                </Box>
+            </Card>
+        </Box>
     );
 };
