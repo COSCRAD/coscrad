@@ -58,5 +58,13 @@ export abstract class BaseUpdateCommandHandler<
         await this.getRepositoryForCommand(command).update(
             instanceToPersistWithUpdatedEventHistory
         );
+
+        /**
+         * TODO
+         * 1. Share this logic with the base-create-command handler
+         * 2. Move event publication out of process by pulling events from the
+         * command database and publishing via a proper messaging queue.
+         */
+        this.eventPublisher.publish(event);
     }
 }

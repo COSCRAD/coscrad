@@ -1,6 +1,8 @@
 import { ResourceType } from '@coscrad/api-interfaces';
 import { CommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
+import { EVENT_PUBLISHER_TOKEN } from '../../../../../domain/common';
+import { ICoscradEventPublisher } from '../../../../../domain/common/events/interfaces';
 import { Valid } from '../../../../../domain/domainModelValidators/Valid';
 import {
     ID_MANAGER_TOKEN,
@@ -27,9 +29,10 @@ export class AddAudioItemToPlaylistCommandHandler extends BaseUpdateCommandHandl
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN)
         protected readonly repositoryProvider: IRepositoryProvider,
-        @Inject(ID_MANAGER_TOKEN) protected readonly idManager: IIdManager
+        @Inject(ID_MANAGER_TOKEN) protected readonly idManager: IIdManager,
+        @Inject(EVENT_PUBLISHER_TOKEN) protected readonly eventPublisher: ICoscradEventPublisher
     ) {
-        super(repositoryProvider, idManager);
+        super(repositoryProvider, idManager, eventPublisher);
     }
 
     protected actOnInstance(
