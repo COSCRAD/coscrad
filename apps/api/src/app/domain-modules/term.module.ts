@@ -1,6 +1,7 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
 import { ConsoleCoscradCliLogger } from '../../coscrad-cli/logging';
+import { EventModule } from '../../domain/common';
 import { AUDIO_QUERY_REPOSITORY_TOKEN } from '../../domain/models/audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ArangoAudioItemQueryRepository } from '../../domain/models/audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import {
@@ -22,12 +23,20 @@ import { TermQueryService } from '../../domain/services/query-services/term-quer
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { ArangoConnectionProvider } from '../../persistence/database/arango-connection.provider';
 import { PersistenceModule } from '../../persistence/persistence.module';
+import { DynamicDataTypeModule } from '../../validation';
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
 import { TermController } from '../controllers/resources/term.controller';
 import { TermCommandsModule } from './term.commands.module';
 
 @Module({
-    imports: [PersistenceModule, CommandModule, IdGenerationModule, TermCommandsModule],
+    imports: [
+        PersistenceModule,
+        DynamicDataTypeModule,
+        CommandModule,
+        IdGenerationModule,
+        EventModule,
+        TermCommandsModule,
+    ],
     controllers: [TermController],
     providers: [
         CommandInfoService,
