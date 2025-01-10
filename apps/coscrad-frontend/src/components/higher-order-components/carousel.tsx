@@ -2,7 +2,7 @@ import { Box, Button } from '@mui/material';
 import { useState } from 'react';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { cyclicDecrement, cyclicIncrement } from '../../utils/math';
 import { NotFoundPresenter } from '../not-found';
@@ -34,21 +34,19 @@ export const Carousel = <T,>({ propsForItems, Presenter }: CarouselProps<T>) => 
     return (
         <Box>
             <Presenter {...propsForSelectedItem} />
-            <Box sx={{ textAlign: 'center' }}>
+            <Box sx={{ textAlign: 'center', marginTop: 2 }}>
                 <Button
                     data-testid="PREV"
                     color="primary"
-                    variant="outlined"
-                    sx={{ borderRadius: '20px 0px 0px 20px' }}
+                    sx={{ fontSize: 20 }}
                     onClick={(_) => setIndex(cyclicDecrement(indexToUse, numberOfItems))}
                 >
-                    <ArrowBackIosIcon sx={{ fontSize: '2em' }} />
+                    <ArrowBackIosNewIcon sx={{ fontSize: '2em' }} />
                 </Button>
                 <Button
                     data-testid="NEXT"
                     color="primary"
-                    variant="outlined"
-                    sx={{ borderRadius: '0px 20px 20px 0px' }}
+                    sx={{ fontSize: 20 }}
                     onClick={(_) => setIndex(cyclicIncrement(indexToUse, numberOfItems))}
                 >
                     <ArrowForwardIosIcon sx={{ fontSize: '2em' }} />
