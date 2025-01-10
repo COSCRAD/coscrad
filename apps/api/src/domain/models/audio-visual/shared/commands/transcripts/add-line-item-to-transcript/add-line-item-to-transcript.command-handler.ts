@@ -1,5 +1,9 @@
 import { CommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
+import {
+    EVENT_PUBLISHER_TOKEN,
+    ICoscradEventPublisher,
+} from 'apps/api/src/domain/common/events/interfaces';
 import { InternalError } from '../../../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../../../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../../../persistence/constants/persistenceConstants';
@@ -31,9 +35,10 @@ export class AddLineItemtoTranscriptCommandHandler extends BaseCommandHandler<Tr
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN)
         protected readonly repositoryProvider: IRepositoryProvider,
-        @Inject(ID_MANAGER_TOKEN) protected readonly idManager: IIdManager
+        @Inject(ID_MANAGER_TOKEN) protected readonly idManager: IIdManager,
+        @Inject(EVENT_PUBLISHER_TOKEN) protected readonly eventPublisher: ICoscradEventPublisher
     ) {
-        super(repositoryProvider, idManager);
+        super(repositoryProvider, idManager, eventPublisher);
     }
 
     protected fetchRequiredExternalState(): Promise<InMemorySnapshot> {

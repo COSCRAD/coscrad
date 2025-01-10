@@ -69,6 +69,14 @@ export abstract class BaseCreateCommandHandler<
         await this.getRepositoryForCommand(command).create(
             instanceToPersistWithUpdatedEventHistory
         );
+
+        /**
+         * TODO
+         * 1. Share this logic with the base-update-command handler
+         * 2. Move event publication out of process by pulling events from the
+         * command database and publishing via a proper messaging queue.
+         */
+        this.eventPublisher.publish(event);
     }
 
     /**
@@ -88,7 +96,7 @@ export abstract class BaseCreateCommandHandler<
         if (isNotFound(idStatus)) return new UuidNotGeneratedInternallyError(newId);
 
         if (isNotAvailable(idStatus))
-            // Consider throwing as this is a system error (i.e. exception) adn not necessarily a user error
+            // Consider throwing as this is a system error (i.e. exception) and not necessarily a user error
             return new UuidNotAvailableForUseError(newId);
 
         if (!isOK(idStatus)) {

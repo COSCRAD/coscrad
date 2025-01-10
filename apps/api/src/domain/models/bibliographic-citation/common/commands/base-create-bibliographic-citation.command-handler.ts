@@ -1,4 +1,6 @@
 import { Inject } from '@nestjs/common';
+import { EVENT_PUBLISHER_TOKEN } from '../../../../../domain/common';
+import { ICoscradEventPublisher } from '../../../../../domain/common/events/interfaces';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import { Valid } from '../../../../domainModelValidators/Valid';
@@ -23,9 +25,10 @@ export abstract class BaseCreateBibliographicCitation extends BaseCreateCommandH
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN)
         protected readonly repositoryProvider: IRepositoryProvider,
-        @Inject('ID_MANAGER') protected readonly idManager: IIdManager
+        @Inject('ID_MANAGER') protected readonly idManager: IIdManager,
+        @Inject(EVENT_PUBLISHER_TOKEN) protected readonly eventPublisher: ICoscradEventPublisher
     ) {
-        super(repositoryProvider, idManager);
+        super(repositoryProvider, idManager, eventPublisher);
 
         this.repositoryForCommandsTargetAggregate = this.repositoryProvider.forResource(
             this.aggregateType
