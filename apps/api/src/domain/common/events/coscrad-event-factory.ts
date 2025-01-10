@@ -5,7 +5,11 @@ import { BaseEvent } from '../../models/shared/events/base-event.entity';
 
 @Injectable()
 export class CoscradEventFactory {
-    constructor(private readonly dynamicDataTypeFinderService: DynamicDataTypeFinderService) {}
+    constructor(private readonly dynamicDataTypeFinderService: DynamicDataTypeFinderService) {
+        if (typeof dynamicDataTypeFinderService.unionFactory?.build !== 'function') {
+            dynamicDataTypeFinderService.bootstrapDynamicTypes();
+        }
+    }
 
     build<T extends BaseEvent = BaseEvent>(eventDocument: DTO<BaseEvent>): T {
         /**

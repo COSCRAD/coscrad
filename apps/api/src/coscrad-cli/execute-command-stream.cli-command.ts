@@ -232,7 +232,6 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
             .map(([_slugContext, slug]) => slug);
 
         const generatedIds = await this.idManager.generateMany(userDefinedSlugs.length);
-        console.timeLog(`${userDefinedSlugs.length} IDs have been generated`);
 
         const idMap = generatedIds.reduce((acc, generatedId, index) => {
             // We essentially zipping the slugs together with corresponding uuids
@@ -252,7 +251,6 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
             new Map<string, Ctor<unknown>>()
         );
 
-        console.timeLog(`resolving referential property paths`);
         const commandTypeToReferentialPropertyPaths = commandFsasToExecute.reduce(
             (acc, { type }) => {
                 if (acc.has(type)) {
@@ -285,9 +283,6 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
             },
             new Map<string, string[]>()
         );
-        console.timeLog(`resolved referential property paths`);
-
-        console.timeLog(`resolving ID to use`);
 
         for (const [index, fsa] of commandFsasToExecute.entries()) {
             const {
@@ -384,7 +379,6 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
                     }
                 });
             }
-            console.timeLog(`resolved IDs to use. will execute commmands`);
 
             this.logger.log(`Attempting to execute command FSA: ${JSON.stringify(fsaToExecute)}`);
 
@@ -398,8 +392,6 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
                  */
                 contributorIds,
             });
-
-            console.timeLog(`executed: ${JSON.stringify(fsaToExecute)}`);
 
             commandResults.push({
                 index,
