@@ -1,0 +1,18 @@
+{
+    "colors": {
+        "primary": "#0D92F4",
+        "secondary": "#77CDFF",
+        "teritary": "#F95454",
+        "text": "#ffffff",
+        "accent": "#C62E2E"
+    },
+    "fonts": {
+        "primary": "sans-serif-medium",
+        "secondary": "serif"
+    },
+    "fontSizes": {
+        "large": 60,
+        "medium": 40,
+        "small": 20
+    }
+}
