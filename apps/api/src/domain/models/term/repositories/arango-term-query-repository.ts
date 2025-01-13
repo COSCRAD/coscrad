@@ -307,7 +307,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
 
         const asView = mapDatabaseDocumentToAggregateDTO(result);
 
-        return asView as TermViewModel;
+        return TermViewModel.fromDto(asView);
     }
 
     async fetchMany(): Promise<TermViewModel[]> {
