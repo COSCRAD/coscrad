@@ -13,6 +13,7 @@ export class TermCreatedEventHandler implements ICoscradEventHandler {
     ) {}
 
     async handle(event: TermCreated): Promise<void> {
+        console.log('handling TermCreated');
         // TODO use dynamic registration
         // Can we remove this now?
         if (!event.isOfType('TERM_CREATED')) return;
