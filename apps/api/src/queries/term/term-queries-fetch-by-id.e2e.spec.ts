@@ -38,6 +38,7 @@ import TestRepositoryProvider from '../../persistence/repositories/__tests__/Tes
 import generateDatabaseNameForTestSuite from '../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestDataInFlatFormat from '../../test-data/buildTestDataInFlatFormat';
 import { TestEventStream } from '../../test-data/events';
+import { DynamicDataTypeFinderService } from '../../validation';
 import { BaseResourceViewModel } from '../buildViewModelForResource/viewModels/base-resource.view-model';
 
 // Set up endpoints: index endpoint, id endpoint
@@ -297,6 +298,8 @@ describe(`when querying for a term: fetch by Id`, () => {
                         ),
                     }
                 ));
+
+                await app.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
 
                 termQueryRepository = app.get(TERM_QUERY_REPOSITORY_TOKEN);
 
