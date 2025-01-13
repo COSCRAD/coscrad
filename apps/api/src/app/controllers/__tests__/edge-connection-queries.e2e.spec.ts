@@ -11,7 +11,6 @@ import TestRepositoryProvider from '../../../persistence/repositories/__tests__/
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import formatResourceCompositeIdentifier from '../../../queries/presentation/formatAggregateCompositeIdentifier';
 import buildTestData from '../../../test-data/buildTestData';
-import { DynamicDataTypeFinderService } from '../../../validation';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from './setUpIntegrationTest';
 
@@ -52,8 +51,6 @@ describe('When querying for edge connections', () => {
             ARANGO_DB_NAME: testDatabaseName,
         }));
 
-        // TODO this should happen in `setupIntegrationTest`
-        await app.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
 
         await testRepositoryProvider.testSetup();
 

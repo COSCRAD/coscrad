@@ -51,7 +51,6 @@ export default async (
     const app = moduleRef.createNestApplication();
 
     await app.init();
-
     const commandHandlerService = moduleRef.get<CommandHandlerService>(CommandHandlerService);
 
     const idManager = moduleRef.get<IIdManager>('ID_MANAGER');

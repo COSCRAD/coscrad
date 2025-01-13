@@ -21,9 +21,16 @@ const buildCommandTypeFilter = (
     if (isCommandViewIndexContext(context))
         return (commandType: string) => context.getIndexScopedCommands().includes(commandType);
 
-    return (commandType: string) =>
+    return (commandType: string) => {
+        const relevantCommands = Reflect.getMetadata(INDEX_SCOPED_COMMANDS, context);
+
+        if (!Array.isArray(relevantCommands)) {
+            throw new Error(`Failed to find index-scoped commands for context: ${context}`);
+        }
+
         // DO NOT DEFAULT TO [] here. Failing to decorate the Resource class should break things!
-        Reflect.getMetadata(INDEX_SCOPED_COMMANDS, context).includes(commandType);
+        return relevantCommands.includes(commandType);
+    };
 };
 
 type CommandInfo = CommandMetadataBase & {
@@ -81,7 +88,7 @@ export class CommandInfoService {
     getCommandForms(context?: CommandContext): ICommandFormAndLabels[] {
         const commandTypeFilter = buildCommandTypeFilter(context);
 
-        return this.getCommandSchemasWithMetadata()
+        const result = this.getCommandSchemasWithMetadata()
             .filter(({ type }) => commandTypeFilter(type))
             .map(({ label, description, schema, type }) => ({
                 label,
@@ -89,5 +96,7 @@ export class CommandInfoService {
                 type,
                 form: buildCommandForm(schema, context),
             }));
+
+        return result;
     }
 }

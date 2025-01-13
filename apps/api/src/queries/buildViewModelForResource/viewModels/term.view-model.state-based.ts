@@ -1,4 +1,8 @@
-import { ITermViewModel } from '@coscrad/api-interfaces';
+import {
+    AggregateCompositeIdentifier,
+    AggregateType,
+    ITermViewModel,
+} from '@coscrad/api-interfaces';
 import { FromDomainModel, URL } from '@coscrad/data-types';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { ApiPropertyOptional } from '@nestjs/swagger';
@@ -11,6 +15,7 @@ import { BaseResourceViewModel } from './base-resource.view-model';
 
 const FromTerm = FromDomainModel(Term);
 
+// TODO remove this
 export class TermViewModel extends BaseResourceViewModel implements ITermViewModel {
     // We should wrap the API Property using the View Model Schemas!
     @ApiPropertyOptional({
@@ -75,5 +80,17 @@ export class TermViewModel extends BaseResourceViewModel implements ITermViewMod
                 }
             }
         }
+    }
+
+    public getAvailableCommands(): string[] {
+        // TODO add the logic here or remove this class if it's not going to be used
+        return [];
+    }
+
+    public getCompositeIdentifier(): AggregateCompositeIdentifier {
+        return {
+            type: AggregateType.term,
+            id: this.id,
+        };
     }
 }

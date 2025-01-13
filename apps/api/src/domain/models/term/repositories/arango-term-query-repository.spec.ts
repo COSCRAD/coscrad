@@ -38,6 +38,7 @@ import { ArangoAudioItemQueryRepository } from '../../audio-visual/audio-item/re
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import { CoscradContributor } from '../../user-management/contributor';
 import { FullName } from '../../user-management/user/entities/user/full-name.entity';
+import { PromptTermCreated } from '../commands';
 import { ITermQueryRepository } from '../queries/term-query-repository.interface';
 import { ArangoTermQueryRepository } from './arango-term-query-repository';
 
@@ -137,14 +138,35 @@ describe(`ArangoTermQueryRepository`, () => {
         })
     );
 
-    const termViews = termIds.map((id) => ({
-        id,
-        contributions: [],
-        name: buildMultilingualTextWithSingleItem(buildTermText(id), originalLanguageCode),
-        actions: [],
-        isPublished: false,
-        accessControlList: new AccessControlList(),
-    }));
+    const promptTermView = TermViewModel.fromPromptTermCreated(
+        new TestEventStream()
+            .andThen<PromptTermCreated>({
+                type: 'PROMPT_TERM_CREATED',
+            })
+            .as({
+                type: AggregateType.term,
+                id: buildDummyUuid(876),
+            })[0] as PromptTermCreated
+    );
+
+    const termViews: TermViewModel[] = termIds.map((id) =>
+        TermViewModel.fromDto({
+            id,
+            contributions: [],
+            name: buildMultilingualTextWithSingleItem(buildTermText(id), originalLanguageCode),
+            actions: [
+                'TRANSLATE_TERM',
+                'ADD_AUDIO_FOR_TERM',
+                'TAG_RESOURCE',
+                'CREATE_NOTE_ABOUT_RESOURCE',
+                'CONNECT_RESOURCES_WITH_NOTE',
+                'PUBLISH_RESOURCE',
+                'GRANT_RESOURCE_READ_ACCESS_TO_USER',
+            ],
+            isPublished: false,
+            accessControlList: new AccessControlList(),
+        })
+    );
 
     describe(`fetchById`, () => {
         const targetTermId = termIds[0];
@@ -161,7 +183,7 @@ describe(`ArangoTermQueryRepository`, () => {
 
                 expect(result).not.toBe(NotFound);
 
-                const { name } = result as IDetailQueryResult<ITermViewModel>;
+                const { name } = result as TermViewModel;
 
                 const foundOriginalTextForTerm = name.items.find(
                     ({ languageCode }) => languageCode === originalLanguageCode
@@ -265,6 +287,59 @@ describe(`ArangoTermQueryRepository`, () => {
             expect(foundTranslation.text).toBe(textTranslation);
 
             expect(foundTranslation.role).toBe(targetTranslationRole);
+
+            /**
+             * Currently, you can translate into multiple languages, but this might
+             * not be what we want in the long run. We could hide the command
+             * as a matter of convenience to hide the ability to translate into a third
+             * langauge for now.
+             */
+            expect(updatedTerm.actions).toContain('TRANSLATE_TERM');
+        });
+    });
+
+    describe(`elicitFromPrompt`, () => {
+        const targetTerm = promptTermView;
+
+        beforeEach(async () => {
+            await arangoDatabaseForCollection.clear();
+
+            await testQueryRepository.create(targetTerm);
+        });
+
+        it(`should append the expected multilingual text item`, async () => {
+            const targetTranslationRole = MultilingualTextItemRole.elicitedFromPrompt;
+
+            await testQueryRepository.elicitFromPrompt(targetTerm.id, {
+                text: textTranslation,
+                languageCode: originalLanguageCode,
+            });
+
+            const updatedTerm = await testQueryRepository.fetchById(targetTerm.id);
+
+            if (isNotFound(updatedTerm)) {
+                expect(updatedTerm).not.toBe(NotFound);
+
+                throw new InternalError('test failed');
+            }
+
+            const updatedName = new MultilingualText(updatedTerm.name); // we want an instance (not a DTO) for the query methods
+
+            const searchResultForTranslation = updatedName.getTranslation(originalLanguageCode);
+
+            expect(searchResultForTranslation).not.toBe(NotFound);
+
+            const foundTranslation = searchResultForTranslation as MultilingualTextItem;
+
+            expect(foundTranslation.text).toBe(textTranslation);
+
+            expect(foundTranslation.role).toBe(targetTranslationRole);
+
+            /**
+             * Currently, you can only elicit a term from a prompt into a single
+             * translation language.
+             */
+            expect(updatedTerm.actions).not.toContain('ELICIT_TERM_FROM_PROMPT');
         });
     });
 
@@ -307,10 +382,12 @@ describe(`ArangoTermQueryRepository`, () => {
 
             const updatedView = (await testQueryRepository.fetchById(
                 targetTerm.id
-            )) as IDetailQueryResult<ITermViewModel>;
+            )) as TermViewModel;
 
             // TODO In the future, we should use multilingual audio for terms
             expect(updatedView.mediaItemId).toBe(mediaItemId);
+
+            expect(updatedView.actions).not.toContain('ADD_AUDIO_FOR_TERM');
         });
     });
 
@@ -432,9 +509,14 @@ describe(`ArangoTermQueryRepository`, () => {
             )) as TermViewModel;
 
             expect(updatedView.isPublished).toBe(true);
+
+            expect(updatedView.actions).not.toContain('PUBLISH_RESOURCE');
         });
     });
 
+    /**
+     * TODO[https://www.pivotaltracker.com/story/show/188764063] support `unpublish`
+     */
     describe(`attribute`, () => {
         const targetTerm = termViews[0];
 

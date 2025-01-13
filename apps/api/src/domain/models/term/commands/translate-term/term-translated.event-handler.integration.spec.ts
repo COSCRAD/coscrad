@@ -162,6 +162,12 @@ describe(`TermTranslatedEventHandler.handle`, () => {
             expect(translationItem.role).toBe(MultilingualTextItemRole.freeTranslation);
 
             // TODO check that the original text is still in tact as well
+
+            /**
+             * Currently, we allow translation into multiple languages,
+             * so this should remain.
+             */
+            expect(updatedView.actions).toContain('TRANSLATE_TERM');
         });
     });
 

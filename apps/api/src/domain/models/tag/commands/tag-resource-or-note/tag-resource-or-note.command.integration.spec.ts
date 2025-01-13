@@ -7,7 +7,6 @@ import { InternalError } from '../../../../../lib/errors/InternalError';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import formatAggregateType from '../../../../../queries/presentation/formatAggregateType';
 import { DTO } from '../../../../../types/DTO';
-import { DynamicDataTypeFinderService } from '../../../../../validation';
 import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { AggregateType, isAggregateType } from '../../../../types/AggregateType';
 import { CategorizableType } from '../../../../types/CategorizableType';
@@ -34,10 +33,6 @@ describe(commandType, () => {
         commandAssertionDependencies = await setUpIntegrationTest({
             ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
         });
-
-        await commandAssertionDependencies.app
-            .get(DynamicDataTypeFinderService)
-            .bootstrapDynamicTypes();
     });
 
     afterAll(async () => {

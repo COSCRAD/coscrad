@@ -1,37 +1,35 @@
-import {
-    IDetailQueryResult,
-    IMultilingualTextItem,
-    ITermViewModel,
-    LanguageCode,
-} from '@coscrad/api-interfaces';
+import { IMultilingualTextItem, LanguageCode } from '@coscrad/api-interfaces';
 import { Maybe } from '../../../../lib/types/maybe';
+import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { AggregateId } from '../../../types/AggregateId';
-
-/**
- * TODO reconsider this. It feels awkward.
- * We should probably do away with the `IDetailQueryResult` and instead
- * absorb it into the base view model at this point, given that we are
- * denormalizing the views and we do not want to expose the tag and note joins
- * explicitly.
- */
-type TermQueryModel = IDetailQueryResult<ITermViewModel>;
 
 export const TERM_QUERY_REPOSITORY_TOKEN = 'TERM_QUERY_REPOSITORY_TOKEN';
 
+/**
+ * Note that we are abstracting over the database, not the view model so
+ * we program to the concrete view model type. `ITermViewModel` is only meant
+ * to serve as a constraint for the return of the query service and represents
+ * a contract with the client.
+ */
 export interface ITermQueryRepository {
-    create(view: TermQueryModel): Promise<void>;
+    create(view: TermViewModel): Promise<void>;
 
-    createMany(views: TermQueryModel[]): Promise<void>;
+    createMany(views: TermViewModel[]): Promise<void>;
 
     delete(id: AggregateId): Promise<void>;
 
-    fetchById(id: AggregateId): Promise<Maybe<TermQueryModel>>;
+    fetchById(id: AggregateId): Promise<Maybe<TermViewModel>>;
 
-    fetchMany(): Promise<TermQueryModel[]>;
+    fetchMany(): Promise<TermViewModel[]>;
 
     allowUser(id: AggregateId, userId: AggregateId): Promise<void>;
 
     translate(id: AggregateId, translationItem: IMultilingualTextItem): Promise<void>;
+
+    elicitFromPrompt(
+        id: AggregateId,
+        translationItem: Omit<IMultilingualTextItem, 'role'>
+    ): Promise<void>;
 
     publish(id: AggregateId): Promise<void>;
 

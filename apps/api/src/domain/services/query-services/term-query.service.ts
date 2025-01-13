@@ -59,7 +59,17 @@ export class TermQueryService {
                 : this.buildAudioUrl(mediaItemId);
 
             // TODO do this more efficiently
-            return { ...result, audioItemURL };
+            return {
+                ...result,
+                audioItemURL,
+                /**
+                 * Currently, permission to execute commands is solely
+                 * role based and limited to project admin and COSCRAD admin.
+                 * In the future, command permissions may depend on the command
+                 * or the resource (row-level write permissions).
+                 */
+                actions: this.fetchUserActions(userWithGroups, [result]),
+            };
         }
 
         return NotFound;
@@ -95,6 +105,10 @@ export class TermQueryService {
                 return {
                     ...entity,
                     audioURL: this.buildAudioUrl(entity.mediaItemId),
+                    /**
+                     * See comment in `fetchById` about current RBAC for command execution.
+                     */
+                    actions: this.fetchUserActions(userWithGroups, [entity]),
                 };
             }),
             // TODO Should we register index-scoped commands in the view layer instead?

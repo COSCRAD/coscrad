@@ -156,10 +156,6 @@ export class ArangoDatabase {
 
         if (!collectionExists) throw new Error(`Collection ${collectionName} not found!`);
 
-        if (collectionName.includes('onnection')) {
-            console.log('here');
-        }
-
         const query = `
     FOR dto IN @dtos
         INSERT dto
