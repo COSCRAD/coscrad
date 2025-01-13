@@ -1,9 +1,7 @@
 import {
     AggregateType,
-    ICommandFormAndLabels,
     IIndexQueryResult,
     IMultilingualTextItem,
-    ITermViewModel,
     IVocabularyListViewModel,
     LanguageCode,
 } from '@coscrad/api-interfaces';
@@ -17,6 +15,7 @@ import { ArangoConnectionProvider } from '../../../../persistence/database/arang
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { TestEventStream } from '../../../../test-data/events';
 import { getCoscradEventConsumerMeta, ICoscradEvent } from '../../../common';
 import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
@@ -64,17 +63,14 @@ const termTranslationLanguageCode = LanguageCode.English;
 
 const indexEndpoint = `/resources/vocabularyLists`;
 
-const audioUrlForTerm = 'https://www.foo.com/word.mp3';
-
 /**
  * TODO We may want to event source our test setup to give us a very high
  * level of confidence that our back-end is working from event handler
  * to query endpoint. Eagerly joining in terms, tags, notes, etc. into vocabulary
  * lists, for example, is a big risk.
  */
-const existingTerm: ITermViewModel & { actions: ICommandFormAndLabels[] } = {
+const existingTerm: TermViewModel = TermViewModel.fromDto({
     id: termId,
-    audioURL: audioUrlForTerm,
     isPublished: true,
     accessControlList: new AccessControlList().toDTO(),
     actions: [],
@@ -89,7 +85,7 @@ const existingTerm: ITermViewModel & { actions: ICommandFormAndLabels[] } = {
         }
     ),
     contributions: [],
-};
+});
 
 const vocabularyListEventStream = new TestEventStream()
     .andThen<VocabularyListCreated>({
