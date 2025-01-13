@@ -14,7 +14,6 @@ import generateDatabaseNameForTestSuite from '../../../../../persistence/reposit
 import { ArangoEventRepository } from '../../../../../persistence/repositories/arango-event-repository';
 import { buildTestCommandFsaMap } from '../../../../../test-data/commands';
 import { TestEventStream } from '../../../../../test-data/events';
-import { DynamicDataTypeFinderService } from '../../../../../validation';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
@@ -110,8 +109,6 @@ describe(commandType, () => {
             idManager,
             commandHandlerService,
         };
-
-        await app.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
     });
 
     beforeEach(async () => {

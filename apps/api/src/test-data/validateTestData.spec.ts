@@ -10,7 +10,7 @@ import { DeluxeInMemoryStore } from '../domain/types/DeluxeInMemoryStore';
 import formatAggregateCompositeIdentifier from '../queries/presentation/formatAggregateCompositeIdentifier';
 import formatAggregateType from '../queries/presentation/formatAggregateType';
 import assertTestInstancesOfTypeAreComprehensive from '../test-data/__tests__/assertTestInstancesOfTypeAreComprehensive';
-import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../validation';
+import { DynamicDataTypeModule } from '../validation';
 import assertEdgeConnectionContextStateIsValid from './__tests__/assertEdgeConnectionContextStateIsValid';
 import buildTestData from './buildTestData';
 import convertInMemorySnapshotToDatabaseFormat from './utilities/convertInMemorySnapshotToDatabaseFormat';
@@ -23,8 +23,6 @@ describe('buildTestData', () => {
         }).compile();
 
         await testModule.init();
-
-        await testModule.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
     });
 
     const testData = buildTestData();

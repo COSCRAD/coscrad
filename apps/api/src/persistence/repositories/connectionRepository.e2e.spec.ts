@@ -5,7 +5,6 @@ import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import { NotFound, isNotFound } from '../../lib/types/not-found';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import buildTestData from '../../test-data/buildTestData';
-import { DynamicDataTypeFinderService } from '../../validation';
 import TestRepositoryProvider from './__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from './__tests__/generateDatabaseNameForTestSuite';
 
@@ -22,8 +21,6 @@ describe('Repository provider > getEdgeConnectionRepository', () => {
         ({ app, testRepositoryProvider } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
         }));
-
-        await app.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
     });
 
     afterAll(async () => {

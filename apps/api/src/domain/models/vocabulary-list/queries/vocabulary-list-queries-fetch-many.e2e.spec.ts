@@ -18,7 +18,6 @@ import { ArangoDatabaseProvider } from '../../../../persistence/database/databas
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { TestEventStream } from '../../../../test-data/events';
-import { DynamicDataTypeFinderService } from '../../../../validation';
 import { getCoscradEventConsumerMeta, ICoscradEvent } from '../../../common';
 import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
@@ -229,8 +228,6 @@ describe(`when querying for a vocabulary list: fetch many`, () => {
                 }
                 // no authenticated user
             ));
-
-            await app.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
 
             connectionProvider = app.get(ArangoConnectionProvider);
 
