@@ -106,6 +106,15 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
     }
 
     query(aqlQuery: AqlQuery) {
+        if (
+            this.#collectionID.includes('__VIEWS') &&
+            ['insert', 'update', 'remove', 'upsert', 'replace'].some((keyword) =>
+                aqlQuery.query.toLowerCase().includes(keyword)
+            )
+        ) {
+            console.log(`ARANGO DB has an update with bind vars: ${aqlQuery.bindVars}}`);
+        }
+
         return this.#arangoDatabase.query(aqlQuery);
     }
 }
