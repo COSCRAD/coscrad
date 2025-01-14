@@ -133,5 +133,14 @@ describe(`PromptTermCreatedEventHandler.handle`, () => {
         expect(originalTextItemForName.languageCode).toBe(LanguageCode.English);
 
         expect(originalTextItemForName.role).toBe(MultilingualTextItemRole.original);
+
+        expect(termView.actions).toContain('ELICIT_TERM_FROM_PROMPT');
+        expect(termView.actions).not.toContain('TRANSLATE_TERM');
+
+        expect(termView.actions).toContain('TAG_RESOURCE');
+        expect(termView.actions).toContain('CREATE_NOTE_ABOUT_RESOURCE');
+        expect(termView.actions).toContain('CONNECT_RESOURCES_WITH_NOTE');
+        expect(termView.actions).toContain('PUBLISH_RESOURCE');
+        expect(termView.actions).toContain('ADD_AUDIO_FOR_TERM');
     });
 });

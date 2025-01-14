@@ -77,8 +77,6 @@ describe(`Arango Event Repository`, () => {
 
         dynamicDataTypeFinderService = testingModule.get(DynamicDataTypeFinderService);
 
-        await dynamicDataTypeFinderService.bootstrapDynamicTypes();
-
         jest.useFakeTimers(fakeTimersConfig);
     });
 

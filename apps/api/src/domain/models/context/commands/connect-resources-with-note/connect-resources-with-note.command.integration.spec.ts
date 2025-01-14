@@ -11,7 +11,6 @@ import TestRepositoryProvider from '../../../../../persistence/repositories/__te
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import formatAggregateCompositeIdentifier from '../../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import buildTestDataInFlatFormat from '../../../../../test-data/buildTestDataInFlatFormat';
-import { DynamicDataTypeFinderService } from '../../../../../validation';
 import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import InvariantValidationError from '../../../../domainModelValidators/errors/InvariantValidationError';
 import ContextTypeIsNotAllowedForGivenResourceTypeError from '../../../../domainModelValidators/errors/context/edgeConnections/ContextTypeIsNotAllowedForGivenResourceTypeError';
@@ -223,8 +222,6 @@ describe(commandType, () => {
             await setUpIntegrationTest({
                 ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
             }));
-
-        await app.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
 
         assertionHelperDependencies = {
             testRepositoryProvider,
