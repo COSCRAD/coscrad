@@ -51,10 +51,6 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
     }
 
     async publish(id: AggregateId): Promise<void> {
-        // return this.database.update(id, {
-        //     isPublished: true,
-        // });
-
         const query = `
         FOR doc IN @@collectionName
         FILTER doc._key == @id
