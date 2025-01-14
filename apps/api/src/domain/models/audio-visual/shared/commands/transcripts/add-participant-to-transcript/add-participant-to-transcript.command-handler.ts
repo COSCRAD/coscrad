@@ -1,7 +1,7 @@
 import { CommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
-import { EVENT_PUBLISHER_TOKEN } from 'apps/api/src/domain/common';
-import { ICoscradEventPublisher } from 'apps/api/src/domain/common/events/interfaces';
+import { EVENT_PUBLISHER_TOKEN } from '../../../../../../../domain/common';
+import { ICoscradEventPublisher } from '../../../../../../../domain/common/events/interfaces';
 import { InternalError } from '../../../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../../../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../../../persistence/constants/persistenceConstants';

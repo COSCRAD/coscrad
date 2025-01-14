@@ -3,7 +3,7 @@ import { Inject } from '@nestjs/common';
 import {
     EVENT_PUBLISHER_TOKEN,
     ICoscradEventPublisher,
-} from 'apps/api/src/domain/common/events/interfaces';
+} from '../../../../../../../domain/common/events/interfaces';
 import { InternalError } from '../../../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../../../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../../../persistence/constants/persistenceConstants';

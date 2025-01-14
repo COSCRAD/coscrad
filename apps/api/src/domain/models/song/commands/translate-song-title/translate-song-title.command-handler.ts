@@ -1,8 +1,8 @@
 import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { CommandHandler, ICommand } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
-import { EVENT_PUBLISHER_TOKEN } from 'apps/api/src/domain/common';
-import { ICoscradEventPublisher } from 'apps/api/src/domain/common/events/interfaces';
+import { EVENT_PUBLISHER_TOKEN } from '../../../../../domain/common';
+import { ICoscradEventPublisher } from '../../../../../domain/common/events/interfaces';
 import { Valid } from '../../../../../domain/domainModelValidators/Valid';
 import {
     ID_MANAGER_TOKEN,
