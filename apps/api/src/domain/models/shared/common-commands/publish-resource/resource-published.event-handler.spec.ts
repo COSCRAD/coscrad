@@ -138,6 +138,10 @@ describe(`ResourcePublished.eventHandler`, () => {
 
         expect(searchResult).not.toBe(NotFound);
 
-        expect((searchResult as TermViewModel).isPublished).toBe(true);
+        const foundTerm = searchResult as TermViewModel;
+
+        expect(foundTerm.isPublished).toBe(true);
+
+        expect(foundTerm.actions).not.toContain('PUBLISH_RESOURCE');
     });
 });

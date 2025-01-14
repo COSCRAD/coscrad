@@ -135,6 +135,8 @@ describe(`TermElicitedFromPromptEventHandler.handle`, () => {
             expect(text).toBe(elicitationEvent.payload.text);
 
             expect(languageCode).toBe(elicitationEvent.payload.languageCode);
+
+            expect(updatedView.actions).not.toContain('ELICIT_TERM_FROM_PROMPT');
         });
     });
 

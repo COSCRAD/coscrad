@@ -1,9 +1,7 @@
 import {
-    ICommandFormAndLabels,
-    IDetailQueryResult,
     IMultilingualTextItem,
-    ITermViewModel,
     LanguageCode,
+    MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
@@ -16,6 +14,7 @@ import { ArangoDatabase } from '../../../../persistence/database/arango-database
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
 import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
+import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { AggregateId } from '../../../types/AggregateId';
 import {
     AUDIO_QUERY_REPOSITORY_TOKEN,
@@ -24,9 +23,7 @@ import {
 import { ITermQueryRepository } from '../queries';
 
 export class ArangoTermQueryRepository implements ITermQueryRepository {
-    private readonly database: ArangoDatabaseForCollection<
-        IDetailQueryResult<ITermViewModel & { actions: ICommandFormAndLabels[] }>
-    >;
+    private readonly database: ArangoDatabaseForCollection<TermViewModel>;
 
     constructor(
         arangoConnectionProvider: ArangoConnectionProvider,
@@ -41,7 +38,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         );
     }
 
-    async create(view: ITermViewModel & { actions: ICommandFormAndLabels[] }): Promise<void> {
+    async create(view: TermViewModel): Promise<void> {
         const document = mapEntityDTOToDatabaseDocument(view);
 
         await this.database.create(document).catch((error) => {
@@ -49,17 +46,41 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         });
     }
 
-    async createMany(
-        views: (ITermViewModel & { actions: ICommandFormAndLabels[] })[]
-    ): Promise<void> {
+    async createMany(views: TermViewModel[]): Promise<void> {
         return this.database.createMany(views.map(mapEntityDTOToDatabaseDocument));
     }
 
     async publish(id: AggregateId): Promise<void> {
-        return this.database.update(id, {
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+        UPDATE doc WITH {
             isPublished: true,
-        });
+            actions: REMOVE_VALUE(doc.actions,"PUBLISH_RESOURCE")
+        } IN @@collectionName
+         RETURN OLD
+        `;
+
+        const bindVars = {
+            '@collectionName': 'term__VIEWS',
+            id: id,
+        };
+
+        const cursor = await this.database
+            .query({
+                query,
+                bindVars,
+            })
+            .catch((reason) => {
+                throw new InternalError(`Failed to translate term via TermRepository: ${reason}`);
+            });
+
+        await cursor.all();
     }
+
+    /**
+     * TODO[https://www.pivotaltracker.com/story/show/188764063] support `unpublish`
+     */
 
     async delete(id: AggregateId): Promise<void> {
         return this.database.delete(id);
@@ -80,7 +101,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         UPDATE doc WITH {
             name: {
                 items: APPEND(doc.name.items,newItem)
-            }
+            },
         } IN @@collectionName
          RETURN OLD
         `;
@@ -90,6 +111,53 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             id: id,
             text: text,
             role: role,
+            languageCode: languageCode,
+        };
+
+        const cursor = await this.database
+            .query({
+                query,
+                bindVars,
+            })
+            .catch((reason) => {
+                throw new InternalError(`Failed to translate term via TermRepository: ${reason}`);
+            });
+
+        await cursor.all();
+    }
+
+    async elicitFromPrompt(
+        id: AggregateId,
+        { text, languageCode }: Omit<IMultilingualTextItem, 'role'>
+    ): Promise<void> {
+        /**
+         * Note that the only difference between this and `translate` is currently
+         * that `elicitFromPrompt` removes "ELICIT_TERM_FROM_PROMPT" from actions.
+         * However, we may also want to expose `isPromptTerm` in the future, in which
+         * case this property will differ as well.
+         */
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+        let newItem = {
+                    text: @text,
+                    languageCode: @languageCode,
+                    role: @role
+        }
+        UPDATE doc WITH {
+            actions: REMOVE_VALUE(doc.actions,"ELICIT_TERM_FROM_PROMPT"),
+            name: {
+                items: APPEND(doc.name.items,newItem)
+            },
+        } IN @@collectionName
+         RETURN OLD
+        `;
+
+        const bindVars = {
+            '@collectionName': 'term__VIEWS',
+            id: id,
+            text: text,
+            role: MultilingualTextItemRole.elicitedFromPrompt,
             languageCode: languageCode,
         };
 
@@ -126,12 +194,12 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             return;
         }
 
-        // note the casing here on `audioURL`
         const query = `
         FOR doc IN @@collectionName
         FILTER doc._key == @id
         UPDATE doc WITH {
             mediaItemId: @mediaItemId,
+            actions: REMOVE_VALUE(doc.actions,"ADD_AUDIO_FOR_TERM")
         } IN @@collectionName
          RETURN OLD
         `;
@@ -228,24 +296,20 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             });
     }
 
-    async fetchById(
-        id: AggregateId
-    ): Promise<Maybe<ITermViewModel & { actions: ICommandFormAndLabels[] }>> {
+    async fetchById(id: AggregateId): Promise<Maybe<TermViewModel>> {
         const result = await this.database.fetchById(id);
 
         if (isNotFound(result)) return result;
 
         const asView = mapDatabaseDocumentToAggregateDTO(result);
 
-        return asView as ITermViewModel & { actions: ICommandFormAndLabels[] };
+        return TermViewModel.fromDto(asView);
     }
 
-    async fetchMany(): Promise<(ITermViewModel & { actions: ICommandFormAndLabels[] })[]> {
+    async fetchMany(): Promise<TermViewModel[]> {
         const result = await this.database.fetchMany();
 
-        return result.map(mapDatabaseDocumentToAggregateDTO) as (ITermViewModel & {
-            actions: ICommandFormAndLabels[];
-        })[];
+        return result.map((doc) => TermViewModel.fromDto(mapDatabaseDocumentToAggregateDTO(doc)));
     }
 
     async count(): Promise<number> {

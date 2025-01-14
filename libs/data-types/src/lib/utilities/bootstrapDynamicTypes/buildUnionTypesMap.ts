@@ -77,7 +77,15 @@ export const buildUnionTypesMap = <T = unknown>(allCtorCandidates: Ctor<T>[]): U
             .filter(({ unionName }) => nameOfUnionToValidate === unionName)
             .map(({ ctor, discriminant: discriminantValue }) => [ctor, discriminantValue]);
 
-        if (discriminantValuesAndCtors.length === 0) {
+        /**
+         * TODO We need to decide whether this is really a valid reason to throw. It causes
+         * unwanted dynamic dependencies in tests that don't require union factories or
+         * validators.
+         */
+        if (
+            discriminantValuesAndCtors.length === 0 &&
+            nameOfUnionToValidate !== 'COSCRAD_EVENT_UNION'
+        ) {
             // TODO Break out proper exceptions here
             throw new Error(
                 `Failed to find any union members (sub-type classes) for the union: ${nameOfUnionToValidate}`

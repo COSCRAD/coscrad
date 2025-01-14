@@ -146,8 +146,6 @@ describe('AudioAddedForTermEventHandler.handle', () => {
         await testQueryRepository.create(initialView);
 
         await audioRepository.create(relatedAudioItem);
-
-        console.log('done');
     });
 
     describe(`when there is an existing term`, () => {
@@ -168,6 +166,8 @@ describe('AudioAddedForTermEventHandler.handle', () => {
              * the eager joins.
              */
             expect(updatedTerm.mediaItemId).toBe(mediaItemId);
+
+            expect(updatedTerm.actions).not.toContain('ADD_AUDIO_FOR_TERM');
         });
     });
 });

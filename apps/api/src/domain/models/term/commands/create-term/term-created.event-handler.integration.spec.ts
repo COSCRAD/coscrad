@@ -4,12 +4,15 @@ import {
     ITermViewModel,
     LanguageCode,
 } from '@coscrad/api-interfaces';
+import { CommandModule } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/Environment';
+import { CommandInfoService } from '../../../../../app/controllers/command/services/command-info-service';
+import { TermCommandsModule } from '../../../../../app/domain-modules/term.commands.module';
 import { ConsoleCoscradCliLogger } from '../../../../../coscrad-cli/logging';
 import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
@@ -65,7 +68,8 @@ describe(`TermCreatedEventHandler`, () => {
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
-            imports: [PersistenceModule.forRootAsync()],
+            providers: [CommandInfoService, TermCreatedEventHandler],
+            imports: [PersistenceModule.forRootAsync(), CommandModule, TermCommandsModule],
         })
             .overrideProvider(ConfigService)
             .useValue(
@@ -81,6 +85,8 @@ describe(`TermCreatedEventHandler`, () => {
         await moduleRef.init();
 
         app = moduleRef.createNestApplication();
+
+        await app.init();
 
         const connectionProvider = app.get(ArangoConnectionProvider);
 
@@ -105,7 +111,7 @@ describe(`TermCreatedEventHandler`, () => {
         });
 
         it(`should create the expected view in the database`, async () => {
-            const handler = new TermCreatedEventHandler(testQueryRepository);
+            const handler = app.get(TermCreatedEventHandler);
 
             // @ts-expect-error Fix this issue
             await handler.handle(termCreated);
@@ -126,7 +132,14 @@ describe(`TermCreatedEventHandler`, () => {
 
             expect(originalTextItem.languageCode).toBe(languageCode);
 
-            expect(actions).toEqual([]);
+            expect(actions).toContain('TRANSLATE_TERM');
+            expect(actions).not.toContain('ELICIT_TERM_FROM_PROMPT');
+
+            expect(actions).toContain('TAG_RESOURCE');
+            expect(actions).toContain('CREATE_NOTE_ABOUT_RESOURCE');
+            expect(actions).toContain('CONNECT_RESOURCES_WITH_NOTE');
+            expect(actions).toContain('PUBLISH_RESOURCE');
+            expect(actions).toContain('ADD_AUDIO_FOR_TERM');
 
             // expect tags to be empty
             // expect categories to be empty
