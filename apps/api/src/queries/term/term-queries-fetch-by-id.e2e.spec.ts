@@ -1,6 +1,8 @@
 import {
     AggregateType,
     CoscradUserRole,
+    IDetailQueryResult,
+    ITermViewModel,
     LanguageCode,
     ResourceType,
 } from '@coscrad/api-interfaces';
@@ -36,7 +38,6 @@ import generateDatabaseNameForTestSuite from '../../persistence/repositories/__t
 import buildTestDataInFlatFormat from '../../test-data/buildTestDataInFlatFormat';
 import { TestEventStream } from '../../test-data/events';
 import { DynamicDataTypeFinderService } from '../../validation';
-import { TermViewModel } from '../buildViewModelForResource/viewModels';
 import { BaseResourceViewModel } from '../buildViewModelForResource/viewModels/base-resource.view-model';
 
 // Set up endpoints: index endpoint, id endpoint
@@ -189,8 +190,6 @@ describe(`when querying for a term: fetch by Id`, () => {
                 // no authenticated user
             ));
 
-            await app.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
-
             termQueryRepository = app.get(TERM_QUERY_REPOSITORY_TOKEN);
 
             handlers = buildEventHandlers(termQueryRepository);
@@ -233,9 +232,12 @@ describe(`when querying for a term: fetch by Id`, () => {
 
                     expect(res.status).toBe(httpStatusCodes.ok);
 
-                    const result = res.body as TermViewModel;
+                    const result = res.body as IDetailQueryResult<ITermViewModel>;
 
                     expect(result.id).toBe(termId);
+
+                    // We don't expose actions to non-admin users
+                    expect(result.actions).toEqual([]);
 
                     assertResourceHasContributionFor(dummyContributor, result);
                 });
@@ -293,6 +295,8 @@ describe(`when querying for a term: fetch by Id`, () => {
                     }
                 ));
 
+                await app.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
+
                 termQueryRepository = app.get(TERM_QUERY_REPOSITORY_TOKEN);
 
                 /**
@@ -328,6 +332,9 @@ describe(`when querying for a term: fetch by Id`, () => {
                         );
 
                         expect(res.status).toBe(httpStatusCodes.ok);
+
+                        // Commands should be visible to admin
+                        expect(res.body.actions).not.toEqual([]);
                     });
                 });
 
@@ -349,6 +356,9 @@ describe(`when querying for a term: fetch by Id`, () => {
                         );
 
                         expect(res.status).toBe(httpStatusCodes.ok);
+
+                        // Commands should be visible to admin
+                        expect(res.body.actions).not.toEqual([]);
                     });
                 });
 
@@ -370,6 +380,9 @@ describe(`when querying for a term: fetch by Id`, () => {
                         );
 
                         expect(res.status).toBe(httpStatusCodes.ok);
+
+                        // Commands should be visible to admin
+                        expect(res.body.actions).not.toEqual([]);
                     });
                 });
             });
@@ -436,6 +449,20 @@ describe(`when querying for a term: fetch by Id`, () => {
                         );
 
                         expect(res.status).toBe(httpStatusCodes.ok);
+
+                        const term = res.body as IDetailQueryResult<ITermViewModel>;
+
+                        const { actions } = term;
+
+                        // admin should see commands
+                        expect(actions).not.toHaveLength(0);
+
+                        /**
+                         * TODO We should add a separate test that checks
+                         * that the correct actions come through in different
+                         * scenarios.
+                         */
+                        expect(actions).toMatchSnapshot();
                     });
                 });
 
@@ -457,6 +484,9 @@ describe(`when querying for a term: fetch by Id`, () => {
                         );
 
                         expect(res.status).toBe(httpStatusCodes.ok);
+
+                        // Commands should be visible to admin
+                        expect(res.body.actions).not.toEqual([]);
                     });
                 });
 
@@ -480,6 +510,9 @@ describe(`when querying for a term: fetch by Id`, () => {
                         );
 
                         expect(res.status).toBe(httpStatusCodes.ok);
+
+                        // Commands should be visible to admin
+                        expect(res.body.actions).not.toEqual([]);
                     });
                 });
             });
@@ -541,6 +574,9 @@ describe(`when querying for a term: fetch by Id`, () => {
                         );
 
                         expect(res.status).toBe(httpStatusCodes.ok);
+
+                        // We don't expose actions to non-admin users
+                        expect(res.body.actions).toEqual([]);
                     });
                 });
 
@@ -585,6 +621,9 @@ describe(`when querying for a term: fetch by Id`, () => {
                         );
 
                         expect(res.status).toBe(httpStatusCodes.ok);
+
+                        // We don't expose actions to non-admin users
+                        expect(res.body.actions).toEqual([]);
                     });
                 });
             });

@@ -4,12 +4,361 @@ exports[`when querying for a term: fetch many when the user is a project admin s
 {
   "entities": [
     {
-      "_id": "term__VIEWS/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
       "accessControlList": {
         "allowedGroupIds": [],
         "allowedUserIds": [],
       },
-      "actions": [],
+      "actions": [
+        {
+          "description": "Make a resource visible to the public",
+          "form": {
+            "fields": [],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+                "type": "term",
+              },
+            },
+          },
+          "label": "Publish Resource",
+          "type": "PUBLISH_RESOURCE",
+        },
+        {
+          "description": "creates a note about this particular resource",
+          "form": {
+            "fields": [
+              {
+                "constraints": [],
+                "description": "system-wide unique identifier for the resource about which we are making a note",
+                "label": "CompositeIdentifier",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+              {},
+              {
+                "constraints": [
+                  {
+                    "message": "must be a non-empty string",
+                    "name": "non-empty string",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "text for the note",
+                "label": "text",
+                "name": "text",
+                "type": "TEXT_FIELD",
+              },
+              {
+                "constraints": [
+                  {
+                    "message": "Must be a valid \${propertyLabel}",
+                    "name": "IS_ENUM",
+                  },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the language in which you are writing the note",
+                "label": "language code",
+                "name": "languageCode",
+                "options": [
+                  {
+                    "display": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "display": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "display": "English",
+                    "value": "en",
+                  },
+                  {
+                    "display": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "display": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "display": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "display": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+                "type": "STATIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+                "type": "term",
+              },
+            },
+          },
+          "label": "Create Note",
+          "type": "CREATE_NOTE_ABOUT_RESOURCE",
+        },
+        {
+          "description": "connects two resources with a note and context",
+          "form": {
+            "fields": [
+              {
+                "constraints": [],
+                "description": "system-wide unique identifier for the resource to which you are making a connection",
+                "label": "to member composite identifier",
+                "name": "toMemberCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+              {},
+              {
+                "constraints": [],
+                "description": "system-wide unique identifier for the resource from which you are making a connection",
+                "label": "from member composite identifier",
+                "name": "fromMemberCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+              {},
+              {
+                "constraints": [
+                  {
+                    "message": "must be a non-empty string",
+                    "name": "non-empty string",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "text for the note",
+                "label": "text",
+                "name": "text",
+                "type": "TEXT_FIELD",
+              },
+              {
+                "constraints": [
+                  {
+                    "message": "Must be a valid \${propertyLabel}",
+                    "name": "IS_ENUM",
+                  },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the language in which you are writing the note",
+                "label": "language code",
+                "name": "languageCode",
+                "options": [
+                  {
+                    "display": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "display": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "display": "English",
+                    "value": "en",
+                  },
+                  {
+                    "display": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "display": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "display": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "display": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+                "type": "STATIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+                "type": "term",
+              },
+            },
+          },
+          "label": "Connect Resources with Note",
+          "type": "CONNECT_RESOURCES_WITH_NOTE",
+        },
+        {
+          "description": "Translate an existing term (typically from the language to English)",
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
+                    "message": "must be a non-empty string",
+                    "name": "non-empty string",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "translation for the given term",
+                "label": "translation",
+                "name": "translation",
+                "type": "TEXT_FIELD",
+              },
+              {
+                "constraints": [
+                  {
+                    "message": "Must be a valid \${propertyLabel}",
+                    "name": "IS_ENUM",
+                  },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "language in which you are translating the term (typically English)",
+                "label": "language code",
+                "name": "languageCode",
+                "options": [
+                  {
+                    "display": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "display": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "display": "English",
+                    "value": "en",
+                  },
+                  {
+                    "display": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "display": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "display": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "display": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+                "type": "STATIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+                "type": "term",
+              },
+            },
+          },
+          "label": "Translate Term",
+          "type": "TRANSLATE_TERM",
+        },
+        {
+          "description": "add audio for an existing term",
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
+                    "message": "must be a UUID",
+                    "name": "UUID",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "reference to an audio item",
+                "label": "audio item ID",
+                "name": "audioItemId",
+                "options": {
+                  "aggregateType": "audioItem",
+                },
+                "type": "DYNAMIC_SELECT",
+              },
+              {
+                "constraints": [
+                  {
+                    "message": "Must be a valid \${propertyLabel}",
+                    "name": "IS_ENUM",
+                  },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the language of the audio",
+                "label": "language code",
+                "name": "languageCode",
+                "options": [
+                  {
+                    "display": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "display": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "display": "English",
+                    "value": "en",
+                  },
+                  {
+                    "display": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "display": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "display": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "display": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+                "type": "STATIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+                "type": "term",
+              },
+            },
+          },
+          "label": "add audio for term",
+          "type": "ADD_AUDIO_FOR_TERM",
+        },
+      ],
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
       "isPublished": false,
@@ -29,14 +378,363 @@ exports[`when querying for a term: fetch many when the user is a project admin s
       },
     },
     {
-      "_id": "term__VIEWS/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
       "accessControlList": {
         "allowedGroupIds": [],
         "allowedUserIds": [
           "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100004",
         ],
       },
-      "actions": [],
+      "actions": [
+        {
+          "description": "Make a resource visible to the public",
+          "form": {
+            "fields": [],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
+                "type": "term",
+              },
+            },
+          },
+          "label": "Publish Resource",
+          "type": "PUBLISH_RESOURCE",
+        },
+        {
+          "description": "creates a note about this particular resource",
+          "form": {
+            "fields": [
+              {
+                "constraints": [],
+                "description": "system-wide unique identifier for the resource about which we are making a note",
+                "label": "CompositeIdentifier",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+              {},
+              {
+                "constraints": [
+                  {
+                    "message": "must be a non-empty string",
+                    "name": "non-empty string",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "text for the note",
+                "label": "text",
+                "name": "text",
+                "type": "TEXT_FIELD",
+              },
+              {
+                "constraints": [
+                  {
+                    "message": "Must be a valid \${propertyLabel}",
+                    "name": "IS_ENUM",
+                  },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the language in which you are writing the note",
+                "label": "language code",
+                "name": "languageCode",
+                "options": [
+                  {
+                    "display": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "display": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "display": "English",
+                    "value": "en",
+                  },
+                  {
+                    "display": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "display": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "display": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "display": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+                "type": "STATIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
+                "type": "term",
+              },
+            },
+          },
+          "label": "Create Note",
+          "type": "CREATE_NOTE_ABOUT_RESOURCE",
+        },
+        {
+          "description": "connects two resources with a note and context",
+          "form": {
+            "fields": [
+              {
+                "constraints": [],
+                "description": "system-wide unique identifier for the resource to which you are making a connection",
+                "label": "to member composite identifier",
+                "name": "toMemberCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+              {},
+              {
+                "constraints": [],
+                "description": "system-wide unique identifier for the resource from which you are making a connection",
+                "label": "from member composite identifier",
+                "name": "fromMemberCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+              {},
+              {
+                "constraints": [
+                  {
+                    "message": "must be a non-empty string",
+                    "name": "non-empty string",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "text for the note",
+                "label": "text",
+                "name": "text",
+                "type": "TEXT_FIELD",
+              },
+              {
+                "constraints": [
+                  {
+                    "message": "Must be a valid \${propertyLabel}",
+                    "name": "IS_ENUM",
+                  },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the language in which you are writing the note",
+                "label": "language code",
+                "name": "languageCode",
+                "options": [
+                  {
+                    "display": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "display": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "display": "English",
+                    "value": "en",
+                  },
+                  {
+                    "display": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "display": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "display": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "display": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+                "type": "STATIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
+                "type": "term",
+              },
+            },
+          },
+          "label": "Connect Resources with Note",
+          "type": "CONNECT_RESOURCES_WITH_NOTE",
+        },
+        {
+          "description": "Translate an existing term (typically from the language to English)",
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
+                    "message": "must be a non-empty string",
+                    "name": "non-empty string",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "translation for the given term",
+                "label": "translation",
+                "name": "translation",
+                "type": "TEXT_FIELD",
+              },
+              {
+                "constraints": [
+                  {
+                    "message": "Must be a valid \${propertyLabel}",
+                    "name": "IS_ENUM",
+                  },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "language in which you are translating the term (typically English)",
+                "label": "language code",
+                "name": "languageCode",
+                "options": [
+                  {
+                    "display": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "display": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "display": "English",
+                    "value": "en",
+                  },
+                  {
+                    "display": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "display": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "display": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "display": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+                "type": "STATIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
+                "type": "term",
+              },
+            },
+          },
+          "label": "Translate Term",
+          "type": "TRANSLATE_TERM",
+        },
+        {
+          "description": "add audio for an existing term",
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
+                    "message": "must be a UUID",
+                    "name": "UUID",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "reference to an audio item",
+                "label": "audio item ID",
+                "name": "audioItemId",
+                "options": {
+                  "aggregateType": "audioItem",
+                },
+                "type": "DYNAMIC_SELECT",
+              },
+              {
+                "constraints": [
+                  {
+                    "message": "Must be a valid \${propertyLabel}",
+                    "name": "IS_ENUM",
+                  },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the language of the audio",
+                "label": "language code",
+                "name": "languageCode",
+                "options": [
+                  {
+                    "display": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "display": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "display": "English",
+                    "value": "en",
+                  },
+                  {
+                    "display": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "display": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "display": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "display": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+                "type": "STATIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
+                "type": "term",
+              },
+            },
+          },
+          "label": "add audio for term",
+          "type": "ADD_AUDIO_FOR_TERM",
+        },
+      ],
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
       "isPublished": false,
@@ -56,12 +754,347 @@ exports[`when querying for a term: fetch many when the user is a project admin s
       },
     },
     {
-      "_id": "term__VIEWS/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
       "accessControlList": {
         "allowedGroupIds": [],
         "allowedUserIds": [],
       },
-      "actions": [],
+      "actions": [
+        {
+          "description": "creates a note about this particular resource",
+          "form": {
+            "fields": [
+              {
+                "constraints": [],
+                "description": "system-wide unique identifier for the resource about which we are making a note",
+                "label": "CompositeIdentifier",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+              {},
+              {
+                "constraints": [
+                  {
+                    "message": "must be a non-empty string",
+                    "name": "non-empty string",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "text for the note",
+                "label": "text",
+                "name": "text",
+                "type": "TEXT_FIELD",
+              },
+              {
+                "constraints": [
+                  {
+                    "message": "Must be a valid \${propertyLabel}",
+                    "name": "IS_ENUM",
+                  },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the language in which you are writing the note",
+                "label": "language code",
+                "name": "languageCode",
+                "options": [
+                  {
+                    "display": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "display": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "display": "English",
+                    "value": "en",
+                  },
+                  {
+                    "display": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "display": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "display": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "display": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+                "type": "STATIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+                "type": "term",
+              },
+            },
+          },
+          "label": "Create Note",
+          "type": "CREATE_NOTE_ABOUT_RESOURCE",
+        },
+        {
+          "description": "connects two resources with a note and context",
+          "form": {
+            "fields": [
+              {
+                "constraints": [],
+                "description": "system-wide unique identifier for the resource to which you are making a connection",
+                "label": "to member composite identifier",
+                "name": "toMemberCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+              {},
+              {
+                "constraints": [],
+                "description": "system-wide unique identifier for the resource from which you are making a connection",
+                "label": "from member composite identifier",
+                "name": "fromMemberCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+              {},
+              {
+                "constraints": [
+                  {
+                    "message": "must be a non-empty string",
+                    "name": "non-empty string",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "text for the note",
+                "label": "text",
+                "name": "text",
+                "type": "TEXT_FIELD",
+              },
+              {
+                "constraints": [
+                  {
+                    "message": "Must be a valid \${propertyLabel}",
+                    "name": "IS_ENUM",
+                  },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the language in which you are writing the note",
+                "label": "language code",
+                "name": "languageCode",
+                "options": [
+                  {
+                    "display": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "display": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "display": "English",
+                    "value": "en",
+                  },
+                  {
+                    "display": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "display": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "display": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "display": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+                "type": "STATIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+                "type": "term",
+              },
+            },
+          },
+          "label": "Connect Resources with Note",
+          "type": "CONNECT_RESOURCES_WITH_NOTE",
+        },
+        {
+          "description": "Translate an existing term (typically from the language to English)",
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
+                    "message": "must be a non-empty string",
+                    "name": "non-empty string",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "translation for the given term",
+                "label": "translation",
+                "name": "translation",
+                "type": "TEXT_FIELD",
+              },
+              {
+                "constraints": [
+                  {
+                    "message": "Must be a valid \${propertyLabel}",
+                    "name": "IS_ENUM",
+                  },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "language in which you are translating the term (typically English)",
+                "label": "language code",
+                "name": "languageCode",
+                "options": [
+                  {
+                    "display": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "display": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "display": "English",
+                    "value": "en",
+                  },
+                  {
+                    "display": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "display": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "display": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "display": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+                "type": "STATIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+                "type": "term",
+              },
+            },
+          },
+          "label": "Translate Term",
+          "type": "TRANSLATE_TERM",
+        },
+        {
+          "description": "add audio for an existing term",
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
+                    "message": "must be a UUID",
+                    "name": "UUID",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "reference to an audio item",
+                "label": "audio item ID",
+                "name": "audioItemId",
+                "options": {
+                  "aggregateType": "audioItem",
+                },
+                "type": "DYNAMIC_SELECT",
+              },
+              {
+                "constraints": [
+                  {
+                    "message": "Must be a valid \${propertyLabel}",
+                    "name": "IS_ENUM",
+                  },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the language of the audio",
+                "label": "language code",
+                "name": "languageCode",
+                "options": [
+                  {
+                    "display": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "display": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "display": "English",
+                    "value": "en",
+                  },
+                  {
+                    "display": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "display": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "display": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "display": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+                "type": "STATIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+                "type": "term",
+              },
+            },
+          },
+          "label": "add audio for term",
+          "type": "ADD_AUDIO_FOR_TERM",
+        },
+      ],
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
       "isPublished": true,
