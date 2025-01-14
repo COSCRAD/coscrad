@@ -1,5 +1,7 @@
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
+import { InternalError } from '../../../../../lib/errors/InternalError';
 import {
     IVocabularyListQueryRepository,
     VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
@@ -23,6 +25,13 @@ export class VocabularyListFilterPropertyRegisteredEventHandler implements ICosc
     }: VocabularyListFilterPropertyRegistered): Promise<void> {
         // Has this been done?
         // TODO translate checkbox -> switch
-        await this.queryRepository.registerFilterProperty(id, name, type, allowedValuesAndLabels);
+        await this.queryRepository
+            .registerFilterProperty(id, name, type, allowedValuesAndLabels)
+            .catch((e) => {
+                return new InternalError(
+                    `Failed to register vocabulary list filter p roperty for (${name})[${id}] in Arango query database`,
+                    isNonEmptyString(e?.message) ? [new InternalError(e.message)] : []
+                );
+            });
     }
 }

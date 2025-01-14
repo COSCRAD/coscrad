@@ -1,9 +1,4 @@
-import {
-    AggregateType,
-    IValueAndDisplay,
-    IVocabularyListViewModel,
-    LanguageCode,
-} from '@coscrad/api-interfaces';
+import { AggregateType, IValueAndDisplay, LanguageCode } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -149,7 +144,7 @@ describe(`VocabularyListFilterPropertyRegistered.handle`, () => {
             // assert
             const updatedView = (await testQueryRepository.fetchById(
                 existingView.id
-            )) as IVocabularyListViewModel;
+            )) as EventSourcedVocabularyListViewModel;
 
             const foundField = updatedView.form.fields.find(
                 ({ name }) => name === filterPropertyName
@@ -173,6 +168,12 @@ describe(`VocabularyListFilterPropertyRegistered.handle`, () => {
             );
 
             expect(missingOptions).toHaveLength(0);
+
+            // Users are allowed to register mutliple filter properties
+            expect(updatedView.actions).toContain('REGISTER_VOCABULARY_LIST_FILTER_PROPERTY');
+
+            // This should now be available
+            expect(updatedView.actions).toContain('ANALYZE_TERM_IN_VOCABULARY_LIST');
         });
     });
 });

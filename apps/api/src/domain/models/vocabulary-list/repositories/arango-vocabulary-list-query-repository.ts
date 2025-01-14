@@ -33,9 +33,7 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
         );
     }
 
-    async fetchById(
-        id: AggregateId
-    ): Promise<Maybe<IVocabularyListViewModel & { actions: ICommandFormAndLabels[] }>> {
+    async fetchById(id: AggregateId): Promise<Maybe<IVocabularyListViewModel>> {
         const documentSearchResult = await this.database.fetchById(id);
 
         return isNotFound(documentSearchResult)
@@ -45,23 +43,17 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
               });
     }
 
-    async fetchMany(): Promise<
-        (IVocabularyListViewModel & { actions: ICommandFormAndLabels[] })[]
-    > {
+    async fetchMany(): Promise<IVocabularyListViewModel[]> {
         const documents = await this.database.fetchMany();
 
-        return documents.map(mapDatabaseDocumentToEntityDto) as (IVocabularyListViewModel & {
-            actions: ICommandFormAndLabels[];
-        })[];
+        return documents.map(mapDatabaseDocumentToEntityDto) as IVocabularyListViewModel[];
     }
 
     async count(): Promise<number> {
         return this.database.getCount();
     }
 
-    async create(
-        view: IVocabularyListViewModel & { actions: ICommandFormAndLabels[] }
-    ): Promise<void> {
+    async create(view: IVocabularyListViewModel): Promise<void> {
         // TODO If we're going to throw here, we need to wrap the top level event handlers in a try...catch
         return this.database.create(mapEntityDtoToDatabaseDocument(view)).catch((error) => {
             throw new InternalError(
@@ -71,9 +63,7 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
         });
     }
 
-    async createMany(
-        views: (IVocabularyListViewModel & { actions: ICommandFormAndLabels[] })[]
-    ): Promise<void> {
+    async createMany(views: IVocabularyListViewModel[]): Promise<void> {
         return this.database
             .createMany(views.map(mapEntityDtoToDatabaseDocument))
             .catch((error) => {
@@ -227,16 +217,15 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
         };
 
         /**
-         * We need to figure out why we get the dreaded `write-write` conflict
-         * with arango.
-         *
-         * Note that the following query works fine when executed from the ArangoDB dashboard:
-         *
+         * Note that we use `UNION_DISTINCT` to update actions in case this event has already been seen
+         * once. We only need to open the option to `AnalyzeTermInVocabularyList`
+         * on the first play.
          * **/
         const query = `
             for v in @@collectionName
                 filter v._key == @id
                 update v with {
+                actions: UNION_DISTINCT(v.actions,["ANALYZE_TERM_IN_VOCABULARY_LIST"]),
                 form: {
                 fields: push(v.form.fields,{
                     name: @name,
@@ -246,6 +235,8 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
                 }
                 } in @@collectionName
                 OPTIONS { mergeObjects: false }
+
+                RETURN NEW
         `;
 
         const cursor = await this.database
@@ -260,7 +251,8 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
                 );
             });
 
-        await cursor.all();
+        const _new = await cursor.all();
+        console.log({ _new: JSON.stringify(_new) });
     }
 
     async addTerm(vocabularyListId: AggregateId, termId: AggregateId): Promise<void> {

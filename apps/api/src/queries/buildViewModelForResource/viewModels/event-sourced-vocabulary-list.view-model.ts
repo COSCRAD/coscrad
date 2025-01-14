@@ -1,8 +1,6 @@
 import {
     ContributorWithId,
     FormFieldType,
-    ICommandFormAndLabels,
-    IDetailQueryResult,
     IDynamicForm,
     IFormField,
     IMultilingualText,
@@ -17,16 +15,19 @@ import {
     VocabularyListCreated,
     VocabularyListFilterPropertyRegistered,
 } from '../../../domain/models/vocabulary-list/commands';
+/**
+ * TODO Rename this class `VocabularyListViewModel` and remove the legacy state-based
+ * view model.
+ */
 
-export class EventSourcedVocabularyListViewModel
-    implements IDetailQueryResult<IVocabularyListViewModel>
-{
+export class EventSourcedVocabularyListViewModel implements IVocabularyListViewModel {
     entries: IVocabularyListEntry<string | boolean>[];
     form: IDynamicForm;
     contributions: ContributorWithId[];
     name: IMultilingualText;
     id: string;
-    actions: ICommandFormAndLabels[];
+    // note that these are mapped to form specifications in the query service layer
+    actions: string[];
     isPublished: boolean;
     accessControlList: { allowedUserIds: string[]; allowedGroupIds: string[] };
 
@@ -54,7 +55,14 @@ export class EventSourcedVocabularyListViewModel
         // TODO we should serialize when returning from the query service automatically so we can use instances here if we'd like
         view.name = buildMultilingualTextWithSingleItem(textForName, languageCodeForName).toDTO();
 
-        view.actions = [];
+        view.actions = [
+            'PUBLISH_RESOURCE',
+            'CREATE_NOTE_ABOUT_RESOURCE',
+            'CONNECT_RESOURCES_WITH_NOTE',
+            'TRANSLATE_VOCABULARY_LIST_NAME',
+            'ADD_TERM_TO_VOCABULARY_LIST',
+            'REGISTER_VOCABULARY_LIST_FILTER_PROPERTY',
+        ];
 
         view.accessControlList = new AccessControlList();
 

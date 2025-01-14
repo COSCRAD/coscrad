@@ -1,4 +1,4 @@
-import { AggregateType, IVocabularyListViewModel, LanguageCode } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -120,7 +120,7 @@ describe(`VocabularyListNameTranslatedEventHandler`, () => {
 
             expect(searchResult).not.toBe(NotFound);
 
-            const updatedView = searchResult as IVocabularyListViewModel;
+            const updatedView = searchResult as EventSourcedVocabularyListViewModel;
 
             const updatedName = new MultilingualText(updatedView.name);
 
@@ -134,6 +134,11 @@ describe(`VocabularyListNameTranslatedEventHandler`, () => {
             expect(foundText).toBe(translationText);
 
             expect(foundLanguageCode).toBe(translationLanguageCode);
+
+            /**
+             * We currently allow translation into multiple target languages.
+             */
+            expect(updatedView.actions).toContain('TRANSLATE_VOCABULARY_LIST_NAME');
         });
     });
 });
