@@ -130,7 +130,7 @@ export class TermViewModel implements ITermViewModel, HasAggregateId {
         const { contributions, name, id, actions, accessControlList, mediaItemId, isPublished } =
             dto;
 
-        term.contributions = contributions;
+        term.contributions = Array.isArray(contributions) ? contributions : [];
 
         term.name = name;
 
