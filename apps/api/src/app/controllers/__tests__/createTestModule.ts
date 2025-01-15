@@ -12,6 +12,7 @@ import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-g
 import { ConsoleCoscradCliLogger } from '../../../coscrad-cli/logging';
 import { CoscradEventFactory, CoscradEventUnion } from '../../../domain/common';
 import { ObservableInMemoryEventPublisher } from '../../../domain/common/events/in-memory-event-publisher';
+import { EVENT_PUBLISHER_TOKEN } from '../../../domain/common/events/interfaces';
 import { ID_MANAGER_TOKEN } from '../../../domain/interfaces/id-manager.interface';
 import { AudioItemController } from '../../../domain/models/audio-visual/application/audio-item.controller';
 import { VideoController } from '../../../domain/models/audio-visual/application/video.controller';
@@ -391,6 +392,10 @@ export default async (
                         configOverrides,
                         buildConfigFilePath(Environment.test)
                     ),
+            },
+            {
+                provide: EVENT_PUBLISHER_TOKEN,
+                useValue: new ObservableInMemoryEventPublisher(new ConsoleCoscradCliLogger()),
             },
             {
                 provide: ArangoConnectionProvider,
