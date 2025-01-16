@@ -213,6 +213,7 @@ export class PersistenceModule implements OnApplicationShutdown {
                 audioQueryRepositoryProvider,
                 termQueryRepositoryProvider,
                 queryRepositoryProvider,
+                EventModule,
             ],
             global: true,
         };

@@ -3,6 +3,20 @@
 exports[`when querying for a term: fetch by Id when the user is authenticated when the user is a project admin when there is a term with the given Id when the term is published should return the expected result 1`] = `
 [
   {
+    "description": "Make a resource visible to the public",
+    "form": {
+      "fields": [],
+      "prepopulatedFields": {
+        "aggregateCompositeIdentifier": {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
+          "type": "term",
+        },
+      },
+    },
+    "label": "Publish Resource",
+    "type": "PUBLISH_RESOURCE",
+  },
+  {
     "description": "creates a note about this particular resource",
     "form": {
       "fields": [

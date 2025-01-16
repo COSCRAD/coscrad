@@ -68,7 +68,6 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
 
     // Commands (mutate state)
     async create(databaseDocument: ArangoDatabaseDocument<TEntity>) {
-        // Handle the difference in _id \ _key between model and database
         return this.#arangoDatabase.create(databaseDocument, this.#collectionID).catch((error) => {
             throw new InternalError(
                 `ArangoDatabase for collection: ${
