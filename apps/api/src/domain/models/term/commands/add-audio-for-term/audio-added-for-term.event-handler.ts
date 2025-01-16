@@ -10,8 +10,6 @@ export class AudioAddedForTermEventHandler implements ICoscradEventHandler {
     ) {}
 
     async handle(event: AudioAddedForTerm): Promise<void> {
-        if (!event.isOfType('AUDIO_ADDED_FOR_TERM')) return;
-
         const {
             payload: {
                 audioItemId,

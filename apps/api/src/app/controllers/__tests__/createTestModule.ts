@@ -11,7 +11,6 @@ import { MockJwtStrategy } from '../../../authorization/mock-jwt.strategy';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
 import { ConsoleCoscradCliLogger } from '../../../coscrad-cli/logging';
 import { CoscradEventFactory, CoscradEventUnion, EventModule } from '../../../domain/common';
-import { ObservableInMemoryEventPublisher } from '../../../domain/common/events/in-memory-event-publisher';
 import { EVENT_PUBLISHER_TOKEN } from '../../../domain/common/events/interfaces';
 import { SyncInMemoryEventPublisher } from '../../../domain/common/events/sync-in-memory-event-publisher';
 import { ID_MANAGER_TOKEN } from '../../../domain/interfaces/id-manager.interface';
@@ -690,11 +689,6 @@ export default async (
                     CoscradEventFactory,
                     DynamicDataTypeFinderService,
                 ],
-            },
-            {
-                provide: 'COSCRAD_EVENT_PUBLISHER',
-                useFactory: () =>
-                    new ObservableInMemoryEventPublisher(new ConsoleCoscradCliLogger()),
             },
             ...dataClassProviders,
 

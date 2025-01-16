@@ -14,10 +14,6 @@ export class TermTranslatedEventHandler implements ICoscradEventHandler {
     ) {}
 
     async handle(event: TermTranslated): Promise<void> {
-        // TODO Use dynamic registration
-        // TODO remove these
-        if (!event.isOfType('TERM_TRANSLATED')) return;
-
         const {
             payload: {
                 aggregateCompositeIdentifier: { id: termId },

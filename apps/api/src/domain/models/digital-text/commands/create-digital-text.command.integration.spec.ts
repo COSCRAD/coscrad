@@ -181,8 +181,6 @@ describe('CreateDigitalText', () => {
                         await app
                             .get(ArangoEventRepository)
                             .appendEvent(creationEventForDigitalTextWithSameTitle);
-
-                        console.log('done');
                     },
                     buildCommandFSA: buildValidCommandFSA,
                 });

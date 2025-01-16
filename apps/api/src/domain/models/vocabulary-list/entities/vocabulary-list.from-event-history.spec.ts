@@ -192,8 +192,6 @@ describe(`VocabularyList.fromEventHistory`, () => {
                 const eventHistory = termInVocabularyListAnalyzed
                     .as(vocabularyListCompositeIdentfier)
                     .map((event) => {
-                        if (!event.isOfType(`TERM_IN_VOCABULARY_LIST_ANALYZED`)) return event;
-
                         const eventToFix = event as TermInVocabularyListAnalyzed;
 
                         /**
