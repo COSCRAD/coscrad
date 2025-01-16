@@ -61,6 +61,10 @@ export class TermViewModel implements ITermViewModel, HasAggregateId {
 
         term.actions = []; // TODO build all actions here
 
+        /**
+         * Note that this must be written in the DB by the event-handler, as
+         * we do not have access to the contributors in this scope.
+         */
         term.contributions = [];
 
         /**
@@ -130,7 +134,7 @@ export class TermViewModel implements ITermViewModel, HasAggregateId {
         const { contributions, name, id, actions, accessControlList, mediaItemId, isPublished } =
             dto;
 
-        term.contributions = contributions;
+        term.contributions = Array.isArray(contributions) ? contributions : [];
 
         term.name = name;
 

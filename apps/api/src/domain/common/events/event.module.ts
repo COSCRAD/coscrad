@@ -26,10 +26,6 @@ import { SyncInMemoryEventPublisher } from './sync-in-memory-event-publisher';
         {
             provide: EVENT_PUBLISHER_TOKEN,
             useFactory: () => new SyncInMemoryEventPublisher(new ConsoleCoscradCliLogger()),
-            // new InMemoryEventPublisher(
-            //     // TODO We need to work on our logging strategy
-            //     new ConsoleCoscradCliLogger()
-            // ),
         },
     ],
     exports: [CoscradEventFactory, EVENT_PUBLISHER_TOKEN],
@@ -45,13 +41,15 @@ export class EventModule {
     ) {}
 
     onApplicationBootstrap() {
-        const handlersAndTypes = this.discoveryService
+        const allInstancesAndMeta = this.discoveryService
             .getProviders()
             .filter((provider) => provider.instance)
             .map((provider) => [
                 provider.instance,
                 getCoscradEventConsumerMeta(Object.getPrototypeOf(provider.instance).constructor),
-            ])
+            ]);
+
+        const handlersAndTypes = allInstancesAndMeta
             .filter(
                 (
                     instanceAndMeta

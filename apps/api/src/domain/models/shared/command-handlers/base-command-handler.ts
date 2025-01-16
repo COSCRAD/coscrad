@@ -10,6 +10,7 @@ import { InternalError, isInternalError } from '../../../../lib/errors/InternalE
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../persistence/constants/persistenceConstants';
 import { ResultOrError } from '../../../../types/ResultOrError';
+import { EVENT_PUBLISHER_TOKEN, ICoscradEventPublisher } from '../../../common/events/interfaces';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
@@ -31,7 +32,8 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN)
         protected readonly repositoryProvider: IRepositoryProvider,
-        @Inject('ID_MANAGER') protected readonly idManager: IIdManager
+        @Inject('ID_MANAGER') protected readonly idManager: IIdManager,
+        @Inject(EVENT_PUBLISHER_TOKEN) protected readonly eventPublisher: ICoscradEventPublisher
     ) {}
 
     protected getAggregateIdFromCommand({

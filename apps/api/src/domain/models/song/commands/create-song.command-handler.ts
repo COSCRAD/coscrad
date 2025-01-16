@@ -8,7 +8,9 @@ import { isOK } from '../../../../lib/types/ok';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../persistence/constants/persistenceConstants';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
+import { EVENT_PUBLISHER_TOKEN } from '../../../common';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
+import { ICoscradEventPublisher } from '../../../common/events/interfaces';
 import { Valid } from '../../../domainModelValidators/Valid';
 import getInstanceFactoryForResource from '../../../factories/get-instance-factory-for-resource';
 import { EVENT, IIdManager } from '../../../interfaces/id-manager.interface';
@@ -38,9 +40,10 @@ export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN)
         protected readonly repositoryProvider: IRepositoryProvider,
-        @Inject('ID_MANAGER') protected readonly idManager: IIdManager
+        @Inject('ID_MANAGER') protected readonly idManager: IIdManager,
+        @Inject(EVENT_PUBLISHER_TOKEN) protected readonly eventPublisher: ICoscradEventPublisher
     ) {
-        super(repositoryProvider, idManager);
+        super(repositoryProvider, idManager, eventPublisher);
 
         this.repositoryForCommandsTargetAggregate = this.repositoryProvider.forResource<Song>(
             ResourceType.song

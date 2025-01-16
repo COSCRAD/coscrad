@@ -1,5 +1,7 @@
 import { CommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
+import { EVENT_PUBLISHER_TOKEN } from '../../../../../domain/common';
+import { ICoscradEventPublisher } from '../../../../../domain/common/events/interfaces';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
@@ -28,9 +30,10 @@ export class TagResourceOrNoteCommandHandler extends BaseUpdateCommandHandler<Ta
         @Inject('ID_MANAGER') protected readonly idManager: IIdManager,
 
         // TODO Make Tags fully event sourced
-        @Inject(ArangoEventRepository) protected readonly eventRepository: IEventRepository
+        @Inject(ArangoEventRepository) protected readonly eventRepository: IEventRepository,
+        @Inject(EVENT_PUBLISHER_TOKEN) protected readonly eventPublisher: ICoscradEventPublisher
     ) {
-        super(repositoryProvider, idManager);
+        super(repositoryProvider, idManager, eventPublisher);
     }
 
     protected async fetchRequiredExternalState({
