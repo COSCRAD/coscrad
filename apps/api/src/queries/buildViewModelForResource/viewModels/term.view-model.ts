@@ -61,6 +61,10 @@ export class TermViewModel implements ITermViewModel, HasAggregateId {
 
         term.actions = []; // TODO build all actions here
 
+        /**
+         * Note that this must be written in the DB by the event-handler, as
+         * we do not have access to the contributors in this scope.
+         */
         term.contributions = [];
 
         /**
