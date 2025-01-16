@@ -48,6 +48,19 @@ export class SyncInMemoryEventPublisher implements ICoscradEventPublisher {
             this.eventTypeToConsumers.set(eventType, []);
         }
 
-        this.eventTypeToConsumers.get(eventType).push(eventConsumer);
+        /**
+         * We want registration to be idempotent in case this module is somehow
+         * initialized multiple times.
+         */
+        if (!this.has(eventType, eventConsumer))
+            this.eventTypeToConsumers.get(eventType).push(eventConsumer);
+    }
+
+    private has(eventType: string, eventConsumer: ICoscradEventHandler) {
+        return (
+            this.eventTypeToConsumers.has(eventType) &&
+            // Compare by reference
+            this.eventTypeToConsumers.get(eventType).some((handler) => handler === eventConsumer)
+        );
     }
 }

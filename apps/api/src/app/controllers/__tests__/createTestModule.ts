@@ -10,7 +10,10 @@ import { MockJwtAuthGuard } from '../../../authorization/mock-jwt-auth-guard';
 import { MockJwtStrategy } from '../../../authorization/mock-jwt.strategy';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
 import { ConsoleCoscradCliLogger } from '../../../coscrad-cli/logging';
-import { CoscradEventFactory, CoscradEventUnion } from '../../../domain/common';
+import { CoscradEventFactory, CoscradEventUnion, EventModule } from '../../../domain/common';
+import { ObservableInMemoryEventPublisher } from '../../../domain/common/events/in-memory-event-publisher';
+import { EVENT_PUBLISHER_TOKEN } from '../../../domain/common/events/interfaces';
+import { SyncInMemoryEventPublisher } from '../../../domain/common/events/sync-in-memory-event-publisher';
 import { ID_MANAGER_TOKEN } from '../../../domain/interfaces/id-manager.interface';
 import { AudioItemController } from '../../../domain/models/audio-visual/application/audio-item.controller';
 import { VideoController } from '../../../domain/models/audio-visual/application/video.controller';
@@ -143,8 +146,12 @@ import {
     UnpublishResource,
     UnpublishResourceCommandHandler,
 } from '../../../domain/models/shared/common-commands';
+import { ResourceReadAccessGrantedToUserEventHandler } from '../../../domain/models/shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
 import { ResourcePublished } from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event';
-import { IQueryRepositoryProvider } from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
+import {
+    IQueryRepositoryProvider,
+    ResourcePublishedEventHandler,
+} from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
 import {
     AddLyricsForSong,
     AddLyricsForSongCommandHandler,
@@ -187,10 +194,15 @@ import {
     PromptTermCreated,
     TermCreated,
     TermElicitedFromPrompt,
+    TermElicitedFromPromptEventHandler,
     TermTranslated,
     TranslateTerm,
     TranslateTermCommandHandler,
 } from '../../../domain/models/term/commands';
+import { AudioAddedForTermEventHandler } from '../../../domain/models/term/commands/add-audio-for-term/audio-added-for-term.event-handler';
+import { PromptTermCreatedEventHandler } from '../../../domain/models/term/commands/create-prompt-term/prompt-term-created.event-handler';
+import { TermCreatedEventHandler } from '../../../domain/models/term/commands/create-term/term-created.event-handler';
+import { TermTranslatedEventHandler } from '../../../domain/models/term/commands/translate-term/term-translated.event-handler';
 import { Term } from '../../../domain/models/term/entities/term.entity';
 import {
     ITermQueryRepository,
@@ -380,6 +392,7 @@ export default async (
             CommandModule,
             PassportModule.register({ defaultStrategy: 'jwt' }),
             DynamicDataTypeModule,
+            EventModule,
         ],
         providers: [
             CommandInfoService,
@@ -390,6 +403,10 @@ export default async (
                         configOverrides,
                         buildConfigFilePath(Environment.test)
                     ),
+            },
+            {
+                provide: EVENT_PUBLISHER_TOKEN,
+                useValue: new SyncInMemoryEventPublisher(new ConsoleCoscradCliLogger()),
             },
             {
                 provide: ArangoConnectionProvider,
@@ -674,7 +691,13 @@ export default async (
                     DynamicDataTypeFinderService,
                 ],
             },
+            {
+                provide: 'COSCRAD_EVENT_PUBLISHER',
+                useFactory: () =>
+                    new ObservableInMemoryEventPublisher(new ConsoleCoscradCliLogger()),
+            },
             ...dataClassProviders,
+
             /**
              * TODO [https://www.pivotaltracker.com/story/show/182576828]
              *
@@ -799,6 +822,14 @@ export default async (
             AddContentToDigitalTextPageCommandHandler,
             CreatePhotograph,
             CreatePhotographCommandHandler,
+            // Event Handlers
+            ResourcePublishedEventHandler,
+            ResourceReadAccessGrantedToUserEventHandler,
+            TermCreatedEventHandler,
+            TermTranslatedEventHandler,
+            PromptTermCreatedEventHandler,
+            TermElicitedFromPromptEventHandler,
+            AudioAddedForTermEventHandler,
         ],
 
         controllers: [

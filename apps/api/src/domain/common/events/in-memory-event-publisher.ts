@@ -17,7 +17,6 @@ export class ObservableInMemoryEventPublisher
         super();
     }
 
-    // todo make this async
     publish(eventOrEvents: ICoscradEvent<unknown> | ICoscradEvent<unknown>[]): void {
         const eventsToPublish = Array.isArray(eventOrEvents) ? eventOrEvents : [eventOrEvents];
 
@@ -56,7 +55,11 @@ export class ObservableInMemoryEventPublisher
     }
 
     private ofEventType(type: string) {
-        return this.subject$.pipe(filter((event) => event.isOfType(type)));
+        return this.subject$.pipe(
+            filter((event) => {
+                return event.isOfType(type);
+            })
+        );
     }
 
     onModuleDestroy() {

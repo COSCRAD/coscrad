@@ -3,23 +3,17 @@ import {
     CoscradUserRole,
     HttpStatusCode,
     LanguageCode,
-    ResourceType,
+    MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import httpStatusCodes from '../../app/constants/httpStatusCodes';
 import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
 import getValidAggregateInstanceForTest from '../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
-import { ICoscradEvent, ICoscradEventHandler } from '../../domain/common';
+import { MultilingualText } from '../../domain/common/entities/multilingual-text';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
-import { ResourceReadAccessGrantedToUser } from '../../domain/models/shared/common-commands';
-import { ResourceReadAccessGrantedToUserEventHandler } from '../../domain/models/shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
-import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
-import { ResourcePublishedEventHandler } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
-import { TermCreated, TermTranslated } from '../../domain/models/term/commands';
-import { AudioAddedForTermEventHandler } from '../../domain/models/term/commands/add-audio-for-term/audio-added-for-term.event-handler';
-import { TermCreatedEventHandler } from '../../domain/models/term/commands/create-term/term-created.event-handler';
-import { TermTranslatedEventHandler } from '../../domain/models/term/commands/translate-term/term-translated.event-handler';
+import { AccessControlList } from '../../domain/models/shared/access-control/access-control-list.entity';
+import { TermCreated } from '../../domain/models/term/commands';
 import {
     ITermQueryRepository,
     TERM_QUERY_REPOSITORY_TOKEN,
@@ -28,14 +22,14 @@ import { CoscradUserGroup } from '../../domain/models/user-management/group/enti
 import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../domain/models/user-management/user/entities/user/coscrad-user.entity';
 import { FullName } from '../../domain/models/user-management/user/entities/user/full-name.entity';
-import { InternalError } from '../../lib/errors/InternalError';
+import { clonePlainObjectWithOverrides } from '../../lib/utilities/clonePlainObjectWithOverrides';
 import { ArangoCollectionId } from '../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestDataInFlatFormat from '../../test-data/buildTestDataInFlatFormat';
 import { TestEventStream } from '../../test-data/events';
-import { TermViewModel } from '../buildViewModelForResource/viewModels';
+import { TermViewModel } from '../buildViewModelForResource/viewModels/term.view-model';
 
 const indexEndpoint = `/resources/terms`;
 
@@ -65,6 +59,11 @@ const translationLanguage = LanguageCode.English;
 
 const termId = buildDummyUuid(101);
 
+const termCompositeIdentifier = {
+    type: AggregateType.term,
+    id: termId,
+};
+
 const termIdUnpublishedNoUserAccessId = buildDummyUuid(102);
 
 const termIdUnpublishedWithUserAccessId = buildDummyUuid(103);
@@ -92,50 +91,42 @@ const termCreated = new TestEventStream().andThen<TermCreated>({
     },
 });
 
-const termTranslated = termCreated.andThen<TermTranslated>({
-    type: 'TERM_TRANSLATED',
-    payload: {
-        translation: termTranslation,
+const dummyTermView = clonePlainObjectWithOverrides(
+    TermViewModel.fromTermCreated(termCreated.as(termCompositeIdentifier)[0] as TermCreated),
+    {
+        contributions: [
+            {
+                id: dummyContributor.id,
+                fullName: dummyContributor.fullName.toString(),
+            },
+        ],
+    }
+);
+
+const publicTermView = clonePlainObjectWithOverrides(dummyTermView, {
+    isPublished: true,
+    name: new MultilingualText(dummyTermView.name).translate({
+        text: termTranslation,
         languageCode: translationLanguage,
-    },
+        role: MultilingualTextItemRole.freeTranslation,
+        // we are insisting by casting that the call to `translate` won't fail above
+    }) as MultilingualText,
 });
 
-const termPrivateThatUserCanAccess = termTranslated.andThen<ResourceReadAccessGrantedToUser>({
-    type: 'RESOURCE_READ_ACCESS_GRANTED_TO_USER',
-    payload: {
-        userId: dummyQueryUserId,
-    },
+const privateTermThatUserCanAccess = clonePlainObjectWithOverrides(publicTermView, {
+    id: termIdUnpublishedWithUserAccessId,
+    isPublished: false,
+    accessControlList: new AccessControlList().allowUser(dummyQueryUserId),
 });
 
-const termPublished = termTranslated.andThen<ResourcePublished>({
-    type: 'RESOURCE_PUBLISHED',
+const privateTermUserCannotAccess = clonePlainObjectWithOverrides(publicTermView, {
+    id: termIdUnpublishedNoUserAccessId,
+    isPublished: false,
+    // no special access
+    accessControlList: new AccessControlList(),
 });
 
 // const promptTermId = buildDummyUuid(2)
-
-/**
- * TODO We need to find a more maintainable way of
- * seeding the required initial state.
- */
-const buildEventHandlers = (termQueryRepository: ITermQueryRepository) => [
-    new TermCreatedEventHandler(termQueryRepository),
-    new TermTranslatedEventHandler(termQueryRepository),
-    new AudioAddedForTermEventHandler(termQueryRepository),
-    // TODO update this to take in a generic query repository provider
-    new ResourceReadAccessGrantedToUserEventHandler(termQueryRepository),
-    new ResourcePublishedEventHandler({
-        // TODO break this out into an ArangoQueryRepositoryProvider
-        forResource(resourceType: ResourceType) {
-            if (resourceType === ResourceType.term) {
-                return termQueryRepository;
-            }
-
-            throw new InternalError(
-                `Resource Type: ${resourceType} is not supported by the query repository provider`
-            );
-        },
-    }),
-];
 
 describe(`when querying for a term: fetch many`, () => {
     const testDatabaseName = generateDatabaseNameForTestSuite();
@@ -144,39 +135,17 @@ describe(`when querying for a term: fetch many`, () => {
 
     let testRepositoryProvider: TestRepositoryProvider;
 
-    let termQueryRepository: ITermQueryRepository;
-
     let databaseProvider: ArangoDatabaseProvider;
 
-    let handlers: ICoscradEventHandler[];
+    let termQueryRepository: ITermQueryRepository;
 
-    let seedTerms: (eventHistory: ICoscradEvent[]) => Promise<void>;
+    let seedTerms: (terms: TermViewModel[]) => Promise<void>;
 
     afterAll(async () => {
         await app.close();
 
         databaseProvider.close();
     });
-
-    const eventsForPrivateTermUserCannotAccess = termTranslated.as({
-        id: termIdUnpublishedNoUserAccessId,
-        type: AggregateType.term,
-    });
-
-    const eventsForPrivateTermUserCanAccess = termPrivateThatUserCanAccess.as({
-        id: termIdUnpublishedWithUserAccessId,
-        type: AggregateType.term,
-    });
-
-    const eventHistoryForManyUnpublished = [
-        ...eventsForPrivateTermUserCannotAccess,
-        ...eventsForPrivateTermUserCanAccess,
-    ];
-
-    const eventHistoryForManyWithPublishedTerm = [
-        ...eventHistoryForManyUnpublished,
-        ...termPublished.as({ id: termId, type: AggregateType.term }),
-    ];
 
     describe(`when the user is unauthenticated`, () => {
         beforeAll(async () => {
@@ -191,14 +160,8 @@ describe(`when querying for a term: fetch many`, () => {
 
             termQueryRepository = app.get(TERM_QUERY_REPOSITORY_TOKEN);
 
-            handlers = buildEventHandlers(termQueryRepository);
-
-            seedTerms = async (events: ICoscradEvent[]) => {
-                for (const e of events) {
-                    for (const h of handlers) {
-                        await h.handle(e);
-                    }
-                }
+            seedTerms = async (terms: TermViewModel[]) => {
+                await termQueryRepository.createMany(terms);
             };
         });
 
@@ -212,7 +175,11 @@ describe(`when querying for a term: fetch many`, () => {
 
                 await testRepositoryProvider.getContributorRepository().create(dummyContributor);
 
-                await seedTerms(eventHistoryForManyWithPublishedTerm);
+                await seedTerms([
+                    publicTermView,
+                    privateTermThatUserCanAccess,
+                    privateTermUserCannotAccess,
+                ]);
             });
 
             it(`should only return published terms`, async () => {
@@ -259,7 +226,11 @@ describe(`when querying for a term: fetch many`, () => {
 
                 await testRepositoryProvider.getContributorRepository().create(dummyContributor);
 
-                await seedTerms(eventHistoryForManyUnpublished);
+                /**
+                 * Note that there is no ordinary system user authenticated for the request
+                 * in this scenario. This is a public request.
+                 */
+                await seedTerms([privateTermUserCannotAccess, privateTermThatUserCanAccess]);
             });
 
             it(`should return no terms`, async () => {
@@ -285,14 +256,8 @@ describe(`when querying for a term: fetch many`, () => {
 
             termQueryRepository = app.get(TERM_QUERY_REPOSITORY_TOKEN);
 
-            handlers = buildEventHandlers(termQueryRepository);
-
-            seedTerms = async (events: ICoscradEvent[]) => {
-                for (const e of events) {
-                    for (const h of handlers) {
-                        await h.handle(e);
-                    }
-                }
+            seedTerms = async (terms: TermViewModel[]) => {
+                await termQueryRepository.createMany(terms);
             };
         });
 
@@ -305,7 +270,12 @@ describe(`when querying for a term: fetch many`, () => {
                         .getDatabaseForCollection(ArangoCollectionId.contributors)
                         .clear();
 
-                    await seedTerms(eventHistoryForManyWithPublishedTerm);
+                    await seedTerms([
+                        publicTermView,
+                        privateTermThatUserCanAccess,
+                        // This one should not be visible to an ordinary user
+                        privateTermUserCannotAccess,
+                    ]);
 
                     await testRepositoryProvider
                         .getContributorRepository()
@@ -334,7 +304,10 @@ describe(`when querying for a term: fetch many`, () => {
                         .getDatabaseForCollection(ArangoCollectionId.contributors)
                         .clear();
 
-                    await seedTerms(eventHistoryForManyUnpublished);
+                    await seedTerms([
+                        // we only seed the accessible term here
+                        privateTermThatUserCanAccess,
+                    ]);
 
                     await testRepositoryProvider
                         .getContributorRepository()
@@ -346,16 +319,11 @@ describe(`when querying for a term: fetch many`, () => {
 
                     expect(res.status).toBe(httpStatusCodes.ok);
 
-                    /**
-                     * + published
-                     * + private, but user in ACL
-                     * - private, user not in ACL
-                     */
-
                     const {
                         body: { entities },
                     } = res;
 
+                    // this is the first and only term we seeded
                     const result = entities[0] as TermViewModel;
 
                     expect(result.id).toBe(termIdUnpublishedWithUserAccessId);
@@ -388,14 +356,8 @@ describe(`when querying for a term: fetch many`, () => {
 
                 termQueryRepository = app.get(TERM_QUERY_REPOSITORY_TOKEN);
 
-                handlers = buildEventHandlers(termQueryRepository);
-
-                seedTerms = async (events: ICoscradEvent[]) => {
-                    for (const e of events) {
-                        for (const h of handlers) {
-                            await h.handle(e);
-                        }
-                    }
+                seedTerms = async (terms: TermViewModel[]) => {
+                    await termQueryRepository.createMany(terms);
                 };
             });
 
@@ -406,7 +368,11 @@ describe(`when querying for a term: fetch many`, () => {
                     .getDatabaseForCollection(ArangoCollectionId.contributors)
                     .clear();
 
-                await seedTerms(eventHistoryForManyWithPublishedTerm);
+                await seedTerms([
+                    publicTermView,
+                    privateTermThatUserCanAccess,
+                    privateTermUserCannotAccess,
+                ]);
 
                 await testRepositoryProvider.getContributorRepository().create(dummyContributor);
             });

@@ -15,7 +15,7 @@ exports[`when querying for a term: fetch many when the user is a project admin s
             "fields": [],
             "prepopulatedFields": {
               "aggregateCompositeIdentifier": {
-                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
                 "type": "term",
               },
             },
@@ -100,7 +100,7 @@ exports[`when querying for a term: fetch many when the user is a project admin s
             ],
             "prepopulatedFields": {
               "aggregateCompositeIdentifier": {
-                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
                 "type": "term",
               },
             },
@@ -193,7 +193,7 @@ exports[`when querying for a term: fetch many when the user is a project admin s
             ],
             "prepopulatedFields": {
               "aggregateCompositeIdentifier": {
-                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
                 "type": "term",
               },
             },
@@ -270,7 +270,7 @@ exports[`when querying for a term: fetch many when the user is a project admin s
             ],
             "prepopulatedFields": {
               "aggregateCompositeIdentifier": {
-                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
                 "type": "term",
               },
             },
@@ -350,7 +350,7 @@ exports[`when querying for a term: fetch many when the user is a project admin s
             ],
             "prepopulatedFields": {
               "aggregateCompositeIdentifier": {
-                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
                 "type": "term",
               },
             },
@@ -359,9 +359,14 @@ exports[`when querying for a term: fetch many when the user is a project admin s
           "type": "ADD_AUDIO_FOR_TERM",
         },
       ],
-      "contributions": [],
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
-      "isPublished": false,
+      "contributions": [
+        {
+          "fullName": "Dumb McContributor",
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110901",
+        },
+      ],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+      "isPublished": true,
       "name": {
         "items": [
           {
@@ -735,7 +740,12 @@ exports[`when querying for a term: fetch many when the user is a project admin s
           "type": "ADD_AUDIO_FOR_TERM",
         },
       ],
-      "contributions": [],
+      "contributions": [
+        {
+          "fullName": "Dumb McContributor",
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110901",
+        },
+      ],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
       "isPublished": false,
       "name": {
@@ -759,6 +769,20 @@ exports[`when querying for a term: fetch many when the user is a project admin s
         "allowedUserIds": [],
       },
       "actions": [
+        {
+          "description": "Make a resource visible to the public",
+          "form": {
+            "fields": [],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+                "type": "term",
+              },
+            },
+          },
+          "label": "Publish Resource",
+          "type": "PUBLISH_RESOURCE",
+        },
         {
           "description": "creates a note about this particular resource",
           "form": {
@@ -836,7 +860,7 @@ exports[`when querying for a term: fetch many when the user is a project admin s
             ],
             "prepopulatedFields": {
               "aggregateCompositeIdentifier": {
-                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
                 "type": "term",
               },
             },
@@ -929,7 +953,7 @@ exports[`when querying for a term: fetch many when the user is a project admin s
             ],
             "prepopulatedFields": {
               "aggregateCompositeIdentifier": {
-                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
                 "type": "term",
               },
             },
@@ -1006,7 +1030,7 @@ exports[`when querying for a term: fetch many when the user is a project admin s
             ],
             "prepopulatedFields": {
               "aggregateCompositeIdentifier": {
-                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
                 "type": "term",
               },
             },
@@ -1086,7 +1110,7 @@ exports[`when querying for a term: fetch many when the user is a project admin s
             ],
             "prepopulatedFields": {
               "aggregateCompositeIdentifier": {
-                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
                 "type": "term",
               },
             },
@@ -1095,9 +1119,14 @@ exports[`when querying for a term: fetch many when the user is a project admin s
           "type": "ADD_AUDIO_FOR_TERM",
         },
       ],
-      "contributions": [],
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
-      "isPublished": true,
+      "contributions": [
+        {
+          "fullName": "Dumb McContributor",
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110901",
+        },
+      ],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+      "isPublished": false,
       "name": {
         "items": [
           {

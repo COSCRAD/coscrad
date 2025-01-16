@@ -3,7 +3,9 @@ import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { CoscradUserRole } from '@coscrad/data-types';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
+import { ConsoleCoscradCliLogger } from '../../../coscrad-cli/logging';
 import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
+import { ObservableInMemoryEventPublisher } from '../../../domain/common/events/in-memory-event-publisher';
 import { IIdManager } from '../../../domain/interfaces/id-manager.interface';
 import { buildFakeTimersConfig } from '../../../domain/models/__tests__/utilities/buildFakeTimersConfig';
 import { CreateSong } from '../../../domain/models/song/commands/create-song.command';
@@ -80,7 +82,11 @@ describe('The Command Controller', () => {
          */
         commandHandlerService.registerHandler(
             'CREATE_SONG',
-            new CreateSongCommandHandler(testRepositoryProvider, idManager)
+            new CreateSongCommandHandler(
+                testRepositoryProvider,
+                idManager,
+                new ObservableInMemoryEventPublisher(new ConsoleCoscradCliLogger())
+            )
         );
 
         jest.useFakeTimers(buildFakeTimersConfig());

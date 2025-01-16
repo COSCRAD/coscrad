@@ -47,7 +47,9 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
     }
 
     async createMany(views: TermViewModel[]): Promise<void> {
-        return this.database.createMany(views.map(mapEntityDTOToDatabaseDocument));
+        const documents = views.map(mapEntityDTOToDatabaseDocument);
+
+        return this.database.createMany(documents);
     }
 
     async publish(id: AggregateId): Promise<void> {
@@ -75,7 +77,9 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
                 throw new InternalError(`Failed to translate term via TermRepository: ${reason}`);
             });
 
-        await cursor.all();
+        const result = await cursor.all();
+
+        result;
     }
 
     /**
