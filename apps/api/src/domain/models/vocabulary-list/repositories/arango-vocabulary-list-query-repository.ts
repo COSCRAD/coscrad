@@ -266,6 +266,9 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
          * have to repeat `mapDatabaseDocumentToEntityDto` here. It feels more
          * natural to do this in the query service.
          */
+        /**
+         * Right now, there are no new commands available upon adding an entry.
+         */
         const query = `
             for v in @@collectionName
             filter v._key == @id

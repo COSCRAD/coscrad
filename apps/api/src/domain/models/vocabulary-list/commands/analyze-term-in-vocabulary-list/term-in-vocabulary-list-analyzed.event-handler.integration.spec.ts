@@ -96,6 +96,8 @@ const [creationEvent, analysisEvent] = termAnalyzed.as({
 // We use event-sourcing for the creation setup only
 const existingView = EventSourcedVocabularyListViewModel.fromVocabularyListCreated(creationEvent);
 
+existingView.actions.push('ANALYZE_TERM_IN_VOCABULARY_LIST');
+
 // here we used state-based test setup for convenience
 existingView.entries = [
     {
@@ -194,6 +196,17 @@ describe(`TermInVocabularyListAnalyzedEventHandler.handle`, () => {
         it(`should add the filter information for the correspoding entry`, async () => {
             // act
             await eventHandler.handle(analysisEvent);
+
+            // TODO add missing test coverage here
+
+            const updatedView = (await testQueryRepository.fetchById(
+                existingView.id
+            )) as EventSourcedVocabularyListViewModel;
+
+            /**
+             * This commmand can be run multiple times.
+             */
+            expect(updatedView.actions).toContain('ANALYZE_TERM_IN_VOCABULARY_LIST');
         });
     });
 });

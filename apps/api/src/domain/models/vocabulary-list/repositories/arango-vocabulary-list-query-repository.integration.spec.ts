@@ -463,7 +463,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
 
                 const updatedView = (await testQueryRepository.fetchById(
                     targetView.id
-                )) as IVocabularyListViewModel;
+                )) as EventSourcedVocabularyListViewModel;
 
                 const {
                     form: { fields },
@@ -489,6 +489,17 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
                 );
 
                 expect(missingOptions).toEqual([]);
+
+                /**
+                 * We may want to consider an alternative option where we
+                 * project the available commands off the view model. For example,
+                 * we don't really want to expose "AnalyzeTerm" if no "Entries"
+                 * have been added.
+                 *
+                 * This is why we should avoid testing this behaviour in the repository
+                 * and test it only at the integration level in the event handler.
+                 */
+                // expect(updatedView.actions).toContain('ANALYZE_TERM_IN_VOCABULARY_LIST');
             });
         });
     });

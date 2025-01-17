@@ -69,6 +69,9 @@ const convertVocabularyListVaraibleToFormElement = ({
     constraints: [],
 });
 
+/**
+ * TODO remove this class
+ */
 export class VocabularyListViewModel
     extends BaseResourceViewModel
     implements IVocabularyListViewModel
