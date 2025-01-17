@@ -120,7 +120,7 @@ describe(`VocabularyListNameTranslatedEventHandler`, () => {
 
             expect(searchResult).not.toBe(NotFound);
 
-            const updatedView = searchResult as EventSourcedVocabularyListViewModel;
+            const updatedView = searchResult as VocabularyListViewModel;
 
             const updatedName = new MultilingualText(updatedView.name);
 
