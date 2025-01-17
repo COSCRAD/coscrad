@@ -29,7 +29,7 @@ export class VocabularyListFilterPropertyRegisteredEventHandler implements ICosc
             .registerFilterProperty(id, name, type, allowedValuesAndLabels)
             .catch((e) => {
                 return new InternalError(
-                    `Failed to register vocabulary list filter p roperty for (${name})[${id}] in Arango query database`,
+                    `Failed to register vocabulary list filter property for (${name})[${id}] in Arango query database`,
                     isNonEmptyString(e?.message) ? [new InternalError(e.message)] : []
                 );
             });

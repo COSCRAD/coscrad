@@ -7,28 +7,39 @@ import {
     IVocabularyListEntry,
     IVocabularyListViewModel,
 } from '@coscrad/api-interfaces';
+import { ApiProperty } from '@nestjs/swagger';
 import { ICoscradEvent } from '../../../domain/common';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
 import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
 import {
     FilterPropertyType,
     VocabularyListCreated,
     VocabularyListFilterPropertyRegistered,
 } from '../../../domain/models/vocabulary-list/commands';
-/**
- * TODO Rename this class `VocabularyListViewModel` and remove the legacy state-based
- * view model.
- */
+import { VocabularyListEntry } from '../../../domain/models/vocabulary-list/vocabulary-list-entry.entity';
 
-export class EventSourcedVocabularyListViewModel implements IVocabularyListViewModel {
+export class VocabularyListViewModel implements IVocabularyListViewModel {
+    @ApiProperty({
+        type: VocabularyListEntry,
+        isArray: true,
+    })
     entries: IVocabularyListEntry<string | boolean>[];
+    // TODO We need a concrete class to include this on the API docs
     form: IDynamicForm;
     contributions: ContributorWithId[];
+    @ApiProperty({
+        type: MultilingualText,
+    })
     name: IMultilingualText;
+    @ApiProperty()
     id: string;
     // note that these are mapped to form specifications in the query service layer
+    @ApiProperty()
     actions: string[];
+    @ApiProperty()
     isPublished: boolean;
+    // this should be removed in query responses
     accessControlList: { allowedUserIds: string[]; allowedGroupIds: string[] };
 
     static fromVocabularyListCreated({
@@ -37,8 +48,8 @@ export class EventSourcedVocabularyListViewModel implements IVocabularyListViewM
             languageCodeForName,
             aggregateCompositeIdentifier: { id: vocabularyListId },
         },
-    }: VocabularyListCreated): EventSourcedVocabularyListViewModel {
-        const view = new EventSourcedVocabularyListViewModel();
+    }: VocabularyListCreated): VocabularyListViewModel {
+        const view = new VocabularyListViewModel();
 
         view.id = vocabularyListId;
 
