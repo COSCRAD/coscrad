@@ -212,8 +212,6 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
                             [AggregateType.note]: [noteForAudiovisualItem],
                         }).fetchFullSnapshotInLegacyFormat()
                     );
-
-                    console.log('done');
                 });
 
                 it(`should write the expected data file`, async () => {
