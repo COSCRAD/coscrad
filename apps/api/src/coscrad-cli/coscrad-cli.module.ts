@@ -9,6 +9,7 @@ import { IdGenerationModule } from '../lib/id-generation/id-generation.module';
 import { MigrationModule } from '../persistence/migrations';
 import { PersistenceModule } from '../persistence/persistence.module';
 import { ClearDatabaseCliCommand } from './clear-database.cli-comand';
+import { PerformanceTestCliCommand } from './cli-commands';
 import { DomainDumpCliCommand } from './data-dump.cli-command';
 import { DomainRestoreCliCommand } from './data-restore.cli-command';
 import { ExecuteCommandStreamCliCommand } from './execute-command-stream.cli-command';
@@ -26,6 +27,11 @@ import { SeedTestDataWithCommand } from './seed-test-data-with-command.cli-comma
 import { SeedTestUuids } from './seed-test-uuids.cli-command';
 import { ValidateInvariantsCliCommand } from './validate-invariants.cli-command';
 
+/**
+ * TODO We should consider exporting the CLI commands near services for a given
+ * vertical slice and using a `Discovery` pattern as we do for (system) command
+ * and event handlers.
+ */
 @Module({
     providers: [
         DomainDumpCliCommand,
@@ -44,6 +50,7 @@ import { ValidateInvariantsCliCommand } from './validate-invariants.cli-command'
         ExportAudioItemLineagesCliCommand,
         ExportSchemasCliCommand,
         RehydrateViewsCliCommand,
+        PerformanceTestCliCommand,
         {
             provide: COSCRAD_LOGGER_TOKEN,
             useClass: ConsoleCoscradCliLogger,
