@@ -21,9 +21,6 @@ export class ResourcePublishedEventHandler implements ICoscradEventHandler {
     ) {}
 
     async handle(event: ResourcePublished): Promise<void> {
-        // TODO move this responsibility elsewhere it is very dangerous and easy to miss
-        if (!event.isOfType('RESOURCE_PUBLISHED')) return;
-
         const {
             payload: {
                 aggregateCompositeIdentifier: { type: resourceType, id },
@@ -43,7 +40,5 @@ export class ResourcePublishedEventHandler implements ICoscradEventHandler {
         }
 
         await queryRepository.publish(id);
-
-        console.log('done');
     }
 }

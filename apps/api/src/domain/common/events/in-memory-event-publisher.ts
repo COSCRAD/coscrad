@@ -7,6 +7,9 @@ import { ICoscradEvent } from './coscrad-event.interface';
 import { ICoscradEventPublisher } from './interfaces';
 import { ObservableBus } from './utils';
 
+/**
+ * @deprecated use `SyncInMemoryEventPublisher`
+ */
 export class ObservableInMemoryEventPublisher
     extends ObservableBus<ICoscradEvent>
     implements ICoscradEventPublisher, OnModuleDestroy

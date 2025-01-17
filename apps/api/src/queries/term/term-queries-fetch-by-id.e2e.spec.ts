@@ -182,8 +182,6 @@ describe(`when querying for a term: fetch by Id`, () => {
                         .getContributorRepository()
                         .create(dummyContributor);
 
-                    console.log('clearing database');
-
                     await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
 
                     await seedTerms([targetTermView]);
