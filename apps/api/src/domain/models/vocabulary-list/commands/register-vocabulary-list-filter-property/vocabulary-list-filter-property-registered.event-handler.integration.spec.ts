@@ -2,6 +2,7 @@ import { AggregateType, IValueAndDisplay, LanguageCode } from '@coscrad/api-inte
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
+import { VocabularyListViewModel } from 'apps/api/src/queries/buildViewModelForResource/viewModels';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/Environment';
@@ -10,7 +11,6 @@ import { ArangoConnectionProvider } from '../../../../../persistence/database/ar
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { EventSourcedVocabularyListViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
 import { TestEventStream } from '../../../../../test-data/events';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { IVocabularyListQueryRepository } from '../../queries';
@@ -69,7 +69,7 @@ const [creationEvent, registrationEvent] = vocabularyListNameTranslated.as({
     id: vocabularyListId,
 }) as [VocabularyListCreated, VocabularyListFilterPropertyRegistered];
 
-const existingView = EventSourcedVocabularyListViewModel.fromVocabularyListCreated(creationEvent);
+const existingView = VocabularyListViewModel.fromVocabularyListCreated(creationEvent);
 
 /**
  * TODO opt back into this test once we solve the issue

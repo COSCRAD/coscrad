@@ -10,7 +10,7 @@ import { ArangoConnectionProvider } from '../../../../../persistence/database/ar
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { EventSourcedVocabularyListViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
+import { VocabularyListViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
 import { TermViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { TestEventStream } from '../../../../../test-data/events';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
@@ -94,7 +94,7 @@ const [creationEvent, analysisEvent] = termAnalyzed.as({
 }) as [VocabularyListCreated, TermInVocabularyListAnalyzed];
 
 // We use event-sourcing for the creation setup only
-const existingView = EventSourcedVocabularyListViewModel.fromVocabularyListCreated(creationEvent);
+const existingView = VocabularyListViewModel.fromVocabularyListCreated(creationEvent);
 
 existingView.actions.push('ANALYZE_TERM_IN_VOCABULARY_LIST');
 
@@ -201,7 +201,7 @@ describe(`TermInVocabularyListAnalyzedEventHandler.handle`, () => {
 
             const updatedView = (await testQueryRepository.fetchById(
                 existingView.id
-            )) as EventSourcedVocabularyListViewModel;
+            )) as VocabularyListViewModel;
 
             /**
              * This commmand can be run multiple times.

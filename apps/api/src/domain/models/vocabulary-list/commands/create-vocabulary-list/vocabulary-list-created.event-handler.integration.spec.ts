@@ -12,7 +12,7 @@ import { ArangoConnectionProvider } from '../../../../../persistence/database/ar
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { EventSourcedVocabularyListViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
+import { VocabularyListViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
 import { TestEventStream } from '../../../../../test-data/events';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { IVocabularyListQueryRepository } from '../../queries';
@@ -91,7 +91,7 @@ describe(`VocabularyListCreatedEventHandler`, () => {
 
             expect(searchResult).not.toBe(NotFound);
 
-            const view = searchResult as EventSourcedVocabularyListViewModel;
+            const view = searchResult as VocabularyListViewModel;
 
             const foundName = new MultilingualText(view.name);
 
