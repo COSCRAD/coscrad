@@ -11,9 +11,6 @@ export class ResourceReadAccessGrantedToUserEventHandler implements ICoscradEven
     ) {}
 
     async handle(event: ResourceReadAccessGrantedToUser): Promise<void> {
-        // TODO use dynamic registration
-        if (!event.isOfType('RESOURCE_READ_ACCESS_GRANTED_TO_USER')) return;
-
         const {
             payload: {
                 aggregateCompositeIdentifier: { id, type: resourceType },

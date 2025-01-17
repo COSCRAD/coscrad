@@ -60,7 +60,6 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             isPublished: true,
             actions: REMOVE_VALUE(doc.actions,"PUBLISH_RESOURCE")
         } IN @@collectionName
-         RETURN OLD
         `;
 
         const bindVars = {
@@ -77,9 +76,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
                 throw new InternalError(`Failed to translate term via TermRepository: ${reason}`);
             });
 
-        const result = await cursor.all();
-
-        result;
+        await cursor.all();
     }
 
     /**

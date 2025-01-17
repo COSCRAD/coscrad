@@ -221,8 +221,6 @@ describe('RegisterUser', () => {
                                     },
                                     buildValidCommandFSA(buildDummyUuid(12))
                                 );
-
-                                console.log('done');
                             });
                         });
                     });
