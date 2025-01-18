@@ -24,7 +24,7 @@ import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/uti
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoRepositoryForAggregate } from '../../../../persistence/repositories/arango-repository-for-aggregate';
-import { EventSourcedVocabularyListViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
+import { VocabularyListViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { TestEventStream } from '../../../../test-data/events';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
@@ -82,7 +82,7 @@ const vocabularyListViews = vocabularyListIds.map((id) => {
 
     const creationEvent = eventHistory[0] as VocabularyListCreated;
 
-    return EventSourcedVocabularyListViewModel.fromVocabularyListCreated(creationEvent);
+    return VocabularyListViewModel.fromVocabularyListCreated(creationEvent);
 });
 
 const dummyContributor = getValidAggregateInstanceForTest(AggregateType.contributor);
@@ -225,7 +225,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
 
                 expect(result).not.toBe(NotFound);
 
-                const foundView = result as EventSourcedVocabularyListViewModel;
+                const foundView = result as VocabularyListViewModel;
 
                 const foundName = new MultilingualText(foundView.name);
 
@@ -463,7 +463,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
 
                 const updatedView = (await testQueryRepository.fetchById(
                     targetView.id
-                )) as IVocabularyListViewModel;
+                )) as VocabularyListViewModel;
 
                 const {
                     form: { fields },
@@ -489,6 +489,17 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
                 );
 
                 expect(missingOptions).toEqual([]);
+
+                /**
+                 * We may want to consider an alternative option where we
+                 * project the available commands off the view model. For example,
+                 * we don't really want to expose "AnalyzeTerm" if no "Entries"
+                 * have been added.
+                 *
+                 * This is why we should avoid testing this behaviour in the repository
+                 * and test it only at the integration level in the event handler.
+                 */
+                // expect(updatedView.actions).toContain('ANALYZE_TERM_IN_VOCABULARY_LIST');
             });
         });
     });

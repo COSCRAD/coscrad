@@ -10,7 +10,7 @@ import { ArangoConnectionProvider } from '../../../../../persistence/database/ar
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { EventSourcedVocabularyListViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
+import { VocabularyListViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
 import { TermViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { TestEventStream } from '../../../../../test-data/events';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
@@ -104,9 +104,7 @@ const [creationEvent, registrationEvent, termAddedEvent] = termAddedToVocabulary
 }) as [VocabularyListCreated, VocabularyListFilterPropertyRegistered, TermAddedToVocabularyList];
 
 const existingView =
-    EventSourcedVocabularyListViewModel.fromVocabularyListCreated(creationEvent).apply(
-        registrationEvent
-    );
+    VocabularyListViewModel.fromVocabularyListCreated(creationEvent).apply(registrationEvent);
 
 describe(`TermAddedToVocabularyListEventHandler.handle`, () => {
     let testQueryRepository: IVocabularyListQueryRepository;

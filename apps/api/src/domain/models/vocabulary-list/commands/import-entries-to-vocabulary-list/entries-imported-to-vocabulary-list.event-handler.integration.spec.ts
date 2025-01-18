@@ -15,7 +15,7 @@ import { ArangoConnectionProvider } from '../../../../../persistence/database/ar
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { EventSourcedVocabularyListViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
+import { VocabularyListViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
 import { TermViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { TestEventStream } from '../../../../../test-data/events';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
@@ -102,9 +102,7 @@ const [vocabularyListCreationEvent, importEvent] = entriesImported.as({
     id: vocabularyListId,
 }) as [VocabularyListCreated, EntriesImportedToVocabularyList];
 
-const existingView = EventSourcedVocabularyListViewModel.fromVocabularyListCreated(
-    vocabularyListCreationEvent
-);
+const existingView = VocabularyListViewModel.fromVocabularyListCreated(vocabularyListCreationEvent);
 
 // here we used state-based test setup for convenience
 existingView.entries = [
