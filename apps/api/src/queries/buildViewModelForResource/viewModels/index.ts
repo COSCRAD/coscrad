@@ -1,6 +1,6 @@
+export * from './event-sourced-vocabulary-list.view-model';
 export * from './playlist.view-model';
 export * from './song.view-model';
-export * from './state-based-vocabulary-list.view-model';
 export * from './tag.view-model';
 export * from './term.view-model.state-based';
 export * from './types/ViewModelId';

@@ -1,4 +1,4 @@
-import { AggregateType, IVocabularyListViewModel, LanguageCode } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -15,7 +15,7 @@ import { ArangoConnectionProvider } from '../../../../../persistence/database/ar
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { EventSourcedVocabularyListViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
+import { VocabularyListViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
 import { TestEventStream } from '../../../../../test-data/events';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { IVocabularyListQueryRepository } from '../../queries';
@@ -52,7 +52,7 @@ const [creationEvent, translationEvent] = vocabularyListNameTranslated.as({
     id: vocabularyListId,
 }) as [VocabularyListCreated, VocabularyListNameTranslated];
 
-const existingView = EventSourcedVocabularyListViewModel.fromVocabularyListCreated(creationEvent);
+const existingView = VocabularyListViewModel.fromVocabularyListCreated(creationEvent);
 
 describe(`VocabularyListNameTranslatedEventHandler`, () => {
     let testQueryRepository: IVocabularyListQueryRepository;
@@ -120,7 +120,7 @@ describe(`VocabularyListNameTranslatedEventHandler`, () => {
 
             expect(searchResult).not.toBe(NotFound);
 
-            const updatedView = searchResult as IVocabularyListViewModel;
+            const updatedView = searchResult as VocabularyListViewModel;
 
             const updatedName = new MultilingualText(updatedView.name);
 
@@ -134,6 +134,11 @@ describe(`VocabularyListNameTranslatedEventHandler`, () => {
             expect(foundText).toBe(translationText);
 
             expect(foundLanguageCode).toBe(translationLanguageCode);
+
+            /**
+             * We currently allow translation into multiple target languages.
+             */
+            expect(updatedView.actions).toContain('TRANSLATE_VOCABULARY_LIST_NAME');
         });
     });
 });

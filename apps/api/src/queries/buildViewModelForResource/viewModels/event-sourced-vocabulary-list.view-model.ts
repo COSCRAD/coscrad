@@ -1,33 +1,45 @@
 import {
     ContributorWithId,
     FormFieldType,
-    ICommandFormAndLabels,
-    IDetailQueryResult,
     IDynamicForm,
     IFormField,
     IMultilingualText,
     IVocabularyListEntry,
     IVocabularyListViewModel,
 } from '@coscrad/api-interfaces';
+import { ApiProperty } from '@nestjs/swagger';
 import { ICoscradEvent } from '../../../domain/common';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
 import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
 import {
     FilterPropertyType,
     VocabularyListCreated,
     VocabularyListFilterPropertyRegistered,
 } from '../../../domain/models/vocabulary-list/commands';
+import { VocabularyListEntry } from '../../../domain/models/vocabulary-list/vocabulary-list-entry.entity';
 
-export class EventSourcedVocabularyListViewModel
-    implements IDetailQueryResult<IVocabularyListViewModel>
-{
+export class VocabularyListViewModel implements IVocabularyListViewModel {
+    @ApiProperty({
+        type: VocabularyListEntry,
+        isArray: true,
+    })
     entries: IVocabularyListEntry<string | boolean>[];
+    // TODO We need a concrete class to include this on the API docs
     form: IDynamicForm;
     contributions: ContributorWithId[];
+    @ApiProperty({
+        type: MultilingualText,
+    })
     name: IMultilingualText;
+    @ApiProperty()
     id: string;
-    actions: ICommandFormAndLabels[];
+    // note that these are mapped to form specifications in the query service layer
+    @ApiProperty()
+    actions: string[];
+    @ApiProperty()
     isPublished: boolean;
+    // this should be removed in query responses
     accessControlList: { allowedUserIds: string[]; allowedGroupIds: string[] };
 
     static fromVocabularyListCreated({
@@ -36,8 +48,8 @@ export class EventSourcedVocabularyListViewModel
             languageCodeForName,
             aggregateCompositeIdentifier: { id: vocabularyListId },
         },
-    }: VocabularyListCreated): EventSourcedVocabularyListViewModel {
-        const view = new EventSourcedVocabularyListViewModel();
+    }: VocabularyListCreated): VocabularyListViewModel {
+        const view = new VocabularyListViewModel();
 
         view.id = vocabularyListId;
 
@@ -54,7 +66,14 @@ export class EventSourcedVocabularyListViewModel
         // TODO we should serialize when returning from the query service automatically so we can use instances here if we'd like
         view.name = buildMultilingualTextWithSingleItem(textForName, languageCodeForName).toDTO();
 
-        view.actions = [];
+        view.actions = [
+            'PUBLISH_RESOURCE',
+            'CREATE_NOTE_ABOUT_RESOURCE',
+            'CONNECT_RESOURCES_WITH_NOTE',
+            'TRANSLATE_VOCABULARY_LIST_NAME',
+            'ADD_TERM_TO_VOCABULARY_LIST',
+            'REGISTER_VOCABULARY_LIST_FILTER_PROPERTY',
+        ];
 
         view.accessControlList = new AccessControlList();
 

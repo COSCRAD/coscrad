@@ -1,9 +1,4 @@
-import {
-    AggregateType,
-    IDetailQueryResult,
-    IVocabularyListViewModel,
-    LanguageCode,
-} from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -17,6 +12,7 @@ import { ArangoConnectionProvider } from '../../../../../persistence/database/ar
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { VocabularyListViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
 import { TestEventStream } from '../../../../../test-data/events';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { IVocabularyListQueryRepository } from '../../queries';
@@ -95,7 +91,7 @@ describe(`VocabularyListCreatedEventHandler`, () => {
 
             expect(searchResult).not.toBe(NotFound);
 
-            const view = searchResult as IDetailQueryResult<IVocabularyListViewModel>;
+            const view = searchResult as VocabularyListViewModel;
 
             const foundName = new MultilingualText(view.name);
 
@@ -105,6 +101,19 @@ describe(`VocabularyListCreatedEventHandler`, () => {
             expect(foundTextForName).toBe(vocabularyListName);
 
             expect(foundLanguageCodeForName).toBe(originalLanguageCode);
+
+            expect(view.actions).toContain('PUBLISH_RESOURCE');
+            expect(view.actions).toContain('CREATE_NOTE_ABOUT_RESOURCE');
+            expect(view.actions).toContain('CONNECT_RESOURCES_WITH_NOTE');
+            expect(view.actions).toContain('TRANSLATE_VOCABULARY_LIST_NAME');
+            expect(view.actions).toContain('ADD_TERM_TO_VOCABULARY_LIST');
+            expect(view.actions).toContain('REGISTER_VOCABULARY_LIST_FILTER_PROPERTY');
+            /**
+             * Note that we do not expose 'IMPORT_ENTRIES_TO_VOCABULARY_LIST'
+             * in the  UX. We may want to update our approach to include
+             * a `isAvailableInUx` flag in addition to the command type
+             * on actions.
+             */
         });
     });
 });
