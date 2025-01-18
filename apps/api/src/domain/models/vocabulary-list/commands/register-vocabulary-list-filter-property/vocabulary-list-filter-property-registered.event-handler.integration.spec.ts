@@ -1,9 +1,4 @@
-import {
-    AggregateType,
-    IValueAndDisplay,
-    IVocabularyListViewModel,
-    LanguageCode,
-} from '@coscrad/api-interfaces';
+import { AggregateType, IValueAndDisplay, LanguageCode } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -15,7 +10,7 @@ import { ArangoConnectionProvider } from '../../../../../persistence/database/ar
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { EventSourcedVocabularyListViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
+import { VocabularyListViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
 import { TestEventStream } from '../../../../../test-data/events';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { IVocabularyListQueryRepository } from '../../queries';
@@ -74,7 +69,7 @@ const [creationEvent, registrationEvent] = vocabularyListNameTranslated.as({
     id: vocabularyListId,
 }) as [VocabularyListCreated, VocabularyListFilterPropertyRegistered];
 
-const existingView = EventSourcedVocabularyListViewModel.fromVocabularyListCreated(creationEvent);
+const existingView = VocabularyListViewModel.fromVocabularyListCreated(creationEvent);
 
 /**
  * TODO opt back into this test once we solve the issue
@@ -149,7 +144,7 @@ describe(`VocabularyListFilterPropertyRegistered.handle`, () => {
             // assert
             const updatedView = (await testQueryRepository.fetchById(
                 existingView.id
-            )) as IVocabularyListViewModel;
+            )) as VocabularyListViewModel;
 
             const foundField = updatedView.form.fields.find(
                 ({ name }) => name === filterPropertyName
@@ -173,6 +168,12 @@ describe(`VocabularyListFilterPropertyRegistered.handle`, () => {
             );
 
             expect(missingOptions).toHaveLength(0);
+
+            // Users are allowed to register mutliple filter properties
+            expect(updatedView.actions).toContain('REGISTER_VOCABULARY_LIST_FILTER_PROPERTY');
+
+            // This should now be available
+            expect(updatedView.actions).toContain('ANALYZE_TERM_IN_VOCABULARY_LIST');
         });
     });
 });

@@ -1,8 +1,4 @@
-import {
-    IDetailQueryResult,
-    IMultilingualTextItem,
-    IVocabularyListViewModel,
-} from '@coscrad/api-interfaces';
+import { IMultilingualTextItem, IVocabularyListViewModel } from '@coscrad/api-interfaces';
 import { Maybe } from '../../../../lib/types/maybe';
 import { AggregateId } from '../../../types/AggregateId';
 import { FilterPropertyType } from '../commands';
@@ -10,26 +6,16 @@ import { VocabularyListEntryImportItem } from '../entities/vocabulary-list.entit
 
 export const VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN = 'VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN';
 
-/**
- * TODO Absorb the detail query response piece into the view model interface.
- * However, there may be a case that these interfaces are actually the types
- * of the query response, as they represent the contract with the client. There
- * are cases where the query service is responsible for mapping the view model further,
- * e.g. by appending a base URL or leveraging the media item or user services, for example.
- * We should sort this out before we do a fourth event-sourced query service.
- */
-type VocabularyListQueryModel = IDetailQueryResult<IVocabularyListViewModel>;
-
 export interface IVocabularyListQueryRepository {
-    fetchById(id: AggregateId): Promise<Maybe<VocabularyListQueryModel>>;
+    fetchById(id: AggregateId): Promise<Maybe<IVocabularyListViewModel>>;
 
-    fetchMany(): Promise<VocabularyListQueryModel[]>;
+    fetchMany(): Promise<IVocabularyListViewModel[]>;
 
     count(): Promise<number>;
 
-    create(view: VocabularyListQueryModel): Promise<void>;
+    create(view: IVocabularyListViewModel): Promise<void>;
 
-    createMany(views: VocabularyListQueryModel[]): Promise<void>;
+    createMany(views: IVocabularyListViewModel[]): Promise<void>;
 
     delete(id: AggregateId): Promise<void>;
 
