@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import theme from '../../theme.config.json';
 
 export const colors = {
@@ -12,8 +12,7 @@ export const colors = {
 
 const styles = StyleSheet.create({
     background: {
-        backgroundColor: colors.teritary,
-        height: 1000,
+        height: 'auto',
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
@@ -21,12 +20,103 @@ const styles = StyleSheet.create({
     },
 });
 
-export const alphabetButton = StyleSheet.create({
-    alphabetName: {
+export const homeScreen = StyleSheet.create({
+    background: {
+        height: '100%',
+        fontFamily: theme.fonts.primary,
+    },
+    button: {
+        backgroundColor: theme.colors.accent,
+        padding: 12,
+        paddingTop: 6,
+        width: '80%',
+        borderRadius: 24,
+        alignSelf: 'center',
+        marginBottom: 16,
+        elevation: 8,
+    },
+    appTitle: {
+        textAlign: 'center',
         color: theme.colors.text,
         fontSize: theme.fontSizes.large,
-        fontWeight: '100',
+        margin: 20,
+        fontWeight: '700',
+    },
+    homeImage: {
+        width: 130,
+        height: 130,
+        alignSelf: 'center',
+        marginTop: 120,
+    },
+    tagline: {
+        color: theme.colors.text,
+        margin: 38,
+        fontSize: theme.fontSizes.small,
+        marginTop: 0,
+        textAlign: 'center',
+    },
+    footer: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        padding: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    footerText: {
+        color: theme.colors.text,
+        fontSize: theme.fontSizes.small,
+    },
+});
+
+export const loadingComponent = StyleSheet.create({
+    loader: {
+        color: theme.colors.text,
+        textAlign: 'center',
+    },
+    image: {
+        height: 80,
+        width: 80,
+        alignSelf: 'center',
+    },
+    text: {
+        color: theme.colors.text,
+        textAlign: 'center',
+        fontSize: theme.fontSizes.medium,
+    },
+    center: {
+        transform: [
+            {
+                translateY: Dimensions.get('screen').height * 0.3,
+            },
+        ],
+    },
+});
+
+export const errorComponent = StyleSheet.create({
+    text: {
+        color: theme.colors.text,
+        fontSize: theme.fontSizes.small,
+    },
+});
+
+export const menuScreen = StyleSheet.create({
+    alphabet: {
+        fontSize: theme.fontSizes.medium,
         fontFamily: theme.fonts.primary,
+        textAlign: 'center',
+        color: colors.text,
+    },
+});
+
+export const alphabetButton = StyleSheet.create({
+    alphabetName: {
+        color: theme.colors.textDark,
+        fontSize: theme.fontSizes.medium,
+        fontFamily: theme.fonts.primary,
+        textAlign: 'center',
+        fontWeight: 'normal',
     },
     alphabet: {
         color: theme.colors.text,
@@ -44,7 +134,7 @@ export const creditsButton = StyleSheet.create({
         textAlign: 'center',
         fontSize: theme.fontSizes.small,
         fontFamily: theme.fonts.secondary,
-        color: theme.colors.text,
+        color: theme.colors.accent,
     },
 });
 

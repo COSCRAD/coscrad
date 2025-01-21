@@ -10,6 +10,7 @@ import { AppDispatch } from '../../store';
 import { selectAlphabet } from '../../store/slices/selectors';
 import { fetchAlphabets } from './../../store/slices/alphabet-slice';
 import { AppAudio } from './audio';
+import Background from './Background';
 
 /**
  *
@@ -81,83 +82,85 @@ export function AlphabetCardDetailScreen({ route }) {
     } = selectedCard;
 
     return (
-        <View style={detailStyles.background} testID="AlphabetCardDetail">
-            {!imageError ? (
-                <Image
-                    style={{ height: 200 }}
-                    testID={`loadedImage`}
-                    onError={() => setImageError(true)}
-                    resizeMode="center"
-                    source={{
-                        uri: `${BASE_API_URL}/resources/mediaitems/download?name=${card_image.replace(
-                            '.png',
-                            ''
-                        )}`,
-                    }}
-                />
-            ) : (
-                <Text testID={`imageError`}>Error loading image.</Text>
-            )}
-
-            <View style={alphabetDetailStyle.layout}>
-                <View style={alphabetDetailStyle.flexLayout}></View>
-                <View style={alphabetDetailStyle.flexLayout}>
-                    <Text style={alphabetDetailStyle.letter} testID={`${letter}`}>
-                        {letter}
-                    </Text>
-                </View>
-                <View style={alphabetDetailStyle.appAudio}>
-                    <AppAudio
-                        message={letter}
-                        url={`${BASE_API_URL}/resources/mediaitems/download?name=${letter_audio.replace(
-                            '.mp3',
-                            ''
-                        )}`}
+        <Background>
+            <View style={detailStyles.background} testID="AlphabetCardDetail">
+                {!imageError ? (
+                    <Image
+                        style={{ height: 200 }}
+                        testID={`loadedImage`}
+                        onError={() => setImageError(true)}
+                        resizeMode="center"
+                        source={{
+                            uri: `${BASE_API_URL}/resources/mediaitems/download?name=${card_image.replace(
+                                '.png',
+                                ''
+                            )}`,
+                        }}
                     />
-                </View>
-            </View>
-            <View style={alphabetDetailStyle.layout}>
-                <View style={alphabetDetailStyle.flexLayout}></View>
-                <View style={alphabetDetailStyle.flexLayout}>
-                    <Text style={alphabetDetailStyle.word} testID={`${word}`}>
-                        {word}
-                    </Text>
-                </View>
-                <View style={alphabetDetailStyle.appAudio}>
-                    <AppAudio
-                        message={word}
-                        url={`${BASE_API_URL}/resources/mediaitems/download?name=${word_audio.replace(
-                            '.mp3',
-                            ''
-                        )}`}
-                    />
-                </View>
-            </View>
+                ) : (
+                    <Text testID={`imageError`}>Error loading image.</Text>
+                )}
 
-            <View style={alphabetDetailStyle.navigationButtons}>
-                <TouchableOpacity
-                    style={{ padding: 20 }}
-                    onPress={() => {
-                        setSelectedLetterSequenceNumber(
-                            ((selectedLetterSequenceNumber - 2 + alphabetCards.length) %
-                                alphabetCards.length) +
-                                1
-                        );
-                    }}
-                >
-                    <FontAwesomeIcon color={colors.primary} size={70} icon={faChevronLeft} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={{ padding: 20 }}
-                    onPress={() => {
-                        setSelectedLetterSequenceNumber(
-                            (selectedLetterSequenceNumber % alphabetCards.length) + 1
-                        );
-                    }}
-                >
-                    <FontAwesomeIcon color={colors.primary} size={70} icon={faChevronRight} />
-                </TouchableOpacity>
+                <View style={alphabetDetailStyle.layout}>
+                    <View style={alphabetDetailStyle.flexLayout}></View>
+                    <View style={alphabetDetailStyle.flexLayout}>
+                        <Text style={alphabetDetailStyle.letter} testID={`${letter}`}>
+                            {letter}
+                        </Text>
+                    </View>
+                    <View style={alphabetDetailStyle.appAudio}>
+                        <AppAudio
+                            message={letter}
+                            url={`${BASE_API_URL}/resources/mediaitems/download?name=${letter_audio.replace(
+                                '.mp3',
+                                ''
+                            )}`}
+                        />
+                    </View>
+                </View>
+                <View style={alphabetDetailStyle.layout}>
+                    <View style={alphabetDetailStyle.flexLayout}></View>
+                    <View style={alphabetDetailStyle.flexLayout}>
+                        <Text style={alphabetDetailStyle.word} testID={`${word}`}>
+                            {word}
+                        </Text>
+                    </View>
+                    <View style={alphabetDetailStyle.appAudio}>
+                        <AppAudio
+                            message={word}
+                            url={`${BASE_API_URL}/resources/mediaitems/download?name=${word_audio.replace(
+                                '.mp3',
+                                ''
+                            )}`}
+                        />
+                    </View>
+                </View>
+
+                <View style={alphabetDetailStyle.navigationButtons}>
+                    <TouchableOpacity
+                        style={{ padding: 20 }}
+                        onPress={() => {
+                            setSelectedLetterSequenceNumber(
+                                ((selectedLetterSequenceNumber - 2 + alphabetCards.length) %
+                                    alphabetCards.length) +
+                                    1
+                            );
+                        }}
+                    >
+                        <FontAwesomeIcon color={colors.primary} size={70} icon={faChevronLeft} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={{ padding: 20 }}
+                        onPress={() => {
+                            setSelectedLetterSequenceNumber(
+                                (selectedLetterSequenceNumber % alphabetCards.length) + 1
+                            );
+                        }}
+                    >
+                        <FontAwesomeIcon color={colors.primary} size={70} icon={faChevronRight} />
+                    </TouchableOpacity>
+                </View>
             </View>
-        </View>
+        </Background>
     );
 }
