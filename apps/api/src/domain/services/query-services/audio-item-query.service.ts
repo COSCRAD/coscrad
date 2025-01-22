@@ -20,7 +20,10 @@ export type AudioLineageRecord = {
     audioItemId: AggregateId;
 };
 
-export class AudioItemQueryService extends ResourceQueryService<AudioItem, IAudioItemViewModel> {
+export class AudioItemQueryService extends ResourceQueryService<
+    AudioItem,
+    Omit<IAudioItemViewModel, 'actions'>
+> {
     protected readonly type = ResourceType.audioItem;
 
     constructor(
@@ -58,7 +61,8 @@ export class AudioItemQueryService extends ResourceQueryService<AudioItem, IAudi
     buildViewModel(
         transcribedAudioInstance: AudioItem,
         { resources: { mediaItem: mediaItems }, contributor: allContributors }: InMemorySnapshot
-    ): IAudioItemViewModel {
+    ): // note that actions (available commands) are added at a higher level
+    Omit<IAudioItemViewModel, 'actions'> {
         return new StateBasedAudioItemViewModel(
             transcribedAudioInstance,
             mediaItems,

@@ -1,11 +1,11 @@
 import {
     AggregateType,
     IMultilingualText,
-    ITermViewModel,
     LanguageCode,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { DetailScopedCommandWriteContext } from '../../../app/controllers/command/services/command-info-service';
 import { ICoscradEvent } from '../../../domain/common';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
 import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
@@ -22,7 +22,7 @@ import { DTO } from '../../../types/DTO';
  * This is the first view model leveraging a new approach that involves denormalized,
  * event-sourced, materialized views.
  */
-export class TermViewModel implements ITermViewModel, HasAggregateId {
+export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
     contributions: { id: string; fullName: string }[];
 
     name: IMultilingualText;

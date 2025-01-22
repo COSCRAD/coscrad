@@ -48,7 +48,7 @@ export class VideoQueryService extends ResourceQueryService<Video, IVideoViewMod
     buildViewModel(
         videoInstance: Video,
         { resources: { mediaItem: mediaItems }, contributor: contributors }: InMemorySnapshot
-    ): IVideoViewModel {
+    ): Omit<IVideoViewModel, 'actions'> {
         return new VideoViewModel(videoInstance, mediaItems, contributors);
     }
 

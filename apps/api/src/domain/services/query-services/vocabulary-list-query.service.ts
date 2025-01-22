@@ -1,4 +1,8 @@
-import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
+import {
+    ICommandFormAndLabels,
+    IIndexQueryResult,
+    IVocabularyListViewModel,
+} from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject, Injectable } from '@nestjs/common';
 import {
@@ -51,7 +55,9 @@ export class VocabularyListQueryService {
         return NotFound;
     }
 
-    async fetchMany(userWithGroups?: CoscradUserWithGroups) {
+    async fetchMany(
+        userWithGroups?: CoscradUserWithGroups
+    ): Promise<IIndexQueryResult<IVocabularyListViewModel>> {
         // TODO consider filtering for user access in the DB
         const entities = await this.repository.fetchMany();
 
@@ -73,8 +79,11 @@ export class VocabularyListQueryService {
         });
 
         return {
-            // TODO ensure actions show up on entities
-            entities: availableEntities,
+            // TODO ensure actions show up on entities DO this now!
+            entities: availableEntities.map((entity) => ({
+                ...entity,
+                actions: fetchActionsForUser(this.commandInfoService, userWithGroups, entity),
+            })),
             // TODO Should we register index-scoped commands in the view layer instead?
             indexScopedActions: this.fetchUserActions(userWithGroups, [VocabularyList]),
         };

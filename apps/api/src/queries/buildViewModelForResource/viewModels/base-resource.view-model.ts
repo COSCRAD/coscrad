@@ -1,8 +1,12 @@
-import { ContributorWithId } from '@coscrad/api-interfaces';
+import { AggregateType, ContributorWithId } from '@coscrad/api-interfaces';
 import { NonEmptyString } from '@coscrad/data-types';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { DetailScopedCommandWriteContext } from '../../../app/controllers/command/services/command-info-service';
 import idEquals from '../../../domain/models/shared/functional/idEquals';
 import { CoscradContributor } from '../../../domain/models/user-management/contributor';
+import { AggregateId } from '../../../domain/types/AggregateId';
+import { HasAggregateId } from '../../../domain/types/HasAggregateId';
+import { InternalError } from '../../../lib/errors/InternalError';
 import { BaseViewModel, Nameable } from './base.view-model';
 import { HasViewModelId } from './types/ViewModelId';
 
@@ -10,7 +14,10 @@ interface Accreditable {
     getContributions(): { contributorId: string; eventType: string; date: number }[];
 }
 
-export class BaseResourceViewModel extends BaseViewModel {
+export class BaseResourceViewModel
+    extends BaseViewModel
+    implements HasAggregateId, DetailScopedCommandWriteContext
+{
     @NonEmptyString({
         label: `contributions`,
         description: `list of knowledge keepers who contributed this song`,
@@ -31,5 +38,12 @@ export class BaseResourceViewModel extends BaseViewModel {
             .map(({ id, fullName }) => ({ id: id, fullName: fullName.toString() }));
 
         this.contributions = [...new Set(contributionsWithDuplicates)];
+    }
+    getAvailableCommands(): string[] {
+        throw new Error(`Not Implemented: Did you mean to project off the event-sourced view?`);
+    }
+
+    getCompositeIdentifier(): { type: AggregateType; id: AggregateId } {
+        throw new InternalError(`Not Implemented. Use event-sourced views.`);
     }
 }

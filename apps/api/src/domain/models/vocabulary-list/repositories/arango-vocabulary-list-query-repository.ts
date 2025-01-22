@@ -2,7 +2,6 @@ import {
     ICommandFormAndLabels,
     IMultilingualTextItem,
     IValueAndDisplay,
-    IVocabularyListViewModel,
 } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from '../../../../coscrad-cli/logging';
@@ -14,13 +13,15 @@ import { ArangoDatabase } from '../../../../persistence/database/arango-database
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
 import mapDatabaseDocumentToEntityDto from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDtoToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
+import { VocabularyListViewModel } from '../../../../queries/buildViewModelForResource/viewModels/event-sourced-vocabulary-list.view-model';
 import { AggregateId } from '../../../types/AggregateId';
 import { FilterPropertyType } from '../commands';
 import { VocabularyListEntryImportItem } from '../entities/vocabulary-list.entity';
 import { IVocabularyListQueryRepository } from '../queries/vocabulary-list-query-repository.interface';
 
 export class ArangoVocabularyListQueryRepository implements IVocabularyListQueryRepository {
-    private readonly database: ArangoDatabaseForCollection<IVocabularyListViewModel>;
+    // TODO rename the file for `VocabularyListViewModel`
+    private readonly database: ArangoDatabaseForCollection<VocabularyListViewModel>;
 
     constructor(
         arangoConnectionProvider: ArangoConnectionProvider,
@@ -33,27 +34,35 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
         );
     }
 
-    async fetchById(id: AggregateId): Promise<Maybe<IVocabularyListViewModel>> {
+    async fetchById(id: AggregateId): Promise<Maybe<VocabularyListViewModel>> {
         const documentSearchResult = await this.database.fetchById(id);
 
-        return isNotFound(documentSearchResult)
-            ? documentSearchResult
-            : (mapDatabaseDocumentToEntityDto(documentSearchResult) as IVocabularyListViewModel & {
-                  actions: ICommandFormAndLabels[];
-              });
+        if (isNotFound(documentSearchResult)) {
+            return documentSearchResult;
+        }
+
+        const viewModelDto = mapDatabaseDocumentToEntityDto(
+            documentSearchResult
+        ) as VocabularyListViewModel & {
+            actions: ICommandFormAndLabels[];
+        };
+
+        return VocabularyListViewModel.fromDto(viewModelDto);
     }
 
-    async fetchMany(): Promise<IVocabularyListViewModel[]> {
+    async fetchMany(): Promise<VocabularyListViewModel[]> {
         const documents = await this.database.fetchMany();
 
-        return documents.map(mapDatabaseDocumentToEntityDto) as IVocabularyListViewModel[];
+        return documents.map((doc) =>
+            VocabularyListViewModel.fromDto(mapDatabaseDocumentToEntityDto(doc))
+        ) as VocabularyListViewModel[];
     }
 
     async count(): Promise<number> {
         return this.database.getCount();
     }
 
-    async create(view: IVocabularyListViewModel): Promise<void> {
+    async create(view: VocabularyListViewModel): Promise<void> {
         // TODO If we're going to throw here, we need to wrap the top level event handlers in a try...catch
         return this.database.create(mapEntityDtoToDatabaseDocument(view)).catch((error) => {
             throw new InternalError(
@@ -63,7 +72,7 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
         });
     }
 
-    async createMany(views: IVocabularyListViewModel[]): Promise<void> {
+    async createMany(views: VocabularyListViewModel[]): Promise<void> {
         return this.database
             .createMany(views.map(mapEntityDtoToDatabaseDocument))
             .catch((error) => {

@@ -14,7 +14,10 @@ import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../types/ResourceType';
 import { ResourceQueryService } from './resource-query.service';
 
-export class PlaylistQueryService extends ResourceQueryService<Playlist, IPlayListViewModel> {
+export class PlaylistQueryService extends ResourceQueryService<
+    Playlist,
+    Omit<IPlayListViewModel, 'actions'>
+> {
     protected readonly type = ResourceType.playlist;
 
     constructor(
@@ -46,7 +49,7 @@ export class PlaylistQueryService extends ResourceQueryService<Playlist, IPlayLi
             resources: { audioItem: allAudioItems, mediaItem: allMediaItems },
             contributor: allContributors,
         }: InMemorySnapshot
-    ): IPlayListViewModel {
+    ): Omit<IPlayListViewModel, 'actions'> {
         return new PlaylistViewModel(playlist, allAudioItems, allMediaItems, allContributors);
     }
 
