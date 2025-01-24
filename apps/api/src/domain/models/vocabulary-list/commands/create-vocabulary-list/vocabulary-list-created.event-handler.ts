@@ -15,8 +15,10 @@ export class VocabularyListCreatedEventHandler implements ICoscradEventHandler {
     ) {}
 
     async handle(creationEvent: VocabularyListCreated): Promise<void> {
-        return this.queryRepository.create(
-            VocabularyListViewModel.fromVocabularyListCreated(creationEvent)
-        );
+        const listToCreate = VocabularyListViewModel.fromVocabularyListCreated(creationEvent);
+
+        console.log({ listToCreate });
+
+        return this.queryRepository.create(listToCreate);
     }
 }

@@ -13,7 +13,7 @@ import { ArangoDatabase } from '../../../../persistence/database/arango-database
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
 import mapDatabaseDocumentToEntityDto from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDtoToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
-import { VocabularyListViewModel } from '../../../../queries/buildViewModelForResource/viewModels/event-sourced-vocabulary-list.view-model';
+import { VocabularyListViewModel } from '../../../../queries/buildViewModelForResource/viewModels/vocabulary-list.view-model';
 import { AggregateId } from '../../../types/AggregateId';
 import { FilterPropertyType } from '../commands';
 import { VocabularyListEntryImportItem } from '../entities/vocabulary-list.entity';

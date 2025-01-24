@@ -55,7 +55,7 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
          * TODO Let's not cache actions on the view documents. Let's instead
          * project off the view model state to determine the available commands types.
          */
-        return this.actions;
+        return this.actions || [];
     }
 
     getCompositeIdentifier(): { type: AggregateType; id: AggregateId } {
@@ -158,7 +158,8 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
             return vl;
         }
 
-        const { form, contributions, name, id, actions, isPublished, accessControlList } = vl;
+        const { form, contributions, name, id, actions, isPublished, accessControlList, entries } =
+            vl;
 
         if (!isNullOrUndefined(form)) {
             vl.form = form;
@@ -175,6 +176,8 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
         vl.id = id;
 
         vl.actions = actions;
+
+        vl.entries = entries;
 
         // we default to unpublished just to be safe here
         vl.isPublished = isBoolean(isPublished) ? isPublished : false;
