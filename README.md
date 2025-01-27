@@ -98,13 +98,40 @@ Install the dependencies
 
 > > yarn install --frozen-lockfile
 
+#### Setting up config files \ secrets
+
+Copy and customize the following secrets and config files.
+
+> > cp apps/api/src/app/config/sample.env apps/api/src/app/config/development.env
+
+Note that `development.env` is used by `start:db:dev` to configure a local instance of ArangoDB running in a Docker container. The script uses the
+env variables related to ArangoDB to spin up an instance with the desired credentials running on the given port.
+
+> > cp apps/coscrad-frontend/src/auth_config.SAMPLE.json apps/coscrad-frontend/src/auth_config.json
+
+> > cp apps/coscrad-frontend/src/configurable-front-matter/data/content.config.SAMPLE.ts apps/coscrad-frontend/src/configurable-front-matter/data/content.config.ts
+
+> > apps/coscrad-frontend-e2e/cypress.env.SAMPLE.json apps/coscrad-frontend-e2e/cypress.env.json
+
 ## Workflow
 
-For convenience we have included a quality check script. This script will run lint, Jest tests and build for the front-end (coscrad-frontend) and back-end (api), and run the `e2e` tests via Cypress for the entire COSCRAD core.
+### Dev Mode
 
-> > npm run quality-check:coscrad
+Start a local Docker instance of ArangoDB
 
-Contributors should ensure all of these quality checks pass on their end prior to submitting a PR. Note that eventually this will become the responsibility of our CI system and PRs that break the quality checks will automatically be rejected.
+> > npm run start:db:dev
+
+Note that the offered test data hasn't been well maintained since moving to full event sourcing.
+
+Start the front-end and back-end together:
+
+> > npm run serve:all
+
+To run Jest tests:
+
+> > npx nx test {(api|coscrad-frontend)} [--test-path-pattern={pattern-to-match-in-test-file-path}]
+
+To run Cypress (end-to-end) tests, see the [coscrad-frontend-e2e docs](apps/coscrad-frontend-e2e/README.md)
 
 See the `README` in individual projects and libs for more details about how to run tests and static analsysis.
 

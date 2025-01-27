@@ -53,9 +53,11 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
     async fetchMany(): Promise<VocabularyListViewModel[]> {
         const documents = await this.database.fetchMany();
 
-        return documents.map((doc) =>
+        const viewModelsFromRepo = documents.map((doc) =>
             VocabularyListViewModel.fromDto(mapDatabaseDocumentToEntityDto(doc))
         ) as VocabularyListViewModel[];
+
+        return viewModelsFromRepo;
     }
 
     async count(): Promise<number> {
@@ -63,8 +65,10 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
     }
 
     async create(view: VocabularyListViewModel): Promise<void> {
+        const viewToCreate = mapEntityDtoToDatabaseDocument(view);
+
         // TODO If we're going to throw here, we need to wrap the top level event handlers in a try...catch
-        return this.database.create(mapEntityDtoToDatabaseDocument(view)).catch((error) => {
+        return this.database.create(viewToCreate).catch((error) => {
             throw new InternalError(
                 `failed to create vocabulary list view in ArangoVocabularyListQueryRepository`,
                 [error]

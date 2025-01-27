@@ -59,7 +59,11 @@ export class DataImporter {
 
         await Promise.all(
             Object.values(ArangoCollectionId)
-                .concat('games' as ArangoCollectionId)
+                .concat(
+                    'games' as ArangoCollectionId,
+                    'term__VIEWS' as ArangoCollectionId,
+                    'vocabularyList__VIEWS' as ArangoCollectionId
+                )
                 .map((collectionName) =>
                     this.databaseProvider.getDBInstance().deleteAll(collectionName)
                 )

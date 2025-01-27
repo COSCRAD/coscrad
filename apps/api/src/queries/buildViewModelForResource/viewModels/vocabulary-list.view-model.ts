@@ -5,27 +5,52 @@ import {
     IDynamicForm,
     IFormField,
     IMultilingualText,
-    IVocabularyListEntry,
 } from '@coscrad/api-interfaces';
-import { isBoolean, isNonEmptyObject, isNullOrUndefined } from '@coscrad/validation-constraints';
+import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { ApiProperty } from '@nestjs/swagger';
 import { DetailScopedCommandWriteContext } from '../../../app/controllers/command/services/command-info-service';
 import { ICoscradEvent } from '../../../domain/common';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
+import BaseDomainModel from '../../../domain/models/base-domain-model.entity';
 import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
 import {
     FilterPropertyType,
     VocabularyListCreated,
     VocabularyListFilterPropertyRegistered,
 } from '../../../domain/models/vocabulary-list/commands';
-import { VocabularyListEntry } from '../../../domain/models/vocabulary-list/vocabulary-list-entry.entity';
 import { AggregateId } from '../../../domain/types/AggregateId';
 import { HasAggregateId } from '../../../domain/types/HasAggregateId';
 import { DTO } from '../../../types/DTO';
+import { TermViewModel } from './term.view-model';
+
+export class VocabularyListEntryViewModel extends BaseDomainModel {
+    // note this doesn't quite line up with the `IVocabularyListViewModel` interface
+    term: TermViewModel;
+
+    variableValues: Record<string, string | boolean>;
+
+    constructor(dto?: Partial<DTO<VocabularyListEntryViewModel>>) {
+        super();
+
+        if (!isNonEmptyObject(dto)) {
+            return;
+        }
+
+        const { term: termDto, variableValues } = dto;
+
+        this.term = TermViewModel.fromDto(termDto);
+
+        this.variableValues = { ...variableValues };
+    }
+}
 
 export class VocabularyListViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
-    public entries: IVocabularyListEntry<string | boolean>[];
+    @ApiProperty({
+        type: VocabularyListEntryViewModel,
+        isArray: true,
+    })
+    public entries: VocabularyListEntryViewModel[];
 
     // TODO We need a concrete class to include this on the API docs
     public form: IDynamicForm;
@@ -65,10 +90,46 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
         };
     }
 
-    @ApiProperty({
-        type: VocabularyListEntry,
-        isArray: true,
-    })
+    constructor(dto?: Partial<DTO<VocabularyListViewModel>>) {
+        if (!isNonEmptyObject(dto)) {
+            return;
+        }
+
+        const {
+            id,
+            isPublished,
+            entries,
+            form,
+            contributions,
+            name,
+            actions,
+            accessControlList: aclDto,
+        } = dto;
+
+        this.id = id;
+
+        // out of an abundance of caution
+        this.isPublished = typeof isPublished === 'boolean' ? isPublished : false;
+
+        this.entries = Array.isArray(entries)
+            ? entries.map((entryDto) => new VocabularyListEntryViewModel(entryDto))
+            : [];
+
+        // TODO investigate the need for a cast here
+        this.form = isNonEmptyObject(form)
+            ? (form as IDynamicForm)
+            : {
+                  fields: [] as IFormField[],
+              };
+
+        this.contributions = Array.isArray(contributions) ? contributions : [];
+
+        this.name = new MultilingualText(name);
+
+        this.actions = Array.isArray(actions) ? actions : [];
+
+        this.accessControlList = new AccessControlList(aclDto);
+    }
 
     /**
      * TODO If we really want to do this, we need to find a way to share the
@@ -120,71 +181,20 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
             aggregateCompositeIdentifier: { id: vocabularyListId },
         },
     }: VocabularyListCreated): VocabularyListViewModel {
-        const view = new VocabularyListViewModel();
-
-        view.id = vocabularyListId;
-
-        view.isPublished = false;
-
-        view.entries = [];
-
-        view.form = {
-            fields: [],
+        const dto: Partial<DTO<VocabularyListViewModel>> = {
+            name: buildMultilingualTextWithSingleItem(textForName, languageCodeForName),
+            id: vocabularyListId,
         };
 
-        view.contributions = [];
-
-        // TODO we should serialize when returning from the query service automatically so we can use instances here if we'd like
-        view.name = buildMultilingualTextWithSingleItem(textForName, languageCodeForName).toDTO();
-
-        view.actions = [
-            'PUBLISH_RESOURCE',
-            'CREATE_NOTE_ABOUT_RESOURCE',
-            'CONNECT_RESOURCES_WITH_NOTE',
-            'TRANSLATE_VOCABULARY_LIST_NAME',
-            'ADD_TERM_TO_VOCABULARY_LIST',
-            'REGISTER_VOCABULARY_LIST_FILTER_PROPERTY',
-        ];
-
-        view.accessControlList = new AccessControlList();
+        const view = new VocabularyListViewModel(dto);
 
         return view;
     }
 
     static fromDto(dto: DTO<VocabularyListViewModel>): VocabularyListViewModel {
-        const vl = new VocabularyListViewModel();
+        console.log({ vlFromDto: dto });
 
-        if (isNullOrUndefined(dto)) {
-            return vl;
-        }
-
-        const { form, contributions, name, id, actions, isPublished, accessControlList, entries } =
-            vl;
-
-        if (!isNullOrUndefined(form)) {
-            vl.form = form;
-        }
-
-        if (Array.isArray(contributions)) {
-            vl.contributions = contributions;
-        }
-
-        if (isNonEmptyObject(name)) {
-            vl.name = new MultilingualText(name);
-        }
-
-        vl.id = id;
-
-        vl.actions = actions;
-
-        vl.entries = entries;
-
-        // we default to unpublished just to be safe here
-        vl.isPublished = isBoolean(isPublished) ? isPublished : false;
-
-        if (!isNullOrUndefined(accessControlList)) {
-            vl.accessControlList = new AccessControlList(accessControlList);
-        }
+        const vl = new VocabularyListViewModel(dto);
 
         return vl;
     }

@@ -84,7 +84,7 @@ export class VocabularyListQueryService {
             );
         });
 
-        return {
+        const result = {
             // TODO ensure actions show up on entities DO this now!
             entities: availableEntities.map((entity) => {
                 const actions =
@@ -100,6 +100,9 @@ export class VocabularyListQueryService {
             // TODO Should we register index-scoped commands in the view layer instead?
             indexScopedActions: this.fetchUserActions(userWithGroups, [VocabularyList]),
         };
+
+        // @ts-expect-error TODO fix this type
+        return result;
     }
 
     // TODO share this code with other query services
