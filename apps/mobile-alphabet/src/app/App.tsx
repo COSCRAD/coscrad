@@ -49,8 +49,16 @@ const App = () => {
                             }}
                         >
                             <Stack.Screen name="Home" component={HomeScreen} />
-                            <Stack.Screen name="Menu" component={MenuScreen} />
-                            <Stack.Screen name="Detail" component={AlphabetCardDetailScreen} />
+                            <Stack.Screen
+                                options={{ title: 'Select Letter' }}
+                                name="Menu"
+                                component={MenuScreen}
+                            />
+                            <Stack.Screen
+                                options={{ title: 'Alphabet' }}
+                                name="Detail"
+                                component={AlphabetCardDetailScreen}
+                            />
                             <Stack.Screen name="Credits" component={CreditsScreen} />
                         </Stack.Navigator>
                     </NavigationContainer>

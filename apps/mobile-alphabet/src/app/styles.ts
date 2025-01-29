@@ -46,7 +46,6 @@ export const homeScreen = StyleSheet.create({
         width: 130,
         height: 130,
         alignSelf: 'center',
-        marginTop: 120,
     },
     tagline: {
         color: theme.colors.text,
@@ -88,7 +87,7 @@ export const loadingComponent = StyleSheet.create({
     center: {
         transform: [
             {
-                translateY: Dimensions.get('screen').height * 0.3,
+                translateY: Dimensions.get('screen').height * 0.1,
             },
         ],
     },
@@ -103,10 +102,13 @@ export const errorComponent = StyleSheet.create({
 
 export const menuScreen = StyleSheet.create({
     alphabet: {
-        fontSize: theme.fontSizes.medium,
+        fontSize: 40,
         fontFamily: theme.fonts.primary,
         textAlign: 'center',
         color: colors.text,
+        borderBottomColor: 'white',
+        borderBottomWidth: 1,
+        paddingBottom: 10,
     },
 });
 
@@ -148,6 +150,24 @@ export const detailStyles = StyleSheet.create({
     },
 });
 
+export const alphabetCard = StyleSheet.create({
+    card: {
+        width: 380,
+        backgroundColor: '#fff',
+        borderRadius: 22,
+        alignSelf: 'center',
+        borderStyle: 'solid',
+        borderWidth: 3,
+        borderColor: 'black',
+    },
+    image: {
+        width: 380,
+        height: 160,
+        resizeMode: 'cover',
+        alignSelf: 'center',
+    },
+});
+
 export const alphabetDetailStyle = StyleSheet.create({
     layout: {
         flexDirection: 'row',
@@ -159,27 +179,10 @@ export const alphabetDetailStyle = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    letter: {
-        fontSize: 80,
-        fontWeight: 'bold',
+    hint: {
+        color: colors.text,
         textAlign: 'center',
-        color: colors.primary,
-    },
-    word: {
-        fontSize: 35,
-        textAlign: 'center',
-        color: colors.primary,
-    },
-    appAudio: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    navigationButtons: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 30,
+        padding: 4,
     },
 });
 

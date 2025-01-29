@@ -63,7 +63,7 @@ const MenuScreen = ({ navigation }: NativeStackScreenProps<NavigationState, 'Det
 
     // TODO Use the alphabet cards to create a menu
     const {
-        data: { name, name_english, poster, alphabet_cards: alphabetCards },
+        data: { alphabet_cards: alphabetCards },
     } = alphabetData;
 
     return (

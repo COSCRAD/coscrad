@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 import theme from './../../../theme.config.json';
 
@@ -9,7 +9,11 @@ const TO_COLOR = theme.colors.secondary;
 const Background = ({ children }) => {
     return (
         <View style={{ flex: 1 }}>
-            <Svg height="100%" width="100%" style={StyleSheet.absoluteFillObject}>
+            <Svg
+                height={useWindowDimensions().height}
+                width={useWindowDimensions().width + 1}
+                style={StyleSheet.absoluteFill}
+            >
                 <Defs>
                     <LinearGradient id="grad" x1="0%" y1="0%" x2="0%" y2="100%">
                         <Stop offset="0" stopColor={FROM_COLOR} />
