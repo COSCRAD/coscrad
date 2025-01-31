@@ -1,10 +1,14 @@
+import { colors } from 'app/styles';
 import { Text, View } from 'react-native';
+import Background from './Background';
 
 export function CreditsScreen() {
     return (
-        <View>
-            <Text>Credits screen works!</Text>
-        </View>
+        <Background>
+            <View>
+                <Text style={{ color: colors.text }}>Credits screen works!</Text>
+            </View>
+        </Background>
     );
 }
 

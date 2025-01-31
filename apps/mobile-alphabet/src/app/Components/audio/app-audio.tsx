@@ -1,9 +1,8 @@
-import { faVolumeLow } from '@fortawesome/free-solid-svg-icons/faVolumeLow';
 import { faVolumeXmark } from '@fortawesome/free-solid-svg-icons/faVolumeXmark';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { colors } from 'app/styles';
 import { useEffect, useState } from 'react';
-import { Pressable } from 'react-native';
+import { Pressable, Text } from 'react-native';
 import Sound from 'react-native-sound';
 
 interface AppAudioProps {
@@ -56,14 +55,23 @@ export const AppAudio = ({ url, message }: AppAudioProps) => {
             disabled={loadingState !== LoadingState.success}
             onPress={playAudio}
         >
-            {/* <Text>{message}</Text> */}
-            <FontAwesomeIcon color={colors.primary} size={40} icon={faVolumeLow} />
+            <Text
+                style={{
+                    marginLeft: 30,
+                    padding: 6,
+                    paddingTop: 0,
+                    fontSize: 34,
+                    fontWeight: '900',
+                    color: 'black',
+                }}
+            >
+                {message}
+            </Text>
         </Pressable>
     ) : (
-        // <Text testID={'audioError'}>Error loading {message} audio</Text>
         <FontAwesomeIcon
             testID={'audioError'}
-            color={colors.primary}
+            color={colors.accent}
             size={40}
             icon={faVolumeXmark}
         />

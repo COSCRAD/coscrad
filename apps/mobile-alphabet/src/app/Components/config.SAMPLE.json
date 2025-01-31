@@ -1,4 +1,9 @@
 {
+    "baseApiUrl": "http://0.0.0.0:3131/api",
+    "targetAlphabetName": "alphabet-english",
     "apiUrl": "http://10.0.2.2:3131/api/games/alphabet-english/",
-    "apiUrlPrefix": "http://10.0.2.2:3131/api/resources/mediaitems/download?name="
+    "apiUrlPrefix": "http://10.0.2.2:3131/api/resources/mediaitems/download?name=",
+    "appImage": "https://website.ca/app_image.png",
+    "appName": "English Alphabet",
+    "language": "English"
 }

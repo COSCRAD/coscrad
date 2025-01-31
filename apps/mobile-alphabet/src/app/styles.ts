@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import theme from '../../theme.config.json';
 
 export const colors = {
@@ -12,8 +12,7 @@ export const colors = {
 
 const styles = StyleSheet.create({
     background: {
-        backgroundColor: colors.teritary,
-        height: 1000,
+        height: 'auto',
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
@@ -21,12 +20,105 @@ const styles = StyleSheet.create({
     },
 });
 
-export const alphabetButton = StyleSheet.create({
-    alphabetName: {
+export const homeScreen = StyleSheet.create({
+    background: {
+        height: '100%',
+        fontFamily: theme.fonts.primary,
+    },
+    button: {
+        backgroundColor: theme.colors.accent,
+        padding: 12,
+        paddingTop: 6,
+        width: '80%',
+        borderRadius: 24,
+        alignSelf: 'center',
+        marginBottom: 16,
+        elevation: 8,
+    },
+    appTitle: {
+        textAlign: 'center',
         color: theme.colors.text,
         fontSize: theme.fontSizes.large,
-        fontWeight: '100',
+        margin: 20,
+        fontWeight: '700',
+    },
+    homeImage: {
+        width: 130,
+        height: 130,
+        alignSelf: 'center',
+    },
+    tagline: {
+        color: theme.colors.text,
+        margin: 38,
+        fontSize: theme.fontSizes.small,
+        marginTop: 0,
+        textAlign: 'center',
+    },
+    footer: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        padding: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    footerText: {
+        color: theme.colors.text,
+        fontSize: theme.fontSizes.small,
+    },
+});
+
+export const loadingComponent = StyleSheet.create({
+    loader: {
+        color: theme.colors.text,
+        textAlign: 'center',
+    },
+    image: {
+        height: 80,
+        width: 80,
+        alignSelf: 'center',
+    },
+    text: {
+        color: theme.colors.text,
+        textAlign: 'center',
+        fontSize: theme.fontSizes.medium,
+    },
+    center: {
+        transform: [
+            {
+                translateY: Dimensions.get('screen').height * 0.1,
+            },
+        ],
+    },
+});
+
+export const errorComponent = StyleSheet.create({
+    text: {
+        color: theme.colors.text,
+        fontSize: theme.fontSizes.small,
+    },
+});
+
+export const menuScreen = StyleSheet.create({
+    alphabet: {
+        fontSize: 40,
         fontFamily: theme.fonts.primary,
+        textAlign: 'center',
+        color: colors.text,
+        borderBottomColor: 'white',
+        borderBottomWidth: 1,
+        paddingBottom: 10,
+    },
+});
+
+export const alphabetButton = StyleSheet.create({
+    alphabetName: {
+        color: theme.colors.textDark,
+        fontSize: theme.fontSizes.medium,
+        fontFamily: theme.fonts.primary,
+        textAlign: 'center',
+        fontWeight: 'normal',
     },
     alphabet: {
         color: theme.colors.text,
@@ -44,7 +136,7 @@ export const creditsButton = StyleSheet.create({
         textAlign: 'center',
         fontSize: theme.fontSizes.small,
         fontFamily: theme.fonts.secondary,
-        color: theme.colors.text,
+        color: theme.colors.accent,
     },
 });
 
@@ -55,6 +147,30 @@ export const detailStyles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         fontFamily: theme.fonts.primary,
+    },
+    notFound: {
+        color: 'white',
+        fontSize: 20,
+        textAlign: 'center',
+        padding: 10,
+    },
+});
+
+export const alphabetCard = StyleSheet.create({
+    card: {
+        width: 380,
+        backgroundColor: '#fff',
+        borderRadius: 22,
+        alignSelf: 'center',
+        borderStyle: 'solid',
+        borderWidth: 3,
+        borderColor: 'black',
+    },
+    image: {
+        width: 380,
+        height: 160,
+        resizeMode: 'cover',
+        alignSelf: 'center',
     },
 });
 
@@ -69,27 +185,10 @@ export const alphabetDetailStyle = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    letter: {
-        fontSize: 80,
-        fontWeight: 'bold',
+    hint: {
+        color: colors.text,
         textAlign: 'center',
-        color: colors.primary,
-    },
-    word: {
-        fontSize: 35,
-        textAlign: 'center',
-        color: colors.primary,
-    },
-    appAudio: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    navigationButtons: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 30,
+        padding: 4,
     },
 });
 

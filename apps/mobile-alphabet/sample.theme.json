@@ -4,6 +4,7 @@
         "secondary": "#77CDFF",
         "teritary": "#F95454",
         "text": "#ffffff",
+        "textDark": "#000000",
         "accent": "#C62E2E"
     },
     "fonts": {
