@@ -1,5 +1,5 @@
 import { useConfig } from 'app/config';
-import { alphabetCard, alphabetDetailStyle, loadingComponent } from 'app/styles';
+import { alphabetCard, alphabetDetailStyle, detailStyles, loadingComponent } from 'app/styles';
 import React, { useEffect, useState } from 'react';
 import { Image, Text, View } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
@@ -79,7 +79,11 @@ export function AlphabetCardDetailScreen({ route }) {
     // The data is validate so really this is a system error
     if (isUndefined(selectedCard)) {
         // TODO handle this properly
-        return <div>Card not found!</div>;
+        return (
+            <Background>
+                <Text style={[detailStyles.notFound]}>Card not found.</Text>
+            </Background>
+        );
     }
 
     const {
@@ -94,7 +98,9 @@ export function AlphabetCardDetailScreen({ route }) {
 
     const swipeRight = () => {
         setSelectedLetterSequenceNumber(
-            ((selectedLetterSequenceNumber - 2 + alphabetCards.length) % alphabetCards.length) + 1
+            selectedLetterSequenceNumber === 1
+                ? alphabetCards.length
+                : selectedLetterSequenceNumber - 1
         );
     };
 

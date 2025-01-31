@@ -148,6 +148,12 @@ export const detailStyles = StyleSheet.create({
         justifyContent: 'center',
         fontFamily: theme.fonts.primary,
     },
+    notFound: {
+        color: 'white',
+        fontSize: 20,
+        textAlign: 'center',
+        padding: 10,
+    },
 });
 
 export const alphabetCard = StyleSheet.create({

@@ -7,13 +7,11 @@ const FROM_COLOR = theme.colors.primary;
 const TO_COLOR = theme.colors.secondary;
 
 const Background = ({ children }) => {
+    const { height, width } = useWindowDimensions();
+
     return (
         <View style={{ flex: 1 }}>
-            <Svg
-                height={useWindowDimensions().height}
-                width={useWindowDimensions().width + 1}
-                style={StyleSheet.absoluteFill}
-            >
+            <Svg height={height} width={width + 1} style={StyleSheet.absoluteFill}>
                 <Defs>
                     <LinearGradient id="grad" x1="0%" y1="0%" x2="0%" y2="100%">
                         <Stop offset="0" stopColor={FROM_COLOR} />
