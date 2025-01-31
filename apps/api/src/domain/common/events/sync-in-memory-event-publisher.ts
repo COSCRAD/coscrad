@@ -15,6 +15,11 @@ export class SyncInMemoryEventPublisher implements ICoscradEventPublisher {
 
         this.logger.log(`publishing ${events.length} events`);
 
+        /**
+         * TODO remove this!
+         */
+        this.logger.log(`${JSON.stringify(events)}`);
+
         for (const e of events) {
             const { type: eventType } = e;
 

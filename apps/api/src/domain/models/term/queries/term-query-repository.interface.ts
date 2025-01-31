@@ -1,4 +1,5 @@
 import { IMultilingualTextItem, LanguageCode } from '@coscrad/api-interfaces';
+import { Observable } from 'rxjs';
 import { Maybe } from '../../../../lib/types/maybe';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { AggregateId } from '../../../types/AggregateId';
@@ -12,6 +13,8 @@ export const TERM_QUERY_REPOSITORY_TOKEN = 'TERM_QUERY_REPOSITORY_TOKEN';
  * a contract with the client.
  */
 export interface ITermQueryRepository {
+    subscribeToUpdates(): Observable<{ data: { type: string } }>;
+
     create(view: TermViewModel): Promise<void>;
 
     createMany(views: TermViewModel[]): Promise<void>;

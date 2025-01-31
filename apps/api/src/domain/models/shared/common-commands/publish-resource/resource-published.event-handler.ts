@@ -27,6 +27,13 @@ export class ResourcePublishedEventHandler implements ICoscradEventHandler {
             },
         } = event;
 
+        console.log({
+            publishingAttempt: {
+                resourceType,
+                id,
+            },
+        });
+
         const queryRepository = this.queryRepositoryProvider.forResource(resourceType);
 
         if (typeof queryRepository.publish !== 'function') {
@@ -38,6 +45,8 @@ export class ResourcePublishedEventHandler implements ICoscradEventHandler {
                 }]`
             );
         }
+
+        console.log(`PUbLISHING VL: ${id}`);
 
         await queryRepository.publish(id);
     }

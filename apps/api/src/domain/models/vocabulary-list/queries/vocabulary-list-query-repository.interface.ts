@@ -1,4 +1,5 @@
 import { IMultilingualTextItem } from '@coscrad/api-interfaces';
+import { Observable } from 'rxjs';
 import { Maybe } from '../../../../lib/types/maybe';
 import { VocabularyListViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
 import { AggregateId } from '../../../types/AggregateId';
@@ -8,6 +9,8 @@ import { VocabularyListEntryImportItem } from '../entities/vocabulary-list.entit
 export const VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN = 'VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN';
 
 export interface IVocabularyListQueryRepository {
+    subscribeToUpdates(): Observable<{ data: { type: string } }>;
+
     fetchById(id: AggregateId): Promise<Maybe<VocabularyListViewModel>>;
 
     fetchMany(): Promise<VocabularyListViewModel[]>;

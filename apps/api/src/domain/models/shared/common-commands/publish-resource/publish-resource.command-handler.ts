@@ -76,5 +76,11 @@ export class PublishResourceCommandHandler extends BaseCommandHandler<Resource> 
         await this.repositoryProvider
             .forResource(resourceType)
             .update(instanceToPersistWithUpdatedEventHistory);
+
+        /**
+         * This is a huge gotcha. We need to use a proper messaging queue
+         * that automatically pulls from the event db.
+         */
+        this.eventPublisher.publish(event);
     }
 }

@@ -5,6 +5,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject, Injectable } from '@nestjs/common';
+import { Observable } from 'rxjs';
 import {
     CommandContext,
     CommandInfoService,
@@ -103,6 +104,10 @@ export class VocabularyListQueryService {
 
         // @ts-expect-error TODO fix this type
         return result;
+    }
+
+    public subscribeToWriteNotifications(): Observable<{ data: { type: string } }> {
+        return this.repository.subscribeToUpdates();
     }
 
     // TODO share this code with other query services

@@ -5,6 +5,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
+import { Observable } from 'rxjs';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from '../../../../coscrad-cli/logging';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
@@ -315,5 +316,11 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
 
     async count(): Promise<number> {
         return this.database.getCount();
+    }
+
+    subscribeToUpdates(): Observable<{ data: { type: string } }> {
+        console.log(`subscsribing to term view updates!`);
+
+        return this.database.getViewUpdateNotifications();
     }
 }

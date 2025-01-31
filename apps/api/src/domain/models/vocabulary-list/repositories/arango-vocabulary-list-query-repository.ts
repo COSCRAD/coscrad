@@ -4,6 +4,7 @@ import {
     IValueAndDisplay,
 } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
+import { Observable } from 'rxjs';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from '../../../../coscrad-cli/logging';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
@@ -396,5 +397,11 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
             });
 
         await cursor.all();
+    }
+
+    subscribeToUpdates(): Observable<{ data: { type: string } }> {
+        console.log(`subscsribing to VL view updates!`);
+
+        return this.database.getViewUpdateNotifications();
     }
 }

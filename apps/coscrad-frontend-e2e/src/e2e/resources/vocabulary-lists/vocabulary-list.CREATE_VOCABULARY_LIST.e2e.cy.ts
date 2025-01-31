@@ -1,4 +1,4 @@
-import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import { LanguageCode, ResourceType } from '@coscrad/api-interfaces';
 import { Steps } from '../../../support/utilities';
 
 const commandLabel = `Create Vocabulary List`;
@@ -35,7 +35,7 @@ describe(`CREATE_VOCABULARY_LIST`, () => {
         beforeEach(() => {
             cy.visit('/');
 
-            cy.navigateToResourceIndex(AggregateType.vocabularyList);
+            cy.navigateToResourceIndex(ResourceType.vocabularyList);
         });
 
         it(`should not expose the command`, () => {
@@ -49,7 +49,7 @@ describe(`CREATE_VOCABULARY_LIST`, () => {
 
             cy.login();
 
-            cy.navigateToResourceIndex(AggregateType.vocabularyList);
+            cy.navigateToResourceIndex(ResourceType.vocabularyList);
 
             cy.getLoading().should('not.exist');
 
