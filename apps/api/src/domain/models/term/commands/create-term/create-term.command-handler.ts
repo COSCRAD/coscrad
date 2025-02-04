@@ -35,6 +35,7 @@ export class CreateTermCommandHandler extends BaseCreateCommandHandler<Term> {
             // You must run `PUBLISH_RESOURCE` to publish the term
             published: false,
             isPromptTerm: false,
+            hasBeenDeleted: false,
         });
     }
 

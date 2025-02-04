@@ -7,6 +7,7 @@ const dtos: DTO<Line>[] = [
     {
         type: ResourceType.spatialFeature,
         published: true,
+        hasBeenDeleted: false,
         id: '1',
         geometry: {
             type: GeometricFeatureType.line,

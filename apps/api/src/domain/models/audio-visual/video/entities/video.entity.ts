@@ -308,6 +308,7 @@ export class Video extends Resource {
             name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
             mediaItemId,
             lengthMilliseconds,
+            hasBeenDeleted: false,
         });
 
         const invariantValidationResult = instance.validateInvariants();

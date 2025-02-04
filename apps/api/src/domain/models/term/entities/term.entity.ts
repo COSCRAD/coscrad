@@ -271,6 +271,7 @@ export class Term extends Resource {
             audio: new MultilingualAudio({
                 items: [],
             }),
+            hasBeenDeleted: false,
         });
     }
 
@@ -293,6 +294,7 @@ export class Term extends Resource {
             }),
             // terms are not published by default
             published: false,
+            hasBeenDeleted: false,
         });
     }
 }

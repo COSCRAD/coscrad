@@ -641,6 +641,7 @@ export class DigitalText extends Resource {
             audioForTitle: MultilingualAudio.buildEmpty(),
             pages: [],
             published: false,
+            hasBeenDeleted: false,
         });
 
         // TODO validate invariants

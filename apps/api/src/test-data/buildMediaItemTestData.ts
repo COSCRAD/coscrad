@@ -18,6 +18,7 @@ const dtos: DTO<MediaItem>[] = [
         lengthMilliseconds: 2500,
         mimeType: MIMEType.wav,
         published: true,
+        hasBeenDeleted: false,
         type: ResourceType.mediaItem,
     },
     {
@@ -33,6 +34,7 @@ const dtos: DTO<MediaItem>[] = [
         lengthMilliseconds: 910000,
         mimeType: MIMEType.mp4,
         published: true,
+        hasBeenDeleted: false,
         type: ResourceType.mediaItem,
     },
     {
@@ -48,6 +50,7 @@ const dtos: DTO<MediaItem>[] = [
         lengthMilliseconds: 2500,
         mimeType: MIMEType.mp3,
         published: true,
+        hasBeenDeleted: false,
         type: ResourceType.mediaItem,
     },
     {
@@ -57,6 +60,7 @@ const dtos: DTO<MediaItem>[] = [
         url: 'https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png',
         mimeType: MIMEType.png,
         published: true,
+        hasBeenDeleted: false,
         type: ResourceType.mediaItem,
     },
     {
@@ -66,6 +70,7 @@ const dtos: DTO<MediaItem>[] = [
         url: 'https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png',
         mimeType: MIMEType.png,
         published: true,
+        hasBeenDeleted: false,
         type: ResourceType.mediaItem,
     },
     {
@@ -75,6 +80,7 @@ const dtos: DTO<MediaItem>[] = [
         url: 'https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png',
         mimeType: MIMEType.png,
         published: true,
+        hasBeenDeleted: false,
         type: ResourceType.mediaItem,
     },
     {
@@ -84,6 +90,7 @@ const dtos: DTO<MediaItem>[] = [
         url: 'https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png',
         mimeType: MIMEType.png,
         published: true,
+        hasBeenDeleted: false,
         type: ResourceType.mediaItem,
     },
     {
@@ -93,6 +100,7 @@ const dtos: DTO<MediaItem>[] = [
         url: 'https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav',
         mimeType: MIMEType.wav,
         published: true,
+        hasBeenDeleted: false,
         type: ResourceType.mediaItem,
     },
     {
@@ -102,6 +110,7 @@ const dtos: DTO<MediaItem>[] = [
         url: 'https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav',
         mimeType: MIMEType.wav,
         published: true,
+        hasBeenDeleted: false,
         type: ResourceType.mediaItem,
     },
 ];

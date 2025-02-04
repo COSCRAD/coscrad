@@ -61,6 +61,7 @@ export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
             title: buildMultilingualTextWithSingleItem(title, languageCodeForTitle),
             audioItemId,
             published: false,
+            hasBeenDeleted: false,
             type: ResourceType.song,
             eventHistory: [],
         };

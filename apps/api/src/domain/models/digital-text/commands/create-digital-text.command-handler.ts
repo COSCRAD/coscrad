@@ -27,6 +27,7 @@ export class CreateDigitalTextCommandHandler extends BaseCreateCommandHandler<Di
             type: AggregateType.digitalText,
             id,
             published: false,
+            hasBeenDeleted: false,
             title: new MultilingualText({
                 items: [
                     new MultilingualTextItem({

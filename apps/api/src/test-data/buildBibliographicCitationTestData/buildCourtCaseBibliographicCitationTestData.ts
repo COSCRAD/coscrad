@@ -18,6 +18,7 @@ const dtos: DTO<CourtCaseBibliographicCitation>[] = [
             pages: 'Pages 1-6',
         },
         published: true,
+        hasBeenDeleted: false,
         id: '3',
     },
 ];

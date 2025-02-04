@@ -32,6 +32,7 @@ const dtos: DTO<BookBibliographicCitation>[] = [
             isbn: '978-1-895811-34-6',
         },
         published: true,
+        hasBeenDeleted: false,
         id: '1',
         digitalRepresentationResourceCompositeIdentifier: {
             type: AggregateType.digitalText,

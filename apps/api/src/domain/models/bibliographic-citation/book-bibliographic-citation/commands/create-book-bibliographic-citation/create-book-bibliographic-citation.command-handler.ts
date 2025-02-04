@@ -37,6 +37,7 @@ export class CreateBookBibliographicCitationCommandHandler extends BaseCreateCom
             // A separate `publish` command must be executed
             // TODO [https://www.pivotaltracker.com/story/show/183227484] add this command
             published: false,
+            hasBeenDeleted: false,
             data: {
                 type: BibliographicCitationType.book,
                 title,

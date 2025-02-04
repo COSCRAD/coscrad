@@ -52,6 +52,7 @@ export class CreateJournalArticleBibliographicCitationCommandHandler extends Bas
             id,
             // a separate publication command is required
             published: false,
+            hasBeenDeleted: false,
             data: {
                 type: BibliographicCitationType.journalArticle,
                 title,

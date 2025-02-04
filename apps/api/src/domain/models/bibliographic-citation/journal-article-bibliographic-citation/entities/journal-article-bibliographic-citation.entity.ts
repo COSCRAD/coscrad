@@ -116,6 +116,7 @@ export class JournalArticleBibliographicCitation
             type: AggregateType.bibliographicCitation,
             id,
             published: false,
+            hasBeenDeleted: false,
             data: {
                 type: BibliographicCitationType.journalArticle,
                 title,
