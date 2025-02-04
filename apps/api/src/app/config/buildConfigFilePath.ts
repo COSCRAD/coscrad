@@ -1,6 +1,6 @@
 import { existsSync } from 'fs';
 import { InternalError } from '../../lib/errors/InternalError';
-import { Environment, isValidEnvironment } from './constants/Environment';
+import { Environment } from './constants/Environment';
 
 const getTargetDirectoryForEnvironment = (environment: Environment): string => {
     if ([Environment.production, Environment.staging, Environment.e2e].includes(environment))
@@ -9,12 +9,11 @@ const getTargetDirectoryForEnvironment = (environment: Environment): string => {
     return `/apps/api/src/app/config/`;
 };
 
+/**
+ * It is the responsibility of the client to validate the environment prefix.
+ */
 export default (envFilePrefix: string): string => {
-    if (!isValidEnvironment(envFilePrefix)) {
-        throw new InternalError(
-            `Failed to build a .env file path for unsupported environment: ${envFilePrefix}`
-        );
-    }
+    // TODO We may want to throw here to fail faster when an invalid env is used
 
     /**
      * `envFilePrefix` is usually linked to node_env and of type `Environment`,

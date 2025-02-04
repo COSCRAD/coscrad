@@ -184,7 +184,14 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
         const dto: Partial<DTO<VocabularyListViewModel>> = {
             name: buildMultilingualTextWithSingleItem(textForName, languageCodeForName),
             id: vocabularyListId,
-            actions: ['ADD_TERM_TO_VOCABULARY_LIST', 'PUBLISH_RESOURCE'],
+            actions: [
+                'ADD_TERM_TO_VOCABULARY_LIST',
+                'PUBLISH_RESOURCE',
+                'CREATE_NOTE_ABOUT_RESOURCE',
+                'CONNECT_RESOURCES_WITH_NOTE',
+                'TRANSLATE_VOCABULARY_LIST_NAME',
+                'REGISTER_VOCABULARY_LIST_FILTER_PROPERTY',
+            ],
         };
 
         const view = new VocabularyListViewModel(dto);

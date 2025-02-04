@@ -1,4 +1,4 @@
-import { AggregateType, IVocabularyListViewModel, LanguageCode } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -182,7 +182,7 @@ describe(`TermAddedToVocabularyListEventHandler.handle`, () => {
 
             const updatedView = (await testQueryRepository.fetchById(
                 existingView.id
-            )) as IVocabularyListViewModel;
+            )) as VocabularyListViewModel;
 
             const entrySearchResult = updatedView.entries.find(
                 ({ term }) => term.id === existingTermView.id

@@ -1,9 +1,4 @@
-import {
-    AggregateType,
-    FormFieldType,
-    IVocabularyListViewModel,
-    LanguageCode,
-} from '@coscrad/api-interfaces';
+import { AggregateType, FormFieldType, LanguageCode } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -202,7 +197,7 @@ describe(`EntriesImportedToVocabularyListEventHandler`, () => {
 
             const { entries } = (await testQueryRepository.fetchById(
                 existingView.id
-            )) as IVocabularyListViewModel;
+            )) as VocabularyListViewModel;
 
             expect(entries).toHaveLength(1);
 
