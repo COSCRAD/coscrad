@@ -46,8 +46,6 @@ export class ResourcePublishedEventHandler implements ICoscradEventHandler {
             );
         }
 
-        console.log(`PUbLISHING VL: ${id}`);
-
         await queryRepository.publish(id);
     }
 }

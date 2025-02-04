@@ -25,7 +25,13 @@ import { DTO } from '../../../types/DTO';
 import { TermViewModel } from './term.view-model';
 
 export class VocabularyListEntryViewModel extends BaseDomainModel {
-    // note this doesn't quite line up with the `IVocabularyListViewModel` interface
+    /**
+     * Note this doesn't quite line up with the `IVocabularyListViewModel` interface.
+     * This isn't a problem because we don't need to know the available actions
+     * on the nested term view as it stands. This is only important if we want to
+     * allow user actions to be nested in components on the client. We may consider
+     * this if we move to SSR, but it's not important right now.
+     */
     term: TermViewModel;
 
     variableValues: Record<string, string | boolean>;

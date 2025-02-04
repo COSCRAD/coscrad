@@ -319,8 +319,6 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
     }
 
     subscribeToUpdates(): Observable<{ data: { type: string } }> {
-        console.log(`subscsribing to term view updates!`);
-
         return this.database.getViewUpdateNotifications();
     }
 }

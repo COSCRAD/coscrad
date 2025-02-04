@@ -102,7 +102,6 @@ export class VocabularyListQueryService {
             indexScopedActions: this.fetchUserActions(userWithGroups, [VocabularyList]),
         };
 
-        // @ts-expect-error TODO fix this type
         return result;
     }
 

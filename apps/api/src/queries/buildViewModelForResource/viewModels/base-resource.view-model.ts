@@ -39,6 +39,12 @@ export class BaseResourceViewModel
 
         this.contributions = [...new Set(contributionsWithDuplicates)];
     }
+
+    /**
+     * Note that for state-based models, we should really move the logic to the
+     * view model instead of the domain model. For event sourced models, this
+     * is already done. For now, we side-step the need for a sweeping refactor.
+     */
     getAvailableCommands(): string[] {
         throw new Error(`Not Implemented: Did you mean to project off the event-sourced view?`);
     }

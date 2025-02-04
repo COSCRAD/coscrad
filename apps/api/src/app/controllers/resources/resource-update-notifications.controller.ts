@@ -14,13 +14,9 @@ export class ResourceUpdateNotificationsController {
      * TODO We want to move to a web sockets implementation. Right now, we just
      * stream out the view type when any document is updated. But we want to include
      * an ID, which should not be sent over public channels.
-     *
-     * TODO Consolidate all notifications into a single channel.
      */
     @Sse('resourceUpdates')
     public subscribeToWriteNotifications(): Observable<{ data: { type: string } }> {
-        console.log(`subsrcibing to resource updates in CONTROLLER`);
-
         return merge(
             this.vocabularyListQueryService.subscribeToWriteNotifications(),
             this.termQueryService.subscribeToWriteNotifications(),

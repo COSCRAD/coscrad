@@ -1,8 +1,6 @@
 echo "Setting Environment..."
 export NODE_ENV="e2e"
 
-FILE="e2e.env"
-
 echo "Building COSCRAD CLI..."
 echo "Using Node Environment:"
 echo $NODE_ENV

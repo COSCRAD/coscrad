@@ -1,4 +1,4 @@
-import { AggregateType, isAggregateType } from '@coscrad/api-interfaces';
+import { AggregateType, isAggregateType, IViewUpdateNotification } from '@coscrad/api-interfaces';
 import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { useContext, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
@@ -10,12 +10,8 @@ import { fetchFreshState } from '../store/slices/utils/fetch-fresh-state';
 import { CoscradLayoutContainer } from './coscrad-layout-container';
 import { useAppDispatch } from './hooks';
 
-type ViewWriteNotificationEvent = {
-    type: string;
-};
-
-const isViewWriteEvent = (input: unknown): input is ViewWriteNotificationEvent =>
-    !isNullOrUndefined(input) && isNonEmptyString((input as ViewWriteNotificationEvent).type);
+const isViewWriteEvent = (input: unknown): input is IViewUpdateNotification['data'] =>
+    !isNullOrUndefined(input) && isNonEmptyString((input as IViewUpdateNotification['data']).type);
 
 const subscribeToRealTimeUpdates = (dispatch: ReturnType<typeof useAppDispatch>) => {
     const eventSource = new EventSource(`${getConfig().apiUrl}/commands/notifications`);
@@ -25,7 +21,7 @@ const subscribeToRealTimeUpdates = (dispatch: ReturnType<typeof useAppDispatch>)
          * TODO Move the following somewhere else. `store`?
          *
          */
-        const message = JSON.parse(result.data);
+        const message = JSON.parse(result?.data);
 
         const aggregateTypeFromMessage = message.aggregateCompositeIdentifier?.type;
 

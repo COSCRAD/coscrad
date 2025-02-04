@@ -400,8 +400,6 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
     }
 
     subscribeToUpdates(): Observable<{ data: { type: string } }> {
-        console.log(`subscsribing to VL view updates!`);
-
         return this.database.getViewUpdateNotifications();
     }
 }

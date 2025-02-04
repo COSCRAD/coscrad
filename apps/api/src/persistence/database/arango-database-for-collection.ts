@@ -1,3 +1,10 @@
+/**
+ * TODO Do we want our persistence implementation to depend on this lib?
+ * The reason for doing this is that the type is simply inherited upstream
+ * all the way to the controller, which should be constrained via the contract
+ * provided to the client.
+ */
+import { IViewUpdateNotification } from '@coscrad/api-interfaces';
 import { AqlQuery } from 'arangojs/aql';
 import { isArangoDatabase } from 'arangojs/database';
 import { Subject } from 'rxjs';
@@ -11,15 +18,6 @@ import { ArangoDatabase } from './arango-database';
 import { ArangoDatabaseDocument } from './utilities/mapEntityDTOToDatabaseDocument';
 
 /**
- * TODO Include this in API interfaces
- */
-type ViewUpdateNotification = {
-    data: {
-        type: string;
-    };
-};
-
-/**
  * Note that at this level we are working with a `DatabaseDocument` (has _key
  * and _id), not an `EntityDTO`. The mapping is taken care of in the
  * repositories layer.
@@ -29,7 +27,7 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
 
     #arangoDatabase: ArangoDatabase;
 
-    private readonly viewWriteHookSubject = new Subject<ViewUpdateNotification>();
+    private readonly viewWriteHookSubject = new Subject<IViewUpdateNotification>();
 
     private isDatabaseForView: boolean;
 

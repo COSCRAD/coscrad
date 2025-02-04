@@ -1,4 +1,3 @@
-import { AggregateCompositeIdentifier } from '../aggregate-composite-identifier';
 import { IBaseResourceViewModel } from '../base.view-model.interface';
 
 export interface ITermViewModel extends IBaseResourceViewModel {
@@ -17,12 +16,4 @@ export interface ITermViewModel extends IBaseResourceViewModel {
         allowedUserIds: string[];
         allowedGroupIds: string[];
     };
-
-    /**
-     * These should not be here. These interfaces are for specifying the contract
-     * with the client, and methods cannot be sent over the wire.
-     */
-    getAvailableCommands(): string[];
-
-    getCompositeIdentifier(): AggregateCompositeIdentifier;
 }

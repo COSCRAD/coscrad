@@ -111,7 +111,7 @@ env variables related to ArangoDB to spin up an instance with the desired creden
 
 > > cp apps/coscrad-frontend/src/configurable-front-matter/data/content.config.SAMPLE.ts apps/coscrad-frontend/src/configurable-front-matter/data/content.config.ts
 
-> > apps/coscrad-frontend-e2e/cypress.env.SAMPLE.json apps/coscrad-frontend-e2e/cypress.env.json
+> > cp apps/coscrad-frontend-e2e/cypress.env.SAMPLE.json apps/coscrad-frontend-e2e/cypress.env.json
 
 ## Workflow
 
