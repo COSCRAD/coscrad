@@ -1,10 +1,8 @@
 import {
     AggregateType,
     FormFieldType,
-    IDetailQueryResult,
     IMultilingualTextItem,
     IValueAndDisplay,
-    IVocabularyListViewModel,
     LanguageCode,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
@@ -24,9 +22,13 @@ import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/uti
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoRepositoryForAggregate } from '../../../../persistence/repositories/arango-repository-for-aggregate';
-import { VocabularyListViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
+import {
+    VocabularyListEntryViewModel,
+    VocabularyListViewModel,
+} from '../../../../queries/buildViewModelForResource/viewModels';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { TestEventStream } from '../../../../test-data/events';
+import { DTO } from '../../../../types/DTO';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
@@ -360,7 +362,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
 
             const updatedView = (await testQueryRepository.fetchById(
                 targetView.id
-            )) as IVocabularyListViewModel;
+            )) as VocabularyListViewModel;
 
             const acl = new AccessControlList(updatedView.accessControlList);
 
@@ -389,7 +391,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
 
             const updatedView = (await testQueryRepository.fetchById(
                 targetView.id
-            )) as IVocabularyListViewModel;
+            )) as VocabularyListViewModel;
 
             const { contributions } = updatedView;
 
@@ -427,7 +429,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
             // Assert
             const updatedView = (await testQueryRepository.fetchById(
                 targetView.id
-            )) as IVocabularyListViewModel;
+            )) as VocabularyListViewModel;
 
             const translationItemSearchResult = new MultilingualText(
                 updatedView.name
@@ -453,7 +455,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
             await contributorRepository.createMany(testContributors);
         });
         describe(`when there is an existing vocabulary list`, () => {
-            it.only(`should register the given filter property`, async () => {
+            it(`should register the given filter property`, async () => {
                 await testQueryRepository.registerFilterProperty(
                     targetView.id,
                     filterPropertyName,
@@ -522,7 +524,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
 
             const updatedView = (await testQueryRepository.fetchById(
                 targetView.id
-            )) as IVocabularyListViewModel;
+            )) as VocabularyListViewModel;
 
             const entrySearchResult = updatedView.entries.find(
                 ({ term }) => term.id === existingTerm.id
@@ -548,7 +550,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
             const targetVocabularyListId = buildDummyUuid(987);
 
             // TODO deal with this awkward type
-            const targetView: IDetailQueryResult<IVocabularyListViewModel> = {
+            const targetViewDto: DTO<VocabularyListViewModel> = {
                 id: targetVocabularyListId,
                 name: buildMultilingualTextWithSingleItem(
                     'vocabulary list with existing entry',
@@ -581,9 +583,11 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
                         term: existingTerm,
                         variableValues: {},
                     },
-                ],
+                ].map((dto) => new VocabularyListEntryViewModel(dto)),
                 actions: [],
             };
+
+            const targetView = VocabularyListViewModel.fromDto(targetViewDto);
 
             beforeEach(async () => {
                 await testQueryRepository.create(targetView);
@@ -607,7 +611,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
 
                 const updatedView = (await testQueryRepository.fetchById(
                     targetView.id
-                )) as IVocabularyListViewModel;
+                )) as VocabularyListViewModel;
 
                 const targetEntry = updatedView.entries.find(
                     ({ term }) => term.id === existingTerm.id
@@ -630,7 +634,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
             const targetVocabularyListId = buildDummyUuid(987);
 
             // TODO deal with this awkward type
-            const targetView: IDetailQueryResult<IVocabularyListViewModel> = {
+            const targetViewDto: DTO<VocabularyListViewModel> = {
                 id: targetVocabularyListId,
                 name: buildMultilingualTextWithSingleItem(
                     'vocabulary list with existing entry',
@@ -664,6 +668,8 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
                 actions: [],
             };
 
+            const targetView = VocabularyListViewModel.fromDto(targetViewDto);
+
             beforeEach(async () => {
                 await testQueryRepository.create(targetView);
 
@@ -693,7 +699,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
 
                 const updatedView = (await testQueryRepository.fetchById(
                     targetView.id
-                )) as IVocabularyListViewModel;
+                )) as unknown as VocabularyListViewModel;
 
                 const { entries } = updatedView;
 
