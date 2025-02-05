@@ -2,6 +2,7 @@ import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Observable } from 'rxjs';
 import {
     CommandContext,
     CommandInfoService,
@@ -114,6 +115,10 @@ export class TermQueryService {
             // TODO Should we register index-scoped commands in the view layer instead?
             indexScopedActions: this.fetchUserActions(userWithGroups, [Term]),
         };
+    }
+
+    public subscribeToWriteNotifications(): Observable<{ data: { type: string } }> {
+        return this.termQueryRepository.subscribeToUpdates();
     }
 
     // TODO share this code with other query services

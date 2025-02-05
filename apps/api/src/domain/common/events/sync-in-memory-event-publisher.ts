@@ -13,8 +13,6 @@ export class SyncInMemoryEventPublisher implements ICoscradEventPublisher {
     async publish(eventsToPublish: ICoscradEvent | ICoscradEvent[]): Promise<void> {
         const events = Array.isArray(eventsToPublish) ? eventsToPublish : [eventsToPublish];
 
-        this.logger.log(`publishing ${events.length} events`);
-
         for (const e of events) {
             const { type: eventType } = e;
 

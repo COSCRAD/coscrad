@@ -17,6 +17,7 @@ import { CommandController } from './controllers/command/command.controller';
 import { GameController } from './controllers/command/game.controller';
 import { CommandInfoService } from './controllers/command/services/command-info-service';
 import { ResourceDescriptionController } from './controllers/resources/resource-description.controller';
+import { ResourceUpdateNotificationsController } from './controllers/resources/resource-update-notifications.controller';
 import { BibliographicCitationModule } from './domain-modules/bibliographic-citation.module';
 import { DigitalTextModule } from './domain-modules/digital-text.module';
 import { EdgeConnectionModule } from './domain-modules/edge-connection.module';
@@ -63,6 +64,7 @@ import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
         AppController,
         CategoryController,
         ResourceDescriptionController,
+        ResourceUpdateNotificationsController,
         CommandController,
         GameController,
     ],

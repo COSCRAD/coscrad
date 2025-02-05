@@ -21,10 +21,10 @@ export const fetchVocabularyLists = createFetchThunk<VocabularyListIndexState>(
          */
         return {
             ...serverResponse,
-            entities: serverResponse.entities.map((entity) => {
+            entities: (serverResponse.entities || []).map((entity) => {
                 return {
                     ...entity,
-                    entries: entity.entries.map((entry) => ({
+                    entries: (entity.entries || []).map((entry) => ({
                         ...entry,
                         term: {
                             ...entry.term,

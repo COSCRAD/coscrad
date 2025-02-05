@@ -12,7 +12,7 @@ import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
 import { ResourceQueryService } from './resource-query.service';
 
 @Injectable()
-export class SongQueryService extends ResourceQueryService<Song, ISongViewModel> {
+export class SongQueryService extends ResourceQueryService<Song, Omit<ISongViewModel, 'actions'>> {
     protected readonly type = ResourceType.song;
 
     buildViewModel(
@@ -21,7 +21,7 @@ export class SongQueryService extends ResourceQueryService<Song, ISongViewModel>
             resources: { audioItem: allAudioItems, mediaItem: allMediaItems },
             contributor: allContributors,
         }: InMemorySnapshot
-    ): ISongViewModel {
+    ): Omit<ISongViewModel, 'actions'> {
         return new SongViewModel(song, allAudioItems, allMediaItems, allContributors);
     }
 

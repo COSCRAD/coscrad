@@ -74,7 +74,19 @@ export class CommandController {
         if (result !== Ack) return sendInternalResultAsHttpResponse(res, result);
 
         this.commandResultSubject.next({
-            data: { aggregateCompositeIdentifier: payload[AGGREGATE_COMPOSITE_IDENTIFIER] },
+            data: {
+                aggregateCompositeIdentifier: {
+                    type: payload[AGGREGATE_COMPOSITE_IDENTIFIER].type,
+                    /**
+                     * Note we do not publish IDs over a public channel.
+                     * This means that the client needs to refresh the entire
+                     * client-side cache of the resources of a given type on update.
+                     * This is currenlty only used for the admin UX.
+                     *
+                     * TODO Move to a web-sockets implementation.
+                     */
+                },
+            },
         });
 
         return res.status(httpStatusCodes.ok).send();

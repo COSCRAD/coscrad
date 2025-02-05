@@ -196,7 +196,7 @@ describe(`when querying for a term: fetch by Id`, () => {
 
                     expect(res.status).toBe(httpStatusCodes.ok);
 
-                    const result = res.body as IDetailQueryResult<ITermViewModel>;
+                    const result = res.body as IDetailQueryResult<TermViewModel>;
 
                     expect(result.id).toBe(termId);
 

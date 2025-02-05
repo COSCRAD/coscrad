@@ -59,7 +59,29 @@ export class DataImporter {
 
         await Promise.all(
             Object.values(ArangoCollectionId)
-                .concat('games' as ArangoCollectionId)
+                .concat(
+                    /**
+                     * TODO We need to find a more extensible solution to this
+                     * 1. Dynamic registration:
+                     * ```ts
+                     * @ArangoViewCollectionFor('term') // presumably builds 'term__VIEWS'
+                     * ```
+                     *
+                     * 2. Convention over configuration:
+                     * ```ts
+                     * this.db.collections.forEach(
+                     *     collectionName => {
+                     *          if(collectionName.contains("__VIEWS")){
+                     *      // .. do something
+                     *  }
+                     * }
+                     * )
+                     * ```
+                     */
+                    'games' as ArangoCollectionId,
+                    'term__VIEWS' as ArangoCollectionId,
+                    'vocabularyList__VIEWS' as ArangoCollectionId
+                )
                 .map((collectionName) =>
                     this.databaseProvider.getDBInstance().deleteAll(collectionName)
                 )

@@ -1,4 +1,4 @@
-import { IVideoViewModel, MIMEType } from '@coscrad/api-interfaces';
+import { MIMEType } from '@coscrad/api-interfaces';
 import { ExternalEnum, NestedDataType, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { MultilingualText } from '../../../../domain/common/entities/multilingual-text';
@@ -9,7 +9,7 @@ import { CoscradContributor } from '../../../../domain/models/user-management/co
 import { isNullOrUndefined } from '../../../../domain/utilities/validation/is-null-or-undefined';
 import { BaseResourceViewModel } from '../base-resource.view-model';
 
-export class VideoViewModel extends BaseResourceViewModel implements IVideoViewModel {
+export class VideoViewModel extends BaseResourceViewModel {
     @NestedDataType(MultilingualText, {
         label: 'name',
         description: 'name of the video',

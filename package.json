@@ -5,8 +5,11 @@
     "scripts": {
         "nx": "nx",
         "serve:frontend": "cross-env NODE_ENV=development nx run coscrad-frontend:serve",
+        "serve:frontend:e2e": "cross-env NODE_ENV=e2e nx run coscrad-frontend:serve",
         "serve:api": "cross-env NODE_ENV=development nx run api:serve",
+        "serve:api:e2e": "cross-env NODE_ENV=e2e nx run api:serve",
         "serve:all": "concurrently \"npm run serve:api\" \"npm run serve:frontend\"",
+        "serve:all:e2e": "concurrently \"npm run serve:api:e2e\" \"npm run serve:frontend:e2e\"",
         "start:db:dev": "nx run api:test --skip-nx-cache --testFile 'validateTestData.spec.ts' && ./scripts/arangodb-docker-container-setup/arangodb-docker-container-setup.sh development",
         "start:db:staging": "./scripts/arangodb-docker-container-setup/start-arango-db.sh staging",
         "start:db:production": "./scripts/arangodb-docker-container-setup/start-arango-db.sh production",

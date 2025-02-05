@@ -1,4 +1,4 @@
-import { IAudioItemViewModel, MIMEType } from '@coscrad/api-interfaces';
+import { MIMEType } from '@coscrad/api-interfaces';
 import {
     ExternalEnum,
     NestedDataType,
@@ -15,10 +15,7 @@ import { AccessControlList } from '../../../../domain/models/shared/access-contr
 import { CoscradContributor } from '../../../../domain/models/user-management/contributor';
 import { BaseResourceViewModel } from '../base-resource.view-model';
 
-export class StateBasedAudioItemViewModel
-    extends BaseResourceViewModel
-    implements IAudioItemViewModel
-{
+export class StateBasedAudioItemViewModel extends BaseResourceViewModel {
     @NestedDataType(MultilingualText, {
         label: 'name',
         description: 'name of the audio item',
