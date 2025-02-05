@@ -15,133 +15,133 @@ const originalEnv = process.env;
  */
 
 const createAppModule = (configFileName: string) =>
-  Test.createTestingModule({
-    imports: [
-      ConfigModule.forRoot({
-        isGlobal: true,
-        /**
-         * We intentionally read the sample .env here to avoid snapshotting
-         * actual sensitive data. The only constraint is that the values
-         * in `sample.env` need to have the corredt types as specified in
-         * `env.validation.ts`.
-         */
-        envFilePath: buildConfigFilePath(configFileName),
-        cache: false,
-        validate,
-      }),
-    ],
-  }).compile();
+    Test.createTestingModule({
+        imports: [
+            ConfigModule.forRoot({
+                isGlobal: true,
+                /**
+                 * We intentionally read the sample .env here to avoid snapshotting
+                 * actual sensitive data. The only constraint is that the values
+                 * in `sample.env` need to have the corredt types as specified in
+                 * `env.validation.ts`.
+                 */
+                envFilePath: buildConfigFilePath(configFileName),
+                cache: false,
+                validate,
+            }),
+        ],
+    }).compile();
 
 describe('ConfigService', () => {
-  let app: INestApplication;
+    let app: INestApplication;
 
-  beforeEach(async () => {
-    /**
-     * HACK We have experienced annoying side-effect issues with the way the
-     * built-in ConfigService reads our `.env` files. We have a separate
-     * `${environment}.env` file for each unique environment. However,
-     * `process.env` apparently takes priority over these locally defined files.
-     * Forcing the local values to take precedence in the test environment has
-     * been an exercise in frustration.
-     *
-     * https://github.com/nestjs/config/issues/168
-     *
-     * https://github.com/nestjs/config/issues/168
-     */
-    removeAllCustomEntironmentVariables();
-  });
-
-  describe('the environment', () => {
-    it('should be test', () => {
-      expect(process.env.NODE_ENV).toBe('test');
+    beforeEach(async () => {
+        /**
+         * HACK We have experienced annoying side-effect issues with the way the
+         * built-in ConfigService reads our `.env` files. We have a separate
+         * `${environment}.env` file for each unique environment. However,
+         * `process.env` apparently takes priority over these locally defined files.
+         * Forcing the local values to take precedence in the test environment has
+         * been an exercise in frustration.
+         *
+         * https://github.com/nestjs/config/issues/168
+         *
+         * https://github.com/nestjs/config/issues/168
+         */
+        removeAllCustomEntironmentVariables();
     });
-  });
 
-  describe('when all environment variables are valid', () => {
-    describe('the config service', () => {
-      describe('when creating the module', () => {
-        it('should not throw', () => {
-          const attemptToCreateAppModule = () => createAppModule('sample');
-
-          expect(attemptToCreateAppModule).not.toThrow();
+    describe('the environment', () => {
+        it('should be test', () => {
+            expect(process.env.NODE_ENV).toBe('test');
         });
-      });
-      describe('when reading environment variables', () => {
-        beforeAll(async () => {
-          const moduleRef = await createAppModule('sample');
+    });
 
-          app = moduleRef.createNestApplication();
-          await app.init();
+    describe('when all environment variables are valid', () => {
+        describe('the config service', () => {
+            describe('when creating the module', () => {
+                it('should not throw', () => {
+                    const attemptToCreateAppModule = () => createAppModule('sample');
+
+                    expect(attemptToCreateAppModule).not.toThrow();
+                });
+            });
+            describe('when reading environment variables', () => {
+                beforeAll(async () => {
+                    const moduleRef = await createAppModule('sample');
+
+                    app = moduleRef.createNestApplication();
+                    await app.init();
+                });
+
+                it('should obtain the correct values', () => {
+                    const configService = app.get(ConfigService);
+
+                    const config = buildAllCustomEnvironmentVariableKeys().reduce(
+                        (accumulated, key) => ({
+                            ...accumulated,
+                            [key]: configService.get(key),
+                        }),
+                        {}
+                    );
+
+                    expect(config).toMatchSnapshot();
+                });
+            });
+        });
+    });
+
+    describe('when the .env contains invalid variable declarations', () => {
+        const attemptToCreateAppModule = () => createAppModule('invalid');
+
+        // We might want to check that the promise rejects here instead
+        it('should throw', () => {
+            expect(attemptToCreateAppModule).toThrow();
+
+            let configErrorMessage;
+
+            try {
+                attemptToCreateAppModule();
+            } catch (error) {
+                configErrorMessage = error;
+            }
+
+            expect(configErrorMessage).toMatchSnapshot();
+        });
+    });
+
+    describe('when NODE_ENV is not inherited from the process', () => {
+        beforeAll(() => {
+            delete process.env.NODE_ENV;
         });
 
-        it('should obtain the correct values', () => {
-          const configService = app.get(ConfigService);
-
-          const config = buildAllCustomEnvironmentVariableKeys().reduce(
-            (accumulated, key) => ({
-              ...accumulated,
-              [key]: configService.get(key),
-            }),
-            {}
-          );
-
-          expect(config).toMatchSnapshot();
+        afterAll(() => {
+            process.env = originalEnv;
         });
-      });
-    });
-  });
 
-  describe('when the .env contains invalid variable declarations', () => {
-    const attemptToCreateAppModule = () => createAppModule('invalid');
+        const attemptToCreateAppModule = () => createAppModule('sample');
 
-    // We might want to check that the promise rejects here instead
-    it('should throw', () => {
-      expect(attemptToCreateAppModule).toThrow();
+        // We might want to check that the promise rejects here instead
+        it('should throw', () => {
+            expect(attemptToCreateAppModule).toThrow();
 
-      let configErrorMessage;
+            let configErrorMessage;
 
-      try {
-        attemptToCreateAppModule();
-      } catch (error) {
-        configErrorMessage = error;
-      }
+            try {
+                attemptToCreateAppModule();
+            } catch (error) {
+                configErrorMessage = error;
+            }
 
-      expect(configErrorMessage).toMatchSnapshot();
-    });
-  });
-
-  describe('when NODE_ENV is not inherited from the process', () => {
-    beforeAll(() => {
-      delete process.env.NODE_ENV;
+            expect(configErrorMessage).toMatchSnapshot();
+        });
     });
 
-    afterAll(() => {
-      process.env = originalEnv;
+    afterEach(() => {
+        process.env = originalEnv;
     });
 
-    const attemptToCreateAppModule = () => createAppModule('sample');
-
-    // We might want to check that the promise rejects here instead
-    it('should throw', () => {
-      expect(attemptToCreateAppModule).toThrow();
-
-      let configErrorMessage;
-
-      try {
-        attemptToCreateAppModule();
-      } catch (error) {
-        configErrorMessage = error;
-      }
-
-      expect(configErrorMessage).toMatchSnapshot();
+    afterAll(async () => {
+        await app.close();
     });
-  });
-
-  afterEach(() => {
-    process.env = originalEnv;
-  });
-
-  afterAll(async () => {
-    await app.close();
-  });
 });

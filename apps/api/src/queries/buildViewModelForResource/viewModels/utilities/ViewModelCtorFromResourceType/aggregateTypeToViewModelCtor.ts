@@ -12,7 +12,6 @@ import { CategoryTreeViewModel } from '../../category-tree.view-model';
 import { CoscradContributorViewModel } from '../../coscrad-contributor.view-model';
 import { CoscradUserGroupViewModel } from '../../coscrad-user-group.view-model';
 import { CoscradUserViewModel } from '../../coscrad-user.view-model';
-import { VocabularyListViewModel } from '../../event-sourced-vocabulary-list.view-model';
 import { MediaItemViewModel } from '../../media-item.view-model';
 import { PhotographViewModel } from '../../photograph.view-model';
 import { PlaylistViewModel } from '../../playlist.view-model';
@@ -20,6 +19,7 @@ import { SongViewModel } from '../../song.view-model';
 import { SpatialFeatureViewModel } from '../../spatial-data/spatial-feature.view-model';
 import { TagViewModel } from '../../tag.view-model';
 import { TermViewModel } from '../../term.view-model.state-based';
+import { VocabularyListViewModel } from '../../vocabulary-list.view-model';
 
 /**
  * TODO Remove this once all resource views are event sourced.

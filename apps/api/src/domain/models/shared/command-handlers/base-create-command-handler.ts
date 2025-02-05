@@ -70,8 +70,6 @@ export abstract class BaseCreateCommandHandler<
             instanceToPersistWithUpdatedEventHistory
         );
 
-        console.log(`Publishing: ${event}`);
-
         /**
          * TODO
          * 1. Share this logic with the base-update-command handler

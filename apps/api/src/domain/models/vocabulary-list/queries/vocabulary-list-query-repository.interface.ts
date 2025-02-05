@@ -1,5 +1,7 @@
-import { IMultilingualTextItem, IVocabularyListViewModel } from '@coscrad/api-interfaces';
+import { IMultilingualTextItem } from '@coscrad/api-interfaces';
+import { Observable } from 'rxjs';
 import { Maybe } from '../../../../lib/types/maybe';
+import { VocabularyListViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
 import { AggregateId } from '../../../types/AggregateId';
 import { FilterPropertyType } from '../commands';
 import { VocabularyListEntryImportItem } from '../entities/vocabulary-list.entity';
@@ -7,15 +9,17 @@ import { VocabularyListEntryImportItem } from '../entities/vocabulary-list.entit
 export const VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN = 'VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN';
 
 export interface IVocabularyListQueryRepository {
-    fetchById(id: AggregateId): Promise<Maybe<IVocabularyListViewModel>>;
+    subscribeToUpdates(): Observable<{ data: { type: string } }>;
 
-    fetchMany(): Promise<IVocabularyListViewModel[]>;
+    fetchById(id: AggregateId): Promise<Maybe<VocabularyListViewModel>>;
+
+    fetchMany(): Promise<VocabularyListViewModel[]>;
 
     count(): Promise<number>;
 
-    create(view: IVocabularyListViewModel): Promise<void>;
+    create(view: VocabularyListViewModel): Promise<void>;
 
-    createMany(views: IVocabularyListViewModel[]): Promise<void>;
+    createMany(views: VocabularyListViewModel[]): Promise<void>;
 
     delete(id: AggregateId): Promise<void>;
 

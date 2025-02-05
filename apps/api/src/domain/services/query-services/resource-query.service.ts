@@ -86,7 +86,8 @@ export abstract class ResourceQueryService<
     abstract buildViewModel(
         domainInstance: TDomainModel,
         externalState: InMemorySnapshot
-    ): UViewModel;
+    ): // the actions are mixed-in at a higher level
+    Omit<UViewModel, 'actions'>;
 
     /**
      * Union models have multiple ctors which must all be considered when

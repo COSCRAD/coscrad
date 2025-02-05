@@ -88,5 +88,6 @@ import { VocabularyListController } from '../controllers/resources/vocabulary-li
             useValue: ctor,
         })),
     ],
+    exports: [VocabularyListQueryService],
 })
 export class VocabularyListModule {}

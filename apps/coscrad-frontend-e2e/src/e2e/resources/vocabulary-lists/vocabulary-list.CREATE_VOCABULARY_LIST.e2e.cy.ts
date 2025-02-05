@@ -1,4 +1,4 @@
-import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import { LanguageCode, ResourceType } from '@coscrad/api-interfaces';
 import { Steps } from '../../../support/utilities';
 
 const commandLabel = `Create Vocabulary List`;
@@ -11,17 +11,21 @@ const languageCode = LanguageCode.Chilcotin;
 
 const steps = new Steps()
     .addStep(stepNames[0], () => {
-        cy.getByDataAttribute(`text_name`).click().type(name);
+        cy.getByDataAttribute(`text_name`).click();
+
+        cy.getByDataAttribute(`text_name`).type(name);
     })
+
     .addStep(stepNames[1], () => {
+        cy.getByDataAttribute('languageCodeForName_select').click();
+
         cy.getByDataAttribute('languageCodeForName_select')
-            .click()
             .get(`[data-value="${languageCode}"`)
             .click();
     });
 
 describe(`CREATE_VOCABULARY_LIST`, () => {
-    before(() => {
+    beforeEach(() => {
         cy.clearDatabase();
 
         cy.executeCommandStreamByName('users:create-admin');
@@ -31,7 +35,7 @@ describe(`CREATE_VOCABULARY_LIST`, () => {
         beforeEach(() => {
             cy.visit('/');
 
-            cy.navigateToResourceIndex(AggregateType.vocabularyList);
+            cy.navigateToResourceIndex(ResourceType.vocabularyList);
         });
 
         it(`should not expose the command`, () => {
@@ -45,7 +49,9 @@ describe(`CREATE_VOCABULARY_LIST`, () => {
 
             cy.login();
 
-            cy.navigateToResourceIndex(AggregateType.vocabularyList);
+            cy.navigateToResourceIndex(ResourceType.vocabularyList);
+
+            cy.getLoading().should('not.exist');
 
             cy.contains(commandLabel).click();
         });
@@ -61,6 +67,12 @@ describe(`CREATE_VOCABULARY_LIST`, () => {
 
             it(`should succeed`, () => {
                 cy.contains(name);
+            });
+
+            it.skip(`should navigate successfully to the detail component`, () => {
+                cy.get(
+                    '[data-testid="vocabularyList/a1fe833e-f2f5-4411-a6d4-8cae682c7c42"] > :nth-child(1) > a'
+                ).click();
             });
         });
 

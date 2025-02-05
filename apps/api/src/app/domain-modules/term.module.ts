@@ -81,5 +81,6 @@ import { TermCommandsModule } from './term.commands.module';
         TermElicitedFromPromptEventHandler,
         AudioAddedForTermEventHandler,
     ],
+    exports: [TermQueryService],
 })
 export class TermModule {}

@@ -1,7 +1,4 @@
-import {
-    IBibliographicCitationData,
-    IBibliographicCitationViewModel,
-} from '@coscrad/api-interfaces';
+import { IBibliographicCitationData } from '@coscrad/api-interfaces';
 import { ApiProperty } from '@nestjs/swagger';
 import { IBibliographicCitation } from '../../../../domain/models/bibliographic-citation/interfaces/bibliographic-citation.interface';
 import { BibliographicCitationDataUnionType } from '../../../../domain/models/bibliographic-citation/shared/bibliographic-citation-union-data-member.decorator';
@@ -9,10 +6,7 @@ import { CoscradContributor } from '../../../../domain/models/user-management/co
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { BaseResourceViewModel } from '../base-resource.view-model';
 
-export class BibliographicCitationViewModel
-    extends BaseResourceViewModel
-    implements IBibliographicCitationViewModel
-{
+export class BibliographicCitationViewModel extends BaseResourceViewModel {
     // TODO expose data types to swagger
     @ApiProperty()
     @BibliographicCitationDataUnionType({
