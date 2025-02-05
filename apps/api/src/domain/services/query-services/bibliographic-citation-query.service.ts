@@ -44,7 +44,7 @@ export class BibliographicCitationQueryService extends ResourceQueryService<
     buildViewModel(
         bibliographicCitationInstance: IBibliographicCitation<IBibliographicCitationData>,
         { contributor: contributors }: InMemorySnapshot
-    ): IBibliographicCitationViewModel {
+    ): Omit<IBibliographicCitationViewModel, 'actions'> {
         return new BibliographicCitationViewModel(bibliographicCitationInstance, contributors);
     }
 

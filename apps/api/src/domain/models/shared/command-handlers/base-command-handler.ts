@@ -170,7 +170,7 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
 
         if (isInternalError(updatedInstance)) return buildExecutionError([updatedInstance]);
 
-        // Can we combine this with fetching the write context for performance?
+        // Can we combine this with fetching the write context for performance and atomicity.
         const externalState = await this.fetchRequiredExternalState(command);
 
         const referenceValidationResult = this.validateReferences(command, externalState);

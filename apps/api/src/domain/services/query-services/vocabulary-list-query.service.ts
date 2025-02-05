@@ -1,11 +1,17 @@
-import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
+import {
+    ICommandFormAndLabels,
+    IIndexQueryResult,
+    IVocabularyListViewModel,
+} from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject, Injectable } from '@nestjs/common';
+import { Observable } from 'rxjs';
 import {
     CommandContext,
     CommandInfoService,
 } from '../../../app/controllers/command/services/command-info-service';
 import { isNotFound, NotFound } from '../../../lib/types/not-found';
+import { VocabularyListViewModel } from '../../../queries/buildViewModelForResource/viewModels';
 import { AccessControlList } from '../../models/shared/access-control/access-control-list.entity';
 import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';
 import { VocabularyList } from '../../models/vocabulary-list/entities/vocabulary-list.entity';
@@ -45,13 +51,20 @@ export class VocabularyListQueryService {
             acl.canUser(userWithGroups.id) ||
             userWithGroups.groups.some(({ id: groupId }) => acl.canGroup(groupId))
         ) {
-            return result;
+            const viewWithoutActions = VocabularyListViewModel.fromDto(result);
+
+            return {
+                ...viewWithoutActions,
+                actions: this.fetchUserActions(userWithGroups, [viewWithoutActions]),
+            };
         }
 
         return NotFound;
     }
 
-    async fetchMany(userWithGroups?: CoscradUserWithGroups) {
+    async fetchMany(
+        userWithGroups?: CoscradUserWithGroups
+    ): Promise<IIndexQueryResult<IVocabularyListViewModel>> {
         // TODO consider filtering for user access in the DB
         const entities = await this.repository.fetchMany();
 
@@ -72,12 +85,28 @@ export class VocabularyListQueryService {
             );
         });
 
-        return {
-            // TODO ensure actions show up on entities
-            entities: availableEntities,
+        const result = {
+            // TODO ensure actions show up on entities DO this now!
+            entities: availableEntities.map((entity) => {
+                const actions =
+                    Array.isArray(entity.actions) && entity.actions.length > 0
+                        ? fetchActionsForUser(this.commandInfoService, userWithGroups, entity)
+                        : [];
+
+                return {
+                    ...entity,
+                    actions,
+                };
+            }),
             // TODO Should we register index-scoped commands in the view layer instead?
             indexScopedActions: this.fetchUserActions(userWithGroups, [VocabularyList]),
         };
+
+        return result;
+    }
+
+    public subscribeToWriteNotifications(): Observable<{ data: { type: string } }> {
+        return this.repository.subscribeToUpdates();
     }
 
     // TODO share this code with other query services

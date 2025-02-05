@@ -1,16 +1,6 @@
 echo "Setting Environment..."
 export NODE_ENV="e2e"
 
-FILE="e2e.env"
-
-if test -f "$FILE"; then
-    echo "removing existing $FILE"
-    rm "$FILE"
-fi
-
-echo "Copying across e2e.env"
-cp ../api/src/app/config/e2e.env $FILE
-
 echo "Building COSCRAD CLI..."
 echo "Using Node Environment:"
 echo $NODE_ENV

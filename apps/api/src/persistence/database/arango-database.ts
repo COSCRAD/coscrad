@@ -178,7 +178,7 @@ export class ArangoDatabase {
          */
         const MAX_NUMBER_OF_RETRIES = 10;
 
-        await this.db.query(
+        const cursor = await this.db.query(
             {
                 query,
                 bindVars,
@@ -187,6 +187,8 @@ export class ArangoDatabase {
                 retryOnConflict: MAX_NUMBER_OF_RETRIES,
             }
         );
+
+        await cursor.all();
     };
 
     update = async <TUpdateEntityDTO>(

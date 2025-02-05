@@ -25,7 +25,9 @@ const buildCommandTypeFilter = (
         const relevantCommands = Reflect.getMetadata(INDEX_SCOPED_COMMANDS, context);
 
         if (!Array.isArray(relevantCommands)) {
-            throw new Error(`Failed to find index-scoped commands for context: ${context}`);
+            throw new Error(
+                `Failed to find index-scoped commands for context: ${JSON.stringify(context)}`
+            );
         }
 
         // DO NOT DEFAULT TO [] here. Failing to decorate the Resource class should break things!
@@ -39,14 +41,14 @@ type CommandInfo = CommandMetadataBase & {
     schema: ClassSchema;
 };
 
-export type DetailScopedCommandWriteContext = {
+export interface DetailScopedCommandWriteContext {
     getAvailableCommands(): string[];
 
     getCompositeIdentifier(): {
         type: AggregateType;
         id: AggregateId;
     };
-};
+}
 
 type IndexScopedCommandWriteContext = DomainModelCtor;
 

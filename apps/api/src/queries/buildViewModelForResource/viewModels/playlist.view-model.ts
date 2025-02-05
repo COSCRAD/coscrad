@@ -1,4 +1,4 @@
-import { IPlayListViewModel, ResourceType } from '@coscrad/api-interfaces';
+import { ResourceType } from '@coscrad/api-interfaces';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
 import { AudioItem } from '../../../domain/models/audio-visual/audio-item/entities/audio-item.entity';
@@ -18,7 +18,7 @@ import { BaseResourceViewModel } from './base-resource.view-model';
  * or notes about the playlist and will only support general context in connections
  * for playlists.
  */
-export class PlaylistViewModel extends BaseResourceViewModel implements IPlayListViewModel {
+export class PlaylistViewModel extends BaseResourceViewModel {
     @NestedDataType(MultilingualText, {
         label: 'name',
         description: 'name of the playlist',

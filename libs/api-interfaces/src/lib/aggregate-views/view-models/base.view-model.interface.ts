@@ -1,3 +1,4 @@
+import { ICommandFormAndLabels } from '../../commands';
 import { HasId } from './has-id.interface';
 import { IMultilingualText } from './resources/common';
 
@@ -12,4 +13,5 @@ export interface IBaseViewModel extends HasId {
 
 export interface IBaseResourceViewModel extends IBaseViewModel {
     contributions: ContributorWithId[];
+    actions: ICommandFormAndLabels[];
 }
