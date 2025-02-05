@@ -7,7 +7,11 @@ type AggregateTypeAndLabel = {
     [K in AggregateType]: string;
 };
 
-// I wonder if we could make this a static property on the class?
+/**
+ * TODO Let's leverage our
+ * @Resource({type: ResourceType.digitalText, labels: { singular: 'Digital Text', plural: 'Digital Texts'}, })
+ * decorator for dynamically registering these
+ */
 const resourceTypeAndLabel: AggregateTypeAndLabel = {
     [AggregateType.note]: 'Note',
     [AggregateType.category]: 'Category',
@@ -15,9 +19,9 @@ const resourceTypeAndLabel: AggregateTypeAndLabel = {
     [AggregateType.user]: 'User',
     [AggregateType.contributor]: 'Contributor',
     [AggregateType.userGroup]: 'User Group',
+    [AggregateType.mediaItem]: 'Media Item',
     [ResourceType.bibliographicCitation]: 'Bibliographic Citation',
     [ResourceType.digitalText]: 'Digital Text',
-    [ResourceType.mediaItem]: 'Media Item',
     [ResourceType.photograph]: 'Photograph',
     [ResourceType.song]: 'Song',
     [ResourceType.spatialFeature]: 'Spatial Feature',

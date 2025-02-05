@@ -1,15 +1,16 @@
+import { AggregateType } from '@coscrad/api-interfaces';
 import { CommandHandler } from '@coscrad/commands';
+import buildInstanceFactory from '../../../../../domain/factories/utilities/buildInstanceFactory';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { Valid } from '../../../../domainModelValidators/Valid';
-import getInstanceFactoryForResource from '../../../../factories/get-instance-factory-for-resource';
-import { InMemorySnapshot, ResourceType } from '../../../../types/ResourceType';
+import { InMemorySnapshot } from '../../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../../utilities/buildInMemorySnapshot';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
 import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
-import ResourceIdAlreadyInUseError from '../../../shared/common-command-errors/ResourceIdAlreadyInUseError';
+import AggregateIdAlreadyInUseError from '../../../shared/common-command-errors/AggregateIdAlreadyInUseError';
 import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import idEquals from '../../../shared/functional/idEquals';
 import { MediaItemDimensions } from '../../entities/media-item-dimensions';
@@ -32,7 +33,7 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
 
         const createDto: DTO<MediaItem> = {
             id,
-            type: ResourceType.mediaItem,
+            type: AggregateType.mediaItem,
             title,
             url,
             mimeType: mimeType,
@@ -55,15 +56,18 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
                       }),
         };
 
-        return getInstanceFactoryForResource<MediaItem>(ResourceType.mediaItem)(createDto);
+        return buildInstanceFactory(MediaItem)(createDto);
     }
 
-    protected async fetchRequiredExternalState({
-        aggregateCompositeIdentifier: { id: mediaItemId },
-    }: CreateMediaItem): Promise<InMemorySnapshot> {
-        const searchResult = await this.repositoryProvider
-            .forResource<MediaItem>(ResourceType.mediaItem)
-            .fetchById(mediaItemId);
+    protected async fetchRequiredExternalState(
+        command: CreateMediaItem
+    ): Promise<InMemorySnapshot> {
+        const {
+            aggregateCompositeIdentifier: { id: mediaItemId },
+        } = command;
+
+        // why not inject a @Inject(`MEDIA_ITEM_REPOSITORY_TOKEN`) repo: IAggregateRootCommandRepo<MediaItem> ???
+        const searchResult = await this.getRepositoryForCommand(command).fetchById(mediaItemId);
 
         if (isInternalError(searchResult)) {
             throw new InternalError(`Invalid media item in database!`, [searchResult]);
@@ -72,21 +76,16 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
         const relevantExistingMediaItems = isNotFound(searchResult) ? [] : [searchResult];
 
         return buildInMemorySnapshot({
-            resources: {
-                mediaItem: relevantExistingMediaItems,
-            },
+            mediaItems: relevantExistingMediaItems,
         });
     }
 
     protected validateExternalState(
-        { resources: { mediaItem: preExistingMediaItems } }: InMemorySnapshot,
+        { mediaItems: preExistingMediaItems }: InMemorySnapshot,
         instance: MediaItem
     ): InternalError | Valid {
         if (preExistingMediaItems.some(idEquals(instance.id)))
-            return new ResourceIdAlreadyInUseError({
-                id: instance.id,
-                resourceType: ResourceType.mediaItem,
-            });
+            return new AggregateIdAlreadyInUseError(instance.getCompositeIdentifier());
 
         return Valid;
     }

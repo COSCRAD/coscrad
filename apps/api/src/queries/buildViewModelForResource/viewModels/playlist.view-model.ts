@@ -1,4 +1,4 @@
-import { ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType } from '@coscrad/api-interfaces';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
 import { AudioItem } from '../../../domain/models/audio-visual/audio-item/entities/audio-item.entity';
@@ -65,7 +65,7 @@ export class PlaylistViewModel extends BaseResourceViewModel {
         this.episodes = allResources.flatMap((resource) =>
             resource.buildEpisodes(
                 new DeluxeInMemoryStore({
-                    [ResourceType.mediaItem]: allMediaItems,
+                    [AggregateType.mediaItem]: allMediaItems,
                 }).fetchFullSnapshotInLegacyFormat()
             )
         );

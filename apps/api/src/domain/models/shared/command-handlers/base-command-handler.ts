@@ -65,6 +65,15 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
         if (aggregateType === AggregateType.tag)
             return this.repositoryProvider.getTagRepository() as unknown as IRepositoryForAggregate<T>;
 
+        /**
+         * TODO remove `mediaItem` from `AggregateType`
+         */
+        if (aggregateType === AggregateType.mediaItem) {
+            throw new InternalError(
+                `Do not use the repository provider to access a MediaItem query repository. Use the media item service directly`
+            );
+        }
+
         if (aggregateType === AggregateType.category) {
             throw new InternalError(
                 `Category Repository is not supported as it doesn not have an update method`

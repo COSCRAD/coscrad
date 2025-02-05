@@ -28,7 +28,6 @@ import {
     MEDIA_PROBER_TOKEN,
 } from '../domain/services/query-services/media-management';
 import { AggregateId } from '../domain/types/AggregateId';
-import { ResourceType } from '../domain/types/ResourceType';
 import { InternalError, isInternalError } from '../lib/errors/InternalError';
 import { NotFound, isNotFound } from '../lib/types/not-found';
 import clonePlainObjectWithoutProperty from '../lib/utilities/clonePlainObjectWithoutProperty';
@@ -229,7 +228,7 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
                     payload: {
                         ...clonePlainObjectWithoutProperty(partialFsa, 'filename'),
                         aggregateCompositeIdentifier: {
-                            type: ResourceType.mediaItem,
+                            type: AggregateType.mediaItem,
                             id,
                         },
                         url: `${baseUrl}/${generatedIds[index]}`,

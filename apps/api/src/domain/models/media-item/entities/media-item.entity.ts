@@ -1,5 +1,6 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import {
+    BooleanDataType,
     ExternalEnum,
     MIMEType,
     NestedDataType,
@@ -12,17 +13,13 @@ import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
-import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
-import { ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
+import { Aggregate } from '../../aggregate.entity';
 import { isAudioMimeType } from '../../audio-visual/audio-item/entities/audio-item.entity';
 import { isVideoMimeType } from '../../audio-visual/video/entities/video.entity';
-import { TimeRangeContext } from '../../context/time-range-context/time-range-context.entity';
-import { ITimeBoundable } from '../../interfaces/ITimeBoundable';
 import { isPhotographMimeType } from '../../photograph/entities/photograph.entity';
-import { Resource } from '../../resource.entity';
-import validateTimeRangeContextForModel from '../../shared/contextValidators/validateTimeRangeContextForModel';
+import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import newInstance from '../../shared/functional/newInstance';
 import { ContributorAndRole } from '../../song/ContributorAndRole';
 import { InconsistentMediaItemPropertyError } from '../errors';
@@ -30,8 +27,13 @@ import { getExtensionForMimeType } from './get-extension-for-mime-type';
 import { MediaItemDimensions } from './media-item-dimensions';
 
 @RegisterIndexScopedCommands(['CREATE_MEDIA_ITEM'])
-export class MediaItem extends Resource implements ITimeBoundable {
-    readonly type = ResourceType.mediaItem;
+export class MediaItem extends Aggregate {
+    @BooleanDataType({
+        isOptional: false,
+        label: 'is published',
+        description: 'is this media item available to the public?',
+    })
+    readonly published: boolean;
 
     @NonEmptyString({
         isOptional: true,
@@ -58,6 +60,8 @@ export class MediaItem extends Resource implements ITimeBoundable {
         description: 'a web link to the corresponding media file',
     })
     readonly url: string;
+
+    readonly queryAccessControlList?: AccessControlList;
 
     @ExternalEnum(
         {
@@ -147,12 +151,12 @@ export class MediaItem extends Resource implements ITimeBoundable {
         return [];
     }
 
-    validateTimeRangeContext(timeRangeContext: TimeRangeContext): Valid | InternalError {
-        return validateTimeRangeContextForModel(this, timeRangeContext);
-    }
-
     getTimeBounds(): [number, number] {
         return [0, this.lengthMilliseconds];
+    }
+
+    override getAvailableCommands(): string[] {
+        throw new Error('Method not implemented.');
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {

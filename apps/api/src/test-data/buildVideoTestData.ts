@@ -2,9 +2,9 @@ import { LanguageCode, ResourceType } from '@coscrad/api-interfaces';
 import { Aggregate } from '../domain/models/aggregate.entity';
 import { Transcript } from '../domain/models/audio-visual/shared/entities/transcript.entity';
 import { Video } from '../domain/models/audio-visual/video/entities/video.entity';
+import buildMediaItemTestData from '../domain/models/media-item/test-data/buildMediaItemTestData';
 import { DTO } from '../types/DTO';
 import { buildSingleLanguageText } from './buildAudioItemTestData';
-import buildMediaItemTestData from './buildMediaItemTestData';
 import { convertAggregatesIdToUuid } from './utilities/convertSequentialIdToUuid';
 
 const mediaItems = buildMediaItemTestData();

@@ -9,20 +9,19 @@ import { isAudioMimeType } from '../../../domain/models/audio-visual/audio-item/
 import { isVideoMimeType } from '../../../domain/models/audio-visual/video/entities/video.entity';
 import { getExtensionForMimeType } from '../../../domain/models/media-item/entities/get-extension-for-mime-type';
 import { MediaItemQueryService } from '../../../domain/services/query-services/media-management/media-item-query.service';
-import { ResourceType } from '../../../domain/types/ResourceType';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { NotFound, isNotFound } from '../../../lib/types/not-found';
 import { clonePlainObjectWithOverrides } from '../../../lib/utilities/clonePlainObjectWithOverrides';
 import clonePlainObjectWithoutProperty from '../../../lib/utilities/clonePlainObjectWithoutProperty';
 import { MediaItemViewModel } from '../../../queries/buildViewModelForResource/viewModels/media-item.view-model';
 import { InternalErrorFilter } from '../command/exception-handling/exception-filters/internal-error.filter';
-import buildViewModelPathForResourceType from '../utilities/buildIndexPathForResourceType';
 import buildByIdApiParamMetadata from './common/buildByIdApiParamMetadata';
 import sendInternalResultAsHttpResponse from './common/sendInternalResultAsHttpResponse';
 import { RESOURCES_ROUTE_PREFIX } from './constants';
 
 @ApiTags(RESOURCES_ROUTE_PREFIX)
-@Controller(buildViewModelPathForResourceType(ResourceType.mediaItem))
+// Should this be '/media/items?
+@Controller('/mediaItems')
 @UseFilters(new InternalErrorFilter())
 export class MediaItemController {
     constructor(private readonly mediaItemQueryService: MediaItemQueryService) {}

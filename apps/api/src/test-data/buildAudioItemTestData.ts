@@ -8,9 +8,9 @@ import {
 import { Aggregate } from '../domain/models/aggregate.entity';
 import { AudioItem } from '../domain/models/audio-visual/audio-item/entities/audio-item.entity';
 import { Transcript } from '../domain/models/audio-visual/shared/entities/transcript.entity';
+import buildMediaItemTestData from '../domain/models/media-item/test-data/buildMediaItemTestData';
 import { ResourceType } from '../domain/types/ResourceType';
 import { DTO } from '../types/DTO';
-import buildMediaItemTestData from './buildMediaItemTestData';
 import { convertAggregatesIdToUuid } from './utilities/convertSequentialIdToUuid';
 
 const mediaItems = buildMediaItemTestData();

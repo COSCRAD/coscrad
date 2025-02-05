@@ -1,8 +1,8 @@
 import { MIMEType } from '@coscrad/data-types';
-import { MediaItem } from '../domain/models/media-item/entities/media-item.entity';
-import { ResourceType } from '../domain/types/ResourceType';
-import { DTO } from '../types/DTO';
-import { convertAggregatesIdToUuid } from './utilities/convertSequentialIdToUuid';
+import { convertAggregatesIdToUuid } from '../../../../test-data/utilities/convertSequentialIdToUuid';
+import { DTO } from '../../../../types/DTO';
+import { AggregateType } from '../../../types/AggregateType';
+import { MediaItem } from '../entities/media-item.entity';
 
 const dtos: DTO<MediaItem>[] = [
     {
@@ -18,7 +18,7 @@ const dtos: DTO<MediaItem>[] = [
         lengthMilliseconds: 2500,
         mimeType: MIMEType.wav,
         published: true,
-        type: ResourceType.mediaItem,
+        type: AggregateType.mediaItem,
     },
     {
         id: '2',
@@ -33,7 +33,7 @@ const dtos: DTO<MediaItem>[] = [
         lengthMilliseconds: 910000,
         mimeType: MIMEType.mp4,
         published: true,
-        type: ResourceType.mediaItem,
+        type: AggregateType.mediaItem,
     },
     {
         id: '3',
@@ -48,7 +48,7 @@ const dtos: DTO<MediaItem>[] = [
         lengthMilliseconds: 2500,
         mimeType: MIMEType.mp3,
         published: true,
-        type: ResourceType.mediaItem,
+        type: AggregateType.mediaItem,
     },
     {
         id: '4',
@@ -57,7 +57,7 @@ const dtos: DTO<MediaItem>[] = [
         url: 'https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png',
         mimeType: MIMEType.png,
         published: true,
-        type: ResourceType.mediaItem,
+        type: AggregateType.mediaItem,
     },
     {
         id: '5',
@@ -66,7 +66,7 @@ const dtos: DTO<MediaItem>[] = [
         url: 'https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png',
         mimeType: MIMEType.png,
         published: true,
-        type: ResourceType.mediaItem,
+        type: AggregateType.mediaItem,
     },
     {
         id: '6',
@@ -75,7 +75,7 @@ const dtos: DTO<MediaItem>[] = [
         url: 'https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png',
         mimeType: MIMEType.png,
         published: true,
-        type: ResourceType.mediaItem,
+        type: AggregateType.mediaItem,
     },
     {
         id: '7',
@@ -84,7 +84,7 @@ const dtos: DTO<MediaItem>[] = [
         url: 'https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png',
         mimeType: MIMEType.png,
         published: true,
-        type: ResourceType.mediaItem,
+        type: AggregateType.mediaItem,
     },
     {
         id: '8',
@@ -93,7 +93,7 @@ const dtos: DTO<MediaItem>[] = [
         url: 'https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav',
         mimeType: MIMEType.wav,
         published: true,
-        type: ResourceType.mediaItem,
+        type: AggregateType.mediaItem,
     },
     {
         id: '9',
@@ -102,7 +102,7 @@ const dtos: DTO<MediaItem>[] = [
         url: 'https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav',
         mimeType: MIMEType.wav,
         published: true,
-        type: ResourceType.mediaItem,
+        type: AggregateType.mediaItem,
     },
 ];
 

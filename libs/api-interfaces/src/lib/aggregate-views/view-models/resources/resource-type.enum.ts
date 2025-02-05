@@ -7,7 +7,6 @@ export enum ResourceType {
     bibliographicCitation = 'bibliographicCitation',
     digitalText = 'digitalText',
     song = 'song',
-    mediaItem = 'mediaItem',
     video = 'video',
     playlist = 'playlist',
 }

@@ -9,12 +9,10 @@ import { ArangoDatabaseProvider } from '../../../../../persistence/database/data
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../../types/DTO';
-import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
-import { ResourceType } from '../../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../../utilities/buildInMemorySnapshot';
 import { assertCreateCommandError } from '../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../__tests__/command-helpers/assert-create-command-success';
@@ -24,10 +22,11 @@ import { CommandAssertionDependencies } from '../../../__tests__/command-helpers
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import { dummyUuid } from '../../../__tests__/utilities/dummyUuid';
+import AggregateIdAlreadyInUseError from '../../../shared/common-command-errors/AggregateIdAlreadyInUseError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
-import ResourceIdAlreadyInUseError from '../../../shared/common-command-errors/ResourceIdAlreadyInUseError';
 import { MediaItemDimensions } from '../../entities/media-item-dimensions';
 import { MediaItem } from '../../entities/media-item.entity';
+import buildMediaItemTestData from '../../test-data/buildMediaItemTestData';
 import { CreateMediaItem } from './create-media-item.command';
 
 const commandType = 'CREATE_MEDIA_ITEM';
@@ -111,9 +110,8 @@ describe('CreateMediaItem', () => {
 
                         expect(idStatus).toBe(NotAvailable);
 
-                        const mediaItemSearchResult = await testRepositoryProvider
-                            .forResource<MediaItem>(ResourceType.mediaItem)
-                            .fetchById(id);
+                        // TODO Let's inject a media item query service instead
+                        // const mediaItemSearchResult = await new ArangoRepositoryForAggregate().fetchById()
 
                         expect(mediaItemSearchResult).not.toBe(NotFound);
 
@@ -197,13 +195,11 @@ describe('CreateMediaItem', () => {
                     systemUserId: dummyAdminUserId,
                     buildCommandFSA: (_: AggregateId) => buildValidCommandFSA(existingMediaItemId),
                     initialState: buildInMemorySnapshot({
-                        resources: {
-                            mediaItem: [
-                                getValidAggregateInstanceForTest(ResourceType.mediaItem).clone({
-                                    id: existingMediaItemId,
-                                }),
-                            ],
-                        },
+                        mediaItems: [
+                            buildMediaItemTestData()[0].clone({
+                                id: existingMediaItemId,
+                            }),
+                        ],
                     }),
 
                     checkError: (error) => {
@@ -214,9 +210,9 @@ describe('CreateMediaItem', () => {
                         const innerError = error.innerErrors[0];
 
                         expect(innerError).toEqual(
-                            new ResourceIdAlreadyInUseError({
+                            new AggregateIdAlreadyInUseError({
+                                type: AggregateType.mediaItem,
                                 id: existingMediaItemId,
-                                resourceType: ResourceType.mediaItem,
                             })
                         );
                     },

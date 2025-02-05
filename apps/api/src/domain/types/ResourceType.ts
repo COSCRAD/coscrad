@@ -56,6 +56,8 @@ export type InMemorySnapshot = {
     resources: InMemorySnapshotOfResources;
     note: EdgeConnection[];
     tag: Tag[];
+    // TODO Consider whether we want to include media items here
+    mediaItems: MediaItem[];
     /**
      * We do not intend to leak the abstraction of how the categories are
      * represented in the database here. Defer this to (the db specific) document

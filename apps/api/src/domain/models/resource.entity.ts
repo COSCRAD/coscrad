@@ -25,10 +25,6 @@ export abstract class Resource extends Aggregate {
     // TODO: Rename this 'isPublished' - db migration
     readonly published: boolean;
 
-    /**
-     * TODO We need a migration to make the acl required. We'll also need to
-     * populate this on all test data.
-     */
     readonly queryAccessControlList?: AccessControlList;
 
     constructor(dto: DTO<Resource>) {

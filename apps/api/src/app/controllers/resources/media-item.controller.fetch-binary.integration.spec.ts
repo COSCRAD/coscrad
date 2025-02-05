@@ -1,4 +1,4 @@
-import { AggregateType, CoscradUserRole, MIMEType, ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType, CoscradUserRole, MIMEType } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { INestApplication } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -11,15 +11,21 @@ import { MockJwtAuthGuard } from '../../../authorization/mock-jwt-auth-guard';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
 import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { CoscradEventFactory } from '../../../domain/common';
+import buildInstanceFactory from '../../../domain/factories/utilities/buildInstanceFactory';
 import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { getExtensionForMimeType } from '../../../domain/models/media-item/entities/get-extension-for-mime-type';
 import { MediaItem } from '../../../domain/models/media-item/entities/media-item.entity';
+import buildMediaItemTestData from '../../../domain/models/media-item/test-data/buildMediaItemTestData';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../../domain/models/user-management/user/entities/user/coscrad-user.entity';
 import { DeluxeInMemoryStore } from '../../../domain/types/DeluxeInMemoryStore';
+import { ArangoCollectionId } from '../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
+import mapDatabaseDocumentToAggregateDTO from '../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
+import mapEntityDTOToDatabaseDocument from '../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../persistence/persistence.module';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import { ArangoRepositoryForAggregate } from '../../../persistence/repositories/arango-repository-for-aggregate';
 import { DynamicDataTypeFinderService } from '../../../validation';
 import buildMockConfigService from '../../config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../config/buildConfigFilePath';
@@ -43,7 +49,7 @@ const targetFilePath = `${staticAssetsDir}/${dummyMediaItemId}.png`;
 
 const dummyUserId = buildDummyUuid(1);
 
-const existingMediaItem = getValidAggregateInstanceForTest(AggregateType.mediaItem).clone({
+const existingMediaItem = buildMediaItemTestData()[0].clone({
     id: dummyMediaItemId,
 });
 
@@ -236,9 +242,13 @@ describe(`MediaItemController.fetchBinary`, () => {
                     beforeEach(async () => {
                         await testRepositoryProvider.testTeardown();
 
-                        await testRepositoryProvider
-                            .forResource(ResourceType.mediaItem)
-                            .create(mediaItem);
+                        await new ArangoRepositoryForAggregate(
+                            app.get(ArangoDatabaseProvider),
+                            ArangoCollectionId.media_items,
+                            buildInstanceFactory(MediaItem),
+                            mapDatabaseDocumentToAggregateDTO,
+                            mapEntityDTOToDatabaseDocument
+                        ).create(mediaItem);
 
                         if (!isNullOrUndefined(user))
                             await testRepositoryProvider.addFullSnapshot(

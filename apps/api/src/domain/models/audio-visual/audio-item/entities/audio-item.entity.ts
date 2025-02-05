@@ -53,7 +53,7 @@ export type CoscradTimeStamp = number;
 
 // TODO export from elsewhere
 export interface IRadioPublishableResource {
-    // TODO Reduce the input type
+    // TODO Consider using separate media item test helpers
     buildEpisodes: (snapshot: InMemorySnapshot) => PlaylistEpisode[];
 }
 
@@ -150,9 +150,10 @@ export class AudioItem extends Resource implements IRadioPublishableResource {
         ];
     }
 
-    override validateExternalReferences({
-        resources: { mediaItem: mediaItems },
-    }: InMemorySnapshot): ValidationResult {
+    /**
+     * TODO Validate the media item state directly using an (injected) `MediaItemService`
+     */
+    override validateExternalReferences({ mediaItems }: InMemorySnapshot): ValidationResult {
         const myMediaItem = mediaItems.find(({ id }) => id === this.mediaItemId);
 
         /**
@@ -262,16 +263,28 @@ export class AudioItem extends Resource implements IRadioPublishableResource {
         return importTranslationsForTranscriptImplementation.apply(this, [translationItemDtos]);
     }
 
-    // TODO Does this belong in the view layer?
-    buildEpisodes({
-        resources: { mediaItem: allMediaItems },
-    }: InMemorySnapshot): PlaylistEpisode[] {
+    /**
+     * TODO Move this to the view layer.
+     * Note that we  do not use this in validating state when adding an
+     * audio item to a playlist.
+     * When playlists and audio items are event sourced, we should introduce an
+     * ```ts
+     * AudioItemAddedToPlaylistEventConsumer{
+     *     handle({payload: {audioItemId}}){
+     *          this.repo.addAudioItemToPlaylist({audioItemId})
+     *     }
+     * }```
+     *
+     * Given this pattern, we already have the flexibility we were seaking
+     * around adding any resource with audio \ video as a playlist item.
+     */
+    buildEpisodes({ mediaItems: allMediaItems }: InMemorySnapshot): PlaylistEpisode[] {
         const myMediaItem = allMediaItems.find(({ id }) => id === this.mediaItemId);
 
         if (isNullOrUndefined(myMediaItem)) {
             throw new AggregateNotFoundError({
                 id: this.mediaItemId,
-                type: ResourceType.mediaItem,
+                type: AggregateType.mediaItem,
             });
         }
 

@@ -25,5 +25,9 @@ export default <TResource extends Resource>(
 
     const Ctor = getAggregateCtorFromAggregateType(resourceType);
 
+    /**
+     * Realistically, all we need is to use the following and cast. We don't
+     * need magic mapping layers from global enums to types \ Ctors.
+     */
     return buildInstanceFactory<TResource>(Ctor as unknown as DomainModelCtor<TResource>);
 };

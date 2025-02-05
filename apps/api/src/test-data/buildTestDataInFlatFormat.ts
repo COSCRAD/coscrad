@@ -7,7 +7,6 @@ import buildCategoryTestData from './buildCategoryTestData';
 import buildContributorTestData from './buildContributorTestData';
 import buildDigitalTextTestData from './buildDigitalTextTestData';
 import buildEdgeConnectionTestData from './buildEdgeConnectionTestData';
-import buildMediaItemTestData from './buildMediaItemTestData';
 import buildPhotographTestData from './buildPhotographTestData';
 import buildPlayListTestData from './buildPlaylistTestData';
 import buildSongTestData from './buildSongTestData';
@@ -30,7 +29,6 @@ export default (): PartialSnapshot => ({
     [ResourceType.bibliographicCitation]: buildBibliographicCitationTestData(),
     [ResourceType.digitalText]: buildDigitalTextTestData(),
     [ResourceType.song]: buildSongTestData(),
-    [ResourceType.mediaItem]: buildMediaItemTestData(),
     [ResourceType.playlist]: buildPlayListTestData(),
     // Non-Resource Aggregates
     [AggregateType.note]: buildEdgeConnectionTestData(),

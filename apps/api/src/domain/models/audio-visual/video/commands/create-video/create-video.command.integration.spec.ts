@@ -5,7 +5,6 @@ import {
     MIMEType,
     MultilingualTextItemRole,
     ResourceCompositeIdentifier,
-    ResourceType,
 } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
@@ -254,7 +253,7 @@ describe(commandType, () => {
                     await assertCreateCommandError(assertionHelperDependencies, {
                         systemUserId: dummyAdminUserId,
                         initialState: new DeluxeInMemoryStore({
-                            [ResourceType.mediaItem]: [existingMediaItem],
+                            [AggregateType.mediaItem]: [existingMediaItem],
                         }).fetchFullSnapshotInLegacyFormat(),
                         buildCommandFSA: (id: AggregateId) =>
                             fsaFactory.build(id, {
@@ -284,7 +283,7 @@ describe(commandType, () => {
                     await assertCreateCommandError(assertionHelperDependencies, {
                         systemUserId: dummyAdminUserId,
                         initialState: new DeluxeInMemoryStore({
-                            [ResourceType.mediaItem]: [existingMediaItem],
+                            [AggregateType.mediaItem]: [existingMediaItem],
                         }).fetchFullSnapshotInLegacyFormat(),
                         buildCommandFSA: (id: AggregateId) =>
                             fsaFactory.build(id, {
