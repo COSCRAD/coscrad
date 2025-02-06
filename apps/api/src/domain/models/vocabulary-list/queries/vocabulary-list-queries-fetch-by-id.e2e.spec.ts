@@ -354,5 +354,7 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
 
     describe(`when the user is authenticated as an ordinary user`, () => {
         it.todo(`should have a test`);
+
+        it.todo(`should respect the ACLs of terms contained as entries`);
     });
 });

@@ -3,7 +3,7 @@ import {
     IIndexQueryResult,
     IVocabularyListViewModel,
 } from '@coscrad/api-interfaces';
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { isNonEmptyObject, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import {
@@ -93,8 +93,25 @@ export class VocabularyListQueryService {
                         ? fetchActionsForUser(this.commandInfoService, userWithGroups, entity)
                         : [];
 
+                const entries = entity.entries.filter((entry) => {
+                    const acl = new AccessControlList(entry.term.accessControlList);
+
+                    if (!isNonEmptyObject(userWithGroups)) {
+                        return entry.term.isPublished;
+                    }
+
+                    return (
+                        entry.term.isPublished ||
+                        acl.canUser(userWithGroups.id) ||
+                        userWithGroups.groups.some(({ id: groupId }) => acl.canGroup(groupId))
+                    );
+                });
+
+                console.log({ filteredEntries: entries });
+
                 return {
                     ...entity,
+                    entries,
                     actions,
                 };
             }),
