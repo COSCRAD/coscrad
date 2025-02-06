@@ -1,5 +1,5 @@
 import { Controller, Sse } from '@nestjs/common';
-import { interval, merge, Observable, of, throttle } from 'rxjs';
+import { merge, Observable } from 'rxjs';
 import { TermQueryService } from '../../../domain/services/query-services/term-query.service';
 import { VocabularyListQueryService } from '../../../domain/services/query-services/vocabulary-list-query.service';
 
@@ -19,10 +19,7 @@ export class ResourceUpdateNotificationsController {
     public subscribeToWriteNotifications(): Observable<{ data: { type: string } }> {
         return merge(
             this.vocabularyListQueryService.subscribeToWriteNotifications(),
-            this.termQueryService.subscribeToWriteNotifications(),
-            of(...'abcdefghijklmnop'.split('').map((type) => ({ data: { type } }))).pipe(
-                throttle(() => interval(1500))
-            )
+            this.termQueryService.subscribeToWriteNotifications()
         );
     }
 }

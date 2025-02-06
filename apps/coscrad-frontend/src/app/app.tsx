@@ -1,12 +1,14 @@
 import { AggregateType, isAggregateType, IViewUpdateNotification } from '@coscrad/api-interfaces';
 import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { useContext, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 import { Footer } from '../components/footer/footer';
 import { Header } from '../components/header/header';
 import { getConfig } from '../config';
 import { ConfigurableContentContext } from '../configurable-front-matter/configurable-content-provider';
 import { fetchFreshState } from '../store/slices/utils/fetch-fresh-state';
+import { selectAuthToken } from '../store/slices/utils/select-token';
 import { CoscradLayoutContainer } from './coscrad-layout-container';
 import { useAppDispatch } from './hooks';
 
@@ -71,7 +73,7 @@ const subscribeToRealTimeUpdates = (dispatch: ReturnType<typeof useAppDispatch>)
 export function App() {
     const dispatch = useAppDispatch();
 
-    // const token = useSelector(selectAuthToken);
+    const token = useSelector(selectAuthToken);
 
     /**
      * While it is possible to stream updates to non-admin users, there are far more
@@ -81,9 +83,9 @@ export function App() {
      *
      * Note that in the future, we may want to move to a web-sockets implementation.
      */
-    // if (isNonEmptyString(token)) {
-    subscribeToRealTimeUpdates(dispatch);
-    // }
+    if (isNonEmptyString(token)) {
+        subscribeToRealTimeUpdates(dispatch);
+    }
 
     const { siteTitle, siteFavicon } = useContext(ConfigurableContentContext);
 
