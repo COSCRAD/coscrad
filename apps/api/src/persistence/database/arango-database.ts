@@ -53,6 +53,7 @@ export class ArangoDatabase {
         }
 
         // TODO optimize this! Do the fetch by ID in actual AQL
+        // DO this now! Why is it being done this way?
         const allEntities = await this.fetchMany<TDatabaseDTO>(collectionName, new IdEquals(id));
 
         if (allEntities.length === 0) return NotFound;
