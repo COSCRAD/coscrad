@@ -1,8 +1,10 @@
+import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import { AggregateId } from '../../../types/AggregateId';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../base-domain-model.entity';
+import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 
 export class AccessControlList extends BaseDomainModel {
     readonly allowedUserIds: AggregateId[];
@@ -64,5 +66,17 @@ export class AccessControlList extends BaseDomainModel {
 
     canGroup(groupId: AggregateId) {
         return this.allowedGroupIds.includes(groupId);
+    }
+
+    // TODO make sure this is unit tested
+    // TODO Should `isPublished` be part of the ACL?
+    canUserWithGroups(userWithGroups: CoscradUserWithGroups) {
+        if (!isNonEmptyObject(userWithGroups)) {
+            return false;
+        }
+
+        const { id: userId, groups } = userWithGroups;
+
+        return this.canUser(userId) || groups.some(({ id: groupId }) => this.canGroup(groupId));
     }
 }
