@@ -1,6 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from '../../../coscrad-cli/logging';
-import { InternalError } from '../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { ICoscradEventHandler } from './coscrad-event-handler.interface';
 import { ICoscradEvent } from './coscrad-event.interface';
 import { ICoscradEventPublisher } from './interfaces';
@@ -27,16 +27,7 @@ export class SyncInMemoryEventPublisher implements ICoscradEventPublisher {
             }
 
             for (const handler of handlers) {
-                try {
-                    await handler.handle(e);
-                } catch (error) {
-                    this.logger.log(
-                        new InternalError(
-                            `failed to publish event: ${JSON.stringify(e)}. Handler failed.`,
-                            [error]
-                        ).toString()
-                    );
-                }
+                this.handleWithRetries(e, handler);
             }
         }
     }
@@ -60,5 +51,32 @@ export class SyncInMemoryEventPublisher implements ICoscradEventPublisher {
             // Compare by reference
             this.eventTypeToConsumers.get(eventType).some((handler) => handler === eventConsumer)
         );
+    }
+
+    private async handleWithRetries(
+        event: ICoscradEvent,
+        handler: ICoscradEventHandler,
+        retried = 0
+    ) {
+        const result = await handler
+            .handle(event)
+            .catch(
+                (handlerError) =>
+                    new InternalError(
+                        `failed to publish event: ${JSON.stringify(event.type)}. Handler failed.`,
+                        [handlerError]
+                    )
+            );
+
+        if (isInternalError(result)) {
+            if (retried < 5) {
+                this.handleWithRetries(event, handler, retried + 1);
+            } else {
+                throw new InternalError(
+                    `Failed to handle event of type: ${event.type} after 5 retries`,
+                    [result]
+                );
+            }
+        }
     }
 }

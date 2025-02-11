@@ -4,7 +4,6 @@ import { isArangoDatabase } from 'arangojs/database';
 import { isTestEnvironment } from '../../app/config/constants/Environment';
 import { QueryOperator } from '../../domain/repositories/interfaces/QueryOperator';
 import { ISpecification } from '../../domain/repositories/interfaces/specification.interface';
-import { IdEquals } from '../../domain/repositories/specifications/id-equals.specification';
 import { isAggregateId } from '../../domain/types/AggregateId';
 import { HasAggregateId } from '../../domain/types/HasAggregateId';
 import { InternalError } from '../../lib/errors/InternalError';
@@ -52,10 +51,23 @@ export class ArangoDatabase {
             throw new InternalError(`Arango cannot fetchById with invalid id: ${id}`);
         }
 
-        // TODO optimize this! Do the fetch by ID in actual AQL
-        const allEntities = await this.fetchMany<TDatabaseDTO>(collectionName, new IdEquals(id));
+        const aqlQuery = `
+        FOR doc in @@collectionName
+        FILTER doc._key == @id
+        return doc
+        `;
 
-        if (allEntities.length === 0) return NotFound;
+        const cursor = await this.db.query({
+            query: aqlQuery,
+            bindVars: {
+                '@collectionName': collectionName,
+                id,
+            },
+        });
+
+        const allDocs = await cursor.all();
+
+        if (allDocs.length === 0) return NotFound;
 
         const searchId = buildArangoDocumentHandle(collectionName, id);
 
@@ -65,7 +77,7 @@ export class ArangoDatabase {
             return result;
         };
 
-        const searchResult = allEntities.find(doIdsMatch(searchId));
+        const searchResult = allDocs.find(doIdsMatch(searchId));
 
         return searchResult || NotFound;
     };
