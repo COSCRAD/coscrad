@@ -13,7 +13,7 @@ import {
     MultilingualTextItem,
     MultilingualTextItemRole,
 } from '../../../common/entities/multilingual-text';
-import { UpdateMethod } from '../../../decorators';
+import { AggregateRoot, UpdateMethod } from '../../../decorators';
 import { Valid, isValid } from '../../../domainModelValidators/Valid';
 import VocabularyListWithNoEntriesCannotBePublishedError from '../../../domainModelValidators/errors/vocabularyList/vocabulary-list-with-no-entries-cannot-be-published.error';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
@@ -73,6 +73,7 @@ type LabelAndValue<T = string> = {
     value: T;
 };
 
+@AggregateRoot(AggregateType.vocabularyList)
 @RegisterIndexScopedCommands([`CREATE_VOCABULARY_LIST`])
 export class VocabularyList extends Resource {
     readonly type = ResourceType.vocabularyList;

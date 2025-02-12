@@ -165,13 +165,15 @@ describe(`the vocabulary list detail page`, () => {
 
                 cy.contains(term3Text);
             });
+
+            it(`should display the contributions`, () => {});
         });
 
         describe(`when the list has several terms with filters specified`, () => {
             before(() => {
                 cy.clearDatabase();
 
-                cy.seedTestUuids(10);
+                cy.seedTestUuids(100);
 
                 cy.seedDataWithCommand(`CREATE_VOCABULARY_LIST`, {
                     aggregateCompositeIdentifier,
@@ -185,13 +187,15 @@ describe(`the vocabulary list detail page`, () => {
                     text: translatedListName,
                 });
 
-                Object.entries(filterPropertiesAndAllowedValues).forEach((key, labelsAndValues) => {
-                    cy.seedDataWithCommand('REGISTER_VOCABULARY_LIST_FILTER_PROPERTY', {
-                        aggregateCompositeIdentifier,
-                        name: key,
-                        labelsAndValues,
-                    });
-                });
+                Object.entries(filterPropertiesAndAllowedValues).forEach(
+                    ([key, labelsAndValues]) => {
+                        cy.seedDataWithCommand('REGISTER_VOCABULARY_LIST_FILTER_PROPERTY', {
+                            aggregateCompositeIdentifier,
+                            name: key,
+                            allowedValuesAndLabels: labelsAndValues,
+                        });
+                    }
+                );
 
                 termsAndFilterPropertyValues.forEach(({ text, propertyValues }, index) => {
                     const termCompositeId = buildDummyAggregateCompositeIdentifier(
@@ -227,8 +231,23 @@ describe(`the vocabulary list detail page`, () => {
             });
 
             it.only(`should be filterable`, () => {
-                // TODO add more
-                cy.contains(vocabularyListName);
+                /**
+                 * These filters should find term 3 but not term 2;
+                 */
+                cy.get('#mui-component-select-aspect').click();
+
+                cy.get('#mui-component-select-aspect').get(`[data-value="3"`).click();
+
+                cy.get('#mui-component-select-positive').click();
+
+                cy.get('#mui-component-select-positive').get(`[data-value="0"`).click();
+
+                cy.contains(term3Text);
+
+                cy.getByDataAttribute('NEXT').click();
+
+                // no change is expected since there should be only 1 result
+                cy.contains(term3Text);
             });
         });
     });

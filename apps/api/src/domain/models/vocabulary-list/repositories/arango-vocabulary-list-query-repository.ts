@@ -1,4 +1,5 @@
 import {
+    FormFieldType,
     ICommandFormAndLabels,
     IMultilingualTextItem,
     IValueAndDisplay,
@@ -226,7 +227,18 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
             '@collectionName': 'vocabularyList__VIEWS',
             id,
             name,
-            type,
+            // TODO We need to ensure switches are working as well
+            /**
+             * Here we are mapping from the language of the phrasebook
+             * subdomain (filter property type) to the generic language
+             * of frontend forms (form field type). The latter is shared with
+             * dynamic command execution forms and is not specific to forms for
+             * filtering vocabulary lists.
+             */
+            type:
+                type === FilterPropertyType.selection
+                    ? FormFieldType.staticSelect
+                    : FormFieldType.switch,
             options,
         };
 

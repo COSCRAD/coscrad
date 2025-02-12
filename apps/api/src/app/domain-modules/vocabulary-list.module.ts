@@ -27,6 +27,7 @@ import { EntriesImportedToVocabularyListEventHandler } from '../../domain/models
 import { VocabularyListFilterPropertyRegisteredEventHandler } from '../../domain/models/vocabulary-list/commands/register-vocabulary-list-filter-property/vocabulary-list-filter-property-registered.event-handler';
 import { VocabularyListNameTranslated } from '../../domain/models/vocabulary-list/commands/translate-vocabulary-list-name/vocabulary-list-name-translated.event';
 import { VocabularyListNameTranslatedEventHandler } from '../../domain/models/vocabulary-list/commands/translate-vocabulary-list-name/vocabulary-list-name-translated.event-handler';
+import { VocabularyList } from '../../domain/models/vocabulary-list/entities/vocabulary-list.entity';
 import { VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN } from '../../domain/models/vocabulary-list/queries';
 import { ArangoVocabularyListQueryRepository } from '../../domain/models/vocabulary-list/repositories';
 import { VocabularyListQueryService } from '../../domain/services/query-services/vocabulary-list-query.service';
@@ -69,6 +70,9 @@ import { VocabularyListController } from '../controllers/resources/vocabulary-li
 
         // Data Classes
         ...[
+            // Domain Model
+            VocabularyList,
+            // commands
             CreateVocabularyList,
             TranslateVocabularyListName,
             VocabularyListNameTranslated,
