@@ -154,6 +154,16 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
         `;
 
         /**
+         * Note that this might not be the way we want to do this, it's only an idea.
+         * The downside is that changing the wording requires a migration. The upside
+         * is that it provides a natural means to align wording the contributions with the
+         * event handlers.
+         *
+         * Another option would be to register such templates in the event meta
+         * @CoscradEvent((e)=> e.type === 'VOCABULARY_LIST_CREATED',{ contributionStatementTemplate: "created by $fullname"})
+         *
+         */
+        /**
          *      ...  
          *        let joinedName = CONCAT(CONCAT(c.fullName.firstName,' '),c.fullName.lastName)   
          *        return {
