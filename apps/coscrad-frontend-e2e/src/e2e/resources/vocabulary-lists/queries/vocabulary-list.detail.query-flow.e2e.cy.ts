@@ -1,5 +1,8 @@
 import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
-import { buildDummyAggregateCompositeIdentifier } from '../../../../support/utilities';
+import {
+    buildDummyAggregateCompositeIdentifier,
+    buildDummyUuid,
+} from '../../../../support/utilities';
 
 const aggregateCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
     AggregateType.vocabularyList,
@@ -65,6 +68,13 @@ const filterPropertiesAndAllowedValues = {
     ],
 };
 
+const contributors = {
+    creator: {
+        id: buildDummyUuid(112),
+        firstName: 'Jamethon',
+    },
+};
+
 describe(`the vocabulary list detail page`, () => {
     describe(`when list with the given ID (123) does not exist`, () => {
         beforeEach(() => {
@@ -85,13 +95,29 @@ describe(`the vocabulary list detail page`, () => {
             before(() => {
                 cy.clearDatabase();
 
-                cy.seedTestUuids(10);
+                cy.seedTestUuids(200);
 
-                cy.seedDataWithCommand(`CREATE_VOCABULARY_LIST`, {
-                    aggregateCompositeIdentifier,
-                    name: vocabularyListName,
-                    languageCodeForName,
+                cy.seedDataWithCommand(`CREATE_CONTRIBUTOR`, {
+                    aggregateCompositeIdentifier: {
+                        type: AggregateType.contributor,
+                        id: contributors.creator.id,
+                    },
+                    shortBio: 'This is a hard-working language champion indeed!',
+                    firstName: contributors.creator.firstName,
+                    // we don't bother with the last name
                 });
+
+                cy.seedDataWithCommand(
+                    `CREATE_VOCABULARY_LIST`,
+                    {
+                        aggregateCompositeIdentifier,
+                        name: vocabularyListName,
+                        languageCodeForName,
+                    },
+                    {
+                        contributorIds: [contributors.creator.id],
+                    }
+                );
 
                 cy.seedDataWithCommand(`TRANSLATE_VOCABULARY_LIST_NAME`, {
                     aggregateCompositeIdentifier,
@@ -117,11 +143,11 @@ describe(`the vocabulary list detail page`, () => {
                  * TODO We might want a test case showing that for an ordinary user
                  * an unpublished term is not visible.
                  */
-                cy.seedDataWithCommand(`PUBLISH_TERM`, {
+                cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
                     aggregateCompositeIdentifier: term2CompositeIdentifier,
                 });
 
-                cy.seedDataWithCommand(`PUBLISH_TERM`, {
+                cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
                     aggregateCompositeIdentifier: term3CompositeIdentifier,
                 });
 
@@ -166,7 +192,9 @@ describe(`the vocabulary list detail page`, () => {
                 cy.contains(term3Text);
             });
 
-            it(`should display the contributions`, () => {});
+            it.only(`should display the contributions`, () => {
+                cy.contains(contributors.creator.firstName);
+            });
         });
 
         describe(`when the list has several terms with filters specified`, () => {
@@ -230,7 +258,7 @@ describe(`the vocabulary list detail page`, () => {
                 });
             });
 
-            it.only(`should be filterable`, () => {
+            it(`should be filterable`, () => {
                 /**
                  * These filters should find term 3 but not term 2;
                  */

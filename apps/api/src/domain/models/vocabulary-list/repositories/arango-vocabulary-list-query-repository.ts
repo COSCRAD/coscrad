@@ -129,7 +129,11 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
         });
     }
 
-    async attribute(termId: AggregateId, contributorIds: AggregateId[]): Promise<void> {
+    async attribute(
+        termId: AggregateId,
+        contributorIds: AggregateId[]
+        // contributionStatementTemplate: string
+    ): Promise<void> {
         const query = `
         FOR doc IN @@collectionName
         FILTER doc._key == @id
@@ -148,6 +152,16 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
         } IN @@collectionName
          RETURN updatedContributions
         `;
+
+        /**
+         *      ...  
+         *        let joinedName = CONCAT(CONCAT(c.fullName.firstName,' '),c.fullName.lastName)   
+         *        return {
+                        id: c._key,
+                        fullName: joinedName,
+                        contributionStatement: SUBSTITUTE(@contributionStatementTemplate,"$C",joinedName)
+                    }
+         */
 
         const bindVars = {
             // todo is this necessary?
