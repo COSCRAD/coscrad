@@ -11,9 +11,4 @@ export interface ITermViewModel extends IBaseResourceViewModel {
 
     // TODO put this on the base interface
     isPublished: boolean;
-
-    accessControlList: {
-        allowedUserIds: string[];
-        allowedGroupIds: string[];
-    };
 }
