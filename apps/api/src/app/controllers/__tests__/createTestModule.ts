@@ -132,6 +132,7 @@ import {
     IPhotographQueryRepository,
     PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
 } from '../../../domain/models/photograph/queries';
+import { ArangoPhotographQueryRepository } from '../../../domain/models/photograph/repositories';
 import {
     AddAudioItemToPlaylistCommandHandler,
     CreatePlayListCommandHandler,
@@ -531,6 +532,15 @@ export default async (
                     ),
                 inject: [ArangoConnectionProvider],
             },
+            {
+                provide: PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
+                useFactory: (ArangoConnectionProvider: ArangoConnectionProvider) =>
+                    new ArangoPhotographQueryRepository(
+                        ArangoConnectionProvider,
+                        new ConsoleCoscradCliLogger()
+                    ),
+                inject: [ArangoConnectionProvider],
+            },
 
             {
                 //  TODO use a const for this
@@ -607,7 +617,7 @@ export default async (
                         commandInfoService,
                         configService
                     ),
-                inject: [PHOTOGRAPH_QUERY_REPOSITORY_TOKEN, CommandInfoService, ConfigService],
+                inject: [PHOTOGRAPH_QUERY_REPOSITORY_TOKEN, ConfigService],
             },
             {
                 provide: SpatialFeatureQueryService,
