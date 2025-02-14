@@ -7,7 +7,10 @@ import {
     IAudioItemQueryRepository,
 } from '../domain/models/audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ArangoAudioItemQueryRepository } from '../domain/models/audio-visual/audio-item/repositories/arango-audio-item-query-repository';
-import { PHOTOGRAPH_QUERY_REPOSITORY_TOKEN } from '../domain/models/photograph/queries';
+import {
+    IPhotographQueryRepository,
+    PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
+} from '../domain/models/photograph/queries';
 import { ArangoPhotographQueryRepository } from '../domain/models/photograph/repositories';
 import { IQueryRepositoryProvider } from '../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
 import { ITermQueryRepository, TERM_QUERY_REPOSITORY_TOKEN } from '../domain/models/term/queries';
@@ -180,16 +183,19 @@ export class PersistenceModule implements OnApplicationShutdown {
             //  TODO use a const for this
             provide: 'QUERY_REPOSITORY_PROVIDER',
             useFactory: (
+                photographQueryRepository: IPhotographQueryRepository,
                 termQueryRepository: ITermQueryRepository,
                 audioItemQueryRepository: IAudioItemQueryRepository,
                 vocabularyListQueryRepository: IVocabularyListQueryRepository
             ): IQueryRepositoryProvider =>
                 new ArangoQueryRepositoryProvider(
+                    photographQueryRepository,
                     termQueryRepository,
                     audioItemQueryRepository,
                     vocabularyListQueryRepository
                 ),
             inject: [
+                PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
                 TERM_QUERY_REPOSITORY_TOKEN,
                 AUDIO_QUERY_REPOSITORY_TOKEN,
                 VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
