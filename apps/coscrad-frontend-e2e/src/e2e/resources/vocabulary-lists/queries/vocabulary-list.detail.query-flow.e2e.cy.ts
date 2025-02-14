@@ -535,11 +535,11 @@ describe(`the vocabulary list detail page`, () => {
                  */
                 cy.get('#mui-component-select-aspect').click();
 
-                cy.get('#mui-component-select-aspect').get(`[data-value="3"`).click();
+                cy.get('#mui-component-select-aspect').get(`[data-value="3"]`).click();
 
                 cy.get('#mui-component-select-positive').click();
 
-                cy.get('#mui-component-select-positive').get(`[data-value="0"`).click();
+                cy.get('#mui-component-select-positive').get(`[data-value="0"]`).click();
 
                 cy.contains(term3Text);
 
@@ -558,13 +558,110 @@ describe(`the vocabulary list detail page`, () => {
             });
 
             describe(`when filters match exactly one term`, () => {
-                it.only(`should display the list`, () => {
-                    cy.contains(vocabularyListName);
+                it(`should display the list`, () => {
+                    /**
+                     * TODO make a cypress command for the next two steps:
+                     * cy.fillStaticSelect('positive','0');
+                     */
+                    cy.get('#mui-component-select-positive').click();
+
+                    cy.get('#mui-component-select-positive').get(`[data-value="0"]`).click();
+
+                    cy.get(`#mui-component-select-person`).click();
+
+                    cy.get(`#mui-component-select-person`).get(`[data-value="31"]`).click();
+
+                    cy.get(`#mui-component-select-aspect`).click();
+
+                    cy.get(`#mui-component-select-aspect`).get(`[data-value="2"]`).click();
+
+                    cy.get(`#mui-component-select-usitative`).click();
+
+                    cy.get(`#mui-component-select-usitative`).get(`[data-value="0"]`).click();
+
+                    cy.contains('He or she did not sing');
+
+                    /**
+                     * This is an ad-hoc way to verify that there is only one
+                     * result given that the list is displayed as a carousel.
+                     *
+                     * Consider presenting the number of results to the user:
+                     * `1 Result Found`
+                     */
+                    cy.getByDataAttribute('NEXT').click();
+
+                    cy.contains('He or she did not sing');
                 });
             });
 
-            // describe - match many terms
-            // describe - match no terms
+            describe(`when filters match multiple terms`, () => {
+                it.only(`should display the list`, () => {
+                    /**
+                     * TODO make a cypress command for the next two steps:
+                     * cy.fillStaticSelect('positive','0');
+                     */
+                    cy.get('#mui-component-select-positive').click();
+
+                    cy.get('#mui-component-select-positive').get(`[data-value="1"]`).click();
+
+                    cy.get(`#mui-component-select-person`).click();
+
+                    cy.get(`#mui-component-select-person`).get(`[data-value="11"]`).click();
+
+                    cy.get(`#mui-component-select-usitative`).click();
+
+                    cy.get(`#mui-component-select-usitative`).get(`[data-value="0"]`).click();
+
+                    cy.contains('I am singing');
+
+                    cy.getByDataAttribute('NEXT').click();
+
+                    cy.contains('I sang');
+
+                    cy.getByDataAttribute('NEXT').click();
+
+                    cy.contains('I am going to sing');
+
+                    cy.getByDataAttribute('NEXT').click();
+
+                    cy.contains('I should sing');
+
+                    cy.getByDataAttribute('NEXT').click();
+
+                    cy.contains('I started to sing');
+
+                    cy.getByDataAttribute('NEXT').click();
+
+                    // it should roll over at this point
+                    cy.contains('I am singing');
+                });
+            });
+
+            describe(`when filters match exactly one term`, () => {
+                it(`should display the list`, () => {
+                    /**
+                     * TODO make a cypress command for the next two steps:
+                     * cy.fillStaticSelect('positive','0');
+                     */
+                    cy.get('#mui-component-select-positive').click();
+
+                    cy.get('#mui-component-select-positive').get(`[data-value="0"]`).click();
+
+                    cy.get(`#mui-component-select-person`).click();
+
+                    cy.get(`#mui-component-select-person`).get(`[data-value="22"]`).click();
+
+                    cy.get(`#mui-component-select-aspect`).click();
+
+                    cy.get(`#mui-component-select-aspect`).get(`[data-value="1"]`).click();
+
+                    cy.get(`#mui-component-select-usitative`).click();
+
+                    cy.get(`#mui-component-select-usitative`).get(`[data-value="1"]`).click();
+
+                    cy.contains('No result found');
+                });
+            });
         });
     });
 });
