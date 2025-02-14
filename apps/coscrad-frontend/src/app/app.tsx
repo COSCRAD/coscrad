@@ -59,6 +59,10 @@ const subscribeToRealTimeUpdates = (dispatch: ReturnType<typeof useAppDispatch>)
             const { type } = event;
 
             // TODO Map the view collection names to aggregate types in the repository layer
+            if (type === 'photograph__VIEWS') {
+                fetchFreshState(dispatch, AggregateType.photograph);
+            }
+
             if (type === 'term__VIEWS') {
                 fetchFreshState(dispatch, AggregateType.term);
             }
