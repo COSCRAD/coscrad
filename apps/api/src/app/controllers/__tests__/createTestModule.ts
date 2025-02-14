@@ -239,6 +239,7 @@ import {
     TranslateVocabularyListName,
     TranslateVocabularyListNameCommandHandler,
 } from '../../../domain/models/vocabulary-list/commands';
+import { VocabularyList } from '../../../domain/models/vocabulary-list/entities/vocabulary-list.entity';
 import {
     IVocabularyListQueryRepository,
     VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
@@ -367,6 +368,7 @@ export const buildAllDataClassProviders = () =>
         DigitalText,
         Song,
         Term,
+        VocabularyList,
     ].map((ctor: Ctor<unknown>) => ({
         provide: ctor,
         useValue: ctor,
