@@ -19,7 +19,7 @@ export class PhotographController {
     @ApiParam(buildByIdApiParamMetadata())
     @ApiOkResponse({ type: PhotographViewModel })
     @Get(`/:id`)
-    async fetchById(@Request() req, @Res() res, @Param('id') id: unknown) {
+    async fetchById(@Request() req, @Res() res, @Param('id') id: string) {
         const searchResult = await this.photographQueryService.fetchById(id, req.user || undefined);
 
         return sendInternalResultAsHttpResponse(res, searchResult);
@@ -29,6 +29,7 @@ export class PhotographController {
     @UseGuards(OptionalJwtAuthGuard)
     @Get('')
     async fetchMany(@Request() req) {
-        return this.photographQueryService.fetchMany(req.user || undefined);
+        return req.user;
+        // return this.photographQueryService.fetchMany(req.user || undefined);
     }
 }

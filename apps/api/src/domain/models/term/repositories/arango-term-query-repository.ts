@@ -74,6 +74,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
                 bindVars,
             })
             .catch((reason) => {
+                // IS THIS CORRECT?  TRANSLATE TERM?
                 throw new InternalError(`Failed to translate term via TermRepository: ${reason}`);
             });
 
@@ -169,6 +170,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
                 bindVars,
             })
             .catch((reason) => {
+                // IS THIS CORRECT?  TRANSLATE TERM?
                 throw new InternalError(`Failed to translate term via TermRepository: ${reason}`);
             });
 
@@ -252,6 +254,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
                 bindVars,
             })
             .catch((reason) => {
+                // IS THIS CORRECT?  TRANSLATE TERM?
                 throw new InternalError(`Failed to translate term via TermRepository: ${reason}`);
             });
 

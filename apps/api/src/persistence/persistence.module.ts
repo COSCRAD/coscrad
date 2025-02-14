@@ -7,6 +7,8 @@ import {
     IAudioItemQueryRepository,
 } from '../domain/models/audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ArangoAudioItemQueryRepository } from '../domain/models/audio-visual/audio-item/repositories/arango-audio-item-query-repository';
+import { PHOTOGRAPH_QUERY_REPOSITORY_TOKEN } from '../domain/models/photograph/queries';
+import { ArangoPhotographQueryRepository } from '../domain/models/photograph/repositories';
 import { IQueryRepositoryProvider } from '../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
 import { ITermQueryRepository, TERM_QUERY_REPOSITORY_TOKEN } from '../domain/models/term/queries';
 import { ArangoTermQueryRepository } from '../domain/models/term/repositories';
@@ -164,6 +166,16 @@ export class PersistenceModule implements OnApplicationShutdown {
             inject: [ArangoConnectionProvider, AUDIO_QUERY_REPOSITORY_TOKEN],
         };
 
+        const photographQueryRepository = {
+            provide: PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
+            useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
+                new ArangoPhotographQueryRepository(
+                    arangoConnectionProvider,
+                    new ConsoleCoscradCliLogger()
+                ),
+            inject: [ArangoConnectionProvider],
+        };
+
         const queryRepositoryProvider = {
             //  TODO use a const for this
             provide: 'QUERY_REPOSITORY_PROVIDER',
@@ -197,6 +209,7 @@ export class PersistenceModule implements OnApplicationShutdown {
                 domainDataExporterProvider,
                 digitalTextQueryRepositoryProvider,
                 audioQueryRepositoryProvider,
+                photographQueryRepository,
                 termQueryRepositoryProvider,
                 vocabularyListQueryRepository,
                 queryRepositoryProvider,

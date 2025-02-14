@@ -136,6 +136,10 @@ import {
     PhotographCreated,
 } from '../../../domain/models/photograph';
 import {
+    IPhotographQueryRepository,
+    PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
+} from '../../../domain/models/photograph/queries';
+import {
     AddAudioItemToPlaylistCommandHandler,
     CreatePlayListCommandHandler,
     ImportAudioItemsToPlaylist,
@@ -625,10 +629,16 @@ export default async (
             {
                 provide: PhotographQueryService,
                 useFactory: (
-                    repositoryProvider: ArangoRepositoryProvider,
+                    photographQueryRepository: IPhotographQueryRepository,
+                    configService: ConfigService,
                     commandInfoService: CommandInfoService
-                ) => new PhotographQueryService(repositoryProvider, commandInfoService),
-                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService, ConfigService],
+                ) =>
+                    new PhotographQueryService(
+                        photographQueryRepository,
+                        commandInfoService,
+                        configService
+                    ),
+                inject: [PHOTOGRAPH_QUERY_REPOSITORY_TOKEN, CommandInfoService, ConfigService],
             },
             {
                 provide: SpatialFeatureQueryService,
