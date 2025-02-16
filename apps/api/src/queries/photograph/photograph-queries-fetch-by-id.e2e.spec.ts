@@ -1,4 +1,9 @@
-import { AggregateType, IDetailQueryResult, LanguageCode } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    CoscradUserRole,
+    IDetailQueryResult,
+    LanguageCode,
+} from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import httpStatusCodes from '../../app/constants/httpStatusCodes';
@@ -11,12 +16,15 @@ import {
     PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
 } from '../../domain/models/photograph/queries';
 import { CoscradContributor } from '../../domain/models/user-management/contributor';
+import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
+import { CoscradUser } from '../../domain/models/user-management/user/entities/user/coscrad-user.entity';
 import { FullName } from '../../domain/models/user-management/user/entities/user/full-name.entity';
 import { AggregateId } from '../../domain/types/AggregateId';
 import { clonePlainObjectWithOverrides } from '../../lib/utilities/clonePlainObjectWithOverrides';
 import { ArangoDatabaseProvider } from '../../persistence/database/database.provider';
 import generateDatabaseNameForTestSuite from '../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../persistence/repositories/__tests__/TestRepositoryProvider';
+import buildTestDataInFlatFormat from '../../test-data/buildTestDataInFlatFormat';
 import { TestEventStream } from '../../test-data/events';
 import { BaseResourceViewModel } from '../buildViewModelForResource/viewModels/base-resource.view-model';
 import { PhotographViewModel } from '../buildViewModelForResource/viewModels/photograph.view-model';
@@ -27,15 +35,15 @@ const indexEndpoint = `/resources/photographs`;
 const buildDetailEndpoint = (id: AggregateId) => `${indexEndpoint}/${id}`;
 
 // We require an existing user for ACL tests
-// const dummyQueryUserId = buildDummyUuid(4);
+const dummyQueryUserId = buildDummyUuid(4);
 
-// const { user: users, userGroup: userGroups } = buildTestDataInFlatFormat();
+const { user: users, userGroup: userGroups } = buildTestDataInFlatFormat();
 
-// const dummyUser = (users as CoscradUser[])[0].clone({
-//     authProviderUserId: `auth0|${dummyQueryUserId}`,
-//     id: dummyQueryUserId,
-//     roles: [CoscradUserRole.viewer],
-// });
+const dummyUser = (users as CoscradUser[])[0].clone({
+    authProviderUserId: `auth0|${dummyQueryUserId}`,
+    id: dummyQueryUserId,
+    roles: [CoscradUserRole.viewer],
+});
 
 // const dummyGroup = (userGroups as CoscradUserGroup[])[0].clone({ userIds: [dummyUser.id] });
 
@@ -211,6 +219,96 @@ describe(`when querying for a photograph: fetch by Id`, () => {
                     expect(result.actions).toEqual([]);
 
                     assertResourceHasContributionFor(dummyContributor, result);
+                });
+            });
+
+            describe(`when a photograph is not published`, () => {
+                beforeEach(async () => {
+                    // note that there is no publication event in this event history
+
+                    // TODO: we need to check that contributors come through
+                    await seedPhotographs([
+                        clonePlainObjectWithOverrides(targetPhotographView, {
+                            isPublished: false,
+                        }),
+                    ]);
+                });
+
+                // We pretend the resource does not exist when the user
+                // does not have access to this term
+                it(`should return not found (404)`, async () => {
+                    const res = await request(app.getHttpServer()).get(
+                        buildDetailEndpoint(photographId)
+                    );
+
+                    expect(res.status).toBe(httpStatusCodes.notFound);
+                });
+            });
+        });
+
+        describe(`when there is no photograph with the given Id`, () => {
+            it(`should return not found (404)`, async () => {
+                const res = await request(app.getHttpServer()).get(
+                    buildDetailEndpoint(buildDummyUuid(467))
+                );
+
+                expect(res.status).toBe(httpStatusCodes.notFound);
+            });
+        });
+    });
+
+    describe(`when the user is authenticated`, () => {
+        describe(`when the user is a coscrad admin`, () => {
+            beforeAll(async () => {
+                ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
+                    {
+                        ARANGO_DB_NAME: testDatabaseName,
+                    },
+                    {
+                        testUserWithGroups: new CoscradUserWithGroups(
+                            dummyUser.clone({
+                                roles: [CoscradUserRole.superAdmin],
+                            }),
+                            []
+                        ),
+                    }
+                ));
+
+                seedPhotographs = async (photographs: PhotographViewModel[]) => {
+                    await photographQueryRepository.createMany(photographs);
+                };
+            });
+
+            describe(`when there is a photograph with the given Id`, () => {
+                describe(`when the photograph is published`, () => {
+                    beforeEach(async () => {
+                        await seedPhotographs([targetPhotographView]);
+                    });
+
+                    it(`should return the expected result`, async () => {
+                        const res = await request(app.getHttpServer()).get(
+                            buildDetailEndpoint(photographId)
+                        );
+
+                        expect(res.status).toBe(httpStatusCodes.ok);
+
+                        // Commands should be visible to admin
+                        expect(res.body.actions).not.toEqual([]);
+                    });
+                });
+
+                describe(`when the photograph is not published`, () => {
+                    beforeEach(async () => {
+                        // note that there is no publication event in this event history
+
+                        // TODO: we need to check that contributors come through
+
+                        await seedPhotographs([
+                            clonePlainObjectWithOverrides(targetPhotographView, {
+                                isPublished: false,
+                            }),
+                        ]);
+                    });
                 });
             });
         });
