@@ -224,6 +224,7 @@ describe(`when querying for a term: fetch by Id`, () => {
                 it(`should return not found (404)`, async () => {
                     const res = await request(app.getHttpServer()).get(buildDetailEndpoint(termId));
 
+                    // Remove?
                     const _foo = res.body;
 
                     expect(res.status).toBe(httpStatusCodes.notFound);
