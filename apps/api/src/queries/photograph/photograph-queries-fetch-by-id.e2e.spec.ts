@@ -119,9 +119,6 @@ const targetPhotographView = clonePlainObjectWithOverrides(dummyPhotograph, {
 //     isPublished: false,
 // });
 
-// TODO Add happy path cases for a prompt photograph
-// const promptTermId = buildDummyUuid(2)
-
 const assertResourceHasContributionFor = (
     { id: contributorId }: CoscradContributor,
     resource: BaseResourceViewModel
@@ -235,7 +232,7 @@ describe(`when querying for a photograph: fetch by Id`, () => {
                 });
 
                 // We pretend the resource does not exist when the user
-                // does not have access to this term
+                // does not have access to this photograph
                 it(`should return not found (404)`, async () => {
                     const res = await request(app.getHttpServer()).get(
                         buildDetailEndpoint(photographId)
@@ -297,19 +294,61 @@ describe(`when querying for a photograph: fetch by Id`, () => {
                     });
                 });
 
-                describe(`when the photograph is not published`, () => {
-                    beforeEach(async () => {
-                        // note that there is no publication event in this event history
+                //     describe(`when the photograph is not published`, () => {
+                //         beforeEach(async () => {
+                //             // note that there is no publication event in this event history
 
-                        // TODO: we need to check that contributors come through
+                //             // TODO: we need to check that contributors come through
 
-                        await seedPhotographs([
-                            clonePlainObjectWithOverrides(targetPhotographView, {
-                                isPublished: false,
-                            }),
-                        ]);
-                    });
-                });
+                //             await seedPhotographs([
+                //                 clonePlainObjectWithOverrides(targetPhotographView, {
+                //                     isPublished: false,
+                //                 }),
+                //             ]);
+                //         });
+
+                //         it(`should return the expected result`, async () => {
+                //             const res = await request(app.getHttpServer()).get(
+                //                 buildDetailEndpoint(photographId)
+                //             );
+
+                //             expect(res.status).toBe(httpStatusCodes.ok);
+
+                //             // Commands should be visible to admin
+                //             expect(res.body.actions).not.toEqual([]);
+                //         });
+                //     });
+
+                //     describe(`when the photograph is not published but the user has explicit access`, () => {
+                //         beforeEach(async () => {
+                //             // note that there is no publication event in this event history
+
+                //             // TODO: we need to check that contributors come through
+
+                //             await seedPhotographs([privatePhotographThatUserCanAccess]);
+                //         });
+
+                //         it(`should return the expected result`, async () => {
+                //             const res = await request(app.getHttpServer()).get(
+                //                 buildDetailEndpoint(photographId)
+                //             );
+
+                //             expect(res.status).toBe(httpStatusCodes.ok);
+
+                //             // Commands should be visible to admin
+                //             expect(res.body.actions).not.toEqual([]);
+                //         });
+                //     });
+
+                //     describe(`when there is no photograph with the given Id`, () => {
+                //         it(`should return not found (404)`, async () => {
+                //             const res = await request(app.getHttpServer()).get(
+                //                 buildDetailEndpoint(buildDummyUuid(456))
+                //             );
+
+                //             expect(res.status).toBe(httpStatusCodes.notFound);
+                //         });
+                //     });
             });
         });
     });
