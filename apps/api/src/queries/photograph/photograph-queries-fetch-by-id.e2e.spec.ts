@@ -4,10 +4,12 @@ import {
     IDetailQueryResult,
     LanguageCode,
 } from '@coscrad/api-interfaces';
+import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import httpStatusCodes from '../../app/constants/httpStatusCodes';
 import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
+import { CommandInfoService } from '../../app/controllers/command/services/command-info-service';
 import getValidAggregateInstanceForTest from '../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { PhotographCreated } from '../../domain/models/photograph';
@@ -37,7 +39,7 @@ const buildDetailEndpoint = (id: AggregateId) => `${indexEndpoint}/${id}`;
 // We require an existing user for ACL tests
 const dummyQueryUserId = buildDummyUuid(4);
 
-const { user: users, userGroup: userGroups } = buildTestDataInFlatFormat();
+const { user: users, userGroup: _userGroups } = buildTestDataInFlatFormat();
 
 const dummyUser = (users as CoscradUser[])[0].clone({
     authProviderUserId: `auth0|${dummyQueryUserId}`,
@@ -143,8 +145,6 @@ describe(`when querying for a photograph: fetch by Id`, () => {
 
     let photographQueryRepository: IPhotographQueryRepository;
 
-    let seedPhotographs: (photographs: PhotographViewModel[]) => Promise<void>;
-
     // let eventPublisher: ICoscradEventPublisher;
     beforeEach(async () => {
         await testRepositoryProvider.testSetup();
@@ -167,17 +167,7 @@ describe(`when querying for a photograph: fetch by Id`, () => {
                 // no authenticated user
             ));
 
-            // eventPublisher = app.get(EVENT_PUBLISHER_TOKEN);
-
             photographQueryRepository = app.get(PHOTOGRAPH_QUERY_REPOSITORY_TOKEN);
-
-            /**
-             * We need to use the proper publisher to make sure events only
-             * run if they match the pattern for the given handler.
-             */
-            seedPhotographs = async (photographs: PhotographViewModel[]) => {
-                await photographQueryRepository.createMany(photographs);
-            };
         });
 
         describe(`when there is a photograph with the given Id`, () => {
@@ -194,7 +184,7 @@ describe(`when querying for a photograph: fetch by Id`, () => {
 
                     await databaseProvider.getDatabaseForCollection('photograph__VIEWS').clear();
 
-                    await seedPhotographs([targetPhotographView]);
+                    await photographQueryRepository.createMany([targetPhotographView]);
                 });
 
                 /**
@@ -224,7 +214,7 @@ describe(`when querying for a photograph: fetch by Id`, () => {
                     // note that there is no publication event in this event history
 
                     // TODO: we need to check that contributors come through
-                    await seedPhotographs([
+                    await photographQueryRepository.createMany([
                         clonePlainObjectWithOverrides(targetPhotographView, {
                             isPublished: false,
                         }),
@@ -271,18 +261,20 @@ describe(`when querying for a photograph: fetch by Id`, () => {
                     }
                 ));
 
-                seedPhotographs = async (photographs: PhotographViewModel[]) => {
-                    await photographQueryRepository.createMany(photographs);
-                };
+                const _commandInfoService = app.get(CommandInfoService);
+
+                const _foo = app.get(CommandHandlerService);
+
+                photographQueryRepository = app.get(PHOTOGRAPH_QUERY_REPOSITORY_TOKEN);
             });
 
             describe(`when there is a photograph with the given Id`, () => {
                 describe(`when the photograph is published`, () => {
                     beforeEach(async () => {
-                        await seedPhotographs([targetPhotographView]);
+                        await photographQueryRepository.createMany([targetPhotographView]);
                     });
 
-                    it(`should return the expected result`, async () => {
+                    it.only(`should return the expected result`, async () => {
                         const res = await request(app.getHttpServer()).get(
                             buildDetailEndpoint(photographId)
                         );

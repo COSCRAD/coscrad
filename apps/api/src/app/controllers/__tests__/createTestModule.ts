@@ -566,7 +566,6 @@ export default async (
                     ),
                 inject: [ArangoConnectionProvider],
             },
-
             {
                 //  TODO use a const for this
                 provide: 'QUERY_REPOSITORY_PROVIDER',
@@ -640,15 +639,15 @@ export default async (
                 provide: PhotographQueryService,
                 useFactory: (
                     photographQueryRepository: IPhotographQueryRepository,
-                    configService: ConfigService,
-                    commandInfoService: CommandInfoService
+                    commandInfoService: CommandInfoService,
+                    configService: ConfigService
                 ) =>
                     new PhotographQueryService(
                         photographQueryRepository,
                         commandInfoService,
                         configService
                     ),
-                inject: [PHOTOGRAPH_QUERY_REPOSITORY_TOKEN, ConfigService],
+                inject: [PHOTOGRAPH_QUERY_REPOSITORY_TOKEN, CommandInfoService, ConfigService],
             },
             {
                 provide: SpatialFeatureQueryService,

@@ -56,6 +56,8 @@ export class PhotographQueryService {
                 actions: this.fetchUserActions(userWithGroups, [result]),
             };
         }
+
+        return NotFound;
     }
 
     // TODO share this code with other query services
