@@ -68,7 +68,8 @@ export class TextFieldContext extends EdgeConnectionContext {
     })
     languageCode: LanguageCode;
 
-    constructor(dto: DTO<TextFieldContext>) {
+    // TODO Can't we do this on the utility type
+    constructor(dto: Omit<DTO<TextFieldContext>, 'type'>) {
         super();
 
         if (!dto) return;
