@@ -2,6 +2,7 @@ import {
     AggregateType,
     CoscradUserRole,
     IDetailQueryResult,
+    IPhotographViewModel,
     LanguageCode,
 } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
@@ -17,7 +18,9 @@ import {
     IPhotographQueryRepository,
     PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
 } from '../../domain/models/photograph/queries';
+import { AccessControlList } from '../../domain/models/shared/access-control/access-control-list.entity';
 import { CoscradContributor } from '../../domain/models/user-management/contributor';
+import { CoscradUserGroup } from '../../domain/models/user-management/group/entities/coscrad-user-group.entity';
 import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../domain/models/user-management/user/entities/user/coscrad-user.entity';
 import { FullName } from '../../domain/models/user-management/user/entities/user/full-name.entity';
@@ -39,7 +42,7 @@ const buildDetailEndpoint = (id: AggregateId) => `${indexEndpoint}/${id}`;
 // We require an existing user for ACL tests
 const dummyQueryUserId = buildDummyUuid(4);
 
-const { user: users, userGroup: _userGroups } = buildTestDataInFlatFormat();
+const { user: users, userGroup: userGroups } = buildTestDataInFlatFormat();
 
 const dummyUser = (users as CoscradUser[])[0].clone({
     authProviderUserId: `auth0|${dummyQueryUserId}`,
@@ -47,9 +50,9 @@ const dummyUser = (users as CoscradUser[])[0].clone({
     roles: [CoscradUserRole.viewer],
 });
 
-// const dummyGroup = (userGroups as CoscradUserGroup[])[0].clone({ userIds: [dummyUser.id] });
+const dummyGroup = (userGroups as CoscradUserGroup[])[0].clone({ userIds: [dummyUser.id] });
 
-// const dummyUserWithGroups = new CoscradUserWithGroups(dummyUser, [dummyGroup]);
+const dummyUserWithGroups = new CoscradUserWithGroups(dummyUser, [dummyGroup]);
 
 // Set up test data (use event sourcing to set up state)
 const photographTitle = `Photograph Title`;
@@ -113,13 +116,13 @@ const targetPhotographView = clonePlainObjectWithOverrides(dummyPhotograph, {
     ],
 });
 
-// const privatePhotographThatUserCanAccess = clonePlainObjectWithOverrides(dummyPhotograph, {
-//     accessControlList: new AccessControlList({
-//         allowedUserIds: [dummyQueryUserId],
-//         allowedGroupIds: [],
-//     }),
-//     isPublished: false,
-// });
+const privatePhotographThatUserCanAccess = clonePlainObjectWithOverrides(dummyPhotograph, {
+    accessControlList: new AccessControlList({
+        allowedUserIds: [dummyQueryUserId],
+        allowedGroupIds: [],
+    }),
+    isPublished: false,
+});
 
 const assertResourceHasContributionFor = (
     { id: contributorId }: CoscradContributor,
@@ -274,7 +277,7 @@ describe(`when querying for a photograph: fetch by Id`, () => {
                         await photographQueryRepository.createMany([targetPhotographView]);
                     });
 
-                    it.only(`should return the expected result`, async () => {
+                    it(`should return the expected result`, async () => {
                         const res = await request(app.getHttpServer()).get(
                             buildDetailEndpoint(photographId)
                         );
@@ -286,61 +289,249 @@ describe(`when querying for a photograph: fetch by Id`, () => {
                     });
                 });
 
-                //     describe(`when the photograph is not published`, () => {
-                //         beforeEach(async () => {
-                //             // note that there is no publication event in this event history
+                describe(`when the photograph is not published`, () => {
+                    beforeEach(async () => {
+                        // note that there is no publication event in this event history
 
-                //             // TODO: we need to check that contributors come through
+                        // TODO: we need to check that contributors come through
 
-                //             await seedPhotographs([
-                //                 clonePlainObjectWithOverrides(targetPhotographView, {
-                //                     isPublished: false,
-                //                 }),
-                //             ]);
-                //         });
+                        await photographQueryRepository.createMany([
+                            clonePlainObjectWithOverrides(targetPhotographView, {
+                                isPublished: false,
+                            }),
+                        ]);
+                    });
 
-                //         it(`should return the expected result`, async () => {
-                //             const res = await request(app.getHttpServer()).get(
-                //                 buildDetailEndpoint(photographId)
-                //             );
+                    it(`should return the expected result`, async () => {
+                        const res = await request(app.getHttpServer()).get(
+                            buildDetailEndpoint(photographId)
+                        );
 
-                //             expect(res.status).toBe(httpStatusCodes.ok);
+                        expect(res.status).toBe(httpStatusCodes.ok);
 
-                //             // Commands should be visible to admin
-                //             expect(res.body.actions).not.toEqual([]);
-                //         });
-                //     });
+                        // Commands should be visible to admin
+                        expect(res.body.actions).not.toEqual([]);
+                    });
+                });
 
-                //     describe(`when the photograph is not published but the user has explicit access`, () => {
-                //         beforeEach(async () => {
-                //             // note that there is no publication event in this event history
+                describe(`when the photograph is not published but the user has explicit access`, () => {
+                    beforeEach(async () => {
+                        // note that there is no publication event in this event history
 
-                //             // TODO: we need to check that contributors come through
+                        // TODO: we need to check that contributors come through
 
-                //             await seedPhotographs([privatePhotographThatUserCanAccess]);
-                //         });
+                        await photographQueryRepository.createMany([
+                            privatePhotographThatUserCanAccess,
+                        ]);
+                    });
 
-                //         it(`should return the expected result`, async () => {
-                //             const res = await request(app.getHttpServer()).get(
-                //                 buildDetailEndpoint(photographId)
-                //             );
+                    it(`should return the expected result`, async () => {
+                        const res = await request(app.getHttpServer()).get(
+                            buildDetailEndpoint(photographId)
+                        );
 
-                //             expect(res.status).toBe(httpStatusCodes.ok);
+                        expect(res.status).toBe(httpStatusCodes.ok);
 
-                //             // Commands should be visible to admin
-                //             expect(res.body.actions).not.toEqual([]);
-                //         });
-                //     });
+                        // Commands should be visible to admin
+                        expect(res.body.actions).not.toEqual([]);
+                    });
+                });
 
-                //     describe(`when there is no photograph with the given Id`, () => {
-                //         it(`should return not found (404)`, async () => {
-                //             const res = await request(app.getHttpServer()).get(
-                //                 buildDetailEndpoint(buildDummyUuid(456))
-                //             );
+                describe(`when there is no photograph with the given Id`, () => {
+                    it(`should return not found (404)`, async () => {
+                        const res = await request(app.getHttpServer()).get(
+                            buildDetailEndpoint(buildDummyUuid(456))
+                        );
 
-                //             expect(res.status).toBe(httpStatusCodes.notFound);
-                //         });
-                //     });
+                        expect(res.status).toBe(httpStatusCodes.notFound);
+                    });
+                });
+            });
+
+            describe(`when the user is a project admin`, () => {
+                beforeAll(async () => {
+                    ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
+                        {
+                            ARANGO_DB_NAME: testDatabaseName,
+                        },
+                        {
+                            testUserWithGroups: new CoscradUserWithGroups(
+                                dummyUser.clone({
+                                    roles: [CoscradUserRole.projectAdmin],
+                                }),
+                                []
+                            ),
+                        }
+                    ));
+                });
+
+                describe(`when there is a photograph with the given Id`, () => {
+                    describe(`when the photograph is published`, () => {
+                        beforeEach(async () => {
+                            // TODO: we need to check that contributors come through
+
+                            await photographQueryRepository.createMany([targetPhotographView]);
+                        });
+
+                        it(`should return the expected result`, async () => {
+                            const res = await request(app.getHttpServer()).get(
+                                buildDetailEndpoint(photographId)
+                            );
+
+                            expect(res.status).toBe(httpStatusCodes.ok);
+
+                            const photograph = res.body as IDetailQueryResult<IPhotographViewModel>;
+
+                            const { actions } = photograph;
+
+                            // admin should see commands
+                            expect(actions).not.toHaveLength(0);
+
+                            /**
+                             * TODO We should add a separate test that checks
+                             * that the correct actions come through in different
+                             * scenarios.
+                             */
+                            expect(actions).toMatchSnapshot();
+                        });
+                    });
+
+                    describe(`when the term is not published`, () => {
+                        beforeEach(async () => {
+                            await photographQueryRepository.createMany([
+                                clonePlainObjectWithOverrides(targetPhotographView, {
+                                    isPublished: false,
+                                }),
+                            ]);
+                        });
+
+                        it(`should return the expected result`, async () => {
+                            const res = await request(app.getHttpServer()).get(
+                                buildDetailEndpoint(photographId)
+                            );
+
+                            expect(res.status).toBe(httpStatusCodes.ok);
+
+                            // Commands should be visible to admin
+                            expect(res.body.actions).not.toEqual([]);
+                        });
+                    });
+
+                    describe(`when the term is not published but the user has explicit access`, () => {
+                        // This case is a bit unclear: does this project admin have access to
+                        // the project this term is a part of?
+                        beforeEach(async () => {
+                            await photographQueryRepository.createMany([
+                                privatePhotographThatUserCanAccess,
+                            ]);
+                        });
+
+                        it(`should return the expected result`, async () => {
+                            const res = await request(app.getHttpServer()).get(
+                                buildDetailEndpoint(photographId)
+                            );
+
+                            expect(res.status).toBe(httpStatusCodes.ok);
+
+                            // Commands should be visible to admin
+                            expect(res.body.actions).not.toEqual([]);
+                        });
+                    });
+
+                    describe(`when there is no photograph with the given Id`, () => {
+                        it(`should return not found (404)`, async () => {
+                            const res = await request(app.getHttpServer()).get(
+                                buildDetailEndpoint(buildDummyUuid(456))
+                            );
+
+                            expect(res.status).toBe(httpStatusCodes.notFound);
+                        });
+                    });
+                });
+
+                describe(`when the user is an ordinary authenticated user`, () => {
+                    beforeAll(async () => {
+                        ({ app, testRepositoryProvider, databaseProvider } =
+                            await setUpIntegrationTest(
+                                {
+                                    ARANGO_DB_NAME: testDatabaseName,
+                                },
+                                {
+                                    testUserWithGroups: dummyUserWithGroups,
+                                }
+                            ));
+                    });
+
+                    describe(`when there is a term with the given Id`, () => {
+                        describe(`when the term is published`, () => {
+                            beforeEach(async () => {
+                                await photographQueryRepository.createMany([targetPhotographView]);
+                            });
+
+                            it(`should return the expected result`, async () => {
+                                const res = await request(app.getHttpServer()).get(
+                                    buildDetailEndpoint(photographId)
+                                );
+
+                                expect(res.status).toBe(httpStatusCodes.ok);
+
+                                // We don't expose actions to non-admin users
+                                expect(res.body.actions).toEqual([]);
+                            });
+                        });
+                    });
+
+                    describe(`when the term is not published and the user does not have access`, () => {
+                        beforeEach(async () => {
+                            await photographQueryRepository.createMany([
+                                clonePlainObjectWithOverrides(targetPhotographView, {
+                                    isPublished: false,
+                                    // no special access here
+                                    accessControlList: new AccessControlList(),
+                                }),
+                            ]);
+                        });
+
+                        // We pretend the resource does not exist when the user
+                        // does not have access to this term
+                        it(`should return not found (404)`, async () => {
+                            const res = await request(app.getHttpServer()).get(
+                                buildDetailEndpoint(photographId)
+                            );
+
+                            expect(res.status).toBe(httpStatusCodes.notFound);
+                        });
+                    });
+
+                    describe(`when the term is not published but the user has access`, () => {
+                        beforeEach(async () => {
+                            await photographQueryRepository.createMany([
+                                privatePhotographThatUserCanAccess,
+                            ]);
+                        });
+
+                        it(`should return the expected result`, async () => {
+                            const res = await request(app.getHttpServer()).get(
+                                buildDetailEndpoint(photographId)
+                            );
+
+                            expect(res.status).toBe(httpStatusCodes.ok);
+
+                            // We don't expose actions to non-admin users
+                            expect(res.body.actions).toEqual([]);
+                        });
+                    });
+
+                    describe(`when there is no photograph with the given Id`, () => {
+                        it(`should return not found (404)`, async () => {
+                            const res = await request(app.getHttpServer()).get(
+                                buildDetailEndpoint(buildDummyUuid(458))
+                            );
+
+                            expect(res.status).toBe(httpStatusCodes.notFound);
+                        });
+                    });
+                });
             });
         });
     });
