@@ -79,9 +79,14 @@ export class SyncInMemoryEventPublisher implements ICoscradEventPublisher {
 
                 this.logger.log(error.toString());
 
-                console.log(error.toString());
-
-                throw error;
+                /**
+                 * Note that we don't want to throw because this event-queue
+                 * is in-process. It's important that we don't bring down other
+                 * subscribers. This is the  main reason why we want to use
+                 * a proper out-of-process memory queue that pulls from the
+                 * event store.
+                 */
+                // throw error;
             }
         }
     }
