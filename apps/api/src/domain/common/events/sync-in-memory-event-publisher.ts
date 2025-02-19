@@ -1,3 +1,4 @@
+import { isFunction } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from '../../../coscrad-cli/logging';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
@@ -27,6 +28,12 @@ export class SyncInMemoryEventPublisher implements ICoscradEventPublisher {
             }
 
             for (const handler of handlers) {
+                if (!isFunction(handler.handle)) {
+                    this.logger.log(
+                        `Encountered an invalid handler (missing a handle method) for event of type: ${eventType}`
+                    );
+                }
+
                 this.handleWithRetries(e, handler);
             }
         }
