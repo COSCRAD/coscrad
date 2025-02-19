@@ -37,6 +37,26 @@ import { PersistenceModule } from '../../persistence/persistence.module';
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
 import { VocabularyListController } from '../controllers/resources/vocabulary-list.controller';
 
+const dataClasses = [
+    // Domain Model
+    VocabularyList,
+    // commands
+    CreateVocabularyList,
+    TranslateVocabularyListName,
+    VocabularyListNameTranslated,
+    AddTermToVocabularyList,
+    RegisterVocabularyListFilterProperty,
+    AnalyzeTermInVocabularyList,
+    EntriesImportedToVocabularyList,
+    // events
+    VocabularyListCreated,
+    VocabularyListNameTranslated,
+    TermAddedToVocabularyList,
+    VocabularyListFilterPropertyRegistered,
+    TermInVocabularyListAnalyzed,
+    EntriesImportedToVocabularyList,
+];
+
 @Module({
     imports: [PersistenceModule, IdGenerationModule, CommandModule],
     controllers: [VocabularyListController],
@@ -69,25 +89,7 @@ import { VocabularyListController } from '../controllers/resources/vocabulary-li
         EntriesImportedToVocabularyListEventHandler,
 
         // Data Classes
-        ...[
-            // Domain Model
-            VocabularyList,
-            // commands
-            CreateVocabularyList,
-            TranslateVocabularyListName,
-            VocabularyListNameTranslated,
-            AddTermToVocabularyList,
-            RegisterVocabularyListFilterProperty,
-            AnalyzeTermInVocabularyList,
-            EntriesImportedToVocabularyList,
-            // events
-            VocabularyListCreated,
-            VocabularyListNameTranslated,
-            TermAddedToVocabularyList,
-            VocabularyListFilterPropertyRegistered,
-            TermInVocabularyListAnalyzed,
-            EntriesImportedToVocabularyList,
-        ].map((ctor) => ({
+        ...dataClasses.map((ctor) => ({
             provide: ctor,
             useValue: ctor,
         })),

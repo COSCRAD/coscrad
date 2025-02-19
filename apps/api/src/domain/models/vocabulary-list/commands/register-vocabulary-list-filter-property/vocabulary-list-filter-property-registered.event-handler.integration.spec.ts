@@ -1,4 +1,9 @@
-import { AggregateType, IValueAndDisplay, LanguageCode } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    FormFieldType,
+    IValueAndDisplay,
+    LanguageCode,
+} from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -156,7 +161,7 @@ describe(`VocabularyListFilterPropertyRegistered.handle`, () => {
 
             const foundOptions = options as IValueAndDisplay<string>[];
 
-            expect(foundFormFieldType).toBe(filterPropertyType);
+            expect(foundFormFieldType).toBe(FormFieldType.staticSelect);
 
             expect(foundOptions).toHaveLength(allowedValuesAndLabels.length);
 

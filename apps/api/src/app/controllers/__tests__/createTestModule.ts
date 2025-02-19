@@ -236,9 +236,15 @@ import {
     ImportEntriesToVocabularyListCommandHandler,
     RegisterVocabularyListFilterProperty,
     RegisterVocabularyListFilterPropertyCommandHandler,
+    TermAddedToVocabularyList,
+    TermInVocabularyListAnalyzed,
     TranslateVocabularyListName,
     TranslateVocabularyListNameCommandHandler,
+    VocabularyListCreated,
+    VocabularyListCreatedEventHandler,
+    VocabularyListFilterPropertyRegistered,
 } from '../../../domain/models/vocabulary-list/commands';
+import { VocabularyListNameTranslated } from '../../../domain/models/vocabulary-list/commands/translate-vocabulary-list-name/vocabulary-list-name-translated.event';
 import { VocabularyList } from '../../../domain/models/vocabulary-list/entities/vocabulary-list.entity';
 import {
     IVocabularyListQueryRepository,
@@ -361,6 +367,11 @@ export const buildAllDataClassProviders = () =>
         PromptTermCreated,
         AudioAddedForTerm,
         TermElicitedFromPrompt,
+        VocabularyListCreated,
+        VocabularyListNameTranslated,
+        VocabularyListFilterPropertyRegistered,
+        TermAddedToVocabularyList,
+        TermInVocabularyListAnalyzed,
         PhotographCreated,
         EntriesImportedToVocabularyList,
         ContributorCreated,
@@ -826,6 +837,7 @@ export default async (
             PromptTermCreatedEventHandler,
             TermElicitedFromPromptEventHandler,
             AudioAddedForTermEventHandler,
+            VocabularyListCreatedEventHandler,
         ],
 
         controllers: [
