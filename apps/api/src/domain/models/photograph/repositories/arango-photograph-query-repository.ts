@@ -74,7 +74,7 @@ export class ArangoPhotographQueryRepository implements IPhotographQueryReposito
             .createMany(views.map(mapEntityDtoToDatabaseDocument))
             .catch((error) => {
                 throw new InternalError(
-                    `faile to create many photograph views in ArangoPhotographQueryRepository`,
+                    `failed to create many photograph views in ArangoPhotographQueryRepository`,
                     [error]
                 );
             });
@@ -109,7 +109,7 @@ export class ArangoPhotographQueryRepository implements IPhotographQueryReposito
         await cursor.all();
     }
 
-    async allowUser(PhotographId: AggregateId, userId: AggregateId): Promise<void> {
+    async allowUser(photographId: AggregateId, userId: AggregateId): Promise<void> {
         const query = `
     FOR doc IN @@collectionName
     FILTER doc._key == @id
@@ -121,8 +121,8 @@ export class ArangoPhotographQueryRepository implements IPhotographQueryReposito
     `;
 
         const bindVars = {
-            '@collectionName': 'photograph_VIEWS',
-            id: PhotographId,
+            '@collectionName': 'photograph__VIEWS',
+            id: photographId,
             userId,
         };
 
