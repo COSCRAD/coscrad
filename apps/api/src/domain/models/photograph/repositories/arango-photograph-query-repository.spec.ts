@@ -24,6 +24,7 @@ import { ArangoRepositoryForAggregate } from '../../../../persistence/repositori
 import { PhotographViewModel } from '../../../../queries/buildViewModelForResource/viewModels/photograph.view-model';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../../common/entities/multilingual-text';
 import buildInstanceFactory from '../../../factories/utilities/buildInstanceFactory';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
@@ -42,7 +43,7 @@ describe(`ArangoPhotographQueryRepository`, () => {
         IDetailQueryResult<IPhotographViewModel>
     >;
 
-    let _contributorRepository: IRepositoryForAggregate<CoscradContributor>;
+    let contributorRepository: IRepositoryForAggregate<CoscradContributor>;
 
     let app: INestApplication;
 
@@ -80,7 +81,7 @@ describe(`ArangoPhotographQueryRepository`, () => {
         /**
          * Currently, the contributors are snapshot based (not event sourced).
          */
-        _contributorRepository = new ArangoRepositoryForAggregate(
+        contributorRepository = new ArangoRepositoryForAggregate(
             databaseProvider,
             ArangoCollectionId.contributors,
             buildInstanceFactory(CoscradContributor),
@@ -119,7 +120,7 @@ describe(`ArangoPhotographQueryRepository`, () => {
         }),
     }));
 
-    const _testContributors = contributorIdsAndNames.map(({ contributorId, fullName }) =>
+    const testContributors = contributorIdsAndNames.map(({ contributorId, fullName }) =>
         dummyContributor.clone({
             id: contributorId,
             fullName,
@@ -253,6 +254,145 @@ describe(`ArangoPhotographQueryRepository`, () => {
             const canUser = updatedAcl.canUser(userId);
 
             expect(canUser).toBe(true);
+        });
+    });
+
+    describe(`delete`, () => {
+        beforeEach(async () => {
+            await arangoDatabaseForCollection.clear();
+
+            await testQueryRepository.createMany(photographViews);
+        });
+
+        it(`should remove the given term`, async () => {
+            const targetTermViewId = photographIds[0];
+
+            const expectedNumberOfTermsAfterDelete = photographViews.length - 1;
+
+            await testQueryRepository.delete(targetTermViewId);
+
+            const actualNumberOfTerms = await testQueryRepository.count();
+
+            expect(actualNumberOfTerms).toBe(expectedNumberOfTermsAfterDelete);
+        });
+    });
+
+    describe(`count`, () => {
+        beforeEach(async () => {
+            await arangoDatabaseForCollection.clear();
+
+            await testQueryRepository.createMany(photographViews);
+        });
+
+        it(`should return the correct count`, async () => {
+            const result = await testQueryRepository.count();
+
+            expect(result).toBe(photographViews.length);
+        });
+    });
+
+    describe(`create`, () => {
+        beforeEach(async () => {
+            await arangoDatabaseForCollection.clear();
+        });
+
+        it(`should create the correct term view`, async () => {
+            const photographToCreate = photographViews[0];
+
+            // act
+            await testQueryRepository.create(photographToCreate);
+
+            const searchResult = await testQueryRepository.fetchById(photographToCreate.id);
+
+            expect(searchResult).not.toBe(NotFound);
+
+            const foundPhotographView = searchResult as PhotographViewModel;
+
+            const name = new MultilingualText(foundPhotographView.name);
+
+            expect(name.getOriginalTextItem().text).toBe(photographTitle);
+        });
+    });
+
+    describe(`createMany`, () => {
+        beforeEach(async () => {
+            await arangoDatabaseForCollection.clear();
+        });
+
+        it(`should create the expected term views`, async () => {
+            // act
+            await testQueryRepository.createMany(photographViews);
+
+            const actualCount = await testQueryRepository.count();
+
+            expect(actualCount).toBe(photographViews.length);
+        });
+    });
+
+    describe('publish', () => {
+        const targetPhotograph = photographViews[0];
+
+        beforeEach(async () => {
+            await arangoDatabaseForCollection.clear();
+
+            await testQueryRepository.create(targetPhotograph);
+        });
+
+        it(`should publish the given term`, async () => {
+            await testQueryRepository.publish(targetPhotograph.id);
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetPhotograph.id
+            )) as PhotographViewModel;
+
+            expect(updatedView.isPublished).toBe(true);
+
+            expect(updatedView.actions).not.toContain('PUBLISH_RESOURCE');
+        });
+    });
+
+    /**
+     * TODO[https://www.pivotaltracker.com/story/show/188764063] support `unpublish`
+     */
+    describe(`attribute`, () => {
+        const targetPhotograph = photographViews[0];
+
+        beforeEach(async () => {
+            await arangoDatabaseForCollection.clear();
+
+            await databaseProvider.getDatabaseForCollection('contributors').clear();
+
+            await testQueryRepository.create(targetPhotograph);
+
+            await contributorRepository.createMany(testContributors);
+        });
+
+        it(`should add the given contributions`, async () => {
+            await testQueryRepository.attribute(
+                targetPhotograph.id,
+                testContributors.map((c) => c.id)
+            );
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetPhotograph.id
+            )) as PhotographViewModel;
+
+            const missingAttributions = updatedView.contributions.filter(
+                ({ id }) => !contributorIds.includes(id)
+            );
+
+            expect(missingAttributions).toHaveLength(0);
+
+            const { contributorId: targetContributorId, fullName: expectedFullName } =
+                contributorIdsAndNames[0];
+
+            const contributionForFirstUser = updatedView.contributions.find(
+                ({ id }) => id === targetContributorId
+            );
+
+            expect(contributionForFirstUser.fullName).toBe(
+                `${expectedFullName.firstName} ${expectedFullName.lastName}`
+            );
         });
     });
 });
