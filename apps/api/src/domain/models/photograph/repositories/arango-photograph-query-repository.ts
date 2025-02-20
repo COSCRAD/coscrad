@@ -114,10 +114,11 @@ export class ArangoPhotographQueryRepository implements IPhotographQueryReposito
     FOR doc IN @@collectionName
     FILTER doc._key == @id
     UPDATE doc WITH {
-        accesControlList: {
+        accessControlList: {
             allowedUserIds: APPEND(doc.accessControlList.allowedUserIds,[@userId])
         }
     } IN @@collectionName
+
     `;
 
         const bindVars = {
@@ -126,7 +127,7 @@ export class ArangoPhotographQueryRepository implements IPhotographQueryReposito
             userId,
         };
 
-        const cursor = await this.database
+        await this.database
             .query({
                 query,
                 bindVars,
@@ -136,8 +137,6 @@ export class ArangoPhotographQueryRepository implements IPhotographQueryReposito
                     `Failed to grant user access via PhotographRepository: ${reason}`
                 );
             });
-
-        await cursor.all();
     }
 
     async delete(id: AggregateId): Promise<void> {
