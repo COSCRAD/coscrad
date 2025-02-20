@@ -18,6 +18,8 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
 
     photographer: string;
 
+    // Do we need pixel height and width?
+
     isPublished: boolean;
 
     mediaItemId?: string;
