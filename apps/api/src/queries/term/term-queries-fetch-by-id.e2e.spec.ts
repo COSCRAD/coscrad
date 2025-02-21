@@ -189,7 +189,7 @@ describe(`when querying for a term: fetch by Id`, () => {
 
                 /**
                  * TODO We need a contract test that will warn us if we potentially
-                 * break the client via breaking chagnes to the API.
+                 * break the client via breaking changes to the API.
                  */
                 it('should return the expected result', async () => {
                     const res = await request(app.getHttpServer()).get(buildDetailEndpoint(termId));
@@ -223,8 +223,6 @@ describe(`when querying for a term: fetch by Id`, () => {
                 // does not have access to this term
                 it(`should return not found (404)`, async () => {
                     const res = await request(app.getHttpServer()).get(buildDetailEndpoint(termId));
-
-                    const _foo = res.body;
 
                     expect(res.status).toBe(httpStatusCodes.notFound);
                 });

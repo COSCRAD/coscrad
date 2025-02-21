@@ -116,6 +116,7 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
                 bindVars,
             })
             .catch((reason) => {
+                // IS THIS CORRECT?  TRANSLATE TERM?
                 throw new InternalError(`Failed to translate term via TermRepository: ${reason}`);
             });
 
