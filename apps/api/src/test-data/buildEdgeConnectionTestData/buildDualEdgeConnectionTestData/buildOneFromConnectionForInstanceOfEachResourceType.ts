@@ -13,6 +13,7 @@ import { MultilingualAudio } from '../../../domain/models/shared/multilingual-au
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { DTO } from '../../../types/DTO';
+import { buildTestVocabularyListEdgeConnectionMember } from '../../buildVocabularyListTestData';
 
 // type is the same for all, use map to mix this in below
 const dtosWithoutTypeProperty: DTO<
@@ -46,7 +47,6 @@ const dtosWithoutTypeProperty: DTO<
                     id: '2',
                 },
                 context: new TextFieldContext({
-                    type: EdgeConnectionContextType.textField,
                     target: 'text',
                     languageCode: LanguageCode.English,
                     charRange: [1, 4],
@@ -74,6 +74,26 @@ const dtosWithoutTypeProperty: DTO<
                 compositeIdentifier: {
                     type: ResourceType.bibliographicCitation,
                     id: '1',
+                },
+                context: new GeneralContext(),
+            },
+        ],
+    },
+    {
+        id: '3004',
+        note: buildMultilingualTextWithSingleItem(
+            'this vocabulary list will help in studying the book'
+        ),
+        members: [
+            buildTestVocabularyListEdgeConnectionMember(
+                EdgeConnectionContextType.textField,
+                EdgeConnectionMemberRole.from
+            ),
+            {
+                role: EdgeConnectionMemberRole.to,
+                compositeIdentifier: {
+                    type: ResourceType.digitalText,
+                    id: '950',
                 },
                 context: new GeneralContext(),
             },

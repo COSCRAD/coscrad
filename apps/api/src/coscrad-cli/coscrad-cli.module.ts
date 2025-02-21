@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { AppModule } from '../app/app.module';
 import { EdgeConnectionModule } from '../app/domain-modules/edge-connection.module';
 import { MediaItemModule } from '../app/domain-modules/media-item.module';
+import { VocabularyListModule } from '../app/domain-modules/vocabulary-list.module';
 import { EventModule } from '../domain/common';
 import { AudioVisualModule } from '../domain/models/audio-visual/application/audio-visual.module';
 import { IdGenerationModule } from '../lib/id-generation/id-generation.module';
@@ -55,6 +56,7 @@ import { ValidateInvariantsCliCommand } from './validate-invariants.cli-command'
         IdGenerationModule,
         MigrationModule,
         CommandModule,
+        VocabularyListModule,
         AudioVisualModule,
         MediaItemModule,
         EdgeConnectionModule,

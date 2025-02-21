@@ -1,4 +1,9 @@
-import { AggregateType, IValueAndDisplay, LanguageCode } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    FormFieldType,
+    IValueAndDisplay,
+    LanguageCode,
+} from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -17,7 +22,7 @@ import { IVocabularyListQueryRepository } from '../../queries';
 import { ArangoVocabularyListQueryRepository } from '../../repositories';
 import { VocabularyListCreated } from '../create-vocabulary-list';
 import { FilterPropertyType } from './register-vocabulary-list-filter-property.command';
-import { VocabularyListFilterPropertyRegistered } from './vocabulary-list-filter-property-registered';
+import { VocabularyListFilterPropertyRegistered } from './vocabulary-list-filter-property-registered.event';
 import { VocabularyListFilterPropertyRegisteredEventHandler } from './vocabulary-list-filter-property-registered.event-handler';
 
 const vocabularyListId = buildDummyUuid(345);
@@ -156,7 +161,7 @@ describe(`VocabularyListFilterPropertyRegistered.handle`, () => {
 
             const foundOptions = options as IValueAndDisplay<string>[];
 
-            expect(foundFormFieldType).toBe(filterPropertyType);
+            expect(foundFormFieldType).toBe(FormFieldType.staticSelect);
 
             expect(foundOptions).toHaveLength(allowedValuesAndLabels.length);
 

@@ -45,8 +45,6 @@ const subscribeToRealTimeUpdates = (dispatch: ReturnType<typeof useAppDispatch>)
     viewWriteEventSource.onmessage = (result) => {
         const event = JSON.parse(result.data);
 
-        console.log({ sse: event });
-
         /**
          * Note that we should only fetch a single view, not all views
          * here. This is inefficient.
@@ -56,7 +54,6 @@ const subscribeToRealTimeUpdates = (dispatch: ReturnType<typeof useAppDispatch>)
          * implementation or a different paradigm (e.g., htmx) in the future.
          */
         if (isViewWriteEvent(event)) {
-            console.log('fetching freshhhhhhh');
             const { type } = event;
 
             // TODO Map the view collection names to aggregate types in the repository layer

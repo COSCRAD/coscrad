@@ -1,9 +1,8 @@
-import { AggregateType, DropboxOrCheckbox, ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { CommandFSA } from '../../../../../app/controllers/command/command-fsa/command-fsa.entity';
-import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
@@ -30,6 +29,11 @@ import {
     VocabularyListEntryImportItem,
 } from '../../entities/vocabulary-list.entity';
 import { VocabularyListEntry } from '../../vocabulary-list-entry.entity';
+import { VocabularyListCreated } from '../create-vocabulary-list';
+import {
+    FilterPropertyType,
+    VocabularyListFilterPropertyRegistered,
+} from '../register-vocabulary-list-filter-property';
 import { ImportEntriesToVocabularyList } from './import-entries-to-vocabulary-list.command';
 
 const commandType = 'IMPORT_ENTRIES_TO_VOCABULARY_LIST';
@@ -79,36 +83,48 @@ const entries: VocabularyListEntryImportItem[] = allowedValuesForPersonProperty.
     })
 );
 
-const existingVocabularyList = getValidAggregateInstanceForTest(AggregateType.vocabularyList).clone(
-    {
-        published: false,
-        entries: [],
-        variables: [
-            {
-                name: 'person',
-                type: DropboxOrCheckbox.dropbox,
-                validValues: allowedValuesForPersonProperty.map((value) => ({
-                    value,
-                    display: `label for ${value}`,
-                })),
-            },
-            {
-                name: 'positive',
-                type: DropboxOrCheckbox.checkbox,
-                validValues: [
-                    {
-                        value: true,
-                        display: 'positive',
-                    },
-                    {
-                        value: false,
-                        display: 'negative',
-                    },
-                ],
-            },
-        ],
-    }
-);
+const eventHistoryForVocabularyList = new TestEventStream()
+    .andThen<VocabularyListCreated>({
+        type: 'VOCABULARY_LIST_CREATED',
+    })
+    .andThen<VocabularyListFilterPropertyRegistered>({
+        type: 'VOCABULARY_LIST_PROPERTY_FILTER_REGISTERED',
+        payload: {
+            name: 'person',
+            type: FilterPropertyType.selection,
+            allowedValuesAndLabels: allowedValuesForPersonProperty.map((value) => ({
+                value,
+                label: `label for ${value}`,
+            })),
+        },
+    })
+    .andThen<VocabularyListFilterPropertyRegistered>({
+        type: 'VOCABULARY_LIST_PROPERTY_FILTER_REGISTERED',
+        payload: {
+            name: 'positive',
+            type: FilterPropertyType.checkbox,
+            allowedValuesAndLabels: [
+                {
+                    value: true,
+                    label: 'positive',
+                },
+                {
+                    value: false,
+                    label: 'negative',
+                },
+            ],
+        },
+    });
+
+const vocabularyListId = buildDummyUuid(1);
+
+const existingVocabularyList = VocabularyList.fromEventHistory(
+    eventHistoryForVocabularyList.as({
+        type: AggregateType.vocabularyList,
+        id: vocabularyListId,
+    }),
+    vocabularyListId
+) as VocabularyList;
 
 const dummyFsa = buildTestCommandFsaMap().get(
     commandType

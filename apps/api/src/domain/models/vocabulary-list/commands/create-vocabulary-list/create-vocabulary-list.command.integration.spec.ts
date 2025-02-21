@@ -10,8 +10,8 @@ import { ArangoDatabaseProvider } from '../../../../../persistence/database/data
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestCommandFsaMap } from '../../../../../test-data/commands';
+import { TestEventStream } from '../../../../../test-data/events';
 import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
-import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
 import { MultilingualTextItem } from '../../../../common/entities/multilingual-text';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../../types/AggregateId';
@@ -32,6 +32,7 @@ import { VocabularyList } from '../../entities/vocabulary-list.entity';
 import { DuplicateVocabularyListNameError } from '../../errors';
 import { VOCABULARY_LIST_CREATED } from './constants';
 import { CreateVocabularyList } from './create-vocabulary-list.command';
+import { VocabularyListCreated } from './vocabulary-list-created.event';
 
 const commandType = 'CREATE_VOCABULARY_LIST';
 
@@ -143,20 +144,33 @@ describe(commandType, () => {
     describe(`when the command is invalid`, () => {
         describe(`when there is already a vocabulary list with the given name`, () => {
             it(`should fail with the expected errors`, async () => {
-                const existingVocabularyListId = buildDummyUuid(987);
+                const idOfVocabularyListWithSameName = buildDummyUuid(123);
 
                 await assertCreateCommandError(assertionHelperDependencies, {
-                    initialState: new DeluxeInMemoryStore({
-                        [AggregateType.vocabularyList]: [
-                            getValidAggregateInstanceForTest(AggregateType.vocabularyList).clone({
-                                name: buildMultilingualTextWithSingleItem(
-                                    nameInLanguage,
-                                    languageCodeForName
-                                ),
-                                id: existingVocabularyListId,
-                            }),
-                        ],
-                    }).fetchFullSnapshotInLegacyFormat(),
+                    seedInitialState: async () => {
+                        await testRepositoryProvider.addFullSnapshot(
+                            new DeluxeInMemoryStore({
+                                [AggregateType.vocabularyList]: [
+                                    VocabularyList.fromEventHistory(
+                                        new TestEventStream()
+                                            .andThen<VocabularyListCreated>({
+                                                type: 'VOCABULARY_LIST_CREATED',
+                                                payload: {
+                                                    name: validFsa.payload.name,
+                                                    languageCodeForName:
+                                                        validFsa.payload.languageCodeForName,
+                                                },
+                                            })
+                                            .as({
+                                                id: idOfVocabularyListWithSameName,
+                                            }),
+                                        idOfVocabularyListWithSameName
+                                    ) as VocabularyList,
+                                    getValidAggregateInstanceForTest(AggregateType.vocabularyList),
+                                ],
+                            }).fetchFullSnapshotInLegacyFormat()
+                        );
+                    },
                     systemUserId: dummySystemUserId,
                     buildCommandFSA: (id: string) => commandFsaFactory.build(id),
                     checkError: (error, id) => {
@@ -171,7 +185,7 @@ describe(commandType, () => {
                                         },
                                         {
                                             type: AggregateType.vocabularyList,
-                                            id: existingVocabularyListId,
+                                            id: idOfVocabularyListWithSameName,
                                         },
                                         new MultilingualTextItem({
                                             text: nameInLanguage,
@@ -196,9 +210,16 @@ describe(commandType, () => {
                 await testRepositoryProvider.addFullSnapshot(
                     new DeluxeInMemoryStore({
                         [AggregateType.vocabularyList]: [
-                            getValidAggregateInstanceForTest(AggregateType.vocabularyList).clone({
-                                id: newId,
-                            }),
+                            VocabularyList.fromEventHistory(
+                                new TestEventStream()
+                                    .andThen<VocabularyListCreated>({
+                                        type: 'VOCABULARY_LIST_CREATED',
+                                    })
+                                    .as({
+                                        id: newId,
+                                    }),
+                                newId
+                            ) as VocabularyList,
                         ],
                     }).fetchFullSnapshotInLegacyFormat()
                 );
@@ -218,7 +239,9 @@ describe(commandType, () => {
                 await assertCreateCommandError(assertionHelperDependencies, {
                     systemUserId: dummySystemUserId,
                     buildCommandFSA: (_: AggregateId) => commandFsaFactory.build(bogusId),
-                    initialState: emptyInitialState,
+                    seedInitialState: async () => {
+                        Promise.resolve();
+                    },
                     checkError: (error: InternalError) => {
                         assertErrorAsExpected(
                             error,

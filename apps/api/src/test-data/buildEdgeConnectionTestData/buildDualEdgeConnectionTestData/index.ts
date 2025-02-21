@@ -169,22 +169,33 @@ const additionalDualConnectionsForBibliographicCitationDTOs = [
     },
 ];
 
+const dualConnectionsWithVariousContextTypes = buildOneDualEdgeConnectionForEveryContextType();
+
+const fromConnections = buildOneFromConnectionForInstanceOfEachResourceType();
+
+const toConnections = buildOneToConnectionForInstanceOfEachResourceType();
+
 const additionalDualConnectionsForBibliographicCitations: EdgeConnection[] =
     additionalDualConnectionsForBibliographicCitationDTOs.map(
         (dto) => new EdgeConnection({ ...dto, audioForNote: MultilingualAudio.buildEmpty() })
     );
 
-export default (uniqueIdOffset: number): EdgeConnection[] => [
-    /**
-     * TODO [https://www.pivotaltracker.com/story/show/182302542]
-     * "Strangle out" auto generation of test data.
-     */
-    ...generateComprehensiveDualEdgeConnectionTestData(uniqueIdOffset, [
+export default (uniqueIdOffset: number): EdgeConnection[] => {
+    const generatedConnections = generateComprehensiveDualEdgeConnectionTestData(uniqueIdOffset, [
         ResourceType.mediaItem,
         ResourceType.bibliographicCitation,
-    ]),
-    ...buildOneDualEdgeConnectionForEveryContextType(),
-    ...buildOneFromConnectionForInstanceOfEachResourceType(),
-    ...buildOneToConnectionForInstanceOfEachResourceType(),
-    ...additionalDualConnectionsForBibliographicCitations,
-];
+        ResourceType.vocabularyList,
+    ]);
+
+    return [
+        /**
+         * TODO [https://www.pivotaltracker.com/story/show/182302542]
+         * "Strangle out" auto generation of test data.
+         */
+        ...generatedConnections,
+        ...dualConnectionsWithVariousContextTypes,
+        ...fromConnections,
+        ...toConnections,
+        ...additionalDualConnectionsForBibliographicCitations,
+    ];
+};

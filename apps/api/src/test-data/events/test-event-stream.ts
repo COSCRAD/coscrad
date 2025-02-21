@@ -1,5 +1,5 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
-import { isNonEmptyString } from '@coscrad/validation-constraints';
+import { isNonEmptyObject, isNonEmptyString } from '@coscrad/validation-constraints';
 import { plainToInstance } from 'class-transformer';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../domain/models/__tests__/utilities/dummyDateNow';
@@ -87,6 +87,7 @@ import {
 import { AggregateId } from '../../domain/types/AggregateId';
 import { AggregateType } from '../../domain/types/AggregateType';
 import { InternalError } from '../../lib/errors/InternalError';
+import clonePlainObjectWithoutProperty from '../../lib/utilities/clonePlainObjectWithoutProperty';
 import { clonePlainObjectWithOverrides } from '../../lib/utilities/clonePlainObjectWithOverrides';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { BaseEvent } from '../../queries/event-sourcing';
@@ -625,8 +626,41 @@ const buildTermInVocabularyListAnalyzed = (
         },
     };
 
+    /**
+     * The following logic should really be part of a core utility. The problem we
+     * are encountering is that when we have "magic keys" on payload properties,
+     * our base behaviour of `clonePlainObjectWithOverrides` is to merge these
+     * objects. We need a way to specify that the entire object should be replaced.
+     *
+     * For now, we are wrapping this logic here so that the logic doesn't leak
+     * into our test setup. But we should push this logic further down into cloning
+     * utils soon.
+     */
+    let payloadWithOverridesApplied: {
+        -readonly [K in keyof TermInVocabularyListAnalyzedPayload]?: TermInVocabularyListAnalyzedPayload[K];
+    };
+
+    payloadWithOverridesApplied = clonePlainObjectWithOverrides(defaultPayload, payloadOverrides);
+
+    /**
+     * This will overwrite the `propertyValues` property completely with a brand-new
+     * object.
+     */
+    if (isNonEmptyObject(payloadOverrides.propertyValues)) {
+        payloadWithOverridesApplied = clonePlainObjectWithoutProperty(
+            payloadWithOverridesApplied,
+            'propertyValues'
+        );
+        payloadWithOverridesApplied.propertyValues = payloadOverrides.propertyValues;
+    }
+
+    /**
+     * The cast below is because we modified what was intended to be a read-only
+     * object. We need to think carefully about whether we need such strong
+     * immutability guarantees.
+     */
     return new TermInVocabularyListAnalyzed(
-        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        payloadWithOverridesApplied as TermInVocabularyListAnalyzedPayload,
         buildMetadata()
     );
 };

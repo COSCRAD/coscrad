@@ -1,9 +1,8 @@
-import { AggregateType, DropboxOrCheckbox } from '@coscrad/api-interfaces';
+import { AggregateType } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { CommandFSA } from '../../../../../app/controllers/command/command-fsa/command-fsa.entity';
-import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
@@ -12,6 +11,7 @@ import { ArangoDatabaseProvider } from '../../../../../persistence/database/data
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestCommandFsaMap } from '../../../../../test-data/commands';
+import { TestEventStream } from '../../../../../test-data/events';
 import InvariantValidationError from '../../../../domainModelValidators/errors/InvariantValidationError';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
@@ -25,24 +25,35 @@ import AggregateNotFoundError from '../../../shared/common-command-errors/Aggreg
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { InvalidValueForCheckboxFilterPropertyError } from '../../entities/invalid-value-for-checkbox-filter-property.error';
 import { InvalidValueForSelectFilterPropertyError } from '../../entities/invalid-value-for-select-filter-property.error';
-import { VocabularyListFilterProperty } from '../../entities/vocabulary-list-variable.entity';
+import { VocabularyList } from '../../entities/vocabulary-list.entity';
 import {
     CannotHaveTwoFilterPropertiesWithTheSameNameError,
     DuplicateValueForVocabularyListFilterPropertyValueError,
 } from '../../errors';
 import { DuplicateLabelForVocabularyListFilterPropertyValueError } from '../../errors/duplicate-label-for-vocabulary-list-filter-property-value.error';
 import { VocabularyListFilterPropertyMustHaveAtLeastOneAllowedValueError } from '../../errors/vocabulary-list-filter-property-must-have-at-least-one-allowed-value.error';
+import { VocabularyListCreated } from '../create-vocabulary-list';
 import { REGISTER_VOCABULARY_LIST_FILTER_PROPERTY } from './constants';
-import { FilterPropertyType, RegisterVocabularyListFilterProperty } from './index';
+import {
+    FilterPropertyType,
+    RegisterVocabularyListFilterProperty,
+    VocabularyListFilterPropertyRegistered,
+} from './index';
 
 const commandType = REGISTER_VOCABULARY_LIST_FILTER_PROPERTY;
 
-const existingVocabularyList = getValidAggregateInstanceForTest(AggregateType.vocabularyList).clone(
-    {
-        // ensure that there are no filter properties to start with
-        variables: [],
-    }
-);
+const vocabularyListId = buildDummyUuid(1);
+
+const vocabularyListCreated = new TestEventStream().andThen<VocabularyListCreated>({
+    type: 'VOCABULARY_LIST_CREATED',
+});
+const existingVocabularyList = VocabularyList.fromEventHistory(
+    vocabularyListCreated.as({
+        type: AggregateType.vocabularyList,
+        id: vocabularyListId,
+    }),
+    vocabularyListId
+) as VocabularyList;
 
 const dummyFsa = buildTestCommandFsaMap().get(
     REGISTER_VOCABULARY_LIST_FILTER_PROPERTY
@@ -185,20 +196,17 @@ describe(commandType, () => {
                         await testRepositoryProvider.addFullSnapshot(
                             new DeluxeInMemoryStore({
                                 [AggregateType.vocabularyList]: [
-                                    existingVocabularyList.clone({
-                                        variables: [
-                                            new VocabularyListFilterProperty({
-                                                name: duplicateFilterPropertyName,
-                                                type: DropboxOrCheckbox.dropbox,
-                                                validValues: [
-                                                    {
-                                                        value: 'F8',
-                                                        display: 'foo',
-                                                    },
-                                                ],
-                                            }),
-                                        ],
-                                    }),
+                                    VocabularyList.fromEventHistory(
+                                        vocabularyListCreated
+                                            .andThen<VocabularyListFilterPropertyRegistered>({
+                                                type: 'VOCABULARY_LIST_PROPERTY_FILTER_REGISTERED',
+                                                payload: {
+                                                    name: duplicateFilterPropertyName,
+                                                },
+                                            })
+                                            .as(existingVocabularyList.getCompositeIdentifier()),
+                                        vocabularyListId
+                                    ) as VocabularyList,
                                 ],
                             }).fetchFullSnapshotInLegacyFormat()
                         );

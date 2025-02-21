@@ -32,7 +32,6 @@ export const buildContextModelMap = () =>
         .set(
             EdgeConnectionContextType.textField,
             new TextFieldContext({
-                type: EdgeConnectionContextType.textField,
                 target: 'foobarbaz',
                 languageCode: LanguageCode.English,
                 charRange: [0, 10000000000000],

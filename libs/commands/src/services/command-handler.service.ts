@@ -25,6 +25,9 @@ export class CommandHandlerService {
 
     async execute(
         { type, payload }: FluxStandardAction,
+        /**
+         * TODO We should use a data class and schema validation for metadata.
+         */
         meta?: Record<string, unknown>
     ): Promise<Error | Ack> {
         const handler = this.#handlers.get(type);

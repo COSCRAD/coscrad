@@ -1,4 +1,4 @@
-import { CoscradEvent } from '../../../../../domain/common';
+import { CoscradEvent } from '../../../../common';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { RegisterVocabularyListFilterProperty } from './register-vocabulary-list-filter-property.command';
 

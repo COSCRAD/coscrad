@@ -11,6 +11,12 @@ import { EdgeConnectionContextType } from '../context/types/EdgeConnectionContex
  * Better yet
  * @AllowedContext(contextCtors: Ctor<ContextUnion>p[])
  *
+ * Or event
+ * @Resource({
+ *     type: AggregateType.vocabularyList,
+ *     allowedContextTypes: [EdgeConnectionContextType.textContext]
+ * })
+ *
  * and then on the Context classes:
  * @EdgeConnectionContext(contextType)
  * becomes the source of truth for the various context types.

@@ -185,6 +185,9 @@ export class Song extends Resource {
         return !isNotFound(searchResult);
     }
 
+    /**
+     * TODO Use the same pattern as elsewhere.
+     */
     static fromEventHistory(
         eventStream: BaseEvent[],
         idOfSongToCreate: AggregateId
@@ -218,6 +221,8 @@ export class Song extends Resource {
             audioItemId,
         } = creationEvent.payload as CreateSong;
 
+        const { contributorIds = [] } = creationEvent.meta;
+
         const initialInstance = new Song({
             type,
             id,
@@ -225,6 +230,10 @@ export class Song extends Resource {
             published: false,
             title: buildMultilingualTextWithSingleItem(title, languageCodeForTitle),
             eventHistory: [creationEvent],
+            contributions: contributorIds.map((contributorId) => ({
+                contributorId,
+                role: 'created song',
+            })),
         });
 
         const newSong = updateEvents.reduce(

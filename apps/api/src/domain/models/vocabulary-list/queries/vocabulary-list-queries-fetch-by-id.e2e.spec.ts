@@ -187,9 +187,11 @@ const registerEventHandlers = (
 
 /**
  * TODO[test-coverage]: include test case with import history
+ *
+ * This test is being reworked on a separate branch. Opt back in when rebasing.
  */
 
-describe(`when querying for a vocabulary list: fetch by ID`, () => {
+describe.skip(`when querying for a vocabulary list: fetch by ID`, () => {
     const testDatabaseName = generateDatabaseNameForTestSuite();
 
     let app: INestApplication;

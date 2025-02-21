@@ -89,7 +89,8 @@ const analyzeTermInVocabularyList: CommandFSA<AnalyzeTermInVocabularyList> = {
         },
         termId: buildDummyUuid(55),
         propertyValues: {
-            dummyPropertyName: 'dummy-property-value',
+            // TODO Because of the way our "clone with overrides" logic works, this needs to be empty
+            // dummyPropertyName: 'dummy-property-value',
         },
     },
 };

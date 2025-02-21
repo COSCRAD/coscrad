@@ -28,6 +28,10 @@ import validateCommandPayloadType from './utilities/validateCommandPayloadType';
 
 const buildExecutionError = (allErrors: InternalError[]) => new CommandExecutionError(allErrors);
 
+export type CoscradCommandMeta = Pick<EventRecordMetadata, 'userId'> & {
+    contributorIds?: AggregateId[];
+};
+
 export abstract class BaseCommandHandler<TAggregate extends Aggregate> implements ICommandHandler {
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN)
@@ -150,10 +154,7 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
     async execute(
         command: ICommandBase,
         commandType: string,
-        {
-            userId,
-            contributorIds,
-        }: Pick<EventRecordMetadata, 'userId'> & { contributorIds?: AggregateId[] }
+        { userId, contributorIds }: CoscradCommandMeta
     ): Promise<Ack | InternalError> {
         const typeValidationResult = this.validateType(command, commandType);
 

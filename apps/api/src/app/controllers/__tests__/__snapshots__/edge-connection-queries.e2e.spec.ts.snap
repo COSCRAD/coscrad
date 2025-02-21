@@ -628,15 +628,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       "connectedResources": [
         {
           "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "vocabularyList",
           },
           "context": {
             "charRange": [
-              0,
-              1,
+              5,
+              7,
             ],
-            "languageCode": "hai",
+            "languageCode": "clc",
             "target": "name",
             "type": "textField",
           },
@@ -650,14 +650,14 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "A note about vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "text": "A note about vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           },
         ],
       },
       "note": {
         "items": [
           {
-            "languageCode": "hai",
+            "languageCode": "clc",
             "role": "original",
             "text": "This is the first letter of the list name",
           },
@@ -1357,7 +1357,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "connectedResources": [
         {
           "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "vocabularyList",
           },
           "context": {
@@ -1373,14 +1373,14 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "A note about vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "text": "A note about vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           },
         ],
       },
       "note": {
         "items": [
           {
-            "languageCode": "hai",
+            "languageCode": "clc",
             "role": "original",
             "text": "This is the first letter of the list name",
           },
@@ -1553,64 +1553,6 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
         {
           "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-            "type": "vocabularyList",
-          },
-          "context": {
-            "charRange": [
-              0,
-              1,
-            ],
-            "languageCode": "hai",
-            "target": "name",
-            "type": "textField",
-          },
-          "role": "from",
-        },
-      ],
-      "connectionType": "dual",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112000",
-      "name": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "A connection from vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002 to term/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-          },
-        ],
-      },
-      "note": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "That is why term/2 is related to vocabularyList/2",
-          },
-        ],
-      },
-      "tags": [],
-    },
-    {
-      "actions": [],
-      "connectedResources": [
-        {
-          "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-            "type": "vocabularyList",
-          },
-          "context": {
-            "charRange": [
-              0,
-              1,
-            ],
-            "languageCode": "hai",
-            "target": "name",
-            "type": "textField",
-          },
-          "role": "to",
-        },
-        {
-          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
             "type": "audioItem",
           },
@@ -1625,13 +1567,13 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "dual",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112001",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112000",
       "name": {
         "items": [
           {
             "languageCode": "en",
             "role": "original",
-            "text": "A connection from audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110 to vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "text": "A connection from audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110 to term/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           },
         ],
       },
@@ -1640,7 +1582,57 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "That is why vocabularyList/2 is related to audioItem/110",
+            "text": "That is why term/2 is related to audioItem/110",
+          },
+        ],
+      },
+      "tags": [],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+            "type": "audioItem",
+          },
+          "context": {
+            "timeRange": {
+              "inPointMilliseconds": 11000,
+              "outPointMilliseconds": 12950,
+            },
+            "type": "timeRange",
+          },
+          "role": "to",
+        },
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "type": "photograph",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "from",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112001",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "A connection from photograph/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002 to audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+          },
+        ],
+      },
+      "note": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "That is why audioItem/110 is related to photograph/2",
           },
         ],
       },
@@ -1691,22 +1683,18 @@ exports[`When querying for edge connections GET /connections/notes should return
       "connectedResources": [
         {
           "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
-            "type": "audioItem",
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "type": "photograph",
           },
           "context": {
-            "timeRange": {
-              "inPointMilliseconds": 11000,
-              "outPointMilliseconds": 12950,
-            },
-            "type": "timeRange",
+            "type": "general",
           },
           "role": "to",
         },
         {
           "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-            "type": "photograph",
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
+            "type": "spatialFeature",
           },
           "context": {
             "type": "general",
@@ -1721,7 +1709,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "A connection from photograph/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002 to audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+            "text": "A connection from spatialFeature/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300 to photograph/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           },
         ],
       },
@@ -1730,7 +1718,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "That is why audioItem/110 is related to photograph/2",
+            "text": "That is why photograph/2 is related to spatialFeature/300",
           },
         ],
       },
@@ -1769,8 +1757,8 @@ exports[`When querying for edge connections GET /connections/notes should return
       "connectedResources": [
         {
           "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-            "type": "photograph",
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
+            "type": "spatialFeature",
           },
           "context": {
             "type": "general",
@@ -1779,11 +1767,14 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
         {
           "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
-            "type": "spatialFeature",
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950",
+            "type": "digitalText",
           },
           "context": {
-            "type": "general",
+            "pageIdentifiers": [
+              "1",
+            ],
+            "type": "pageRange",
           },
           "role": "from",
         },
@@ -1795,7 +1786,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "A connection from spatialFeature/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300 to photograph/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "text": "A connection from digitalText/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950 to spatialFeature/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
           },
         ],
       },
@@ -1804,7 +1795,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "That is why photograph/2 is related to spatialFeature/300",
+            "text": "That is why spatialFeature/300 is related to digitalText/950",
           },
         ],
       },
@@ -1847,16 +1838,6 @@ exports[`When querying for edge connections GET /connections/notes should return
       "connectedResources": [
         {
           "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
-            "type": "spatialFeature",
-          },
-          "context": {
-            "type": "general",
-          },
-          "role": "to",
-        },
-        {
-          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950",
             "type": "digitalText",
           },
@@ -1865,6 +1846,16 @@ exports[`When querying for edge connections GET /connections/notes should return
               "1",
             ],
             "type": "pageRange",
+          },
+          "role": "to",
+        },
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "song",
+          },
+          "context": {
+            "type": "general",
           },
           "role": "from",
         },
@@ -1876,7 +1867,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "A connection from digitalText/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950 to spatialFeature/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
+            "text": "A connection from song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to digitalText/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950",
           },
         ],
       },
@@ -1885,7 +1876,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "That is why spatialFeature/300 is related to digitalText/950",
+            "text": "That is why digitalText/950 is related to song/1",
           },
         ],
       },
@@ -1944,24 +1935,25 @@ exports[`When querying for edge connections GET /connections/notes should return
       "connectedResources": [
         {
           "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950",
-            "type": "digitalText",
-          },
-          "context": {
-            "pageIdentifiers": [
-              "1",
-            ],
-            "type": "pageRange",
-          },
-          "role": "to",
-        },
-        {
-          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "song",
           },
           "context": {
             "type": "general",
+          },
+          "role": "to",
+        },
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+            "type": "video",
+          },
+          "context": {
+            "timeRange": {
+              "inPointMilliseconds": 11000,
+              "outPointMilliseconds": 12950,
+            },
+            "type": "timeRange",
           },
           "role": "from",
         },
@@ -1973,7 +1965,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "A connection from song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to digitalText/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950",
+            "text": "A connection from video/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223 to song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           },
         ],
       },
@@ -1982,7 +1974,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "That is why digitalText/950 is related to song/1",
+            "text": "That is why song/1 is related to video/223",
           },
         ],
       },
@@ -2037,56 +2029,6 @@ exports[`When querying for edge connections GET /connections/notes should return
       "connectedResources": [
         {
           "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-            "type": "song",
-          },
-          "context": {
-            "type": "general",
-          },
-          "role": "to",
-        },
-        {
-          "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
-            "type": "video",
-          },
-          "context": {
-            "timeRange": {
-              "inPointMilliseconds": 11000,
-              "outPointMilliseconds": 12950,
-            },
-            "type": "timeRange",
-          },
-          "role": "from",
-        },
-      ],
-      "connectionType": "dual",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112006",
-      "name": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "A connection from video/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223 to song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-          },
-        ],
-      },
-      "note": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "That is why song/1 is related to video/223",
-          },
-        ],
-      },
-      "tags": [],
-    },
-    {
-      "actions": [],
-      "connectedResources": [
-        {
-          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
             "type": "video",
           },
@@ -2111,7 +2053,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "dual",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112007",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112006",
       "name": {
         "items": [
           {
@@ -2163,7 +2105,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "dual",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112008",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112007",
       "name": {
         "items": [
           {
@@ -2248,7 +2190,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
         {
           "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b104567",
             "type": "vocabularyList",
           },
           "context": {
@@ -2264,7 +2206,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "A connection from vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002 to video/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+            "text": "A connection from vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b104567 to video/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
           },
         ],
       },
@@ -2284,7 +2226,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "connectedResources": [
         {
           "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b104567",
             "type": "vocabularyList",
           },
           "context": {
@@ -2310,7 +2252,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "A connection from audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111 to vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "text": "A connection from audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111 to vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b104567",
           },
         ],
       },
@@ -2525,6 +2467,58 @@ exports[`When querying for edge connections GET /connections/notes should return
         {
           "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "vocabularyList",
+          },
+          "context": {
+            "charRange": [
+              5,
+              7,
+            ],
+            "languageCode": "clc",
+            "target": "name",
+            "type": "textField",
+          },
+          "role": "from",
+        },
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950",
+            "type": "digitalText",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "to",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113004",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "A connection from vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to digitalText/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110950",
+          },
+        ],
+      },
+      "note": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "this vocabulary list will help in studying the book",
+          },
+        ],
+      },
+      "tags": [],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "mediaItem",
           },
           "context": {
@@ -2715,11 +2709,17 @@ exports[`When querying for edge connections GET /connections/notes should return
       "connectedResources": [
         {
           "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b114567",
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "vocabularyList",
           },
           "context": {
-            "type": "general",
+            "charRange": [
+              5,
+              7,
+            ],
+            "languageCode": "clc",
+            "target": "name",
+            "type": "textField",
           },
           "role": "to",
         },
@@ -2741,7 +2741,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "en",
             "role": "original",
-            "text": "A connection from song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b114567",
+            "text": "A connection from song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           },
         ],
       },

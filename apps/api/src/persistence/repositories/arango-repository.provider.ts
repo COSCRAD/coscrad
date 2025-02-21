@@ -98,7 +98,6 @@ export class ArangoRepositoryProvider implements IRepositoryProvider {
         );
     }
 
-    // TODO: explain why this isn't forAggregate()
     forResource<TResource extends Resource>(resourceType: ResourceType) {
         const snapshotRepository = new ArangoRepositoryForAggregate<TResource>(
             this.databaseProvider,
@@ -114,9 +113,14 @@ export class ArangoRepositoryProvider implements IRepositoryProvider {
             AggregateType.song,
             AggregateType.digitalText,
             AggregateType.term,
+            AggregateType.vocabularyList,
         ];
 
         if (eventSourcedAggregateTypes.includes(resourceType)) {
+            /**
+             * Let's review the relationship of event and snapshot
+             * persistence.
+             */
             return new ArangoCommandRepositoryForAggregateRoot(
                 this.eventRepository,
                 snapshotRepository as unknown as IRepositoryForAggregate<TResource>,

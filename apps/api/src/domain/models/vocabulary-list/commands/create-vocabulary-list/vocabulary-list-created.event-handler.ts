@@ -18,5 +18,15 @@ export class VocabularyListCreatedEventHandler implements ICoscradEventHandler {
         const listToCreate = VocabularyListViewModel.fromVocabularyListCreated(creationEvent);
 
         await this.queryRepository.create(listToCreate);
+
+        // todo make this atomic
+        if (creationEvent.meta.contributorIds?.length > 0) {
+            await this.queryRepository.attribute(
+                listToCreate.id,
+                creationEvent.meta.contributorIds
+                // TODO include an attribution here?
+                // `Created by {}`
+            );
+        }
     }
 }

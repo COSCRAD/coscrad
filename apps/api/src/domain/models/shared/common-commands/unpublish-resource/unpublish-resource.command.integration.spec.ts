@@ -64,9 +64,12 @@ describe(commandType, () => {
             // TODO [https://www.pivotaltracker.com/story/show/187855311] support event sourced resources
             .filter(
                 (resourceType) =>
-                    ![ResourceType.term, ResourceType.digitalText, ResourceType.song].includes(
-                        resourceType
-                    )
+                    ![
+                        ResourceType.term,
+                        ResourceType.digitalText,
+                        ResourceType.song,
+                        ResourceType.vocabularyList,
+                    ].includes(resourceType)
             )
             .forEach((resourceType) => {
                 const publishedResource = getValidAggregateInstanceForTest(resourceType).clone({
@@ -109,9 +112,12 @@ describe(commandType, () => {
                 // TODO support event sourced resources
                 .filter(
                     (resourceType) =>
-                        ![ResourceType.term, ResourceType.digitalText, ResourceType.song].includes(
-                            resourceType
-                        )
+                        ![
+                            ResourceType.term,
+                            ResourceType.digitalText,
+                            ResourceType.song,
+                            ResourceType.vocabularyList,
+                        ].includes(resourceType)
                 )
                 .forEach((resourceType) => {
                     const unpublishedResource = getValidAggregateInstanceForTest(

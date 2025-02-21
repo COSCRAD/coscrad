@@ -66,9 +66,13 @@ export abstract class BaseCreateCommandHandler<
         const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);
 
         // Persist the valid instance
-        await this.getRepositoryForCommand(command).create(
-            instanceToPersistWithUpdatedEventHistory
-        );
+        await this.getRepositoryForCommand(command)
+            .create(instanceToPersistWithUpdatedEventHistory)
+            .catch((e) => {
+                throw new InternalError(`failed to create new aggregate root in command handler`, [
+                    new InternalError(e?.message || 'unknown repository error'),
+                ]);
+            });
 
         /**
          * TODO

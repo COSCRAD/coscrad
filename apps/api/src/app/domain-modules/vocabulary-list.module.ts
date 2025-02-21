@@ -27,6 +27,7 @@ import { EntriesImportedToVocabularyListEventHandler } from '../../domain/models
 import { VocabularyListFilterPropertyRegisteredEventHandler } from '../../domain/models/vocabulary-list/commands/register-vocabulary-list-filter-property/vocabulary-list-filter-property-registered.event-handler';
 import { VocabularyListNameTranslated } from '../../domain/models/vocabulary-list/commands/translate-vocabulary-list-name/vocabulary-list-name-translated.event';
 import { VocabularyListNameTranslatedEventHandler } from '../../domain/models/vocabulary-list/commands/translate-vocabulary-list-name/vocabulary-list-name-translated.event-handler';
+import { VocabularyList } from '../../domain/models/vocabulary-list/entities/vocabulary-list.entity';
 import { VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN } from '../../domain/models/vocabulary-list/queries';
 import { ArangoVocabularyListQueryRepository } from '../../domain/models/vocabulary-list/repositories';
 import { VocabularyListQueryService } from '../../domain/services/query-services/vocabulary-list-query.service';
@@ -35,6 +36,26 @@ import { ArangoConnectionProvider } from '../../persistence/database/arango-conn
 import { PersistenceModule } from '../../persistence/persistence.module';
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
 import { VocabularyListController } from '../controllers/resources/vocabulary-list.controller';
+
+const dataClasses = [
+    // Domain Model
+    VocabularyList,
+    // commands
+    CreateVocabularyList,
+    TranslateVocabularyListName,
+    VocabularyListNameTranslated,
+    AddTermToVocabularyList,
+    RegisterVocabularyListFilterProperty,
+    AnalyzeTermInVocabularyList,
+    EntriesImportedToVocabularyList,
+    // events
+    VocabularyListCreated,
+    VocabularyListNameTranslated,
+    TermAddedToVocabularyList,
+    VocabularyListFilterPropertyRegistered,
+    TermInVocabularyListAnalyzed,
+    EntriesImportedToVocabularyList,
+];
 
 @Module({
     imports: [PersistenceModule, IdGenerationModule, CommandModule],
@@ -68,22 +89,7 @@ import { VocabularyListController } from '../controllers/resources/vocabulary-li
         EntriesImportedToVocabularyListEventHandler,
 
         // Data Classes
-        ...[
-            CreateVocabularyList,
-            TranslateVocabularyListName,
-            VocabularyListNameTranslated,
-            AddTermToVocabularyList,
-            RegisterVocabularyListFilterProperty,
-            AnalyzeTermInVocabularyList,
-            EntriesImportedToVocabularyList,
-            // events
-            VocabularyListCreated,
-            VocabularyListNameTranslated,
-            TermAddedToVocabularyList,
-            VocabularyListFilterPropertyRegistered,
-            TermInVocabularyListAnalyzed,
-            EntriesImportedToVocabularyList,
-        ].map((ctor) => ({
+        ...dataClasses.map((ctor) => ({
             provide: ctor,
             useValue: ctor,
         })),

@@ -24,7 +24,11 @@ declare namespace Cypress {
 
         executeCommandStreamByName(name: string): Chainable<Subject>;
 
-        seedDataWithCommand(type: string, payloadOverrides: Record<string, unknown>): void;
+        seedDataWithCommand(
+            type: string,
+            payloadOverrides: Record<string, unknown>,
+            metaOverrides?: Record<string, unknown>
+        ): void;
 
         seedDatabase(collectionName: string, documents: unknown[]): void;
 
@@ -173,14 +177,17 @@ Cypress.Commands.add(`executeCommandStreamByName`, (name: string) => {
 
 Cypress.Commands.add(
     `seedDataWithCommand`,
-    (type: string, payloadOverrides: Record<string, unknown>) => {
-        const serializedOverrides = JSON.stringify(payloadOverrides);
+    (
+        type: string,
+        payloadOverrides: Record<string, unknown>,
+        metaOverrides: Record<string, unknown> = {}
+    ) => {
+        const serializedPayloadOverrides = JSON.stringify(payloadOverrides).replace(/"/g, `\\"`);
+
+        const serializedMetaOverrides = JSON.stringify(metaOverrides).replace(/"/g, `\\"`);
 
         // "{\\"foo\\": 5}"
-        const command = `node ../../dist/apps/coscrad-cli/main.js seed-test-data-with-command --type=${type} --payload-overrides="${serializedOverrides.replace(
-            /"/g,
-            `\\"`
-        )}"`;
+        const command = `node ../../dist/apps/coscrad-cli/main.js seed-test-data-with-command --type=${type} --payload-overrides="${serializedPayloadOverrides}" --meta-overrides="${serializedMetaOverrides}"`;
 
         cy.exec(command).then((_result) => {
             if (command.includes(`FOOBARBAZ`))

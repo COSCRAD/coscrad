@@ -1,9 +1,8 @@
-import { AggregateType, DropboxOrCheckbox, ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { CommandFSA } from '../../../../../app/controllers/command/command-fsa/command-fsa.entity';
-import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
@@ -22,7 +21,6 @@ import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserI
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { TermCreated, TermTranslated } from '../../../term/commands';
-import { VocabularyListFilterProperty } from '../../entities/vocabulary-list-variable.entity';
 import { VocabularyList } from '../../entities/vocabulary-list.entity';
 import {
     CannotOverwriteFilterPropertyValueForVocabularyListEntryError,
@@ -32,9 +30,17 @@ import { InvalidVocabularyListFilterPropertyValueError } from '../../errors/inva
 import { VocabularyListEntryNotFoundError } from '../../errors/vocabulary-list-entry-not-found.error';
 import { VocabularyListFilterPropertyNotFoundError } from '../../errors/vocabulary-list-filter-property-not-found.error';
 import { VocabularyListEntry } from '../../vocabulary-list-entry.entity';
+import { TermAddedToVocabularyList } from '../add-term-to-vocabulary-list';
+import { VocabularyListCreated } from '../create-vocabulary-list';
+import {
+    FilterPropertyType,
+    VocabularyListFilterPropertyRegistered,
+} from '../register-vocabulary-list-filter-property';
 import { AnalyzeTermInVocabularyList } from './analyze-term-in-vocabulary-list.command';
 
 const commandType = 'ANALYZE_TERM_IN_VOCABULARY_LIST';
+
+const vocabularyListId = buildDummyUuid(1);
 
 const termId = buildDummyUuid(123);
 
@@ -50,11 +56,6 @@ const eventHistoryForTerm = new TestEventStream()
         id: termId,
     });
 
-const existingEntry = new VocabularyListEntry({
-    termId,
-    variableValues: {},
-});
-
 const selectFilterPropertyName = 'aspect';
 
 const allowedValueForSelectFilterProperty = '1';
@@ -66,43 +67,64 @@ const valueForCheckboxProperty = false;
 
 const anotherAllowedValueForSelectFilterProperty = '2';
 
-const selectFilterProperty = new VocabularyListFilterProperty({
-    name: selectFilterPropertyName,
-    type: DropboxOrCheckbox.dropbox,
-    validValues: [
-        {
-            value: allowedValueForSelectFilterProperty,
-            display: 'progressive',
+/**
+ * TODO Consider adding a big warning with clone that the event history will not
+ * be consistent.
+ */
+const eventHistoryForExistingVocabularyList = new TestEventStream()
+    .andThen<VocabularyListCreated>({
+        type: 'VOCABULARY_LIST_CREATED',
+    })
+    .andThen<TermAddedToVocabularyList>({
+        type: 'TERM_ADDED_TO_VOCABULARY_LIST',
+        payload: {
+            termId,
         },
-        {
-            value: anotherAllowedValueForSelectFilterProperty,
-            display: 'perfective',
+    })
+    .andThen<VocabularyListFilterPropertyRegistered>({
+        type: 'VOCABULARY_LIST_PROPERTY_FILTER_REGISTERED',
+        payload: {
+            name: selectFilterPropertyName,
+            type: FilterPropertyType.selection,
+            allowedValuesAndLabels: [
+                {
+                    value: allowedValueForSelectFilterProperty,
+                    label: 'progressive',
+                },
+                {
+                    value: anotherAllowedValueForSelectFilterProperty,
+                    label: 'perfective',
+                },
+            ],
         },
-    ],
-});
+    })
+    .andThen<VocabularyListFilterPropertyRegistered>({
+        type: 'VOCABULARY_LIST_PROPERTY_FILTER_REGISTERED',
+        payload: {
+            name: checkboxFilterPropertyName,
+            type: FilterPropertyType.checkbox,
+            // can we do away with `ValueAndDisplayNow`?
+            allowedValuesAndLabels: [
+                {
+                    value: true,
+                    label: 'usually',
+                },
+                {
+                    value: false,
+                    label: 'standard form',
+                },
+            ],
+        },
+    })
+    .as({
+        type: AggregateType.vocabularyList,
+        id: vocabularyListId,
+    });
 
-const checkboxFilterProperty = new VocabularyListFilterProperty({
-    name: checkboxFilterPropertyName,
-    type: DropboxOrCheckbox.checkbox,
-    validValues: [
-        {
-            value: true,
-            display: 'usually',
-        },
-        {
-            value: false,
-            display: 'standard form',
-        },
-    ],
-});
-
-const existingVocabularyList = getValidAggregateInstanceForTest(AggregateType.vocabularyList).clone(
-    {
-        published: false,
-        entries: [existingEntry],
-        variables: [selectFilterProperty, checkboxFilterProperty],
-    }
-);
+const existingVocabularyList = VocabularyList.fromEventHistory(
+    eventHistoryForExistingVocabularyList,
+    vocabularyListId
+) as VocabularyList;
 
 const dummyFsa = buildTestCommandFsaMap().get(
     commandType
