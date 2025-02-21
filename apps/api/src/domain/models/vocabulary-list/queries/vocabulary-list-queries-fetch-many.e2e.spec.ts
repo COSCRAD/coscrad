@@ -188,7 +188,7 @@ const registerEventHandlers = (
  * THIS TEST IS BEING REWRITTEN ON ANOTHER BRANCH. OPT BACK IN IMMEDIATELY WHEN REBASING.
  */
 
-describe.skip(`when querying for a vocabulary list: fetch many`, () => {
+describe(`when querying for a vocabulary list: fetch many`, () => {
     const testDatabaseName = generateDatabaseNameForTestSuite();
 
     let app: INestApplication;
