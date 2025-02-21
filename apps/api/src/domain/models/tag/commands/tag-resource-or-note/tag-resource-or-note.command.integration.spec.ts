@@ -62,6 +62,7 @@ describe(commandType, () => {
         ResourceType.song,
         ResourceType.digitalText,
         ResourceType.term,
+        ResourceType.vocabularyList,
     ];
 
     Object.values(CategorizableType)

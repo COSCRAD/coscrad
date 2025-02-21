@@ -7,7 +7,6 @@ import EmptyTargetForTextFieldContextError from '../../../domainModelValidators/
 import InconsistentCharRangeError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/textFieldContext/InconsistentCharRangeError';
 import { AggregateType } from '../../../types/AggregateType';
 import { TextFieldContext } from '../../context/text-field-context/text-field-context.entity';
-import { EdgeConnectionContextType } from '../../context/types/EdgeConnectionContextType';
 
 describe(`Vocabulary List- context validation`, () => {
     describe(`when the context is of type: textField`, () => {
@@ -33,7 +32,6 @@ describe(`Vocabulary List- context validation`, () => {
         );
 
         const validTextFieldContext = new TextFieldContext({
-            type: EdgeConnectionContextType.textField,
             target: 'name',
             languageCode: LanguageCode.Chilcotin,
             charRange: [0, nameChilcotin.length - 1],

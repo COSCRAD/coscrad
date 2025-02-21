@@ -14,6 +14,7 @@ import { MultilingualAudio } from '../../../domain/models/shared/multilingual-au
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { DTO } from '../../../types/DTO';
+import { buildTestVocabularyListEdgeConnectionMember } from '../../buildVocabularyListTestData';
 
 const role = EdgeConnectionMemberRole.self;
 
@@ -50,7 +51,6 @@ const edgeConnectionDTOs: Omit<
                     type: ResourceType.term,
                 },
                 context: new TextFieldContext({
-                    type: EdgeConnectionContextType.textField,
                     languageCode: LanguageCode.English,
                     target: 'text',
                     charRange: [0, 1],
@@ -93,22 +93,13 @@ const edgeConnectionDTOs: Omit<
     {
         note: buildMultilingualTextWithSingleItem(
             'This is the first letter of the list name',
-            LanguageCode.Haida
+            LanguageCode.Chilcotin
         ),
         members: [
-            {
-                role,
-                compositeIdentifier: {
-                    id: '2',
-                    type: ResourceType.vocabularyList,
-                },
-                context: new TextFieldContext({
-                    type: EdgeConnectionContextType.textField,
-                    target: 'name',
-                    languageCode: LanguageCode.Haida,
-                    charRange: [0, 1],
-                }).toDTO(),
-            },
+            buildTestVocabularyListEdgeConnectionMember(
+                EdgeConnectionContextType.textField,
+                EdgeConnectionMemberRole.self
+            ),
         ],
     },
     {

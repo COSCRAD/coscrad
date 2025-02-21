@@ -11,8 +11,5 @@ export interface IVocabularyListViewModel extends IBaseResourceViewModel {
 
     isPublished: boolean;
 
-    accessControlList: {
-        allowedUserIds: string[];
-        allowedGroupIds: string[];
-    };
+    // note that the accessControlList is private and needs to be removed before returning a query result to the user
 }

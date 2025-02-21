@@ -12,6 +12,7 @@ import { ArangoDatabaseProvider } from '../../../../../persistence/database/data
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestCommandFsaMap } from '../../../../../test-data/commands';
+import { TestEventStream } from '../../../../../test-data/events';
 import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
@@ -27,16 +28,30 @@ import CommandExecutionError from '../../../shared/common-command-errors/Command
 import { buildTestTerm } from '../../../term/test-data/build-test-term';
 import { VocabularyList } from '../../entities/vocabulary-list.entity';
 import { CannotAddMultipleEntriesForSingleTermError } from '../../errors';
+import { VocabularyListCreated } from '../create-vocabulary-list';
+import { VocabularyListNameTranslated } from '../translate-vocabulary-list-name/vocabulary-list-name-translated.event';
 import { AddTermToVocabularyList } from './add-term-to-vocabulary-list.command';
+import { TermAddedToVocabularyList } from './term-added-to-vocabulary-list.event';
 
 const commandType = 'ADD_TERM_TO_VOCABULARY_LIST';
 
-const existingVocabularyList = getValidAggregateInstanceForTest(AggregateType.vocabularyList).clone(
-    {
-        published: false,
-        entries: [],
-    }
-);
+const vocabularyListId = buildDummyUuid(1);
+
+const vocabularyListNameTranslated = new TestEventStream()
+    .andThen<VocabularyListCreated>({
+        type: 'VOCABULARY_LIST_CREATED',
+    })
+    .andThen<VocabularyListNameTranslated>({
+        type: 'VOCABULARY_LIST_NAME_TRANSLATED',
+    });
+
+const existingVocabularyList = VocabularyList.fromEventHistory(
+    vocabularyListNameTranslated.as({
+        type: AggregateType.vocabularyList,
+        id: vocabularyListId,
+    }),
+    vocabularyListId
+) as VocabularyList; // we are asserting that event sourcing will succeed
 
 const existingTerm = buildTestTerm({
     aggregateCompositeIdentifier: {
@@ -162,6 +177,7 @@ describe(commandType, () => {
 
         describe(`when the vocabulary list does not exist`, () => {
             it(`should fail with the expected errors`, async () => {
+                // TODO update API call
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     buildCommandFSA: () => validFsa,
@@ -187,11 +203,25 @@ describe(commandType, () => {
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     buildCommandFSA: () => validFsa,
-                    initialState: new DeluxeInMemoryStore({
-                        [AggregateType.vocabularyList]: [
-                            existingVocabularyList.addEntry(existingTerm.id) as VocabularyList,
-                        ],
-                    }).fetchFullSnapshotInLegacyFormat(),
+                    seedInitialState: async () => {
+                        await testRepositoryProvider.addFullSnapshot(
+                            new DeluxeInMemoryStore({
+                                [AggregateType.vocabularyList]: [
+                                    VocabularyList.fromEventHistory(
+                                        vocabularyListNameTranslated
+                                            .andThen<TermAddedToVocabularyList>({
+                                                type: 'TERM_ADDED_TO_VOCABULARY_LIST',
+                                                payload: {
+                                                    termId: existingTerm.id,
+                                                },
+                                            })
+                                            .as(existingVocabularyList.getCompositeIdentifier()),
+                                        existingVocabularyList.id
+                                    ) as VocabularyList,
+                                ],
+                            }).fetchFullSnapshotInLegacyFormat()
+                        );
+                    },
                     checkError: (error) => {
                         assertErrorAsExpected(
                             error,

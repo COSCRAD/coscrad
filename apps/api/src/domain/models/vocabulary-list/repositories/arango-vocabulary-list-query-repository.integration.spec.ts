@@ -459,7 +459,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
                 await testQueryRepository.registerFilterProperty(
                     targetView.id,
                     filterPropertyName,
-                    filterPropertyType,
+                    FilterPropertyType.selection,
                     allowedValuesAndLabels
                 );
 
@@ -476,6 +476,10 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
                 );
 
                 expect(formFieldSearchResult).toBeTruthy();
+
+                const { type: viewFormType } = formFieldSearchResult;
+
+                expect(viewFormType).toBe(FormFieldType.staticSelect);
 
                 const foundOptions = formFieldSearchResult.options as IValueAndDisplay<
                     string | boolean

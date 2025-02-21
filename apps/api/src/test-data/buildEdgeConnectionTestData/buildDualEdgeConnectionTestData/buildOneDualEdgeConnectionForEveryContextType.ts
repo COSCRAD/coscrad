@@ -11,6 +11,7 @@ import { EdgeConnectionContextType } from '../../../domain/models/context/types/
 import { MultilingualAudio } from '../../../domain/models/shared/multilingual-audio/multilingual-audio.entity';
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
+import { buildTestVocabularyListEdgeConnectionMember } from '../../buildVocabularyListTestData';
 
 export default (): EdgeConnection[] =>
     [
@@ -57,14 +58,10 @@ export default (): EdgeConnection[] =>
                     },
                     context: new GeneralContext(),
                 },
-                {
-                    role: EdgeConnectionMemberRole.from,
-                    compositeIdentifier: {
-                        type: ResourceType.vocabularyList,
-                        id: '2',
-                    },
-                    context: new GeneralContext(),
-                },
+                buildTestVocabularyListEdgeConnectionMember(
+                    EdgeConnectionContextType.general,
+                    EdgeConnectionMemberRole.from
+                ),
             ],
         },
         {
@@ -74,14 +71,10 @@ export default (): EdgeConnection[] =>
                 LanguageCode.English
             ),
             members: [
-                {
-                    role: EdgeConnectionMemberRole.to,
-                    compositeIdentifier: {
-                        type: ResourceType.vocabularyList,
-                        id: '1',
-                    },
-                    context: new GeneralContext(),
-                },
+                buildTestVocabularyListEdgeConnectionMember(
+                    EdgeConnectionContextType.general,
+                    EdgeConnectionMemberRole.to
+                ),
                 {
                     role: EdgeConnectionMemberRole.from,
                     compositeIdentifier: {
