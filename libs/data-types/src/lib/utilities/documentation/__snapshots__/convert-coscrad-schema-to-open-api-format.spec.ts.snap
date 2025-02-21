@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`convertCoscradSchemaToOpenApiFormat when there is a simple schmea with only basic data types should return the correct open API schema 1`] = `
+{
+  "properties": {
+    "count": {
+      "type": "NON_NEGATIVE_FINITE_NUMBER",
+    },
+  },
+}
+`;

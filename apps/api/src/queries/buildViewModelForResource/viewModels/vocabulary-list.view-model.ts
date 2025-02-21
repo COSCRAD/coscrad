@@ -6,6 +6,7 @@ import {
     IFormField,
     IMultilingualText,
 } from '@coscrad/api-interfaces';
+import { NonNegativeFiniteNumber } from '@coscrad/data-types';
 import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { ApiProperty } from '@nestjs/swagger';
 import { DetailScopedCommandWriteContext } from '../../../app/controllers/command/services/command-info-service';
@@ -77,6 +78,12 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
 
     @ApiProperty()
     public isPublished: boolean;
+
+    @NonNegativeFiniteNumber({
+        label: 'count',
+        description: 'remove me soon!',
+    })
+    public count: number;
 
     // this should be removed in query responses
     public accessControlList: { allowedUserIds: string[]; allowedGroupIds: string[] };

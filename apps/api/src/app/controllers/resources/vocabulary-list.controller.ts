@@ -1,3 +1,4 @@
+import { convertCoscradSchemaToOpenApiFormat, getCoscradDataSchema } from '@coscrad/data-types';
 import { Controller, Get, Param, Request, Res, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
@@ -30,6 +31,9 @@ export class VocabularyListController {
 
     @ApiBearerAuth('JWT')
     @UseGuards(OptionalJwtAuthGuard)
+    @ApiOkResponse({
+        schema: convertCoscradSchemaToOpenApiFormat(getCoscradDataSchema(VocabularyListViewModel)),
+    })
     @Get('')
     async fetchMany(@Request() req) {
         return this.vocabularyListQueryService.fetchMany(req.user || undefined);
