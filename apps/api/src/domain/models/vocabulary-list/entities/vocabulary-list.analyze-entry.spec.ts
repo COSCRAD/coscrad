@@ -21,10 +21,10 @@ const existingCheckBoxFilterProperty: VocabularyListFilterProperty<boolean> =
         name: 'positive',
         type: DropboxOrCheckbox.checkbox,
         validValues: [
-            { value: validValueForCheckBox, label: 'positive' },
+            { value: validValueForCheckBox, display: 'positive' },
             {
                 value: !validValueForCheckBox,
-                label: 'negative',
+                display: 'negative',
             },
         ],
     });
@@ -39,15 +39,15 @@ const existingSelectProperty = new VocabularyListFilterProperty<string>({
     validValues: [
         {
             value: validValueForSelect,
-            label: 'Two A',
+            display: 'Two A',
         },
         {
             value: '2b',
-            label: 'Two B',
+            display: 'Two B',
         },
         {
             value: additionalValidValueForSelect,
-            label: 'Two C',
+            display: 'Two C',
         },
     ],
 });

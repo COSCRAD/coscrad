@@ -490,7 +490,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
                 const missingOptions = foundOptions.filter(
                     (option) =>
                         !allowedValuesAndLabels.some(
-                            ({ value, label }) => value === option.value && label === option.label
+                            ({ value, label }) => value === option.value && label === option.display
                         )
                 );
 

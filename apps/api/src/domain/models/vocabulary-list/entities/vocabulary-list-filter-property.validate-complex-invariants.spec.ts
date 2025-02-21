@@ -63,7 +63,7 @@ describe('VocabularyListVariable.validateComplexInvariants', () => {
                         {
                             // this isn't allowed to be a number
                             value: false,
-                            label: 'foo',
+                            display: 'foo',
                         },
                     ],
                 };
@@ -77,7 +77,7 @@ describe('VocabularyListVariable.validateComplexInvariants', () => {
                 assertErrorAsExpected(
                     result[0],
                     new InvalidValueForSelectFilterPropertyError(
-                        { value: false, label: 'foo' },
+                        { value: false, display: 'foo' },
                         validDto.name
                     )
                 );
@@ -146,7 +146,7 @@ describe('VocabularyListVariable.validateComplexInvariants', () => {
                         ...validValuesForCheckbox,
                         {
                             value: 'bogus',
-                            label: 'label for bogus',
+                            display: 'label for bogus',
                         },
                     ],
                 };
@@ -171,11 +171,11 @@ describe('VocabularyListVariable.validateComplexInvariants', () => {
                 validValues: [
                     {
                         value: true,
-                        label: 'positive',
+                        display: 'positive',
                     },
                     {
                         value: true,
-                        label: 'negative',
+                        display: 'negative',
                     },
                 ],
             };
@@ -210,11 +210,11 @@ describe('VocabularyListVariable.validateComplexInvariants', () => {
                 validValues: [
                     {
                         value: '1',
-                        label: duplicateLabel,
+                        display: duplicateLabel,
                     },
                     {
                         value: '11',
-                        label: duplicateLabel,
+                        display: duplicateLabel,
                     },
                 ],
             };

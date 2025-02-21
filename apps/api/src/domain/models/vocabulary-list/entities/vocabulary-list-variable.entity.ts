@@ -78,17 +78,17 @@ export class VocabularyListFilterProperty<
          * Here we filter out the duplicated labels.
          */
         const labelCounts = this.validValues.reduce(
-            (acc, { label: display }) =>
+            (acc, { display: display }) =>
                 acc.has(display) ? acc.set(display, acc.get(display) + 1) : acc.set(display, 1),
             new Map<string, number>()
         );
 
         const duplicateLabels = this.validValues.filter(
-            ({ label: display }) => labelCounts.get(display) > 1
+            ({ display: display }) => labelCounts.get(display) > 1
         );
 
         const labelDuplicationErrors = duplicateLabels.map(
-            ({ label: label, value }) =>
+            ({ display: label, value }) =>
                 new DuplicateLabelForVocabularyListFilterPropertyValueError(this.name, label, value)
         );
 
@@ -105,7 +105,7 @@ export class VocabularyListFilterProperty<
         );
 
         const valueDuplicationErrors = duplicateValues.map(
-            ({ label: label, value }) =>
+            ({ display: label, value }) =>
                 new DuplicateValueForVocabularyListFilterPropertyValueError(this.name, label, value)
         );
 

@@ -29,11 +29,11 @@ const vocabularyList = vocabularyListWithNoPropertyFilters.safeClone({
             validValues: [
                 {
                     value: '11',
-                    label: 'I',
+                    display: 'I',
                 },
                 {
                     value: '31',
-                    label: 'he or she',
+                    display: 'he or she',
                 },
             ],
         },
@@ -43,11 +43,11 @@ const vocabularyList = vocabularyListWithNoPropertyFilters.safeClone({
             validValues: [
                 {
                     value: true,
-                    label: 'positive',
+                    display: 'positive',
                 },
                 {
                     value: false,
-                    label: 'negative',
+                    display: 'negative',
                 },
             ],
         },
