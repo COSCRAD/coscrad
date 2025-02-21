@@ -2,11 +2,13 @@ import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Observable } from 'rxjs';
 import {
     CommandContext,
     CommandInfoService,
 } from '../../../app/controllers/command/services/command-info-service';
 import { isNotFound, NotFound } from '../../../lib/types/not-found';
+import { Photograph } from '../../models/photograph/entities/photograph.entity';
 import {
     IPhotographQueryRepository,
     PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
@@ -58,6 +60,48 @@ export class PhotographQueryService {
         }
 
         return NotFound;
+    }
+
+    // TODO should we support specifications \ custom filters?
+    async fetchMany(userWithGroups?: CoscradUserWithGroups) {
+        // TODO consider filtering for user access in the DB
+        const entities = await this.photographQueryRepository.fetchMany();
+
+        // TODO use SSOT utility function \ method for this
+        const availableEntities = entities.filter((entity) => {
+            if (entity.isPublished) return true;
+
+            // the public can only access published resources
+            if (isNullOrUndefined(userWithGroups)) return false;
+
+            if (userWithGroups.isAdmin()) return true;
+
+            const acl = new AccessControlList(entity.accessControlList);
+
+            return (
+                acl.canUser(userWithGroups.id) ||
+                userWithGroups.groups.some(({ id: groupId }) => acl.canGroup(groupId))
+            );
+        });
+
+        return {
+            // TODO ensure actions show up on entities
+            entities: availableEntities.map((entity) => {
+                return {
+                    ...entity,
+                    /**
+                     * See comment in `fetchById` about current RBAC for command execution.
+                     */
+                    actions: this.fetchUserActions(userWithGroups, [entity]),
+                };
+            }),
+            // TODO Should we register index-scoped commands in the view layer instead?
+            indexScopedActions: this.fetchUserActions(userWithGroups, [Photograph]),
+        };
+    }
+
+    public subscribeToWriteNotifications(): Observable<{ data: { type: string } }> {
+        return this.photographQueryRepository.subscribeToUpdates();
     }
 
     // TODO share this code with other query services

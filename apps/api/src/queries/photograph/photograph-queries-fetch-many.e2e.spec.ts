@@ -1,6 +1,7 @@
 import {
     AggregateType,
     CoscradUserRole,
+    HttpStatusCode,
     LanguageCode,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
@@ -30,7 +31,7 @@ import buildTestDataInFlatFormat from '../../test-data/buildTestDataInFlatFormat
 import { TestEventStream } from '../../test-data/events';
 import { PhotographViewModel } from '../buildViewModelForResource/viewModels/photograph.view-model';
 
-const indexEndpoint = `/resources/terms`;
+const indexEndpoint = `/resources/photographs`;
 
 // We require an existing user for ACL tests
 const dummyQueryUserId = buildDummyUuid(4);
@@ -45,7 +46,7 @@ const dummyUser = (users as CoscradUser[])[0].clone({
 
 const dummyGroup = (userGroups as CoscradUserGroup[])[0].clone({ userIds: [dummyUser.id] });
 
-const _dummyUserWithGroups = new CoscradUserWithGroups(dummyUser, [dummyGroup]);
+const dummyUserWithGroups = new CoscradUserWithGroups(dummyUser, [dummyGroup]);
 
 // Set up test data (use event sourcing to set up state)
 const photographTitle = `Photograph Name (in the language)`;
@@ -206,6 +207,196 @@ describe(`when querying for a photograph: fetch many`, () => {
                         );
                     })
                 ).toBe(true);
+            });
+        });
+
+        describe(`when there are no published photographs`, () => {
+            beforeEach(async () => {
+                await databaseProvider
+                    .getDatabaseForCollection(ArangoCollectionId.contributors)
+                    .clear();
+
+                await databaseProvider.getDatabaseForCollection('photograph__VIEWS').clear();
+
+                await testRepositoryProvider.getContributorRepository().create(dummyContributor);
+
+                /**
+                 * Note that there is no ordinary system user authenticated for the request
+                 * in this scenario. This is a public request.
+                 */
+                await photographQueryRepository.createMany([
+                    privatePhotographUserCannotAccess,
+                    privatePhotographThatUserCanAccess,
+                ]);
+            });
+
+            it(`should return no photographs`, async () => {
+                const res = await request(app.getHttpServer()).get(indexEndpoint);
+
+                expect(res.status).toBe(httpStatusCodes.ok);
+
+                expect(res.body.entities).toHaveLength(0);
+            });
+        });
+    });
+
+    describe(`when the user is authenticated as a non-admin user`, () => {
+        beforeAll(async () => {
+            ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
+                {
+                    ARANGO_DB_NAME: testDatabaseName,
+                },
+                {
+                    testUserWithGroups: dummyUserWithGroups,
+                }
+            ));
+
+            photographQueryRepository = app.get(PHOTOGRAPH_QUERY_REPOSITORY_TOKEN);
+        });
+
+        describe(`when there is a photograph that is unpublished`, () => {
+            describe(`when the user does not have read access`, () => {
+                beforeEach(async () => {
+                    await databaseProvider.getDatabaseForCollection('photograph__VIEWS').clear();
+
+                    await databaseProvider
+                        .getDatabaseForCollection(ArangoCollectionId.contributors)
+                        .clear();
+
+                    await photographQueryRepository.createMany([
+                        publicPhotographView,
+                        privatePhotographThatUserCanAccess,
+                        // This one should not be visible to an ordinary user
+                        privatePhotographUserCannotAccess,
+                    ]);
+
+                    await testRepositoryProvider
+                        .getContributorRepository()
+                        .create(dummyContributor);
+                });
+
+                it(`should not return the unpublished photograph`, async () => {
+                    const res = await request(app.getHttpServer()).get(indexEndpoint);
+
+                    expect(res.status).toBe(httpStatusCodes.ok);
+
+                    /**
+                     * + private, but user in ACL
+                     * - private, user not in ACL
+                     * + published
+                     */
+                    expect(res.body.entities).toHaveLength(2);
+                });
+            });
+
+            describe(`when the user does have read access`, () => {
+                beforeEach(async () => {
+                    await databaseProvider.getDatabaseForCollection('photograph__VIEWS').clear();
+
+                    await databaseProvider
+                        .getDatabaseForCollection(ArangoCollectionId.contributors)
+                        .clear();
+
+                    await photographQueryRepository.createMany([
+                        // we only seed the accessible photograph here
+                        privatePhotographThatUserCanAccess,
+                    ]);
+
+                    await testRepositoryProvider
+                        .getContributorRepository()
+                        .create(dummyContributor);
+                });
+
+                it(`should return the unpublished photograph`, async () => {
+                    const res = await request(app.getHttpServer()).get(indexEndpoint);
+
+                    expect(res.status).toBe(httpStatusCodes.ok);
+
+                    const {
+                        body: { entities },
+                    } = res;
+
+                    // this is the first and only photograph we seeded
+                    const result = entities[0] as PhotographViewModel;
+
+                    expect(result.id).toBe(photographIdUnpublishedWithUserAccessId);
+                });
+            });
+        });
+    });
+
+    (
+        [
+            [CoscradUserRole.superAdmin, 'when the user is a COSCRAD admin'],
+            [CoscradUserRole.projectAdmin, 'when the user is a project admin'],
+        ] as const
+    ).forEach(([userRole, description]) => {
+        describe(description, () => {
+            beforeAll(async () => {
+                ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
+                    {
+                        ARANGO_DB_NAME: testDatabaseName,
+                    },
+                    {
+                        testUserWithGroups: new CoscradUserWithGroups(
+                            dummyUser.clone({
+                                roles: [userRole],
+                            }),
+                            []
+                        ),
+                    }
+                ));
+
+                photographQueryRepository = app.get(PHOTOGRAPH_QUERY_REPOSITORY_TOKEN);
+            });
+
+            beforeEach(async () => {
+                await databaseProvider.getDatabaseForCollection('photograph__VIEWS').clear();
+
+                await databaseProvider
+                    .getDatabaseForCollection(ArangoCollectionId.contributors)
+                    .clear();
+
+                await photographQueryRepository.createMany([
+                    publicPhotographView,
+                    privatePhotographThatUserCanAccess,
+                    privatePhotographUserCannotAccess,
+                ]);
+
+                await testRepositoryProvider.getContributorRepository().create(dummyContributor);
+            });
+
+            it(`should allow the user to access private resources`, async () => {
+                const res = await request(app.getHttpServer()).get(indexEndpoint);
+
+                const numberOfPrivatePhotographs = 2;
+
+                const numberOfPublicPhotographs = 1;
+
+                expect(res.status).toBe(HttpStatusCode.ok);
+
+                expect(res.body.entities).toHaveLength(
+                    numberOfPrivatePhotographs + numberOfPublicPhotographs
+                );
+
+                /**
+                 * This if statement is effectively a filter for our test
+                 * case builder pattern. We only want to snapshot the response
+                 * once for one specific class of user. We want this to be
+                 * an admin user, because admin users have access to all
+                 * data, including command info (available actions).
+                 * Finally, we do this for the project admin, as queries
+                 * for this user are by far more common than for coscrad admin
+                 * in practice.
+                 */
+                if (userRole === CoscradUserRole.projectAdmin) {
+                    /**
+                     * This is to catch breaking changes in the API contract with
+                     * the client. See the above comment for the corresponding detail
+                     * endpoint test case.
+                     */
+                    expect(res.body).toMatchSnapshot();
+                }
             });
         });
     });
