@@ -155,7 +155,7 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
 
         /**
          * Note that this might not be the way we want to do this, it's only an idea.
-         * The downside is that changing the wording requires a migration. The upside
+         * The downside is that changing the wording would require a downstream event replay or migration. The upside
          * is that it provides a natural means to align wording the contributions with the
          * event handlers.
          *

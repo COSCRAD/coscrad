@@ -36,11 +36,7 @@ export class VocabularyListFilterPropertyRegisteredEventHandler implements ICosc
                     isNonEmptyString(e?.message) ? [new InternalError(e.message)] : []
                 );
 
-                console.log(handlerError);
-
                 throw handlerError;
             });
-
-        console.log('DONE!');
     }
 }

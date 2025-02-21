@@ -12,5 +12,5 @@ export class ValueAndDisplay<T> implements IValueAndDisplay<T> {
         example: 'I',
         description: 'the user-facing label for the given value',
     })
-    public readonly display: string;
+    public readonly label: string;
 }

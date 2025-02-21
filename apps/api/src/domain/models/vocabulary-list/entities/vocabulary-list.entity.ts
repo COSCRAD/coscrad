@@ -272,10 +272,7 @@ export class VocabularyList extends Resource {
             new VocabularyListFilterProperty({
                 name,
                 type: mappedType,
-                validValues: allowedValuesWithLabels.map(({ label, value }) => ({
-                    value,
-                    display: label,
-                })),
+                validValues: allowedValuesWithLabels,
             })
         );
 

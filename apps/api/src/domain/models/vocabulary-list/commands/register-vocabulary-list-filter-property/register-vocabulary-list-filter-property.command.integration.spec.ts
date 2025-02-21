@@ -325,7 +325,7 @@ describe(commandType, () => {
                                             new InvalidValueForSelectFilterPropertyError(
                                                 {
                                                     value: invalidValueAndLabel.value,
-                                                    display: invalidValueAndLabel.label,
+                                                    label: invalidValueAndLabel.label,
                                                 },
                                                 dummyName
                                             ),
@@ -537,7 +537,7 @@ describe(commandType, () => {
                                                 new InvalidValueForCheckboxFilterPropertyError(
                                                     {
                                                         value: invalidValueAndLabel.value,
-                                                        display: invalidValueAndLabel.label,
+                                                        label: invalidValueAndLabel.label,
                                                     },
                                                     dummyName
                                                 ),
