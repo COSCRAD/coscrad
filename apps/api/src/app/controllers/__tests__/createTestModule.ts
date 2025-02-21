@@ -128,6 +128,7 @@ import {
     CreatePhotographCommandHandler,
     PhotographCreated,
 } from '../../../domain/models/photograph';
+import { PhotographCreatedEventHandler } from '../../../domain/models/photograph/commands/create-photograph/photograph-created.event-handler';
 import {
     IPhotographQueryRepository,
     PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
@@ -843,6 +844,7 @@ export default async (
             PromptTermCreatedEventHandler,
             TermElicitedFromPromptEventHandler,
             AudioAddedForTermEventHandler,
+            PhotographCreatedEventHandler,
         ],
 
         controllers: [
