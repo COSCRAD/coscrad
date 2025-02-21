@@ -1,4 +1,5 @@
 import {
+    FormFieldType,
     ICommandFormAndLabels,
     IMultilingualTextItem,
     IValueAndDisplay,
@@ -128,7 +129,11 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
         });
     }
 
-    async attribute(termId: AggregateId, contributorIds: AggregateId[]): Promise<void> {
+    async attribute(
+        termId: AggregateId,
+        contributorIds: AggregateId[]
+        // contributionStatementTemplate: string
+    ): Promise<void> {
         const query = `
         FOR doc IN @@collectionName
         FILTER doc._key == @id
@@ -147,6 +152,26 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
         } IN @@collectionName
          RETURN updatedContributions
         `;
+
+        /**
+         * Note that this might not be the way we want to do this, it's only an idea.
+         * The downside is that changing the wording would require a downstream event replay or migration. The upside
+         * is that it provides a natural means to align wording the contributions with the
+         * event handlers.
+         *
+         * Another option would be to register such templates in the event meta
+         * @CoscradEvent((e)=> e.type === 'VOCABULARY_LIST_CREATED',{ contributionStatementTemplate: "created by $fullname"})
+         *
+         */
+        /**
+         *      ...  
+         *        let joinedName = CONCAT(CONCAT(c.fullName.firstName,' '),c.fullName.lastName)   
+         *        return {
+                        id: c._key,
+                        fullName: joinedName,
+                        contributionStatement: SUBSTITUTE(@contributionStatementTemplate,"$C",joinedName)
+                    }
+         */
 
         const bindVars = {
             // todo is this necessary?
@@ -226,7 +251,18 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
             '@collectionName': 'vocabularyList__VIEWS',
             id,
             name,
-            type,
+            // TODO We need to ensure switches are working as well
+            /**
+             * Here we are mapping from the language of the phrasebook
+             * subdomain (filter property type) to the generic language
+             * of frontend forms (form field type). The latter is shared with
+             * dynamic command execution forms and is not specific to forms for
+             * filtering vocabulary lists.
+             */
+            type:
+                type === FilterPropertyType.selection
+                    ? FormFieldType.staticSelect
+                    : FormFieldType.switch,
             options,
         };
 

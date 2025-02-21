@@ -162,6 +162,11 @@ const englishOnlyTermEvents = new TestEventStream()
 export const buildTermsForVocabularyList = () =>
     (
         [
+            /**
+             * Note that the 1 in `512` means positive and the 2 means
+             * second person. Do not confuse this with `first person plural`. Number
+             * is not a separate property in this scenario.
+             */
             [iAmSingingEvents, '511'],
             [youAreSingingEvents, '512'],
             [sheIsSingingEvents, '513'],

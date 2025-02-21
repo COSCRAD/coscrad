@@ -5,8 +5,9 @@ import { DeepPartial } from '../../types/DeepPartial';
 
 const PREFIX = 10000;
 
-export const convertSequenceNumberToUuid = (sequenceNumber: number): string =>
-    buildDummyUuid(PREFIX + sequenceNumber);
+export const convertSequenceNumberToUuid = (sequenceNumber: number): string => {
+    return buildDummyUuid(PREFIX + sequenceNumber);
+};
 
 export const convertAggregatesIdToUuid = <T extends Aggregate = Aggregate>(aggregate: T): T => {
     const updatedAggregate = aggregate.clone<T>({

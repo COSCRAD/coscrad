@@ -13,6 +13,12 @@ import { MultilingualAudio } from '../../../domain/models/shared/multilingual-au
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { DTO } from '../../../types/DTO';
+import { buildTestVocabularyListEdgeConnectionMember } from '../../buildVocabularyListTestData';
+
+const vocListMemberFor3105 = buildTestVocabularyListEdgeConnectionMember(
+    EdgeConnectionContextType.textField,
+    EdgeConnectionMemberRole.to
+);
 
 // type is the same for all, use map to mix this in below
 const dtosWithoutTypeProperty: DTO<
@@ -131,14 +137,7 @@ const dtosWithoutTypeProperty: DTO<
             LanguageCode.English
         ),
         members: [
-            {
-                role: EdgeConnectionMemberRole.to,
-                compositeIdentifier: {
-                    type: ResourceType.vocabularyList,
-                    id: '4567',
-                },
-                context: new GeneralContext(),
-            },
+            vocListMemberFor3105,
             {
                 role: EdgeConnectionMemberRole.from,
                 compositeIdentifier: {

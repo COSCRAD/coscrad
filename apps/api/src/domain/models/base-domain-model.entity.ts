@@ -18,6 +18,16 @@ export default class BaseDomainModel {
 
     // This allows us to use our instances as immutable data structures
     // One problem with this is that it assumes too much about the parameters the constructor takes
+    /**
+     * **Do not** use this for test data if you rely on having a consistent event history.
+     * This method will not append or remove any events from an aggregate root instance's
+     * `eventHistory`.
+     *
+     * Use `TestEventStream` or the event handler methods `handleXEvent` directly.
+     * @param this
+     * @param overrides properties to override
+     * @returns a new instance (this is a deep clone)
+     */
     clone<T extends BaseDomainModel>(this: T, overrides?: DeepPartial<DTO<T>>): T {
         return new (this.constructor as ModelConstructor<T>)({
             ...this.toDTO(),

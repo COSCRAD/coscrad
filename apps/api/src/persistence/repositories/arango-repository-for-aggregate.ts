@@ -80,6 +80,9 @@ export class ArangoRepositoryForAggregate<TEntity extends Aggregate>
     }
 
     async create(entity: TEntity) {
+        /**
+         * TODO Write the event to the event directory atomically with the query.
+         */
         return this.#arangoDatabaseForEntitysCollection
             .create(this.#mapEntityDTOToDocument(entity.toDTO()))
             .catch((err) => {
@@ -98,6 +101,9 @@ export class ArangoRepositoryForAggregate<TEntity extends Aggregate>
             .map((entity) => entity.toDTO())
             .map((dto) => this.#mapEntityDTOToDocument(dto));
 
+        /**
+         * TODO Write the event to the event directory atomically with the query.
+         */
         return this.#arangoDatabaseForEntitysCollection
             .createMany(createDTOs as ArangoDatabaseDocument<TEntity>[])
             .catch((err) => {

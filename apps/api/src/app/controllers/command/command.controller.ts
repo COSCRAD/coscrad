@@ -68,6 +68,9 @@ export class CommandController {
 
         const result = await this.commandHandlerService.execute(
             { type, payload },
+            /**
+             * TODO We need to populate the rest of the meta from the fsa
+             */
             { userId: user.id }
         );
 

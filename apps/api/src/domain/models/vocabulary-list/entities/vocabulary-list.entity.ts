@@ -13,7 +13,7 @@ import {
     MultilingualTextItem,
     MultilingualTextItemRole,
 } from '../../../common/entities/multilingual-text';
-import { UpdateMethod } from '../../../decorators';
+import { AggregateRoot, UpdateMethod } from '../../../decorators';
 import { Valid, isValid } from '../../../domainModelValidators/Valid';
 import VocabularyListWithNoEntriesCannotBePublishedError from '../../../domainModelValidators/errors/vocabularyList/vocabulary-list-with-no-entries-cannot-be-published.error';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
@@ -73,6 +73,7 @@ type LabelAndValue<T = string> = {
     value: T;
 };
 
+@AggregateRoot(AggregateType.vocabularyList)
 @RegisterIndexScopedCommands([`CREATE_VOCABULARY_LIST`])
 export class VocabularyList extends Resource {
     readonly type = ResourceType.vocabularyList;
@@ -247,6 +248,8 @@ export class VocabularyList extends Resource {
         /**
          * This is necessary until a migration \ event versioning occurs so we can
          * rename the properties on existing data.
+         *
+         * Can we get rid of this now that we are doing full event sourcing?
          */
         const mappedType =
             type === FilterPropertyType.selection
@@ -269,7 +272,8 @@ export class VocabularyList extends Resource {
             new VocabularyListFilterProperty({
                 name,
                 type: mappedType,
-                validValues: allowedValuesWithLabels.map(({ label, value }) => ({
+                // TODO make this ValueAndLabel not ValueAndDisplay
+                validValues: allowedValuesWithLabels.map(({ value, label }) => ({
                     value,
                     display: label,
                 })),

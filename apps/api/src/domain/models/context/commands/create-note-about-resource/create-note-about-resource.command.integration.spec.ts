@@ -331,7 +331,6 @@ describe(commandType, () => {
                     },
                 }),
                 [EdgeConnectionContextType.textField]: new TextFieldContext({
-                    type: EdgeConnectionContextType.textField,
                     target: 'booooogus_FIELD',
                     languageCode: LanguageCode.Haida,
                     charRange: [0, 5],

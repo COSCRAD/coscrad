@@ -4,6 +4,7 @@ import { Maybe } from '../../../lib/types/maybe';
 import { NotFound } from '../../../lib/types/not-found';
 import { EVENT_PUBLISHER_TOKEN } from './constants';
 import { CoscradEventConsumer } from './coscrad-event-consumer.decorator';
+import { ICoscradEventHandler } from './coscrad-event-handler.interface';
 import { CoscradEvent } from './coscrad-event.decorator';
 import { ICoscradEvent } from './coscrad-event.interface';
 import { EventModule } from './event.module';
@@ -76,11 +77,11 @@ class WidgetRepository {
 }
 
 @CoscradEventConsumer(`WIDGET_CREATED`)
-class HandleWidgetCreated {
+class HandleWidgetCreated implements ICoscradEventHandler {
     constructor(private readonly widgetRepository: WidgetRepository) {}
 
     handle({ payload: { id, name } }: WidgetCreated) {
-        this.widgetRepository.create(new Widget(id, name));
+        return Promise.resolve(this.widgetRepository.create(new Widget(id, name)));
     }
 }
 

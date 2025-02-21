@@ -9,7 +9,7 @@ import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { VocabularyList } from '../../entities/vocabulary-list.entity';
 import { RegisterVocabularyListFilterProperty } from './register-vocabulary-list-filter-property.command';
-import { VocabularyListFilterPropertyRegistered } from './vocabulary-list-filter-property-registered';
+import { VocabularyListFilterPropertyRegistered } from './vocabulary-list-filter-property-registered.event';
 
 @CommandHandler(RegisterVocabularyListFilterProperty)
 export class RegisterVocabularyListFilterPropertyCommandHandler extends BaseUpdateCommandHandler<VocabularyList> {
