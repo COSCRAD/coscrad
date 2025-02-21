@@ -248,6 +248,8 @@ export class VocabularyList extends Resource {
         /**
          * This is necessary until a migration \ event versioning occurs so we can
          * rename the properties on existing data.
+         *
+         * Can we get rid of this now that we are doing full event sourcing?
          */
         const mappedType =
             type === FilterPropertyType.selection
