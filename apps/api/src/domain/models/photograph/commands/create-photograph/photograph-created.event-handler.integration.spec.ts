@@ -1,9 +1,4 @@
-import {
-    AggregateType,
-    IDetailQueryResult,
-    IPhotographViewModel,
-    LanguageCode,
-} from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { CommandModule } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -11,13 +6,11 @@ import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/Environment';
-import { CommandInfoService } from '../../../../../app/controllers/command/services/command-info-service';
 import { ConsoleCoscradCliLogger } from '../../../../../coscrad-cli/logging';
 import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
 import { NotFound } from '../../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
-import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -59,15 +52,15 @@ describe(`PhotographCreatedEventHandler`, () => {
 
     let databaseProvider: ArangoDatabaseProvider;
 
-    let arangoDatabaseForCollection: ArangoDatabaseForCollection<
-        IDetailQueryResult<IPhotographViewModel>
-    >;
+    // let arangoDatabaseForCollection: ArangoDatabaseForCollection<
+    //     IDetailQueryResult<IPhotographViewModel>
+    // >;
 
     let app: INestApplication;
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
-            providers: [CommandInfoService, PhotographCreatedEventHandler],
+            // providers: [CommandInfoService, PhotographCreatedEventHandler],
             imports: [PersistenceModule.forRootAsync(), CommandModule, PhotographCommandsModule],
         })
             .overrideProvider(ConfigService)
@@ -91,8 +84,8 @@ describe(`PhotographCreatedEventHandler`, () => {
 
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
 
-        arangoDatabaseForCollection =
-            databaseProvider.getDatabaseForCollection('photograph__VIEWS');
+        // arangoDatabaseForCollection =
+        //     databaseProvider.getDatabaseForCollection('photograph__VIEWS');
 
         testQueryRepository = new ArangoPhotographQueryRepository(
             connectionProvider,
@@ -100,20 +93,22 @@ describe(`PhotographCreatedEventHandler`, () => {
         );
     });
 
+    beforeEach(async () => {
+        await databaseProvider.getDatabaseForCollection('photograph__VIEWS').clear();
+    });
+
     afterAll(async () => {
         databaseProvider.close();
     });
 
     describe(`when handling a photograph created event`, () => {
-        beforeEach(async () => {
-            await arangoDatabaseForCollection.clear();
-        });
-
-        it(`should create the expected view in the database`, async () => {
-            const handler = app.get(PhotographCreatedEventHandler);
+        it(`should create the expected photograph`, async () => {
+            // const handler = app.get(PhotographCreatedEventHandler);
 
             // @ts-expect-error Fix this issue
-            await handler.handle(photographCreated);
+            // await handler.handle(photographCreated);
+
+            await new PhotographCreatedEventHandler(testQueryRepository).handle(photographCreated);
 
             const searchResult = await testQueryRepository.fetchById(photographId);
 
