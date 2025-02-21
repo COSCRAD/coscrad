@@ -236,9 +236,16 @@ import {
     ImportEntriesToVocabularyListCommandHandler,
     RegisterVocabularyListFilterProperty,
     RegisterVocabularyListFilterPropertyCommandHandler,
+    TermAddedToVocabularyList,
+    TermInVocabularyListAnalyzed,
     TranslateVocabularyListName,
     TranslateVocabularyListNameCommandHandler,
+    VocabularyListCreated,
+    VocabularyListCreatedEventHandler,
+    VocabularyListFilterPropertyRegistered,
 } from '../../../domain/models/vocabulary-list/commands';
+import { VocabularyListNameTranslated } from '../../../domain/models/vocabulary-list/commands/translate-vocabulary-list-name/vocabulary-list-name-translated.event';
+import { VocabularyList } from '../../../domain/models/vocabulary-list/entities/vocabulary-list.entity';
 import {
     IVocabularyListQueryRepository,
     VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
@@ -360,6 +367,11 @@ export const buildAllDataClassProviders = () =>
         PromptTermCreated,
         AudioAddedForTerm,
         TermElicitedFromPrompt,
+        VocabularyListCreated,
+        VocabularyListNameTranslated,
+        VocabularyListFilterPropertyRegistered,
+        TermAddedToVocabularyList,
+        TermInVocabularyListAnalyzed,
         PhotographCreated,
         EntriesImportedToVocabularyList,
         ContributorCreated,
@@ -367,6 +379,7 @@ export const buildAllDataClassProviders = () =>
         DigitalText,
         Song,
         Term,
+        VocabularyList,
     ].map((ctor: Ctor<unknown>) => ({
         provide: ctor,
         useValue: ctor,
@@ -824,6 +837,7 @@ export default async (
             PromptTermCreatedEventHandler,
             TermElicitedFromPromptEventHandler,
             AudioAddedForTermEventHandler,
+            VocabularyListCreatedEventHandler,
         ],
 
         controllers: [

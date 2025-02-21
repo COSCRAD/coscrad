@@ -44,6 +44,7 @@ export class VocabularyListFilterProperty<
             'specifies whether the corresponding field be a dropbox (select) or slider (switch)',
     })
     // TODO Support `DropboxOrCheckbox` enum data-type
+    // TODO Change this to `FilterPropertyType`
     type: DropboxOrCheckbox;
 
     @ApiProperty({
@@ -77,13 +78,13 @@ export class VocabularyListFilterProperty<
          * Here we filter out the duplicated labels.
          */
         const labelCounts = this.validValues.reduce(
-            (acc, { display }) =>
+            (acc, { display: display }) =>
                 acc.has(display) ? acc.set(display, acc.get(display) + 1) : acc.set(display, 1),
             new Map<string, number>()
         );
 
         const duplicateLabels = this.validValues.filter(
-            ({ display }) => labelCounts.get(display) > 1
+            ({ display: display }) => labelCounts.get(display) > 1
         );
 
         const labelDuplicationErrors = duplicateLabels.map(

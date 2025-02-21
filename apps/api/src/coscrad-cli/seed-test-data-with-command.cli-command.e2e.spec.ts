@@ -6,6 +6,8 @@ import createTestModule from '../app/controllers/__tests__/createTestModule';
 import getValidAggregateInstanceForTest from '../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
 import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
+import { dummySystemUserId } from '../domain/models/__tests__/utilities/dummySystemUserId';
+import { CoscradCommandMeta } from '../domain/models/shared/command-handlers/base-command-handler';
 import { AddLyricsForSong } from '../domain/models/song/commands';
 import { CreateSong } from '../domain/models/song/commands/create-song.command';
 import { Song } from '../domain/models/song/song.entity';
@@ -18,6 +20,7 @@ import { ArangoConnectionProvider } from '../persistence/database/arango-connect
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { ArangoEventRepository } from '../persistence/repositories/arango-event-repository';
 import { ArangoIdRepository } from '../persistence/repositories/arango-id-repository';
 import { DeepPartial } from '../types/DeepPartial';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../validation';
@@ -61,10 +64,12 @@ describe(`CLI Command: ${cliCommandName}`, () => {
 
     let idManager: IIdManager;
 
+    let testAppModule: TestingModule;
+
     const mockLogger = buildMockLogger({ isEnabled: false });
 
     beforeAll(async () => {
-        const testAppModule = await createTestModule({
+        testAppModule = await createTestModule({
             ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
         });
 
@@ -136,6 +141,15 @@ describe(`CLI Command: ${cliCommandName}`, () => {
         payloadOverridesForUpdateCommand
     );
 
+    const dummyContributorId = buildDummyUuid(835);
+
+    const metaOverrides: CoscradCommandMeta = {
+        userId: dummySystemUserId,
+        contributorIds: [dummyContributorId],
+    };
+
+    const serializedMetaOverrides = JSON.stringify(metaOverrides);
+
     describe(`when the command is valid`, () => {
         describe(`when executing a create command (requires ID generation)`, () => {
             it(`should succeed`, async () => {
@@ -143,6 +157,7 @@ describe(`CLI Command: ${cliCommandName}`, () => {
                     cliCommandName,
                     `--type=${createCommandType}`,
                     `--payload-overrides=${serializedPayloadOverridesForCreateCommand}`,
+                    `--meta-overrides=${serializedMetaOverrides}`,
                 ]);
 
                 const newId = dummyUuids[0];
@@ -152,10 +167,26 @@ describe(`CLI Command: ${cliCommandName}`, () => {
                     .fetchById(newId);
 
                 expect(searchResult).not.toBe(NotFound);
+
+                const eventsForSong = testAppModule
+                    .get(ArangoEventRepository)
+                    .fetchEvents({ type: AggregateType.song, id: newId });
+
+                const contributions = (await eventsForSong).flatMap(
+                    ({ meta: { contributorIds = [] } }) => contributorIds
+                );
+
+                expect(contributions).toHaveLength(1);
+
+                const relevantContributions = contributions.filter(
+                    (contributorId) => contributorId === dummyContributorId
+                );
+
+                expect(relevantContributions).toHaveLength(1);
             });
         });
 
-        describe(`when execute an update command`, () => {
+        describe(`when executing an update command`, () => {
             it(`should update the data in the test database`, async () => {
                 // First, we create the song itself so we can updated it
                 await CommandTestFactory.run(commandInstance, [
@@ -179,7 +210,9 @@ describe(`CLI Command: ${cliCommandName}`, () => {
 
                 expect(searchResult).not.toBe(NotFound);
 
-                const doesSongHaveLyrics = (searchResult as Song).hasLyrics();
+                const foundSong = searchResult as Song;
+
+                const doesSongHaveLyrics = foundSong.hasLyrics();
 
                 expect(doesSongHaveLyrics).toBe(true);
             });

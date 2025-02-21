@@ -2,24 +2,21 @@ import {
     AggregateType,
     FluxStandardAction,
     LanguageCode,
-    MultilingualTextItemRole,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
-import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
-import {
-    MultilingualText,
-    MultilingualTextItem,
-} from '../../../../../domain/common/entities/multilingual-text';
+import { MultilingualTextItem } from '../../../../../domain/common/entities/multilingual-text';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { NotFound } from '../../../../../lib/types/not-found';
+import { clonePlainObjectWithOverrides } from '../../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { TestEventStream } from '../../../../../test-data/events';
 import { DTO } from '../../../../../types/DTO';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
@@ -32,23 +29,31 @@ import { DuplicateLanguageInMultilingualTextError } from '../../../audio-visual/
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { VocabularyList } from '../../entities/vocabulary-list.entity';
+import { VocabularyListCreated } from '../create-vocabulary-list';
 import { TranslateVocabularyListName } from './translate-vocabulary-list-name.command';
 
 const commandType = 'TRANSLATE_VOCABULARY_LIST_NAME';
 
-const existingVocabularyList = getValidAggregateInstanceForTest(AggregateType.vocabularyList).clone(
-    {
-        name: new MultilingualText({
-            items: [
-                new MultilingualTextItem({
-                    text: 'orignal name of the vocabulary list',
-                    role: MultilingualTextItemRole.original,
-                    languageCode: LanguageCode.Chilcotin,
-                }),
-            ],
-        }),
-    }
-);
+const originalLanguageCode = LanguageCode.Chilcotin;
+
+const translationLanguageCode = LanguageCode.English;
+
+const eventHistoryForExistingList = new TestEventStream().andThen<VocabularyListCreated>({
+    type: 'VOCABULARY_LIST_CREATED',
+    payload: {
+        languageCodeForName: originalLanguageCode,
+    },
+});
+
+const vocabularyListId = buildDummyUuid(1);
+
+const existingVocabularyList = VocabularyList.fromEventHistory(
+    eventHistoryForExistingList.as({
+        type: AggregateType.vocabularyList,
+        id: vocabularyListId,
+    }),
+    vocabularyListId
+) as VocabularyList;
 
 const englishName = 'vocabulary list name translated to English';
 
@@ -57,7 +62,7 @@ const validPayload: TranslateVocabularyListName = {
         type: AggregateType.vocabularyList,
         id: existingVocabularyList.id,
     },
-    languageCode: LanguageCode.English,
+    languageCode: translationLanguageCode,
     text: englishName,
 };
 
@@ -112,9 +117,13 @@ describe(commandType, () => {
             await assertCommandSuccess(commandAssertionDependencies, {
                 systemUserId: dummySystemUserId,
                 buildValidCommandFSA,
-                initialState: new DeluxeInMemoryStore({
-                    [AggregateType.vocabularyList]: [existingVocabularyList],
-                }).fetchFullSnapshotInLegacyFormat(),
+                seedInitialState: async () => {
+                    await testRepositoryProvider.addFullSnapshot(
+                        new DeluxeInMemoryStore({
+                            [AggregateType.vocabularyList]: [existingVocabularyList],
+                        }).fetchFullSnapshotInLegacyFormat()
+                    );
+                },
                 checkStateOnSuccess: async ({
                     aggregateCompositeIdentifier: { id: vocabularyListId },
                 }: TranslateVocabularyListName) => {
@@ -143,25 +152,25 @@ describe(commandType, () => {
             it('should fail with the expected errors', async () => {
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
-                    buildCommandFSA: buildValidCommandFSA,
-                    initialState: new DeluxeInMemoryStore({
-                        [AggregateType.vocabularyList]: [
-                            existingVocabularyList.clone({
-                                name: existingVocabularyList.name.clone({
-                                    items: [
-                                        existingVocabularyList.name.items[0].clone({
-                                            languageCode: LanguageCode.English,
-                                        }),
-                                    ],
-                                }),
-                            }),
-                        ],
-                    }).fetchFullSnapshotInLegacyFormat(),
+                    buildCommandFSA: () =>
+                        clonePlainObjectWithOverrides(validCommandFSA, {
+                            payload: {
+                                // this is the language code on the creation event
+                                languageCode: originalLanguageCode,
+                            },
+                        }),
+                    seedInitialState: async () => {
+                        await testRepositoryProvider.addFullSnapshot(
+                            new DeluxeInMemoryStore({
+                                [AggregateType.vocabularyList]: [existingVocabularyList],
+                            }).fetchFullSnapshotInLegacyFormat()
+                        );
+                    },
                     checkError: (error) => {
                         assertErrorAsExpected(
                             error,
                             new CommandExecutionError([
-                                new DuplicateLanguageInMultilingualTextError(LanguageCode.English),
+                                new DuplicateLanguageInMultilingualTextError(originalLanguageCode),
                             ])
                         );
                     },
@@ -174,7 +183,10 @@ describe(commandType, () => {
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     buildCommandFSA: buildValidCommandFSA,
-                    initialState: new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat(),
+                    seedInitialState: async () => {
+                        // no-op
+                        await Promise.resolve();
+                    },
                     checkError: (error) => {
                         assertErrorAsExpected(
                             error,

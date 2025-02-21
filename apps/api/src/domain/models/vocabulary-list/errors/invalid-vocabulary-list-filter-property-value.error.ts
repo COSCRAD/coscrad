@@ -7,6 +7,7 @@ export class InvalidVocabularyListFilterPropertyValueError extends InternalError
     constructor(
         propertyName: string,
         propertyValue: string | boolean,
+        // should this be the name instead?
         vocabularyListId: AggregateId
     ) {
         const msg = `The value: ${propertyValue} is not an allowed value for the filter property: ${propertyName} of ${formatAggregateCompositeIdentifier(

@@ -1,5 +1,4 @@
 import { AGGREGATE_COMPOSITE_IDENTIFIER, ICommandBase } from '@coscrad/api-interfaces';
-import { isString } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { AggregateTypeMetadata, getAggregateTypeForTarget } from '../../domain/decorators';
 import { Aggregate } from '../../domain/models/aggregate.entity';
@@ -117,6 +116,7 @@ export class ArangoCommandRepositoryForAggregateRoot<TAggregate extends Aggregat
         // TODO Have these been sorted yet?
         await this.eventRepository.appendEvents(eventHistory);
 
+        // TODO this should be done atomically with the above
         await this.snapshotRepositoryForAggregate.create(entity);
     }
 
@@ -133,16 +133,14 @@ export class ArangoCommandRepositoryForAggregateRoot<TAggregate extends Aggregat
 
         if (entities.length === 0) return;
 
-        await Promise.all(entities.map((entity) => this.create(entity))).catch((error) => {
-            const innerErrors: InternalError[] = isString(error?.message)
-                ? [new InternalError(error.message)]
-                : [];
+        const events = entities.flatMap(({ eventHistory }) => eventHistory || []);
 
-            throw new InternalError(
-                `Failed to create many aggregate roots from event history`,
-                innerErrors
-            );
-        });
+        /**
+         * TODO Make the following atomic \ transactional.
+         */
+        await this.snapshotRepositoryForAggregate.createMany(entities);
+
+        await this.eventRepository.appendEvents(events);
     }
 
     /**
