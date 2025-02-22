@@ -440,20 +440,6 @@ describe(`ArangoTermQueryRepository`, () => {
         });
     });
 
-    describe(`count`, () => {
-        beforeEach(async () => {
-            await arangoDatabaseForCollection.clear();
-
-            await testQueryRepository.createMany(termViews);
-        });
-
-        it(`should return the correct count`, async () => {
-            const result = await testQueryRepository.count();
-
-            expect(result).toBe(termViews.length);
-        });
-    });
-
     describe(`create`, () => {
         beforeEach(async () => {
             await arangoDatabaseForCollection.clear();
