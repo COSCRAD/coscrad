@@ -1,7 +1,6 @@
 import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Observable } from 'rxjs';
 import {
     CommandContext,
@@ -25,8 +24,7 @@ export class PhotographQueryService {
     constructor(
         @Inject(PHOTOGRAPH_QUERY_REPOSITORY_TOKEN)
         private readonly photographQueryRepository: IPhotographQueryRepository,
-        @Inject(CommandInfoService) private readonly commandInfoService: CommandInfoService,
-        private readonly configService: ConfigService
+        @Inject(CommandInfoService) private readonly commandInfoService: CommandInfoService
     ) {}
 
     // todo add explicit return type

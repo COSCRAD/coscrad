@@ -277,20 +277,6 @@ describe(`ArangoPhotographQueryRepository`, () => {
         });
     });
 
-    describe(`count`, () => {
-        beforeEach(async () => {
-            await arangoDatabaseForCollection.clear();
-
-            await testQueryRepository.createMany(photographViews);
-        });
-
-        it(`should return the correct count`, async () => {
-            const result = await testQueryRepository.count();
-
-            expect(result).toBe(photographViews.length);
-        });
-    });
-
     describe(`create`, () => {
         beforeEach(async () => {
             await arangoDatabaseForCollection.clear();

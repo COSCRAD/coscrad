@@ -396,7 +396,7 @@ describe(`when querying for a photograph: fetch by Id`, () => {
                         });
                     });
 
-                    describe(`when the term is not published`, () => {
+                    describe(`when the photograph is not published`, () => {
                         beforeEach(async () => {
                             await photographQueryRepository.createMany([
                                 clonePlainObjectWithOverrides(targetPhotographView, {
@@ -417,9 +417,13 @@ describe(`when querying for a photograph: fetch by Id`, () => {
                         });
                     });
 
-                    describe(`when the term is not published but the user has explicit access`, () => {
-                        // This case is a bit unclear: does this project admin have access to
-                        // the project this term is a part of?
+                    describe(`when the photograph is not published but the user has explicit access`, () => {
+                        /**
+                         * Currently, a project admin has access to all resources.
+                         * In the future, this may not be the case. Nonetheless, a
+                         * project admin will always have access to a resource for
+                         * which their name appears in the query ACL.
+                         */
                         beforeEach(async () => {
                             await photographQueryRepository.createMany([
                                 privatePhotographThatUserCanAccess,
@@ -462,8 +466,8 @@ describe(`when querying for a photograph: fetch by Id`, () => {
                             ));
                     });
 
-                    describe(`when there is a term with the given Id`, () => {
-                        describe(`when the term is published`, () => {
+                    describe(`when there is a photograph with the given Id`, () => {
+                        describe(`when the photograph is published`, () => {
                             beforeEach(async () => {
                                 await photographQueryRepository.createMany([targetPhotographView]);
                             });
@@ -481,7 +485,7 @@ describe(`when querying for a photograph: fetch by Id`, () => {
                         });
                     });
 
-                    describe(`when the term is not published and the user does not have access`, () => {
+                    describe(`when the photograph is not published and the user does not have access`, () => {
                         beforeEach(async () => {
                             await photographQueryRepository.createMany([
                                 clonePlainObjectWithOverrides(targetPhotographView, {
@@ -493,7 +497,7 @@ describe(`when querying for a photograph: fetch by Id`, () => {
                         });
 
                         // We pretend the resource does not exist when the user
-                        // does not have access to this term
+                        // does not have access to this photograph
                         it(`should return not found (404)`, async () => {
                             const res = await request(app.getHttpServer()).get(
                                 buildDetailEndpoint(photographId)
@@ -503,7 +507,7 @@ describe(`when querying for a photograph: fetch by Id`, () => {
                         });
                     });
 
-                    describe(`when the term is not published but the user has access`, () => {
+                    describe(`when the photograph is not published but the user has access`, () => {
                         beforeEach(async () => {
                             await photographQueryRepository.createMany([
                                 privatePhotographThatUserCanAccess,
