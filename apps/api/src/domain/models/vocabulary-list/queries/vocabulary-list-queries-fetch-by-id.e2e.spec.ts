@@ -21,6 +21,7 @@ import { AggregateId } from '../../../types/AggregateId';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
+import { CoscradUser } from '../../user-management/user/entities/user/coscrad-user.entity';
 import { buildTestVocabularyListView } from './__tests__';
 import {
     IVocabularyListQueryRepository,
@@ -157,6 +158,10 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
 
     let databaseProvider: ArangoDatabaseProvider;
 
+    beforeEach(async () => {
+        await testRepositoryProvider.testSetup();
+    });
+
     afterAll(async () => {
         await app.close();
 
@@ -177,11 +182,6 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
         describe(`when there is a vocabulary list with the given ID`, () => {
             describe(`when the vocabulary list is published`, () => {
                 describe(`when the term which appears as an entry is published`, () => {
-                    beforeEach(async () => {
-                        // TODO remove all manual calls to clear views from other tests as it is now part of `testSetup`
-                        await testRepositoryProvider.testSetup();
-                    });
-
                     it(`should return the correct vocabulary list view`, async () => {
                         await assertQueryResult({
                             app,
@@ -194,11 +194,12 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
                             },
                             endpoint: buildDetailEndpoint(vocabularyListId),
                             expectedStatus: HttpStatusCode.ok,
-                            checkResponseBody: async ({
-                                name: namedto,
-                                entries,
-                            }: IDetailQueryResult<IVocabularyListViewModel>) => {
-                                const foundName = new MultilingualText(namedto);
+                            checkResponseBody: async (
+                                body: IDetailQueryResult<IVocabularyListViewModel>
+                            ) => {
+                                const { name: nameDto, entries } = body;
+
+                                const foundName = new MultilingualText(nameDto);
 
                                 const { text: foundText, languageCode: foundLanguageCode } =
                                     foundName.getOriginalTextItem();
@@ -237,17 +238,20 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
                                 expect(foundTermTranslationLanguageCode).toBe(
                                     termTranslationLanguageCode
                                 );
-                                // TODO check additional state
+
+                                /**
+                                 * We do this once and only once as a test of
+                                 * the contract with the client. If this snapshot changes,
+                                 * it means we have changed the contract with the client,
+                                 * and the front-end may require corresponding changes.
+                                 */
+                                expect(body).toMatchSnapshot();
                             },
                         });
                     });
                 });
 
                 describe(`when the term which appears as an entry is **not** published`, () => {
-                    beforeEach(async () => {
-                        await testRepositoryProvider.testSetup();
-                    });
-
                     it(`should return the correct vocabulary list view`, async () => {
                         await assertQueryResult({
                             app,
@@ -289,10 +293,6 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
             });
 
             describe(`when the vocabulary list is not published`, () => {
-                beforeEach(async () => {
-                    await testRepositoryProvider.testSetup();
-                });
-
                 it(`should return not found`, async () => {
                     await assertQueryResult({
                         app,
@@ -326,6 +326,7 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
     });
 
     describe(`when the user is authenticated as an ordinary user`, () => {
+        // TODO shuld this be a before all?
         beforeEach(async () => {
             // TODO avoid using `setUpIntegrationTest` here
             ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
@@ -336,10 +337,6 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
                     testUserWithGroups: nonAdminUserWithGroups,
                 }
             ));
-        });
-
-        beforeEach(async () => {
-            await testRepositoryProvider.testSetup();
         });
 
         describe(`when the term that the is subject of an entry is published`, () => {
@@ -367,10 +364,6 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
         });
 
         describe(`when the term that is subject of an entry is not published (and the user has no query ACL level permissions)`, () => {
-            beforeEach(async () => {
-                await testRepositoryProvider.testSetup();
-            });
-
             it(`should not return the given term`, async () => {
                 await assertQueryResult({
                     app,
@@ -406,21 +399,297 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
         });
 
         describe(`when the term that is subject of an entry is not published, but the user has priviliged read access via a query ACL`, () => {
-            it.todo(`should return the term as one of the entries`);
+            it(`should return the term as one of the entries`, async () => {
+                const privateTermUserCanAccess = publishedTerm.clone({
+                    isPublished: false,
+                    accessControlList: new AccessControlList().allowUser(nonAdminUserWithGroups.id),
+                });
+
+                await assertQueryResult({
+                    app,
+                    endpoint: buildDetailEndpoint(vocabularyListId),
+                    expectedStatus: HttpStatusCode.ok,
+                    seedInitialState: async () => {
+                        await app
+                            .get<IVocabularyListQueryRepository>(
+                                VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN
+                            )
+                            .create(
+                                publishedVocabularyList.clone({
+                                    isPublished: true,
+                                    entries: [
+                                        {
+                                            term: privateTermUserCanAccess,
+                                        },
+                                    ],
+                                })
+                            );
+                    },
+                    checkResponseBody: async ({
+                        entries,
+                    }: IDetailQueryResult<IVocabularyListViewModel>) => {
+                        expect(entries).toHaveLength(1);
+
+                        expect(entries[0].term.id).toBe(privateTermUserCanAccess.id);
+                    },
+                });
+            });
         });
     });
 
     describe(`when the user is a COSCRAD admin`, () => {
-        it.todo(`should have a test`);
+        beforeAll(async () => {
+            // TODO avoid using `setUpIntegrationTest` here
+            ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
+                {
+                    ARANGO_DB_NAME: testDatabaseName,
+                },
+                {
+                    testUserWithGroups: new CoscradUserWithGroups(
+                        // TODO is there a helper for this?
+                        new CoscradUser({
+                            id: buildDummyUuid(909),
+                            authProviderUserId: `myauth|${1223}`,
+                            // TODO Make it so this is not part of the DTO
+                            type: AggregateType.user,
+                            username: 'coscrad',
+                            roles: [CoscradUserRole.superAdmin],
+                        }),
+                        []
+                    ),
+                }
+            ));
+        });
+
+        describe(`when the vocabulary list is public`, () => {
+            describe(`when all terms with entries are public`, () => {
+                it(`should return the entire vocabulary list`, async () => {
+                    await assertQueryResult({
+                        app,
+                        endpoint: buildDetailEndpoint(vocabularyListId),
+                        expectedStatus: HttpStatusCode.ok,
+                        seedInitialState: async () => {
+                            await app
+                                .get<IVocabularyListQueryRepository>(
+                                    VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN
+                                )
+                                .create(publishedVocabularyList);
+                        },
+                        checkResponseBody: async ({
+                            entries,
+                        }: IDetailQueryResult<IVocabularyListViewModel>) => {
+                            expect(entries).toHaveLength(1);
+                        },
+                    });
+                });
+            });
+
+            describe(`when one of the terms that is the subject of an entry is not public`, () => {
+                it(`should return the entire vocabulary list`, async () => {
+                    await assertQueryResult({
+                        app,
+                        endpoint: buildDetailEndpoint(vocabularyListId),
+                        expectedStatus: HttpStatusCode.ok,
+                        seedInitialState: async () => {
+                            const unpublishedTerm = publishedTerm.clone({
+                                id: buildDummyUuid(585),
+                                isPublished: false,
+                            });
+
+                            const entriesWithUnpublishedTerm = [
+                                {
+                                    term: publishedTerm,
+                                    variableValues: {},
+                                },
+                                {
+                                    term: unpublishedTerm,
+                                    variableValues: {},
+                                },
+                            ];
+
+                            await app
+                                .get<IVocabularyListQueryRepository>(
+                                    VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN
+                                )
+                                .create(
+                                    publishedVocabularyList.clone({
+                                        entries: entriesWithUnpublishedTerm,
+                                    })
+                                );
+                        },
+                        checkResponseBody: async ({
+                            entries,
+                        }: IDetailQueryResult<IVocabularyListViewModel>) => {
+                            // the unpublished term should come through for an admin user
+                            expect(entries).toHaveLength(2);
+                        },
+                    });
+                });
+            });
+        });
+
+        describe(`when the vocabulary list is not public`, () => {
+            it(`should still return the vocabulary list`, async () => {
+                await assertQueryResult({
+                    app,
+                    endpoint: buildDetailEndpoint(vocabularyListId),
+                    expectedStatus: HttpStatusCode.ok,
+                    seedInitialState: async () => {
+                        await app
+                            .get<IVocabularyListQueryRepository>(
+                                VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN
+                            )
+                            .create(
+                                publishedVocabularyList.clone({
+                                    isPublished: false,
+                                    accessControlList: new AccessControlList().toDTO(),
+                                    entries: [
+                                        {
+                                            term: publishedTerm.clone({
+                                                isPublished: false,
+                                                accessControlList: new AccessControlList().toDTO(),
+                                            }),
+                                            variableValues: {},
+                                        },
+                                    ],
+                                })
+                            );
+                    },
+                    checkResponseBody: async ({
+                        entries,
+                    }: IDetailQueryResult<IVocabularyListViewModel>) => {
+                        expect(entries).toHaveLength(1);
+                    },
+                });
+            });
+        });
     });
 
     describe(`when the user is a project admin`, () => {
-        it.todo(`should have a test`);
-    });
+        beforeAll(async () => {
+            // TODO avoid using `setUpIntegrationTest` here
+            ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
+                {
+                    ARANGO_DB_NAME: testDatabaseName,
+                },
+                {
+                    testUserWithGroups: new CoscradUserWithGroups(
+                        // TODO is there a helper for this?
+                        new CoscradUser({
+                            id: buildDummyUuid(909),
+                            authProviderUserId: `myauth|${1223}`,
+                            // TODO Make it so this is not part of the DTO
+                            type: AggregateType.user,
+                            username: 'coscrad',
+                            roles: [CoscradUserRole.projectAdmin],
+                        }),
+                        []
+                    ),
+                }
+            ));
+        });
 
-    describe(`when the user is authenticated as an ordinary user`, () => {
-        it.todo(`should have a test`);
+        describe(`when the vocabulary list is public`, () => {
+            describe(`when all terms with entries are public`, () => {
+                it(`should return the entire vocabulary list`, async () => {
+                    await assertQueryResult({
+                        app,
+                        endpoint: buildDetailEndpoint(vocabularyListId),
+                        expectedStatus: HttpStatusCode.ok,
+                        seedInitialState: async () => {
+                            await app
+                                .get<IVocabularyListQueryRepository>(
+                                    VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN
+                                )
+                                .create(publishedVocabularyList);
+                        },
+                        checkResponseBody: async ({
+                            entries,
+                        }: IDetailQueryResult<IVocabularyListViewModel>) => {
+                            expect(entries).toHaveLength(1);
+                        },
+                    });
+                });
+            });
 
-        it.todo(`should respect the ACLs of terms contained as entries`);
+            describe(`when one of the terms that is the subject of an entry is not public`, () => {
+                it(`should return the entire vocabulary list`, async () => {
+                    await assertQueryResult({
+                        app,
+                        endpoint: buildDetailEndpoint(vocabularyListId),
+                        expectedStatus: HttpStatusCode.ok,
+                        seedInitialState: async () => {
+                            const unpublishedTerm = publishedTerm.clone({
+                                id: buildDummyUuid(585),
+                                isPublished: false,
+                            });
+
+                            const entriesWithUnpublishedTerm = [
+                                {
+                                    term: publishedTerm,
+                                    variableValues: {},
+                                },
+                                {
+                                    term: unpublishedTerm,
+                                    variableValues: {},
+                                },
+                            ];
+
+                            await app
+                                .get<IVocabularyListQueryRepository>(
+                                    VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN
+                                )
+                                .create(
+                                    publishedVocabularyList.clone({
+                                        entries: entriesWithUnpublishedTerm,
+                                    })
+                                );
+                        },
+                        checkResponseBody: async ({
+                            entries,
+                        }: IDetailQueryResult<IVocabularyListViewModel>) => {
+                            // the unpublished term should come through for an admin user
+                            expect(entries).toHaveLength(2);
+                        },
+                    });
+                });
+            });
+        });
+
+        describe(`when the vocabulary list is not public`, () => {
+            it(`should still return the vocabulary list`, async () => {
+                await assertQueryResult({
+                    app,
+                    endpoint: buildDetailEndpoint(vocabularyListId),
+                    expectedStatus: HttpStatusCode.ok,
+                    seedInitialState: async () => {
+                        await app
+                            .get<IVocabularyListQueryRepository>(
+                                VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN
+                            )
+                            .create(
+                                publishedVocabularyList.clone({
+                                    isPublished: false,
+                                    accessControlList: new AccessControlList().toDTO(),
+                                    entries: [
+                                        {
+                                            term: publishedTerm.clone({
+                                                isPublished: false,
+                                                accessControlList: new AccessControlList().toDTO(),
+                                            }),
+                                            variableValues: {},
+                                        },
+                                    ],
+                                })
+                            );
+                    },
+                    checkResponseBody: async ({
+                        entries,
+                    }: IDetailQueryResult<IVocabularyListViewModel>) => {
+                        expect(entries).toHaveLength(1);
+                    },
+                });
+            });
+        });
     });
 });

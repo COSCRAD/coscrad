@@ -68,11 +68,14 @@ export class AccessControlList extends BaseDomainModel {
         return this.allowedGroupIds.includes(groupId);
     }
 
-    // TODO make sure this is unit tested
-    // TODO Should `isPublished` be part of the ACL?
+    // TODO Should `isPublished` be part of the ACL?!
     canUserWithGroups(userWithGroups: CoscradUserWithGroups) {
         if (!isNonEmptyObject(userWithGroups)) {
             return false;
+        }
+
+        if (userWithGroups.isAdmin()) {
+            return true;
         }
 
         const { id: userId, groups } = userWithGroups;

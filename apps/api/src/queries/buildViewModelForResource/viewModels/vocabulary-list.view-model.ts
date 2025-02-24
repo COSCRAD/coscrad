@@ -256,8 +256,12 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
          * without repetition.
          */
         const buildResult = () => {
+            const availableEntries = this.entries.filter((entry) =>
+                entry.canUserWithGroups(userWithGroups)
+            );
+
             return this.clone({
-                entries: this.entries.filter((entry) => entry.canUserWithGroups(userWithGroups)),
+                entries: availableEntries,
             });
         };
 
