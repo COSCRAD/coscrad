@@ -5,7 +5,6 @@ import {
     IDynamicForm,
     IFormField,
     IMultilingualText,
-    ResourceType,
 } from '@coscrad/api-interfaces';
 import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { ApiProperty } from '@nestjs/swagger';
@@ -23,11 +22,11 @@ import {
 } from '../../../domain/models/vocabulary-list/commands';
 import { AggregateId } from '../../../domain/types/AggregateId';
 import { HasAggregateId } from '../../../domain/types/HasAggregateId';
-import { InternalError } from '../../../lib/errors/InternalError';
 import { Maybe } from '../../../lib/types/maybe';
 import { NotFound } from '../../../lib/types/not-found';
 import { clonePlainObjectWithOverrides } from '../../../lib/utilities/clonePlainObjectWithOverrides';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
+import { CoscradDataExample } from '../../../test-data/utilities';
 import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
 import { TermViewModel } from './term.view-model';
@@ -65,20 +64,6 @@ export class VocabularyListEntryViewModel extends BaseDomainModel {
     }
 }
 
-/**
- * TODO If we like this approach, let's move code from here into a test util.
- * Also note that this has implications for our approach to generating standard
- * `OpenApi` schemas, including samples.
- */
-const CanonicalResourceView = (
-    _resourceType: string,
-    { sample }: { sample: Object }
-): ClassDecorator => {
-    return function (target: Object) {
-        Reflect.defineMetadata('SAMPLE', sample, target);
-    };
-};
-
 const sample: DTO<VocabularyListViewModel> = {
     entries: [
         {
@@ -105,19 +90,8 @@ const sample: DTO<VocabularyListViewModel> = {
     accessControlList: new AccessControlList().toDTO(),
 };
 
-export const buildTestViewData = (Ctor: unknown, overrides: Record<string, unknown>) => {
-    const testMetadata = Reflect.getMetadata('SAMPLE', Ctor);
-
-    if (!isNonEmptyObject(testMetadata)) {
-        throw new InternalError(`No metadata found for: ${Ctor}`);
-    }
-
-    // @ts-expect-error fix me
-    return Ctor.fromDto(clonePlainObjectWithOverrides(testMetadata, overrides));
-};
-
-@CanonicalResourceView(ResourceType.vocabularyList, {
-    sample,
+@CoscradDataExample({
+    example: sample,
 })
 export class VocabularyListViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
     @ApiProperty({

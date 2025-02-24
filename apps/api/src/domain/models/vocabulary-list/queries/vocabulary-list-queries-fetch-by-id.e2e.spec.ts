@@ -14,11 +14,9 @@ import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpInt
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import {
-    buildTestViewData,
-    VocabularyListViewModel,
-} from '../../../../queries/buildViewModelForResource/viewModels';
+import { VocabularyListViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
+import { buildTestInstance } from '../../../../test-data/utilities';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
@@ -75,7 +73,7 @@ const publishedTerm: TermViewModel = TermViewModel.fromDto({
 // TODO check that contributors are joined in- let's do this now
 // const existingContributor = getValidAggregateInstanceForTest(AggregateType.contributor)
 
-const publishedVocabularyList = buildTestViewData(VocabularyListViewModel, {
+const publishedVocabularyList = buildTestInstance(VocabularyListViewModel, {
     id: vocabularyListId,
     isPublished: true,
     entries: [
