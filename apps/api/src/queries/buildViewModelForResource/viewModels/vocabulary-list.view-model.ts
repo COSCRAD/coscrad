@@ -279,7 +279,9 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
      * TODO Breakout functional helper and bind it to this here so we can have
      * a single-source of truth for this logic across resource types.
      */
-    public forUser(userWithGroups?: CoscradUserWithGroups): Maybe<VocabularyListViewModel> {
+    public forUser(
+        userWithGroups?: CoscradUserWithGroups
+    ): Maybe<Omit<VocabularyListViewModel, 'accessControlList'>> {
         /**
          * There are 2 branches in the conditional logic where we need to
          * do this, so I created a little helper here so we can do this lazily
@@ -290,9 +292,13 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
                 entry.canUserWithGroups(userWithGroups)
             );
 
-            return this.clone({
+            const withAvailableEntries = this.clone({
                 entries: availableEntries,
             });
+
+            delete withAvailableEntries.accessControlList;
+
+            return withAvailableEntries;
         };
 
         /**
