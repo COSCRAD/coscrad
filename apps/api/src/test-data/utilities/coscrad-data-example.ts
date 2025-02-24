@@ -42,13 +42,18 @@ export const buildTestInstance = <T = unknown>(
     return target.fromDto(clonePlainObjectWithOverrides<DTO<T>>(testMetadata[0], overrides)) as T;
 };
 
+interface CoscradDataExampleOptions<T = unknown> {
+    example: DTO<T>;
+}
+
 /**
  * TODO If we like this approach, let's move code from here into a test util.
  * Also note that this has implications for our approach to generating standard
  * `OpenApi` schemas, including samples.
  */
-export const CoscradDataExample = ({ example }: { example: Object }): ClassDecorator => {
-    return function (target: any) {
+export function CoscradDataExample<T>({ example }: CoscradDataExampleOptions<T>): ClassDecorator {
+    // @ts-expect-error treat this as a cast. What's important is type-safety at the call site.
+    return function (target: Ctor<T>) {
         const existingTestData = getCoscradDataExamples(target);
 
         existingTestData.push(example);
@@ -56,4 +61,4 @@ export const CoscradDataExample = ({ example }: { example: Object }): ClassDecor
         // here we overwrite the original
         Reflect.defineMetadata('SAMPLE', existingTestData, target);
     };
-};
+}
