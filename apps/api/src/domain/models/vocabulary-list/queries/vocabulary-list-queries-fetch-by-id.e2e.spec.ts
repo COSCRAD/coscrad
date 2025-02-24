@@ -122,6 +122,32 @@ const _privateVocabularyListWithUserPermissions = publishedVocabularyList.clone(
     }),
 });
 
+interface AssertQueryResultParams<TResponseBody = unknown> {
+    app: INestApplication;
+    seedInitialState: () => Promise<void>;
+    endpoint: string;
+    expectedStatus: HttpStatusCode;
+    checkResponseBody?: (body: TResponseBody) => Promise<void>;
+}
+
+const assertQueryResult = async ({
+    app,
+    seedInitialState,
+    endpoint,
+    expectedStatus,
+    checkResponseBody,
+}: AssertQueryResultParams) => {
+    await seedInitialState();
+
+    const res = await request(app.getHttpServer()).get(endpoint);
+
+    expect(res.status).toBe(expectedStatus);
+
+    if (typeof checkResponseBody === 'function') {
+        await checkResponseBody(res.body);
+    }
+};
+
 describe(`when querying for a vocabulary list: fetch by ID`, () => {
     const testDatabaseName = generateDatabaseNameForTestSuite();
 
@@ -152,118 +178,112 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
             describe(`when the vocabulary list is published`, () => {
                 describe(`when the term which appears as an entry is published`, () => {
                     beforeEach(async () => {
+                        // TODO remove all manual calls to clear views from other tests as it is now part of `testSetup`
                         await testRepositoryProvider.testSetup();
-
-                        await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
-
-                        await databaseProvider
-                            .getDatabaseForCollection('vocabularyList__VIEWS')
-                            .clear();
-
-                        await app
-                            .get<IVocabularyListQueryRepository>(
-                                VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN
-                            )
-                            .create(publishedVocabularyList);
                     });
 
                     it(`should return the correct vocabulary list view`, async () => {
-                        const res = await request(app.getHttpServer()).get(
-                            buildDetailEndpoint(vocabularyListId)
-                        );
+                        await assertQueryResult({
+                            app,
+                            seedInitialState: async () => {
+                                await app
+                                    .get<IVocabularyListQueryRepository>(
+                                        VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN
+                                    )
+                                    .create(publishedVocabularyList);
+                            },
+                            endpoint: buildDetailEndpoint(vocabularyListId),
+                            expectedStatus: HttpStatusCode.ok,
+                            checkResponseBody: async ({
+                                name: namedto,
+                                entries,
+                            }: IDetailQueryResult<IVocabularyListViewModel>) => {
+                                const foundName = new MultilingualText(namedto);
 
-                        expect(res.status).toBe(HttpStatusCode.ok);
+                                const { text: foundText, languageCode: foundLanguageCode } =
+                                    foundName.getOriginalTextItem();
 
-                        const body = res.body as IDetailQueryResult<IVocabularyListViewModel>;
+                                expect(foundText).toBe(publishedVocabularyList.name.items[0].text);
 
-                        const { name: namedto, entries } = body;
+                                expect(foundLanguageCode).toBe(
+                                    publishedVocabularyList.name.items[0].languageCode
+                                );
 
-                        const foundName = new MultilingualText(namedto);
+                                // here we check that the term comes through
+                                expect(entries).toHaveLength(1);
 
-                        const { text: foundText, languageCode: foundLanguageCode } =
-                            foundName.getOriginalTextItem();
+                                const { term: foundTerm } = entries[0];
 
-                        expect(foundText).toBe(publishedVocabularyList.name.items[0].text);
+                                const { name: termNameDto } = foundTerm;
 
-                        expect(foundLanguageCode).toBe(
-                            publishedVocabularyList.name.items[0].languageCode
-                        );
+                                const termName = new MultilingualText(termNameDto);
 
-                        // here we check that the term comes through
-                        expect(entries).toHaveLength(1);
+                                const { text: foundTermText, languageCode: foundTermLanguageCode } =
+                                    termName.getOriginalTextItem();
 
-                        const { term: foundTerm } = entries[0];
+                                expect(foundTermText).toBe(termOriginalText);
 
-                        const { name: termNameDto } = foundTerm;
+                                expect(foundTermLanguageCode).toBe(termOriginalLanguageCode);
 
-                        const termName = new MultilingualText(termNameDto);
+                                const {
+                                    text: foundTermTranslationText,
+                                    languageCode: foundTermTranslationLanguageCode,
+                                } = termName.getTranslation(
+                                    termTranslationLanguageCode
+                                ) as IMultilingualTextItem;
 
-                        const { text: foundTermText, languageCode: foundTermLanguageCode } =
-                            termName.getOriginalTextItem();
+                                expect(foundTermTranslationText).toBe(termTranslation);
 
-                        expect(foundTermText).toBe(termOriginalText);
-
-                        expect(foundTermLanguageCode).toBe(termOriginalLanguageCode);
-
-                        const {
-                            text: foundTermTranslationText,
-                            languageCode: foundTermTranslationLanguageCode,
-                        } = termName.getTranslation(
-                            termTranslationLanguageCode
-                        ) as IMultilingualTextItem;
-
-                        expect(foundTermTranslationText).toBe(termTranslation);
-
-                        expect(foundTermTranslationLanguageCode).toBe(termTranslationLanguageCode);
-                        // TODO check additional state
+                                expect(foundTermTranslationLanguageCode).toBe(
+                                    termTranslationLanguageCode
+                                );
+                                // TODO check additional state
+                            },
+                        });
                     });
                 });
 
                 describe(`when the term which appears as an entry is **not** published`, () => {
                     beforeEach(async () => {
                         await testRepositoryProvider.testSetup();
-
-                        await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
-
-                        await databaseProvider
-                            .getDatabaseForCollection('vocabularyList__VIEWS')
-                            .clear();
-
-                        await app
-                            .get<IVocabularyListQueryRepository>(
-                                VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN
-                            )
-                            .create(publishedVocabularyListWithUnpublishedTerm);
                     });
 
                     it(`should return the correct vocabulary list view`, async () => {
-                        const res = await request(app.getHttpServer()).get(
-                            buildDetailEndpoint(vocabularyListId)
-                        );
+                        await assertQueryResult({
+                            app,
+                            endpoint: buildDetailEndpoint(vocabularyListId),
+                            expectedStatus: HttpStatusCode.ok,
+                            seedInitialState: async () => {
+                                await app
+                                    .get<IVocabularyListQueryRepository>(
+                                        VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN
+                                    )
+                                    .create(publishedVocabularyListWithUnpublishedTerm);
+                            },
+                            checkResponseBody: async (
+                                body: IDetailQueryResult<IVocabularyListViewModel>
+                            ) => {
+                                const { name: namedto, entries } = body;
 
-                        expect(res.status).toBe(HttpStatusCode.ok);
+                                const foundName = new MultilingualText(namedto);
 
-                        const body = res.body as IDetailQueryResult<IVocabularyListViewModel>;
+                                const { text: foundText, languageCode: foundLanguageCode } =
+                                    foundName.getOriginalTextItem();
 
-                        const { name: namedto, entries } = body;
+                                expect(foundText).toBe(publishedVocabularyList.name.items[0].text);
 
-                        const foundName = new MultilingualText(namedto);
+                                expect(foundLanguageCode).toBe(
+                                    publishedVocabularyList.name.items[0].languageCode
+                                );
 
-                        const { text: foundText, languageCode: foundLanguageCode } =
-                            foundName.getOriginalTextItem();
-
-                        expect(foundText).toBe(publishedVocabularyList.name.items[0].text);
-
-                        expect(foundLanguageCode).toBe(
-                            publishedVocabularyList.name.items[0].languageCode
-                        );
-
-                        /**
-                         * Note that the following is crucial. Because the
-                         * term is not published, it should not be returned
-                         * from the query.
-                         */
-                        expect(entries).toHaveLength(0);
+                                /**
+                                 * Note that the following is crucial. Because the
+                                 * term is not published, it should not be returned
+                                 * from the query.
+                                 */
+                                expect(entries).toHaveLength(0);
+                            },
+                        });
                     });
                 });
             });
@@ -271,28 +291,25 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
             describe(`when the vocabulary list is not published`, () => {
                 beforeEach(async () => {
                     await testRepositoryProvider.testSetup();
-
-                    await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
-
-                    await databaseProvider
-                        .getDatabaseForCollection('vocabularyList__VIEWS')
-                        .clear();
-
-                    await app
-                        .get<IVocabularyListQueryRepository>(VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN)
-                        .create(
-                            publishedVocabularyList.clone({
-                                isPublished: false,
-                            })
-                        );
                 });
 
                 it(`should return not found`, async () => {
-                    const res = await request(app.getHttpServer()).get(
-                        buildDetailEndpoint(vocabularyListId)
-                    );
-
-                    expect(res.status).toBe(HttpStatusCode.notFound);
+                    await assertQueryResult({
+                        app,
+                        seedInitialState: async () => {
+                            await app
+                                .get<IVocabularyListQueryRepository>(
+                                    VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN
+                                )
+                                .create(
+                                    publishedVocabularyList.clone({
+                                        isPublished: false,
+                                    })
+                                );
+                        },
+                        endpoint: buildDetailEndpoint(vocabularyListId),
+                        expectedStatus: HttpStatusCode.notFound,
+                    });
                 });
             });
         });
@@ -323,62 +340,68 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
 
         beforeEach(async () => {
             await testRepositoryProvider.testSetup();
-
-            await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
-
-            await databaseProvider.getDatabaseForCollection('vocabularyList__VIEWS').clear();
-
-            await app
-                .get<IVocabularyListQueryRepository>(VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN)
-                .create(publishedVocabularyList);
         });
 
-        describe(`when the term that is subject of an entry is published`, () => {
-            it('should return the given term', async () => {});
+        describe(`when the term that the is subject of an entry is published`, () => {
+            it('should return the given term', async () => {
+                await assertQueryResult({
+                    app,
+                    endpoint: buildDetailEndpoint(vocabularyListId),
+                    expectedStatus: HttpStatusCode.ok,
+                    seedInitialState: async () => {
+                        await app
+                            .get<IVocabularyListQueryRepository>(
+                                VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN
+                            )
+                            .create(publishedVocabularyList);
+                    },
+                    checkResponseBody: async ({
+                        entries,
+                    }: IDetailQueryResult<IVocabularyListViewModel>) => {
+                        expect(entries).toHaveLength(1);
+
+                        expect(entries[0].term.id).toBe(publishedTerm.id);
+                    },
+                });
+            });
         });
 
         describe(`when the term that is subject of an entry is not published (and the user has no query ACL level permissions)`, () => {
             beforeEach(async () => {
                 await testRepositoryProvider.testSetup();
-
-                await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
-
-                await databaseProvider.getDatabaseForCollection('vocabularyList__VIEWS').clear();
-
-                const publishedVocabularyListWithUnpublishedTerm = publishedVocabularyList.clone({
-                    entries: [
-                        {
-                            term: publishedTerm.clone({
-                                isPublished: false,
-                                // empty
-                                accessControlList: new AccessControlList().toDTO(),
-                            }),
-                        },
-                    ],
-                });
-
-                await app
-                    .get<IVocabularyListQueryRepository>(VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN)
-                    .create(publishedVocabularyListWithUnpublishedTerm);
             });
 
             it(`should not return the given term`, async () => {
-                const res = await request(app.getHttpServer()).get(
-                    buildDetailEndpoint(vocabularyListId)
-                );
+                await assertQueryResult({
+                    app,
+                    endpoint: buildDetailEndpoint(vocabularyListId),
+                    expectedStatus: HttpStatusCode.ok,
+                    seedInitialState: async () => {
+                        const publishedVocabularyListWithUnpublishedTerm =
+                            publishedVocabularyList.clone({
+                                entries: [
+                                    {
+                                        term: publishedTerm.clone({
+                                            isPublished: false,
+                                            // empty
+                                            accessControlList: new AccessControlList().toDTO(),
+                                        }),
+                                    },
+                                ],
+                            });
 
-                expect(res.status).toBe(HttpStatusCode.ok);
-
-                const body = res.body as IDetailQueryResult<IVocabularyListViewModel>;
-
-                const { entries } = body;
-
-                /**
-                 * Note that the following is crucial. Because the
-                 * term is not published, it should not be returned
-                 * from the query.
-                 */
-                expect(entries).toHaveLength(0);
+                        await app
+                            .get<IVocabularyListQueryRepository>(
+                                VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN
+                            )
+                            .create(publishedVocabularyListWithUnpublishedTerm);
+                    },
+                    checkResponseBody: async ({
+                        entries,
+                    }: IDetailQueryResult<IVocabularyListViewModel>) => {
+                        expect(entries).toHaveLength(0);
+                    },
+                });
             });
         });
 

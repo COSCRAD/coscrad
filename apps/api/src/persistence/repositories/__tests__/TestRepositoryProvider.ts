@@ -155,6 +155,8 @@ export default class TestRepositoryProvider extends ArangoRepositoryProvider {
         await this.deleteAllDocumentData();
 
         await this.deleteAllEdgeDocumentData();
+
+        await this.databaseProvider.clearViews();
     }
 
     public async testTeardown(): Promise<void> {
