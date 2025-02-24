@@ -7,12 +7,17 @@ import {
     LanguageCode,
 } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
+import 'reflect-metadata';
 import * as request from 'supertest';
 import httpStatusCodes, { HttpStatusCode } from '../../../../app/constants/httpStatusCodes';
 import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import {
+    buildTestViewData,
+    VocabularyListViewModel,
+} from '../../../../queries/buildViewModelForResource/viewModels';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
@@ -22,7 +27,6 @@ import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../user-management/user/entities/user/coscrad-user.entity';
-import { buildTestVocabularyListView } from './__tests__';
 import {
     IVocabularyListQueryRepository,
     VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
@@ -71,7 +75,7 @@ const publishedTerm: TermViewModel = TermViewModel.fromDto({
 // TODO check that contributors are joined in- let's do this now
 // const existingContributor = getValidAggregateInstanceForTest(AggregateType.contributor)
 
-const publishedVocabularyList = buildTestVocabularyListView({
+const publishedVocabularyList = buildTestViewData(VocabularyListViewModel, {
     id: vocabularyListId,
     isPublished: true,
     entries: [
@@ -157,6 +161,18 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
     let testRepositoryProvider: TestRepositoryProvider;
 
     let databaseProvider: ArangoDatabaseProvider;
+
+    const buildTestModule = async (userWithGroups: CoscradUserWithGroups) => {
+        // TODO avoid using `setUpIntegrationTest` here
+        ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
+            {
+                ARANGO_DB_NAME: testDatabaseName,
+            },
+            {
+                testUserWithGroups: userWithGroups,
+            }
+        ));
+    };
 
     beforeEach(async () => {
         await testRepositoryProvider.testSetup();
@@ -327,15 +343,7 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
 
     describe(`when the user is authenticated as an ordinary user`, () => {
         beforeAll(async () => {
-            // TODO avoid using `setUpIntegrationTest` here
-            ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
-                {
-                    ARANGO_DB_NAME: testDatabaseName,
-                },
-                {
-                    testUserWithGroups: nonAdminUserWithGroups,
-                }
-            ));
+            await buildTestModule(nonAdminUserWithGroups);
         });
 
         describe(`when the vocabulary list is published`, () => {
@@ -463,26 +471,20 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
 
     describe(`when the user is a COSCRAD admin`, () => {
         beforeAll(async () => {
-            // TODO avoid using `setUpIntegrationTest` here
-            ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
-                {
-                    ARANGO_DB_NAME: testDatabaseName,
-                },
-                {
-                    testUserWithGroups: new CoscradUserWithGroups(
-                        // TODO is there a helper for this?
-                        new CoscradUser({
-                            id: buildDummyUuid(909),
-                            authProviderUserId: `myauth|${1223}`,
-                            // TODO Make it so this is not part of the DTO
-                            type: AggregateType.user,
-                            username: 'coscrad',
-                            roles: [CoscradUserRole.superAdmin],
-                        }),
-                        []
-                    ),
-                }
-            ));
+            await buildTestModule(
+                new CoscradUserWithGroups(
+                    // TODO is there a helper for this?
+                    new CoscradUser({
+                        id: buildDummyUuid(909),
+                        authProviderUserId: `myauth|${1223}`,
+                        // TODO Make it so this is not part of the DTO
+                        type: AggregateType.user,
+                        username: 'coscrad',
+                        roles: [CoscradUserRole.superAdmin],
+                    }),
+                    []
+                )
+            );
         });
 
         describe(`when the vocabulary list is public`, () => {
