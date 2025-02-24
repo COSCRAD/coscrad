@@ -326,8 +326,7 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
     });
 
     describe(`when the user is authenticated as an ordinary user`, () => {
-        // TODO shuld this be a before all?
-        beforeEach(async () => {
+        beforeAll(async () => {
             // TODO avoid using `setUpIntegrationTest` here
             ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
                 {
@@ -339,76 +338,113 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
             ));
         });
 
-        describe(`when the term that the is subject of an entry is published`, () => {
-            it('should return the given term', async () => {
-                await assertQueryResult({
-                    app,
-                    endpoint: buildDetailEndpoint(vocabularyListId),
-                    expectedStatus: HttpStatusCode.ok,
-                    seedInitialState: async () => {
-                        await app
-                            .get<IVocabularyListQueryRepository>(
-                                VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN
-                            )
-                            .create(publishedVocabularyList);
-                    },
-                    checkResponseBody: async ({
-                        entries,
-                    }: IDetailQueryResult<IVocabularyListViewModel>) => {
-                        expect(entries).toHaveLength(1);
+        describe(`when the vocabulary list is published`, () => {
+            describe(`when the term that the is subject of an entry is published`, () => {
+                it('should return the given term', async () => {
+                    await assertQueryResult({
+                        app,
+                        endpoint: buildDetailEndpoint(vocabularyListId),
+                        expectedStatus: HttpStatusCode.ok,
+                        seedInitialState: async () => {
+                            await app
+                                .get<IVocabularyListQueryRepository>(
+                                    VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN
+                                )
+                                .create(publishedVocabularyList);
+                        },
+                        checkResponseBody: async ({
+                            entries,
+                        }: IDetailQueryResult<IVocabularyListViewModel>) => {
+                            expect(entries).toHaveLength(1);
 
-                        expect(entries[0].term.id).toBe(publishedTerm.id);
-                    },
+                            expect(entries[0].term.id).toBe(publishedTerm.id);
+                        },
+                    });
+                });
+            });
+
+            describe(`when the term that is subject of an entry is not published (and the user has no query ACL level permissions)`, () => {
+                it(`should not return the given term`, async () => {
+                    await assertQueryResult({
+                        app,
+                        endpoint: buildDetailEndpoint(vocabularyListId),
+                        expectedStatus: HttpStatusCode.ok,
+                        seedInitialState: async () => {
+                            const publishedVocabularyListWithUnpublishedTerm =
+                                publishedVocabularyList.clone({
+                                    entries: [
+                                        {
+                                            term: publishedTerm.clone({
+                                                isPublished: false,
+                                                // empty
+                                                accessControlList: new AccessControlList().toDTO(),
+                                            }),
+                                        },
+                                    ],
+                                });
+
+                            await app
+                                .get<IVocabularyListQueryRepository>(
+                                    VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN
+                                )
+                                .create(publishedVocabularyListWithUnpublishedTerm);
+                        },
+                        checkResponseBody: async ({
+                            entries,
+                        }: IDetailQueryResult<IVocabularyListViewModel>) => {
+                            expect(entries).toHaveLength(0);
+                        },
+                    });
+                });
+            });
+
+            describe(`when the term that is subject of an entry is not published, but the user has priviliged read access via a query ACL`, () => {
+                it(`should return the term as one of the entries`, async () => {
+                    const privateTermUserCanAccess = publishedTerm.clone({
+                        isPublished: false,
+                        accessControlList: new AccessControlList().allowUser(
+                            nonAdminUserWithGroups.id
+                        ),
+                    });
+
+                    await assertQueryResult({
+                        app,
+                        endpoint: buildDetailEndpoint(vocabularyListId),
+                        expectedStatus: HttpStatusCode.ok,
+                        seedInitialState: async () => {
+                            await app
+                                .get<IVocabularyListQueryRepository>(
+                                    VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN
+                                )
+                                .create(
+                                    publishedVocabularyList.clone({
+                                        isPublished: true,
+                                        entries: [
+                                            {
+                                                term: privateTermUserCanAccess,
+                                            },
+                                        ],
+                                    })
+                                );
+                        },
+                        checkResponseBody: async ({
+                            entries,
+                        }: IDetailQueryResult<IVocabularyListViewModel>) => {
+                            expect(entries).toHaveLength(1);
+
+                            expect(entries[0].term.id).toBe(privateTermUserCanAccess.id);
+                        },
+                    });
                 });
             });
         });
 
-        describe(`when the term that is subject of an entry is not published (and the user has no query ACL level permissions)`, () => {
-            it(`should not return the given term`, async () => {
+        describe(`when the vocabulary  list is not published`, () => {
+            it(`should return not found`, async () => {
                 await assertQueryResult({
                     app,
                     endpoint: buildDetailEndpoint(vocabularyListId),
-                    expectedStatus: HttpStatusCode.ok,
-                    seedInitialState: async () => {
-                        const publishedVocabularyListWithUnpublishedTerm =
-                            publishedVocabularyList.clone({
-                                entries: [
-                                    {
-                                        term: publishedTerm.clone({
-                                            isPublished: false,
-                                            // empty
-                                            accessControlList: new AccessControlList().toDTO(),
-                                        }),
-                                    },
-                                ],
-                            });
-
-                        await app
-                            .get<IVocabularyListQueryRepository>(
-                                VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN
-                            )
-                            .create(publishedVocabularyListWithUnpublishedTerm);
-                    },
-                    checkResponseBody: async ({
-                        entries,
-                    }: IDetailQueryResult<IVocabularyListViewModel>) => {
-                        expect(entries).toHaveLength(0);
-                    },
-                });
-            });
-        });
-
-        describe(`when the term that is subject of an entry is not published, but the user has priviliged read access via a query ACL`, () => {
-            it(`should return the term as one of the entries`, async () => {
-                const privateTermUserCanAccess = publishedTerm.clone({
-                    isPublished: false,
-                    accessControlList: new AccessControlList().allowUser(nonAdminUserWithGroups.id),
-                });
-
-                await assertQueryResult({
-                    app,
-                    endpoint: buildDetailEndpoint(vocabularyListId),
-                    expectedStatus: HttpStatusCode.ok,
+                    expectedStatus: HttpStatusCode.notFound,
                     seedInitialState: async () => {
                         await app
                             .get<IVocabularyListQueryRepository>(
@@ -416,21 +452,9 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
                             )
                             .create(
                                 publishedVocabularyList.clone({
-                                    isPublished: true,
-                                    entries: [
-                                        {
-                                            term: privateTermUserCanAccess,
-                                        },
-                                    ],
+                                    isPublished: false,
                                 })
                             );
-                    },
-                    checkResponseBody: async ({
-                        entries,
-                    }: IDetailQueryResult<IVocabularyListViewModel>) => {
-                        expect(entries).toHaveLength(1);
-
-                        expect(entries[0].term.id).toBe(privateTermUserCanAccess.id);
                     },
                 });
             });
