@@ -72,6 +72,8 @@ pipeline {
                     // See https://github.com/facebook/jest/issues/11354
                     sh "sed -i -e 's/const FORCE_EXIT_DELAY = 500;/const FORCE_EXIT_DELAY = 7000;/g' ./node_modules/jest-worker/build/base/BaseWorkerPool.js"
 
+                    sh "cat ./node_modules/jest-worker/build/base/BaseWorkerPool.js | grep FORCE"
+
                     echo 'testing api (coscrad back-end)'
 
                 /**
