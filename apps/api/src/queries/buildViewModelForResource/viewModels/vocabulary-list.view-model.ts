@@ -58,9 +58,10 @@ export class VocabularyListEntryViewModel extends BaseDomainModel {
     }
 
     public canUserWithGroups(userWithGroups: CoscradUserWithGroups) {
-        return (
-            this.term.isPublished || this.term.accessControlList.canUserWithGroups(userWithGroups)
-        );
+        const isAllowed =
+            this.term.isPublished || this.term.accessControlList.canUserWithGroups(userWithGroups);
+
+        return isAllowed;
     }
 }
 

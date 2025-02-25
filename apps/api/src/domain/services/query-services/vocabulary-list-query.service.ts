@@ -3,7 +3,6 @@ import {
     IIndexQueryResult,
     IVocabularyListViewModel,
 } from '@coscrad/api-interfaces';
-import { isNonEmptyObject, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import {
@@ -11,7 +10,7 @@ import {
     CommandInfoService,
 } from '../../../app/controllers/command/services/command-info-service';
 import { isNotFound, NotFound } from '../../../lib/types/not-found';
-import { AccessControlList } from '../../models/shared/access-control/access-control-list.entity';
+import { VocabularyListViewModel } from '../../../queries/buildViewModelForResource/viewModels';
 import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';
 import { VocabularyList } from '../../models/vocabulary-list/entities/vocabulary-list.entity';
 import {
@@ -45,9 +44,11 @@ export class VocabularyListQueryService {
             return NotFound;
         }
 
+        const actions = this.fetchUserActions(userWithGroups, [vocabularyList]);
+
         return {
             ...vocabularyList,
-            actions: this.fetchUserActions(userWithGroups, [vocabularyList]),
+            actions,
         };
     }
 
@@ -58,21 +59,14 @@ export class VocabularyListQueryService {
         const entities = await this.repository.fetchMany();
 
         // TODO use SSOT utility function \ method for this
-        const availableEntities = entities.filter((entity) => {
-            if (entity.isPublished) return true;
+        // note we use `flatMap` for map + filter in a single iteration
+        const availableEntities = entities.flatMap((entity) => {
+            const forUser = entity.forUser(userWithGroups);
 
-            // the public can only access published resources
-            if (isNullOrUndefined(userWithGroups)) return false;
-
-            if (userWithGroups.isAdmin()) return true;
-
-            const acl = new AccessControlList(entity.accessControlList);
-
-            return (
-                acl.canUser(userWithGroups.id) ||
-                userWithGroups.groups.some(({ id: groupId }) => acl.canGroup(groupId))
-            );
+            return isNotFound(forUser) ? [] : forUser;
         });
+
+        const indexScopedActions = this.fetchUserActions(userWithGroups, [VocabularyList]);
 
         const result = {
             // TODO ensure actions show up on entities DO this now!
@@ -82,28 +76,14 @@ export class VocabularyListQueryService {
                         ? fetchActionsForUser(this.commandInfoService, userWithGroups, entity)
                         : [];
 
-                const entries = entity.entries.filter((entry) => {
-                    const acl = new AccessControlList(entry.term.accessControlList);
+                entity.actions = actions;
 
-                    if (!isNonEmptyObject(userWithGroups)) {
-                        return entry.term.isPublished;
-                    }
-
-                    return (
-                        entry.term.isPublished ||
-                        acl.canUser(userWithGroups.id) ||
-                        userWithGroups.groups.some(({ id: groupId }) => acl.canGroup(groupId))
-                    );
-                });
-
-                return {
-                    ...entity,
-                    entries,
-                    actions,
+                return entity as unknown as Omit<VocabularyListViewModel, 'actions'> & {
+                    actions: ICommandFormAndLabels[];
                 };
             }),
             // TODO Should we register index-scoped commands in the view layer instead?
-            indexScopedActions: this.fetchUserActions(userWithGroups, [VocabularyList]),
+            indexScopedActions,
         };
 
         return result;

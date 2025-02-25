@@ -1,0 +1,455 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`when querying for a vocabulary list: fetch many when the user is a COSCRAD admin when some terms are private and some are public should have access to all vocabulary lists and terms 1`] = `
+{
+  "entities": [
+    {
+      "actions": [
+        {
+          "description": "Translate the name of a vocabulary list to another language",
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
+                    "message": "Must be a valid \${propertyLabel}",
+                    "name": "IS_ENUM",
+                  },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the language in which you are naming the new vocabulary list name",
+                "label": "language code",
+                "name": "languageCode",
+                "options": [
+                  {
+                    "display": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "display": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "display": "English",
+                    "value": "en",
+                  },
+                  {
+                    "display": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "display": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "display": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "display": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+                "type": "STATIC_SELECT",
+              },
+              {
+                "constraints": [
+                  {
+                    "message": "must be a non-empty string",
+                    "name": "non-empty string",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "text for the translation of the name",
+                "label": "translation",
+                "name": "text",
+                "type": "TEXT_FIELD",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
+                "type": "vocabularyList",
+              },
+            },
+          },
+          "label": "Translate Vocabulary List Name",
+          "type": "TRANSLATE_VOCABULARY_LIST_NAME",
+        },
+      ],
+      "contributions": [
+        {
+          "fullName": "Test McContributor",
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100374",
+        },
+      ],
+      "entries": [
+        {
+          "term": {
+            "accessControlList": {
+              "allowedGroupIds": [],
+              "allowedUserIds": [],
+            },
+            "actions": [],
+            "contributions": [],
+            "id": "123",
+            "isPublished": false,
+            "mediaItemId": "555",
+            "name": {
+              "items": [
+                {
+                  "languageCode": "en",
+                  "role": "original",
+                  "text": "test term in vocabulary list",
+                },
+              ],
+            },
+          },
+          "variableValues": {},
+        },
+      ],
+      "form": {
+        "fields": [],
+      },
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
+      "isPublished": true,
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "to swim",
+          },
+          {
+            "languageCode": "clc",
+            "role": "free translation",
+            "text": "to swim (translation)",
+          },
+        ],
+      },
+    },
+    {
+      "actions": [
+        {
+          "description": "Translate the name of a vocabulary list to another language",
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
+                    "message": "Must be a valid \${propertyLabel}",
+                    "name": "IS_ENUM",
+                  },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the language in which you are naming the new vocabulary list name",
+                "label": "language code",
+                "name": "languageCode",
+                "options": [
+                  {
+                    "display": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "display": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "display": "English",
+                    "value": "en",
+                  },
+                  {
+                    "display": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "display": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "display": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "display": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+                "type": "STATIC_SELECT",
+              },
+              {
+                "constraints": [
+                  {
+                    "message": "must be a non-empty string",
+                    "name": "non-empty string",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "text for the translation of the name",
+                "label": "translation",
+                "name": "text",
+                "type": "TEXT_FIELD",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",
+                "type": "vocabularyList",
+              },
+            },
+          },
+          "label": "Translate Vocabulary List Name",
+          "type": "TRANSLATE_VOCABULARY_LIST_NAME",
+        },
+      ],
+      "contributions": [],
+      "entries": [
+        {
+          "term": {
+            "accessControlList": {
+              "allowedGroupIds": [],
+              "allowedUserIds": [
+                "system4d-3b7d-4bad-9bdd-2b0d70userid",
+              ],
+            },
+            "actions": [],
+            "contributions": [],
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
+            "isPublished": false,
+            "name": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "private term, but with ACL access for user",
+                },
+              ],
+            },
+          },
+          "variableValues": {},
+        },
+      ],
+      "form": {
+        "fields": [],
+      },
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",
+      "isPublished": false,
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "vocab list name (orig)",
+          },
+        ],
+      },
+    },
+    {
+      "actions": [
+        {
+          "description": "Translate the name of a vocabulary list to another language",
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
+                    "message": "Must be a valid \${propertyLabel}",
+                    "name": "IS_ENUM",
+                  },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the language in which you are naming the new vocabulary list name",
+                "label": "language code",
+                "name": "languageCode",
+                "options": [
+                  {
+                    "display": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "display": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "display": "English",
+                    "value": "en",
+                  },
+                  {
+                    "display": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "display": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "display": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "display": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+                "type": "STATIC_SELECT",
+              },
+              {
+                "constraints": [
+                  {
+                    "message": "must be a non-empty string",
+                    "name": "non-empty string",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "text for the translation of the name",
+                "label": "translation",
+                "name": "text",
+                "type": "TEXT_FIELD",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100002",
+                "type": "vocabularyList",
+              },
+            },
+          },
+          "label": "Translate Vocabulary List Name",
+          "type": "TRANSLATE_VOCABULARY_LIST_NAME",
+        },
+      ],
+      "contributions": [],
+      "entries": [
+        {
+          "term": {
+            "accessControlList": {
+              "allowedGroupIds": [],
+              "allowedUserIds": [],
+            },
+            "actions": [],
+            "contributions": [],
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+            "isPublished": false,
+            "name": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "private term",
+                },
+              ],
+            },
+          },
+          "variableValues": {},
+        },
+      ],
+      "form": {
+        "fields": [],
+      },
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100002",
+      "isPublished": false,
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "vocab list name (orig)",
+          },
+        ],
+      },
+    },
+  ],
+  "indexScopedActions": [
+    {
+      "description": "creates a new vocabulary list",
+      "form": {
+        "fields": [
+          {
+            "constraints": [
+              {
+                "message": "must be a non-empty string",
+                "name": "non-empty string",
+              },
+              {
+                "message": "must be a defined value",
+                "name": "defined value",
+              },
+            ],
+            "description": "name of the vocabulary list",
+            "label": "name",
+            "name": "name",
+            "type": "TEXT_FIELD",
+          },
+          {
+            "constraints": [
+              {
+                "message": "Must be a valid \${propertyLabel}",
+                "name": "IS_ENUM",
+              },
+              {
+                "message": "Required",
+                "name": "defined value",
+              },
+            ],
+            "description": "the language in which you are naming the vocabulary list",
+            "label": "language code",
+            "name": "languageCodeForName",
+            "options": [
+              {
+                "display": "Chilcotin",
+                "value": "clc",
+              },
+              {
+                "display": "Haida",
+                "value": "hai",
+              },
+              {
+                "display": "English",
+                "value": "en",
+              },
+              {
+                "display": "French",
+                "value": "fra",
+              },
+              {
+                "display": "Chinook",
+                "value": "chn",
+              },
+              {
+                "display": "Zapotec",
+                "value": "zap",
+              },
+              {
+                "display": "Spanish",
+                "value": "spa",
+              },
+            ],
+            "type": "STATIC_SELECT",
+          },
+        ],
+        "prepopulatedFields": {},
+      },
+      "label": "Create Vocabulary List",
+      "type": "CREATE_VOCABULARY_LIST",
+    },
+  ],
+}
+`;
