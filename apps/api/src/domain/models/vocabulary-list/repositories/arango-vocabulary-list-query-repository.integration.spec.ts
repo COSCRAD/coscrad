@@ -210,7 +210,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
         // clear existing contributors
         await databaseProvider.getDatabaseForCollection(ArangoCollectionId.contributors).clear();
 
-        await databaseProvider.getDatabaseForCollection('vocabularyList__VIEWS').clear();
+        await databaseProvider.clearViews();
     });
 
     describe(`fetchById`, () => {
@@ -518,7 +518,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
 
             await contributorRepository.createMany(testContributors);
 
-            await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
+            await databaseProvider.clearViews();
 
             await termQueryRepository.create(existingTerm);
         });
@@ -598,7 +598,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
 
                 await contributorRepository.createMany(testContributors);
 
-                await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
+                await databaseProvider.clearViews();
 
                 await termQueryRepository.create(existingTerm);
             });
@@ -679,7 +679,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
 
                 await contributorRepository.createMany(testContributors);
 
-                await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
+                await databaseProvider.clearViews();
 
                 await termQueryRepository.create(existingTerm);
             });

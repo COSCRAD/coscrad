@@ -176,7 +176,7 @@ describe(`EntriesImportedToVocabularyListEventHandler`, () => {
     });
 
     beforeEach(async () => {
-        databaseProvider.getDatabaseForCollection('vocabularyList__VIEWS').clear();
+        databaseProvider.clearViews();
 
         /**
          * We attempted to use "handle" on a creation event for the test
@@ -186,7 +186,7 @@ describe(`EntriesImportedToVocabularyListEventHandler`, () => {
          */
         await testQueryRepository.create(existingView);
 
-        await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
+        await databaseProvider.clearViews();
 
         await termQueryRepository.create(existingTermView);
     });

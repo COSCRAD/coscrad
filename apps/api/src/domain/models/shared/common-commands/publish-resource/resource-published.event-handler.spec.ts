@@ -1,10 +1,4 @@
-import {
-    AggregateType,
-    IDetailQueryResult,
-    ITermViewModel,
-    LanguageCode,
-    ResourceType,
-} from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode, ResourceType } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -15,7 +9,6 @@ import { ConsoleCoscradCliLogger } from '../../../../../coscrad-cli/logging';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { NotFound } from '../../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
-import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -61,10 +54,6 @@ describe(`ResourcePublished.eventHandler`, () => {
 
     let databaseProvider: ArangoDatabaseProvider;
 
-    let arangoDatabaseForCollection: ArangoDatabaseForCollection<
-        IDetailQueryResult<ITermViewModel>
-    >;
-
     let app: INestApplication;
 
     let resourcePublishedEventHandler: ResourcePublishedEventHandler;
@@ -92,8 +81,6 @@ describe(`ResourcePublished.eventHandler`, () => {
 
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
 
-        arangoDatabaseForCollection = databaseProvider.getDatabaseForCollection('term__VIEWS');
-
         testQueryRepository = new ArangoTermQueryRepository(
             connectionProvider,
             new ArangoAudioItemQueryRepository(connectionProvider),
@@ -118,7 +105,7 @@ describe(`ResourcePublished.eventHandler`, () => {
     });
 
     beforeEach(async () => {
-        arangoDatabaseForCollection.clear();
+        databaseProvider.clearViews();
 
         const existingView = TermViewModel.fromTermCreated(creationEvent as TermCreated);
 

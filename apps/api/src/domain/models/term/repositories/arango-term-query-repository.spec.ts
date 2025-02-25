@@ -1,10 +1,4 @@
-import {
-    AggregateType,
-    IDetailQueryResult,
-    ITermViewModel,
-    LanguageCode,
-    MultilingualTextItemRole,
-} from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -15,7 +9,6 @@ import { ConsoleCoscradCliLogger } from '../../../../coscrad-cli/logging';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
-import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
 import { ArangoCollectionId } from '../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
@@ -49,10 +42,6 @@ describe(`ArangoTermQueryRepository`, () => {
 
     let databaseProvider: ArangoDatabaseProvider;
 
-    let arangoDatabaseForCollection: ArangoDatabaseForCollection<
-        IDetailQueryResult<ITermViewModel>
-    >;
-
     let contributorRepository: IRepositoryForAggregate<CoscradContributor>;
 
     let app: INestApplication;
@@ -79,8 +68,6 @@ describe(`ArangoTermQueryRepository`, () => {
         const connectionProvider = app.get(ArangoConnectionProvider);
 
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
-
-        arangoDatabaseForCollection = databaseProvider.getDatabaseForCollection('term__VIEWS');
 
         // TODO Use the DI system so this is more extensible to keep test maintenance lower
         audioItemQueryRepository = new ArangoAudioItemQueryRepository(connectionProvider);
@@ -172,7 +159,7 @@ describe(`ArangoTermQueryRepository`, () => {
         const targetTermId = termIds[0];
 
         beforeEach(async () => {
-            await arangoDatabaseForCollection.clear();
+            await databaseProvider.clearViews();
 
             await testQueryRepository.create(termViews[0]);
         });
@@ -204,7 +191,7 @@ describe(`ArangoTermQueryRepository`, () => {
 
     describe(`fetchMany`, () => {
         beforeEach(async () => {
-            await arangoDatabaseForCollection.clear();
+            await databaseProvider.clearViews();
 
             for (const term of termViews) {
                 await testQueryRepository.create(term);
@@ -221,7 +208,7 @@ describe(`ArangoTermQueryRepository`, () => {
     describe(`count`, () => {
         describe(`when there are term views in the database`, () => {
             beforeEach(async () => {
-                await arangoDatabaseForCollection.clear();
+                await databaseProvider.clearViews();
 
                 for (const term of termViews) {
                     await testQueryRepository.create(term);
@@ -237,7 +224,7 @@ describe(`ArangoTermQueryRepository`, () => {
 
         describe(`when the database collection is empty`, () => {
             beforeEach(async () => {
-                await arangoDatabaseForCollection.clear();
+                await databaseProvider.clearViews();
 
                 // no terms are added here
             });
@@ -254,7 +241,7 @@ describe(`ArangoTermQueryRepository`, () => {
         const targetTerm = termViews[0];
 
         beforeEach(async () => {
-            await arangoDatabaseForCollection.clear();
+            await databaseProvider.clearViews();
 
             await testQueryRepository.create(targetTerm);
         });
@@ -302,7 +289,7 @@ describe(`ArangoTermQueryRepository`, () => {
         const targetTerm = promptTermView;
 
         beforeEach(async () => {
-            await arangoDatabaseForCollection.clear();
+            await databaseProvider.clearViews();
 
             await testQueryRepository.create(targetTerm);
         });
@@ -367,10 +354,10 @@ describe(`ArangoTermQueryRepository`, () => {
 
         beforeEach(async () => {
             // clear existing term views
-            await arangoDatabaseForCollection.clear();
+            await databaseProvider.clearViews();
 
             // clear existing audio item views
-            databaseProvider.getDatabaseForCollection('audioItem__VIEWS').clear();
+            databaseProvider.clearViews();
 
             await testQueryRepository.create(targetTerm);
 
@@ -396,7 +383,7 @@ describe(`ArangoTermQueryRepository`, () => {
 
         beforeEach(async () => {
             // clear existing term views
-            await arangoDatabaseForCollection.clear();
+            await databaseProvider.clearViews();
 
             // clear existing audio item views
 
@@ -422,7 +409,7 @@ describe(`ArangoTermQueryRepository`, () => {
 
     describe(`delete`, () => {
         beforeEach(async () => {
-            await arangoDatabaseForCollection.clear();
+            await databaseProvider.clearViews();
 
             await testQueryRepository.createMany(termViews);
         });
@@ -442,7 +429,7 @@ describe(`ArangoTermQueryRepository`, () => {
 
     describe(`count`, () => {
         beforeEach(async () => {
-            await arangoDatabaseForCollection.clear();
+            await databaseProvider.clearViews();
 
             await testQueryRepository.createMany(termViews);
         });
@@ -456,7 +443,7 @@ describe(`ArangoTermQueryRepository`, () => {
 
     describe(`create`, () => {
         beforeEach(async () => {
-            await arangoDatabaseForCollection.clear();
+            await databaseProvider.clearViews();
         });
 
         it(`should create the correct term view`, async () => {
@@ -479,7 +466,7 @@ describe(`ArangoTermQueryRepository`, () => {
 
     describe(`createMany`, () => {
         beforeEach(async () => {
-            await arangoDatabaseForCollection.clear();
+            await databaseProvider.clearViews();
         });
 
         it(`should create the expected term views`, async () => {
@@ -496,7 +483,7 @@ describe(`ArangoTermQueryRepository`, () => {
         const targetTerm = termViews[0];
 
         beforeEach(async () => {
-            await arangoDatabaseForCollection.clear();
+            await databaseProvider.clearViews();
 
             await testQueryRepository.create(targetTerm);
         });
@@ -521,7 +508,7 @@ describe(`ArangoTermQueryRepository`, () => {
         const targetTerm = termViews[0];
 
         beforeEach(async () => {
-            await arangoDatabaseForCollection.clear();
+            await databaseProvider.clearViews();
 
             await databaseProvider.getDatabaseForCollection('contributors').clear();
 

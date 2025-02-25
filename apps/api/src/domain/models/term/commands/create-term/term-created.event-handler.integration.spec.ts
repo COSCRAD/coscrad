@@ -1,9 +1,4 @@
-import {
-    AggregateType,
-    IDetailQueryResult,
-    ITermViewModel,
-    LanguageCode,
-} from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { CommandModule } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -18,7 +13,6 @@ import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/ut
 import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
 import { NotFound } from '../../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
-import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -60,10 +54,6 @@ describe(`TermCreatedEventHandler`, () => {
 
     let databaseProvider: ArangoDatabaseProvider;
 
-    let arangoDatabaseForCollection: ArangoDatabaseForCollection<
-        IDetailQueryResult<ITermViewModel>
-    >;
-
     let app: INestApplication;
 
     beforeAll(async () => {
@@ -92,8 +82,6 @@ describe(`TermCreatedEventHandler`, () => {
 
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
 
-        arangoDatabaseForCollection = databaseProvider.getDatabaseForCollection('term__VIEWS');
-
         testQueryRepository = new ArangoTermQueryRepository(
             connectionProvider,
             new ArangoAudioItemQueryRepository(connectionProvider),
@@ -107,7 +95,7 @@ describe(`TermCreatedEventHandler`, () => {
 
     describe(`when handling a term created event`, () => {
         beforeEach(async () => {
-            await arangoDatabaseForCollection.clear();
+            await databaseProvider.clearViews();
         });
 
         it(`should create the expected view in the database`, async () => {

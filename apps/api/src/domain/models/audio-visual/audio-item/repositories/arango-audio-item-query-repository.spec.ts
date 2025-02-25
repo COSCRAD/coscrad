@@ -17,7 +17,6 @@ import {
 } from '../../../../../domain/common/entities/multilingual-text';
 import { NotFound } from '../../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
-import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -39,10 +38,6 @@ describe(`ArangoAudioItemQueryRepository`, () => {
     let testQueryRepository: IAudioItemQueryRepository;
 
     let databaseProvider: ArangoDatabaseProvider;
-
-    let arangoDatabaseForCollection: ArangoDatabaseForCollection<
-        IDetailQueryResult<IAudioItemViewModel>
-    >;
 
     let app: INestApplication;
 
@@ -69,13 +64,12 @@ describe(`ArangoAudioItemQueryRepository`, () => {
 
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
 
-        arangoDatabaseForCollection = databaseProvider.getDatabaseForCollection('audioItem__VIEWS');
-
         testQueryRepository = new ArangoAudioItemQueryRepository(connectionProvider);
     });
 
     beforeEach(async () => {
-        await arangoDatabaseForCollection.clear();
+        // is this preferred to `databaseProvider.clearViews()` ?
+        await databaseProvider.getDatabaseForCollection('audioItem__VIEWS').clear();
     });
 
     afterAll(async () => {

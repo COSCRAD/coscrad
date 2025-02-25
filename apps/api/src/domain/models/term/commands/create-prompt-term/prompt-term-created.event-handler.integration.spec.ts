@@ -1,10 +1,4 @@
-import {
-    AggregateType,
-    IDetailQueryResult,
-    ITermViewModel,
-    LanguageCode,
-    MultilingualTextItemRole,
-} from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -18,7 +12,6 @@ import { IRepositoryProvider } from '../../../../../domain/repositories/interfac
 import { NotFound } from '../../../../../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
-import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
 import { ArangoCollectionId } from '../../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
@@ -53,10 +46,6 @@ describe(`PromptTermCreatedEventHandler.handle`, () => {
 
     let databaseProvider: ArangoDatabaseProvider;
 
-    let arangoDatabaseForCollection: ArangoDatabaseForCollection<
-        IDetailQueryResult<ITermViewModel>
-    >;
-
     let app: INestApplication;
 
     beforeAll(async () => {
@@ -82,8 +71,6 @@ describe(`PromptTermCreatedEventHandler.handle`, () => {
 
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
 
-        arangoDatabaseForCollection = databaseProvider.getDatabaseForCollection('term__VIEWS');
-
         testQueryRepository = new ArangoTermQueryRepository(
             connectionProvider,
             app.get(AUDIO_QUERY_REPOSITORY_TOKEN),
@@ -92,7 +79,7 @@ describe(`PromptTermCreatedEventHandler.handle`, () => {
     });
 
     beforeEach(async () => {
-        await arangoDatabaseForCollection.clear();
+        await databaseProvider.clearViews();
 
         await databaseProvider.getDatabaseForCollection(ArangoCollectionId.contributors).clear();
 
