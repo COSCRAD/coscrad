@@ -3,7 +3,7 @@ import {
     IIndexQueryResult,
     IVocabularyListViewModel,
 } from '@coscrad/api-interfaces';
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { isNonEmptyObject, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import {
@@ -11,7 +11,6 @@ import {
     CommandInfoService,
 } from '../../../app/controllers/command/services/command-info-service';
 import { isNotFound, NotFound } from '../../../lib/types/not-found';
-import { VocabularyListViewModel } from '../../../queries/buildViewModelForResource/viewModels';
 import { AccessControlList } from '../../models/shared/access-control/access-control-list.entity';
 import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';
 import { VocabularyList } from '../../models/vocabulary-list/entities/vocabulary-list.entity';
@@ -35,31 +34,21 @@ export class VocabularyListQueryService {
 
     // todo add explicit return type
     async fetchById(id: AggregateId, userWithGroups?: CoscradUserWithGroups) {
+        // TODO Consider passing the user here
         const result = await this.repository.fetchById(id);
 
         if (isNotFound(result)) return result;
 
-        const acl = new AccessControlList(result.accessControlList);
+        const vocabularyList = result.forUser(userWithGroups);
 
-        if (isNullOrUndefined(userWithGroups) && !result.isPublished) {
+        if (isNotFound(vocabularyList)) {
             return NotFound;
         }
 
-        if (
-            result.isPublished ||
-            userWithGroups?.isAdmin() ||
-            acl.canUser(userWithGroups.id) ||
-            userWithGroups.groups.some(({ id: groupId }) => acl.canGroup(groupId))
-        ) {
-            const viewWithoutActions = VocabularyListViewModel.fromDto(result);
-
-            return {
-                ...viewWithoutActions,
-                actions: this.fetchUserActions(userWithGroups, [viewWithoutActions]),
-            };
-        }
-
-        return NotFound;
+        return {
+            ...vocabularyList,
+            actions: this.fetchUserActions(userWithGroups, [vocabularyList]),
+        };
     }
 
     async fetchMany(
@@ -93,8 +82,23 @@ export class VocabularyListQueryService {
                         ? fetchActionsForUser(this.commandInfoService, userWithGroups, entity)
                         : [];
 
+                const entries = entity.entries.filter((entry) => {
+                    const acl = new AccessControlList(entry.term.accessControlList);
+
+                    if (!isNonEmptyObject(userWithGroups)) {
+                        return entry.term.isPublished;
+                    }
+
+                    return (
+                        entry.term.isPublished ||
+                        acl.canUser(userWithGroups.id) ||
+                        userWithGroups.groups.some(({ id: groupId }) => acl.canGroup(groupId))
+                    );
+                });
+
                 return {
                     ...entity,
+                    entries,
                     actions,
                 };
             }),

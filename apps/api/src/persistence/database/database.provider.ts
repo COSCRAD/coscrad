@@ -33,6 +33,22 @@ export class ArangoDatabaseProvider {
         return new ArangoDatabaseForCollection<TEntity>(this.arangoInstance, collectionName);
     };
 
+    /**
+     * This is a test helper. It will throw if you attempt to call it outside
+     * of a testing environment.
+     */
+    clearViews = async (): Promise<void> => {
+        const viewCollections = (await this.databaseConnection.collections(true)).flatMap(
+            (collection) => (collection.name.includes('__VIEWS') ? [collection.name] : [])
+        );
+
+        await Promise.all(
+            viewCollections.map((collectionName) =>
+                this.getDatabaseForCollection(collectionName).clear()
+            )
+        );
+    };
+
     close() {
         this.databaseConnection.close();
     }

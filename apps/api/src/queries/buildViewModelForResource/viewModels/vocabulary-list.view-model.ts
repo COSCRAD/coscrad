@@ -14,6 +14,7 @@ import { buildMultilingualTextWithSingleItem } from '../../../domain/common/buil
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
 import BaseDomainModel from '../../../domain/models/base-domain-model.entity';
 import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
+import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import {
     FilterPropertyType,
     VocabularyListCreated,
@@ -21,6 +22,12 @@ import {
 } from '../../../domain/models/vocabulary-list/commands';
 import { AggregateId } from '../../../domain/types/AggregateId';
 import { HasAggregateId } from '../../../domain/types/HasAggregateId';
+import { Maybe } from '../../../lib/types/maybe';
+import { NotFound } from '../../../lib/types/not-found';
+import { clonePlainObjectWithOverrides } from '../../../lib/utilities/clonePlainObjectWithOverrides';
+import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
+import { CoscradDataExample } from '../../../test-data/utilities';
+import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
 import { TermViewModel } from './term.view-model';
 
@@ -49,8 +56,43 @@ export class VocabularyListEntryViewModel extends BaseDomainModel {
 
         this.variableValues = { ...variableValues };
     }
+
+    public canUserWithGroups(userWithGroups: CoscradUserWithGroups) {
+        return (
+            this.term.isPublished || this.term.accessControlList.canUserWithGroups(userWithGroups)
+        );
+    }
 }
 
+const sample: DTO<VocabularyListViewModel> = {
+    entries: [
+        {
+            term: {
+                id: '123',
+                name: buildMultilingualTextWithSingleItem('test term in vocabulary list'),
+                contributions: [],
+                isPublished: false,
+                actions: [],
+                mediaItemId: '555',
+                accessControlList: new AccessControlList().toDTO(),
+            },
+            variableValues: {},
+        },
+    ],
+    form: {
+        fields: [],
+    },
+    name: buildMultilingualTextWithSingleItem('vocab list name (orig)'),
+    id: '123',
+    actions: [],
+    isPublished: false,
+    contributions: [],
+    accessControlList: new AccessControlList().toDTO(),
+};
+
+@CoscradDataExample({
+    example: sample,
+})
 export class VocabularyListViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
     @ApiProperty({
         type: VocabularyListEntryViewModel,
@@ -78,8 +120,13 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
     @ApiProperty()
     public isPublished: boolean;
 
-    // this should be removed in query responses
-    public accessControlList: { allowedUserIds: string[]; allowedGroupIds: string[] };
+    /**
+     * This should be removed in query responses.
+     *
+     * Note that if we leverage `forUser`, we should be able to make this
+     * private.
+     * */
+    public accessControlList: AccessControlList;
 
     getAvailableCommands(): string[] {
         /**
@@ -209,5 +256,68 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
         const vl = new VocabularyListViewModel(dto);
 
         return vl;
+    }
+
+    // TODO move this to base model
+    public toDto(): DTO<VocabularyListViewModel> {
+        return cloneToPlainObject(this);
+    }
+
+    // TODO move this to base model
+    public clone(overrides: DeepPartial<DTO<VocabularyListViewModel>>) {
+        const dtoWithOverridesApplied = clonePlainObjectWithOverrides(this.toDto(), overrides);
+
+        return VocabularyListViewModel.fromDto(dtoWithOverridesApplied);
+    }
+
+    /**
+     * Note that this pattern requires us to hydrate the view model after fetching
+     * a corresponding document from the database, even in the event that the user
+     * does not have permission to access this. It would be ideal to check this
+     * directly in the database.
+     *
+     * TODO Breakout functional helper and bind it to this here so we can have
+     * a single-source of truth for this logic across resource types.
+     */
+    public forUser(
+        userWithGroups?: CoscradUserWithGroups
+    ): Maybe<Omit<VocabularyListViewModel, 'accessControlList'>> {
+        /**
+         * There are 2 branches in the conditional logic where we need to
+         * do this, so I created a little helper here so we can do this lazily
+         * without repetition.
+         */
+        const buildResult = () => {
+            const availableEntries = this.entries.filter((entry) =>
+                entry.canUserWithGroups(userWithGroups)
+            );
+
+            const withAvailableEntries = this.clone({
+                entries: availableEntries,
+            });
+
+            delete withAvailableEntries.accessControlList;
+
+            return withAvailableEntries;
+        };
+
+        /**
+         * In this case, no user was provided.
+         */
+        if (!isNonEmptyObject(userWithGroups)) {
+            return this.isPublished ? buildResult() : NotFound;
+        }
+
+        // Now we know we have a non-null `userWithGroups`
+
+        if (this.isPublished || this.accessControlList.canUserWithGroups(userWithGroups)) {
+            /**
+             * TODO Consider adding a method for mapping this to a client query
+             * response DTO (removing hidden or irrelevant attributes, for example).
+             */
+            return buildResult();
+        }
+
+        return NotFound;
     }
 }
