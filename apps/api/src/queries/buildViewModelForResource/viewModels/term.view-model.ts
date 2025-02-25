@@ -7,7 +7,9 @@ import {
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { DetailScopedCommandWriteContext } from '../../../app/controllers/command/services/command-info-service';
 import { ICoscradEvent } from '../../../domain/common';
+import { buildMultilingualTextFromBilingualText } from '../../../domain/common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
+import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
 import {
     PromptTermCreated,
@@ -21,6 +23,7 @@ import { Maybe } from '../../../lib/types/maybe';
 import { NotFound } from '../../../lib/types/not-found';
 import { clonePlainObjectWithOverrides } from '../../../lib/utilities/clonePlainObjectWithOverrides';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
+import { CoscradDataExample } from '../../../test-data/utilities';
 import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
 
@@ -28,6 +31,25 @@ import { DTO } from '../../../types/DTO';
  * This is the first view model leveraging a new approach that involves denormalized,
  * event-sourced, materialized views.
  */
+@CoscradDataExample<TermViewModel>({
+    example: {
+        id: buildDummyUuid(1),
+        isPublished: true,
+        accessControlList: new AccessControlList().toDTO(),
+        actions: [],
+        name: buildMultilingualTextFromBilingualText(
+            {
+                text: 'term (in the language)',
+                languageCode: LanguageCode.Chilcotin,
+            },
+            {
+                text: 'term (in English)',
+                languageCode: LanguageCode.English,
+            }
+        ),
+        contributions: [],
+    },
+})
 export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
     contributions: { id: string; fullName: string }[];
 
