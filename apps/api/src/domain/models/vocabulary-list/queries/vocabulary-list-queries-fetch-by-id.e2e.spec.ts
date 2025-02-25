@@ -21,6 +21,7 @@ import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getVa
 import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { AggregateId } from '../../../types/AggregateId';
+import { assertQueryResult } from '../../__tests__';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
@@ -120,32 +121,6 @@ const _privateVocabularyListWithUserPermissions = publishedVocabularyList.clone(
         allowedGroupIds: [nonAdminUserWithGroups.groups[0].id, buildDummyUuid(909)],
     }),
 });
-
-interface AssertQueryResultParams<TResponseBody = unknown> {
-    app: INestApplication;
-    seedInitialState: () => Promise<void>;
-    endpoint: string;
-    expectedStatus: HttpStatusCode;
-    checkResponseBody?: (body: TResponseBody) => Promise<void>;
-}
-
-const assertQueryResult = async ({
-    app,
-    seedInitialState,
-    endpoint,
-    expectedStatus,
-    checkResponseBody,
-}: AssertQueryResultParams) => {
-    await seedInitialState();
-
-    const res = await request(app.getHttpServer()).get(endpoint);
-
-    expect(res.status).toBe(expectedStatus);
-
-    if (typeof checkResponseBody === 'function') {
-        await checkResponseBody(res.body);
-    }
-};
 
 describe(`when querying for a vocabulary list: fetch by ID`, () => {
     const testDatabaseName = generateDatabaseNameForTestSuite();

@@ -4,10 +4,6 @@ exports[`when querying for a vocabulary list: fetch many when the user is unauth
 {
   "entities": [
     {
-      "accessControlList": {
-        "allowedGroupIds": [],
-        "allowedUserIds": [],
-      },
       "actions": [],
       "contributions": [
         {

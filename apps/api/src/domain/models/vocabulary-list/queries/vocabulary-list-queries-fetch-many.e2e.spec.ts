@@ -1,5 +1,6 @@
 import {
     AggregateType,
+    CoscradUserRole,
     IIndexQueryResult,
     IMultilingualTextItem,
     IVocabularyListViewModel,
@@ -21,9 +22,11 @@ import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getVa
 import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
+import { assertQueryResult } from '../../__tests__';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../__tests__/utilities/dummySystemUserId';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
+import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import { ArangoVocabularyListQueryRepository } from '../repositories';
 import { IVocabularyListQueryRepository } from './vocabulary-list-query-repository.interface';
 
@@ -48,6 +51,7 @@ const indexEndpoint = `/resources/vocabularyLists`;
  */
 const ordinaryUser = getValidAggregateInstanceForTest(AggregateType.user).clone({
     id: dummySystemUserId,
+    roles: [CoscradUserRole.viewer],
 });
 
 const publishedTerm: TermViewModel = buildTestInstance(TermViewModel, {
@@ -143,6 +147,43 @@ describe(`when querying for a vocabulary list: fetch many`, () => {
 
     let vocabularyListQueryRepository: IVocabularyListQueryRepository;
 
+    const setItUp = async (testUserWithGroups?: CoscradUserWithGroups) => {
+        // TODO avoid using `setUpIntegrationTest` here
+        ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
+            {
+                ARANGO_DB_NAME: testDatabaseName,
+            },
+            {
+                testUserWithGroups,
+            }
+            // no authenticated user
+        ));
+
+        connectionProvider = app.get(ArangoConnectionProvider);
+
+        vocabularyListQueryRepository = new ArangoVocabularyListQueryRepository(
+            connectionProvider,
+            new ConsoleCoscradCliLogger()
+        );
+    };
+
+    const seedInitialState = async () => {
+        await vocabularyListQueryRepository.createMany([
+            // available to public user
+            publishedVocabularyList.clone({
+                entries: [buildEntryForTerm(publishedTerm)],
+            }),
+            // not available
+            privateVocabularyList.clone({
+                entries: [buildEntryForTerm(publishedTerm)],
+            }),
+            // not available
+            unpublishedVocabularyListOrdinaryUserCanAccess.clone({
+                entries: [buildEntryForTerm(publishedTerm)],
+            }),
+        ]);
+    };
+
     beforeEach(async () => {
         await testRepositoryProvider.testSetup();
 
@@ -160,42 +201,15 @@ describe(`when querying for a vocabulary list: fetch many`, () => {
 
     describe(`when the user is unauthenticated`, () => {
         beforeAll(async () => {
-            // TODO avoid using `setUpIntegrationTest` here
-            ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
-                {
-                    ARANGO_DB_NAME: testDatabaseName,
-                }
-                // no authenticated user
-            ));
-
-            connectionProvider = app.get(ArangoConnectionProvider);
-
-            vocabularyListQueryRepository = new ArangoVocabularyListQueryRepository(
-                connectionProvider,
-                new ConsoleCoscradCliLogger()
-            );
-
-            connectionProvider = app.get(ArangoConnectionProvider);
+            // no `testUserWithGroups`, i.e., simulate a public request
+            await setItUp();
         });
 
         describe(`when there is a vocabulary list with the given ID`, () => {
             describe(`when the vocabulary list is published`, () => {
                 describe(`when each vocabulary list has one entry for a published term`, () => {
                     beforeEach(async () => {
-                        await vocabularyListQueryRepository.createMany([
-                            // available to public user
-                            publishedVocabularyList.clone({
-                                entries: [buildEntryForTerm(publishedTerm)],
-                            }),
-                            // not available
-                            privateVocabularyList.clone({
-                                entries: [buildEntryForTerm(publishedTerm)],
-                            }),
-                            // not available
-                            unpublishedVocabularyListOrdinaryUserCanAccess.clone({
-                                entries: [buildEntryForTerm(publishedTerm)],
-                            }),
-                        ]);
+                        await seedInitialState();
                     });
 
                     it(`should return the correct vocabulary list view`, async () => {
@@ -279,14 +293,173 @@ describe(`when querying for a vocabulary list: fetch many`, () => {
      * test coverage.
      */
     describe(`when the user is a COSCRAD admin`, () => {
-        it.todo(`should have a test`);
+        beforeAll(async () => {
+            await setItUp(
+                new CoscradUserWithGroups(
+                    getValidAggregateInstanceForTest(AggregateType.user).clone({
+                        id: dummySystemUserId,
+                        roles: [CoscradUserRole.superAdmin],
+                    }),
+                    []
+                )
+            );
+        });
+
+        describe(`when some terms are private and some are public`, () => {
+            it(`should have access to all vocabulary lists and terms`, async () => {
+                await assertQueryResult({
+                    app,
+                    endpoint: indexEndpoint,
+                    expectedStatus: HttpStatusCode.ok,
+                    seedInitialState: async () => {
+                        // Here we use a combination of public and private terms as entries
+                        await vocabularyListQueryRepository.createMany([
+                            publishedVocabularyList,
+                            unpublishedVocabularyListOrdinaryUserCanAccess.clone({
+                                entries: [buildEntryForTerm(unpublishedTermOrdinaryUserCanAccess)],
+                            }),
+                            privateVocabularyList.clone({
+                                entries: [buildEntryForTerm(privateTerm)],
+                            }),
+                        ]);
+                    },
+                    checkResponseBody: async ({
+                        entities,
+                    }: IIndexQueryResult<IVocabularyListViewModel>) => {
+                        expect(entities).toHaveLength(3);
+
+                        const allTerms = entities.flatMap(({ entries }) =>
+                            entries.map(({ term }) => term)
+                        );
+
+                        expect(allTerms).toHaveLength(3);
+                    },
+                });
+            });
+        });
     });
 
     describe(`when the user is a project admin`, () => {
-        it.todo(`should have a test`);
+        beforeAll(async () => {
+            await setItUp(
+                new CoscradUserWithGroups(
+                    getValidAggregateInstanceForTest(AggregateType.user).clone({
+                        id: dummySystemUserId,
+                        roles: [CoscradUserRole.projectAdmin],
+                    }),
+                    []
+                )
+            );
+        });
+
+        describe(`when some terms are private and some are public`, () => {
+            it(`should have access to all vocabulary lists and terms`, async () => {
+                await assertQueryResult({
+                    app,
+                    endpoint: indexEndpoint,
+                    expectedStatus: HttpStatusCode.ok,
+                    seedInitialState: async () => {
+                        // Here we use a combination of public and private terms as entries
+                        await vocabularyListQueryRepository.createMany([
+                            publishedVocabularyList,
+                            unpublishedVocabularyListOrdinaryUserCanAccess.clone({
+                                entries: [buildEntryForTerm(unpublishedTermOrdinaryUserCanAccess)],
+                            }),
+                            privateVocabularyList.clone({
+                                entries: [buildEntryForTerm(privateTerm)],
+                            }),
+                        ]);
+                    },
+                    checkResponseBody: async ({
+                        entities,
+                    }: IIndexQueryResult<IVocabularyListViewModel>) => {
+                        expect(entities).toHaveLength(3);
+
+                        const allTerms = entities.flatMap(({ entries }) =>
+                            entries.map(({ term }) => term)
+                        );
+
+                        expect(allTerms).toHaveLength(3);
+                    },
+                });
+            });
+        });
     });
 
     describe(`when the user is authenticated as an ordinary user`, () => {
-        it.todo(`should have a test`);
+        beforeAll(async () => {
+            /**
+             * TODO Add group-based ACL test cases
+             */
+            await setItUp(new CoscradUserWithGroups(ordinaryUser, []));
+        });
+
+        describe(`when some terms are available to the user`, () => {
+            it(`should bring back only the vocabulary lists available to the user, with the available terms`, async () => {
+                await assertQueryResult({
+                    app,
+                    endpoint: indexEndpoint,
+                    expectedStatus: HttpStatusCode.ok,
+                    seedInitialState: async () => {
+                        await vocabularyListQueryRepository.createMany([
+                            publishedVocabularyList.clone({
+                                entries: [buildEntryForTerm(publishedTerm)],
+                            }),
+                            privateVocabularyList.clone({
+                                entries: [buildEntryForTerm(privateTerm)],
+                            }),
+                            unpublishedVocabularyListOrdinaryUserCanAccess.clone({
+                                entries: [buildEntryForTerm(unpublishedTermOrdinaryUserCanAccess)],
+                            }),
+                        ]);
+                    },
+                    checkResponseBody: async ({
+                        entities,
+                    }: IIndexQueryResult<IVocabularyListViewModel>) => {
+                        expect(entities).toHaveLength(2);
+
+                        const availableTerms = entities.flatMap(({ entries }) =>
+                            entries.map((term) => term)
+                        );
+
+                        expect(availableTerms).toHaveLength(2);
+                    },
+                });
+            });
+        });
+
+        describe(`when all terms are private`, () => {
+            it(`should bring back only the vocabulary lists available to the user, with no terms`, async () => {
+                await assertQueryResult({
+                    app,
+                    endpoint: indexEndpoint,
+                    expectedStatus: HttpStatusCode.ok,
+                    seedInitialState: async () => {
+                        await vocabularyListQueryRepository.createMany([
+                            publishedVocabularyList.clone({
+                                entries: [buildEntryForTerm(privateTerm)],
+                            }),
+                            privateVocabularyList.clone({
+                                entries: [buildEntryForTerm(privateTerm)],
+                            }),
+                            unpublishedVocabularyListOrdinaryUserCanAccess.clone({
+                                entries: [buildEntryForTerm(privateTerm)],
+                            }),
+                        ]);
+                    },
+                    checkResponseBody: async ({
+                        entities,
+                    }: IIndexQueryResult<IVocabularyListViewModel>) => {
+                        expect(entities).toHaveLength(2);
+
+                        const availableTerms = entities.flatMap(({ entries }) =>
+                            entries.map((term) => term)
+                        );
+
+                        expect(availableTerms).toHaveLength(0);
+                    },
+                });
+            });
+        });
     });
 });
