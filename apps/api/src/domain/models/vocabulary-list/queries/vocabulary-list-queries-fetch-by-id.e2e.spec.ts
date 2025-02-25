@@ -46,6 +46,11 @@ const indexEndpoint = `/resources/vocabularyLists`;
 
 const buildDetailEndpoint = (id: AggregateId) => `${indexEndpoint}/${id}`;
 
+const dummyContribution = {
+    id: buildDummyUuid(70),
+    fullName: 'Erin Truck',
+};
+
 /**
  * TODO We may want to event source our test setup to give us a very high
  * level of confidence that our back-end is working from event handler
@@ -67,11 +72,8 @@ const publishedTerm: TermViewModel = TermViewModel.fromDto({
             languageCode: termTranslationLanguageCode,
         }
     ),
-    contributions: [],
+    contributions: [dummyContribution],
 });
-
-// TODO check that contributors are joined in- let's do this now
-// const existingContributor = getValidAggregateInstanceForTest(AggregateType.contributor)
 
 const publishedVocabularyList = buildTestInstance(VocabularyListViewModel, {
     id: vocabularyListId,
@@ -95,12 +97,6 @@ const publishedVocabularyListWithUnpublishedTerm = publishedVocabularyList.clone
         },
     ],
 });
-
-/**
- * TODO[test-coverage]: include test case with import history
- *
- * This test is being reworked on a separate branch. Opt back in when rebasing.
- */
 
 const testUserId = buildDummyUuid(55);
 

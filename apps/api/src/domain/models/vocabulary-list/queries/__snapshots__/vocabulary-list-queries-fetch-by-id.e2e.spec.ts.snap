@@ -2,10 +2,6 @@
 
 exports[`when querying for a vocabulary list: fetch by ID when the user is unauthenticated when there is a vocabulary list with the given ID when the vocabulary list is published when the term which appears as an entry is published should return the correct vocabulary list view 1`] = `
 {
-  "accessControlList": {
-    "allowedGroupIds": [],
-    "allowedUserIds": [],
-  },
   "actions": [],
   "contributions": [],
   "entries": [
@@ -16,7 +12,12 @@ exports[`when querying for a vocabulary list: fetch by ID when the user is unaut
           "allowedUserIds": [],
         },
         "actions": [],
-        "contributions": [],
+        "contributions": [
+          {
+            "fullName": "Erin Truck",
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100070",
+          },
+        ],
         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100005",
         "isPublished": true,
         "name": {
