@@ -356,9 +356,6 @@ describe(`ArangoTermQueryRepository`, () => {
             // clear existing term views
             await databaseProvider.clearViews();
 
-            // clear existing audio item views
-            databaseProvider.clearViews();
-
             await testQueryRepository.create(targetTerm);
 
             await audioItemQueryRepository.create(targetAudioItemView);

@@ -514,11 +514,11 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
         const targetView = vocabularyListViews[0];
 
         beforeEach(async () => {
+            await databaseProvider.clearViews();
+
             await testQueryRepository.create(targetView);
 
             await contributorRepository.createMany(testContributors);
-
-            await databaseProvider.clearViews();
 
             await termQueryRepository.create(existingTerm);
         });
@@ -594,11 +594,11 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
             const targetView = VocabularyListViewModel.fromDto(targetViewDto);
 
             beforeEach(async () => {
+                await databaseProvider.clearViews();
+
                 await testQueryRepository.create(targetView);
 
                 await contributorRepository.createMany(testContributors);
-
-                await databaseProvider.clearViews();
 
                 await termQueryRepository.create(existingTerm);
             });
@@ -675,11 +675,11 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
             const targetView = VocabularyListViewModel.fromDto(targetViewDto);
 
             beforeEach(async () => {
+                await databaseProvider.clearViews();
+
                 await testQueryRepository.create(targetView);
 
                 await contributorRepository.createMany(testContributors);
-
-                await databaseProvider.clearViews();
 
                 await termQueryRepository.create(existingTerm);
             });
