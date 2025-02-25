@@ -34,7 +34,7 @@ export class ArangoDatabaseProvider {
     };
 
     /**
-     * This is a test helper. It will not throw if you attempt to call it outside
+     * This is a test helper. It will throw if you attempt to call it outside
      * of a testing environment.
      */
     clearViews = async (): Promise<void> => {
