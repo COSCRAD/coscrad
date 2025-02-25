@@ -110,7 +110,7 @@ describe('Access Control List', () => {
             describe(`when the ACL is empty`, () => {
                 const acl = new AccessControlList({});
 
-                it.only(`should allow the admin user access`, () => {
+                it(`should allow the admin user access`, () => {
                     const result = acl.canUserWithGroups(
                         new CoscradUserWithGroups(
                             // TODO `buildDummyCoscradAdmin`
@@ -135,7 +135,7 @@ describe('Access Control List', () => {
             describe(`when the ACL is empty`, () => {
                 const acl = new AccessControlList({});
 
-                it.only(`should allow the admin user access`, () => {
+                it(`should allow the admin user access`, () => {
                     const result = acl.canUserWithGroups(
                         new CoscradUserWithGroups(
                             // TODO `buildDummyProjectAdmin`

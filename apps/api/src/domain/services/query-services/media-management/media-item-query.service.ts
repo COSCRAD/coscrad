@@ -161,13 +161,13 @@ export class MediaItemQueryService {
 
         const acl = new AccessControlList(mediaItemDocument.queryAccessControlList);
 
-        const doesUserHavePriviligedAccess =
+        const doesUserHavePrivilegedAccess =
             !isNullOrUndefined(userWithGroups) &&
             (userWithGroups.isAdmin() ||
                 acl.canUser(userWithGroups.id) ||
                 userWithGroups.groups.some((group) => acl.canGroup(group.id)));
 
-        if (mediaItemDocument.published || doesUserHavePriviligedAccess) {
+        if (mediaItemDocument.published || doesUserHavePrivilegedAccess) {
             return {
                 ...this.buildViewModel(
                     new MediaItem(mapDatabaseDocumentToAggregateDTO(mediaItemDocument))

@@ -341,7 +341,7 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
         });
 
         describe(`when the vocabulary list is published`, () => {
-            describe(`when the term that the is subject of an entry is published`, () => {
+            describe(`when the term that is the subject of an entry is published`, () => {
                 it('should return the given term', async () => {
                     await assertQueryResult({
                         app,
@@ -400,7 +400,7 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
                 });
             });
 
-            describe(`when the term that is subject of an entry is not published, but the user has priviliged read access via a query ACL`, () => {
+            describe(`when the term that is subject of an entry is not published, but the user has privileged read access via a query ACL`, () => {
                 it(`should return the term as one of the entries`, async () => {
                     const privateTermUserCanAccess = publishedTerm.clone({
                         isPublished: false,
@@ -441,7 +441,7 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
             });
         });
 
-        describe(`when the vocabulary  list is not published`, () => {
+        describe(`when the vocabulary list is not published`, () => {
             it(`should return not found`, async () => {
                 await assertQueryResult({
                     app,
