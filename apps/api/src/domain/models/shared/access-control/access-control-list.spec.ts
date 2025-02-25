@@ -1,3 +1,7 @@
+import { AggregateType, CoscradUserRole } from '@coscrad/api-interfaces';
+import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
+import { CoscradUser } from '../../user-management/user/entities/user/coscrad-user.entity';
 import { AccessControlList } from './access-control-list.entity';
 
 const dummyIds = [
@@ -98,6 +102,58 @@ describe('Access Control List', () => {
 
         it('should not allow a group with a null ID', () => {
             expect(acl.canGroup(null)).toBe(false);
+        });
+    });
+
+    describe(`when the user is an admin`, () => {
+        describe(`COSCRAD admin`, () => {
+            describe(`when the ACL is empty`, () => {
+                const acl = new AccessControlList({});
+
+                it(`should allow the admin user access`, () => {
+                    const result = acl.canUserWithGroups(
+                        new CoscradUserWithGroups(
+                            // TODO `buildDummyCoscradAdmin`
+                            new CoscradUser({
+                                id: buildDummyUuid(909),
+                                authProviderUserId: `myauth|${1223}`,
+                                // TODO Make it so this is not part of the DTO
+                                type: AggregateType.user,
+                                username: 'coscrad',
+                                roles: [CoscradUserRole.superAdmin],
+                            }),
+                            []
+                        )
+                    );
+
+                    expect(result).toBe(true);
+                });
+            });
+        });
+
+        describe(`project admin`, () => {
+            describe(`when the ACL is empty`, () => {
+                const acl = new AccessControlList({});
+
+                it(`should allow the admin user access`, () => {
+                    const result = acl.canUserWithGroups(
+                        new CoscradUserWithGroups(
+                            // TODO `buildDummyProjectAdmin`
+                            new CoscradUser({
+                                id: buildDummyUuid(909),
+                                authProviderUserId: `myauth|${1223}`,
+                                // TODO Make it so this is not part of the DTO
+                                type: AggregateType.user,
+                                username: 'project-admin',
+                                roles: [CoscradUserRole.projectAdmin],
+                            }),
+                            []
+                        )
+                    );
+
+                    expect(result).toBe(true);
+                });
+            });
         });
     });
 });

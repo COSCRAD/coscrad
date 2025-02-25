@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`when querying for a vocabulary list: fetch by ID when the user is unauthenticated when there is a vocabulary list with the given ID when the vocabulary list is published when the term which appears as an entry is published should return the correct vocabulary list view 1`] = `
+{
+  "actions": [],
+  "contributions": [],
+  "entries": [
+    {
+      "term": {
+        "accessControlList": {
+          "allowedGroupIds": [],
+          "allowedUserIds": [],
+        },
+        "actions": [],
+        "contributions": [
+          {
+            "fullName": "Erin Truck",
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100070",
+          },
+        ],
+        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100005",
+        "isPublished": true,
+        "name": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "I swim",
+            },
+            {
+              "languageCode": "en",
+              "role": "free translation",
+              "text": "I am swimming (English)",
+            },
+          ],
+        },
+      },
+      "variableValues": {},
+    },
+  ],
+  "form": {
+    "fields": [],
+  },
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100004",
+  "isPublished": true,
+  "name": {
+    "items": [
+      {
+        "languageCode": "en",
+        "role": "original",
+        "text": "vocab list name (orig)",
+      },
+    ],
+  },
+}
+`;

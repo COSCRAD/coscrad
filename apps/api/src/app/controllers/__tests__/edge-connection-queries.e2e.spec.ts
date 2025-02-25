@@ -51,7 +51,6 @@ describe('When querying for edge connections', () => {
             ARANGO_DB_NAME: testDatabaseName,
         }));
 
-
         await testRepositoryProvider.testSetup();
 
         await testRepositoryProvider.addFullSnapshot(fullSnapshot);

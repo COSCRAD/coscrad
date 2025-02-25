@@ -183,9 +183,10 @@ const registerEventHandlers = (
 };
 
 /**
- * TODO[test-coverage]: include test case with import history
  *
  * THIS TEST IS BEING REWRITTEN ON ANOTHER BRANCH. OPT BACK IN IMMEDIATELY WHEN REBASING.
+ *
+ * **
  */
 
 describe.skip(`when querying for a vocabulary list: fetch many`, () => {
