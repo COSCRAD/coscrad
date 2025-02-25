@@ -14,8 +14,14 @@ import {
     TermCreated,
     TermTranslated,
 } from '../../../domain/models/term/commands';
+import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { AggregateId } from '../../../domain/types/AggregateId';
 import { HasAggregateId } from '../../../domain/types/HasAggregateId';
+import { Maybe } from '../../../lib/types/maybe';
+import { NotFound } from '../../../lib/types/not-found';
+import { clonePlainObjectWithOverrides } from '../../../lib/utilities/clonePlainObjectWithOverrides';
+import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
+import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
 
 /**
@@ -210,5 +216,23 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
             type: AggregateType.term,
             id: this.id,
         };
+    }
+
+    public toDto(): DTO<TermViewModel> {
+        return cloneToPlainObject(this);
+    }
+
+    public clone(overrides: DeepPartial<DTO<TermViewModel>>) {
+        const dtoWithOverridesApplied = clonePlainObjectWithOverrides(this.toDto(), overrides);
+
+        return TermViewModel.fromDto(dtoWithOverridesApplied);
+    }
+
+    public forUser(userWithGroups: CoscradUserWithGroups): Maybe<TermViewModel> {
+        if (this.isPublished || this.accessControlList.canUserWithGroups(userWithGroups)) {
+            return this;
+        }
+
+        return NotFound;
     }
 }
