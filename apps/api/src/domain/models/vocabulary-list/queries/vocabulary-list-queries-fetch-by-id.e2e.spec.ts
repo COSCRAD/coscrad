@@ -21,6 +21,7 @@ import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getVa
 import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { AggregateId } from '../../../types/AggregateId';
+import { assertQueryResult } from '../../__tests__';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
@@ -84,6 +85,7 @@ const publishedVocabularyList = buildTestInstance(VocabularyListViewModel, {
             variableValues: {},
         },
     ],
+    actions: ['TRANSLATE_VOCABULARY_LIST_NAME'],
 });
 
 const publishedVocabularyListWithUnpublishedTerm = publishedVocabularyList.clone({
@@ -120,32 +122,6 @@ const _privateVocabularyListWithUserPermissions = publishedVocabularyList.clone(
         allowedGroupIds: [nonAdminUserWithGroups.groups[0].id, buildDummyUuid(909)],
     }),
 });
-
-interface AssertQueryResultParams<TResponseBody = unknown> {
-    app: INestApplication;
-    seedInitialState: () => Promise<void>;
-    endpoint: string;
-    expectedStatus: HttpStatusCode;
-    checkResponseBody?: (body: TResponseBody) => Promise<void>;
-}
-
-const assertQueryResult = async ({
-    app,
-    seedInitialState,
-    endpoint,
-    expectedStatus,
-    checkResponseBody,
-}: AssertQueryResultParams) => {
-    await seedInitialState();
-
-    const res = await request(app.getHttpServer()).get(endpoint);
-
-    expect(res.status).toBe(expectedStatus);
-
-    if (typeof checkResponseBody === 'function') {
-        await checkResponseBody(res.body);
-    }
-};
 
 describe(`when querying for a vocabulary list: fetch by ID`, () => {
     const testDatabaseName = generateDatabaseNameForTestSuite();
@@ -248,14 +224,6 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
                                 expect(foundTermTranslationLanguageCode).toBe(
                                     termTranslationLanguageCode
                                 );
-
-                                /**
-                                 * We do this once and only once as a test of
-                                 * the contract with the client. If this snapshot changes,
-                                 * it means we have changed the contract with the client,
-                                 * and the front-end may require corresponding changes.
-                                 */
-                                expect(body).toMatchSnapshot();
                             },
                         });
                     });
@@ -623,10 +591,20 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
                                 )
                                 .create(publishedVocabularyList);
                         },
-                        checkResponseBody: async ({
-                            entries,
-                        }: IDetailQueryResult<IVocabularyListViewModel>) => {
+                        checkResponseBody: async (
+                            body: IDetailQueryResult<IVocabularyListViewModel>
+                        ) => {
+                            const { entries } = body;
+
                             expect(entries).toHaveLength(1);
+
+                            /**
+                             * We do this once and only once as a test of
+                             * the contract with the client. If this snapshot changes,
+                             * it means we have changed the contract with the client,
+                             * and the front-end may require corresponding changes.
+                             */
+                            expect(body).toMatchSnapshot();
                         },
                     });
                 });
