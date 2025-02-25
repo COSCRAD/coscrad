@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`when querying for a vocabulary list: fetch many when the user is unauthenticated when there is a vocabulary list with the given ID when the vocabulary list is published when each vocabulary list has one entry for a published term should return the correct vocabulary list view 1`] = `
+{
+  "entities": [
+    {
+      "accessControlList": {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "actions": [],
+      "contributions": [
+        {
+          "fullName": "Test McContributor",
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100374",
+        },
+      ],
+      "entries": [
+        {
+          "term": {
+            "accessControlList": {
+              "allowedGroupIds": [],
+              "allowedUserIds": [],
+            },
+            "actions": [],
+            "contributions": [
+              {
+                "fullName": "Term Contributor",
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100374",
+              },
+            ],
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+            "isPublished": true,
+            "name": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "I swim (public term)",
+                },
+                {
+                  "languageCode": "en",
+                  "role": "free translation",
+                  "text": "I swim (English)",
+                },
+              ],
+            },
+          },
+          "variableValues": {},
+        },
+      ],
+      "form": {
+        "fields": [],
+      },
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
+      "isPublished": true,
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "to swim",
+          },
+          {
+            "languageCode": "clc",
+            "role": "free translation",
+            "text": "to swim (translation)",
+          },
+        ],
+      },
+    },
+  ],
+  "indexScopedActions": [],
+}
+`;
