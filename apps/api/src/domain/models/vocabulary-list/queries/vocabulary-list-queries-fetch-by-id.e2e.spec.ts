@@ -85,6 +85,7 @@ const publishedVocabularyList = buildTestInstance(VocabularyListViewModel, {
             variableValues: {},
         },
     ],
+    actions: ['TRANSLATE_VOCABULARY_LIST_NAME'],
 });
 
 const publishedVocabularyListWithUnpublishedTerm = publishedVocabularyList.clone({
@@ -223,14 +224,6 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
                                 expect(foundTermTranslationLanguageCode).toBe(
                                     termTranslationLanguageCode
                                 );
-
-                                /**
-                                 * We do this once and only once as a test of
-                                 * the contract with the client. If this snapshot changes,
-                                 * it means we have changed the contract with the client,
-                                 * and the front-end may require corresponding changes.
-                                 */
-                                expect(body).toMatchSnapshot();
                             },
                         });
                     });
@@ -598,10 +591,20 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
                                 )
                                 .create(publishedVocabularyList);
                         },
-                        checkResponseBody: async ({
-                            entries,
-                        }: IDetailQueryResult<IVocabularyListViewModel>) => {
+                        checkResponseBody: async (
+                            body: IDetailQueryResult<IVocabularyListViewModel>
+                        ) => {
+                            const { entries } = body;
+
                             expect(entries).toHaveLength(1);
+
+                            /**
+                             * We do this once and only once as a test of
+                             * the contract with the client. If this snapshot changes,
+                             * it means we have changed the contract with the client,
+                             * and the front-end may require corresponding changes.
+                             */
+                            expect(body).toMatchSnapshot();
                         },
                     });
                 });

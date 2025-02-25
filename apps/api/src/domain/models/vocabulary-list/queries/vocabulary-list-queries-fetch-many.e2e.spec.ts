@@ -44,6 +44,8 @@ const termTranslationLanguageCode = LanguageCode.English;
 
 const indexEndpoint = `/resources/vocabularyLists`;
 
+const testActions = ['TRANSLATE_VOCABULARY_LIST_NAME'];
+
 /**
  * Note that:
  * 1. users are persisted using state-based persistence (and this probably won't change to event sourcing soon)
@@ -58,7 +60,7 @@ const publishedTerm: TermViewModel = buildTestInstance(TermViewModel, {
     id: buildDummyUuid(101),
     isPublished: true,
     accessControlList: new AccessControlList().toDTO(),
-    actions: [],
+    actions: ['TRANSLATE_VOCABULARY_LIST_NAME'],
     name: buildMultilingualTextFromBilingualText(
         {
             text: termOriginalText,
@@ -112,18 +114,21 @@ const publishedVocabularyList = buildTestInstance(VocabularyListViewModel, {
             fullName: 'Test McContributor',
         },
     ],
+    actions: testActions,
 });
 
 const privateVocabularyList = buildTestInstance(VocabularyListViewModel, {
     id: buildDummyUuid(2),
     isPublished: false,
     accessControlList: new AccessControlList().toDTO(),
+    actions: testActions,
 });
 
 const unpublishedVocabularyListOrdinaryUserCanAccess = buildTestInstance(VocabularyListViewModel, {
     id: buildDummyUuid(3),
     isPublished: false,
     accessControlList: new AccessControlList().allowUser(dummySystemUserId).toDTO(),
+    actions: testActions,
 });
 
 const buildEntryForTerm = (term: TermViewModel) => ({
@@ -263,14 +268,6 @@ describe(`when querying for a vocabulary list: fetch many`, () => {
                         expect(foundTermTranslationText).toBe(termTranslation);
 
                         expect(foundTermTranslationLanguageCode).toBe(termTranslationLanguageCode);
-
-                        /**
-                         * We snapshot one and only one query response here in
-                         * the happy path. This serves as a contract test. If
-                         * this snapshot changes, it indicates that the client
-                         * may require corresponding updates.
-                         */
-                        expect(body).toMatchSnapshot();
                     });
                 });
             });
@@ -323,9 +320,11 @@ describe(`when querying for a vocabulary list: fetch many`, () => {
                             }),
                         ]);
                     },
-                    checkResponseBody: async ({
-                        entities,
-                    }: IIndexQueryResult<IVocabularyListViewModel>) => {
+                    checkResponseBody: async (
+                        body: IIndexQueryResult<IVocabularyListViewModel>
+                    ) => {
+                        const { entities } = body;
+
                         expect(entities).toHaveLength(3);
 
                         const allTerms = entities.flatMap(({ entries }) =>
@@ -333,6 +332,14 @@ describe(`when querying for a vocabulary list: fetch many`, () => {
                         );
 
                         expect(allTerms).toHaveLength(3);
+
+                        /**
+                         * We snapshot one and only one query response here in
+                         * the happy path. This serves as a contract test. If
+                         * this snapshot changes, it indicates that the client
+                         * may require corresponding updates.
+                         */
+                        expect(body).toMatchSnapshot();
                     },
                 });
             });

@@ -1,8 +1,86 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`when querying for a vocabulary list: fetch by ID when the user is unauthenticated when there is a vocabulary list with the given ID when the vocabulary list is published when the term which appears as an entry is published should return the correct vocabulary list view 1`] = `
+exports[`when querying for a vocabulary list: fetch by ID when the user is a project admin when the vocabulary list is public when all terms with entries are public should return the entire vocabulary list 1`] = `
 {
-  "actions": [],
+  "actions": [
+    {
+      "description": "Translate the name of a vocabulary list to another language",
+      "form": {
+        "fields": [
+          {
+            "constraints": [
+              {
+                "message": "Must be a valid \${propertyLabel}",
+                "name": "IS_ENUM",
+              },
+              {
+                "message": "Required",
+                "name": "defined value",
+              },
+            ],
+            "description": "the language in which you are naming the new vocabulary list name",
+            "label": "language code",
+            "name": "languageCode",
+            "options": [
+              {
+                "display": "Chilcotin",
+                "value": "clc",
+              },
+              {
+                "display": "Haida",
+                "value": "hai",
+              },
+              {
+                "display": "English",
+                "value": "en",
+              },
+              {
+                "display": "French",
+                "value": "fra",
+              },
+              {
+                "display": "Chinook",
+                "value": "chn",
+              },
+              {
+                "display": "Zapotec",
+                "value": "zap",
+              },
+              {
+                "display": "Spanish",
+                "value": "spa",
+              },
+            ],
+            "type": "STATIC_SELECT",
+          },
+          {
+            "constraints": [
+              {
+                "message": "must be a non-empty string",
+                "name": "non-empty string",
+              },
+              {
+                "message": "must be a defined value",
+                "name": "defined value",
+              },
+            ],
+            "description": "text for the translation of the name",
+            "label": "translation",
+            "name": "text",
+            "type": "TEXT_FIELD",
+          },
+        ],
+        "prepopulatedFields": {
+          "aggregateCompositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100004",
+            "type": "vocabularyList",
+          },
+        },
+      },
+      "label": "Translate Vocabulary List Name",
+      "type": "TRANSLATE_VOCABULARY_LIST_NAME",
+    },
+  ],
   "contributions": [],
   "entries": [
     {

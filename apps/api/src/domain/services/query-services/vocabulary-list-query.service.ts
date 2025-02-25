@@ -44,9 +44,11 @@ export class VocabularyListQueryService {
             return NotFound;
         }
 
+        const actions = this.fetchUserActions(userWithGroups, [vocabularyList]);
+
         return {
             ...vocabularyList,
-            actions: this.fetchUserActions(userWithGroups, [vocabularyList]),
+            actions,
         };
     }
 
@@ -64,6 +66,8 @@ export class VocabularyListQueryService {
             return isNotFound(forUser) ? [] : forUser;
         });
 
+        const indexScopedActions = this.fetchUserActions(userWithGroups, [VocabularyList]);
+
         const result = {
             // TODO ensure actions show up on entities DO this now!
             entities: availableEntities.map((entity) => {
@@ -79,7 +83,7 @@ export class VocabularyListQueryService {
                 };
             }),
             // TODO Should we register index-scoped commands in the view layer instead?
-            indexScopedActions: this.fetchUserActions(userWithGroups, [VocabularyList]),
+            indexScopedActions,
         };
 
         return result;
