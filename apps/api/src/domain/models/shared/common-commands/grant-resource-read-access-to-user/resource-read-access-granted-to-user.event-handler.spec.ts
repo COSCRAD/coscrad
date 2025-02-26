@@ -104,7 +104,7 @@ describe(`ResourceReadAccessGrantedToUserEventHandler.handle`, () => {
     });
 
     beforeEach(async () => {
-        databaseProvider.clearViews();
+        await databaseProvider.clearViews();
 
         const existingView = TermViewModel.fromTermCreated(creationEvent as TermCreated);
 
