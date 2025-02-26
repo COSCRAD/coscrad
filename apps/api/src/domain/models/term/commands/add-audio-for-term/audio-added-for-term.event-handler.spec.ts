@@ -1,4 +1,4 @@
-import { AggregateType, IDetailQueryResult, ITermViewModel } from '@coscrad/api-interfaces';
+import { AggregateType } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -8,7 +8,6 @@ import { Environment } from '../../../../../app/config/constants/Environment';
 import { ConsoleCoscradCliLogger } from '../../../../../coscrad-cli/logging';
 import { NotFound } from '../../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
-import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -84,10 +83,6 @@ describe('AudioAddedForTermEventHandler.handle', () => {
 
     let databaseProvider: ArangoDatabaseProvider;
 
-    let arangoDatabaseForCollection: ArangoDatabaseForCollection<
-        IDetailQueryResult<ITermViewModel>
-    >;
-
     let app: INestApplication;
 
     let audioAddedForTermEventHandler: AudioAddedForTermEventHandler;
@@ -115,8 +110,6 @@ describe('AudioAddedForTermEventHandler.handle', () => {
 
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
 
-        arangoDatabaseForCollection = databaseProvider.getDatabaseForCollection('term__VIEWS');
-
         audioRepository = app.get(AUDIO_QUERY_REPOSITORY_TOKEN);
 
         testQueryRepository = new ArangoTermQueryRepository(
@@ -133,9 +126,7 @@ describe('AudioAddedForTermEventHandler.handle', () => {
     });
 
     beforeEach(async () => {
-        await arangoDatabaseForCollection.clear();
-
-        await databaseProvider.getDatabaseForCollection('audioItem__VIEWS').clear();
+        await databaseProvider.clearViews();
 
         /**
          * We attempted to use "handle" on a creation event for the test

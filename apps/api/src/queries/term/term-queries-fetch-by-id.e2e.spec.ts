@@ -139,7 +139,7 @@ describe(`when querying for a term: fetch by Id`, () => {
     beforeEach(async () => {
         await testRepositoryProvider.testSetup();
 
-        await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
+        await databaseProvider.clearViews();
     });
 
     afterAll(async () => {
@@ -182,7 +182,7 @@ describe(`when querying for a term: fetch by Id`, () => {
                         .getContributorRepository()
                         .create(dummyContributor);
 
-                    await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
+                    await databaseProvider.clearViews();
 
                     await seedTerms([targetTermView]);
                 });
