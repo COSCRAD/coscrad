@@ -76,7 +76,7 @@ describe(`VocabularyListCreatedEventHandler`, () => {
     });
 
     beforeEach(async () => {
-        await databaseProvider.getDatabaseForCollection('vocabularyList__VIEWS').clear();
+        await databaseProvider.clearViews();
     });
 
     afterAll(async () => {

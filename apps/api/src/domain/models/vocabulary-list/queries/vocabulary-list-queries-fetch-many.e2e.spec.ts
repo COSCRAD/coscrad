@@ -191,11 +191,6 @@ describe(`when querying for a vocabulary list: fetch many`, () => {
 
     beforeEach(async () => {
         await testRepositoryProvider.testSetup();
-
-        // TODO remove all such calls across all tests
-        // await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
-
-        // await databaseProvider.getDatabaseForCollection('vocabularyList__VIEWS').clear();
     });
 
     afterAll(async () => {
