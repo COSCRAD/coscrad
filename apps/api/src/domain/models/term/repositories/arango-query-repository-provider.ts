@@ -2,6 +2,7 @@ import { ResourceType } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { AUDIO_QUERY_REPOSITORY_TOKEN } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
+import { PHOTOGRAPH_QUERY_REPOSITORY_TOKEN } from '../../photograph/queries';
 import {
     IPublishable,
     IQueryRepositoryProvider,
@@ -17,6 +18,7 @@ import { TERM_QUERY_REPOSITORY_TOKEN } from '../queries';
  */
 export class ArangoQueryRepositoryProvider implements IQueryRepositoryProvider {
     constructor(
+        @Inject(PHOTOGRAPH_QUERY_REPOSITORY_TOKEN) private readonly photographQueryRepository,
         @Inject(TERM_QUERY_REPOSITORY_TOKEN) private readonly termQueryRepsitory,
         @Inject(AUDIO_QUERY_REPOSITORY_TOKEN) private readonly audioItemQueryRepository,
         @Inject(VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN)
@@ -26,6 +28,10 @@ export class ArangoQueryRepositoryProvider implements IQueryRepositoryProvider {
     forResource<T extends IPublishable>(resourceType: ResourceType): T {
         if (resourceType === ResourceType.audioItem) {
             return this.audioItemQueryRepository;
+        }
+
+        if (resourceType === ResourceType.photograph) {
+            return this.photographQueryRepository;
         }
 
         if (resourceType === ResourceType.term) {

@@ -74,7 +74,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
                 bindVars,
             })
             .catch((reason) => {
-                throw new InternalError(`Failed to translate term via TermRepository: ${reason}`);
+                throw new InternalError(`Failed to publish term via TermRepository: ${reason}`);
             });
 
         await cursor.all();
@@ -169,7 +169,9 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
                 bindVars,
             })
             .catch((reason) => {
-                throw new InternalError(`Failed to translate term via TermRepository: ${reason}`);
+                throw new InternalError(
+                    `Failed to elicit term from prompt via TermRepository: ${reason}`
+                );
             });
 
         await cursor.all();
@@ -252,7 +254,9 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
                 bindVars,
             })
             .catch((reason) => {
-                throw new InternalError(`Failed to translate term via TermRepository: ${reason}`);
+                throw new InternalError(
+                    `Failed to allow user access to term via TermRepository: ${reason}`
+                );
             });
 
         await cursor.all();

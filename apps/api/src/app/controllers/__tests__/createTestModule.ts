@@ -128,6 +128,12 @@ import {
     CreatePhotographCommandHandler,
     PhotographCreated,
 } from '../../../domain/models/photograph';
+import { PhotographCreatedEventHandler } from '../../../domain/models/photograph/commands/create-photograph/photograph-created.event-handler';
+import {
+    IPhotographQueryRepository,
+    PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
+} from '../../../domain/models/photograph/queries';
+import { ArangoPhotographQueryRepository } from '../../../domain/models/photograph/repositories';
 import {
     AddAudioItemToPlaylistCommandHandler,
     CreatePlayListCommandHandler,
@@ -540,7 +546,15 @@ export default async (
                     ),
                 inject: [ArangoConnectionProvider],
             },
-
+            {
+                provide: PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
+                useFactory: (ArangoConnectionProvider: ArangoConnectionProvider) =>
+                    new ArangoPhotographQueryRepository(
+                        ArangoConnectionProvider,
+                        new ConsoleCoscradCliLogger()
+                    ),
+                inject: [ArangoConnectionProvider],
+            },
             {
                 //  TODO use a const for this
                 provide: 'QUERY_REPOSITORY_PROVIDER',
@@ -607,10 +621,16 @@ export default async (
             {
                 provide: PhotographQueryService,
                 useFactory: (
-                    repositoryProvider: ArangoRepositoryProvider,
-                    commandInfoService: CommandInfoService
-                ) => new PhotographQueryService(repositoryProvider, commandInfoService),
-                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService, ConfigService],
+                    photographQueryRepository: IPhotographQueryRepository,
+                    commandInfoService: CommandInfoService,
+                    configService: ConfigService
+                ) =>
+                    new PhotographQueryService(
+                        photographQueryRepository,
+                        commandInfoService,
+                        configService
+                    ),
+                inject: [PHOTOGRAPH_QUERY_REPOSITORY_TOKEN, CommandInfoService, ConfigService],
             },
             {
                 provide: SpatialFeatureQueryService,
@@ -837,6 +857,7 @@ export default async (
             PromptTermCreatedEventHandler,
             TermElicitedFromPromptEventHandler,
             AudioAddedForTermEventHandler,
+            PhotographCreatedEventHandler,
             VocabularyListCreatedEventHandler,
         ],
 
