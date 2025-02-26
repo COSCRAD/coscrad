@@ -101,7 +101,7 @@ describe(`VocabularyListNameTranslatedEventHandler`, () => {
     });
 
     beforeEach(async () => {
-        databaseProvider.clearViews();
+        await databaseProvider.clearViews();
 
         /**
          * We attempted to use "handle" on a creation event for the test

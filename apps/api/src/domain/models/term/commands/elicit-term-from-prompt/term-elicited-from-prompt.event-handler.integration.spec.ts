@@ -85,7 +85,7 @@ describe(`TermElicitedFromPromptEventHandler.handle`, () => {
     });
 
     beforeEach(async () => {
-        databaseProvider.clearViews();
+        await databaseProvider.clearViews();
 
         const existingView = TermViewModel.fromPromptTermCreated(
             creationEvent as PromptTermCreated

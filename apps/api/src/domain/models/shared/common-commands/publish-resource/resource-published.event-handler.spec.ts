@@ -105,7 +105,7 @@ describe(`ResourcePublished.eventHandler`, () => {
     });
 
     beforeEach(async () => {
-        databaseProvider.clearViews();
+        await databaseProvider.clearViews();
 
         const existingView = TermViewModel.fromTermCreated(creationEvent as TermCreated);
 
