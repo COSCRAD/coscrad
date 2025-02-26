@@ -180,7 +180,7 @@ describe(`TermInVocabularyListAnalyzedEventHandler.handle`, () => {
     });
 
     beforeEach(async () => {
-        databaseProvider.getDatabaseForCollection('vocabularyList__VIEWS').clear();
+        await databaseProvider.clearViews();
 
         /**
          * We attempted to use "handle" on a creation event for the test
@@ -189,8 +189,6 @@ describe(`TermInVocabularyListAnalyzedEventHandler.handle`, () => {
          * We should investigate this further.
          */
         await testQueryRepository.create(existingView);
-
-        await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
 
         await termQueryRepository.create(existingTermView);
     });

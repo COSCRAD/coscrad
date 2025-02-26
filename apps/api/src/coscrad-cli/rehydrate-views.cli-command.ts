@@ -34,15 +34,15 @@ export class RehydrateViewsCliCommand extends CliCommandRunner {
          */
         this.logger.log(`clearing existing term views`);
 
-        await this.databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
+        await this.databaseProvider.clearViews();
 
-        this.logger.log('clearing existing audio item views');
+        /**
+         * TODO It's not clear whether we will allow clearing and rehydrating
+         * views for a single aggregate type. If so, use the commented out pattern here.
+         */
+        // this.logger.log('clearing existing audio item views');
 
-        await this.databaseProvider.getDatabaseForCollection('audioItem__VIEWS').clear();
-
-        this.logger.log('clearing existing vocabulary list views');
-
-        await this.databaseProvider.getDatabaseForCollection('vocabularyList__VIEWS').clear();
+        // await this.databaseProvider.getDatabaseForCollection('audioItem__VIEWS').clear();
 
         const events = await this.eventRepository.fetchEvents();
 

@@ -1,9 +1,4 @@
-import {
-    AggregateType,
-    IAudioItemViewModel,
-    IDetailQueryResult,
-    LanguageCode,
-} from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -13,7 +8,6 @@ import { Environment } from '../../../../../../app/config/constants/Environment'
 import { MultilingualText } from '../../../../../../domain/common/entities/multilingual-text';
 import { NotFound } from '../../../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../../../persistence/database/arango-connection.provider';
-import { ArangoDatabaseForCollection } from '../../../../../../persistence/database/arango-database-for-collection';
 import { ArangoDatabaseProvider } from '../../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -49,10 +43,6 @@ describe(`AudioItemCreatedEventHandler`, () => {
 
     let databaseProvider: ArangoDatabaseProvider;
 
-    let arangoDatabaseForCollection: ArangoDatabaseForCollection<
-        IDetailQueryResult<IAudioItemViewModel>
-    >;
-
     let app: INestApplication;
 
     beforeAll(async () => {
@@ -78,8 +68,6 @@ describe(`AudioItemCreatedEventHandler`, () => {
 
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
 
-        arangoDatabaseForCollection = databaseProvider.getDatabaseForCollection('audioItem__VIEWS');
-
         testQueryRepository = new ArangoAudioItemQueryRepository(connectionProvider);
     });
 
@@ -89,7 +77,7 @@ describe(`AudioItemCreatedEventHandler`, () => {
 
     describe(`when handling an AUDIO_ITEM_CREATED event`, () => {
         beforeEach(async () => {
-            await arangoDatabaseForCollection.clear();
+            await databaseProvider.clearViews();
         });
 
         it(`should succeed`, async () => {

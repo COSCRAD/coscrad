@@ -171,7 +171,7 @@ describe(`when querying for a term: fetch many`, () => {
                     .getDatabaseForCollection(ArangoCollectionId.contributors)
                     .clear();
 
-                await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
+                await databaseProvider.clearViews();
 
                 await testRepositoryProvider.getContributorRepository().create(dummyContributor);
 
@@ -222,7 +222,7 @@ describe(`when querying for a term: fetch many`, () => {
                     .getDatabaseForCollection(ArangoCollectionId.contributors)
                     .clear();
 
-                await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
+                await databaseProvider.clearViews();
 
                 await testRepositoryProvider.getContributorRepository().create(dummyContributor);
 
@@ -264,7 +264,7 @@ describe(`when querying for a term: fetch many`, () => {
         describe(`when there is a term that is unpublished`, () => {
             describe(`when the user does not have read access`, () => {
                 beforeEach(async () => {
-                    await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
+                    await databaseProvider.clearViews();
 
                     await databaseProvider
                         .getDatabaseForCollection(ArangoCollectionId.contributors)
@@ -298,7 +298,7 @@ describe(`when querying for a term: fetch many`, () => {
 
             describe(`when the user does have read access`, () => {
                 beforeEach(async () => {
-                    await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
+                    await databaseProvider.clearViews();
 
                     await databaseProvider
                         .getDatabaseForCollection(ArangoCollectionId.contributors)
@@ -362,7 +362,7 @@ describe(`when querying for a term: fetch many`, () => {
             });
 
             beforeEach(async () => {
-                await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
+                await databaseProvider.clearViews();
 
                 await databaseProvider
                     .getDatabaseForCollection(ArangoCollectionId.contributors)

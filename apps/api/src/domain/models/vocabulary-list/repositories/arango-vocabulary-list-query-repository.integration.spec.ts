@@ -210,7 +210,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
         // clear existing contributors
         await databaseProvider.getDatabaseForCollection(ArangoCollectionId.contributors).clear();
 
-        await databaseProvider.getDatabaseForCollection('vocabularyList__VIEWS').clear();
+        await databaseProvider.clearViews();
     });
 
     describe(`fetchById`, () => {
@@ -514,11 +514,11 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
         const targetView = vocabularyListViews[0];
 
         beforeEach(async () => {
+            await databaseProvider.clearViews();
+
             await testQueryRepository.create(targetView);
 
             await contributorRepository.createMany(testContributors);
-
-            await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
 
             await termQueryRepository.create(existingTerm);
         });
@@ -594,11 +594,11 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
             const targetView = VocabularyListViewModel.fromDto(targetViewDto);
 
             beforeEach(async () => {
+                await databaseProvider.clearViews();
+
                 await testQueryRepository.create(targetView);
 
                 await contributorRepository.createMany(testContributors);
-
-                await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
 
                 await termQueryRepository.create(existingTerm);
             });
@@ -675,11 +675,11 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
             const targetView = VocabularyListViewModel.fromDto(targetViewDto);
 
             beforeEach(async () => {
+                await databaseProvider.clearViews();
+
                 await testQueryRepository.create(targetView);
 
                 await contributorRepository.createMany(testContributors);
-
-                await databaseProvider.getDatabaseForCollection('term__VIEWS').clear();
 
                 await termQueryRepository.create(existingTerm);
             });
