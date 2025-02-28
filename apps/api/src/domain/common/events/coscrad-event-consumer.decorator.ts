@@ -1,8 +1,12 @@
+import { isString } from '@coscrad/validation-constraints';
 import { Maybe } from '../../../lib/types/maybe';
 import { NotFound } from '../../../lib/types/not-found';
+import { BaseEvent } from '../../../queries/event-sourcing';
+
+export type EventPredicate = <T extends BaseEvent = BaseEvent>(event: T) => boolean;
 
 export interface CoscradEventConsumerMetadata {
-    type: string;
+    matcher: EventPredicate;
 }
 
 const COSCRAD_EVENT_CONSUMER_METADATA = 'COSCRAD_EVENT_CONSUMER_METADATA';
@@ -25,13 +29,22 @@ export const getCoscradEventConsumerMeta = (
  * This marks a class as a consumer of Coscrad Events. This should not
  * be confused with the `handleX` methods used to event-source the domain.
  */
-export const CoscradEventConsumer = (eventType: string): ClassDecorator => {
+export const CoscradEventConsumer = (matcher: string | EventPredicate): ClassDecorator => {
+    const resolvedMatcher = isString(matcher)
+        ? (event: BaseEvent) => event.isOfType(matcher)
+        : matcher;
+
     return function (target: Object) {
         setCoscradEventConsumerMeta(
             {
-                type: eventType,
+                matcher: resolvedMatcher,
             },
             target
         );
+
+        // @ts-expect-error fix this
+        Object.defineProperty(target.prototype, 'handles', {
+            value: resolvedMatcher,
+        });
     };
 };
