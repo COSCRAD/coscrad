@@ -5,7 +5,7 @@ import { EdgeConnectionModule } from '../app/domain-modules/edge-connection.modu
 import { VocabularyListModule } from '../app/domain-modules/vocabulary-list.module';
 import { EventModule } from '../domain/common';
 import { AudioVisualModule } from '../domain/models/audio-visual/application/audio-visual.module';
-import { MediaItemModule } from '../domain/models/media-item/media-item.module';
+import { MediaItemModule } from '../domain/models/media-item';
 import { IdGenerationModule } from '../lib/id-generation/id-generation.module';
 import { MigrationModule } from '../persistence/migrations';
 import { PersistenceModule } from '../persistence/persistence.module';

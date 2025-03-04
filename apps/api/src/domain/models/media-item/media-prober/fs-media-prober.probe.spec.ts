@@ -1,6 +1,6 @@
 import { NotFound } from '../../../../lib/types/not-found';
-import { RawMediaInfo } from '../../../services/query-services/media-management/media-prober.interface';
 import { FsMediaProber } from './fs-media-prober';
+import { RawMediaInfo } from './media-prober.interface';
 
 const baseDir = `__cli-command-test-inputs__/ingest-media-items/mediaItemsOnly`;
 

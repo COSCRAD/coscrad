@@ -4,7 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthorizationModule } from '../authorization/authorization.module';
 import { EventModule } from '../domain/common';
 import { AudioVisualModule } from '../domain/models/audio-visual/application/audio-visual.module';
-import { MediaItemModule } from '../domain/models/media-item/media-item.module';
+import { MediaItemModule } from '../domain/models/media-item';
 import { IdGenerationModule } from '../lib/id-generation/id-generation.module';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
 import { PersistenceModule } from '../persistence/persistence.module';
