@@ -4,7 +4,7 @@ import { promisify } from 'util';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound, isNotFound } from '../../../../lib/types/not-found';
-import { MediaItemDimensions } from '../../../models/media-item/entities/media-item-dimensions';
+import { MediaItemDimensions } from '../entities/media-item-dimensions';
 import { IMediaProber, RawMediaInfo } from './media-prober.interface';
 
 const ffprobe = promisify<string, ffmpeg.FfprobeData>(ffmpeg.ffprobe);

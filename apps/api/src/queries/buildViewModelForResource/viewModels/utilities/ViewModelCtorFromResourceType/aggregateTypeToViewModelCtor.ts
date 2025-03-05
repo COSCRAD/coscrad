@@ -1,3 +1,4 @@
+import { MediaItemViewModel } from '../../../../../domain/models/media-item/queries/media-item.view-model';
 import { AggregateType } from '../../../../../domain/types/AggregateType';
 import { CategorizableType } from '../../../../../domain/types/CategorizableType';
 import { ResourceType } from '../../../../../domain/types/ResourceType';
@@ -12,7 +13,6 @@ import { CategoryTreeViewModel } from '../../category-tree.view-model';
 import { CoscradContributorViewModel } from '../../coscrad-contributor.view-model';
 import { CoscradUserGroupViewModel } from '../../coscrad-user-group.view-model';
 import { CoscradUserViewModel } from '../../coscrad-user.view-model';
-import { MediaItemViewModel } from '../../media-item.view-model';
 import { PhotographViewModel } from '../../photograph.view-model';
 import { PlaylistViewModel } from '../../playlist.view-model';
 import { SongViewModel } from '../../song.view-model';

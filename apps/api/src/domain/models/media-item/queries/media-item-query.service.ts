@@ -22,22 +22,22 @@ import { ArangoDatabaseProvider } from '../../../../persistence/database/databas
 import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import { DatabaseDTO } from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { TagViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
-import { MediaItemViewModel } from '../../../../queries/buildViewModelForResource/viewModels/media-item.view-model';
 import { ResultOrError } from '../../../../types/ResultOrError';
-import BaseDomainModel from '../../../models/base-domain-model.entity';
-import { MediaItem } from '../../../models/media-item/entities/media-item.entity';
-import { AccessControlList } from '../../../models/shared/access-control/access-control-list.entity';
-import { validAggregateOrThrow } from '../../../models/shared/functional';
-import { Tag } from '../../../models/tag/tag.entity';
-import { CoscradUserWithGroups } from '../../../models/user-management/user/entities/user/coscrad-user-with-groups';
 import { IRepositoryProvider } from '../../../repositories/interfaces/repository-provider.interface';
 import { ISpecification } from '../../../repositories/interfaces/specification.interface';
+import { buildAccessFilter } from '../../../services/query-services/utilities/buildAccessFilter';
+import { fetchActionsForUser } from '../../../services/query-services/utilities/fetch-actions-for-user';
 import { AggregateId, isAggregateId } from '../../../types/AggregateId';
 import { AggregateTypeToAggregateInstance } from '../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
-import { buildAccessFilter } from '../utilities/buildAccessFilter';
-import { fetchActionsForUser } from '../utilities/fetch-actions-for-user';
+import BaseDomainModel from '../../base-domain-model.entity';
+import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
+import { validAggregateOrThrow } from '../../shared/functional';
+import { Tag } from '../../tag/tag.entity';
+import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
+import { MediaItem } from '../entities/media-item.entity';
+import { MediaItemViewModel } from './media-item.view-model';
 
 @Injectable()
 export class MediaItemQueryService {
