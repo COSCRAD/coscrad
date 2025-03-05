@@ -1,7 +1,7 @@
 import { IMediaItemViewModel } from '@coscrad/api-interfaces';
 import { FromDomainModel, MIMEType } from '@coscrad/data-types';
-import { MediaItem } from '../../../domain/models/media-item/entities/media-item.entity';
-import { BaseViewModel } from './base.view-model';
+import { BaseViewModel } from '../../../../queries/buildViewModelForResource/viewModels/base.view-model';
+import { MediaItem } from '../entities/media-item.entity';
 
 const FromMediaItem = FromDomainModel(MediaItem);
 

@@ -3,16 +3,16 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { INestApplication } from '@nestjs/common';
 import { copyFileSync, existsSync, mkdirSync } from 'fs';
 import * as request from 'supertest';
-import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
-import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
-import { CoscradUserGroup } from '../../../domain/models/user-management/group/entities/coscrad-user-group.entity';
-import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
-import { CoscradUser } from '../../../domain/models/user-management/user/entities/user/coscrad-user.entity';
-import { DeluxeInMemoryStore } from '../../../domain/types/DeluxeInMemoryStore';
-import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
-import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
-import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import setUpIntegrationTest from '../__tests__/setUpIntegrationTest';
+import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpIntegrationTest';
+import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
+import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
+import { DeluxeInMemoryStore } from '../../../types/DeluxeInMemoryStore';
+import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import { CoscradUserGroup } from '../../user-management/group/entities/coscrad-user-group.entity';
+import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
+import { CoscradUser } from '../../user-management/user/entities/user/coscrad-user.entity';
 
 const mediaItemBaseEndpoint = `/resources/mediaItems`;
 

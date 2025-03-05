@@ -124,6 +124,10 @@ import { DigitalText } from '../../../domain/models/digital-text/entities/digita
 import { CreateMediaItem } from '../../../domain/models/media-item/commands/create-media-item/create-media-item.command';
 import { CreateMediaItemCommandHandler } from '../../../domain/models/media-item/commands/create-media-item/create-media-item.command-handler';
 import {
+    MediaItemController,
+    MediaItemQueryService,
+} from '../../../domain/models/media-item/queries';
+import {
     CreatePhotograph,
     CreatePhotographCommandHandler,
     PhotographCreated,
@@ -256,7 +260,6 @@ import { BibliographicCitationQueryService } from '../../../domain/services/quer
 import { CoscradUserGroupQueryService } from '../../../domain/services/query-services/coscrad-user-group-query.service';
 import { CoscradUserQueryService } from '../../../domain/services/query-services/coscrad-user-query.service';
 import { EdgeConnectionQueryService } from '../../../domain/services/query-services/edge-connection-query.service';
-import { MediaItemQueryService } from '../../../domain/services/query-services/media-management/media-item-query.service';
 import { PhotographQueryService } from '../../../domain/services/query-services/photograph-query.service';
 import { PlaylistQueryService } from '../../../domain/services/query-services/playlist-query.service';
 import { SongQueryService } from '../../../domain/services/query-services/song-query.service';
@@ -296,7 +299,6 @@ import { EdgeConnectionController } from '../edge-connection.controller';
 import { IdGenerationController } from '../id-generation/id-generation.controller';
 import { BibliographicCitationController } from '../resources/bibliographic-citation.controller';
 import { DigitalTextQueryController } from '../resources/digital-text.controller';
-import { MediaItemController } from '../resources/media-item.controller';
 import { PhotographController } from '../resources/photograph.controller';
 import { PlaylistController } from '../resources/playlist.controller';
 import { ResourceDescriptionController } from '../resources/resource-description.controller';
