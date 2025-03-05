@@ -22,11 +22,11 @@ import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getVa
 import { CoscradEventFactory } from '../../../common';
 import { DeluxeInMemoryStore } from '../../../types/DeluxeInMemoryStore';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
-import { MediaItemModule } from '../../domain-modules/media-item.module';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../user-management/user/entities/user/coscrad-user.entity';
 import { getExtensionForMimeType } from '../entities/get-extension-for-mime-type';
 import { MediaItem } from '../entities/media-item.entity';
+import { MediaItemModule } from '../media-item.module';
 
 const baseUrl = `/resources/mediaItems/download`;
 
