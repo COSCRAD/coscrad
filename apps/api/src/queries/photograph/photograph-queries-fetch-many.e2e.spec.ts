@@ -289,6 +289,7 @@ describe(`when querying for a photograph: fetch many`, () => {
                 });
             });
 
+            // Re-write `when the user is a project admin` from vocabulary list
             describe(`when the user does have read access`, () => {
                 beforeEach(async () => {
                     await databaseProvider.getDatabaseForCollection('photograph__VIEWS').clear();

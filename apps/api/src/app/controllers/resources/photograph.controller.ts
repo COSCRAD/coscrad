@@ -51,8 +51,6 @@ export class PhotographController {
     @UseGuards(OptionalJwtAuthGuard)
     @Get('')
     async fetchMany(@Request() req) {
-        const result = this.photographQueryService.fetchMany(req.user || undefined);
-
-        return result;
+        return await this.photographQueryService.fetchMany(req.user || undefined);
     }
 }

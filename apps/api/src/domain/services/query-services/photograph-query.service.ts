@@ -77,6 +77,7 @@ export class PhotographQueryService {
             const acl = new AccessControlList(entity.accessControlList);
 
             return (
+                // forUser
                 acl.canUser(userWithGroups.id) ||
                 userWithGroups.groups.some(({ id: groupId }) => acl.canGroup(groupId))
             );

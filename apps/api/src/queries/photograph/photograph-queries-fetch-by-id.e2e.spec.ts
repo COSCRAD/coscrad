@@ -348,6 +348,7 @@ describe(`when querying for a photograph: fetch by Id`, () => {
                 });
             });
 
+            // Re-write `when the user is a project admin` from vocabulary list
             describe(`when the user is a project admin`, () => {
                 beforeAll(async () => {
                     ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
@@ -386,6 +387,10 @@ describe(`when querying for a photograph: fetch by Id`, () => {
 
                             // admin should see commands
                             expect(actions).not.toHaveLength(0);
+
+                            /**
+                             * TODO: build a media url given the media item id based on `buildAudioUrl` in term query service
+                             */
 
                             /**
                              * TODO We should add a separate test that checks
