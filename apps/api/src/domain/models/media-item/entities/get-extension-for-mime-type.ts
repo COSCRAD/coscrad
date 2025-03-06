@@ -37,7 +37,7 @@ export const getExtensionForMimeType = (mimeType: MIMEType): string => {
     return searchResult;
 };
 
-export const getExpectedMimeTypeFromExtension = (extension: string) => {
+export const getExpectedMimeTypeFromExtension = (extension: string): MIMEType => {
     const searchResult = Object.entries(lookupTable).find(
         ([_mimeType, extensionForThisMimeType]) => extensionForThisMimeType === extension
     );
@@ -48,5 +48,5 @@ export const getExpectedMimeTypeFromExtension = (extension: string) => {
         );
     }
 
-    return searchResult[0];
+    return searchResult[0] as MIMEType;
 };
