@@ -79,6 +79,8 @@ export class FsMediaProber implements IMediaProber {
             );
         });
 
+        // TODO Use mmmagic to probe the mime type
+
         const { streams = [] } = ffprobeResult;
 
         if (streams.length === 0) {
