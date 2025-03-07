@@ -1,4 +1,5 @@
-import { ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
+import { CommandHandlerService } from '@coscrad/commands';
 import { isNonEmptyObject, isNonEmptyString } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { copyFileSync } from 'fs';
@@ -6,10 +7,12 @@ import { InternalError, isInternalError } from '../../../lib/errors/InternalErro
 import { Maybe } from '../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../lib/types/not-found';
 import { ResultOrError } from '../../../types/ResultOrError';
+import { ID_MANAGER_TOKEN, IIdManager } from '../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../repositories/interfaces/repository-for-aggregate.interface';
 import { AggregateId } from '../../types/AggregateId';
 import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
 import { CoscradUserWithGroups } from '../user-management/user/entities/user/coscrad-user-with-groups';
+import { CreateMediaItem } from './commands';
 import { getExpectedMimeTypeFromExtension } from './entities/get-extension-for-mime-type';
 import { MediaItem } from './entities/media-item.entity';
 import { IMediaManager } from './media-manager.interface';
@@ -32,7 +35,9 @@ export class NodeMediaManagementService implements IMediaManager {
     constructor(
         @Inject('MEDIA_ITEM_COMMAND_REPOSITORY_INJECTION_TOKEN')
         private readonly commandRepository: IRepositoryForAggregate<MediaItem>,
-        @Inject(MEDIA_PROBER_TOKEN) private readonly mediaProber: IMediaProber
+        @Inject(MEDIA_PROBER_TOKEN) private readonly mediaProber: IMediaProber,
+        @Inject(ID_MANAGER_TOKEN) private readonly idManager: IIdManager,
+        private readonly commandHandlerService: CommandHandlerService
     ) {}
 
     create(_binary: ReadableStream): Promise<ResultOrError<MediaCreationAcknowledgement>> {
@@ -106,7 +111,26 @@ export class NodeMediaManagementService implements IMediaManager {
             url: 'https://www.ilie.ca/itstruethough',
         });
 
-        const _errors = newMediaItem.validateInvariants();
+        /**
+         * TODO We may want to pass this state in from above.
+         * Consider generating many for discoverAll
+         */
+        const generatedId = await this.idManager.generate();
+
+        /**
+         * There's a bit of a chicken-and-egg problem here. The command handler
+         * uses the prober and determines the duration \ dimensions.
+         */
+        const creationCommand: CreateMediaItem = {
+            title: filePrefix,
+            mimeType: expectedMimetypeFromExtension,
+            aggregateCompositeIdentifier: {
+                id: generatedId,
+                type: AggregateType.mediaItem,
+            },
+            url: 'TODO remove this property!',
+            ...probeResult,
+        };
 
         // TODO handle file copy failure
         // TODO We may want to abstract over file reads and writes with a binary file repository
@@ -117,9 +141,20 @@ export class NodeMediaManagementService implements IMediaManager {
          */
         copyFileSync(filepath, `${staticAssetsDir}/${filename}.${extension}`);
 
-        await this.commandRepository.create(newMediaItem).catch((err) => {
-            console.log(err);
+        /**
+         * Note that at this point, the command execution is an encapsulated
+         * implementation detail of the media-service. We don't have to follow any
+         * CQRS-ES patterns here. We simply stick to this because it was built
+         * this way to start with.
+         */
+        const result = await this.commandHandlerService.execute({
+            type: 'CREATE_MEDIA_ITEM',
+            payload: creationCommand,
         });
+
+        if (isInternalError(result)) {
+            return result;
+        }
 
         return {
             id: newMediaItem.id,

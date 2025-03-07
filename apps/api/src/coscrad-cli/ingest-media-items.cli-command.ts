@@ -139,6 +139,9 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
 
         this.logger.log(`Attempting to import media from: ${directory}`);
 
+        /**
+         * TODO We should consider using the async API for performance.
+         */
         const partialPayloads: (Omit<CreateMediaItem, 'aggregateCompositeIdentifier' | 'url'> & {
             filename: string;
         })[] = readdirSync(directory).map((file) => {
