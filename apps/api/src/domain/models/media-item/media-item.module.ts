@@ -1,9 +1,9 @@
 import { ResourceType } from '@coscrad/api-interfaces';
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
-import { REPOSITORY_PROVIDER_TOKEN } from 'apps/api/src/persistence/constants/persistenceConstants';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { IdGenerationModule } from '../../../lib/id-generation/id-generation.module';
+import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
 import { PersistenceModule } from '../../../persistence/persistence.module';
 import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
 import { CreateMediaItem, MediaItemCreated } from './commands';
