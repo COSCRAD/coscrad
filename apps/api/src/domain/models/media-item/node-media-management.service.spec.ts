@@ -187,9 +187,8 @@ describe(`NodeMediaManagementService`, () => {
 
                     expect(allMediaItems[0].mimeType).toBe(MIMEType.jpg);
 
-                    const wasFileCopiedToStatic = existsSync(
-                        `${staticAssetsDir}/desk-593327_640.jpg`
-                    );
+                    // __static__/desk-593327_640.jpg
+                    const wasFileCopiedToStatic = existsSync(validDestinationFilepath);
 
                     expect(wasFileCopiedToStatic).toBe(true);
                 });
@@ -206,6 +205,8 @@ describe(`NodeMediaManagementService`, () => {
             /**
              * These are just sanity checks that the errors flow through properly.
              * We test the actual validation logic with a lower level unit test.
+             *
+             * Note that we still need to add support for this elsewhere.
              */
             describe(`when the mimeType is inconsistent with the extension`, () => {
                 it.todo(`should return the expected error`);
@@ -213,7 +214,9 @@ describe(`NodeMediaManagementService`, () => {
         });
 
         describe(`when the file does note exist`, () => {
-            it.todo(`should have a test`);
+            it(`should fail with an appropriate error`, async () => {
+                await manager.discover(validSourceFilepath);
+            });
         });
     });
 });

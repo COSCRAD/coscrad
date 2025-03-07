@@ -121,7 +121,9 @@ export class ArangoDatabase {
 
         if (cursor.count === 0) return [];
 
-        return cursor.all();
+        const result = await cursor.all();
+
+        return result;
     };
 
     // TODO renamme this method to `count`

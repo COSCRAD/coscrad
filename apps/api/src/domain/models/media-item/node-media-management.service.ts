@@ -1,6 +1,7 @@
 import { ResourceType } from '@coscrad/api-interfaces';
 import { isNonEmptyObject, isNonEmptyString } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
+import { copyFileSync } from 'fs';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { Maybe } from '../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../lib/types/not-found';
@@ -13,6 +14,8 @@ import { getExpectedMimeTypeFromExtension } from './entities/get-extension-for-m
 import { MediaItem } from './entities/media-item.entity';
 import { IMediaManager } from './media-manager.interface';
 import { IMediaProber, MEDIA_PROBER_TOKEN } from './media-prober';
+
+const staticAssetsDir = '__static__';
 
 interface MediaCreationAcknowledgement {
     id: AggregateId;
@@ -56,6 +59,12 @@ export class NodeMediaManagementService implements IMediaManager {
         // TODO what if there are multiple dots in the filename?
         const filePrefix = filepathSplitOnSeparator[0];
 
+        // TODO this logic needs to be unit tested and separated into a util
+        // also, isn't there a standard lib for doing these manipulations?
+        const filePrefixSplitOnSlashes = filePrefix.split('/');
+
+        const filename = filePrefixSplitOnSlashes[filePrefixSplitOnSlashes.length - 1];
+
         // TODO use get file extension  helper
         const extension = filepathSplitOnSeparator[filepathSplitOnSeparator.length - 1];
 
@@ -93,10 +102,24 @@ export class NodeMediaManagementService implements IMediaManager {
             published: true,
             // TODO we need the ID generator- better to just execute the command
             id: buildDummyUuid(1),
-            url: 'todo remove this!',
+            // todo remove this!
+            url: 'https://www.ilie.ca/itstruethough',
         });
 
-        await this.commandRepository.create(newMediaItem);
+        const _errors = newMediaItem.validateInvariants();
+
+        // TODO handle file copy failure
+        // TODO We may want to abstract over file reads and writes with a binary file repository
+        /**
+         * Note that we write the file before persisting to the database because
+         * it is better to have an orphaned file than a database record that
+         * is missing media in case of failure.
+         */
+        copyFileSync(filepath, `${staticAssetsDir}/${filename}.${extension}`);
+
+        await this.commandRepository.create(newMediaItem).catch((err) => {
+            console.log(err);
+        });
 
         return {
             id: newMediaItem.id,
