@@ -62,6 +62,8 @@ describe(`NodeMediaManagementService`, () => {
 
         app = testModuleRef.createNestApplication();
 
+        await app.init();
+
         manager = app.get<IMediaManager>(MEDIA_MANGAER_INJECTION_TOKEN);
     });
 
@@ -181,7 +183,12 @@ describe(`NodeMediaManagementService`, () => {
                     // Should we provide additional metadata here, such as the `title`?
                     await manager.discover(validSourceFilepath);
 
-                    const allMediaItems = await manager.fetchMany(testUserWithGroups);
+                    const allMediaItems = await manager.fetchMany(
+                        testUserWithGroups.clone({
+                            username: 'COSCRAD-ADMIN',
+                            roles: [CoscradUserRole.superAdmin],
+                        })
+                    );
 
                     expect(allMediaItems).toHaveLength(1);
 

@@ -1,3 +1,4 @@
+import { Readable } from 'stream';
 import { Maybe } from '../../../../lib/types/maybe';
 
 export const MEDIA_PROBER_TOKEN = `MEDIA_PROBER_TOKEN`;
@@ -27,5 +28,5 @@ export interface IMediaProber {
      * - probe(mediaItemId -> external service)
      * - probe(externalUrl)
      */
-    probe(filepath: string): Promise<Maybe<RawMediaInfo>>;
+    probe(input: string | Readable): Promise<Maybe<RawMediaInfo>>;
 }

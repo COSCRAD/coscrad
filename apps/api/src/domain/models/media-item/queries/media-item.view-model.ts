@@ -7,9 +7,6 @@ const FromMediaItem = FromDomainModel(MediaItem);
 
 export class MediaItemViewModel extends BaseViewModel implements IMediaItemViewModel {
     @FromMediaItem
-    readonly url: string;
-
-    @FromMediaItem
     readonly mimeType: MIMEType;
 
     @FromMediaItem
@@ -18,11 +15,9 @@ export class MediaItemViewModel extends BaseViewModel implements IMediaItemViewM
     readonly filepath: string;
 
     constructor(mediaItem: MediaItem) {
-        const { url, mimeType, lengthMilliseconds } = mediaItem;
+        const { mimeType, lengthMilliseconds } = mediaItem;
 
         super(mediaItem);
-
-        this.url = url;
 
         this.mimeType = mimeType;
 

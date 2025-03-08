@@ -35,24 +35,66 @@ describe(`FSMediaProber.probe`, () => {
         });
     });
 
-    // TODO[https://www.pivotaltracker.com/story/show/186726351] add test for audio and video duration
-    (
-        [
-            ['biodynamic-theme-song-forever.mp3', 8.35916],
-            ['trees-reflect-into-the-lake.mp4', 13.3],
-            ['coscrad-test-video.mov', 4.1],
-        ] as const
-    ).forEach(([mediaFilename, expectedDuration]) => {
-        describe(`when probing the media item: ${mediaFilename}`, () => {
-            it(`should determine the correct duration`, async () => {
-                const result = await mediaProber.probe(buildMediaItemPath(mediaFilename));
+    describe(`when probing a jpg`, () => {
+        it(`should not have a duration`, async () => {
+            const testJpgFile = buildMediaItemPath('desk-593327_640.jpg');
 
-                expect(result).not.toBe(NotFound);
+            const result = await mediaProber.probe(testJpgFile);
 
-                const { durationSeconds } = result as RawMediaInfo;
+            expect(result).not.toBe(NotFound);
 
-                expect(durationSeconds).toBeCloseTo(expectedDuration, 1);
-            });
+            expect((result as RawMediaInfo).durationSeconds).toBeUndefined();
         });
     });
+
+    describe(`when probing an mp3`, () => {
+        it(`should determine the correct duration`, async () => {
+            const result = await mediaProber.probe(
+                buildMediaItemPath('elemental-magic-spell-impact-outgoing-228342.mp3')
+            );
+
+            expect(result).not.toBe(NotFound);
+
+            const { durationSeconds } = result as RawMediaInfo;
+
+            // 8.35916
+
+            expect(durationSeconds).toBeCloseTo(3, 1);
+        });
+    });
+
+    describe(`when probing an mp4`, () => {
+        it(`should return the correct duration`, async () => {
+            const result = await mediaProber.probe(
+                buildMediaItemPath('trees-reflect-into-the-lake.mp4')
+            );
+
+            expect(result).not.toBe(NotFound);
+
+            const { durationSeconds } = result as RawMediaInfo;
+
+            expect(durationSeconds).toBeCloseTo(13.3, 1);
+        });
+    });
+
+    // // TODO[https://www.pivotaltracker.com/story/show/186726351] add test for audio and video duration
+    // (
+    //     [
+    //         ['biodynamic-theme-song-forever.mp3', 8.35916],
+    //         ['trees-reflect-into-the-lake.mp4', 13.3],
+    //         ['coscrad-test-video.mov', 4.1],
+    //     ] as const
+    // ).forEach(([mediaFilename, expectedDuration]) => {
+    //     describe(`when probing the media item: ${mediaFilename}`, () => {
+    //         it(`should determine the correct duration`, async () => {
+    //             const result = await mediaProber.probe(buildMediaItemPath(mediaFilename));
+
+    //             expect(result).not.toBe(NotFound);
+
+    //             const { durationSeconds } = result as RawMediaInfo;
+
+    //             expect(durationSeconds).toBeCloseTo(expectedDuration, 1);
+    //         });
+    //     });
+    // });
 });

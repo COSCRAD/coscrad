@@ -275,13 +275,14 @@ export class AudioItem extends Resource implements IRadioPublishableResource {
             });
         }
 
-        const { mimeType, url: mediaItemUrl } = myMediaItem;
+        const { mimeType } = myMediaItem;
 
         return [
             new PlaylistEpisode({
                 name: this.name.toString(),
                 mimeType,
-                mediaItemUrl,
+                // TODO build this URL elsewhere and only store the media item ID here
+                mediaItemUrl: `/resources/mediaItems/${this.mediaItemId}`,
             }),
         ];
     }

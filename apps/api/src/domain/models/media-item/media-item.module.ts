@@ -8,6 +8,7 @@ import { PersistenceModule } from '../../../persistence/persistence.module';
 import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
 import { CreateMediaItem, MediaItemCreated } from './commands';
 import { CreateMediaItemCommandHandler } from './commands/create-media-item/create-media-item.command-handler';
+import { MediaItem } from './entities/media-item.entity';
 import { MEDIA_MANGAER_INJECTION_TOKEN } from './media-manager.interface';
 import { FsMediaProber, MEDIA_PROBER_TOKEN } from './media-prober';
 import { NodeMediaManagementService } from './node-media-management.service';
@@ -22,8 +23,12 @@ import { MediaItemController, MediaItemQueryService } from './queries';
         CreateMediaItem,
         CreateMediaItemCommandHandler,
         // Data Type Ctors
-        // Events
-        ...[MediaItemCreated].map((Ctor) => ({
+        ...[
+            // Domain Models
+            MediaItem,
+            // Events
+            MediaItemCreated,
+        ].map((Ctor) => ({
             provide: Ctor,
             useValue: Ctor,
         })),

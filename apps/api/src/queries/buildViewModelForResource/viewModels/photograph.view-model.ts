@@ -26,14 +26,18 @@ export class PhotographViewModel extends BaseViewModel implements IPhotographVie
      * there.
      */
 
-    constructor(photograph: Photograph, allMediaItems: MediaItem[]) {
+    constructor(photograph: Photograph, _allMediaItems: MediaItem[]) {
         super(photograph);
 
-        const { mediaItemId, photographer } = photograph;
+        const { photographer } = photograph;
 
-        const searchResult = allMediaItems.find(({ id }) => id === mediaItemId);
-
-        this.imageUrl = searchResult?.url;
+        /**
+         * TODO we are now event sourcing this view. We should cache the media
+         * item ID and build the URL in the new query service layer. Since this
+         * is done on another branch, we've made this property optional here and
+         * will reconcile upon rebase.
+         */
+        // this.imageUrl = searchResult?.url;
 
         this.photographer = photographer;
     }

@@ -38,9 +38,9 @@ const parseMediaItemDimensions = ({ streams }: ffmpeg.FfprobeData): Maybe<MediaI
 const parseDuration = ({ streams }: ffmpeg.FfprobeData): Maybe<number> => {
     if (streams.length === 0) return NotFound;
 
-    const { codec_type: codecType, duration } = streams[0];
+    const { codec_type: codecType, codec_name: codecName, duration } = streams[0];
 
-    const isAudioOrVideo = ['audio', 'video'].includes(codecType);
+    const isAudioOrVideo = ['audio', 'video'].includes(codecType) && codecName !== 'mjpeg';
 
     if (!isAudioOrVideo) return NotFound;
 

@@ -84,7 +84,8 @@ export class StateBasedAudioItemViewModel extends BaseResourceViewModel {
     constructor(
         audioItem: AudioItem,
         allMediaItems: MediaItem[],
-        allContributors: CoscradContributor[]
+        allContributors: CoscradContributor[],
+        baseMediaUrl: string
     ) {
         super(audioItem, allContributors);
 
@@ -95,9 +96,9 @@ export class StateBasedAudioItemViewModel extends BaseResourceViewModel {
         // TODO Send back the full data structure for rich presentation on the client
         this.text = transcript?.toString() || '';
 
-        const { url, mimeType } = allMediaItems.find(({ id }) => id === mediaItemId);
+        const { mimeType } = allMediaItems.find(({ id }) => id === mediaItemId);
 
-        this.audioURL = url;
+        this.audioURL = `${baseMediaUrl}/${mediaItemId}`;
 
         this.mimeType = mimeType;
 

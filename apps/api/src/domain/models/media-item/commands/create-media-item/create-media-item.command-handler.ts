@@ -23,7 +23,6 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
         const {
             aggregateCompositeIdentifier: { id },
             title,
-            url,
             mimeType,
             lengthMilliseconds,
             heightPx,
@@ -34,7 +33,6 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
             id,
             type: ResourceType.mediaItem,
             title,
-            url,
             mimeType: mimeType,
             // You must execute `PUBLISH_MEDIA_ITEM` to publish
             published: false,

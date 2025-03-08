@@ -1,6 +1,10 @@
 import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
-import { isNonEmptyObject, isNonEmptyString } from '@coscrad/validation-constraints';
+import {
+    isNonEmptyObject,
+    isNonEmptyString,
+    isNonNegativeFiniteNumber,
+} from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { copyFileSync } from 'fs';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
@@ -17,6 +21,9 @@ import { getExpectedMimeTypeFromExtension } from './entities/get-extension-for-m
 import { MediaItem } from './entities/media-item.entity';
 import { IMediaManager } from './media-manager.interface';
 import { IMediaProber, MEDIA_PROBER_TOKEN } from './media-prober';
+
+// TODO  move this
+const MS_PER_S = 1000;
 
 const staticAssetsDir = '__static__';
 
@@ -108,7 +115,6 @@ export class NodeMediaManagementService implements IMediaManager {
             // TODO we need the ID generator- better to just execute the command
             id: buildDummyUuid(1),
             // todo remove this!
-            url: 'https://www.ilie.ca/itstruethough',
         });
 
         /**
@@ -121,16 +127,29 @@ export class NodeMediaManagementService implements IMediaManager {
          * There's a bit of a chicken-and-egg problem here. The command handler
          * uses the prober and determines the duration \ dimensions.
          */
-        const creationCommand: CreateMediaItem = {
+        const creationCommand: {
+            -readonly [K in keyof CreateMediaItem]: CreateMediaItem[K];
+        } = {
             title: filePrefix,
             mimeType: expectedMimetypeFromExtension,
             aggregateCompositeIdentifier: {
                 id: generatedId,
                 type: AggregateType.mediaItem,
             },
-            url: 'TODO remove this property!',
-            ...probeResult,
         };
+
+        if (isNonNegativeFiniteNumber(probeResult.durationSeconds)) {
+            creationCommand.lengthMilliseconds = probeResult.durationSeconds * MS_PER_S;
+        }
+
+        if (
+            isNonNegativeFiniteNumber(probeResult.heightPx) &&
+            isNonNegativeFiniteNumber(probeResult.widthPx)
+        ) {
+            creationCommand.heightPx = probeResult.heightPx;
+
+            creationCommand.widthPx = probeResult.widthPx;
+        }
 
         // TODO handle file copy failure
         // TODO We may want to abstract over file reads and writes with a binary file repository
@@ -147,10 +166,17 @@ export class NodeMediaManagementService implements IMediaManager {
          * CQRS-ES patterns here. We simply stick to this because it was built
          * this way to start with.
          */
-        const result = await this.commandHandlerService.execute({
-            type: 'CREATE_MEDIA_ITEM',
-            payload: creationCommand,
-        });
+        const result = await this.commandHandlerService.execute(
+            {
+                type: 'CREATE_MEDIA_ITEM',
+                payload: creationCommand,
+            },
+            {
+                userId: 'COSCRAD_ADMIN',
+                // TODO We may want to handle metadata differently on media items
+                contributorIds: [],
+            }
+        );
 
         if (isInternalError(result)) {
             return result;
