@@ -1,32 +1,66 @@
-import { AggregateType, IMultilingualText } from '@coscrad/api-interfaces';
+import { AggregateType, ContributorWithId, IMultilingualText } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { ApiProperty } from '@nestjs/swagger';
 import { DetailScopedCommandWriteContext } from '../../../../app/controllers/command/services/command-info-service';
+import { Maybe } from '../../../../lib/types/maybe';
+import { NotFound } from '../../../../lib/types/not-found';
 import { DTO } from '../../../../types/DTO';
 import { ICoscradEvent } from '../../../common';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { AggregateId } from '../../../types/AggregateId';
 import { HasAggregateId } from '../../../types/HasAggregateId';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
+import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import { PhotographCreated } from '../commands';
 
 export class PhotographViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
-    contributions: { id: string; fullName: string }[];
+    public contributions: ContributorWithId[];
 
-    name: IMultilingualText;
+    @ApiProperty({
+        type: MultilingualText,
+    })
+    public name: IMultilingualText;
 
-    id: AggregateId;
+    @ApiProperty()
+    public id: string;
 
-    photographer: string;
+    @ApiProperty()
+    public photographer: string;
 
     // Do we need pixel height and width?
 
-    isPublished: boolean;
-
     mediaItemId?: string;
 
-    actions: string[];
+    // note that these are mapped to form specifications in the query service layer
+    @ApiProperty()
+    public actions: string[];
 
-    accessControlList: AccessControlList;
+    @ApiProperty()
+    public isPublished: boolean;
+
+    /**
+     * This should be removed in query responses.
+     *
+     * Note that if we leverage `forUser`, we should be able to make this
+     * private.
+     * */
+    public accessControlList: AccessControlList;
+
+    getAvailableCommands(): string[] {
+        /**
+         * TODO Let's not cache actions on the view documents. Let's instead
+         * project off the view model state to determine the available commands types.
+         */
+        return this.actions || [];
+    }
+
+    getCompositeIdentifier(): { type: AggregateType; id: AggregateId } {
+        return {
+            type: AggregateType.photograph,
+            id: this.id,
+        };
+    }
 
     // notes
 
@@ -96,6 +130,10 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
     static fromDto(dto: DTO<PhotographViewModel>): PhotographViewModel {
         const photograph = new PhotographViewModel();
 
+        if (isNullOrUndefined(dto)) {
+            return photograph;
+        }
+
         const { contributions, name, id, actions, accessControlList, mediaItemId, isPublished } =
             dto;
 
@@ -111,27 +149,19 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
             photograph.mediaItemId = mediaItemId;
         }
 
-        photograph.accessControlList = new AccessControlList(accessControlList);
+        const { id, isPublished, contributions, name, actions, accessControlList: aclDto } = dto;
 
-        photograph.actions = actions;
+        this.id = id;
 
-        photograph.isPublished = isNullOrUndefined(isPublished) ? false : isPublished; // we want to be extra careful here
+        this.isPublished = typeof isPublished === 'boolean' ? isPublished : false;
 
-        return photograph;
-    }
+        this.contributions = Array.isArray(contributions) ? contributions : [];
 
-    appendAction(action: string): PhotographViewModel {
-        this.actions.push(action);
+        this.name = new MultilingualText(name);
 
-        return this;
-    }
+        this.actions = Array.isArray(actions) ? actions : [];
 
-    appendActions(actions: string[]): PhotographViewModel {
-        for (const a of actions) {
-            this.actions.push(a);
-        }
-
-        return this;
+        this.accessControlList = new AccessControlList(aclDto);
     }
 
     apply(event: ICoscradEvent): PhotographViewModel {
@@ -147,14 +177,42 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
         return this;
     }
 
-    public getAvailableCommands() {
-        return this.actions;
+    static fromPhotographCreated({
+        payload: {
+            title,
+            languageCodeForTitle,
+            aggregateCompositeIdentifier: { id: photographId },
+        },
+    }: PhotographCreated): PhotographViewModel {
+        const dto: Partial<DTO<PhotographViewModel>> = {
+            name: buildMultilingualTextWithSingleItem(title, languageCodeForTitle),
+            id: photographId,
+            actions: [
+                'PUBLISH_RESOURCE',
+                'TAG_RESOURCE',
+                'CONNECT_RESOURCES_WITH_NOTE',
+                'CREATE_NOTE_ABOUT_RESOURCE',
+            ],
+        };
+
+        const view = new PhotographViewModel(dto);
+
+        return view;
     }
 
-    public getCompositeIdentifier() {
-        return {
-            type: AggregateType.photograph,
-            id: this.id,
-        };
+    static fromDto(dto: DTO<PhotographViewModel>): PhotographViewModel {
+        const photograph = new PhotographViewModel(dto);
+
+        return photograph;
+    }
+
+    public forUser(
+        userWithGroups?: CoscradUserWithGroups
+    ): Maybe<Omit<PhotographViewModel, 'accessControlList'>> {
+        if (this.isPublished || this.accessControlList.canUserWithGroups(userWithGroups)) {
+            return this;
+        }
+
+        return NotFound;
     }
 }

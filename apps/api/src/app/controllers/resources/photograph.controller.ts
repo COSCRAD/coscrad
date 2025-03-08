@@ -10,8 +10,8 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
+import { PhotographQueryService } from '../../../domain/models/photograph/queries/photograph-query.service';
 import { PhotographViewModel } from '../../../domain/models/photograph/queries/photograph.view-model';
-import { PhotographQueryService } from '../../../domain/services/query-services/photograph-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { QueryResponseTransformInterceptor } from '../response-mapping';
 import {

@@ -140,6 +140,7 @@ import {
     IPhotographQueryRepository,
     PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
 } from '../../../domain/models/photograph/queries';
+import { PhotographQueryService } from '../../../domain/models/photograph/queries/photograph-query.service';
 import { ArangoPhotographQueryRepository } from '../../../domain/models/photograph/repositories';
 import {
     AddAudioItemToPlaylistCommandHandler,
@@ -269,7 +270,6 @@ import { BibliographicCitationQueryService } from '../../../domain/services/quer
 import { CoscradUserGroupQueryService } from '../../../domain/services/query-services/coscrad-user-group-query.service';
 import { CoscradUserQueryService } from '../../../domain/services/query-services/coscrad-user-query.service';
 import { EdgeConnectionQueryService } from '../../../domain/services/query-services/edge-connection-query.service';
-import { PhotographQueryService } from '../../../domain/services/query-services/photograph-query.service';
 import { PlaylistQueryService } from '../../../domain/services/query-services/playlist-query.service';
 import { SongQueryService } from '../../../domain/services/query-services/song-query.service';
 import { SpatialFeatureQueryService } from '../../../domain/services/query-services/spatial-feature-query.service';

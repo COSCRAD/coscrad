@@ -21,18 +21,87 @@ import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/uti
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoRepositoryForAggregate } from '../../../../persistence/repositories/arango-repository-for-aggregate';
-import { PhotographViewModel } from '../../../../queries/buildViewModelForResource/viewModels/photograph.view-model';
+import { TestEventStream } from '../../../../test-data/events';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
-import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import buildInstanceFactory from '../../../factories/utilities/buildInstanceFactory';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
+import { AggregateId } from '../../../types/AggregateId';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import { CoscradContributor } from '../../user-management/contributor';
 import { FullName } from '../../user-management/user/entities/user/full-name.entity';
+import { PhotographCreated } from '../commands';
 import { IPhotographQueryRepository } from '../queries';
+import { PhotographViewModel } from '../queries/photograph.view-model';
 import { ArangoPhotographQueryRepository } from './arango-photograph-query-repository';
+
+const photographIds = [1, 2, 3].map(buildDummyUuid);
+
+const buildPhotographTitle = (id: string) => `photograph ${id}`;
+
+const photographTitle = buildPhotographTitle(photographIds[0]);
+
+const originalLanguageCode = LanguageCode.Chilcotin;
+
+const _translationLanguageCode = LanguageCode.English;
+
+const _textTranslation = 'foobar';
+
+const dummyPhotographer = 'Tester Photographer';
+
+const dummyContributor = getValidAggregateInstanceForTest(AggregateType.contributor);
+
+const contributorIds = [101, 102, 103].map(buildDummyUuid);
+
+const contributorIdsAndNames = contributorIds.map((contributorId) => ({
+    contributorId,
+    fullName: new FullName({
+        firstName: `user`,
+        lastName: contributorId,
+    }),
+}));
+
+const testContributors = contributorIdsAndNames.map(({ contributorId, fullName }) =>
+    dummyContributor.clone({
+        id: contributorId,
+        fullName,
+    })
+);
+
+const buildPhotographEventHistory = (
+    id: AggregateId,
+    title: string,
+    languageCodeForTitle: LanguageCode,
+    photographer: string
+) => {
+    const photographCreated = new TestEventStream().andThen<PhotographCreated>({
+        type: 'PHOTOGRAPH_CREATED',
+        payload: {
+            title,
+            languageCodeForTitle,
+            photographer,
+        },
+    });
+
+    return photographCreated.as({
+        type: AggregateType.photograph,
+        id,
+    });
+};
+
+const photographViews = photographIds.map((id) => {
+    const eventHistory = buildPhotographEventHistory(
+        id,
+        buildPhotographTitle(id),
+        originalLanguageCode,
+        dummyPhotographer
+    );
+
+    const creationEvent = eventHistory[0] as PhotographCreated;
+
+    return PhotographViewModel.fromPhotographCreated(creationEvent);
+});
 
 describe(`ArangoPhotographQueryRepository`, () => {
     let testQueryRepository: IPhotographQueryRepository;
@@ -93,60 +162,6 @@ describe(`ArangoPhotographQueryRepository`, () => {
     afterAll(async () => {
         databaseProvider.close();
     });
-
-    const photographIds = [1, 2, 3].map(buildDummyUuid);
-
-    const buildPhotographTitle = (id: string) => `photograph ${id}`;
-
-    const photographTitle = buildPhotographTitle(photographIds[0]);
-
-    const originalLanguageCode = LanguageCode.Chilcotin;
-
-    const _translationLanguageCode = LanguageCode.English;
-
-    const _textTranslation = 'foobar';
-
-    const dummyPhotographer = 'Tester Photographer';
-
-    const dummyContributor = getValidAggregateInstanceForTest(AggregateType.contributor);
-
-    const contributorIds = [101, 102, 103].map(buildDummyUuid);
-
-    const contributorIdsAndNames = contributorIds.map((contributorId) => ({
-        contributorId,
-        fullName: new FullName({
-            firstName: `user`,
-            lastName: contributorId,
-        }),
-    }));
-
-    const testContributors = contributorIdsAndNames.map(({ contributorId, fullName }) =>
-        dummyContributor.clone({
-            id: contributorId,
-            fullName,
-        })
-    );
-
-    const photographViews: PhotographViewModel[] = photographIds.map((id) =>
-        PhotographViewModel.fromDto({
-            id,
-            contributions: [],
-            name: buildMultilingualTextWithSingleItem(
-                buildPhotographTitle(id),
-                originalLanguageCode
-            ),
-            photographer: dummyPhotographer,
-            actions: [
-                'TAG_RESOURCE',
-                'CREATE_NOTE_ABOUT_RESOURCE',
-                'CONNECT_RESOURCES_WITH_NOTE',
-                'PUBLISH_RESOURCE',
-                'GRANT_RESOURCE_READ_ACCESS_TO_USER',
-            ],
-            isPublished: false,
-            accessControlList: new AccessControlList(),
-        })
-    );
 
     describe(`fetchById`, () => {
         const targetPhotographId = photographIds[0];

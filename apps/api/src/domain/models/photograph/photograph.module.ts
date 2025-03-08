@@ -9,12 +9,12 @@ import { ArangoConnectionProvider } from '../../../persistence/database/arango-c
 import { PersistenceModule } from '../../../persistence/persistence.module';
 import { DynamicDataTypeModule } from '../../../validation';
 import { EventModule } from '../../common';
-import { PhotographQueryService } from '../../services/query-services/photograph-query.service';
 import { CreatePhotographCommandHandler } from './commands/create-photograph/create-photograph.command-handler';
 import { PhotographCreatedEventHandler } from './commands/create-photograph/photograph-created.event-handler';
 import { Photograph } from './entities/photograph.entity';
 import { PhotographCommandsModule } from './photograph.commands.module';
 import { PHOTOGRAPH_QUERY_REPOSITORY_TOKEN } from './queries';
+import { PhotographQueryService } from './queries/photograph-query.service';
 import { ArangoPhotographQueryRepository } from './repositories';
 
 @Module({
