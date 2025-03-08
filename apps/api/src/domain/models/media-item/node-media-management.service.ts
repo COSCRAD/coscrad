@@ -6,7 +6,7 @@ import {
     isNonNegativeFiniteNumber,
 } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
-import { copyFileSync } from 'fs';
+import { copyFileSync, existsSync } from 'fs';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { Maybe } from '../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../lib/types/not-found';
@@ -19,6 +19,7 @@ import { CoscradUserWithGroups } from '../user-management/user/entities/user/cos
 import { CreateMediaItem } from './commands';
 import { getExpectedMimeTypeFromExtension } from './entities/get-extension-for-mime-type';
 import { MediaItem } from './entities/media-item.entity';
+import { FileNotFound } from './errors';
 import { IMediaManager } from './media-manager.interface';
 import { IMediaProber, MEDIA_PROBER_TOKEN } from './media-prober';
 import path = require('path');
@@ -59,7 +60,10 @@ export class NodeMediaManagementService implements IMediaManager {
      * @param filepath path to the file within an ingestion directory accessible to the node process
      */
     async discover(filepath: string): Promise<ResultOrError<MediaCreationAcknowledgement>> {
-        // TODO check if file exists
+        if (!existsSync(filepath)) {
+            return new FileNotFound(filepath);
+        }
+
         const extension = path.extname(filepath);
 
         if (!isNonEmptyString(extension)) {

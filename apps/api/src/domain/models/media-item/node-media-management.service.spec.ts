@@ -8,6 +8,7 @@ import buildConfigFilePath from '../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../app/config/constants/Environment';
 import { JwtStrategy } from '../../../authorization/jwt.strategy';
 import { MockJwtStrategy } from '../../../authorization/mock-jwt.strategy';
+import assertErrorAsExpected from '../../../lib/__tests__/assertErrorAsExpected';
 import { NotFound } from '../../../lib/types/not-found';
 import { ArangoCollectionId } from '../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
@@ -18,6 +19,7 @@ import { IRepositoryForAggregate } from '../../repositories/interfaces/repositor
 import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
 import { CoscradUserWithGroups } from '../user-management/user/entities/user/coscrad-user-with-groups';
 import { MediaItem } from './entities/media-item.entity';
+import { FileNotFound } from './errors';
 import { MediaItemModule } from './media-item.module';
 import { IMediaManager, MEDIA_MANGAER_INJECTION_TOKEN } from './media-manager.interface';
 
@@ -222,7 +224,11 @@ describe(`NodeMediaManagementService`, () => {
 
         describe(`when the file does note exist`, () => {
             it(`should fail with an appropriate error`, async () => {
-                await manager.discover(validSourceFilepath);
+                const invalidPath = 'mario-is-in-another-castle.mp3';
+
+                const result = await manager.discover(invalidPath);
+
+                assertErrorAsExpected(result, new FileNotFound(invalidPath));
             });
         });
     });
