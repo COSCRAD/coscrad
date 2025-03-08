@@ -10,9 +10,9 @@ import { ArangoDatabase } from '../../../../persistence/database/arango-database
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
 import mapDatabaseDocumentToEntityDto from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDtoToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
-import { PhotographViewModel } from '../../../../queries/buildViewModelForResource/viewModels/photograph.view-model';
 import { AggregateId } from '../../../types/AggregateId';
 import { IPhotographQueryRepository } from '../queries';
+import { PhotographViewModel } from '../queries/photograph.view-model';
 
 export class ArangoPhotographQueryRepository implements IPhotographQueryRepository {
     private readonly database: ArangoDatabaseForCollection<PhotographViewModel>;

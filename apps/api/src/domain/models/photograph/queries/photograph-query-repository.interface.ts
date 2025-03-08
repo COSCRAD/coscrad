@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { Maybe } from '../../../../lib/types/maybe';
-import { PhotographViewModel } from '../../../../queries/buildViewModelForResource/viewModels/photograph.view-model';
 import { AggregateId } from '../../../types/AggregateId';
+import { PhotographViewModel } from './photograph.view-model';
 
 export const PHOTOGRAPH_QUERY_REPOSITORY_TOKEN = 'PHOTOGRAPH_QUERY_REPOSITORY_TOKEN';
 

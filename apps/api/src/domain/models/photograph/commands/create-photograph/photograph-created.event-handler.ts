@@ -1,7 +1,7 @@
 import { Inject } from '@nestjs/common';
-import { PhotographViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/photograph.view-model';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../common';
 import { IPhotographQueryRepository, PHOTOGRAPH_QUERY_REPOSITORY_TOKEN } from '../../queries';
+import { PhotographViewModel } from '../../queries/photograph.view-model';
 import { PhotographCreated } from './photograph-created.event';
 
 @CoscradEventConsumer('PHOTOGRAPH_CREATED')

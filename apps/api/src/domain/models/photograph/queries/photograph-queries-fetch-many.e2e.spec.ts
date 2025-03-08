@@ -7,29 +7,29 @@ import {
 } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import httpStatusCodes from '../../app/constants/httpStatusCodes';
-import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
-import getValidAggregateInstanceForTest from '../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
-import { MultilingualText } from '../../domain/common/entities/multilingual-text';
-import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
-import { PhotographCreated } from '../../domain/models/photograph';
+import httpStatusCodes from '../../../../app/constants/httpStatusCodes';
+import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpIntegrationTest';
+import { clonePlainObjectWithOverrides } from '../../../../lib/utilities/clonePlainObjectWithOverrides';
+import { ArangoCollectionId } from '../../../../persistence/database/collection-references/ArangoCollectionId';
+import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
+import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import buildTestDataInFlatFormat from '../../../../test-data/buildTestDataInFlatFormat';
+import { TestEventStream } from '../../../../test-data/events';
+import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
+import { MultilingualText } from '../../../common/entities/multilingual-text';
+import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
+import { CoscradUserGroup } from '../../user-management/group/entities/coscrad-user-group.entity';
+import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
+import { CoscradUser } from '../../user-management/user/entities/user/coscrad-user.entity';
+import { FullName } from '../../user-management/user/entities/user/full-name.entity';
+import { PhotographCreated } from '../commands';
 import {
     IPhotographQueryRepository,
     PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
-} from '../../domain/models/photograph/queries';
-import { AccessControlList } from '../../domain/models/shared/access-control/access-control-list.entity';
-import { CoscradUserGroup } from '../../domain/models/user-management/group/entities/coscrad-user-group.entity';
-import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
-import { CoscradUser } from '../../domain/models/user-management/user/entities/user/coscrad-user.entity';
-import { FullName } from '../../domain/models/user-management/user/entities/user/full-name.entity';
-import { clonePlainObjectWithOverrides } from '../../lib/utilities/clonePlainObjectWithOverrides';
-import { ArangoCollectionId } from '../../persistence/database/collection-references/ArangoCollectionId';
-import { ArangoDatabaseProvider } from '../../persistence/database/database.provider';
-import TestRepositoryProvider from '../../persistence/repositories/__tests__/TestRepositoryProvider';
-import generateDatabaseNameForTestSuite from '../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import buildTestDataInFlatFormat from '../../test-data/buildTestDataInFlatFormat';
-import { TestEventStream } from '../../test-data/events';
-import { PhotographViewModel } from '../buildViewModelForResource/viewModels/photograph.view-model';
+} from './photograph-query-repository.interface';
+import { PhotographViewModel } from './photograph.view-model';
 
 const indexEndpoint = `/resources/photographs`;
 

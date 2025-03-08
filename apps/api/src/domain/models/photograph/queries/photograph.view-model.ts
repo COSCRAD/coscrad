@@ -1,13 +1,13 @@
 import { AggregateType, IMultilingualText } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { DetailScopedCommandWriteContext } from '../../../app/controllers/command/services/command-info-service';
-import { ICoscradEvent } from '../../../domain/common';
-import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
-import { PhotographCreated } from '../../../domain/models/photograph';
-import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
-import { AggregateId } from '../../../domain/types/AggregateId';
-import { HasAggregateId } from '../../../domain/types/HasAggregateId';
-import { DTO } from '../../../types/DTO';
+import { DetailScopedCommandWriteContext } from '../../../../app/controllers/command/services/command-info-service';
+import { DTO } from '../../../../types/DTO';
+import { ICoscradEvent } from '../../../common';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
+import { AggregateId } from '../../../types/AggregateId';
+import { HasAggregateId } from '../../../types/HasAggregateId';
+import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
+import { PhotographCreated } from '../commands';
 
 export class PhotographViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
     contributions: { id: string; fullName: string }[];

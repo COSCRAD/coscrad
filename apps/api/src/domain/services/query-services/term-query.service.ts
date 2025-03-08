@@ -1,6 +1,7 @@
 import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Observable } from 'rxjs';
 import {
     CommandContext,
@@ -24,7 +25,8 @@ export class TermQueryService {
     constructor(
         @Inject(TERM_QUERY_REPOSITORY_TOKEN)
         private readonly termQueryRepository: ITermQueryRepository,
-        @Inject(CommandInfoService) private readonly commandInfoService: CommandInfoService
+        @Inject(CommandInfoService) private readonly commandInfoService: CommandInfoService,
+        private readonly configService: ConfigService
     ) {
         // TODO we need the base URL as part of the config
         // this.audioUrlPrefix = `http://localhost:${this.configService.get(
