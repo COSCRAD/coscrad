@@ -21,6 +21,7 @@ import { getExpectedMimeTypeFromExtension } from './entities/get-extension-for-m
 import { MediaItem } from './entities/media-item.entity';
 import { IMediaManager } from './media-manager.interface';
 import { IMediaProber, MEDIA_PROBER_TOKEN } from './media-prober';
+import path = require('path');
 
 // TODO  move this
 const MS_PER_S = 1000;
@@ -59,28 +60,19 @@ export class NodeMediaManagementService implements IMediaManager {
      */
     async discover(filepath: string): Promise<ResultOrError<MediaCreationAcknowledgement>> {
         // TODO check if file exists
+        const extension = path.extname(filepath);
 
-        const filepathSplitOnSeparator = filepath.split('.');
-
-        if (filepathSplitOnSeparator.length < 2) {
+        if (!isNonEmptyString(extension)) {
             throw new InternalError(
                 `encountered an invalid filepath: ${filepath}. must include an extension`
             );
         }
 
-        // TODO what if there are multiple dots in the filename?
-        const filePrefix = filepathSplitOnSeparator[0];
+        const dirname = path.dirname(filepath);
 
-        // TODO this logic needs to be unit tested and separated into a util
-        // also, isn't there a standard lib for doing these manipulations?
-        const filePrefixSplitOnSlashes = filePrefix.split('/');
+        const filename = path.basename(filepath);
 
-        const filename = filePrefixSplitOnSlashes[filePrefixSplitOnSlashes.length - 1];
-
-        // TODO use get file extension  helper
-        const extension = filepathSplitOnSeparator[filepathSplitOnSeparator.length - 1];
-
-        if (!isNonEmptyString(extension) || extension.includes('.')) {
+        if (!isNonEmptyString(extension)) {
             throw new InternalError(
                 `failed to parse extension for file: ${filepath}. Invalid result: ${extension}`
             );
@@ -106,7 +98,7 @@ export class NodeMediaManagementService implements IMediaManager {
         // TODO Execute a command instead
         const newMediaItem: MediaItem = new MediaItem({
             // TODO shouldn't this be passed in?
-            title: filePrefix,
+            title: dirname,
             // TODO remove this
             type: ResourceType.mediaItem,
             mimeType: expectedMimetypeFromExtension,
@@ -130,7 +122,7 @@ export class NodeMediaManagementService implements IMediaManager {
         const creationCommand: {
             -readonly [K in keyof CreateMediaItem]: CreateMediaItem[K];
         } = {
-            title: filePrefix,
+            title: dirname,
             mimeType: expectedMimetypeFromExtension,
             aggregateCompositeIdentifier: {
                 id: generatedId,
@@ -158,7 +150,9 @@ export class NodeMediaManagementService implements IMediaManager {
          * it is better to have an orphaned file than a database record that
          * is missing media in case of failure.
          */
-        copyFileSync(filepath, `${staticAssetsDir}/${filename}.${extension}`);
+
+        // Note that filename includes the extension
+        copyFileSync(filepath, `${staticAssetsDir}/${filename}`);
 
         /**
          * Note that at this point, the command execution is an encapsulated
