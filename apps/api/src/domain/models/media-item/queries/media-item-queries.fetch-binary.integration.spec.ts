@@ -107,11 +107,11 @@ describe(`MediaItemController.fetchBinary`, () => {
         roles: [CoscradUserRole.viewer],
     });
 
-    const _projectAdmin = dummyUser.clone({
+    const projectAdmin = dummyUser.clone({
         roles: [CoscradUserRole.projectAdmin],
     });
 
-    const _coscradAdmin = dummyUser.clone({
+    const coscradAdmin = dummyUser.clone({
         roles: [CoscradUserRole.superAdmin],
     });
 
@@ -258,6 +258,88 @@ describe(`MediaItemController.fetchBinary`, () => {
                         endpoint: buildDetailEndpoint(privateMediaItemUserCanAccess.id),
                         expectedStatus: HttpStatusCode.ok,
                     });
+                });
+            });
+        });
+    });
+
+    describe(`when the user is authenticated as a coscrad admin`, () => {
+        beforeAll(async () => {
+            // TODO test support for user groups
+
+            await setItUp(new CoscradUserWithGroups(coscradAdmin, []), testPngFilePath);
+        });
+        describe(`when the media item is public`, () => {
+            it(`should return the expected result`, async () => {
+                await assertQueryResult({
+                    app,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider
+                            .forResource(ResourceType.mediaItem)
+                            .create(publicMediaItem);
+
+                        await testRepositoryProvider.getUserRepository().create(coscradAdmin);
+                    },
+                    endpoint: buildDetailEndpoint(publicMediaItem.id),
+                    expectedStatus: HttpStatusCode.ok,
+                });
+            });
+        });
+
+        describe(`when the media item is not published`, () => {
+            it(`should still return the media item (admin have full access)`, async () => {
+                await assertQueryResult({
+                    app,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider
+                            .forResource(ResourceType.mediaItem)
+                            .create(privateMediaItem);
+
+                        await testRepositoryProvider.getUserRepository().create(coscradAdmin);
+                    },
+                    endpoint: buildDetailEndpoint(publicMediaItem.id),
+                    expectedStatus: HttpStatusCode.ok,
+                });
+            });
+        });
+    });
+
+    describe(`when the user is authenticated as a project admin`, () => {
+        beforeAll(async () => {
+            // TODO test support for user groups
+
+            await setItUp(new CoscradUserWithGroups(projectAdmin, []), testPngFilePath);
+        });
+        describe(`when the media item is public`, () => {
+            it(`should return the expected result`, async () => {
+                await assertQueryResult({
+                    app,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider
+                            .forResource(ResourceType.mediaItem)
+                            .create(publicMediaItem);
+
+                        await testRepositoryProvider.getUserRepository().create(projectAdmin);
+                    },
+                    endpoint: buildDetailEndpoint(publicMediaItem.id),
+                    expectedStatus: HttpStatusCode.ok,
+                });
+            });
+        });
+
+        describe(`when the media item is not published`, () => {
+            it(`should still return the media item (admin have full access)`, async () => {
+                await assertQueryResult({
+                    app,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider
+                            .forResource(ResourceType.mediaItem)
+                            .create(privateMediaItem);
+
+                        await testRepositoryProvider.getUserRepository().create(coscradAdmin);
+                    },
+                    endpoint: buildDetailEndpoint(publicMediaItem.id),
+                    expectedStatus: HttpStatusCode.ok,
                 });
             });
         });
