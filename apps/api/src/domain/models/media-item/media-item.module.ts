@@ -1,6 +1,7 @@
 import { ResourceType } from '@coscrad/api-interfaces';
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { IdGenerationModule } from '../../../lib/id-generation/id-generation.module';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
@@ -15,7 +16,7 @@ import { NodeMediaManagementService } from './node-media-management.service';
 import { MediaItemController, MediaItemQueryService } from './queries';
 
 @Module({
-    imports: [PersistenceModule, CommandModule, IdGenerationModule],
+    imports: [ConfigModule, PersistenceModule, CommandModule, IdGenerationModule],
     controllers: [MediaItemController],
     providers: [
         MediaItemQueryService,
