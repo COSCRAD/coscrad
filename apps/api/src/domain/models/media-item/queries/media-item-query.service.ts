@@ -3,10 +3,17 @@ import {
     IDetailQueryResult,
     IIndexQueryResult,
     IMediaItemViewModel,
+    MIMEType,
     WithTags,
 } from '@coscrad/api-interfaces';
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import {
+    isNonEmptyObject,
+    isNonEmptyString,
+    isNullOrUndefined,
+} from '@coscrad/validation-constraints';
 import { Inject, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { existsSync } from 'fs';
 import {
     CommandContext,
     CommandInfoService,
@@ -39,6 +46,14 @@ import { CoscradUserWithGroups } from '../../user-management/user/entities/user/
 import { MediaItem } from '../entities/media-item.entity';
 import { MediaItemViewModel } from './media-item.view-model';
 
+// TODO remove this- this is temporary to support a refactor
+interface FilepathResponse {
+    root: string;
+    filepath: string;
+    mimeType: MIMEType;
+    filename: string;
+}
+
 @Injectable()
 export class MediaItemQueryService {
     private readonly type = ResourceType.mediaItem;
@@ -47,7 +62,8 @@ export class MediaItemQueryService {
         @Inject(REPOSITORY_PROVIDER_TOKEN)
         protected readonly repositoryProvider: IRepositoryProvider,
         protected readonly databaseProvider: ArangoDatabaseProvider,
-        @Inject(CommandInfoService) protected readonly commandInfoService: CommandInfoService
+        @Inject(CommandInfoService) protected readonly commandInfoService: CommandInfoService,
+        private readonly configService: ConfigService
     ) {}
 
     /**
@@ -233,12 +249,82 @@ export class MediaItemQueryService {
         );
     }
 
-    buildViewModel(mediaItem: MediaItem): MediaItemViewModel {
+    buildViewModel(mediaItem: MediaItem): IMediaItemViewModel {
+        const baseApiUrl = `${this.configService.get('BASE_URL')}/${this.configService.get(
+            'GLOBAL_PREFIX'
+        )}`;
+
+        const baseDigitalAssetUrl = `${baseApiUrl}/media`;
+
         /**
          * Note that we need to remove `filepath` for security reasons.
          * We currently do so the controller.
          */
-        return new MediaItemViewModel(mediaItem);
+        const view = new MediaItemViewModel(mediaItem);
+
+        /**
+         * Note that there is no risk of side-effects due to aliasing biting us.
+         * View model objects have a short lifetime.
+         */
+        // @ts-expect-error We may want to relax the read-only constraints.
+        delete view.filepath;
+
+        const viewWithoutFilePath = view as unknown as IMediaItemViewModel;
+
+        viewWithoutFilePath.url = `${baseDigitalAssetUrl}/${mediaItem.id}`;
+
+        return viewWithoutFilePath;
+    }
+
+    /**
+     * TODO We want to move towards fetching the binary as a `StreamableFile`.
+     * This method is here to "make it wrong before we make it right". It's a
+     * stepping stone that enables us to remove the current (filepath based)
+     * logic out of the controller and back into the service layer where it
+     * belongs.
+     *
+     * [See here for streaming files in NestJS](https://docs.nestjs.com/techniques/streaming-files)
+     */
+    async fetchFilepathForMediaItem(
+        systemUser: CoscradUserWithGroups,
+        mediaItemId: AggregateId
+    ): Promise<Maybe<ResultOrError<FilepathResponse>>> {
+        const mediaItem = await this.fetchDomainModelById(mediaItemId);
+
+        if (isNotFound(mediaItem)) {
+            return NotFound;
+        }
+
+        if (isInternalError(mediaItem)) {
+            // TODO include more info if the user is an admin
+            throw new InternalError('media item query service encountered an invalid media item');
+        }
+
+        const relativeFilePath = mediaItem.getFilePath();
+
+        // TODO Make this configurable
+        const STATIC_DIR = `__static__`;
+
+        const fullFilePath = `./${STATIC_DIR}/${relativeFilePath}`;
+
+        if (
+            mediaItem.published ||
+            (isNonEmptyObject(systemUser) &&
+                mediaItem.queryAccessControlList.canUserWithGroups(systemUser))
+        ) {
+            if (!existsSync(fullFilePath)) {
+                return NotFound;
+            }
+
+            return {
+                root: STATIC_DIR,
+                filepath: relativeFilePath,
+                mimeType: mediaItem.mimeType,
+                filename: isNonEmptyString(mediaItem.title) ? mediaItem.title : 'media-item',
+            };
+        }
+
+        return NotFound;
     }
 
     getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {

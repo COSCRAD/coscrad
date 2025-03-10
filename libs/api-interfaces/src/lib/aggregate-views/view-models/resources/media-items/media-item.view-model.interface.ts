@@ -9,4 +9,6 @@ export interface IMediaItemViewModel extends IBaseViewModel {
     mimeType: MIMEType;
 
     lengthMilliseconds: number;
+
+    url: string;
 }

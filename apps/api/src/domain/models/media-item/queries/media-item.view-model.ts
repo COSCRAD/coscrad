@@ -5,7 +5,11 @@ import { MediaItem } from '../entities/media-item.entity';
 
 const FromMediaItem = FromDomainModel(MediaItem);
 
-export class MediaItemViewModel extends BaseViewModel implements IMediaItemViewModel {
+/**
+ * Note that we build the `url` dynamically in the query service as we need the
+ * config to get the base url.
+ */
+export class MediaItemViewModel extends BaseViewModel implements Omit<IMediaItemViewModel, 'url'> {
     @FromMediaItem
     readonly mimeType: MIMEType;
 

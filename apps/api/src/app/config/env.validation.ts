@@ -110,6 +110,7 @@ export class EnvironmentVariables {
     SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT: string;
 }
 
+// Do we have a test of this?
 export const validate = (config: Record<string, unknown>): EnvironmentVariables => {
     const configToValidate = plainToInstance(EnvironmentVariables, config, {
         enableImplicitConversion: true,
