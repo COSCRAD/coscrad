@@ -21,6 +21,7 @@ import { CoscradEventFactory } from '../../../common';
 import { AggregateId } from '../../../types/AggregateId';
 import { assertQueryResult } from '../../__tests__';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import { MediaItemModule } from '../media-item.module';
 
@@ -102,7 +103,7 @@ describe(`MediaItemController.fetchBinary`, () => {
         authProviderUserId: `autho|${dummyUserId}`,
     });
 
-    const _nonAdminUser = dummyUser.clone({
+    const nonAdminUser = dummyUser.clone({
         roles: [CoscradUserRole.viewer],
     });
 
@@ -172,6 +173,7 @@ describe(`MediaItemController.fetchBinary`, () => {
                     endpoint: buildDetailEndpoint(publicMediaItem.id),
                     expectedStatus: HttpStatusCode.ok,
                     // checkResponseBody:
+                    // TODO do we want to snapshot one response?
                 });
             });
         });
@@ -189,6 +191,73 @@ describe(`MediaItemController.fetchBinary`, () => {
                     },
                     endpoint: buildDetailEndpoint(privateMediaItem.id),
                     expectedStatus: HttpStatusCode.notFound,
+                });
+            });
+        });
+    });
+
+    describe(`when the user is authenticated as a viewer`, () => {
+        beforeAll(async () => {
+            // TODO test support for user groups
+
+            await setItUp(new CoscradUserWithGroups(nonAdminUser, []), testPngFilePath);
+        });
+
+        describe(`when the media item is public`, () => {
+            it(`should return the correct result`, async () => {
+                await assertQueryResult({
+                    app,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider
+                            .forResource(ResourceType.mediaItem)
+                            .create(publicMediaItem);
+
+                        await testRepositoryProvider.getUserRepository().create(nonAdminUser);
+                    },
+                    endpoint: buildDetailEndpoint(publicMediaItem.id),
+                    expectedStatus: HttpStatusCode.ok,
+                    // checkResponseBody:
+                });
+            });
+        });
+
+        describe(`when the media item is not published`, () => {
+            describe(`when the user does not have query ACL read permissions`, () => {
+                it(`should return not found`, async () => {
+                    await assertQueryResult({
+                        app,
+                        seedInitialState: async () => {
+                            await testRepositoryProvider
+                                .forResource(ResourceType.mediaItem)
+                                .create(privateMediaItem);
+
+                            await testRepositoryProvider.getUserRepository().create(nonAdminUser);
+                        },
+                        endpoint: buildDetailEndpoint(privateMediaItem.id),
+                        expectedStatus: HttpStatusCode.notFound,
+                        // checkResponseBody:
+                    });
+                });
+            });
+
+            describe(`when the user has query ACL read permissions`, () => {
+                it(`should return the expected result`, async () => {
+                    const privateMediaItemUserCanAccess = privateMediaItem.clone({
+                        queryAccessControlList: new AccessControlList().allowUser(nonAdminUser.id),
+                    });
+
+                    await assertQueryResult({
+                        app,
+                        seedInitialState: async () => {
+                            await testRepositoryProvider
+                                .forResource(ResourceType.mediaItem)
+                                .create(privateMediaItemUserCanAccess);
+
+                            await testRepositoryProvider.getUserRepository().create(nonAdminUser);
+                        },
+                        endpoint: buildDetailEndpoint(privateMediaItemUserCanAccess.id),
+                        expectedStatus: HttpStatusCode.ok,
+                    });
                 });
             });
         });
