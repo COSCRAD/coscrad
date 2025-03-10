@@ -1,4 +1,9 @@
-import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
+import {
+    ICommandFormAndLabels,
+    IDetailQueryResult,
+    IIndexQueryResult,
+    IPhotographViewModel,
+} from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Observable } from 'rxjs';
@@ -26,7 +31,10 @@ export class PhotographQueryService {
     ) {}
 
     // todo add explicit return type
-    async fetchById(id: AggregateId, userWithGroups?: CoscradUserWithGroups) {
+    async fetchById(
+        id: AggregateId,
+        userWithGroups?: CoscradUserWithGroups
+    ): Promise<IDetailQueryResult<IPhotographViewModel> | NotFound> {
         const result = await this.repository.fetchById(id);
 
         if (isNotFound(result)) return result;
@@ -46,7 +54,9 @@ export class PhotographQueryService {
     }
 
     // TODO should we support specifications \ custom filters?
-    async fetchMany(userWithGroups?: CoscradUserWithGroups) {
+    async fetchMany(
+        userWithGroups?: CoscradUserWithGroups
+    ): Promise<IIndexQueryResult<IPhotographViewModel>> {
         // TODO consider filtering for user access in the DB
         const entities = await this.repository.fetchMany();
 

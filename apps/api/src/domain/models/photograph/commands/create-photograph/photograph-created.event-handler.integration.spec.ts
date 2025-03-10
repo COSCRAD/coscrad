@@ -14,12 +14,13 @@ import { ArangoConnectionProvider } from '../../../../../persistence/database/ar
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { PhotographViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/photograph.view-model';
 import { TestEventStream } from '../../../../../test-data/events';
+import { assertResourceHasContributionFor } from '../../../__tests__';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
-import { PhotographCommandsModule } from '../../photograph.commands.module';
 import { IPhotographQueryRepository } from '../../queries';
+import { PhotographViewModel } from '../../queries/photograph.view-model';
 import { ArangoPhotographQueryRepository } from '../../repositories';
+import { PhotographCommandsModule } from '../photograph.commands.module';
 import { PhotographCreated } from './photograph-created.event';
 import { PhotographCreatedEventHandler } from './photograph-created.event-handler';
 
@@ -114,13 +115,13 @@ describe(`PhotographCreatedEventHandler`, () => {
 
             expect(searchResult).not.toBe(NotFound);
 
-            const foundPhotograph = searchResult as PhotographViewModel;
+            const view = searchResult as PhotographViewModel;
 
-            const { name: nameDto, contributions, actions } = foundPhotograph;
+            const { name: nameDto, actions } = view;
 
-            const name = new MultilingualText(nameDto);
+            const foundName = new MultilingualText(nameDto);
 
-            const originalPhotographTitleItem = name.getOriginalTextItem();
+            const originalPhotographTitleItem = foundName.getOriginalTextItem();
 
             expect(originalPhotographTitleItem.text).toBe(photographTitle);
 
@@ -135,14 +136,7 @@ describe(`PhotographCreatedEventHandler`, () => {
             // expect categories to be empty
             // expect notes to be empty
 
-            expect(
-                contributions.some(
-                    // this should actually be the name and ID
-                    (c) => c.id === dummyContributor.id
-                )
-            );
-
-            // TODO check the contributor's full name as well
+            assertResourceHasContributionFor(dummyContributor, view);
         });
     });
 });
