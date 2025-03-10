@@ -116,6 +116,12 @@ const buildCreateResourceFsaForMediaItem = (
     }
 };
 
+/**
+ * TODO We should to either:
+ * 1. Use the async fs APIs to optimize this
+ * 2. Expose an `ingest-media-item` (singular) so that we can use, e.g., GNU parallel
+ * for performance instead.
+ */
 @CliCommand({
     name: 'ingest-media-items',
     description: 'ingest all media items within a target directory',
