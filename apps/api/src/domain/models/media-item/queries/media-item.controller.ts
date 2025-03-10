@@ -2,7 +2,6 @@ import { IDetailQueryResult, MIMEType } from '@coscrad/api-interfaces';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Controller, Get, Param, Query, Request, Res, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
-import { existsSync } from 'fs';
 import { InternalErrorFilter } from '../../../../app/controllers/command/exception-handling/exception-filters/internal-error.filter';
 import buildByIdApiParamMetadata from '../../../../app/controllers/resources/common/buildByIdApiParamMetadata';
 import sendInternalResultAsHttpResponse from '../../../../app/controllers/resources/common/sendInternalResultAsHttpResponse';
@@ -92,22 +91,24 @@ export class MediaItemController {
         }
 
         // TODO share this logic with the fetch binary method
-        const filePath = searchResult.filepath;
+        const filePath = await this.mediaItemQueryService.fetchFilepathForMediaItem(
+            req?.user,
+            searchResult.id
+        );
 
-        // TODO Make this configurable
-        const STATIC_DIR = `./__static__`;
-
-        if (!existsSync(`${STATIC_DIR}/${filePath}`)) {
-            return sendInternalResultAsHttpResponse(res, NotFound);
+        if (isInternalError(filePath) || isNotFound(filePath)) {
+            return filePath;
         }
 
+        const headers = this.buildHeaders({ mimeType: filePath.mimeType, name: filePath.filename });
+
         const options = {
-            root: STATIC_DIR,
+            root: filePath.root,
             dotfiles: 'deny',
-            headers: this.buildHeaders({ mimeType: searchResult.mimeType, name }),
+            headers,
         };
 
-        return res.sendFile(filePath, options);
+        return res.sendFile(filePath.filepath, options);
     }
 
     @ApiBearerAuth('JWT')
