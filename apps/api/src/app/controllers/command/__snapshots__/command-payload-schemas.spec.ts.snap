@@ -141,13 +141,6 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isOptional": true,
         "label": "title (language)",
       },
-      "url": {
-        "coscradDataType": "URL",
-        "description": "a web URL link to a digital version of this media item for playback",
-        "isArray": false,
-        "isOptional": false,
-        "label": "audio link",
-      },
       "widthPx": {
         "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
         "description": "the width of the media item in pixels",
