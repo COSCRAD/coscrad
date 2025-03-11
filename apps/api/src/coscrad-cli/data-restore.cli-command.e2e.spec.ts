@@ -126,12 +126,20 @@ describe(`CLI Command: **data-restore**`, () => {
                     new ArangoQueryRunner(databaseProvider)
                 );
 
-                const databaseSnapshot = await dataExporter.fetchSnapshot();
+                const databaseSnapshot = await dataExporter.fetchSnapshot([
+                    ...Object.values(ArangoEdgeCollectionId),
+                ]);
 
-                const documentCollectionsNotInSnapshot = Object.values(
-                    ArangoDocumentCollectionId
-                ).filter((collectionId) =>
-                    isNullOrUndefined(databaseSnapshot.document[collectionId]?.length)
+                const documentCollections = [
+                    ...Object.values(ArangoDocumentCollectionId),
+                    'games',
+                    'term__VIEWS',
+                    'vocabularyList__VIEWS',
+                ];
+
+                const documentCollectionsNotInSnapshot = documentCollections.filter(
+                    (collectionId) =>
+                        isNullOrUndefined(databaseSnapshot.document[collectionId]?.length)
                 );
 
                 /**

@@ -14,6 +14,10 @@ export class ArangoDatabaseProvider {
         this.databaseConnection = arangoConnectionProvider.getConnection();
     }
 
+    async collections() {
+        return this.databaseConnection.collections();
+    }
+
     getDBInstance = (): ArangoDatabase => {
         if (!this.arangoInstance)
             // TODO inject this in the constructor

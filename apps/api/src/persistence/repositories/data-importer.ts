@@ -4,7 +4,7 @@ import { HasAggregateId } from '../../domain/types/HasAggregateId';
 import { InternalError } from '../../lib/errors/InternalError';
 import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../database/database.provider';
-import { DatabaseDTO } from '../database/utilities/mapEntityDTOToDatabaseDocument';
+import { ArangoDocumentForAggregateRoot } from '../database/utilities/mapEntityDTOToDatabaseDocument';
 
 export const DATA_MODE = 'DATA_MODE';
 
@@ -34,7 +34,7 @@ export class DataImporter {
 
         const writeDocumentData = ([collectionName, documents]: [
             ArangoCollectionId,
-            DatabaseDTO<HasAggregateId>[]
+            ArangoDocumentForAggregateRoot<HasAggregateId>[]
         ]) => this.databaseProvider.getDatabaseForCollection(collectionName).createMany(documents);
 
         await Promise.all(Object.entries(parsedSnapshot.document).map(writeDocumentData));

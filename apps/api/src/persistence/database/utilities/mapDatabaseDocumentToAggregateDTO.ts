@@ -1,9 +1,11 @@
 import { isAggregateId } from '../../../domain/types/AggregateId';
 import { HasAggregateId } from '../../../domain/types/HasAggregateId';
 import { DTO } from '../../../types/DTO';
-import { DatabaseDTO } from './mapEntityDTOToDatabaseDocument';
+import { ArangoDocumentForAggregateRoot } from './mapEntityDTOToDatabaseDocument';
 
-export default <TEntity extends HasAggregateId>(databaseDTO: DatabaseDTO<TEntity>): DTO<TEntity> =>
+export default <TEntity extends HasAggregateId>(
+    databaseDTO: ArangoDocumentForAggregateRoot<TEntity>
+): DTO<TEntity> =>
     Object.entries(databaseDTO).reduce((accumulatedMappedObject: DTO<TEntity>, [key, value]) => {
         /**
          * We don't currently expose this in the repository layer

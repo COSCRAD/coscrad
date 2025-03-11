@@ -11,8 +11,12 @@ import { ArangoDatabaseDocument } from './utilities/mapEntityDTOToDatabaseDocume
 export class ArangoQueryRunner implements ICoscradQueryRunner {
     private readonly arangoDatabase: ArangoDatabase;
 
-    constructor(arangoDatabaseProvider: ArangoDatabaseProvider) {
+    constructor(private readonly arangoDatabaseProvider: ArangoDatabaseProvider) {
         this.arangoDatabase = arangoDatabaseProvider.getDBInstance();
+    }
+
+    async collections() {
+        return this.arangoDatabaseProvider.collections();
     }
 
     async fetchMany<TDocument>(collectionName: string): Promise<TDocument[]> {

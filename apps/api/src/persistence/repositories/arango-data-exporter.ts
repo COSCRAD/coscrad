@@ -1,8 +1,6 @@
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { InMemoryDatabaseSnapshot } from '../../test-data/utilities/convertInMemorySnapshotToDatabaseFormat';
 import { ArangoQueryRunner } from '../database/arango-query-runner';
-import { ArangoDocumentCollectionId } from '../database/collection-references/ArangoDocumentCollectionId';
-import { ArangoEdgeCollectionId } from '../database/collection-references/ArangoEdgeCollectionId';
 
 /**
  * TODO [test-coverage] [https://github.com/COSCRAD/coscrad/pull/381#discussion_r1198018120]
@@ -11,21 +9,30 @@ import { ArangoEdgeCollectionId } from '../database/collection-references/Arango
 export class ArangoDataExporter {
     constructor(private readonly arangoQueryRunner: ArangoQueryRunner) {}
 
-    async fetchSnapshot(): Promise<InMemoryDatabaseSnapshot> {
+    async fetchSnapshot(knownEdgeCollections: string[] = []): Promise<InMemoryDatabaseSnapshot> {
         const document = {};
 
         const edge = {};
 
+        const allCollections = await this.arangoQueryRunner.collections();
+
+        const documentCollectionNames = allCollections
+            .map(({ name }) => name)
+            .filter((c) => !knownEdgeCollections.includes(c));
+
+        // TODO can we work with checksums?
+
         /**
          * TODO Consider parallelizing these queries for performance.
          */
-        for (const collection of Object.values(ArangoDocumentCollectionId)) {
+        for (const collection of documentCollectionNames) {
             const queryResult = await this.arangoQueryRunner.fetchMany(collection);
 
             document[collection] = queryResult;
         }
 
-        for (const collection of Object.values(ArangoEdgeCollectionId)) {
+        for (const collection of knownEdgeCollections) {
+            // TODO handle the case that the collection does not exist explicitly
             const queryResult = await this.arangoQueryRunner.fetchMany(collection);
 
             edge[collection] = queryResult;
@@ -37,12 +44,12 @@ export class ArangoDataExporter {
         } as InMemoryDatabaseSnapshot;
     }
 
-    async dumpSnapshot(directory: string, filename: string) {
+    async dumpSnapshot(directory: string, filename: string, knownEdgeCollections: string[] = []) {
         if (!existsSync(directory)) {
             mkdirSync(directory);
         }
 
-        const snapshot = await this.fetchSnapshot();
+        const snapshot = await this.fetchSnapshot(knownEdgeCollections);
 
         try {
             // TODO We need an abstraction for writing files

@@ -10,7 +10,7 @@ import { InternalError } from '../../lib/errors/InternalError';
 import { Maybe } from '../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
 import buildArangoDocumentHandle from './utilities/buildArangoDocumentHandle';
-import { DatabaseDTO } from './utilities/mapEntityDTOToDatabaseDocument';
+import { ArangoDocumentForAggregateRoot } from './utilities/mapEntityDTOToDatabaseDocument';
 
 type ArangoDTO<T> = T & {
     _key: string;
@@ -43,7 +43,7 @@ export class ArangoDatabase {
         return this.db.name;
     }
 
-    fetchById = async <TDatabaseDTO extends DatabaseDTO<HasAggregateId>>(
+    fetchById = async <TDatabaseDTO extends ArangoDocumentForAggregateRoot<HasAggregateId>>(
         id: string,
         collectionName: string
     ): Promise<Maybe<TDatabaseDTO>> => {
