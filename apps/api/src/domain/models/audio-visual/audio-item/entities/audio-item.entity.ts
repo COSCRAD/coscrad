@@ -282,7 +282,7 @@ export class AudioItem extends Resource implements IRadioPublishableResource {
                 name: this.name.toString(),
                 mimeType,
                 // TODO build this URL elsewhere and only store the media item ID here
-                mediaItemUrl: `/resources/mediaItems/${this.mediaItemId}`,
+                mediaItemUrl: `/resources/mediaItems/download/${this.mediaItemId}`,
             }),
         ];
     }

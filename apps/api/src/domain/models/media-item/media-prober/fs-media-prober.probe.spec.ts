@@ -57,9 +57,9 @@ describe(`FSMediaProber.probe`, () => {
 
             const { durationSeconds } = result as RawMediaInfo;
 
-            // 8.35916
+            const lengthDeterminedFromAudacity = 3.183;
 
-            expect(durationSeconds).toBeCloseTo(3, 1);
+            expect(durationSeconds).toBeCloseTo(lengthDeterminedFromAudacity, 1);
         });
     });
 

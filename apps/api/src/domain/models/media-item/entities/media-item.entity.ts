@@ -16,6 +16,7 @@ import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
+import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { isAudioMimeType } from '../../audio-visual/audio-item/entities/audio-item.entity';
 import { isVideoMimeType } from '../../audio-visual/video/entities/video.entity';
 import { TimeRangeContext } from '../../context/time-range-context/time-range-context.entity';
@@ -29,9 +30,13 @@ import { InconsistentMediaItemPropertyError } from '../errors';
 import { getExtensionForMimeType } from './get-extension-for-mime-type';
 import { MediaItemDimensions } from './media-item-dimensions';
 
+const ID_OFFSET = 10000;
+
+const buildId = (sequenceNumber: number) => buildDummyUuid(sequenceNumber + ID_OFFSET);
+
 @CoscradDataExample<MediaItem>({
     example: {
-        id: '1',
+        id: buildId(1),
         title: 'episode (media item 1) title (in language)',
         contributorAndRoles: [
             {
@@ -47,7 +52,7 @@ import { MediaItemDimensions } from './media-item-dimensions';
 })
 @CoscradDataExample<MediaItem>({
     example: {
-        id: '2',
+        id: buildId(2),
         title: 'video (media item 2) title (in language)',
         contributorAndRoles: [
             {
@@ -63,7 +68,7 @@ import { MediaItemDimensions } from './media-item-dimensions';
 })
 @CoscradDataExample<MediaItem>({
     example: {
-        id: '3',
+        id: buildId(3),
         title: 'episode (media item 3) title (in language)',
         contributorAndRoles: [
             {
@@ -79,7 +84,7 @@ import { MediaItemDimensions } from './media-item-dimensions';
 })
 @CoscradDataExample<MediaItem>({
     example: {
-        id: '4',
+        id: buildId(4),
         title: 'snow mountain',
         contributorAndRoles: [],
         mimeType: MIMEType.png,
@@ -89,7 +94,7 @@ import { MediaItemDimensions } from './media-item-dimensions';
 })
 @CoscradDataExample<MediaItem>({
     example: {
-        id: '5',
+        id: buildId(5),
         title: 'Adiitsii Running',
         contributorAndRoles: [],
         mimeType: MIMEType.png,
@@ -99,7 +104,7 @@ import { MediaItemDimensions } from './media-item-dimensions';
 })
 @CoscradDataExample<MediaItem>({
     example: {
-        id: '6',
+        id: buildId(6),
         title: 'Nuu Story',
         contributorAndRoles: [],
         mimeType: MIMEType.png,
@@ -109,7 +114,7 @@ import { MediaItemDimensions } from './media-item-dimensions';
 })
 @CoscradDataExample<MediaItem>({
     example: {
-        id: '7',
+        id: buildId(7),
         title: 'Two Brothers Pole',
         contributorAndRoles: [],
         mimeType: MIMEType.png,
@@ -119,7 +124,7 @@ import { MediaItemDimensions } from './media-item-dimensions';
 })
 @CoscradDataExample<MediaItem>({
     example: {
-        id: '8',
+        id: buildId(8),
         title: 'Mary Had a Little Lamb',
         contributorAndRoles: [],
         mimeType: MIMEType.wav,
@@ -129,7 +134,7 @@ import { MediaItemDimensions } from './media-item-dimensions';
 })
 @CoscradDataExample<MediaItem>({
     example: {
-        id: '9',
+        id: buildId(9),
         title: 'No Light',
         contributorAndRoles: [],
         mimeType: MIMEType.wav,

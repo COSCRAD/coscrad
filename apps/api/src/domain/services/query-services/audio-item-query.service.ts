@@ -71,7 +71,7 @@ export class AudioItemQueryService extends ResourceQueryService<
             allContributors,
             `${this.configService.get('BASE_URL')}/${this.configService.get(
                 'GLOBAL_PREFIX'
-            )}/resources/mediaItems`
+            )}/resources/mediaItems/download/`
         );
     }
 

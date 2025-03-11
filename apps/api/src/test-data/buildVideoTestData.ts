@@ -1,19 +1,17 @@
 import { LanguageCode, ResourceType } from '@coscrad/api-interfaces';
+import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
 import { Aggregate } from '../domain/models/aggregate.entity';
 import { Transcript } from '../domain/models/audio-visual/shared/entities/transcript.entity';
 import { Video } from '../domain/models/audio-visual/video/entities/video.entity';
 import { DTO } from '../types/DTO';
 import { buildSingleLanguageText } from './buildAudioItemTestData';
-import buildMediaItemTestData from './buildMediaItemTestData';
 import { convertAggregatesIdToUuid } from './utilities/convertSequentialIdToUuid';
-
-const mediaItems = buildMediaItemTestData();
 
 const partialDtos: DTO<Omit<Video, 'type'>>[] = [
     {
         id: '223',
         name: buildSingleLanguageText('The Demonstration', LanguageCode.English),
-        mediaItemId: mediaItems[1].id,
+        mediaItemId: buildDummyUuid(10002),
         lengthMilliseconds: 20000,
         published: true,
         transcript: new Transcript({

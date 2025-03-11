@@ -138,7 +138,7 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
 
     async run(
         _passedParams: string[],
-        { directory, baseUrl, staticAssetDestinationDirectory }: IngestMediaItemsCliCommandOptions
+        { directory, staticAssetDestinationDirectory }: IngestMediaItemsCliCommandOptions
     ): Promise<void> {
         console.time();
         // console.timeLog();
@@ -241,7 +241,6 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
                             type: ResourceType.mediaItem,
                             id,
                         },
-                        url: `${baseUrl}/${generatedIds[index]}`,
                         rawData: {
                             filename,
                         },

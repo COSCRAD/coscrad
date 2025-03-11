@@ -7,7 +7,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
     "allowedUserIds": [],
   },
   "actions": [],
-  "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
+  "audioURL": "http://localhost/api/resources/mediaItems/download//9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "contributions": [],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
   "isPublished": false,
@@ -150,60 +150,19 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/mediaItems/:id when the resource is published when an resource with the id exists should return the expected response 1`] = `
 {
   "actions": [],
-  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-  "lengthMilliseconds": 2500,
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
   "mimeType": "audio/wav",
   "name": {
     "items": [
       {
         "languageCode": "clc",
         "role": "original",
-        "text": "episode (media item 1) title (in language)",
+        "text": "No Light",
       },
     ],
   },
-  "tags": [
-    {
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
-      "label": "legends",
-      "members": [
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-          "type": "vocabularyList",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101",
-          "type": "spatialFeature",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112001",
-          "type": "note",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-          "type": "note",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-          "type": "mediaItem",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-          "type": "song",
-        },
-      ],
-      "name": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "legends",
-          },
-        ],
-      },
-    },
-  ],
-  "url": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
+  "tags": [],
+  "url": "http://localhost/api/media/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
 }
 `;
 
@@ -211,7 +170,6 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
 {
   "actions": [],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
-  "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png",
   "name": {
     "items": [
       {
@@ -232,12 +190,12 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
   "contributions": [],
   "episodes": [
     {
-      "mediaItemUrl": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
+      "mediaItemUrl": "/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "mimeType": "audio/wav",
       "name": "The Wooden Boy {en} (role: original)",
     },
     {
-      "mediaItemUrl": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
+      "mediaItemUrl": "/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
       "mimeType": "audio/mpeg",
       "name": "Down at the River {clc} (role: original)",
     },

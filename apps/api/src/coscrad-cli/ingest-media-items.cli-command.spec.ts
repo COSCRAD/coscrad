@@ -131,7 +131,7 @@ describe(`CLI Command: **ingest-media-items**`, () => {
             ]);
 
             // the number of items in `__cli-command-test-inputs__/ingest-media-items/media-items-only/`
-            const expectedNumberOfResults = 12;
+            const expectedNumberOfResults = 13;
 
             const searchResult = await testRepositoryProvider
                 .forResource<MediaItem>(AggregateType.mediaItem)
@@ -161,7 +161,7 @@ describe(`CLI Command: **ingest-media-items**`, () => {
                 .forResource(AggregateType.audioItem)
                 .fetchMany()) as AudioItem[];
 
-            expect(newAudioItems.length).toBe(1);
+            expect(newAudioItems.length).toBe(2);
 
             const newVideos = (await testRepositoryProvider
                 .forResource(AggregateType.video)
