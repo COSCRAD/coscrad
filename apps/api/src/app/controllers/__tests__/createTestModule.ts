@@ -1,5 +1,5 @@
 import { ResourceType } from '@coscrad/api-interfaces';
-import { CommandModule } from '@coscrad/commands';
+import { CommandHandlerService, CommandModule } from '@coscrad/commands';
 import { bootstrapDynamicTypes } from '@coscrad/data-types';
 import { ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
@@ -123,6 +123,9 @@ import {
 import { DigitalText } from '../../../domain/models/digital-text/entities/digital-text.entity';
 import { CreateMediaItem } from '../../../domain/models/media-item/commands/create-media-item/create-media-item.command';
 import { CreateMediaItemCommandHandler } from '../../../domain/models/media-item/commands/create-media-item/create-media-item.command-handler';
+import { MEDIA_MANGAER_INJECTION_TOKEN } from '../../../domain/models/media-item/media-manager.interface';
+import { FsMediaProber, MEDIA_PROBER_TOKEN } from '../../../domain/models/media-item/media-prober';
+import { NodeMediaManagementService } from '../../../domain/models/media-item/node-media-management.service';
 import {
     MediaItemController,
     MediaItemQueryService,
@@ -716,6 +719,32 @@ export default async (
                     ArangoConnectionProvider,
                     CoscradEventFactory,
                     DynamicDataTypeFinderService,
+                ],
+            },
+            {
+                provide: 'MEDIA_ITEM_COMMAND_REPOSITORY_INJECTION_TOKEN',
+                useFactory: (repositoryProvider: ArangoRepositoryProvider) =>
+                    repositoryProvider.forResource(ResourceType.mediaItem),
+                inject: [REPOSITORY_PROVIDER_TOKEN],
+            },
+            {
+                provide: MEDIA_PROBER_TOKEN,
+                useValue: new FsMediaProber(),
+            },
+            {
+                provide: MEDIA_MANGAER_INJECTION_TOKEN,
+                useFactory: (commandRepository, mediaProber, idManager, commandHandlerService) =>
+                    new NodeMediaManagementService(
+                        commandRepository,
+                        mediaProber,
+                        idManager,
+                        commandHandlerService
+                    ),
+                inject: [
+                    'MEDIA_ITEM_COMMAND_REPOSITORY_INJECTION_TOKEN',
+                    MEDIA_PROBER_TOKEN,
+                    ID_MANAGER_TOKEN,
+                    CommandHandlerService,
                 ],
             },
             ...dataClassProviders,
