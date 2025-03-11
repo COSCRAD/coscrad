@@ -138,7 +138,7 @@ describe(`TermCreatedEventHandler`, () => {
                     // this should actually be the name and ID
                     (c) => c.id === dummyContributor.id
                 )
-            );
+            ).toBe(true);
 
             // TODO check the contributor's full name as well
         });

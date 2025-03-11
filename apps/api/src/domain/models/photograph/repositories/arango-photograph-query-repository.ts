@@ -149,7 +149,7 @@ export class ArangoPhotographQueryRepository implements IPhotographQueryReposito
         FILTER doc._key == @id
         LET newContributions = (
             FOR contributorId IN @contributorIds
-                FOR c in contributors
+                FOR c IN contributors
                     FILTER c._key == contributorId
                     return {
                         id: c._key,
