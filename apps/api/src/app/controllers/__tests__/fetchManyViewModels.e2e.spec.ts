@@ -67,6 +67,7 @@ describe('When fetching multiple resources', () => {
     beforeAll(async () => {
         ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
+            BASE_URL: 'https://www.testapi.coscrad.org',
         }));
 
         eventRepository = app.get(ArangoEventRepository);
