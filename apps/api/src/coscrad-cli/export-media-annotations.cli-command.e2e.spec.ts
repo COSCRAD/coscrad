@@ -7,7 +7,7 @@ import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import buildMockConfigServiceSpec from '../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../app/config/buildConfigFilePath';
-import { Environment } from '../app/config/constants/Environment';
+import { Environment } from '../app/config/constants/environment';
 import { EdgeConnectionModule } from '../app/domain-modules/edge-connection.module';
 import getValidAggregateInstanceForTest from '../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { CoscradEventFactory, EventModule } from '../domain/common';

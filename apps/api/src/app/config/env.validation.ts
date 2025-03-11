@@ -8,7 +8,7 @@ import {
     validateCoscradModelInstance,
 } from '@coscrad/data-types';
 import { plainToInstance } from 'class-transformer';
-import { Environment } from './constants/Environment';
+import { Environment } from './constants/environment';
 import { Scheme } from './constants/Scheme';
 
 export class EnvironmentVariables {

@@ -1,5 +1,5 @@
 import { CommandFactory } from 'nest-commander';
-import { Environment } from './app/config/constants/Environment';
+import { Environment } from './app/config/constants/environment';
 import { CoscradCliModule } from './coscrad-cli/coscrad-cli.module';
 import { InternalError } from './lib/errors/InternalError';
 import { DynamicDataTypeFinderService } from './validation';

@@ -4,7 +4,7 @@ import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import buildMockConfigService from '../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../app/config/buildConfigFilePath';
-import { Environment } from '../app/config/constants/Environment';
+import { Environment } from '../app/config/constants/environment';
 import { CoscradEventFactory, CoscradEventUnion } from '../domain/common';
 import { TermCreated } from '../domain/models/term/commands';
 import { DeluxeInMemoryStore } from '../domain/types/DeluxeInMemoryStore';

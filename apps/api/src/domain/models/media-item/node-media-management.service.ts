@@ -1,4 +1,4 @@
-import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import {
     isNonEmptyObject,
@@ -14,7 +14,6 @@ import { ResultOrError } from '../../../types/ResultOrError';
 import { ID_MANAGER_TOKEN, IIdManager } from '../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../repositories/interfaces/repository-for-aggregate.interface';
 import { AggregateId } from '../../types/AggregateId';
-import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
 import { CoscradUserWithGroups } from '../user-management/user/entities/user/coscrad-user-with-groups';
 import { CreateMediaItem } from './commands';
 import { getExpectedMimeTypeFromExtension } from './entities/get-extension-for-mime-type';
@@ -24,7 +23,7 @@ import { IMediaManager } from './media-manager.interface';
 import { IMediaProber, MEDIA_PROBER_TOKEN } from './media-prober';
 import path = require('path');
 
-// TODO  move this
+// TODO  move this to a math lib
 const MS_PER_S = 1000;
 
 const staticAssetsDir = '__static__';
@@ -99,30 +98,12 @@ export class NodeMediaManagementService implements IMediaManager {
         //     throw new Error(`todo = return this error?`);
         // }
 
-        // TODO Execute a command instead
-        const newMediaItem: MediaItem = new MediaItem({
-            // TODO shouldn't this be passed in?
-            title: dirname,
-            // TODO remove this
-            type: ResourceType.mediaItem,
-            mimeType: expectedMimetypeFromExtension,
-            // this is totally wrong!
-            published: true,
-            // TODO we need the ID generator- better to just execute the command
-            id: buildDummyUuid(1),
-            // todo remove this!
-        });
-
         /**
          * TODO We may want to pass this state in from above.
          * Consider generating many for discoverAll
          */
         const generatedId = await this.idManager.generate();
 
-        /**
-         * There's a bit of a chicken-and-egg problem here. The command handler
-         * uses the prober and determines the duration \ dimensions.
-         */
         const creationCommand: {
             -readonly [K in keyof CreateMediaItem]: CreateMediaItem[K];
         } = {
@@ -147,7 +128,6 @@ export class NodeMediaManagementService implements IMediaManager {
             creationCommand.widthPx = probeResult.widthPx;
         }
 
-        // TODO handle file copy failure
         // TODO We may want to abstract over file reads and writes with a binary file repository
         /**
          * Note that we write the file before persisting to the database because
@@ -156,7 +136,14 @@ export class NodeMediaManagementService implements IMediaManager {
          */
 
         // Note that filename includes the extension
-        copyFileSync(filepath, `${staticAssetsDir}/${filename}`);
+        try {
+            copyFileSync(filepath, `${staticAssetsDir}/${filename}`);
+        } catch (error) {
+            return new InternalError(
+                `Failed to copy file: ${filename}`,
+                isNonEmptyString(error?.message) ? [new InternalError(error.message)] : []
+            );
+        }
 
         /**
          * Note that at this point, the command execution is an encapsulated
@@ -181,7 +168,7 @@ export class NodeMediaManagementService implements IMediaManager {
         }
 
         return {
-            id: newMediaItem.id,
+            id: generatedId,
         };
     }
 

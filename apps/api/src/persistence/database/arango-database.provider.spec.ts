@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../app/config/buildConfigFilePath';
-import { Environment } from '../../app/config/constants/Environment';
+import { Environment } from '../../app/config/constants/environment';
 import { PersistenceModule } from '../persistence.module';
 import generateDatabaseNameForTestSuite from '../repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoDatabaseProvider } from './database.provider';

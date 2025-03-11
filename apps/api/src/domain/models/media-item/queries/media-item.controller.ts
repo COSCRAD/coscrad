@@ -43,7 +43,6 @@ export class MediaItemController {
             id
         );
 
-        // TODO do we want to throw if there is an error?
         if (isInternalError(filePathSearchResult) || isNotFound(filePathSearchResult))
             return sendInternalResultAsHttpResponse(res, filePathSearchResult);
 
@@ -60,7 +59,6 @@ export class MediaItemController {
         return res.sendFile(filePathSearchResult.filepath, options);
     }
 
-    // TODO move the logic to the MediaItemQueryService
     // /download?name=C1
     @ApiBearerAuth('JWT')
     @UseGuards(OptionalJwtAuthGuard)

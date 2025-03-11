@@ -7,7 +7,7 @@ import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import buildMockConfigServiceSpec from '../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../app/config/buildConfigFilePath';
-import { Environment } from '../app/config/constants/Environment';
+import { Environment } from '../app/config/constants/environment';
 import { CoscradEventFactory, EventModule } from '../domain/common';
 import { AudioItem } from '../domain/models/audio-visual/audio-item/entities/audio-item.entity';
 import { Video } from '../domain/models/audio-visual/video/entities/video.entity';

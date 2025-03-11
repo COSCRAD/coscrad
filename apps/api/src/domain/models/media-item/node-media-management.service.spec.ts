@@ -5,7 +5,7 @@ import { Test } from '@nestjs/testing';
 import { existsSync, mkdirSync, unlinkSync } from 'fs';
 import buildMockConfigService from '../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../app/config/buildConfigFilePath';
-import { Environment } from '../../../app/config/constants/Environment';
+import { Environment } from '../../../app/config/constants/environment';
 import { JwtStrategy } from '../../../authorization/jwt.strategy';
 import { MockJwtStrategy } from '../../../authorization/mock-jwt.strategy';
 import assertErrorAsExpected from '../../../lib/__tests__/assertErrorAsExpected';
@@ -27,7 +27,6 @@ const testUser = getValidAggregateInstanceForTest(AggregateType.user).clone({
     roles: [CoscradUserRole.viewer],
 });
 
-// TODO Use new test data helper instead
 const dummyMediaItem = getValidAggregateInstanceForTest(AggregateType.mediaItem);
 
 const mediaItems = [1, 2, 3].map((sequentialId) =>

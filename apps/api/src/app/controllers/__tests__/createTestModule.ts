@@ -290,7 +290,7 @@ import { DTO } from '../../../types/DTO';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../../../validation';
 import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../config/buildConfigFilePath';
-import { Environment } from '../../config/constants/Environment';
+import { Environment } from '../../config/constants/environment';
 import { EnvironmentVariables } from '../../config/env.validation';
 import { AdminController } from '../admin.controller';
 import { CategoryController } from '../category.controller';

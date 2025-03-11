@@ -7,7 +7,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
     "allowedUserIds": [],
   },
   "actions": [],
-  "audioURL": "https://www.testapi.coscrad.org/api/resources/mediaItems/download//9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+  "audioURL": "https:/www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "contributions": [],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
   "isPublished": false,

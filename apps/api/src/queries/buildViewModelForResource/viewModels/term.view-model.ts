@@ -4,13 +4,7 @@ import {
     LanguageCode,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
-import {
-    BooleanDataType,
-    FromDomainModel,
-    NestedDataType,
-    NonEmptyString,
-    ReferenceTo,
-} from '@coscrad/data-types';
+import { BooleanDataType, FromDomainModel, NestedDataType, ReferenceTo } from '@coscrad/data-types';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { DetailScopedCommandWriteContext } from '../../../app/controllers/command/services/command-info-service';
 import { ICoscradEvent } from '../../../domain/common';
@@ -25,6 +19,7 @@ import {
     TermTranslated,
 } from '../../../domain/models/term/commands';
 import { Term } from '../../../domain/models/term/entities/term.entity';
+import { ContributionSummary } from '../../../domain/models/user-management';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { AggregateId } from '../../../domain/types/AggregateId';
 import { HasAggregateId } from '../../../domain/types/HasAggregateId';
@@ -37,21 +32,6 @@ import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
 
 const FromTerm = FromDomainModel(Term);
-
-// TODO move this
-class ContributionSummary {
-    @NonEmptyString({
-        label: 'contributor ID',
-        description: 'ID of person who contributed to the creation or editing of this resource',
-    })
-    id: string;
-
-    @NonEmptyString({
-        label: 'full name',
-        description: 'the first and last name of the contributor',
-    })
-    fullName: string;
-}
 
 /**
  * This is the first view model leveraging a new approach that involves denormalized,

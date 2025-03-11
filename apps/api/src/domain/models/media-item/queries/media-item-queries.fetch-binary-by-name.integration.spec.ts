@@ -5,7 +5,7 @@ import { Test } from '@nestjs/testing';
 import { copyFileSync, existsSync, mkdirSync } from 'fs';
 import buildMockConfigService from '../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../app/config/buildConfigFilePath';
-import { Environment } from '../../../../app/config/constants/Environment';
+import { Environment } from '../../../../app/config/constants/environment';
 import { HttpStatusCode } from '../../../../app/constants/httpStatusCodes';
 import { AdminJwtGuard } from '../../../../app/controllers/command/command.controller';
 import { AuthorizationModule } from '../../../../authorization/authorization.module';
@@ -14,6 +14,7 @@ import { MockJwtAuthGuard } from '../../../../authorization/mock-jwt-auth-guard'
 import { OptionalJwtAuthGuard } from '../../../../authorization/optional-jwt-auth-guard';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../persistence/persistence.module';
+import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { DynamicDataTypeFinderService } from '../../../../validation';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
@@ -22,6 +23,8 @@ import { assertQueryResult } from '../../__tests__';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
+import { getExtensionForMimeType } from '../entities/get-extension-for-mime-type';
+import { MediaItem } from '../entities/media-item.entity';
 import { MediaItemModule } from '../media-item.module';
 
 // Be careful to include /download in query service responses!
@@ -53,7 +56,7 @@ describe(`MediaItemController.fetchBinary`, () => {
         const mockConfigService = buildMockConfigService(
             {
                 // TODO can we fix this?
-                ARANGO_DB_NAME: 'testingdb_ap', // generateDatabaseNameForTestSuite(),
+                ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
                 GLOBAL_PREFIX: '',
             },
             buildConfigFilePath(Environment.test)
@@ -129,25 +132,23 @@ describe(`MediaItemController.fetchBinary`, () => {
         published: false,
     });
 
-    // const assertResponseWithMediaItem = (res, mediaItem: MediaItem) => {
-    //     expect(res.status).toBe(HttpStatusCode.ok);
+    const assertResponseWithMediaItem = (header: Record<string, unknown>, mediaItem: MediaItem) => {
+        const disposition = header['content-disposition'];
 
-    //     const disposition = res.header['content-disposition'];
-
-    //     expect(disposition).toBe(
-    //         // TODO just specify this on the test case manually- we're copying implementation logic here
-    //         /**
-    //          * The linter is confused because this escape character applies at
-    //          * the level of HTTP responses to be interpreted by the browser. A pair of
-    //          * `\"`s are is necessary in the result.
-    //          */
-    //         // eslint-disable-next-line no-useless-escape
-    //         `attachment; filename=\"${
-    //             mediaItem.getName().getOriginalTextItem().text
-    //             // eslint-disable-next-line no-useless-escape
-    //         }.${getExtensionForMimeType(mediaItem.mimeType)}\"`
-    //     );
-    // };
+        expect(disposition).toBe(
+            // TODO just specify this on the test case manually- we're copying implementation logic here
+            /**
+             * The linter is confused because this escape character applies at
+             * the level of HTTP responses to be interpreted by the browser. A pair of
+             * `\"`s are is necessary in the result.
+             */
+            // eslint-disable-next-line no-useless-escape
+            `attachment; filename=\"${
+                mediaItem.getName().getOriginalTextItem().text
+                // eslint-disable-next-line no-useless-escape
+            }.${getExtensionForMimeType(mediaItem.mimeType)}\"`
+        );
+    };
 
     beforeEach(async () => {
         await testRepositoryProvider.testSetup();
@@ -173,8 +174,12 @@ describe(`MediaItemController.fetchBinary`, () => {
                         publicMediaItem.getName().getOriginalTextItem().text
                     ),
                     expectedStatus: HttpStatusCode.ok,
-                    // checkResponseBody:
-                    // TODO do we want to snapshot one response?
+                    checkHeaders: async (header) => {
+                        assertResponseWithMediaItem(header, publicMediaItem);
+                    },
+                    checkResponseBody: async (body) => {
+                        expect(body).toMatchSnapshot();
+                    },
                 });
             });
         });
