@@ -1,6 +1,8 @@
 import { HasId } from '@coscrad/api-interfaces';
 import { Injectable } from '@nestjs/common';
 import { isDeepStrictEqual } from 'util';
+import { Maybe } from '../../lib/types/maybe';
+import { DatabaseCollectionSnapshot } from '../../test-data/utilities';
 import { ICoscradQueryRunner } from '../migrations/coscrad-query-runner.interface';
 import { ArangoDatabase } from './arango-database';
 import { ArangoCollectionId } from './collection-references/ArangoCollectionId';
@@ -21,6 +23,19 @@ export class ArangoQueryRunner implements ICoscradQueryRunner {
 
     async fetchMany<TDocument>(collectionName: string): Promise<TDocument[]> {
         return this.arangoDatabase.fetchMany(collectionName);
+    }
+
+    async export(collectionName: string): Promise<Maybe<DatabaseCollectionSnapshot>> {
+        return this.arangoDatabase.export(collectionName);
+    }
+
+    async import(
+        collectionName: string,
+        data: unknown[],
+        type: 'edge' | 'document',
+        checksum?: string
+    ): Promise<void> {
+        await this.arangoDatabase.import(collectionName, data, type, checksum);
     }
 
     async update<TOldDocument extends ArangoDatabaseDocument<HasId>, UNewDocument>(

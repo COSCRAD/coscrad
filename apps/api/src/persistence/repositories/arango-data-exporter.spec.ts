@@ -9,8 +9,10 @@ import { CoscradEventFactory } from '../../domain/common';
 import { DeluxeInMemoryStore } from '../../domain/types/DeluxeInMemoryStore';
 import { HasAggregateId } from '../../domain/types/HasAggregateId';
 import buildTestDataInFlatFormat from '../../test-data/buildTestDataInFlatFormat';
+import { InMemoryDatabaseSnapshot } from '../../test-data/utilities';
 import { DynamicDataTypeFinderService } from '../../validation';
 import { ArangoConnectionProvider } from '../database/arango-connection.provider';
+import { ArangoEdgeCollectionId } from '../database/collection-references/ArangoEdgeCollectionId';
 import { ArangoDatabaseProvider } from '../database/database.provider';
 import { HasArangoDocumentDirectionAttributes } from '../database/types/HasArangoDocumentDirectionAttributes';
 import { ArangoDocumentForAggregateRoot } from '../database/utilities/mapEntityDTOToDatabaseDocument';
@@ -69,6 +71,8 @@ describe(`ArangoDataExporter`, () => {
     const testEdgeCollectionName = 'edges';
 
     const testDocumentCollectionName = 'docs';
+
+    const knownEdgeCollections = [...Object.values(ArangoEdgeCollectionId), testEdgeCollectionName];
 
     beforeAll(async () => {
         const testModule = await Test.createTestingModule({
@@ -129,19 +133,45 @@ describe(`ArangoDataExporter`, () => {
         await testRepositoryProvider.addFullSnapshot(testData.fetchFullSnapshotInLegacyFormat());
     });
 
-    it(`should write all documents for all collections`, async () => {
-        await arangoDataExporter.dumpSnapshot(dir, filename, [testEdgeCollectionName]);
+    describe('dumpSnapshot', () => {
+        it(`should write all documents for all collections`, async () => {
+            await arangoDataExporter.dumpSnapshot(dir, filename, knownEdgeCollections);
 
-        const readResult = JSON.parse(readFileSync(fullpath, { encoding: 'utf-8' }));
+            const readResult = JSON.parse(
+                readFileSync(fullpath, { encoding: 'utf-8' })
+            ) as InMemoryDatabaseSnapshot;
 
-        const foundDocs = readResult['document'][testDocumentCollectionName];
+            const foundDocs = readResult.document[testDocumentCollectionName]['documents'];
 
-        expect(foundDocs).toHaveLength(testDocs.length);
+            expect(foundDocs).toHaveLength(testDocs.length);
 
-        const foundEdges = readResult['edge'][testEdgeCollectionName];
+            const foundEdges = readResult.edge[testEdgeCollectionName]['documents'];
 
-        expect(foundEdges).toHaveLength(testEdges.length);
+            expect(foundEdges).toHaveLength(testEdges.length);
 
-        expect(readResult).toMatchSnapshot();
+            expect(readResult).toMatchSnapshot();
+        });
+    });
+
+    describe('restoreSnapshot', () => {
+        describe(`when the checksums are valid`, () => {
+            it(`should restore the snapshot`, async () => {
+                const snapshot = await arangoDataExporter.fetchSnapshot(knownEdgeCollections);
+
+                await arangoDataExporter.restoreFromSnapshot(snapshot);
+
+                const foundTestDocs = await arangoDatabaseProvider
+                    .getDatabaseForCollection(testDocumentCollectionName)
+                    .fetchMany();
+
+                expect(foundTestDocs).toHaveLength(testDocs.length);
+
+                const foundEdges = await arangoDatabaseProvider
+                    .getDatabaseForCollection(testEdgeCollectionName)
+                    .fetchMany();
+
+                expect(foundEdges).toHaveLength(testEdges.length);
+            });
+        });
     });
 });

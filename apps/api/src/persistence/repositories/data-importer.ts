@@ -15,6 +15,7 @@ export class DataImporter {
     ) {}
 
     /**
+     * This isn't what we want. Let's block existing data.
      * Note that this method will import additional data from a dump file, stacking
      * on top of what data is already there, with errors in case there are collisions
      * in keys \ IDs.

@@ -1,4 +1,6 @@
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import { InternalError } from '../../lib/errors/InternalError';
+import { isNotFound } from '../../lib/types/not-found';
 import { InMemoryDatabaseSnapshot } from '../../test-data/utilities/convertInMemorySnapshotToDatabaseFormat';
 import { ArangoQueryRunner } from '../database/arango-query-runner';
 
@@ -26,14 +28,26 @@ export class ArangoDataExporter {
          * TODO Consider parallelizing these queries for performance.
          */
         for (const collection of documentCollectionNames) {
-            const queryResult = await this.arangoQueryRunner.fetchMany(collection);
+            const queryResult = await this.arangoQueryRunner.export(collection);
+
+            if (isNotFound(queryResult)) {
+                throw new InternalError(
+                    `Failed to export. Collection: ${collection} does not exist`
+                );
+            }
 
             document[collection] = queryResult;
         }
 
         for (const collection of knownEdgeCollections) {
             // TODO handle the case that the collection does not exist explicitly
-            const queryResult = await this.arangoQueryRunner.fetchMany(collection);
+            const queryResult = await this.arangoQueryRunner.export(collection);
+
+            if (isNotFound(queryResult)) {
+                throw new InternalError(
+                    `Failed to export. Collection: ${collection} does not exist`
+                );
+            }
 
             edge[collection] = queryResult;
         }
@@ -56,6 +70,22 @@ export class ArangoDataExporter {
             writeFileSync(`${directory}/${filename}`, JSON.stringify(snapshot, null, 4));
         } catch (error) {
             throw new Error(`failed to write snapshot`);
+        }
+    }
+
+    async restoreFromSnapshot(snapshot: InMemoryDatabaseSnapshot) {
+        const { document: allDocumentSnapshots, edge: allEdgeSnapshots } = snapshot;
+
+        for (const [collectionName, { checksum, documents }] of [
+            ...Object.entries(allDocumentSnapshots),
+        ]) {
+            await this.arangoQueryRunner.import(collectionName, documents, 'document', checksum);
+        }
+
+        for (const [collectionName, { checksum, documents }] of [
+            ...Object.entries(allEdgeSnapshots),
+        ]) {
+            await this.arangoQueryRunner.import(collectionName, documents, 'edge', checksum);
         }
     }
 }
