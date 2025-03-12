@@ -16,7 +16,7 @@ import { NodeMediaManagementService } from './node-media-management.service';
 import { MediaItemController, MediaItemQueryService } from './queries';
 
 @Module({
-    imports: [ConfigModule, PersistenceModule, CommandModule, IdGenerationModule],
+    imports: [ConfigModule, PersistenceModule, IdGenerationModule, CommandModule],
     controllers: [MediaItemController],
     providers: [
         MediaItemQueryService,

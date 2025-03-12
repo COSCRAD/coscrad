@@ -64,12 +64,12 @@ describe(`MediaItemController.fetchBinary`, () => {
 
         const testModuleRef = await Test.createTestingModule({
             imports: [
+                PersistenceModule.forRootAsync(),
                 ConfigModule.forRoot({
                     isGlobal: true,
                     envFilePath: buildConfigFilePath(process.env.NODE_ENV),
                     cache: false,
                 }),
-                PersistenceModule.forRootAsync(),
                 AuthorizationModule,
                 MediaItemModule,
             ],
@@ -177,9 +177,7 @@ describe(`MediaItemController.fetchBinary`, () => {
                     checkHeaders: async (header) => {
                         assertResponseWithMediaItem(header, publicMediaItem);
                     },
-                    checkResponseBody: async (body) => {
-                        expect(body).toMatchSnapshot();
-                    },
+                    // note that we do not want to snapshot the binary response as it will be massive
                 });
             });
         });
