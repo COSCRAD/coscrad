@@ -153,9 +153,10 @@ describe(`MediaItemController.fetchBinary`, () => {
                     endpoint: buildDetailEndpoint(publicMediaItem.id),
                     expectedStatus: HttpStatusCode.ok,
                     // checkHeaders TODO check content disposition
-                    checkResponseBody: async (body) => {
-                        expect(body).toMatchSnapshot();
-                    },
+                    /**
+                     * Note that we do not snapshot the response because it is
+                     * binary and would lead to a massive snapshot.
+                     */
                 });
             });
         });
