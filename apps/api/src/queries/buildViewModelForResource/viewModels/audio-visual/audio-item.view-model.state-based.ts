@@ -86,7 +86,7 @@ export class StateBasedAudioItemViewModel extends BaseResourceViewModel {
         audioItem: AudioItem,
         allMediaItems: MediaItem[],
         allContributors: CoscradContributor[],
-        baseMediaUrl: string
+        baseUrl: string
     ) {
         super(audioItem, allContributors);
 
@@ -99,7 +99,8 @@ export class StateBasedAudioItemViewModel extends BaseResourceViewModel {
 
         const { mimeType } = allMediaItems.find(({ id }) => id === mediaItemId);
 
-        this.audioURL = path.join(baseMediaUrl, mediaItemId);
+        // `${baseMediaUrl}/${mediaItemId}`;
+        this.audioURL = `${baseUrl}/${path.join(`resources/mediaItems/download/`, mediaItemId)}`;
 
         this.mimeType = mimeType;
 
