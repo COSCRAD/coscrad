@@ -8,11 +8,10 @@ import {
     UseGuards,
     UseInterceptors,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
 import { TermQueryService } from '../../../domain/services/query-services/term-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
-import { TermViewModel } from '../../../queries/buildViewModelForResource/viewModels';
 import { QueryResponseTransformInterceptor } from '../response-mapping';
 import {
     CoscradInternalErrorFilter,
@@ -38,7 +37,8 @@ export class TermController {
     @ApiBearerAuth('JWT')
     @UseGuards(OptionalJwtAuthGuard)
     @ApiParam(buildByIdApiParamMetadata())
-    @ApiOkResponse({ type: TermViewModel })
+    // TODO Restore docs
+    // @ApiOkResponse({ type: TermViewModel })
     @Get(`/:id`)
     // TODO be sure to validate that ID is a string
     async fetchById(@Request() req, @Res() res, @Param('id') id: string) {

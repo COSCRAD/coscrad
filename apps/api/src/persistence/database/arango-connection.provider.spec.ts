@@ -1,7 +1,7 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildConfigFilePath from '../../app/config/buildConfigFilePath';
-import { Environment } from '../../app/config/constants/Environment';
+import { Environment } from '../../app/config/constants/environment';
 import { ArangoConnectionProvider } from './arango-connection.provider';
 
 /**

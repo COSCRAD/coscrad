@@ -37,7 +37,6 @@ const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateMed
     payload: {
         aggregateCompositeIdentifier: { id, type: AggregateType.mediaItem },
         title: 'Fishing Video',
-        url: 'https://www.mysoundbox.org/vid.mp4',
         mimeType: MIMEType.mp4,
     },
 });

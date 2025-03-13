@@ -5,10 +5,10 @@ import {
     NestedDataType,
     NonEmptyString,
     NonNegativeFiniteNumber,
-    URL,
 } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
+import { CoscradDataExample } from '../../../../test-data/utilities';
 import { DTO } from '../../../../types/DTO';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
@@ -16,6 +16,7 @@ import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
+import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { isAudioMimeType } from '../../audio-visual/audio-item/entities/audio-item.entity';
 import { isVideoMimeType } from '../../audio-visual/video/entities/video.entity';
 import { TimeRangeContext } from '../../context/time-range-context/time-range-context.entity';
@@ -29,6 +30,118 @@ import { InconsistentMediaItemPropertyError } from '../errors';
 import { getExtensionForMimeType } from './get-extension-for-mime-type';
 import { MediaItemDimensions } from './media-item-dimensions';
 
+const ID_OFFSET = 10000;
+
+const buildId = (sequenceNumber: number) => buildDummyUuid(sequenceNumber + ID_OFFSET);
+
+@CoscradDataExample<MediaItem>({
+    example: {
+        id: buildId(1),
+        title: 'episode (media item 1) title (in language)',
+        contributorAndRoles: [
+            {
+                contributorId: '2',
+                role: 'host',
+            },
+        ],
+        lengthMilliseconds: 2500,
+        mimeType: MIMEType.wav,
+        published: true,
+        type: ResourceType.mediaItem,
+    },
+})
+@CoscradDataExample<MediaItem>({
+    example: {
+        id: buildId(2),
+        title: 'video (media item 2) title (in language)',
+        contributorAndRoles: [
+            {
+                contributorId: '2',
+                role: 'host',
+            },
+        ],
+        lengthMilliseconds: 910000,
+        mimeType: MIMEType.mp4,
+        published: true,
+        type: ResourceType.mediaItem,
+    },
+})
+@CoscradDataExample<MediaItem>({
+    example: {
+        id: buildId(3),
+        title: 'episode (media item 3) title (in language)',
+        contributorAndRoles: [
+            {
+                contributorId: '2',
+                role: 'host',
+            },
+        ],
+        lengthMilliseconds: 2500,
+        mimeType: MIMEType.mp3,
+        published: true,
+        type: ResourceType.mediaItem,
+    },
+})
+@CoscradDataExample<MediaItem>({
+    example: {
+        id: buildId(4),
+        title: 'snow mountain',
+        contributorAndRoles: [],
+        mimeType: MIMEType.png,
+        published: true,
+        type: ResourceType.mediaItem,
+    },
+})
+@CoscradDataExample<MediaItem>({
+    example: {
+        id: buildId(5),
+        title: 'Adiitsii Running',
+        contributorAndRoles: [],
+        mimeType: MIMEType.png,
+        published: true,
+        type: ResourceType.mediaItem,
+    },
+})
+@CoscradDataExample<MediaItem>({
+    example: {
+        id: buildId(6),
+        title: 'Nuu Story',
+        contributorAndRoles: [],
+        mimeType: MIMEType.png,
+        published: true,
+        type: ResourceType.mediaItem,
+    },
+})
+@CoscradDataExample<MediaItem>({
+    example: {
+        id: buildId(7),
+        title: 'Two Brothers Pole',
+        contributorAndRoles: [],
+        mimeType: MIMEType.png,
+        published: true,
+        type: ResourceType.mediaItem,
+    },
+})
+@CoscradDataExample<MediaItem>({
+    example: {
+        id: buildId(8),
+        title: 'Mary Had a Little Lamb',
+        contributorAndRoles: [],
+        mimeType: MIMEType.wav,
+        published: true,
+        type: ResourceType.mediaItem,
+    },
+})
+@CoscradDataExample<MediaItem>({
+    example: {
+        id: buildId(9),
+        title: 'No Light',
+        contributorAndRoles: [],
+        mimeType: MIMEType.wav,
+        published: true,
+        type: ResourceType.mediaItem,
+    },
+})
 @RegisterIndexScopedCommands(['CREATE_MEDIA_ITEM'])
 export class MediaItem extends Resource implements ITimeBoundable {
     readonly type = ResourceType.mediaItem;
@@ -47,17 +160,6 @@ export class MediaItem extends Resource implements ITimeBoundable {
     // })
     // @deprecated Remove this property in favor of edge connections to a Contributor resource
     readonly contributorAndRoles?: ContributorAndRole[];
-
-    /**
-     * TODO Soon we will want to generate URLs dynamically.
-     * There should be an endpoint where you can fetch an
-     * internal media item if you have access.
-     */
-    @URL({
-        label: 'url',
-        description: 'a web link to the corresponding media file',
-    })
-    readonly url: string;
 
     @ExternalEnum(
         {
@@ -96,7 +198,6 @@ export class MediaItem extends Resource implements ITimeBoundable {
         const {
             title,
             contributorAndRoles,
-            url,
             mimeType,
             lengthMilliseconds,
             dimensions: dimensionsDto,
@@ -107,8 +208,6 @@ export class MediaItem extends Resource implements ITimeBoundable {
         this.contributorAndRoles = Array.isArray(contributorAndRoles)
             ? contributorAndRoles.map(newInstance(ContributorAndRole))
             : null;
-
-        this.url = url;
 
         this.mimeType = mimeType;
 

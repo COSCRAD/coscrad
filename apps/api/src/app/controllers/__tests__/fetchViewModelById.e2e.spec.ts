@@ -72,6 +72,7 @@ describe('GET  (fetch view models)', () => {
     beforeAll(async () => {
         ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
+            BASE_URL: 'https://www.testapi.coscrad.org',
         }));
     });
 

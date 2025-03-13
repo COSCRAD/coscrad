@@ -10,7 +10,7 @@ import { PersistenceModule } from '../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildMockConfigService from '../../config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../config/buildConfigFilePath';
-import { Environment } from '../../config/constants/Environment';
+import { Environment } from '../../config/constants/environment';
 import { GameController } from './game.controller';
 
 const endpointUnderTest = '/games';

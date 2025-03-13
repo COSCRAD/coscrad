@@ -37,16 +37,23 @@ export const getExtensionForMimeType = (mimeType: MIMEType): string => {
     return searchResult;
 };
 
-export const getExpectedMimeTypeFromExtension = (extension: string) => {
+export const getExpectedMimeTypeFromExtension = (extension: string): MIMEType => {
+    /**
+     * This is so we don't require the dot in the lookup table. Also, note that
+     * the standard `path` lib parses extensions including the `.`. E.g., it returns
+     * ".jpg" not "jpg."
+     */
+    const extensionToUse = extension.charAt(0) === '.' ? extension.slice(1) : extension;
+
     const searchResult = Object.entries(lookupTable).find(
-        ([_mimeType, extensionForThisMimeType]) => extensionForThisMimeType === extension
+        ([_mimeType, extensionForThisMimeType]) => extensionForThisMimeType === extensionToUse
     );
 
     if (!Array.isArray(searchResult)) {
         throw new InternalError(
-            `failed to find a MIME type for unsupported extension: .${extension}`
+            `failed to find a MIME type for unsupported extension: .${extensionToUse}`
         );
     }
 
-    return searchResult[0];
+    return searchResult[0] as MIMEType;
 };

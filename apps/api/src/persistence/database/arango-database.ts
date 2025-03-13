@@ -1,7 +1,7 @@
 import { Database } from 'arangojs';
 import { aql, AqlQuery } from 'arangojs/aql';
 import { isArangoDatabase } from 'arangojs/database';
-import { isTestEnvironment } from '../../app/config/constants/Environment';
+import { isTestEnvironment } from '../../app/config/constants/environment';
 import { QueryOperator } from '../../domain/repositories/interfaces/QueryOperator';
 import { ISpecification } from '../../domain/repositories/interfaces/specification.interface';
 import { isAggregateId } from '../../domain/types/AggregateId';
@@ -121,7 +121,9 @@ export class ArangoDatabase {
 
         if (cursor.count === 0) return [];
 
-        return cursor.all();
+        const result = await cursor.all();
+
+        return result;
     };
 
     // TODO renamme this method to `count`

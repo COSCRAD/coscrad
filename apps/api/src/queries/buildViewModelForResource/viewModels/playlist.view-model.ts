@@ -41,6 +41,14 @@ export class PlaylistViewModel extends BaseResourceViewModel {
     // TODO establish a view model for episodes
     readonly episodes: PlaylistEpisode[];
 
+    /**
+     * TODO This is not a performant way to handle joins. We have moved to
+     * event sourcing most resources, however playlists are somewhat unique in
+     * being more closely alligned with CMS concerns than constituting an
+     * actual resource in the web of knowledge. Once we decide how we
+     * want to handle `playlists` and content-management, we should move to
+     * a more performant way of managing queries.
+     */
     constructor(
         playlist: Playlist,
         allAudioItems: AudioItem[],
@@ -62,6 +70,7 @@ export class PlaylistViewModel extends BaseResourceViewModel {
             allResourceCompositeIdsToFind.some((compositeId) => compositeId.id === id)
         );
 
+        // note that the client has to append the base URL
         this.episodes = allResources.flatMap((resource) =>
             resource.buildEpisodes(
                 new DeluxeInMemoryStore({

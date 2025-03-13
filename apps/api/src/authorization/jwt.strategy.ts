@@ -5,7 +5,6 @@ import { passportJwtSecret } from 'jwks-rsa';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { validAggregateOrThrow } from '../domain/models/shared/functional';
 import { CoscradUserWithGroups } from '../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
-import { CoscradUser } from '../domain/models/user-management/user/entities/user/coscrad-user.entity';
 import { IRepositoryProvider } from '../domain/repositories/interfaces/repository-provider.interface';
 import { isInternalError } from '../lib/errors/InternalError';
 import { isNotFound } from '../lib/types/not-found';
@@ -47,7 +46,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         });
     }
 
-    async validate(payload: unknown): Promise<CoscradUser> {
+    async validate(payload: unknown): Promise<CoscradUserWithGroups> {
         const auth0UserId = (payload as HasSub)?.sub;
 
         if (!auth0UserId) {

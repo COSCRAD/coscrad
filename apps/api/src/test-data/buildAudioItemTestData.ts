@@ -5,15 +5,13 @@ import {
     MultilingualTextItem,
     MultilingualTextItemRole,
 } from '../domain/common/entities/multilingual-text';
+import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
 import { Aggregate } from '../domain/models/aggregate.entity';
 import { AudioItem } from '../domain/models/audio-visual/audio-item/entities/audio-item.entity';
 import { Transcript } from '../domain/models/audio-visual/shared/entities/transcript.entity';
 import { ResourceType } from '../domain/types/ResourceType';
 import { DTO } from '../types/DTO';
-import buildMediaItemTestData from './buildMediaItemTestData';
 import { convertAggregatesIdToUuid } from './utilities/convertSequentialIdToUuid';
-
-const mediaItems = buildMediaItemTestData();
 
 export const buildSingleLanguageText = (text: string, languageCode: LanguageCode) =>
     new MultilingualText({
@@ -30,7 +28,7 @@ const partialDtos: DTO<Omit<AudioItem, 'type'>>[] = [
     {
         id: '110',
         name: buildSingleLanguageText('The Wooden Boy', LanguageCode.English),
-        mediaItemId: mediaItems[0].id,
+        mediaItemId: buildDummyUuid(10001),
         lengthMilliseconds: 20000,
         published: true,
         transcript: new Transcript({
@@ -97,7 +95,7 @@ const partialDtos: DTO<Omit<AudioItem, 'type'>>[] = [
                 text: buildSingleLanguageText(item.text, LanguageCode.English),
             })),
         },
-        mediaItemId: mediaItems[2].id,
+        mediaItemId: buildDummyUuid(10003),
         lengthMilliseconds: 23409,
         published: true,
     },
@@ -133,14 +131,14 @@ const partialDtos: DTO<Omit<AudioItem, 'type'>>[] = [
                 text: buildSingleLanguageText(item.text, LanguageCode.English),
             })),
         },
-        mediaItemId: mediaItems[0].id,
+        mediaItemId: buildDummyUuid(10001),
         lengthMilliseconds: 32989,
         published: true,
     },
     {
         id: '114',
         name: buildMultilingualTextWithSingleItem(`Mary had a Little Lamb`),
-        mediaItemId: mediaItems[7].id,
+        mediaItemId: buildDummyUuid(10008),
         // TODO use real value here
         lengthMilliseconds: 1000,
         published: true,
@@ -148,7 +146,7 @@ const partialDtos: DTO<Omit<AudioItem, 'type'>>[] = [
     {
         id: '115',
         name: buildMultilingualTextWithSingleItem('No Light'),
-        mediaItemId: mediaItems[8].id,
+        mediaItemId: buildDummyUuid(10009),
         lengthMilliseconds: 10,
         published: true,
     },
