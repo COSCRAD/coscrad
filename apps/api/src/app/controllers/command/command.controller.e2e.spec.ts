@@ -3,10 +3,7 @@ import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { CoscradUserRole } from '@coscrad/data-types';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { ConsoleCoscradCliLogger } from '../../../coscrad-cli/logging';
 import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
-import { SyncInMemoryEventPublisher } from '../../../domain/common/events/sync-in-memory-event-publisher';
-import { IIdManager } from '../../../domain/interfaces/id-manager.interface';
 import { buildFakeTimersConfig } from '../../../domain/models/__tests__/utilities/buildFakeTimersConfig';
 import { CreateSong } from '../../../domain/models/song/commands/create-song.command';
 import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
@@ -64,10 +61,8 @@ describe('The Command Controller', () => {
 
     let commandHandlerService: CommandHandlerService;
 
-    let idManager: IIdManager;
-
     beforeAll(async () => {
-        ({ testRepositoryProvider, app, commandHandlerService, idManager, databaseProvider } =
+        ({ testRepositoryProvider, app, commandHandlerService, databaseProvider } =
             await setUpIntegrationTest(
                 {
                     ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
@@ -80,14 +75,7 @@ describe('The Command Controller', () => {
          *
          * This needs to be replaced with `PUBLISH_RESOURCE`
          */
-        commandHandlerService.registerHandler(
-            'CREATE_SONG',
-            new CreateSongCommandHandler(
-                testRepositoryProvider,
-                idManager,
-                new SyncInMemoryEventPublisher(new ConsoleCoscradCliLogger())
-            )
-        );
+        commandHandlerService.registerHandler('CREATE_SONG', app.get(CreateSongCommandHandler));
 
         jest.useFakeTimers(buildFakeTimersConfig());
     });

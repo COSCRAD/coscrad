@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildMockConfigServiceSpec from '../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../app/config/buildConfigFilePath';
-import { Environment } from '../../app/config/constants/Environment';
+import { Environment } from '../../app/config/constants/environment';
 import { CommandFSA } from '../../app/controllers/command/command-fsa/command-fsa.entity';
 import { SongModule } from '../../app/domain-modules/song.module';
 import { CoscradEventUnion, EventModule } from '../../domain/common';

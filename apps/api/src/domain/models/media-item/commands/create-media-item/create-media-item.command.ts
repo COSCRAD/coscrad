@@ -7,7 +7,6 @@ import {
     NonEmptyString,
     NonNegativeFiniteNumber,
     RawDataObject,
-    URL,
     UUID,
 } from '@coscrad/data-types';
 import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
@@ -62,16 +61,6 @@ export class CreateMediaItem implements ICommandBase {
     })
     readonly title?: string;
 
-    @URL({
-        label: 'audio link',
-        description: 'a web URL link to a digital version of this media item for playback',
-    })
-    readonly url: string;
-
-    // @Enum(CoscradEnum.MIMEType, {
-    //     label: 'MIME type',
-    //     description: 'technical specification of the type of this media item',
-    // })
     @ExternalEnum(
         {
             enumName: `MIMEType`,

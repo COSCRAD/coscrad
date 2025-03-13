@@ -4,11 +4,13 @@ import {
     LanguageCode,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
+import { BooleanDataType, FromDomainModel, NestedDataType, ReferenceTo } from '@coscrad/data-types';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { DetailScopedCommandWriteContext } from '../../../app/controllers/command/services/command-info-service';
 import { ICoscradEvent } from '../../../domain/common';
 import { buildMultilingualTextFromBilingualText } from '../../../domain/common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
 import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
 import {
@@ -16,6 +18,8 @@ import {
     TermCreated,
     TermTranslated,
 } from '../../../domain/models/term/commands';
+import { Term } from '../../../domain/models/term/entities/term.entity';
+import { ContributionSummary } from '../../../domain/models/user-management';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { AggregateId } from '../../../domain/types/AggregateId';
 import { HasAggregateId } from '../../../domain/types/HasAggregateId';
@@ -26,6 +30,8 @@ import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { CoscradDataExample } from '../../../test-data/utilities';
 import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
+
+const FromTerm = FromDomainModel(Term);
 
 /**
  * This is the first view model leveraging a new approach that involves denormalized,
@@ -51,14 +57,31 @@ import { DTO } from '../../../types/DTO';
     },
 })
 export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
-    contributions: { id: string; fullName: string }[];
+    @NestedDataType(ContributionSummary, {
+        label: 'contributions',
+        description: 'a list of all contributions to the development of this resource',
+        // Can't we get this from reflection?
+        isArray: true,
+    })
+    contributions: ContributionSummary[];
 
+    @NestedDataType(MultilingualText, {
+        label: 'name',
+        // note that we call it `name` not `text` for consistency with other models
+        description: 'name (text) includes the text as well as any translations for this term',
+    })
     name: IMultilingualText;
 
+    @FromTerm
     id: AggregateId;
 
+    @BooleanDataType({
+        label: 'is published',
+        description: 'indicates whether this resource available to the public',
+    })
     isPublished: boolean;
 
+    @ReferenceTo(AggregateType.mediaItem)
     mediaItemId?: string;
 
     actions: string[];

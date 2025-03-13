@@ -14,6 +14,7 @@ import { MediaItem } from '../../../../domain/models/media-item/entities/media-i
 import { AccessControlList } from '../../../../domain/models/shared/access-control/access-control-list.entity';
 import { CoscradContributor } from '../../../../domain/models/user-management/contributor';
 import { BaseResourceViewModel } from '../base-resource.view-model';
+import path = require('path');
 
 export class StateBasedAudioItemViewModel extends BaseResourceViewModel {
     @NestedDataType(MultilingualText, {
@@ -84,7 +85,8 @@ export class StateBasedAudioItemViewModel extends BaseResourceViewModel {
     constructor(
         audioItem: AudioItem,
         allMediaItems: MediaItem[],
-        allContributors: CoscradContributor[]
+        allContributors: CoscradContributor[],
+        baseUrl: string
     ) {
         super(audioItem, allContributors);
 
@@ -95,9 +97,10 @@ export class StateBasedAudioItemViewModel extends BaseResourceViewModel {
         // TODO Send back the full data structure for rich presentation on the client
         this.text = transcript?.toString() || '';
 
-        const { url, mimeType } = allMediaItems.find(({ id }) => id === mediaItemId);
+        const { mimeType } = allMediaItems.find(({ id }) => id === mediaItemId);
 
-        this.audioURL = url;
+        // `${baseMediaUrl}/${mediaItemId}`;
+        this.audioURL = `${baseUrl}/${path.join(`resources/mediaItems/download/`, mediaItemId)}`;
 
         this.mimeType = mimeType;
 

@@ -1,6 +1,6 @@
 import { existsSync } from 'fs';
 import { InternalError } from '../../lib/errors/InternalError';
-import { Environment } from './constants/Environment';
+import { Environment } from './constants/environment';
 
 const getTargetDirectoryForEnvironment = (environment: Environment): string => {
     if ([Environment.production, Environment.staging, Environment.e2e].includes(environment))

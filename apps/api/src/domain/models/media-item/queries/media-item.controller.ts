@@ -2,7 +2,6 @@ import { IDetailQueryResult, MIMEType } from '@coscrad/api-interfaces';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Controller, Get, Param, Query, Request, Res, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
-import { existsSync } from 'fs';
 import { InternalErrorFilter } from '../../../../app/controllers/command/exception-handling/exception-filters/internal-error.filter';
 import buildByIdApiParamMetadata from '../../../../app/controllers/resources/common/buildByIdApiParamMetadata';
 import sendInternalResultAsHttpResponse from '../../../../app/controllers/resources/common/sendInternalResultAsHttpResponse';
@@ -13,7 +12,6 @@ import { InternalError, isInternalError } from '../../../../lib/errors/InternalE
 import { NotFound, isNotFound } from '../../../../lib/types/not-found';
 import { clonePlainObjectWithOverrides } from '../../../../lib/utilities/clonePlainObjectWithOverrides';
 import clonePlainObjectWithoutProperty from '../../../../lib/utilities/clonePlainObjectWithoutProperty';
-import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { ResourceType } from '../../../types/ResourceType';
 import { isAudioMimeType } from '../../audio-visual/audio-item/entities/audio-item.entity';
 import { isVideoMimeType } from '../../audio-visual/video/entities/video.entity';
@@ -34,36 +32,33 @@ export class MediaItemController {
      * TODO Move this logic to the service layer.
      */
     async fetchBinary(@Request() req, @Res() res, @Param('id') id: unknown) {
-        const searchResult = (await this.mediaItemQueryService.fetchById(
-            id,
-            req.user || undefined
-        )) as unknown as IDetailQueryResult<MediaItemViewModel>;
-
-        // TODO do we want to throw if there is an error?
-        if (isInternalError(searchResult) || isNotFound(searchResult))
-            return sendInternalResultAsHttpResponse(res, searchResult);
-
-        const filePath = searchResult.filepath;
-
-        // TODO Make this configurable
-        const STATIC_DIR = `./__static__`;
-
-        if (!existsSync(`${STATIC_DIR}/${filePath}`)) {
-            return sendInternalResultAsHttpResponse(res, NotFound);
+        // TODO validation pipe
+        // TODO SSOT for by-id query params
+        if (!isNonEmptyString(id)) {
+            return new InternalError(`Invalid request paramter: id must consist of non-empty text`);
         }
 
-        const name = new MultilingualText(searchResult.name).getOriginalTextItem().text;
+        const filePathSearchResult = await this.mediaItemQueryService.fetchFilepathForMediaItem(
+            req?.user,
+            id
+        );
+
+        if (isInternalError(filePathSearchResult) || isNotFound(filePathSearchResult))
+            return sendInternalResultAsHttpResponse(res, filePathSearchResult);
 
         const options = {
-            root: STATIC_DIR,
+            // TODO make this configurable
+            root: filePathSearchResult.root,
             dotfiles: 'deny',
-            headers: this.buildHeaders({ mimeType: searchResult.mimeType, name }),
+            headers: this.buildHeaders({
+                mimeType: filePathSearchResult.mimeType,
+                name: filePathSearchResult.filename,
+            }),
         };
 
-        return res.sendFile(filePath, options);
+        return res.sendFile(filePathSearchResult.filepath, options);
     }
 
-    // TODO move the logic to the MediaItemQueryService
     // /download?name=C1
     @ApiBearerAuth('JWT')
     @UseGuards(OptionalJwtAuthGuard)
@@ -94,22 +89,24 @@ export class MediaItemController {
         }
 
         // TODO share this logic with the fetch binary method
-        const filePath = searchResult.filepath;
+        const filePath = await this.mediaItemQueryService.fetchFilepathForMediaItem(
+            req?.user,
+            searchResult.id
+        );
 
-        // TODO Make this configurable
-        const STATIC_DIR = `./__static__`;
-
-        if (!existsSync(`${STATIC_DIR}/${filePath}`)) {
-            return sendInternalResultAsHttpResponse(res, NotFound);
+        if (isInternalError(filePath) || isNotFound(filePath)) {
+            return filePath;
         }
 
+        const headers = this.buildHeaders({ mimeType: filePath.mimeType, name: filePath.filename });
+
         const options = {
-            root: STATIC_DIR,
+            root: filePath.root,
             dotfiles: 'deny',
-            headers: this.buildHeaders({ mimeType: searchResult.mimeType, name }),
+            headers,
         };
 
-        return res.sendFile(filePath, options);
+        return res.sendFile(filePath.filepath, options);
     }
 
     @ApiBearerAuth('JWT')

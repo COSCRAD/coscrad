@@ -9,7 +9,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
         "allowedUserIds": [],
       },
       "actions": [],
-      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
+      "audioURL": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
       "isPublished": false,
@@ -66,7 +66,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
         "allowedUserIds": [],
       },
       "actions": [],
-      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
+      "audioURL": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111",
       "isPublished": false,
@@ -92,7 +92,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
         "allowedUserIds": [],
       },
       "actions": [],
-      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
+      "audioURL": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110113",
       "isPublished": false,
@@ -117,7 +117,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
         "allowedUserIds": [],
       },
       "actions": [],
-      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
+      "audioURL": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110114",
       "isPublished": false,
@@ -141,7 +141,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
         "allowedUserIds": [],
       },
       "actions": [],
-      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav",
+      "audioURL": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110115",
       "isPublished": false,
@@ -173,7 +173,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
         "allowedUserIds": [],
       },
       "actions": [],
-      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
+      "audioURL": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
       "isPublished": false,
@@ -230,7 +230,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
         "allowedUserIds": [],
       },
       "actions": [],
-      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
+      "audioURL": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111",
       "isPublished": false,
@@ -256,7 +256,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
         "allowedUserIds": [],
       },
       "actions": [],
-      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
+      "audioURL": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110113",
       "isPublished": false,
@@ -281,7 +281,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
         "allowedUserIds": [],
       },
       "actions": [],
-      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
+      "audioURL": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110114",
       "isPublished": false,
@@ -305,7 +305,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
         "allowedUserIds": [],
       },
       "actions": [],
-      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav",
+      "audioURL": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110115",
       "isPublished": false,
@@ -679,37 +679,99 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
   "entities": [
     {
       "actions": [],
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "lengthMilliseconds": 2500,
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
       "mimeType": "audio/wav",
       "name": {
         "items": [
           {
             "languageCode": "clc",
             "role": "original",
-            "text": "episode (media item 1) title (in language)",
+            "text": "No Light",
           },
         ],
       },
       "tags": [],
-      "url": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
+      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
     },
     {
       "actions": [],
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-      "lengthMilliseconds": 910000,
-      "mimeType": "video/mp4",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
+      "mimeType": "audio/wav",
       "name": {
         "items": [
           {
             "languageCode": "clc",
             "role": "original",
-            "text": "video (media item 2) title (in language)",
+            "text": "Mary Had a Little Lamb",
           },
         ],
       },
       "tags": [],
-      "url": "https://coscrad.org/wp-content/uploads/2023/05/Rexy-and-The-Egg-_3D-Dinosaur-Animation_-_-3D-Animation-_-Maya-3D.mp4",
+      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
+      "mimeType": "image/png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Two Brothers Pole",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
+      "mimeType": "image/png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Nuu Story",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
+      "mimeType": "image/png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Adiitsii Running",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
+      "mimeType": "image/png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "snow mountain",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
     },
     {
       "actions": [],
@@ -726,103 +788,41 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
         ],
       },
       "tags": [],
-      "url": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
+      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
     },
     {
       "actions": [],
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
-      "mimeType": "image/png",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+      "lengthMilliseconds": 910000,
+      "mimeType": "video/mp4",
       "name": {
         "items": [
           {
             "languageCode": "clc",
             "role": "original",
-            "text": "snow mountain",
+            "text": "video (media item 2) title (in language)",
           },
         ],
       },
       "tags": [],
-      "url": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
+      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
     },
     {
       "actions": [],
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
-      "mimeType": "image/png",
-      "name": {
-        "items": [
-          {
-            "languageCode": "clc",
-            "role": "original",
-            "text": "Adiitsii Running",
-          },
-        ],
-      },
-      "tags": [],
-      "url": "https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png",
-    },
-    {
-      "actions": [],
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
-      "mimeType": "image/png",
-      "name": {
-        "items": [
-          {
-            "languageCode": "clc",
-            "role": "original",
-            "text": "Nuu Story",
-          },
-        ],
-      },
-      "tags": [],
-      "url": "https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png",
-    },
-    {
-      "actions": [],
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
-      "mimeType": "image/png",
-      "name": {
-        "items": [
-          {
-            "languageCode": "clc",
-            "role": "original",
-            "text": "Two Brothers Pole",
-          },
-        ],
-      },
-      "tags": [],
-      "url": "https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png",
-    },
-    {
-      "actions": [],
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "lengthMilliseconds": 2500,
       "mimeType": "audio/wav",
       "name": {
         "items": [
           {
             "languageCode": "clc",
             "role": "original",
-            "text": "Mary Had a Little Lamb",
+            "text": "episode (media item 1) title (in language)",
           },
         ],
       },
       "tags": [],
-      "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
-    },
-    {
-      "actions": [],
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
-      "mimeType": "audio/wav",
-      "name": {
-        "items": [
-          {
-            "languageCode": "clc",
-            "role": "original",
-            "text": "No Light",
-          },
-        ],
-      },
-      "tags": [],
-      "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav",
+      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
     },
   ],
   "indexScopedActions": [],
@@ -834,37 +834,99 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
   "entities": [
     {
       "actions": [],
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "lengthMilliseconds": 2500,
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
       "mimeType": "audio/wav",
       "name": {
         "items": [
           {
             "languageCode": "clc",
             "role": "original",
-            "text": "episode (media item 1) title (in language)",
+            "text": "No Light",
           },
         ],
       },
       "tags": [],
-      "url": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
+      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
     },
     {
       "actions": [],
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-      "lengthMilliseconds": 910000,
-      "mimeType": "video/mp4",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
+      "mimeType": "audio/wav",
       "name": {
         "items": [
           {
             "languageCode": "clc",
             "role": "original",
-            "text": "video (media item 2) title (in language)",
+            "text": "Mary Had a Little Lamb",
           },
         ],
       },
       "tags": [],
-      "url": "https://coscrad.org/wp-content/uploads/2023/05/Rexy-and-The-Egg-_3D-Dinosaur-Animation_-_-3D-Animation-_-Maya-3D.mp4",
+      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
+      "mimeType": "image/png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Two Brothers Pole",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
+      "mimeType": "image/png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Nuu Story",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
+      "mimeType": "image/png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Adiitsii Running",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
+      "mimeType": "image/png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "snow mountain",
+          },
+        ],
+      },
+      "tags": [],
+      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
     },
     {
       "actions": [],
@@ -881,103 +943,41 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
         ],
       },
       "tags": [],
-      "url": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
+      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
     },
     {
       "actions": [],
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
-      "mimeType": "image/png",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+      "lengthMilliseconds": 910000,
+      "mimeType": "video/mp4",
       "name": {
         "items": [
           {
             "languageCode": "clc",
             "role": "original",
-            "text": "snow mountain",
+            "text": "video (media item 2) title (in language)",
           },
         ],
       },
       "tags": [],
-      "url": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
+      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
     },
     {
       "actions": [],
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
-      "mimeType": "image/png",
-      "name": {
-        "items": [
-          {
-            "languageCode": "clc",
-            "role": "original",
-            "text": "Adiitsii Running",
-          },
-        ],
-      },
-      "tags": [],
-      "url": "https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png",
-    },
-    {
-      "actions": [],
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
-      "mimeType": "image/png",
-      "name": {
-        "items": [
-          {
-            "languageCode": "clc",
-            "role": "original",
-            "text": "Nuu Story",
-          },
-        ],
-      },
-      "tags": [],
-      "url": "https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png",
-    },
-    {
-      "actions": [],
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
-      "mimeType": "image/png",
-      "name": {
-        "items": [
-          {
-            "languageCode": "clc",
-            "role": "original",
-            "text": "Two Brothers Pole",
-          },
-        ],
-      },
-      "tags": [],
-      "url": "https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png",
-    },
-    {
-      "actions": [],
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "lengthMilliseconds": 2500,
       "mimeType": "audio/wav",
       "name": {
         "items": [
           {
             "languageCode": "clc",
             "role": "original",
-            "text": "Mary Had a Little Lamb",
+            "text": "episode (media item 1) title (in language)",
           },
         ],
       },
       "tags": [],
-      "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
-    },
-    {
-      "actions": [],
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
-      "mimeType": "audio/wav",
-      "name": {
-        "items": [
-          {
-            "languageCode": "clc",
-            "role": "original",
-            "text": "No Light",
-          },
-        ],
-      },
-      "tags": [],
-      "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav",
+      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
     },
   ],
   "indexScopedActions": [],
@@ -990,7 +990,6 @@ exports[`When fetching multiple resources GET /resources/photographs when all of
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
-      "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png",
       "name": {
         "items": [
           {
@@ -1006,7 +1005,6 @@ exports[`When fetching multiple resources GET /resources/photographs when all of
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png",
       "name": {
         "items": [
           {
@@ -1022,7 +1020,6 @@ exports[`When fetching multiple resources GET /resources/photographs when all of
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-      "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png",
       "name": {
         "items": [
           {
@@ -1046,7 +1043,6 @@ exports[`When fetching multiple resources GET /resources/photographs when some o
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
-      "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png",
       "name": {
         "items": [
           {
@@ -1062,7 +1058,6 @@ exports[`When fetching multiple resources GET /resources/photographs when some o
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png",
       "name": {
         "items": [
           {
@@ -1078,7 +1073,6 @@ exports[`When fetching multiple resources GET /resources/photographs when some o
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-      "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png",
       "name": {
         "items": [
           {
@@ -1104,12 +1098,12 @@ exports[`When fetching multiple resources GET /resources/playlists when all of t
       "contributions": [],
       "episodes": [
         {
-          "mediaItemUrl": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
+          "mediaItemUrl": "/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "mimeType": "audio/wav",
           "name": "The Wooden Boy {en} (role: original)",
         },
         {
-          "mediaItemUrl": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
+          "mediaItemUrl": "/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
           "mimeType": "audio/mpeg",
           "name": "Down at the River {clc} (role: original)",
         },
@@ -1163,12 +1157,12 @@ exports[`When fetching multiple resources GET /resources/playlists when some of 
       "contributions": [],
       "episodes": [
         {
-          "mediaItemUrl": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
+          "mediaItemUrl": "/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "mimeType": "audio/wav",
           "name": "The Wooden Boy {en} (role: original)",
         },
         {
-          "mediaItemUrl": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
+          "mediaItemUrl": "/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
           "mimeType": "audio/mpeg",
           "name": "Down at the River {clc} (role: original)",
         },

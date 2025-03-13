@@ -2,12 +2,16 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { HttpStatusCode } from '../../../../app/constants/httpStatusCodes';
 
-interface AssertQueryResultParams<TResponseBody = unknown> {
+interface AssertQueryResultParams<
+    TResponseBody = unknown,
+    THeaders extends Record<string, unknown> = Record<string, unknown>
+> {
     app: INestApplication;
     seedInitialState: () => Promise<void>;
     endpoint: string;
     expectedStatus: HttpStatusCode;
     checkResponseBody?: (body: TResponseBody) => Promise<void>;
+    checkHeaders?: (headers: THeaders) => Promise<void>;
 }
 
 export const assertQueryResult = async ({
@@ -16,6 +20,7 @@ export const assertQueryResult = async ({
     endpoint,
     expectedStatus,
     checkResponseBody,
+    checkHeaders,
 }: AssertQueryResultParams) => {
     await seedInitialState();
 
@@ -25,5 +30,9 @@ export const assertQueryResult = async ({
 
     if (typeof checkResponseBody === 'function') {
         await checkResponseBody(res.body);
+    }
+
+    if (typeof checkHeaders === 'function') {
+        await checkHeaders(res.header);
     }
 };

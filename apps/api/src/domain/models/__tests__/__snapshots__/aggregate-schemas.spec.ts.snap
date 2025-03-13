@@ -946,13 +946,6 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isOptional": true,
     "label": "title (language)",
   },
-  "url": {
-    "coscradDataType": "URL",
-    "description": "a web link to the corresponding media file",
-    "isArray": false,
-    "isOptional": false,
-    "label": "url",
-  },
 }
 `;
 

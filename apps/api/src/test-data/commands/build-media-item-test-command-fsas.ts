@@ -13,7 +13,6 @@ const createMediaItem: CommandFSA<CreateMediaItem> = {
     payload: {
         aggregateCompositeIdentifier: { id, type },
         title: 'Fishing Video',
-        url: 'https://www.mysoundbox.org/vid.mp4',
         mimeType: MIMEType.mp4,
         lengthMilliseconds: 100000,
     },

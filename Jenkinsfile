@@ -27,6 +27,7 @@ pipeline {
                 ARANGO_DB_NAME = 'staging'
                 AUTH0_ISSUER_URL = 'https://foo.auth0.com/'
                 AUTH0_AUDIENCE = 'https://bar.mydomain.ca'
+                BASE_URL="http://localhost"
                 GLOBAL_PREFIX = 'api'
                 SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT = 'false'
             }
@@ -107,6 +108,7 @@ pipeline {
                 ARANGO_DB_NAME = 'staging'
                 AUTH0_ISSUER_URL = 'https://foo.auth0.com/'
                 AUTH0_AUDIENCE = 'https://bar.mydomain.ca'
+                BASE_URL = 'http://localhost'
                 GLOBAL_PREFIX = 'api'
                 SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT = 'false'
             }

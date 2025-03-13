@@ -8,7 +8,7 @@ import {
     validateCoscradModelInstance,
 } from '@coscrad/data-types';
 import { plainToInstance } from 'class-transformer';
-import { Environment } from './constants/Environment';
+import { Environment } from './constants/environment';
 import { Scheme } from './constants/Scheme';
 
 export class EnvironmentVariables {
@@ -89,6 +89,13 @@ export class EnvironmentVariables {
     })
     AUTH0_AUDIENCE: string;
 
+    @URL({
+        label: 'base API url',
+        description:
+            'the protocol and full base url (TLD and SLD) and port number, e.g., "https://www.myorg.com:8345"',
+    })
+    BASE_URL: string;
+
     @NonEmptyString({
         label: 'Global API Prefix',
         description: 'the prefix that will come before all endpoints in your API',
@@ -103,6 +110,7 @@ export class EnvironmentVariables {
     SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT: string;
 }
 
+// Do we have a test of this?
 export const validate = (config: Record<string, unknown>): EnvironmentVariables => {
     const configToValidate = plainToInstance(EnvironmentVariables, config, {
         enableImplicitConversion: true,

@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
-import { Environment } from '../../../../../app/config/constants/Environment';
+import { Environment } from '../../../../../app/config/constants/environment';
 import { CommandInfoService } from '../../../../../app/controllers/command/services/command-info-service';
 import { TermCommandsModule } from '../../../../../app/domain-modules/term.commands.module';
 import { ConsoleCoscradCliLogger } from '../../../../../coscrad-cli/logging';

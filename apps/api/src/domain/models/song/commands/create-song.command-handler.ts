@@ -13,6 +13,7 @@ import { buildMultilingualTextWithSingleItem } from '../../../common/build-multi
 import { ICoscradEventPublisher } from '../../../common/events/interfaces';
 import { Valid } from '../../../domainModelValidators/Valid';
 import getInstanceFactoryForResource from '../../../factories/get-instance-factory-for-resource';
+import { IMediaManagementService } from '../../../interfaces';
 import { EVENT, IIdManager } from '../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../repositories/interfaces/repository-provider.interface';
@@ -41,6 +42,7 @@ export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
         @Inject(REPOSITORY_PROVIDER_TOKEN)
         protected readonly repositoryProvider: IRepositoryProvider,
         @Inject('ID_MANAGER') protected readonly idManager: IIdManager,
+        protected readonly mediaManager: IMediaManagementService,
         @Inject(EVENT_PUBLISHER_TOKEN) protected readonly eventPublisher: ICoscradEventPublisher
     ) {
         super(repositoryProvider, idManager, eventPublisher);
@@ -94,6 +96,8 @@ export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
     }
 
     validateExternalState(state: InMemorySnapshot, song: Song): ValidationResult {
+        // const doesMediaItemExist = await this.mediaManager.exists(mediaItemId);
+
         return song.validateExternalState(state);
     }
 

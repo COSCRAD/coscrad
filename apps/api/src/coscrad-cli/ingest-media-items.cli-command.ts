@@ -116,6 +116,12 @@ const buildCreateResourceFsaForMediaItem = (
     }
 };
 
+/**
+ * TODO We should to either:
+ * 1. Use the async fs APIs to optimize this
+ * 2. Expose an `ingest-media-item` (singular) so that we can use, e.g., GNU parallel
+ * for performance instead.
+ */
 @CliCommand({
     name: 'ingest-media-items',
     description: 'ingest all media items within a target directory',
@@ -132,13 +138,16 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
 
     async run(
         _passedParams: string[],
-        { directory, baseUrl, staticAssetDestinationDirectory }: IngestMediaItemsCliCommandOptions
+        { directory, staticAssetDestinationDirectory }: IngestMediaItemsCliCommandOptions
     ): Promise<void> {
         console.time();
         // console.timeLog();
 
         this.logger.log(`Attempting to import media from: ${directory}`);
 
+        /**
+         * TODO We should consider using the async API for performance.
+         */
         const partialPayloads: (Omit<CreateMediaItem, 'aggregateCompositeIdentifier' | 'url'> & {
             filename: string;
         })[] = readdirSync(directory).map((file) => {
@@ -232,7 +241,6 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
                             type: ResourceType.mediaItem,
                             id,
                         },
-                        url: `${baseUrl}/${generatedIds[index]}`,
                         rawData: {
                             filename,
                         },

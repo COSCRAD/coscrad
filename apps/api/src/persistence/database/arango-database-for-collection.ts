@@ -23,7 +23,7 @@ import { ArangoDatabaseDocument } from './utilities/mapEntityDTOToDatabaseDocume
  * repositories layer.
  */
 export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
-    #collectionID: string;
+    private collectionID: string;
 
     #arangoDatabase: ArangoDatabase;
 
@@ -41,7 +41,7 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
      * exists.
      */
     constructor(arangoDatabase: ArangoDatabase, collectionName: string) {
-        this.#collectionID = collectionName;
+        this.collectionID = collectionName;
 
         this.isDatabaseForView = collectionName.includes('__VIEW');
 
@@ -60,13 +60,13 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
     // Queries (return information)
     fetchById(id: AggregateId): Promise<Maybe<ArangoDatabaseDocument<TEntity>>> {
         return this.#arangoDatabase
-            .fetchById<ArangoDatabaseDocument<TEntity>>(id, this.#collectionID)
+            .fetchById<ArangoDatabaseDocument<TEntity>>(id, this.collectionID)
             .catch((error) => {
                 const innerErrors = error?.message ? [new InternalError(error.message)] : [];
 
                 throw new InternalError(
                     `[Arango Database for Collection]: failed to fetch by ID (${id}) from collection: ${
-                        this.#collectionID
+                        this.collectionID
                     } \n ${innerErrors.map((e) => e.toString()).join(' \n ')}`
                 );
             });
@@ -74,24 +74,24 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
 
     fetchMany(specification?: ISpecification<TEntity>): Promise<ArangoDatabaseDocument<TEntity>[]> {
         return this.#arangoDatabase.fetchMany<ArangoDatabaseDocument<TEntity>>(
-            this.#collectionID,
+            this.collectionID,
             // TODO remove cast, handle mapping layer
             specification as unknown as ISpecification<ArangoDatabaseDocument<TEntity>>
         );
     }
 
     getCount(): Promise<number> {
-        return this.#arangoDatabase.getCount(this.#collectionID);
+        return this.#arangoDatabase.getCount(this.collectionID);
     }
 
     // Commands (mutate state)
     async create(databaseDocument: ArangoDatabaseDocument<TEntity>) {
-        await this.#arangoDatabase.create(databaseDocument, this.#collectionID);
+        await this.#arangoDatabase.create(databaseDocument, this.collectionID);
 
         if (this.isDatabaseForView) {
             this.viewWriteHookSubject.next({
                 data: {
-                    type: this.#collectionID,
+                    type: this.collectionID,
                 },
             });
         }
@@ -99,11 +99,11 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
 
     async createMany(databaseDocuments: ArangoDatabaseDocument<TEntity>[]) {
         return this.#arangoDatabase
-            .createMany(databaseDocuments, this.#collectionID)
+            .createMany(databaseDocuments, this.collectionID)
             .catch((error) => {
                 throw new InternalError(
                     `Failed to create many in Arango collection: ${
-                        this.#collectionID
+                        this.collectionID
                     } \n documents: ${JSON.stringify(databaseDocuments)} \n ids: ${databaseDocuments
                         .map(({ _key }) => _key)
                         .join(' , ')} `,
@@ -113,12 +113,12 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
     }
 
     async delete(id: string) {
-        const cursor = await this.#arangoDatabase.delete(id, this.#collectionID);
+        const cursor = await this.#arangoDatabase.delete(id, this.collectionID);
 
         if (this.isDatabaseForView) {
             this.viewWriteHookSubject.next({
                 data: {
-                    type: this.#collectionID,
+                    type: this.collectionID,
                 },
             });
         }
@@ -127,16 +127,16 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
     }
 
     clear(): Promise<void> {
-        return this.#arangoDatabase.deleteAll(this.#collectionID);
+        return this.#arangoDatabase.deleteAll(this.collectionID);
     }
 
     async update(id: AggregateId, updateDTO: DeepPartial<ArangoDatabaseDocument<TEntity>>) {
-        const cursor = await this.#arangoDatabase.update(id, updateDTO, this.#collectionID);
+        const cursor = await this.#arangoDatabase.update(id, updateDTO, this.collectionID);
 
         if (this.isDatabaseForView) {
             this.viewWriteHookSubject.next({
                 data: {
-                    type: this.#collectionID,
+                    type: this.collectionID,
                 },
             });
         }
@@ -164,7 +164,7 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
         ) {
             this.viewWriteHookSubject.next({
                 data: {
-                    type: this.#collectionID,
+                    type: this.collectionID,
                     /**
                      * TODO We should include the ID as well. One way to do this is to
                      * always put the _key of the doc to update on bind vars with a consistent
