@@ -4,7 +4,6 @@ import { bootstrapDynamicTypes } from '@coscrad/data-types';
 import { ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { Test } from '@nestjs/testing';
-import { ArangoQueryRepositoryProvider } from 'apps/api/src/domain/models/term/repositories/arango-query-repository-provider';
 import { JwtStrategy } from '../../../authorization/jwt.strategy';
 import { MockJwtAdminAuthGuard } from '../../../authorization/mock-jwt-admin-auth-guard';
 import { MockJwtAuthGuard } from '../../../authorization/mock-jwt-auth-guard';
@@ -223,6 +222,7 @@ import {
     ITermQueryRepository,
     TERM_QUERY_REPOSITORY_TOKEN,
 } from '../../../domain/models/term/queries';
+import { ArangoQueryRepositoryProvider } from '../../../domain/models/term/repositories/arango-query-repository-provider';
 import { ArangoTermQueryRepository } from '../../../domain/models/term/repositories/arango-term-query-repository';
 import {
     ContributorCreated,
