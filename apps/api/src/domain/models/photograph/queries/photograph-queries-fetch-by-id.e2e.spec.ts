@@ -17,11 +17,11 @@ import generateDatabaseNameForTestSuite from '../../../../persistence/repositori
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { BaseResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/base-resource.view-model';
 import buildTestDataInFlatFormat from '../../../../test-data/buildTestDataInFlatFormat';
-import { TestEventStream } from '../../../../test-data/events';
+import { buildTestInstance } from '../../../../test-data/utilities';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { AggregateId } from '../../../types/AggregateId';
 import { assertQueryResult } from '../../__tests__';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
-import { PhotographCreated } from '../../photograph';
 import {
     IPhotographQueryRepository,
     PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
@@ -72,9 +72,9 @@ const existingMediaItem = getValidAggregateInstanceForTest(AggregateType.mediaIt
 
 const testPhotographer = 'Jeff Thomas';
 
-const photograghHeightPx = 600;
+// const photograghHeightPx = 600;
 
-const photograghWidthPx = 1200;
+// const photograghWidthPx = 1200;
 
 const dummyContributorFirstName = 'Dumb';
 
@@ -87,24 +87,20 @@ const dummyContributor = getValidAggregateInstanceForTest(AggregateType.contribu
     }),
 });
 
-const photographCreated = new TestEventStream().andThen<PhotographCreated>({
-    type: 'PHOTOGRAPH_CREATED',
-    payload: {
-        title: photographTitle,
-        languageCodeForTitle: languageCodeForTitle,
-        mediaItemId: existingMediaItem.id,
-        photographer: testPhotographer,
-        heightPx: photograghHeightPx,
-        widthPx: photograghWidthPx,
-    },
-    meta: {
-        contributorIds: [dummyContributor.id],
-    },
+const dummyPhotograph = buildTestInstance(PhotographViewModel, {
+    ...photographCompositeId,
+    name: buildMultilingualTextWithSingleItem(photographTitle, languageCodeForTitle),
+    mediaItemId: existingMediaItem.id,
+    photographer: testPhotographer,
+    contributions: [
+        {
+            id: dummyContributor.id,
+            fullName: dummyContributor.fullName.toString(),
+        },
+    ],
+    // heightPx
+    // widthPx
 });
-
-const dummyPhotograph = PhotographViewModel.fromPhotographCreated(
-    photographCreated.as(photographCompositeId)[0] as PhotographCreated
-);
 
 const targetPhotographView = clonePlainObjectWithOverrides(dummyPhotograph, {
     isPublished: true,
@@ -144,6 +140,8 @@ describe(`when querying for a photograph: fetch by Id`, () => {
         ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
             {
                 ARANGO_DB_NAME: testDatabaseName,
+                BASE_URL: 'https://www.photograph-queries-by-id.com',
+                GLOBAL_PREFIX: 'myapi',
             },
             {
                 testUserWithGroups: userWithGroups,
@@ -352,6 +350,14 @@ describe(`when querying for a photograph: fetch by Id`, () => {
                                 body: IDetailQueryResult<IPhotographViewModel>
                             ) => {
                                 expect(body.actions).not.toEqual([]);
+
+                                /**
+                                 * Note that we do this once and only once as
+                                 * a contract test. We choose an admin case
+                                 * because we want to capture the format of
+                                 * the actions property as well.
+                                 */
+                                expect(body).toMatchSnapshot();
                             },
                         });
                     });

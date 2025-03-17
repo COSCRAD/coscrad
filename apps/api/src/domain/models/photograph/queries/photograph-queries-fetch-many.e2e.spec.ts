@@ -15,15 +15,15 @@ import { ArangoDatabaseProvider } from '../../../../persistence/database/databas
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestDataInFlatFormat from '../../../../test-data/buildTestDataInFlatFormat';
-import { TestEventStream } from '../../../../test-data/events';
+import { buildTestInstance } from '../../../../test-data/utilities';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../user-management/user/entities/user/coscrad-user.entity';
 import { FullName } from '../../user-management/user/entities/user/full-name.entity';
-import { PhotographCreated } from '../commands';
 import {
     IPhotographQueryRepository,
     PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
@@ -75,31 +75,16 @@ const dummyContributor = getValidAggregateInstanceForTest(AggregateType.contribu
     }),
 });
 
-const photographCreated = new TestEventStream().andThen<PhotographCreated>({
-    type: 'PHOTOGRAPH_CREATED',
-    payload: {
-        title: photographTitle,
-        languageCodeForTitle: originalLanguage,
-    },
-    meta: {
-        // we also want to check that the contributions come through
-        contributorIds: [dummyContributor.id],
-    },
+const dummyPhotographView = buildTestInstance(PhotographViewModel, {
+    ...photographCompositeIdentifier,
+    name: buildMultilingualTextWithSingleItem(photographTitle, originalLanguage),
+    contributions: [
+        {
+            id: dummyContributor.id,
+            fullName: dummyContributor.fullName.toString(),
+        },
+    ],
 });
-
-const dummyPhotographView = clonePlainObjectWithOverrides(
-    PhotographViewModel.fromPhotographCreated(
-        photographCreated.as(photographCompositeIdentifier)[0] as PhotographCreated
-    ),
-    {
-        contributions: [
-            {
-                id: dummyContributor.id,
-                fullName: dummyContributor.fullName.toString(),
-            },
-        ],
-    }
-);
 
 const publicPhotographView = clonePlainObjectWithOverrides(dummyPhotographView, {
     isPublished: true,
@@ -139,6 +124,8 @@ describe(`when querying for a photograph: fetch many`, () => {
         ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
             {
                 ARANGO_DB_NAME: testDatabaseName,
+                BASE_URL: 'https://www.photograph-queries.com',
+                GLOBAL_PREFIX: 'myapi',
             },
             {
                 testUserWithGroups,

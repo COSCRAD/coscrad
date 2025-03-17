@@ -634,8 +634,14 @@ export default async (
                 provide: PhotographQueryService,
                 useFactory: (
                     photographQueryRepository: IPhotographQueryRepository,
-                    commandInfoService: CommandInfoService
-                ) => new PhotographQueryService(photographQueryRepository, commandInfoService),
+                    commandInfoService: CommandInfoService,
+                    configService: ConfigService
+                ) =>
+                    new PhotographQueryService(
+                        photographQueryRepository,
+                        commandInfoService,
+                        configService
+                    ),
                 inject: [PHOTOGRAPH_QUERY_REPOSITORY_TOKEN, CommandInfoService, ConfigService],
             },
             {

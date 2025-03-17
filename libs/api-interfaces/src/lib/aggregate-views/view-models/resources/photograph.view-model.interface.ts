@@ -1,7 +1,7 @@
 import { IBaseViewModel } from '../base.view-model.interface';
 
 export interface IPhotographViewModel extends IBaseViewModel {
-    mediaItemId?: string;
+    imageUrl: string;
 
     photographer: string;
 }

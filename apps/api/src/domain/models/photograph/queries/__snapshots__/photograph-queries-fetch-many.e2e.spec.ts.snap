@@ -10,7 +10,41 @@ exports[`when querying for a photograph: fetch many when the user is a project a
       },
       "actions": [
         {
-          "description": "Make a resource visible to the public",
+          "description": "Allow a user to view (but not edit) a given resource",
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
+                    "message": "must be a UUID",
+                    "name": "UUID",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the ID of the user who will be given permission to view this resource",
+                "label": "userId",
+                "name": "userId",
+                "options": {
+                  "aggregateType": "user",
+                },
+                "type": "DYNAMIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+                "type": "photograph",
+              },
+            },
+          },
+          "label": "Grant Read Access to User",
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+        {
+          "description": "Make a resource unpublished to the public",
           "form": {
             "fields": [],
             "prepopulatedFields": {
@@ -20,8 +54,8 @@ exports[`when querying for a photograph: fetch many when the user is a project a
               },
             },
           },
-          "label": "Publish Resource",
-          "type": "PUBLISH_RESOURCE",
+          "label": "Unpublish Resource",
+          "type": "UNPUBLISH_RESOURCE",
         },
         {
           "description": "creates a note about this particular resource",
@@ -209,6 +243,7 @@ exports[`when querying for a photograph: fetch many when the user is a project a
         },
       ],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+      "imageUrl": "https://www.photograph-queries.com/myapi/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100055",
       "isPublished": true,
       "name": {
         "items": [
@@ -234,6 +269,40 @@ exports[`when querying for a photograph: fetch many when the user is a project a
         ],
       },
       "actions": [
+        {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
+                    "message": "must be a UUID",
+                    "name": "UUID",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the ID of the user who will be given permission to view this resource",
+                "label": "userId",
+                "name": "userId",
+                "options": {
+                  "aggregateType": "user",
+                },
+                "type": "DYNAMIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
+                "type": "photograph",
+              },
+            },
+          },
+          "label": "Grant Read Access to User",
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
         {
           "description": "Make a resource visible to the public",
           "form": {
@@ -434,6 +503,7 @@ exports[`when querying for a photograph: fetch many when the user is a project a
         },
       ],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
+      "imageUrl": "https://www.photograph-queries.com/myapi/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100055",
       "isPublished": false,
       "name": {
         "items": [
@@ -457,6 +527,40 @@ exports[`when querying for a photograph: fetch many when the user is a project a
         "allowedUserIds": [],
       },
       "actions": [
+        {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
+                    "message": "must be a UUID",
+                    "name": "UUID",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the ID of the user who will be given permission to view this resource",
+                "label": "userId",
+                "name": "userId",
+                "options": {
+                  "aggregateType": "user",
+                },
+                "type": "DYNAMIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+                "type": "photograph",
+              },
+            },
+          },
+          "label": "Grant Read Access to User",
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
         {
           "description": "Make a resource visible to the public",
           "form": {
@@ -657,6 +761,7 @@ exports[`when querying for a photograph: fetch many when the user is a project a
         },
       ],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+      "imageUrl": "https://www.photograph-queries.com/myapi/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100055",
       "isPublished": false,
       "name": {
         "items": [

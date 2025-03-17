@@ -5,16 +5,31 @@ import { DetailScopedCommandWriteContext } from '../../../../app/controllers/com
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
 import { TagViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
+import { CoscradDataExample } from '../../../../test-data/utilities';
 import { DTO } from '../../../../types/DTO';
 import { ICoscradEvent } from '../../../common';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { AggregateId } from '../../../types/AggregateId';
 import { HasAggregateId } from '../../../types/HasAggregateId';
+import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import { PhotographCreated } from '../commands';
 
+@CoscradDataExample<PhotographViewModel>({
+    example: {
+        name: buildMultilingualTextWithSingleItem('nice photo'),
+        id: buildDummyUuid(1),
+        photographer: 'Jane Deer',
+        tags: [],
+        mediaItemId: buildDummyUuid(55),
+        actions: [],
+        isPublished: false,
+        contributions: [],
+        accessControlList: new AccessControlList().toDTO(),
+    },
+})
 export class PhotographViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
     public contributions: ContributorWithId[];
 
@@ -37,7 +52,7 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
 
     // Do we need pixel height and width?
 
-    mediaItemId?: string;
+    mediaItemId: string;
 
     // note that these are mapped to form specifications in the query service layer
     @ApiProperty()
@@ -61,11 +76,20 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
     public accessControlList: AccessControlList;
 
     getAvailableCommands(): string[] {
-        /**
-         * TODO Let's not cache actions on the view documents. Let's instead
-         * project off the view model state to determine the available commands types.
-         */
-        return this.actions || [];
+        const allCommands = [
+            'TAG_RESOURCE',
+            'CREATE_NOTE_ABOUT_RESOURCE',
+            'CONNECT_RESOURCES_WITH_NOTE',
+            'GRANT_RESOURCE_READ_ACCESS_TO_USER',
+        ];
+
+        if (!this.isPublished) {
+            allCommands.push('PUBLISH_RESOURCE');
+        } else {
+            allCommands.push('UNPUBLISH_RESOURCE');
+        }
+
+        return allCommands;
     }
 
     getCompositeIdentifier(): { type: AggregateType; id: AggregateId } {

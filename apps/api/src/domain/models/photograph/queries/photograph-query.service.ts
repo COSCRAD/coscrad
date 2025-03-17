@@ -5,6 +5,7 @@ import {
     IPhotographViewModel,
 } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Observable } from 'rxjs';
 import { IPhotographQueryRepository, PHOTOGRAPH_QUERY_REPOSITORY_TOKEN } from '.';
 import {
@@ -26,10 +27,10 @@ export class PhotographQueryService {
     constructor(
         @Inject(PHOTOGRAPH_QUERY_REPOSITORY_TOKEN)
         private readonly repository: IPhotographQueryRepository,
-        @Inject(CommandInfoService) private readonly commandInfoService: CommandInfoService
+        @Inject(CommandInfoService) private readonly commandInfoService: CommandInfoService,
+        private readonly configService: ConfigService
     ) {}
 
-    // todo add explicit return type
     async fetchById(
         id: AggregateId,
         userWithGroups?: CoscradUserWithGroups
@@ -44,12 +45,17 @@ export class PhotographQueryService {
             return NotFound;
         }
 
-        const actions = this.fetchUserActions(userWithGroups, [photograph]);
+        const photographWithUrlInsteadOfId =
+            photograph as unknown as IDetailQueryResult<IPhotographViewModel>;
 
-        return {
-            ...photograph,
-            actions,
-        };
+        photographWithUrlInsteadOfId.imageUrl = this.buildImageUrl(photograph.mediaItemId);
+
+        // note that this also affects `photographWithUrlInsteadOfId`
+        delete photograph.mediaItemId;
+
+        photographWithUrlInsteadOfId.actions = this.fetchUserActions(userWithGroups, [photograph]);
+
+        return photographWithUrlInsteadOfId;
     }
 
     // TODO should we support specifications \ custom filters?
@@ -70,15 +76,21 @@ export class PhotographQueryService {
 
         const result = {
             entities: availableEntities.map((entity) => {
-                const actions =
-                    Array.isArray(entity.actions) && entity.actions.length > 0
-                        ? fetchActionsForUser(this.commandInfoService, userWithGroups, entity)
-                        : [];
+                const actions = fetchActionsForUser(
+                    this.commandInfoService,
+                    userWithGroups,
+                    entity
+                );
 
                 entity.actions = actions;
 
-                return entity as unknown as Omit<PhotographViewModel, 'actions'> & {
+                entity.imageUrl = this.buildImageUrl(entity.mediaItemId);
+
+                delete entity.mediaItemId;
+
+                return entity as unknown as Omit<PhotographViewModel, 'actions' | 'mediaItemId'> & {
                     actions: ICommandFormAndLabels[];
+                    imageUrl: string;
                 };
             }),
             indexScopedActions,
@@ -99,5 +111,11 @@ export class PhotographQueryService {
         return commandContexts.flatMap((commandContext) =>
             fetchActionsForUser(this.commandInfoService, systemUser, commandContext)
         );
+    }
+
+    private buildImageUrl(mediaItemId: AggregateId): string {
+        return `${this.configService.get('BASE_URL')}/${this.configService.get(
+            'GLOBAL_PREFIX'
+        )}/resources/mediaItems/download/${mediaItemId}`;
     }
 }
