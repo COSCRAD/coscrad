@@ -45,12 +45,11 @@ describe('GET  (fetch view models)', () => {
 
     const resourceTypesThatHaveStandaloneQueryTests = [
         ResourceType.digitalText,
-
         //TODO write standalone query test
         ResourceType.song,
         ResourceType.term,
-        // not yet event sourced, but depends on term
         ResourceType.vocabularyList,
+        ResourceType.photograph,
     ];
 
     const testDataWithAllResourcesPublished = Object.entries(resourceTestData).reduce(

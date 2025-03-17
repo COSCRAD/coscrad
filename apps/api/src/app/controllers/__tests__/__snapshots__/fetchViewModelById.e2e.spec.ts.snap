@@ -166,24 +166,6 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
 }
 `;
 
-exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/photographs/:id when the resource is published when an resource with the id exists should return the expected response 1`] = `
-{
-  "actions": [],
-  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
-  "name": {
-    "items": [
-      {
-        "languageCode": "en",
-        "role": "original",
-        "text": "Adiitsii Running",
-      },
-    ],
-  },
-  "photographer": "Susie McRealart",
-  "tags": [],
-}
-`;
-
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/playlists/:id when the resource is published when an resource with the id exists should return the expected response 1`] = `
 {
   "actions": [],

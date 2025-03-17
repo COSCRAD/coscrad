@@ -1,4 +1,5 @@
-import { AggregateType, ContributorWithId, IMultilingualText } from '@coscrad/api-interfaces';
+import { AggregateType, IMultilingualText } from '@coscrad/api-interfaces';
+import { BooleanDataType, NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
 import { isBoolean, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { ApiProperty } from '@nestjs/swagger';
 import { DetailScopedCommandWriteContext } from '../../../../app/controllers/command/services/command-info-service';
@@ -14,6 +15,7 @@ import { AggregateId } from '../../../types/AggregateId';
 import { HasAggregateId } from '../../../types/HasAggregateId';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
+import { ContributionSummary } from '../../user-management';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import { PhotographCreated } from '../commands';
 
@@ -31,21 +33,39 @@ import { PhotographCreated } from '../commands';
     },
 })
 export class PhotographViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
-    public contributions: ContributorWithId[];
+    // TODO add decorators for this property
+    public contributions: ContributionSummary[];
 
     @ApiProperty({
         type: MultilingualText,
     })
+    @NestedDataType(MultilingualText, {
+        label: 'name',
+        description: 'the name of this photograph',
+    })
     public name: IMultilingualText;
 
     @ApiProperty()
+    @UUID({
+        label: 'ID',
+        description: 'System identifier for this photograph',
+    })
     public id: string;
 
     @ApiProperty()
+    @NonEmptyString({
+        label: 'photographer',
+        description: 'the full name of the photographer responsible for this photograph',
+    })
     public photographer: string;
 
     @ApiProperty({
         type: TagViewModel,
+        isArray: true,
+    })
+    @NestedDataType(TagViewModel, {
+        label: 'tags',
+        description: 'the tags that apply to this photograph',
         isArray: true,
     })
     public tags: TagViewModel[];
@@ -58,7 +78,12 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
     @ApiProperty()
     public actions: string[];
 
+    // TODO Should we remove this from the public view?
     @ApiProperty()
+    @BooleanDataType({
+        label: 'is published',
+        description: 'a flag indicated if this photograph is available to the general public',
+    })
     public isPublished: boolean;
 
     // notes

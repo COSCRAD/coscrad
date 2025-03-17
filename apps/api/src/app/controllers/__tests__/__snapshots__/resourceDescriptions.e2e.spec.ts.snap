@@ -758,15 +758,22 @@ exports[`GET /resources should return the expected result 1`] = `
     "pluralLabel": "Photographs",
     "schema": {
       "id": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "unique identifier",
+        "coscradDataType": "UUID",
+        "description": "System identifier for this photograph",
         "isArray": false,
         "isOptional": false,
         "label": "ID",
       },
+      "isPublished": {
+        "coscradDataType": "BOOLEAN",
+        "description": "a flag indicated if this photograph is available to the general public",
+        "isArray": false,
+        "isOptional": false,
+        "label": "is published",
+      },
       "name": {
         "complexDataType": "NESTED_TYPE",
-        "description": "multilingual text name of the entity",
+        "description": "the name of this photograph",
         "isArray": false,
         "isOptional": false,
         "label": "name",
@@ -863,10 +870,138 @@ exports[`GET /resources should return the expected result 1`] = `
       },
       "photographer": {
         "coscradDataType": "NON_EMPTY_STRING",
-        "description": "the person who took the picture",
+        "description": "the full name of the photographer responsible for this photograph",
         "isArray": false,
         "isOptional": false,
-        "label": "photograph",
+        "label": "photographer",
+      },
+      "tags": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "the tags that apply to this photograph",
+        "isArray": true,
+        "isOptional": false,
+        "label": "tags",
+        "name": "TagViewModel",
+        "schema": {
+          "id": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "label": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "a human readable text label for this tag",
+            "isArray": false,
+            "isOptional": false,
+            "label": "label",
+          },
+          "members": {
+            "coscradDataType": "COMPOSITE_IDENTIFIER",
+            "description": "the composite identifier of every resource or note with this tag",
+            "isArray": true,
+            "isOptional": false,
+            "label": "members",
+          },
+          "name": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "multilingual text name of the entity",
+            "isArray": false,
+            "isOptional": false,
+            "label": "name",
+            "name": "MultilingualText",
+            "schema": {
+              "items": {
+                "complexDataType": "NESTED_TYPE",
+                "description": "one item for each provided language",
+                "isArray": true,
+                "isOptional": false,
+                "label": "items",
+                "name": "MultilingualTextItem",
+                "schema": {
+                  "languageCode": {
+                    "complexDataType": "ENUM",
+                    "description": "an official identifier of the language",
+                    "enumLabel": "Language_Code",
+                    "enumName": "LangaugeCode",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "language code",
+                    "labelsAndValues": [
+                      {
+                        "label": "Chilcotin",
+                        "value": "clc",
+                      },
+                      {
+                        "label": "Haida",
+                        "value": "hai",
+                      },
+                      {
+                        "label": "English",
+                        "value": "en",
+                      },
+                      {
+                        "label": "French",
+                        "value": "fra",
+                      },
+                      {
+                        "label": "Chinook",
+                        "value": "chn",
+                      },
+                      {
+                        "label": "Zapotec",
+                        "value": "zap",
+                      },
+                      {
+                        "label": "Spanish",
+                        "value": "spa",
+                      },
+                    ],
+                  },
+                  "role": {
+                    "complexDataType": "ENUM",
+                    "description": "role of this text in the translation process",
+                    "enumLabel": "text item role",
+                    "enumName": "Multilingual Text Item Role",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "text item role",
+                    "labelsAndValues": [
+                      {
+                        "label": "original",
+                        "value": "original",
+                      },
+                      {
+                        "label": "glossed to",
+                        "value": "glossed to",
+                      },
+                      {
+                        "label": "free translation",
+                        "value": "free translation",
+                      },
+                      {
+                        "label": "literal translation",
+                        "value": "literal translation",
+                      },
+                      {
+                        "label": "elicited from a prompt",
+                        "value": "elicited from a prompt",
+                      },
+                    ],
+                  },
+                  "text": {
+                    "coscradDataType": "NON_EMPTY_STRING",
+                    "description": "plain text in the given language",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "text",
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     },
     "type": "photograph",
