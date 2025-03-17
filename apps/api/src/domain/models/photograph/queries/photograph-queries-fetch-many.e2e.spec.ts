@@ -20,7 +20,6 @@ import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getVa
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
-import { CoscradUserGroup } from '../../user-management/group/entities/coscrad-user-group.entity';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../user-management/user/entities/user/coscrad-user.entity';
 import { FullName } from '../../user-management/user/entities/user/full-name.entity';
@@ -36,17 +35,14 @@ const indexEndpoint = `/resources/photographs`;
 // We require an existing user for ACL tests
 const dummyQueryUserId = buildDummyUuid(4);
 
-const { user: users, userGroup: userGroups } = buildTestDataInFlatFormat();
+const { user: users } = buildTestDataInFlatFormat();
 
+// TODO support user groups
 const dummyUser = (users as CoscradUser[])[0].clone({
     authProviderUserId: `auth0|${dummyQueryUserId}`,
     id: dummyQueryUserId,
     roles: [CoscradUserRole.viewer],
 });
-
-const dummyGroup = (userGroups as CoscradUserGroup[])[0].clone({ userIds: [dummyUser.id] });
-
-const dummyUserWithGroups = new CoscradUserWithGroups(dummyUser, [dummyGroup]);
 
 // Set up test data (use event sourcing to set up state)
 const photographTitle = `Photograph Name (in the language)`;
@@ -138,6 +134,19 @@ describe(`when querying for a photograph: fetch many`, () => {
     let databaseProvider: ArangoDatabaseProvider;
 
     let photographQueryRepository: IPhotographQueryRepository;
+
+    const setItUp = async (testUserWithGroups?: CoscradUserWithGroups) => {
+        ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
+            {
+                ARANGO_DB_NAME: testDatabaseName,
+            },
+            {
+                testUserWithGroups,
+            }
+        ));
+
+        photographQueryRepository = app.get(PHOTOGRAPH_QUERY_REPOSITORY_TOKEN);
+    };
 
     afterAll(async () => {
         await app.close();
@@ -242,115 +251,17 @@ describe(`when querying for a photograph: fetch many`, () => {
 
     describe(`when the user is authenticated as a non-admin user`, () => {
         beforeAll(async () => {
-            ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
-                {
-                    ARANGO_DB_NAME: testDatabaseName,
-                },
-                {
-                    testUserWithGroups: dummyUserWithGroups,
-                }
-            ));
-
-            photographQueryRepository = app.get(PHOTOGRAPH_QUERY_REPOSITORY_TOKEN);
+            await setItUp(
+                new CoscradUserWithGroups(
+                    dummyUser.clone({
+                        roles: [CoscradUserRole.viewer],
+                    }),
+                    []
+                )
+            );
         });
 
-        describe(`when there is a photograph that is unpublished`, () => {
-            describe(`when the user does not have read access`, () => {
-                beforeEach(async () => {
-                    await databaseProvider.getDatabaseForCollection('photograph__VIEWS').clear();
-
-                    await databaseProvider
-                        .getDatabaseForCollection(ArangoCollectionId.contributors)
-                        .clear();
-
-                    await photographQueryRepository.createMany([
-                        publicPhotographView,
-                        privatePhotographThatUserCanAccess,
-                        // This one should not be visible to an ordinary user
-                        privatePhotographUserCannotAccess,
-                    ]);
-
-                    await testRepositoryProvider
-                        .getContributorRepository()
-                        .create(dummyContributor);
-                });
-
-                it(`should not return the unpublished photograph`, async () => {
-                    const res = await request(app.getHttpServer()).get(indexEndpoint);
-
-                    expect(res.status).toBe(httpStatusCodes.ok);
-
-                    /**
-                     * + private, but user in ACL
-                     * - private, user not in ACL
-                     * + published
-                     */
-                    expect(res.body.entities).toHaveLength(2);
-                });
-            });
-
-            // Re-write `when the user is a project admin` from vocabulary list
-            describe(`when the user does have read access`, () => {
-                beforeEach(async () => {
-                    await databaseProvider.getDatabaseForCollection('photograph__VIEWS').clear();
-
-                    await databaseProvider
-                        .getDatabaseForCollection(ArangoCollectionId.contributors)
-                        .clear();
-
-                    await photographQueryRepository.createMany([
-                        // we only seed the accessible photograph here
-                        privatePhotographThatUserCanAccess,
-                    ]);
-
-                    await testRepositoryProvider
-                        .getContributorRepository()
-                        .create(dummyContributor);
-                });
-
-                it(`should return the unpublished photograph`, async () => {
-                    const res = await request(app.getHttpServer()).get(indexEndpoint);
-
-                    expect(res.status).toBe(httpStatusCodes.ok);
-
-                    const {
-                        body: { entities },
-                    } = res;
-
-                    // this is the first and only photograph we seeded
-                    const result = entities[0] as PhotographViewModel;
-
-                    expect(result.id).toBe(photographIdUnpublishedWithUserAccessId);
-                });
-            });
-        });
-    });
-
-    (
-        [
-            [CoscradUserRole.superAdmin, 'when the user is a COSCRAD admin'],
-            [CoscradUserRole.projectAdmin, 'when the user is a project admin'],
-        ] as const
-    ).forEach(([userRole, description]) => {
-        describe(description, () => {
-            beforeAll(async () => {
-                ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
-                    {
-                        ARANGO_DB_NAME: testDatabaseName,
-                    },
-                    {
-                        testUserWithGroups: new CoscradUserWithGroups(
-                            dummyUser.clone({
-                                roles: [userRole],
-                            }),
-                            []
-                        ),
-                    }
-                ));
-
-                photographQueryRepository = app.get(PHOTOGRAPH_QUERY_REPOSITORY_TOKEN);
-            });
-
+        describe(`when there are some resources the user should not access`, () => {
             beforeEach(async () => {
                 await databaseProvider.getDatabaseForCollection('photograph__VIEWS').clear();
 
@@ -361,44 +272,122 @@ describe(`when querying for a photograph: fetch many`, () => {
                 await photographQueryRepository.createMany([
                     publicPhotographView,
                     privatePhotographThatUserCanAccess,
+                    // This one should not be visible to an ordinary user
                     privatePhotographUserCannotAccess,
                 ]);
 
                 await testRepositoryProvider.getContributorRepository().create(dummyContributor);
             });
 
-            it(`should allow the user to access private resources`, async () => {
+            it(`should not return private results`, async () => {
                 const res = await request(app.getHttpServer()).get(indexEndpoint);
 
-                const numberOfPrivatePhotographs = 2;
-
-                const numberOfPublicPhotographs = 1;
-
-                expect(res.status).toBe(HttpStatusCode.ok);
-
-                expect(res.body.entities).toHaveLength(
-                    numberOfPrivatePhotographs + numberOfPublicPhotographs
-                );
+                expect(res.status).toBe(httpStatusCodes.ok);
 
                 /**
-                 * This if statement is effectively a filter for our test
-                 * case builder pattern. We only want to snapshot the response
-                 * once for one specific class of user. We want this to be
-                 * an admin user, because admin users have access to all
-                 * data, including command info (available actions).
-                 * Finally, we do this for the project admin, as queries
-                 * for this user are by far more common than for coscrad admin
-                 * in practice.
+                 * + private, but user in ACL
+                 * - private, user not in ACL
+                 * + published
                  */
-                if (userRole === CoscradUserRole.projectAdmin) {
-                    /**
-                     * This is to catch breaking changes in the API contract with
-                     * the client. See the above comment for the corresponding detail
-                     * endpoint test case.
-                     */
-                    expect(res.body).toMatchSnapshot();
-                }
+                expect(res.body.entities).toHaveLength(2);
             });
+        });
+    });
+
+    describe('when the user is a project admin', () => {
+        const userRole = CoscradUserRole.projectAdmin;
+
+        beforeAll(async () => {
+            await setItUp(
+                new CoscradUserWithGroups(
+                    dummyUser.clone({
+                        roles: [userRole],
+                    }),
+                    []
+                )
+            );
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.getDatabaseForCollection('photograph__VIEWS').clear();
+
+            await databaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.contributors)
+                .clear();
+
+            await photographQueryRepository.createMany([
+                publicPhotographView,
+                privatePhotographThatUserCanAccess,
+                privatePhotographUserCannotAccess,
+            ]);
+
+            await testRepositoryProvider.getContributorRepository().create(dummyContributor);
+        });
+
+        it(`should allow the user to access private resources`, async () => {
+            const res = await request(app.getHttpServer()).get(indexEndpoint);
+
+            const numberOfPrivatePhotographs = 2;
+
+            const numberOfPublicPhotographs = 1;
+
+            expect(res.status).toBe(HttpStatusCode.ok);
+
+            expect(res.body.entities).toHaveLength(
+                numberOfPrivatePhotographs + numberOfPublicPhotographs
+            );
+
+            /**
+             * This is to catch breaking changes in the API contract with
+             * the client. See the above comment for the corresponding detail
+             * endpoint test case.
+             */
+            expect(res.body).toMatchSnapshot();
+        });
+    });
+
+    describe('when the user is a COSCRAD admin', () => {
+        const userRole = CoscradUserRole.superAdmin;
+
+        beforeAll(async () => {
+            await setItUp(
+                new CoscradUserWithGroups(
+                    dummyUser.clone({
+                        roles: [userRole],
+                    }),
+                    []
+                )
+            );
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.getDatabaseForCollection('photograph__VIEWS').clear();
+
+            await databaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.contributors)
+                .clear();
+
+            await photographQueryRepository.createMany([
+                publicPhotographView,
+                privatePhotographThatUserCanAccess,
+                privatePhotographUserCannotAccess,
+            ]);
+
+            await testRepositoryProvider.getContributorRepository().create(dummyContributor);
+        });
+
+        it(`should allow the user to access private resources`, async () => {
+            const res = await request(app.getHttpServer()).get(indexEndpoint);
+
+            const numberOfPrivatePhotographs = 2;
+
+            const numberOfPublicPhotographs = 1;
+
+            expect(res.status).toBe(HttpStatusCode.ok);
+
+            expect(res.body.entities).toHaveLength(
+                numberOfPrivatePhotographs + numberOfPublicPhotographs
+            );
         });
     });
 });
