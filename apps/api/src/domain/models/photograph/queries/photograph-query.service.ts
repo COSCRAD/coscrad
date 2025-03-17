@@ -11,6 +11,7 @@ import {
     CommandContext,
     CommandInfoService,
 } from '../../../../app/controllers/command/services/command-info-service';
+import { Maybe } from '../../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import { fetchActionsForUser } from '../../../services/query-services/utilities/fetch-actions-for-user';
 import { AggregateId } from '../../../types/AggregateId';
@@ -32,7 +33,7 @@ export class PhotographQueryService {
     async fetchById(
         id: AggregateId,
         userWithGroups?: CoscradUserWithGroups
-    ): Promise<IDetailQueryResult<IPhotographViewModel> | NotFound> {
+    ): Promise<Maybe<IDetailQueryResult<IPhotographViewModel>>> {
         const result = await this.repository.fetchById(id);
 
         if (isNotFound(result)) return result;

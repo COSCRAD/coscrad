@@ -187,10 +187,6 @@ describe(`when querying for a term: fetch by Id`, () => {
                     await seedTerms([targetTermView]);
                 });
 
-                /**
-                 * TODO We need a contract test that will warn us if we potentially
-                 * break the client via breaking changes to the API.
-                 */
                 it('should return the expected result', async () => {
                     const res = await request(app.getHttpServer()).get(buildDetailEndpoint(termId));
 

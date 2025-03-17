@@ -5,12 +5,10 @@ import {
     IPhotographViewModel,
     LanguageCode,
 } from '@coscrad/api-interfaces';
-import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import httpStatusCodes from '../../../../app/constants/httpStatusCodes';
 import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpIntegrationTest';
-import { CommandInfoService } from '../../../../app/controllers/command/services/command-info-service';
 import getValidAggregateInstanceForTest from '../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { clonePlainObjectWithOverrides } from '../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
@@ -264,10 +262,6 @@ describe(`when querying for a photograph: fetch by Id`, () => {
                     }
                 ));
 
-                const _commandInfoService = app.get(CommandInfoService);
-
-                const _foo = app.get(CommandHandlerService);
-
                 photographQueryRepository = app.get(PHOTOGRAPH_QUERY_REPOSITORY_TOKEN);
             });
 
@@ -397,7 +391,7 @@ describe(`when querying for a photograph: fetch by Id`, () => {
                              * that the correct actions come through in different
                              * scenarios.
                              */
-                            expect(actions).toMatchSnapshot();
+                            expect(photograph).toMatchSnapshot();
                         });
                     });
 

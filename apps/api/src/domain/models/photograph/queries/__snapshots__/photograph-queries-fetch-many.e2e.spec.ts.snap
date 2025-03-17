@@ -224,6 +224,7 @@ exports[`when querying for a photograph: fetch many when the user is a project a
           },
         ],
       },
+      "tags": [],
     },
     {
       "accessControlList": {
@@ -448,6 +449,7 @@ exports[`when querying for a photograph: fetch many when the user is a project a
           },
         ],
       },
+      "tags": [],
     },
     {
       "accessControlList": {
@@ -670,6 +672,7 @@ exports[`when querying for a photograph: fetch many when the user is a project a
           },
         ],
       },
+      "tags": [],
     },
   ],
   "indexScopedActions": [],
