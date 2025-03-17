@@ -4,6 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { DetailScopedCommandWriteContext } from '../../../../app/controllers/command/services/command-info-service';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
+import { TagViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
 import { DTO } from '../../../../types/DTO';
 import { ICoscradEvent } from '../../../common';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
@@ -27,6 +28,12 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
 
     @ApiProperty()
     public photographer: string;
+
+    @ApiProperty({
+        type: TagViewModel,
+        isArray: true,
+    })
+    public tags: TagViewModel[];
 
     // Do we need pixel height and width?
 
@@ -149,7 +156,22 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
             photograph.mediaItemId = mediaItemId;
         }
 
-        const { id, isPublished, contributions, name, actions, accessControlList: aclDto } = dto;
+        const {
+            id,
+            isPublished,
+            contributions,
+            name,
+            actions,
+            accessControlList: aclDto,
+            // tags,
+        } = dto;
+
+        /**
+         * TODO We need to support tags in the query layer via event sourcing.
+         *
+         * For now, we will default tags to an empty array.
+         */
+        this.tags = [];
 
         this.id = id;
 

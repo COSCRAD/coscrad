@@ -5,7 +5,6 @@ import {
     IPhotographViewModel,
 } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Observable } from 'rxjs';
 import { IPhotographQueryRepository, PHOTOGRAPH_QUERY_REPOSITORY_TOKEN } from '.';
 import {
@@ -26,8 +25,7 @@ export class PhotographQueryService {
     constructor(
         @Inject(PHOTOGRAPH_QUERY_REPOSITORY_TOKEN)
         private readonly repository: IPhotographQueryRepository,
-        @Inject(CommandInfoService) private readonly commandInfoService: CommandInfoService,
-        private readonly configService: ConfigService
+        @Inject(CommandInfoService) private readonly commandInfoService: CommandInfoService
     ) {}
 
     // todo add explicit return type

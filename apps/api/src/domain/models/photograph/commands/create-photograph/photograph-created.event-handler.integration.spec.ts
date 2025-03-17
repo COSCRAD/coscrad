@@ -9,18 +9,23 @@ import { Environment } from '../../../../../app/config/constants/Environment';
 import { ConsoleCoscradCliLogger } from '../../../../../coscrad-cli/logging';
 import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
+import { IRepositoryProvider } from '../../../../../domain/repositories/interfaces/repository-provider.interface';
 import { NotFound } from '../../../../../lib/types/not-found';
+import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
+import { ArangoDatabase } from '../../../../../persistence/database/arango-database';
+import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
+import { ArangoCollectionId } from '../../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { TestEventStream } from '../../../../../test-data/events';
 import { assertResourceHasContributionFor } from '../../../__tests__';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { PhotographModule } from '../../photograph.module';
 import { IPhotographQueryRepository } from '../../queries';
 import { PhotographViewModel } from '../../queries/photograph.view-model';
 import { ArangoPhotographQueryRepository } from '../../repositories';
-import { PhotographCommandsModule } from '../photograph.commands.module';
 import { PhotographCreated } from './photograph-created.event';
 import { PhotographCreatedEventHandler } from './photograph-created.event-handler';
 
@@ -46,23 +51,19 @@ const photographCreated = new TestEventStream()
     .as({
         id: photographId,
         type: AggregateType.photograph,
-    })[0]; // There is only one event in this stream, which is the target event
+    })[0] as PhotographCreated; // There is only one event in this stream, which is the target event
 
 describe(`PhotographCreatedEventHandler`, () => {
     let testQueryRepository: IPhotographQueryRepository;
 
     let databaseProvider: ArangoDatabaseProvider;
 
-    // let arangoDatabaseForCollection: ArangoDatabaseForCollection<
-    //     IDetailQueryResult<IPhotographViewModel>
-    // >;
-
     let app: INestApplication;
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
             // providers: [CommandInfoService, PhotographCreatedEventHandler],
-            imports: [PersistenceModule.forRootAsync(), CommandModule, PhotographCommandsModule],
+            imports: [PersistenceModule.forRootAsync(), CommandModule, PhotographModule],
         })
             .overrideProvider(ConfigService)
             .useValue(
@@ -85,9 +86,6 @@ describe(`PhotographCreatedEventHandler`, () => {
 
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
 
-        // arangoDatabaseForCollection =
-        //     databaseProvider.getDatabaseForCollection('photograph__VIEWS');
-
         testQueryRepository = new ArangoPhotographQueryRepository(
             connectionProvider,
             new ConsoleCoscradCliLogger()
@@ -95,6 +93,11 @@ describe(`PhotographCreatedEventHandler`, () => {
     });
 
     beforeEach(async () => {
+        await new ArangoDatabaseForCollection(
+            new ArangoDatabase(app.get(ArangoConnectionProvider).getConnection()),
+            ArangoCollectionId.contributors
+        ).clear();
+
         await databaseProvider.getDatabaseForCollection('photograph__VIEWS').clear();
     });
 
@@ -103,13 +106,15 @@ describe(`PhotographCreatedEventHandler`, () => {
     });
 
     describe(`when handling a photograph created event`, () => {
+        beforeEach(async () => {
+            await app
+                .get<IRepositoryProvider>(REPOSITORY_PROVIDER_TOKEN)
+                .getContributorRepository()
+                .create(dummyContributor);
+        });
+
         it(`should create the expected photograph`, async () => {
-            // const handler = app.get(PhotographCreatedEventHandler);
-
-            // @ts-expect-error Fix this issue
-            // await handler.handle(photographCreated);
-
-            await new PhotographCreatedEventHandler(testQueryRepository).handle(photographCreated);
+            await app.get(PhotographCreatedEventHandler).handle(photographCreated);
 
             const searchResult = await testQueryRepository.fetchById(photographId);
 
@@ -117,7 +122,7 @@ describe(`PhotographCreatedEventHandler`, () => {
 
             const view = searchResult as PhotographViewModel;
 
-            const { name: nameDto, actions } = view;
+            const { name: nameDto, actions, tags } = view;
 
             const foundName = new MultilingualText(nameDto);
 
@@ -133,6 +138,8 @@ describe(`PhotographCreatedEventHandler`, () => {
             expect(actions).toContain('PUBLISH_RESOURCE');
 
             // expect tags to be empty
+            expect(tags).toHaveLength(0);
+
             // expect categories to be empty
             // expect notes to be empty
 

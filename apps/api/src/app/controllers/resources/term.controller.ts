@@ -40,7 +40,6 @@ export class TermController {
     // TODO Restore docs
     // @ApiOkResponse({ type: TermViewModel })
     @Get(`/:id`)
-    // TODO be sure to validate that ID is a string
     async fetchById(@Request() req, @Res() res, @Param('id') id: string) {
         const searchResult = await this.termQueryService.fetchById(id, req.user || undefined);
 

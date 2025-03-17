@@ -40,7 +40,6 @@ export class PhotographController {
     @ApiParam(buildByIdApiParamMetadata())
     @ApiOkResponse({ type: PhotographViewModel })
     @Get(`/:id`)
-    // TODO be sure to validate that ID is a string
     async fetchById(@Request() req, @Res() res, @Param('id') id: string) {
         const searchResult = await this.photographQueryService.fetchById(id, req.user || undefined);
 

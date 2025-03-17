@@ -22,9 +22,15 @@ import {
     IAudioItemQueryRepository,
 } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ITermQueryRepository } from '../queries';
+import { ArangoResourceQueryBuilder } from './arango-resource-query-builder';
 
 export class ArangoTermQueryRepository implements ITermQueryRepository {
     private readonly database: ArangoDatabaseForCollection<TermViewModel>;
+
+    /**
+     * We use this helper to achieve composition over inheritance.
+     */
+    private readonly baseResourceQueryBuilder: ArangoResourceQueryBuilder;
 
     constructor(
         arangoConnectionProvider: ArangoConnectionProvider,
@@ -37,6 +43,8 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             new ArangoDatabase(arangoConnectionProvider.getConnection()),
             'term__VIEWS'
         );
+
+        this.baseResourceQueryBuilder = new ArangoResourceQueryBuilder(`term__VIEWS`);
     }
 
     async create(view: TermViewModel): Promise<void> {
@@ -54,28 +62,11 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
     }
 
     async publish(id: AggregateId): Promise<void> {
-        const query = `
-        FOR doc IN @@collectionName
-        FILTER doc._key == @id
-        UPDATE doc WITH {
-            isPublished: true,
-            actions: REMOVE_VALUE(doc.actions,"PUBLISH_RESOURCE")
-        } IN @@collectionName
-        `;
+        const query = this.baseResourceQueryBuilder.publish(id);
 
-        const bindVars = {
-            '@collectionName': 'term__VIEWS',
-            id: id,
-        };
-
-        const cursor = await this.database
-            .query({
-                query,
-                bindVars,
-            })
-            .catch((reason) => {
-                throw new InternalError(`Failed to publish term via TermRepository: ${reason}`);
-            });
+        const cursor = await this.database.query(query).catch((reason) => {
+            throw new InternalError(`Failed to publish term via TermRepository: ${reason}`);
+        });
 
         await cursor.all();
     }
@@ -230,76 +221,26 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
 
     // note that it is important to pass APPEND an array of items to append when appending a string value to an existing array
     async allowUser(termId: AggregateId, userId: AggregateId): Promise<void> {
-        const query = `
-        FOR doc IN @@collectionName
-        FILTER doc._key == @id
-        UPDATE doc WITH {
-            accessControlList: {
-                allowedUserIds: APPEND(doc.accessControlList.allowedUserIds,[@userId])
-            }
-        } IN @@collectionName
-         RETURN OLD
-        `;
-        // TODO remove return value?
+        const aqlQuery = this.baseResourceQueryBuilder.allowUser(termId, userId);
 
-        const bindVars = {
-            '@collectionName': 'term__VIEWS',
-            id: termId,
-            userId,
-        };
-
-        const cursor = await this.database
-            .query({
-                query,
-                bindVars,
-            })
-            .catch((reason) => {
-                throw new InternalError(
-                    `Failed to allow user access to term via TermRepository: ${reason}`
-                );
-            });
+        const cursor = await this.database.query(aqlQuery).catch((reason) => {
+            throw new InternalError(
+                `Failed to allow user access to term via TermRepository: ${reason}`
+            );
+        });
 
         await cursor.all();
     }
 
     // TODO share this with other resources
     async attribute(termId: AggregateId, contributorIds: AggregateId[]): Promise<void> {
-        const query = `
-        FOR doc IN @@collectionName
-        FILTER doc._key == @id
-        LET newContributions = (
-            FOR contributorId IN @contributorIds
-                FOR c in contributors
-                    FILTER c._key == contributorId
-                    return {
-                        id: c._key,
-                        fullName: CONCAT(CONCAT(c.fullName.firstName,' '),c.fullName.lastName)
-                    }
-        )
-        LET updatedContributions = APPEND(doc.contributions,newContributions)
-        UPDATE doc WITH {
-            contributions: updatedContributions
-        } IN @@collectionName
-         RETURN updatedContributions
-        `;
+        const aqlQuery = this.baseResourceQueryBuilder.attribute(termId, contributorIds);
 
-        const bindVars = {
-            // todo is this necessary?
-            '@collectionName': 'term__VIEWS',
-            id: termId,
-            contributorIds,
-        };
-
-        await this.database
-            .query({
-                query,
-                bindVars,
-            })
-            .catch((reason) => {
-                throw new InternalError(
-                    `Failed to add attribution for term via TermRepository: ${reason}`
-                );
-            });
+        await this.database.query(aqlQuery).catch((reason) => {
+            throw new InternalError(
+                `Failed to add attribution for term via TermRepository: ${reason}`
+            );
+        });
     }
 
     async fetchById(id: AggregateId): Promise<Maybe<TermViewModel>> {

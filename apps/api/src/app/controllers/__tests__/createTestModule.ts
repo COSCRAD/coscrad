@@ -4,6 +4,7 @@ import { bootstrapDynamicTypes } from '@coscrad/data-types';
 import { ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { Test } from '@nestjs/testing';
+import { ArangoQueryRepositoryProvider } from 'apps/api/src/domain/models/term/repositories/arango-query-repository-provider';
 import { JwtStrategy } from '../../../authorization/jwt.strategy';
 import { MockJwtAdminAuthGuard } from '../../../authorization/mock-jwt-admin-auth-guard';
 import { MockJwtAuthGuard } from '../../../authorization/mock-jwt-auth-guard';
@@ -163,6 +164,7 @@ import { ResourceReadAccessGrantedToUserEventHandler } from '../../../domain/mod
 import { ResourcePublished } from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import {
     IQueryRepositoryProvider,
+    QUERY_REPOSITORY_PROVIDER_TOKEN,
     ResourcePublishedEventHandler,
 } from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
 import {
@@ -568,28 +570,20 @@ export default async (
                 inject: [ArangoConnectionProvider],
             },
             {
-                //  TODO use a const for this
-                provide: 'QUERY_REPOSITORY_PROVIDER',
+                //  TODO use a more extensible pattern
+                provide: QUERY_REPOSITORY_PROVIDER_TOKEN,
                 useFactory: (
+                    photographQueryRespository: ArangoPhotographQueryRepository,
                     termQueryRepository: ArangoTermQueryRepository,
-                    audioItemQueryRepository: ArangoAudioItemQueryRepository
+                    audioItemQueryRepository: ArangoAudioItemQueryRepository,
+                    vocabularyListQueryRepository: ArangoVocabularyListQueryRepository
                 ): IQueryRepositoryProvider => {
-                    // TODO use actual class for this
-                    return {
-                        forResource: (resourceType: ResourceType) => {
-                            if (resourceType === ResourceType.term) {
-                                return termQueryRepository;
-                            }
-
-                            if (resourceType === ResourceType.audioItem) {
-                                return audioItemQueryRepository;
-                            }
-
-                            throw new InternalError(
-                                `Query Repository not available for unsupported resource type: ${resourceType}`
-                            );
-                        },
-                    };
+                    return new ArangoQueryRepositoryProvider(
+                        photographQueryRespository,
+                        termQueryRepository,
+                        audioItemQueryRepository,
+                        vocabularyListQueryRepository
+                    );
                 },
                 inject: [TERM_QUERY_REPOSITORY_TOKEN, AUDIO_QUERY_REPOSITORY_TOKEN],
             },
@@ -640,14 +634,8 @@ export default async (
                 provide: PhotographQueryService,
                 useFactory: (
                     photographQueryRepository: IPhotographQueryRepository,
-                    commandInfoService: CommandInfoService,
-                    configService: ConfigService
-                ) =>
-                    new PhotographQueryService(
-                        photographQueryRepository,
-                        commandInfoService,
-                        configService
-                    ),
+                    commandInfoService: CommandInfoService
+                ) => new PhotographQueryService(photographQueryRepository, commandInfoService),
                 inject: [PHOTOGRAPH_QUERY_REPOSITORY_TOKEN, CommandInfoService, ConfigService],
             },
             {

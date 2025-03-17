@@ -1,11 +1,10 @@
-import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode, ResourceType } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/environment';
-import { ConsoleCoscradCliLogger } from '../../../../../coscrad-cli/logging';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
@@ -13,11 +12,13 @@ import generateDatabaseNameForTestSuite from '../../../../../persistence/reposit
 import { TermViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { TestEventStream } from '../../../../../test-data/events';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
-import { ArangoAudioItemQueryRepository } from '../../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { TermCreated } from '../../../term/commands';
 import { ITermQueryRepository } from '../../../term/queries';
-import { ArangoTermQueryRepository } from '../../../term/repositories/arango-term-query-repository';
 import { AccessControlList } from '../../access-control/access-control-list.entity';
+import {
+    IQueryRepositoryProvider,
+    QUERY_REPOSITORY_PROVIDER_TOKEN,
+} from '../publish-resource/resource-published.event-handler';
 import { ResourceReadAccessGrantedToUser } from './resource-read-access-granted-to-user.event';
 import { ResourceReadAccessGrantedToUserEventHandler } from './resource-read-access-granted-to-user.event-handler';
 
@@ -65,6 +66,8 @@ describe(`ResourceReadAccessGrantedToUserEventHandler.handle`, () => {
 
     let readAccessEventHandler: ResourceReadAccessGrantedToUserEventHandler;
 
+    let repositoryProvider: IQueryRepositoryProvider;
+
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
             imports: [PersistenceModule.forRootAsync()],
@@ -88,14 +91,14 @@ describe(`ResourceReadAccessGrantedToUserEventHandler.handle`, () => {
 
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
 
-        testQueryRepository = new ArangoTermQueryRepository(
-            connectionProvider,
-            new ArangoAudioItemQueryRepository(connectionProvider),
-            new ConsoleCoscradCliLogger()
+        repositoryProvider = app.get<IQueryRepositoryProvider>(QUERY_REPOSITORY_PROVIDER_TOKEN);
+
+        testQueryRepository = repositoryProvider.forResource<ITermQueryRepository>(
+            ResourceType.term
         );
 
         readAccessEventHandler = new ResourceReadAccessGrantedToUserEventHandler(
-            testQueryRepository
+            repositoryProvider
         );
     });
 
@@ -114,7 +117,7 @@ describe(`ResourceReadAccessGrantedToUserEventHandler.handle`, () => {
          *
          * We should investigate this further.
          */
-        await testQueryRepository.create(existingView);
+        await repositoryProvider.forResource(ResourceType.term).create(existingView);
     });
 
     it(`should allow access to the given user`, async () => {

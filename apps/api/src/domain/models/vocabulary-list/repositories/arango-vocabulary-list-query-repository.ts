@@ -17,6 +17,7 @@ import mapDatabaseDocumentToEntityDto from '../../../../persistence/database/uti
 import mapEntityDtoToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { VocabularyListViewModel } from '../../../../queries/buildViewModelForResource/viewModels/vocabulary-list.view-model';
 import { AggregateId } from '../../../types/AggregateId';
+import { ArangoResourceQueryBuilder } from '../../term/repositories/arango-resource-query-builder';
 import { FilterPropertyType } from '../commands';
 import { VocabularyListEntryImportItem } from '../entities/vocabulary-list.entity';
 import { IVocabularyListQueryRepository } from '../queries/vocabulary-list-query-repository.interface';
@@ -24,6 +25,11 @@ import { IVocabularyListQueryRepository } from '../queries/vocabulary-list-query
 export class ArangoVocabularyListQueryRepository implements IVocabularyListQueryRepository {
     // TODO rename the file for `VocabularyListViewModel`
     private readonly database: ArangoDatabaseForCollection<VocabularyListViewModel>;
+
+    /**
+     * We use this helper to achieve composition over inheritance.
+     */
+    private readonly baseResourceQueryBuilder: ArangoResourceQueryBuilder;
 
     constructor(
         arangoConnectionProvider: ArangoConnectionProvider,
@@ -34,6 +40,8 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
             new ArangoDatabase(arangoConnectionProvider.getConnection()),
             'vocabularyList__VIEWS'
         );
+
+        this.baseResourceQueryBuilder = new ArangoResourceQueryBuilder('vocabularyList__VIEWS');
     }
 
     async fetchById(id: AggregateId): Promise<Maybe<VocabularyListViewModel>> {
@@ -93,32 +101,13 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
         return this.database.delete(id);
     }
 
-    // note that it is important to pass APPEND an array of items to append when appending a string value to an existing array
     async allowUser(termId: AggregateId, userId: AggregateId): Promise<void> {
-        const query = `
-    FOR doc IN @@collectionName
-    FILTER doc._key == @id
-    UPDATE doc WITH {
-        accessControlList: {
-            allowedUserIds: APPEND(doc.accessControlList.allowedUserIds,[@userId])
-        }
-    } IN @@collectionName
-    `;
-
-        const bindVars = {
-            '@collectionName': 'vocabularyList__VIEWS',
-            id: termId,
-            userId,
-        };
-
         const cursor = await this.database
-            .query({
-                query,
-                bindVars,
-            })
+            .query(this.baseResourceQueryBuilder.allowUser(termId, userId))
             .catch((reason) => {
-                // IS THIS CORRECT?  TRANSLATE TERM?
-                throw new InternalError(`Failed to translate term via TermRepository: ${reason}`);
+                throw new InternalError(
+                    `Failed to grant user access to vocabulary list: ${reason}`
+                );
             });
 
         await cursor.all();
@@ -131,63 +120,14 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
     }
 
     async attribute(
-        termId: AggregateId,
+        vocabularyListId: AggregateId,
         contributorIds: AggregateId[]
         // contributionStatementTemplate: string
     ): Promise<void> {
-        const query = `
-        FOR doc IN @@collectionName
-        FILTER doc._key == @id
-        LET newContributions = (
-            FOR contributorId IN @contributorIds
-                FOR c in contributors
-                    FILTER c._key == contributorId
-                    return {
-                        id: c._key,
-                        fullName: CONCAT(CONCAT(c.fullName.firstName,' '),c.fullName.lastName)
-                    }
-        )
-        LET updatedContributions = APPEND(doc.contributions,newContributions)
-        UPDATE doc WITH {
-            contributions: updatedContributions
-        } IN @@collectionName
-         RETURN updatedContributions
-        `;
-
-        /**
-         * Note that this might not be the way we want to do this, it's only an idea.
-         * The downside is that changing the wording would require a downstream event replay or migration. The upside
-         * is that it provides a natural means to align wording the contributions with the
-         * event handlers.
-         *
-         * Another option would be to register such templates in the event meta
-         * @CoscradEvent((e)=> e.type === 'VOCABULARY_LIST_CREATED',{ contributionStatementTemplate: "created by $fullname"})
-         *
-         */
-        /**
-         *      ...  
-         *        let joinedName = CONCAT(CONCAT(c.fullName.firstName,' '),c.fullName.lastName)   
-         *        return {
-                        id: c._key,
-                        fullName: joinedName,
-                        contributionStatement: SUBSTITUTE(@contributionStatementTemplate,"$C",joinedName)
-                    }
-         */
-
-        const bindVars = {
-            // todo is this necessary?
-            '@collectionName': 'vocabularyList__VIEWS',
-            id: termId,
-            contributorIds,
-        };
-
         await this.database
-            .query({
-                query,
-                bindVars,
-            })
+            .query(this.baseResourceQueryBuilder.attribute(vocabularyListId, contributorIds))
             .catch((reason) => {
-                throw new InternalError(`Failed to translate term via TermRepository: ${reason}`);
+                throw new InternalError(`Failed to add attribution to vocabulary list: ${reason}`);
             });
     }
 
@@ -225,7 +165,7 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
                 bindVars,
             })
             .catch((reason) => {
-                throw new InternalError(`Failed to translate term via TermRepository: ${reason}`);
+                throw new InternalError(`Failed to translate vocabulary list name: ${reason}`);
             });
 
         await cursor.all();

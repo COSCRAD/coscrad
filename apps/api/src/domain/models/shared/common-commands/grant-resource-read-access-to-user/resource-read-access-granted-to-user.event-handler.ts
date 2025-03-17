@@ -1,19 +1,22 @@
-import { AggregateType } from '@coscrad/api-interfaces';
+import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { ICoscradEventHandler } from '../../../../../domain/common';
-import {
-    IPhotographQueryRepository,
-    PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
-} from '../../../photograph/queries';
-import { ITermQueryRepository, TERM_QUERY_REPOSITORY_TOKEN } from '../../../term/queries';
+import { AggregateId } from '../../../../../domain/types/AggregateId';
+import { QUERY_REPOSITORY_PROVIDER_TOKEN } from '../publish-resource/resource-published.event-handler';
 import { ResourceReadAccessGrantedToUser } from './resource-read-access-granted-to-user.event';
+
+export interface IAccessible {
+    allowUser(aggregateId: AggregateId, userId: AggregateId): Promise<void>;
+}
+
+interface IRepoProvider {
+    forResource(resourceType: ResourceType): IAccessible;
+}
 
 export class ResourceReadAccessGrantedToUserEventHandler implements ICoscradEventHandler {
     constructor(
-        // TODO make this a generic repository provider for all resource views
-        @Inject(TERM_QUERY_REPOSITORY_TOKEN) private readonly termRepository: ITermQueryRepository,
-        @Inject(PHOTOGRAPH_QUERY_REPOSITORY_TOKEN)
-        private readonly photographRepository: IPhotographQueryRepository
+        @Inject(QUERY_REPOSITORY_PROVIDER_TOKEN)
+        private readonly queryRepositoryProvider: IRepoProvider
     ) {}
 
     async handle(event: ResourceReadAccessGrantedToUser): Promise<void> {
@@ -29,6 +32,8 @@ export class ResourceReadAccessGrantedToUserEventHandler implements ICoscradEven
             return;
         }
 
-        await this.termRepository.allowUser(id, userId);
+        const targetRepository = this.queryRepositoryProvider.forResource(resourceType);
+
+        await targetRepository.allowUser(id, userId);
     }
 }

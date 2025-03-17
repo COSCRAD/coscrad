@@ -11,11 +11,17 @@ import { ArangoDatabaseForCollection } from '../../../../persistence/database/ar
 import mapDatabaseDocumentToEntityDto from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDtoToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { AggregateId } from '../../../types/AggregateId';
+import { ArangoResourceQueryBuilder } from '../../term/repositories/arango-resource-query-builder';
 import { IPhotographQueryRepository } from '../queries';
 import { PhotographViewModel } from '../queries/photograph.view-model';
 
 export class ArangoPhotographQueryRepository implements IPhotographQueryRepository {
     private readonly database: ArangoDatabaseForCollection<PhotographViewModel>;
+
+    /**
+     * We use this helper to achieve composition over inheritance.
+     */
+    private readonly baseResourceQueryBuilder: ArangoResourceQueryBuilder;
 
     constructor(
         arangoConnectionProvider: ArangoConnectionProvider,
@@ -25,6 +31,8 @@ export class ArangoPhotographQueryRepository implements IPhotographQueryReposito
             new ArangoDatabase(arangoConnectionProvider.getConnection()),
             'photograph__VIEWS'
         );
+
+        this.baseResourceQueryBuilder = new ArangoResourceQueryBuilder('photograph__VIEWS');
     }
 
     async fetchById(id: AggregateId): Promise<Maybe<PhotographViewModel>> {
@@ -81,25 +89,8 @@ export class ArangoPhotographQueryRepository implements IPhotographQueryReposito
     }
 
     async publish(id: AggregateId): Promise<void> {
-        const query = `
-        FOR doc IN @@collectionName
-        FILTER doc._key == @id
-        UPDATE doc WITH {
-            isPublished: true,
-            actions: REMOVE_VALUE(doc.actions, "PUBLISH_RESOURCE")
-        } IN @@collectionName
-         `;
-
-        const bindVars = {
-            '@collectionName': 'photograph__VIEWS',
-            id: id,
-        };
-
         const cursor = await this.database
-            .query({
-                query,
-                bindVars,
-            })
+            .query(this.baseResourceQueryBuilder.publish(id))
             .catch((reason) => {
                 throw new InternalError(
                     `Failed to publish photograph via PhotographRepository: ${reason}`
@@ -110,28 +101,8 @@ export class ArangoPhotographQueryRepository implements IPhotographQueryReposito
     }
 
     async allowUser(photographId: AggregateId, userId: AggregateId): Promise<void> {
-        const query = `
-    FOR doc IN @@collectionName
-    FILTER doc._key == @id
-    UPDATE doc WITH {
-        accessControlList: {
-            allowedUserIds: APPEND(doc.accessControlList.allowedUserIds,[@userId])
-        }
-    } IN @@collectionName
-
-    `;
-
-        const bindVars = {
-            '@collectionName': 'photograph__VIEWS',
-            id: photographId,
-            userId,
-        };
-
         await this.database
-            .query({
-                query,
-                bindVars,
-            })
+            .query(this.baseResourceQueryBuilder.allowUser(photographId, userId))
             .catch((reason) => {
                 throw new InternalError(
                     `Failed to grant user access via PhotographRepository: ${reason}`
@@ -144,37 +115,8 @@ export class ArangoPhotographQueryRepository implements IPhotographQueryReposito
     }
 
     async attribute(photographId: AggregateId, contributorIds: AggregateId[]): Promise<void> {
-        const query = `
-        FOR doc IN @@collectionName
-        FILTER doc._key == @id
-        LET newContributions = (
-            FOR contributorId IN @contributorIds
-                FOR c IN contributors
-                    FILTER c._key == contributorId
-                    return {
-                        id: c._key,
-                        fullName: CONCAT(CONCAT(c.fullName.firstName,' '),c.fullName.lastName)
-                    }
-        )
-        LET updatedContributions = APPEND(doc.contributions,newContributions)
-        UPDATE doc WITH {
-            contributions: updatedContributions
-        } IN @@collectionName
-         RETURN updatedContributions
-        `;
-
-        const bindVars = {
-            // todo is this necessary?
-            '@collectionName': 'photograph__VIEWS',
-            id: photographId,
-            contributorIds,
-        };
-
         await this.database
-            .query({
-                query,
-                bindVars,
-            })
+            .query(this.baseResourceQueryBuilder.attribute(photographId, contributorIds))
             .catch((reason) => {
                 throw new InternalError(
                     `Failed to add attribution for photograph via PhotographRepository: ${reason}`
