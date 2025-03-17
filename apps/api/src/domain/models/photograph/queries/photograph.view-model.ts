@@ -1,5 +1,5 @@
 import { AggregateType, ContributorWithId, IMultilingualText } from '@coscrad/api-interfaces';
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { isBoolean, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { ApiProperty } from '@nestjs/swagger';
 import { DetailScopedCommandWriteContext } from '../../../../app/controllers/command/services/command-info-service';
 import { Maybe } from '../../../../lib/types/maybe';
@@ -46,6 +46,12 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
     @ApiProperty()
     public isPublished: boolean;
 
+    // notes
+
+    // events ?
+
+    // revision ?
+
     /**
      * This should be removed in query responses.
      *
@@ -67,26 +73,6 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
             type: AggregateType.photograph,
             id: this.id,
         };
-    }
-
-    // notes
-
-    // tags
-
-    // events ?
-
-    // revision ?
-
-    constructor(photograph: Photograph, _allMediaItems: MediaItem[]) {
-        const { photographer } = photograph;
-
-        /**
-         * TODO we are now event sourcing this view. We should cache the media
-         * item ID and build the URL in the new query service layer. Since this
-         * is done on another branch, we've made this property optional here and
-         * will reconcile upon rebase.
-         */
-        // this.imageUrl = searchResult?.url;
     }
 
     static fromPhotographCreated({
@@ -131,6 +117,9 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
             'CREATE_NOTE_ABOUT_RESOURCE',
         ];
 
+        // note that a `RESOURCE_TAGGED` event must be handled to add tags
+        photograph.tags = [];
+
         return photograph;
     }
 
@@ -141,8 +130,16 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
             return photograph;
         }
 
-        const { contributions, name, id, actions, accessControlList, mediaItemId, isPublished } =
-            dto;
+        const {
+            contributions,
+            name,
+            id,
+            actions,
+            accessControlList,
+            mediaItemId,
+            isPublished,
+            // tags,
+        } = dto;
 
         photograph.contributions = Array.isArray(contributions) ? contributions : [];
 
@@ -152,38 +149,20 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
 
         photograph.actions = actions;
 
+        photograph.accessControlList = new AccessControlList(accessControlList);
+
+        photograph.isPublished = isBoolean(isPublished) ? isPublished : false;
+
+        /**
+         * TODO Populate tags
+         */
+        photograph.tags = [];
+
         if (!isNullOrUndefined(mediaItemId)) {
             photograph.mediaItemId = mediaItemId;
         }
 
-        const {
-            id,
-            isPublished,
-            contributions,
-            name,
-            actions,
-            accessControlList: aclDto,
-            // tags,
-        } = dto;
-
-        /**
-         * TODO We need to support tags in the query layer via event sourcing.
-         *
-         * For now, we will default tags to an empty array.
-         */
-        this.tags = [];
-
-        this.id = id;
-
-        this.isPublished = typeof isPublished === 'boolean' ? isPublished : false;
-
-        this.contributions = Array.isArray(contributions) ? contributions : [];
-
-        this.name = new MultilingualText(name);
-
-        this.actions = Array.isArray(actions) ? actions : [];
-
-        this.accessControlList = new AccessControlList(aclDto);
+        return photograph;
     }
 
     apply(event: ICoscradEvent): PhotographViewModel {
@@ -197,35 +176,6 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
 
         // there is no handler for this event
         return this;
-    }
-
-    static fromPhotographCreated({
-        payload: {
-            title,
-            languageCodeForTitle,
-            aggregateCompositeIdentifier: { id: photographId },
-        },
-    }: PhotographCreated): PhotographViewModel {
-        const dto: Partial<DTO<PhotographViewModel>> = {
-            name: buildMultilingualTextWithSingleItem(title, languageCodeForTitle),
-            id: photographId,
-            actions: [
-                'PUBLISH_RESOURCE',
-                'TAG_RESOURCE',
-                'CONNECT_RESOURCES_WITH_NOTE',
-                'CREATE_NOTE_ABOUT_RESOURCE',
-            ],
-        };
-
-        const view = new PhotographViewModel(dto);
-
-        return view;
-    }
-
-    static fromDto(dto: DTO<PhotographViewModel>): PhotographViewModel {
-        const photograph = new PhotographViewModel(dto);
-
-        return photograph;
     }
 
     public forUser(
