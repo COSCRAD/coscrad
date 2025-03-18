@@ -1,56 +1,74 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
-import { buildMultilingualTextWithSingleItem } from '../domain/common/build-multilingual-text-with-single-item';
+import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
+import { PhotographCreated } from '../domain/models/photograph';
 import { Photograph } from '../domain/models/photograph/entities/photograph.entity';
-import { ResourceType } from '../domain/types/ResourceType';
-import { DTO } from '../types/DTO';
-import {
-    convertAggregatesIdToUuid,
-    convertSequenceNumberToUuid,
-} from './utilities/convertSequentialIdToUuid';
+import { InternalError, isInternalError } from '../lib/errors/InternalError';
+import { isNotFound } from '../lib/types/not-found';
+import { TestEventStream } from './events';
 
-const dtos: DTO<Omit<Photograph, 'id' | 'published' | 'type'>>[] = [
-    {
-        mediaItemId: '5',
-        title: buildMultilingualTextWithSingleItem('Adiitsii Running', LanguageCode.English),
-        // imageUrl: 'https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png',
-        photographer: 'Susie McRealart',
-        dimensions: {
-            widthPx: 300,
-            heightPx: 400,
+const testEventStream = new TestEventStream();
+
+const creationEvents = [
+    testEventStream.buildSingle<PhotographCreated>({
+        type: 'PHOTOGRAPH_CREATED',
+        payload: {
+            aggregateCompositeIdentifier: {
+                id: buildDummyUuid(10000),
+            },
+            mediaItemId: buildDummyUuid(10005),
+            title: 'Adiitsii Running',
+            languageCodeForTitle: LanguageCode.English,
+            photographer: 'Susie McRealart',
+            // dimensions: {
+            //     widthPx: 300,
+            //     heightPx: 400,
+            // },
         },
-    },
-    {
-        title: buildMultilingualTextWithSingleItem('Nuu Story', LanguageCode.English),
-        mediaItemId: '6',
-        // imageUrl: 'https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png',
-        photographer: 'Robert McRealart',
-        dimensions: {
-            widthPx: 420,
-            heightPx: 285,
+    }),
+    testEventStream.buildSingle<PhotographCreated>({
+        type: 'PHOTOGRAPH_CREATED',
+        payload: {
+            aggregateCompositeIdentifier: {
+                id: buildDummyUuid(10001),
+            },
+            mediaItemId: buildDummyUuid(10006),
+            title: 'Nuu Story',
+            languageCodeForTitle: LanguageCode.English,
+            photographer: 'Robert McRealart',
+            // dimensions: {
+            //     widthPx: 420,
+            //     heightPx: 285,
+            // },
         },
-    },
-    {
-        title: buildMultilingualTextWithSingleItem('Two Brothers Pole'),
-        mediaItemId: '7',
-        // imageUrl: 'https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png',
-        photographer: 'Kenny Tree-Huggens',
-        dimensions: {
-            widthPx: 1200,
-            heightPx: 1500,
+    }),
+    testEventStream.buildSingle<PhotographCreated>({
+        type: 'PHOTOGRAPH_CREATED',
+        payload: {
+            aggregateCompositeIdentifier: {
+                id: buildDummyUuid(10002),
+            },
+            mediaItemId: buildDummyUuid(10007),
+            title: 'Two Brothers Pole',
+            languageCodeForTitle: LanguageCode.English,
+            photographer: 'Kenny Tree-Huggens',
+            // dimensions: {
+            //     widthPx: 1200,
+            //     heightPx: 1500,
+            // },
         },
-    },
+    }),
 ];
 
 export default (): Photograph[] =>
-    dtos
-        .map(
-            (dto, index) =>
-                new Photograph({
-                    ...dto,
-                    id: `${index}`,
-                    published: true,
-                    type: ResourceType.photograph,
-                    mediaItemId: convertSequenceNumberToUuid(parseInt(dto.mediaItemId)),
-                })
-        )
-        .map(convertAggregatesIdToUuid);
+    creationEvents.map((event) => {
+        const photo = Photograph.fromEventHistory(
+            [event],
+            event.payload.aggregateCompositeIdentifier.id
+        );
+
+        if (isInternalError(photo) || isNotFound(photo)) {
+            throw new InternalError(`Encountered invalid photograph test data`);
+        }
+
+        return photo;
+    });
