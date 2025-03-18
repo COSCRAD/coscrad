@@ -139,7 +139,7 @@ describe(`CLI Command: **data-restore**`, () => {
 
                 const documentCollectionsNotInSnapshot = documentCollections.filter(
                     (collectionId) =>
-                        isNullOrUndefined(databaseSnapshot.document[collectionId]?.length)
+                        isNullOrUndefined(databaseSnapshot.document[collectionId]?.documents.length)
                 );
 
                 /**
@@ -150,7 +150,8 @@ describe(`CLI Command: **data-restore**`, () => {
                 expect(documentCollectionsNotInSnapshot).toEqual([]);
 
                 const edgeCollectionsNotInSnapshot = Object.values(ArangoEdgeCollectionId).filter(
-                    (collectionId) => isNullOrUndefined(databaseSnapshot.edge[collectionId]?.length)
+                    (collectionId) =>
+                        isNullOrUndefined(databaseSnapshot.edge[collectionId]?.documents.length)
                 );
 
                 /**
@@ -236,7 +237,9 @@ describe(`CLI Command: **data-restore**`, () => {
             const { document: allDocuments, edge: allEdges } = await dataExporter.fetchSnapshot();
 
             const nonEmptyCollections = [allDocuments, allEdges].flatMap((keysAndDocuments) =>
-                Object.entries(keysAndDocuments).filter(([_key, documents]) => documents.length > 0)
+                Object.entries(keysAndDocuments).filter(
+                    ([_key, snapshotOfCollection]) => snapshotOfCollection.documents.length > 0
+                )
             );
 
             expect(nonEmptyCollections).toEqual([]);
