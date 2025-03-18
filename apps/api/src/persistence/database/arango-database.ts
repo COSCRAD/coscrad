@@ -147,7 +147,6 @@ export class ArangoDatabase {
 
         return {
             checksum,
-            //  TODO fetch these as well
             documents,
         };
     };
@@ -179,7 +178,6 @@ export class ArangoDatabase {
 
         const { count: currentCollectionSize } = await collection.count();
 
-        // TODO be sure to include a test case for this behaviour
         if (currentCollectionSize !== 0) {
             throw new InternalError(
                 `You can only import to an empty collection. Collection: ${collectionName} has ${currentCollectionSize} documents.`

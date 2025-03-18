@@ -22,8 +22,6 @@ export class ArangoDataExporter {
             .map(({ name }) => name)
             .filter((c) => !knownEdgeCollections.includes(c));
 
-        // TODO can we work with checksums?
-
         /**
          * TODO Consider parallelizing these queries for performance.
          */

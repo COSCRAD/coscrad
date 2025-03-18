@@ -19,9 +19,7 @@ export class ArangoDatabaseProvider {
     }
 
     getDBInstance = (): ArangoDatabase => {
-        if (!this.arangoInstance)
-            // TODO inject this in the constructor
-            this.arangoInstance = new ArangoDatabase(this.databaseConnection);
+        if (!this.arangoInstance) this.arangoInstance = new ArangoDatabase(this.databaseConnection);
 
         return this.arangoInstance;
     };
