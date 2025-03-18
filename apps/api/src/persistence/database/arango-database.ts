@@ -11,6 +11,7 @@ import { InternalError } from '../../lib/errors/InternalError';
 import { Maybe } from '../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
 import { DatabaseCollectionSnapshot } from '../../test-data/utilities';
+import { ArangoDatabaseForCollection } from './arango-database-for-collection';
 import buildArangoDocumentHandle from './utilities/buildArangoDocumentHandle';
 import { ArangoDocumentForAggregateRoot } from './utilities/mapEntityDTOToDatabaseDocument';
 
@@ -136,7 +137,7 @@ export class ArangoDatabase {
         }
 
         const checksumResult = await collection.checksum({
-            withRevisions: true,
+            withRevisions: false,
             withData: true,
         });
 
@@ -187,8 +188,13 @@ export class ArangoDatabase {
 
         await collection.import(documents, {});
 
+        const _updated = await new ArangoDatabaseForCollection(
+            new ArangoDatabase(this.db),
+            collection.name
+        ).fetchMany();
+
         const { checksum: checksumAfterImport } = await collection.checksum({
-            withRevisions: true,
+            withRevisions: false,
             withData: true,
         });
 
@@ -196,11 +202,10 @@ export class ArangoDatabase {
             !isNonEmptyString(checksumAfterImport) ||
             checksumAfterImport !== checksumFromPreviousExport
         ) {
-            throw new InternalError(`Failed to import data to collection: ${collectionName}.`, [
-                new InternalError(
-                    `Checksums do not match. Export: ${checksumFromPreviousExport}, post-import`
-                ),
-            ]);
+            throw new InternalError(
+                `Failed to import data to collection: ${collectionName}. Checksums do not match. Export: ${checksumFromPreviousExport}, post-import: ${checksumAfterImport}`,
+                []
+            );
         }
     };
 

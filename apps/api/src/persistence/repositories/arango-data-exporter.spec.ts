@@ -4,12 +4,13 @@ import { Test } from '@nestjs/testing';
 import { existsSync, readFileSync, unlinkSync } from 'fs';
 import buildMockConfigService from '../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../app/config/buildConfigFilePath';
-import { Environment } from '../../app/config/constants/Environment';
+import { Environment } from '../../app/config/constants/environment';
 import { CoscradEventFactory } from '../../domain/common';
 import { DeluxeInMemoryStore } from '../../domain/types/DeluxeInMemoryStore';
 import { HasAggregateId } from '../../domain/types/HasAggregateId';
+import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import buildTestDataInFlatFormat from '../../test-data/buildTestDataInFlatFormat';
-import { InMemoryDatabaseSnapshot } from '../../test-data/utilities';
+import { DatabaseCollectionSnapshot, InMemoryDatabaseSnapshot } from '../../test-data/utilities';
 import { DynamicDataTypeFinderService } from '../../validation';
 import { ArangoConnectionProvider } from '../database/arango-connection.provider';
 import { ArangoEdgeCollectionId } from '../database/collection-references/ArangoEdgeCollectionId';
@@ -21,6 +22,16 @@ import generateDatabaseNameForTestSuite from './__tests__/generateDatabaseNameFo
 import TestRepositoryProvider from './__tests__/TestRepositoryProvider';
 import { ArangoDataExporter } from './arango-data-exporter';
 import path = require('path');
+
+type HasRev = {
+    _rev: string;
+};
+
+const removeRev = <T extends HasRev>(doc: T): Omit<T, '_rev'> => {
+    delete doc._rev;
+
+    return doc;
+};
 
 const testData = new DeluxeInMemoryStore(buildTestDataInFlatFormat());
 
@@ -145,32 +156,79 @@ describe(`ArangoDataExporter`, () => {
 
             expect(foundDocs).toHaveLength(testDocs.length);
 
+            // Note that we only snapshot the custom (unregistered collection) docs so to avoid snapshotting all test data
+            expect(foundDocs.map(removeRev)).toMatchSnapshot();
+
             const foundEdges = readResult.edge[testEdgeCollectionName]['documents'];
 
             expect(foundEdges).toHaveLength(testEdges.length);
 
-            expect(readResult).toMatchSnapshot();
+            expect(foundEdges.map(removeRev)).toMatchSnapshot();
         });
     });
 
     describe('restoreSnapshot', () => {
-        describe(`when the checksums are valid`, () => {
-            it(`should restore the snapshot`, async () => {
-                const snapshot = await arangoDataExporter.fetchSnapshot(knownEdgeCollections);
+        let snapshot: InMemoryDatabaseSnapshot;
 
-                await arangoDataExporter.restoreFromSnapshot(snapshot);
+        beforeEach(async () => {
+            snapshot = await arangoDataExporter.fetchSnapshot(knownEdgeCollections);
+        });
 
-                const foundTestDocs = await arangoDatabaseProvider
-                    .getDatabaseForCollection(testDocumentCollectionName)
-                    .fetchMany();
+        describe(`when restoring to an empty database`, () => {
+            beforeEach(async () => {
+                await arangoDatabaseProvider.clearAll();
+            });
 
-                expect(foundTestDocs).toHaveLength(testDocs.length);
+            describe(`when the checksums are valid`, () => {
+                it(`should restore the snapshot`, async () => {
+                    await arangoDataExporter.restoreFromSnapshot(snapshot);
 
-                const foundEdges = await arangoDatabaseProvider
-                    .getDatabaseForCollection(testEdgeCollectionName)
-                    .fetchMany();
+                    const foundTestDocs = await arangoDatabaseProvider
+                        .getDatabaseForCollection(testDocumentCollectionName)
+                        .fetchMany();
 
-                expect(foundEdges).toHaveLength(testEdges.length);
+                    expect(foundTestDocs).toHaveLength(testDocs.length);
+
+                    const foundEdges = await arangoDatabaseProvider
+                        .getDatabaseForCollection(testEdgeCollectionName)
+                        .fetchMany();
+
+                    expect(foundEdges).toHaveLength(testEdges.length);
+                });
+            });
+
+            describe(`when the checksums are not valid (data has been changed)`, () => {
+                it(`should reject`, async () => {
+                    const { document } = snapshot;
+
+                    // @ts-expect-error this is tough
+                    const tamperedDoc = cloneToPlainObject(document['photographs']['documents'][0]);
+
+                    // this would be no good, very bad!
+                    delete tamperedDoc['queryAccessControlList'];
+
+                    const tamperedPhotographs = (
+                        document['photographs']['documents'] as unknown as { _key: string }[]
+                    ).map((doc) =>
+                        doc._key === tamperedDoc._key ? tamperedDoc : doc
+                    ) as unknown as DatabaseCollectionSnapshot;
+
+                    const tamperedSnapshot = cloneToPlainObject(snapshot);
+
+                    delete tamperedSnapshot['document']['photographs']['documents'];
+
+                    tamperedSnapshot['document']['photographs']['documents'] = tamperedPhotographs;
+
+                    expect(
+                        arangoDataExporter.restoreFromSnapshot(tamperedSnapshot)
+                    ).rejects.toMatchSnapshot();
+                });
+            });
+        });
+
+        describe(`when attempting to restore to a non-empty database`, () => {
+            it(`should throw`, async () => {
+                expect(arangoDataExporter.restoreFromSnapshot(snapshot)).rejects;
             });
         });
     });

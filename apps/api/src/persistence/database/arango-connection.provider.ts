@@ -90,9 +90,9 @@ export class ArangoConnectionProvider {
          * TODO[https://www.pivotaltracker.com/story/show/187960041]
          * Discover view collections dynamically.
          */
-        await this.#createCollectionIfNotExists('photograph__VIEWS');
+        await this.createCollectionIfNotExists('photograph__VIEWS');
 
-        await this.#createCollectionIfNotExists('term__VIEWS');
+        await this.createCollectionIfNotExists('term__VIEWS');
 
         await this.createCollectionIfNotExists('audioItem__VIEWS');
 

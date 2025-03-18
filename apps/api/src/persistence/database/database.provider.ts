@@ -53,6 +53,22 @@ export class ArangoDatabaseProvider {
         );
     };
 
+    /**
+     * This is a test helper. It will throw if you attempt to call it outside
+     * of a testing environment.
+     */
+    clearAll = async (): Promise<void> => {
+        const collections = (await this.databaseConnection.collections(true)).map(
+            (collection) => collection.name
+        );
+
+        await Promise.all(
+            collections.map((collectionName) =>
+                this.getDatabaseForCollection(collectionName).clear()
+            )
+        );
+    };
+
     close() {
         this.databaseConnection.close();
     }
