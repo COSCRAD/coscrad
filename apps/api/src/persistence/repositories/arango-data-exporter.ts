@@ -72,6 +72,16 @@ export class ArangoDataExporter {
     }
 
     async restoreFromSnapshot(snapshot: InMemoryDatabaseSnapshot) {
+        /**
+         * This functions like the pop-out tab on a VHS or audio cassette in that
+         * it enforces us to be intentional about writing data. By leaving this
+         * env variable unset in production, we will avoid accidentally importing
+         * data there.
+         */
+        if (process.env['DATA_MODE'] !== 'import') {
+            throw new InternalError(`You must set $DATA_MODE=import to enable imports.`);
+        }
+
         const { document: allDocumentSnapshots, edge: allEdgeSnapshots } = snapshot;
 
         for (const [collectionName, { checksum, documents }] of [

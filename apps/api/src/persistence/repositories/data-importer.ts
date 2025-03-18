@@ -20,6 +20,10 @@ export class DataImporter {
      * on top of what data is already there, with errors in case there are collisions
      * in keys \ IDs.
      */
+    /**
+     *
+     * @deprecated use `ArangoDataExporter.restoreFromSnapshot`
+     */
     async import({ filepath }: { filepath: string }): Promise<void> {
         /**
          * This functions like the pop-out tab on a VHS or audio cassette in that

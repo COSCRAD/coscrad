@@ -1,8 +1,10 @@
+import { INestApplication } from '@nestjs/common';
 import { TestingModule } from '@nestjs/testing';
-import { existsSync, mkdirSync, unlinkSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, unlinkSync } from 'fs';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
+import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
 import { AggregateType } from '../domain/types/AggregateType';
 import { DeluxeInMemoryStore } from '../domain/types/DeluxeInMemoryStore';
 import { isNullOrUndefined } from '../domain/utilities/validation/is-null-or-undefined';
@@ -14,9 +16,7 @@ import { ArangoDatabaseProvider } from '../persistence/database/database.provide
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoDataExporter } from '../persistence/repositories/arango-data-exporter';
-import { DomainDataExporter } from '../persistence/repositories/domain-data-exporter';
 import buildTestDataInFlatFormat from '../test-data/buildTestDataInFlatFormat';
-import convertInMemorySnapshotToDatabaseFormat from '../test-data/utilities/convertInMemorySnapshotToDatabaseFormat';
 import { DynamicDataTypeFinderService } from '../validation';
 import { CoscradCliModule } from './coscrad-cli.module';
 
@@ -26,20 +26,24 @@ const cliCommandName = 'data-restore';
 
 const outputDir = `__cli-command-test-files__`;
 
-const outputFilePrefix = `./${outputDir}/${cliCommandName}`;
+const filenameToRestore = `data-restore__restore-file__.data.json`;
 
-const buildFullFilepath = (suffix: string): string => `${outputFilePrefix}${suffix}.data.json`;
-
-const fileToRestore = buildFullFilepath(`__restore-file__`);
+const fullPathOfFileToRestore = `${outputDir}/${filenameToRestore}`;
 
 const testDataInFlatFormat = buildTestDataInFlatFormat();
 
+const unregisteredCollectionName = 'games';
+
 describe(`CLI Command: **data-restore**`, () => {
+    let app: INestApplication;
+
     let commandInstance: TestingModule;
 
     let testRepositoryProvider: TestRepositoryProvider;
 
     let databaseProvider: ArangoDatabaseProvider;
+
+    let dataExporter: ArangoDataExporter;
 
     beforeAll(async () => {
         const testAppModule = await createTestModule({
@@ -48,7 +52,11 @@ describe(`CLI Command: **data-restore**`, () => {
 
         await testAppModule.init();
 
-        const dynamicDataTypeFinderService = testAppModule.get(DynamicDataTypeFinderService);
+        app = testAppModule.createNestApplication();
+
+        await app.init();
+
+        const dynamicDataTypeFinderService = app.get(DynamicDataTypeFinderService);
 
         await dynamicDataTypeFinderService.bootstrapDynamicTypes();
 
@@ -71,10 +79,19 @@ describe(`CLI Command: **data-restore**`, () => {
         if (!existsSync(outputDir)) {
             mkdirSync(outputDir);
         }
+
+        dataExporter = new ArangoDataExporter(new ArangoQueryRunner(databaseProvider));
     });
 
     beforeEach(async () => {
         await testRepositoryProvider.testTeardown();
+
+        // clear unregistered collection
+        await databaseProvider
+            .getDatabaseForCollection<{ id: string; name: string; populatiry: number }>(
+                unregisteredCollectionName
+            )
+            .clear();
 
         const testDataWithUniqueKeys = Object.entries(testDataInFlatFormat).reduce(
             (acc, [aggregateType, instances]) => ({
@@ -88,15 +105,53 @@ describe(`CLI Command: **data-restore**`, () => {
             {}
         );
 
-        if (existsSync(fileToRestore)) unlinkSync(fileToRestore);
+        if (existsSync(fullPathOfFileToRestore)) unlinkSync(fullPathOfFileToRestore);
 
-        const snapshot = convertInMemorySnapshotToDatabaseFormat(
-            new DeluxeInMemoryStore(testDataWithUniqueKeys).fetchFullSnapshotInLegacyFormat()
-        );
+        const domainSnapshot = new DeluxeInMemoryStore(
+            testDataWithUniqueKeys
+        ).fetchFullSnapshotInLegacyFormat();
 
-        writeFileSync(fileToRestore, JSON.stringify(snapshot, null, 4));
+        await testRepositoryProvider.addFullSnapshot(domainSnapshot);
+
+        // ensure there is a doc in `uuids`
+        await app.get<IIdManager>(ID_MANAGER_TOKEN).generate();
+
+        // ensure there is a migration
+        await databaseProvider
+            .getDatabaseForCollection<{ id: string; data: string }>('migrations')
+            .create({
+                _key: '1',
+                data: 'hello world',
+            });
+
+        // ensure there is data in an unregistered collection (e.g., the legacy game data collection
+        await databaseProvider
+            .getDatabaseForCollection<{ id: string; name: string; populatiry: number }>(
+                unregisteredCollectionName
+            )
+            .create({
+                _key: '1',
+                name: 'memory match',
+                populatiry: 1,
+            });
+
+        await dataExporter.dumpSnapshot(outputDir, filenameToRestore, [
+            ...Object.values(ArangoEdgeCollectionId),
+        ]);
 
         await testRepositoryProvider.testTeardown();
+
+        // clear migrations
+        await databaseProvider
+            .getDatabaseForCollection<{ id: string; data: string }>('migrations')
+            .clear();
+
+        // clear unregistered collection
+        await databaseProvider
+            .getDatabaseForCollection<{ id: string; name: string; populatiry: number }>(
+                unregisteredCollectionName
+            )
+            .clear();
     });
 
     describe(`when the command is valid`, () => {
@@ -119,7 +174,7 @@ describe(`CLI Command: **data-restore**`, () => {
 
                 await CommandTestFactory.run(commandInstance, [
                     cliCommandName,
-                    `--filepath=${fileToRestore}`,
+                    `--filepath=${fullPathOfFileToRestore}`,
                 ]);
 
                 const dataExporter = new ArangoDataExporter(
@@ -179,14 +234,12 @@ describe(`CLI Command: **data-restore**`, () => {
                 await CommandTestFactory.run(commandInstance, [
                     cliCommandName,
                     `-f`,
-                    fileToRestore,
+                    fullPathOfFileToRestore,
                 ]);
 
-                const dataExporter = new DomainDataExporter(testRepositoryProvider);
-
-                const inMemoryStore = await dataExporter.fetchSnapshot();
-
-                const snapshot = inMemoryStore.fetchFullSnapshot();
+                const foundSnapshot = await dataExporter.fetchSnapshot([
+                    ...Object.values(ArangoEdgeCollectionId),
+                ]);
 
                 /**
                  * We could refactor this the same as the other test case. But
@@ -194,14 +247,15 @@ describe(`CLI Command: **data-restore**`, () => {
                  * of --filename, we have left it with the data check at the level of
                  * the domain (instead of persistence layer).
                  */
-                const aggregatesNotInSnapshot = Object.values(AggregateType).reduce(
-                    (acc: AggregateType[], aggregateType) =>
-                        isNullOrUndefined(snapshot[aggregateType]) ||
-                        snapshot[aggregateType]?.length === 0
-                            ? acc.concat(aggregateType)
-                            : acc,
-                    []
-                );
+                const collectionsWhoseDataIsMissing = [
+                    ...Object.values(ArangoDocumentCollectionId),
+                    unregisteredCollectionName,
+                ].reduce((acc: string[], collectionName) => {
+                    return isNullOrUndefined(foundSnapshot.document[collectionName]) ||
+                        foundSnapshot.document[collectionName]?.documents?.length === 0
+                        ? acc.concat(collectionName)
+                        : acc;
+                }, []);
 
                 const compareStrings = (a: string, b: string) => a.localeCompare(b);
 
@@ -212,7 +266,18 @@ describe(`CLI Command: **data-restore**`, () => {
                  * least one instnace of each aggregate in the post-restore state
                  * is a good sanity check.
                  */
-                expect(aggregatesNotInSnapshot.sort(compareStrings)).toEqual([]);
+                expect(collectionsWhoseDataIsMissing.sort(compareStrings)).toEqual([]);
+
+                const edgeCollectionsWhoseDataIsMissing = [
+                    ...Object.values(ArangoEdgeCollectionId),
+                ].reduce((acc: string[], collectionName) => {
+                    return isNullOrUndefined(foundSnapshot.edge[collectionName]) ||
+                        foundSnapshot.edge[collectionName]?.documents?.length === 0
+                        ? acc.concat(collectionName)
+                        : acc;
+                }, []);
+
+                expect(edgeCollectionsWhoseDataIsMissing.sort(compareStrings)).toEqual([]);
             });
         });
     });
@@ -229,7 +294,7 @@ describe(`CLI Command: **data-restore**`, () => {
         it(`should not import any data`, async () => {
             await CommandTestFactory.run(commandInstance, [
                 cliCommandName,
-                `--filepath=${fileToRestore}`,
+                `--filepath=${fullPathOfFileToRestore}`,
             ]);
 
             const dataExporter = new ArangoDataExporter(new ArangoQueryRunner(databaseProvider));
