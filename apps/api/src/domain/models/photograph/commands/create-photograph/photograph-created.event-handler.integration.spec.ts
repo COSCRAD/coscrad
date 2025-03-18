@@ -61,20 +61,18 @@ describe(`PhotographCreatedEventHandler`, () => {
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
-            providers: [
-                PhotographCreatedEventHandler,
-                {
-                    provide: ConfigService,
-                    useValue: buildMockConfigService(
-                        {
-                            ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
-                        },
-                        buildConfigFilePath(Environment.test)
-                    ),
-                },
-            ],
             imports: [PersistenceModule.forRootAsync(), CommandModule, PhotographModule],
-        }).compile();
+        })
+            .overrideProvider(ConfigService)
+            .useValue(
+                buildMockConfigService(
+                    {
+                        ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+                    },
+                    buildConfigFilePath(Environment.test)
+                )
+            )
+            .compile();
 
         await moduleRef.init();
 

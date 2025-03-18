@@ -12,6 +12,7 @@ import { EventModule } from '../../common';
 import { QUERY_REPOSITORY_PROVIDER_TOKEN } from '../shared/common-commands/publish-resource/resource-published.event-handler';
 import { ArangoQueryRepositoryProvider } from '../term/repositories/arango-query-repository-provider';
 import { CreatePhotographCommandHandler } from './commands/create-photograph/create-photograph.command-handler';
+import { PhotographCreatedEventHandler } from './commands/create-photograph/photograph-created.event-handler';
 import { Photograph } from './entities/photograph.entity';
 import { PHOTOGRAPH_QUERY_REPOSITORY_TOKEN } from './queries';
 import { PhotographQueryService } from './queries/photograph-query.service';
@@ -38,6 +39,8 @@ import { PhotographQueryService } from './queries/photograph-query.service';
         },
         CreatePhotograph,
         CreatePhotographCommandHandler,
+        // Event Handlers
+        PhotographCreatedEventHandler,
         // Data classes
         ...[
             // Domain Model
