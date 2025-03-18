@@ -1,5 +1,6 @@
 import { Controller, Sse } from '@nestjs/common';
 import { merge, Observable } from 'rxjs';
+import { PhotographQueryService } from '../../../domain/models/photograph/queries/photograph-query.service';
 import { TermQueryService } from '../../../domain/services/query-services/term-query.service';
 import { VocabularyListQueryService } from '../../../domain/services/query-services/vocabulary-list-query.service';
 
@@ -7,7 +8,8 @@ import { VocabularyListQueryService } from '../../../domain/services/query-servi
 export class ResourceUpdateNotificationsController {
     constructor(
         private readonly vocabularyListQueryService: VocabularyListQueryService,
-        private readonly termQueryService: TermQueryService
+        private readonly termQueryService: TermQueryService,
+        private readonly photographQueryService: PhotographQueryService
     ) {}
 
     /**
@@ -19,7 +21,8 @@ export class ResourceUpdateNotificationsController {
     public subscribeToWriteNotifications(): Observable<{ data: { type: string } }> {
         return merge(
             this.vocabularyListQueryService.subscribeToWriteNotifications(),
-            this.termQueryService.subscribeToWriteNotifications()
+            this.termQueryService.subscribeToWriteNotifications(),
+            this.photographQueryService.subscribeToWriteNotifications()
         );
     }
 }

@@ -5,6 +5,7 @@ import { AuthorizationModule } from '../authorization/authorization.module';
 import { EventModule } from '../domain/common';
 import { AudioVisualModule } from '../domain/models/audio-visual/application/audio-visual.module';
 import { MediaItemModule } from '../domain/models/media-item';
+import { PhotographModule } from '../domain/models/photograph/photograph.module';
 import { IdGenerationModule } from '../lib/id-generation/id-generation.module';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
 import { PersistenceModule } from '../persistence/persistence.module';
@@ -22,7 +23,6 @@ import { ResourceUpdateNotificationsController } from './controllers/resources/r
 import { BibliographicCitationModule } from './domain-modules/bibliographic-citation.module';
 import { DigitalTextModule } from './domain-modules/digital-text.module';
 import { EdgeConnectionModule } from './domain-modules/edge-connection.module';
-import { PhotographModule } from './domain-modules/photograph.module';
 import { PlaylistModule } from './domain-modules/playlist.module';
 import { SongModule } from './domain-modules/song.module';
 import { SpatialFeatureModule } from './domain-modules/spatial-feature.module';

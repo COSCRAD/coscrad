@@ -135,6 +135,13 @@ import {
     CreatePhotographCommandHandler,
     PhotographCreated,
 } from '../../../domain/models/photograph';
+import { PhotographCreatedEventHandler } from '../../../domain/models/photograph/commands/create-photograph/photograph-created.event-handler';
+import {
+    IPhotographQueryRepository,
+    PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
+} from '../../../domain/models/photograph/queries';
+import { PhotographQueryService } from '../../../domain/models/photograph/queries/photograph-query.service';
+import { ArangoPhotographQueryRepository } from '../../../domain/models/photograph/repositories';
 import {
     AddAudioItemToPlaylistCommandHandler,
     CreatePlayListCommandHandler,
@@ -156,6 +163,7 @@ import { ResourceReadAccessGrantedToUserEventHandler } from '../../../domain/mod
 import { ResourcePublished } from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import {
     IQueryRepositoryProvider,
+    QUERY_REPOSITORY_PROVIDER_TOKEN,
     ResourcePublishedEventHandler,
 } from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
 import {
@@ -214,6 +222,7 @@ import {
     ITermQueryRepository,
     TERM_QUERY_REPOSITORY_TOKEN,
 } from '../../../domain/models/term/queries';
+import { ArangoQueryRepositoryProvider } from '../../../domain/models/term/repositories/arango-query-repository-provider';
 import { ArangoTermQueryRepository } from '../../../domain/models/term/repositories/arango-term-query-repository';
 import {
     ContributorCreated,
@@ -263,7 +272,6 @@ import { BibliographicCitationQueryService } from '../../../domain/services/quer
 import { CoscradUserGroupQueryService } from '../../../domain/services/query-services/coscrad-user-group-query.service';
 import { CoscradUserQueryService } from '../../../domain/services/query-services/coscrad-user-query.service';
 import { EdgeConnectionQueryService } from '../../../domain/services/query-services/edge-connection-query.service';
-import { PhotographQueryService } from '../../../domain/services/query-services/photograph-query.service';
 import { PlaylistQueryService } from '../../../domain/services/query-services/playlist-query.service';
 import { SongQueryService } from '../../../domain/services/query-services/song-query.service';
 import { SpatialFeatureQueryService } from '../../../domain/services/query-services/spatial-feature-query.service';
@@ -552,30 +560,27 @@ export default async (
                     ),
                 inject: [ArangoConnectionProvider],
             },
-
             {
-                //  TODO use a const for this
-                provide: 'QUERY_REPOSITORY_PROVIDER',
+                provide: PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
+                useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
+                    new ArangoPhotographQueryRepository(arangoConnectionProvider),
+                inject: [ArangoConnectionProvider],
+            },
+            {
+                //  TODO use a more extensible pattern
+                provide: QUERY_REPOSITORY_PROVIDER_TOKEN,
                 useFactory: (
+                    photographQueryRespository: ArangoPhotographQueryRepository,
                     termQueryRepository: ArangoTermQueryRepository,
-                    audioItemQueryRepository: ArangoAudioItemQueryRepository
+                    audioItemQueryRepository: ArangoAudioItemQueryRepository,
+                    vocabularyListQueryRepository: ArangoVocabularyListQueryRepository
                 ): IQueryRepositoryProvider => {
-                    // TODO use actual class for this
-                    return {
-                        forResource: (resourceType: ResourceType) => {
-                            if (resourceType === ResourceType.term) {
-                                return termQueryRepository;
-                            }
-
-                            if (resourceType === ResourceType.audioItem) {
-                                return audioItemQueryRepository;
-                            }
-
-                            throw new InternalError(
-                                `Query Repository not available for unsupported resource type: ${resourceType}`
-                            );
-                        },
-                    };
+                    return new ArangoQueryRepositoryProvider(
+                        photographQueryRespository,
+                        termQueryRepository,
+                        audioItemQueryRepository,
+                        vocabularyListQueryRepository
+                    );
                 },
                 inject: [TERM_QUERY_REPOSITORY_TOKEN, AUDIO_QUERY_REPOSITORY_TOKEN],
             },
@@ -625,10 +630,16 @@ export default async (
             {
                 provide: PhotographQueryService,
                 useFactory: (
-                    repositoryProvider: ArangoRepositoryProvider,
-                    commandInfoService: CommandInfoService
-                ) => new PhotographQueryService(repositoryProvider, commandInfoService),
-                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService, ConfigService],
+                    photographQueryRepository: IPhotographQueryRepository,
+                    commandInfoService: CommandInfoService,
+                    configService: ConfigService
+                ) =>
+                    new PhotographQueryService(
+                        photographQueryRepository,
+                        commandInfoService,
+                        configService
+                    ),
+                inject: [PHOTOGRAPH_QUERY_REPOSITORY_TOKEN, CommandInfoService, ConfigService],
             },
             {
                 provide: SpatialFeatureQueryService,
@@ -881,6 +892,7 @@ export default async (
             PromptTermCreatedEventHandler,
             TermElicitedFromPromptEventHandler,
             AudioAddedForTermEventHandler,
+            PhotographCreatedEventHandler,
             VocabularyListCreatedEventHandler,
         ],
 

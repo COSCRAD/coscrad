@@ -1,0 +1,257 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`when querying for a photograph: fetch by Id when the user is authenticated when the user is a project admin when there is a photograph with the given Id when the photograph is published should return the expected result 1`] = `
+{
+  "accessControlList": {
+    "allowedGroupIds": [],
+    "allowedUserIds": [],
+  },
+  "actions": [
+    {
+      "description": "Allow a user to view (but not edit) a given resource",
+      "form": {
+        "fields": [
+          {
+            "constraints": [
+              {
+                "message": "must be a UUID",
+                "name": "UUID",
+              },
+              {
+                "message": "must be a defined value",
+                "name": "defined value",
+              },
+            ],
+            "description": "the ID of the user who will be given permission to view this resource",
+            "label": "userId",
+            "name": "userId",
+            "options": {
+              "aggregateType": "user",
+            },
+            "type": "DYNAMIC_SELECT",
+          },
+        ],
+        "prepopulatedFields": {
+          "aggregateCompositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
+            "type": "photograph",
+          },
+        },
+      },
+      "label": "Grant Read Access to User",
+      "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+    },
+    {
+      "description": "Make a resource unpublished to the public",
+      "form": {
+        "fields": [],
+        "prepopulatedFields": {
+          "aggregateCompositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
+            "type": "photograph",
+          },
+        },
+      },
+      "label": "Unpublish Resource",
+      "type": "UNPUBLISH_RESOURCE",
+    },
+    {
+      "description": "creates a note about this particular resource",
+      "form": {
+        "fields": [
+          {
+            "constraints": [],
+            "description": "system-wide unique identifier for the resource about which we are making a note",
+            "label": "CompositeIdentifier",
+            "name": "resourceCompositeIdentifier",
+            "type": "JSON_INPUT",
+          },
+          {},
+          {
+            "constraints": [
+              {
+                "message": "must be a non-empty string",
+                "name": "non-empty string",
+              },
+              {
+                "message": "must be a defined value",
+                "name": "defined value",
+              },
+            ],
+            "description": "text for the note",
+            "label": "text",
+            "name": "text",
+            "type": "TEXT_FIELD",
+          },
+          {
+            "constraints": [
+              {
+                "message": "Must be a valid \${propertyLabel}",
+                "name": "IS_ENUM",
+              },
+              {
+                "message": "Required",
+                "name": "defined value",
+              },
+            ],
+            "description": "the language in which you are writing the note",
+            "label": "language code",
+            "name": "languageCode",
+            "options": [
+              {
+                "display": "Chilcotin",
+                "value": "clc",
+              },
+              {
+                "display": "Haida",
+                "value": "hai",
+              },
+              {
+                "display": "English",
+                "value": "en",
+              },
+              {
+                "display": "French",
+                "value": "fra",
+              },
+              {
+                "display": "Chinook",
+                "value": "chn",
+              },
+              {
+                "display": "Zapotec",
+                "value": "zap",
+              },
+              {
+                "display": "Spanish",
+                "value": "spa",
+              },
+            ],
+            "type": "STATIC_SELECT",
+          },
+        ],
+        "prepopulatedFields": {
+          "aggregateCompositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
+            "type": "photograph",
+          },
+        },
+      },
+      "label": "Create Note",
+      "type": "CREATE_NOTE_ABOUT_RESOURCE",
+    },
+    {
+      "description": "connects two resources with a note and context",
+      "form": {
+        "fields": [
+          {
+            "constraints": [],
+            "description": "system-wide unique identifier for the resource to which you are making a connection",
+            "label": "to member composite identifier",
+            "name": "toMemberCompositeIdentifier",
+            "type": "JSON_INPUT",
+          },
+          {},
+          {
+            "constraints": [],
+            "description": "system-wide unique identifier for the resource from which you are making a connection",
+            "label": "from member composite identifier",
+            "name": "fromMemberCompositeIdentifier",
+            "type": "JSON_INPUT",
+          },
+          {},
+          {
+            "constraints": [
+              {
+                "message": "must be a non-empty string",
+                "name": "non-empty string",
+              },
+              {
+                "message": "must be a defined value",
+                "name": "defined value",
+              },
+            ],
+            "description": "text for the note",
+            "label": "text",
+            "name": "text",
+            "type": "TEXT_FIELD",
+          },
+          {
+            "constraints": [
+              {
+                "message": "Must be a valid \${propertyLabel}",
+                "name": "IS_ENUM",
+              },
+              {
+                "message": "Required",
+                "name": "defined value",
+              },
+            ],
+            "description": "the language in which you are writing the note",
+            "label": "language code",
+            "name": "languageCode",
+            "options": [
+              {
+                "display": "Chilcotin",
+                "value": "clc",
+              },
+              {
+                "display": "Haida",
+                "value": "hai",
+              },
+              {
+                "display": "English",
+                "value": "en",
+              },
+              {
+                "display": "French",
+                "value": "fra",
+              },
+              {
+                "display": "Chinook",
+                "value": "chn",
+              },
+              {
+                "display": "Zapotec",
+                "value": "zap",
+              },
+              {
+                "display": "Spanish",
+                "value": "spa",
+              },
+            ],
+            "type": "STATIC_SELECT",
+          },
+        ],
+        "prepopulatedFields": {
+          "aggregateCompositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
+            "type": "photograph",
+          },
+        },
+      },
+      "label": "Connect Resources with Note",
+      "type": "CONNECT_RESOURCES_WITH_NOTE",
+    },
+  ],
+  "contributions": [
+    {
+      "fullName": "Dumb McContributor",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110901",
+    },
+  ],
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
+  "imageUrl": "https://www.photograph-queries-by-id.com/myapi/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100055",
+  "isPublished": true,
+  "name": {
+    "items": [
+      {
+        "languageCode": "hai",
+        "role": "original",
+        "text": "Photograph Title",
+      },
+    ],
+  },
+  "tags": [],
+}
+`;
