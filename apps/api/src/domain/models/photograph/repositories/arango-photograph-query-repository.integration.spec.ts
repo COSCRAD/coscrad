@@ -9,8 +9,7 @@ import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../app/config/buildConfigFilePath';
-import { Environment } from '../../../../app/config/constants/Environment';
-import { ConsoleCoscradCliLogger } from '../../../../coscrad-cli/logging';
+import { Environment } from '../../../../app/config/constants/environment';
 import { NotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
@@ -142,10 +141,7 @@ describe(`ArangoPhotographQueryRepository`, () => {
         arangoDatabaseForCollection =
             databaseProvider.getDatabaseForCollection('photograph__VIEWS');
 
-        testQueryRepository = new ArangoPhotographQueryRepository(
-            connectionProvider,
-            new ConsoleCoscradCliLogger()
-        );
+        testQueryRepository = new ArangoPhotographQueryRepository(connectionProvider);
 
         /**
          * Currently, the contributors are snapshot based (not event sourced).

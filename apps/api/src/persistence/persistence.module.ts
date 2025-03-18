@@ -172,13 +172,12 @@ export class PersistenceModule implements OnApplicationShutdown {
             inject: [ArangoConnectionProvider, AUDIO_QUERY_REPOSITORY_TOKEN],
         };
 
+        // TODO We should remove this.
         const photographQueryRepository = {
             provide: PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
-            useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
-                new ArangoPhotographQueryRepository(
-                    arangoConnectionProvider,
-                    new ConsoleCoscradCliLogger()
-                ),
+            useFactory: (arangoConnectionProvider: ArangoConnectionProvider) => {
+                return new ArangoPhotographQueryRepository(arangoConnectionProvider);
+            },
             inject: [ArangoConnectionProvider],
         };
 

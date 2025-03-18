@@ -562,11 +562,8 @@ export default async (
             },
             {
                 provide: PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
-                useFactory: (ArangoConnectionProvider: ArangoConnectionProvider) =>
-                    new ArangoPhotographQueryRepository(
-                        ArangoConnectionProvider,
-                        new ConsoleCoscradCliLogger()
-                    ),
+                useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
+                    new ArangoPhotographQueryRepository(arangoConnectionProvider),
                 inject: [ArangoConnectionProvider],
             },
             {

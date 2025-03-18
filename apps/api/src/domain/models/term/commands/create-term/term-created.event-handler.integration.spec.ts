@@ -11,8 +11,11 @@ import { TermCommandsModule } from '../../../../../app/domain-modules/term.comma
 import { ConsoleCoscradCliLogger } from '../../../../../coscrad-cli/logging';
 import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
+import { IRepositoryProvider } from '../../../../../domain/repositories/interfaces/repository-provider.interface';
 import { NotFound } from '../../../../../lib/types/not-found';
+import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
+import { ArangoCollectionId } from '../../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -96,6 +99,15 @@ describe(`TermCreatedEventHandler`, () => {
     describe(`when handling a term created event`, () => {
         beforeEach(async () => {
             await databaseProvider.clearViews();
+
+            await databaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.contributors)
+                .clear();
+
+            await app
+                .get<IRepositoryProvider>(REPOSITORY_PROVIDER_TOKEN)
+                .getContributorRepository()
+                .create(dummyContributor);
         });
 
         it(`should create the expected view in the database`, async () => {

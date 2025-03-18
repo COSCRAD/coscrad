@@ -5,8 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
-import { Environment } from '../../../../../app/config/constants/Environment';
-import { ConsoleCoscradCliLogger } from '../../../../../coscrad-cli/logging';
+import { Environment } from '../../../../../app/config/constants/environment';
 import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
 import { IRepositoryProvider } from '../../../../../domain/repositories/interfaces/repository-provider.interface';
@@ -62,19 +61,20 @@ describe(`PhotographCreatedEventHandler`, () => {
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
-            // providers: [CommandInfoService, PhotographCreatedEventHandler],
+            providers: [
+                PhotographCreatedEventHandler,
+                {
+                    provide: ConfigService,
+                    useValue: buildMockConfigService(
+                        {
+                            ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+                        },
+                        buildConfigFilePath(Environment.test)
+                    ),
+                },
+            ],
             imports: [PersistenceModule.forRootAsync(), CommandModule, PhotographModule],
-        })
-            .overrideProvider(ConfigService)
-            .useValue(
-                buildMockConfigService(
-                    {
-                        ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
-                    },
-                    buildConfigFilePath(Environment.test)
-                )
-            )
-            .compile();
+        }).compile();
 
         await moduleRef.init();
 
@@ -86,10 +86,7 @@ describe(`PhotographCreatedEventHandler`, () => {
 
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
 
-        testQueryRepository = new ArangoPhotographQueryRepository(
-            connectionProvider,
-            new ConsoleCoscradCliLogger()
-        );
+        testQueryRepository = new ArangoPhotographQueryRepository(connectionProvider);
     });
 
     beforeEach(async () => {

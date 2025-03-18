@@ -1,7 +1,5 @@
 import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
-import { Inject } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from '../../../../coscrad-cli/logging';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { isNotFound } from '../../../../lib/types/not-found';
@@ -23,10 +21,7 @@ export class ArangoPhotographQueryRepository implements IPhotographQueryReposito
      */
     private readonly baseResourceQueryBuilder: ArangoResourceQueryBuilder;
 
-    constructor(
-        arangoConnectionProvider: ArangoConnectionProvider,
-        @Inject(COSCRAD_LOGGER_TOKEN) _logger: ICoscradLogger
-    ) {
+    constructor(arangoConnectionProvider: ArangoConnectionProvider) {
         this.database = new ArangoDatabaseForCollection(
             new ArangoDatabase(arangoConnectionProvider.getConnection()),
             'photograph__VIEWS'
