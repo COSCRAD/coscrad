@@ -1,6 +1,7 @@
 import { HasId } from '@coscrad/api-interfaces';
 import { Injectable } from '@nestjs/common';
 import { isDeepStrictEqual } from 'util';
+import { InternalError } from '../../lib/errors/InternalError';
 import { Maybe } from '../../lib/types/maybe';
 import { DatabaseCollectionSnapshot } from '../../test-data/utilities';
 import { ICoscradQueryRunner } from '../migrations/coscrad-query-runner.interface';
@@ -35,7 +36,15 @@ export class ArangoQueryRunner implements ICoscradQueryRunner {
         type: 'edge' | 'document',
         checksum?: string
     ): Promise<void> {
-        await this.arangoDatabase.import(collectionName, data, type, checksum);
+        await this.arangoDatabase.import(collectionName, data, type, checksum).catch((e) => {
+            const error = new InternalError(
+                `Failed to import collection: ${collectionName}`,
+
+                [e]
+            );
+
+            throw error;
+        });
     }
 
     async update<TOldDocument extends ArangoDatabaseDocument<HasId>, UNewDocument>(

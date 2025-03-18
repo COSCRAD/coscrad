@@ -1,5 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { readFileSync } from 'fs';
+import { InternalError } from '../lib/errors/InternalError';
 import { ArangoQueryRunner } from '../persistence/database/arango-query-runner';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
 import { ArangoDataExporter } from '../persistence/repositories/arango-data-exporter';
@@ -28,7 +29,13 @@ export class DomainRestoreCliCommand extends CliCommandRunner {
             readFileSync(filepath, { encoding: 'utf-8' })
         ) as InMemoryDatabaseSnapshot;
 
-        return this.dataExporter.restoreFromSnapshot(parsedSnapshot);
+        await this.dataExporter.restoreFromSnapshot(parsedSnapshot).catch((e) => {
+            const error = new InternalError(`Data exporter failed to restore data.`, [e]);
+
+            this.logger.log(error.toString());
+
+            throw error;
+        });
     }
 
     @CliCommandOption({
