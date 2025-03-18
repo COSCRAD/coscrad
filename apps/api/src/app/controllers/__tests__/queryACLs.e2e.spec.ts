@@ -82,11 +82,10 @@ const fullSnapshotOfResources = buildTestData().resources;
 
 const resourceTypesThatHaveStandaloneQueryTests = [
     ResourceType.digitalText,
-
     // TODO write standalone query test
     ResourceType.song,
+    ResourceType.photograph,
     ResourceType.term,
-    // Not yet event sourced, but depends on vocabulary list
     ResourceType.vocabularyList,
 ];
 

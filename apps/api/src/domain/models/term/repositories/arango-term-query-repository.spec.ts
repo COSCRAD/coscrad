@@ -102,7 +102,7 @@ describe(`ArangoTermQueryRepository`, () => {
 
     const originalLanguageCode = LanguageCode.Chilcotin;
 
-    const translationLangaugeCode = LanguageCode.English;
+    const translationLanguageCode = LanguageCode.English;
 
     const textTranslation = 'foobar';
 
@@ -251,7 +251,7 @@ describe(`ArangoTermQueryRepository`, () => {
 
             await testQueryRepository.translate(targetTerm.id, {
                 text: textTranslation,
-                languageCode: translationLangaugeCode,
+                languageCode: translationLanguageCode,
                 role: targetTranslationRole,
             });
 
@@ -265,7 +265,7 @@ describe(`ArangoTermQueryRepository`, () => {
 
             const updatedName = new MultilingualText(updatedTerm.name); // we want an instance (not a DTO) for the query methods
 
-            const searchResultForTranslation = updatedName.getTranslation(translationLangaugeCode);
+            const searchResultForTranslation = updatedName.getTranslation(translationLanguageCode);
 
             expect(searchResultForTranslation).not.toBe(NotFound);
 

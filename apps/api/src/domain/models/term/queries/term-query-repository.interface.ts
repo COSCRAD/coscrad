@@ -3,6 +3,8 @@ import { Observable } from 'rxjs';
 import { Maybe } from '../../../../lib/types/maybe';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { AggregateId } from '../../../types/AggregateId';
+import { IAccessible } from '../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
+import { IPublishable } from '../../shared/common-commands/publish-resource/resource-published.event-handler';
 
 export const TERM_QUERY_REPOSITORY_TOKEN = 'TERM_QUERY_REPOSITORY_TOKEN';
 
@@ -12,7 +14,7 @@ export const TERM_QUERY_REPOSITORY_TOKEN = 'TERM_QUERY_REPOSITORY_TOKEN';
  * to serve as a constraint for the return of the query service and represents
  * a contract with the client.
  */
-export interface ITermQueryRepository {
+export interface ITermQueryRepository extends IAccessible, IPublishable {
     subscribeToUpdates(): Observable<{ data: { type: string } }>;
 
     create(view: TermViewModel): Promise<void>;

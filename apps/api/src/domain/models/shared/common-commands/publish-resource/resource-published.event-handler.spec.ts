@@ -88,6 +88,7 @@ describe(`ResourcePublished.eventHandler`, () => {
         );
 
         resourcePublishedEventHandler = new ResourcePublishedEventHandler({
+            // @ts-expect-error todo fix this
             forResource: (resourceType) => {
                 if (resourceType !== ResourceType.term) {
                     throw new InternalError(

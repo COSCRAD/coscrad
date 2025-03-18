@@ -811,6 +811,25 @@ export class TestEventStream {
         ].reduce((acc, [eventType, builder]) => acc.registerBuilder(eventType, builder), this);
     }
 
+    // TODO share this implementation with the `as` method below
+    public buildSingle<TEvent extends BaseEvent>({
+        type,
+        payload: payloadOverrides,
+        meta,
+    }: EventTypeAndPayloadOverrides<TEvent>): TEvent {
+        const metaOverrides = isNonEmptyObject(meta) ? meta : {};
+
+        if (!this.eventBuilderMap.has(type)) {
+            throw new InternalError(
+                `No test event builder has been registered for events of type: ${type}`
+            );
+        }
+
+        const eventBuilder = this.eventBuilderMap.get(type) as EventBuilder<TEvent>;
+
+        return eventBuilder(payloadOverrides, () => this.buildEventMeta(metaOverrides));
+    }
+
     andThen<T extends BaseEvent>(
         eventTypeAndPayloadOverrides: EventTypeAndPayloadOverrides<T>
     ): TestEventStream {

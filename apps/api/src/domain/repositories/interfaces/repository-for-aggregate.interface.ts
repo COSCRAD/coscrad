@@ -1,6 +1,5 @@
 import { Maybe } from '../../../lib/types/maybe';
 import { ResultOrError } from '../../../types/ResultOrError';
-import { Aggregate } from '../../models/aggregate.entity';
 import { AggregateId } from '../../types/AggregateId';
 import { ISpecification } from './specification.interface';
 
@@ -10,7 +9,7 @@ import { ISpecification } from './specification.interface';
  * methods on concrete repositories for more model-specific behaviour. Also,
  * we need to deal with `graph edge` relationships.
  */
-export interface IRepositoryForAggregate<TEntity extends Aggregate> {
+export interface IRepositoryForAggregate<TEntity = unknown> {
     fetchById: (id: AggregateId) => Promise<ResultOrError<Maybe<TEntity>>>;
 
     // Returns an empty array if none found

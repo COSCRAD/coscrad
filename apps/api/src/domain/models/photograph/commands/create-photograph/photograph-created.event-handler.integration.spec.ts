@@ -6,54 +6,54 @@ import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/environment';
-import { CommandInfoService } from '../../../../../app/controllers/command/services/command-info-service';
-import { TermCommandsModule } from '../../../../../app/domain-modules/term.commands.module';
-import { ConsoleCoscradCliLogger } from '../../../../../coscrad-cli/logging';
 import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
 import { IRepositoryProvider } from '../../../../../domain/repositories/interfaces/repository-provider.interface';
 import { NotFound } from '../../../../../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
+import { ArangoDatabase } from '../../../../../persistence/database/arango-database';
+import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
 import { ArangoCollectionId } from '../../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { TermViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { TestEventStream } from '../../../../../test-data/events';
+import { assertResourceHasContributionFor } from '../../../__tests__';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
-import { ArangoAudioItemQueryRepository } from '../../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
-import { ITermQueryRepository } from '../../queries';
-import { ArangoTermQueryRepository } from '../../repositories/arango-term-query-repository';
-import { TermCreated } from './term-created.event';
-import { TermCreatedEventHandler } from './term-created.event-handler';
+import { PhotographModule } from '../../photograph.module';
+import { IPhotographQueryRepository } from '../../queries';
+import { PhotographViewModel } from '../../queries/photograph.view-model';
+import { ArangoPhotographQueryRepository } from '../../repositories';
+import { PhotographCreated } from './photograph-created.event';
+import { PhotographCreatedEventHandler } from './photograph-created.event-handler';
 
-const textForTerm = 'boo yah';
+const photographTitle = 'photo one test title';
 
-const languageCode = LanguageCode.Chilcotin;
+const languageCode = LanguageCode.Haida;
 
-const termId = buildDummyUuid(1);
+const photographId = buildDummyUuid(1);
 
 const dummyContributor = getValidAggregateInstanceForTest(AggregateType.contributor);
 
-const termCreated = new TestEventStream()
-    .andThen<TermCreated>({
-        type: 'TERM_CREATED',
+const photographCreated = new TestEventStream()
+    .andThen<PhotographCreated>({
+        type: 'PHOTOGRAPH_CREATED',
         payload: {
-            text: textForTerm,
-            languageCode,
+            title: photographTitle,
+            languageCodeForTitle: languageCode,
         },
         meta: {
             contributorIds: [dummyContributor.id],
         },
     })
     .as({
-        id: termId,
-        type: AggregateType.digitalText,
-    })[0]; // There is only one event in this stream, which is the target event
+        id: photographId,
+        type: AggregateType.photograph,
+    })[0] as PhotographCreated; // There is only one event in this stream, which is the target event
 
-describe(`TermCreatedEventHandler`, () => {
-    let testQueryRepository: ITermQueryRepository;
+describe(`PhotographCreatedEventHandler`, () => {
+    let testQueryRepository: IPhotographQueryRepository;
 
     let databaseProvider: ArangoDatabaseProvider;
 
@@ -61,8 +61,7 @@ describe(`TermCreatedEventHandler`, () => {
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
-            providers: [CommandInfoService, TermCreatedEventHandler],
-            imports: [PersistenceModule.forRootAsync(), CommandModule, TermCommandsModule],
+            imports: [PersistenceModule.forRootAsync(), CommandModule, PhotographModule],
         })
             .overrideProvider(ConfigService)
             .useValue(
@@ -85,74 +84,61 @@ describe(`TermCreatedEventHandler`, () => {
 
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
 
-        testQueryRepository = new ArangoTermQueryRepository(
-            connectionProvider,
-            new ArangoAudioItemQueryRepository(connectionProvider),
-            new ConsoleCoscradCliLogger()
-        );
+        testQueryRepository = new ArangoPhotographQueryRepository(connectionProvider);
+    });
+
+    beforeEach(async () => {
+        await new ArangoDatabaseForCollection(
+            new ArangoDatabase(app.get(ArangoConnectionProvider).getConnection()),
+            ArangoCollectionId.contributors
+        ).clear();
+
+        await databaseProvider.getDatabaseForCollection('photograph__VIEWS').clear();
     });
 
     afterAll(async () => {
         databaseProvider.close();
     });
 
-    describe(`when handling a term created event`, () => {
+    describe(`when handling a photograph created event`, () => {
         beforeEach(async () => {
-            await databaseProvider.clearViews();
-
-            await databaseProvider
-                .getDatabaseForCollection(ArangoCollectionId.contributors)
-                .clear();
-
             await app
                 .get<IRepositoryProvider>(REPOSITORY_PROVIDER_TOKEN)
                 .getContributorRepository()
                 .create(dummyContributor);
         });
 
-        it(`should create the expected view in the database`, async () => {
-            const handler = app.get(TermCreatedEventHandler);
+        it(`should create the expected photograph`, async () => {
+            await app.get(PhotographCreatedEventHandler).handle(photographCreated);
 
-            // @ts-expect-error Fix this issue
-            await handler.handle(termCreated);
-
-            const searchResult = await testQueryRepository.fetchById(termId);
+            const searchResult = await testQueryRepository.fetchById(photographId);
 
             expect(searchResult).not.toBe(NotFound);
 
-            const foundTerm = searchResult as TermViewModel;
+            const view = searchResult as PhotographViewModel;
 
-            const { name: nameDto, contributions, actions } = foundTerm;
+            const { name: nameDto, actions, tags } = view;
 
-            const name = new MultilingualText(nameDto);
+            const foundName = new MultilingualText(nameDto);
 
-            const originalTextItem = name.getOriginalTextItem();
+            const originalPhotographTitleItem = foundName.getOriginalTextItem();
 
-            expect(originalTextItem.text).toBe(textForTerm);
+            expect(originalPhotographTitleItem.text).toBe(photographTitle);
 
-            expect(originalTextItem.languageCode).toBe(languageCode);
-
-            expect(actions).toContain('TRANSLATE_TERM');
-            expect(actions).not.toContain('ELICIT_TERM_FROM_PROMPT');
+            expect(originalPhotographTitleItem.languageCode).toBe(languageCode);
 
             expect(actions).toContain('TAG_RESOURCE');
             expect(actions).toContain('CREATE_NOTE_ABOUT_RESOURCE');
             expect(actions).toContain('CONNECT_RESOURCES_WITH_NOTE');
             expect(actions).toContain('PUBLISH_RESOURCE');
-            expect(actions).toContain('ADD_AUDIO_FOR_TERM');
 
             // expect tags to be empty
+            expect(tags).toHaveLength(0);
+
             // expect categories to be empty
             // expect notes to be empty
 
-            expect(
-                contributions.some(
-                    // this should actually be the name and ID
-                    (c) => c.id === dummyContributor.id
-                )
-            ).toBe(true);
-
-            // TODO check the contributor's full name as well
+            assertResourceHasContributionFor(dummyContributor, view);
         });
     });
 });
