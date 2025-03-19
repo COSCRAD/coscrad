@@ -37,11 +37,7 @@ export class ArangoQueryRunner implements ICoscradQueryRunner {
         checksum?: string
     ): Promise<void> {
         await this.arangoDatabase.import(collectionName, data, type, checksum).catch((e) => {
-            const error = new InternalError(
-                `Failed to import collection: ${collectionName}`,
-
-                [e]
-            );
+            const error = new InternalError(`Failed to import collection: ${collectionName}`, [e]);
 
             throw error;
         });

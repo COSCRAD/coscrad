@@ -87,13 +87,21 @@ export class ArangoDataExporter {
         for (const [collectionName, { checksum, documents }] of [
             ...Object.entries(allDocumentSnapshots),
         ]) {
-            await this.arangoQueryRunner.import(collectionName, documents, 'document', checksum);
+            await this.arangoQueryRunner
+                .import(collectionName, documents, 'document', checksum)
+                .catch((e) => {
+                    throw e;
+                });
         }
 
         for (const [collectionName, { checksum, documents }] of [
             ...Object.entries(allEdgeSnapshots),
         ]) {
-            await this.arangoQueryRunner.import(collectionName, documents, 'edge', checksum);
+            await this.arangoQueryRunner
+                .import(collectionName, documents, 'edge', checksum)
+                .catch((e) => {
+                    throw e;
+                });
         }
     }
 }

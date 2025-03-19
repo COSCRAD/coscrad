@@ -32,5 +32,3 @@ exports[`ArangoDataExporter dumpSnapshot should write all documents for all coll
   },
 ]
 `;
-
-exports[`ArangoDataExporter restoreSnapshot when attempting to restore to a non-empty database should throw 1`] = `[Error: Failed to import data to collection: photographs. Checksums do not match. Export: 9222859855719120303, post-import: 0]`;

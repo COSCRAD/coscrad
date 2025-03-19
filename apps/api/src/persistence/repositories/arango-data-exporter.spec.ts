@@ -8,6 +8,7 @@ import { Environment } from '../../app/config/constants/environment';
 import { CoscradEventFactory } from '../../domain/common';
 import { DeluxeInMemoryStore } from '../../domain/types/DeluxeInMemoryStore';
 import { HasAggregateId } from '../../domain/types/HasAggregateId';
+import { InternalError } from '../../lib/errors/InternalError';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import buildTestDataInFlatFormat from '../../test-data/buildTestDataInFlatFormat';
 import { DatabaseCollectionSnapshot, InMemoryDatabaseSnapshot } from '../../test-data/utilities';
@@ -85,6 +86,8 @@ describe(`ArangoDataExporter`, () => {
 
     const knownEdgeCollections = [...Object.values(ArangoEdgeCollectionId), testEdgeCollectionName];
 
+    const originalEnv = process.env;
+
     beforeAll(async () => {
         const testModule = await Test.createTestingModule({
             imports: [ConfigModule, PersistenceModule.forRootAsync()],
@@ -107,6 +110,12 @@ describe(`ArangoDataExporter`, () => {
         arangoDatabaseProvider = app.get(ArangoDatabaseProvider);
 
         arangoDataExporter = app.get(ArangoDataExporter);
+
+        process.env.DATA_MODE = 'import';
+    });
+
+    afterAll(() => {
+        process.env = originalEnv;
     });
 
     beforeEach(async () => {
@@ -219,9 +228,13 @@ describe(`ArangoDataExporter`, () => {
 
                     tamperedSnapshot['document']['photographs']['documents'] = tamperedPhotographs;
 
-                    expect(
-                        arangoDataExporter.restoreFromSnapshot(tamperedSnapshot)
-                    ).rejects.toMatchSnapshot();
+                    expect.assertions(1);
+
+                    try {
+                        await arangoDataExporter.restoreFromSnapshot(tamperedSnapshot);
+                    } catch (error) {
+                        expect(error).toBeInstanceOf(InternalError);
+                    }
                 });
             });
         });
