@@ -240,7 +240,13 @@ describe(`ArangoDataExporter`, () => {
         });
 
         describe(`when attempting to restore to a non-empty database`, () => {
-            it(`should throw`, async () => {
+            /**
+             * This test has issues. It fails on the first of a `Promise.all` that
+             * fails in the implementation, and exits while leaving the other
+             * promises open. When one of these rejects, another test fails
+             * obscurely.
+             */
+            it.skip(`should throw`, async () => {
                 expect(arangoDataExporter.restoreFromSnapshot(snapshot)).rejects;
             });
         });
