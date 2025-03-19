@@ -5,7 +5,6 @@ import {
     InMemorySnapshotOfResources,
     ResourceType,
 } from '../../domain/types/ResourceType';
-import { UuidDto } from '../../lib/id-generation/types/UuidDocument';
 import { ArangoCollectionId } from '../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoEdgeCollectionId } from '../../persistence/database/collection-references/ArangoEdgeCollectionId';
 import { getArangoCollectionIDFromResourceType } from '../../persistence/database/collection-references/getArangoCollectionIDFromResourceType';
@@ -13,16 +12,21 @@ import buildEdgeDocumentsFromCategoryNodeDTOs from '../../persistence/database/u
 import mapCategoryDTOToArangoDocument from '../../persistence/database/utilities/category/mapCategoryDTOToArangoDocument';
 import mapEdgeConnectionDTOToArangoEdgeDocument from '../../persistence/database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
 import mapEntityDTOToDatabaseDTO from '../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
-import { ArangoMigrationRecord } from '../../persistence/migrations/arango-migration-record';
-import { DTO } from '../../types/DTO';
+
+// TODO move this
+export type DatabaseCollectionSnapshot<TDoc = unknown> = {
+    documents: TDoc[];
+    checksum: string;
+};
 
 export type InMemoryDatabaseSnapshot = {
     document: {
-        [K in Exclude<ArangoCollectionId, 'uuids' | 'migrations'>]: unknown[];
-    } & { uuids: UuidDto[]; migrations: DTO<ArangoMigrationRecord>[] };
+        // can we just use `string` here isntead?
+        [K: string]: DatabaseCollectionSnapshot;
+    };
 
     edge: {
-        [K in ArangoEdgeCollectionId]: Record<string, unknown>[];
+        [K in ArangoEdgeCollectionId]: DatabaseCollectionSnapshot;
     };
 };
 

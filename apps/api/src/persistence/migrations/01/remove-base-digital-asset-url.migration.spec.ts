@@ -16,7 +16,7 @@ import { ArangoCollectionId } from '../../database/collection-references/ArangoC
 import { ArangoDatabaseProvider } from '../../database/database.provider';
 import {
     ArangoDatabaseDocument,
-    DatabaseDTO,
+    ArangoDocumentForAggregateRoot,
 } from '../../database/utilities/mapEntityDTOToDatabaseDocument';
 import TestRepositoryProvider from '../../repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -178,7 +178,7 @@ describe.skip(`RemoveBaseDigitalAssetUrl`, () => {
 
             const updatedTermDocuments = (await testDatabaseProvider
                 .getDatabaseForCollection(ArangoCollectionId.terms)
-                .fetchMany()) as DatabaseDTO<DTO<Term>>[];
+                .fetchMany()) as ArangoDocumentForAggregateRoot<DTO<Term>>[];
 
             expect(updatedTermDocuments.length).toBe(originalTermDocuments.length);
 
@@ -229,7 +229,7 @@ describe.skip(`RemoveBaseDigitalAssetUrl`, () => {
 
             const updatedPhotographDocuments = (await testDatabaseProvider
                 .getDatabaseForCollection(ArangoCollectionId.photographs)
-                .fetchMany()) as DatabaseDTO<DTO<Photograph>>[];
+                .fetchMany()) as ArangoDocumentForAggregateRoot<DTO<Photograph>>[];
 
             expect(updatedPhotographDocuments.length).toBe(originalPhotographDocuments.length);
 

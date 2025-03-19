@@ -8,7 +8,7 @@ import { ArangoCollectionId } from '../database/collection-references/ArangoColl
 import { ArangoDatabaseProvider } from '../database/database.provider';
 import mapDatabaseDocumentToAggregateDTO from '../database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDTO, {
-    DatabaseDTO,
+    ArangoDocumentForAggregateRoot,
 } from '../database/utilities/mapEntityDTOToDatabaseDocument';
 import { IEventRepository } from './arango-command-repository-for-aggregate-root';
 
@@ -52,7 +52,8 @@ export class ArangoEventRepository implements IEventRepository {
             bindVars: {},
         });
 
-        const allEventDocuments = (await cursor.all()) as DatabaseDTO<BaseEvent>[];
+        const allEventDocuments =
+            (await cursor.all()) as ArangoDocumentForAggregateRoot<BaseEvent>[];
 
         const eventInstances = allEventDocuments.map((eventDocument) =>
             this.coscradEventFactory.build(mapDatabaseDocumentToAggregateDTO(eventDocument))

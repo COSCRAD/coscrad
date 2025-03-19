@@ -1,6 +1,9 @@
 import { HasId } from '@coscrad/api-interfaces';
 import { Injectable } from '@nestjs/common';
 import { isDeepStrictEqual } from 'util';
+import { InternalError } from '../../lib/errors/InternalError';
+import { Maybe } from '../../lib/types/maybe';
+import { DatabaseCollectionSnapshot } from '../../test-data/utilities';
 import { ICoscradQueryRunner } from '../migrations/coscrad-query-runner.interface';
 import { ArangoDatabase } from './arango-database';
 import { ArangoCollectionId } from './collection-references/ArangoCollectionId';
@@ -11,12 +14,33 @@ import { ArangoDatabaseDocument } from './utilities/mapEntityDTOToDatabaseDocume
 export class ArangoQueryRunner implements ICoscradQueryRunner {
     private readonly arangoDatabase: ArangoDatabase;
 
-    constructor(arangoDatabaseProvider: ArangoDatabaseProvider) {
+    constructor(private readonly arangoDatabaseProvider: ArangoDatabaseProvider) {
         this.arangoDatabase = arangoDatabaseProvider.getDBInstance();
+    }
+
+    async collections() {
+        return this.arangoDatabaseProvider.collections();
     }
 
     async fetchMany<TDocument>(collectionName: string): Promise<TDocument[]> {
         return this.arangoDatabase.fetchMany(collectionName);
+    }
+
+    async export(collectionName: string): Promise<Maybe<DatabaseCollectionSnapshot>> {
+        return this.arangoDatabase.export(collectionName);
+    }
+
+    async import(
+        collectionName: string,
+        data: unknown[],
+        type: 'edge' | 'document',
+        checksum?: string
+    ): Promise<void> {
+        await this.arangoDatabase.import(collectionName, data, type, checksum).catch((e) => {
+            const error = new InternalError(`Failed to import collection: ${collectionName}`, [e]);
+
+            throw error;
+        });
     }
 
     async update<TOldDocument extends ArangoDatabaseDocument<HasId>, UNewDocument>(

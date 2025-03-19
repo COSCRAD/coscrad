@@ -27,7 +27,7 @@ import { REPOSITORY_PROVIDER_TOKEN } from '../../../../persistence/constants/per
 import { ArangoCollectionId } from '../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
-import { DatabaseDTO } from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
+import { ArangoDocumentForAggregateRoot } from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { TagViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { IRepositoryProvider } from '../../../repositories/interfaces/repository-provider.interface';
@@ -173,7 +173,7 @@ export class MediaItemQueryService {
             throw new InternalError(`Encountered a duplicate media item name: ${name}`);
         }
 
-        const mediaItemDocument = result[0] as DatabaseDTO<MediaItem>;
+        const mediaItemDocument = result[0] as ArangoDocumentForAggregateRoot<MediaItem>;
 
         const acl = new AccessControlList(mediaItemDocument.queryAccessControlList);
 

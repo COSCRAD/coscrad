@@ -12,7 +12,7 @@ import { ArangoConnectionProvider } from '../../database/arango-connection.provi
 import { ArangoQueryRunner } from '../../database/arango-query-runner';
 import { ArangoCollectionId } from '../../database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../database/database.provider';
-import { DatabaseDTO } from '../../database/utilities/mapEntityDTOToDatabaseDocument';
+import { ArangoDocumentForAggregateRoot } from '../../database/utilities/mapEntityDTOToDatabaseDocument';
 import TestRepositoryProvider from '../../repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../repositories/__tests__/generateDatabaseNameForTestSuite';
 import { UpdateEnglishLanguageCode } from './update-english-language-code.migration';
@@ -97,7 +97,9 @@ describe(`UpdateEnglishLanguageCode`, () => {
 
             await testDatabaseProvider
                 .getDatabaseForCollection(ArangoCollectionId.audio_items)
-                .createMany(audioItemsWithOldFormat as unknown as DatabaseDTO<HasAggregateId>[]);
+                .createMany(
+                    audioItemsWithOldFormat as unknown as ArangoDocumentForAggregateRoot<HasAggregateId>[]
+                );
         });
 
         const migrationUnderTest = new UpdateEnglishLanguageCode();
@@ -105,13 +107,13 @@ describe(`UpdateEnglishLanguageCode`, () => {
         it(`should apply the appropriate updates`, async () => {
             const originalDocuments = (await testDatabaseProvider
                 .getDatabaseForCollection(ArangoCollectionId.audio_items)
-                .fetchMany()) as unknown as DatabaseDTO<DTO<AudioItem>>[];
+                .fetchMany()) as unknown as ArangoDocumentForAggregateRoot<DTO<AudioItem>>[];
 
             await migrationUnderTest.up(testQueryRunner);
 
             const updatedAudioDocuments = (await testDatabaseProvider
                 .getDatabaseForCollection(ArangoCollectionId.audio_items)
-                .fetchMany()) as unknown as DatabaseDTO<DTO<AudioItem>>[];
+                .fetchMany()) as unknown as ArangoDocumentForAggregateRoot<DTO<AudioItem>>[];
 
             const invalidDocuments = updatedAudioDocuments.filter(doesDeepAnyPropertyEqual('eng'));
 
@@ -127,7 +129,7 @@ describe(`UpdateEnglishLanguageCode`, () => {
 
             const updatedAudioDocuments = (await testDatabaseProvider
                 .getDatabaseForCollection(ArangoCollectionId.audio_items)
-                .fetchMany()) as unknown as DatabaseDTO<DTO<AudioItem>>[];
+                .fetchMany()) as unknown as ArangoDocumentForAggregateRoot<DTO<AudioItem>>[];
 
             const invalidDocuments = updatedAudioDocuments.filter(
                 doesDeepAnyPropertyEqual(LanguageCode.English)

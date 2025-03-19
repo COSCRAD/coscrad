@@ -13,9 +13,6 @@ import { isArangoEdgeCollectionCollectionID } from './collection-references/Aran
 import DatabaseAlreadyInitializedError from './errors/DatabaseAlreadyInitializedError';
 import DatabaseNotYetInitializedError from './errors/DatabaseNotYetInitializedError';
 
-// const UUID_SEQUENCE_NUMBER_OFFSET = 3000;
-
-// Alias for more clarity from the outside; TODO wrap `Database` with simpler API?
 export type ArangoConnection = Database;
 
 type Port = `${number}`;
@@ -93,13 +90,13 @@ export class ArangoConnectionProvider {
          * TODO[https://www.pivotaltracker.com/story/show/187960041]
          * Discover view collections dynamically.
          */
-        await this.#createCollectionIfNotExists('photograph__VIEWS');
+        await this.createCollectionIfNotExists('photograph__VIEWS');
 
-        await this.#createCollectionIfNotExists('term__VIEWS');
+        await this.createCollectionIfNotExists('term__VIEWS');
 
-        await this.#createCollectionIfNotExists('audioItem__VIEWS');
+        await this.createCollectionIfNotExists('audioItem__VIEWS');
 
-        await this.#createCollectionIfNotExists('vocabularyList__VIEWS');
+        await this.createCollectionIfNotExists('vocabularyList__VIEWS');
 
         this.isInitialized = true;
     }
@@ -163,11 +160,11 @@ export class ArangoConnectionProvider {
         await Promise.all(
             getAllArangoCollectionIDs()
                 .concat('games' as ArangoCollectionId)
-                .map((collectionName) => this.#createCollectionIfNotExists(collectionName))
+                .map((collectionName) => this.createCollectionIfNotExists(collectionName))
         );
     }
 
-    async #createCollectionIfNotExists(collectionName: string): Promise<void> {
+    async createCollectionIfNotExists(collectionName: string): Promise<void> {
         const doesCollectionExist = await this.#doesCollectionExist(collectionName);
 
         if (doesCollectionExist) return;

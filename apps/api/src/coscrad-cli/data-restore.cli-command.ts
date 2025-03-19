@@ -1,6 +1,10 @@
 import { Inject } from '@nestjs/common';
+import { readFileSync } from 'fs';
+import { InternalError } from '../lib/errors/InternalError';
+import { ArangoQueryRunner } from '../persistence/database/arango-query-runner';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
-import { DataImporter } from '../persistence/repositories/data-importer';
+import { ArangoDataExporter } from '../persistence/repositories/arango-data-exporter';
+import { InMemoryDatabaseSnapshot } from '../test-data/utilities';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
 
@@ -9,7 +13,7 @@ import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
     description: 'restores the database state from a snapshot file',
 })
 export class DomainRestoreCliCommand extends CliCommandRunner {
-    private readonly dataImporter: DataImporter;
+    private readonly dataExporter: ArangoDataExporter;
 
     constructor(
         databaseProvider: ArangoDatabaseProvider,
@@ -17,11 +21,21 @@ export class DomainRestoreCliCommand extends CliCommandRunner {
     ) {
         super();
 
-        this.dataImporter = new DataImporter(databaseProvider, this.logger);
+        this.dataExporter = new ArangoDataExporter(new ArangoQueryRunner(databaseProvider));
     }
 
     async run(_passedParams: string[], { filepath }: { filepath: string }): Promise<void> {
-        return this.dataImporter.import({ filepath });
+        const parsedSnapshot = JSON.parse(
+            readFileSync(filepath, { encoding: 'utf-8' })
+        ) as InMemoryDatabaseSnapshot;
+
+        await this.dataExporter.restoreFromSnapshot(parsedSnapshot).catch((e) => {
+            const error = new InternalError(`Data exporter failed to restore data.`, [e]);
+
+            this.logger.log(error.toString());
+
+            throw error;
+        });
     }
 
     @CliCommandOption({
