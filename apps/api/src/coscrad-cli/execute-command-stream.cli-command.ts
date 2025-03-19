@@ -176,7 +176,7 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
             dataFile: commandFsasFromDataFile,
         }: { name: CommandFsaWithMeta[]; dataFile: CommandFsaWithMeta[] }
     ): Promise<void> {
-        console.time('command-performance');
+        // console.time('command-performance');
 
         if (commandFsasFromDataFile && commandFsasFromFixture) {
             const msg = `You must only specify one of [name, data-file]`;
