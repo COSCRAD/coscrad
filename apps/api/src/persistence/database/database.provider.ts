@@ -14,10 +14,12 @@ export class ArangoDatabaseProvider {
         this.databaseConnection = arangoConnectionProvider.getConnection();
     }
 
+    async collections() {
+        return this.databaseConnection.collections();
+    }
+
     getDBInstance = (): ArangoDatabase => {
-        if (!this.arangoInstance)
-            // TODO inject this in the constructor
-            this.arangoInstance = new ArangoDatabase(this.databaseConnection);
+        if (!this.arangoInstance) this.arangoInstance = new ArangoDatabase(this.databaseConnection);
 
         return this.arangoInstance;
     };
@@ -44,6 +46,22 @@ export class ArangoDatabaseProvider {
 
         await Promise.all(
             viewCollections.map((collectionName) =>
+                this.getDatabaseForCollection(collectionName).clear()
+            )
+        );
+    };
+
+    /**
+     * This is a test helper. It will throw if you attempt to call it outside
+     * of a testing environment.
+     */
+    clearAll = async (): Promise<void> => {
+        const collections = (await this.databaseConnection.collections(true)).map(
+            (collection) => collection.name
+        );
+
+        await Promise.all(
+            collections.map((collectionName) =>
                 this.getDatabaseForCollection(collectionName).clear()
             )
         );

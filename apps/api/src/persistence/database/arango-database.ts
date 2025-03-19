@@ -1,3 +1,4 @@
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Database } from 'arangojs';
 import { aql, AqlQuery } from 'arangojs/aql';
 import { isArangoDatabase } from 'arangojs/database';
@@ -9,8 +10,10 @@ import { HasAggregateId } from '../../domain/types/HasAggregateId';
 import { InternalError } from '../../lib/errors/InternalError';
 import { Maybe } from '../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
+import { DatabaseCollectionSnapshot } from '../../test-data/utilities';
+import { ArangoDatabaseForCollection } from './arango-database-for-collection';
 import buildArangoDocumentHandle from './utilities/buildArangoDocumentHandle';
-import { DatabaseDTO } from './utilities/mapEntityDTOToDatabaseDocument';
+import { ArangoDocumentForAggregateRoot } from './utilities/mapEntityDTOToDatabaseDocument';
 
 type ArangoDTO<T> = T & {
     _key: string;
@@ -43,7 +46,7 @@ export class ArangoDatabase {
         return this.db.name;
     }
 
-    fetchById = async <TDatabaseDTO extends DatabaseDTO<HasAggregateId>>(
+    fetchById = async <TDatabaseDTO extends ArangoDocumentForAggregateRoot<HasAggregateId>>(
         id: string,
         collectionName: string
     ): Promise<Maybe<TDatabaseDTO>> => {
@@ -124,6 +127,84 @@ export class ArangoDatabase {
         const result = await cursor.all();
 
         return result;
+    };
+
+    export = async (collectionName: string): Promise<Maybe<DatabaseCollectionSnapshot>> => {
+        const collection = this.db.collection(collectionName);
+
+        if (!collection.exists()) {
+            return NotFound;
+        }
+
+        const checksumResult = await collection.checksum({
+            withRevisions: false,
+            withData: true,
+        });
+
+        const { checksum } = checksumResult;
+
+        const documents = await this.fetchMany(collectionName);
+
+        return {
+            checksum,
+            documents,
+        };
+    };
+
+    import = async (
+        collectionName: string,
+        documents: unknown[],
+        type: 'edge' | 'document',
+        checksumFromPreviousExport?: string
+    ) => {
+        const collection = this.db.collection(collectionName);
+
+        const doesCollectionExist = await collection.exists();
+
+        // Do we want a flag to enable this behaviour?
+        if (!doesCollectionExist) {
+            if (type === 'document') {
+                await this.db.createCollection(collectionName);
+            }
+
+            if (type === 'edge') {
+                await this.db.createEdgeCollection(collectionName);
+            }
+
+            throw new InternalError(
+                `Failed to create missing collection. Invalid Arango collection type: ${type}`
+            );
+        }
+
+        const { count: currentCollectionSize } = await collection.count();
+
+        if (currentCollectionSize !== 0) {
+            throw new InternalError(
+                `You can only import to an empty collection. Collection: ${collectionName} has ${currentCollectionSize} documents.`
+            );
+        }
+
+        await collection.import(documents, {});
+
+        const _updated = await new ArangoDatabaseForCollection(
+            new ArangoDatabase(this.db),
+            collection.name
+        ).fetchMany();
+
+        const { checksum: checksumAfterImport } = await collection.checksum({
+            withRevisions: false,
+            withData: true,
+        });
+
+        if (
+            !isNonEmptyString(checksumAfterImport) ||
+            checksumAfterImport !== checksumFromPreviousExport
+        ) {
+            throw new InternalError(
+                `Failed to import data to collection: ${collectionName}. Checksums do not match. Export: ${checksumFromPreviousExport}, post-import: ${checksumAfterImport}`,
+                []
+            );
+        }
     };
 
     // TODO renamme this method to `count`

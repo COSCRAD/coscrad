@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ArangoDataExporter dumpSnapshot should write all documents for all collections 1`] = `
+[
+  {
+    "_id": "docs/123",
+    "_key": "123",
+    "name": "bobby",
+  },
+  {
+    "_id": "docs/124",
+    "_key": "124",
+    "name": "billy",
+  },
+  {
+    "_id": "docs/125",
+    "_key": "125",
+    "name": "ŵŝẑʔɨ’",
+  },
+]
+`;
+
+exports[`ArangoDataExporter dumpSnapshot should write all documents for all collections 2`] = `
+[
+  {
+    "_id": "edges/333",
+    "_key": "333",
+  },
+  {
+    "_id": "edges/334",
+    "_key": "334",
+  },
+]
+`;

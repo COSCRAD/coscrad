@@ -16,7 +16,7 @@ import { ArangoCollectionId } from '../../database/collection-references/ArangoC
 import { ArangoDatabaseProvider } from '../../database/database.provider';
 import mapEntityDTOToDatabaseDTO, {
     ArangoDatabaseDocument,
-    DatabaseDTO,
+    ArangoDocumentForAggregateRoot,
 } from '../../database/utilities/mapEntityDTOToDatabaseDocument';
 import TestRepositoryProvider from '../../repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -57,7 +57,7 @@ const termWithNoTextInLanguage = {
 };
 
 // @ts-expect-error fix me
-const oldTermDocuments: DatabaseDTO<OldTermDto>[] = Array(10)
+const oldTermDocuments: ArangoDocumentForAggregateRoot<OldTermDto>[] = Array(10)
     .fill(null)
     .map((_, index) => ({
         ...dummyTermDtoWithoutNewProperty,

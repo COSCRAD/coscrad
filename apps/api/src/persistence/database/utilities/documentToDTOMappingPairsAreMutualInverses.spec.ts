@@ -19,7 +19,9 @@ import { ArangoEdgeDocument } from '../types/ArangoEdgeDocument';
 import mapArangoEdgeDocumentToEdgeConnectionDTO from './mapArangoEdgeDocumentToEdgeConnectionDTO';
 import mapDatabaseDTOToAggregateDTO from './mapDatabaseDocumentToAggregateDTO';
 import mapEdgeConnectionDTOToArangoEdgeDocument from './mapEdgeConnectionDTOToArangoEdgeDocument';
-import mapEntityDTOToDatabaseDTO, { DatabaseDTO } from './mapEntityDTOToDatabaseDocument';
+import mapEntityDTOToDatabaseDTO, {
+    ArangoDocumentForAggregateRoot,
+} from './mapEntityDTOToDatabaseDocument';
 
 type TestCase<TInput, UOutput> = {
     description: string;
@@ -80,7 +82,10 @@ const edgeDocumentToDTOTestCase: TestCase<ArangoEdgeDocument, DTO<EdgeConnection
     outputs: edgeConnections,
 };
 
-const resourceDocumentToDTOTestCase: TestCase<DatabaseDTO, DTO<HasAggregateId>> = {
+const resourceDocumentToDTOTestCase: TestCase<
+    ArangoDocumentForAggregateRoot,
+    DTO<HasAggregateId>
+> = {
     description: 'when mapping an Arango resource document to a Resource DTO',
     forwardLabel: 'document => DTO',
     reverseLabel: 'DTO => document',
