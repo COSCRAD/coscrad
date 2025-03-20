@@ -1,12 +1,12 @@
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { ArrowBackIosNew } from '@mui/icons-material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import {
     Box,
+    Button,
     Checkbox,
     FormControl,
     Grid,
-    IconButton,
     InputLabel,
     TableContainer as MUITableContainer,
     MenuItem,
@@ -154,11 +154,51 @@ export const IndexTable = <T,>({
      * instead a mobile list view, for example, without rewriting the filtering
      * and pagination logic.
      */
+
+    const tableStyles = {
+        width: '100%',
+        '@media (max-width: 350px)': {
+            fontSize: '10px',
+        },
+    };
+
+    const pageIndicatorStyles = {
+        border: '1px solid #c7c5b5 ',
+        minWidth: 34,
+        height: 34,
+        borderRadius: 1,
+        m: 0.5,
+        background: '#ffff',
+        fontWeight: 600,
+        alignContent: 'center',
+        textAlign: 'center',
+    };
+
+    const backButtonStyles = {
+        pl: 1,
+        pr: 2,
+        background: '#ffff',
+        textTransform: 'none',
+        fontWeight: 600,
+        borderColor: '#c7c5b5',
+        color: 'unset',
+    };
+
+    const nextButtonStyles = {
+        pl: 2,
+        pr: 1,
+        background: '#ffff',
+        textTransform: 'none',
+        fontWeight: 600,
+        borderColor: '#c7c5b5',
+        color: 'unset',
+    };
+
     const table =
         paginatedData.length === 0 ? (
             <NotFoundPresenter />
         ) : (
-            <Box sx={{ width: '100%' }}>
+            <Box sx={tableStyles}>
                 <Paper>
                     <MUITableContainer>
                         <Table aria-labelledby="Resources Table" color="primary">
@@ -203,61 +243,91 @@ export const IndexTable = <T,>({
                             justifyItems: 'flex-end',
                         }}
                     >
-                        <Grid container justifyContent="flex-end" spacing={3}>
-                            <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
-                                <Typography component="span" sx={{ mr: 2 }}>
-                                    Rows per page:
-                                </Typography>
-                                <FormControl variant="standard" sx={{ m: 1 }}>
-                                    <Select
-                                        name="pageSize"
-                                        value={pageSize}
-                                        onChange={(changeEvent) => {
-                                            const {
-                                                target: { value },
-                                            } = changeEvent;
-
-                                            const newPageSize =
-                                                typeof value === 'string'
-                                                    ? Number.parseInt(value)
-                                                    : value;
-
-                                            setPageSize(newPageSize);
-                                        }}
+                        <Grid container justifyContent={'center'} sx={{ pt: 0.75 }} spacing={0}>
+                            <Box style={{ display: 'flex', paddingBottom: 2 }}>
+                                <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Button
+                                        variant="outlined"
+                                        sx={backButtonStyles}
+                                        onClick={() =>
+                                            setCurrentPageIndex(
+                                                cyclicDecrement(currentPageIndex, lastPageIndex + 1)
+                                            )
+                                        }
                                     >
-                                        {pageSizeOptions.map((pageSize) => (
-                                            <MenuItem key={pageSize} value={pageSize}>
-                                                {pageSize}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                            </Grid>
-                            <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
-                                Page: {currentPageIndex + 1}/{lastPageIndex + 1}
-                            </Grid>
-                            <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
-                                <IconButton
-                                    onClick={() =>
-                                        setCurrentPageIndex(
-                                            cyclicDecrement(currentPageIndex, lastPageIndex + 1)
-                                        )
-                                    }
+                                        <ArrowBackIosNew fontSize="small" sx={{ pr: 1 }} /> Back
+                                    </Button>
+                                </Grid>
+                                <Grid
+                                    item
+                                    sx={{ display: 'flex', alignItems: 'center', pr: 1, pl: 1 }}
                                 >
-                                    <ArrowBackIosIcon />
-                                </IconButton>
-                            </Grid>
-                            <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
-                                <IconButton
-                                    onClick={() =>
-                                        setCurrentPageIndex(
-                                            cyclicIncrement(currentPageIndex, lastPageIndex + 1)
-                                        )
-                                    }
+                                    Page <Box sx={pageIndicatorStyles}>{currentPageIndex + 1} </Box>{' '}
+                                    of {lastPageIndex + 1}
+                                </Grid>
+                                <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Button
+                                        variant="outlined"
+                                        sx={nextButtonStyles}
+                                        onClick={() =>
+                                            setCurrentPageIndex(
+                                                cyclicIncrement(currentPageIndex, lastPageIndex + 1)
+                                            )
+                                        }
+                                    >
+                                        Next
+                                        <ArrowForwardIosIcon fontSize="small" sx={{ pl: 1 }} />
+                                    </Button>
+                                </Grid>
+                            </Box>
+                        </Grid>
+                        <Grid
+                            item
+                            sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                margin: '0 auto',
+                                '@media (max-width: 350px)': {
+                                    fontSize: '10px',
+                                },
+                            }}
+                        >
+                            <Typography
+                                sx={{
+                                    '@media (max-width: 350px)': {
+                                        fontSize: '10px',
+                                    },
+                                }}
+                            >
+                                Rows per page
+                            </Typography>
+                            <FormControl variant="standard" sx={{ m: 1 }}>
+                                <Select
+                                    name="pageSize"
+                                    variant="outlined"
+                                    size="small"
+                                    sx={{ bgcolor: '#ffff' }}
+                                    value={pageSize}
+                                    onChange={(changeEvent) => {
+                                        const {
+                                            target: { value },
+                                        } = changeEvent;
+
+                                        const newPageSize =
+                                            typeof value === 'string'
+                                                ? Number.parseInt(value)
+                                                : value;
+
+                                        setPageSize(newPageSize);
+                                    }}
                                 >
-                                    <ArrowForwardIosIcon />
-                                </IconButton>
-                            </Grid>
+                                    {pageSizeOptions.map((pageSize) => (
+                                        <MenuItem key={pageSize} value={pageSize}>
+                                            {pageSize}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         </Grid>
                     </Box>
                 </Paper>
