@@ -1,0 +1,132 @@
+import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import {
+    buildDummyAggregateCompositeIdentifier,
+    buildDummyUuid,
+} from '../../../../support/utilities';
+
+const ID_OFFSET = 80;
+
+const dummyPhotographTitle = 'Photograph of historic pithouse';
+
+const dummyPhotographer = 'Jennifer Stump';
+
+const aggregateCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
+    AggregateType.photograph,
+    2
+);
+
+const { id: photographId } = aggregateCompositeIdentifier;
+
+const validPhotographIndexRoute = `/Resources/Photographs/`;
+
+const contributors = {
+    creator: {
+        id: buildDummyUuid(112),
+        firstName: 'Jamethon',
+    },
+};
+
+describe('Photograph index query flow', () => {
+    const seedDummyPhotograph = ({
+        id,
+        title,
+        languageCodeForTitle,
+        mediaItemId,
+        photographer,
+        heightPx,
+        widthPx,
+    }: {
+        id: string;
+        title: string;
+        languageCodeForTitle: LanguageCode;
+        mediaItemId: string;
+        photographer: string;
+        heightPx: number;
+        widthPx: number;
+    }) => {
+        const aggregateCompositeIdentifier = {
+            type: AggregateType.photograph,
+            id,
+        };
+
+        cy.seedDataWithCommand(`CREATE_PHOTOGRAPH`, {
+            aggregateCompositeIdentifier,
+            title,
+            languageCodeForTitle,
+            mediaItemId,
+            photographer,
+            heightPx,
+            widthPx,
+        });
+
+        cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+            aggregateCompositeIdentifier,
+        });
+    };
+
+    const seedManyPhotographsInLanguage = (
+        numberToBuild: number,
+        offSet: number,
+        languageCode: LanguageCode
+    ) => {
+        new Array(numberToBuild).fill('').forEach((_, index) =>
+            seedDummyPhotograph({
+                id: buildDummyUuid(offSet + index),
+                title: `Title of Photograph: ${index + offSet}`,
+                languageCodeForTitle: languageCode,
+                mediaItemId: buildDummyUuid(offSet + 12 + index),
+                photographer: dummyPhotographer,
+                heightPx: 800,
+                widthPx: 200,
+            })
+        );
+    };
+
+    before(() => {
+        cy.clearDatabase();
+
+        cy.seedTestUuids(200);
+
+        cy.seedDataWithCommand(`CREATE_CONTRIBUTOR`, {
+            aggregateCompositeIdentifier: {
+                type: AggregateType.contributor,
+                id: contributors.creator.id,
+            },
+            shortBio: 'This is a hard-working language champion indeed!',
+            firstName: contributors.creator.firstName,
+            // we don't bother with the last name
+        });
+
+        cy.seedDataWithCommand(`CREATE_PHOTOGRAPH`, {
+            aggregateCompositeIdentifier,
+            title: dummyPhotographTitle,
+            languageCodeForTitle: LanguageCode.English,
+        });
+
+        const NUMBER_OF_ENGLISH_PHOTOS = 10;
+
+        const NUMBER_OF_HAIDA_PHOTOS = 15;
+
+        seedManyPhotographsInLanguage(NUMBER_OF_ENGLISH_PHOTOS, ID_OFFSET, LanguageCode.English);
+
+        seedManyPhotographsInLanguage(NUMBER_OF_HAIDA_PHOTOS, ID_OFFSET, LanguageCode.Haida);
+    });
+
+    describe(`the index page`, () => {
+        beforeEach(() => {
+            cy.visit(validPhotographIndexRoute);
+        });
+
+        it(`should display the label "Photographs"`, () => {
+            cy.contains(dummyPhotographTitle);
+        });
+
+        it(`should have a link to the detail view for this photograph`, () => {
+            cy.get(`[href="/Resources/Photographs/${photographId}]`).click();
+
+            cy.contains(dummyPhotographTitle);
+
+            cy.location('pathname').should('contain', `/Resources/Photographs/${photographId}`);
+        });
+    });
+});
