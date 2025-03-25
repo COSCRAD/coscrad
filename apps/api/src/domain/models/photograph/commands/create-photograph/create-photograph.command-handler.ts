@@ -19,7 +19,7 @@ import { PhotographCreated } from './photograph-created.event';
 export class CreatePhotographCommandHandler extends BaseCreateCommandHandler<Photograph> {
     protected createNewInstance({
         aggregateCompositeIdentifier: { id },
-        title: titleText,
+        title,
         languageCodeForTitle,
         mediaItemId,
         photographer,
@@ -29,7 +29,7 @@ export class CreatePhotographCommandHandler extends BaseCreateCommandHandler<Pho
         const newInstance = new Photograph({
             type: AggregateType.photograph,
             id,
-            title: buildMultilingualTextWithSingleItem(titleText, languageCodeForTitle),
+            title: buildMultilingualTextWithSingleItem(title, languageCodeForTitle),
             mediaItemId,
             dimensions: new MediaItemDimensions({
                 heightPx,
