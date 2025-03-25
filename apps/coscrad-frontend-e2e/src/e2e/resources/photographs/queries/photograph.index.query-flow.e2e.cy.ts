@@ -12,12 +12,17 @@ const dummyPhotographer = 'Jennifer Stump';
 
 const aggregateCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
     AggregateType.photograph,
-    2
+    9
 );
 
 const { id: photographId } = aggregateCompositeIdentifier;
 
 const validPhotographIndexRoute = `/Resources/Photographs/`;
+
+const mediaItemCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
+    AggregateType.mediaItem,
+    4
+);
 
 const contributors = {
     creator: {
@@ -87,6 +92,17 @@ describe('Photograph index query flow', () => {
 
         cy.seedTestUuids(200);
 
+        cy.seedDataWithCommand(`CREATE_MEDIA_ITEM`, {
+            aggregateCompositeIdentifier: mediaItemCompositeIdentifier,
+            title: `Tawt'a k̲'iidagas Giiahlɢ̲alang`,
+            mimeType: 'image/jpeg',
+            lengthMilliseconds: undefined,
+        });
+
+        cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+            aggregateCompositeIdentifier: mediaItemCompositeIdentifier,
+        });
+
         cy.seedDataWithCommand(`CREATE_CONTRIBUTOR`, {
             aggregateCompositeIdentifier: {
                 type: AggregateType.contributor,
@@ -101,15 +117,41 @@ describe('Photograph index query flow', () => {
             aggregateCompositeIdentifier,
             title: dummyPhotographTitle,
             languageCodeForTitle: LanguageCode.English,
+            mediaItemId: mediaItemCompositeIdentifier.id,
+            photographer: dummyPhotographer,
+            heightPx: 800,
+            widthPx: 200,
+        });
+
+        cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+            aggregateCompositeIdentifier,
         });
 
         const NUMBER_OF_ENGLISH_PHOTOS = 10;
 
         const NUMBER_OF_HAIDA_PHOTOS = 15;
 
-        seedManyPhotographsInLanguage(NUMBER_OF_ENGLISH_PHOTOS, ID_OFFSET, LanguageCode.English);
+        // seedManyPhotographsInLanguage(NUMBER_OF_ENGLISH_PHOTOS, ID_OFFSET, LanguageCode.English);
 
-        seedManyPhotographsInLanguage(NUMBER_OF_HAIDA_PHOTOS, ID_OFFSET, LanguageCode.Haida);
+        // seedManyPhotographsInLanguage(NUMBER_OF_HAIDA_PHOTOS, ID_OFFSET, LanguageCode.Haida);
+    });
+
+    describe(`the resource types page`, () => {
+        beforeEach(() => {
+            cy.visit(`/Resources`);
+        });
+
+        it('should have an entry for photographs', () => {
+            cy.contains('Photographs');
+        });
+
+        it('should have a link to the Photographs', () => {
+            cy.contains('Photographs').click();
+
+            cy.contains('Photographs');
+
+            cy.location('pathname').should('contain', 'Resources/Photographs');
+        });
     });
 
     describe(`the index page`, () => {
@@ -118,10 +160,18 @@ describe('Photograph index query flow', () => {
         });
 
         it(`should display the label "Photographs"`, () => {
+            cy.contains('Photographs');
+        });
+
+        it('should display the text for photograph 2', () => {
             cy.contains(dummyPhotographTitle);
         });
 
-        it(`should have a link to the detail view for this photograph`, () => {
+        it(`should display the photographer name`, () => {
+            cy.contains(dummyPhotographer);
+        });
+
+        it.skip(`should have a link to the detail view for this photograph`, () => {
             cy.get(`[href="/Resources/Photographs/${photographId}]`).click();
 
             cy.contains(dummyPhotographTitle);

@@ -1,5 +1,11 @@
 import { AggregateType, IMultilingualText } from '@coscrad/api-interfaces';
-import { BooleanDataType, NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
+import {
+    BooleanDataType,
+    NestedDataType,
+    NonEmptyString,
+    PositiveInteger,
+    UUID,
+} from '@coscrad/data-types';
 import { isBoolean, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { ApiProperty } from '@nestjs/swagger';
 import { DetailScopedCommandWriteContext } from '../../../../app/controllers/command/services/command-info-service';
@@ -24,6 +30,8 @@ import { PhotographCreated } from '../commands';
         name: buildMultilingualTextWithSingleItem('nice photo'),
         id: buildDummyUuid(1),
         photographer: 'Jane Deer',
+        heightPx: 600,
+        widthPx: 800,
         tags: [],
         mediaItemId: buildDummyUuid(55),
         actions: [],
@@ -58,6 +66,20 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
         description: 'the full name of the photographer responsible for this photograph',
     })
     public photographer: string;
+
+    @ApiProperty()
+    @PositiveInteger({
+        label: 'Image Height PX',
+        description: 'Height of the image in pixels',
+    })
+    public heightPx: number;
+
+    @ApiProperty()
+    @PositiveInteger({
+        label: 'Image Height PX',
+        description: 'Width of the image in pixels',
+    })
+    public widthPx: number;
 
     @ApiProperty({
         type: TagViewModel,
@@ -128,6 +150,9 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
         payload: {
             title,
             languageCodeForTitle,
+            photographer,
+            heightPx,
+            widthPx,
             aggregateCompositeIdentifier: { id: photographId },
         },
         meta: { contributorIds },
@@ -137,6 +162,12 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
         photograph.name = buildMultilingualTextWithSingleItem(title, languageCodeForTitle);
 
         photograph.id = photographId;
+
+        photograph.photographer = photographer;
+
+        photograph.heightPx = heightPx;
+
+        photograph.widthPx = widthPx;
 
         photograph.actions = [];
 
@@ -183,6 +214,9 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
             contributions,
             name,
             id,
+            photographer,
+            heightPx,
+            widthPx,
             actions,
             accessControlList,
             mediaItemId,
@@ -195,6 +229,12 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
         photograph.name = name;
 
         photograph.id = id;
+
+        photograph.photographer = photographer;
+
+        photograph.heightPx = heightPx;
+
+        photograph.widthPx = widthPx;
 
         photograph.actions = actions;
 

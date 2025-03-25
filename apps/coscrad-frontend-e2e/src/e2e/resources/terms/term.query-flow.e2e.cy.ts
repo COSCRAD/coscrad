@@ -27,13 +27,13 @@ describe(`Term index-to-detail flow`, () => {
         });
     });
 
-    describe(`the resource menu`, () => {
+    describe(`the resource types page`, () => {
         beforeEach(() => {
             cy.visit(`/Resources`);
         });
 
         it('should have an entry for terms', () => {
-            cy.contains('terms');
+            cy.contains('Terms');
         });
 
         it('should have a link to the terms', () => {
