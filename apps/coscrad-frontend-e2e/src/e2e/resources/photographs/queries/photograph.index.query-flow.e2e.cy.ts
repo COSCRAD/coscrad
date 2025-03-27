@@ -96,7 +96,8 @@ describe('Photograph index query flow', () => {
             aggregateCompositeIdentifier: mediaItemCompositeIdentifier,
             title: `Tawt'a k̲'iidagas Giiahlɢ̲alang`,
             mimeType: 'image/jpeg',
-            lengthMilliseconds: undefined,
+            // Override default value to "remove" property from fsa for image media item
+            lengthMilliseconds: null,
         });
 
         cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
