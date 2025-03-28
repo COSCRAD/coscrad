@@ -164,16 +164,14 @@ describe('Photograph index query flow', () => {
             cy.contains('Photographs');
         });
 
-        it('should display the text for photograph 2', () => {
+        it('should display the title and photographer for photograph 2', () => {
             cy.contains(dummyPhotographTitle);
-        });
 
-        it(`should display the photographer name`, () => {
             cy.contains(dummyPhotographer);
         });
 
-        it.skip(`should have a link to the detail view for this photograph`, () => {
-            cy.get(`[href="/Resources/Photographs/${photographId}]`).click();
+        it(`should have a link to the detail view for this photograph`, () => {
+            cy.getByDataAttribute(`${photographId}`).click();
 
             cy.contains(dummyPhotographTitle);
 
