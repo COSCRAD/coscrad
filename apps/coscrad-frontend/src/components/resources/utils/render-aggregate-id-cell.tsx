@@ -3,5 +3,7 @@ import { Link } from 'react-router-dom';
 import { CellRenderer } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types';
 
 export const renderAggregateIdCell: CellRenderer<HasId> = ({ id }: HasId) => (
-    <Link to={id}>VIEW</Link>
+    <Link data-testid={id} to={id}>
+        VIEW
+    </Link>
 );
