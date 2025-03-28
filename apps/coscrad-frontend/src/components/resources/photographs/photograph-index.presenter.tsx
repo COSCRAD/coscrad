@@ -3,7 +3,9 @@ import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import { PhotographIndexState } from '../../../store/slices/resources/photographs/types';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
+import { Matchers } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/filter-table-data';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
+import { doesSomeMultilingualTextItemInclude } from '../utils/query-matchers';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { renderMultilingualTextCell } from '../utils/render-multilingual-text-cell';
 import { renderPhotographThumbnailLinkCell } from '../utils/render-photograph-thumbnail-link-cell';
@@ -26,6 +28,10 @@ export const PhotographIndexPresenter = ({ entities: photographs }: PhotographIn
             renderMultilingualTextCell(name, defaultLanguageCode),
     };
 
+    const matchers: Matchers<IPhotographViewModel> = {
+        name: doesSomeMultilingualTextItemInclude,
+    };
+
     return (
         <IndexTable
             type={AggregateType.photograph}
@@ -34,7 +40,8 @@ export const PhotographIndexPresenter = ({ entities: photographs }: PhotographIn
             cellRenderersDefinition={cellRenderersDefinition}
             // This should be a resource label from resource info
             heading={'Photographs'}
-            filterableProperties={['photographer']}
+            filterableProperties={['name', 'photographer']}
+            matchers={matchers}
         />
     );
 };

@@ -3,6 +3,6 @@ import { AggregateId } from '../../../types/AggregateId';
 
 export default class UuidAlreadyInUseError extends InternalError {
     constructor(invalidId: AggregateId) {
-        super(`The ID: ${invalidId} is not available for use`);
+        super(`The UUID: ${invalidId} is not available because it is already in use`);
     }
 }

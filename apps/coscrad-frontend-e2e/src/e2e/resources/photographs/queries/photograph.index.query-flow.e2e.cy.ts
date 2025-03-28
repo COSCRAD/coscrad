@@ -1,4 +1,4 @@
-import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode, MIMEType } from '@coscrad/api-interfaces';
 import {
     buildDummyAggregateCompositeIdentifier,
     buildDummyUuid,
@@ -32,6 +32,32 @@ const contributors = {
 };
 
 describe('Photograph index query flow', () => {
+    const seedDummyMediaItem = ({
+        id,
+        title,
+        mimeType,
+    }: {
+        id: string;
+        title: string;
+        mimeType: MIMEType;
+    }) => {
+        const aggregateCompositeIdentifier = {
+            type: AggregateType.mediaItem,
+            id,
+        };
+
+        cy.seedDataWithCommand(`CREATE_MEDIA_ITEM`, {
+            aggregateCompositeIdentifier,
+            title: title,
+            mimeType: mimeType,
+            // Override default value to "remove" property from fsa for image media item
+            lengthMilliseconds: null,
+        });
+        cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+            aggregateCompositeIdentifier,
+        });
+    };
+
     const seedDummyPhotograph = ({
         id,
         title,
@@ -69,28 +95,38 @@ describe('Photograph index query flow', () => {
         });
     };
 
-    const seedManyPhotographsInLanguage = (
+    const seedManyPhotographsInLanguageWithMediaItems = (
         numberToBuild: number,
         offSet: number,
         languageCode: LanguageCode
     ) => {
-        new Array(numberToBuild).fill('').forEach((_, index) =>
+        new Array(numberToBuild).fill('').forEach((_, index) => {
+            const mediaItemIndex = numberToBuild + index + offSet;
+
+            const mediaItemCompositeIdentifier = buildDummyUuid(mediaItemIndex);
+
+            seedDummyMediaItem({
+                id: mediaItemCompositeIdentifier,
+                title: `Title of Media Item: ${index + offSet}`,
+                mimeType: MIMEType.jpg,
+            });
+
             seedDummyPhotograph({
                 id: buildDummyUuid(offSet + index),
                 title: `Title of Photograph: ${index + offSet}`,
                 languageCodeForTitle: languageCode,
-                mediaItemId: buildDummyUuid(offSet + 12 + index),
+                mediaItemId: mediaItemCompositeIdentifier,
                 photographer: dummyPhotographer,
                 heightPx: 800,
                 widthPx: 200,
-            })
-        );
+            });
+        });
     };
 
     before(() => {
         cy.clearDatabase();
 
-        cy.seedTestUuids(200);
+        cy.seedTestUuids(600);
 
         cy.seedDataWithCommand(`CREATE_MEDIA_ITEM`, {
             aggregateCompositeIdentifier: mediaItemCompositeIdentifier,
@@ -165,7 +201,7 @@ describe('Photograph index query flow', () => {
                 buildDummyAggregateCompositeIdentifier(AggregateType.mediaItem, 17);
 
             const photographForFilterTestCompositeIdentifier =
-                buildDummyAggregateCompositeIdentifier(AggregateType.mediaItem, 17);
+                buildDummyAggregateCompositeIdentifier(AggregateType.photograph, 23);
 
             const photoTitleWithQDash = 'Q-Photo Haida';
 
@@ -187,7 +223,7 @@ describe('Photograph index query flow', () => {
                 });
 
                 cy.seedDataWithCommand(`CREATE_PHOTOGRAPH`, {
-                    photographForFilterTestCompositeIdentifier,
+                    aggregateCompositeIdentifier: photographForFilterTestCompositeIdentifier,
                     title: photoTitleWithQDash,
                     languageCodeForTitle: LanguageCode.Haida,
                     mediaItemId: mediaItemForFilterTestCompositeIdentifier.id,
@@ -197,24 +233,24 @@ describe('Photograph index query flow', () => {
                 });
 
                 cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
-                    photographForFilterTestCompositeIdentifier,
+                    aggregateCompositeIdentifier: photographForFilterTestCompositeIdentifier,
                 });
 
-                // const NUMBER_OF_ENGLISH_PHOTOS = 10;
+                const NUMBER_OF_ENGLISH_PHOTOS = 10;
 
-                // const NUMBER_OF_HAIDA_PHOTOS = 15;
+                const NUMBER_OF_HAIDA_PHOTOS = 15;
 
-                // seedManyPhotographsInLanguage(
-                //     NUMBER_OF_ENGLISH_PHOTOS,
-                //     ID_OFFSET,
-                //     LanguageCode.English
-                // );
+                seedManyPhotographsInLanguageWithMediaItems(
+                    NUMBER_OF_ENGLISH_PHOTOS,
+                    ID_OFFSET,
+                    LanguageCode.English
+                );
 
-                // seedManyPhotographsInLanguage(
-                //     NUMBER_OF_HAIDA_PHOTOS,
-                //     ID_OFFSET,
-                //     LanguageCode.Haida
-                // );
+                seedManyPhotographsInLanguageWithMediaItems(
+                    NUMBER_OF_HAIDA_PHOTOS,
+                    ID_OFFSET,
+                    LanguageCode.Haida
+                );
             });
 
             searchScopes.forEach((searchScope) => {
