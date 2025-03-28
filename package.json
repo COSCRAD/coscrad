@@ -151,7 +151,7 @@
         "cross-env": "^7.0.3",
         "css-loader": "^6.4.0",
         "cypress": "^12.8.1",
-        "detox": "^20.13.5",
+        "detox": "^20.36.2",
         "dotenv": "10.0.0",
         "eslint": "8.15.0",
         "eslint-config-prettier": "8.1.0",
