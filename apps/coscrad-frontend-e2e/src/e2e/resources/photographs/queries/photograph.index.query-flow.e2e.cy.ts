@@ -104,16 +104,6 @@ describe('Photograph index query flow', () => {
             aggregateCompositeIdentifier: mediaItemCompositeIdentifier,
         });
 
-        cy.seedDataWithCommand(`CREATE_CONTRIBUTOR`, {
-            aggregateCompositeIdentifier: {
-                type: AggregateType.contributor,
-                id: contributors.creator.id,
-            },
-            shortBio: 'This is a hard-working language champion indeed!',
-            firstName: contributors.creator.firstName,
-            // we don't bother with the last name
-        });
-
         cy.seedDataWithCommand(`CREATE_PHOTOGRAPH`, {
             aggregateCompositeIdentifier,
             title: dummyPhotographTitle,
@@ -127,14 +117,6 @@ describe('Photograph index query flow', () => {
         cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
             aggregateCompositeIdentifier,
         });
-
-        const NUMBER_OF_ENGLISH_PHOTOS = 10;
-
-        const NUMBER_OF_HAIDA_PHOTOS = 15;
-
-        // seedManyPhotographsInLanguage(NUMBER_OF_ENGLISH_PHOTOS, ID_OFFSET, LanguageCode.English);
-
-        // seedManyPhotographsInLanguage(NUMBER_OF_HAIDA_PHOTOS, ID_OFFSET, LanguageCode.Haida);
     });
 
     describe(`the resource types page`, () => {
@@ -155,7 +137,7 @@ describe('Photograph index query flow', () => {
         });
     });
 
-    describe(`the index page`, () => {
+    describe(`the photograph index page`, () => {
         beforeEach(() => {
             cy.visit(validPhotographIndexRoute);
         });
@@ -176,6 +158,92 @@ describe('Photograph index query flow', () => {
             cy.contains(dummyPhotographTitle);
 
             cy.location('pathname').should('contain', `/Resources/Photographs/${photographId}`);
+        });
+
+        describe(`the search filter`, () => {
+            const mediaItemForFilterTestCompositeIdentifier =
+                buildDummyAggregateCompositeIdentifier(AggregateType.mediaItem, 17);
+
+            const photographForFilterTestCompositeIdentifier =
+                buildDummyAggregateCompositeIdentifier(AggregateType.mediaItem, 17);
+
+            const photoTitleWithQDash = 'Q-Photo Haida';
+
+            const haidaPhotoTitleToFind = 'Q-';
+
+            const searchScopes = [`allProperties`, `name`];
+
+            before(() => {
+                cy.seedDataWithCommand(`CREATE_MEDIA_ITEM`, {
+                    aggregateCompositeIdentifier: mediaItemForFilterTestCompositeIdentifier,
+                    title: `Sg_iidllg_uu`,
+                    mimeType: 'image/jpeg',
+                    // Override default value to "remove" property from fsa for image media item
+                    lengthMilliseconds: null,
+                });
+
+                cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+                    aggregateCompositeIdentifier: mediaItemForFilterTestCompositeIdentifier,
+                });
+
+                cy.seedDataWithCommand(`CREATE_PHOTOGRAPH`, {
+                    photographForFilterTestCompositeIdentifier,
+                    title: photoTitleWithQDash,
+                    languageCodeForTitle: LanguageCode.Haida,
+                    mediaItemId: mediaItemForFilterTestCompositeIdentifier.id,
+                    photographer: dummyPhotographer,
+                    heightPx: 800,
+                    widthPx: 200,
+                });
+
+                cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+                    photographForFilterTestCompositeIdentifier,
+                });
+
+                // const NUMBER_OF_ENGLISH_PHOTOS = 10;
+
+                // const NUMBER_OF_HAIDA_PHOTOS = 15;
+
+                // seedManyPhotographsInLanguage(
+                //     NUMBER_OF_ENGLISH_PHOTOS,
+                //     ID_OFFSET,
+                //     LanguageCode.English
+                // );
+
+                // seedManyPhotographsInLanguage(
+                //     NUMBER_OF_HAIDA_PHOTOS,
+                //     ID_OFFSET,
+                //     LanguageCode.Haida
+                // );
+            });
+
+            searchScopes.forEach((searchScope) => {
+                describe(`when the search scope is: ${searchScope}`, () => {
+                    beforeEach(() => {
+                        cy.visit('/Resources/Photographs');
+
+                        cy.getByDataAttribute('select_index_search_scope').click();
+
+                        cy.get(`[data-value="${searchScope}"]`).click();
+                    });
+
+                    describe(`when the filter should return 1 result (based on default language Photograph title)`, () => {
+                        it(`should return the correct result`, () => {
+                            const searchTerms = haidaPhotoTitleToFind;
+
+                            cy.getByDataAttribute(`index_search_bar`).click();
+
+                            cy.getByDataAttribute('index_search_bar').type(searchTerms);
+
+                            cy.getLoading().should(`not.exist`);
+
+                            cy.contains(photoTitleWithQDash);
+
+                            cy.contains(dummyPhotographTitle).should('not.exist');
+                        });
+                    });
+                });
+            });
         });
     });
 });
