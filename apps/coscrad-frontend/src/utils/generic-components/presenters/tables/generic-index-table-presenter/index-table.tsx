@@ -205,6 +205,12 @@ export const IndexTable = <T,>({
                     >
                         <Grid container justifyContent="flex-end" spacing={3}>
                             <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
+                                <Typography component="span" sx={{ mr: 2, mt: 1 }}>
+                                    Total Records: {tableData.length} &nbsp; Filtered Records:{' '}
+                                    {filteredTableData.length}
+                                </Typography>
+                            </Grid>
+                            <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
                                 <Typography component="span" sx={{ mr: 2 }}>
                                     Rows per page:
                                 </Typography>

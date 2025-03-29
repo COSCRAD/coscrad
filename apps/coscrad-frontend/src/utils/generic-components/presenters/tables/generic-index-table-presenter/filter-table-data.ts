@@ -36,8 +36,6 @@ export const filterTableData = <T>(
 
             const propertyValue = row[propertyKey];
 
-            console.log({ propertyValue });
-
             return doesValueMatchSearchTerm(propertyValue, searchTerm);
         })
     );
