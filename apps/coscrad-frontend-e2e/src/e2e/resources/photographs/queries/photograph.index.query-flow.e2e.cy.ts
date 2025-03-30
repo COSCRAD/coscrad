@@ -98,11 +98,11 @@ describe('Photograph index query flow', () => {
     const seedManyPhotographsInLanguageWithMediaItems = (
         numberToBuild: number,
         offSet: number,
-        totalNumberForThisTest: number,
+        mediaItemOffset: number,
         languageCode: LanguageCode
     ) => {
         new Array(numberToBuild).fill('').forEach((_, index) => {
-            const mediaItemIndex = totalNumberForThisTest + index + offSet;
+            const mediaItemIndex = mediaItemOffset + offSet + index;
 
             const mediaItemCompositeIdentifier = buildDummyUuid(mediaItemIndex);
 
@@ -241,20 +241,19 @@ describe('Photograph index query flow', () => {
 
                 const NUMBER_OF_HAIDA_PHOTOS = 15;
 
-                const TOTAL_NUMBER_OF_PHOTOS_FOR_THIS_TEST =
-                    NUMBER_OF_ENGLISH_PHOTOS + NUMBER_OF_HAIDA_PHOTOS;
+                const MEDIA_ITEM_OFFSET = NUMBER_OF_ENGLISH_PHOTOS + NUMBER_OF_HAIDA_PHOTOS;
 
                 seedManyPhotographsInLanguageWithMediaItems(
                     NUMBER_OF_ENGLISH_PHOTOS,
                     ID_OFFSET,
-                    TOTAL_NUMBER_OF_PHOTOS_FOR_THIS_TEST,
+                    MEDIA_ITEM_OFFSET,
                     LanguageCode.English
                 );
 
                 seedManyPhotographsInLanguageWithMediaItems(
                     NUMBER_OF_HAIDA_PHOTOS,
                     ID_OFFSET + NUMBER_OF_ENGLISH_PHOTOS,
-                    TOTAL_NUMBER_OF_PHOTOS_FOR_THIS_TEST + NUMBER_OF_ENGLISH_PHOTOS,
+                    MEDIA_ITEM_OFFSET + NUMBER_OF_ENGLISH_PHOTOS,
                     LanguageCode.Haida
                 );
             });
@@ -282,6 +281,22 @@ describe('Photograph index query flow', () => {
                             cy.contains(photoTitleWithQDash);
 
                             cy.contains(dummyPhotographTitle).should('not.exist');
+                        });
+                    });
+
+                    describe(`when the filter should return no results`, () => {
+                        it(`should show no results`, () => {
+                            const searchTerms = `BBQ Chicken`;
+
+                            cy.getByDataAttribute(`index_search_bar`).click();
+
+                            cy.getByDataAttribute(`index_search_bar`).type(searchTerms);
+
+                            cy.getLoading().should(`not.exist`);
+
+                            cy.contains(dummyPhotographTitle).should(`not.exist`);
+
+                            cy.getByDataAttribute(`not-found`);
                         });
                     });
                 });
