@@ -32,6 +32,7 @@ const contributors = {
 };
 
 describe('Photograph index query flow', () => {
+    // Make this a shared utility?
     const seedDummyMediaItem = ({
         id,
         title,
@@ -53,6 +54,7 @@ describe('Photograph index query flow', () => {
             // Override default value to "remove" property from fsa for image media item
             lengthMilliseconds: null,
         });
+
         cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
             aggregateCompositeIdentifier,
         });
