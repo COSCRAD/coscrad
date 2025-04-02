@@ -43,6 +43,7 @@ export class ArangoEventRepository implements IEventRepository {
         const aqlQuery = `
             FOR ${docRef} in events
             ${this.buildAggregateFilter(docRef, aggregateContextIdentifier)}
+            SORT e.meta.dateCreated
             return e
         `;
 
