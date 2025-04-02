@@ -1,11 +1,5 @@
 import { AggregateType, IMultilingualText } from '@coscrad/api-interfaces';
-import {
-    BooleanDataType,
-    NestedDataType,
-    NonEmptyString,
-    PositiveInteger,
-    UUID,
-} from '@coscrad/data-types';
+import { BooleanDataType, NestedDataType, PositiveInteger, UUID } from '@coscrad/data-types';
 import { isBoolean, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { ApiProperty } from '@nestjs/swagger';
 import { DetailScopedCommandWriteContext } from '../../../../app/controllers/command/services/command-info-service';
@@ -29,7 +23,6 @@ import { PhotographCreated } from '../commands';
     example: {
         name: buildMultilingualTextWithSingleItem('nice photo'),
         id: buildDummyUuid(1),
-        photographer: 'Jane Deer',
         heightPx: 600,
         widthPx: 800,
         tags: [],
@@ -59,13 +52,6 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
         description: 'System identifier for this photograph',
     })
     public id: string;
-
-    @ApiProperty()
-    @NonEmptyString({
-        label: 'photographer',
-        description: 'the full name of the photographer responsible for this photograph',
-    })
-    public photographer: string;
 
     @ApiProperty()
     @PositiveInteger({
@@ -150,7 +136,6 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
         payload: {
             title,
             languageCodeForTitle,
-            photographer,
             heightPx,
             widthPx,
             aggregateCompositeIdentifier: { id: photographId },
@@ -162,8 +147,6 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
         photograph.name = buildMultilingualTextWithSingleItem(title, languageCodeForTitle);
 
         photograph.id = photographId;
-
-        photograph.photographer = photographer;
 
         photograph.heightPx = heightPx;
 
@@ -214,7 +197,6 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
             contributions,
             name,
             id,
-            photographer,
             heightPx,
             widthPx,
             actions,
@@ -229,8 +211,6 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
         photograph.name = name;
 
         photograph.id = id;
-
-        photograph.photographer = photographer;
 
         photograph.heightPx = heightPx;
 

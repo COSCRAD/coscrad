@@ -70,8 +70,6 @@ const existingMediaItem = getValidAggregateInstanceForTest(AggregateType.mediaIt
     id: buildDummyUuid(55),
 });
 
-const testPhotographer = 'Jeff Thomas';
-
 // const photograghHeightPx = 600;
 
 // const photograghWidthPx = 1200;
@@ -91,7 +89,6 @@ const dummyPhotograph = buildTestInstance(PhotographViewModel, {
     ...photographCompositeId,
     name: buildMultilingualTextWithSingleItem(photographTitle, languageCodeForTitle),
     mediaItemId: existingMediaItem.id,
-    photographer: testPhotographer,
     contributions: [
         {
             id: dummyContributor.id,

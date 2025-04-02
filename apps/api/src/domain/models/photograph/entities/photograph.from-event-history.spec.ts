@@ -14,8 +14,6 @@ const aggregateCompositeIdentifier = {
 
 const mediaItemId = buildDummyUuid(2);
 
-const photographer = 'Jane Buck';
-
 const photographWidth = 120;
 
 const photographHeight = 300;
@@ -28,7 +26,6 @@ const photographCreated = new TestEventStream().andThen<PhotographCreated>({
     type: 'PHOTOGRAPH_CREATED',
     payload: {
         mediaItemId,
-        photographer,
         widthPx: photographWidth,
         heightPx: photographHeight,
         title: photographTitle,
@@ -50,8 +47,6 @@ describe(`Photograph.fromEventHistory`, () => {
                 const photograph = result as Photograph;
 
                 expect(photograph.id).toBe(photographId);
-
-                expect(photograph.photographer).toBe(photographer);
 
                 expect(photograph.mediaItemId).toBe(mediaItemId);
 

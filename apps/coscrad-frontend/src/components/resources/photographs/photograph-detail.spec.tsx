@@ -28,7 +28,6 @@ const photographToFind: IPhotographViewModel = {
             },
         ],
     },
-    photographer: 'Johnny Blue',
     imageUrl: 'https://jazzysnaps.images.com/doghouse.png',
 };
 

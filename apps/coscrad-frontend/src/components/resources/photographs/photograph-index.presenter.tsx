@@ -17,7 +17,6 @@ export const PhotographIndexPresenter = ({ entities: photographs }: PhotographIn
         { propertyKey: 'id', headingLabel: 'Link' },
         { propertyKey: 'imageUrl', headingLabel: 'Image' },
         { propertyKey: 'name', headingLabel: 'Title' },
-        { propertyKey: 'photographer', headingLabel: 'Photographer' },
     ];
 
     const cellRenderersDefinition: CellRenderersDefinition<IPhotographViewModel> = {
@@ -40,7 +39,7 @@ export const PhotographIndexPresenter = ({ entities: photographs }: PhotographIn
             cellRenderersDefinition={cellRenderersDefinition}
             // This should be a resource label from resource info
             heading={'Photographs'}
-            filterableProperties={['name', 'photographer']}
+            filterableProperties={['name']}
             matchers={matchers}
         />
     );

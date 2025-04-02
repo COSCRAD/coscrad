@@ -27,8 +27,6 @@ const photographTitle = 'My Photo';
 
 const photographTitleNoNotes = 'My Photo without any notes';
 
-const dummyPhotographer = 'Slank Mortimer';
-
 const languageCodeForTitle = LanguageCode.Haida;
 
 const validPhotographDetailRoute = buildRoute(aggregateCompositeIdentifier.id);
@@ -68,7 +66,6 @@ describe(`the photograph detail page`, () => {
             title: photographTitle,
             languageCodeForTitle,
             mediaItemId: mediaItemCompositeIdentifier.id,
-            photographer: dummyPhotographer,
             heightPx: 800,
             widthPx: 200,
         });
@@ -103,7 +100,6 @@ describe(`the photograph detail page`, () => {
             title: photographTitleNoNotes,
             languageCodeForTitle,
             mediaItemId: mediaItemCompositeIdentifierNoNotes.id,
-            photographer: dummyPhotographer,
             heightPx: 800,
             widthPx: 200,
         });
@@ -120,8 +116,6 @@ describe(`the photograph detail page`, () => {
 
         it(`should contain the photograph name`, () => {
             cy.contains(photographTitle);
-
-            cy.contains(dummyPhotographer);
 
             cy.getByDataAttribute('LanguageIcon').first().trigger('mouseover');
 
