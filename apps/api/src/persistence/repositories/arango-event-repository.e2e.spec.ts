@@ -155,18 +155,29 @@ describe(`Arango Event Repository`, () => {
         const eventsForTargetAggregate: DTO<BaseEvent<DummyPayload>>[] = [
             {
                 id: targetCompositeIdentifier.id,
+                type: 'LYRICS_ADDED_FOR_SONG',
+                payload: {
+                    aggregateCompositeIdentifier: targetCompositeIdentifier,
+                    bar: 'new place',
+                },
+                meta: {
+                    userId: buildDummyUuid(33),
+                    id: buildDummyUuid(201),
+                    dateCreated: dummyDateNow + 1000,
+                },
+            },
+            // these events are intentionally out of order
+            {
+                id: targetCompositeIdentifier.id,
                 type: 'SONG_CREATED',
                 payload: {
                     aggregateCompositeIdentifier: targetCompositeIdentifier,
                     foo: 22,
                 },
-            },
-            {
-                id: targetCompositeIdentifier.id,
-                type: 'LYRICS_ADDED_FOR_SONG',
-                payload: {
-                    aggregateCompositeIdentifier: targetCompositeIdentifier,
-                    bar: 'new place',
+                meta: {
+                    userId: buildDummyUuid(33),
+                    id: buildDummyUuid(200),
+                    dateCreated: dummyDateNow, // before the preivous one to ensure sorting works!
                 },
             },
             {
@@ -176,15 +187,15 @@ describe(`Arango Event Repository`, () => {
                     aggregateCompositeIdentifier: targetCompositeIdentifier,
                     baz: ['a', 'b', 'c'],
                 },
+                meta: {
+                    userId: buildDummyUuid(33),
+                    id: buildDummyUuid(202),
+                    dateCreated: dummyDateNow + 2000,
+                },
             },
         ].map((eventRecord, index) => ({
             ...eventRecord,
             id: buildDummyUuid(200 + index),
-            meta: {
-                userId: buildDummyUuid(33),
-                id: buildDummyUuid(200 + index),
-                dateCreated: dummyDateNow + index,
-            },
         }));
 
         const eventsForOtherAggregates: DTO<BaseEvent<DummyPayload>>[] = [
@@ -257,12 +268,18 @@ describe(`Arango Event Repository`, () => {
         });
 
         describe(`when an aggregate composite identifier is provided`, () => {
-            it(`should return only the events for the requested aggregate`, async () => {
+            it(`should return only the events for the requested aggregate (in the correct order)`, async () => {
                 const foundEvents = await arangoEventRepository.fetchEvents(
                     targetCompositeIdentifier
                 );
 
                 expect(foundEvents).toHaveLength(eventsForTargetAggregate.length);
+
+                expect(foundEvents.map(({ type }) => type)).toEqual([
+                    'SONG_CREATED',
+                    'LYRICS_ADDED_FOR_SONG',
+                    'SONG_TITLE_TRANSLATED',
+                ]);
             });
         });
 
