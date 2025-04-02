@@ -242,6 +242,7 @@ exports[`when querying for a photograph: fetch many when the user is a project a
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110901",
         },
       ],
+      "heightPx": 600,
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
       "imageUrl": "https://www.photograph-queries.com/myapi/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100055",
       "isPublished": true,
@@ -260,6 +261,7 @@ exports[`when querying for a photograph: fetch many when the user is a project a
         ],
       },
       "tags": [],
+      "widthPx": 800,
     },
     {
       "accessControlList": {
@@ -502,6 +504,7 @@ exports[`when querying for a photograph: fetch many when the user is a project a
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110901",
         },
       ],
+      "heightPx": 600,
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
       "imageUrl": "https://www.photograph-queries.com/myapi/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100055",
       "isPublished": false,
@@ -520,6 +523,7 @@ exports[`when querying for a photograph: fetch many when the user is a project a
         ],
       },
       "tags": [],
+      "widthPx": 800,
     },
     {
       "accessControlList": {
@@ -760,6 +764,7 @@ exports[`when querying for a photograph: fetch many when the user is a project a
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110901",
         },
       ],
+      "heightPx": 600,
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
       "imageUrl": "https://www.photograph-queries.com/myapi/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100055",
       "isPublished": false,
@@ -778,6 +783,7 @@ exports[`when querying for a photograph: fetch many when the user is a project a
         ],
       },
       "tags": [],
+      "widthPx": 800,
     },
   ],
   "indexScopedActions": [],

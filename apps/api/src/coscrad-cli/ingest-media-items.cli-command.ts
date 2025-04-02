@@ -108,7 +108,6 @@ const buildCreateResourceFsaForMediaItem = (
                 languageCodeForTitle: LanguageCode.English,
                 mediaItemId,
                 // TODO What should we do about this? Maybe it is indicated in the filename? The real metadata? Should be optional?
-                photographer: 'unknown',
                 heightPx,
                 widthPx,
             },

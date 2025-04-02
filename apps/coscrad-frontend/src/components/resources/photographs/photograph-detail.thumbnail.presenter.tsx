@@ -3,12 +3,10 @@ import {
     IPhotographViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { SinglePropertyPresenter } from '../../../utils/generic-components';
 import { ResourceDetailThumbnailPresenter } from '../../../utils/generic-components/presenters/detail-views';
 
 export const PhotographDetailThumbnailPresenter = ({
     id,
-    photographer,
 }: ICategorizableDetailQueryResult<IPhotographViewModel>): JSX.Element => {
     /**
      * Temporary placeholder: I'm putting a name here instead of editing the
@@ -19,7 +17,7 @@ export const PhotographDetailThumbnailPresenter = ({
 
     return (
         <ResourceDetailThumbnailPresenter id={id} name={name} type={ResourceType.photograph}>
-            <SinglePropertyPresenter display="Photographer" value={photographer} />
+            {/* Add contributor to replace photographer */}
         </ResourceDetailThumbnailPresenter>
     );
 };

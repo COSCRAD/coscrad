@@ -15,7 +15,6 @@ const createPhotograph: CommandFSA<CreatePhotograph> = {
         title: 'The Meadow',
         languageCodeForTitle: LanguageCode.English,
         mediaItemId: buildDummyUuid(2),
-        photographer: 'Jane Deer',
         heightPx: 1200,
         widthPx: 600,
     },

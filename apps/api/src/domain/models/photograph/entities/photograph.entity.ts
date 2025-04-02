@@ -55,13 +55,6 @@ export class Photograph extends Resource implements Boundable2D {
     @ReferenceTo(AggregateType.mediaItem)
     readonly mediaItemId: AggregateId;
 
-    // TODO make this a `contributorID`
-    @NonEmptyString({
-        label: 'photograph',
-        description: 'the person who took the picture',
-    })
-    readonly photographer: string;
-
     @NestedDataType(MediaItemDimensions, {
         label: 'dimensions',
         description: 'the height and width of the photograph in pixels',
@@ -73,11 +66,9 @@ export class Photograph extends Resource implements Boundable2D {
 
         if (!dto) return;
 
-        const { title, mediaItemId, photographer, dimensions: dimensionsDTO } = dto;
+        const { title, mediaItemId, dimensions: dimensionsDTO } = dto;
 
         this.mediaItemId = mediaItemId;
-
-        this.photographer = photographer;
 
         // Is this a dupliate nested entity with MediaItemDimensions?
         this.dimensions = new MediaItemDimensions(dimensionsDTO);
@@ -219,7 +210,6 @@ export class Photograph extends Resource implements Boundable2D {
             aggregateCompositeIdentifier: { id },
             title,
             languageCodeForTitle,
-            photographer,
             widthPx,
             heightPx,
             mediaItemId,
@@ -229,7 +219,6 @@ export class Photograph extends Resource implements Boundable2D {
             type: AggregateType.photograph,
             id,
             title: buildMultilingualTextWithSingleItem(title, languageCodeForTitle),
-            photographer,
             dimensions: {
                 heightPx,
                 widthPx,

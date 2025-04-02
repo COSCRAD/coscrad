@@ -12,19 +12,16 @@ const dummyPhotographs: IPhotographViewModel[] = [
     {
         id: '123',
         name: buildMultilingualTextFromEnglishOriginal('name 123'),
-        photographer: 'Bobby Blue Bland',
         imageUrl: 'https://mypics.somecloud.org/pic123.jpg',
     },
     {
         id: '124',
         name: buildMultilingualTextFromEnglishOriginal('name 124'),
-        photographer: 'Janet Jackson',
         imageUrl: 'https://mypics.somecloud.org/pic124.jpg',
     },
     {
         id: '125',
         name: buildMultilingualTextFromEnglishOriginal('name 125'),
-        photographer: 'Kermit DeFrog',
         imageUrl: 'https://mypics.somecloud.org/pic125.jpg',
     },
 ];
