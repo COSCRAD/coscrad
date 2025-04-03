@@ -1,6 +1,6 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 
-type Token = {
+export type Token = {
     text: string;
     languageCode: LanguageCode;
     /**

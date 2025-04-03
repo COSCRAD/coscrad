@@ -1,5 +1,5 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
-import { InternalError } from '../../../../lib/errors/InternalError';
+import { AlphabetFiniteStateMachine } from './FooFsm';
 import { ITokenizer } from './tokenizer.interface';
 
 ('’ɨʔŝẑŵ');
@@ -58,6 +58,8 @@ export class ChilcotinTokenizer implements ITokenizer {
 
     private alphabet = [...this.vowels, ...this.consonants];
 
+    private letterParser = new AlphabetFiniteStateMachine();
+
     tokenize(document: string): {
         text: string;
         languageCode: LanguageCode;
@@ -69,7 +71,10 @@ export class ChilcotinTokenizer implements ITokenizer {
         const rawTokens = document.split(' ');
 
         return rawTokens.map((text) => {
-            const symbols = this.separateLetters(text);
+            // TODO handle capitalization
+            const lowerCaseText = text.toLowerCase();
+
+            const symbols = this.separateLetters(lowerCaseText);
 
             return {
                 text,
@@ -85,7 +90,9 @@ export class ChilcotinTokenizer implements ITokenizer {
         });
     }
 
-    private separateLetters(_token: string): string[] {
-        throw new InternalError(`Not Implemented`);
+    private separateLetters(token: string): string[] {
+        const letters = this.letterParser.parse(token);
+
+        return letters.map(({ text }) => text);
     }
 }
