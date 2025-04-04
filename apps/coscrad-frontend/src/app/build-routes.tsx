@@ -132,6 +132,14 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
                 element: <ListenLivePage />,
             }),
         ],
+        [
+            isNonEmptyObject(contentConfig.alphabetConfig),
+            (_contentConfig: ConfigurableContent) => ({
+                path: 'Alphabet',
+                label: 'Alphabet',
+                element: <AlphabetPage />,
+            }),
+        ],
         {
             path: 'Credits',
             label: 'Credits',
@@ -142,14 +150,6 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
             path: '*',
             element: <NotFoundPresenter />,
         },
-        [
-            isNonEmptyObject(contentConfig.alphabetConfig),
-            (_contentConfig: ConfigurableContent) => ({
-                path: 'Alphabet',
-                label: 'Alphabet',
-                element: <AlphabetPage />,
-            }),
-        ],
     ];
 
     return routeDefinitions

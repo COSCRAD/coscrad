@@ -72,9 +72,9 @@ const existingMediaItem = getValidAggregateInstanceForTest(AggregateType.mediaIt
 
 const testPhotographer = 'Jeff Thomas';
 
-// const photograghHeightPx = 600;
+const photographHeightPx = 600;
 
-// const photograghWidthPx = 1200;
+const photographWidthPx = 800;
 
 const dummyContributorFirstName = 'Dumb';
 
@@ -98,8 +98,8 @@ const dummyPhotograph = buildTestInstance(PhotographViewModel, {
             fullName: dummyContributor.fullName.toString(),
         },
     ],
-    // heightPx
-    // widthPx
+    heightPx: photographHeightPx,
+    widthPx: photographWidthPx,
 });
 
 const targetPhotographView = clonePlainObjectWithOverrides(dummyPhotograph, {
