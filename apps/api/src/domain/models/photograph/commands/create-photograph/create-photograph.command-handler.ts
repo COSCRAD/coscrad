@@ -22,6 +22,7 @@ export class CreatePhotographCommandHandler extends BaseCreateCommandHandler<Pho
         title,
         languageCodeForTitle,
         mediaItemId,
+        photographer,
         heightPx,
         widthPx,
     }: CreatePhotograph): ResultOrError<Photograph> {
@@ -34,6 +35,7 @@ export class CreatePhotographCommandHandler extends BaseCreateCommandHandler<Pho
                 heightPx,
                 widthPx,
             }),
+            photographer,
             published: false,
         });
 

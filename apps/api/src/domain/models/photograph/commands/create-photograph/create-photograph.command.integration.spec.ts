@@ -38,6 +38,8 @@ const titleText = `The Photograph Title`;
 
 const languageCodeForTitle = LanguageCode.English;
 
+const photographer = 'Jeffory Goat';
+
 const fsaFactory = new DummyCommandFsaFactory((id: AggregateId) =>
     clonePlainObjectWithOverrides(dummyFsa, {
         payload: {
@@ -45,6 +47,7 @@ const fsaFactory = new DummyCommandFsaFactory((id: AggregateId) =>
             mediaItemId: existingMediaItem.id,
             title: titleText,
             languageCodeForTitle,
+            photographer,
         },
     })
 );
@@ -115,6 +118,8 @@ describe(commandType, () => {
                     expect(originalTextItemForName.text).toBe(titleText);
 
                     expect(originalTextItemForName.languageCode).toBe(languageCodeForTitle);
+
+                    expect(newPhotograph.photographer).toBe(photographer);
 
                     expect(newPhotograph.published).toBe(false);
 
