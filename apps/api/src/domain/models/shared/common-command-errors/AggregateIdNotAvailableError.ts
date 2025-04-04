@@ -8,6 +8,6 @@ import { AggregateId } from '../../../types/AggregateId';
  */
 export default class AggregateIdNotAvailableError extends InternalError {
     constructor(invalidId: AggregateId) {
-        super(`The Aggregate ID: ${invalidId} is not available for use`);
+        super(`The ID: ${invalidId} is not available for use by an aggregate root`);
     }
 }

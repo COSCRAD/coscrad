@@ -64,7 +64,7 @@ describe(`Photograph.fromEventHistory`, () => {
                 expect(heightPx).toBe(photographHeight);
 
                 const { text: foundText, languageCode: foundLanguageCode } =
-                    photograph.title.getOriginalTextItem();
+                    photograph.titleText.getOriginalTextItem();
 
                 expect(foundText).toBe(photographTitle);
 

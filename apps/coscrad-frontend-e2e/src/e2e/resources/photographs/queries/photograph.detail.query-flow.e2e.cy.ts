@@ -1,12 +1,12 @@
 import { AggregateType, LanguageCode, MIMEType } from '@coscrad/api-interfaces';
 import { buildDummyAggregateCompositeIdentifier } from '../../../../support/utilities';
 
-const aggregateCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
+const photographAggregateCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
     AggregateType.photograph,
     2
 );
 
-const aggregateCompositeIdentifierNoNotes = buildDummyAggregateCompositeIdentifier(
+const photographAggregateCompositeIdentifierNoNotes = buildDummyAggregateCompositeIdentifier(
     AggregateType.photograph,
     3
 );
@@ -21,6 +21,11 @@ const mediaItemCompositeIdentifierNoNotes = buildDummyAggregateCompositeIdentifi
     13
 );
 
+const mediaItemCompositeIdentifierNoConnections = buildDummyAggregateCompositeIdentifier(
+    AggregateType.mediaItem,
+    14
+);
+
 const buildRoute = (id: string) => `/Resources/Photographs/${id}`;
 
 const photographTitle = 'My Photo';
@@ -31,7 +36,7 @@ const dummyPhotographer = 'Slank Mortimer';
 
 const languageCodeForTitle = LanguageCode.Haida;
 
-const validPhotographDetailRoute = buildRoute(aggregateCompositeIdentifier.id);
+const validPhotographDetailRoute = buildRoute(photographAggregateCompositeIdentifier.id);
 
 const noteText = 'This is a note about a photograph';
 
@@ -64,7 +69,7 @@ describe(`the photograph detail page`, () => {
         });
 
         cy.seedDataWithCommand(`CREATE_PHOTOGRAPH`, {
-            aggregateCompositeIdentifier,
+            aggregateCompositeIdentifier: photographAggregateCompositeIdentifier,
             title: photographTitle,
             languageCodeForTitle,
             mediaItemId: mediaItemCompositeIdentifier.id,
@@ -74,7 +79,7 @@ describe(`the photograph detail page`, () => {
         });
 
         cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
-            aggregateCompositeIdentifier,
+            aggregateCompositeIdentifier: photographAggregateCompositeIdentifier,
         });
 
         cy.seedDataWithCommand(`CREATE_NOTE_ABOUT_RESOURCE`, {
@@ -82,7 +87,7 @@ describe(`the photograph detail page`, () => {
                 AggregateType.note,
                 15
             ),
-            resourceCompositeIdentifier: aggregateCompositeIdentifier,
+            resourceCompositeIdentifier: photographAggregateCompositeIdentifier,
             text: noteText,
         });
 
@@ -99,7 +104,7 @@ describe(`the photograph detail page`, () => {
         });
 
         cy.seedDataWithCommand(`CREATE_PHOTOGRAPH`, {
-            aggregateCompositeIdentifier: aggregateCompositeIdentifierNoNotes,
+            aggregateCompositeIdentifier: photographAggregateCompositeIdentifierNoNotes,
             title: photographTitleNoNotes,
             languageCodeForTitle,
             mediaItemId: mediaItemCompositeIdentifierNoNotes.id,
@@ -109,7 +114,7 @@ describe(`the photograph detail page`, () => {
         });
 
         cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
-            aggregateCompositeIdentifier: aggregateCompositeIdentifierNoNotes,
+            aggregateCompositeIdentifier: photographAggregateCompositeIdentifierNoNotes,
         });
     });
 
@@ -143,7 +148,7 @@ describe(`the photograph detail page`, () => {
 
     describe('when there are no notes for the Photograph (3)', () => {
         beforeEach(() => {
-            cy.visit(`/Resources/Photographs/${aggregateCompositeIdentifierNoNotes.id}`);
+            cy.visit(`/Resources/Photographs/${photographAggregateCompositeIdentifierNoNotes.id}`);
         });
 
         it(`should display the no notes message`, () => {
@@ -152,6 +157,97 @@ describe(`the photograph detail page`, () => {
             cy.openPanel('notes');
 
             cy.contains('No Notes Found');
+        });
+    });
+
+    describe('when there are connections for the photograph (2)', () => {
+        const connectedSpatialFeatureCompositeId = buildDummyAggregateCompositeIdentifier(
+            AggregateType.spatialFeature,
+            24
+        );
+
+        const { id: connectedSpatialFeatureId } = connectedSpatialFeatureCompositeId;
+
+        before(() => {
+            cy.seedDataWithCommand(`CREATE_POINT`, {
+                aggregateCompositeIdentifier: connectedSpatialFeatureCompositeId,
+                lattitude: 130.45,
+                longitude: 54.2,
+                name: 'connected place',
+                description: 'This is a connected place to the photo.',
+            });
+
+            cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+                aggregateCompositeIdentifier: connectedSpatialFeatureCompositeId,
+            });
+
+            cy.seedDataWithCommand(`CONNECT_RESOURCES_WITH_NOTE`, {
+                aggregateCompositeIdentifier: buildDummyAggregateCompositeIdentifier(
+                    AggregateType.note,
+                    32
+                ),
+                toMemberCompositeIdentifier: connectedSpatialFeatureCompositeId,
+                fromMemberCompositeIdentifier: photographAggregateCompositeIdentifier,
+            });
+        });
+
+        beforeEach(() => {
+            cy.visit(validPhotographDetailRoute);
+
+            cy.getByDataAttribute('loading').should('not.exist');
+        });
+
+        it('should display the connected spatial feature', () => {
+            cy.openPanel('connections');
+
+            cy.getAggregateDetailView(AggregateType.spatialFeature, connectedSpatialFeatureId);
+        });
+    });
+
+    describe('when there are no connections for the photograph (123)', () => {
+        const titleForPhotographWithNoConnections = 'I have no connections';
+
+        const compositeIdForPhotographWithNoConnections = buildDummyAggregateCompositeIdentifier(
+            AggregateType.photograph,
+            123
+        );
+
+        const { id: idForPhotographWithoutConnections } = compositeIdForPhotographWithNoConnections;
+
+        before(() => {
+            cy.seedDataWithCommand(`CREATE_MEDIA_ITEM`, {
+                aggregateCompositeIdentifier: mediaItemCompositeIdentifierNoConnections,
+                title: 'My photo of Masset without connections',
+                mimeType: MIMEType.jpg,
+                // Override default value to "remove" property from fsa for image media item
+                lengthMilliseconds: null,
+            });
+
+            cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+                aggregateCompositeIdentifier: mediaItemCompositeIdentifierNoConnections,
+            });
+
+            cy.seedDataWithCommand(`CREATE_PHOTOGRAPH`, {
+                aggregateCompositeIdentifier: compositeIdForPhotographWithNoConnections,
+                title: titleForPhotographWithNoConnections,
+                mediaItemId: mediaItemCompositeIdentifierNoConnections.id,
+            });
+
+            cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+                aggregateCompositeIdentifier: compositeIdForPhotographWithNoConnections,
+            });
+        });
+
+        beforeEach(() => {
+            cy.visit(`/Resources/Photographs/${idForPhotographWithoutConnections}`);
+        });
+
+        it('should display the no connections message', () => {
+            cy.contains(titleForPhotographWithNoConnections);
+
+            cy.openPanel('connections');
+
+            cy.contains('No Connections Found');
         });
     });
 });
