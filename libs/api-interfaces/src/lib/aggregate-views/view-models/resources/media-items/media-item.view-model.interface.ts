@@ -11,4 +11,9 @@ export interface IMediaItemViewModel extends IBaseViewModel {
     lengthMilliseconds: number;
 
     url: string;
+
+    dimensions: {
+        heightPx: number;
+        widthPx: number;
+    };
 }

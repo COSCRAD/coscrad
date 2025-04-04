@@ -38,7 +38,6 @@ import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
 
 interface IngestMediaItemsCliCommandOptions {
     directory: string;
-    baseUrl: string;
     staticAssetDestinationDirectory: string;
     publish?: boolean;
     createResources?: boolean;
@@ -153,6 +152,9 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
 
         /**
          * TODO We should consider using the async API for performance.
+         *
+         * Curently, an option for performance is to ingest media items one at a time
+         * and parallelize using GNUParallel.
          */
         const partialPayloads: (Omit<CreateMediaItem, 'aggregateCompositeIdentifier' | 'url'> & {
             filename: string;
@@ -417,15 +419,6 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
         required: true,
     })
     parseDirectory(input: string): string {
-        return input;
-    }
-
-    @CliCommandOption({
-        flags: '-b, --baseUrl [baseUrl]',
-        description: 'the base URL for the media server',
-        required: true,
-    })
-    parseBaseUrl(input: string): string {
         return input;
     }
 

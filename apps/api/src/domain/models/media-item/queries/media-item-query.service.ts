@@ -254,7 +254,7 @@ export class MediaItemQueryService {
             'GLOBAL_PREFIX'
         )}`;
 
-        const baseDigitalAssetUrl = `${baseApiUrl}/mediaItems/download`;
+        const baseDigitalAssetUrl = `${baseApiUrl}/resources/mediaItems/download`;
 
         /**
          * Note that we need to remove `filepath` for security reasons.
