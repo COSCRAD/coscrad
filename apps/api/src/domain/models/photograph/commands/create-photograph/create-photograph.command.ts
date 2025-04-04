@@ -58,6 +58,12 @@ export class CreatePhotograph implements ICommandBase {
     })
     readonly mediaItemId: AggregateId;
 
+    @NonEmptyString({
+        label: 'photographer',
+        description: 'the name of the person who took this photograph',
+    })
+    readonly photographer: string;
+
     @NonNegativeFiniteNumber({
         label: `height (px)`,
         description: `the height of the digital photograph in pixels`,

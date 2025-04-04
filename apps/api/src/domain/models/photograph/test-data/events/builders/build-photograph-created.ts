@@ -19,6 +19,7 @@ export const buildPhotographCreated = (
         heightPx: 900,
         widthPx: 1200,
         mediaItemId: buildDummyUuid(2),
+        photographer: 'Aaron Plahn',
     };
 
     return new PhotographCreated(

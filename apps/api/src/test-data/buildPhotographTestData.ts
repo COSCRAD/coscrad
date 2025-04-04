@@ -18,6 +18,7 @@ const creationEvents = [
             mediaItemId: buildDummyUuid(10005),
             title: 'Adiitsii Running',
             languageCodeForTitle: LanguageCode.English,
+            photographer: 'Susie McRealart',
             // dimensions: {
             //     widthPx: 300,
             //     heightPx: 400,
@@ -33,6 +34,7 @@ const creationEvents = [
             mediaItemId: buildDummyUuid(10006),
             title: 'Nuu Story',
             languageCodeForTitle: LanguageCode.English,
+            photographer: 'Robert McRealart',
             // dimensions: {
             //     widthPx: 420,
             //     heightPx: 285,
@@ -48,6 +50,7 @@ const creationEvents = [
             mediaItemId: buildDummyUuid(10007),
             title: 'Two Brothers Pole',
             languageCodeForTitle: LanguageCode.English,
+            photographer: 'Kenny Tree-Huggens',
             // dimensions: {
             //     widthPx: 1200,
             //     heightPx: 1500,

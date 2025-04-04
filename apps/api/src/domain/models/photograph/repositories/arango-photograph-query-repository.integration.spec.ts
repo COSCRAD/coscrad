@@ -47,6 +47,8 @@ const _translationLanguageCode = LanguageCode.English;
 
 const _textTranslation = 'foobar';
 
+const dummyPhotographer = 'Tester Photographer';
+
 const dummyContributor = getValidAggregateInstanceForTest(AggregateType.contributor);
 
 const contributorIds = [101, 102, 103].map(buildDummyUuid);
@@ -69,13 +71,15 @@ const testContributors = contributorIdsAndNames.map(({ contributorId, fullName }
 const buildPhotographEventHistory = (
     id: AggregateId,
     title: string,
-    languageCodeForTitle: LanguageCode
+    languageCodeForTitle: LanguageCode,
+    photographer: string
 ) => {
     const photographCreated = new TestEventStream().andThen<PhotographCreated>({
         type: 'PHOTOGRAPH_CREATED',
         payload: {
             title,
             languageCodeForTitle,
+            photographer,
         },
     });
 
@@ -89,7 +93,8 @@ const photographViews = photographIds.map((id) => {
     const eventHistory = buildPhotographEventHistory(
         id,
         buildPhotographTitle(id),
-        originalLanguageCode
+        originalLanguageCode,
+        dummyPhotographer
     );
 
     const creationEvent = eventHistory[0] as PhotographCreated;

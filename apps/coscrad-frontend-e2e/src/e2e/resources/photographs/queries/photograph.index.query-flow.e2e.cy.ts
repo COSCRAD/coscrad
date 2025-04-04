@@ -8,6 +8,8 @@ const ID_OFFSET = 80;
 
 const dummyPhotographTitle = 'Photograph of historic pithouse';
 
+const dummyPhotographer = 'Jennifer Stump';
+
 const aggregateCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
     AggregateType.photograph,
     9
@@ -63,6 +65,7 @@ describe('Photograph index query flow', () => {
         title,
         languageCodeForTitle,
         mediaItemId,
+        photographer,
         heightPx,
         widthPx,
     }: {
@@ -70,6 +73,7 @@ describe('Photograph index query flow', () => {
         title: string;
         languageCodeForTitle: LanguageCode;
         mediaItemId: string;
+        photographer: string;
         heightPx: number;
         widthPx: number;
     }) => {
@@ -83,6 +87,7 @@ describe('Photograph index query flow', () => {
             title,
             languageCodeForTitle,
             mediaItemId,
+            photographer,
             heightPx,
             widthPx,
         });
@@ -114,6 +119,7 @@ describe('Photograph index query flow', () => {
                 title: `Title of Photograph: ${index + offSet}`,
                 languageCodeForTitle: languageCode,
                 mediaItemId: mediaItemCompositeIdentifier,
+                photographer: dummyPhotographer,
                 heightPx: 800,
                 widthPx: 200,
             });
@@ -142,6 +148,7 @@ describe('Photograph index query flow', () => {
             title: dummyPhotographTitle,
             languageCodeForTitle: LanguageCode.English,
             mediaItemId: mediaItemCompositeIdentifier.id,
+            photographer: dummyPhotographer,
             heightPx: 800,
             widthPx: 200,
         });
@@ -180,6 +187,8 @@ describe('Photograph index query flow', () => {
 
         it('should display the title and photographer for photograph 2', () => {
             cy.contains(dummyPhotographTitle);
+
+            cy.contains(dummyPhotographer);
         });
 
         it(`should have a link to the detail view for this photograph`, () => {
@@ -221,6 +230,7 @@ describe('Photograph index query flow', () => {
                     title: photoTitleWithQDash,
                     languageCodeForTitle: LanguageCode.Haida,
                     mediaItemId: mediaItemForFilterTestCompositeIdentifier.id,
+                    photographer: dummyPhotographer,
                     heightPx: 800,
                     widthPx: 200,
                 });
