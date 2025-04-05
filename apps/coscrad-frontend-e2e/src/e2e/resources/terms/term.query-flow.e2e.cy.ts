@@ -34,6 +34,10 @@ describe(`Term index-to-detail flow`, () => {
 
         it('should have an entry for terms', () => {
             cy.contains('Terms');
+
+            // Ensure this is the link to the Terms and not an occurence of the word terms
+            // in the description of another resource
+            cy.getByDataAttribute('Term').should('exist');
         });
 
         it('should have a link to the terms', () => {
@@ -105,17 +109,18 @@ describe(`Term index-to-detail flow`, () => {
                     beforeEach(() => {
                         cy.visit('/Resources/Terms');
 
-                        cy.getByDataAttribute('select_index_search_scope')
-                            .click()
-                            .get(`[data-value="${searchScope}"]`)
-                            .click();
+                        cy.getByDataAttribute('select_index_search_scope').click();
+
+                        cy.get(`[data-value="${searchScope}"]`).click();
                     });
 
                     describe(`when the filter should return 1 result (based on default language term)`, () => {
                         it(`should return the correct result`, () => {
                             const searchTerms = haidaTextToFind;
 
-                            cy.getByDataAttribute(`index_search_bar`).click().type(searchTerms);
+                            cy.getByDataAttribute(`index_search_bar`).click();
+
+                            cy.getByDataAttribute(`index_search_bar`).type(searchTerms);
 
                             cy.getLoading().should(`not.exist`);
 
@@ -129,7 +134,9 @@ describe(`Term index-to-detail flow`, () => {
                         it(`should return the correct result`, () => {
                             const searchTerms = `{hai}:${haidaTextToFind}`;
 
-                            cy.getByDataAttribute(`index_search_bar`).click().type(searchTerms, {
+                            cy.getByDataAttribute(`index_search_bar`).click();
+
+                            cy.getByDataAttribute(`index_search_bar`).type(searchTerms, {
                                 parseSpecialCharSequences: false,
                             });
 
@@ -145,7 +152,9 @@ describe(`Term index-to-detail flow`, () => {
                         it(`should return the correct result`, () => {
                             const searchTerms = `ZZZ`;
 
-                            cy.getByDataAttribute(`index_search_bar`).click().type(searchTerms);
+                            cy.getByDataAttribute(`index_search_bar`).click();
+
+                            cy.getByDataAttribute(`index_search_bar`).type(searchTerms);
 
                             cy.getLoading().should(`not.exist`);
 
@@ -159,7 +168,9 @@ describe(`Term index-to-detail flow`, () => {
                         it(`should show no results`, () => {
                             const searchTerms = `BBQ Chicken`;
 
-                            cy.getByDataAttribute(`index_search_bar`).click().type(searchTerms);
+                            cy.getByDataAttribute(`index_search_bar`).click();
+
+                            cy.getByDataAttribute(`index_search_bar`).type(searchTerms);
 
                             cy.getLoading().should(`not.exist`);
 

@@ -3,6 +3,7 @@ import {
     buildDummyAggregateCompositeIdentifier,
     buildDummyUuid,
 } from '../../../../support/utilities';
+import { seedDummyMediaItem } from '../../../shared/seed-dummy-media-item.cy';
 
 const ID_OFFSET = 80;
 
@@ -32,34 +33,6 @@ const contributors = {
 };
 
 describe('Photograph index query flow', () => {
-    // Make this a shared utility?
-    const seedDummyMediaItem = ({
-        id,
-        title,
-        mimeType,
-    }: {
-        id: string;
-        title: string;
-        mimeType: MIMEType;
-    }) => {
-        const aggregateCompositeIdentifier = {
-            type: AggregateType.mediaItem,
-            id,
-        };
-
-        cy.seedDataWithCommand(`CREATE_MEDIA_ITEM`, {
-            aggregateCompositeIdentifier,
-            title: title,
-            mimeType: mimeType,
-            // Override default value to "remove" property from fsa for image media item
-            lengthMilliseconds: null,
-        });
-
-        cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
-            aggregateCompositeIdentifier,
-        });
-    };
-
     const seedDummyPhotograph = ({
         id,
         title,
@@ -131,16 +104,10 @@ describe('Photograph index query flow', () => {
 
         cy.seedTestUuids(600);
 
-        cy.seedDataWithCommand(`CREATE_MEDIA_ITEM`, {
-            aggregateCompositeIdentifier: mediaItemCompositeIdentifier,
+        seedDummyMediaItem({
+            id: mediaItemCompositeIdentifier.id,
             title: `Tawt'a k̲'iidagas Giiahlɢ̲alang`,
-            mimeType: 'image/jpeg',
-            // Override default value to "remove" property from fsa for image media item
-            lengthMilliseconds: null,
-        });
-
-        cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
-            aggregateCompositeIdentifier: mediaItemCompositeIdentifier,
+            mimeType: MIMEType.jpg,
         });
 
         cy.seedDataWithCommand(`CREATE_PHOTOGRAPH`, {
@@ -221,8 +188,10 @@ describe('Photograph index query flow', () => {
                     lengthMilliseconds: null,
                 });
 
-                cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
-                    aggregateCompositeIdentifier: mediaItemForFilterTestCompositeIdentifier,
+                seedDummyMediaItem({
+                    id: mediaItemForFilterTestCompositeIdentifier.id,
+                    title: `Sg_iidllg_uu`,
+                    mimeType: MIMEType.jpg,
                 });
 
                 cy.seedDataWithCommand(`CREATE_PHOTOGRAPH`, {

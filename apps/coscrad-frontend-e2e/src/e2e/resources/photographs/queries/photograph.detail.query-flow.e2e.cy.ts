@@ -1,5 +1,6 @@
 import { AggregateType, LanguageCode, MIMEType } from '@coscrad/api-interfaces';
 import { buildDummyAggregateCompositeIdentifier } from '../../../../support/utilities';
+import { seedDummyMediaItem } from '../../../shared/seed-dummy-media-item.cy';
 
 const photographAggregateCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
     AggregateType.photograph,
@@ -56,16 +57,10 @@ describe(`the photograph detail page`, () => {
 
         cy.seedTestUuids(200);
 
-        cy.seedDataWithCommand(`CREATE_MEDIA_ITEM`, {
-            aggregateCompositeIdentifier: mediaItemCompositeIdentifier,
+        seedDummyMediaItem({
+            id: mediaItemCompositeIdentifier.id,
             title: 'My photo of Masset',
             mimeType: MIMEType.jpg,
-            // Override default value to "remove" property from fsa for image media item
-            lengthMilliseconds: null,
-        });
-
-        cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
-            aggregateCompositeIdentifier: mediaItemCompositeIdentifier,
         });
 
         cy.seedDataWithCommand(`CREATE_PHOTOGRAPH`, {
@@ -91,16 +86,10 @@ describe(`the photograph detail page`, () => {
             text: noteText,
         });
 
-        cy.seedDataWithCommand(`CREATE_MEDIA_ITEM`, {
-            aggregateCompositeIdentifier: mediaItemCompositeIdentifierNoNotes,
+        seedDummyMediaItem({
+            id: mediaItemCompositeIdentifierNoNotes.id,
             title: 'My photo of Skidegate with no notes',
             mimeType: MIMEType.jpg,
-            // Override default value to "remove" property from fsa for image media item
-            lengthMilliseconds: null,
-        });
-
-        cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
-            aggregateCompositeIdentifier: mediaItemCompositeIdentifierNoNotes,
         });
 
         cy.seedDataWithCommand(`CREATE_PHOTOGRAPH`, {
@@ -215,16 +204,10 @@ describe(`the photograph detail page`, () => {
         const { id: idForPhotographWithoutConnections } = compositeIdForPhotographWithNoConnections;
 
         before(() => {
-            cy.seedDataWithCommand(`CREATE_MEDIA_ITEM`, {
-                aggregateCompositeIdentifier: mediaItemCompositeIdentifierNoConnections,
+            seedDummyMediaItem({
+                id: mediaItemCompositeIdentifierNoConnections.id,
                 title: 'My photo of Masset without connections',
                 mimeType: MIMEType.jpg,
-                // Override default value to "remove" property from fsa for image media item
-                lengthMilliseconds: null,
-            });
-
-            cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
-                aggregateCompositeIdentifier: mediaItemCompositeIdentifierNoConnections,
             });
 
             cy.seedDataWithCommand(`CREATE_PHOTOGRAPH`, {
