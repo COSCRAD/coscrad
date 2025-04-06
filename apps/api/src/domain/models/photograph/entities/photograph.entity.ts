@@ -75,14 +75,14 @@ export class Photograph extends Resource implements Boundable2D {
 
         const { title, mediaItemId, photographer, dimensions: dimensionsDTO } = dto;
 
+        this.title = new MultilingualText(title);
+
         this.mediaItemId = mediaItemId;
 
         this.photographer = photographer;
 
-        // Is this a dupliate nested entity with MediaItemDimensions?
+        // Is this a duplicate nested entity with MediaItemDimensions?
         this.dimensions = new MediaItemDimensions(dimensionsDTO);
-
-        this.title = new MultilingualText(title);
     }
 
     getName(): MultilingualText {
