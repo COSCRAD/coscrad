@@ -254,15 +254,13 @@ export class MediaItemQueryService {
             'GLOBAL_PREFIX'
         )}`;
 
-        const baseDigitalAssetUrl = `${baseApiUrl}/mediaItems/download`;
+        const baseDigitalAssetUrl = `${baseApiUrl}/resources/mediaItems/download`;
 
-        /**
-         * Note that we need to remove `filepath` for security reasons.
-         * We currently do so the controller.
-         */
         const view = new MediaItemViewModel(mediaItem);
 
         /**
+         * We remove the filepath here for security reasons.
+         *
          * Note that there is no risk of side-effects due to aliasing biting us.
          * View model objects have a short lifetime.
          */

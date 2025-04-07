@@ -2382,6 +2382,30 @@ exports[`GET /resources should return the expected result 1`] = `
     "link": "/resources/mediaItems",
     "pluralLabel": "Media Items",
     "schema": {
+      "dimensions": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "the width and height of the media item",
+        "isArray": false,
+        "isOptional": true,
+        "label": "dimensions",
+        "name": "MediaItemDimensions",
+        "schema": {
+          "heightPx": {
+            "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+            "description": "the height of the media item in pixels",
+            "isArray": false,
+            "isOptional": false,
+            "label": "height (px)",
+          },
+          "widthPx": {
+            "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+            "description": "the width of the media item in pixels",
+            "isArray": false,
+            "isOptional": false,
+            "label": "width (px)",
+          },
+        },
+      },
       "id": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "unique identifier",

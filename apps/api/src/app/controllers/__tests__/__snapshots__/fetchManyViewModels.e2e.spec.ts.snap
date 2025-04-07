@@ -691,7 +691,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
         ],
       },
       "tags": [],
-      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
+      "url": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
     },
     {
       "actions": [],
@@ -707,7 +707,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
         ],
       },
       "tags": [],
-      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
+      "url": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
     },
     {
       "actions": [],
@@ -723,7 +723,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
         ],
       },
       "tags": [],
-      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
+      "url": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
     },
     {
       "actions": [],
@@ -739,7 +739,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
         ],
       },
       "tags": [],
-      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
+      "url": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
     },
     {
       "actions": [],
@@ -755,7 +755,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
         ],
       },
       "tags": [],
-      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
+      "url": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
     },
     {
       "actions": [],
@@ -771,7 +771,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
         ],
       },
       "tags": [],
-      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
+      "url": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
     },
     {
       "actions": [],
@@ -788,7 +788,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
         ],
       },
       "tags": [],
-      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+      "url": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
     },
     {
       "actions": [],
@@ -805,7 +805,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
         ],
       },
       "tags": [],
-      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+      "url": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
     },
     {
       "actions": [],
@@ -822,7 +822,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
         ],
       },
       "tags": [],
-      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "url": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
     },
   ],
   "indexScopedActions": [],
@@ -846,7 +846,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
         ],
       },
       "tags": [],
-      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
+      "url": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
     },
     {
       "actions": [],
@@ -862,7 +862,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
         ],
       },
       "tags": [],
-      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
+      "url": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
     },
     {
       "actions": [],
@@ -878,7 +878,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
         ],
       },
       "tags": [],
-      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
+      "url": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
     },
     {
       "actions": [],
@@ -894,7 +894,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
         ],
       },
       "tags": [],
-      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
+      "url": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
     },
     {
       "actions": [],
@@ -910,7 +910,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
         ],
       },
       "tags": [],
-      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
+      "url": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
     },
     {
       "actions": [],
@@ -926,7 +926,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
         ],
       },
       "tags": [],
-      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
+      "url": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
     },
     {
       "actions": [],
@@ -943,7 +943,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
         ],
       },
       "tags": [],
-      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+      "url": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
     },
     {
       "actions": [],
@@ -960,7 +960,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
         ],
       },
       "tags": [],
-      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+      "url": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
     },
     {
       "actions": [],
@@ -977,7 +977,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
         ],
       },
       "tags": [],
-      "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "url": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
     },
   ],
   "indexScopedActions": [],

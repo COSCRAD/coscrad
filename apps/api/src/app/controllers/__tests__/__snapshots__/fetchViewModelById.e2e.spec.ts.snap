@@ -162,7 +162,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
     ],
   },
   "tags": [],
-  "url": "https://www.testapi.coscrad.org/api/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
+  "url": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
 }
 `;
 
