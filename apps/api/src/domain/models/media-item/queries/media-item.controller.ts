@@ -15,6 +15,7 @@ import clonePlainObjectWithoutProperty from '../../../../lib/utilities/clonePlai
 import { ResourceType } from '../../../types/ResourceType';
 import { isAudioMimeType } from '../../audio-visual/audio-item/entities/audio-item.entity';
 import { isVideoMimeType } from '../../audio-visual/video/entities/video.entity';
+import { isPhotographMimeType } from '../../photograph/entities/photograph.entity';
 import { getExtensionForMimeType } from '../entities/get-extension-for-mime-type';
 import { MediaItemQueryService } from './media-item-query.service';
 import { MediaItemViewModel } from './media-item.view-model';
@@ -153,7 +154,7 @@ export class MediaItemController {
         name: string;
     }): Record<string, unknown> {
         const disposition =
-            isAudioMimeType(mimeType) || isVideoMimeType(mimeType)
+            isPhotographMimeType(mimeType) || isAudioMimeType(mimeType) || isVideoMimeType(mimeType)
                 ? `inline`
                 : `attachment; filename="${name}.${getExtensionForMimeType(mimeType)}"`;
 

@@ -16,6 +16,7 @@ import { MediaItem } from '../domain/models/media-item/entities/media-item.entit
 import { Photograph } from '../domain/models/photograph/entities/photograph.entity';
 import { validAggregateOrThrow } from '../domain/models/shared/functional';
 import { AggregateType } from '../domain/types/AggregateType';
+import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
 import { PersistenceModule } from '../persistence/persistence.module';
@@ -33,6 +34,11 @@ const destinationDir = `__cli-command-test-files__`;
 const inputFilePrefix = `./${inputDir}/${cliCommandName}`;
 
 const buildDirectoryPath = (suffix: string) => `${inputFilePrefix}/${suffix}`;
+
+// the number of items in `__cli-command-test-inputs__/ingest-media-items/media-items-only/`
+const expectedNumberOfMediaItemsCreated = 13;
+
+const testDbName = generateDatabaseNameForTestSuite();
 
 /**
  * TODO Diagnose why this test is flakey when run by the CI.
@@ -62,7 +68,7 @@ describe(`CLI Command: **ingest-media-items**`, () => {
                     useFactory: () =>
                         buildMockConfigServiceSpec(
                             {
-                                ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+                                ARANGO_DB_NAME: testDbName,
                             },
                             buildConfigFilePath(Environment.test)
                         ),
@@ -73,12 +79,13 @@ describe(`CLI Command: **ingest-media-items**`, () => {
                         databaseProvider: ArangoDatabaseProvider,
                         coscradEventFactory: CoscradEventFactory,
                         dynamicDataTypeFinderService: DynamicDataTypeFinderService
-                    ) =>
-                        new TestRepositoryProvider(
+                    ) => {
+                        return new TestRepositoryProvider(
                             databaseProvider,
                             coscradEventFactory,
                             dynamicDataTypeFinderService
-                        ),
+                        );
+                    },
                     inject: [
                         ArangoDatabaseProvider,
                         CoscradEventFactory,
@@ -86,7 +93,17 @@ describe(`CLI Command: **ingest-media-items**`, () => {
                     ],
                 },
             ],
-        }).compile();
+        })
+            .overrideProvider(ConfigService)
+            .useValue(
+                buildMockConfigServiceSpec(
+                    {
+                        ARANGO_DB_NAME: testDbName,
+                    },
+                    buildConfigFilePath(Environment.test)
+                )
+            )
+            .compile();
 
         await testAppModule.init();
 
@@ -101,102 +118,208 @@ describe(`CLI Command: **ingest-media-items**`, () => {
 
         testRepositoryProvider = testAppModule.get(TestRepositoryProvider);
 
-        commandInstance = await CommandTestFactory.createTestingCommand({
-            imports: [CoscradCliModule],
-        })
-            .overrideProvider(AppModule)
-            .useValue(testAppModule)
-            .overrideProvider(DynamicDataTypeModule)
-            .useValue(testAppModule.get(DynamicDataTypeModule))
-            .overrideProvider(ArangoDatabaseProvider)
-            .useValue(databaseProvider)
-            .compile();
-
         if (!existsSync(destinationDir)) {
             mkdirSync(destinationDir);
         }
     });
 
-    beforeEach(async () => {
-        await testRepositoryProvider.testTeardown();
-    });
-
     describe(`when the media directory has some allowed media items only`, () => {
-        it(`should ingest the media items`, async () => {
-            await CommandTestFactory.run(commandInstance, [
-                cliCommandName,
-                `--directory=${buildDirectoryPath(`mediaItemsOnly`)}`,
-                `--baseUrl=http://localhost:3131/uploads`,
-                `--staticAssetDestinationDirectory=${destinationDir}`,
-            ]);
+        describe(`when publication (of media item) and resource creation is requested`, () => {
+            beforeEach(async () => {
+                await testRepositoryProvider.testTeardown();
 
-            // the number of items in `__cli-command-test-inputs__/ingest-media-items/media-items-only/`
-            const expectedNumberOfResults = 13;
+                commandInstance = await CommandTestFactory.createTestingCommand({
+                    imports: [CoscradCliModule],
+                })
+                    .overrideProvider(AppModule)
+                    .useValue(testAppModule)
+                    .overrideProvider(DynamicDataTypeModule)
+                    .useValue(testAppModule.get(DynamicDataTypeModule))
+                    .overrideProvider(ArangoDatabaseProvider)
+                    .useValue(databaseProvider)
+                    .overrideProvider(REPOSITORY_PROVIDER_TOKEN)
+                    .useValue(testRepositoryProvider)
+                    .compile();
+            });
 
-            const searchResult = await testRepositoryProvider
-                .forResource<MediaItem>(AggregateType.mediaItem)
-                .fetchMany();
+            it(`should ingest the media items`, async () => {
+                await CommandTestFactory.run(commandInstance, [
+                    cliCommandName,
+                    `--directory=${buildDirectoryPath(`mediaItemsOnly`)}`,
+                    `--staticAssetDestinationDirectory=${destinationDir}`,
+                    `--createResources`,
+                    `--publish`,
+                    // TODO support tags
+                    // `--tags="from system X, kid's songs"`,
+                ]);
 
-            const mediaItems = searchResult.filter(validAggregateOrThrow);
+                const searchResult = await testRepositoryProvider
+                    .forResource<MediaItem>(AggregateType.mediaItem)
+                    .fetchMany();
 
-            expect(mediaItems).toHaveLength(expectedNumberOfResults);
+                const mediaItems = searchResult
+                    .filter(validAggregateOrThrow)
+                    .filter(({ published }) => published);
 
-            const testMp3FileName = `biodynamic-theme-song-forever`;
+                expect(mediaItems).toHaveLength(expectedNumberOfMediaItemsCreated);
 
-            const testMp3MediaItem = mediaItems.find((mediaItem) =>
-                mediaItem.getFilePath().toLowerCase().includes(testMp3FileName.toLowerCase())
-            );
+                const testMp3FileName = `biodynamic-theme-song-forever`;
 
-            expect(testMp3MediaItem).toBeInstanceOf(MediaItem);
+                const testMp3MediaItem = mediaItems.find((mediaItem) =>
+                    mediaItem.getFilePath().toLowerCase().includes(testMp3FileName.toLowerCase())
+                );
 
-            const { lengthMilliseconds } = testMp3MediaItem;
+                expect(testMp3MediaItem).toBeInstanceOf(MediaItem);
 
-            const actualMediaItemLength = 8.35916 * 1000; // ms, determined with Audacity
+                const { lengthMilliseconds } = testMp3MediaItem;
 
-            const lengthToCompare = isFiniteNumber(lengthMilliseconds) ? lengthMilliseconds : -1;
+                const actualMediaItemLength = 8.35916 * 1000; // ms, determined with Audacity
 
-            expect(lengthToCompare).toBeCloseTo(actualMediaItemLength);
+                const lengthToCompare = isFiniteNumber(lengthMilliseconds)
+                    ? lengthMilliseconds
+                    : -1;
 
-            const newAudioItems = (await testRepositoryProvider
-                .forResource(AggregateType.audioItem)
-                .fetchMany()) as AudioItem[];
+                expect(lengthToCompare).toBeCloseTo(actualMediaItemLength);
 
-            expect(newAudioItems.length).toBe(2);
+                const newAudioItems = (await testRepositoryProvider
+                    .forResource(AggregateType.audioItem)
+                    .fetchMany()) as AudioItem[];
 
-            const newVideos = (await testRepositoryProvider
-                .forResource(AggregateType.video)
-                .fetchMany()) as Video[];
+                expect(newAudioItems.length).toBe(2);
 
-            expect(newVideos.length).toBe(2);
+                const newVideos = (await testRepositoryProvider
+                    .forResource(AggregateType.video)
+                    .fetchMany()) as Video[];
 
-            const newPhotographs = (await testRepositoryProvider
-                .forResource(AggregateType.photograph)
-                .fetchMany()) as Photograph[];
+                expect(newVideos.length).toBe(2);
 
-            expect(newPhotographs.length).toBe(3);
+                const newPhotographs = (await testRepositoryProvider
+                    .forResource(AggregateType.photograph)
+                    .fetchMany()) as Photograph[];
 
-            const newPngPhotograph = newPhotographs.find(
-                ({ title }) => title.getOriginalTextItem().text === 'station'
-            );
+                expect(newPhotographs.length).toBe(3);
 
-            const expectedHeightPx = 1280;
+                const newPngPhotograph = newPhotographs.find(
+                    ({ title }) => title.getOriginalTextItem().text === 'station'
+                );
 
-            const expectedWidthPx = 960;
+                const expectedHeightPx = 1280;
 
-            expect(newPngPhotograph.dimensions.heightPx).toEqual(expectedHeightPx);
+                const expectedWidthPx = 960;
 
-            expect(newPngPhotograph.dimensions.widthPx).toEqual(expectedWidthPx);
-        }, 60000); // timeout of 60s
+                expect(newPngPhotograph.dimensions.heightPx).toEqual(expectedHeightPx);
+
+                expect(newPngPhotograph.dimensions.widthPx).toEqual(expectedWidthPx);
+            }, 60000); // timeout of 60s
+        });
+
+        describe(`when publication of the media item is not requested`, () => {
+            beforeEach(async () => {
+                await testRepositoryProvider.testTeardown();
+
+                commandInstance = await CommandTestFactory.createTestingCommand({
+                    imports: [CoscradCliModule],
+                })
+                    .overrideProvider(AppModule)
+                    .useValue(testAppModule)
+                    .overrideProvider(DynamicDataTypeModule)
+                    .useValue(testAppModule.get(DynamicDataTypeModule))
+                    .overrideProvider(ArangoDatabaseProvider)
+                    .useValue(databaseProvider)
+                    .overrideProvider(REPOSITORY_PROVIDER_TOKEN)
+                    .useValue(testRepositoryProvider)
+                    .compile();
+            });
+
+            it(`should not publish the media items`, async () => {
+                await CommandTestFactory.run(commandInstance, [
+                    cliCommandName,
+                    `--directory=${buildDirectoryPath(`mediaItemsOnly`)}`,
+                    `--staticAssetDestinationDirectory=${destinationDir}`,
+                    `--createResources`,
+                    // `--publish`,
+                ]);
+
+                const searchResult = await testRepositoryProvider
+                    .forResource<MediaItem>(AggregateType.mediaItem)
+                    .fetchMany();
+
+                const mediaItems = searchResult.filter(validAggregateOrThrow);
+
+                expect(mediaItems).toHaveLength(expectedNumberOfMediaItemsCreated);
+
+                const publicMediaItems = mediaItems.filter(({ published }) => published);
+
+                expect(publicMediaItems).toHaveLength(0);
+            }, 60000); // timeout of 60s
+        });
+
+        describe(`when associated resource creation is not requested`, () => {
+            beforeEach(async () => {
+                await testRepositoryProvider.testTeardown();
+
+                commandInstance = await CommandTestFactory.createTestingCommand({
+                    imports: [CoscradCliModule],
+                })
+                    .overrideProvider(AppModule)
+                    .useValue(testAppModule)
+                    .overrideProvider(DynamicDataTypeModule)
+                    .useValue(testAppModule.get(DynamicDataTypeModule))
+                    .overrideProvider(ArangoDatabaseProvider)
+                    .useValue(databaseProvider)
+                    .overrideProvider(REPOSITORY_PROVIDER_TOKEN)
+                    .useValue(testRepositoryProvider)
+                    .compile();
+            });
+
+            it(`should not create associated resources`, async () => {
+                testRepositoryProvider;
+
+                await CommandTestFactory.run(commandInstance, [
+                    cliCommandName,
+                    `--directory=${buildDirectoryPath(`mediaItemsOnly`)}`,
+                    `--staticAssetDestinationDirectory=${destinationDir}`,
+                    // omitted
+                    // `--createResources`,
+                    `--publish`,
+                ]);
+
+                const searchResult = await testRepositoryProvider
+                    .forResource<MediaItem>(AggregateType.mediaItem)
+                    .fetchMany();
+
+                const mediaItems = searchResult
+                    .filter(validAggregateOrThrow)
+                    .filter(({ published }) => published);
+
+                expect(mediaItems).toHaveLength(expectedNumberOfMediaItemsCreated);
+
+                const numberOfNewAudioItems = await testRepositoryProvider
+                    .forResource(AggregateType.audioItem)
+                    .getCount();
+
+                expect(numberOfNewAudioItems).toBe(0);
+
+                const numberOfNewVideos = await testRepositoryProvider
+                    .forResource(AggregateType.video)
+                    .getCount();
+
+                expect(numberOfNewVideos).toBe(0);
+
+                const numberOfNewPhotographs = await testRepositoryProvider
+                    .forResource(AggregateType.photograph)
+                    .getCount();
+
+                expect(numberOfNewPhotographs).toBe(0);
+            }, 6000); // timeout of 6 s
+        });
     });
 
     /**
      * TODO[test coverage]:
-     * - Stress test
      * - When the directory has nested directories
      * - when the directory has other file types
      *
      * Note that this is an internal tool and not user facing.
-     * We are not as concerned with comprehensive test coverage
-     * until we expand its use.
      */
 });

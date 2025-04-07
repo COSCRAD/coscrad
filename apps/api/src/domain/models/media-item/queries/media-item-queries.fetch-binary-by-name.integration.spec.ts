@@ -23,7 +23,6 @@ import { assertQueryResult } from '../../__tests__';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
-import { getExtensionForMimeType } from '../entities/get-extension-for-mime-type';
 import { MediaItem } from '../entities/media-item.entity';
 import { MediaItemModule } from '../media-item.module';
 
@@ -132,7 +131,10 @@ describe(`MediaItemController.fetchBinary`, () => {
         published: false,
     });
 
-    const assertResponseWithMediaItem = (header: Record<string, unknown>, mediaItem: MediaItem) => {
+    const assertResponseWithMediaItem = (
+        header: Record<string, unknown>,
+        _mediaItem: MediaItem
+    ) => {
         const disposition = header['content-disposition'];
 
         expect(disposition).toBe(
@@ -143,10 +145,12 @@ describe(`MediaItemController.fetchBinary`, () => {
              * `\"`s are is necessary in the result.
              */
             // eslint-disable-next-line no-useless-escape
-            `attachment; filename=\"${
-                mediaItem.getName().getOriginalTextItem().text
-                // eslint-disable-next-line no-useless-escape
-            }.${getExtensionForMimeType(mediaItem.mimeType)}\"`
+            // `attachment; filename=\"${
+            //     mediaItem.getName().getOriginalTextItem().text
+            //     // eslint-disable-next-line no-useless-escape
+            // }.${getExtensionForMimeType(mediaItem.mimeType)}\"`
+            // TODO Should this be built differently for the `download` endpoint?
+            `inline`
         );
     };
 

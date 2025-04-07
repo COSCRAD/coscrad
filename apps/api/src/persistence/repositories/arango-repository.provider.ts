@@ -43,6 +43,11 @@ export class ArangoRepositoryProvider implements IRepositoryProvider {
         this.eventRepository = new ArangoEventRepository(databaseProvider, coscradEventFactory);
     }
 
+    // This is helpful when diagnosing issues with test dependency injection
+    getDatabaseName() {
+        return this.databaseProvider.getDBInstance().getDatabaseName();
+    }
+
     getEdgeConnectionRepository() {
         return new ArangoRepositoryForAggregate<EdgeConnection>(
             this.databaseProvider,

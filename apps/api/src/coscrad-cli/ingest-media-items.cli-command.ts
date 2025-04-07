@@ -7,7 +7,7 @@ import {
 import { CommandHandlerService } from '@coscrad/commands';
 import { MIMEType } from '@coscrad/data-types';
 import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Inject } from '@nestjs/common';
+import { Inject, NotImplementedException } from '@nestjs/common';
 import { copyFileSync, existsSync, readdirSync } from 'fs';
 import { CommandFSA } from '../app/controllers/command/command-fsa/command-fsa.entity';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
@@ -38,8 +38,10 @@ import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
 
 interface IngestMediaItemsCliCommandOptions {
     directory: string;
-    baseUrl: string;
     staticAssetDestinationDirectory: string;
+    publish?: boolean;
+    createResources?: boolean;
+    tags?: string[];
 }
 
 const buildCreateResourceFsaForMediaItem = (
@@ -138,15 +140,21 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
 
     async run(
         _passedParams: string[],
-        { directory, staticAssetDestinationDirectory }: IngestMediaItemsCliCommandOptions
+        {
+            directory,
+            staticAssetDestinationDirectory,
+            publish: shouldPublishMediaItems = false,
+            createResources: shouldCreateResources = false,
+            tags = [],
+        }: IngestMediaItemsCliCommandOptions
     ): Promise<void> {
-        console.time();
-        // console.timeLog();
-
         this.logger.log(`Attempting to import media from: ${directory}`);
 
         /**
          * TODO We should consider using the async API for performance.
+         *
+         * Curently, an option for performance is to ingest media items one at a time
+         * and parallelize using GNUParallel.
          */
         const partialPayloads: (Omit<CreateMediaItem, 'aggregateCompositeIdentifier' | 'url'> & {
             filename: string;
@@ -255,17 +263,22 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
             }
         );
 
-        const createResourceFsas = createMediaItemFsas
-            /**
-             * We only want to create corresponding media resources when the MIME Type
-             * corresponds to a audio, video, or photograph.
-             */
-            .filter(({ payload: { mimeType } }) => isMediaResourceMimeType(mimeType))
-            .map((createMediaItemFsa, index) => {
-                const idToUse = generatedIds[index + partialPayloads.length];
+        const createResourceFsas = shouldCreateResources
+            ? createMediaItemFsas
+                  /**
+                   * We only want to create corresponding media resources when the MIME Type
+                   * corresponds to a audio, video, or photograph.
+                   */
+                  .filter(({ payload: { mimeType } }) => isMediaResourceMimeType(mimeType))
+                  .map((createMediaItemFsa, index) => {
+                      const idToUse = generatedIds[index + partialPayloads.length];
 
-                return buildCreateResourceFsaForMediaItem(createMediaItemFsa.payload, idToUse);
-            });
+                      return buildCreateResourceFsaForMediaItem(
+                          createMediaItemFsa.payload,
+                          idToUse
+                      );
+                  })
+            : [];
 
         /**
          * TODO[Performance] We should consider another pattern such as a promise
@@ -288,30 +301,42 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
                 throw topLevelError;
             }
 
-            const publicationResult = await this.commandHandlerService.execute(
-                {
-                    type: 'PUBLISH_RESOURCE',
-                    payload: {
-                        aggregateCompositeIdentifier: fsa.payload.aggregateCompositeIdentifier,
-                    },
-                },
-                {
-                    userId: 'COSCRAD Admin',
-                }
+            this.logger.log(
+                `Media Item Added: ${JSON.stringify(fsa.payload.aggregateCompositeIdentifier.id)}`
             );
 
-            if (isInternalError(publicationResult)) {
-                const error = new InternalError(
-                    `Failed to import media item: ${fsa.payload.aggregateCompositeIdentifier.id} at the publication stage`,
-                    [publicationResult]
+            // publish media item, if this was requested
+            if (shouldPublishMediaItems) {
+                const publicationResult = await this.commandHandlerService.execute(
+                    {
+                        type: 'PUBLISH_RESOURCE',
+                        payload: {
+                            aggregateCompositeIdentifier: fsa.payload.aggregateCompositeIdentifier,
+                        },
+                    },
+                    {
+                        userId: 'COSCRAD Admin',
+                    }
                 );
 
-                this.logger.log(error.toString());
+                if (isInternalError(publicationResult)) {
+                    const error = new InternalError(
+                        `Failed to import media item: ${fsa.payload.aggregateCompositeIdentifier.id} at the publication stage`,
+                        [publicationResult]
+                    );
 
-                throw error;
+                    this.logger.log(error.toString());
+
+                    throw error;
+                }
             }
 
-            this.logger.log(`Media Item Added: ${JSON.stringify(fsa)}`);
+            // tag media item, if this was requested
+            if (tags.length > 0) {
+                throw new NotImplementedException(
+                    `We do not yet support tagging media items during ingestion`
+                );
+            }
 
             const {
                 payload: {
@@ -332,6 +357,10 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
             }
         }
 
+        /**
+         * Note that if `shouldCreateResources == false`, `createResourceFsas`
+         * will be empty and no work will be done here.
+         */
         for (const fsa of createResourceFsas) {
             const result = await this.commandHandlerService.execute(fsa, {
                 userId: 'COSCRAD Admin',
@@ -382,9 +411,6 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
                 )} Added: ${JSON.stringify(fsa)}`
             );
         }
-
-        // console.timeLog();
-        // console.timeEnd();
     }
 
     @CliCommandOption({
@@ -393,15 +419,6 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
         required: true,
     })
     parseDirectory(input: string): string {
-        return input;
-    }
-
-    @CliCommandOption({
-        flags: '-b, --baseUrl [baseUrl]',
-        description: 'the base URL for the media server',
-        required: true,
-    })
-    parseBaseUrl(input: string): string {
         return input;
     }
 
@@ -420,5 +437,39 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
         }
 
         return isNonEmptyString(input) ? input : undefined;
+    }
+
+    @CliCommandOption({
+        flags: '-p, --publish [publish]',
+        description: 'should the media item be published?',
+        required: false,
+    })
+    parsePublish(input: string): boolean {
+        return JSON.parse(input);
+    }
+
+    @CliCommandOption({
+        flags: '-c, --createResources [createResources]',
+        description:
+            'should corresponding resources (e.g., audio, video, or photograph) be created?',
+        required: false,
+    })
+    parseCreateResources(input: string): boolean {
+        return JSON.parse(input);
+    }
+
+    @CliCommandOption({
+        flags: '-t, --tags [tags]',
+        description: 'a comma separated list of tags (by label) to apply to all media items',
+        required: false,
+    })
+    parseTags(input: string): string[] {
+        if (!isNonEmptyString(input)) return [];
+
+        if (input.charAt(0) === '"' && input.charAt(input.length - 1) === '"') {
+            input = input.slice(1, input.length - 1);
+        }
+
+        return input.split(',');
     }
 }
