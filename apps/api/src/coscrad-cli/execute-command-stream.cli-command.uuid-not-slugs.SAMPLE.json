@@ -3,7 +3,7 @@
         "type": "CREATE_TERM",
         "payload": {
             "aggregateCompositeIdentifier": {
-                "id": "GENERATE_THIS_ID:1",
+                "id": "41fb2d7f-c483-4e09-a1f0-e9909a6b0001",
                 "type": "term"
             },
             "text": "I am talking to him (language)",
@@ -14,7 +14,7 @@
         "type": "TRANSLATE_TERM",
         "payload": {
             "aggregateCompositeIdentifier": {
-                "id": "APPEND_THIS_ID",
+                "id": "41fb2d7f-c483-4e09-a1f0-e9909a6b0001",
                 "type": "term"
             },
             "translation": "I am talking to him (English)",
@@ -25,7 +25,7 @@
         "type": "PUBLISH_RESOURCE",
         "payload": {
             "aggregateCompositeIdentifier": {
-                "id": "APPEND_THIS_ID",
+                "id": "41fb2d7f-c483-4e09-a1f0-e9909a6b0001",
                 "type": "term"
             }
         }
