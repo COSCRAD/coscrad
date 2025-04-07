@@ -1,7 +1,6 @@
 import { CommandHandler } from '@coscrad/commands';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
-import { ArangoRepositoryProvider } from '../../../../../persistence/repositories/arango-repository.provider';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { Valid } from '../../../../domainModelValidators/Valid';
@@ -60,8 +59,6 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
     protected async fetchRequiredExternalState({
         aggregateCompositeIdentifier: { id: mediaItemId },
     }: CreateMediaItem): Promise<InMemorySnapshot> {
-        const _db = (this.repositoryProvider as ArangoRepositoryProvider).getDatabaseName();
-
         const searchResult = await this.repositoryProvider
             .forResource<MediaItem>(ResourceType.mediaItem)
             .fetchById(mediaItemId);
