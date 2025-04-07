@@ -146,7 +146,6 @@ describe(`CLI Command: **ingest-media-items**`, () => {
                 await CommandTestFactory.run(commandInstance, [
                     cliCommandName,
                     `--directory=${buildDirectoryPath(`mediaItemsOnly`)}`,
-                    `--baseUrl=http://localhost:3131/uploads`,
                     `--staticAssetDestinationDirectory=${destinationDir}`,
                     `--createResources`,
                     `--publish`,
@@ -236,7 +235,6 @@ describe(`CLI Command: **ingest-media-items**`, () => {
                 await CommandTestFactory.run(commandInstance, [
                     cliCommandName,
                     `--directory=${buildDirectoryPath(`mediaItemsOnly`)}`,
-                    `--baseUrl=http://localhost:3131/uploads`,
                     `--staticAssetDestinationDirectory=${destinationDir}`,
                     `--createResources`,
                     // `--publish`,
@@ -280,7 +278,6 @@ describe(`CLI Command: **ingest-media-items**`, () => {
                 await CommandTestFactory.run(commandInstance, [
                     cliCommandName,
                     `--directory=${buildDirectoryPath(`mediaItemsOnly`)}`,
-                    `--baseUrl=http://localhost:3131/uploads`,
                     `--staticAssetDestinationDirectory=${destinationDir}`,
                     // omitted
                     // `--createResources`,
