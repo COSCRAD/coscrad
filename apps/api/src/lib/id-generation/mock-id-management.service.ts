@@ -21,9 +21,11 @@ const buildId = (sequentialId: number) => {
         throw new InternalError(`Invalid sequential id: ${sequentialId}`);
     }
 
-    return `${hardwiredUuidPrefix}${sequentialId
+    const generatedId = `${hardwiredUuidPrefix}${sequentialId
         .toString()
         .padStart(numberOfReservedDigits, fillerChar)}`;
+
+    return generatedId;
 };
 
 export class MockIdManagementService extends IdManagementService {
