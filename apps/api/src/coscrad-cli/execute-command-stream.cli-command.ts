@@ -5,7 +5,12 @@ import {
     getCoscradDataSchema,
     getReferencesForCoscradDataSchema,
 } from '@coscrad/data-types';
-import { isNonEmptyString, isNullOrUndefined, isString } from '@coscrad/validation-constraints';
+import {
+    isNonEmptyString,
+    isNullOrUndefined,
+    isString,
+    isUUID,
+} from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { readFileSync } from 'fs';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
@@ -210,8 +215,8 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
                     },
                 }) => id
             )
-            .map((slugFromPayload) => {
-                return parseSlugDefinition(slugFromPayload);
+            .map((idFromPayload) => {
+                return isUUID(idFromPayload) ? idFromPayload : parseSlugDefinition(idFromPayload);
             });
 
         const invalidSlugDefinitions = userDefinedSlugParseResult.filter(isInternalError);
