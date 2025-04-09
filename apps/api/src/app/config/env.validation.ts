@@ -108,6 +108,15 @@ export class EnvironmentVariables {
         description: 'whether or not to enable the legacy games data endpoint',
     })
     SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT: string;
+
+    // TODO Can we add a parsing layer before validation? That way, this will be `string[]` by the time it's available in the `ConfigService`
+    @NonEmptyString({
+        label: 'allowed client origins',
+        description:
+            'Comma separated list. If non-empty, this list will be use to configure CORS for provided client URLs',
+        isOptional: true,
+    })
+    ALLOWED_CLIENT_ORIGINS: string;
 }
 
 // Do we have a test of this?

@@ -1,3 +1,4 @@
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
@@ -7,13 +8,19 @@ import { AppModule } from './app/app.module';
 import { DynamicDataTypeFinderService } from './validation';
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule, { cors: true });
+    const app = await NestFactory.create(AppModule);
 
     const globalPrefix = app.get(ConfigService).get<string>('GLOBAL_PREFIX', 'api');
 
     app.setGlobalPrefix(globalPrefix);
 
-    // app.enableCors({});
+    const rawOrigins = app.get(ConfigService).get<string>('ALLOWED_CLIENT_ORIGINS');
+
+    const allowedOrigins = isNonEmptyString(rawOrigins) ? rawOrigins.split(',') : [];
+
+    app.enableCors({
+        origin: allowedOrigins,
+    });
 
     const port = app.get(ConfigService).get<string>('NODE_PORT', '3987');
 
