@@ -53,7 +53,8 @@ export class PlaylistViewModel extends BaseResourceViewModel {
         playlist: Playlist,
         allAudioItems: AudioItem[],
         allMediaItems: MediaItem[],
-        allContributors: CoscradContributor[]
+        allContributors: CoscradContributor[],
+        baseUrl: string
     ) {
         super(playlist, allContributors);
 
@@ -75,7 +76,8 @@ export class PlaylistViewModel extends BaseResourceViewModel {
             resource.buildEpisodes(
                 new DeluxeInMemoryStore({
                     [ResourceType.mediaItem]: allMediaItems,
-                }).fetchFullSnapshotInLegacyFormat()
+                }).fetchFullSnapshotInLegacyFormat(),
+                baseUrl
             )
         );
     }
