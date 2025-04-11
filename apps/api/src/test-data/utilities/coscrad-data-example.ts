@@ -35,7 +35,7 @@ export const buildTestInstance = <T = unknown>(
         throw new InternalError(
             `In order to build a test instance of: ${
                 Object.getPrototypeOf(target).name
-            }, it must have a static factory method called "toDto"`
+            }, it must have a static factory method called "fromDto"`
         );
     }
 

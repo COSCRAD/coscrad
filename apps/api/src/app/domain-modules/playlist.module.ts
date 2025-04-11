@@ -11,6 +11,8 @@ import {
     TranslatePlaylistName,
     TranslatePlaylistNameCommandHandler,
 } from '../../domain/models/playlist/commands';
+import { AudioItemAddedToPlaylist } from '../../domain/models/playlist/commands/add-audio-item-to-playlist/audio-item-added-to-playlist.event';
+import { AudioItemAddedToPlaylistEventHandler } from '../../domain/models/playlist/commands/add-audio-item-to-playlist/audio-item-added-to-playlist.event-handler';
 import { PlaylistCreated } from '../../domain/models/playlist/commands/playlist-created.event';
 import { PlaylistCreatedEventHandler } from '../../domain/models/playlist/commands/playlist-created.event-handler';
 import { ArangoPlaylistQueryRepository } from '../../domain/models/playlist/queries/arango-playlist-query-repository';
@@ -40,12 +42,14 @@ import { PlaylistController } from '../controllers/resources/playlist.controller
         AddAudioItemToPlaylistCommandHandler,
         ImportAudioItemsToPlaylistCommandHandler,
         PlaylistCreatedEventHandler,
+        AudioItemAddedToPlaylistEventHandler,
         // Data Classes
         ...[
             CreatePlayList,
             PlaylistCreated,
             TranslatePlaylistName,
             AddAudioItemToPlaylist,
+            AudioItemAddedToPlaylist,
             ImportAudioItemsToPlaylist,
         ].map((ctor) => ({
             provide: ctor,
