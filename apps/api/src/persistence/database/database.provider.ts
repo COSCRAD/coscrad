@@ -40,9 +40,11 @@ export class ArangoDatabaseProvider {
      * of a testing environment.
      */
     clearViews = async (): Promise<void> => {
-        const viewCollections = (await this.databaseConnection.collections(true)).flatMap(
-            (collection) => (collection.name.includes('__VIEWS') ? [collection.name] : [])
-        );
+        const allCollections = await this.databaseConnection.collections(true);
+
+        const viewCollections = allCollections.flatMap((collection) => {
+            return collection.name.includes('__VIEWS') ? [collection.name] : [];
+        });
 
         await Promise.all(
             viewCollections.map((collectionName) =>

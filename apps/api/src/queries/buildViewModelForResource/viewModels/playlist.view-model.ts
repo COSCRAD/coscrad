@@ -1,13 +1,12 @@
-import { ResourceType } from '@coscrad/api-interfaces';
-import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
+import { NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
+import { isNonEmptyObject } from '@coscrad/validation-constraints';
+import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
-import { AudioItem } from '../../../domain/models/audio-visual/audio-item/entities/audio-item.entity';
-import { MediaItem } from '../../../domain/models/media-item/entities/media-item.entity';
-import { Playlist } from '../../../domain/models/playlist';
+import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { PlaylistEpisode } from '../../../domain/models/playlist/entities/playlist-episode.entity';
-import { CoscradContributor } from '../../../domain/models/user-management/contributor';
-import { DeluxeInMemoryStore } from '../../../domain/types/DeluxeInMemoryStore';
-import { BaseResourceViewModel } from './base-resource.view-model';
+import { AggregateId } from '../../../domain/types/AggregateId';
+import { CoscradDataExample } from '../../../test-data/utilities';
+import { DTO } from '../../../types/DTO';
 
 /**
  * Note that in the future we anticipate the Playlist becoming something other
@@ -18,7 +17,21 @@ import { BaseResourceViewModel } from './base-resource.view-model';
  * or notes about the playlist and will only support general context in connections
  * for playlists.
  */
-export class PlaylistViewModel extends BaseResourceViewModel {
+// TODO leverage this in `buildTestData`
+@CoscradDataExample<PlaylistViewModel>({
+    example: {
+        id: buildDummyUuid(9001),
+        name: buildMultilingualTextWithSingleItem('Metal Mondays'),
+        episodes: [],
+    },
+})
+export class PlaylistViewModel {
+    @UUID({
+        label: 'Playlist ID',
+        description: 'unique system-wide identifier for this playlist',
+    })
+    id: AggregateId;
+
     @NestedDataType(MultilingualText, {
         label: 'name',
         description: 'name of the playlist',
@@ -38,7 +51,7 @@ export class PlaylistViewModel extends BaseResourceViewModel {
         label: 'episodes',
         description: 'a summary description of each episode in this playlist',
     })
-    // TODO establish a view model for episodes
+    // TODO move this class here
     readonly episodes: PlaylistEpisode[];
 
     /**
@@ -49,36 +62,28 @@ export class PlaylistViewModel extends BaseResourceViewModel {
      * want to handle `playlists` and content-management, we should move to
      * a more performant way of managing queries.
      */
-    constructor(
-        playlist: Playlist,
-        allAudioItems: AudioItem[],
-        allMediaItems: MediaItem[],
-        allContributors: CoscradContributor[],
-        baseUrl: string
-    ) {
-        super(playlist, allContributors);
+    constructor(id?: AggregateId, name?: MultilingualText, episodes: PlaylistEpisode[] = []) {
+        this.id = id;
 
-        const { name, items } = playlist;
+        if (isNonEmptyObject(name)) {
+            // TODO Whose job is it to clone?
+            this.name = name;
+        }
 
-        this.name = name.clone();
+        this.episodes = episodes;
+    }
 
-        const allResourceCompositeIdsToFind = items.flatMap(
-            ({ resourceCompositeIdentifier }) => resourceCompositeIdentifier
-        );
+    public static fromDto(dto: DTO<PlaylistViewModel>): PlaylistViewModel {
+        if (!isNonEmptyObject(dto)) {
+            return new PlaylistViewModel();
+        }
 
-        // TODO establish a view model for episodes
-        const allResources = allAudioItems.filter(({ id }) =>
-            allResourceCompositeIdsToFind.some((compositeId) => compositeId.id === id)
-        );
+        const { id, name, episodes } = dto;
 
-        // note that the client has to append the base URL
-        this.episodes = allResources.flatMap((resource) =>
-            resource.buildEpisodes(
-                new DeluxeInMemoryStore({
-                    [ResourceType.mediaItem]: allMediaItems,
-                }).fetchFullSnapshotInLegacyFormat(),
-                baseUrl
-            )
+        return new PlaylistViewModel(
+            id,
+            new MultilingualText(name),
+            episodes.map((e) => new PlaylistEpisode(e))
         );
     }
 }

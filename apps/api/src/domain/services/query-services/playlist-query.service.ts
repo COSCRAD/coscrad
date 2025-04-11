@@ -4,7 +4,6 @@ import { ConfigService } from '@nestjs/config';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
-import { PlaylistViewModel } from '../../../queries/buildViewModelForResource/viewModels';
 import { AudioItem } from '../../models/audio-visual/audio-item/entities/audio-item.entity';
 import BaseDomainModel from '../../models/base-domain-model.entity';
 import { MediaItem } from '../../models/media-item/entities/media-item.entity';
@@ -24,7 +23,7 @@ export class PlaylistQueryService extends ResourceQueryService<
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN) repositoryProvider: IRepositoryProvider,
         @Inject(CommandInfoService) commandInfoService: CommandInfoService,
-        private readonly configService: ConfigService
+        private readonly _configService: ConfigService
     ) {
         super(repositoryProvider, commandInfoService);
     }
@@ -45,20 +44,8 @@ export class PlaylistQueryService extends ResourceQueryService<
         }).fetchFullSnapshotInLegacyFormat();
     }
 
-    buildViewModel(
-        playlist: Playlist,
-        {
-            resources: { audioItem: allAudioItems, mediaItem: allMediaItems },
-            contributor: allContributors,
-        }: InMemorySnapshot
-    ): Omit<IPlayListViewModel, 'actions'> {
-        return new PlaylistViewModel(
-            playlist,
-            allAudioItems,
-            allMediaItems,
-            allContributors,
-            `${this.configService.get('BASE_URL')}/${this.configService.get('GLOBAL_PREFIX')}`
-        );
+    buildViewModel(_playlist: Playlist, __: InMemorySnapshot): Omit<IPlayListViewModel, 'actions'> {
+        throw new Error(`deprecated`);
     }
 
     getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {
