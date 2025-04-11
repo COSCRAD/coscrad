@@ -12,6 +12,7 @@ import { NotFound } from '../../../../../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import { ArangoCollectionId } from '../../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
+import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { PlaylistViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
@@ -41,6 +42,11 @@ const audioItemAddedToPlaylistEvent = buildTestInstance(AudioItemAddedToPlaylist
         },
         audioItemId: existingAudioItemView.id,
     },
+});
+
+const existingPlaylist = buildTestInstance(PlaylistViewModel, {
+    id: playlistId,
+    episodes: [],
 });
 
 describe(`AudioItemAddedToPlaylistEventHandler`, () => {
@@ -99,13 +105,19 @@ describe(`AudioItemAddedToPlaylistEventHandler`, () => {
                 .getDatabaseForCollection(ArangoCollectionId.contributors)
                 .clear();
 
+            await databaseProvider
+                .getDatabaseForCollection('audioItem__VIEWS')
+                .create(mapEntityDTOToDatabaseDocument(existingAudioItemView));
+
+            await testQueryRepository.create(existingPlaylist);
+
             await app
                 .get<IRepositoryProvider>(REPOSITORY_PROVIDER_TOKEN)
                 .getContributorRepository()
                 .create(dummyContributor);
         });
 
-        it(`should create the expected view in the database`, async () => {
+        it(`should append the correct episode to the existing playlist in the query db`, async () => {
             const handler = app.get(AudioItemAddedToPlaylistEventHandler);
 
             await handler.handle(audioItemAddedToPlaylistEvent);
@@ -118,14 +130,14 @@ describe(`AudioItemAddedToPlaylistEventHandler`, () => {
 
             expect(episodes).toHaveLength(1);
 
-            const { name, mediaItemUrl, mimeType } = episodes[0];
+            const { name, mediaItemId, mimeType } = episodes[0];
 
             expect(name).toEqual(existingAudioItemView.name);
 
             expect(mimeType).toBe(existingAudioItemView.mimeType);
 
             // fix this- it should be an ID on the model
-            expect(mediaItemUrl).toEqual(existingAudioItemView.mediaItemId);
+            expect(mediaItemId).toEqual(existingAudioItemView.mediaItemId);
         });
     });
 });

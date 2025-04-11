@@ -5,7 +5,6 @@ import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../app/config/constants/environment';
-import { ConsoleCoscradCliLogger } from '../../../../coscrad-cli/logging';
 import { NotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoCollectionId } from '../../../../persistence/database/collection-references/ArangoCollectionId';
@@ -21,6 +20,7 @@ import { buildMultilingualTextFromBilingualText } from '../../../common/build-mu
 import buildInstanceFactory from '../../../factories/utilities/buildInstanceFactory';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
 import { IAudioItemQueryRepository } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ArangoAudioItemQueryRepository } from '../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { CoscradContributor } from '../../user-management';
@@ -36,6 +36,7 @@ const playlistViews = playlistIds.map((id, index) =>
             { text: `playlist #${index + 1}`, languageCode: LanguageCode.Chilcotin },
             { text: `playlist #${index + 1} (translation)`, languageCode: LanguageCode.English }
         ),
+        episodes: [],
     })
 );
 
@@ -43,10 +44,12 @@ const targetPlaylist = playlistViews[0];
 
 const targetPlaylistId = targetPlaylist.id;
 
+const existingAudioItem = buildTestInstance(EventSourcedAudioItemViewModel);
+
 describe(`ArangoPlaylistQueryRepository`, () => {
     let testQueryRepository: IPlaylistQueryRepository;
 
-    let _audioItemQueryRepository: IAudioItemQueryRepository;
+    let audioItemQueryRepository: IAudioItemQueryRepository;
 
     let databaseProvider: ArangoDatabaseProvider;
 
@@ -78,11 +81,11 @@ describe(`ArangoPlaylistQueryRepository`, () => {
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
 
         // TODO Use the DI system so this is more extensible to keep test maintenance lower
-        _audioItemQueryRepository = new ArangoAudioItemQueryRepository(connectionProvider);
+        audioItemQueryRepository = new ArangoAudioItemQueryRepository(connectionProvider);
 
         testQueryRepository = new ArangoPlaylistQueryRepository(
-            connectionProvider,
-            new ConsoleCoscradCliLogger()
+            connectionProvider
+            // new ConsoleCoscradCliLogger()
         );
 
         /**
@@ -114,6 +117,52 @@ describe(`ArangoPlaylistQueryRepository`, () => {
 
                 expect(result).not.toBe(NotFound);
             });
+        });
+    });
+
+    describe(`fetchMany`, () => {
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.createMany(playlistViews);
+        });
+
+        describe(`when there are several views`, () => {
+            it(`should return them`, async () => {
+                const result = await testQueryRepository.fetchMany();
+
+                expect(result).toHaveLength(playlistViews.length);
+            });
+        });
+    });
+
+    describe(`addAudioItem`, () => {
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.createMany(playlistViews);
+
+            await audioItemQueryRepository.create(existingAudioItem);
+        });
+
+        it(`should add the correct episode to the playlist`, async () => {
+            await testQueryRepository.addAudioItem(targetPlaylist.id, existingAudioItem.id);
+
+            const { episodes } = (await testQueryRepository.fetchById(
+                targetPlaylist.id
+            )) as PlaylistViewModel;
+
+            expect(episodes).toHaveLength(1);
+
+            const { mimeType, mediaItemId, lengthMilliseconds, name } = episodes[0];
+
+            expect(mediaItemId).toBe(existingAudioItem.mediaItemId);
+
+            expect(lengthMilliseconds).toBe(existingAudioItem.lengthMilliseconds);
+
+            expect(name).toEqual(existingAudioItem.name);
+
+            expect(mimeType).toBe(mimeType);
         });
     });
 });

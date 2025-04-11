@@ -1,12 +1,73 @@
-import { NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
+import { AggregateType } from '@coscrad/api-interfaces';
+import {
+    ExternalEnum,
+    MIMEType,
+    NestedDataType,
+    NonEmptyString,
+    NonNegativeFiniteNumber,
+    ReferenceTo,
+    UUID,
+} from '@coscrad/data-types';
 import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
 import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
-import { PlaylistEpisode } from '../../../domain/models/playlist/entities/playlist-episode.entity';
 import { AggregateId } from '../../../domain/types/AggregateId';
 import { CoscradDataExample } from '../../../test-data/utilities';
 import { DTO } from '../../../types/DTO';
+
+// TODO move this file
+export class PlaylistEpisodeViewModel {
+    // resourceCompositeIdentifier
+
+    @NestedDataType(MultilingualText, {
+        label: 'name',
+        description: 'name of this episode along with its translations',
+    })
+    name: MultilingualText;
+
+    @ExternalEnum(
+        {
+            labelsAndValues: Object.entries(MIMEType).map(([label, value]) => ({ label, value })),
+            enumLabel: 'MIME type',
+            enumName: 'MIMEType',
+        },
+        {
+            label: 'MIME type',
+            description: 'technical specification of the format of the media item',
+        }
+    )
+    mimeType: MIMEType;
+
+    @ReferenceTo(AggregateType.mediaItem)
+    @UUID({
+        label: 'media item ID',
+        description: 'system reference to the media item for this episode',
+    })
+    mediaItemId: AggregateId;
+
+    @NonNegativeFiniteNumber({
+        label: 'duration (ms)',
+        description: 'duration of the audio or video in milliseconds',
+    })
+    lengthMilliseconds: number;
+
+    constructor(dto: DTO<PlaylistEpisodeViewModel>) {
+        if (!dto) return;
+
+        const { name, mimeType, lengthMilliseconds, mediaItemId } = dto;
+
+        if (isNonEmptyObject(name)) {
+            this.name = new MultilingualText(name);
+        }
+
+        this.mimeType = mimeType;
+
+        this.lengthMilliseconds = lengthMilliseconds;
+
+        this.mediaItemId = mediaItemId;
+    }
+}
 
 /**
  * Note that in the future we anticipate the Playlist becoming something other
@@ -52,7 +113,7 @@ export class PlaylistViewModel {
         description: 'a summary description of each episode in this playlist',
     })
     // TODO move this class here
-    readonly episodes: PlaylistEpisode[];
+    readonly episodes: PlaylistEpisodeViewModel[];
 
     /**
      * TODO This is not a performant way to handle joins. We have moved to
@@ -62,7 +123,11 @@ export class PlaylistViewModel {
      * want to handle `playlists` and content-management, we should move to
      * a more performant way of managing queries.
      */
-    constructor(id?: AggregateId, name?: MultilingualText, episodes: PlaylistEpisode[] = []) {
+    constructor(
+        id?: AggregateId,
+        name?: MultilingualText,
+        episodes: PlaylistEpisodeViewModel[] = []
+    ) {
         this.id = id;
 
         if (isNonEmptyObject(name)) {
@@ -83,7 +148,7 @@ export class PlaylistViewModel {
         return new PlaylistViewModel(
             id,
             new MultilingualText(name),
-            episodes.map((e) => new PlaylistEpisode(e))
+            episodes.map((e) => new PlaylistEpisodeViewModel(e))
         );
     }
 }

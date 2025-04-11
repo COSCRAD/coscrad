@@ -1,4 +1,5 @@
 import { Observable } from 'rxjs';
+import { InternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { isNotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
@@ -61,11 +62,57 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
         return PlaylistViewModel.fromDto(asView);
     }
 
-    fetchMany(): Promise<PlaylistViewModel[]> {
-        throw new Error('Method not implemented.');
+    async fetchMany(): Promise<PlaylistViewModel[]> {
+        const result = await this.database.fetchMany();
+
+        const asViews = result.map((doc) =>
+            PlaylistViewModel.fromDto(mapDatabaseDocumentToAggregateDTO(doc))
+        );
+
+        return asViews;
     }
 
     allowUser(_id: AggregateId, _userId: AggregateId): Promise<void> {
         throw new Error('Method not implemented.');
+    }
+
+    async addAudioItem(playlistId: AggregateId, audioItemId: string) {
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+        FOR a IN audioItem__VIEWS
+        FILTER a._key == @audioItemId
+        LET nextEpisode = {
+                name: a.name,
+                mimeType: a.mimeType,
+                lengthMilliseconds: a.lengthMilliseconds,
+                mediaItemId: a.mediaItemId
+            }
+        UPDATE doc WITH {
+            episodes: APPEND(doc.episodes,nextEpisode)
+        } IN @@collectionName
+         RETURN NEW
+        `;
+
+        const bindVars = {
+            '@collectionName': 'playlist__VIEWS',
+            id: playlistId,
+            audioItemId,
+        };
+
+        const cursor = await this.database
+            .query({
+                query,
+                bindVars,
+            })
+            .catch((reason) => {
+                throw new InternalError(
+                    `Failed to add audio item as episode to playlist via term query repository: ${reason}`
+                );
+            });
+
+        const _new = await cursor.all();
+
+        _new;
     }
 }
