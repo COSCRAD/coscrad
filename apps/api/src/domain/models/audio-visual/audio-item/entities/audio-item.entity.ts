@@ -54,7 +54,7 @@ export type CoscradTimeStamp = number;
 // TODO export from elsewhere
 export interface IRadioPublishableResource {
     // TODO Reduce the input type
-    buildEpisodes: (snapshot: InMemorySnapshot) => PlaylistEpisode[];
+    buildEpisodes: (snapshot: InMemorySnapshot, baseUrl: string) => PlaylistEpisode[];
 }
 
 export const isAudioMimeType = (mimeType: MIMEType): boolean =>
@@ -263,9 +263,10 @@ export class AudioItem extends Resource implements IRadioPublishableResource {
     }
 
     // TODO Does this belong in the view layer?
-    buildEpisodes({
-        resources: { mediaItem: allMediaItems },
-    }: InMemorySnapshot): PlaylistEpisode[] {
+    buildEpisodes(
+        { resources: { mediaItem: allMediaItems } }: InMemorySnapshot,
+        baseUrl: string
+    ): PlaylistEpisode[] {
         const myMediaItem = allMediaItems.find(({ id }) => id === this.mediaItemId);
 
         if (isNullOrUndefined(myMediaItem)) {
@@ -282,7 +283,7 @@ export class AudioItem extends Resource implements IRadioPublishableResource {
                 name: this.name.toString(),
                 mimeType,
                 // TODO build this URL elsewhere and only store the media item ID here
-                mediaItemUrl: `/resources/mediaItems/download/${this.mediaItemId}`,
+                mediaItemUrl: `${baseUrl}/resources/mediaItems/download/${this.mediaItemId}`,
             }),
         ];
     }
