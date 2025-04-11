@@ -992,12 +992,12 @@ exports[`When fetching multiple resources GET /resources/playlists when all of t
       "contributions": [],
       "episodes": [
         {
-          "mediaItemUrl": "/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          "mediaItemUrl": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "mimeType": "audio/wav",
           "name": "The Wooden Boy {en} (role: original)",
         },
         {
-          "mediaItemUrl": "/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+          "mediaItemUrl": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
           "mimeType": "audio/mpeg",
           "name": "Down at the River {clc} (role: original)",
         },
@@ -1051,12 +1051,12 @@ exports[`When fetching multiple resources GET /resources/playlists when some of 
       "contributions": [],
       "episodes": [
         {
-          "mediaItemUrl": "/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          "mediaItemUrl": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "mimeType": "audio/wav",
           "name": "The Wooden Boy {en} (role: original)",
         },
         {
-          "mediaItemUrl": "/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+          "mediaItemUrl": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
           "mimeType": "audio/mpeg",
           "name": "Down at the River {clc} (role: original)",
         },

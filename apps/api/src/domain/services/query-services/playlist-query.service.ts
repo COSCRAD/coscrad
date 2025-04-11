@@ -1,5 +1,6 @@
 import { AggregateType, IPlayListViewModel, ResourceType } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
@@ -22,7 +23,8 @@ export class PlaylistQueryService extends ResourceQueryService<
 
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN) repositoryProvider: IRepositoryProvider,
-        @Inject(CommandInfoService) commandInfoService: CommandInfoService
+        @Inject(CommandInfoService) commandInfoService: CommandInfoService,
+        private readonly configService: ConfigService
     ) {
         super(repositoryProvider, commandInfoService);
     }
@@ -50,7 +52,13 @@ export class PlaylistQueryService extends ResourceQueryService<
             contributor: allContributors,
         }: InMemorySnapshot
     ): Omit<IPlayListViewModel, 'actions'> {
-        return new PlaylistViewModel(playlist, allAudioItems, allMediaItems, allContributors);
+        return new PlaylistViewModel(
+            playlist,
+            allAudioItems,
+            allMediaItems,
+            allContributors,
+            `${this.configService.get('BASE_URL')}/${this.configService.get('GLOBAL_PREFIX')}`
+        );
     }
 
     getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {

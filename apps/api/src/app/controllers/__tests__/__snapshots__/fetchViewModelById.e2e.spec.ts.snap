@@ -172,12 +172,12 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
   "contributions": [],
   "episodes": [
     {
-      "mediaItemUrl": "/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "mediaItemUrl": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "mimeType": "audio/wav",
       "name": "The Wooden Boy {en} (role: original)",
     },
     {
-      "mediaItemUrl": "/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+      "mediaItemUrl": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
       "mimeType": "audio/mpeg",
       "name": "Down at the River {clc} (role: original)",
     },
