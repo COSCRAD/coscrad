@@ -143,12 +143,19 @@ import {
 import { PhotographQueryService } from '../../../domain/models/photograph/queries/photograph-query.service';
 import { ArangoPhotographQueryRepository } from '../../../domain/models/photograph/repositories';
 import {
+    IPlaylistQueryRepository,
+    PLAYLIST_QUERY_REPOSITORY_TOKEN,
+} from '../../../domain/models/playlist';
+import {
     AddAudioItemToPlaylistCommandHandler,
     CreatePlayListCommandHandler,
     ImportAudioItemsToPlaylist,
     ImportAudioItemsToPlaylistCommandHandler,
     TranslatePlaylistNameCommandHandler,
 } from '../../../domain/models/playlist/commands';
+import { PlaylistController } from '../../../domain/models/playlist/playlist.controller';
+import { ArangoPlaylistQueryRepository } from '../../../domain/models/playlist/queries/arango-playlist-query-repository';
+import { PlaylistQueryService } from '../../../domain/models/playlist/queries/playlist-query.service';
 import {
     GrantResourceReadAccessToUser,
     GrantResourceReadAccessToUserCommandHandler,
@@ -272,7 +279,6 @@ import { BibliographicCitationQueryService } from '../../../domain/services/quer
 import { CoscradUserGroupQueryService } from '../../../domain/services/query-services/coscrad-user-group-query.service';
 import { CoscradUserQueryService } from '../../../domain/services/query-services/coscrad-user-query.service';
 import { EdgeConnectionQueryService } from '../../../domain/services/query-services/edge-connection-query.service';
-import { PlaylistQueryService } from '../../../domain/services/query-services/playlist-query.service';
 import { SongQueryService } from '../../../domain/services/query-services/song-query.service';
 import { SpatialFeatureQueryService } from '../../../domain/services/query-services/spatial-feature-query.service';
 import { TagQueryService } from '../../../domain/services/query-services/tag-query.service';
@@ -311,7 +317,6 @@ import { IdGenerationController } from '../id-generation/id-generation.controlle
 import { BibliographicCitationController } from '../resources/bibliographic-citation.controller';
 import { DigitalTextQueryController } from '../resources/digital-text.controller';
 import { PhotographController } from '../resources/photograph.controller';
-import { PlaylistController } from '../resources/playlist.controller';
 import { ResourceDescriptionController } from '../resources/resource-description.controller';
 import { SongController } from '../resources/song.controller';
 import { SpatialFeatureController } from '../resources/spatial-feature.controller';
@@ -567,6 +572,12 @@ export default async (
                 inject: [ArangoConnectionProvider],
             },
             {
+                provide: PLAYLIST_QUERY_REPOSITORY_TOKEN,
+                useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
+                    new ArangoPlaylistQueryRepository(arangoConnectionProvider),
+                inject: [ArangoConnectionProvider],
+            },
+            {
                 //  TODO use a more extensible pattern
                 provide: QUERY_REPOSITORY_PROVIDER_TOKEN,
                 useFactory: (
@@ -660,12 +671,12 @@ export default async (
             {
                 provide: PlaylistQueryService,
                 useFactory: (
-                    repositoryProvider: ArangoRepositoryProvider,
+                    repositoryProvider: IPlaylistQueryRepository,
                     commandInfoService: CommandInfoService,
                     configService: ConfigService
                 ) =>
                     new PlaylistQueryService(repositoryProvider, commandInfoService, configService),
-                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService, ConfigService],
+                inject: [PLAYLIST_QUERY_REPOSITORY_TOKEN, CommandInfoService, ConfigService],
             },
             {
                 provide: CoscradUserGroupQueryService,

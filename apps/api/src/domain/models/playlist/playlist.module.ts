@@ -1,6 +1,10 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
-import { PLAYLIST_QUERY_REPOSITORY_TOKEN } from '../../domain/models/playlist';
+import { PLAYLIST_QUERY_REPOSITORY_TOKEN } from '.';
+import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
+import { IdGenerationModule } from '../../../lib/id-generation/id-generation.module';
+import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
+import { PersistenceModule } from '../../../persistence/persistence.module';
 import {
     AddAudioItemToPlaylist,
     AddAudioItemToPlaylistCommandHandler,
@@ -10,18 +14,14 @@ import {
     ImportAudioItemsToPlaylistCommandHandler,
     TranslatePlaylistName,
     TranslatePlaylistNameCommandHandler,
-} from '../../domain/models/playlist/commands';
-import { AudioItemAddedToPlaylist } from '../../domain/models/playlist/commands/add-audio-item-to-playlist/audio-item-added-to-playlist.event';
-import { AudioItemAddedToPlaylistEventHandler } from '../../domain/models/playlist/commands/add-audio-item-to-playlist/audio-item-added-to-playlist.event-handler';
-import { PlaylistCreated } from '../../domain/models/playlist/commands/playlist-created.event';
-import { PlaylistCreatedEventHandler } from '../../domain/models/playlist/commands/playlist-created.event-handler';
-import { ArangoPlaylistQueryRepository } from '../../domain/models/playlist/queries/arango-playlist-query-repository';
-import { PlaylistQueryService } from '../../domain/services/query-services/playlist-query.service';
-import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
-import { ArangoConnectionProvider } from '../../persistence/database/arango-connection.provider';
-import { PersistenceModule } from '../../persistence/persistence.module';
-import { CommandInfoService } from '../controllers/command/services/command-info-service';
-import { PlaylistController } from '../controllers/resources/playlist.controller';
+} from './commands';
+import { AudioItemAddedToPlaylist } from './commands/add-audio-item-to-playlist/audio-item-added-to-playlist.event';
+import { AudioItemAddedToPlaylistEventHandler } from './commands/add-audio-item-to-playlist/audio-item-added-to-playlist.event-handler';
+import { PlaylistCreated } from './commands/playlist-created.event';
+import { PlaylistCreatedEventHandler } from './commands/playlist-created.event-handler';
+import { PlaylistController } from './playlist.controller';
+import { ArangoPlaylistQueryRepository } from './queries/arango-playlist-query-repository';
+import { PlaylistQueryService } from './queries/playlist-query.service';
 
 // TODO move this
 @Module({

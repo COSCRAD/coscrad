@@ -1,5 +1,6 @@
 import {
     ICommandFormAndLabels,
+    IDetailQueryResult,
     IIndexQueryResult,
     IVocabularyListViewModel,
 } from '@coscrad/api-interfaces';
@@ -9,6 +10,7 @@ import {
     CommandContext,
     CommandInfoService,
 } from '../../../app/controllers/command/services/command-info-service';
+import { Maybe } from '../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../lib/types/not-found';
 import { VocabularyListViewModel } from '../../../queries/buildViewModelForResource/viewModels';
 import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';
@@ -32,7 +34,10 @@ export class VocabularyListQueryService {
     ) {}
 
     // todo add explicit return type
-    async fetchById(id: AggregateId, userWithGroups?: CoscradUserWithGroups) {
+    async fetchById(
+        id: AggregateId,
+        userWithGroups?: CoscradUserWithGroups
+    ): Promise<Maybe<IDetailQueryResult<IVocabularyListViewModel>>> {
         // TODO Consider passing the user here
         const result = await this.repository.fetchById(id);
 

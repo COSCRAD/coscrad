@@ -9,18 +9,18 @@ import {
     UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
-import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
-import { PlaylistQueryService } from '../../../domain/services/query-services/playlist-query.service';
-import { PlaylistViewModel } from '../../../queries/buildViewModelForResource/viewModels';
-import { QueryResponseTransformInterceptor } from '../response-mapping';
+import buildByIdApiParamMetadata from '../../../app/controllers/resources/common/buildByIdApiParamMetadata';
+import { RESOURCES_ROUTE_PREFIX } from '../../../app/controllers/resources/constants';
+import { QueryResponseTransformInterceptor } from '../../../app/controllers/response-mapping';
 import {
     CoscradInternalErrorFilter,
     CoscradInvalidUserInputFilter,
     CoscradNotFoundFilter,
-} from '../response-mapping/CoscradExceptions/exception-filters';
-import buildViewModelPathForResourceType from '../utilities/buildIndexPathForResourceType';
-import buildByIdApiParamMetadata from './common/buildByIdApiParamMetadata';
-import { RESOURCES_ROUTE_PREFIX } from './constants';
+} from '../../../app/controllers/response-mapping/CoscradExceptions/exception-filters';
+import buildViewModelPathForResourceType from '../../../app/controllers/utilities/buildIndexPathForResourceType';
+import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
+import { PlaylistViewModel } from '../../../queries/buildViewModelForResource/viewModels';
+import { PlaylistQueryService } from './queries/playlist-query.service';
 
 @ApiTags(RESOURCES_ROUTE_PREFIX)
 @Controller(buildViewModelPathForResourceType(ResourceType.playlist))
@@ -45,7 +45,7 @@ export class PlaylistController {
     @ApiParam(buildByIdApiParamMetadata())
     @ApiOkResponse({ type: PlaylistViewModel })
     @Get(`/:id`)
-    async fetchById(@Request() req, @Param('id') id: unknown) {
+    async fetchById(@Request() req, @Param('id') id: string) {
         return this.playlistQueryService.fetchById(id, req.user || undefined);
     }
 }
