@@ -232,7 +232,7 @@ export class PlaylistViewModel {
 
     public forUser(userWithGroups?: CoscradUserWithGroups): Maybe<
         Omit<PlaylistViewModel, 'queryAccessControlList' | 'episodes'> & {
-            episodes: Omit<PlaylistEpisodeViewModel, 'accessControlList'>;
+            episodes: Omit<PlaylistEpisodeViewModel, 'accessControlList'>[];
         }
     > {
         const buildResult = (): PlaylistViewModel => {
@@ -277,7 +277,7 @@ export class PlaylistViewModel {
                 PlaylistViewModel,
                 'queryAccessControlList' | 'episodes'
             > & {
-                episodes: Omit<PlaylistEpisodeViewModel, 'accessControlList'>;
+                episodes: Omit<PlaylistEpisodeViewModel, 'accessControlList'>[];
             };
         }
 
@@ -297,7 +297,7 @@ export class PlaylistViewModel {
                 PlaylistViewModel,
                 'queryAccessControlList' | 'episodes'
             > & {
-                episodes: Omit<PlaylistEpisodeViewModel, 'accessControlList'>;
+                episodes: Omit<PlaylistEpisodeViewModel, 'accessControlList'>[];
             };
         }
 

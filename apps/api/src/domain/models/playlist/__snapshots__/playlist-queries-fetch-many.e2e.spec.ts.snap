@@ -1,0 +1,539 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`when querying for a playlist: fetch many (/resources/playlists) when the user is authenticated as a COSCRAD admin it should return playlists and episodes that are public or have the user in the ACL 1`] = `
+{
+  "entities": [
+    {
+      "actions": [
+        {
+          "description": "Make a resource visible to the public",
+          "form": {
+            "fields": [],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
+                "type": "playlist",
+              },
+            },
+          },
+          "label": "Publish Resource",
+          "type": "PUBLISH_RESOURCE",
+        },
+        {
+          "description": "Assign a tag to a resource or note",
+          "form": {
+            "fields": [
+              {
+                "constraints": [],
+                "description": "system-wide unique identifier for the resource or note being tagged",
+                "label": "Tagged Member's Composite Identifier",
+                "name": "taggedMemberCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
+                "type": "playlist",
+              },
+            },
+          },
+          "label": "Tag Resource or Note",
+          "type": "TAG_RESOURCE_OR_NOTE",
+        },
+        {
+          "description": "creates a note about this particular resource",
+          "form": {
+            "fields": [
+              {
+                "constraints": [],
+                "description": "system-wide unique identifier for the resource about which we are making a note",
+                "label": "CompositeIdentifier",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+              {},
+              {
+                "constraints": [
+                  {
+                    "message": "must be a non-empty string",
+                    "name": "non-empty string",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "text for the note",
+                "label": "text",
+                "name": "text",
+                "type": "TEXT_FIELD",
+              },
+              {
+                "constraints": [
+                  {
+                    "message": "Must be a valid \${propertyLabel}",
+                    "name": "IS_ENUM",
+                  },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the language in which you are writing the note",
+                "label": "language code",
+                "name": "languageCode",
+                "options": [
+                  {
+                    "display": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "display": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "display": "English",
+                    "value": "en",
+                  },
+                  {
+                    "display": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "display": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "display": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "display": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+                "type": "STATIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
+                "type": "playlist",
+              },
+            },
+          },
+          "label": "Create Note",
+          "type": "CREATE_NOTE_ABOUT_RESOURCE",
+        },
+      ],
+      "episodes": [
+        {
+          "isPublished": true,
+          "lengthMilliseconds": 30456,
+          "mediaItemUrl": "http://localhost/api/resources/mediaItems/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100567",
+          "mimeType": "audio/mpeg",
+          "name": {
+            "items": [
+              {
+                "languageCode": "en",
+                "role": "original",
+                "text": "public episode",
+              },
+            ],
+          },
+        },
+        {
+          "isPublished": false,
+          "lengthMilliseconds": 30456,
+          "mediaItemUrl": "http://localhost/api/resources/mediaItems/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100567",
+          "mimeType": "audio/mpeg",
+          "name": {
+            "items": [
+              {
+                "languageCode": "en",
+                "role": "original",
+                "text": "private episode",
+              },
+            ],
+          },
+        },
+        {
+          "isPublished": false,
+          "lengthMilliseconds": 30456,
+          "mediaItemUrl": "http://localhost/api/resources/mediaItems/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100567",
+          "mimeType": "audio/mpeg",
+          "name": {
+            "items": [
+              {
+                "languageCode": "en",
+                "role": "original",
+                "text": "unpublished episode with ACL access for viewer",
+              },
+            ],
+          },
+        },
+      ],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
+      "isPublished": true,
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "public playlist",
+          },
+        ],
+      },
+    },
+    {
+      "actions": [
+        {
+          "description": "Make a resource visible to the public",
+          "form": {
+            "fields": [],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100002",
+                "type": "playlist",
+              },
+            },
+          },
+          "label": "Publish Resource",
+          "type": "PUBLISH_RESOURCE",
+        },
+        {
+          "description": "Assign a tag to a resource or note",
+          "form": {
+            "fields": [
+              {
+                "constraints": [],
+                "description": "system-wide unique identifier for the resource or note being tagged",
+                "label": "Tagged Member's Composite Identifier",
+                "name": "taggedMemberCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100002",
+                "type": "playlist",
+              },
+            },
+          },
+          "label": "Tag Resource or Note",
+          "type": "TAG_RESOURCE_OR_NOTE",
+        },
+        {
+          "description": "creates a note about this particular resource",
+          "form": {
+            "fields": [
+              {
+                "constraints": [],
+                "description": "system-wide unique identifier for the resource about which we are making a note",
+                "label": "CompositeIdentifier",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+              {},
+              {
+                "constraints": [
+                  {
+                    "message": "must be a non-empty string",
+                    "name": "non-empty string",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "text for the note",
+                "label": "text",
+                "name": "text",
+                "type": "TEXT_FIELD",
+              },
+              {
+                "constraints": [
+                  {
+                    "message": "Must be a valid \${propertyLabel}",
+                    "name": "IS_ENUM",
+                  },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the language in which you are writing the note",
+                "label": "language code",
+                "name": "languageCode",
+                "options": [
+                  {
+                    "display": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "display": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "display": "English",
+                    "value": "en",
+                  },
+                  {
+                    "display": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "display": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "display": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "display": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+                "type": "STATIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100002",
+                "type": "playlist",
+              },
+            },
+          },
+          "label": "Create Note",
+          "type": "CREATE_NOTE_ABOUT_RESOURCE",
+        },
+      ],
+      "episodes": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100002",
+      "isPublished": false,
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "Metal Mondays",
+          },
+        ],
+      },
+    },
+    {
+      "actions": [
+        {
+          "description": "Make a resource visible to the public",
+          "form": {
+            "fields": [],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",
+                "type": "playlist",
+              },
+            },
+          },
+          "label": "Publish Resource",
+          "type": "PUBLISH_RESOURCE",
+        },
+        {
+          "description": "Assign a tag to a resource or note",
+          "form": {
+            "fields": [
+              {
+                "constraints": [],
+                "description": "system-wide unique identifier for the resource or note being tagged",
+                "label": "Tagged Member's Composite Identifier",
+                "name": "taggedMemberCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",
+                "type": "playlist",
+              },
+            },
+          },
+          "label": "Tag Resource or Note",
+          "type": "TAG_RESOURCE_OR_NOTE",
+        },
+        {
+          "description": "creates a note about this particular resource",
+          "form": {
+            "fields": [
+              {
+                "constraints": [],
+                "description": "system-wide unique identifier for the resource about which we are making a note",
+                "label": "CompositeIdentifier",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+              {},
+              {
+                "constraints": [
+                  {
+                    "message": "must be a non-empty string",
+                    "name": "non-empty string",
+                  },
+                  {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "text for the note",
+                "label": "text",
+                "name": "text",
+                "type": "TEXT_FIELD",
+              },
+              {
+                "constraints": [
+                  {
+                    "message": "Must be a valid \${propertyLabel}",
+                    "name": "IS_ENUM",
+                  },
+                  {
+                    "message": "Required",
+                    "name": "defined value",
+                  },
+                ],
+                "description": "the language in which you are writing the note",
+                "label": "language code",
+                "name": "languageCode",
+                "options": [
+                  {
+                    "display": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "display": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "display": "English",
+                    "value": "en",
+                  },
+                  {
+                    "display": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "display": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "display": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "display": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+                "type": "STATIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",
+                "type": "playlist",
+              },
+            },
+          },
+          "label": "Create Note",
+          "type": "CREATE_NOTE_ABOUT_RESOURCE",
+        },
+      ],
+      "episodes": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",
+      "isPublished": false,
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "Metal Mondays",
+          },
+        ],
+      },
+    },
+  ],
+  "indexScopedActions": [
+    {
+      "description": "Creates a new playlist",
+      "form": {
+        "fields": [
+          {
+            "constraints": [
+              {
+                "message": "must be a non-empty string",
+                "name": "non-empty string",
+              },
+              {
+                "message": "must be a defined value",
+                "name": "defined value",
+              },
+            ],
+            "description": "name of the playlist",
+            "label": "name",
+            "name": "name",
+            "type": "TEXT_FIELD",
+          },
+          {
+            "constraints": [
+              {
+                "message": "Must be a valid \${propertyLabel}",
+                "name": "IS_ENUM",
+              },
+              {
+                "message": "Required",
+                "name": "defined value",
+              },
+            ],
+            "description": "the language in which you are naming this playlist",
+            "label": "language code",
+            "name": "languageCodeForName",
+            "options": [
+              {
+                "display": "Chilcotin",
+                "value": "clc",
+              },
+              {
+                "display": "Haida",
+                "value": "hai",
+              },
+              {
+                "display": "English",
+                "value": "en",
+              },
+              {
+                "display": "French",
+                "value": "fra",
+              },
+              {
+                "display": "Chinook",
+                "value": "chn",
+              },
+              {
+                "display": "Zapotec",
+                "value": "zap",
+              },
+              {
+                "display": "Spanish",
+                "value": "spa",
+              },
+            ],
+            "type": "STATIC_SELECT",
+          },
+        ],
+        "prepopulatedFields": {},
+      },
+      "label": "Create Playlist",
+      "type": "CREATE_PLAYLIST",
+    },
+  ],
+}
+`;
