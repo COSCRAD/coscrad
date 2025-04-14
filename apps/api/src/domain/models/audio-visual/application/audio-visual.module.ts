@@ -23,6 +23,7 @@ import {
 } from '../audio-item/commands';
 import { AudioItemCreated } from '../audio-item/commands/create-audio-item/audio-item-created.event';
 import { AudioItemCreatedEventHandler } from '../audio-item/commands/create-audio-item/audio-item-created.event-handler';
+import { AudioItemNameTranslated } from '../audio-item/commands/translate-audio-item-name/audio-item-name-translated-event';
 import {
     ImportLineItemsToTranscript,
     ImportLineItemsToTranscriptCommandHandler,
@@ -64,7 +65,7 @@ import { VideoController } from './video.controller';
         ImportTranslationsForTranscript,
         ImportTranslationsForTranscriptCommandHandler,
         // events
-        ...[AudioItemCreated].map((ctor) => ({
+        ...[AudioItemCreated, AudioItemNameTranslated].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
         })),
