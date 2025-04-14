@@ -7,7 +7,7 @@ import formatResourceType from '../presentation/formatAggregateType';
 import getPluralLabelForAggregateType from '../presentation/getPluralLabelForAggregateType';
 import { AggregateInfo } from './types/AggregateInfo';
 
-const resourceDescriptions: Pick<AggregateInfo, 'type' | 'description'>[] = [
+const aggregateDescriptions: Pick<AggregateInfo, 'type' | 'description'>[] = [
     {
         type: ResourceType.term,
         description: 'A term is a word, phrase, or sentence.',
@@ -112,7 +112,7 @@ const resourceDescriptions: Pick<AggregateInfo, 'type' | 'description'>[] = [
  * union member annotations).
  */
 export const buildAllAggregateDescriptions = (): Omit<AggregateInfo, 'link'>[] =>
-    resourceDescriptions.map(({ type: resourceType, description }) => ({
+    aggregateDescriptions.map(({ type: resourceType, description }) => ({
         type: resourceType,
         description,
         label: formatResourceType(resourceType),

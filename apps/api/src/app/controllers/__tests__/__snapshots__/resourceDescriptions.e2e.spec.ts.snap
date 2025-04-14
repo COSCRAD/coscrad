@@ -2255,13 +2255,6 @@ exports[`GET /resources should return the expected result 1`] = `
     "link": "/resources/playlists",
     "pluralLabel": "Playlists",
     "schema": {
-      "contributions": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "list of knowledge keepers who contributed this song",
-        "isArray": true,
-        "isOptional": false,
-        "label": "contributions",
-      },
       "episodes": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "a summary description of each episode in this playlist",
@@ -2270,11 +2263,11 @@ exports[`GET /resources should return the expected result 1`] = `
         "label": "episodes",
       },
       "id": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "unique identifier",
+        "coscradDataType": "UUID",
+        "description": "unique system-wide identifier for this playlist",
         "isArray": false,
         "isOptional": false,
-        "label": "ID",
+        "label": "Playlist ID",
       },
       "name": {
         "complexDataType": "NESTED_TYPE",
