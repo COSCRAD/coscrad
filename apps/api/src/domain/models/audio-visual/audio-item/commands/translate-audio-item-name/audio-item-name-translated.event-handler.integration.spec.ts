@@ -1,10 +1,15 @@
-import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../../app/config/constants/environment';
+import {
+    MultilingualText,
+    MultilingualTextItem,
+} from '../../../../../../domain/common/entities/multilingual-text';
+import { NotFound } from '../../../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../../persistence/persistence.module';
@@ -98,8 +103,25 @@ describe(`AudioItemNameTranslatedEventHandler`, () => {
     });
 
     describe(`when there is an existing audio item`, () => {
-        it(`should translate the given audio item`, async () => {
+        it(`should translate the given audio item name`, async () => {
             await audioItemNameTranslatedEventHandler.handle(translationEvent);
+
+            const updatedView = (await testQueryRepository.fetchById(
+                existingView.id
+            )) as EventSourcedAudioItemViewModel;
+
+            const translationItemSearchResult = new MultilingualText(
+                updatedView.name
+            ).getTranslation(translationLanguageCode);
+
+            expect(translationItemSearchResult).not.toBe(NotFound);
+
+            const { text: foundText, role: foundRole } =
+                translationItemSearchResult as MultilingualTextItem;
+
+            expect(foundText).toBe(translationText);
+
+            expect(foundRole).toBe(MultilingualTextItemRole.freeTranslation);
         });
     });
 });
