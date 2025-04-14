@@ -432,7 +432,38 @@ describe(`when querying for a single playlist- by ID`, () => {
     },
   ],
   "contributions": [],
-  "episodes": [],
+  "episodes": [
+    {
+      "isPublished": true,
+      "lengthMilliseconds": 30456,
+      "mediaItemUrl": "http://localhost/api/resources/mediaItems/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100567",
+      "mimeType": "audio/mpeg",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "Episode 1",
+          },
+        ],
+      },
+    },
+    {
+      "isPublished": false,
+      "lengthMilliseconds": 30456,
+      "mediaItemUrl": "http://localhost/api/resources/mediaItems/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100567",
+      "mimeType": "audio/mpeg",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "Episode 1",
+          },
+        ],
+      },
+    },
+  ],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b109001",
   "isPublished": true,
   "name": {
@@ -604,7 +635,38 @@ describe(`when querying for a single playlist- by ID`, () => {
     },
   ],
   "contributions": [],
-  "episodes": [],
+  "episodes": [
+    {
+      "isPublished": true,
+      "lengthMilliseconds": 30456,
+      "mediaItemUrl": "http://localhost/api/resources/mediaItems/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100567",
+      "mimeType": "audio/mpeg",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "Episode 1",
+          },
+        ],
+      },
+    },
+    {
+      "isPublished": false,
+      "lengthMilliseconds": 30456,
+      "mediaItemUrl": "http://localhost/api/resources/mediaItems/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100567",
+      "mimeType": "audio/mpeg",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "Episode 1",
+          },
+        ],
+      },
+    },
+  ],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b109001",
   "isPublished": false,
   "name": {
@@ -823,7 +885,38 @@ describe(`when querying for a single playlist- by ID`, () => {
     },
   ],
   "contributions": [],
-  "episodes": [],
+  "episodes": [
+    {
+      "isPublished": true,
+      "lengthMilliseconds": 30456,
+      "mediaItemUrl": "http://localhost/api/resources/mediaItems/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100567",
+      "mimeType": "audio/mpeg",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "Episode 1",
+          },
+        ],
+      },
+    },
+    {
+      "isPublished": false,
+      "lengthMilliseconds": 30456,
+      "mediaItemUrl": "http://localhost/api/resources/mediaItems/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100567",
+      "mimeType": "audio/mpeg",
+      "name": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "Episode 1",
+          },
+        ],
+      },
+    },
+  ],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b109001",
   "isPublished": false,
   "name": {
