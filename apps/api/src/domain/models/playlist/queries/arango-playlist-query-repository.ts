@@ -115,4 +115,12 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
 
         _new;
     }
+
+    async attribute(id: AggregateId, contributorIds: AggregateId[]): Promise<void> {
+        const cursor = await this.database.query(
+            this.baseResourceQueryBuilder.attribute(id, contributorIds)
+        );
+
+        await cursor.all();
+    }
 }

@@ -7,12 +7,24 @@ import { MultilingualText } from '../../../../../domain/common/entities/multilin
 import { AggregateRoot } from '../../../../../domain/decorators';
 import { AggregateCompositeIdentifier } from '../../../../../domain/types/AggregateCompositeIdentifier';
 import { InternalError } from '../../../../../lib/errors/InternalError';
+import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { Aggregate } from '../../../aggregate.entity';
 import { FullName } from '../../user/entities/user/full-name.entity';
 import { CoscradDate } from '../../utilities/coscrad-date.entity';
 import { ContributorNotUniquelyIdentifiableUserError } from './errors';
 
+@CoscradDataExample<CoscradContributor>({
+    example: {
+        id: buildDummyUuid(393),
+        type: AggregateType.contributor,
+        fullName: new FullName({
+            firstName: 'Arrow',
+            lastName: 'Plain',
+        }),
+    },
+})
 @AggregateRoot(AggregateType.contributor)
 @RegisterIndexScopedCommands([])
 export class CoscradContributor extends Aggregate {
@@ -75,5 +87,9 @@ export class CoscradContributor extends Aggregate {
 
     protected getExternalReferences(): AggregateCompositeIdentifier[] {
         return [];
+    }
+
+    public static fromDto(dto: DTO<CoscradContributor>): CoscradContributor {
+        return new CoscradContributor(dto);
     }
 }

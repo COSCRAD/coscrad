@@ -127,6 +127,21 @@ exports[`when querying for a playlist: fetch many (/resources/playlists) when th
           "type": "CREATE_NOTE_ABOUT_RESOURCE",
         },
       ],
+      "contributions": [
+        {
+          "fullName": "Oscar Myers",
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100123",
+          "name": {
+            "items": [
+              {
+                "languageCode": "en",
+                "role": "original",
+                "text": "Oscar Myers",
+              },
+            ],
+          },
+        },
+      ],
       "episodes": [
         {
           "isPublished": true,
@@ -310,6 +325,21 @@ exports[`when querying for a playlist: fetch many (/resources/playlists) when th
           "type": "CREATE_NOTE_ABOUT_RESOURCE",
         },
       ],
+      "contributions": [
+        {
+          "fullName": "Oscar Myers",
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100123",
+          "name": {
+            "items": [
+              {
+                "languageCode": "en",
+                "role": "original",
+                "text": "Oscar Myers",
+              },
+            ],
+          },
+        },
+      ],
       "episodes": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100002",
       "isPublished": false,
@@ -445,6 +475,21 @@ exports[`when querying for a playlist: fetch many (/resources/playlists) when th
           },
           "label": "Create Note",
           "type": "CREATE_NOTE_ABOUT_RESOURCE",
+        },
+      ],
+      "contributions": [
+        {
+          "fullName": "Oscar Myers",
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100123",
+          "name": {
+            "items": [
+              {
+                "languageCode": "en",
+                "role": "original",
+                "text": "Oscar Myers",
+              },
+            ],
+          },
         },
       ],
       "episodes": [],

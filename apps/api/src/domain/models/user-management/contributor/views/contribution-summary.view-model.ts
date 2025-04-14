@@ -2,7 +2,7 @@ import { NonEmptyString } from '@coscrad/data-types';
 
 /**
  * Note that this is not the "canonical view" for a contributor. Rather, this is
- * the view that is used when joining (eagerly in the vent consumers) contribution
+ * the view that is used when joining (eagerly in the event consumers) contribution
  * info into resource views.
  */
 export class ContributionSummary {

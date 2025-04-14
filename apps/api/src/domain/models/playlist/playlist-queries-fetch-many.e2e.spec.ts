@@ -10,6 +10,7 @@ import { ArangoConnectionProvider } from '../../../persistence/database/arango-c
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import { CoscradContributorViewModel } from '../../../queries/buildViewModelForResource/viewModels/coscrad-contributor.view-model';
 import { buildTestInstance } from '../../../test-data/utilities';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { assertQueryResult } from '../__tests__';
@@ -43,12 +44,17 @@ const unpublishedEpisodeWithAclAccessForOrdinaryUser = buildTestInstance(Playlis
     name: buildMultilingualTextWithSingleItem('unpublished episode with ACL access for viewer'),
 });
 
+const testContributor = buildTestInstance(CoscradContributorViewModel);
+
+const contributions = [testContributor];
+
 // + ALL
 const publicPlaylist = buildTestInstance(PlaylistViewModel, {
     id: buildDummyUuid(1),
     isPublished: true,
     name: buildMultilingualTextWithSingleItem('public playlist'),
     episodes: [publicEpisode, privateEpisode, unpublishedEpisodeWithAclAccessForOrdinaryUser],
+    contributions,
 });
 
 // - publicUser, - ordinaryUser, + admin
@@ -57,6 +63,7 @@ const privatePlaylist = buildTestInstance(PlaylistViewModel, {
     isPublished: false,
     // no special access
     queryAccessControlList: new AccessControlList(),
+    contributions,
 });
 
 // - publicUser, + ordinaryUser, + admin
@@ -64,6 +71,7 @@ const unpublishedPlaylistWithAclAccessForOrdinaryUser = buildTestInstance(Playli
     id: buildDummyUuid(3),
     isPublished: false,
     queryAccessControlList: new AccessControlList().allowUser(ordinaryUser.id),
+    contributions,
 });
 
 const allPlaylists = [

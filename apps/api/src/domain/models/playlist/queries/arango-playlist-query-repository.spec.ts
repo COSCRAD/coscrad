@@ -23,6 +23,7 @@ import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
 import { IAudioItemQueryRepository } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ArangoAudioItemQueryRepository } from '../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
+import idEquals from '../../shared/functional/idEquals';
 import { CoscradContributor } from '../../user-management';
 import { ArangoPlaylistQueryRepository } from './arango-playlist-query-repository';
 import { IPlaylistQueryRepository } from './playlist-query-repository.interface';
@@ -53,7 +54,7 @@ describe(`ArangoPlaylistQueryRepository`, () => {
 
     let databaseProvider: ArangoDatabaseProvider;
 
-    let _contributorRepository: IRepositoryForAggregate<CoscradContributor>;
+    let contributorRepository: IRepositoryForAggregate<CoscradContributor>;
 
     let app: INestApplication;
 
@@ -91,7 +92,7 @@ describe(`ArangoPlaylistQueryRepository`, () => {
         /**
          * Currently, the contributors are snapshot based (not event sourced).
          */
-        _contributorRepository = new ArangoRepositoryForAggregate(
+        contributorRepository = new ArangoRepositoryForAggregate(
             databaseProvider,
             ArangoCollectionId.contributors,
             buildInstanceFactory(CoscradContributor),
@@ -163,6 +164,45 @@ describe(`ArangoPlaylistQueryRepository`, () => {
             expect(name).toEqual(existingAudioItem.name);
 
             expect(mimeType).toBe(mimeType);
+        });
+    });
+
+    describe(`attribute`, () => {
+        const testContributors = [buildTestInstance(CoscradContributor, {})];
+
+        const targetView = playlistViews[0];
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetView);
+
+            await databaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.contributors)
+                .clear();
+
+            await contributorRepository.createMany(testContributors);
+        });
+
+        it(`should add the expected attributions for contributors`, async () => {
+            await testQueryRepository.attribute(
+                targetView.id,
+                testContributors.map(({ id }) => id)
+            );
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetView.id
+            )) as PlaylistViewModel;
+
+            const { contributions } = updatedView;
+
+            expect(contributions).toHaveLength(testContributors.length);
+
+            const missingContributions = contributions.filter(
+                ({ id: foundContributorId }) => !testContributors.some(idEquals(foundContributorId))
+            );
+
+            expect(missingContributions).toEqual([]);
         });
     });
 });

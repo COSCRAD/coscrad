@@ -19,6 +19,7 @@ import { MultilingualText } from '../../common/entities/multilingual-text';
 import { AggregateId } from '../../types/AggregateId';
 import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../shared/access-control/access-control-list.entity';
+import { ContributionSummary } from '../user-management';
 import { CoscradUserWithGroups } from '../user-management/user/entities/user/coscrad-user-with-groups';
 
 // TODO move this file
@@ -135,6 +136,7 @@ export class PlaylistEpisodeViewModel {
         isPublished: false,
         name: buildMultilingualTextWithSingleItem('Metal Mondays'),
         episodes: [],
+        contributions: [],
     },
 })
 export class PlaylistViewModel {
@@ -149,6 +151,13 @@ export class PlaylistViewModel {
         description: 'a flag indicating whether this playlist is published',
     })
     isPublished: boolean;
+
+    @NestedDataType(ContributionSummary, {
+        isArray: true,
+        label: 'contributions',
+        description: 'a summary of the work done by various contributors in creating this playlist',
+    })
+    contributions: ContributionSummary[];
 
     @NestedDataType(AccessControlList, {
         label: 'query ACL',
@@ -192,7 +201,8 @@ export class PlaylistViewModel {
         isPublished?: boolean,
         accessControlList?: AccessControlList,
         name?: MultilingualText,
-        episodes: PlaylistEpisodeViewModel[] = []
+        episodes: PlaylistEpisodeViewModel[] = [],
+        contributions: ContributionSummary[] = []
     ) {
         this.id = id;
 
@@ -209,6 +219,8 @@ export class PlaylistViewModel {
         }
 
         this.episodes = episodes;
+
+        this.contributions = contributions;
     }
 
     public getCompositeIdentifier() {
@@ -304,19 +316,24 @@ export class PlaylistViewModel {
         return NotFound;
     }
 
-    public static fromDto(dto: DTO<PlaylistViewModel>): PlaylistViewModel {
+    public static fromDto(
+        dto: DTO<Omit<PlaylistViewModel, 'contributions'>> & {
+            contributions?: ContributionSummary[];
+        }
+    ): PlaylistViewModel {
         if (!isNonEmptyObject(dto)) {
             return new PlaylistViewModel();
         }
 
-        const { id, name, episodes, isPublished, queryAccessControlList } = dto;
+        const { id, name, episodes, isPublished, queryAccessControlList, contributions } = dto;
 
         return new PlaylistViewModel(
             id,
             isPublished,
             new AccessControlList(queryAccessControlList),
             new MultilingualText(name),
-            episodes.map((e) => new PlaylistEpisodeViewModel(e))
+            episodes.map((e) => new PlaylistEpisodeViewModel(e)),
+            contributions
         );
     }
 }

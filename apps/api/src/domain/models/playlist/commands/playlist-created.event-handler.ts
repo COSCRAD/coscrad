@@ -19,6 +19,7 @@ export class PlaylistCreatedEventHandler implements ICoscradEventHandler {
             languageCodeForName,
             aggregateCompositeIdentifier: { id },
         },
+        meta: { contributorIds = [] },
     }: PlaylistCreated): Promise<void> {
         await this.playlistQueryRepository.create(
             PlaylistViewModel.fromDto({
@@ -27,8 +28,11 @@ export class PlaylistCreatedEventHandler implements ICoscradEventHandler {
                 queryAccessControlList: new AccessControlList(),
                 name: buildMultilingualTextWithSingleItem(textForName, languageCodeForName),
                 episodes: [],
-                // contributorIds:
+                // we have to add the contributions separately
             })
         );
+
+        // TODO do this atomically in the repository
+        await this.playlistQueryRepository.attribute(id, contributorIds);
     }
 }

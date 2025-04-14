@@ -7,9 +7,9 @@ import buildMockConfigService from '../../../../app/config/__tests__/utilities/b
 import buildConfigFilePath from '../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../app/config/constants/environment';
 import { CommandInfoService } from '../../../../app/controllers/command/services/command-info-service';
-import { PlaylistModule } from '../../../../app/domain-modules/playlist.module';
 import { NotFound } from '../../../../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../persistence/constants/persistenceConstants';
+import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoCollectionId } from '../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../persistence/persistence.module';
@@ -20,6 +20,7 @@ import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getVa
 import { IRepositoryProvider } from '../../../repositories/interfaces/repository-provider.interface';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { IPlaylistQueryRepository, PLAYLIST_QUERY_REPOSITORY_TOKEN } from '../queries';
+import { ArangoPlaylistQueryRepository } from '../queries/arango-playlist-query-repository';
 import { PlaylistCreated } from './playlist-created.event';
 import { PlaylistCreatedEventHandler } from './playlist-created.event-handler';
 
@@ -39,6 +40,9 @@ const playlistCreatedEvent = buildTestInstance(PlaylistCreated, {
             id: playlistId,
         },
     },
+    meta: {
+        contributorIds: [dummyContributor.id],
+    },
 });
 
 describe(`PlaylistCreatedEventHandler`, () => {
@@ -51,7 +55,17 @@ describe(`PlaylistCreatedEventHandler`, () => {
 
         beforeAll(async () => {
             const moduleRef = await Test.createTestingModule({
-                providers: [CommandInfoService],
+                providers: [
+                    CommandInfoService,
+                    {
+                        provide: PLAYLIST_QUERY_REPOSITORY_TOKEN,
+                        useFactory: (connectionProvider: ArangoConnectionProvider) => {
+                            return new ArangoPlaylistQueryRepository(connectionProvider);
+                        },
+                        inject: [ArangoConnectionProvider],
+                    },
+                    PlaylistCreatedEventHandler,
+                ],
                 imports: [
                     ConfigModule.forRoot({
                         isGlobal: true,
@@ -61,7 +75,6 @@ describe(`PlaylistCreatedEventHandler`, () => {
                     }),
                     PersistenceModule.forRootAsync(),
                     CommandModule,
-                    PlaylistModule,
                 ],
             })
                 .overrideProvider(ConfigService)
@@ -112,13 +125,19 @@ describe(`PlaylistCreatedEventHandler`, () => {
 
             expect(searchResult).not.toBe(NotFound);
 
-            const { name } = searchResult as PlaylistViewModel;
+            const { name, contributions } = searchResult as PlaylistViewModel;
 
             const { languageCode: foundLanguageCode, text: foundText } = name.getOriginalTextItem();
 
             expect(foundLanguageCode).toBe(originalLanguageCode);
 
             expect(foundText).toBe(playlistNameText);
+
+            expect(contributions).not.toHaveLength(0);
+
+            const { fullName } = contributions[0];
+
+            expect(fullName).toBe(dummyContributor.fullName.toString());
         });
     });
 });

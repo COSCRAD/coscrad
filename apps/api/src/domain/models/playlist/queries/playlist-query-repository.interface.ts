@@ -14,6 +14,8 @@ export interface IPlaylistQueryRepository {
 
     delete(id: AggregateId): Promise<void>;
 
+    attribute(id: AggregateId, contributorIds: AggregateId[]): Promise<void>;
+
     fetchById(id: AggregateId): Promise<Maybe<PlaylistViewModel>>;
 
     fetchMany(): Promise<PlaylistViewModel[]>;

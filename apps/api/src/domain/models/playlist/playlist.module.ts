@@ -47,6 +47,7 @@ import { PlaylistQueryService } from './queries/playlist-query.service';
         ...[
             CreatePlayList,
             PlaylistCreated,
+            PlaylistCreatedEventHandler,
             TranslatePlaylistName,
             AddAudioItemToPlaylist,
             AudioItemAddedToPlaylist,
