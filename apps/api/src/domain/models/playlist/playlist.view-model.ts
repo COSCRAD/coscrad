@@ -22,6 +22,18 @@ import { AccessControlList } from '../shared/access-control/access-control-list.
 import { CoscradUserWithGroups } from '../user-management/user/entities/user/coscrad-user-with-groups';
 
 // TODO move this file
+
+// TODO move this to another file DO this
+@CoscradDataExample<PlaylistEpisodeViewModel>({
+    example: {
+        name: buildMultilingualTextWithSingleItem('Episode 1'),
+        isPublished: false,
+        accessControlList: new AccessControlList(),
+        mimeType: MIMEType.mp3,
+        mediaItemId: buildDummyUuid(567),
+        lengthMilliseconds: 30456,
+    },
+})
 export class PlaylistEpisodeViewModel {
     // resourceCompositeIdentifier
 
@@ -73,11 +85,18 @@ export class PlaylistEpisodeViewModel {
     constructor(dto: DTO<PlaylistEpisodeViewModel>) {
         if (!dto) return;
 
-        const { name, mimeType, lengthMilliseconds, mediaItemId } = dto;
+        const { name, mimeType, lengthMilliseconds, mediaItemId, accessControlList, isPublished } =
+            dto;
 
         if (isNonEmptyObject(name)) {
             this.name = new MultilingualText(name);
         }
+
+        this.isPublished = isBoolean(isPublished) ? isPublished : false;
+
+        this.accessControlList = isNonEmptyObject(accessControlList)
+            ? new AccessControlList(accessControlList)
+            : new AccessControlList();
 
         this.mimeType = mimeType;
 
@@ -91,7 +110,11 @@ export class PlaylistEpisodeViewModel {
             return this.isPublished;
         }
 
-        return this.accessControlList.canUserWithGroups(userWithGroups);
+        return this.isPublished || this.accessControlList.canUserWithGroups(userWithGroups);
+    }
+
+    public static fromDto(dto: DTO<PlaylistEpisodeViewModel>): PlaylistEpisodeViewModel {
+        return new PlaylistEpisodeViewModel(dto);
     }
 }
 

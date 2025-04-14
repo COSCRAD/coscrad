@@ -27,9 +27,7 @@ import {
 } from '../../../build-aggregate-root-from-event-history';
 import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
 import { TimeRangeContext } from '../../../context/time-range-context/time-range-context.entity';
-import { PlaylistEpisode } from '../../../playlist/entities/playlist-episode.entity';
 import { Resource } from '../../../resource.entity';
-import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import validateTimeRangeContextForModel from '../../../shared/contextValidators/validateTimeRangeContextForModel';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { TranscriptItem } from '../../shared/entities/transcript-item.entity';
@@ -51,19 +49,13 @@ import { AudioItemNameTranslated } from '../commands/translate-audio-item-name/a
 
 export type CoscradTimeStamp = number;
 
-// TODO export from elsewhere
-export interface IRadioPublishableResource {
-    // TODO Reduce the input type
-    buildEpisodes: (snapshot: InMemorySnapshot, baseUrl: string) => PlaylistEpisode[];
-}
-
 export const isAudioMimeType = (mimeType: MIMEType): boolean =>
     [MIMEType.mp3, MIMEType.wav, MIMEType.audioOgg].includes(mimeType);
 
 @RegisterIndexScopedCommands([`CREATE_AUDIO_ITEM`])
 // mixin the magic method event handlers for transcripts
 @EventSourcedTranscribable()
-export class AudioItem extends Resource implements IRadioPublishableResource {
+export class AudioItem extends Resource {
     readonly type = ResourceType.audioItem;
 
     @NestedDataType(MultilingualText, {
@@ -260,32 +252,6 @@ export class AudioItem extends Resource implements IRadioPublishableResource {
         translationItemDtos: LineItemTranslation[]
     ): ResultOrError<AudioItem> {
         return importTranslationsForTranscriptImplementation.apply(this, [translationItemDtos]);
-    }
-
-    // TODO Does this belong in the view layer?
-    buildEpisodes(
-        { resources: { mediaItem: allMediaItems } }: InMemorySnapshot,
-        baseUrl: string
-    ): PlaylistEpisode[] {
-        const myMediaItem = allMediaItems.find(({ id }) => id === this.mediaItemId);
-
-        if (isNullOrUndefined(myMediaItem)) {
-            throw new AggregateNotFoundError({
-                id: this.mediaItemId,
-                type: ResourceType.mediaItem,
-            });
-        }
-
-        const { mimeType } = myMediaItem;
-
-        return [
-            new PlaylistEpisode({
-                name: this.name.toString(),
-                mimeType,
-                // TODO build this URL elsewhere and only store the media item ID here
-                mediaItemUrl: `${baseUrl}/resources/mediaItems/download/${this.mediaItemId}`,
-            }),
-        ];
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {

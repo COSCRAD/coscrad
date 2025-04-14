@@ -22,7 +22,7 @@ import { dummySystemUserId } from '../__tests__/utilities/dummySystemUserId';
 import { AccessControlList } from '../shared/access-control/access-control-list.entity';
 import { CoscradUserWithGroups } from '../user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../user-management/user/entities/user/coscrad-user.entity';
-import { PlaylistViewModel } from './playlist.view-model';
+import { PlaylistEpisodeViewModel, PlaylistViewModel } from './playlist.view-model';
 import { IPlaylistQueryRepository, PLAYLIST_QUERY_REPOSITORY_TOKEN } from './queries';
 
 const indexEndpoint = `/resources/playlists`;
@@ -35,7 +35,16 @@ const testUserThatIsAViewer = buildTestInstance(CoscradUser, {
 });
 
 // TODO Support user groups
-const _dummyUserWithGroups = new CoscradUserWithGroups(testUserThatIsAViewer, []);
+
+const publicEpisode = buildTestInstance(PlaylistEpisodeViewModel, {
+    isPublished: true,
+    accessControlList: new AccessControlList(),
+});
+
+const privateEpisodeWithNoSpecialAccess = buildTestInstance(PlaylistEpisodeViewModel, {
+    isPublished: false,
+    accessControlList: new AccessControlList(),
+});
 
 const playlistName = 'Smooth Jazz';
 
@@ -45,6 +54,7 @@ const publishedPlaylistWithNoSpecialAccess = buildTestInstance(PlaylistViewModel
     queryAccessControlList: new AccessControlList(),
     isPublished: true,
     name: buildMultilingualTextWithSingleItem(playlistName, originalLanguageCode),
+    episodes: [publicEpisode, privateEpisodeWithNoSpecialAccess],
 });
 
 describe(`when querying for a single playlist- by ID`, () => {
@@ -91,11 +101,32 @@ describe(`when querying for a single playlist- by ID`, () => {
 
         describe(`when there is a playlist with the given ID`, () => {
             describe(`when the playlist has been published`, () => {
-                beforeEach(async () => {
-                    await playlistQueryRepository.create(publishedPlaylistWithNoSpecialAccess);
-                });
-
                 it(`should return the playlist`, async () => {
+                    await assertQueryResult({
+                        app,
+                        endpoint: buildDetailEndpoint(publishedPlaylistWithNoSpecialAccess.id),
+                        seedInitialState: async () => {
+                            await playlistQueryRepository.create(
+                                clonePlainObjectWithOverrides(
+                                    publishedPlaylistWithNoSpecialAccess,
+                                    {
+                                        episodes: [
+                                            publicEpisode,
+                                            privateEpisodeWithNoSpecialAccess,
+                                        ],
+                                    }
+                                )
+                            );
+                        },
+                        expectedStatus: HttpStatusCode.ok,
+                        checkResponseBody: async ({
+                            episodes,
+                        }: IDetailQueryResult<PlaylistViewModel>) => {
+                            // The public user should only have access to the public episode
+                            expect(episodes).toHaveLength(1);
+                        },
+                    });
+
                     const res = await request(app.getHttpServer()).get(
                         buildDetailEndpoint(publishedPlaylistWithNoSpecialAccess.id)
                     );
@@ -153,12 +184,34 @@ describe(`when querying for a single playlist- by ID`, () => {
                     app,
                     endpoint: buildDetailEndpoint(publishedPlaylistWithNoSpecialAccess.id),
                     seedInitialState: async () => {
-                        await playlistQueryRepository.create(publishedPlaylistWithNoSpecialAccess);
+                        await playlistQueryRepository.create(
+                            clonePlainObjectWithOverrides(publishedPlaylistWithNoSpecialAccess, {
+                                episodes: [
+                                    publicEpisode,
+                                    privateEpisodeWithNoSpecialAccess,
+                                    clonePlainObjectWithOverrides(
+                                        privateEpisodeWithNoSpecialAccess,
+                                        {
+                                            accessControlList: new AccessControlList().allowUser(
+                                                testUserThatIsAViewer.id
+                                            ),
+                                        }
+                                    ),
+                                ],
+                            })
+                        );
                     },
                     expectedStatus: HttpStatusCode.ok,
                     checkResponseBody: async (body: IDetailQueryResult<IPlayListViewModel>) => {
                         // ordinary users cannot execute actions
                         expect(body.actions).toEqual([]);
+
+                        /**
+                         * The user should see the public episode and the
+                         * private episode for which they are in the ACL, but not
+                         * the other private episode.
+                         */
+                        expect(body.episodes).toHaveLength(2);
                     },
                 });
             });
@@ -242,6 +295,9 @@ describe(`when querying for a single playlist- by ID`, () => {
                         checkResponseBody: async (body: IDetailQueryResult<IPlayListViewModel>) => {
                             // a COSCRAD admin can execute actions
                             expect(body.actions).not.toEqual([]);
+
+                            // we included 1 public and 1 private episode- an admin should see both
+                            expect(body.episodes).toHaveLength(2);
 
                             /**
                              * We snapshot just one response as a contract test
@@ -606,6 +662,9 @@ describe(`when querying for a single playlist- by ID`, () => {
                         checkResponseBody: async (body: IDetailQueryResult<IPlayListViewModel>) => {
                             // admin users have access to actions
                             expect(body.actions).not.toEqual([]);
+
+                            // we included 1 public and 1 private episode- an admin should see both
+                            expect(body.episodes).toHaveLength(2);
                         },
                     });
                 });
