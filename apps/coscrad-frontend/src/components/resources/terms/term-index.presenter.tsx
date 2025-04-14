@@ -9,6 +9,7 @@ import { HeadingLabel, IndexTable } from '../../../utils/generic-components/pres
 import { Matchers } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/filter-table-data';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { doesSomeMultilingualTextItemInclude } from '../utils/query-matchers';
+import { doesContributorInclude } from '../utils/query-matchers/does-contributor-include';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { renderContributionsTextCell } from '../utils/render-contributions-text-cell';
 import { renderMultilingualTextCell } from '../utils/render-multilingual-text-cell';
@@ -42,6 +43,7 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
 
     const matchers: Matchers<ITermViewModel> = {
         name: doesSomeMultilingualTextItemInclude,
+        contributions: doesContributorInclude,
     };
 
     return (
