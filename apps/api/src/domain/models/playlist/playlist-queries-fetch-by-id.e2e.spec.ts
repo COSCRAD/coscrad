@@ -1,5 +1,12 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
+import {
+    CoscradUserRole,
+    HttpStatusCode,
+    IDetailQueryResult,
+    IPlayListViewModel,
+    LanguageCode,
+} from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
+import { clonePlainObjectWithOverrides } from 'apps/api/src/lib/utilities/clonePlainObjectWithOverrides';
 import * as request from 'supertest';
 import httpStatusCodes from '../../../app/constants/httpStatusCodes';
 import setUpIntegrationTest from '../../../app/controllers/__tests__/setUpIntegrationTest';
@@ -9,6 +16,7 @@ import TestRepositoryProvider from '../../../persistence/repositories/__tests__/
 import { buildTestInstance } from '../../../test-data/utilities';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { AggregateId } from '../../types/AggregateId';
+import { assertQueryResult } from '../__tests__';
 import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../__tests__/utilities/dummySystemUserId';
 import { AccessControlList } from '../shared/access-control/access-control-list.entity';
@@ -21,13 +29,13 @@ const indexEndpoint = `/resources/playlists`;
 
 const buildDetailEndpoint = (id: AggregateId) => `${indexEndpoint}/${id}`;
 
-const dummyUser = buildTestInstance(CoscradUser, {
+const testUserThatIsAViewer = buildTestInstance(CoscradUser, {
     id: dummySystemUserId,
-    roles: [],
+    roles: [CoscradUserRole.viewer],
 });
 
 // TODO Support user groups
-const _dummyUserWithGroups = new CoscradUserWithGroups(dummyUser, []);
+const _dummyUserWithGroups = new CoscradUserWithGroups(testUserThatIsAViewer, []);
 
 const playlistName = 'Smooth Jazz';
 
@@ -50,6 +58,19 @@ describe(`when querying for a single playlist- by ID`, () => {
 
     let playlistQueryRepository: IPlaylistQueryRepository;
 
+    const setItUp = async (userWithGroups?: CoscradUserWithGroups) => {
+        ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
+            {
+                ARANGO_DB_NAME: testDatabaseName,
+            },
+            {
+                testUserWithGroups: userWithGroups,
+            }
+        ));
+
+        playlistQueryRepository = app.get(PLAYLIST_QUERY_REPOSITORY_TOKEN);
+    };
+
     // let eventPublisher: ICoscradEventPublisher;
     beforeEach(async () => {
         await testRepositoryProvider.testSetup();
@@ -65,14 +86,7 @@ describe(`when querying for a single playlist- by ID`, () => {
 
     describe(`when the user is unauthenticated (general public)`, () => {
         beforeAll(async () => {
-            ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
-                {
-                    ARANGO_DB_NAME: testDatabaseName,
-                }
-                // no authenticated user
-            ));
-
-            playlistQueryRepository = app.get(PLAYLIST_QUERY_REPOSITORY_TOKEN);
+            await setItUp();
         });
 
         describe(`when there is a playlist with the given ID`, () => {
@@ -114,29 +128,129 @@ describe(`when querying for a single playlist- by ID`, () => {
         });
 
         describe(`when there is no playlist with the given ID`, () => {
-            beforeEach(async () => {
-                await playlistQueryRepository.create(publishedPlaylistWithNoSpecialAccess);
-            });
-
             it(`should return not found`, async () => {
-                const res = await request(app.getHttpServer()).get(
-                    buildDetailEndpoint(buildDummyUuid(159))
-                );
-
-                expect(res.status).toBe(httpStatusCodes.notFound);
+                await assertQueryResult({
+                    app,
+                    endpoint: buildDetailEndpoint(buildDummyUuid(157)),
+                    expectedStatus: HttpStatusCode.ok,
+                    seedInitialState: async () => {
+                        await playlistQueryRepository.create(publishedPlaylistWithNoSpecialAccess);
+                    },
+                });
             });
         });
     });
 
     describe(`when the user is authenticated as a regular viewer (non-admin)`, () => {
-        it.todo(`should have a test`);
+        beforeAll(async () => {
+            await setItUp(new CoscradUserWithGroups(testUserThatIsAViewer, []));
+        });
+
+        describe(`when the playlist is public`, () => {
+            it(`should return the expected result`, async () => {
+                await assertQueryResult({
+                    app,
+                    endpoint: buildDetailEndpoint(publishedPlaylistWithNoSpecialAccess.id),
+                    seedInitialState: async () => {
+                        await playlistQueryRepository.create(publishedPlaylistWithNoSpecialAccess);
+                    },
+                    expectedStatus: HttpStatusCode.ok,
+                    checkResponseBody: async (body: IDetailQueryResult<IPlayListViewModel>) => {
+                        // ordinary users cannot execute actions
+                        expect(body.actions).toEqual([]);
+                    },
+                });
+            });
+        });
+
+        describe(`when the playlist is private`, () => {
+            describe(`when the user is not in the query ACL`, () => {
+                it(`should return not found`, async () => {
+                    await assertQueryResult({
+                        app,
+                        endpoint: buildDetailEndpoint(publishedPlaylistWithNoSpecialAccess.id),
+                        seedInitialState: async () => {
+                            await playlistQueryRepository.create(
+                                clonePlainObjectWithOverrides(
+                                    publishedPlaylistWithNoSpecialAccess,
+                                    {
+                                        isPublished: false,
+                                    }
+                                )
+                            );
+                        },
+                        expectedStatus: HttpStatusCode.notFound,
+                    });
+                });
+            });
+
+            describe(`when the user appears in the query ACL as a user`, () => {
+                it(`should return the expected result`, async () => {
+                    await assertQueryResult({
+                        app,
+                        endpoint: buildDetailEndpoint(publishedPlaylistWithNoSpecialAccess.id),
+                        seedInitialState: async () => {
+                            await playlistQueryRepository.create(
+                                clonePlainObjectWithOverrides(
+                                    publishedPlaylistWithNoSpecialAccess,
+                                    {
+                                        queryAccessControlList: new AccessControlList().allowUser(
+                                            testUserThatIsAViewer.id
+                                        ),
+                                    }
+                                )
+                            );
+                        },
+                        expectedStatus: HttpStatusCode.ok,
+                        checkResponseBody: async (body: IDetailQueryResult<IPlayListViewModel>) => {
+                            // ordinary users cannot execute actions
+                            expect(body.actions).toEqual([]);
+                        },
+                    });
+                });
+            });
+
+            describe(`when the user appears in the query ACL as a group member`, () => {
+                // TODO We don't yet support this use case
+                it.todo(`should return the expected result`);
+            });
+        });
     });
 
     describe(`when the user is a COSCRAD admin`, () => {
-        it.todo(`should have a test`);
+        describe(`when there is a playlist with the given ID`, () => {
+            describe(`when the playlist is public`, () => {
+                it.todo(`should return the expected result`);
+            });
+
+            describe(`when the playlist is private`, () => {
+                describe(`when the user is not in the query ACL`, () => {
+                    it.todo(`should return not found`);
+                });
+
+                describe(`when the user appears in the query ACL as a user`, () => {
+                    it.todo(`should return the expected result`);
+                });
+
+                describe(`when the user appears in the query ACL as a group member`, () => {
+                    // TODO We don't yet support this use case
+                    it.todo(`should return the expected result`);
+                });
+            });
+        });
+
+        describe(`when there is no playlist with the given ID`, () => {
+            it.todo(`should have a test`);
+        });
     });
 
     describe(`when the user is a project admin`, () => {
-        it.todo(`should have a test`);
+        describe(`when there is a playlist with the given ID`, () => {
+            it.todo(`should have a test`);
+        });
+
+        describe(`when there is no playlist with the given ID`, () => {
+            it.todo(`should have a test`);
+        });
     });
 });
