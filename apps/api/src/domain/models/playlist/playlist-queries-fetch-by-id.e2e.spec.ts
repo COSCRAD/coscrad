@@ -6,10 +6,10 @@ import {
     LanguageCode,
 } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
-import { clonePlainObjectWithOverrides } from 'apps/api/src/lib/utilities/clonePlainObjectWithOverrides';
 import * as request from 'supertest';
 import httpStatusCodes from '../../../app/constants/httpStatusCodes';
 import setUpIntegrationTest from '../../../app/controllers/__tests__/setUpIntegrationTest';
+import { clonePlainObjectWithOverrides } from '../../../lib/utilities/clonePlainObjectWithOverrides';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
@@ -129,10 +129,11 @@ describe(`when querying for a single playlist- by ID`, () => {
 
         describe(`when there is no playlist with the given ID`, () => {
             it(`should return not found`, async () => {
+                // can we share this test case with other user cases?
                 await assertQueryResult({
                     app,
                     endpoint: buildDetailEndpoint(buildDummyUuid(157)),
-                    expectedStatus: HttpStatusCode.ok,
+                    expectedStatus: HttpStatusCode.notFound,
                     seedInitialState: async () => {
                         await playlistQueryRepository.create(publishedPlaylistWithNoSpecialAccess);
                     },
@@ -218,39 +219,582 @@ describe(`when querying for a single playlist- by ID`, () => {
     });
 
     describe(`when the user is a COSCRAD admin`, () => {
+        const coscradAdmin = testUserThatIsAViewer.clone({
+            roles: [CoscradUserRole.superAdmin],
+        });
+
+        beforeAll(async () => {
+            await setItUp(new CoscradUserWithGroups(coscradAdmin, []));
+        });
+
         describe(`when there is a playlist with the given ID`, () => {
             describe(`when the playlist is public`, () => {
-                it.todo(`should return the expected result`);
+                it(`should return the expected result`, async () => {
+                    await assertQueryResult({
+                        app,
+                        endpoint: buildDetailEndpoint(publishedPlaylistWithNoSpecialAccess.id),
+                        seedInitialState: async () => {
+                            await playlistQueryRepository.create(
+                                publishedPlaylistWithNoSpecialAccess
+                            );
+                        },
+                        expectedStatus: HttpStatusCode.ok,
+                        checkResponseBody: async (body: IDetailQueryResult<IPlayListViewModel>) => {
+                            // a COSCRAD admin can execute actions
+                            expect(body.actions).not.toEqual([]);
+
+                            /**
+                             * We snapshot just one response as a contract test
+                             * for the `by ID` query endpoint for playlists.
+                             * We do this with the `Coscrad Admin` case because this
+                             * will also capture the structure of properties such
+                             * as `actions`, which are only visible to admin
+                             */
+                            expect(body).toMatchInlineSnapshot(`
+{
+  "actions": [
+    {
+      "description": "Make a resource visible to the public",
+      "form": {
+        "fields": [],
+        "prepopulatedFields": {
+          "aggregateCompositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b109001",
+            "type": "playlist",
+          },
+        },
+      },
+      "label": "Publish Resource",
+      "type": "PUBLISH_RESOURCE",
+    },
+    {
+      "description": "Assign a tag to a resource or note",
+      "form": {
+        "fields": [
+          {
+            "constraints": [],
+            "description": "system-wide unique identifier for the resource or note being tagged",
+            "label": "Tagged Member's Composite Identifier",
+            "name": "taggedMemberCompositeIdentifier",
+            "type": "JSON_INPUT",
+          },
+        ],
+        "prepopulatedFields": {
+          "aggregateCompositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b109001",
+            "type": "playlist",
+          },
+        },
+      },
+      "label": "Tag Resource or Note",
+      "type": "TAG_RESOURCE_OR_NOTE",
+    },
+    {
+      "description": "creates a note about this particular resource",
+      "form": {
+        "fields": [
+          {
+            "constraints": [],
+            "description": "system-wide unique identifier for the resource about which we are making a note",
+            "label": "CompositeIdentifier",
+            "name": "resourceCompositeIdentifier",
+            "type": "JSON_INPUT",
+          },
+          {},
+          {
+            "constraints": [
+              {
+                "message": "must be a non-empty string",
+                "name": "non-empty string",
+              },
+              {
+                "message": "must be a defined value",
+                "name": "defined value",
+              },
+            ],
+            "description": "text for the note",
+            "label": "text",
+            "name": "text",
+            "type": "TEXT_FIELD",
+          },
+          {
+            "constraints": [
+              {
+                "message": "Must be a valid \${propertyLabel}",
+                "name": "IS_ENUM",
+              },
+              {
+                "message": "Required",
+                "name": "defined value",
+              },
+            ],
+            "description": "the language in which you are writing the note",
+            "label": "language code",
+            "name": "languageCode",
+            "options": [
+              {
+                "display": "Chilcotin",
+                "value": "clc",
+              },
+              {
+                "display": "Haida",
+                "value": "hai",
+              },
+              {
+                "display": "English",
+                "value": "en",
+              },
+              {
+                "display": "French",
+                "value": "fra",
+              },
+              {
+                "display": "Chinook",
+                "value": "chn",
+              },
+              {
+                "display": "Zapotec",
+                "value": "zap",
+              },
+              {
+                "display": "Spanish",
+                "value": "spa",
+              },
+            ],
+            "type": "STATIC_SELECT",
+          },
+        ],
+        "prepopulatedFields": {
+          "aggregateCompositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b109001",
+            "type": "playlist",
+          },
+        },
+      },
+      "label": "Create Note",
+      "type": "CREATE_NOTE_ABOUT_RESOURCE",
+    },
+  ],
+  "contributions": [],
+  "episodes": [],
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b109001",
+  "isPublished": true,
+  "name": {
+    "items": [
+      {
+        "languageCode": "en",
+        "role": "original",
+        "text": "Smooth Jazz",
+      },
+    ],
+  },
+}
+`);
+                        },
+                    });
+                });
             });
 
             describe(`when the playlist is private`, () => {
-                describe(`when the user is not in the query ACL`, () => {
-                    it.todo(`should return not found`);
-                });
+                it(`should return the expected result`, async () => {
+                    await assertQueryResult({
+                        app,
+                        endpoint: buildDetailEndpoint(publishedPlaylistWithNoSpecialAccess.id),
+                        seedInitialState: async () => {
+                            await playlistQueryRepository.create(
+                                clonePlainObjectWithOverrides(
+                                    publishedPlaylistWithNoSpecialAccess,
+                                    {
+                                        isPublished: false,
+                                    }
+                                )
+                            );
+                        },
+                        expectedStatus: HttpStatusCode.ok,
+                        checkResponseBody: async (body: IDetailQueryResult<IPlayListViewModel>) => {
+                            // ordinary users cannot execute actions
+                            expect(body.actions).not.toEqual([]);
 
-                describe(`when the user appears in the query ACL as a user`, () => {
-                    it.todo(`should return the expected result`);
-                });
-
-                describe(`when the user appears in the query ACL as a group member`, () => {
-                    // TODO We don't yet support this use case
-                    it.todo(`should return the expected result`);
+                            /**
+                             * We snapshot just one response as a contract test
+                             * for the `by ID` query endpoint for playlists.
+                             * We do this with the `Coscrad Admin` case because this
+                             * will also capture the structure of properties such
+                             * as `actions`, which are only visible to admin
+                             */
+                            expect(body).toMatchInlineSnapshot(`
+{
+  "actions": [
+    {
+      "description": "Make a resource visible to the public",
+      "form": {
+        "fields": [],
+        "prepopulatedFields": {
+          "aggregateCompositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b109001",
+            "type": "playlist",
+          },
+        },
+      },
+      "label": "Publish Resource",
+      "type": "PUBLISH_RESOURCE",
+    },
+    {
+      "description": "Assign a tag to a resource or note",
+      "form": {
+        "fields": [
+          {
+            "constraints": [],
+            "description": "system-wide unique identifier for the resource or note being tagged",
+            "label": "Tagged Member's Composite Identifier",
+            "name": "taggedMemberCompositeIdentifier",
+            "type": "JSON_INPUT",
+          },
+        ],
+        "prepopulatedFields": {
+          "aggregateCompositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b109001",
+            "type": "playlist",
+          },
+        },
+      },
+      "label": "Tag Resource or Note",
+      "type": "TAG_RESOURCE_OR_NOTE",
+    },
+    {
+      "description": "creates a note about this particular resource",
+      "form": {
+        "fields": [
+          {
+            "constraints": [],
+            "description": "system-wide unique identifier for the resource about which we are making a note",
+            "label": "CompositeIdentifier",
+            "name": "resourceCompositeIdentifier",
+            "type": "JSON_INPUT",
+          },
+          {},
+          {
+            "constraints": [
+              {
+                "message": "must be a non-empty string",
+                "name": "non-empty string",
+              },
+              {
+                "message": "must be a defined value",
+                "name": "defined value",
+              },
+            ],
+            "description": "text for the note",
+            "label": "text",
+            "name": "text",
+            "type": "TEXT_FIELD",
+          },
+          {
+            "constraints": [
+              {
+                "message": "Must be a valid \${propertyLabel}",
+                "name": "IS_ENUM",
+              },
+              {
+                "message": "Required",
+                "name": "defined value",
+              },
+            ],
+            "description": "the language in which you are writing the note",
+            "label": "language code",
+            "name": "languageCode",
+            "options": [
+              {
+                "display": "Chilcotin",
+                "value": "clc",
+              },
+              {
+                "display": "Haida",
+                "value": "hai",
+              },
+              {
+                "display": "English",
+                "value": "en",
+              },
+              {
+                "display": "French",
+                "value": "fra",
+              },
+              {
+                "display": "Chinook",
+                "value": "chn",
+              },
+              {
+                "display": "Zapotec",
+                "value": "zap",
+              },
+              {
+                "display": "Spanish",
+                "value": "spa",
+              },
+            ],
+            "type": "STATIC_SELECT",
+          },
+        ],
+        "prepopulatedFields": {
+          "aggregateCompositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b109001",
+            "type": "playlist",
+          },
+        },
+      },
+      "label": "Create Note",
+      "type": "CREATE_NOTE_ABOUT_RESOURCE",
+    },
+  ],
+  "contributions": [],
+  "episodes": [],
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b109001",
+  "isPublished": false,
+  "name": {
+    "items": [
+      {
+        "languageCode": "en",
+        "role": "original",
+        "text": "Smooth Jazz",
+      },
+    ],
+  },
+}
+`);
+                        },
+                    });
                 });
             });
         });
 
         describe(`when there is no playlist with the given ID`, () => {
-            it.todo(`should have a test`);
+            it(`should return not found`, async () => {
+                await assertQueryResult({
+                    app,
+                    endpoint: buildDetailEndpoint(buildDummyUuid(345)),
+                    seedInitialState: async () => {
+                        await playlistQueryRepository.create(publishedPlaylistWithNoSpecialAccess);
+                    },
+                    expectedStatus: HttpStatusCode.notFound,
+                });
+            });
         });
     });
 
     describe(`when the user is a project admin`, () => {
+        const projectAdmin = testUserThatIsAViewer.clone({
+            roles: [CoscradUserRole.projectAdmin],
+        });
+
+        beforeAll(async () => {
+            await setItUp(new CoscradUserWithGroups(projectAdmin, []));
+        });
+
         describe(`when there is a playlist with the given ID`, () => {
-            it.todo(`should have a test`);
+            describe(`when the playlist is public`, () => {
+                it(`should return the expected result`, async () => {
+                    await assertQueryResult({
+                        app,
+                        endpoint: buildDetailEndpoint(publishedPlaylistWithNoSpecialAccess.id),
+                        seedInitialState: async () => {
+                            await playlistQueryRepository.create(
+                                publishedPlaylistWithNoSpecialAccess
+                            );
+                        },
+                        expectedStatus: HttpStatusCode.ok,
+                        checkResponseBody: async (body: IDetailQueryResult<IPlayListViewModel>) => {
+                            // admin users have access to actions
+                            expect(body.actions).not.toEqual([]);
+                        },
+                    });
+                });
+            });
+
+            describe(`when the playlist is private`, () => {
+                it(`should return the expected result`, async () => {
+                    await assertQueryResult({
+                        app,
+                        endpoint: buildDetailEndpoint(publishedPlaylistWithNoSpecialAccess.id),
+                        seedInitialState: async () => {
+                            await playlistQueryRepository.create(
+                                clonePlainObjectWithOverrides(
+                                    publishedPlaylistWithNoSpecialAccess,
+                                    {
+                                        isPublished: false,
+                                    }
+                                )
+                            );
+                        },
+                        expectedStatus: HttpStatusCode.ok,
+                        checkResponseBody: async (body: IDetailQueryResult<IPlayListViewModel>) => {
+                            // ordinary users cannot execute actions
+                            expect(body.actions).not.toEqual([]);
+
+                            /**
+                             * We snapshot just one response as a contract test
+                             * for the `by ID` query endpoint for playlists.
+                             * We do this with the `Coscrad Admin` case because this
+                             * will also capture the structure of properties such
+                             * as `actions`, which are only visible to admin
+                             */
+                            expect(body).toMatchInlineSnapshot(`
+{
+  "actions": [
+    {
+      "description": "Make a resource visible to the public",
+      "form": {
+        "fields": [],
+        "prepopulatedFields": {
+          "aggregateCompositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b109001",
+            "type": "playlist",
+          },
+        },
+      },
+      "label": "Publish Resource",
+      "type": "PUBLISH_RESOURCE",
+    },
+    {
+      "description": "Assign a tag to a resource or note",
+      "form": {
+        "fields": [
+          {
+            "constraints": [],
+            "description": "system-wide unique identifier for the resource or note being tagged",
+            "label": "Tagged Member's Composite Identifier",
+            "name": "taggedMemberCompositeIdentifier",
+            "type": "JSON_INPUT",
+          },
+        ],
+        "prepopulatedFields": {
+          "aggregateCompositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b109001",
+            "type": "playlist",
+          },
+        },
+      },
+      "label": "Tag Resource or Note",
+      "type": "TAG_RESOURCE_OR_NOTE",
+    },
+    {
+      "description": "creates a note about this particular resource",
+      "form": {
+        "fields": [
+          {
+            "constraints": [],
+            "description": "system-wide unique identifier for the resource about which we are making a note",
+            "label": "CompositeIdentifier",
+            "name": "resourceCompositeIdentifier",
+            "type": "JSON_INPUT",
+          },
+          {},
+          {
+            "constraints": [
+              {
+                "message": "must be a non-empty string",
+                "name": "non-empty string",
+              },
+              {
+                "message": "must be a defined value",
+                "name": "defined value",
+              },
+            ],
+            "description": "text for the note",
+            "label": "text",
+            "name": "text",
+            "type": "TEXT_FIELD",
+          },
+          {
+            "constraints": [
+              {
+                "message": "Must be a valid \${propertyLabel}",
+                "name": "IS_ENUM",
+              },
+              {
+                "message": "Required",
+                "name": "defined value",
+              },
+            ],
+            "description": "the language in which you are writing the note",
+            "label": "language code",
+            "name": "languageCode",
+            "options": [
+              {
+                "display": "Chilcotin",
+                "value": "clc",
+              },
+              {
+                "display": "Haida",
+                "value": "hai",
+              },
+              {
+                "display": "English",
+                "value": "en",
+              },
+              {
+                "display": "French",
+                "value": "fra",
+              },
+              {
+                "display": "Chinook",
+                "value": "chn",
+              },
+              {
+                "display": "Zapotec",
+                "value": "zap",
+              },
+              {
+                "display": "Spanish",
+                "value": "spa",
+              },
+            ],
+            "type": "STATIC_SELECT",
+          },
+        ],
+        "prepopulatedFields": {
+          "aggregateCompositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b109001",
+            "type": "playlist",
+          },
+        },
+      },
+      "label": "Create Note",
+      "type": "CREATE_NOTE_ABOUT_RESOURCE",
+    },
+  ],
+  "contributions": [],
+  "episodes": [],
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b109001",
+  "isPublished": false,
+  "name": {
+    "items": [
+      {
+        "languageCode": "en",
+        "role": "original",
+        "text": "Smooth Jazz",
+      },
+    ],
+  },
+}
+`);
+                        },
+                    });
+                });
+            });
         });
 
         describe(`when there is no playlist with the given ID`, () => {
-            it.todo(`should have a test`);
+            it(`should return not found`, async () => {
+                await assertQueryResult({
+                    app,
+                    endpoint: buildDetailEndpoint(buildDummyUuid(345)),
+                    seedInitialState: async () => {
+                        await playlistQueryRepository.create(publishedPlaylistWithNoSpecialAccess);
+                    },
+                    expectedStatus: HttpStatusCode.notFound,
+                });
+            });
         });
     });
 });

@@ -12,7 +12,6 @@ import {
 import { isBoolean, isNonEmptyObject } from '@coscrad/validation-constraints';
 import { Maybe } from '../../../lib/types/maybe';
 import { NotFound } from '../../../lib/types/not-found';
-import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { CoscradDataExample } from '../../../test-data/utilities';
 import { DTO } from '../../../types/DTO';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
@@ -224,12 +223,10 @@ export class PlaylistViewModel {
                 return [e];
             });
 
-            const out = cloneToPlainObject<PlaylistViewModel>(this) as PlaylistViewModel;
-
             // @ts-expect-error should we remove read only?
-            out.episodes = availableEpisodes;
+            this.episodes = availableEpisodes;
 
-            return out;
+            return this;
         };
 
         /**
