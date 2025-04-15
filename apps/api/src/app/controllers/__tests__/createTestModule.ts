@@ -143,7 +143,6 @@ import {
 } from '../../../domain/models/photograph/queries';
 import { PhotographQueryService } from '../../../domain/models/photograph/queries/photograph-query.service';
 import { ArangoPhotographQueryRepository } from '../../../domain/models/photograph/repositories';
-import { PLAYLIST_QUERY_REPOSITORY_TOKEN } from '../../../domain/models/playlist';
 import {
     AddAudioItemToPlaylistCommandHandler,
     CreatePlayListCommandHandler,
@@ -423,6 +422,7 @@ export default async (
             EventModule,
         ],
         providers: [
+            DiscoveryService,
             CommandInfoService,
             {
                 provide: ConfigService,
@@ -554,27 +554,9 @@ export default async (
                     ),
                 inject: [ArangoConnectionProvider, AUDIO_QUERY_REPOSITORY_TOKEN],
             },
-            {
-                provide: VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
-                useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
-                    new ArangoVocabularyListQueryRepository(
-                        arangoConnectionProvider,
-                        new ConsoleCoscradCliLogger()
-                    ),
-                inject: [ArangoConnectionProvider],
-            },
-            {
-                provide: PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
-                useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
-                    new ArangoPhotographQueryRepository(arangoConnectionProvider),
-                inject: [ArangoConnectionProvider],
-            },
-            {
-                provide: PLAYLIST_QUERY_REPOSITORY_TOKEN,
-                useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
-                    new ArangoPlaylistQueryRepository(arangoConnectionProvider),
-                inject: [ArangoConnectionProvider],
-            },
+            ArangoVocabularyListQueryRepository,
+            ArangoPhotographQueryRepository,
+            ArangoPlaylistQueryRepository,
             {
                 //  TODO use a more extensible pattern
                 provide: QUERY_REPOSITORY_PROVIDER_TOKEN,
