@@ -2,7 +2,7 @@ import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { Maybe } from '../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../lib/types/not-found';
 
-const ARANGO_VIEW_REPOSITORY_METADATA = 'ARANGO_VIEW_REPOSITORY_METADATA';
+export const ARANGO_VIEW_REPOSITORY_METADATA = 'ARANGO_VIEW_REPOSITORY_METADATA';
 
 export interface ArangoViewRepositoryMetadata {
     viewType: string;

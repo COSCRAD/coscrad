@@ -13,6 +13,7 @@ import { isNotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabase } from '../../../../persistence/database/arango-database';
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
+import { ArangoViewRepository } from '../../../../persistence/database/decorators/arango-view-repository.decorator';
 import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
@@ -24,6 +25,7 @@ import {
 import { ITermQueryRepository } from '../queries';
 import { ArangoResourceQueryBuilder } from './arango-resource-query-builder';
 
+@ArangoViewRepository('term')
 export class ArangoTermQueryRepository implements ITermQueryRepository {
     private readonly database: ArangoDatabaseForCollection<TermViewModel>;
 

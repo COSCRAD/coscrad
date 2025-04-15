@@ -1,3 +1,4 @@
+import { Inject, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
@@ -13,6 +14,7 @@ import { AggregateId } from '../../../types/AggregateId';
 import { ArangoResourceQueryBuilder } from '../../term/repositories/arango-resource-query-builder';
 import { IPlaylistQueryRepository } from './playlist-query-repository.interface';
 
+@Injectable()
 @ArangoViewRepository('playlist')
 export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
     private readonly database: ArangoDatabaseForCollection<PlaylistViewModel>;
@@ -24,7 +26,7 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
 
     constructor(
         // should we inject the database directly?
-        arangoConnectionProvider: ArangoConnectionProvider
+        @Inject(ArangoConnectionProvider) arangoConnectionProvider: ArangoConnectionProvider
         // @Inject(COSCRAD_LOGGER_TOKEN)
         // readonly logger: ICoscradLogger
     ) {

@@ -16,8 +16,8 @@ export class AudioItemCreatedEventHandler implements ICoscradEventHandler {
         @Inject(QUERY_REPOSITORY_PROVIDER_TOKEN)
         queryRepositoryProvider: IQueryRepositoryProvider
     ) {
-        // @ts-expect-error Fix this now!
-        this.audioItemRepository = queryRepositoryProvider.forView('audioItem');
+        this.audioItemRepository =
+            queryRepositoryProvider.forView<IAudioItemQueryRepository>('audioItem');
     }
 
     async handle(event: AudioItemCreated): Promise<void> {

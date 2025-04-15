@@ -1,9 +1,12 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
-import { ConsoleCoscradCliLogger } from '../../coscrad-cli/logging';
+import { ConsoleCoscradCliLogger, COSCRAD_LOGGER_TOKEN } from '../../coscrad-cli/logging';
 import { EventModule } from '../../domain/common';
 import { AUDIO_QUERY_REPOSITORY_TOKEN } from '../../domain/models/audio-visual/audio-item/queries/audio-item-query-repository.interface';
-import { ArangoAudioItemQueryRepository } from '../../domain/models/audio-visual/audio-item/repositories/arango-audio-item-query-repository';
+import {
+    IQueryRepositoryProvider,
+    QUERY_REPOSITORY_PROVIDER_TOKEN,
+} from '../../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
 import {
     AudioAddedForTerm,
     PromptTermCreated,
@@ -19,9 +22,9 @@ import { TermTranslatedEventHandler } from '../../domain/models/term/commands/tr
 import { Term } from '../../domain/models/term/entities/term.entity';
 import { TERM_QUERY_REPOSITORY_TOKEN } from '../../domain/models/term/queries';
 import { ArangoTermQueryRepository } from '../../domain/models/term/repositories';
+import { ArangoQueryRepositoryProvider } from '../../domain/models/term/repositories/arango-query-repository-provider';
 import { TermQueryService } from '../../domain/services/query-services/term-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
-import { ArangoConnectionProvider } from '../../persistence/database/arango-connection.provider';
 import { PersistenceModule } from '../../persistence/persistence.module';
 import { DynamicDataTypeModule } from '../../validation';
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
@@ -39,26 +42,24 @@ import { TermCommandsModule } from './term.commands.module';
     ],
     controllers: [TermController],
     providers: [
+        {
+            provide: COSCRAD_LOGGER_TOKEN,
+            useClass: ConsoleCoscradCliLogger,
+        },
         CommandInfoService,
         TermQueryService,
         {
             provide: AUDIO_QUERY_REPOSITORY_TOKEN,
-            useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
-                new ArangoAudioItemQueryRepository(arangoConnectionProvider),
-            inject: [ArangoConnectionProvider],
+            useFactory: (queryRepositoryProvider: ArangoQueryRepositoryProvider) =>
+                queryRepositoryProvider.forView('audioItem'),
+            inject: [QUERY_REPOSITORY_PROVIDER_TOKEN],
         },
+        ArangoTermQueryRepository,
         {
             provide: TERM_QUERY_REPOSITORY_TOKEN,
-            useFactory: (
-                arangoConnectionProvider: ArangoConnectionProvider,
-                audioItemQueryRepository: ArangoAudioItemQueryRepository
-            ) =>
-                new ArangoTermQueryRepository(
-                    arangoConnectionProvider,
-                    audioItemQueryRepository,
-                    new ConsoleCoscradCliLogger()
-                ),
-            inject: [ArangoConnectionProvider, AUDIO_QUERY_REPOSITORY_TOKEN],
+            useFactory: (queryRepositoryProvider: IQueryRepositoryProvider) =>
+                queryRepositoryProvider.forView('term'),
+            inject: [QUERY_REPOSITORY_PROVIDER_TOKEN],
         },
         // Data Classes
         ...[

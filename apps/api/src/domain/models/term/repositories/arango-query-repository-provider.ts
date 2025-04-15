@@ -1,9 +1,7 @@
-import { ResourceType } from '@coscrad/api-interfaces';
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { DiscoveryService } from '@nestjs/core';
+import { DiscoveryService } from '@golevelup/nestjs-discovery';
 import { InternalError } from '../../../../lib/errors/InternalError';
+import { isNotFound } from '../../../../lib/types/not-found';
 import {
-    ArangoViewRepositoryMetadata,
     getArangoViewRepositoryMetadata,
     hasArangoViewRepositoryMetatdata,
 } from '../../../../persistence/database/decorators/arango-view-repository.decorator';
@@ -19,38 +17,47 @@ import {
  * Then we can use reflection to return the desired repository.
  */
 export class ArangoQueryRepositoryProvider implements IQueryRepositoryProvider {
+    private readonly viewTypeToRepository = new Map<string, unknown>();
+
+    private isInitialized = false;
+
     //    TODO Use the standard []`Reflector` pattern](https://docs.nestjs.com/fundamentals/execution-context#reflection-and-metadata) from `NestJS`
     constructor(private readonly discoveryService: DiscoveryService) {}
 
     // can this be `forView(viewtype: string)` ?
-    forView<T extends IPublishable>(resourceType: ResourceType): T {
-        const searchResult = this.discoveryService.getProviders().flatMap(({ instance }): T[] => {
-            const ctor = isNullOrUndefined(instance) ? null : instance.constructor;
-
-            if (isNullOrUndefined(instance) || !hasArangoViewRepositoryMetatdata(ctor)) {
-                return [];
-            }
-
-            /**
-             * We are asserting that this exists at this point because `hasX` returned true
-             */
-            const meta = getArangoViewRepositoryMetadata(ctor) as ArangoViewRepositoryMetadata;
-
-            return meta.viewType == resourceType ? [instance] : [];
-        });
-
-        if (searchResult.length == 0) {
+    forView<T extends IPublishable>(viewType: string): T {
+        if (!this.viewTypeToRepository.has(viewType)) {
             throw new InternalError(
-                `Cannot provide a query repository for unknown view type: ${resourceType}`
+                `Cannot provide a query repository for unknown view type: ${viewType}`
             );
         }
 
-        if (searchResult.length > 1) {
-            throw new InternalError(
-                `Multiple query repositories have been annotated for view type: ${resourceType}`
-            );
+        return this.viewTypeToRepository.get(viewType) as T;
+    }
+
+    public async initialize() {
+        if (this.isInitialized) {
+            return;
         }
 
-        return searchResult[0] as T;
+        const queryRepositoryProviders = await this.discoveryService.providers((provider) =>
+            hasArangoViewRepositoryMetatdata(provider?.injectType)
+        );
+
+        for (const provider of queryRepositoryProviders) {
+            const meta = getArangoViewRepositoryMetadata(provider.injectType);
+
+            if (isNotFound(meta)) return;
+
+            this.register(meta.viewType, provider.instance);
+        }
+
+        this.isInitialized = true;
+    }
+
+    private register(viewType: string, repository: unknown) {
+        if (!this.viewTypeToRepository.has(viewType)) {
+            this.viewTypeToRepository.set(viewType, repository);
+        }
     }
 }

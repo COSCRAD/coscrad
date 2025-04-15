@@ -1,11 +1,8 @@
+import { DiscoveryModule, DiscoveryService } from '@golevelup/nestjs-discovery';
 import { DynamicModule, Global, Module, OnApplicationShutdown } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { DiscoveryService } from '@nestjs/core';
 import { CoscradEventFactory, EventModule } from '../domain/common';
-import {
-    IQueryRepositoryProvider,
-    QUERY_REPOSITORY_PROVIDER_TOKEN,
-} from '../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
+import { QUERY_REPOSITORY_PROVIDER_TOKEN } from '../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
 import { ArangoQueryRepositoryProvider } from '../domain/models/term/repositories/arango-query-repository-provider';
 import { ID_RESPOSITORY_TOKEN } from '../lib/id-generation/interfaces/id-repository.interface';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../validation';
@@ -97,16 +94,21 @@ export class PersistenceModule implements OnApplicationShutdown {
 
         const queryRepositoryProvider = {
             provide: QUERY_REPOSITORY_PROVIDER_TOKEN,
-            useFactory: (
-                dynamicDataTypeFinderService: DiscoveryService
-            ): IQueryRepositoryProvider =>
-                new ArangoQueryRepositoryProvider(dynamicDataTypeFinderService),
+            useFactory: async (
+                discoveryService: DiscoveryService
+            ): Promise<ArangoQueryRepositoryProvider> => {
+                const instance = new ArangoQueryRepositoryProvider(discoveryService);
+
+                await instance.initialize();
+
+                return instance;
+            },
             inject: [DiscoveryService],
         };
 
         return {
             module: PersistenceModule,
-            imports: [ConfigModule, EventModule, DynamicDataTypeModule],
+            imports: [ConfigModule, EventModule, DiscoveryModule, DynamicDataTypeModule],
             providers: [
                 arangoConnectionProvider,
                 repositoryProvider,
@@ -116,7 +118,6 @@ export class PersistenceModule implements OnApplicationShutdown {
                 arangoDataExporterProvider,
                 domainDataExporterProvider,
                 queryRepositoryProvider,
-                DiscoveryService,
             ],
             exports: [
                 arangoConnectionProvider,

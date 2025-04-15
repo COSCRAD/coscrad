@@ -1,5 +1,6 @@
 import { CommandModule } from '@coscrad/commands';
 import { forwardRef, Module } from '@nestjs/common';
+import { ArangoConnectionProvider } from 'apps/api/src/persistence/database/arango-connection.provider';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { IdGenerationModule } from '../../../lib/id-generation/id-generation.module';
 import { PersistenceModule } from '../../../persistence/persistence.module';
@@ -19,6 +20,7 @@ import { PlaylistCreated } from './commands/playlist-created.event';
 import { PlaylistCreatedEventHandler } from './commands/playlist-created.event-handler';
 import { PlaylistController } from './playlist.controller';
 import { ArangoPlaylistQueryRepository } from './queries/arango-playlist-query-repository';
+import { PLAYLIST_QUERY_REPOSITORY_TOKEN } from './queries/playlist-query-repository.interface';
 import { PlaylistQueryService } from './queries/playlist-query.service';
 
 @Module({
@@ -37,13 +39,20 @@ import { PlaylistQueryService } from './queries/playlist-query.service';
         ImportAudioItemsToPlaylistCommandHandler,
         PlaylistCreatedEventHandler,
         AudioItemAddedToPlaylistEventHandler,
-        ArangoPlaylistQueryRepository,
-        // {
-        //     provide: PLAYLIST_QUERY_REPOSITORY_TOKEN,
-        //     useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
-        //         new ArangoPlaylistQueryRepository(arangoConnectionProvider),
-        //     inject: [ArangoConnectionProvider],
-        // },
+        {
+            provide: PLAYLIST_QUERY_REPOSITORY_TOKEN,
+            useFactory: (connectionProvider: ArangoConnectionProvider) => {
+                const instance = new ArangoPlaylistQueryRepository(connectionProvider);
+
+                console.log({
+                    instance,
+                    connectionProvider,
+                });
+
+                return instance;
+            },
+            inject: [ArangoConnectionProvider],
+        },
         // Data Classes
         ...[
             CreatePlayList,

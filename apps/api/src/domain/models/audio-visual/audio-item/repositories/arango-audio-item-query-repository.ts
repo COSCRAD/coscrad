@@ -14,6 +14,7 @@ import { ArangoDatabaseForCollection } from '../../../../../persistence/database
 import { ArangoViewRepository } from '../../../../../persistence/database/decorators/arango-view-repository.decorator';
 import mapDatabaseDocumentToAggregateDTO from '../../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
+import { ArangoResourceQueryBuilder } from '../../../term/repositories/arango-resource-query-builder';
 import { IAudioItemQueryRepository } from '../queries/audio-item-query-repository.interface';
 
 @ArangoViewRepository('audioItem')
@@ -22,11 +23,18 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
         IDetailQueryResult<IAudioItemViewModel & { actions: ICommandFormAndLabels[] }>
     >;
 
+    /**
+     * We use this helper to achieve composition over inheritance.
+     */
+    private readonly baseResourceQueryBuilder: ArangoResourceQueryBuilder;
+
     constructor(arangoConnectionProvider: ArangoConnectionProvider) {
         this.database = new ArangoDatabaseForCollection(
             new ArangoDatabase(arangoConnectionProvider.getConnection()),
             'audioItem__VIEWS'
         );
+
+        this.baseResourceQueryBuilder = new ArangoResourceQueryBuilder(`audioItem__VIEWS`);
     }
 
     async create(
@@ -72,6 +80,10 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
         return documents.map(mapDatabaseDocumentToAggregateDTO) as (IAudioItemViewModel & {
             actions: ICommandFormAndLabels[];
         })[];
+    }
+
+    async allowUser(audioItemId: AggregateId, userId: AggregateId): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.allowUser(audioItemId, userId));
     }
 
     async translateName(

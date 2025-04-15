@@ -87,7 +87,6 @@ const dataClasses = [
         TermAddedToVocabularyListEventHandler,
         TermInVocabularyListAnalyzedEventHandler,
         EntriesImportedToVocabularyListEventHandler,
-
         // Data Classes
         ...dataClasses.map((ctor) => ({
             provide: ctor,
