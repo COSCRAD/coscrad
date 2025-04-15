@@ -251,4 +251,15 @@ describe(`ArangoAudioItemQueryRepository`, () => {
             expect(updatedView.isPublished).toBe(true);
         });
     });
+
+    describe(`create transcript`, () => {
+        /**
+         * Write an empty transcript to the `transcript` property on the existing
+         * database document (with AQL) and write a boolean property `hasTranscript`=true.
+         * Also update the `EventSourcedAudioItemViewModel` to have these properties.
+         *
+         * TODO Support video
+         */
+        it.todo(`should have a test`);
+    });
 });

@@ -35,4 +35,6 @@ export interface IAudioItemQueryRepository extends IPublishable {
     translateName(id: AggregateId, translationItem: IMultilingualTextItem): Promise<void>;
 
     count(): Promise<number>;
+
+    addTranscript(id: AggregateId): Promise<void>;
 }

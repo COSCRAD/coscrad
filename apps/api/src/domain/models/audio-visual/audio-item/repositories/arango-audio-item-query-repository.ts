@@ -113,6 +113,11 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
         await cursor.all();
     }
 
+    // TODO Add a test case for this
+    addTranscript(_id: AggregateId): Promise<void> {
+        throw new Error('Method not implemented.');
+    }
+
     async count(): Promise<number> {
         return this.database.getCount();
     }
