@@ -25,7 +25,6 @@ export class VocabularyListFilterPropertyRegisteredEventHandler implements ICosc
             },
         } = e;
 
-        console.log({ handling: JSON.stringify(e) });
         // Has this been done?
         // TODO translate checkbox -> switch
         await this.queryRepository

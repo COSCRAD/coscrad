@@ -30,8 +30,6 @@ export class PlaylistCreatedEventHandler implements ICoscradEventHandler {
         },
         meta: { contributorIds = [] },
     }: PlaylistCreated): Promise<void> {
-        console.log({ handling: 'PLAYLIST_CREATED', id });
-
         await this.playlistQueryRepository.create(
             PlaylistViewModel.fromDto({
                 id,

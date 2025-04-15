@@ -1,8 +1,8 @@
 import { CommandModule } from '@coscrad/commands';
 import { forwardRef, Module } from '@nestjs/common';
-import { ArangoConnectionProvider } from 'apps/api/src/persistence/database/arango-connection.provider';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { IdGenerationModule } from '../../../lib/id-generation/id-generation.module';
+import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import { PersistenceModule } from '../../../persistence/persistence.module';
 import {
     AddAudioItemToPlaylist,
@@ -43,11 +43,6 @@ import { PlaylistQueryService } from './queries/playlist-query.service';
             provide: PLAYLIST_QUERY_REPOSITORY_TOKEN,
             useFactory: (connectionProvider: ArangoConnectionProvider) => {
                 const instance = new ArangoPlaylistQueryRepository(connectionProvider);
-
-                console.log({
-                    instance,
-                    connectionProvider,
-                });
 
                 return instance;
             },

@@ -241,9 +241,6 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
                     `Failed to register vocabulary list filter property via VocabularyListRepository: ${reason}`
                 );
             });
-
-        const _new = await cursor.all();
-        console.log({ _new: JSON.stringify(_new) });
     }
 
     async addTerm(vocabularyListId: AggregateId, termId: AggregateId): Promise<void> {

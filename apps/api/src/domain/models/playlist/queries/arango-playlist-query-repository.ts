@@ -36,8 +36,6 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
         );
 
         this.baseResourceQueryBuilder = new ArangoResourceQueryBuilder('playlist__VIEWS');
-
-        console.log(`PLAYLIST QUERY REPO intantiated`);
     }
 
     subscribeToUpdates(): Observable<{ data: { type: string } }> {
