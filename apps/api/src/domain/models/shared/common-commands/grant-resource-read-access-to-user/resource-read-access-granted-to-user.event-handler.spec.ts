@@ -93,9 +93,7 @@ describe(`ResourceReadAccessGrantedToUserEventHandler.handle`, () => {
 
         repositoryProvider = app.get<IQueryRepositoryProvider>(QUERY_REPOSITORY_PROVIDER_TOKEN);
 
-        testQueryRepository = repositoryProvider.forResource<ITermQueryRepository>(
-            ResourceType.term
-        );
+        testQueryRepository = repositoryProvider.forView<ITermQueryRepository>(ResourceType.term);
 
         readAccessEventHandler = new ResourceReadAccessGrantedToUserEventHandler(
             repositoryProvider
@@ -117,7 +115,7 @@ describe(`ResourceReadAccessGrantedToUserEventHandler.handle`, () => {
          *
          * We should investigate this further.
          */
-        await repositoryProvider.forResource(ResourceType.term).create(existingView);
+        await repositoryProvider.forView(ResourceType.term).create(existingView);
     });
 
     it(`should allow access to the given user`, async () => {

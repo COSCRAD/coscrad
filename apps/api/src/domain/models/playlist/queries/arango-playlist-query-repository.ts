@@ -5,6 +5,7 @@ import { isNotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabase } from '../../../../persistence/database/arango-database';
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
+import { ArangoViewRepository } from '../../../../persistence/database/decorators/arango-view-repository.decorator';
 import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PlaylistViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
@@ -12,6 +13,7 @@ import { AggregateId } from '../../../types/AggregateId';
 import { ArangoResourceQueryBuilder } from '../../term/repositories/arango-resource-query-builder';
 import { IPlaylistQueryRepository } from './playlist-query-repository.interface';
 
+@ArangoViewRepository('playlist')
 export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
     private readonly database: ArangoDatabaseForCollection<PlaylistViewModel>;
 
@@ -32,6 +34,8 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
         );
 
         this.baseResourceQueryBuilder = new ArangoResourceQueryBuilder('playlist__VIEWS');
+
+        console.log(`PLAYLIST QUERY REPO intantiated`);
     }
 
     subscribeToUpdates(): Observable<{ data: { type: string } }> {
@@ -50,6 +54,12 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
 
     delete(_id: AggregateId): Promise<void> {
         throw new Error('Method not implemented.');
+    }
+
+    async publish(id: AggregateId): Promise<void> {
+        const cursor = await this.database.query(this.baseResourceQueryBuilder.publish(id));
+
+        await cursor.all();
     }
 
     async fetchById(id: AggregateId): Promise<Maybe<PlaylistViewModel>> {

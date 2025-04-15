@@ -1,4 +1,3 @@
-import { ResourceType } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
@@ -11,7 +10,7 @@ interface GenericRepository<T = unknown> {
     create(entity: T): Promise<void>;
     fetchById(id: string): Promise<Maybe<T>>;
     fetchMany(): Promise<T[]>;
-    count(): Promise<number>;
+    // count(): Promise<number>;
 }
 
 export interface IPublishable {
@@ -21,12 +20,12 @@ export interface IPublishable {
 export const QUERY_REPOSITORY_PROVIDER_TOKEN = 'QUERY_REPOSITORY_PROVIDER_TOKEN';
 
 export interface IQueryRepositoryProvider {
-    forResource<
+    forView<
         T extends IPublishable & IAccessible & GenericRepository = IPublishable &
             IAccessible &
             GenericRepository
     >(
-        resourceType: ResourceType
+        viewType: string
     ): T;
 }
 
@@ -44,14 +43,7 @@ export class ResourcePublishedEventHandler implements ICoscradEventHandler {
             },
         } = event;
 
-        console.log({
-            publishingAttempt: {
-                resourceType,
-                id,
-            },
-        });
-
-        const queryRepository = this.queryRepositoryProvider.forResource(resourceType);
+        const queryRepository = this.queryRepositoryProvider.forView(resourceType);
 
         if (typeof queryRepository.publish !== 'function') {
             throw new InternalError(

@@ -11,10 +11,12 @@ import { isNotFound } from '../../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabase } from '../../../../../persistence/database/arango-database';
 import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
+import { ArangoViewRepository } from '../../../../../persistence/database/decorators/arango-view-repository.decorator';
 import mapDatabaseDocumentToAggregateDTO from '../../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { IAudioItemQueryRepository } from '../queries/audio-item-query-repository.interface';
 
+@ArangoViewRepository('audioItem')
 export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository {
     private readonly database: ArangoDatabaseForCollection<
         IDetailQueryResult<IAudioItemViewModel & { actions: ICommandFormAndLabels[] }>

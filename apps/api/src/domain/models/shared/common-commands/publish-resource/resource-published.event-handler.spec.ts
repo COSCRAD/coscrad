@@ -89,7 +89,7 @@ describe(`ResourcePublished.eventHandler`, () => {
 
         resourcePublishedEventHandler = new ResourcePublishedEventHandler({
             // @ts-expect-error todo fix this
-            forResource: (resourceType) => {
+            forView: (resourceType) => {
                 if (resourceType !== ResourceType.term) {
                     throw new InternalError(
                         `publication not yet supported for ${resourceType} (we need to register a query repository provider)`

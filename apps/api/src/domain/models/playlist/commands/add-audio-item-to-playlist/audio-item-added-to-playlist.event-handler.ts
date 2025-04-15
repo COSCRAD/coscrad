@@ -1,14 +1,23 @@
+import { ResourceType } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
-import { IPlaylistQueryRepository, PLAYLIST_QUERY_REPOSITORY_TOKEN } from '../../queries';
+import {
+    IQueryRepositoryProvider,
+    QUERY_REPOSITORY_PROVIDER_TOKEN,
+} from '../../../shared/common-commands/publish-resource/resource-published.event-handler';
+import { IPlaylistQueryRepository } from '../../queries';
 import { AudioItemAddedToPlaylist } from './audio-item-added-to-playlist.event';
 
 @CoscradEventConsumer('AUDIO_ITEM_ADDED_TO_PLAYLIST')
 export class AudioItemAddedToPlaylistEventHandler implements ICoscradEventHandler {
+    private readonly playlistQueryRepository: IPlaylistQueryRepository;
+
     constructor(
-        @Inject(PLAYLIST_QUERY_REPOSITORY_TOKEN)
-        private readonly playlistQueryRepository: IPlaylistQueryRepository
-    ) {}
+        @Inject(QUERY_REPOSITORY_PROVIDER_TOKEN)
+        queryRepositoryProvider: IQueryRepositoryProvider
+    ) {
+        this.playlistQueryRepository = queryRepositoryProvider.forView(ResourceType.playlist);
+    }
 
     async handle({
         payload: {

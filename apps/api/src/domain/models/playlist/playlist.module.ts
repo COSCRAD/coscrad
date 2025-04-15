@@ -1,9 +1,7 @@
 import { CommandModule } from '@coscrad/commands';
-import { Module } from '@nestjs/common';
-import { PLAYLIST_QUERY_REPOSITORY_TOKEN } from '.';
+import { forwardRef, Module } from '@nestjs/common';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { IdGenerationModule } from '../../../lib/id-generation/id-generation.module';
-import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import { PersistenceModule } from '../../../persistence/persistence.module';
 import {
     AddAudioItemToPlaylist,
@@ -23,18 +21,14 @@ import { PlaylistController } from './playlist.controller';
 import { ArangoPlaylistQueryRepository } from './queries/arango-playlist-query-repository';
 import { PlaylistQueryService } from './queries/playlist-query.service';
 
-// TODO move this
 @Module({
-    imports: [PersistenceModule, CommandModule, IdGenerationModule],
+    imports: [
+        forwardRef(() => PersistenceModule),
+        CommandModule,
+        forwardRef(() => IdGenerationModule),
+    ],
     controllers: [PlaylistController],
     providers: [
-        {
-            provide: PLAYLIST_QUERY_REPOSITORY_TOKEN,
-            useFactory: (connectionProvider: ArangoConnectionProvider) => {
-                return new ArangoPlaylistQueryRepository(connectionProvider);
-            },
-            inject: [ArangoConnectionProvider],
-        },
         CommandInfoService,
         PlaylistQueryService,
         CreatePlayListCommandHandler,
@@ -43,11 +37,17 @@ import { PlaylistQueryService } from './queries/playlist-query.service';
         ImportAudioItemsToPlaylistCommandHandler,
         PlaylistCreatedEventHandler,
         AudioItemAddedToPlaylistEventHandler,
+        ArangoPlaylistQueryRepository,
+        // {
+        //     provide: PLAYLIST_QUERY_REPOSITORY_TOKEN,
+        //     useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
+        //         new ArangoPlaylistQueryRepository(arangoConnectionProvider),
+        //     inject: [ArangoConnectionProvider],
+        // },
         // Data Classes
         ...[
             CreatePlayList,
             PlaylistCreated,
-            PlaylistCreatedEventHandler,
             TranslatePlaylistName,
             AddAudioItemToPlaylist,
             AudioItemAddedToPlaylist,

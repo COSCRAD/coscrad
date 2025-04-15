@@ -2,6 +2,7 @@ import { ResourceType } from '@coscrad/api-interfaces';
 import { CommandHandlerService, CommandModule } from '@coscrad/commands';
 import { bootstrapDynamicTypes } from '@coscrad/data-types';
 import { ConfigService } from '@nestjs/config';
+import { DiscoveryService } from '@nestjs/core';
 import { PassportModule } from '@nestjs/passport';
 import { Test } from '@nestjs/testing';
 import { JwtStrategy } from '../../../authorization/jwt.strategy';
@@ -142,10 +143,7 @@ import {
 } from '../../../domain/models/photograph/queries';
 import { PhotographQueryService } from '../../../domain/models/photograph/queries/photograph-query.service';
 import { ArangoPhotographQueryRepository } from '../../../domain/models/photograph/repositories';
-import {
-    IPlaylistQueryRepository,
-    PLAYLIST_QUERY_REPOSITORY_TOKEN,
-} from '../../../domain/models/playlist';
+import { PLAYLIST_QUERY_REPOSITORY_TOKEN } from '../../../domain/models/playlist';
 import {
     AddAudioItemToPlaylistCommandHandler,
     CreatePlayListCommandHandler,
@@ -298,7 +296,7 @@ import { ArangoIdRepository } from '../../../persistence/repositories/arango-id-
 import { ArangoRepositoryProvider } from '../../../persistence/repositories/arango-repository.provider';
 import { BibliographicCitationViewModel } from '../../../queries/buildViewModelForResource/viewModels/bibliographic-citation/bibliographic-citation.view-model';
 import { DigitalTextQueryService } from '../../../queries/digital-text';
-import { DigitalTextQueryRepository } from '../../../queries/digital-text/digital-text.query-repository';
+import { ArangoDigitalTextQueryRepository } from '../../../queries/digital-text/digital-text.query-repository';
 import { NoteViewModel } from '../../../queries/edgeConnectionViewModels/note.view-model';
 import { DTO } from '../../../types/DTO';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../../../validation';
@@ -580,20 +578,10 @@ export default async (
             {
                 //  TODO use a more extensible pattern
                 provide: QUERY_REPOSITORY_PROVIDER_TOKEN,
-                useFactory: (
-                    photographQueryRespository: ArangoPhotographQueryRepository,
-                    termQueryRepository: ArangoTermQueryRepository,
-                    audioItemQueryRepository: ArangoAudioItemQueryRepository,
-                    vocabularyListQueryRepository: ArangoVocabularyListQueryRepository
-                ): IQueryRepositoryProvider => {
-                    return new ArangoQueryRepositoryProvider(
-                        photographQueryRespository,
-                        termQueryRepository,
-                        audioItemQueryRepository,
-                        vocabularyListQueryRepository
-                    );
+                useFactory: (discoveryService: DiscoveryService): IQueryRepositoryProvider => {
+                    return new ArangoQueryRepositoryProvider(discoveryService);
                 },
-                inject: [TERM_QUERY_REPOSITORY_TOKEN, AUDIO_QUERY_REPOSITORY_TOKEN],
+                inject: [DiscoveryService],
             },
             {
                 provide: TermQueryService,
@@ -671,12 +659,12 @@ export default async (
             {
                 provide: PlaylistQueryService,
                 useFactory: (
-                    repositoryProvider: IPlaylistQueryRepository,
+                    repositoryProvider: IQueryRepositoryProvider,
                     commandInfoService: CommandInfoService,
                     configService: ConfigService
                 ) =>
                     new PlaylistQueryService(repositoryProvider, commandInfoService, configService),
-                inject: [PLAYLIST_QUERY_REPOSITORY_TOKEN, CommandInfoService, ConfigService],
+                inject: [QUERY_REPOSITORY_PROVIDER_TOKEN, CommandInfoService, ConfigService],
             },
             {
                 provide: CoscradUserGroupQueryService,
@@ -701,7 +689,7 @@ export default async (
                     commandInfoService: CommandInfoService
                 ) =>
                     new DigitalTextQueryService(
-                        new DigitalTextQueryRepository(eventRepository),
+                        new ArangoDigitalTextQueryRepository(eventRepository),
                         commandInfoService
                     ),
 

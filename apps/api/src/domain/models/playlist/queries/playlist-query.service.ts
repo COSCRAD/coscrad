@@ -8,7 +8,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { IPlaylistQueryRepository, Playlist, PLAYLIST_QUERY_REPOSITORY_TOKEN } from '..';
+import { IPlaylistQueryRepository, Playlist } from '..';
 import {
     CommandContext,
     CommandInfoService,
@@ -17,18 +17,26 @@ import { Maybe } from '../../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import { fetchActionsForUser } from '../../../services/query-services/utilities/fetch-actions-for-user';
 import { AggregateId } from '../../../types/AggregateId';
+import {
+    IQueryRepositoryProvider,
+    QUERY_REPOSITORY_PROVIDER_TOKEN,
+} from '../../shared/common-commands/publish-resource/resource-published.event-handler';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import { PlaylistEpisodeViewModel } from '../playlist.view-model';
 
 export class PlaylistQueryService {
     protected readonly type = ResourceType.playlist;
 
+    private readonly repository: IPlaylistQueryRepository;
+
     constructor(
-        @Inject(PLAYLIST_QUERY_REPOSITORY_TOKEN)
-        private readonly repository: IPlaylistQueryRepository,
+        @Inject(QUERY_REPOSITORY_PROVIDER_TOKEN)
+        queryRepositoryProvider: IQueryRepositoryProvider,
         @Inject(CommandInfoService) private readonly commandInfoService,
         private readonly configService: ConfigService
-    ) {}
+    ) {
+        this.repository = queryRepositoryProvider.forView<IPlaylistQueryRepository>('playlist');
+    }
 
     public async fetchById(
         id: AggregateId,

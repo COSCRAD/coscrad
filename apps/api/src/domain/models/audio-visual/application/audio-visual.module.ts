@@ -1,5 +1,5 @@
 import { CommandModule } from '@coscrad/commands';
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { CommandInfoService } from '../../../../app/controllers/command/services/command-info-service';
 import { IdGenerationModule } from '../../../../lib/id-generation/id-generation.module';
 import { PersistenceModule } from '../../../../persistence/persistence.module';
@@ -23,6 +23,7 @@ import {
 } from '../audio-item/commands';
 import { AudioItemCreated } from '../audio-item/commands/create-audio-item/audio-item-created.event';
 import { AudioItemCreatedEventHandler } from '../audio-item/commands/create-audio-item/audio-item-created.event-handler';
+import { ArangoAudioItemQueryRepository } from '../audio-item/repositories/arango-audio-item-query-repository';
 import {
     ImportLineItemsToTranscript,
     ImportLineItemsToTranscriptCommandHandler,
@@ -37,7 +38,11 @@ import { AudioItemController } from './audio-item.controller';
 import { VideoController } from './video.controller';
 
 @Module({
-    imports: [PersistenceModule, CommandModule, IdGenerationModule],
+    imports: [
+        forwardRef(() => PersistenceModule),
+        CommandModule,
+        forwardRef(() => IdGenerationModule),
+    ],
     controllers: [AudioItemController, VideoController],
     providers: [
         CommandInfoService,
@@ -63,6 +68,7 @@ import { VideoController } from './video.controller';
         ImportLineItemsToTranscriptCommandHandler,
         ImportTranslationsForTranscript,
         ImportTranslationsForTranscriptCommandHandler,
+        ArangoAudioItemQueryRepository,
         // events
         ...[AudioItemCreated].map((ctor) => ({
             provide: ctor,

@@ -3,7 +3,7 @@ import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
 import { LanguageCodeEnum } from '../../../common/entities/multilingual-text';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
-import { AggregateTypeProperty } from '../../shared/common-commands';
+import { AggregateTypeProperty } from '../../shared/common-commands/aggregate-type-property.decorator';
 
 export class PlayListCompositeId {
     @AggregateTypeProperty([AggregateType.playlist])

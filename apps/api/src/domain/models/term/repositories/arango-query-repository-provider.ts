@@ -1,14 +1,16 @@
 import { ResourceType } from '@coscrad/api-interfaces';
-import { Inject } from '@nestjs/common';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { DiscoveryService } from '@nestjs/core';
 import { InternalError } from '../../../../lib/errors/InternalError';
-import { AUDIO_QUERY_REPOSITORY_TOKEN } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
-import { PHOTOGRAPH_QUERY_REPOSITORY_TOKEN } from '../../photograph/queries';
+import {
+    ArangoViewRepositoryMetadata,
+    getArangoViewRepositoryMetadata,
+    hasArangoViewRepositoryMetatdata,
+} from '../../../../persistence/database/decorators/arango-view-repository.decorator';
 import {
     IPublishable,
     IQueryRepositoryProvider,
 } from '../../shared/common-commands/publish-resource/resource-published.event-handler';
-import { VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN } from '../../vocabulary-list/queries';
-import { TERM_QUERY_REPOSITORY_TOKEN } from '../queries';
 
 /**
  * TODO We need to find a pattern to make this more extensible. Maybe we should
@@ -17,33 +19,38 @@ import { TERM_QUERY_REPOSITORY_TOKEN } from '../queries';
  * Then we can use reflection to return the desired repository.
  */
 export class ArangoQueryRepositoryProvider implements IQueryRepositoryProvider {
-    constructor(
-        @Inject(PHOTOGRAPH_QUERY_REPOSITORY_TOKEN) private readonly photographQueryRepository,
-        @Inject(TERM_QUERY_REPOSITORY_TOKEN) private readonly termQueryRepsitory,
-        @Inject(AUDIO_QUERY_REPOSITORY_TOKEN) private readonly audioItemQueryRepository,
-        @Inject(VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN)
-        private readonly vocabularyListQueryRepository
-    ) {}
+    //    TODO Use the standard []`Reflector` pattern](https://docs.nestjs.com/fundamentals/execution-context#reflection-and-metadata) from `NestJS`
+    constructor(private readonly discoveryService: DiscoveryService) {}
 
-    forResource<T extends IPublishable>(resourceType: ResourceType): T {
-        if (resourceType === ResourceType.audioItem) {
-            return this.audioItemQueryRepository;
+    // can this be `forView(viewtype: string)` ?
+    forView<T extends IPublishable>(resourceType: ResourceType): T {
+        const searchResult = this.discoveryService.getProviders().flatMap(({ instance }): T[] => {
+            const ctor = isNullOrUndefined(instance) ? null : instance.constructor;
+
+            if (isNullOrUndefined(instance) || !hasArangoViewRepositoryMetatdata(ctor)) {
+                return [];
+            }
+
+            /**
+             * We are asserting that this exists at this point because `hasX` returned true
+             */
+            const meta = getArangoViewRepositoryMetadata(ctor) as ArangoViewRepositoryMetadata;
+
+            return meta.viewType == resourceType ? [instance] : [];
+        });
+
+        if (searchResult.length == 0) {
+            throw new InternalError(
+                `Cannot provide a query repository for unknown view type: ${resourceType}`
+            );
         }
 
-        if (resourceType === ResourceType.photograph) {
-            return this.photographQueryRepository;
+        if (searchResult.length > 1) {
+            throw new InternalError(
+                `Multiple query repositories have been annotated for view type: ${resourceType}`
+            );
         }
 
-        if (resourceType === ResourceType.term) {
-            return this.termQueryRepsitory;
-        }
-
-        if (resourceType === ResourceType.vocabularyList) {
-            return this.vocabularyListQueryRepository;
-        }
-
-        throw new InternalError(
-            `Failed to provide a query repository for unsupported resource type: ${resourceType}`
-        );
+        return searchResult[0] as T;
     }
 }

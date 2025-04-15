@@ -20,6 +20,8 @@ export interface IPlaylistQueryRepository {
 
     fetchMany(): Promise<PlaylistViewModel[]>;
 
+    publish(id: AggregateId): Promise<void>;
+
     allowUser(id: AggregateId, userId: AggregateId): Promise<void>;
 
     addAudioItem(id: AggregateId, audioItemId: AggregateId): Promise<void>;

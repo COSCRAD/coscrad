@@ -6,6 +6,7 @@ import { isNotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabase } from '../../../../persistence/database/arango-database';
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
+import { ArangoViewRepository } from '../../../../persistence/database/decorators/arango-view-repository.decorator';
 import mapDatabaseDocumentToEntityDto from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDtoToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { AggregateId } from '../../../types/AggregateId';
@@ -13,6 +14,7 @@ import { ArangoResourceQueryBuilder } from '../../term/repositories/arango-resou
 import { IPhotographQueryRepository } from '../queries';
 import { PhotographViewModel } from '../queries/photograph.view-model';
 
+@ArangoViewRepository('photograph')
 export class ArangoPhotographQueryRepository implements IPhotographQueryRepository {
     private readonly database: ArangoDatabaseForCollection<PhotographViewModel>;
 

@@ -1,5 +1,5 @@
 import { CommandModule } from '@coscrad/commands';
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { CoscradEventFactory } from '../../domain/common';
 import {
     AddAudioForDigitalTextPage,
@@ -24,12 +24,13 @@ import { DigitalText } from '../../domain/models/digital-text/entities/digital-t
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { ArangoEventRepository } from '../../persistence/repositories/arango-event-repository';
 import { DigitalTextQueryService } from '../../queries/digital-text';
+import { ArangoDigitalTextQueryRepository } from '../../queries/digital-text/digital-text.query-repository';
 import { DynamicDataTypeFinderService } from '../../validation';
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
 import { DigitalTextQueryController } from '../controllers/resources/digital-text.controller';
 
 @Module({
-    imports: [CommandModule, IdGenerationModule],
+    imports: [forwardRef(() => CommandModule), forwardRef(() => IdGenerationModule)],
     controllers: [DigitalTextQueryController],
     providers: [
         CommandInfoService,
@@ -40,6 +41,7 @@ import { DigitalTextQueryController } from '../controllers/resources/digital-tex
         AddPageToDigitalTextCommandHandler,
         AddContentToDigitalTextPageCommandHandler,
         AddAudioForDigitalTextPageCommandHandler,
+        ArangoDigitalTextQueryRepository,
         DigitalTextQueryService,
 
         ...[

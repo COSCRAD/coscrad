@@ -1,38 +1,19 @@
 import { DynamicModule, Global, Module, OnApplicationShutdown } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ConsoleCoscradCliLogger } from '../coscrad-cli/logging';
+import { DiscoveryService } from '@nestjs/core';
 import { CoscradEventFactory, EventModule } from '../domain/common';
-import {
-    AUDIO_QUERY_REPOSITORY_TOKEN,
-    IAudioItemQueryRepository,
-} from '../domain/models/audio-visual/audio-item/queries/audio-item-query-repository.interface';
-import { ArangoAudioItemQueryRepository } from '../domain/models/audio-visual/audio-item/repositories/arango-audio-item-query-repository';
-import {
-    IPhotographQueryRepository,
-    PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
-} from '../domain/models/photograph/queries';
-import { ArangoPhotographQueryRepository } from '../domain/models/photograph/repositories';
 import {
     IQueryRepositoryProvider,
     QUERY_REPOSITORY_PROVIDER_TOKEN,
 } from '../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
-import { ITermQueryRepository, TERM_QUERY_REPOSITORY_TOKEN } from '../domain/models/term/queries';
-import { ArangoTermQueryRepository } from '../domain/models/term/repositories';
 import { ArangoQueryRepositoryProvider } from '../domain/models/term/repositories/arango-query-repository-provider';
-import {
-    IVocabularyListQueryRepository,
-    VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
-} from '../domain/models/vocabulary-list/queries';
-import { ArangoVocabularyListQueryRepository } from '../domain/models/vocabulary-list/repositories';
 import { ID_RESPOSITORY_TOKEN } from '../lib/id-generation/interfaces/id-repository.interface';
-import { DigitalTextQueryRepository } from '../queries/digital-text/digital-text.query-repository';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../validation';
 import { REPOSITORY_PROVIDER_TOKEN } from './constants/persistenceConstants';
 import { ArangoConnectionProvider } from './database/arango-connection.provider';
 import { ArangoQueryRunner } from './database/arango-query-runner';
 import { ArangoDatabaseProvider } from './database/database.provider';
 import { ArangoDataExporter } from './repositories/arango-data-exporter';
-import { ArangoEventRepository } from './repositories/arango-event-repository';
 import { ArangoIdRepository } from './repositories/arango-id-repository';
 import { ArangoRepositoryProvider } from './repositories/arango-repository.provider';
 import { DomainDataExporter } from './repositories/domain-data-exporter';
@@ -114,89 +95,13 @@ export class PersistenceModule implements OnApplicationShutdown {
             inject: [REPOSITORY_PROVIDER_TOKEN],
         };
 
-        // TODO Remove this in favor of generic `QueryRepositoryProvider`
-        const digitalTextQueryRepositoryProvider = {
-            provide: DigitalTextQueryRepository,
-            useFactory: (
-                databaseProvider: ArangoDatabaseProvider,
-                coscradEventFactory: CoscradEventFactory
-            ) => {
-                return new DigitalTextQueryRepository(
-                    new ArangoEventRepository(databaseProvider, coscradEventFactory)
-                );
-            },
-            inject: [ArangoDatabaseProvider, CoscradEventFactory],
-        };
-
-        /**
-         * TODO We shouldn't expose the resource-specific repositories here.
-         * Instead, we should inject the required Arango infrastructure into
-         * the corresponding resource module. This will keep the modules
-         * independent and loosely coupled.
-         */
-        const audioQueryRepositoryProvider = {
-            provide: AUDIO_QUERY_REPOSITORY_TOKEN,
-            useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
-                new ArangoAudioItemQueryRepository(arangoConnectionProvider),
-            inject: [ArangoConnectionProvider],
-        };
-
-        const termQueryRepositoryProvider = {
-            provide: TERM_QUERY_REPOSITORY_TOKEN,
-            useFactory: (
-                arangoConnectionProvider: ArangoConnectionProvider,
-                audioItemQueryRepository: ArangoAudioItemQueryRepository
-            ) => {
-                const singleton = new ArangoTermQueryRepository(
-                    arangoConnectionProvider,
-                    audioItemQueryRepository,
-                    new ConsoleCoscradCliLogger()
-                );
-
-                return singleton;
-            },
-            inject: [ArangoConnectionProvider, AUDIO_QUERY_REPOSITORY_TOKEN],
-        };
-
-        const vocabularyListQueryRepository = {
-            provide: VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
-            useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
-                new ArangoVocabularyListQueryRepository(
-                    arangoConnectionProvider,
-                    new ConsoleCoscradCliLogger()
-                ),
-            inject: [ArangoConnectionProvider, AUDIO_QUERY_REPOSITORY_TOKEN],
-        };
-
-        // TODO We should remove this.
-        const photographQueryRepository = {
-            provide: PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
-            useFactory: (arangoConnectionProvider: ArangoConnectionProvider) => {
-                return new ArangoPhotographQueryRepository(arangoConnectionProvider);
-            },
-            inject: [ArangoConnectionProvider],
-        };
-
         const queryRepositoryProvider = {
             provide: QUERY_REPOSITORY_PROVIDER_TOKEN,
             useFactory: (
-                photographQueryRepository: IPhotographQueryRepository,
-                termQueryRepository: ITermQueryRepository,
-                audioItemQueryRepository: IAudioItemQueryRepository,
-                vocabularyListQueryRepository: IVocabularyListQueryRepository
+                dynamicDataTypeFinderService: DiscoveryService
             ): IQueryRepositoryProvider =>
-                new ArangoQueryRepositoryProvider(
-                    photographQueryRepository,
-                    termQueryRepository,
-                    audioItemQueryRepository,
-                    vocabularyListQueryRepository
-                ),
-            inject: [
-                PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
-                TERM_QUERY_REPOSITORY_TOKEN,
-                AUDIO_QUERY_REPOSITORY_TOKEN,
-                VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
-            ],
+                new ArangoQueryRepositoryProvider(dynamicDataTypeFinderService),
+            inject: [DiscoveryService],
         };
 
         return {
@@ -210,12 +115,8 @@ export class PersistenceModule implements OnApplicationShutdown {
                 arangoQueryRunnerProvider,
                 arangoDataExporterProvider,
                 domainDataExporterProvider,
-                digitalTextQueryRepositoryProvider,
-                audioQueryRepositoryProvider,
-                photographQueryRepository,
-                termQueryRepositoryProvider,
-                vocabularyListQueryRepository,
                 queryRepositoryProvider,
+                DiscoveryService,
             ],
             exports: [
                 arangoConnectionProvider,
@@ -225,9 +126,6 @@ export class PersistenceModule implements OnApplicationShutdown {
                 arangoQueryRunnerProvider,
                 arangoDataExporterProvider,
                 domainDataExporterProvider,
-                digitalTextQueryRepositoryProvider,
-                audioQueryRepositoryProvider,
-                termQueryRepositoryProvider,
                 queryRepositoryProvider,
                 EventModule,
             ],

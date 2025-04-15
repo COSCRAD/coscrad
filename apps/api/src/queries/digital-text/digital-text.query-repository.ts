@@ -7,9 +7,9 @@ import { IAggregateRootQueryRepository } from '../interfaces';
 import { DigitalTextViewModel } from './digital-text.view-model';
 
 /**
- * TODO Generalize this for any aggregate root.
+ * TODO Refactor this to use the same pattern as `ArangoVocabularyListQueryRepository`, for example.
  */
-export class DigitalTextQueryRepository
+export class ArangoDigitalTextQueryRepository
     implements IAggregateRootQueryRepository<IDigitalTextViewModel>
 {
     constructor(private readonly eventRepository: ArangoEventRepository) {}

@@ -15,7 +15,7 @@ import { Maybe } from '../../lib/types/maybe';
 import { NotFound, isNotFound } from '../../lib/types/not-found';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { IAggregateRootQueryRepository } from '../interfaces';
-import { DigitalTextQueryRepository } from './digital-text.query-repository';
+import { ArangoDigitalTextQueryRepository } from './digital-text.query-repository';
 import { DigitalTextViewModel } from './digital-text.view-model';
 
 type IndexScopedCommandContext = {
@@ -39,7 +39,7 @@ export class DigitalTextQueryService {
      */
     constructor(
         // TODO Use a string injection token here. Consider using a provider when generalizing the implementation over aggregate type.
-        @Inject(DigitalTextQueryRepository)
+        @Inject(ArangoDigitalTextQueryRepository)
         protected readonly queryRepository: IAggregateRootQueryRepository<DigitalTextViewModel>,
         @Inject(CommandInfoService) protected readonly commandInfoService: CommandInfoService
     ) {}

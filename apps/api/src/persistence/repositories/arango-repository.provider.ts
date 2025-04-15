@@ -41,6 +41,8 @@ export class ArangoRepositoryProvider implements IRepositoryProvider {
         private readonly dynamicDataTypeFinderService: DynamicDataTypeFinderService
     ) {
         this.eventRepository = new ArangoEventRepository(databaseProvider, coscradEventFactory);
+
+        console.log(`query repo provider isntantiated!`);
     }
 
     // This is helpful when diagnosing issues with test dependency injection
