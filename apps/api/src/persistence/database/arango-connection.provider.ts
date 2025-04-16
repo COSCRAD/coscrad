@@ -98,6 +98,8 @@ export class ArangoConnectionProvider {
 
         await this.createCollectionIfNotExists('vocabularyList__VIEWS');
 
+        await this.createCollectionIfNotExists('playlist__VIEWS');
+
         this.isInitialized = true;
     }
 

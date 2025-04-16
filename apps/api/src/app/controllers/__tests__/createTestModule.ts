@@ -149,6 +149,8 @@ import {
     ImportAudioItemsToPlaylistCommandHandler,
     TranslatePlaylistNameCommandHandler,
 } from '../../../domain/models/playlist/commands';
+import { ArangoPlaylistQueryRepository } from '../../../domain/models/playlist/queries/arango-playlist-query-repository';
+import { PLAYLIST_QUERY_REPOSITORY_TOKEN } from '../../../domain/models/playlist/queries/playlist-query-repository.interface';
 import {
     GrantResourceReadAccessToUser,
     GrantResourceReadAccessToUserCommandHandler,
@@ -567,22 +569,36 @@ export default async (
                 inject: [ArangoConnectionProvider],
             },
             {
+                provide: PLAYLIST_QUERY_REPOSITORY_TOKEN,
+                useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
+                    new ArangoPlaylistQueryRepository(arangoConnectionProvider),
+                inject: [ArangoConnectionProvider],
+            },
+            {
                 //  TODO use a more extensible pattern
                 provide: QUERY_REPOSITORY_PROVIDER_TOKEN,
                 useFactory: (
                     photographQueryRespository: ArangoPhotographQueryRepository,
                     termQueryRepository: ArangoTermQueryRepository,
                     audioItemQueryRepository: ArangoAudioItemQueryRepository,
-                    vocabularyListQueryRepository: ArangoVocabularyListQueryRepository
+                    vocabularyListQueryRepository: ArangoVocabularyListQueryRepository,
+                    playlistQueryRepository: ArangoPlaylistQueryRepository
                 ): IQueryRepositoryProvider => {
                     return new ArangoQueryRepositoryProvider(
                         photographQueryRespository,
                         termQueryRepository,
                         audioItemQueryRepository,
-                        vocabularyListQueryRepository
+                        vocabularyListQueryRepository,
+                        playlistQueryRepository
                     );
                 },
-                inject: [TERM_QUERY_REPOSITORY_TOKEN, AUDIO_QUERY_REPOSITORY_TOKEN],
+                inject: [
+                    PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
+                    TERM_QUERY_REPOSITORY_TOKEN,
+                    AUDIO_QUERY_REPOSITORY_TOKEN,
+                    VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
+                    PLAYLIST_QUERY_REPOSITORY_TOKEN,
+                ],
             },
             {
                 provide: TermQueryService,

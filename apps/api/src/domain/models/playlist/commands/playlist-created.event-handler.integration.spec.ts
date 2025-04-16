@@ -14,13 +14,16 @@ import { ArangoCollectionId } from '../../../../persistence/database/collection-
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { PlaylistViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
+import { PlaylistViewModel } from '../../../../queries/buildViewModelForResource/viewModels/playlist.view-model';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { IRepositoryProvider } from '../../../repositories/interfaces/repository-provider.interface';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
-import { IPlaylistQueryRepository, PLAYLIST_QUERY_REPOSITORY_TOKEN } from '../queries';
 import { ArangoPlaylistQueryRepository } from '../queries/arango-playlist-query-repository';
+import {
+    IPlaylistQueryRepository,
+    PLAYLIST_QUERY_REPOSITORY_TOKEN,
+} from '../queries/playlist-query-repository.interface';
 import { PlaylistCreated } from './playlist-created.event';
 import { PlaylistCreatedEventHandler } from './playlist-created.event-handler';
 

@@ -15,13 +15,16 @@ import { ArangoDatabaseProvider } from '../../../../../persistence/database/data
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { PlaylistViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
+import { PlaylistViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/playlist.view-model';
 import { buildTestInstance } from '../../../../../test-data/utilities';
 import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { IRepositoryProvider } from '../../../../repositories/interfaces/repository-provider.interface';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { EventSourcedAudioItemViewModel } from '../../../audio-visual/audio-item/queries';
-import { IPlaylistQueryRepository, PLAYLIST_QUERY_REPOSITORY_TOKEN } from '../../queries';
+import {
+    IPlaylistQueryRepository,
+    PLAYLIST_QUERY_REPOSITORY_TOKEN,
+} from '../../queries/playlist-query-repository.interface';
 import { AudioItemAddedToPlaylist } from './audio-item-added-to-playlist.event';
 import { AudioItemAddedToPlaylistEventHandler } from './audio-item-added-to-playlist.event-handler';
 

@@ -18,6 +18,8 @@ export class AudioItemAddedToPlaylistEventHandler implements ICoscradEventHandle
     ) {
         // @ts-expect-error fix this
         this.playlistQueryRepository = queryRepositoryProvider.forResource(ResourceType.playlist);
+
+        console.log('');
     }
 
     async handle({

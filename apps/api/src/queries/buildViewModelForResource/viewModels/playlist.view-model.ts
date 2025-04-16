@@ -152,11 +152,11 @@ export class PlaylistViewModel {
     })
     isPublished: boolean;
 
-    @NestedDataType(ContributionSummary, {
-        isArray: true,
-        label: 'contributions',
-        description: 'a summary of the work done by various contributors in creating this playlist',
-    })
+    // @NestedDataType(ContributionSummary, {
+    //     isArray: true,
+    //     label: 'contributions',
+    //     description: 'a summary of the work done by various contributors in creating this playlist',
+    // })
     contributions: ContributionSummary[];
 
     @NestedDataType(AccessControlList, {
