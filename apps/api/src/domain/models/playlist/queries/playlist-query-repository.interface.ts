@@ -2,10 +2,14 @@ import { Observable } from 'rxjs';
 import { Maybe } from '../../../../lib/types/maybe';
 import { PlaylistViewModel } from '../../../../queries/buildViewModelForResource/viewModels/playlist.view-model';
 import { AggregateId } from '../../../types/AggregateId';
+import {
+    ICountable,
+    IPublishable,
+} from '../../shared/common-commands/publish-resource/resource-published.event-handler';
 
 export const PLAYLIST_QUERY_REPOSITORY_TOKEN = 'PLAYLIST_QUERY_REPOSITORY_TOKEN';
 
-export interface IPlaylistQueryRepository {
+export interface IPlaylistQueryRepository extends IPublishable, ICountable {
     subscribeToUpdates(): Observable<{ data: { type: string } }>;
 
     create(view: PlaylistViewModel): Promise<void>;
@@ -19,8 +23,6 @@ export interface IPlaylistQueryRepository {
     fetchById(id: AggregateId): Promise<Maybe<PlaylistViewModel>>;
 
     fetchMany(): Promise<PlaylistViewModel[]>;
-
-    publish(id: AggregateId): Promise<void>;
 
     allowUser(id: AggregateId, userId: AggregateId): Promise<void>;
 

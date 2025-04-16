@@ -37,6 +37,9 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
 
         this.baseResourceQueryBuilder = new ArangoResourceQueryBuilder('playlist__VIEWS');
     }
+    count(): Promise<number> {
+        throw new Error('Method not implemented.');
+    }
 
     subscribeToUpdates(): Observable<{ data: { type: string } }> {
         throw new Error('Method not implemented.');

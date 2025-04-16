@@ -36,7 +36,6 @@ export class PlaylistQueryService {
         @Inject(CommandInfoService) private readonly commandInfoService,
         private readonly configService: ConfigService
     ) {
-        // @ts-expect-error FIX this now- implement the base interfaces with the PlaylistQueryRepo
         this.repository = queryRepositoryProvider.forResource<IPlaylistQueryRepository>('playlist');
     }
 

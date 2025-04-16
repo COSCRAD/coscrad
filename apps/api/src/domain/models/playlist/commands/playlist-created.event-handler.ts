@@ -19,8 +19,8 @@ export class PlaylistCreatedEventHandler implements ICoscradEventHandler {
         @Inject(QUERY_REPOSITORY_PROVIDER_TOKEN)
         queryRepositoryProvider: IQueryRepositoryProvider
     ) {
-        // @ts-expect-error Fix this- implement the full base interface in `ArangoPlaylistQueryRepository`
-        this.playlistQueryRepository = queryRepositoryProvider.forResource(ResourceType.playlist);
+        this.playlistQueryRepository =
+            queryRepositoryProvider.forResource<IPlaylistQueryRepository>(ResourceType.playlist);
     }
 
     async handle({
