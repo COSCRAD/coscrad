@@ -16,7 +16,6 @@ export class AudioItemAddedToPlaylistEventHandler implements ICoscradEventHandle
         @Inject(QUERY_REPOSITORY_PROVIDER_TOKEN)
         queryRepositoryProvider: IQueryRepositoryProvider
     ) {
-        // @ts-expect-error fix this
         this.playlistQueryRepository = queryRepositoryProvider.forResource(ResourceType.playlist);
 
         console.log('');
