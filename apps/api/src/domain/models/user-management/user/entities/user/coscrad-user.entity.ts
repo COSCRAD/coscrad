@@ -8,6 +8,7 @@ import {
 import { RegisterIndexScopedCommands } from '../../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { UpdateMethod } from '../../../../../../domain/decorators';
 import { InternalError } from '../../../../../../lib/errors/InternalError';
+import { CoscradDataExample } from '../../../../../../test-data/utilities';
 import { DTO } from '../../../../../../types/DTO';
 import { ResultOrError } from '../../../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../../../common/build-multilingual-text-with-single-item';
@@ -17,6 +18,7 @@ import { AggregateCompositeIdentifier } from '../../../../../types/AggregateComp
 import { AggregateType } from '../../../../../types/AggregateType';
 import { InMemorySnapshot } from '../../../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../../../utilities/validation/is-null-or-undefined';
+import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { Aggregate } from '../../../../aggregate.entity';
 import InvalidExternalStateError from '../../../../shared/common-command-errors/InvalidExternalStateError';
 import UserIdFromAuthProviderAlreadyInUseError from '../../errors/external-state-errors/UserIdFromAuthProviderAlreadyInUseError';
@@ -24,6 +26,17 @@ import UsernameAlreadyInUseError from '../../errors/external-state-errors/Userna
 import UserAlreadyHasRoleError from '../../errors/invalid-state-transition-errors/UserAlreadyHasRoleError';
 import { CoscradUserProfile } from './coscrad-user-profile.entity';
 
+const sampleUserId = buildDummyUuid(99);
+
+@CoscradDataExample<CoscradUser>({
+    example: {
+        type: AggregateType.user,
+        id: buildDummyUuid(101),
+        authProviderUserId: sampleUserId,
+        username: 'test-system-user',
+        roles: [],
+    },
+})
 @RegisterIndexScopedCommands(['REGISTER_USER'])
 export class CoscradUser extends Aggregate {
     type = AggregateType.user;
@@ -126,6 +139,10 @@ export class CoscradUser extends Aggregate {
     /**
      * TODO [https://www.pivotaltracker.com/story/show/182727483]
      * Add unit test.
+     *
+     * Note that ideally we would push these constraints to the database. These
+     * global uniqueness checks are important. We may want to persist users via
+     * state-based snapshots instead of events indefinitely for this reason.
      */
     validateExternalState(externalState: InMemorySnapshot): InternalError | Valid {
         const { user: users } = externalState;
@@ -144,5 +161,10 @@ export class CoscradUser extends Aggregate {
             allErrors.push(new UsernameAlreadyInUseError(this.username));
 
         return allErrors.length > 0 ? new InvalidExternalStateError(allErrors) : Valid;
+    }
+
+    // can we make this generic?
+    public static fromDto(dto: DTO<CoscradUser>): CoscradUser {
+        return new CoscradUser(dto);
     }
 }

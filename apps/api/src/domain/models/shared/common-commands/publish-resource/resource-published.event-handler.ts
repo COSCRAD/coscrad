@@ -1,4 +1,3 @@
-import { ResourceType } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
@@ -26,7 +25,7 @@ export interface IQueryRepositoryProvider {
             IAccessible &
             GenericRepository
     >(
-        resourceType: ResourceType
+        resourceType: string
     ): T;
 }
 
