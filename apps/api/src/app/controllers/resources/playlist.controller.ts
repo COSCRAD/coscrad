@@ -45,7 +45,7 @@ export class PlaylistController {
     @ApiParam(buildByIdApiParamMetadata())
     @ApiOkResponse({ type: StateBasedPlaylistViewModel })
     @Get(`/:id`)
-    async fetchById(@Request() req, @Param('id') id: unknown) {
+    async fetchById(@Request() req, @Param('id') id: string) {
         return this.playlistQueryService.fetchById(id, req.user || undefined);
     }
 }

@@ -676,12 +676,12 @@ export default async (
             {
                 provide: PlaylistQueryService,
                 useFactory: (
-                    repositoryProvider: ArangoRepositoryProvider,
+                    repositoryProvider: IQueryRepositoryProvider,
                     commandInfoService: CommandInfoService,
                     configService: ConfigService
                 ) =>
                     new PlaylistQueryService(repositoryProvider, commandInfoService, configService),
-                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService, ConfigService],
+                inject: [QUERY_REPOSITORY_PROVIDER_TOKEN, CommandInfoService, ConfigService],
             },
             {
                 provide: CoscradUserGroupQueryService,
