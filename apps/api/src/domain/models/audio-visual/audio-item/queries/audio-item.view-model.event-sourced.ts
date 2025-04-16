@@ -94,8 +94,9 @@ export class EventSourcedAudioItemViewModel implements IDetailQueryResult<IAudio
             name,
             languageCodeForName,
             mediaItemId,
-            // mimeType
             lengthMilliseconds,
+            // todo fix this
+            // mimeType,
         },
         meta: { contributorIds: _ },
     }: AudioItemCreated): EventSourcedAudioItemViewModel {
@@ -107,11 +108,11 @@ export class EventSourcedAudioItemViewModel implements IDetailQueryResult<IAudio
             // TODO set this
             contributions: [],
             isPublished: false,
-            // FIX this
+            // TODO fix this
             mimeType: MIMEType.wav,
             text: '',
             lengthMilliseconds,
-            // we need a `RESOURCE_READ_ACCESS_GRANTED_TO_USER`
+            // in order to grant access, we need a `RESOURCE_READ_ACCESS_GRANTED_TO_USER`
             accessControlList: new AccessControlList(),
         });
     }

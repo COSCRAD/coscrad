@@ -12,6 +12,8 @@ import {
 } from '../../domain/models/playlist/commands';
 import { AudioItemAddedToPlaylist } from '../../domain/models/playlist/commands/add-audio-item-to-playlist/audio-item-added-to-playlist.event';
 import { AudioItemAddedToPlaylistEventHandler } from '../../domain/models/playlist/commands/add-audio-item-to-playlist/audio-item-added-to-playlist.event-handler';
+import { PlaylistCreated } from '../../domain/models/playlist/commands/playlist-created.event';
+import { PlaylistCreatedEventHandler } from '../../domain/models/playlist/commands/playlist-created.event-handler';
 import { PlaylistQueryService } from '../../domain/services/query-services/playlist-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { PersistenceModule } from '../../persistence/persistence.module';
@@ -28,6 +30,7 @@ import { PlaylistController } from '../controllers/resources/playlist.controller
         TranslatePlaylistNameCommandHandler,
         AddAudioItemToPlaylistCommandHandler,
         ImportAudioItemsToPlaylistCommandHandler,
+        PlaylistCreatedEventHandler,
         AudioItemAddedToPlaylistEventHandler,
         // Data Classes
         ...[
@@ -35,6 +38,8 @@ import { PlaylistController } from '../controllers/resources/playlist.controller
             TranslatePlaylistName,
             AddAudioItemToPlaylist,
             ImportAudioItemsToPlaylist,
+            AudioItemAddedToPlaylist,
+            PlaylistCreated,
             AudioItemAddedToPlaylist,
         ].map((ctor) => ({
             provide: ctor,

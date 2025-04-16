@@ -17,8 +17,6 @@ export class AudioItemAddedToPlaylistEventHandler implements ICoscradEventHandle
         queryRepositoryProvider: IQueryRepositoryProvider
     ) {
         this.playlistQueryRepository = queryRepositoryProvider.forResource(ResourceType.playlist);
-
-        console.log('');
     }
 
     async handle({
