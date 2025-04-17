@@ -10,6 +10,11 @@ import {
 import { NotFound } from '../../../lib/types/not-found';
 import { PersistenceModule } from '../../persistence.module';
 import generateDatabaseNameForTestSuite from '../../repositories/__tests__/generateDatabaseNameForTestSuite';
+import {
+    ArangoViewRepository,
+    ArangoViewRepositoryMetadata,
+    getArangoViewRepositoryMetadata,
+} from './arango-view-repository.decorator';
 
 describe(`@ArangoViewRepository(...)`, () => {
     @ArangoViewRepository('machine')
