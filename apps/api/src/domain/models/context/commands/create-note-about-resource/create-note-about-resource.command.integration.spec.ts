@@ -149,7 +149,13 @@ const buildCreateNoteAboutResourceFSAForNote = (
     };
 };
 
-const eventSourcedResourceTypes = [ResourceType.song, ResourceType.digitalText, ResourceType.term];
+const eventSourcedResourceTypes = [
+    ResourceType.song,
+    ResourceType.digitalText,
+    ResourceType.term,
+    ResourceType.vocabularyList,
+    ResourceType.playlist,
+];
 
 const comprehensiveValidFSAs = notesToCreate
     // filter out the self-connections (true notes) from the db

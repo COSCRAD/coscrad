@@ -119,6 +119,7 @@ export class ArangoRepositoryProvider implements IRepositoryProvider {
             AggregateType.digitalText,
             AggregateType.term,
             AggregateType.vocabularyList,
+            AggregateType.playlist,
         ];
 
         if (eventSourcedAggregateTypes.includes(resourceType)) {

@@ -34,7 +34,7 @@ export class SyncInMemoryEventPublisher implements ICoscradEventPublisher {
                     );
                 }
 
-                this.handleWithRetries(e, handler);
+                await this.handleWithRetries(e, handler);
             }
         }
     }

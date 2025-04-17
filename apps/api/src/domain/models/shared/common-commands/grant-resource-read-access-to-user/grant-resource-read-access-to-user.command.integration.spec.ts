@@ -97,6 +97,8 @@ describe('GRANT_RESOURCE_READ_ACCESS_TO_USER', () => {
         ResourceType.song,
         ResourceType.digitalText,
         ResourceType.term,
+        ResourceType.vocabularyList,
+        ResourceType.playlist,
     ];
 
     describe('when the command is valid', () => {

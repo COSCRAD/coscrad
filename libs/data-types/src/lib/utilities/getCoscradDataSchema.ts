@@ -7,6 +7,11 @@ export interface UnionFinderService {
 }
 
 // eslint-disable-next-line
-export default (TargetClass: Object): ClassSchema<Record<string, unknown>> =>
+export default (TargetClass: Object): ClassSchema<Record<string, unknown>> => {
+    if (!TargetClass) {
+        throw new Error('missing class reference');
+    }
+
     // @ts-expect-error TODO: restrict argument to be a class
-    getCoscradDataSchemaFromPrototype(TargetClass.prototype || {});
+    return getCoscradDataSchemaFromPrototype(TargetClass.prototype || {});
+};

@@ -10,6 +10,7 @@ import { NotFound } from '../../../../../lib/types/not-found';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { TestEventStream } from '../../../../../test-data/events';
 import { DTO } from '../../../../../types/DTO';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
@@ -17,6 +18,7 @@ import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-
 import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
 import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
@@ -24,13 +26,25 @@ import CommandExecutionError from '../../../shared/common-command-errors/Command
 import { Playlist } from '../../entities';
 import { PlaylistItem } from '../../entities/playlist-item.entity';
 import { CannotAddDuplicateItemToPlaylist } from '../../errors';
+import { PlaylistCreated } from '../playlist-created.event';
 import { AddAudioItemToPlaylist } from './add-audio-item-to-playlist.command';
+import { AudioItemAddedToPlaylist } from './audio-item-added-to-playlist.event';
 
 const commandType = 'ADD_AUDIO_ITEM_TO_PLAYLIST';
 
-const existingPlaylist = getValidAggregateInstanceForTest(AggregateType.playlist).clone({
-    items: [],
+const playlistId = buildDummyUuid(89);
+
+const playlistCreated = new TestEventStream().andThen<PlaylistCreated>({
+    type: 'PLAYLIST_CREATED',
 });
+
+const existingPlaylist = Playlist.fromEventHistory(
+    playlistCreated.as({
+        type: AggregateType.playlist,
+        id: playlistId,
+    }),
+    playlistId
+) as Playlist; // we assert that this will succeed
 
 const existingAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem);
 
@@ -141,19 +155,30 @@ describe(commandType, () => {
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     buildCommandFSA: buildValidCommandFSA,
-                    initialState: new DeluxeInMemoryStore({
-                        [AggregateType.audioItem]: [existingAudioItem],
-                        [AggregateType.playlist]: [
-                            existingPlaylist.clone({
-                                items: [
-                                    {
-                                        resourceCompositeIdentifier:
-                                            existingAudioItem.getCompositeIdentifier(),
-                                    },
+                    seedInitialState: async () => {
+                        const audioItemAddedToPlaylist =
+                            playlistCreated.andThen<AudioItemAddedToPlaylist>({
+                                type: 'AUDIO_ITEM_ADDED_TO_PLAYLIST',
+                                payload: {
+                                    audioItemId: validCommandFSA.payload.audioItemId,
+                                },
+                            });
+
+                        await testRepositoryProvider.addFullSnapshot(
+                            new DeluxeInMemoryStore({
+                                [AggregateType.audioItem]: [existingAudioItem],
+                                [AggregateType.playlist]: [
+                                    Playlist.fromEventHistory(
+                                        audioItemAddedToPlaylist.as({
+                                            type: AggregateType.playlist,
+                                            id: playlistId,
+                                        }),
+                                        playlistId
+                                    ) as Playlist,
                                 ],
-                            }),
-                        ],
-                    }).fetchFullSnapshotInLegacyFormat(),
+                            }).fetchFullSnapshotInLegacyFormat()
+                        );
+                    },
                     checkError: (error) => {
                         assertErrorAsExpected(
                             error,

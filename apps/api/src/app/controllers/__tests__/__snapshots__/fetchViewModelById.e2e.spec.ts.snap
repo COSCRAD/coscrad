@@ -166,60 +166,6 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
 }
 `;
 
-exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/playlists/:id when the resource is published when an resource with the id exists should return the expected response 1`] = `
-{
-  "actions": [],
-  "contributions": [],
-  "episodes": [
-    {
-      "mediaItemUrl": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "mimeType": "audio/wav",
-      "name": "The Wooden Boy {en} (role: original)",
-    },
-    {
-      "mediaItemUrl": "https://www.testapi.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-      "mimeType": "audio/mpeg",
-      "name": "Down at the River {clc} (role: original)",
-    },
-  ],
-  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
-  "name": {
-    "items": [
-      {
-        "languageCode": "clc",
-        "role": "original",
-        "text": "Blake's jams",
-      },
-    ],
-  },
-  "tags": [
-    {
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
-      "label": "law",
-      "members": [
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-          "type": "bibliographicCitation",
-        },
-        {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
-          "type": "playlist",
-        },
-      ],
-      "name": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "law",
-          },
-        ],
-      },
-    },
-  ],
-}
-`;
-
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/spatialFeatures/:id when the resource is published when an resource with the id exists should return the expected response 1`] = `
 {
   "actions": [],

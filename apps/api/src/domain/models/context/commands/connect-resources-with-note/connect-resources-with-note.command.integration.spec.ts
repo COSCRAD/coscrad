@@ -61,6 +61,8 @@ const eventSourcedResourceTypes = [
     AggregateType.song,
     AggregateType.digitalText,
     AggregateType.term,
+    AggregateType.vocabularyList,
+    AggregateType.playlist,
 ];
 
 const allDualEdgeConnections = (testDualConnections as EdgeConnection[])

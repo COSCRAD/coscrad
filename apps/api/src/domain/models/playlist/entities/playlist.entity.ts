@@ -11,7 +11,7 @@ import {
     MultilingualTextItem,
     MultilingualTextItemRole,
 } from '../../../common/entities/multilingual-text';
-import { UpdateMethod } from '../../../decorators';
+import { AggregateRoot, UpdateMethod } from '../../../decorators';
 import { isValid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
@@ -32,6 +32,7 @@ import { CannotAddDuplicateItemToPlaylist } from '../errors';
 import { FailedToImportAudioItemsError } from '../errors/failed-to-import-audio-items.error';
 import { PlaylistItem } from './playlist-item.entity';
 
+@AggregateRoot('playlist')
 @RegisterIndexScopedCommands(['CREATE_PLAYLIST'])
 export class Playlist extends Resource {
     readonly type = ResourceType.playlist;
