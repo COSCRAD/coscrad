@@ -11,7 +11,7 @@ import {
 import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
 import { PlaylistQueryService } from '../../../domain/services/query-services/playlist-query.service';
-import { StateBasedPlaylistViewModel } from '../../../queries/buildViewModelForResource/viewModels';
+import { PlaylistViewModel } from '../../../queries/buildViewModelForResource/viewModels/playlist.view-model';
 import { QueryResponseTransformInterceptor } from '../response-mapping';
 import {
     CoscradInternalErrorFilter,
@@ -43,7 +43,7 @@ export class PlaylistController {
     @ApiBearerAuth('JWT')
     @UseGuards(OptionalJwtAuthGuard)
     @ApiParam(buildByIdApiParamMetadata())
-    @ApiOkResponse({ type: StateBasedPlaylistViewModel })
+    @ApiOkResponse({ type: PlaylistViewModel })
     @Get(`/:id`)
     async fetchById(@Request() req, @Param('id') id: string) {
         return this.playlistQueryService.fetchById(id, req.user || undefined);

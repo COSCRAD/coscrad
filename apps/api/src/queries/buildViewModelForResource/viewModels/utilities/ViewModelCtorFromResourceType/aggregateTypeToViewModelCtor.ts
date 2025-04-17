@@ -14,9 +14,9 @@ import { CategoryTreeViewModel } from '../../category-tree.view-model';
 import { CoscradContributorViewModel } from '../../coscrad-contributor.view-model';
 import { CoscradUserGroupViewModel } from '../../coscrad-user-group.view-model';
 import { CoscradUserViewModel } from '../../coscrad-user.view-model';
+import { PlaylistViewModel } from '../../playlist.view-model';
 import { SongViewModel } from '../../song.view-model';
 import { SpatialFeatureViewModel } from '../../spatial-data/spatial-feature.view-model';
-import { StateBasedPlaylistViewModel } from '../../state-based-playlist.view-model';
 import { TagViewModel } from '../../tag.view-model';
 import { TermViewModel } from '../../term.view-model';
 import { VocabularyListViewModel } from '../../vocabulary-list.view-model';
@@ -41,7 +41,7 @@ export const aggregateTypeToViewModelCtor: {
     [ResourceType.audioItem]: StateBasedAudioItemViewModel,
     [ResourceType.video]: VideoViewModel,
     [ResourceType.vocabularyList]: VocabularyListViewModel,
-    [ResourceType.playlist]: StateBasedPlaylistViewModel,
+    [ResourceType.playlist]: PlaylistViewModel,
     [CategorizableType.note]: NoteViewModel,
     [AggregateType.category]: CategoryTreeViewModel,
     [AggregateType.tag]: TagViewModel,
