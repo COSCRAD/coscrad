@@ -87,6 +87,7 @@ const resourceTypesThatHaveStandaloneQueryTests = [
     ResourceType.photograph,
     ResourceType.term,
     ResourceType.vocabularyList,
+    ResourceType.playlist,
 ];
 
 describe('Access Control List and Role Based filtering in resource queries', () => {

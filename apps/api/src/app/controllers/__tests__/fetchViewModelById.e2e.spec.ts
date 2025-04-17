@@ -50,6 +50,7 @@ describe('GET  (fetch view models)', () => {
         ResourceType.term,
         ResourceType.vocabularyList,
         ResourceType.photograph,
+        ResourceType.playlist,
     ];
 
     const testDataWithAllResourcesPublished = Object.entries(resourceTestData).reduce(

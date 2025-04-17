@@ -3,7 +3,6 @@ import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
-import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
@@ -11,6 +10,7 @@ import { NotFound } from '../../../../../lib/types/not-found';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { TestEventStream } from '../../../../../test-data/events';
 import { DTO } from '../../../../../types/DTO';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
@@ -21,6 +21,8 @@ import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
+import { AudioItemCreated } from '../../../audio-visual/audio-item/commands/create-audio-item/audio-item-created.event';
+import { AudioItem } from '../../../audio-visual/audio-item/entities/audio-item.entity';
 import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
@@ -28,24 +30,49 @@ import { Playlist } from '../../entities';
 import { PlaylistItem } from '../../entities/playlist-item.entity';
 import { CannotAddDuplicateItemToPlaylist } from '../../errors';
 import { FailedToImportAudioItemsError } from '../../errors/failed-to-import-audio-items.error';
+import { AudioItemAddedToPlaylist } from '../add-audio-item-to-playlist/audio-item-added-to-playlist.event';
+import { PlaylistCreated } from '../playlist-created.event';
 import { ImportAudioItemsToPlaylist } from './import-audio-items-to-playlist.command';
 
 const commandType = 'IMPORT_AUDIO_ITEMS_TO_PLAYLIST';
 
-const existingPlaylist = getValidAggregateInstanceForTest(AggregateType.playlist).clone({
+const playlistId = buildDummyUuid(1);
+
+const playlistCompositeIdentifier = {
+    type: AggregateType.playlist,
+    id: playlistId,
+};
+
+const playlistCreated = new TestEventStream().andThen<PlaylistCreated>({
+    type: 'PLAYLIST_CREATED',
+});
+
+const existingPlaylist = Playlist.fromEventHistory(
+    playlistCreated.as(playlistCompositeIdentifier),
+    playlistId
+) as Playlist;
+
+getValidAggregateInstanceForTest(AggregateType.playlist).clone({
     items: [],
 });
 
-const dummyAudioItemToUseAsTemplate = getValidAggregateInstanceForTest(AggregateType.audioItem);
-
 const existingAudioItems = Array(5)
     .fill(0)
-    .map((_, index) =>
-        dummyAudioItemToUseAsTemplate.clone({
-            id: buildDummyUuid(index),
-            name: buildMultilingualTextWithSingleItem(`name of audio item: ${index}`),
-        })
-    );
+    .map((_, index) => {
+        const id = buildDummyUuid(index + 20);
+
+        return AudioItem.fromEventHistory(
+            new TestEventStream()
+                .andThen<AudioItemCreated>({
+                    type: 'AUDIO_ITEM_CREATED',
+                })
+                .as({
+                    type: AggregateType.audioItem,
+                    id,
+                }),
+            id
+        ) as AudioItem;
+    });
 
 const existingAudioItemIds = existingAudioItems.map(({ id }) => id);
 
@@ -108,10 +135,14 @@ describe(commandType, () => {
             await assertCommandSuccess(commandAssertionDependencies, {
                 systemUserId: dummySystemUserId,
                 buildValidCommandFSA,
-                initialState: new DeluxeInMemoryStore({
-                    [AggregateType.playlist]: [existingPlaylist],
-                    [AggregateType.audioItem]: existingAudioItems,
-                }).fetchFullSnapshotInLegacyFormat(),
+                seedInitialState: async () => {
+                    await testRepositoryProvider.addFullSnapshot(
+                        new DeluxeInMemoryStore({
+                            [AggregateType.playlist]: [existingPlaylist],
+                            [AggregateType.audioItem]: existingAudioItems,
+                        }).fetchFullSnapshotInLegacyFormat()
+                    );
+                },
                 checkStateOnSuccess: async ({
                     aggregateCompositeIdentifier: { id: playlistId },
                     audioItemIds,
@@ -152,19 +183,27 @@ describe(commandType, () => {
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     buildCommandFSA: buildValidCommandFSA,
-                    initialState: new DeluxeInMemoryStore({
-                        [AggregateType.audioItem]: [dummyAudioItemToUseAsTemplate],
-                        [AggregateType.playlist]: [
-                            existingPlaylist.clone({
-                                items: [
-                                    {
-                                        resourceCompositeIdentifier:
-                                            audioItemThatIsAlreadyOnPlaylist.getCompositeIdentifier(),
-                                    },
+                    seedInitialState: async () => {
+                        await testRepositoryProvider.addFullSnapshot(
+                            new DeluxeInMemoryStore({
+                                [AggregateType.audioItem]: [existingAudioItems[0]],
+                                [AggregateType.playlist]: [
+                                    Playlist.fromEventHistory(
+                                        playlistCreated
+                                            .andThen<AudioItemAddedToPlaylist>({
+                                                type: 'AUDIO_ITEM_ADDED_TO_PLAYLIST',
+                                                payload: {
+                                                    audioItemId:
+                                                        audioItemThatIsAlreadyOnPlaylist.id,
+                                                },
+                                            })
+                                            .as(playlistCompositeIdentifier),
+                                        playlistId
+                                    ) as Playlist,
                                 ],
-                            }),
-                        ],
-                    }).fetchFullSnapshotInLegacyFormat(),
+                            }).fetchFullSnapshotInLegacyFormat()
+                        );
+                    },
                     checkError: (error) => {
                         assertErrorAsExpected(
                             error,
@@ -189,7 +228,7 @@ describe(commandType, () => {
     describe(`when one of the audio items does not exist`, () => {
         const missingAudioItemId = buildDummyUuid(123);
 
-        const missingAudioItem = dummyAudioItemToUseAsTemplate.clone({
+        const missingAudioItem = existingAudioItems[0].clone({
             id: missingAudioItemId,
         });
 
@@ -225,7 +264,7 @@ describe(commandType, () => {
                 systemUserId: dummySystemUserId,
                 buildCommandFSA: buildValidCommandFSA,
                 initialState: new DeluxeInMemoryStore({
-                    [AggregateType.audioItem]: [dummyAudioItemToUseAsTemplate],
+                    [AggregateType.audioItem]: [existingAudioItems[0]],
                 }).fetchFullSnapshotInLegacyFormat(),
                 checkError: (error) => {
                     assertErrorAsExpected(

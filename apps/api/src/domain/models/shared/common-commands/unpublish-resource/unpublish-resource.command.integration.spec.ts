@@ -21,6 +21,14 @@ import { UnpublishResource } from './unpublish-resource.command';
 
 const commandType = 'UNPUBLISH_RESOURCE';
 
+const eventSourcedResourceTypes = [
+    ResourceType.term,
+    ResourceType.digitalText,
+    ResourceType.song,
+    ResourceType.vocabularyList,
+    ResourceType.playlist,
+];
+
 describe(commandType, () => {
     let testRepositoryProvider: TestRepositoryProvider;
 
@@ -62,15 +70,7 @@ describe(commandType, () => {
     describe(`when the command is valid`, () => {
         Object.values(ResourceType)
             // TODO [https://www.pivotaltracker.com/story/show/187855311] support event sourced resources
-            .filter(
-                (resourceType) =>
-                    ![
-                        ResourceType.term,
-                        ResourceType.digitalText,
-                        ResourceType.song,
-                        ResourceType.vocabularyList,
-                    ].includes(resourceType)
-            )
+            .filter((resourceType) => !eventSourcedResourceTypes.includes(resourceType))
             .forEach((resourceType) => {
                 const publishedResource = getValidAggregateInstanceForTest(resourceType).clone({
                     id: resourceId,
@@ -110,15 +110,7 @@ describe(commandType, () => {
         describe(`when the resource is not yet published`, () => {
             Object.values(ResourceType)
                 // TODO support event sourced resources
-                .filter(
-                    (resourceType) =>
-                        ![
-                            ResourceType.term,
-                            ResourceType.digitalText,
-                            ResourceType.song,
-                            ResourceType.vocabularyList,
-                        ].includes(resourceType)
-                )
+                .filter((resourceType) => !eventSourcedResourceTypes.includes(resourceType))
                 .forEach((resourceType) => {
                     const unpublishedResource = getValidAggregateInstanceForTest(
                         resourceType
@@ -153,12 +145,7 @@ describe(commandType, () => {
         describe(`when the resource does not exist`, () => {
             Object.values(ResourceType)
                 // TODO support event sourced resources
-                .filter(
-                    (resourceType) =>
-                        ![ResourceType.term, ResourceType.digitalText, ResourceType.song].includes(
-                            resourceType
-                        )
-                )
+                .filter((resourceType) => !eventSourcedResourceTypes.includes(resourceType))
                 .forEach((resourceType) => {
                     describe(`when there is no: ${resourceType}`, () => {
                         const resourceCompositeIdentifier = {

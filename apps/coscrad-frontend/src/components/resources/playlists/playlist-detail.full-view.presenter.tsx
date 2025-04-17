@@ -6,11 +6,13 @@ import {
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { Typography } from '@mui/material';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateUrlCell } from '../utils/render-audio-preview';
+import { renderMultilingualTextCell } from '../utils/render-multilingual-text-cell';
 
 export const PlaylistDetailFullViewPresenter = ({
     name,
@@ -19,6 +21,8 @@ export const PlaylistDetailFullViewPresenter = ({
     contributions,
 }: ICategorizableDetailQueryResult<IPlayListViewModel>): JSX.Element => {
     const [_url, setUrl] = useState<string | null>(null);
+
+    const { defaultLanguageCode } = useContext(ConfigurableContentContext);
 
     const headingLabels: HeadingLabel<IPlaylistEpisode>[] = [
         {
@@ -33,7 +37,7 @@ export const PlaylistDetailFullViewPresenter = ({
 
     const cellRenderers: CellRenderersDefinition<IPlaylistEpisode> = {
         // TODO Consider making the name property `MultilingualText`
-        // name: ({ name }) => renderMultilingualTextCell(name),
+        name: ({ name }) => renderMultilingualTextCell(name, defaultLanguageCode),
         mediaItemUrl: ({ mediaItemUrl }) =>
             renderAggregateUrlCell(mediaItemUrl, (url: string) => setUrl(url)),
     };

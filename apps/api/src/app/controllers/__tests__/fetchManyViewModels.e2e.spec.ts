@@ -80,6 +80,7 @@ describe('When fetching multiple resources', () => {
         AggregateType.term,
         AggregateType.vocabularyList,
         AggregateType.photograph,
+        AggregateType.playlist,
     ];
 
     Object.values(ResourceType)

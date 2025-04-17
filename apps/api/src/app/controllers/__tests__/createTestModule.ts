@@ -142,6 +142,7 @@ import {
 } from '../../../domain/models/photograph/queries';
 import { PhotographQueryService } from '../../../domain/models/photograph/queries/photograph-query.service';
 import { ArangoPhotographQueryRepository } from '../../../domain/models/photograph/repositories';
+import { Playlist } from '../../../domain/models/playlist';
 import {
     AddAudioItemToPlaylistCommandHandler,
     CreatePlayListCommandHandler,
@@ -149,6 +150,12 @@ import {
     ImportAudioItemsToPlaylistCommandHandler,
     TranslatePlaylistNameCommandHandler,
 } from '../../../domain/models/playlist/commands';
+import { AudioItemAddedToPlaylist } from '../../../domain/models/playlist/commands/add-audio-item-to-playlist/audio-item-added-to-playlist.event';
+import { AudioItemsImportedToPlaylist } from '../../../domain/models/playlist/commands/import-audio-items-to-playlist/audio-items-imported-to-playlist.event';
+import { PlaylistCreated } from '../../../domain/models/playlist/commands/playlist-created.event';
+import { PlaylistNameTranslated } from '../../../domain/models/playlist/commands/translate-playlist-name/playlist-name-translated.event';
+import { ArangoPlaylistQueryRepository } from '../../../domain/models/playlist/queries/arango-playlist-query-repository';
+import { PLAYLIST_QUERY_REPOSITORY_TOKEN } from '../../../domain/models/playlist/queries/playlist-query-repository.interface';
 import {
     GrantResourceReadAccessToUser,
     GrantResourceReadAccessToUserCommandHandler,
@@ -388,11 +395,16 @@ export const buildAllDataClassProviders = () =>
         PhotographCreated,
         EntriesImportedToVocabularyList,
         ContributorCreated,
+        PlaylistCreated,
+        PlaylistNameTranslated,
+        AudioItemAddedToPlaylist,
+        AudioItemsImportedToPlaylist,
         // Aggregate Root Domain Models
         DigitalText,
         Song,
         Term,
         VocabularyList,
+        Playlist,
     ].map((ctor: Ctor<unknown>) => ({
         provide: ctor,
         useValue: ctor,
@@ -567,22 +579,36 @@ export default async (
                 inject: [ArangoConnectionProvider],
             },
             {
+                provide: PLAYLIST_QUERY_REPOSITORY_TOKEN,
+                useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
+                    new ArangoPlaylistQueryRepository(arangoConnectionProvider),
+                inject: [ArangoConnectionProvider],
+            },
+            {
                 //  TODO use a more extensible pattern
                 provide: QUERY_REPOSITORY_PROVIDER_TOKEN,
                 useFactory: (
                     photographQueryRespository: ArangoPhotographQueryRepository,
                     termQueryRepository: ArangoTermQueryRepository,
                     audioItemQueryRepository: ArangoAudioItemQueryRepository,
-                    vocabularyListQueryRepository: ArangoVocabularyListQueryRepository
+                    vocabularyListQueryRepository: ArangoVocabularyListQueryRepository,
+                    playlistQueryRepository: ArangoPlaylistQueryRepository
                 ): IQueryRepositoryProvider => {
                     return new ArangoQueryRepositoryProvider(
                         photographQueryRespository,
                         termQueryRepository,
                         audioItemQueryRepository,
-                        vocabularyListQueryRepository
+                        vocabularyListQueryRepository,
+                        playlistQueryRepository
                     );
                 },
-                inject: [TERM_QUERY_REPOSITORY_TOKEN, AUDIO_QUERY_REPOSITORY_TOKEN],
+                inject: [
+                    PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
+                    TERM_QUERY_REPOSITORY_TOKEN,
+                    AUDIO_QUERY_REPOSITORY_TOKEN,
+                    VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
+                    PLAYLIST_QUERY_REPOSITORY_TOKEN,
+                ],
             },
             {
                 provide: TermQueryService,
@@ -660,12 +686,12 @@ export default async (
             {
                 provide: PlaylistQueryService,
                 useFactory: (
-                    repositoryProvider: ArangoRepositoryProvider,
+                    repositoryProvider: IQueryRepositoryProvider,
                     commandInfoService: CommandInfoService,
                     configService: ConfigService
                 ) =>
                     new PlaylistQueryService(repositoryProvider, commandInfoService, configService),
-                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService, ConfigService],
+                inject: [QUERY_REPOSITORY_PROVIDER_TOKEN, CommandInfoService, ConfigService],
             },
             {
                 provide: CoscradUserGroupQueryService,

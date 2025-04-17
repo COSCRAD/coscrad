@@ -1,4 +1,3 @@
-import { ResourceType } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
@@ -7,11 +6,14 @@ import { Maybe } from '../../../../../lib/types/maybe';
 import { IAccessible } from '../grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
 import { ResourcePublished } from './resource-published.event';
 
-interface GenericRepository<T = unknown> {
+export interface ICountable {
+    count(): Promise<number>;
+}
+
+interface GenericRepository<T = unknown> extends ICountable {
     create(entity: T): Promise<void>;
     fetchById(id: string): Promise<Maybe<T>>;
     fetchMany(): Promise<T[]>;
-    count(): Promise<number>;
 }
 
 export interface IPublishable {
@@ -26,7 +28,7 @@ export interface IQueryRepositoryProvider {
             IAccessible &
             GenericRepository
     >(
-        resourceType: ResourceType
+        resourceType: string
     ): T;
 }
 

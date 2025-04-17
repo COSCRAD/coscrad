@@ -4,6 +4,7 @@ import { InternalError } from '../../lib/errors/InternalError';
 import { Ctor } from '../../lib/types/Ctor';
 import { clonePlainObjectWithOverrides } from '../../lib/utilities/clonePlainObjectWithOverrides';
 import { DTO } from '../../types/DTO';
+import { DeepPartial } from '../../types/DeepPartial';
 
 interface FromDto<T = unknown> {
     fromDto(dto: DTO<T>): T;
@@ -22,7 +23,7 @@ export const getCoscradDataExamples = <T = unknown>(target: Ctor<T>): DTO<T>[] =
 
 export const buildTestInstance = <T = unknown>(
     target: Ctor<T>,
-    overrides: Partial<DTO<T>> = {}
+    overrides: DeepPartial<DTO<T>> = {} as DeepPartial<DTO<T>>
 ): T => {
     const testMetadata = getCoscradDataExamples(target);
 
