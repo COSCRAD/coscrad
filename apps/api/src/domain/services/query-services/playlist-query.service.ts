@@ -105,7 +105,7 @@ export class PlaylistQueryService {
         // TODO Can we share this logic with other views?
         const mediaItemUrl = `${this.configService.get('BASE_URL')}/${this.configService.get(
             'GLOBAL_PREFIX'
-        )}/resources/mediaItems/${episodeWithMediaItemId.mediaItemId}`;
+        )}/resources/mediaItems/download/${episodeWithMediaItemId.mediaItemId}`;
 
         delete episodeWithMediaItemId.mediaItemId;
 

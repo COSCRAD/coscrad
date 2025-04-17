@@ -1,8 +1,8 @@
+import { IMultilingualText } from '../common';
 import { MIMEType } from '../media-items';
 
 export interface IPlaylistEpisode {
-    // TODO make this multi-lingual text
-    name: string;
+    name: IMultilingualText;
 
     mediaItemUrl: string;
 
