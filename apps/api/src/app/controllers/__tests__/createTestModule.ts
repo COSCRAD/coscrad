@@ -142,6 +142,7 @@ import {
 } from '../../../domain/models/photograph/queries';
 import { PhotographQueryService } from '../../../domain/models/photograph/queries/photograph-query.service';
 import { ArangoPhotographQueryRepository } from '../../../domain/models/photograph/repositories';
+import { Playlist } from '../../../domain/models/playlist';
 import {
     AddAudioItemToPlaylistCommandHandler,
     CreatePlayListCommandHandler,
@@ -149,6 +150,9 @@ import {
     ImportAudioItemsToPlaylistCommandHandler,
     TranslatePlaylistNameCommandHandler,
 } from '../../../domain/models/playlist/commands';
+import { AudioItemAddedToPlaylist } from '../../../domain/models/playlist/commands/add-audio-item-to-playlist/audio-item-added-to-playlist.event';
+import { PlaylistCreated } from '../../../domain/models/playlist/commands/playlist-created.event';
+import { PlaylistNameTranslated } from '../../../domain/models/playlist/commands/translate-playlist-name/playlist-name-translated.event';
 import { ArangoPlaylistQueryRepository } from '../../../domain/models/playlist/queries/arango-playlist-query-repository';
 import { PLAYLIST_QUERY_REPOSITORY_TOKEN } from '../../../domain/models/playlist/queries/playlist-query-repository.interface';
 import {
@@ -390,11 +394,15 @@ export const buildAllDataClassProviders = () =>
         PhotographCreated,
         EntriesImportedToVocabularyList,
         ContributorCreated,
+        PlaylistCreated,
+        PlaylistNameTranslated,
+        AudioItemAddedToPlaylist,
         // Aggregate Root Domain Models
         DigitalText,
         Song,
         Term,
         VocabularyList,
+        Playlist,
     ].map((ctor: Ctor<unknown>) => ({
         provide: ctor,
         useValue: ctor,

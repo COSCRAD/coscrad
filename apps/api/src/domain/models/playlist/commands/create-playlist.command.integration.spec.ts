@@ -2,14 +2,14 @@ import { LanguageCode, ResourceType } from '@coscrad/api-interfaces';
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpIntegrationTest';
-import { InternalError } from '../../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { NotAvailable } from '../../../../lib/types/not-available';
-import { NotFound } from '../../../../lib/types/not-found';
+import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { TestEventStream } from '../../../../test-data/events';
 import { DTO } from '../../../../types/DTO';
-import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
@@ -28,14 +28,31 @@ import CommandExecutionError from '../../shared/common-command-errors/CommandExe
 import ResourceIdAlreadyInUseError from '../../shared/common-command-errors/ResourceIdAlreadyInUseError';
 import { Playlist } from '../entities';
 import { CreatePlayList } from './create-playlist.command';
+import { PlaylistCreated } from './playlist-created.event';
 
 const commandType = 'CREATE_PLAYLIST';
 
 const existingPlaylistId = `702096a0-c52f-488f-b5dc-22192e9aca3e`;
 
-const existingPlaylist = getValidAggregateInstanceForTest(ResourceType.playlist).clone({
-    id: existingPlaylistId,
-});
+const existingPlaylist = Playlist.fromEventHistory(
+    new TestEventStream()
+        .andThen<PlaylistCreated>({
+            type: 'PLAYLIST_CREATED',
+        })
+        .as({
+            type: AggregateType.playlist,
+            id: existingPlaylistId,
+        }),
+    existingPlaylistId
+);
+
+if (isInternalError(existingPlaylist) || isNotFound(existingPlaylist)) {
+    throw new InternalError(`Invalid test setup for playlist event history`);
+}
+
+// getValidAggregateInstanceForTest(ResourceType.playlist).clone({
+//     id: existingPlaylistId,
+// });
 
 const {
     text: existingPlaylistOrignalNameText,

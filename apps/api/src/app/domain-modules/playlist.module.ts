@@ -1,5 +1,6 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
+import { Playlist } from '../../domain/models/playlist';
 import {
     AddAudioItemToPlaylist,
     AddAudioItemToPlaylistCommandHandler,
@@ -34,6 +35,7 @@ import { PlaylistController } from '../controllers/resources/playlist.controller
         AudioItemAddedToPlaylistEventHandler,
         // Data Classes
         ...[
+            Playlist,
             CreatePlayList,
             TranslatePlaylistName,
             AddAudioItemToPlaylist,

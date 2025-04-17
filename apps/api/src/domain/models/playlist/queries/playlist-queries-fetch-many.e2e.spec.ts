@@ -105,7 +105,7 @@ describe(`when querying for a playlist: fetch many (${indexEndpoint})`, () => {
         ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
             {
                 ARANGO_DB_NAME: testDatabaseName,
-                BASE_URL: 'https:www.coscrad.org/api/',
+                BASE_URL: 'https:www.coscrad.org',
             },
             {
                 testUserWithGroups,
