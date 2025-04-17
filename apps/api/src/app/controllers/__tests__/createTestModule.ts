@@ -151,6 +151,7 @@ import {
     TranslatePlaylistNameCommandHandler,
 } from '../../../domain/models/playlist/commands';
 import { AudioItemAddedToPlaylist } from '../../../domain/models/playlist/commands/add-audio-item-to-playlist/audio-item-added-to-playlist.event';
+import { AudioItemsImportedToPlaylist } from '../../../domain/models/playlist/commands/import-audio-items-to-playlist/audio-items-imported-to-playlist.event';
 import { PlaylistCreated } from '../../../domain/models/playlist/commands/playlist-created.event';
 import { PlaylistNameTranslated } from '../../../domain/models/playlist/commands/translate-playlist-name/playlist-name-translated.event';
 import { ArangoPlaylistQueryRepository } from '../../../domain/models/playlist/queries/arango-playlist-query-repository';
@@ -397,6 +398,7 @@ export const buildAllDataClassProviders = () =>
         PlaylistCreated,
         PlaylistNameTranslated,
         AudioItemAddedToPlaylist,
+        AudioItemsImportedToPlaylist,
         // Aggregate Root Domain Models
         DigitalText,
         Song,
