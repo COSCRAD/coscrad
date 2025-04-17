@@ -249,9 +249,10 @@ export class PlaylistViewModel {
     > {
         const buildResult = (): PlaylistViewModel => {
             const availableEpisodes = this.episodes.flatMap((e) => {
-                if (!e.canUserWithGroups(userWithGroups)) {
-                    return [];
-                }
+                // TODO we need an event consumer that publishes playlist items
+                // if (!e.canUserWithGroups(userWithGroups)) {
+                //     return [];
+                // }
 
                 delete e.accessControlList;
 
