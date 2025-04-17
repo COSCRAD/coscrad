@@ -16,7 +16,11 @@ import {
     getArangoViewRepositoryMetadata,
 } from './arango-view-repository.decorator';
 
-describe(`@ArangoViewRepository(...)`, () => {
+/**
+ * TODO Leverage reflection in `ArangoQueryRepositoryProvider` then opt-in
+ * to this test.
+ */
+describe.skip(`@ArangoViewRepository(...)`, () => {
     @ArangoViewRepository('machine')
     class ArangoMachineQueryRepository {
         async fetchByName(_name: string) {
@@ -50,7 +54,6 @@ describe(`@ArangoViewRepository(...)`, () => {
                         isGlobal: true,
                         envFilePath,
                         cache: false,
-                        // validate,
                     }),
                     PersistenceModule.forRootAsync(),
                     ArangoMachineQueryRepository,

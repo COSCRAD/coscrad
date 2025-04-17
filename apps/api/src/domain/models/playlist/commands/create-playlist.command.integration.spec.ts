@@ -50,10 +50,6 @@ if (isInternalError(existingPlaylist) || isNotFound(existingPlaylist)) {
     throw new InternalError(`Invalid test setup for playlist event history`);
 }
 
-// getValidAggregateInstanceForTest(ResourceType.playlist).clone({
-//     id: existingPlaylistId,
-// });
-
 const {
     text: existingPlaylistOrignalNameText,
     languageCode: existingPlaylistNameOrignalLanguageCode,

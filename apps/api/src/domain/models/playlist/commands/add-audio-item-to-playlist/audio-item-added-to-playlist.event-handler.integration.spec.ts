@@ -68,7 +68,6 @@ describe(`AudioItemAddedToPlaylistEventHandler`, () => {
                         isGlobal: true,
                         envFilePath: buildConfigFilePath(Environment.test),
                         cache: false,
-                        // validate,
                     }),
                     PersistenceModule.forRootAsync(),
                     CommandModule,
@@ -139,7 +138,6 @@ describe(`AudioItemAddedToPlaylistEventHandler`, () => {
 
             expect(mimeType).toBe(existingAudioItemView.mimeType);
 
-            // fix this- it should be an ID on the model
             expect(mediaItemId).toEqual(existingAudioItemView.mediaItemId);
         });
     });

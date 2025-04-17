@@ -484,7 +484,7 @@ describe(`when querying for a single playlist- by ID`, () => {
     {
       "isPublished": true,
       "lengthMilliseconds": 30456,
-      "mediaItemUrl": "https://jaybam.com/home/api/resources/mediaItems/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100567",
+      "mediaItemUrl": "https://jaybam.com/home/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100567",
       "mimeType": "audio/mpeg",
       "name": {
         "items": [
@@ -499,7 +499,7 @@ describe(`when querying for a single playlist- by ID`, () => {
     {
       "isPublished": false,
       "lengthMilliseconds": 30456,
-      "mediaItemUrl": "https://jaybam.com/home/api/resources/mediaItems/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100567",
+      "mediaItemUrl": "https://jaybam.com/home/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100567",
       "mimeType": "audio/mpeg",
       "name": {
         "items": [
@@ -734,7 +734,7 @@ describe(`when querying for a single playlist- by ID`, () => {
     {
       "isPublished": true,
       "lengthMilliseconds": 30456,
-      "mediaItemUrl": "https://jaybam.com/home/api/resources/mediaItems/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100567",
+      "mediaItemUrl": "https://jaybam.com/home/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100567",
       "mimeType": "audio/mpeg",
       "name": {
         "items": [
@@ -749,7 +749,7 @@ describe(`when querying for a single playlist- by ID`, () => {
     {
       "isPublished": false,
       "lengthMilliseconds": 30456,
-      "mediaItemUrl": "https://jaybam.com/home/api/resources/mediaItems/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100567",
+      "mediaItemUrl": "https://jaybam.com/home/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100567",
       "mimeType": "audio/mpeg",
       "name": {
         "items": [

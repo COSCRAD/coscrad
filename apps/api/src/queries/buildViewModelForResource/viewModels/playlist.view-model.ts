@@ -77,10 +77,7 @@ export class PlaylistEpisodeViewModel {
     // TODO move this to the ACL below
     isPublished: boolean;
 
-    @NestedDataType(AccessControlList, {
-        label: 'ACL',
-        description: 'the access control list indicates which users and groups can view episodes',
-    })
+    // this is removed in query responses
     accessControlList: AccessControlList;
 
     constructor(dto: DTO<PlaylistEpisodeViewModel>) {
