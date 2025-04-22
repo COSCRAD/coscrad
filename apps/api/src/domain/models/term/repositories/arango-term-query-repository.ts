@@ -3,7 +3,6 @@ import {
     LanguageCode,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from '../../../../coscrad-cli/logging';
@@ -182,18 +181,10 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             return;
         }
 
-        const { mediaItemId } = audioItemSearchResult;
-
-        if (isNullOrUndefined(mediaItemId)) {
-            // TODO log error but fail gracefully
-            return;
-        }
-
         const query = `
         FOR doc IN @@collectionName
         FILTER doc._key == @id
         UPDATE doc WITH {
-            mediaItemId: @mediaItemId,
             actions: REMOVE_VALUE(doc.actions,"ADD_AUDIO_FOR_TERM")
         } IN @@collectionName
          RETURN OLD
@@ -202,7 +193,6 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         const bindVars = {
             '@collectionName': 'term__VIEWS',
             id: termId,
-            mediaItemId,
         };
 
         const cursor = await this.database
