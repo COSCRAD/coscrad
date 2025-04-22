@@ -10,6 +10,7 @@ import {
     AddLineItemtoTranscriptCommandHandler,
     AddParticipantToTranscript,
     AddParticipantToTranscriptCommandHandler,
+    AudioItemNameTranslatedEventHandler,
     CreateAudioItem,
     CreateAudioItemCommandHandler,
     CreateTranscript,
@@ -71,6 +72,7 @@ import { VideoController } from './video.controller';
         })),
         // Event Handlers
         AudioItemCreatedEventHandler,
+        AudioItemNameTranslatedEventHandler,
     ],
     exports: [AudioItemQueryService, VideoQueryService],
 })

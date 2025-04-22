@@ -1,3 +1,4 @@
+import { LanguageCode, MIMEType } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import {
     COMPOSITE_IDENTIFIER,
@@ -14,6 +15,11 @@ import {
 import { Inject } from '@nestjs/common';
 import { readFileSync } from 'fs';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
+import {
+    CreateAudioItem,
+    TranslateAudioItemName,
+} from '../domain/models/audio-visual/audio-item/commands';
+import { CreateMediaItem } from '../domain/models/media-item/commands';
 import { GrantUserRole } from '../domain/models/user-management/user/commands/grant-user-role/grant-user-role.command';
 import { RegisterUser } from '../domain/models/user-management/user/commands/register-user/register-user.command';
 import { ImportEntriesToVocabularyList } from '../domain/models/vocabulary-list/commands';
@@ -83,6 +89,50 @@ const grantUserRoleCommandFsa = {
     type: 'GRANT_USER_ROLE',
     payload: grantUserRoleCommand,
 };
+
+const createMediaItem: CreateMediaItem = {
+    aggregateCompositeIdentifier: {
+        type: AggregateType.mediaItem,
+        id: `${GENERATE_THIS_ID}:2`,
+    },
+    title: 'the media item for my song',
+    mimeType: MIMEType.mp3,
+};
+
+const createAudioItem: CreateAudioItem = {
+    aggregateCompositeIdentifier: {
+        type: AggregateType.audioItem,
+        id: `${GENERATE_THIS_ID}:1`,
+    },
+    name: 'my song',
+    languageCodeForName: LanguageCode.English,
+    mediaItemId: `${APPEND_THIS_ID}:2`,
+    lengthMilliseconds: 1234,
+};
+
+const translateAudioItemName: TranslateAudioItemName = {
+    aggregateCompositeIdentifier: {
+        type: AggregateType.audioItem,
+        id: `${APPEND_THIS_ID}:1`,
+    },
+    text: 'my song (clc)',
+    languageCode: LanguageCode.Chilcotin,
+};
+
+const audioItemWithTranslationCommandFsaStream = [
+    {
+        type: 'CREATE_MEDIA_ITEM',
+        payload: createMediaItem,
+    },
+    {
+        type: 'CREATE_AUDIO_ITEM',
+        payload: createAudioItem,
+    },
+    {
+        type: 'TRANSLATE_AUDIO_ITEM_NAME',
+        payload: translateAudioItemName,
+    },
+];
 
 /**
  * Note: Add Geoff's test user
@@ -426,11 +476,15 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
     parseFixtureName(value: string): CommandFsa[] {
         if (!isNonEmptyString(value)) return undefined;
 
-        if (value !== 'users:create-admin') {
-            throw new Error(`unrecognized command stream fixture name: ${value}`);
+        if (value == 'audio:with-translation') {
+            return audioItemWithTranslationCommandFsaStream;
         }
 
-        return createAdminUserCommandStream;
+        if (value == 'users:create-admin') {
+            return createAdminUserCommandStream;
+        }
+
+        throw new Error(`unrecognized command stream fixture name: ${value}`);
     }
 
     @CliCommandOption({

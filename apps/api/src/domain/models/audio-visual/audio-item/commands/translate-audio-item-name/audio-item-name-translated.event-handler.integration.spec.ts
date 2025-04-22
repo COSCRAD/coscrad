@@ -5,6 +5,7 @@ import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../../app/config/constants/environment';
+import { buildMultilingualTextFromBilingualText } from '../../../../../../domain/common/build-multilingual-text-from-bilingual-text';
 import {
     MultilingualText,
     MultilingualTextItem,
@@ -14,12 +15,11 @@ import { ArangoConnectionProvider } from '../../../../../../persistence/database
 import { ArangoDatabaseProvider } from '../../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { TestEventStream } from '../../../../../../test-data/events';
+import { buildTestInstance } from '../../../../../../test-data/utilities';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { EventSourcedAudioItemViewModel } from '../../queries';
 import { IAudioItemQueryRepository } from '../../queries/audio-item-query-repository.interface';
 import { ArangoAudioItemQueryRepository } from '../../repositories/arango-audio-item-query-repository';
-import { AudioItemCreated } from '../create-audio-item/audio-item-created.event';
 import { AudioItemNameTranslated } from './audio-item-name-translated-event';
 import { AudioItemNameTranslatedEventHandler } from './audio-item-name-translated.event-handler';
 
@@ -31,27 +31,24 @@ const translationLanguageCode = LanguageCode.English;
 
 const translationText = 'name in English';
 
-const audioItemCreated = new TestEventStream().andThen<AudioItemCreated>({
-    type: 'AUDIO_ITEM_CREATED',
-    payload: {
-        languageCodeForName: originalLanguageCode,
-    },
-});
-
-const audioItemnameTranslated = audioItemCreated.andThen<AudioItemNameTranslated>({
+const translationEvent = buildTestInstance(AudioItemNameTranslated, {
     type: 'AUDIO_ITEM_NAME_TRANSLATED',
     payload: {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.audioItem,
+            id: audioItemId,
+        },
         text: translationText,
         languageCode: translationLanguageCode,
     },
 });
 
-const [creationEvent, translationEvent] = audioItemnameTranslated.as({
-    type: AggregateType.audioItem,
-    id: audioItemId,
-}) as [AudioItemCreated, AudioItemNameTranslated];
-
-const existingView = EventSourcedAudioItemViewModel.fromAudioItemCreated(creationEvent);
+const existingView = buildTestInstance(EventSourcedAudioItemViewModel, {
+    name: buildMultilingualTextFromBilingualText(
+        { text: 'name in language', languageCode: originalLanguageCode },
+        { text: translationText, languageCode: translationLanguageCode }
+    ),
+});
 
 describe(`AudioItemNameTranslatedEventHandler`, () => {
     let testQueryRepository: IAudioItemQueryRepository;

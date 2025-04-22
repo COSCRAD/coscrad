@@ -41,7 +41,7 @@ export class EventSourcedAudioItemViewModel implements IDetailQueryResult<IAudio
     actions: ICommandFormAndLabels[];
     name: IMultilingualText;
     mediaItemId: AggregateId;
-    mimeType: MIMEType;
+    mimeType?: MIMEType;
     lengthMilliseconds: number;
     text: string;
     contributions: ContributorWithId[];
@@ -88,6 +88,33 @@ export class EventSourcedAudioItemViewModel implements IDetailQueryResult<IAudio
 
     isPublished: boolean;
 
+    constructor(dto: DTO<EventSourcedAudioItemViewModel>) {
+        if (!dto) return;
+
+        const { id, name, contributions, mediaItemId, accessControlList, isPublished } = dto;
+
+        this.id = id;
+
+        this.name = new MultilingualText(name);
+
+        // do we need to clone?
+        this.contributions = Array.isArray(contributions) ? contributions : [];
+
+        this.mediaItemId = mediaItemId;
+
+        /**
+         * We need to share this logic. It's not dangerous to have a single
+         * `BaseResourceViewModel` class as long as all the properties we
+         * put there are essential to the notion of a web-of-knowledge "resource"
+         * (view).
+         */
+        this.accessControlList = isNonEmptyObject(accessControlList)
+            ? new AccessControlList(accessControlList)
+            : new AccessControlList();
+
+        this.isPublished = isPublished;
+    }
+
     static fromAudioItemCreated({
         payload: {
             aggregateCompositeIdentifier: { id: audioItemId },
@@ -95,8 +122,6 @@ export class EventSourcedAudioItemViewModel implements IDetailQueryResult<IAudio
             languageCodeForName,
             mediaItemId,
             lengthMilliseconds,
-            // todo fix this
-            // mimeType,
         },
         meta: { contributorIds: _ },
     }: AudioItemCreated): EventSourcedAudioItemViewModel {
@@ -115,6 +140,10 @@ export class EventSourcedAudioItemViewModel implements IDetailQueryResult<IAudio
             // in order to grant access, we need a `RESOURCE_READ_ACCESS_GRANTED_TO_USER`
             accessControlList: new AccessControlList(),
         });
+    }
+
+    public static fromDto(dto: DTO<EventSourcedAudioItemViewModel>) {
+        return new EventSourcedAudioItemViewModel(dto);
     }
 
     public static fromDto(dto: DTO<EventSourcedAudioItemViewModel>) {
