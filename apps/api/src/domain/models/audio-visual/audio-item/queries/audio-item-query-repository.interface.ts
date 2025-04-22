@@ -36,5 +36,5 @@ export interface IAudioItemQueryRepository extends IPublishable {
 
     count(): Promise<number>;
 
-    addTranscript(id: AggregateId): Promise<void>;
+    createTranscript(id: AggregateId): Promise<void>;
 }
