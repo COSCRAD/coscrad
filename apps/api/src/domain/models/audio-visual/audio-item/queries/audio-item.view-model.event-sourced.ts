@@ -47,45 +47,6 @@ export class EventSourcedAudioItemViewModel implements IDetailQueryResult<IAudio
     contributions: ContributorWithId[];
     id: string;
     accessControlList: { allowedUserIds: string[]; allowedGroupIds: string[] };
-
-    constructor(dto: DTO<EventSourcedAudioItemViewModel>) {
-        if (!dto) return;
-
-        const {
-            name,
-            mediaItemId,
-            mimeType,
-            lengthMilliseconds,
-            text,
-            contributions,
-            id,
-            accessControlList,
-        } = dto;
-
-        if (isNonEmptyObject(accessControlList)) {
-            this.accessControlList = new AccessControlList(accessControlList);
-        } else {
-            // no priviliged access
-            this.accessControlList = new AccessControlList();
-        }
-
-        this.name = new MultilingualText(name);
-
-        this.mediaItemId = mediaItemId;
-
-        this.mimeType = mimeType;
-
-        this.lengthMilliseconds = lengthMilliseconds;
-
-        this.text = text;
-
-        this.contributions = contributions;
-
-        this.actions = [];
-
-        this.id = id;
-    }
-
     isPublished: boolean;
 
     constructor(dto: DTO<EventSourcedAudioItemViewModel>) {
@@ -140,10 +101,6 @@ export class EventSourcedAudioItemViewModel implements IDetailQueryResult<IAudio
             // in order to grant access, we need a `RESOURCE_READ_ACCESS_GRANTED_TO_USER`
             accessControlList: new AccessControlList(),
         });
-    }
-
-    public static fromDto(dto: DTO<EventSourcedAudioItemViewModel>) {
-        return new EventSourcedAudioItemViewModel(dto);
     }
 
     public static fromDto(dto: DTO<EventSourcedAudioItemViewModel>) {
