@@ -12,9 +12,6 @@ export interface IAudioItemViewModel extends IBaseResourceViewModel {
 
     name: IMultilingualText;
 
-    // aggregate ID
-    mediaItemId: string;
-
     audioURL?: string;
 
     /**
@@ -27,8 +24,6 @@ export interface IAudioItemViewModel extends IBaseResourceViewModel {
      * we will cut out the need for lots of optional properties on the media item creation event.
      */
     mimeType?: MIMEType;
-
-    lengthMilliseconds: number;
 
     /**
      * TODO Make this an ITranscript
