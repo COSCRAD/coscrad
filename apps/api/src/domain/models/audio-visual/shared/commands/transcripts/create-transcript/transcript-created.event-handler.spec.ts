@@ -1,4 +1,4 @@
-import { AggregateType } from '@coscrad/api-interfaces';
+import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -6,6 +6,7 @@ import buildMockConfigService from '../../../../../../../app/config/__tests__/ut
 import buildConfigFilePath from '../../../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../../../app/config/constants/environment';
 import buildDummyUuid from '../../../../../../../domain/models/__tests__/utilities/buildDummyUuid';
+import { clonePlainObjectWithOverrides } from '../../../../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { ArangoConnectionProvider } from '../../../../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../../../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../../../persistence/persistence.module';
@@ -83,13 +84,35 @@ describe(`TranscriptCreatedEventHandler.handle`, () => {
         await testQueryRepository.create(targetAudioItem);
     });
 
-    it(`should create an empty transcript`, async () => {
-        await transcriptCreatedEventHandler.handle(transcriptCreated);
+    describe('when transcribing an audio item', () => {
+        it(`should create an empty transcript`, async () => {
+            await transcriptCreatedEventHandler.handle(transcriptCreated);
 
-        const { transcript } = (await testQueryRepository.fetchById(
-            audioItemId
-        )) as EventSourcedAudioItemViewModel;
+            const { transcript } = (await testQueryRepository.fetchById(
+                audioItemId
+            )) as EventSourcedAudioItemViewModel;
 
-        expect(transcript).toBeTruthy();
+            expect(transcript).toBeTruthy();
+        });
+    });
+
+    describe('when transcribing a video', () => {
+        it.skip(`should create an empty transcript`, async () => {
+            await transcriptCreatedEventHandler.handle(
+                clonePlainObjectWithOverrides(transcriptCreated, {
+                    payload: {
+                        aggregateCompositeIdentifier: {
+                            type: ResourceType.video,
+                        },
+                    },
+                })
+            );
+
+            const { transcript } = (await testQueryRepository.fetchById(
+                audioItemId
+            )) as EventSourcedAudioItemViewModel;
+
+            expect(transcript).toBeTruthy();
+        });
     });
 });
