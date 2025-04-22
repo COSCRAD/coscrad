@@ -30,10 +30,10 @@ import { PhotographCreated } from '../commands';
         name: buildMultilingualTextWithSingleItem('nice photo'),
         id: buildDummyUuid(1),
         photographer: 'Jane Deer',
+        mediaItemId: buildDummyUuid(55),
         heightPx: 600,
         widthPx: 800,
         tags: [],
-        mediaItemId: buildDummyUuid(55),
         actions: [],
         isPublished: false,
         contributions: [],
@@ -59,6 +59,12 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
         description: 'System identifier for this photograph',
     })
     public id: string;
+
+    @UUID({
+        label: 'media item',
+        description: 'a reference to the raw media item for this photograph',
+    })
+    public mediaItemId: string;
 
     @ApiProperty()
     @NonEmptyString({
@@ -91,10 +97,6 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
         isArray: true,
     })
     public tags: TagViewModel[];
-
-    // Do we need pixel height and width?
-
-    mediaItemId: string;
 
     // note that these are mapped to form specifications in the query service layer
     @ApiProperty()
@@ -151,6 +153,7 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
             title,
             languageCodeForTitle,
             photographer,
+            mediaItemId,
             heightPx,
             widthPx,
             aggregateCompositeIdentifier: { id: photographId },
@@ -164,6 +167,8 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
         photograph.id = photographId;
 
         photograph.photographer = photographer;
+
+        photograph.mediaItemId = mediaItemId;
 
         photograph.heightPx = heightPx;
 
@@ -242,14 +247,14 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
 
         photograph.isPublished = isBoolean(isPublished) ? isPublished : false;
 
+        if (!isNullOrUndefined(mediaItemId)) {
+            photograph.mediaItemId = mediaItemId;
+        }
+
         /**
          * TODO Populate tags
          */
         photograph.tags = [];
-
-        if (!isNullOrUndefined(mediaItemId)) {
-            photograph.mediaItemId = mediaItemId;
-        }
 
         return photograph;
     }

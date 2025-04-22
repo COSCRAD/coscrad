@@ -25,13 +25,6 @@ const mediaItemCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
     4
 );
 
-const contributors = {
-    creator: {
-        id: buildDummyUuid(112),
-        firstName: 'Jamethon',
-    },
-};
-
 describe('Photograph index query flow', () => {
     const seedDummyPhotograph = ({
         id,

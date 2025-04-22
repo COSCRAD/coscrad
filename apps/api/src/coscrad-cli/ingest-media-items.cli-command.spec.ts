@@ -127,6 +127,11 @@ describe(`CLI Command: **ingest-media-items**`, () => {
 
         testRepositoryProvider = testAppModule.get(TestRepositoryProvider);
 
+        /**
+         * Should the files in `destinationDir` be wiped between tests?  The
+         * command seems to skip files that are already there when the test has
+         * run once.
+         */
         if (!existsSync(destinationDir)) {
             mkdirSync(destinationDir);
         }

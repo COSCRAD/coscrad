@@ -1,55 +1,10 @@
 import { ContributorWithId, IMultilingualText, ResourceType } from '@coscrad/api-interfaces';
-import { ListRounded, Person } from '@mui/icons-material';
-import {
-    Box,
-    Divider,
-    Grid,
-    IconButton,
-    List,
-    ListItem,
-    ListItemIcon,
-    Paper,
-    Typography,
-} from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { ReactNode } from 'react';
 import { buildDataAttributeForAggregateDetailComponent } from './build-data-attribute-for-aggregate-detail-component';
+import { ContributionsPresenter } from './contributions-presenter';
 import { ResourceDetailPresenterHeader } from './resource-detail-presenter-header';
 import { ResourcePreviewIconFactory } from './resource-preview-icon';
-
-const ContributionsPresenter = ({
-    contributions,
-}: {
-    contributions: ContributorWithId[];
-}): JSX.Element => (
-    <List>
-        {contributions.map((contribution) => (
-            <ListItem
-                disableGutters
-                style={{ borderBottom: '1px solid #ccc' }}
-                key={`${contribution.fullName}-${contribution.id}`}
-                data-testid={`${contribution.id}`}
-            >
-                <ContributionPresenter contributor={contribution} />
-                <Divider />
-            </ListItem>
-        ))}
-    </List>
-);
-
-interface ContributionPresenterProps {
-    contributor: ContributorWithId;
-}
-
-const ContributionPresenter = ({ contributor: { fullName } }: ContributionPresenterProps) => {
-    return (
-        <>
-            <ListItemIcon>
-                <Person color="secondary" />
-            </ListItemIcon>
-            <Typography variant="body1">{fullName}</Typography>
-        </>
-    );
-};
 
 export interface ResourceDetailFullViewPresenterProps {
     id: string;
@@ -92,18 +47,11 @@ export const ResourceDetailFullViewPresenter = ({
 
                 <div data-testid={buildDataAttributeForAggregateDetailComponent(type, id)} />
                 {children}
-                <Box>
-                    <Box elevation={0} component={Paper}>
-                        <IconButton>
-                            <ListRounded />
-                        </IconButton>
-                        Contributions
-                    </Box>
-
+                {contributions.length > 0 ? (
                     <Box ml={1}>
                         <ContributionsPresenter contributions={contributions} />
                     </Box>
-                </Box>
+                ) : null}
             </Grid>
         </Grid>
     );
