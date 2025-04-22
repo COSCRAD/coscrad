@@ -37,9 +37,15 @@ import { ArangoPhotographQueryRepository } from './arango-photograph-query-repos
 
 const photographIds = [1, 2, 3].map(buildDummyUuid);
 
+const mediaItemIds = [4, 5, 6].map(buildDummyUuid);
+
 const buildPhotographTitle = (id: string) => `photograph ${id}`;
 
 const photographTitle = buildPhotographTitle(photographIds[0]);
+
+// const buildMediaItemTitle = (id: string) => `media item ${id}`;
+
+// const mediaItemTitle = buildMediaItemTitle(mediaItemIds[0]);
 
 const originalLanguageCode = LanguageCode.Chilcotin;
 
@@ -47,7 +53,7 @@ const _translationLanguageCode = LanguageCode.English;
 
 const _textTranslation = 'foobar';
 
-const dummyPhotographer = 'Tester Photographer';
+const dummyPhotographer = 'Tester Track Photographer';
 
 const dummyContributor = getValidAggregateInstanceForTest(AggregateType.contributor);
 
@@ -72,7 +78,8 @@ const buildPhotographEventHistory = (
     id: AggregateId,
     title: string,
     languageCodeForTitle: LanguageCode,
-    photographer: string
+    photographer: string,
+    mediaItemId: string
 ) => {
     const photographCreated = new TestEventStream().andThen<PhotographCreated>({
         type: 'PHOTOGRAPH_CREATED',
@@ -80,6 +87,7 @@ const buildPhotographEventHistory = (
             title,
             languageCodeForTitle,
             photographer,
+            mediaItemId,
         },
     });
 
@@ -89,12 +97,13 @@ const buildPhotographEventHistory = (
     });
 };
 
-const photographViews = photographIds.map((id) => {
+const photographViews = photographIds.map((id, index) => {
     const eventHistory = buildPhotographEventHistory(
         id,
         buildPhotographTitle(id),
         originalLanguageCode,
-        dummyPhotographer
+        dummyPhotographer,
+        mediaItemIds[index]
     );
 
     const creationEvent = eventHistory[0] as PhotographCreated;
@@ -174,13 +183,15 @@ describe(`ArangoPhotographQueryRepository`, () => {
 
                 expect(result).not.toBe(NotFound);
 
-                const { name } = result as PhotographViewModel;
+                const { name, mediaItemId: foundMediaItemID } = result as PhotographViewModel;
 
                 const foundOriginalTitleForPhotograph = name.items.find(
                     ({ languageCode }) => languageCode === originalLanguageCode
                 ).text;
 
                 expect(foundOriginalTitleForPhotograph).toBe(photographTitle);
+
+                expect(foundMediaItemID).toBe(mediaItemIds[0]);
             });
         });
 
@@ -245,7 +256,7 @@ describe(`ArangoPhotographQueryRepository`, () => {
         const targetPhotograph = photographViews[0];
 
         beforeEach(async () => {
-            // clear existing term views
+            // clear existing photograph views
             await arangoDatabaseForCollection.clear();
 
             await testQueryRepository.create(targetPhotograph);
@@ -275,16 +286,16 @@ describe(`ArangoPhotographQueryRepository`, () => {
             await testQueryRepository.createMany(photographViews);
         });
 
-        it(`should remove the given term`, async () => {
-            const targetTermViewId = photographIds[0];
+        it(`should remove the given photograph`, async () => {
+            const targetPhotographViewId = photographIds[0];
 
-            const expectedNumberOfTermsAfterDelete = photographViews.length - 1;
+            const expectedNumberOfPhotographsAfterDelete = photographViews.length - 1;
 
-            await testQueryRepository.delete(targetTermViewId);
+            await testQueryRepository.delete(targetPhotographViewId);
 
-            const actualNumberOfTerms = await testQueryRepository.count();
+            const actualNumberOfPhotographs = await testQueryRepository.count();
 
-            expect(actualNumberOfTerms).toBe(expectedNumberOfTermsAfterDelete);
+            expect(actualNumberOfPhotographs).toBe(expectedNumberOfPhotographsAfterDelete);
         });
     });
 
@@ -293,7 +304,7 @@ describe(`ArangoPhotographQueryRepository`, () => {
             await arangoDatabaseForCollection.clear();
         });
 
-        it(`should create the correct term view`, async () => {
+        it(`should create the correct Photograph view`, async () => {
             const photographToCreate = photographViews[0];
 
             // act
@@ -316,7 +327,7 @@ describe(`ArangoPhotographQueryRepository`, () => {
             await arangoDatabaseForCollection.clear();
         });
 
-        it(`should create the expected term views`, async () => {
+        it(`should create the expected photograph views`, async () => {
             // act
             await testQueryRepository.createMany(photographViews);
 
@@ -335,7 +346,7 @@ describe(`ArangoPhotographQueryRepository`, () => {
             await testQueryRepository.create(targetPhotograph);
         });
 
-        it(`should publish the given term`, async () => {
+        it(`should publish the given photograph`, async () => {
             await testQueryRepository.publish(targetPhotograph.id);
 
             const updatedView = (await testQueryRepository.fetchById(

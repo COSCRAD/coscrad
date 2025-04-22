@@ -3,17 +3,20 @@ import {
     ICategorizableDetailQueryResult,
     IPhotographViewModel,
     MultilingualTextItemRole,
+    ResourceType,
 } from '@coscrad/api-interfaces';
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
+import { ContributionsPresenter } from '../../../utils/generic-components/presenters/detail-views/contributions-presenter';
+import { ResourceDetailPresenterHeader } from '../../../utils/generic-components/presenters/detail-views/resource-detail-presenter-header';
 import { ImageFullPageWidth } from '../../../utils/generic-components/presenters/image-full-page-width';
-import { ResourceNamePresenter } from '../../../utils/generic-components/presenters/resource-name-presenter';
 
 export const PhotographDetailFullViewPresenter = ({
     id,
     imageUrl,
     name,
     photographer,
+    contributions,
 }: ICategorizableDetailQueryResult<IPhotographViewModel>): JSX.Element => {
     // Simulating image object retrieved from Digital Asset Manager
     const image = {
@@ -34,8 +37,14 @@ export const PhotographDetailFullViewPresenter = ({
                 )}
             />
             <ImageFullPageWidth image={image} />
-            <ResourceNamePresenter name={name} variant="h2" />
+            <ResourceDetailPresenterHeader
+                id={id}
+                type={ResourceType.photograph}
+                name={name}
+                variant="h2"
+            />
             <SinglePropertyPresenter display="Photographer" value={photographer} />
+            <ContributionsPresenter contributions={contributions} />
         </>
     );
 };

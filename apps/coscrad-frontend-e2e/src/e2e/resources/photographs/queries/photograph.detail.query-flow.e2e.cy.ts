@@ -1,5 +1,8 @@
 import { AggregateType, LanguageCode, MIMEType } from '@coscrad/api-interfaces';
-import { buildDummyAggregateCompositeIdentifier } from '../../../../support/utilities';
+import {
+    buildDummyAggregateCompositeIdentifier,
+    buildDummyUuid,
+} from '../../../../support/utilities';
 import { seedDummyMediaItem } from '../../../shared/seed-dummy-media-item.cy';
 
 const photographAggregateCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
@@ -41,6 +44,13 @@ const validPhotographDetailRoute = buildRoute(photographAggregateCompositeIdenti
 
 const noteText = 'This is a note about a photograph';
 
+const contributors = {
+    creator: {
+        id: buildDummyUuid(112),
+        firstName: 'Jamethon',
+    },
+};
+
 describe(`the photograph detail page`, () => {
     describe(`when the photograph with the given ID 123 does not exist`, () => {
         beforeEach(() => {
@@ -57,21 +67,37 @@ describe(`the photograph detail page`, () => {
 
         cy.seedTestUuids(200);
 
+        cy.seedDataWithCommand(`CREATE_CONTRIBUTOR`, {
+            aggregateCompositeIdentifier: {
+                type: AggregateType.contributor,
+                id: contributors.creator.id,
+            },
+            shortBio: 'This is a hard-working language champion indeed!',
+            firstName: contributors.creator.firstName,
+            // we don't bother with the last name
+        });
+
         seedDummyMediaItem({
             id: mediaItemCompositeIdentifier.id,
             title: 'My photo of Masset',
             mimeType: MIMEType.jpg,
         });
 
-        cy.seedDataWithCommand(`CREATE_PHOTOGRAPH`, {
-            aggregateCompositeIdentifier: photographAggregateCompositeIdentifier,
-            title: photographTitle,
-            languageCodeForTitle,
-            mediaItemId: mediaItemCompositeIdentifier.id,
-            photographer: dummyPhotographer,
-            heightPx: 800,
-            widthPx: 200,
-        });
+        cy.seedDataWithCommand(
+            `CREATE_PHOTOGRAPH`,
+            {
+                aggregateCompositeIdentifier: photographAggregateCompositeIdentifier,
+                title: photographTitle,
+                languageCodeForTitle,
+                mediaItemId: mediaItemCompositeIdentifier.id,
+                photographer: dummyPhotographer,
+                heightPx: 800,
+                widthPx: 200,
+            },
+            {
+                contributorIds: [contributors.creator.id],
+            }
+        );
 
         cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
             aggregateCompositeIdentifier: photographAggregateCompositeIdentifier,
@@ -120,6 +146,10 @@ describe(`the photograph detail page`, () => {
             cy.getByDataAttribute('LanguageIcon').first().trigger('mouseover');
 
             cy.contains("Haida, 'original'");
+        });
+
+        it(`should display the contributions`, () => {
+            cy.contains(contributors.creator.firstName);
         });
     });
 
