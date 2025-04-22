@@ -29,6 +29,7 @@ import { AudioItemCreated } from '../commands/create-audio-item/audio-item-creat
         mediaItemId: buildDummyUuid(55),
         mimeType: MIMEType.wav,
         lengthMilliseconds: 1234,
+        transcript: Transcript.buildEmpty(),
         text: '',
         contributions: [],
         // we need this on the playlist view as well
@@ -57,7 +58,8 @@ export class EventSourcedAudioItemViewModel {
     constructor(dto: DTO<EventSourcedAudioItemViewModel>) {
         if (!dto) return;
 
-        const { id, name, contributions, mediaItemId, accessControlList, isPublished } = dto;
+        const { id, name, contributions, mediaItemId, accessControlList, isPublished, transcript } =
+            dto;
 
         this.id = id;
 
