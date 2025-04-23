@@ -100,5 +100,13 @@ export class CreateTranscriptCommandHandler extends BaseCommandHandler<AudioItem
         await this.repositoryProvider
             .forResource(resourceType)
             .update(instanceToPersistWithUpdatedEventHistory);
+
+        /**
+         * TODO
+         * 1. Share this logic with the base-update-command handler
+         * 2. Move event publication out of process by pulling events from the
+         * command database and publishing via a proper messaging queue.
+         */
+        this.eventPublisher.publish(event);
     }
 }

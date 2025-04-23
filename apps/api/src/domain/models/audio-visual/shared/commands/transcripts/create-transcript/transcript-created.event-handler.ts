@@ -8,15 +8,12 @@ import {
 } from '../../../../audio-item/queries/audio-item-query-repository.interface';
 import { TranscriptCreated } from './transcript-created.event';
 
-// TODO write integration test first!
-// todo decorator
 @CoscradEventConsumer('TRANSCRIPT_CREATED')
 export class TranscriptCreatedEventHandler implements ICoscradEventHandler {
     constructor(
         @Inject(AUDIO_QUERY_REPOSITORY_TOKEN)
         private readonly queryRepository: IAudioItemQueryRepository
     ) {}
-    // inject the `AudioItemQueryRepository` in the constructor
 
     async handle({
         payload: {
@@ -27,7 +24,6 @@ export class TranscriptCreatedEventHandler implements ICoscradEventHandler {
             throw new InternalError('event sourcing video views is not yet supported');
         }
 
-        // log and exit if the event is for a video
         await this.queryRepository.createTranscript(id);
     }
 }
