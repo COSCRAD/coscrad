@@ -120,12 +120,6 @@ describe(`ArangoAudioItemQueryRepository`, () => {
                 const result = await testQueryRepository.fetchById(audioItemId);
 
                 expect(result).not.toBe(NotFound);
-
-                const audioItemView = result as IAudioItemViewModel;
-
-                const { mediaItemId } = audioItemView;
-
-                expect(mediaItemId).toBe(mediaItemId);
             });
         });
 
