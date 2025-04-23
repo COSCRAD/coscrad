@@ -13,6 +13,7 @@ import { ArangoDatabase } from '../../../../../persistence/database/arango-datab
 import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
 import mapDatabaseDocumentToAggregateDTO from '../../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
+import { Transcript } from '../../shared/entities/transcript.entity';
 import { IAudioItemQueryRepository } from '../queries/audio-item-query-repository.interface';
 
 export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository {
@@ -109,6 +110,29 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
             .catch((reason) => {
                 throw new InternalError(`Failed to translate term via TermRepository: ${reason}`);
             });
+
+        await cursor.all();
+    }
+
+    // TODO Add a test case for this
+    async createTranscript(id: AggregateId): Promise<void> {
+        const emptyTranscript = Transcript.buildEmpty();
+
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+        UPDATE doc WITH {
+            transcript: @transcriptDto
+        } IN @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'audioItem__VIEWS',
+            id,
+            transcriptDto: emptyTranscript.toDTO(),
+        };
+
+        const cursor = await this.database.query({ query, bindVars });
 
         await cursor.all();
     }

@@ -14,6 +14,7 @@ import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../../shared/access-control/access-control-list.entity';
+import { Transcript } from '../../shared/entities/transcript.entity';
 import { AudioItemCreated } from '../commands/create-audio-item/audio-item-created.event';
 
 @CoscradDataExample<EventSourcedAudioItemViewModel>({
@@ -28,6 +29,7 @@ import { AudioItemCreated } from '../commands/create-audio-item/audio-item-creat
         mediaItemId: buildDummyUuid(55),
         mimeType: MIMEType.wav,
         lengthMilliseconds: 1234,
+        transcript: Transcript.buildEmpty(),
         text: '',
         contributions: [],
         // we need this on the playlist view as well
@@ -46,11 +48,18 @@ export class EventSourcedAudioItemViewModel {
     id: string;
     accessControlList: { allowedUserIds: string[]; allowedGroupIds: string[] };
     isPublished: boolean;
+    /**
+     * TODO Do we want a separate view model for this?
+     *
+     * TODO update `IAudioItemViewModel` in `api-interfaces`
+     */
+    transcript?: Transcript;
 
     constructor(dto: DTO<EventSourcedAudioItemViewModel>) {
         if (!dto) return;
 
-        const { id, name, contributions, mediaItemId, accessControlList, isPublished } = dto;
+        const { id, name, contributions, mediaItemId, accessControlList, isPublished, transcript } =
+            dto;
 
         this.id = id;
 
@@ -72,6 +81,10 @@ export class EventSourcedAudioItemViewModel {
             : new AccessControlList();
 
         this.isPublished = isPublished;
+
+        this.transcript = isNonEmptyObject(transcript)
+            ? new Transcript(transcript)
+            : Transcript.buildEmpty();
     }
 
     static fromAudioItemCreated({

@@ -313,4 +313,11 @@ export class Transcript extends BaseDomainModel implements ITranscript {
 
         return allErrors;
     }
+
+    public static buildEmpty() {
+        return new Transcript({
+            items: [],
+            participants: [],
+        });
+    }
 }
