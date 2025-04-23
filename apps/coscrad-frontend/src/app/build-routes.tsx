@@ -80,23 +80,6 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
             }),
         ],
         [
-            !isNullOrUndefined(externalLinks),
-            () => ({
-                path: 'Links',
-                label: 'Links',
-                element: <Links />,
-            }),
-        ],
-        [
-            additionalMaterials.length > 0,
-            () => ({
-                path: 'Additional Materials',
-                // TODO pull this label from the config
-                label: 'Additional Materials',
-                element: <AdditionalMaterials />,
-            }),
-        ],
-        [
             shouldEnableWebOfKnowledgeForResources,
             () => ({
                 path: 'TreeOfKnowledge',
@@ -138,6 +121,23 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
                 path: 'Alphabet',
                 label: 'Alphabet',
                 element: <AlphabetPage />,
+            }),
+        ],
+        [
+            additionalMaterials.length > 0,
+            () => ({
+                path: 'Additional Materials',
+                // TODO pull this label from the config
+                label: 'Additional Materials',
+                element: <AdditionalMaterials />,
+            }),
+        ],
+        [
+            !isNullOrUndefined(externalLinks),
+            () => ({
+                path: 'Links',
+                label: 'Links',
+                element: <Links />,
             }),
         ],
         {

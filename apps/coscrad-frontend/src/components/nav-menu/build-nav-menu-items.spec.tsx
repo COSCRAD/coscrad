@@ -15,13 +15,13 @@ const expectedOrder = [
     'About',
     'Resources',
     'Notes',
-    'Links',
-    'Additional Materials',
     'TreeOfKnowledge',
     'Tags',
     liveRoute,
-    'Credits',
     'Alphabet',
+    'Additional Materials',
+    'Links',
+    'Credits',
 ];
 
 const assertExpectedOrder = (info: NavItemInfo[]) => {
