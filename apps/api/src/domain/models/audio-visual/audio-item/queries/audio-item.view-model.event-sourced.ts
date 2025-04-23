@@ -1,8 +1,6 @@
 import {
     ContributorWithId,
-    IAudioItemViewModel,
     ICommandFormAndLabels,
-    IDetailQueryResult,
     IMultilingualText,
     LanguageCode,
     MIMEType,
@@ -37,7 +35,7 @@ import { AudioItemCreated } from '../commands/create-audio-item/audio-item-creat
         isPublished: false,
     },
 })
-export class EventSourcedAudioItemViewModel implements IDetailQueryResult<IAudioItemViewModel> {
+export class EventSourcedAudioItemViewModel {
     actions: ICommandFormAndLabels[];
     name: IMultilingualText;
     mediaItemId: AggregateId;
