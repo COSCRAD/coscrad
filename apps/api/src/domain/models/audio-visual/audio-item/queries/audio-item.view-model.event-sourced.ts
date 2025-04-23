@@ -53,7 +53,7 @@ export class EventSourcedAudioItemViewModel {
      *
      * TODO update `IAudioItemViewModel` in `api-interfaces`
      */
-    transcript: Transcript;
+    transcript?: Transcript;
 
     constructor(dto: DTO<EventSourcedAudioItemViewModel>) {
         if (!dto) return;
@@ -81,6 +81,10 @@ export class EventSourcedAudioItemViewModel {
             : new AccessControlList();
 
         this.isPublished = isPublished;
+
+        this.transcript = isNonEmptyObject(transcript)
+            ? new Transcript(transcript)
+            : Transcript.buildEmpty();
     }
 
     static fromAudioItemCreated({
