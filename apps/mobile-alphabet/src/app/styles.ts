@@ -69,6 +69,17 @@ export const homeScreen = StyleSheet.create({
     },
 });
 
+export const creditsScreen = StyleSheet.create({
+    page: {
+        margin: 6,
+        textAlign: 'center',
+    },
+    text: {
+        fontSize: theme.fontSizes.small,
+        color: theme.colors.text,
+    },
+});
+
 export const loadingComponent = StyleSheet.create({
     loader: {
         color: theme.colors.text,
