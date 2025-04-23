@@ -16,14 +16,12 @@ import {
 } from '@mui/material';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 import { SinglePropertyPresenter } from '../../../utils/generic-components/presenters/single-property-presenter';
-import { convertMillisecondsToSeconds } from '../utils/math';
 import { InteractiveAnnotator } from './interactive-annotator';
 
 const CREATE_NOTE_ABOUT_RESOURCE = 'CREATE_NOTE_ABOUT_RESOURCE';
 
 export const AudioItemDetailFullViewPresenter = ({
     id,
-    lengthMilliseconds,
     audioURL,
     text: plainText,
     name,
@@ -57,10 +55,11 @@ export const AudioItemDetailFullViewPresenter = ({
                     </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <SinglePropertyPresenter
+                    {/* TODO pull this from the media server */}
+                    {/* <SinglePropertyPresenter
                         display="Duration"
                         value={`${convertMillisecondsToSeconds(lengthMilliseconds)} secs`}
-                    />
+                    /> */}
                     <SinglePropertyPresenter display="Audio Url" value={audioURL} />
                 </AccordionDetails>
             </Accordion>

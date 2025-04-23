@@ -3,7 +3,6 @@ import {
     LanguageCode,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from '../../../../coscrad-cli/logging';
@@ -169,40 +168,21 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
     }
 
     async addAudio(termId: AggregateId, _languageCode: LanguageCode, audioItemId: string) {
-        /**
-         * TODO Include this in a single query below to ensure this operation
-         * is transactional.
-         */
-        const audioItemSearchResult = await this.audioItemQueryRepository.fetchById(audioItemId);
-
-        if (isNotFound(audioItemSearchResult)) {
-            this.logger.log(
-                `Failed to add audio for term: ${termId}. Audio item: ${audioItemId} not found.`
-            );
-            return;
-        }
-
-        const { mediaItemId } = audioItemSearchResult;
-
-        if (isNullOrUndefined(mediaItemId)) {
-            // TODO log error but fail gracefully
-            return;
-        }
-
         const query = `
-        FOR doc IN @@collectionName
-        FILTER doc._key == @id
-        UPDATE doc WITH {
-            mediaItemId: @mediaItemId,
-            actions: REMOVE_VALUE(doc.actions,"ADD_AUDIO_FOR_TERM")
+        FOR term IN @@collectionName
+        FILTER term._key == @id
+        FOR a IN audioItem__VIEWS
+        FILTER a._key == @audioItemId
+        UPDATE term WITH {
+            actions: REMOVE_VALUE(term.actions,"ADD_AUDIO_FOR_TERM"),
+            mediaItemId: a.mediaItemId
         } IN @@collectionName
-         RETURN OLD
         `;
 
         const bindVars = {
             '@collectionName': 'term__VIEWS',
             id: termId,
-            mediaItemId,
+            audioItemId,
         };
 
         const cursor = await this.database

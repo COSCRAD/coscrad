@@ -145,9 +145,7 @@ exports[`when querying for a playlist: fetch many (/resources/playlists) when th
       "episodes": [
         {
           "isPublished": true,
-          "lengthMilliseconds": 30456,
           "mediaItemUrl": "https:www.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100567",
-          "mimeType": "audio/mpeg",
           "name": {
             "items": [
               {
@@ -160,9 +158,7 @@ exports[`when querying for a playlist: fetch many (/resources/playlists) when th
         },
         {
           "isPublished": false,
-          "lengthMilliseconds": 30456,
           "mediaItemUrl": "https:www.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100567",
-          "mimeType": "audio/mpeg",
           "name": {
             "items": [
               {
@@ -175,9 +171,7 @@ exports[`when querying for a playlist: fetch many (/resources/playlists) when th
         },
         {
           "isPublished": false,
-          "lengthMilliseconds": 30456,
           "mediaItemUrl": "https:www.coscrad.org/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100567",
-          "mimeType": "audio/mpeg",
           "name": {
             "items": [
               {

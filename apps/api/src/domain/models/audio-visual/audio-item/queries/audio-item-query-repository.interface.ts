@@ -1,5 +1,4 @@
 import {
-    IAudioItemViewModel,
     ICommandFormAndLabels,
     IDetailQueryResult,
     IMultilingualTextItem,
@@ -7,6 +6,7 @@ import {
 import { Maybe } from '../../../../../lib/types/maybe';
 import { AggregateId } from '../../../../types/AggregateId';
 import { IPublishable } from '../../../shared/common-commands/publish-resource/resource-published.event-handler';
+import { EventSourcedAudioItemViewModel } from './audio-item.view-model.event-sourced';
 
 /**
  * TODO reconsider this. It feels awkward.
@@ -15,7 +15,7 @@ import { IPublishable } from '../../../shared/common-commands/publish-resource/r
  * denormalizing the views and we do not want to expose the tag and note joins
  * explicitly.
  */
-type IAudioItemQueryModel = IDetailQueryResult<IAudioItemViewModel> & {
+type IAudioItemQueryModel = IDetailQueryResult<EventSourcedAudioItemViewModel> & {
     actions: ICommandFormAndLabels[];
 };
 
