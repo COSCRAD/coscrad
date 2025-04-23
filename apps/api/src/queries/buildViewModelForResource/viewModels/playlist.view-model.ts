@@ -1,11 +1,8 @@
 import { AggregateType, IPlaylistEpisode } from '@coscrad/api-interfaces';
 import {
     BooleanDataType,
-    ExternalEnum,
-    MIMEType,
     NestedDataType,
     NonEmptyString,
-    NonNegativeFiniteNumber,
     ReferenceTo,
     UUID,
 } from '@coscrad/data-types';
@@ -30,9 +27,7 @@ import { DTO } from '../../../types/DTO';
         name: buildMultilingualTextWithSingleItem('Episode 1'),
         isPublished: false,
         accessControlList: new AccessControlList(),
-        mimeType: MIMEType.mp3,
         mediaItemId: buildDummyUuid(567),
-        lengthMilliseconds: 30456,
     },
 })
 export class PlaylistEpisodeViewModel {
@@ -44,31 +39,12 @@ export class PlaylistEpisodeViewModel {
     })
     name: MultilingualText;
 
-    @ExternalEnum(
-        {
-            labelsAndValues: Object.entries(MIMEType).map(([label, value]) => ({ label, value })),
-            enumLabel: 'MIME type',
-            enumName: 'MIMEType',
-        },
-        {
-            label: 'MIME type',
-            description: 'technical specification of the format of the media item',
-        }
-    )
-    mimeType: MIMEType;
-
     @ReferenceTo(AggregateType.mediaItem)
     @UUID({
         label: 'media item ID',
         description: 'system reference to the media item for this episode',
     })
     mediaItemId: AggregateId;
-
-    @NonNegativeFiniteNumber({
-        label: 'duration (ms)',
-        description: 'duration of the audio or video in milliseconds',
-    })
-    lengthMilliseconds: number;
 
     @BooleanDataType({
         label: 'is published',
@@ -83,8 +59,7 @@ export class PlaylistEpisodeViewModel {
     constructor(dto: DTO<PlaylistEpisodeViewModel>) {
         if (!dto) return;
 
-        const { name, mimeType, lengthMilliseconds, mediaItemId, accessControlList, isPublished } =
-            dto;
+        const { name, mediaItemId, accessControlList, isPublished } = dto;
 
         if (isNonEmptyObject(name)) {
             this.name = new MultilingualText(name);
@@ -95,10 +70,6 @@ export class PlaylistEpisodeViewModel {
         this.accessControlList = isNonEmptyObject(accessControlList)
             ? new AccessControlList(accessControlList)
             : new AccessControlList();
-
-        this.mimeType = mimeType;
-
-        this.lengthMilliseconds = lengthMilliseconds;
 
         this.mediaItemId = mediaItemId;
     }

@@ -1,8 +1,6 @@
 import {
     ContributorWithId,
-    IAudioItemViewModel,
     ICommandFormAndLabels,
-    IDetailQueryResult,
     IMultilingualText,
     LanguageCode,
     MIMEType,
@@ -37,56 +35,44 @@ import { AudioItemCreated } from '../commands/create-audio-item/audio-item-creat
         isPublished: false,
     },
 })
-export class EventSourcedAudioItemViewModel implements IDetailQueryResult<IAudioItemViewModel> {
+export class EventSourcedAudioItemViewModel {
     actions: ICommandFormAndLabels[];
     name: IMultilingualText;
     mediaItemId: AggregateId;
-    mimeType: MIMEType;
+    mimeType?: MIMEType;
     lengthMilliseconds: number;
     text: string;
     contributions: ContributorWithId[];
     id: string;
     accessControlList: { allowedUserIds: string[]; allowedGroupIds: string[] };
+    isPublished: boolean;
 
     constructor(dto: DTO<EventSourcedAudioItemViewModel>) {
         if (!dto) return;
 
-        const {
-            name,
-            mediaItemId,
-            mimeType,
-            lengthMilliseconds,
-            text,
-            contributions,
-            id,
-            accessControlList,
-        } = dto;
+        const { id, name, contributions, mediaItemId, accessControlList, isPublished } = dto;
 
-        if (isNonEmptyObject(accessControlList)) {
-            this.accessControlList = new AccessControlList(accessControlList);
-        } else {
-            // no priviliged access
-            this.accessControlList = new AccessControlList();
-        }
+        this.id = id;
 
         this.name = new MultilingualText(name);
 
+        // do we need to clone?
+        this.contributions = Array.isArray(contributions) ? contributions : [];
+
         this.mediaItemId = mediaItemId;
 
-        this.mimeType = mimeType;
+        /**
+         * We need to share this logic. It's not dangerous to have a single
+         * `BaseResourceViewModel` class as long as all the properties we
+         * put there are essential to the notion of a web-of-knowledge "resource"
+         * (view).
+         */
+        this.accessControlList = isNonEmptyObject(accessControlList)
+            ? new AccessControlList(accessControlList)
+            : new AccessControlList();
 
-        this.lengthMilliseconds = lengthMilliseconds;
-
-        this.text = text;
-
-        this.contributions = contributions;
-
-        this.actions = [];
-
-        this.id = id;
+        this.isPublished = isPublished;
     }
-
-    isPublished: boolean;
 
     static fromAudioItemCreated({
         payload: {
@@ -95,8 +81,6 @@ export class EventSourcedAudioItemViewModel implements IDetailQueryResult<IAudio
             languageCodeForName,
             mediaItemId,
             lengthMilliseconds,
-            // todo fix this
-            // mimeType,
         },
         meta: { contributorIds: _ },
     }: AudioItemCreated): EventSourcedAudioItemViewModel {

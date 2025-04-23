@@ -155,15 +155,11 @@ describe(`ArangoPlaylistQueryRepository`, () => {
 
             expect(episodes).toHaveLength(1);
 
-            const { mimeType, mediaItemId, lengthMilliseconds, name } = episodes[0];
+            const { mediaItemId, name } = episodes[0];
 
             expect(mediaItemId).toBe(existingAudioItem.mediaItemId);
 
-            expect(lengthMilliseconds).toBe(existingAudioItem.lengthMilliseconds);
-
             expect(name).toEqual(existingAudioItem.name);
-
-            expect(mimeType).toBe(mimeType);
         });
     });
 

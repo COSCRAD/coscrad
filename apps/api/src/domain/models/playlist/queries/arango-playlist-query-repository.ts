@@ -97,8 +97,6 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
         FILTER a._key == @audioItemId
         LET nextEpisode = {
                 name: a.name,
-                mimeType: a.mimeType,
-                lengthMilliseconds: a.lengthMilliseconds,
                 mediaItemId: a.mediaItemId
             }
         UPDATE doc WITH {

@@ -132,11 +132,9 @@ describe(`AudioItemAddedToPlaylistEventHandler`, () => {
 
             expect(episodes).toHaveLength(1);
 
-            const { name, mediaItemId, mimeType } = episodes[0];
+            const { name, mediaItemId } = episodes[0];
 
             expect(name).toEqual(existingAudioItemView.name);
-
-            expect(mimeType).toBe(existingAudioItemView.mimeType);
 
             expect(mediaItemId).toEqual(existingAudioItemView.mediaItemId);
         });
