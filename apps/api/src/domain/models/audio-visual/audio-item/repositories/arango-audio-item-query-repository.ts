@@ -1,5 +1,4 @@
 import {
-    IAudioItemViewModel,
     ICommandFormAndLabels,
     IDetailQueryResult,
     IMultilingualTextItem,
@@ -13,12 +12,14 @@ import { ArangoDatabase } from '../../../../../persistence/database/arango-datab
 import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
 import mapDatabaseDocumentToAggregateDTO from '../../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
+import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
 import { Transcript } from '../../shared/entities/transcript.entity';
+import { EventSourcedAudioItemViewModel } from '../queries';
 import { IAudioItemQueryRepository } from '../queries/audio-item-query-repository.interface';
 
 export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository {
     private readonly database: ArangoDatabaseForCollection<
-        IDetailQueryResult<IAudioItemViewModel & { actions: ICommandFormAndLabels[] }>
+        IDetailQueryResult<EventSourcedAudioItemViewModel & { actions: ICommandFormAndLabels[] }>
     >;
 
     constructor(arangoConnectionProvider: ArangoConnectionProvider) {
@@ -29,13 +30,15 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
     }
 
     async create(
-        view: IDetailQueryResult<IAudioItemViewModel> & { _actions: ICommandFormAndLabels[] }
+        view: IDetailQueryResult<EventSourcedAudioItemViewModel> & {
+            _actions: ICommandFormAndLabels[];
+        }
     ): Promise<void> {
         await this.database.create(mapEntityDTOToDatabaseDocument(view));
     }
 
     async createMany(
-        views: (IAudioItemViewModel & { actions: ICommandFormAndLabels[] } & {
+        views: (EventSourcedAudioItemViewModel & { actions: ICommandFormAndLabels[] } & {
             actions: ICommandFormAndLabels[];
         })[]
     ): Promise<void> {
@@ -54,21 +57,27 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
 
     async fetchById(
         id: AggregateId
-    ): Promise<Maybe<IAudioItemViewModel & { actions: ICommandFormAndLabels[] }>> {
+    ): Promise<Maybe<EventSourcedAudioItemViewModel & { actions: ICommandFormAndLabels[] }>> {
         const result = await this.database.fetchById(id);
 
         if (isNotFound(result)) return result;
 
         // should we rename this helper method?
-        return mapDatabaseDocumentToAggregateDTO(result) as IAudioItemViewModel & {
+        const dto = mapDatabaseDocumentToAggregateDTO(result) as EventSourcedAudioItemViewModel & {
             actions: ICommandFormAndLabels[];
         };
+
+        return EventSourcedAudioItemViewModel.fromDto(dto);
     }
 
-    async fetchMany(): Promise<(IAudioItemViewModel & { actions: ICommandFormAndLabels[] })[]> {
+    async fetchMany(): Promise<
+        (EventSourcedAudioItemViewModel & { actions: ICommandFormAndLabels[] })[]
+    > {
         const documents = await this.database.fetchMany();
 
-        return documents.map(mapDatabaseDocumentToAggregateDTO) as (IAudioItemViewModel & {
+        return documents.map(
+            mapDatabaseDocumentToAggregateDTO
+        ) as (EventSourcedAudioItemViewModel & {
             actions: ICommandFormAndLabels[];
         })[];
     }
@@ -130,6 +139,33 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
             '@collectionName': 'audioItem__VIEWS',
             id,
             transcriptDto: emptyTranscript.toDTO(),
+        };
+
+        const cursor = await this.database.query({ query, bindVars });
+
+        await cursor.all();
+    }
+
+    async addParticipant(id: AggregateId, { name, initials }: TranscriptParticipant) {
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+        let newParticipant = {
+            name: @name,
+            initials: @initials
+        }
+        update doc with {
+            transcript: MERGE(doc.transcript,{
+                participants: APPEND(doc.transcript.participants,newParticipant)
+            }) 
+        } IN @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'audioItem__VIEWS',
+            id,
+            name,
+            initials,
         };
 
         const cursor = await this.database.query({ query, bindVars });
