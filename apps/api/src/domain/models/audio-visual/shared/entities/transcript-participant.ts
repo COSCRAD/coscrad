@@ -1,7 +1,14 @@
 import { NonEmptyString } from '@coscrad/data-types';
+import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
 import BaseDomainModel from '../../../base-domain-model.entity';
 
+@CoscradDataExample<TranscriptParticipant>({
+    example: {
+        initials: 'BS',
+        name: 'Bob Smith',
+    },
+})
 export class TranscriptParticipant extends BaseDomainModel {
     @NonEmptyString({
         label: 'speaker initials',
@@ -23,5 +30,9 @@ export class TranscriptParticipant extends BaseDomainModel {
         this.initials = label;
 
         this.name = id;
+    }
+
+    public static fromDto(dto: DTO<TranscriptParticipant>) {
+        return new TranscriptParticipant(dto);
     }
 }

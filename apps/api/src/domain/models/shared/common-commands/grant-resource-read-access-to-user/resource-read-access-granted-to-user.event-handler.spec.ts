@@ -111,12 +111,6 @@ describe(`ResourceReadAccessGrantedToUserEventHandler.handle`, () => {
 
         const existingView = TermViewModel.fromTermCreated(creationEvent as TermCreated);
 
-        /**
-         * We attempted to use "handle" on a creation event for the test
-         * setup, but it failed due to an apparent race condition.
-         *
-         * We should investigate this further.
-         */
         await repositoryProvider.forResource(ResourceType.term).create(existingView);
     });
 
