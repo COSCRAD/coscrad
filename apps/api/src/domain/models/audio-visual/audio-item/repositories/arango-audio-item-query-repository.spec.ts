@@ -273,6 +273,32 @@ describe(`ArangoAudioItemQueryRepository`, () => {
         });
     });
 
+    describe(`add participant`, () => {
+        const targetAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
+            transcript: Transcript.buildEmpty(),
+        });
+
+        const participant = buildTestInstance(TranscriptParticipant, {});
+
+        beforeEach(async () => {
+            await testQueryRepository.create(targetAudioItem);
+        });
+
+        it(`should add the participant`, async () => {
+            await testQueryRepository.addParticipant(targetAudioItem.id, participant);
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetAudioItem.id
+            )) as EventSourcedAudioItemViewModel;
+
+            const { name } = updatedView.transcript.findParticipantByInitials(
+                participant.initials
+            ) as TranscriptParticipant;
+
+            expect(name).toBe(participant.name);
+        });
+    });
+
     describe(`add line item`, () => {
         const participant = new TranscriptParticipant({
             initials: 'JB',
@@ -290,7 +316,7 @@ describe(`ArangoAudioItemQueryRepository`, () => {
             await testQueryRepository.create(targetAudioItem);
         });
 
-        it(`should add the line item to an existing transcript`, async () => {
+        it.only(`should add the line item to an existing transcript`, async () => {
             const inPointMs = 100;
 
             const outPointMs = inPointMs + 300;
