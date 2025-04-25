@@ -14,14 +14,13 @@ import { ICoscradEventPublisher } from '../../../common/events/interfaces';
 import { Valid } from '../../../domainModelValidators/Valid';
 import getInstanceFactoryForResource from '../../../factories/get-instance-factory-for-resource';
 import { IMediaManagementService } from '../../../interfaces';
-import { EVENT, IIdManager } from '../../../interfaces/id-manager.interface';
+import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../repositories/interfaces/repository-provider.interface';
-import { AggregateId } from '../../../types/AggregateId';
 import { DeluxeInMemoryStore } from '../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import { AudioItem } from '../../audio-visual/audio-item/entities/audio-item.entity';
-import { BaseCommandHandler } from '../../shared/command-handlers/base-command-handler';
+import { BaseCreateCommandHandler } from '../../shared/command-handlers/base-create-command-handler';
 import UuidNotGeneratedInternallyError from '../../shared/common-command-errors/UuidNotGeneratedInternallyError';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../shared/events/types/EventRecordMetadata';
@@ -35,7 +34,7 @@ import { SongCreated } from './song-created.event';
  * This should leverage the `BaseCreateCommandHandler`
  */
 @CommandHandler(CreateSong)
-export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
+export class CreateSongCommandHandler extends BaseCreateCommandHandler<Song> {
     protected repositoryForCommandsTargetAggregate: IRepositoryForAggregate<Song>;
 
     constructor(
@@ -52,12 +51,12 @@ export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
         );
     }
 
-    async createOrFetchWriteContext({
+    protected createNewInstance({
         aggregateCompositeIdentifier: { id },
         title,
         languageCodeForTitle,
         audioItemId,
-    }: CreateSong): Promise<ResultOrError<Song>> {
+    }: CreateSong): ResultOrError<Song> {
         const songDTO: DTO<Song> = {
             id,
             title: buildMultilingualTextWithSingleItem(title, languageCodeForTitle),
@@ -71,10 +70,11 @@ export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
         return getInstanceFactoryForResource<Song>(ResourceType.song)(songDTO);
     }
 
-    actOnInstance(song: Song): ResultOrError<Song> {
-        return song;
-    }
-
+    /**
+     * TODO Optimize this by using filters to pull out only the necessary
+     * audio items. Consider if duplicate song titles should be allowed, and if so,
+     * fetch only those songs with the same title.
+     */
     async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
         const [songSearchResult, audioItemSearchResult] = await Promise.all([
             this.repositoryProvider.forResource<Song>(ResourceType.song).fetchMany(),
@@ -130,37 +130,5 @@ export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
 
     protected buildEvent(command: CreateSong, eventMeta: EventRecordMetadata): BaseEvent {
         return new SongCreated(command, eventMeta);
-    }
-
-    async persist(
-        instance: Song,
-        command: CreateSong,
-        systemUserId: AggregateId,
-        contributorIds?: AggregateId[]
-    ): Promise<void> {
-        // generate a unique ID for the event
-        const eventId = await this.idManager.generate();
-
-        await this.idManager.use({ id: eventId, type: EVENT });
-
-        /**
-         * This doesn't feel like the right place to do this. Consider tying
-         * this in with the `create` method on the repositories.
-         */
-        await this.idManager.use(command.aggregateCompositeIdentifier);
-
-        const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(
-            this.buildEvent(command, {
-                id: eventId,
-                userId: systemUserId,
-                dateCreated: Date.now(),
-                contributorIds: contributorIds || [],
-            })
-        );
-
-        // Persist the valid instance
-        await this.repositoryProvider
-            .forResource<Song>(ResourceType.song)
-            .create(instanceToPersistWithUpdatedEventHistory);
     }
 }

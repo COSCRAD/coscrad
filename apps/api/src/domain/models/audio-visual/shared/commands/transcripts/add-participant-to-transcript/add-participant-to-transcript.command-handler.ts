@@ -2,22 +2,17 @@ import { CommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
 import { EVENT_PUBLISHER_TOKEN } from '../../../../../../../domain/common';
 import { ICoscradEventPublisher } from '../../../../../../../domain/common/events/interfaces';
+import { BaseUpdateCommandHandler } from '../../../../../../../domain/models/shared/command-handlers/base-update-command-handler';
 import { InternalError } from '../../../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../../../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../../../persistence/constants/persistenceConstants';
 import { ResultOrError } from '../../../../../../../types/ResultOrError';
 import { Valid } from '../../../../../../domainModelValidators/Valid';
-import {
-    EVENT,
-    ID_MANAGER_TOKEN,
-    IIdManager,
-} from '../../../../../../interfaces/id-manager.interface';
+import { ID_MANAGER_TOKEN, IIdManager } from '../../../../../../interfaces/id-manager.interface';
 import { IRepositoryProvider } from '../../../../../../repositories/interfaces/repository-provider.interface';
-import { AggregateId } from '../../../../../../types/AggregateId';
 import { AggregateType } from '../../../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../../../types/ResourceType';
-import { BaseCommandHandler } from '../../../../../shared/command-handlers/base-command-handler';
 import AggregateNotFoundError from '../../../../../shared/common-command-errors/AggregateNotFoundError';
 import { BaseEvent } from '../../../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../../../shared/events/types/EventRecordMetadata';
@@ -28,7 +23,7 @@ import { AddParticipantToTranscript } from './add-participant-to-transcript.comm
 import { ParticipantAddedToTranscript } from './participant-added-to-transcript.event';
 
 @CommandHandler(AddParticipantToTranscript)
-export class AddParticipantToTranscriptCommandHandler extends BaseCommandHandler<
+export class AddParticipantToTranscriptCommandHandler extends BaseUpdateCommandHandler<
     AudioItem | Video
 > {
     protected aggregateType: AggregateType = AggregateType.audioItem;
@@ -87,35 +82,5 @@ export class AddParticipantToTranscriptCommandHandler extends BaseCommandHandler
         eventMeta: EventRecordMetadata
     ): BaseEvent {
         return new ParticipantAddedToTranscript(command, eventMeta);
-    }
-
-    // TODO There's still lots of overlap with the `create` command handler base- move to base class
-    protected async persist(
-        instance: AudioItem | Video,
-        command: AddParticipantToTranscript,
-        systemUserId: AggregateId,
-        contributorIds?: AggregateId[]
-    ): Promise<void> {
-        // generate a unique ID for the event
-        const eventId = await this.idManager.generate();
-
-        await this.idManager.use({ id: eventId, type: EVENT });
-
-        const event = this.buildEvent(command, {
-            id: eventId,
-            userId: systemUserId,
-            dateCreated: Date.now(),
-            contributorIds: contributorIds || [],
-        });
-
-        const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);
-
-        const {
-            aggregateCompositeIdentifier: { type: resourceType },
-        } = command;
-
-        await this.repositoryProvider
-            .forResource(resourceType)
-            .update(instanceToPersistWithUpdatedEventHistory);
     }
 }

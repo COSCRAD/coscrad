@@ -4,22 +4,17 @@ import {
     EVENT_PUBLISHER_TOKEN,
     ICoscradEventPublisher,
 } from '../../../../../../../domain/common/events/interfaces';
+import { BaseUpdateCommandHandler } from '../../../../../../../domain/models/shared/command-handlers/base-update-command-handler';
 import { InternalError } from '../../../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../../../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../../../persistence/constants/persistenceConstants';
 import { ResultOrError } from '../../../../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../../../../common/build-multilingual-text-with-single-item';
 import { Valid } from '../../../../../../domainModelValidators/Valid';
-import {
-    EVENT,
-    ID_MANAGER_TOKEN,
-    IIdManager,
-} from '../../../../../../interfaces/id-manager.interface';
+import { ID_MANAGER_TOKEN, IIdManager } from '../../../../../../interfaces/id-manager.interface';
 import { IRepositoryProvider } from '../../../../../../repositories/interfaces/repository-provider.interface';
-import { AggregateId } from '../../../../../../types/AggregateId';
 import { DeluxeInMemoryStore } from '../../../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../../../types/ResourceType';
-import { BaseCommandHandler } from '../../../../../shared/command-handlers/base-command-handler';
 import AggregateNotFoundError from '../../../../../shared/common-command-errors/AggregateNotFoundError';
 import { BaseEvent } from '../../../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../../../shared/events/types/EventRecordMetadata';
@@ -31,7 +26,7 @@ import { LineItemAddedToTranscript } from './line-item-added-to-transcript.event
 export type TranscribableResource = AudioItem | Video;
 
 @CommandHandler(AddLineItemToTranscript)
-export class AddLineItemtoTranscriptCommandHandler extends BaseCommandHandler<TranscribableResource> {
+export class AddLineItemtoTranscriptCommandHandler extends BaseUpdateCommandHandler<TranscribableResource> {
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN)
         protected readonly repositoryProvider: IRepositoryProvider,
@@ -88,42 +83,5 @@ export class AddLineItemtoTranscriptCommandHandler extends BaseCommandHandler<Tr
         eventMeta: EventRecordMetadata
     ): BaseEvent {
         return new LineItemAddedToTranscript(command, eventMeta);
-    }
-
-    /**
-     * TODO Introduce an `upsert` method on our repositories and then we can share
-     * `persist` method with the base command handler across all commands.
-     *
-     * Note that if we move to true CQRS-ES, we will simply publish the event
-     * (which will write to the command db then trigger publishing it to view
-     * subscribers via messaging queue).
-     */
-    protected async persist(
-        instance: TranscribableResource,
-        command: AddLineItemToTranscript,
-        systemUserId: AggregateId,
-        contributorIds?: AggregateId[]
-    ): Promise<void> {
-        // generate a unique ID for the event
-        const eventId = await this.idManager.generate();
-
-        await this.idManager.use({ id: eventId, type: EVENT });
-
-        const event = this.buildEvent(command, {
-            id: eventId,
-            userId: systemUserId,
-            dateCreated: Date.now(),
-            contributorIds: contributorIds || [],
-        });
-
-        const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);
-
-        const {
-            aggregateCompositeIdentifier: { type: resourceType },
-        } = command;
-
-        await this.repositoryProvider
-            .forResource(resourceType)
-            .update(instanceToPersistWithUpdatedEventHistory);
     }
 }
