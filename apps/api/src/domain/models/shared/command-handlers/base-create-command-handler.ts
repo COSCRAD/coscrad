@@ -6,8 +6,6 @@ import { isNotFound } from '../../../../lib/types/not-found';
 import { isOK } from '../../../../lib/types/ok';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid } from '../../../domainModelValidators/Valid';
-import { EVENT } from '../../../interfaces/id-manager.interface';
-import { AggregateId } from '../../../types/AggregateId';
 import { Aggregate } from '../../aggregate.entity';
 import UuidNotAvailableForUseError from '../common-command-errors/UuidNotAvailableForUseError';
 import UuidNotGeneratedInternallyError from '../common-command-errors/UuidNotGeneratedInternallyError';
@@ -37,52 +35,6 @@ export abstract class BaseCreateCommandHandler<
         return instance;
     }
 
-    protected async persist(
-        instance: TAggregate,
-        command: ICommandBase,
-        userId: AggregateId,
-        contributorIds: AggregateId[]
-    ): Promise<void> {
-        /**
-         * TODO [https://www.pivotaltracker.com/story/show/182597855]
-         *
-         * This doesn't feel like the right place to do this. Consider tying
-         * this in with the `create` method on the repositories.
-         */
-        await this.idManager.use(command.aggregateCompositeIdentifier);
-
-        // generate a unique ID for the event
-        const eventId = await this.idManager.generate();
-
-        await this.idManager.use({ id: eventId, type: EVENT });
-
-        const event = this.buildEvent(command, {
-            id: eventId,
-            userId,
-            dateCreated: Date.now(),
-            contributorIds,
-        });
-
-        const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);
-
-        // Persist the valid instance
-        await this.getRepositoryForCommand(command)
-            .create(instanceToPersistWithUpdatedEventHistory)
-            .catch((e) => {
-                throw new InternalError(`failed to create new aggregate root in command handler`, [
-                    new InternalError(e?.message || 'unknown repository error'),
-                ]);
-            });
-
-        /**
-         * TODO
-         * 1. Share this logic with the base-update-command handler
-         * 2. Move event publication out of process by pulling events from the
-         * command database and publishing via a proper messaging queue.
-         */
-        this.eventPublisher.publish(event);
-    }
-
     /**
      * Where should we do this? It seems natural to do this as part of the
      * `create` call to the repository.
@@ -109,5 +61,15 @@ export abstract class BaseCreateCommandHandler<
         }
 
         return Valid;
+    }
+
+    protected async persistToDatabase(instance: TAggregate): Promise<void> {
+        const aggregateCompositeIdentifier = instance.getCompositeIdentifier();
+
+        await this.idManager.use(aggregateCompositeIdentifier);
+
+        await this.getRepositoryForCommand({
+            aggregateCompositeIdentifier,
+        }).create(instance);
     }
 }

@@ -1,8 +1,6 @@
 import { ICommandBase } from '@coscrad/api-interfaces';
 import { isNotFound } from '../../../../lib/types/not-found';
 import { ResultOrError } from '../../../../types/ResultOrError';
-import { EVENT } from '../../../interfaces/id-manager.interface';
-import { AggregateId } from '../../../types/AggregateId';
 import { Aggregate } from '../../aggregate.entity';
 import AggregateNotFoundError from '../common-command-errors/AggregateNotFoundError';
 import { BaseCommandHandler } from './base-command-handler';
@@ -34,37 +32,9 @@ export abstract class BaseUpdateCommandHandler<
         return this.fetchInstanceToUpdate(command);
     }
 
-    // TODO There's still lots of overlap with the `create` command handler base- move to base class
-    protected async persist(
-        instance: TAggregate,
-        command: ICommandBase,
-        systemUserId: AggregateId,
-        contributorIds?: AggregateId[]
-    ): Promise<void> {
-        // generate a unique ID for the event
-        const eventId = await this.idManager.generate();
-
-        await this.idManager.use({ id: eventId, type: EVENT });
-
-        const event = this.buildEvent(command, {
-            id: eventId,
-            userId: systemUserId,
-            dateCreated: Date.now(),
-            contributorIds: contributorIds || [],
-        });
-
-        const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);
-
-        await this.getRepositoryForCommand(command).update(
-            instanceToPersistWithUpdatedEventHistory
-        );
-
-        /**
-         * TODO
-         * 1. Share this logic with the base-create-command handler
-         * 2. Move event publication out of process by pulling events from the
-         * command database and publishing via a proper messaging queue.
-         */
-        this.eventPublisher.publish(event);
+    protected async persistToDatabase(instance: TAggregate): Promise<void> {
+        await this.getRepositoryForCommand({
+            aggregateCompositeIdentifier: instance.getCompositeIdentifier(),
+        }).update(instance);
     }
 }
