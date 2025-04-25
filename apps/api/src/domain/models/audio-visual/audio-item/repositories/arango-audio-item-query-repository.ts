@@ -12,8 +12,8 @@ import { ArangoDatabase } from '../../../../../persistence/database/arango-datab
 import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
 import mapDatabaseDocumentToAggregateDTO from '../../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
-import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
 import { Transcript } from '../../shared/entities/transcript.entity';
+import { TranscriptLineItemDto } from '../commands';
 import { EventSourcedAudioItemViewModel } from '../queries';
 import { IAudioItemQueryRepository } from '../queries/audio-item-query-repository.interface';
 
@@ -146,26 +146,25 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
         await cursor.all();
     }
 
-    async addParticipant(id: AggregateId, { name, initials }: TranscriptParticipant) {
+    async addLineItem(id: AggregateId, lineItem: TranscriptLineItemDto): Promise<void> {
         const query = `
         FOR doc IN @@collectionName
         FILTER doc._key == @id
-        let newParticipant = {
-            name: @name,
-            initials: @initials
+        let newLineItem = {
+            lineItem: @lineItem
         }
+
         update doc with {
             transcript: MERGE(doc.transcript,{
-                participants: APPEND(doc.transcript.participants,newParticipant)
-            }) 
+                lineItem: APPEND(doc.transcript.items, newLineItem)
+            })
         } IN @@collectionName
         `;
 
         const bindVars = {
             '@collectionName': 'audioItem__VIEWS',
             id,
-            name,
-            initials,
+            lineItem,
         };
 
         const cursor = await this.database.query({ query, bindVars });

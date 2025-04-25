@@ -273,29 +273,47 @@ describe(`ArangoAudioItemQueryRepository`, () => {
         });
     });
 
-    describe(`add participant`, () => {
-        const targetAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
-            transcript: Transcript.buildEmpty(),
+    describe(`add line item`, () => {
+        const participant = new TranscriptParticipant({
+            initials: 'JB',
+            name: 'Johnny Blaze',
         });
 
-        const participant = buildTestInstance(TranscriptParticipant, {});
+        const targetAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
+            transcript: new Transcript({
+                participants: [participant],
+                items: [],
+            }),
+        });
 
         beforeEach(async () => {
             await testQueryRepository.create(targetAudioItem);
         });
 
-        it(`should add the participant`, async () => {
-            await testQueryRepository.addParticipant(targetAudioItem.id, participant);
+        it(`should add the line item to an existing transcript`, async () => {
+            const inPointMs = 100;
+
+            const outPointMs = inPointMs + 300;
+
+            const text = 'this is what was said';
+
+            const languageCode = LanguageCode.English;
+
+            await testQueryRepository.addLineItem(targetAudioItem.id, {
+                inPointMilliseconds: inPointMs,
+                outPointMilliseconds: outPointMs,
+                text,
+                languageCode,
+                speakerInitials: participant.initials,
+            });
 
             const updatedView = (await testQueryRepository.fetchById(
                 targetAudioItem.id
             )) as EventSourcedAudioItemViewModel;
 
-            const { name } = updatedView.transcript.findParticipantByInitials(
-                participant.initials
-            ) as TranscriptParticipant;
+            const numberOfItems = updatedView.transcript.countLineItems();
 
-            expect(name).toBe(participant.name);
+            expect(numberOfItems).toBe(1);
         });
     });
 });
