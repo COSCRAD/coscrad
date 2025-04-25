@@ -12,7 +12,7 @@ import { REPOSITORY_PROVIDER_TOKEN } from '../../../../persistence/constants/per
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { EVENT_PUBLISHER_TOKEN, ICoscradEventPublisher } from '../../../common/events/interfaces';
 import { Valid } from '../../../domainModelValidators/Valid';
-import { IIdManager } from '../../../interfaces/id-manager.interface';
+import { EVENT, IIdManager } from '../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../repositories/interfaces/repository-provider.interface';
 import { AggregateId } from '../../../types/AggregateId';
@@ -32,6 +32,10 @@ export type CoscradCommandMeta = Pick<EventRecordMetadata, 'userId'> & {
     contributorIds?: AggregateId[];
 };
 
+interface HasAggregateCompositeIdentifier {
+    [AGGREGATE_COMPOSITE_IDENTIFIER]: AggregateCompositeIdentifier;
+}
+
 export abstract class BaseCommandHandler<TAggregate extends Aggregate> implements ICommandHandler {
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN)
@@ -47,7 +51,7 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
     }
 
     protected getRepositoryForCommand<T extends Aggregate = Aggregate>(
-        command: ICommandBase
+        command: HasAggregateCompositeIdentifier
     ): IRepositoryForAggregate<T> {
         const { type: aggregateType } = this.getAggregateIdFromCommand(command);
 
@@ -108,19 +112,46 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
         instance: TAggregate
     ): Valid | InternalError;
 
+    // can we make this `buildEvents` now?
     protected abstract buildEvent(
         // Make this base event payload
         payload: ICommand,
         eventMeta: EventRecordMetadata
     ): BaseEvent;
 
-    protected abstract persist(
+    protected abstract persistToDatabase(instance: TAggregate): Promise<void>;
+
+    protected async persist(
         instance: TAggregate,
-        // Make this base event payload
-        payload: ICommand,
+        command: ICommandBase,
         userId: AggregateId,
         contributorIds: AggregateId[]
-    ): Promise<void>;
+    ): Promise<void> {
+        // generate a unique ID for the event
+        const eventId = await this.idManager.generate();
+
+        await this.idManager.use({ id: eventId, type: EVENT });
+
+        const event = this.buildEvent(command, {
+            id: eventId,
+            userId,
+            dateCreated: Date.now(),
+            contributorIds,
+        });
+
+        const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);
+
+        // Persist the valid instance
+        await this.persistToDatabase(instanceToPersistWithUpdatedEventHistory);
+
+        /**
+         * TODO
+         * 1. Share this logic with the base-update-command handler
+         * 2. Move event publication out of process by pulling events from the
+         * command database and publishing via a proper messaging queue.
+         */
+        this.eventPublisher.publish(event);
+    }
 
     /**
      * This is a catch-all in case there's some presently unforeseen validation
