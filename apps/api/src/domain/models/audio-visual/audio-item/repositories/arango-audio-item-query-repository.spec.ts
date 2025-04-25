@@ -21,7 +21,10 @@ import { ArangoDatabaseProvider } from '../../../../../persistence/database/data
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { TestEventStream } from '../../../../../test-data/events';
+import { buildTestInstance } from '../../../../../test-data/utilities';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
+import { Transcript } from '../../shared/entities/transcript.entity';
 import { AudioItemCreated } from '../commands/create-audio-item/audio-item-created.event';
 import { EventSourcedAudioItemViewModel } from '../queries';
 import { IAudioItemQueryRepository } from '../queries/audio-item-query-repository.interface';
@@ -267,6 +270,32 @@ describe(`ArangoAudioItemQueryRepository`, () => {
             )) as EventSourcedAudioItemViewModel;
 
             expect(updatedView.transcript).toBeTruthy();
+        });
+    });
+
+    describe(`add participant`, () => {
+        const targetAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
+            transcript: Transcript.buildEmpty(),
+        });
+
+        const participant = buildTestInstance(TranscriptParticipant, {});
+
+        beforeEach(async () => {
+            await testQueryRepository.create(targetAudioItem);
+        });
+
+        it(`should add the participant`, async () => {
+            await testQueryRepository.addParticipant(targetAudioItem.id, participant);
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetAudioItem.id
+            )) as EventSourcedAudioItemViewModel;
+
+            const { name } = updatedView.transcript.findParticipantByInitials(
+                participant.initials
+            ) as TranscriptParticipant;
+
+            expect(name).toBe(participant.name);
         });
     });
 });
