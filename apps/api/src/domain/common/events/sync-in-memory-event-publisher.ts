@@ -7,7 +7,7 @@ import { ICoscradEvent } from './coscrad-event.interface';
 import { ICoscradEventPublisher } from './interfaces';
 
 export class SyncInMemoryEventPublisher implements ICoscradEventPublisher {
-    private eventTypeToConsumers = new Map<string, ICoscradEventHandler[]>();
+    private eventConsumers = new Set<ICoscradEventHandler>();
 
     constructor(@Inject(COSCRAD_LOGGER_TOKEN) private readonly logger: ICoscradLogger) {}
 
@@ -17,21 +17,15 @@ export class SyncInMemoryEventPublisher implements ICoscradEventPublisher {
         for (const e of events) {
             const { type: eventType } = e;
 
-            const handlers = this.eventTypeToConsumers.get(eventType);
-
-            if (typeof handlers === 'undefined' || handlers.length === 0) {
-                this.logger.log(
-                    `There are no event consumers registered for events of the type: ${eventType}`
-                );
-
-                continue;
-            }
-
-            for (const handler of handlers) {
+            for (const handler of this.eventConsumers.values()) {
                 if (!isFunction(handler.handle)) {
                     this.logger.log(
                         `Encountered an invalid handler (missing a handle method) for event of type: ${eventType}`
                     );
+                }
+
+                if (!(handler as unknown as { handles(e: any): boolean }).handles(e)) {
+                    continue;
                 }
 
                 await this.handleWithRetries(e, handler);
@@ -39,25 +33,11 @@ export class SyncInMemoryEventPublisher implements ICoscradEventPublisher {
         }
     }
 
-    register(eventType: string, eventConsumer: ICoscradEventHandler): void {
-        if (!this.eventTypeToConsumers.has(eventType)) {
-            this.eventTypeToConsumers.set(eventType, []);
+    register(eventConsumer: ICoscradEventHandler): void {
+        // we want to make sure registration is idempotent so events are only handled once per handler (if matched)
+        if (!this.eventConsumers.has(eventConsumer)) {
+            this.eventConsumers.add(eventConsumer);
         }
-
-        /**
-         * We want registration to be idempotent in case this module is somehow
-         * initialized multiple times.
-         */
-        if (!this.has(eventType, eventConsumer))
-            this.eventTypeToConsumers.get(eventType).push(eventConsumer);
-    }
-
-    private has(eventType: string, eventConsumer: ICoscradEventHandler) {
-        return (
-            this.eventTypeToConsumers.has(eventType) &&
-            // Compare by reference
-            this.eventTypeToConsumers.get(eventType).some((handler) => handler === eventConsumer)
-        );
     }
 
     private async handleWithRetries(

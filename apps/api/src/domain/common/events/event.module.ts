@@ -49,18 +49,13 @@ export class EventModule {
                 getCoscradEventConsumerMeta(Object.getPrototypeOf(provider.instance).constructor),
             ]);
 
-        const handlersAndTypes = allInstancesAndMeta
-            .filter(
-                (
-                    instanceAndMeta
-                ): instanceAndMeta is [ICoscradEventHandler, CoscradEventConsumerMetadata] =>
-                    !isNotFound(instanceAndMeta[1])
-            )
-            .map(([handler, { type: eventType }]): [ICoscradEventHandler, string] => [
-                handler,
-                eventType,
-            ]);
+        const handlersAndTypes = allInstancesAndMeta.filter(
+            (
+                instanceAndMeta
+            ): instanceAndMeta is [ICoscradEventHandler, CoscradEventConsumerMetadata] =>
+                !isNotFound(instanceAndMeta[1])
+        );
 
-        handlersAndTypes.forEach(([handler, type]) => this.eventPublisher.register(type, handler));
+        handlersAndTypes.forEach(([handler, _type]) => this.eventPublisher.register(handler));
     }
 }
