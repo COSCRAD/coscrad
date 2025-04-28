@@ -25,6 +25,8 @@ import {
 import { AudioItemCreated } from '../audio-item/commands/create-audio-item/audio-item-created.event';
 import { AudioItemCreatedEventHandler } from '../audio-item/commands/create-audio-item/audio-item-created.event-handler';
 import { AudioItemNameTranslated } from '../audio-item/commands/translate-audio-item-name/audio-item-name-translated-event';
+import { LineItemAddedToTranscript } from '../shared/commands/transcripts/add-line-item-to-transcript/line-item-added-to-transcript.event';
+import { LineItemAddedToTranscriptEventHandler } from '../shared/commands/transcripts/add-line-item-to-transcript/line-item-added-to-transcript.event-handler';
 import { ParticipantAddedToTranscript } from '../shared/commands/transcripts/add-participant-to-transcript/participant-added-to-transcript.event';
 import { ParticipantAddedToTranscriptEventHandler } from '../shared/commands/transcripts/add-participant-to-transcript/participant-added-to-transcript.event-handler';
 import { TranscriptCreated } from '../shared/commands/transcripts/create-transcript/transcript-created.event';
@@ -75,6 +77,7 @@ import { VideoController } from './video.controller';
             AudioItemNameTranslated,
             TranscriptCreated,
             ParticipantAddedToTranscript,
+            LineItemAddedToTranscript,
         ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
@@ -84,6 +87,7 @@ import { VideoController } from './video.controller';
         AudioItemNameTranslatedEventHandler,
         TranscriptCreatedEventHandler,
         ParticipantAddedToTranscriptEventHandler,
+        LineItemAddedToTranscriptEventHandler,
     ],
     exports: [AudioItemQueryService, VideoQueryService],
 })
