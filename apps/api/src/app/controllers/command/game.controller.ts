@@ -1,3 +1,4 @@
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Controller, Get, Param, UseFilters, UseInterceptors } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AggregateId } from '../../../domain/types/AggregateId';
@@ -16,6 +17,30 @@ import {
 type GameDto = {
     id: AggregateId;
     name: string;
+};
+
+interface Sequential {
+    sequence_number: string;
+}
+
+interface Alphabet extends GameDto {
+    data: {
+        alphabet_cards: Sequential[];
+    };
+}
+
+const isAlphabet = (input: unknown): input is Alphabet => {
+    if (isNullOrUndefined(input)) return false;
+
+    const { data } = input as Alphabet;
+
+    if (isNullOrUndefined(data)) return false;
+
+    const { alphabet_cards: alphabetCards } = data;
+
+    if (!Array.isArray(alphabetCards)) return false;
+
+    return alphabetCards.length > 0 && isNonEmptyString(alphabetCards[0].sequence_number);
 };
 
 /**
@@ -54,9 +79,25 @@ export class GameController {
         // Note that we bypass any kind of repository \ validation layers for this quick-and-dirty support for legacy data
         const allGames = await this.gamesDatabase.fetchMany();
 
+        /**
+         * Note that this is not efficient, but we should never have more than a few
+         * documents or else it's time to have a proper backend for this data.
+         */
         const searchResult = allGames.find(({ name }) => nameToFind === name);
 
         if (isNullOrUndefined(searchResult)) return NotFound;
+
+        if (isAlphabet(searchResult)) {
+            const sortedCards = searchResult.data.alphabet_cards.sort(
+                (a, b) => Number.parseInt(a.sequence_number) - Number.parseInt(b.sequence_number)
+            );
+
+            delete searchResult.data.alphabet_cards;
+
+            searchResult.data.alphabet_cards = sortedCards;
+
+            return searchResult;
+        }
 
         /**
          * We are skipping any  kind of view layer here. We can add a data model
