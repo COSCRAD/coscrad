@@ -23,6 +23,7 @@ import generateDatabaseNameForTestSuite from '../../../../../persistence/reposit
 import { TestEventStream } from '../../../../../test-data/events';
 import { buildTestInstance } from '../../../../../test-data/utilities';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { AccessControlList } from '../../../shared/access-control/access-control-list.entity';
 import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
 import { Transcript } from '../../shared/entities/transcript.entity';
 import { AudioItemCreated } from '../commands/create-audio-item/audio-item-created.event';
@@ -252,6 +253,29 @@ describe(`ArangoAudioItemQueryRepository`, () => {
             )) as EventSourcedAudioItemViewModel;
 
             expect(updatedView.isPublished).toBe(true);
+        });
+    });
+
+    describe(`allowUser`, () => {
+        const targetAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
+            // empty to start
+            accessControlList: new AccessControlList(),
+        });
+
+        const testUserId = buildDummyUuid(109);
+
+        beforeEach(async () => {
+            await testQueryRepository.create(targetAudioItem);
+        });
+
+        it(`should add the user to the query ACL`, async () => {
+            await testQueryRepository.allowUser(targetAudioItem.id, testUserId);
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetAudioItem.id
+            )) as EventSourcedAudioItemViewModel;
+
+            expect(updatedView.accessControlList.canUser(testUserId)).toBe(true);
         });
     });
 
