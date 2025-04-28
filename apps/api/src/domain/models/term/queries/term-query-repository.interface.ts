@@ -2,6 +2,7 @@ import { IMultilingualTextItem, LanguageCode } from '@coscrad/api-interfaces';
 import { Observable } from 'rxjs';
 import { Maybe } from '../../../../lib/types/maybe';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
+import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { AggregateId } from '../../../types/AggregateId';
 import { IAccessible } from '../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
 import { IPublishable } from '../../shared/common-commands/publish-resource/resource-published.event-handler';
@@ -49,4 +50,10 @@ export interface ITermQueryRepository extends IAccessible, IPublishable {
     addAudio(id: AggregateId, languageCode: LanguageCode, audioItemId: string): Promise<void>;
 
     count(): Promise<number>;
+
+    indexVocabularyList(
+        id: string,
+        vocabularyListId: string,
+        vocabularyListName: MultilingualText
+    ): Promise<void>;
 }

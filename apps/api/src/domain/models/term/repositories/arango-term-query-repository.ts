@@ -1,4 +1,5 @@
 import {
+    IMultilingualText,
     IMultilingualTextItem,
     LanguageCode,
     MultilingualTextItemRole,
@@ -245,5 +246,32 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
 
     subscribeToUpdates(): Observable<{ data: { type: string } }> {
         return this.database.getViewUpdateNotifications();
+    }
+
+    async indexVocabularyList(
+        id: AggregateId,
+        vocabularyListId: AggregateId,
+        _vocabularyListName: IMultilingualText
+    ): Promise<void> {
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @termId
+        FOR vlDoc IN vocabularyList__VIEWS
+        FILTER vlDoc._key == @vocabularyListId
+        UPDATE doc with { vocabularyLists: APPEND(doc.vocabularyLists,{ id: @vocabularyListId, name: vlDoc.name }) }
+        IN @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'term__VIEWS',
+            termId: id,
+            vocabularyListId,
+        };
+
+        await this.database.query({ query, bindVars }).catch((reason) => {
+            throw new InternalError(
+                `Failed to register vocabulary list for term via TermRepository: ${reason}`
+            );
+        });
     }
 }

@@ -16,9 +16,12 @@ import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/uti
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoRepositoryForAggregate } from '../../../../persistence/repositories/arango-repository-for-aggregate';
+import { VocabularyListViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { TestEventStream } from '../../../../test-data/events';
+import { buildTestInstance } from '../../../../test-data/utilities';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
+import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import buildInstanceFactory from '../../../factories/utilities/buildInstanceFactory';
@@ -31,12 +34,16 @@ import { ArangoAudioItemQueryRepository } from '../../audio-visual/audio-item/re
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import { CoscradContributor } from '../../user-management/contributor';
 import { FullName } from '../../user-management/user/entities/user/full-name.entity';
+import { IVocabularyListQueryRepository } from '../../vocabulary-list/queries';
+import { ArangoVocabularyListQueryRepository } from '../../vocabulary-list/repositories';
 import { PromptTermCreated } from '../commands';
 import { ITermQueryRepository } from '../queries/term-query-repository.interface';
 import { ArangoTermQueryRepository } from './arango-term-query-repository';
 
 describe(`ArangoTermQueryRepository`, () => {
     let testQueryRepository: ITermQueryRepository;
+
+    let vocabularyListQueryRepository: IVocabularyListQueryRepository;
 
     let audioItemQueryRepository: IAudioItemQueryRepository;
 
@@ -75,6 +82,11 @@ describe(`ArangoTermQueryRepository`, () => {
         testQueryRepository = new ArangoTermQueryRepository(
             connectionProvider,
             audioItemQueryRepository,
+            new ConsoleCoscradCliLogger()
+        );
+
+        vocabularyListQueryRepository = new ArangoVocabularyListQueryRepository(
+            connectionProvider,
             new ConsoleCoscradCliLogger()
         );
 
@@ -152,6 +164,7 @@ describe(`ArangoTermQueryRepository`, () => {
             ],
             isPublished: false,
             accessControlList: new AccessControlList(),
+            vocabularyLists: [],
         })
     );
 
@@ -540,6 +553,52 @@ describe(`ArangoTermQueryRepository`, () => {
             expect(contributionForFirstUser.fullName).toBe(
                 `${expectedFullName.firstName} ${expectedFullName.lastName}`
             );
+        });
+    });
+
+    describe(`indexVocabularyList`, () => {
+        describe(`when the vocabulary list exists`, () => {
+            const vocabularyListId = buildDummyUuid(596);
+
+            const vocabularyListName = buildMultilingualTextFromBilingualText(
+                { text: 'vl name', languageCode: LanguageCode.Chilcotin },
+                { text: 'vl name (translated to English', languageCode: LanguageCode.English }
+            );
+
+            const vocabularyListView = buildTestInstance(VocabularyListViewModel, {
+                id: vocabularyListId,
+                name: vocabularyListName,
+            });
+
+            const targetTerm = termViews[0];
+
+            beforeEach(async () => {
+                await databaseProvider.clearViews();
+
+                await databaseProvider.getDatabaseForCollection('contributors').clear();
+
+                await testQueryRepository.create(targetTerm);
+
+                await vocabularyListQueryRepository.create(vocabularyListView);
+            });
+
+            it(`should update the view with a reference to the associated vocabulary list`, async () => {
+                await testQueryRepository.indexVocabularyList(
+                    targetTerm.id,
+                    vocabularyListId,
+                    vocabularyListName
+                );
+
+                const { vocabularyLists } = (await testQueryRepository.fetchById(
+                    targetTerm.id
+                )) as TermViewModel;
+
+                expect(vocabularyLists).toHaveLength(1);
+
+                expect(vocabularyLists[0].id).toBe(vocabularyListId);
+
+                expect(vocabularyLists[0].name.toString()).toBe(vocabularyListName.toString());
+            });
         });
     });
 });
