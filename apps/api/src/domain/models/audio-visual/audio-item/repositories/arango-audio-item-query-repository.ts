@@ -3,6 +3,7 @@ import {
     IDetailQueryResult,
     IMultilingualTextItem,
 } from '@coscrad/api-interfaces';
+import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../../lib/types/maybe';
@@ -12,8 +13,11 @@ import { ArangoDatabase } from '../../../../../persistence/database/arango-datab
 import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
 import mapDatabaseDocumentToAggregateDTO from '../../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
+import { ArangoResourceQueryBuilder } from '../../../term/repositories/arango-resource-query-builder';
+import { TranscriptItem } from '../../shared/entities/transcript-item.entity';
 import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
 import { Transcript } from '../../shared/entities/transcript.entity';
+import { TranscriptLineItemDto } from '../commands';
 import { EventSourcedAudioItemViewModel } from '../queries';
 import { IAudioItemQueryRepository } from '../queries/audio-item-query-repository.interface';
 
@@ -21,6 +25,8 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
     private readonly database: ArangoDatabaseForCollection<
         IDetailQueryResult<EventSourcedAudioItemViewModel & { actions: ICommandFormAndLabels[] }>
     >;
+
+    private readonly baseResourceQueryBuilder = new ArangoResourceQueryBuilder('audioItem__VIEWS');
 
     constructor(arangoConnectionProvider: ArangoConnectionProvider) {
         this.database = new ArangoDatabaseForCollection(
@@ -173,7 +179,46 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
         await cursor.all();
     }
 
+    async addLineItem(
+        id: AggregateId,
+        {
+            speakerInitials,
+            inPointMilliseconds,
+            outPointMilliseconds,
+            text,
+            languageCode,
+        }: TranscriptLineItemDto
+    ): Promise<void> {
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+
+        update doc with {
+            transcript: MERGE(doc.transcript,{
+                items: APPEND(doc.transcript.items, @lineItem)
+            })
+        } IN @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'audioItem__VIEWS',
+            id,
+            lineItem: new TranscriptItem({
+                text: buildMultilingualTextWithSingleItem(text, languageCode),
+                inPointMilliseconds,
+                outPointMilliseconds,
+                speakerInitials,
+            }),
+        };
+
+        await this.database.query({ query, bindVars });
+    }
+
     async count(): Promise<number> {
         return this.database.getCount();
+    }
+
+    async allowUser(aggregateId: AggregateId, userId: AggregateId): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.allowUser(aggregateId, userId));
     }
 }

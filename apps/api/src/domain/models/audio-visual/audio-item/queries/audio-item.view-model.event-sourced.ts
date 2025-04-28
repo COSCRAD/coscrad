@@ -46,7 +46,7 @@ export class EventSourcedAudioItemViewModel {
     text: string;
     contributions: ContributorWithId[];
     id: string;
-    accessControlList: { allowedUserIds: string[]; allowedGroupIds: string[] };
+    accessControlList: AccessControlList;
     isPublished: boolean;
     /**
      * TODO Do we want a separate view model for this?
@@ -82,9 +82,11 @@ export class EventSourcedAudioItemViewModel {
 
         this.isPublished = isPublished;
 
-        this.transcript = isNonEmptyObject(transcript)
-            ? new Transcript(transcript)
-            : Transcript.buildEmpty();
+        if (isNonEmptyObject(transcript)) {
+            this.transcript = new Transcript(transcript);
+        } else {
+            this.transcript = Transcript.buildEmpty();
+        }
     }
 
     static fromAudioItemCreated({

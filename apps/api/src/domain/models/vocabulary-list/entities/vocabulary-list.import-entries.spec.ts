@@ -134,7 +134,7 @@ describe(`VocabularyList.importEntries`, () => {
         });
 
         describe(`when one of the property values is not in the allowed list`, () => {
-            it.only(`should fail`, () => {
+            it(`should fail`, () => {
                 const invalidValue = 'not-known';
 
                 const result = vocabularyList.importEntries(
