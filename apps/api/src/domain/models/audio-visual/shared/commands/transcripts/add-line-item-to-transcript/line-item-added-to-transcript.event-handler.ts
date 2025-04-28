@@ -1,5 +1,5 @@
 import { Inject } from '@nestjs/common';
-import { ICoscradEventHandler } from '../../../../../../../domain/common';
+import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../../../domain/common';
 import { QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../../../../../../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
 import { AggregateId } from '../../../../../../../domain/types/AggregateId';
 import { AudiovisualResourceType } from '../../../../audio-item/entities/audio-item-composite-identifier';
@@ -14,6 +14,7 @@ interface IAudiovisualItemQueryRepositoryProvider<T extends IRepository = IRepos
     forResource(audiovisualResourceType: AudiovisualResourceType): T;
 }
 
+@CoscradEventConsumer('LINE_ITEM_ADDED_TO_TRANSCRIPT')
 export class LineItemAddedToTranscriptEventHandler implements ICoscradEventHandler {
     constructor(
         @Inject(QUERY_REPOSITORY_PROVIDER_TOKEN)
