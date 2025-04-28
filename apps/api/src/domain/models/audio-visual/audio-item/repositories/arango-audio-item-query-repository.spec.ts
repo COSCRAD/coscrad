@@ -316,7 +316,7 @@ describe(`ArangoAudioItemQueryRepository`, () => {
             await testQueryRepository.create(targetAudioItem);
         });
 
-        it.only(`should add the line item to an existing transcript`, async () => {
+        it(`should add the line item to an existing transcript`, async () => {
             const inPointMs = 100;
 
             const outPointMs = inPointMs + 300;
