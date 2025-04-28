@@ -4,6 +4,7 @@
     "apiUrl": "http://10.0.2.2:3131/api/games/alphabet-english/",
     "apiUrlPrefix": "http://10.0.2.2:3131/api/resources/mediaitems/download?name=",
     "appImage": "https://website.ca/app_image.png",
+    "coscradImageUrl": "https://website.ca/coscrad_image.png",
     "appName": "English Alphabet",
     "language": "English",
     "credits": "John Doe"
