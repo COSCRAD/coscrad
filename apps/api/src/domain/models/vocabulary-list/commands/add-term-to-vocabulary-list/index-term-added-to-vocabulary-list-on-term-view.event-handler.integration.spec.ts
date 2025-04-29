@@ -109,8 +109,7 @@ describe(`IndexTermAddedToVocabularyListEventHandlerOnTermView.handle`, () => {
         );
 
         eventHandler = new IndexTermAddedToVocabularyListOnTermViewEventHandler(
-            termQueryRepository,
-            testVocabularyListQueryRepository
+            termQueryRepository
         );
     });
 

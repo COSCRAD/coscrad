@@ -583,11 +583,7 @@ describe(`ArangoTermQueryRepository`, () => {
             });
 
             it(`should update the view with a reference to the associated vocabulary list`, async () => {
-                await testQueryRepository.indexVocabularyList(
-                    targetTerm.id,
-                    vocabularyListId,
-                    vocabularyListName
-                );
+                await testQueryRepository.indexVocabularyList(targetTerm.id, vocabularyListId);
 
                 const { vocabularyLists } = (await testQueryRepository.fetchById(
                     targetTerm.id

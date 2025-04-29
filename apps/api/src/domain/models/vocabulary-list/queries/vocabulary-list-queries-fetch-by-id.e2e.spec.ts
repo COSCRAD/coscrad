@@ -74,6 +74,7 @@ const publishedTerm: TermViewModel = TermViewModel.fromDto({
         }
     ),
     contributions: [dummyContribution],
+    vocabularyLists: [],
 });
 
 const publishedVocabularyList = buildTestInstance(VocabularyListViewModel, {
