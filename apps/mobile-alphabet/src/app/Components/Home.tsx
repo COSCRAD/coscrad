@@ -56,7 +56,7 @@ const HomeScreen = ({ navigation }) => {
                         A project built on the
                         <Image
                             source={{
-                                uri: 'https://tsilhqotinlanguage.ca/assets/COSCRAD-logo-prototype-1.png',
+                                uri: config.coscradLogoUrl,
                             }}
                             alt="Coscrad"
                             style={[homeScreen.homeImage]}

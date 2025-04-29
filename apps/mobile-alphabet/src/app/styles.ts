@@ -46,6 +46,7 @@ export const homeScreen = StyleSheet.create({
         width: 130,
         height: 130,
         alignSelf: 'center',
+        resizeMode: 'contain',
     },
     tagline: {
         color: theme.colors.text,
@@ -89,6 +90,7 @@ export const loadingComponent = StyleSheet.create({
         height: 80,
         width: 80,
         alignSelf: 'center',
+        resizeMode: 'contain',
     },
     text: {
         color: theme.colors.text,
