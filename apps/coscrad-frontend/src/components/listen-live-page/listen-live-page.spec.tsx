@@ -16,6 +16,8 @@ const dummyListenLiveConfig: ListenLivePageConfiguration = {
     logoUrl,
     playingMessage,
     missionStatement,
+    route: 'Live',
+    label: 'Listen Now!',
 };
 
 const dummyConfigurableContent = {
@@ -60,6 +62,25 @@ describe('Listen Live Page', () => {
         expect(screenRes).toBeTruthy();
     });
 
-    //  it may be better to do this with cypress
-    it.todo('should test the audio player and now playing message');
+    it('should render space between the playing message and the mission statement', async () => {
+        act();
+
+        const searchPattern = RegExp(playingMessage);
+
+        const playing = screen.getByText(searchPattern);
+
+        expect(playing).toBeTruthy();
+
+        const icecastPlayer = screen.getByTestId('icecast-player');
+
+        const icecastPlayerHasListenMessage = `${icecastPlayer.innerHTML}`.includes(playingMessage);
+
+        expect(icecastPlayerHasListenMessage).toBe(true);
+
+        const icecastPlayerHasMissionStatement = `${icecastPlayer.innerHTML}`.includes(
+            missionStatement
+        );
+
+        expect(icecastPlayerHasMissionStatement).toBe(false);
+    });
 });
