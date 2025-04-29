@@ -1,5 +1,4 @@
 import {
-    IMultilingualText,
     IMultilingualTextItem,
     LanguageCode,
     MultilingualTextItemRole,
@@ -248,11 +247,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         return this.database.getViewUpdateNotifications();
     }
 
-    async indexVocabularyList(
-        id: AggregateId,
-        vocabularyListId: AggregateId,
-        _vocabularyListName: IMultilingualText
-    ): Promise<void> {
+    async indexVocabularyList(id: AggregateId, vocabularyListId: AggregateId): Promise<void> {
         const query = `
         FOR doc IN @@collectionName
         FILTER doc._key == @termId
@@ -268,10 +263,14 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             vocabularyListId,
         };
 
-        await this.database.query({ query, bindVars }).catch((reason) => {
+        const cursor = await this.database.query({ query, bindVars }).catch((reason) => {
             throw new InternalError(
                 `Failed to register vocabulary list for term via TermRepository: ${reason}`
             );
         });
+
+        const _new = await cursor.all();
+
+        console.log({ newForTerm: _new });
     }
 }
