@@ -5,7 +5,7 @@ const textToFind = 'Sellars';
 
 const textNotToFind = 'Barney';
 
-const contributiorsWithIds: ContributorWithId[] = [
+const contributorsWithIds: ContributorWithId[] = [
     {
         id: '23',
         fullName: 'Frank Jennings',
@@ -19,7 +19,7 @@ const contributiorsWithIds: ContributorWithId[] = [
 describe(`doesSomeContributorInclude`, () => {
     describe(`when the contributor matches the search`, () => {
         it(`should return true`, () => {
-            const result = doesSomeContributorInclude(contributiorsWithIds, textToFind);
+            const result = doesSomeContributorInclude(contributorsWithIds, textToFind);
 
             expect(result).toBe(true);
         });
@@ -27,7 +27,7 @@ describe(`doesSomeContributorInclude`, () => {
 
     describe(`when the contributor does not match the search`, () => {
         it(`should return false`, () => {
-            const result = doesSomeContributorInclude(contributiorsWithIds, textNotToFind);
+            const result = doesSomeContributorInclude(contributorsWithIds, textNotToFind);
 
             expect(result).toBe(false);
         });

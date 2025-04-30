@@ -3,7 +3,7 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { parseLanguageCode } from './parse-language-code-from-query';
 
 export const doesSomeContributorInclude = (
-    contributiorsWithIds: ContributorWithId[],
+    contributorsWithIds: ContributorWithId[],
     query: string
 ) => {
     const languageCodeInQuery = parseLanguageCode(query);
@@ -14,7 +14,7 @@ export const doesSomeContributorInclude = (
 
     if (isNullOrUndefined(searchTerms)) return undefined;
 
-    return contributiorsWithIds
+    return contributorsWithIds
         .map(({ fullName }) => fullName.toLowerCase())
         .join(' ')
         .includes(searchTerms.toLowerCase());
