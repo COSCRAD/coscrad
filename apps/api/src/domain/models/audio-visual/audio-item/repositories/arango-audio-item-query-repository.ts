@@ -214,6 +214,16 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
         await this.database.query({ query, bindVars });
     }
 
+    async importLineItems(_id: AggregateId, _lineItems: TranscriptLineItemDto) {
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+        let newItem = {
+            lineItem: 
+        }
+        `;
+    }
+
     async count(): Promise<number> {
         return this.database.getCount();
     }

@@ -26,6 +26,7 @@ import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../../shared/access-control/access-control-list.entity';
 import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
 import { Transcript } from '../../shared/entities/transcript.entity';
+import { TranscriptLineItemDto } from '../commands';
 import { AudioItemCreated } from '../commands/create-audio-item/audio-item-created.event';
 import { EventSourcedAudioItemViewModel } from '../queries';
 import { IAudioItemQueryRepository } from '../queries/audio-item-query-repository.interface';
@@ -336,10 +337,6 @@ describe(`ArangoAudioItemQueryRepository`, () => {
             }),
         });
 
-        beforeEach(async () => {
-            await testQueryRepository.create(targetAudioItem);
-        });
-
         it(`should add the line item to an existing transcript`, async () => {
             const inPointMs = 100;
 
@@ -364,6 +361,32 @@ describe(`ArangoAudioItemQueryRepository`, () => {
             const numberOfItems = updatedView.transcript.countLineItems();
 
             expect(numberOfItems).toBe(1);
+        });
+    });
+
+    describe(`import line items`, () => {
+        const targetAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
+            transcript: Transcript.buildEmpty(),
+        });
+
+        const lineItems = buildTestInstance(TranscriptLineItemDto, {});
+
+        beforeEach(async () => {
+            await testQueryRepository.create(targetAudioItem);
+        });
+
+        it('should have a test', async () => {
+            await testQueryRepository.importLineItems(targetAudioItem.id, lineItems);
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetAudioItem.id
+            )) as EventSourcedAudioItemViewModel;
+
+            const numberOfItems = updatedView.transcript.countLineItems();
+
+            expect(numberOfItems).toBe(1);
+
+            // const { lineItem } = updatedView.transcript.hasLineItems();
         });
     });
 });
