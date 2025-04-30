@@ -8,12 +8,9 @@ import assertErrorAsExpected from '../../../../../../lib/__tests__/assertErrorAs
 import { ArangoDatabaseProvider } from '../../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import getValidAggregateInstanceForTest from '../../../../../__tests__/utilities/getValidAggregateInstanceForTest';
+import { TestEventStream } from '../../../../../../test-data/events';
 import { CannotAddDuplicateTranslationError } from '../../../../../common/entities/errors';
-import {
-    MultilingualText,
-    MultilingualTextItem,
-} from '../../../../../common/entities/multilingual-text';
+import { MultilingualTextItem } from '../../../../../common/entities/multilingual-text';
 import { AggregateType } from '../../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../../types/DeluxeInMemoryStore';
 import { assertCommandError } from '../../../../__tests__/command-helpers/assert-command-error';
@@ -27,25 +24,34 @@ import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUs
 import AggregateNotFoundError from '../../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../../shared/common-command-errors/CommandExecutionError';
 import { Video } from '../../entities/video.entity';
+import { VideoCreated } from '../create-video';
 import { TranslateVideoName } from './translate-video-name.command';
+import { VideoNameTranslated } from './video-name-translated.event';
 
 const commandType = `TRANSLATE_VIDEO_NAME`;
 
 const languageCodeForExistingVideoName = LanguageCode.Haida;
 
-const existingVideoName = new MultilingualText({
-    items: [
-        new MultilingualTextItem({
-            role: MultilingualTextItemRole.original,
-            text: 'this is the original video name',
-            languageCode: languageCodeForExistingVideoName,
-        }),
-    ],
+const videoId = buildDummyUuid(1);
+
+const videoCompositeIdentifier = {
+    type: AggregateType.video,
+    id: videoId,
+};
+
+const videoCreated = new TestEventStream().andThen<VideoCreated>({
+    type: 'VIDEO_CREATED',
+    payload: {
+        name: 'this is the original video name',
+        languageCodeForName: languageCodeForExistingVideoName,
+    },
 });
 
-const existingVideo = getValidAggregateInstanceForTest(AggregateType.video).clone({
-    name: existingVideoName,
-});
+// We assert the event history is valid
+const existingVideo = Video.fromEventHistory(
+    videoCreated.as(videoCompositeIdentifier),
+    videoId
+) as Video;
 
 const aggregateCompositeIdentifier = existingVideo.getCompositeIdentifier();
 
@@ -183,11 +189,25 @@ describe(commandType, () => {
 
         describe(`when there is already existing text in the translation language`, () => {
             it(`should fail with the expected errors`, async () => {
-                const existingVideoWithTranslationInTargetLanguage = existingVideo.translateName(
+                const existingVideoWithTranslationInTargetLanguage = Video.fromEventHistory(
+                    videoCreated
+                        .andThen<VideoNameTranslated>({
+                            type: 'VIDEO_NAME_TRANSLATED',
+                            payload: {
+                                text: 'existing translation in target language',
+                                languageCode: languageCodeForTranslation,
+                            },
+                        })
+                        .as(videoCompositeIdentifier),
+                    videoId
+                ) as Video;
+
+                existingVideo.translateName(
                     'existing translation in target language',
                     languageCodeForTranslation
                 ) as Video;
 
+                // TODO use the newer API here and in other commands we are currently touching
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     initialState: new DeluxeInMemoryStore({

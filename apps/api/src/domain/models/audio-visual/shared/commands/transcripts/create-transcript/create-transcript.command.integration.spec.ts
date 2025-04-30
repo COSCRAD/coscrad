@@ -8,7 +8,7 @@ import { ArangoDatabaseProvider } from '../../../../../../../persistence/databas
 import TestRepositoryProvider from '../../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import formatAggregateType from '../../../../../../../queries/presentation/formatAggregateType';
-import getValidAggregateInstanceForTest from '../../../../../../__tests__/utilities/getValidAggregateInstanceForTest';
+import { TestEventStream } from '../../../../../../../test-data/events';
 import { IIdManager } from '../../../../../../interfaces/id-manager.interface';
 import { AggregateType } from '../../../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../../../types/DeluxeInMemoryStore';
@@ -24,23 +24,43 @@ import { dummySystemUserId } from '../../../../../__tests__/utilities/dummySyste
 import AggregateNotFoundError from '../../../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../../../shared/common-command-errors/CommandExecutionError';
 import InvalidCommandPayloadTypeError from '../../../../../shared/common-command-errors/InvalidCommandPayloadTypeError';
+import { AudioItemCreated } from '../../../../audio-item/commands/create-audio-item/audio-item-created.event';
 import { AudioItem } from '../../../../audio-item/entities/audio-item.entity';
 import { CannotOverwriteTranscriptError } from '../../../../audio-item/errors';
+import { VideoCreated } from '../../../../video';
 import { Video } from '../../../../video/entities/video.entity';
-import { Transcript } from '../../../entities/transcript.entity';
 import { CreateTranscript } from './create-transcript.command';
+import { TranscriptCreated } from './transcript-created.event';
 
 const commandType = `CREATE_TRANSCRIPT`;
 
-const existingAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem).clone({
-    transcript: undefined,
+const audioItemId = buildDummyUuid(1);
+
+const audioItemCreated = new TestEventStream().andThen<AudioItemCreated>({
+    type: 'AUDIO_ITEM_CREATED',
 });
 
-const existingVideo = getValidAggregateInstanceForTest(AggregateType.video).clone({
-    transcript: undefined,
+const existingAudioItem = AudioItem.fromEventHistory(
+    audioItemCreated.as({
+        type: AggregateType.audioItem,
+        id: audioItemId,
+    }),
+    audioItemId
+) as AudioItem;
+
+const videoId = buildDummyUuid(2);
+
+const videoCreated = new TestEventStream().andThen<VideoCreated>({
+    type: 'VIDEO_CREATED',
 });
 
-const validResourcesForTests = [existingAudioItem, existingVideo];
+const existingVideo = Video.fromEventHistory(
+    videoCreated.as({
+        type: AggregateType.video,
+        id: videoId,
+    }),
+    videoId
+) as Video;
 
 const buildValidCommandFSA = (validResource: AudioItem | Video) => ({
     type: commandType,
@@ -128,117 +148,328 @@ describe(commandType, () => {
             })
         );
 
-    validResourcesForTests.forEach((instance) => {
-        const resourceType = instance.type;
+    // audio items
+    describe(`when working with a resource of type: ${formatAggregateType(
+        AggregateType.audioItem
+    )}`, () => {
+        const instance = existingAudioItem;
 
-        describe(`when working with a resource of type: ${formatAggregateType(
-            resourceType
-        )}`, () => {
-            describe(`when the command is valid`, () => {
-                describe(`when adding a transcript`, () => {
-                    it('should succeed with the expected database updates', async () => {
-                        await assertCommandSuccess(assertionHelperDependencies, {
-                            systemUserId,
-                            initialState: validInitialState,
-                            buildValidCommandFSA: () => buildValidCommandFSA(instance),
-                            checkStateOnSuccess: async ({
-                                aggregateCompositeIdentifier: { id },
-                            }: CreateTranscript) => {
-                                const resourceSearchResult = await testRepositoryProvider
-                                    .forResource<AudioItem | Video>(resourceType)
-                                    .fetchById(id);
+        const audioItemWithTranscript = AudioItem.fromEventHistory(
+            audioItemCreated
+                .andThen<TranscriptCreated>({
+                    type: 'TRANSCRIPT_CREATED',
+                })
+                .as({
+                    type: AggregateType.audioItem,
+                    id: audioItemId,
+                }),
+            audioItemId
+        ) as AudioItem;
 
-                                expect(resourceSearchResult).not.toBe(NotFound);
+        describe(`when the command is valid`, () => {
+            describe(`when adding a transcript`, () => {
+                it('should succeed with the expected database updates', async () => {
+                    await assertCommandSuccess(assertionHelperDependencies, {
+                        systemUserId,
+                        initialState: validInitialState,
+                        buildValidCommandFSA: () => buildValidCommandFSA(instance),
+                        checkStateOnSuccess: async ({
+                            aggregateCompositeIdentifier: { id },
+                        }: CreateTranscript) => {
+                            const resourceSearchResult = await testRepositoryProvider
+                                .forResource<AudioItem | Video>(AggregateType.audioItem)
+                                .fetchById(id);
 
-                                expect(resourceSearchResult).not.toBeInstanceOf(InternalError);
+                            expect(resourceSearchResult).not.toBe(NotFound);
 
-                                const updatedResource = resourceSearchResult as unknown as
-                                    | AudioItem
-                                    | Video;
+                            expect(resourceSearchResult).not.toBeInstanceOf(InternalError);
 
-                                expect(updatedResource.hasTranscript()).toBe(true);
+                            const updatedResource = resourceSearchResult as unknown as
+                                | AudioItem
+                                | Video;
 
-                                assertEventRecordPersisted(
-                                    updatedResource,
-                                    'TRANSCRIPT_CREATED',
-                                    systemUserId
-                                );
-                            },
-                        });
+                            expect(updatedResource.hasTranscript()).toBe(true);
+
+                            assertEventRecordPersisted(
+                                updatedResource,
+                                'TRANSCRIPT_CREATED',
+                                systemUserId
+                            );
+                        },
+                    });
+                });
+            });
+        });
+
+        describe(`when the command is invalid`, () => {
+            describe(`when the payload has an invalid type`, () => {
+                describe('when the command payload type is invalid', () => {
+                    generateCommandFuzzTestCases(CreateTranscript).forEach(
+                        ({ description, propertyName, invalidValue }) => {
+                            describe(`when the property ${propertyName} has the invalid value: ${invalidValue} (${description})`, () => {
+                                it('should fail with the appropriate error', async () => {
+                                    await assertCommandFailsDueToTypeError(
+                                        assertionHelperDependencies,
+                                        { propertyName, invalidValue },
+                                        buildValidCommandFSA(instance)
+                                    );
+                                });
+                            });
+                        }
+                    );
+                });
+            });
+
+            describe(`when there is no resource with the given aggregateCompositeIdentifier`, () => {
+                it('should fail with the expected error', async () => {
+                    await assertCommandError(assertionHelperDependencies, {
+                        buildCommandFSA: () => buildValidCommandFSA(instance),
+                        systemUserId,
+                        initialState: new DeluxeInMemoryStore({
+                            // empty- no existing resources
+                        }).fetchFullSnapshotInLegacyFormat(),
+                        checkError: (error) => {
+                            assertErrorAsExpected(
+                                error,
+                                new CommandExecutionError([
+                                    new AggregateNotFoundError(instance.getCompositeIdentifier()),
+                                ])
+                            );
+                        },
                     });
                 });
             });
 
-            describe(`when the command is invalid`, () => {
-                describe(`when the payload has an invalid type`, () => {
-                    describe('when the command payload type is invalid', () => {
-                        generateCommandFuzzTestCases(CreateTranscript).forEach(
-                            ({ description, propertyName, invalidValue }) => {
-                                describe(`when the property ${propertyName} has the invalid value: ${invalidValue} (${description})`, () => {
-                                    it('should fail with the appropriate error', async () => {
-                                        await assertCommandFailsDueToTypeError(
-                                            assertionHelperDependencies,
-                                            { propertyName, invalidValue },
-                                            buildValidCommandFSA(instance)
-                                        );
-                                    });
-                                });
-                            }
-                        );
-                    });
-                });
-
-                describe(`when there is no resource with the given aggregateCompositeIdentifier`, () => {
-                    it('should fail with the expected error', async () => {
-                        await assertCommandError(assertionHelperDependencies, {
-                            buildCommandFSA: () => buildValidCommandFSA(instance),
-                            systemUserId,
-                            initialState: new DeluxeInMemoryStore({
-                                // empty- no existing resources
-                            }).fetchFullSnapshotInLegacyFormat(),
-                            checkError: (error) => {
-                                assertErrorAsExpected(
-                                    error,
-                                    new CommandExecutionError([
-                                        new AggregateNotFoundError(
-                                            instance.getCompositeIdentifier()
-                                        ),
-                                    ])
-                                );
-                            },
-                        });
-                    });
-                });
-
-                describe(`when the resource already has a transcript`, () => {
-                    it('should fail with the expected error', async () => {
-                        await assertCommandError(assertionHelperDependencies, {
-                            buildCommandFSA: () => buildValidCommandFSA(instance),
-                            systemUserId,
-                            initialState: new DeluxeInMemoryStore({
-                                [instance.type]: [
-                                    instance.clone({
-                                        transcript: new Transcript({
-                                            items: [],
-                                            participants: [],
-                                        }),
-                                    }),
-                                ],
-                            }).fetchFullSnapshotInLegacyFormat(),
-                            checkError: (error) => {
-                                assertErrorAsExpected(
-                                    error,
-                                    new CommandExecutionError([
-                                        new CannotOverwriteTranscriptError(
-                                            instance.getCompositeIdentifier()
-                                        ),
-                                    ])
-                                );
-                            },
-                        });
+            describe(`when the resource already has a transcript`, () => {
+                it('should fail with the expected error', async () => {
+                    await assertCommandError(assertionHelperDependencies, {
+                        buildCommandFSA: () => buildValidCommandFSA(instance),
+                        systemUserId,
+                        initialState: new DeluxeInMemoryStore({
+                            [instance.type]: [audioItemWithTranscript],
+                        }).fetchFullSnapshotInLegacyFormat(),
+                        checkError: (error) => {
+                            assertErrorAsExpected(
+                                error,
+                                new CommandExecutionError([
+                                    new CannotOverwriteTranscriptError(
+                                        instance.getCompositeIdentifier()
+                                    ),
+                                ])
+                            );
+                        },
                     });
                 });
             });
         });
     });
+
+    // videos
+    describe(`when working with a resource of type: ${formatAggregateType(
+        AggregateType.video
+    )}`, () => {
+        const instance = existingVideo;
+
+        const videoWithTranscript = Video.fromEventHistory(
+            videoCreated
+                .andThen<TranscriptCreated>({
+                    type: 'TRANSCRIPT_CREATED',
+                })
+                .as({
+                    type: AggregateType.video,
+                    id: videoId,
+                }),
+            videoId
+        ) as Video;
+
+        describe(`when the command is valid`, () => {
+            describe(`when adding a transcript`, () => {
+                it('should succeed with the expected database updates', async () => {
+                    await assertCommandSuccess(assertionHelperDependencies, {
+                        systemUserId,
+                        initialState: validInitialState,
+                        buildValidCommandFSA: () => buildValidCommandFSA(instance),
+                        checkStateOnSuccess: async ({
+                            aggregateCompositeIdentifier: { id },
+                        }: CreateTranscript) => {
+                            const resourceSearchResult = await testRepositoryProvider
+                                .forResource<AudioItem | Video>(AggregateType.video)
+                                .fetchById(id);
+
+                            expect(resourceSearchResult).not.toBe(NotFound);
+
+                            expect(resourceSearchResult).not.toBeInstanceOf(InternalError);
+
+                            const updatedResource = resourceSearchResult as unknown as
+                                | AudioItem
+                                | Video;
+
+                            expect(updatedResource.hasTranscript()).toBe(true);
+
+                            assertEventRecordPersisted(
+                                updatedResource,
+                                'TRANSCRIPT_CREATED',
+                                systemUserId
+                            );
+                        },
+                    });
+                });
+            });
+        });
+
+        describe(`when the command is invalid`, () => {
+            describe(`when there is no resource with the given aggregateCompositeIdentifier`, () => {
+                it('should fail with the expected error', async () => {
+                    await assertCommandError(assertionHelperDependencies, {
+                        buildCommandFSA: () => buildValidCommandFSA(instance),
+                        systemUserId,
+                        initialState: new DeluxeInMemoryStore({
+                            // empty- no existing resources
+                        }).fetchFullSnapshotInLegacyFormat(),
+                        checkError: (error) => {
+                            assertErrorAsExpected(
+                                error,
+                                new CommandExecutionError([
+                                    new AggregateNotFoundError(instance.getCompositeIdentifier()),
+                                ])
+                            );
+                        },
+                    });
+                });
+            });
+
+            describe(`when the resource already has a transcript`, () => {
+                it('should fail with the expected error', async () => {
+                    await assertCommandError(assertionHelperDependencies, {
+                        buildCommandFSA: () => buildValidCommandFSA(instance),
+                        systemUserId,
+                        initialState: new DeluxeInMemoryStore({
+                            [instance.type]: [videoWithTranscript],
+                        }).fetchFullSnapshotInLegacyFormat(),
+                        checkError: (error) => {
+                            assertErrorAsExpected(
+                                error,
+                                new CommandExecutionError([
+                                    new CannotOverwriteTranscriptError(
+                                        instance.getCompositeIdentifier()
+                                    ),
+                                ])
+                            );
+                        },
+                    });
+                });
+            });
+        });
+    });
+
+    /**
+     * TODO refactor to remove this test builder pattern so we can levarge
+     * `.only` and `.skip` to isolate test cases.
+     */
+    // validResourcesForTests.forEach((instance) => {
+    //     const resourceType = instance.type;
+
+    //     describe(`when working with a resource of type: ${formatAggregateType(
+    //         resourceType
+    //     )}`, () => {
+    //         describe(`when the command is valid`, () => {
+    //             describe(`when adding a transcript`, () => {
+    //                 it('should succeed with the expected database updates', async () => {
+    //                     await assertCommandSuccess(assertionHelperDependencies, {
+    //                         systemUserId,
+    //                         initialState: validInitialState,
+    //                         buildValidCommandFSA: () => buildValidCommandFSA(instance),
+    //                         checkStateOnSuccess: async ({
+    //                             aggregateCompositeIdentifier: { id },
+    //                         }: CreateTranscript) => {
+    //                             const resourceSearchResult = await testRepositoryProvider
+    //                                 .forResource<AudioItem | Video>(resourceType)
+    //                                 .fetchById(id);
+
+    //                             expect(resourceSearchResult).not.toBe(NotFound);
+
+    //                             expect(resourceSearchResult).not.toBeInstanceOf(InternalError);
+
+    //                             const updatedResource = resourceSearchResult as unknown as
+    //                                 | AudioItem
+    //                                 | Video;
+
+    //                             expect(updatedResource.hasTranscript()).toBe(true);
+
+    //                             assertEventRecordPersisted(
+    //                                 updatedResource,
+    //                                 'TRANSCRIPT_CREATED',
+    //                                 systemUserId
+    //                             );
+    //                         },
+    //                     });
+    //                 });
+    //             });
+    //         });
+
+    //         describe(`when the command is invalid`, () => {
+    //             describe(`when the payload has an invalid type`, () => {
+    //                 describe('when the command payload type is invalid', () => {
+    //                     generateCommandFuzzTestCases(CreateTranscript).forEach(
+    //                         ({ description, propertyName, invalidValue }) => {
+    //                             describe(`when the property ${propertyName} has the invalid value: ${invalidValue} (${description})`, () => {
+    //                                 it('should fail with the appropriate error', async () => {
+    //                                     await assertCommandFailsDueToTypeError(
+    //                                         assertionHelperDependencies,
+    //                                         { propertyName, invalidValue },
+    //                                         buildValidCommandFSA(instance)
+    //                                     );
+    //                                 });
+    //                             });
+    //                         }
+    //                     );
+    //                 });
+    //             });
+
+    //             describe(`when there is no resource with the given aggregateCompositeIdentifier`, () => {
+    //                 it('should fail with the expected error', async () => {
+    //                     await assertCommandError(assertionHelperDependencies, {
+    //                         buildCommandFSA: () => buildValidCommandFSA(instance),
+    //                         systemUserId,
+    //                         initialState: new DeluxeInMemoryStore({
+    //                             // empty- no existing resources
+    //                         }).fetchFullSnapshotInLegacyFormat(),
+    //                         checkError: (error) => {
+    //                             assertErrorAsExpected(
+    //                                 error,
+    //                                 new CommandExecutionError([
+    //                                     new AggregateNotFoundError(
+    //                                         instance.getCompositeIdentifier()
+    //                                     ),
+    //                                 ])
+    //                             );
+    //                         },
+    //                     });
+    //                 });
+    //             });
+
+    //             describe(`when the resource already has a transcript`, () => {
+    //                 it('should fail with the expected error', async () => {
+    //                     await assertCommandError(assertionHelperDependencies, {
+    //                         buildCommandFSA: () => buildValidCommandFSA(instance),
+    //                         systemUserId,
+    //                         initialState: new DeluxeInMemoryStore({
+    //                             [instance.type]: [],
+    //                         }).fetchFullSnapshotInLegacyFormat(),
+    //                         checkError: (error) => {
+    //                             assertErrorAsExpected(
+    //                                 error,
+    //                                 new CommandExecutionError([
+    //                                     new CannotOverwriteTranscriptError(
+    //                                         instance.getCompositeIdentifier()
+    //                                     ),
+    //                                 ])
+    //                             );
+    //                         },
+    //                     });
+    //                 });
+    //             });
+    //         });
+    //     });
+    // });
 });

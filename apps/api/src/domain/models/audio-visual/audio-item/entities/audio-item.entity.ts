@@ -8,7 +8,7 @@ import {
 } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
-import { UpdateMethod } from '../../../../../domain/decorators';
+import { AggregateRoot, UpdateMethod } from '../../../../../domain/decorators';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../../lib/errors/types/ValidationResult';
 import { Maybe } from '../../../../../lib/types/maybe';
@@ -55,6 +55,7 @@ export const isAudioMimeType = (mimeType: MIMEType): boolean =>
 @RegisterIndexScopedCommands([`CREATE_AUDIO_ITEM`])
 // mixin the magic method event handlers for transcripts
 @EventSourcedTranscribable()
+@AggregateRoot('audioItem')
 export class AudioItem extends Resource {
     readonly type = ResourceType.audioItem;
 

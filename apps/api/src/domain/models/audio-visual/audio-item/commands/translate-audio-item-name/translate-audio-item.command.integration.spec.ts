@@ -12,13 +12,10 @@ import assertErrorAsExpected from '../../../../../../lib/__tests__/assertErrorAs
 import { NotFound } from '../../../../../../lib/types/not-found';
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { TestEventStream } from '../../../../../../test-data/events';
 import { DTO } from '../../../../../../types/DTO';
-import getValidAggregateInstanceForTest from '../../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { CannotAddDuplicateTranslationError } from '../../../../../common/entities/errors';
-import {
-    MultilingualText,
-    MultilingualTextItem,
-} from '../../../../../common/entities/multilingual-text';
+import { MultilingualTextItem } from '../../../../../common/entities/multilingual-text';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
 import { DeluxeInMemoryStore } from '../../../../../types/DeluxeInMemoryStore';
 import { assertCommandError } from '../../../../__tests__/command-helpers/assert-command-error';
@@ -32,25 +29,34 @@ import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUs
 import AggregateNotFoundError from '../../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../../shared/common-command-errors/CommandExecutionError';
 import { AudioItem } from '../../entities/audio-item.entity';
+import { AudioItemCreated } from '../create-audio-item/audio-item-created.event';
+import { AudioItemNameTranslated } from './audio-item-name-translated-event';
 import { TranslateAudioItemName } from './translate-audio-item-name.command';
 
+// TODO rename this file
 const commandType = 'TRANSLATE_AUDIO_ITEM_NAME';
-
-const existingAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem).clone({
-    name: new MultilingualText({
-        items: [
-            new MultilingualTextItem({
-                text: 'original name of the audio item',
-                role: MultilingualTextItemRole.original,
-                languageCode: LanguageCode.Chilcotin,
-            }),
-        ],
-    }),
-});
 
 const languageCodeForExistingAudioName = LanguageCode.Chilcotin;
 
 const languageCodeForTranslation = LanguageCode.English;
+
+const audioItemId = buildDummyUuid(1);
+
+const audioItemCreated = new TestEventStream().andThen<AudioItemCreated>({
+    type: 'AUDIO_ITEM_CREATED',
+    payload: {
+        name: 'existing audio item name (in the language)',
+        languageCodeForName: languageCodeForExistingAudioName,
+    },
+});
+
+const existingAudioItem = AudioItem.fromEventHistory(
+    audioItemCreated.as({
+        type: AggregateType.audioItem,
+        id: audioItemId,
+    }),
+    audioItemId
+) as AudioItem;
 
 const englishName = 'audio item name translated to English';
 
@@ -162,11 +168,21 @@ describe(commandType, () => {
 
         describe(`when the audio item's name has already been translated into the language`, () => {
             it(`should fail with the expected errors`, async () => {
-                const existingAudioItemTranslationInTargetLanguage =
-                    existingAudioItem.translateName(
-                        'existing translation in the language',
-                        languageCodeForTranslation
-                    ) as AudioItem;
+                const existingAudioItemTranslationInTargetLanguage = AudioItem.fromEventHistory(
+                    audioItemCreated
+                        .andThen<AudioItemNameTranslated>({
+                            type: 'AUDIO_ITEM_NAME_TRANSLATED',
+                            payload: {
+                                text: 'existing English translation of audio item name',
+                                languageCode: languageCodeForTranslation,
+                            },
+                        })
+                        .as({
+                            type: AggregateType.audioItem,
+                            id: audioItemId,
+                        }),
+                    audioItemId
+                ) as AudioItem;
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     initialState: new DeluxeInMemoryStore({
