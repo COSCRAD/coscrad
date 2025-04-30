@@ -41,8 +41,9 @@ export function translateLineItemImplementation<T extends Transcribable & Resour
         role: MultilingualTextItemRole.freeTranslation,
     });
 
-    if (existingLineItem.text.has(languageCode))
+    if (existingLineItem.text.has(languageCode)) {
         return new CannotAddDuplicateTranslationError(newTextItem, existingLineItem.text);
+    }
 
     const textUpdateResult = existingLineItem.text.translate(newTextItem);
 
