@@ -490,10 +490,7 @@ describe(commandType, () => {
                 });
             });
 
-            /**
-             * TODO The fuzz test cases for this one have a strange interaction with other test cases
-             */
-            describe.skip('when the command payload type is invalid', () => {
+            describe('when the command payload type is invalid', () => {
                 generateCommandFuzzTestCases(ImportLineItemsToTranscript).forEach(
                     ({ description, propertyName, invalidValue }) => {
                         describe(`when the property ${propertyName} has the invalid value: ${invalidValue} (${description})`, () => {

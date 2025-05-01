@@ -37,6 +37,15 @@ export class ImportLineItemsToTranscriptCommandHandler extends BaseUpdateCommand
         instance: TranscribableResource,
         { lineItems }: ImportLineItemsToTranscript
     ): ResultOrError<TranscribableResource> {
+        if (Array.isArray(lineItems) && lineItems.length === 0) {
+            /**
+             * TODO This should be caught at the schema based validation instead.
+             */
+            return new InternalError(
+                `You must provide at least one line item when importing to a transcript`
+            );
+        }
+
         return instance.importLineItemsToTranscript(
             lineItems.map((lineItem) => ({
                 ...lineItem,
