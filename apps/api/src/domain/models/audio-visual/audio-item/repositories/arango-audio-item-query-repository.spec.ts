@@ -26,6 +26,7 @@ import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../../shared/access-control/access-control-list.entity';
 import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
 import { Transcript } from '../../shared/entities/transcript.entity';
+import { TranscriptLineItemDto } from '../commands';
 import { AudioItemCreated } from '../commands/create-audio-item/audio-item-created.event';
 import { EventSourcedAudioItemViewModel } from '../queries';
 import { IAudioItemQueryRepository } from '../queries/audio-item-query-repository.interface';
@@ -364,6 +365,51 @@ describe(`ArangoAudioItemQueryRepository`, () => {
             const numberOfItems = updatedView.transcript.countLineItems();
 
             expect(numberOfItems).toBe(1);
+        });
+    });
+
+    describe(`import line items`, () => {
+        const participant = new TranscriptParticipant({
+            initials: 'WO',
+            name: 'William Who',
+        });
+
+        const speakerInitials = participant.initials;
+
+        const targetAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
+            transcript: Transcript.buildEmpty(),
+        });
+
+        const lineItems = [1, 2, 3, 4, 5].map((i) =>
+            buildTestInstance(TranscriptLineItemDto, {
+                inPointMilliseconds: 100 * i,
+                outPointMilliseconds: 100 * i + 50,
+                speakerInitials,
+                text: `text for line item #${i}`,
+            })
+        );
+
+        beforeEach(async () => {
+            await testQueryRepository.create(targetAudioItem);
+        });
+
+        it('should have a test', async () => {
+            await testQueryRepository.importLineItems(targetAudioItem.id, lineItems);
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetAudioItem.id
+            )) as EventSourcedAudioItemViewModel;
+
+            const numberOfItems = updatedView.transcript.countLineItems();
+
+            expect(numberOfItems).toBe(lineItems.length);
+
+            const missingLineItems = lineItems.filter(
+                ({ inPointMilliseconds, outPointMilliseconds }) =>
+                    !updatedView.transcript.hasLineItem(inPointMilliseconds, outPointMilliseconds)
+            );
+
+            expect(missingLineItems).toEqual([]);
         });
     });
 });

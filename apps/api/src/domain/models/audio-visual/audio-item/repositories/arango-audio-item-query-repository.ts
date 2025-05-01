@@ -214,6 +214,41 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
         await this.database.query({ query, bindVars });
     }
 
+    async importLineItems(id: AggregateId, lineItems: TranscriptLineItemDto[]) {
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+
+        update doc with {
+            transcript: MERGE(doc.transcript,{
+                items: APPEND(doc.transcript.items, @lineItems)
+            })
+        } IN @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'audioItem__VIEWS',
+            id,
+            lineItems: lineItems.map(
+                ({
+                    inPointMilliseconds,
+                    outPointMilliseconds,
+                    text,
+                    languageCode,
+                    speakerInitials,
+                }) =>
+                    new TranscriptItem({
+                        text: buildMultilingualTextWithSingleItem(text, languageCode),
+                        inPointMilliseconds,
+                        outPointMilliseconds,
+                        speakerInitials,
+                    })
+            ),
+        };
+
+        await this.database.query({ query, bindVars });
+    }
+
     async count(): Promise<number> {
         return this.database.getCount();
     }

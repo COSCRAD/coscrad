@@ -35,6 +35,8 @@ import {
     ImportLineItemsToTranscript,
     ImportLineItemsToTranscriptCommandHandler,
 } from '../shared/commands/transcripts/import-line-items-to-transcript';
+import { LineItemsImportedToTranscript } from '../shared/commands/transcripts/import-line-items-to-transcript/line-items-imported-to-transcript.event';
+import { LineItemsImportedToTranscriptEventHandler } from '../shared/commands/transcripts/import-line-items-to-transcript/line-items-imported-to-transcript.event-handler';
 import {
     CreateVideo,
     CreateVideoCommandHandler,
@@ -78,6 +80,7 @@ import { VideoController } from './video.controller';
             TranscriptCreated,
             ParticipantAddedToTranscript,
             LineItemAddedToTranscript,
+            LineItemsImportedToTranscript,
         ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
@@ -88,6 +91,7 @@ import { VideoController } from './video.controller';
         TranscriptCreatedEventHandler,
         ParticipantAddedToTranscriptEventHandler,
         LineItemAddedToTranscriptEventHandler,
+        LineItemsImportedToTranscriptEventHandler,
     ],
     exports: [AudioItemQueryService, VideoQueryService],
 })

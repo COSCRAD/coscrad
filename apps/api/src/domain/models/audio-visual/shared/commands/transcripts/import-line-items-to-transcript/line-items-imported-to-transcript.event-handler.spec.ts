@@ -18,30 +18,51 @@ import { buildTestInstance } from '../../../../../../../test-data/utilities';
 import { EventSourcedAudioItemViewModel } from '../../../../audio-item/queries';
 import { TranscriptParticipant } from '../../../entities/transcript-participant';
 import { Transcript } from '../../../entities/transcript.entity';
-import { ParticipantAddedToTranscript } from './participant-added-to-transcript.event';
-import { ParticipantAddedToTranscriptEventHandler } from './participant-added-to-transcript.event-handler';
+import { TranscriptLineItemDto } from './import-line-items-to-transcript.command';
+import { LineItemsImportedToTranscript } from './line-items-imported-to-transcript.event';
+import { LineItemsImportedToTranscriptEventHandler } from './line-items-imported-to-transcript.event-handler';
 
-const audioItemId = buildDummyUuid(50);
+const audioItemId = buildDummyUuid(1);
+
+const participant = buildTestInstance(TranscriptParticipant, {});
+
+const transcript = Transcript.buildEmpty().addParticipant(participant) as Transcript;
 
 const targetAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
     id: audioItemId,
-    transcript: Transcript.buildEmpty(),
+    transcript,
 });
 
-const participantAdded = buildTestInstance(ParticipantAddedToTranscript, {
+const lineItemsImported = buildTestInstance(LineItemsImportedToTranscript, {
     payload: {
-        aggregateCompositeIdentifier: { id: targetAudioItem.id, type: AggregateType.audioItem },
+        aggregateCompositeIdentifier: {
+            type: AggregateType.audioItem,
+            id: audioItemId,
+        },
+        lineItems: (
+            [
+                [100, 200],
+                [500, 900],
+                [1100, 3200],
+            ] as [number, number][]
+        ).map(([i, o]) =>
+            buildTestInstance(TranscriptLineItemDto, {
+                inPointMilliseconds: i,
+                outPointMilliseconds: o,
+                speakerInitials: participant.initials,
+            })
+        ),
     },
 });
 
-describe('ParticipantAddedToTranscriptEventHandler', () => {
+describe('LineItemsImportedToTranscriptEventHandler', () => {
     let databaseProvider: ArangoDatabaseProvider;
 
     let app: INestApplication;
 
     let testRepositoryProvider: IQueryRepositoryProvider;
 
-    let participantAddedToTranscriptEventHandler: ParticipantAddedToTranscriptEventHandler;
+    let lineItemsImportedToTranscriptEventHandler: LineItemsImportedToTranscriptEventHandler;
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
@@ -68,8 +89,8 @@ describe('ParticipantAddedToTranscriptEventHandler', () => {
 
         testRepositoryProvider = app.get(QUERY_REPOSITORY_PROVIDER_TOKEN);
 
-        participantAddedToTranscriptEventHandler = new ParticipantAddedToTranscriptEventHandler(
-            // @ts-expect-error TODO find a better way to sidestep this type issue
+        lineItemsImportedToTranscriptEventHandler = new LineItemsImportedToTranscriptEventHandler(
+            // @ts-expect-error TODO  a better way to sidestep this type issue
             testRepositoryProvider
         );
     });
@@ -80,42 +101,34 @@ describe('ParticipantAddedToTranscriptEventHandler', () => {
 
     beforeEach(async () => {
         await databaseProvider.clearViews();
-
-        /**
-         * We attempted to use "handle" on a creation event for the test
-         * setup, but it failed due to an apparent race condition.
-         *
-         * We should investigate this further.
-         */
-        // await testQueryRepository.create(targetAudioItem);
     });
 
-    describe('when handling a PARTICIPANT_ADDED_TO_TRANSCRIPT', () => {
-        describe('when the target is an audio item', () => {
-            beforeEach(async () => {
-                await testRepositoryProvider
-                    .forResource(ResourceType.audioItem)
-                    .create(targetAudioItem);
-            });
+    describe(`when handling a LINE_ITEMS_IMPORTED_TO_TRANSCRIPT`, () => {
+        describe(`for an audio item`, () => {
+            describe(`when the target audio item view exists`, () => {
+                beforeEach(async () => {
+                    await testRepositoryProvider
+                        .forResource(ResourceType.audioItem)
+                        .create(targetAudioItem);
+                });
 
-            it('should add a participant to the existing transcript', async () => {
-                await participantAddedToTranscriptEventHandler.handle(participantAdded);
+                it(`should import the line items`, async () => {
+                    await lineItemsImportedToTranscriptEventHandler.handle(lineItemsImported);
 
-                const updatedView = (await testRepositoryProvider
-                    .forResource(ResourceType.audioItem)
-                    .fetchById(targetAudioItem.id)) as EventSourcedAudioItemViewModel;
+                    const updatedView = (await testRepositoryProvider
+                        .forResource(ResourceType.audioItem)
+                        .fetchById(targetAudioItem.id)) as EventSourcedAudioItemViewModel;
 
-                const { name } = updatedView.transcript.findParticipantByInitials(
-                    participantAdded.payload.initials
-                ) as TranscriptParticipant;
+                    const { transcript } = updatedView;
 
-                expect(name).toBe(participantAdded.payload.name);
-
-                expect(updatedView.transcript.participants).toHaveLength(1);
+                    expect(transcript.countLineItems()).toBe(
+                        lineItemsImported.payload.lineItems.length
+                    );
+                });
             });
         });
 
-        describe('when the target is a video', () => {
+        describe(`for a video`, () => {
             it.todo('should have a test');
         });
     });
