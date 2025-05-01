@@ -6,10 +6,21 @@ import {
 } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString, NonNegativeFiniteNumber } from '@coscrad/data-types';
+import { CoscradDataExample } from '../../../../../../../test-data/utilities';
+import { DTO } from '../../../../../../../types/DTO';
 import { LanguageCodeEnum } from '../../../../../../common/entities/multilingual-text';
 import { AudioVisualCompositeIdentifier } from '../../../../audio-item/entities/audio-item-composite-identifier';
 import { IMPORT_LINE_ITEMS_TO_TRANSCRIPT } from '../constants';
 
+@CoscradDataExample<TranscriptLineItemDto>({
+    example: {
+        inPointMilliseconds: 100,
+        outPointMilliseconds: 200,
+        text: 'hello',
+        languageCode: LanguageCode.English,
+        speakerInitials: 'JD',
+    },
+})
 export class TranscriptLineItemDto {
     @NonNegativeFiniteNumber({
         label: 'in point (ms)',
@@ -40,6 +51,27 @@ export class TranscriptLineItemDto {
         description: 'the initials of the speaker whose words you are transribing \\ translating',
     })
     readonly speakerInitials: string;
+
+    constructor(dto: DTO<TranscriptLineItemDto>) {
+        if (!dto) return;
+
+        const { inPointMilliseconds, outPointMilliseconds, text, languageCode, speakerInitials } =
+            dto;
+
+        this.inPointMilliseconds = inPointMilliseconds;
+
+        this.outPointMilliseconds = outPointMilliseconds;
+
+        this.speakerInitials = speakerInitials;
+
+        this.text = text;
+
+        this.languageCode = languageCode;
+    }
+
+    public static fromDto(dto: DTO<TranscriptLineItemDto>) {
+        return new TranscriptLineItemDto(dto);
+    }
 }
 
 @Command({

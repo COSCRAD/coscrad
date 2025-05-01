@@ -30,5 +30,5 @@ export interface IAudioItemQueryRepository extends IPublishable, IAccessible {
     // should this be the DTO type?
     addLineItem(id: AggregateId, lineItem: TranscriptLineItemDto): Promise<void>;
 
-    importLineItems(id: AggregateId, lineItems: TranscriptLineItemDto): Promise<void>;
+    importLineItems(id: AggregateId, lineItems: TranscriptLineItemDto[]): Promise<void>;
 }

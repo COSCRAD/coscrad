@@ -337,6 +337,10 @@ describe(`ArangoAudioItemQueryRepository`, () => {
             }),
         });
 
+        beforeEach(async () => {
+            await testQueryRepository.create(targetAudioItem);
+        });
+
         it(`should add the line item to an existing transcript`, async () => {
             const inPointMs = 100;
 
@@ -365,11 +369,25 @@ describe(`ArangoAudioItemQueryRepository`, () => {
     });
 
     describe(`import line items`, () => {
+        const participant = new TranscriptParticipant({
+            initials: 'WO',
+            name: 'William Who',
+        });
+
+        const speakerInitials = participant.initials;
+
         const targetAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
             transcript: Transcript.buildEmpty(),
         });
 
-        const lineItems = buildTestInstance(TranscriptLineItemDto, {});
+        const lineItems = [1, 2, 3, 4, 5].map((i) =>
+            buildTestInstance(TranscriptLineItemDto, {
+                inPointMilliseconds: 100 * i,
+                outPointMilliseconds: 100 * i + 50,
+                speakerInitials,
+                text: `text for line item #${i}`,
+            })
+        );
 
         beforeEach(async () => {
             await testQueryRepository.create(targetAudioItem);
@@ -384,9 +402,14 @@ describe(`ArangoAudioItemQueryRepository`, () => {
 
             const numberOfItems = updatedView.transcript.countLineItems();
 
-            expect(numberOfItems).toBe(1);
+            expect(numberOfItems).toBe(lineItems.length);
 
-            // const { lineItem } = updatedView.transcript.hasLineItems();
+            const missingLineItems = lineItems.filter(
+                ({ inPointMilliseconds, outPointMilliseconds }) =>
+                    !updatedView.transcript.hasLineItem(inPointMilliseconds, outPointMilliseconds)
+            );
+
+            expect(missingLineItems).toEqual([]);
         });
     });
 });

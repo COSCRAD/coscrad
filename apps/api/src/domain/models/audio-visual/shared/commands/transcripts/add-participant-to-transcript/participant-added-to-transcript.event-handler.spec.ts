@@ -89,6 +89,7 @@ describe('ParticipantAddedToTranscriptEventHandler', () => {
          */
         // await testQueryRepository.create(targetAudioItem);
     });
+
     describe('when handling a PARTICIPANT_ADDED_TO_TRANSCRIPT', () => {
         describe('when the target is an audio item', () => {
             beforeEach(async () => {
