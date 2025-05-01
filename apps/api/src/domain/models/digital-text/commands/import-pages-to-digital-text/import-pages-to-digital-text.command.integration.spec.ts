@@ -4,7 +4,6 @@ import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { CommandFSA } from '../../../../../app/controllers/command/command-fsa/command-fsa.entity';
 import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
-import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import {
     MultilingualText,
     MultilingualTextItem,
@@ -24,6 +23,7 @@ import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
+import { AudioItemCreated } from '../../../audio-visual/audio-item/commands/create-audio-item/audio-item-created.event';
 import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
@@ -46,14 +46,16 @@ const audioItemIdForOriginalLanguage = buildDummyUuid(3);
 
 const audioItemIdForTranslationLanguage = buildDummyUuid(4);
 
-const dummyAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem);
+const audioItemCreated = new TestEventStream().andThen<AudioItemCreated>({
+    type: 'AUDIO_ITEM_CREATED',
+});
 
-// TODO event source these
-const audioItems = [audioItemIdForOriginalLanguage, audioItemIdForTranslationLanguage].map((id) =>
-    dummyAudioItem.clone({
-        id,
-        name: buildMultilingualTextWithSingleItem(`audio number: ${id}`),
-    })
+const audioItemEvents = [audioItemIdForOriginalLanguage, audioItemIdForTranslationLanguage].flatMap(
+    (id) =>
+        audioItemCreated.as({
+            type: AggregateType.audioItem,
+            id,
+        })
 );
 
 const photograph = getValidAggregateInstanceForTest(AggregateType.photograph).clone({
@@ -179,9 +181,9 @@ describe(commandType, () => {
     });
 
     const seedValidInitialState = async () => {
-        await app.get(ArangoEventRepository).appendEvents(eventHistoryForDigitalText);
-
-        await testRepositoryProvider.forResource(AggregateType.audioItem).createMany(audioItems);
+        await app
+            .get(ArangoEventRepository)
+            .appendEvents([...eventHistoryForDigitalText, ...audioItemEvents]);
 
         await testRepositoryProvider.forResource(AggregateType.photograph).create(photograph);
     };
@@ -298,9 +300,10 @@ describe(commandType, () => {
                         // TODO why isn't the before each working?
                         await testRepositoryProvider.testSetup();
 
-                        await testRepositoryProvider
-                            .forResource(AggregateType.audioItem)
-                            .createMany(audioItems);
+                        await app
+                            .get(ArangoEventRepository)
+                            // missing the digital text events
+                            .appendEvents(audioItemEvents);
 
                         await testRepositoryProvider
                             .forResource(AggregateType.photograph)
@@ -367,6 +370,7 @@ describe(commandType, () => {
                     seedInitialState: async () => {
                         await app
                             .get(ArangoEventRepository)
+                            // no audio item events
                             .appendEvents(eventHistoryForDigitalText);
 
                         await testRepositoryProvider
@@ -417,11 +421,7 @@ describe(commandType, () => {
                     seedInitialState: async () => {
                         await app
                             .get(ArangoEventRepository)
-                            .appendEvents(eventHistoryForDigitalText);
-
-                        await testRepositoryProvider
-                            .forResource(AggregateType.audioItem)
-                            .createMany(audioItems);
+                            .appendEvents([...eventHistoryForDigitalText, ...audioItemEvents]);
 
                         // no photographs
                     },
