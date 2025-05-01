@@ -4,26 +4,44 @@ import { CoscradUserRole } from '@coscrad/data-types';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
+import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { buildFakeTimersConfig } from '../../../domain/models/__tests__/utilities/buildFakeTimersConfig';
+import { AudioItemCreated } from '../../../domain/models/audio-visual/audio-item/commands/create-audio-item/audio-item-created.event';
+import { AudioItem } from '../../../domain/models/audio-visual/audio-item/entities/audio-item.entity';
 import { CreateSong } from '../../../domain/models/song/commands/create-song.command';
 import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
 import { Song } from '../../../domain/models/song/song.entity';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { AggregateType } from '../../../domain/types/AggregateType';
-import { DeluxeInMemoryStore } from '../../../domain/types/DeluxeInMemoryStore';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import buildInMemorySnapshot from '../../../domain/utilities/buildInMemorySnapshot';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { ArangoEventRepository } from '../../../persistence/repositories/arango-event-repository';
 import buildTestData from '../../../test-data/buildTestData';
+import { TestEventStream } from '../../../test-data/events';
 import { DTO } from '../../../types/DTO';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from '../__tests__/setUpIntegrationTest';
 
 const commandEndpoint = `/commands`;
 
-const existingAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem);
+const audioItemId = buildDummyUuid(102);
+
+const eventHistoryForAudioItem = new TestEventStream()
+    .andThen<AudioItemCreated>({
+        type: 'AUDIO_ITEM_CREATED',
+    })
+    .as({
+        type: AggregateType.audioItem,
+        id: audioItemId,
+    });
+
+const existingAudioItem = AudioItem.fromEventHistory(
+    eventHistoryForAudioItem,
+    audioItemId
+) as AudioItem;
 
 const buildValidCommandFSA = (id: string): FluxStandardAction<DTO<CreateSong>> => ({
     type: 'CREATE_SONG',
@@ -86,11 +104,7 @@ describe('The Command Controller', () => {
         // The admin user must be there for the auth middleware
         await testRepositoryProvider.getUserRepository().create(dummyAdminUser);
 
-        await testRepositoryProvider.addFullSnapshot(
-            new DeluxeInMemoryStore({
-                [AggregateType.audioItem]: [existingAudioItem],
-            }).fetchFullSnapshotInLegacyFormat()
-        );
+        await app.get(ArangoEventRepository).appendEvents(eventHistoryForAudioItem);
     });
 
     afterEach(async () => {

@@ -27,6 +27,7 @@ import { ArangoDatabaseProvider } from '../persistence/database/database.provide
 import { PersistenceModule } from '../persistence/persistence.module';
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { ArangoEventRepository } from '../persistence/repositories/arango-event-repository';
 import { TestEventStream } from '../test-data/events';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../validation';
 import { CoscradCliModule } from './coscrad-cli.module';
@@ -94,6 +95,8 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
 
     let testAppModule: TestingModule;
 
+    let testEventRepository: ArangoEventRepository;
+
     beforeAll(async () => {
         testAppModule = await Test.createTestingModule({
             imports: [
@@ -109,6 +112,10 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
                 AudioVisualModule,
                 EdgeConnectionModule,
             ],
+            providers: [AudioItem, ResourcePublished, AudioItemCreated].map((Ctor) => ({
+                provide: Ctor,
+                useValue: Ctor,
+            })),
         })
             .overrideProvider(COSCRAD_LOGGER_TOKEN)
             .useValue(mockLogger)
@@ -140,6 +147,11 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
             testAppModule.get(DynamicDataTypeFinderService)
         );
 
+        testEventRepository = new ArangoEventRepository(
+            databaseProvider,
+            testAppModule.get(CoscradEventFactory)
+        );
+
         commandInstance = await CommandTestFactory.createTestingCommand({
             imports: [CoscradCliModule],
         })
@@ -164,15 +176,19 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
 
     describe(`when the request is valid`, () => {
         beforeEach(async () => {
+            await testEventRepository.appendEvents(
+                audioItems.flatMap(({ eventHistory }) => eventHistory || [])
+            );
+
             await testRepositoryProvider.addFullSnapshot(
                 new DeluxeInMemoryStore({
                     resources: {
-                        audioItem: audioItems,
                         mediaItem: mediaItems,
                     },
                 }).fetchFullSnapshotInLegacyFormat()
             );
         });
+
         it(`should write the correct result`, async () => {
             // Note that we start indexing at 1 (human readable)
             const outputFilename = `export-audio-item-lineages.cli-command.valid-case.data.json`;
