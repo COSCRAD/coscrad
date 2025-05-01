@@ -2,7 +2,6 @@ import { AggregateType, FluxStandardAction, ResourceType } from '@coscrad/api-in
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
-import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
@@ -10,6 +9,7 @@ import { NotFound } from '../../../../../lib/types/not-found';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { ArangoEventRepository } from '../../../../../persistence/repositories/arango-event-repository';
 import { TestEventStream } from '../../../../../test-data/events';
 import { DTO } from '../../../../../types/DTO';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
@@ -20,6 +20,8 @@ import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
+import { AudioItemCreated } from '../../../audio-visual/audio-item/commands/create-audio-item/audio-item-created.event';
+import { AudioItem } from '../../../audio-visual/audio-item/entities/audio-item.entity';
 import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
@@ -38,22 +40,35 @@ const playlistCreated = new TestEventStream().andThen<PlaylistCreated>({
     type: 'PLAYLIST_CREATED',
 });
 
-const existingPlaylist = Playlist.fromEventHistory(
-    playlistCreated.as({
-        type: AggregateType.playlist,
-        id: playlistId,
-    }),
-    playlistId
-) as Playlist; // we assert that this will succeed
+const eventHistoryForPlaylist = playlistCreated.as({
+    type: AggregateType.playlist,
+    id: playlistId,
+});
 
-const existingAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem);
+const existingPlaylist = Playlist.fromEventHistory(eventHistoryForPlaylist, playlistId) as Playlist; // we assert that this will succeed
+
+const audioItemId = buildDummyUuid(12);
+
+const eventHistoryForAudioItem = new TestEventStream()
+    .andThen<AudioItemCreated>({
+        type: 'AUDIO_ITEM_CREATED',
+    })
+    .as({
+        type: AggregateType.audioItem,
+        id: audioItemId,
+    });
+
+const existingAudioItem = AudioItem.fromEventHistory(
+    eventHistoryForAudioItem,
+    audioItemId
+) as AudioItem;
 
 const validPayload: AddAudioItemToPlaylist = {
     aggregateCompositeIdentifier: {
         type: AggregateType.playlist,
         id: existingPlaylist.id,
     },
-    audioItemId: existingAudioItem.id,
+    audioItemId,
 };
 
 const validCommandFSA = {
@@ -107,12 +122,9 @@ describe(commandType, () => {
                 systemUserId: dummySystemUserId,
                 buildValidCommandFSA,
                 seedInitialState: async () => {
-                    await testRepositoryProvider.addFullSnapshot(
-                        new DeluxeInMemoryStore({
-                            [AggregateType.playlist]: [existingPlaylist],
-                            [AggregateType.audioItem]: [existingAudioItem],
-                        }).fetchFullSnapshotInLegacyFormat()
-                    );
+                    await app
+                        .get(ArangoEventRepository)
+                        .appendEvents([...eventHistoryForAudioItem, ...eventHistoryForPlaylist]);
                 },
                 checkStateOnSuccess: async ({
                     aggregateCompositeIdentifier: { id: playlistId },
@@ -156,28 +168,24 @@ describe(commandType, () => {
                     systemUserId: dummySystemUserId,
                     buildCommandFSA: buildValidCommandFSA,
                     seedInitialState: async () => {
-                        const audioItemAddedToPlaylist =
-                            playlistCreated.andThen<AudioItemAddedToPlaylist>({
+                        const eventHistoryForPlaylist = playlistCreated
+                            .andThen<AudioItemAddedToPlaylist>({
                                 type: 'AUDIO_ITEM_ADDED_TO_PLAYLIST',
                                 payload: {
-                                    audioItemId: validCommandFSA.payload.audioItemId,
+                                    audioItemId,
                                 },
+                            })
+                            .as({
+                                type: AggregateType.playlist,
+                                id: playlistId,
                             });
 
-                        await testRepositoryProvider.addFullSnapshot(
-                            new DeluxeInMemoryStore({
-                                [AggregateType.audioItem]: [existingAudioItem],
-                                [AggregateType.playlist]: [
-                                    Playlist.fromEventHistory(
-                                        audioItemAddedToPlaylist.as({
-                                            type: AggregateType.playlist,
-                                            id: playlistId,
-                                        }),
-                                        playlistId
-                                    ) as Playlist,
-                                ],
-                            }).fetchFullSnapshotInLegacyFormat()
-                        );
+                        await app
+                            .get(ArangoEventRepository)
+                            .appendEvents([
+                                ...eventHistoryForAudioItem,
+                                ...eventHistoryForPlaylist,
+                            ]);
                     },
                     checkError: (error) => {
                         assertErrorAsExpected(

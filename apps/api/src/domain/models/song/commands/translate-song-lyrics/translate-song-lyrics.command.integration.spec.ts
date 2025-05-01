@@ -10,12 +10,12 @@ import { clonePlainObjectWithOverrides } from '../../../../../lib/utilities/clon
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { ArangoEventRepository } from '../../../../../persistence/repositories/arango-event-repository';
 import { buildTestCommandFsaMap } from '../../../../../test-data/commands';
+import { TestEventStream } from '../../../../../test-data/events';
 import { DTO } from '../../../../../types/DTO';
-import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
 import { AggregateId } from '../../../../types/AggregateId';
-import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
@@ -23,6 +23,7 @@ import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
+import { AudioItemCreated } from '../../../audio-visual/audio-item/commands/create-audio-item/audio-item-created.event';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { NoLyricsToTranslateError } from '../../errors';
@@ -57,7 +58,12 @@ const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<Translate
 
 const dummyCreateSongFsa = buildTestCommandFsaMap().get(`CREATE_SONG`) as CommandFSA<CreateSong>;
 
-const existingAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem).clone({
+const audioItemCreated = new TestEventStream().andThen<AudioItemCreated>({
+    type: 'AUDIO_ITEM_CREATED',
+});
+
+const eventHistoryForAudioItem = audioItemCreated.as({
+    type: AggregateType.audioItem,
     id: dummyCreateSongFsa.payload.audioItemId,
 });
 
@@ -104,9 +110,7 @@ describe(commandType, () => {
             // Arrange
             const generatedId = await idManager.generate();
 
-            await testRepositoryProvider
-                .forResource(AggregateType.audioItem)
-                .create(existingAudioItem);
+            await app.get(ArangoEventRepository).appendEvents(eventHistoryForAudioItem);
 
             const createSongFsa = clonePlainObjectWithOverrides(dummyCreateSongFsa, {
                 payload: { aggregateCompositeIdentifier: { id: generatedId } },
@@ -173,7 +177,9 @@ describe(commandType, () => {
 
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
-                    initialState: new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat(),
+                    seedInitialState: async () => {
+                        return Promise.resolve();
+                    },
                     buildCommandFSA: () => buildValidCommandFSA(unknownId),
                     checkError: (error) => {
                         assertErrorAsExpected(
@@ -196,9 +202,7 @@ describe(commandType, () => {
 
                 const validCommandFsa = buildValidCommandFSA(newId);
 
-                await testRepositoryProvider
-                    .forResource(AggregateType.audioItem)
-                    .create(existingAudioItem);
+                await app.get(ArangoEventRepository).appendEvents(eventHistoryForAudioItem);
 
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
@@ -243,9 +247,7 @@ describe(commandType, () => {
 
                         const commandMeta = { userId: dummySystemUserId };
 
-                        await testRepositoryProvider
-                            .forResource(AggregateType.audioItem)
-                            .create(existingAudioItem);
+                        await app.get(ArangoEventRepository).appendEvents(eventHistoryForAudioItem);
 
                         // create the song
                         const createResult = await commandHandlerService.execute(

@@ -3,7 +3,6 @@ import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { CommandFSA } from '../../../../../app/controllers/command/command-fsa/command-fsa.entity';
-import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { clonePlainObjectWithOverrides } from '../../../../../lib/utilities/clonePlainObjectWithOverrides';
@@ -46,16 +45,12 @@ const translationLanguageCodeForContent = LanguageCode.Haida;
 
 const audioItemId = buildDummyUuid(123);
 
-const eventHistoryForAudioItem = new TestEventStream()
-    .andThen<AudioItemCreated>({
-        type: 'AUDIO_ITEM_CREATED',
-    })
-    .as({
-        type: AggregateType.audioItem,
-        id: audioItemId,
-    });
+const audioItemCreated = new TestEventStream().andThen<AudioItemCreated>({
+    type: 'AUDIO_ITEM_CREATED',
+});
 
-const existingAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem).clone({
+const eventHistoryForAudioItem = audioItemCreated.as({
+    type: AggregateType.audioItem,
     id: audioItemId,
 });
 
@@ -219,9 +214,13 @@ describe(commandType, () => {
                 await assertCommandSuccess(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     seedInitialState: async () => {
-                        await app
-                            .get(ArangoEventRepository)
-                            .appendEvents([...eventHistory, ...eventHistoryForAudioItem]);
+                        await app.get(ArangoEventRepository).appendEvents([
+                            ...eventHistory,
+                            ...audioItemCreated.as({
+                                type: AggregateType.audioItem,
+                                id: audioIdForTranslatedContent,
+                            }),
+                        ]);
                     },
                     buildValidCommandFSA: () =>
                         commandFsaFactory.build(undefined, {
@@ -320,15 +319,12 @@ describe(commandType, () => {
                         // TODO Stop using the concrete type for this
                         await app
                             .get(ArangoEventRepository)
-                            .appendEvents(
-                                eventStreamForDigitalTextWithPageContent.as(
+                            .appendEvents([
+                                ...eventStreamForDigitalTextWithPageContent.as(
                                     aggregateCompositeIdentifier
-                                )
-                            );
-
-                        await testRepositoryProvider
-                            .forResource(ResourceType.audioItem)
-                            .create(existingAudioItem);
+                                ),
+                                ...eventHistoryForAudioItem,
+                            ]);
                     },
                     buildCommandFSA: () =>
                         commandFsaFactory.build(undefined, {
@@ -345,8 +341,8 @@ describe(commandType, () => {
                     systemUserId: dummySystemUserId,
                     seedInitialState: async () => {
                         // TODO Stop using the concrete type for this
-                        await app.get(ArangoEventRepository).appendEvents(
-                            eventStreamForDigitalTextWithPageContent
+                        await app.get(ArangoEventRepository).appendEvents([
+                            ...eventStreamForDigitalTextWithPageContent
                                 .andThen<AudioAddedForDigitalTextPage>({
                                     type: `AUDIO_ADDED_FOR_DIGITAL_TEXT_PAGE`,
                                     payload: {
@@ -355,12 +351,9 @@ describe(commandType, () => {
                                         languageCode: languageCodeForContent,
                                     },
                                 })
-                                .as(aggregateCompositeIdentifier)
-                        );
-
-                        await testRepositoryProvider
-                            .forResource(ResourceType.audioItem)
-                            .create(existingAudioItem);
+                                .as(aggregateCompositeIdentifier),
+                            ...eventHistoryForAudioItem,
+                        ]);
                     },
                     buildCommandFSA: () =>
                         commandFsaFactory.build(undefined, {

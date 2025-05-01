@@ -9,11 +9,14 @@ import buildMockConfigServiceSpec from '../app/config/__tests__/utilities/buildM
 import buildConfigFilePath from '../app/config/buildConfigFilePath';
 import { Environment } from '../app/config/constants/environment';
 import { CoscradEventFactory, EventModule } from '../domain/common';
+import { AudioItemCreated } from '../domain/models/audio-visual/audio-item/commands/create-audio-item/audio-item-created.event';
 import { AudioItem } from '../domain/models/audio-visual/audio-item/entities/audio-item.entity';
+import { VideoCreated } from '../domain/models/audio-visual/video';
 import { Video } from '../domain/models/audio-visual/video/entities/video.entity';
 import { MediaItemModule } from '../domain/models/media-item';
 import { MediaItem } from '../domain/models/media-item/entities/media-item.entity';
 import { Photograph } from '../domain/models/photograph/entities/photograph.entity';
+import { ResourcePublished } from '../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import { validAggregateOrThrow } from '../domain/models/shared/functional';
 import { AggregateType } from '../domain/types/AggregateType';
 import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
@@ -92,6 +95,12 @@ describe(`CLI Command: **ingest-media-items**`, () => {
                         DynamicDataTypeFinderService,
                     ],
                 },
+                ...[AudioItem, Video, AudioItemCreated, VideoCreated, ResourcePublished].map(
+                    (Ctor) => ({
+                        provide: Ctor,
+                        useValue: Ctor,
+                    })
+                ),
             ],
         })
             .overrideProvider(ConfigService)

@@ -3,7 +3,6 @@ import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { CommandFSA } from '../../../../../app/controllers/command/command-fsa/command-fsa.entity';
-import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { CannotAddDuplicateTranslationError } from '../../../../../domain/common/entities/errors';
 import {
@@ -11,14 +10,15 @@ import {
     MultilingualTextItem,
 } from '../../../../../domain/common/entities/multilingual-text';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
-import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { clonePlainObjectWithOverrides } from '../../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { ArangoEventRepository } from '../../../../../persistence/repositories/arango-event-repository';
 import { buildTestCommandFsaMap } from '../../../../../test-data/commands';
+import { TestEventStream } from '../../../../../test-data/events';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
@@ -26,7 +26,6 @@ import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/a
 import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
-import { dummyDateNow } from '../../../__tests__/utilities/dummyDateNow';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
@@ -40,25 +39,29 @@ const originalTitleText = 'original title';
 
 const existingTitle = buildMultilingualTextWithSingleItem(originalTitleText, LanguageCode.English);
 
-const dummySong = getValidAggregateInstanceForTest(AggregateType.song);
+const songId = buildDummyUuid(5);
+
+const songCompositeId = {
+    type: AggregateType.song,
+    id: songId,
+} as const;
+
+const audioItemId = buildDummyUuid(123);
+
+const songCreated = new TestEventStream().andThen<SongCreated>({
+    type: 'SONG_CREATED',
+    payload: {
+        aggregateCompositeIdentifier: songCompositeId,
+        title: existingTitle.getOriginalTextItem().text,
+        languageCodeForTitle: existingTitle.getOriginalTextItem().languageCode,
+        audioItemId,
+    },
+});
+
+const eventHistoryForSong = songCreated.as(songCompositeId);
 
 // TODO Seed state from a command stream instead
-const existingSong = dummySong.clone({
-    title: existingTitle,
-    eventHistory: [
-        // TODO make sure the dates are consistent
-        new SongCreated(
-            {
-                aggregateCompositeIdentifier: dummySong.getCompositeIdentifier(),
-                title: existingTitle.getOriginalTextItem().text,
-                languageCodeForTitle: existingTitle.getOriginalTextItem().languageCode,
-                audioItemId: buildDummyUuid(123),
-                // TODO Make BaseEvent generic ?
-            },
-            { id: buildDummyUuid(111), userId: dummySystemUserId, dateCreated: dummyDateNow }
-        ),
-    ],
-});
+const existingSong = Song.fromEventHistory(eventHistoryForSong, songId) as Song;
 
 const dummyFsa = buildTestCommandFsaMap().get(commandType) as CommandFSA<TranslateSongTitle>;
 
@@ -118,9 +121,9 @@ describe(commandType, () => {
         it(`should succeed with the expected updates to the database`, async () => {
             await assertCommandSuccess(commandAssertionDependencies, {
                 systemUserId: dummySystemUserId,
-                initialState: new DeluxeInMemoryStore({
-                    [AggregateType.song]: [existingSong],
-                }).fetchFullSnapshotInLegacyFormat(),
+                seedInitialState: async () => {
+                    await app.get(ArangoEventRepository).appendEvents(eventHistoryForSong);
+                },
                 buildValidCommandFSA,
                 checkStateOnSuccess: async ({
                     aggregateCompositeIdentifier: { id: songId },
@@ -158,23 +161,17 @@ describe(commandType, () => {
                 existingItem
             ) as MultilingualText;
 
+            const fsa = buildValidCommandFSA();
+
             it('should fail with the expected error', async () => {
-                await testRepositoryProvider.addFullSnapshot(
-                    new DeluxeInMemoryStore({
-                        [AggregateType.song]: [
-                            existingSong.clone({
-                                title: existingMultilingualText,
-                            }),
-                        ],
-                    }).fetchFullSnapshotInLegacyFormat()
-                );
+                await app.get(ArangoEventRepository).appendEvents(eventHistoryForSong);
 
                 // Translate the song once
-                await commandHandlerService.execute(buildValidCommandFSA(), {
+                await commandHandlerService.execute(fsa, {
                     userId: dummySystemUserId,
                 });
 
-                const result = await commandHandlerService.execute(buildValidCommandFSA(), {
+                const result = await commandHandlerService.execute(fsa, {
                     userId: dummySystemUserId,
                 });
 
@@ -198,7 +195,9 @@ describe(commandType, () => {
             it(`should fail with the expected errors`, async () => {
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
-                    initialState: new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat(),
+                    seedInitialState: async () => {
+                        return Promise.resolve();
+                    },
                     buildCommandFSA: buildValidCommandFSA,
                     checkError: (error) => {
                         assertErrorAsExpected(

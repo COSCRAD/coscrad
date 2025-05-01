@@ -11,9 +11,10 @@ import { clonePlainObjectWithOverrides } from '../../../../lib/utilities/clonePl
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { ArangoEventRepository } from '../../../../persistence/repositories/arango-event-repository';
 import { buildTestCommandFsaMap } from '../../../../test-data/commands';
+import { TestEventStream } from '../../../../test-data/events';
 import { DTO } from '../../../../types/DTO';
-import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { assertCommandFailsDueToTypeError } from '../../../models/__tests__/command-helpers/assert-command-payload-type-error';
 import { AggregateId } from '../../../types/AggregateId';
@@ -27,6 +28,8 @@ import { generateCommandFuzzTestCases } from '../../__tests__/command-helpers/ge
 import { CommandAssertionDependencies } from '../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../__tests__/utilities/dummySystemUserId';
+import { AudioItemCreated } from '../../audio-visual/audio-item/commands/create-audio-item/audio-item-created.event';
+import { AudioItem } from '../../audio-visual/audio-item/entities/audio-item.entity';
 import InvalidExternalReferenceByAggregateError from '../../categories/errors/InvalidExternalReferenceByAggregateError';
 import CommandExecutionError from '../../shared/common-command-errors/CommandExecutionError';
 import UuidNotGeneratedInternallyError from '../../shared/common-command-errors/UuidNotGeneratedInternallyError';
@@ -35,7 +38,21 @@ import { CreateSong } from './create-song.command';
 
 const createSongCommandType = 'CREATE_SONG';
 
-const existingAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem);
+const audioItemId = buildDummyUuid(33);
+
+const audioItemEventHistory = new TestEventStream()
+    .andThen<AudioItemCreated>({
+        type: 'AUDIO_ITEM_CREATED',
+    })
+    .as({
+        type: AggregateType.audioItem,
+        id: audioItemId,
+    });
+
+const existingAudioItem = AudioItem.fromEventHistory(
+    audioItemEventHistory,
+    audioItemId
+) as AudioItem;
 
 const dummyFsa = buildTestCommandFsaMap().get('CREATE_SONG') as CommandFSA<CreateSong>;
 
@@ -66,10 +83,6 @@ const buildInvalidFSA = (
         ...(payloadOverrides as Partial<CreateSong>),
     },
 });
-
-const initialState = new DeluxeInMemoryStore({
-    [AggregateType.audioItem]: [existingAudioItem],
-}).fetchFullSnapshotInLegacyFormat();
 
 describe('CreateSong', () => {
     let testRepositoryProvider: TestRepositoryProvider;
@@ -116,7 +129,7 @@ describe('CreateSong', () => {
             await assertCreateCommandSuccess(assertionHelperDependencies, {
                 buildValidCommandFSA,
                 seedInitialState: async () => {
-                    await testRepositoryProvider.addFullSnapshot(initialState);
+                    await app.get(ArangoEventRepository).appendEvents(audioItemEventHistory);
                 },
                 systemUserId: dummySystemUserId,
                 checkStateOnSuccess: async ({
@@ -248,7 +261,9 @@ describe('CreateSong', () => {
             await assertCreateCommandError(assertionHelperDependencies, {
                 systemUserId: dummySystemUserId,
                 buildCommandFSA: (_: AggregateId) => buildInvalidFSA(bogusId),
-                initialState,
+                seedInitialState: async () => {
+                    await app.get(ArangoEventRepository).appendEvents(audioItemEventHistory);
+                },
                 checkError: (error: InternalError) => {
                     assertErrorAsExpected(
                         error,

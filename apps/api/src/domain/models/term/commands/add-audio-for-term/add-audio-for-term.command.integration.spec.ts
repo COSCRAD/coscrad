@@ -3,7 +3,6 @@ import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { CommandFSA } from '../../../../../app/controllers/command/command-fsa/command-fsa.entity';
-import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
@@ -20,6 +19,8 @@ import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
+import { AudioItemCreated } from '../../../audio-visual/audio-item/commands/create-audio-item/audio-item-created.event';
+import { AudioItem } from '../../../audio-visual/audio-item/entities/audio-item.entity';
 import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
@@ -31,7 +32,21 @@ import { AudioAddedForTerm } from './audio-added-for-term.event';
 
 const commandType = `ADD_AUDIO_FOR_TERM`;
 
-const existingAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem);
+const audioItemId = buildDummyUuid(475);
+
+const audioItemCreated = new TestEventStream().andThen<AudioItemCreated>({
+    type: 'AUDIO_ITEM_CREATED',
+});
+
+const eventHistoryForAudioItem = audioItemCreated.as({
+    type: AggregateType.audioItem,
+    id: audioItemId,
+});
+
+const existingAudioItem = AudioItem.fromEventHistory(
+    eventHistoryForAudioItem,
+    audioItemId
+) as AudioItem;
 
 const languageCodeForText = LanguageCode.Chilcotin;
 
@@ -65,7 +80,7 @@ const dummyFsa = buildTestCommandFsaMap().get(commandType) as CommandFSA<AddAudi
 
 const validPayload: AddAudioForTerm = clonePlainObjectWithOverrides(dummyFsa.payload, {
     aggregateCompositeIdentifier: termCompositeIdentifier,
-    audioItemId: existingAudioItem.id,
+    audioItemId,
     languageCode: languageCodeForText,
 });
 
