@@ -22,14 +22,10 @@ export class CoscradEventFactory {
          * that this must be updated when we update the API of the BaseEvent
          * constructor.
          */
-        try {
-            return this.dynamicDataTypeFinderService.unionFactory.build(
-                eventDocument.type,
-                eventDocument.payload,
-                eventDocument.meta
-            ) as T;
-        } catch (error) {
-            console.log(`boo`);
-        }
+        return this.dynamicDataTypeFinderService.unionFactory.build(
+            eventDocument.type,
+            eventDocument.payload,
+            eventDocument.meta
+        ) as T;
     }
 }
