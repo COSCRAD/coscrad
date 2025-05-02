@@ -11,6 +11,7 @@ import { ArangoDatabaseProvider } from '../../../../../../../persistence/databas
 import TestRepositoryProvider from '../../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestCommandFsaMap } from '../../../../../../../test-data/commands';
+import { TestEventStream } from '../../../../../../../test-data/events';
 import getValidAggregateInstanceForTest from '../../../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextWithSingleItem } from '../../../../../../common/build-multilingual-text-with-single-item';
 import { CannotAddDuplicateTranslationError } from '../../../../../../common/entities/errors';
@@ -32,6 +33,7 @@ import buildDummyUuid from '../../../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../../../__tests__/utilities/dummySystemUserId';
 import AggregateNotFoundError from '../../../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../../../shared/common-command-errors/CommandExecutionError';
+import { AudioItemCreated } from '../../../../audio-item/commands/create-audio-item/audio-item-created.event';
 import { AudioVisualCompositeIdentifier } from '../../../../audio-item/entities/audio-item-composite-identifier';
 import { AudioItem } from '../../../../audio-item/entities/audio-item.entity';
 import { Video } from '../../../../video/entities/video.entity';
@@ -39,6 +41,9 @@ import { TranscriptItem } from '../../../entities/transcript-item.entity';
 import { TranscriptParticipant } from '../../../entities/transcript-participant';
 import { Transcript } from '../../../entities/transcript.entity';
 import { LineItemNotFoundError } from '../../../transcript-errors/line-item-not-found.error';
+import { LineItemAddedToTranscript } from '../add-line-item-to-transcript/line-item-added-to-transcript.event';
+import { ParticipantAddedToTranscript } from '../add-participant-to-transcript/participant-added-to-transcript.event';
+import { TranscriptCreated } from '../create-transcript/transcript-created.event';
 import { TranslateLineItem } from './translate-line-item.command';
 
 const commandType = `TRANSLATE_LINE_ITEM`;
@@ -51,11 +56,19 @@ const dummyFsa = dummyFsaMap.get(commandType) as CommandFSA<TranslateLineItem>;
 
 const targetSpeakerInitials = 'AP';
 
+const translation = `this is what was said (in English)`;
+
+const translationLanguageCode = LanguageCode.English;
+
+const originalLanguageCode = LanguageCode.Chilcotin;
+
+const audioItemId = buildDummyUuid(1);
+
 const existingMultilingualText = new MultilingualText({
     items: [
         new MultilingualTextItem({
             text: 'this is what was said (language)',
-            languageCode: LanguageCode.Chilcotin,
+            languageCode: originalLanguageCode,
             role: MultilingualTextItemRole.original,
         }),
     ],
@@ -79,17 +92,54 @@ const existingTranscript = new Transcript({
     items: [existingLineItem],
 });
 
-const existingAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem).clone({
-    transcript: existingTranscript,
+const audioCompositeId = {
+    type: AggregateType.audioItem,
+    id: audioItemId,
+};
+
+const audioItemCreated = new TestEventStream().andThen<AudioItemCreated>({
+    type: 'AUDIO_ITEM_CREATED',
 });
 
-const existingVideoItem = getValidAggregateInstanceForTest(AggregateType.video).clone({
+const participantAdded = audioItemCreated
+    .andThen<TranscriptCreated>({
+        type: 'TRANSCRIPT_CREATED',
+    })
+    .andThen<ParticipantAddedToTranscript>({
+        type: 'PARTICIPANT_ADDED_TO_TRANSCRIPT',
+        payload: {
+            initials: targetSpeakerInitials,
+            name: 'Target McSpeaker',
+        },
+    });
+
+const lineItemAddedToAudioTranscript = participantAdded
+    .andThen<ParticipantAddedToTranscript>({
+        type: 'PARTICIPANT_ADDED_TO_TRANSCRIPT',
+        payload: {
+            initials: 'JB',
+            name: 'Jay Bam',
+        },
+    })
+    .andThen<LineItemAddedToTranscript>({
+        type: 'LINE_ITEM_ADDED_TO_TRANSCRIPT',
+        payload: {
+            inPointMilliseconds: existingLineItem.inPointMilliseconds,
+            outPointMilliseconds: existingLineItem.outPointMilliseconds,
+            speakerInitials: targetSpeakerInitials,
+            languageCode: originalLanguageCode,
+            text: existingLineItem.text.getOriginalTextItem().text,
+        },
+    });
+
+const existingAudioItem = AudioItem.fromEventHistory(
+    lineItemAddedToAudioTranscript.as(audioCompositeId),
+    audioItemId
+) as AudioItem;
+
+const _existingVideoItem = getValidAggregateInstanceForTest(AggregateType.video).clone({
     transcript: existingTranscript,
 });
-
-const translation = `this is what was said (in English)`;
-
-const translationLanguageCode = LanguageCode.English;
 
 const buildValidFsa = (
     existingTranscribibleResource: AudioItem | Video
@@ -147,197 +197,203 @@ describe(commandType, () => {
         databaseProvider.close();
     });
 
-    const existingTranscribibleResources = [existingAudioItem, existingVideoItem];
-
-    const buildTranscribileResourceDescription = (
-        existingTranscribibleResource: AudioItem | Video
-    ) => `when transcribing a: ${existingTranscribibleResource.type}`;
-
     describe(`when the command is valid`, () => {
-        existingTranscribibleResources.forEach((existingTranscribibleResource) => {
-            describe(buildTranscribileResourceDescription(existingTranscribibleResource), () => {
-                it(`should succeed with the expected database updates`, async () => {
-                    await assertCommandSuccess(assertionHelperDependencies, {
+        describe(`when transcribing an audio item`, () => {
+            const existingTranscribibleResource = existingAudioItem;
+
+            it(`should succeed with the expected database updates`, async () => {
+                await assertCommandSuccess(assertionHelperDependencies, {
+                    systemUserId: dummySystemUserId,
+                    initialState: new DeluxeInMemoryStore({
+                        [existingTranscribibleResource.type]: [existingTranscribibleResource],
+                    }).fetchFullSnapshotInLegacyFormat(),
+                    buildValidCommandFSA: () => buildValidFsa(existingTranscribibleResource),
+                    checkStateOnSuccess: async ({
+                        aggregateCompositeIdentifier: { id },
+                        translation,
+                    }: TranslateLineItem) => {
+                        const searchResult = await testRepositoryProvider
+                            .forResource(existingTranscribibleResource.type)
+                            .fetchById(id);
+
+                        expect(searchResult).not.toBe(NotFound);
+
+                        expect(searchResult).not.toBeInstanceOf(InternalError);
+
+                        const resource = searchResult as AudioItem | Video;
+
+                        const plainTextTranscript = resource.transcript.toString();
+
+                        const plainTextThatDoesNotIncludeNewLineItem = [plainTextTranscript].filter(
+                            (text) => !text.includes(translation)
+                        );
+
+                        expect(plainTextThatDoesNotIncludeNewLineItem).toEqual([]);
+
+                        assertEventRecordPersisted(
+                            resource,
+                            `LINE_ITEM_TRANSLATED`,
+                            dummySystemUserId
+                        );
+                    },
+                });
+            });
+        });
+
+        describe(`when transcribing a video`, () => {
+            it.todo(`should have a test`);
+        });
+    });
+
+    describe(`when the command is invalid`, () => {
+        const existingTranscribibleResource = existingAudioItem;
+
+        const commandFsaFactory = new DummyCommandFsaFactory(() =>
+            buildValidFsa(existingTranscribibleResource)
+        );
+
+        describe(`when transcribing an audio item`, () => {
+            describe(`when the audio-visual resource does not exist`, () => {
+                it(`should fail with the expected error`, async () => {
+                    await assertCommandError(assertionHelperDependencies, {
                         systemUserId: dummySystemUserId,
-                        initialState: new DeluxeInMemoryStore({
-                            [existingTranscribibleResource.type]: [existingTranscribibleResource],
-                        }).fetchFullSnapshotInLegacyFormat(),
-                        buildValidCommandFSA: () => buildValidFsa(existingTranscribibleResource),
-                        checkStateOnSuccess: async ({
-                            aggregateCompositeIdentifier: { id },
-                            translation,
-                        }: TranslateLineItem) => {
-                            const searchResult = await testRepositoryProvider
-                                .forResource(existingTranscribibleResource.type)
-                                .fetchById(id);
-
-                            expect(searchResult).not.toBe(NotFound);
-
-                            expect(searchResult).not.toBeInstanceOf(InternalError);
-
-                            const resource = searchResult as AudioItem | Video;
-
-                            const plainTextTranscript = resource.transcript.toString();
-
-                            const plainTextThatDoesNotIncludeNewLineItem = [
-                                plainTextTranscript,
-                            ].filter((text) => !text.includes(translation));
-
-                            expect(plainTextThatDoesNotIncludeNewLineItem).toEqual([]);
-
-                            assertEventRecordPersisted(
-                                resource,
-                                `LINE_ITEM_TRANSLATED`,
-                                dummySystemUserId
+                        initialState: new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat(),
+                        buildCommandFSA: () => buildValidFsa(existingTranscribibleResource),
+                        checkError: (error) => {
+                            assertErrorAsExpected(
+                                error,
+                                new CommandExecutionError([
+                                    new AggregateNotFoundError(existingTranscribibleResource),
+                                ])
                             );
                         },
                     });
                 });
             });
-        });
-    });
 
-    describe(`when the command is invalid`, () => {
-        existingTranscribibleResources.forEach((existingTranscribibleResource) => {
-            const commandFsaFactory = new DummyCommandFsaFactory(() =>
-                buildValidFsa(existingTranscribibleResource)
-            );
+            describe(`when the line item already has text in this language`, () => {
+                it(`should fail with the expected errors`, async () => {
+                    const existingText = 'I already have text in this language';
 
-            describe(buildTranscribileResourceDescription(existingTranscribibleResource), () => {
-                describe(`when the audio-visual resource does not exist`, () => {
-                    it(`should fail with the expected error`, async () => {
-                        await assertCommandError(assertionHelperDependencies, {
-                            systemUserId: dummySystemUserId,
-                            initialState: new DeluxeInMemoryStore(
-                                {}
-                            ).fetchFullSnapshotInLegacyFormat(),
-                            buildCommandFSA: () => buildValidFsa(existingTranscribibleResource),
-                            checkError: (error) => {
-                                assertErrorAsExpected(
-                                    error,
-                                    new CommandExecutionError([
-                                        new AggregateNotFoundError(existingTranscribibleResource),
-                                    ])
-                                );
-                            },
-                        });
+                    const existingMultilingualText = buildMultilingualTextWithSingleItem(
+                        existingText,
+                        translationLanguageCode
+                    );
+
+                    const fsa = buildValidFsa(existingTranscribibleResource);
+
+                    const { payload } = fsa;
+
+                    const audioItemWithExistingOriginalTextInTargetLanguage =
+                        AudioItem.fromEventHistory(
+                            participantAdded
+                                .andThen<LineItemAddedToTranscript>({
+                                    type: 'LINE_ITEM_ADDED_TO_TRANSCRIPT',
+                                    payload: {
+                                        // note that this is the original language code for the existing transcript item
+                                        languageCode: fsa.payload.languageCode,
+                                        speakerInitials: targetSpeakerInitials,
+                                        inPointMilliseconds: fsa.payload.inPointMilliseconds,
+                                        outPointMilliseconds: fsa.payload.outPointMilliseconds,
+                                        text: existingText,
+                                    },
+                                })
+                                .as(audioCompositeId),
+                            audioItemId
+                        ) as AudioItem;
+
+                    await assertCommandError(assertionHelperDependencies, {
+                        systemUserId: dummySystemUserId,
+                        seedInitialState: async () => {
+                            await testRepositoryProvider.addFullSnapshot(
+                                new DeluxeInMemoryStore({
+                                    [existingTranscribibleResource.type]: [
+                                        audioItemWithExistingOriginalTextInTargetLanguage,
+                                    ],
+                                }).fetchFullSnapshotInLegacyFormat()
+                            );
+                        },
+                        buildCommandFSA: () =>
+                            commandFsaFactory.build(undefined, {
+                                languageCode: LanguageCode.English,
+                            }),
+                        checkError: (error) => {
+                            assertErrorAsExpected(
+                                error,
+                                new CommandExecutionError([
+                                    new CannotAddDuplicateTranslationError(
+                                        new MultilingualTextItem({
+                                            text: payload.translation,
+                                            languageCode: payload.languageCode,
+                                            role: MultilingualTextItemRole.freeTranslation,
+                                        }),
+                                        existingMultilingualText
+                                    ),
+                                ])
+                            );
+                        },
                     });
                 });
+            });
 
-                describe(`when the line item already has text in this language`, () => {
-                    it(`should fail with the expected errors`, async () => {
-                        const existingMultilingualText = buildMultilingualTextWithSingleItem(
-                            'I already have text in this language',
-                            translationLanguageCode
-                        );
+            describe(`when the in point does not match an existing line item`, () => {
+                const inPointMilliseconds = existingLineItem.getTimeBounds()[0] + 0.0345;
 
-                        const fsa = buildValidFsa(existingTranscribibleResource);
+                const outPointMilliseconds = existingLineItem.getTimeBounds()[0];
 
-                        const { payload } = fsa;
-
-                        await assertCommandError(assertionHelperDependencies, {
-                            systemUserId: dummySystemUserId,
-                            initialState: new DeluxeInMemoryStore({
-                                [existingTranscribibleResource.type]: [
-                                    existingTranscribibleResource.clone({
-                                        transcript: existingTranscribibleResource.transcript.clone({
-                                            items: [
-                                                new TranscriptItem({
-                                                    inPointMilliseconds:
-                                                        payload.inPointMilliseconds,
-                                                    outPointMilliseconds:
-                                                        payload.outPointMilliseconds,
-                                                    speakerInitials: targetSpeakerInitials,
-                                                    text: existingMultilingualText,
-                                                }),
-                                            ],
-                                        }),
+                it(`should fail with the expected errors`, async () => {
+                    await assertCommandError(assertionHelperDependencies, {
+                        systemUserId: dummySystemUserId,
+                        initialState: new DeluxeInMemoryStore({
+                            [existingTranscribibleResource.type]: [existingTranscribibleResource],
+                        }).fetchFullSnapshotInLegacyFormat(),
+                        buildCommandFSA: () =>
+                            commandFsaFactory.build(undefined, {
+                                inPointMilliseconds,
+                                outPointMilliseconds,
+                            }),
+                        checkError: (error) => {
+                            assertErrorAsExpected(
+                                error,
+                                new CommandExecutionError([
+                                    new LineItemNotFoundError({
+                                        inPointMilliseconds,
+                                        outPointMilliseconds,
                                     }),
-                                ],
-                            }).fetchFullSnapshotInLegacyFormat(),
-                            buildCommandFSA: () => fsa,
-                            checkError: (error) => {
-                                assertErrorAsExpected(
-                                    error,
-                                    new CommandExecutionError([
-                                        new CannotAddDuplicateTranslationError(
-                                            new MultilingualTextItem({
-                                                text: payload.translation,
-                                                languageCode: payload.languageCode,
-                                                role: MultilingualTextItemRole.freeTranslation,
-                                            }),
-                                            existingMultilingualText
-                                        ),
-                                    ])
-                                );
-                            },
-                        });
+                                ])
+                            );
+                        },
                     });
                 });
+            });
 
-                describe(`when the in point does not match an existing line item`, () => {
-                    const inPointMilliseconds = existingLineItem.getTimeBounds()[0] + 0.0345;
+            describe(`when the out point does not match an existing line item`, () => {
+                const inPointMilliseconds = existingLineItem.getTimeBounds()[0];
 
-                    const outPointMilliseconds = existingLineItem.getTimeBounds()[0];
+                const outPointMilliseconds = existingLineItem.getTimeBounds()[0] - 0.0345;
 
-                    it(`should fail with the expected errors`, async () => {
-                        await assertCommandError(assertionHelperDependencies, {
-                            systemUserId: dummySystemUserId,
-                            initialState: new DeluxeInMemoryStore({
-                                [existingTranscribibleResource.type]: [
-                                    existingTranscribibleResource,
-                                ],
-                            }).fetchFullSnapshotInLegacyFormat(),
-                            buildCommandFSA: () =>
-                                commandFsaFactory.build(undefined, {
-                                    inPointMilliseconds,
-                                    outPointMilliseconds,
-                                }),
-                            checkError: (error) => {
-                                assertErrorAsExpected(
-                                    error,
-                                    new CommandExecutionError([
-                                        new LineItemNotFoundError({
-                                            inPointMilliseconds,
-                                            outPointMilliseconds,
-                                        }),
-                                    ])
-                                );
-                            },
-                        });
-                    });
-                });
-
-                describe(`when the out point does not match an existing line item`, () => {
-                    const inPointMilliseconds = existingLineItem.getTimeBounds()[0];
-
-                    const outPointMilliseconds = existingLineItem.getTimeBounds()[0] - 0.0345;
-
-                    it(`should fail with the expected errors`, async () => {
-                        await assertCommandError(assertionHelperDependencies, {
-                            systemUserId: dummySystemUserId,
-                            initialState: new DeluxeInMemoryStore({
-                                [existingTranscribibleResource.type]: [
-                                    existingTranscribibleResource,
-                                ],
-                            }).fetchFullSnapshotInLegacyFormat(),
-                            buildCommandFSA: () =>
-                                commandFsaFactory.build(undefined, {
-                                    inPointMilliseconds,
-                                    outPointMilliseconds,
-                                }),
-                            checkError: (error) => {
-                                assertErrorAsExpected(
-                                    error,
-                                    new CommandExecutionError([
-                                        new LineItemNotFoundError({
-                                            inPointMilliseconds,
-                                            outPointMilliseconds,
-                                        }),
-                                    ])
-                                );
-                            },
-                        });
+                it(`should fail with the expected errors`, async () => {
+                    await assertCommandError(assertionHelperDependencies, {
+                        systemUserId: dummySystemUserId,
+                        initialState: new DeluxeInMemoryStore({
+                            [existingTranscribibleResource.type]: [existingTranscribibleResource],
+                        }).fetchFullSnapshotInLegacyFormat(),
+                        buildCommandFSA: () =>
+                            commandFsaFactory.build(undefined, {
+                                inPointMilliseconds,
+                                outPointMilliseconds,
+                            }),
+                        checkError: (error) => {
+                            assertErrorAsExpected(
+                                error,
+                                new CommandExecutionError([
+                                    new LineItemNotFoundError({
+                                        inPointMilliseconds,
+                                        outPointMilliseconds,
+                                    }),
+                                ])
+                            );
+                        },
                     });
                 });
             });

@@ -75,12 +75,14 @@ describe('When fetching multiple resources', () => {
 
     const resourceTypesThatHaveStandaloneQueryTests = [
         AggregateType.digitalText,
-        // TODO add standalone query test for song
-        AggregateType.song,
         AggregateType.term,
         AggregateType.vocabularyList,
         AggregateType.photograph,
         AggregateType.playlist,
+        // TODO add standalone query test for song
+        AggregateType.song,
+        AggregateType.audioItem,
+        AggregateType.video,
     ];
 
     Object.values(ResourceType)

@@ -19,6 +19,7 @@ import { VideoController } from '../../../domain/models/audio-visual/application
 import {
     AddLineItemToTranscript,
     AddLineItemtoTranscriptCommandHandler,
+    AudioItemNameTranslatedEventHandler,
     CreateAudioItem,
     CreateAudioItemCommandHandler,
     CreateTranscript,
@@ -28,6 +29,10 @@ import {
     TranslateLineItem,
     TranslateLineItemCommandHandler,
 } from '../../../domain/models/audio-visual/audio-item/commands';
+import { AudioItemCreated } from '../../../domain/models/audio-visual/audio-item/commands/create-audio-item/audio-item-created.event';
+import { AudioItemCreatedEventHandler } from '../../../domain/models/audio-visual/audio-item/commands/create-audio-item/audio-item-created.event-handler';
+import { AudioItemNameTranslated } from '../../../domain/models/audio-visual/audio-item/commands/translate-audio-item-name/audio-item-name-translated-event';
+import { AudioItem } from '../../../domain/models/audio-visual/audio-item/entities/audio-item.entity';
 import {
     AUDIO_QUERY_REPOSITORY_TOKEN,
     IAudioItemQueryRepository,
@@ -38,17 +43,26 @@ import {
     ImportLineItemsToTranscriptCommandHandler,
     ImportTranslationsForTranscript,
     ImportTranslationsForTranscriptCommandHandler,
+    LineItemTranslated,
+    TranslationsImportedForTranscript,
 } from '../../../domain/models/audio-visual/shared/commands/transcripts';
+import { LineItemAddedToTranscript } from '../../../domain/models/audio-visual/shared/commands/transcripts/add-line-item-to-transcript/line-item-added-to-transcript.event';
 import {
     AddParticipantToTranscript,
     AddParticipantToTranscriptCommandHandler,
 } from '../../../domain/models/audio-visual/shared/commands/transcripts/add-participant-to-transcript';
+import { ParticipantAddedToTranscript } from '../../../domain/models/audio-visual/shared/commands/transcripts/add-participant-to-transcript/participant-added-to-transcript.event';
+import { TranscriptCreated } from '../../../domain/models/audio-visual/shared/commands/transcripts/create-transcript/transcript-created.event';
+import { LineItemsImportedToTranscript } from '../../../domain/models/audio-visual/shared/commands/transcripts/import-line-items-to-transcript/line-items-imported-to-transcript.event';
 import {
     CreateVideo,
     CreateVideoCommandHandler,
     TranslateVideoName,
     TranslateVideoNameCommandHandler,
+    VideoCreated,
+    VideoNameTranslated,
 } from '../../../domain/models/audio-visual/video';
+import { Video } from '../../../domain/models/audio-visual/video/entities/video.entity';
 import { CreateBookBibliographicCitation } from '../../../domain/models/bibliographic-citation/book-bibliographic-citation/commands/create-book-bibliographic-citation/create-book-bibliographic-citation.command';
 import { CreateBookBibliographicCitationCommandHandler } from '../../../domain/models/bibliographic-citation/book-bibliographic-citation/commands/create-book-bibliographic-citation/create-book-bibliographic-citation.command-handler';
 import BookBibliographicCitationData from '../../../domain/models/bibliographic-citation/book-bibliographic-citation/entities/book-bibliographic-citation-data.entity';
@@ -399,12 +413,24 @@ export const buildAllDataClassProviders = () =>
         PlaylistNameTranslated,
         AudioItemAddedToPlaylist,
         AudioItemsImportedToPlaylist,
+        AudioItemCreated,
+        AudioItemNameTranslated,
+        VideoCreated,
+        VideoNameTranslated,
+        TranscriptCreated,
+        ParticipantAddedToTranscript,
+        LineItemAddedToTranscript,
+        LineItemTranslated,
+        LineItemsImportedToTranscript,
+        TranslationsImportedForTranscript,
         // Aggregate Root Domain Models
         DigitalText,
         Song,
         Term,
         VocabularyList,
         Playlist,
+        AudioItem,
+        Video,
     ].map((ctor: Ctor<unknown>) => ({
         provide: ctor,
         useValue: ctor,
@@ -922,6 +948,8 @@ export default async (
             AudioAddedForTermEventHandler,
             PhotographCreatedEventHandler,
             VocabularyListCreatedEventHandler,
+            AudioItemCreatedEventHandler,
+            AudioItemNameTranslatedEventHandler,
         ],
 
         controllers: [

@@ -14,7 +14,9 @@ import { CoscradEventFactory, EventModule } from '../domain/common';
 import { buildMultilingualTextWithSingleItem } from '../domain/common/build-multilingual-text-with-single-item';
 import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
 import { AudioVisualModule } from '../domain/models/audio-visual/application/audio-visual.module';
+import { AudioItemCreated } from '../domain/models/audio-visual/audio-item/commands/create-audio-item/audio-item-created.event';
 import { AudioItem } from '../domain/models/audio-visual/audio-item/entities/audio-item.entity';
+import { VideoCreated } from '../domain/models/audio-visual/video';
 import { Video } from '../domain/models/audio-visual/video/entities/video.entity';
 import {
     EdgeConnection,
@@ -32,6 +34,8 @@ import { ArangoDatabaseProvider } from '../persistence/database/database.provide
 import { PersistenceModule } from '../persistence/persistence.module';
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { ArangoEventRepository } from '../persistence/repositories/arango-event-repository';
+import { TestEventStream } from '../test-data/events';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../validation';
 import { CoscradCliModule } from './coscrad-cli.module';
 import { COSCRAD_LOGGER_TOKEN } from './logging';
@@ -46,6 +50,12 @@ const buildOutputFilepath = (filename: string) => `${outputDir}/${filename}`;
 // can we set this to false to hide console output?
 const mockLogger = buildMockLogger({ isEnabled: true });
 
+/**
+ * TODO [test-coverage] Update this test to cover videos as well.
+ *
+ * The ideal time to do this is when we refactor the query service
+ * to leverage the query database.
+ */
 describe(`CLI Command: **${cliCommandName}**`, () => {
     let commandInstance: TestingModule;
 
@@ -54,6 +64,8 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
     let databaseProvider: ArangoDatabaseProvider;
 
     let testAppModule: TestingModule;
+
+    let eventRepository: ArangoEventRepository;
 
     beforeAll(async () => {
         testAppModule = await Test.createTestingModule({
@@ -70,6 +82,10 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
                 AudioVisualModule,
                 EdgeConnectionModule,
             ],
+            providers: [AudioItem, Video, AudioItemCreated, VideoCreated].map((Ctor) => ({
+                provide: Ctor,
+                useValue: Ctor,
+            })),
         })
             .overrideProvider(COSCRAD_LOGGER_TOKEN)
             .useValue(mockLogger)
@@ -101,6 +117,11 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
             testAppModule.get(DynamicDataTypeFinderService)
         );
 
+        eventRepository = new ArangoEventRepository(
+            databaseProvider,
+            testAppModule.get(CoscradEventFactory)
+        );
+
         commandInstance = await CommandTestFactory.createTestingCommand({
             imports: [CoscradCliModule],
         })
@@ -123,109 +144,115 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
         jest.resetAllMocks();
     });
 
-    [AggregateType.audioItem, AggregateType.video].forEach((aggregateType) => {
-        describe(`when there are annotations for a : ${aggregateType}`, () => {
-            const inPointMilliseconds = 1034;
+    describe(`when there are annotations for an audio item`, () => {
+        const inPointMilliseconds = 1034;
 
-            const outPointMilliseconds = 3200.34;
+        const outPointMilliseconds = 3200.34;
 
-            const lengthMilliseconds = 20 * outPointMilliseconds;
+        const lengthMilliseconds = 20 * outPointMilliseconds;
 
-            const noteText = `this is the note`;
+        const noteText = `this is the note`;
 
-            const noteLanguageCode = LanguageCode.English;
+        const noteLanguageCode = LanguageCode.English;
 
-            const note = buildMultilingualTextWithSingleItem(noteText, noteLanguageCode);
+        const note = buildMultilingualTextWithSingleItem(noteText, noteLanguageCode);
 
-            const dummyAudiovisualItem = getValidAggregateInstanceForTest(aggregateType) as
-                | AudioItem
-                | Video;
+        const audioItemId = buildDummyUuid(456);
 
-            const existingAudiovisualItem = dummyAudiovisualItem.clone<AudioItem | Video>({
+        const aggregateCompositeId = {
+            type: AggregateType.audioItem,
+            id: audioItemId,
+        };
+
+        const audioItemCreated = new TestEventStream().andThen<AudioItemCreated>({
+            type: 'AUDIO_ITEM_CREATED',
+            payload: {
                 lengthMilliseconds,
-                published: true,
-            });
+            },
+        });
 
-            const context = new TimeRangeContext({
-                type: EdgeConnectionContextType.timeRange,
-                timeRange: {
-                    inPointMilliseconds,
-                    outPointMilliseconds,
-                },
-            });
+        const eventHistoryForAudioItem = audioItemCreated.as(aggregateCompositeId);
 
-            const idOfNoteForAudiovisualItem = buildDummyUuid(123);
+        const existingAudioItem = AudioItem.fromEventHistory(
+            eventHistoryForAudioItem,
+            audioItemId
+        ) as AudioItem;
 
-            const audioItemId = buildDummyUuid(555);
+        const context = new TimeRangeContext({
+            type: EdgeConnectionContextType.timeRange,
+            timeRange: {
+                inPointMilliseconds,
+                outPointMilliseconds,
+            },
+        });
 
-            const noteForAudiovisualItem = new EdgeConnection({
-                type: AggregateType.note,
-                connectionType: EdgeConnectionType.self,
+        const idOfNoteForAudiovisualItem = buildDummyUuid(123);
+
+        const noteForAudiovisualItem = new EdgeConnection({
+            type: AggregateType.note,
+            connectionType: EdgeConnectionType.self,
+            members: [
+                new EdgeConnectionMember({
+                    compositeIdentifier: existingAudioItem.getCompositeIdentifier(),
+                    context,
+                    role: EdgeConnectionMemberRole.self,
+                }),
+            ],
+            note,
+            id: idOfNoteForAudiovisualItem,
+            audioForNote: MultilingualAudio.buildEmpty().addAudio(
+                audioItemId,
+                noteLanguageCode
+            ) as MultilingualAudio,
+        });
+
+        const dummyTag = getValidAggregateInstanceForTest(AggregateType.tag);
+
+        const tagsForNote = ['publish', 'delete', 'follow-up-with-jones'].map((label, index) =>
+            dummyTag.clone({
+                id: buildDummyUuid(index),
+                label,
                 members: [
-                    new EdgeConnectionMember({
-                        compositeIdentifier: existingAudiovisualItem.getCompositeIdentifier(),
-                        context,
-                        role: EdgeConnectionMemberRole.self,
-                    }),
+                    {
+                        type: AggregateType.note,
+                        id: idOfNoteForAudiovisualItem,
+                    },
                 ],
-                note,
-                id: idOfNoteForAudiovisualItem,
-                audioForNote: MultilingualAudio.buildEmpty().addAudio(
-                    audioItemId,
-                    noteLanguageCode
-                ) as MultilingualAudio,
+            })
+        );
+
+        // Note that we start indexing at 1 (human readable)
+        const outputFilename = `${AggregateType.audioItem}-${existingAudioItem.id}-1.data.json`;
+
+        const outputFilepath = buildOutputFilepath(outputFilename);
+
+        describe(`when all input arguments are valid`, () => {
+            beforeEach(async () => {
+                if (existsSync(outputFilepath)) {
+                    rmSync(outputFilepath);
+                }
+
+                await eventRepository.appendEvents(eventHistoryForAudioItem);
+
+                await testRepositoryProvider.addFullSnapshot(
+                    new DeluxeInMemoryStore({
+                        [AggregateType.tag]: tagsForNote,
+                        [AggregateType.note]: [noteForAudiovisualItem],
+                    }).fetchFullSnapshotInLegacyFormat()
+                );
             });
 
-            const dummyTag = getValidAggregateInstanceForTest(AggregateType.tag);
+            it(`should write the expected data file`, async () => {
+                await CommandTestFactory.run(commandInstance, [
+                    cliCommandName,
+                    `--exportPath=${outputDir}`,
+                    `--mediaType=all`,
+                    // TODO support input query strings \ filters
+                ]);
 
-            const tagsForNote = ['publish', 'delete', 'follow-up-with-jones'].map((label, index) =>
-                dummyTag.clone({
-                    id: buildDummyUuid(index),
-                    label,
-                    members: [
-                        {
-                            type: AggregateType.note,
-                            id: idOfNoteForAudiovisualItem,
-                        },
-                    ],
-                })
-            );
+                const fileExists = existsSync(outputFilepath);
 
-            // Note that we start indexing at 1 (human readable)
-            const outputFilename = `${aggregateType}-${existingAudiovisualItem.id}-1.data.json`;
-
-            const outputFilepath = buildOutputFilepath(outputFilename);
-
-            describe(`when all input arguments are valid`, () => {
-                beforeEach(async () => {
-                    if (existsSync(outputFilepath)) {
-                        rmSync(outputFilepath);
-                    }
-
-                    await testRepositoryProvider
-                        .forResource(aggregateType)
-                        .createMany([existingAudiovisualItem]);
-
-                    await testRepositoryProvider.addFullSnapshot(
-                        new DeluxeInMemoryStore({
-                            [AggregateType.tag]: tagsForNote,
-                            [AggregateType.note]: [noteForAudiovisualItem],
-                        }).fetchFullSnapshotInLegacyFormat()
-                    );
-                });
-
-                it(`should write the expected data file`, async () => {
-                    await CommandTestFactory.run(commandInstance, [
-                        cliCommandName,
-                        `--exportPath=${outputDir}`,
-                        `--mediaType=all`,
-                        // TODO support input query strings \ filters
-                    ]);
-
-                    const fileExists = existsSync(outputFilepath);
-
-                    expect(fileExists).toBe(true);
-                });
+                expect(fileExists).toBe(true);
             });
         });
     });

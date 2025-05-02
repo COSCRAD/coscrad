@@ -8,5 +8,5 @@ export type SongTitleTranslatedPayload = TranslateSongTitle;
 // TODO Can we get the event type via reflection?
 @CoscradEvent(SONG_TITLE_TRANSLATED)
 export class SongTitleTranslated extends BaseEvent<SongTitleTranslatedPayload> {
-    type = SONG_TITLE_TRANSLATED;
+    readonly type = SONG_TITLE_TRANSLATED;
 }

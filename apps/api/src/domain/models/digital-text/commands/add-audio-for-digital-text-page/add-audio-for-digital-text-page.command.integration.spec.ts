@@ -3,9 +3,7 @@ import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { CommandFSA } from '../../../../../app/controllers/command/command-fsa/command-fsa.entity';
-import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
-import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { clonePlainObjectWithOverrides } from '../../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
@@ -20,6 +18,7 @@ import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
+import { AudioItemCreated } from '../../../audio-visual/audio-item/commands/create-audio-item/audio-item-created.event';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { DigitalText } from '../../entities';
@@ -46,7 +45,12 @@ const translationLanguageCodeForContent = LanguageCode.Haida;
 
 const audioItemId = buildDummyUuid(123);
 
-const existingAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem).clone({
+const audioItemCreated = new TestEventStream().andThen<AudioItemCreated>({
+    type: 'AUDIO_ITEM_CREATED',
+});
+
+const eventHistoryForAudioItem = audioItemCreated.as({
+    type: AggregateType.audioItem,
     id: audioItemId,
 });
 
@@ -159,20 +163,20 @@ describe(commandType, () => {
     describe(`when the command is valid`, () => {
         describe(`when the audio is for the original text item`, () => {
             it(`should succeed`, async () => {
-                const eventHistory = eventStreamForDigitalTextWithPageContent.as({
+                const eventHistoryForDigitalText = eventStreamForDigitalTextWithPageContent.as({
                     id: digitalTextId,
                 });
 
                 await assertCommandSuccess(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     seedInitialState: async () => {
-                        // add the snapshot based audio item
-                        await testRepositoryProvider
-                            .forResource(ResourceType.audioItem)
-                            .create(existingAudioItem);
-
-                        // add the event-sourced digital text
-                        await app.get(ArangoEventRepository).appendEvents(eventHistory);
+                        // add the digital text and audio item
+                        await app
+                            .get(ArangoEventRepository)
+                            .appendEvents([
+                                ...eventHistoryForDigitalText,
+                                ...eventHistoryForAudioItem,
+                            ]);
                     },
                     buildValidCommandFSA: () =>
                         commandFsaFactory.build(undefined, {
@@ -210,18 +214,13 @@ describe(commandType, () => {
                 await assertCommandSuccess(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     seedInitialState: async () => {
-                        // add the snapshot based audio item
-                        await testRepositoryProvider
-                            .forResource(ResourceType.audioItem)
-                            .createMany([
-                                existingAudioItem,
-                                existingAudioItem.clone({
-                                    id: audioIdForTranslatedContent,
-                                }),
-                            ]);
-
-                        // add the event-sourced digital text
-                        await app.get(ArangoEventRepository).appendEvents(eventHistory);
+                        await app.get(ArangoEventRepository).appendEvents([
+                            ...eventHistory,
+                            ...audioItemCreated.as({
+                                type: AggregateType.audioItem,
+                                id: audioIdForTranslatedContent,
+                            }),
+                        ]);
                     },
                     buildValidCommandFSA: () =>
                         commandFsaFactory.build(undefined, {
@@ -257,11 +256,7 @@ describe(commandType, () => {
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     seedInitialState: async () => {
-                        await testRepositoryProvider.addFullSnapshot(
-                            new DeluxeInMemoryStore({
-                                [AggregateType.audioItem]: [existingAudioItem],
-                            }).fetchFullSnapshotInLegacyFormat()
-                        );
+                        await app.get(ArangoEventRepository).appendEvents(eventHistoryForAudioItem);
                     },
                     buildCommandFSA: () => commandFsaFactory.build(),
                     checkError: (error) => {
@@ -324,15 +319,12 @@ describe(commandType, () => {
                         // TODO Stop using the concrete type for this
                         await app
                             .get(ArangoEventRepository)
-                            .appendEvents(
-                                eventStreamForDigitalTextWithPageContent.as(
+                            .appendEvents([
+                                ...eventStreamForDigitalTextWithPageContent.as(
                                     aggregateCompositeIdentifier
-                                )
-                            );
-
-                        await testRepositoryProvider
-                            .forResource(ResourceType.audioItem)
-                            .create(existingAudioItem);
+                                ),
+                                ...eventHistoryForAudioItem,
+                            ]);
                     },
                     buildCommandFSA: () =>
                         commandFsaFactory.build(undefined, {
@@ -349,8 +341,8 @@ describe(commandType, () => {
                     systemUserId: dummySystemUserId,
                     seedInitialState: async () => {
                         // TODO Stop using the concrete type for this
-                        await app.get(ArangoEventRepository).appendEvents(
-                            eventStreamForDigitalTextWithPageContent
+                        await app.get(ArangoEventRepository).appendEvents([
+                            ...eventStreamForDigitalTextWithPageContent
                                 .andThen<AudioAddedForDigitalTextPage>({
                                     type: `AUDIO_ADDED_FOR_DIGITAL_TEXT_PAGE`,
                                     payload: {
@@ -359,12 +351,9 @@ describe(commandType, () => {
                                         languageCode: languageCodeForContent,
                                     },
                                 })
-                                .as(aggregateCompositeIdentifier)
-                        );
-
-                        await testRepositoryProvider
-                            .forResource(ResourceType.audioItem)
-                            .create(existingAudioItem);
+                                .as(aggregateCompositeIdentifier),
+                            ...eventHistoryForAudioItem,
+                        ]);
                     },
                     buildCommandFSA: () =>
                         commandFsaFactory.build(undefined, {

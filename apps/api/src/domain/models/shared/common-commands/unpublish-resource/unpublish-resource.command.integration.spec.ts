@@ -27,6 +27,8 @@ const eventSourcedResourceTypes = [
     ResourceType.song,
     ResourceType.vocabularyList,
     ResourceType.playlist,
+    ResourceType.audioItem,
+    ResourceType.video,
 ];
 
 describe(commandType, () => {

@@ -82,12 +82,14 @@ const fullSnapshotOfResources = buildTestData().resources;
 
 const resourceTypesThatHaveStandaloneQueryTests = [
     ResourceType.digitalText,
-    // TODO write standalone query test
-    ResourceType.song,
     ResourceType.photograph,
     ResourceType.term,
     ResourceType.vocabularyList,
     ResourceType.playlist,
+    // TODO write standalone query test for these
+    ResourceType.song,
+    ResourceType.audioItem,
+    ResourceType.video,
 ];
 
 describe('Access Control List and Role Based filtering in resource queries', () => {

@@ -36,6 +36,13 @@ export class AudioItemQueryService extends ResourceQueryService<
     }
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
+        const _audioItems = await this.repositoryProvider
+            .forResource<AudioItem>(AggregateType.audioItem)
+            .fetchMany()
+            .catch((error) => {
+                console.log(error);
+            });
+
         const [
             audioItemSearchResult,
             mediaItemSearchResult,

@@ -79,6 +79,8 @@ describe(commandType, () => {
                     ResourceType.term,
                     ResourceType.song,
                     ResourceType.digitalText,
+                    ResourceType.audioItem,
+                    ResourceType.video,
                 ].includes(t)
         )
         .forEach((resourceType) => {

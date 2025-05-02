@@ -3,10 +3,10 @@ import { TestingModule } from '@nestjs/testing';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
-import getValidAggregateInstanceForTest from '../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
 import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../domain/models/__tests__/utilities/dummySystemUserId';
+import { AudioItemCreated } from '../domain/models/audio-visual/audio-item/commands/create-audio-item/audio-item-created.event';
 import { CoscradCommandMeta } from '../domain/models/shared/command-handlers/base-command-handler';
 import { AddLyricsForSong } from '../domain/models/song/commands';
 import { CreateSong } from '../domain/models/song/commands/create-song.command';
@@ -22,6 +22,7 @@ import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRe
 import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoEventRepository } from '../persistence/repositories/arango-event-repository';
 import { ArangoIdRepository } from '../persistence/repositories/arango-id-repository';
+import { TestEventStream } from '../test-data/events';
 import { DeepPartial } from '../types/DeepPartial';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../validation';
 import { CoscradCliModule } from './coscrad-cli.module';
@@ -53,7 +54,11 @@ const dummyUuids: AggregateId[] = Array(10)
     .fill(0)
     .map((_, index) => buildDummyUuid(index));
 
-const existingAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem);
+const audioItemId = buildDummyUuid(736);
+
+const audioItemCreated = new TestEventStream().andThen<AudioItemCreated>({
+    type: 'AUDIO_ITEM_CREATED',
+});
 
 describe(`CLI Command: ${cliCommandName}`, () => {
     let commandInstance: TestingModule;
@@ -111,7 +116,12 @@ describe(`CLI Command: ${cliCommandName}`, () => {
          */
         await new ArangoIdRepository(databaseProvider).createMany(dummyUuids);
 
-        await testRepositoryProvider.forResource(AggregateType.audioItem).create(existingAudioItem);
+        await testAppModule.get(ArangoEventRepository).appendEvents(
+            audioItemCreated.as({
+                type: AggregateType.audioItem,
+                id: audioItemId,
+            })
+        );
 
         jest.clearAllMocks();
     });
@@ -119,7 +129,7 @@ describe(`CLI Command: ${cliCommandName}`, () => {
     const createCommandType = 'CREATE_SONG';
 
     const payloadOverridesForValidCreateCommand: DeepPartial<CreateSong> = {
-        audioItemId: existingAudioItem.id,
+        audioItemId,
         aggregateCompositeIdentifier: { id: dummyUuids[0] },
     };
 

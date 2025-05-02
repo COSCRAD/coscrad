@@ -7,7 +7,7 @@ import { ArangoDatabaseProvider } from '../../../../../../../persistence/databas
 import TestRepositoryProvider from '../../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import formatAggregateType from '../../../../../../../queries/presentation/formatAggregateType';
-import getValidAggregateInstanceForTest from '../../../../../../__tests__/utilities/getValidAggregateInstanceForTest';
+import { TestEventStream } from '../../../../../../../test-data/events';
 import { IIdManager } from '../../../../../../interfaces/id-manager.interface';
 import { AggregateCompositeIdentifier } from '../../../../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../../../../types/AggregateType';
@@ -21,6 +21,7 @@ import { CommandAssertionDependencies } from '../../../../../__tests__/command-h
 import buildDummyUuid from '../../../../../__tests__/utilities/buildDummyUuid';
 import AggregateNotFoundError from '../../../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../../../shared/common-command-errors/CommandExecutionError';
+import { AudioItemCreated } from '../../../../audio-item/commands/create-audio-item/audio-item-created.event';
 import { AudiovisualResourceType } from '../../../../audio-item/entities/audio-item-composite-identifier';
 import { AudioItem } from '../../../../audio-item/entities/audio-item.entity';
 import {
@@ -28,12 +29,14 @@ import {
     DuplicateTranscriptParticipantInitialsError,
     DuplicateTranscriptParticipantNameError,
 } from '../../../../audio-item/errors';
+import { VideoCreated } from '../../../../video';
 import { Video } from '../../../../video/entities/video.entity';
 import { TranscriptParticipant } from '../../../entities/transcript-participant';
-import { Transcript } from '../../../entities/transcript.entity';
 import { CannotAddParticipantBeforeCreatingTranscriptError } from '../../../transcript-errors/cannot-add-participant-before-creating-transcript.error';
 import { CreateTranscript } from '../create-transcript';
+import { TranscriptCreated } from '../create-transcript/transcript-created.event';
 import { AddParticipantToTranscript } from './add-participant-to-transcript.command';
+import { ParticipantAddedToTranscript } from './participant-added-to-transcript.event';
 
 type AudiovisualItem = AudioItem | Video;
 
@@ -41,19 +44,41 @@ const commandType = `ADD_PARTICIPANT_TO_TRANSCRIPT`;
 
 const testDatabaseName = generateDatabaseNameForTestSuite();
 
-const buildEmptyTranscript = () =>
-    new Transcript({
-        items: [],
-        participants: [],
-    });
+const audioItemId = buildDummyUuid(1);
 
-const existingAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem).clone({
-    transcript: buildEmptyTranscript(),
+const audioItemCreated = new TestEventStream().andThen<AudioItemCreated>({
+    type: 'AUDIO_ITEM_CREATED',
 });
 
-const existingVideo = getValidAggregateInstanceForTest(AggregateType.video).clone({
-    transcript: buildEmptyTranscript(),
+const transcriptCreatedForAudio = audioItemCreated.andThen<TranscriptCreated>({
+    type: 'TRANSCRIPT_CREATED',
 });
+
+const existingAudioItem = AudioItem.fromEventHistory(
+    transcriptCreatedForAudio.as({
+        type: AggregateType.audioItem,
+        id: audioItemId,
+    }),
+    audioItemId
+) as AudioItem;
+
+const videoCreated = new TestEventStream().andThen<VideoCreated>({
+    type: 'VIDEO_CREATED',
+});
+
+const transcriptCreatedForVideo = videoCreated.andThen<TranscriptCreated>({
+    type: 'TRANSCRIPT_CREATED',
+});
+
+const videoId = buildDummyUuid(5);
+
+const existingVideo = Video.fromEventHistory(
+    transcriptCreatedForVideo.as({
+        type: AggregateType.video,
+        id: videoId,
+    }),
+    videoId
+) as Video;
 
 const existingTranscriptParticipant = new TranscriptParticipant({
     initials: 'ABC',
@@ -119,32 +144,37 @@ describe(`The command: ${commandType}`, () => {
         databaseProvider.close();
     });
 
-    const existingAudiovisualItemsAndCtors: [AudiovisualItem, unknown][] = [
-        [existingAudioItem, AudioItem],
-        [existingVideo, Video],
-    ];
-
     describe(`when the command is valid`, () => {
-        existingAudiovisualItemsAndCtors.forEach(([item, Ctor]) => {
+        describe(`when transcribing an audio item`, () => {
+            const item = existingAudioItem;
+
             const validCommandFSA = buildValidCommandFSA(item);
 
-            describe(`for a resource of type: ${formatAggregateType(item.type)}`, () => {
+            describe(`for a resource of type: ${formatAggregateType(
+                AggregateType.audioItem
+            )}`, () => {
                 describe(`when there is not already a participant on the transcript`, () => {
                     it(`should succeed with the expected database updates`, async () => {
                         await assertCommandSuccess(assertionHelperDependencies, {
                             buildValidCommandFSA: () => validCommandFSA,
                             systemUserId,
-                            initialState: validInitialState,
+                            seedInitialState: async () => {
+                                await testRepositoryProvider.addFullSnapshot(
+                                    new DeluxeInMemoryStore(
+                                        validInitialState
+                                    ).fetchFullSnapshotInLegacyFormat()
+                                );
+                            },
                             checkStateOnSuccess: async ({
                                 aggregateCompositeIdentifier: { id },
                             }: AddParticipantToTranscript) => {
                                 const transcriptSearchResult = await testRepositoryProvider
-                                    .forResource(item.type)
+                                    .forResource(AggregateType.audioItem)
                                     .fetchById(id);
 
                                 expect(transcriptSearchResult).not.toBe(NotFound);
 
-                                expect(transcriptSearchResult).toBeInstanceOf(Ctor);
+                                expect(transcriptSearchResult).toBeInstanceOf(AudioItem);
 
                                 const audiovisualItem = transcriptSearchResult as AudiovisualItem;
 
@@ -169,22 +199,35 @@ describe(`The command: ${commandType}`, () => {
                 });
 
                 describe(`when there is already one participant transcript for the audio item`, () => {
-                    const instanceWithParticipantInitialsAlready = item.clone({
-                        transcript: {
-                            items: [],
-                            participants: [existingTranscriptParticipant],
-                        },
-                    });
+                    const instanceWithParticipantInitialsAlready = AudioItem.fromEventHistory(
+                        transcriptCreatedForAudio
+                            .andThen<ParticipantAddedToTranscript>({
+                                type: 'PARTICIPANT_ADDED_TO_TRANSCRIPT',
+                                payload: {
+                                    initials: existingTranscriptParticipant.initials,
+                                    name: existingTranscriptParticipant.name,
+                                },
+                            })
+                            .as({
+                                type: AggregateType.audioItem,
+                                id: audioItemId,
+                            }),
+                        audioItemId
+                    ) as AudioItem;
 
                     it(`should succeed with the expected database updates`, async () => {
                         await assertCommandSuccess(assertionHelperDependencies, {
                             buildValidCommandFSA: () => validCommandFSA,
                             systemUserId,
-                            initialState: new DeluxeInMemoryStore({
-                                [instanceWithParticipantInitialsAlready.type]: [
-                                    instanceWithParticipantInitialsAlready,
-                                ],
-                            }).fetchFullSnapshotInLegacyFormat(),
+                            seedInitialState: async () => {
+                                await testRepositoryProvider.addFullSnapshot(
+                                    new DeluxeInMemoryStore({
+                                        [instanceWithParticipantInitialsAlready.type]: [
+                                            instanceWithParticipantInitialsAlready,
+                                        ],
+                                    }).fetchFullSnapshotInLegacyFormat()
+                                );
+                            },
                             checkStateOnSuccess: async ({
                                 aggregateCompositeIdentifier: { id },
                             }: AddParticipantToTranscript) => {
@@ -194,7 +237,7 @@ describe(`The command: ${commandType}`, () => {
 
                                 expect(transcriptSearchResult).not.toBe(NotFound);
 
-                                expect(transcriptSearchResult).toBeInstanceOf(Ctor);
+                                expect(transcriptSearchResult).toBeInstanceOf(AudioItem);
 
                                 const audiovisualItem = transcriptSearchResult as AudiovisualItem;
 
@@ -208,11 +251,12 @@ describe(`The command: ${commandType}`, () => {
                                     TranscriptParticipant
                                 );
 
-                                assertEventRecordPersisted(
-                                    audiovisualItem,
-                                    'PARTICIPANT_ADDED_TO_TRANSCRIPT',
-                                    systemUserId
-                                );
+                                /**
+                                 * note that `assertEventRecordPersisted` does not currently support
+                                 * having multiple events of the same type, so we don't check this here.
+                                 *
+                                 * TODO update this util to use a more flexible API (IOC)
+                                 */
                             },
                         });
                     });
@@ -222,142 +266,160 @@ describe(`The command: ${commandType}`, () => {
     });
 
     describe(`when the command is invalid`, () => {
-        existingAudiovisualItemsAndCtors.forEach(([item]) => {
-            const validCommandFSA = buildValidCommandFSA(item);
+        const item = existingAudioItem;
 
-            describe(`when the payload has an invalid type`, () => {
-                describe('when the command payload type is invalid', () => {
-                    generateCommandFuzzTestCases(CreateTranscript).forEach(
-                        ({ description, propertyName, invalidValue }) => {
-                            describe(`when the property ${propertyName} has the invalid value: ${invalidValue} (${description})`, () => {
-                                it('should fail with the appropriate error', async () => {
-                                    await assertCommandFailsDueToTypeError(
-                                        assertionHelperDependencies,
-                                        { propertyName, invalidValue },
-                                        validCommandFSA
-                                    );
-                                });
+        const validCommandFSA = buildValidCommandFSA(item);
+
+        describe(`when the payload has an invalid type`, () => {
+            describe('when the command payload type is invalid', () => {
+                generateCommandFuzzTestCases(CreateTranscript).forEach(
+                    ({ description, propertyName, invalidValue }) => {
+                        describe(`when the property ${propertyName} has the invalid value: ${invalidValue} (${description})`, () => {
+                            it('should fail with the appropriate error', async () => {
+                                await assertCommandFailsDueToTypeError(
+                                    assertionHelperDependencies,
+                                    { propertyName, invalidValue },
+                                    validCommandFSA
+                                );
                             });
-                        }
-                    );
-                });
+                        });
+                    }
+                );
             });
+        });
 
-            describe(`when there is no ${formatAggregateType(item.type)} with the given ID`, () => {
-                it(`should fail with the expected error`, async () => {
-                    await assertCommandError(assertionHelperDependencies, {
-                        systemUserId,
-                        initialState: new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat(),
-                        buildCommandFSA: () => validCommandFSA,
-                        checkError: (error) => {
-                            assertErrorAsExpected(
-                                error,
-                                new CommandExecutionError([
-                                    new AggregateNotFoundError(
-                                        validCommandFSA.payload.aggregateCompositeIdentifier
-                                    ),
-                                ])
-                            );
-                        },
-                    });
-                });
-            });
-
-            describe(`when there is already a participant with the given initials`, () => {
-                const instanceWithParticipantInitialsAlready = item.clone({
-                    transcript: {
-                        items: [],
-                        participants: [
-                            new TranscriptParticipant({
-                                initials: validCommandFSA.payload.initials,
-                                name: 'Bobby Dee',
-                            }),
-                        ],
+        describe(`when there is no ${formatAggregateType(item.type)} with the given ID`, () => {
+            it(`should fail with the expected error`, async () => {
+                await assertCommandError(assertionHelperDependencies, {
+                    systemUserId,
+                    initialState: new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat(),
+                    buildCommandFSA: () => validCommandFSA,
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new AggregateNotFoundError(
+                                    validCommandFSA.payload.aggregateCompositeIdentifier
+                                ),
+                            ])
+                        );
                     },
                 });
-
-                it(`should fail with the expected errors`, async () => {
-                    await assertCommandError(assertionHelperDependencies, {
-                        buildCommandFSA: () => validCommandFSA,
-                        initialState: new DeluxeInMemoryStore({
-                            [item.type]: [instanceWithParticipantInitialsAlready],
-                        }).fetchFullSnapshotInLegacyFormat(),
-                        systemUserId,
-                        checkError: (error) => {
-                            assertErrorAsExpected(
-                                error,
-                                new CommandExecutionError([
-                                    new DuplicateTranscriptParticipantError([
-                                        new DuplicateTranscriptParticipantInitialsError(
-                                            validCommandFSA.payload.initials
-                                        ),
-                                    ]),
-                                ])
-                            );
-                        },
-                    });
-                });
             });
+        });
 
-            describe(`when there is already a participant with the given name`, () => {
-                const instanceWithParticipantNameAlready = item.clone({
-                    transcript: {
-                        items: [],
-                        participants: [
-                            new TranscriptParticipant({
-                                initials: 'ABC',
-                                name: validCommandFSA.payload.name,
-                            }),
-                        ],
+        describe(`when there is already a participant with the given initials`, () => {
+            const instanceWithParticipantInitialsAlready = AudioItem.fromEventHistory(
+                transcriptCreatedForAudio
+                    .andThen<ParticipantAddedToTranscript>({
+                        type: 'PARTICIPANT_ADDED_TO_TRANSCRIPT',
+                        payload: {
+                            initials: validCommandFSA.payload.initials,
+                        },
+                    })
+                    .as({
+                        type: AggregateType.audioItem,
+                        id: audioItemId,
+                    }),
+                audioItemId
+            ) as AudioItem;
+
+            it(`should fail with the expected errors`, async () => {
+                await assertCommandError(assertionHelperDependencies, {
+                    buildCommandFSA: () => validCommandFSA,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider.addFullSnapshot(
+                            new DeluxeInMemoryStore({
+                                [item.type]: [instanceWithParticipantInitialsAlready],
+                            }).fetchFullSnapshotInLegacyFormat()
+                        );
+                    },
+                    systemUserId,
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new DuplicateTranscriptParticipantError([
+                                    new DuplicateTranscriptParticipantInitialsError(
+                                        validCommandFSA.payload.initials
+                                    ),
+                                ]),
+                            ])
+                        );
                     },
                 });
+            });
+        });
 
-                it(`should fail with the expected errors`, async () => {
-                    await assertCommandError(assertionHelperDependencies, {
-                        buildCommandFSA: () => validCommandFSA,
-                        initialState: new DeluxeInMemoryStore({
-                            [item.type]: [instanceWithParticipantNameAlready],
-                        }).fetchFullSnapshotInLegacyFormat(),
-                        systemUserId,
-                        checkError: (error) => {
-                            assertErrorAsExpected(
-                                error,
-                                new CommandExecutionError([
-                                    new DuplicateTranscriptParticipantError([
-                                        new DuplicateTranscriptParticipantNameError(
-                                            validCommandFSA.payload.name
-                                        ),
-                                    ]),
-                                ])
-                            );
+        describe(`when there is already a participant with the given name`, () => {
+            const instanceWithParticipantNameAlready = AudioItem.fromEventHistory(
+                transcriptCreatedForAudio
+                    .andThen<ParticipantAddedToTranscript>({
+                        type: 'PARTICIPANT_ADDED_TO_TRANSCRIPT',
+                        payload: {
+                            name: validCommandFSA.payload.name,
                         },
-                    });
+                    })
+                    .as({
+                        type: AggregateType.audioItem,
+                        id: audioItemId,
+                    }),
+                audioItemId
+            ) as AudioItem;
+
+            it(`should fail with the expected errors`, async () => {
+                await assertCommandError(assertionHelperDependencies, {
+                    buildCommandFSA: () => validCommandFSA,
+                    initialState: new DeluxeInMemoryStore({
+                        [item.type]: [instanceWithParticipantNameAlready],
+                    }).fetchFullSnapshotInLegacyFormat(),
+                    systemUserId,
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new DuplicateTranscriptParticipantError([
+                                    new DuplicateTranscriptParticipantNameError(
+                                        validCommandFSA.payload.name
+                                    ),
+                                ]),
+                            ])
+                        );
+                    },
                 });
             });
+        });
 
-            describe(`when the audio item does not yet have a transcript`, () => {
-                it(`should fail with the expected errors`, async () => {
-                    await assertCommandError(assertionHelperDependencies, {
-                        systemUserId,
-                        initialState: new DeluxeInMemoryStore({
-                            [item.type]: [
-                                item.clone({
-                                    transcript: undefined,
-                                }),
-                            ],
-                        }).fetchFullSnapshotInLegacyFormat(),
-                        buildCommandFSA: () => validCommandFSA,
-                        checkError: (error) => {
-                            assertErrorAsExpected(
-                                error,
-                                new CommandExecutionError([
-                                    new CannotAddParticipantBeforeCreatingTranscriptError(
-                                        validCommandFSA.payload.aggregateCompositeIdentifier
-                                    ),
-                                ])
-                            );
-                        },
-                    });
+        describe(`when the audio item does not yet have a transcript`, () => {
+            it(`should fail with the expected errors`, async () => {
+                await assertCommandError(assertionHelperDependencies, {
+                    systemUserId,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider.addFullSnapshot(
+                            new DeluxeInMemoryStore({
+                                [item.type]: [
+                                    AudioItem.fromEventHistory(
+                                        audioItemCreated.as({
+                                            type: AggregateType.audioItem,
+                                            id: audioItemId,
+                                        }),
+                                        audioItemId
+                                    ) as AudioItem,
+                                ],
+                            }).fetchFullSnapshotInLegacyFormat()
+                        );
+                    },
+                    buildCommandFSA: () => validCommandFSA,
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new CannotAddParticipantBeforeCreatingTranscriptError(
+                                    validCommandFSA.payload.aggregateCompositeIdentifier
+                                ),
+                            ])
+                        );
+                    },
                 });
             });
         });

@@ -120,6 +120,8 @@ export class ArangoRepositoryProvider implements IRepositoryProvider {
             AggregateType.term,
             AggregateType.vocabularyList,
             AggregateType.playlist,
+            AggregateType.audioItem,
+            AggregateType.video,
         ];
 
         if (eventSourcedAggregateTypes.includes(resourceType)) {

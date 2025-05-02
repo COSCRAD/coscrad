@@ -155,6 +155,8 @@ const eventSourcedResourceTypes = [
     ResourceType.term,
     ResourceType.vocabularyList,
     ResourceType.playlist,
+    ResourceType.audioItem,
+    ResourceType.video,
 ];
 
 const comprehensiveValidFSAs = notesToCreate

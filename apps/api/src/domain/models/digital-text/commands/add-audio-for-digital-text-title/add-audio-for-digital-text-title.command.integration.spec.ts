@@ -3,9 +3,7 @@ import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { CommandFSA } from '../../../../../app/controllers/command/command-fsa/command-fsa.entity';
-import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
-import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { clonePlainObjectWithOverrides } from '../../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
@@ -21,6 +19,7 @@ import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
+import { AudioItemCreated } from '../../../audio-visual/audio-item/commands/create-audio-item/audio-item-created.event';
 import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
@@ -42,9 +41,14 @@ const languageCodeForTitleTranslation = LanguageCode.English;
 
 const audioItemId = buildDummyUuid(117);
 
-const existingAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem).clone({
-    id: audioItemId,
-});
+const eventHistoryForAudioItem = new TestEventStream()
+    .andThen<AudioItemCreated>({
+        type: 'AUDIO_ITEM_CREATED',
+    })
+    .as({
+        type: AggregateType.audioItem,
+        id: audioItemId,
+    });
 
 const digitalTextId = dummyFsa.payload.aggregateCompositeIdentifier.id;
 
@@ -134,9 +138,7 @@ describe(commandType, () => {
                 await assertCommandSuccess(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     seedInitialState: async () => {
-                        await testRepositoryProvider
-                            .forResource(ResourceType.audioItem)
-                            .create(existingAudioItem);
+                        await app.get(ArangoEventRepository).appendEvents(eventHistoryForAudioItem);
 
                         await app
                             .get(ArangoEventRepository)
@@ -179,9 +181,7 @@ describe(commandType, () => {
                 await assertCommandSuccess(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     seedInitialState: async () => {
-                        await testRepositoryProvider
-                            .forResource(ResourceType.audioItem)
-                            .create(existingAudioItem);
+                        await app.get(ArangoEventRepository).appendEvents(eventHistoryForAudioItem);
 
                         await app.get(ArangoEventRepository).appendEvents(
                             digitalTextTitleTranslated.as({
@@ -228,11 +228,9 @@ describe(commandType, () => {
                     await assertCommandError(commandAssertionDependencies, {
                         systemUserId: dummySystemUserId,
                         seedInitialState: async () => {
-                            await testRepositoryProvider.addFullSnapshot(
-                                new DeluxeInMemoryStore({
-                                    [AggregateType.audioItem]: [existingAudioItem],
-                                }).fetchFullSnapshotInLegacyFormat()
-                            );
+                            await app
+                                .get(ArangoEventRepository)
+                                .appendEvents(eventHistoryForAudioItem);
                         },
                         buildCommandFSA: () => commandFsaFactory.build(),
                         checkError: (error) => {
@@ -284,14 +282,12 @@ describe(commandType, () => {
                     await assertCommandError(commandAssertionDependencies, {
                         systemUserId: dummySystemUserId,
                         seedInitialState: async () => {
-                            await testRepositoryProvider
-                                .forResource(ResourceType.audioItem)
-                                .create(existingAudioItem);
                             await app
                                 .get(ArangoEventRepository)
-                                .appendEvents(
-                                    validEventHistoryForDigitalTextWithNoTitleTranslationAndNoAudio
-                                );
+                                .appendEvents([
+                                    ...validEventHistoryForDigitalTextWithNoTitleTranslationAndNoAudio,
+                                    ...eventHistoryForAudioItem,
+                                ]);
                         },
                         buildCommandFSA: () =>
                             commandFsaFactory.build(undefined, {
@@ -313,11 +309,9 @@ describe(commandType, () => {
                                 })
                             );
 
-                            await testRepositoryProvider.addFullSnapshot(
-                                new DeluxeInMemoryStore({
-                                    [AggregateType.audioItem]: [existingAudioItem],
-                                }).fetchFullSnapshotInLegacyFormat()
-                            );
+                            await app
+                                .get(ArangoEventRepository)
+                                .appendEvents(eventHistoryForAudioItem);
                         },
                         buildCommandFSA: () =>
                             commandFsaFactory.build(undefined, {

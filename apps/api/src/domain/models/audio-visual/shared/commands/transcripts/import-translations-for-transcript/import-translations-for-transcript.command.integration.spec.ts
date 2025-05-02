@@ -3,12 +3,14 @@ import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { CommandFSA } from '../../../../../../../app/controllers/command/command-fsa/command-fsa.entity';
+import buildDummyUuid from '../../../../../../../domain/models/__tests__/utilities/buildDummyUuid';
 import assertErrorAsExpected from '../../../../../../../lib/__tests__/assertErrorAsExpected';
 import { clonePlainObjectWithOverrides } from '../../../../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { ArangoDatabaseProvider } from '../../../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestCommandFsaMap } from '../../../../../../../test-data/commands';
+import { TestEventStream } from '../../../../../../../test-data/events';
 import getValidAggregateInstanceForTest from '../../../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextWithSingleItem } from '../../../../../../common/build-multilingual-text-with-single-item';
 import InvariantValidationError from '../../../../../../domainModelValidators/errors/InvariantValidationError';
@@ -21,12 +23,16 @@ import { CommandAssertionDependencies } from '../../../../../__tests__/command-h
 import { dummySystemUserId } from '../../../../../__tests__/utilities/dummySystemUserId';
 import CommandExecutionError from '../../../../../shared/common-command-errors/CommandExecutionError';
 import InvalidCommandPayloadTypeError from '../../../../../shared/common-command-errors/InvalidCommandPayloadTypeError';
+import { AudioItemCreated } from '../../../../audio-item/commands/create-audio-item/audio-item-created.event';
 import { AudioVisualCompositeIdentifier } from '../../../../audio-item/entities/audio-item-composite-identifier';
 import { AudioItem } from '../../../../audio-item/entities/audio-item.entity';
 import { TranscriptItem } from '../../../entities/transcript-item.entity';
 import { Transcript } from '../../../entities/transcript.entity';
 import { NoTranslationsProvidedError } from '../../../transcript-errors';
+import { LineItemAddedToTranscript } from '../add-line-item-to-transcript/line-item-added-to-transcript.event';
+import { ParticipantAddedToTranscript } from '../add-participant-to-transcript/participant-added-to-transcript.event';
 import { IMPORT_TRANSLATIONS_FOR_TRANSCRIPT } from '../constants';
+import { TranscriptCreated } from '../create-transcript/transcript-created.event';
 import {
     ImportTranslationsForTranscript,
     TranslationItem,
@@ -73,7 +79,47 @@ describe(commandType, () => {
         items: [lineItemToTranslate],
     });
 
-    const existingAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem).clone({
+    const audioItemCreated = new TestEventStream().andThen<AudioItemCreated>({
+        type: 'AUDIO_ITEM_CREATED',
+        payload: {
+            lengthMilliseconds: mediaItemLength,
+        },
+    });
+
+    const transriptCreated = audioItemCreated.andThen<TranscriptCreated>({
+        type: 'TRANSCRIPT_CREATED',
+    });
+
+    const lineItemAdded = transriptCreated
+        .andThen<ParticipantAddedToTranscript>({
+            type: 'PARTICIPANT_ADDED_TO_TRANSCRIPT',
+            payload: {
+                initials: targetSpeakerInitials,
+            },
+        })
+        .andThen<LineItemAddedToTranscript>({
+            type: 'LINE_ITEM_ADDED_TO_TRANSCRIPT',
+            payload: {
+                speakerInitials: targetSpeakerInitials,
+                languageCode: existingLanguageCode,
+                inPointMilliseconds: lineItemToTranslate.inPointMilliseconds,
+                outPointMilliseconds: lineItemToTranslate.outPointMilliseconds,
+            },
+        });
+
+    const audioItemId = buildDummyUuid(1);
+
+    const audioCompositeId = {
+        type: AggregateType.audioItem,
+        id: audioItemId,
+    };
+
+    const existingAudioItem = AudioItem.fromEventHistory(
+        lineItemAdded.as(audioCompositeId),
+        audioItemId
+    ) as AudioItem;
+
+    getValidAggregateInstanceForTest(AggregateType.audioItem).clone({
         lengthMilliseconds: mediaItemLength,
         transcript: existingTranscript,
     });
@@ -128,25 +174,24 @@ describe(commandType, () => {
     });
 
     describe(`when the command is valid`, () => {
-        it(`should succeed`, async () => {
-            await assertCommandSuccess(commandAssertionDependencies, {
-                systemUserId: dummySystemUserId,
-                seedInitialState: async () => {
-                    await testRepositoryProvider.addFullSnapshot(
-                        new DeluxeInMemoryStore({
-                            [AggregateType.audioItem]: [existingAudioItem],
-                        }).fetchFullSnapshotInLegacyFormat()
-                    );
-                },
-                buildValidCommandFSA: () => validFsa,
+        describe(`when importing translations to an audio transcript`, () => {
+            it(`should succeed`, async () => {
+                await assertCommandSuccess(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider.addFullSnapshot(
+                            new DeluxeInMemoryStore({
+                                [AggregateType.audioItem]: [existingAudioItem],
+                            }).fetchFullSnapshotInLegacyFormat()
+                        );
+                    },
+                    buildValidCommandFSA: () => validFsa,
+                });
             });
         });
     });
 
-    /**
-     *  TODO[https://www.pivotaltracker.com/story/show/187128338]
-     * Add test cases for a video item as well.
-     */
+    // note that we only test video for the happy path, as other test cases are unrelated to the resource type
     describe(`when the command is invalid`, () => {
         describe(`when the audiovisual item does not exist`, () => {
             it(`should fail with the expected errors`, async () => {
@@ -171,9 +216,10 @@ describe(commandType, () => {
                         await testRepositoryProvider.addFullSnapshot(
                             new DeluxeInMemoryStore({
                                 [AggregateType.audioItem]: [
-                                    existingAudioItem.clone({
-                                        transcript: undefined,
-                                    }),
+                                    AudioItem.fromEventHistory(
+                                        audioItemCreated.as(audioCompositeId),
+                                        audioItemId
+                                    ) as AudioItem,
                                 ],
                             }).fetchFullSnapshotInLegacyFormat()
                         );
@@ -191,11 +237,10 @@ describe(commandType, () => {
                         await testRepositoryProvider.addFullSnapshot(
                             new DeluxeInMemoryStore({
                                 [AggregateType.audioItem]: [
-                                    existingAudioItem.clone({
-                                        transcript: existingTranscript.clone({
-                                            items: [],
-                                        }),
-                                    }),
+                                    AudioItem.fromEventHistory(
+                                        transriptCreated.as(audioCompositeId),
+                                        audioItemId
+                                    ) as AudioItem,
                                 ],
                             }).fetchFullSnapshotInLegacyFormat()
                         );

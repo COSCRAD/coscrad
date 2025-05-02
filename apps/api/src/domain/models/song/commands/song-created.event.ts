@@ -6,5 +6,5 @@ export type SongCreatedPayload = CreateSong;
 
 @CoscradEvent('SONG_CREATED')
 export class SongCreated extends BaseEvent<SongCreatedPayload> {
-    type = 'SONG_CREATED';
+    readonly type = 'SONG_CREATED';
 }
