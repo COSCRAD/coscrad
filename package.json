@@ -114,7 +114,7 @@
         "@nrwl/linter": "15.8.7",
         "@nrwl/nest": "15.8.7",
         "@nrwl/node": "15.8.7",
-        "@nrwl/nx-cloud": "15.2.3",
+        "@nrwl/nx-cloud": "19.1.0",
         "@nrwl/react": "15.8.7",
         "@nrwl/react-native": "15.8.7",
         "@nrwl/web": "15.8.7",
