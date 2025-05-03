@@ -14,7 +14,7 @@ import { renderContributionsTextCell } from '../utils/render-contributions-text-
 import { renderMultilingualTextCell } from '../utils/render-multilingual-text-cell';
 
 export const SongIndexPresenter = (songsIndexResult: SongIndexState) => {
-    const { defaultLanguageCode } = useContext(ConfigurableContentContext);
+    const { defaultUILanguageCode } = useContext(ConfigurableContentContext);
 
     const { entities: songs } = songsIndexResult;
 
@@ -27,7 +27,7 @@ export const SongIndexPresenter = (songsIndexResult: SongIndexState) => {
 
     const cellRenderersDefinition: CellRenderersDefinition<ISongViewModel> = {
         id: renderAggregateIdCell,
-        name: ({ name }: ISongViewModel) => renderMultilingualTextCell(name, defaultLanguageCode),
+        name: ({ name }: ISongViewModel) => renderMultilingualTextCell(name, defaultUILanguageCode),
         audioURL: ({ audioURL }: ISongViewModel) =>
             isNullOrUndefined(audioURL) ? <LinkOff /> : <AudioClipPlayer audioUrl={audioURL} />,
         contributions: ({ contributions }: ISongViewModel) =>

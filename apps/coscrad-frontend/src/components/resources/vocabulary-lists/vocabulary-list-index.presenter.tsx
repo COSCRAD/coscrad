@@ -15,7 +15,7 @@ import { renderMultilingualTextCell } from '../utils/render-multilingual-text-ce
 export const VocabularyListIndexPresenter = ({
     entities: vocabularyLists,
 }: VocabularyListIndexState) => {
-    const { defaultLanguageCode } = useContext(ConfigurableContentContext);
+    const { defaultUILanguageCode } = useContext(ConfigurableContentContext);
 
     const headingLabels: HeadingLabel<IVocabularyListViewModel>[] = [
         { propertyKey: 'id', headingLabel: 'link' },
@@ -24,7 +24,7 @@ export const VocabularyListIndexPresenter = ({
 
     const cellRenderersDefinition: CellRenderersDefinition<IVocabularyListViewModel> = {
         id: renderAggregateIdCell,
-        name: ({ name }) => renderMultilingualTextCell(name, defaultLanguageCode),
+        name: ({ name }) => renderMultilingualTextCell(name, defaultUILanguageCode),
     };
 
     const matchers: Matchers<IVocabularyListViewModel> = {

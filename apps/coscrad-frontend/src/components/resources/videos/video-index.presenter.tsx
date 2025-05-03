@@ -37,9 +37,9 @@ const createTableRowBuilder =
     });
 
 export const VideoIndexPresenter = ({ entities: videos }: VideoIndexState): JSX.Element => {
-    const { defaultLanguageCode } = useContext(ConfigurableContentContext);
+    const { defaultUILanguageCode } = useContext(ConfigurableContentContext);
 
-    const buildTableRow = createTableRowBuilder(defaultLanguageCode);
+    const buildTableRow = createTableRowBuilder(defaultUILanguageCode);
 
     const headingLabels: HeadingLabel<VideoTableRow>[] = [
         { propertyKey: 'id', headingLabel: 'Link' },

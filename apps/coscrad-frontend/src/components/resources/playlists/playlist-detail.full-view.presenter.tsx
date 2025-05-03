@@ -22,7 +22,7 @@ export const PlaylistDetailFullViewPresenter = ({
 }: ICategorizableDetailQueryResult<IPlayListViewModel>): JSX.Element => {
     const [_url, setUrl] = useState<string | null>(null);
 
-    const { defaultLanguageCode } = useContext(ConfigurableContentContext);
+    const { defaultUILanguageCode } = useContext(ConfigurableContentContext);
 
     const headingLabels: HeadingLabel<IPlaylistEpisode>[] = [
         {
@@ -37,7 +37,7 @@ export const PlaylistDetailFullViewPresenter = ({
 
     const cellRenderers: CellRenderersDefinition<IPlaylistEpisode> = {
         // TODO Consider making the name property `MultilingualText`
-        name: ({ name }) => renderMultilingualTextCell(name, defaultLanguageCode),
+        name: ({ name }) => renderMultilingualTextCell(name, defaultUILanguageCode),
         mediaItemUrl: ({ mediaItemUrl }) =>
             renderAggregateUrlCell(mediaItemUrl, (url: string) => setUrl(url)),
     };

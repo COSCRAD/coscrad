@@ -3,6 +3,7 @@ import {
     GeometricFeatureType,
     ICategorizableDetailQueryResult,
     ISpatialFeatureViewModel,
+    ResourceType,
 } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box, Grid, styled } from '@mui/material';
@@ -86,7 +87,11 @@ export const SpatialFeatureDetailFullViewPresenter = (
                 </Grid>
                 <Grid item xs={9}>
                     {/* TODO: consider putting a standardized name property on the view models */}
-                    <ResourceNamePresenter name={name} variant="h5" />
+                    <ResourceNamePresenter
+                        name={name}
+                        variant="h5"
+                        type={ResourceType.spatialFeature}
+                    />
                     <SinglePropertyPresenter display="ID" value={id} />
                     <SinglePropertyPresenter display="Description" value={description} />
                     <SinglePropertyPresenter display="Feature Type" value={geometryType} />

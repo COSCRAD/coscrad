@@ -11,7 +11,7 @@ import { renderMultilingualTextCell } from '../utils/render-multilingual-text-ce
 export const TranscribedAudioIndexPresenter = ({
     entities: transcribedAudioItems,
 }: AudioItemIndexState) => {
-    const { defaultLanguageCode } = useContext(ConfigurableContentContext);
+    const { defaultUILanguageCode: defaultLanguageCode } = useContext(ConfigurableContentContext);
 
     const headingLabels: HeadingLabel<IAudioItemViewModel>[] = [
         { propertyKey: 'id', headingLabel: 'Link' },

@@ -14,7 +14,7 @@ import { renderContributionsTextCell } from '../utils/render-contributions-text-
 import { renderMultilingualTextCell } from '../utils/render-multilingual-text-cell';
 
 export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
-    const { defaultLanguageCode } = useContext(ConfigurableContentContext);
+    const { defaultUILanguageCode } = useContext(ConfigurableContentContext);
 
     const { entities: terms } = termsIndexResult;
 
@@ -29,7 +29,7 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
     const cellRenderersDefinition: CellRenderersDefinition<ITermViewModel> = {
         id: renderAggregateIdCell,
         // TODO We need to determine the `term` and `termEnglish` from a multilingual text property
-        name: ({ name }: ITermViewModel) => renderMultilingualTextCell(name, defaultLanguageCode),
+        name: ({ name }: ITermViewModel) => renderMultilingualTextCell(name, defaultUILanguageCode),
         audioURL: ({ audioURL }: ITermViewModel) =>
             isNullOrUndefined(audioURL) ? (
                 <LinkOff color="primary" />

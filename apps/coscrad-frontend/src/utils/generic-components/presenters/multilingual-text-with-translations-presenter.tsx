@@ -1,20 +1,22 @@
-import { IMultilingualTextItem } from '@coscrad/api-interfaces';
+import { IMultilingualTextItem, ResourceType } from '@coscrad/api-interfaces';
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material/';
 import { Accordion, AccordionDetails, AccordionSummary, Box } from '@mui/material';
 import { MultilingualTextItemPresenter } from './multilingual-text-item-presenter';
 
 interface MultilingualTextWithTranslationsProps {
     primaryMultilingualTextItem: IMultilingualTextItem;
+    resourceType: ResourceType;
     translations: IMultilingualTextItem[];
 }
 
 export const MultilingualTextWithTranslations = ({
     primaryMultilingualTextItem,
+    resourceType,
     translations,
 }: MultilingualTextWithTranslationsProps): JSX.Element => (
-    <Accordion elevation={0}>
+    <Accordion elevation={0} defaultExpanded={resourceType === ResourceType.term ? true : false}>
         <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
+            expandIcon={resourceType === ResourceType.term ? null : <ExpandMoreIcon />}
             data-testid="multilingual-text-main-text-item-with-translations"
         >
             <MultilingualTextItemPresenter

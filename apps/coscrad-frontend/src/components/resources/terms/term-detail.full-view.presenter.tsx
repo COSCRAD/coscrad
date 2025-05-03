@@ -1,13 +1,13 @@
 import {
-    AggregateType,
     ICategorizableDetailQueryResult,
     ITermViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { AudioClipPlayer } from '@coscrad/media-player';
-import { Box } from '@mui/material';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { AudioFile as AudioFileIcon } from '@mui/icons-material/';
+import { Box, Grid, Tooltip, Typography } from '@mui/material';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/';
-import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 
 export const TermDetailFullViewPresenter = ({
     id,
@@ -22,12 +22,29 @@ export const TermDetailFullViewPresenter = ({
             type={ResourceType.term}
             contributions={contributions}
         >
-            <Box
-                data-testid={buildDataAttributeForAggregateDetailComponent(AggregateType.term, id)}
-            />
-            <Box id="media-player">
-                <AudioClipPlayer audioUrl={audioURL} />
-            </Box>
+            {!isNullOrUndefined(audioURL) ? (
+                <Box id="media-player">
+                    <AudioClipPlayer audioUrl={audioURL} />
+                </Box>
+            ) : (
+                <Grid
+                    container
+                    justifyContent="flex-start"
+                    spacing="10"
+                    direction="row"
+                    mt={2}
+                    mb={2}
+                >
+                    <Grid item>
+                        <Tooltip title="Audio unavailable">
+                            <AudioFileIcon />
+                        </Tooltip>
+                    </Grid>
+                    <Grid item zeroMinWidth xs>
+                        <Typography variant="body1">Audio not available for this term.</Typography>
+                    </Grid>
+                </Grid>
+            )}
         </ResourceDetailFullViewPresenter>
     );
 };

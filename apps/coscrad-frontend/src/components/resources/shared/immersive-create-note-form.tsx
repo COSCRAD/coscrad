@@ -34,15 +34,13 @@ export const ImmersiveCreateNoteForm = ({ onSubmit }: FormProps) => {
 
     const [text, setText] = useState('');
 
-    const { defaultLanguageCode } = useContext(ConfigurableContentContext);
+    const { defaultUILanguageCode } = useContext(ConfigurableContentContext);
 
-    const [languageCode, setLanguageCode] = useState<LanguageCode>(defaultLanguageCode);
+    const [languageCode, setLanguageCode] = useState<LanguageCode>(defaultUILanguageCode);
 
     const { errorInfo, isLoading, data: generatedId } = useLoadableGeneratedId();
 
     const dispatch = useAppDispatch();
-
-
 
     if (errorInfo) return <ErrorDisplay {...errorInfo} />;
 

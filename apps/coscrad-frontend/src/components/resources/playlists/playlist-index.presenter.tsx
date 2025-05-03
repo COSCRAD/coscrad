@@ -36,7 +36,7 @@ const doesCountSatisfyStringCriterion = (input: number, stringCriterion: string)
 };
 
 export const PlaylistIndexPresenter = ({ entities: playlists }: PlaylistIndexState) => {
-    const { defaultLanguageCode } = useContext(ConfigurableContentContext);
+    const { defaultUILanguageCode } = useContext(ConfigurableContentContext);
 
     const headingLabels: HeadingLabel<IPlayListViewModel>[] = [
         { propertyKey: 'id', headingLabel: 'Link' },
@@ -46,7 +46,7 @@ export const PlaylistIndexPresenter = ({ entities: playlists }: PlaylistIndexSta
 
     const cellRenderersDefinition: CellRenderersDefinition<IPlayListViewModel> = {
         id: renderAggregateIdCell,
-        name: ({ name }) => renderMultilingualTextCell(name, defaultLanguageCode),
+        name: ({ name }) => renderMultilingualTextCell(name, defaultUILanguageCode),
         episodes: ({ episodes }) => episodes.length.toString(),
     };
 

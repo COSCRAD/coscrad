@@ -14,9 +14,9 @@ interface PageContentFormProps {
 }
 
 export const PageContentForm = ({ onSubmitNewContent }: PageContentFormProps) => {
-    const { defaultLanguageCode } = useContext(ConfigurableContentContext);
+    const { defaultUILanguageCode } = useContext(ConfigurableContentContext);
 
-    const [selectedLanguageCode, setSelectedLanguageCode] = useState(defaultLanguageCode);
+    const [selectedLanguageCode, setSelectedLanguageCode] = useState(defaultUILanguageCode);
 
     const [text, setText] = useState<string>('');
 

@@ -8,12 +8,12 @@ interface LanguageSelectProps {
 }
 
 export const LanguageSelect = ({ onSelectLanguage }: LanguageSelectProps) => {
-    const { defaultLanguageCode } = useContext(ConfigurableContentContext);
+    const { defaultUILanguageCode } = useContext(ConfigurableContentContext);
 
     return (
         <Select
             data-testid={`select:language`}
-            defaultValue={defaultLanguageCode}
+            defaultValue={defaultUILanguageCode}
             label="Language"
             onChange={(e) => {
                 onSelectLanguage(e.target.value as LanguageCode);
@@ -22,7 +22,7 @@ export const LanguageSelect = ({ onSelectLanguage }: LanguageSelectProps) => {
             {Object.entries(LanguageCode)
                 .filter(([_label, languageCode]) =>
                     // This is robust to the case where English is the default language code
-                    [LanguageCode.English, defaultLanguageCode].includes(languageCode)
+                    [LanguageCode.English, defaultUILanguageCode].includes(languageCode)
                 )
                 .map(([label, languageCode]) => (
                     <MenuItem value={languageCode} key={languageCode}>

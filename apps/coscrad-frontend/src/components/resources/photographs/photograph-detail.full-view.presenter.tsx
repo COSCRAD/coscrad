@@ -3,6 +3,7 @@ import {
     ICategorizableDetailQueryResult,
     IPhotographViewModel,
     MultilingualTextItemRole,
+    ResourceType,
 } from '@coscrad/api-interfaces';
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
@@ -34,7 +35,7 @@ export const PhotographDetailFullViewPresenter = ({
                 )}
             />
             <ImageFullPageWidth image={image} />
-            <ResourceNamePresenter name={name} variant="h2" />
+            <ResourceNamePresenter name={name} variant="h2" type={ResourceType.photograph} />
             <SinglePropertyPresenter display="Photographer" value={photographer} />
         </>
     );
