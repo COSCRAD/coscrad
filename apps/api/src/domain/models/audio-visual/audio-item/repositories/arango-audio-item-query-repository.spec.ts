@@ -11,6 +11,7 @@ import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/environment';
+import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import {
     MultilingualText,
     MultilingualTextItem,
@@ -24,6 +25,7 @@ import { TestEventStream } from '../../../../../test-data/events';
 import { buildTestInstance } from '../../../../../test-data/utilities';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../../shared/access-control/access-control-list.entity';
+import { TranscriptItem } from '../../shared/entities/transcript-item.entity';
 import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
 import { Transcript } from '../../shared/entities/transcript.entity';
 import { TranscriptLineItemDto } from '../commands';
@@ -410,6 +412,73 @@ describe(`ArangoAudioItemQueryRepository`, () => {
             );
 
             expect(missingLineItems).toEqual([]);
+        });
+    });
+
+    describe(`translate line item`, () => {
+        const originalLanguageCode = LanguageCode.Chilcotin;
+
+        const translationLanguageCode = LanguageCode.English;
+
+        const translationText = 'this is how to translate what was said to English';
+
+        const inPointMilliseconds = 100;
+
+        const outPointMilliseconds = 200;
+
+        const participant = buildTestInstance(TranscriptParticipant);
+
+        const targetLineItem = buildTestInstance(TranscriptItem, {
+            inPointMilliseconds,
+            outPointMilliseconds,
+            speakerInitials: participant.initials,
+            text: buildMultilingualTextWithSingleItem('original text', originalLanguageCode),
+        });
+
+        const existingTranscript = buildTestInstance(Transcript, {
+            participants: [participant],
+            items: [targetLineItem],
+        });
+
+        const targetAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
+            transcript: existingTranscript,
+        });
+
+        beforeEach(async () => {
+            await testQueryRepository.create(targetAudioItem);
+        });
+
+        it('should translate the line item', async () => {
+            await testQueryRepository.translateLineItem(targetAudioItem.id, {
+                inPointMilliseconds,
+                outPointMilliseconds,
+                text: translationText,
+                languageCode: translationLanguageCode,
+                speakerInitials: participant.initials,
+            });
+
+            const { transcript } = (await testQueryRepository.fetchById(
+                targetAudioItem.id
+            )) as EventSourcedAudioItemViewModel;
+
+            const lineItemSearchResult = transcript.getLineItem(
+                inPointMilliseconds,
+                outPointMilliseconds
+            );
+
+            expect(lineItemSearchResult).not.toBe(NotFound);
+
+            const { text } = lineItemSearchResult as TranscriptItem;
+
+            expect(text.hasTranslation()).toEqual(true);
+
+            const { text: foundTranslationText, role } = text.getTranslation(
+                translationLanguageCode
+            ) as MultilingualTextItem;
+
+            expect(foundTranslationText).toEqual(translationText);
+
+            expect(role).toBe(MultilingualTextItemRole.freeTranslation);
         });
     });
 });

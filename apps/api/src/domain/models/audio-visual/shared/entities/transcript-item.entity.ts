@@ -15,6 +15,8 @@ import { Valid } from '../../../../domainModelValidators/Valid';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../../base-domain-model.entity';
 
+import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
+import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { InvalidTimestampOrderError } from '../commands/transcripts/errors';
 import {
     CannotOverrideTranslationError,
@@ -24,6 +26,14 @@ import {
 // We can change this later
 type MediaTimestamp = number;
 
+@CoscradDataExample<TranscriptItem>({
+    example: {
+        inPointMilliseconds: 500,
+        outPointMilliseconds: 1000,
+        text: buildMultilingualTextWithSingleItem('text for test transcrpt item'),
+        speakerInitials: 'RR',
+    },
+})
 export class TranscriptItem extends BaseDomainModel implements ITranscriptItem {
     @NonNegativeFiniteNumber({
         label: 'in point',
@@ -162,5 +172,9 @@ export class TranscriptItem extends BaseDomainModel implements ITranscriptItem {
         return allErrors.length > 0
             ? new InternalError(`Encountered an invalid transcript line item`, allErrors)
             : Valid;
+    }
+
+    public static fromDto(dto: DTO<TranscriptItem>) {
+        return new TranscriptItem(dto);
     }
 }

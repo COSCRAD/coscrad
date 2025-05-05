@@ -5,6 +5,7 @@ import { isDeepStrictEqual } from 'util';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../../lib/types/maybe';
 import { NotFound, isNotFound } from '../../../../../lib/types/not-found';
+import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
 import { DeepPartial } from '../../../../../types/DeepPartial';
 import { ResultOrError } from '../../../../../types/ResultOrError';
@@ -30,6 +31,13 @@ import {
 import { TranscriptParticipantInitialsNotRegisteredError } from '../transcript-errors/transcript-participant-initials-not-registered.error';
 import { TranscriptItem } from './transcript-item.entity';
 import { TranscriptParticipant } from './transcript-participant';
+
+@CoscradDataExample<Transcript>({
+    example: {
+        items: [],
+        participants: [],
+    },
+})
 export class Transcript extends BaseDomainModel implements ITranscript {
     // TODO Validate that there are not duplicate IDs here
     @NestedDataType(TranscriptParticipant, {
@@ -319,5 +327,9 @@ export class Transcript extends BaseDomainModel implements ITranscript {
             items: [],
             participants: [],
         });
+    }
+
+    public static fromDto(dto: DTO<Transcript>) {
+        return new Transcript(dto);
     }
 }

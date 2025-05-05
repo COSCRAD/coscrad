@@ -19,7 +19,10 @@ import { TranscriptParticipant } from '../../shared/entities/transcript-particip
 import { Transcript } from '../../shared/entities/transcript.entity';
 import { TranscriptLineItemDto } from '../commands';
 import { EventSourcedAudioItemViewModel } from '../queries';
-import { IAudioItemQueryRepository } from '../queries/audio-item-query-repository.interface';
+import {
+    IAudioItemQueryRepository,
+    TranslationLineItemDto,
+} from '../queries/audio-item-query-repository.interface';
 
 export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository {
     private readonly database: ArangoDatabaseForCollection<
@@ -247,6 +250,10 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
         };
 
         await this.database.query({ query, bindVars });
+    }
+
+    async translateLineItem(_id: AggregateId, _lineItem: TranslationLineItemDto) {
+        throw new InternalError('not implemented');
     }
 
     async count(): Promise<number> {

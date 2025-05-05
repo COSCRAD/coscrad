@@ -6,10 +6,24 @@ import {
 } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString, NonNegativeFiniteNumber } from '@coscrad/data-types';
+import buildDummyUuid from '../../../../../../../domain/models/__tests__/utilities/buildDummyUuid';
+import { CoscradDataExample } from '../../../../../../../test-data/utilities';
 import { LanguageCodeEnum } from '../../../../../../common/entities/multilingual-text';
 import { AudioVisualCompositeIdentifier } from '../../../../audio-item/entities/audio-item-composite-identifier';
 import { TRANSLATE_LINE_ITEM } from './constants';
 
+@CoscradDataExample<TranslateLineItem>({
+    example: {
+        aggregateCompositeIdentifier: {
+            type: ResourceType.audioItem,
+            id: buildDummyUuid(3),
+        },
+        inPointMilliseconds: 200,
+        outPointMilliseconds: 350,
+        translation: 'translation of items',
+        languageCode: LanguageCode.English,
+    },
+})
 @Command({
     type: TRANSLATE_LINE_ITEM,
     label: 'Translate Line Item',
