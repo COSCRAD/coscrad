@@ -1,3 +1,4 @@
+import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { Inject, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { InternalError } from '../../../../lib/errors/InternalError';
@@ -37,6 +38,7 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
 
         this.baseResourceQueryBuilder = new ArangoResourceQueryBuilder('playlist__VIEWS');
     }
+
     count(): Promise<number> {
         throw new Error('Method not implemented.');
     }
@@ -125,6 +127,47 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
         const _new = await cursor.all();
 
         _new;
+    }
+
+    async translatePlaylistName(
+        id: AggregateId,
+        text: String,
+        languageCode: LanguageCode
+    ): Promise<void> {
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+        let newItem = {
+                    text: @text,
+                    languageCode: @languageCode,
+                    role: @role
+        }
+        UPDATE doc WITH {
+            name: {
+                items: APPEND(doc.name.items,newItem)
+            }
+        } IN @@collectionName
+         RETURN OLD
+        `;
+
+        const bindVars = {
+            '@collectionName': 'playlist__VIEWS',
+            id: id,
+            text: text,
+            role: MultilingualTextItemRole.freeTranslation,
+            languageCode: languageCode,
+        };
+
+        const cursor = await this.database
+            .query({
+                query,
+                bindVars,
+            })
+            .catch((reason) => {
+                throw new InternalError(`Failed to translate playlist name: ${reason}`);
+            });
+
+        await cursor.all();
     }
 
     async attribute(id: AggregateId, contributorIds: AggregateId[]): Promise<void> {

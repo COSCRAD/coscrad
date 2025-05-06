@@ -1,3 +1,4 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { Observable } from 'rxjs';
 import { Maybe } from '../../../../lib/types/maybe';
 import { PlaylistViewModel } from '../../../../queries/buildViewModelForResource/viewModels/playlist.view-model';
@@ -27,4 +28,10 @@ export interface IPlaylistQueryRepository extends IPublishable, ICountable {
     allowUser(id: AggregateId, userId: AggregateId): Promise<void>;
 
     addAudioItem(id: AggregateId, audioItemId: AggregateId): Promise<void>;
+
+    translatePlaylistName(
+        id: AggregateId,
+        translation: String,
+        languageCode: LanguageCode
+    ): Promise<void>;
 }

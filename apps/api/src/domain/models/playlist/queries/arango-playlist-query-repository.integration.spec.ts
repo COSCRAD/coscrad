@@ -17,6 +17,7 @@ import { ArangoRepositoryForAggregate } from '../../../../persistence/repositori
 import { PlaylistViewModel } from '../../../../queries/buildViewModelForResource/viewModels/playlist.view-model';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import buildInstanceFactory from '../../../factories/utilities/buildInstanceFactory';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
@@ -160,6 +161,30 @@ describe(`ArangoPlaylistQueryRepository`, () => {
             expect(mediaItemId).toBe(existingAudioItem.mediaItemId);
 
             expect(name).toEqual(existingAudioItem.name);
+        });
+    });
+
+    describe(`translatePlaylistName`, () => {
+        const translationLanguageCode = LanguageCode.English;
+
+        const translationText = 'translation of the text';
+
+        const targetPlaylistView = buildTestInstance(PlaylistViewModel, {
+            name: buildMultilingualTextWithSingleItem('existing name', LanguageCode.Chilcotin),
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetPlaylistView);
+        });
+
+        it('should have a test', async () => {
+            await testQueryRepository.translatePlaylistName(
+                targetPlaylist.id,
+                translationText,
+                translationLanguageCode
+            );
         });
     });
 
