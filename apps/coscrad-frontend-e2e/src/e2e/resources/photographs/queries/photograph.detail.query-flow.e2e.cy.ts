@@ -3,7 +3,6 @@ import {
     buildDummyAggregateCompositeIdentifier,
     buildDummyUuid,
 } from '../../../../support/utilities';
-import { seedDummyMediaItem } from '../../../shared/seed-dummy-media-item.cy';
 
 const photographAggregateCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
     AggregateType.photograph,
@@ -77,7 +76,7 @@ describe(`the photograph detail page`, () => {
             // we don't bother with the last name
         });
 
-        seedDummyMediaItem({
+        cy.seedTestMediaItem({
             id: mediaItemCompositeIdentifier.id,
             title: 'My photo of Masset',
             mimeType: MIMEType.jpg,
@@ -112,7 +111,7 @@ describe(`the photograph detail page`, () => {
             text: noteText,
         });
 
-        seedDummyMediaItem({
+        cy.seedTestMediaItem({
             id: mediaItemCompositeIdentifierNoNotes.id,
             title: 'My photo of Skidegate with no notes',
             mimeType: MIMEType.jpg,
@@ -234,7 +233,7 @@ describe(`the photograph detail page`, () => {
         const { id: idForPhotographWithoutConnections } = compositeIdForPhotographWithNoConnections;
 
         before(() => {
-            seedDummyMediaItem({
+            cy.seedTestMediaItem({
                 id: mediaItemCompositeIdentifierNoConnections.id,
                 title: 'My photo of Masset without connections',
                 mimeType: MIMEType.jpg,

@@ -3,13 +3,12 @@ import {
     buildDummyAggregateCompositeIdentifier,
     buildDummyUuid,
 } from '../../../../support/utilities';
-import { seedDummyMediaItem } from '../../../shared/seed-dummy-media-item.cy';
 
 const ID_OFFSET = 80;
 
 const dummyPhotographTitle = 'Photograph of historic pithouse';
 
-const dummyPhotographer = 'Jennifer Stump';
+const dummyPhotographer = 'Jane Doe';
 
 const aggregateCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
     AggregateType.photograph,
@@ -74,7 +73,7 @@ describe('Photograph index query flow', () => {
 
             const mediaItemCompositeIdentifier = buildDummyUuid(mediaItemIndex);
 
-            seedDummyMediaItem({
+            cy.seedTestMediaItem({
                 id: mediaItemCompositeIdentifier,
                 title: `Title of Media Item: ${index + offSet}`,
                 mimeType: MIMEType.jpg,
@@ -97,9 +96,9 @@ describe('Photograph index query flow', () => {
 
         cy.seedTestUuids(600);
 
-        seedDummyMediaItem({
+        cy.seedTestMediaItem({
             id: mediaItemCompositeIdentifier.id,
-            title: `Tawt'a k̲'iidagas Giiahlɢ̲alang`,
+            title: `The kids' game`,
             mimeType: MIMEType.jpg,
         });
 
@@ -175,15 +174,15 @@ describe('Photograph index query flow', () => {
             before(() => {
                 cy.seedDataWithCommand(`CREATE_MEDIA_ITEM`, {
                     aggregateCompositeIdentifier: mediaItemForFilterTestCompositeIdentifier,
-                    title: `Sg_iidllg_uu`,
+                    title: `S_i_u`,
                     mimeType: 'image/jpeg',
                     // Override default value to "remove" property from fsa for image media item
                     lengthMilliseconds: null,
                 });
 
-                seedDummyMediaItem({
+                cy.seedTestMediaItem({
                     id: mediaItemForFilterTestCompositeIdentifier.id,
-                    title: `Sg_iidllg_uu`,
+                    title: `S_i_u`,
                     mimeType: MIMEType.jpg,
                 });
 

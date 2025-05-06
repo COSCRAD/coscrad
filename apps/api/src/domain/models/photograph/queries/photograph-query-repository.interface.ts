@@ -1,6 +1,7 @@
 import { Observable } from 'rxjs';
 import { Maybe } from '../../../../lib/types/maybe';
 import { AggregateId } from '../../../types/AggregateId';
+import { IPublishable } from '../../shared/common-commands/publish-resource/resource-published.event-handler';
 import { PhotographViewModel } from './photograph.view-model';
 
 export const PHOTOGRAPH_QUERY_REPOSITORY_TOKEN = 'PHOTOGRAPH_QUERY_REPOSITORY_TOKEN';
@@ -11,7 +12,7 @@ export const PHOTOGRAPH_QUERY_REPOSITORY_TOKEN = 'PHOTOGRAPH_QUERY_REPOSITORY_TO
  * to serve as a constraint for the return of the query service and represents
  * a contract with the client.
  */
-export interface IPhotographQueryRepository {
+export interface IPhotographQueryRepository extends IPublishable {
     subscribeToUpdates(): Observable<{ data: { type: string } }>;
 
     create(view: PhotographViewModel): Promise<void>;
@@ -25,8 +26,6 @@ export interface IPhotographQueryRepository {
     fetchMany(): Promise<PhotographViewModel[]>;
 
     allowUser(id: AggregateId, userId: AggregateId): Promise<void>;
-
-    publish(id: AggregateId): Promise<void>;
 
     /**
      * A better approach would be to do this atomically as part of
