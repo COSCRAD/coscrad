@@ -85,12 +85,6 @@ describe(`PlaylistNameTranslatedEventHandler`, () => {
     beforeEach(async () => {
         await databaseProvider.clearViews();
 
-        /**
-         * We attempted to use "handle" on a creation event for the test
-         * setup, but it failed due to an apparent race condition.
-         *
-         * We should investigate this further.
-         */
         await testQueryRepository.create(existingPlaylistView);
     });
 

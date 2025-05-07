@@ -40,7 +40,7 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
     }
 
     count(): Promise<number> {
-        throw new Error('Method not implemented.');
+        return this.database.getCount();
     }
 
     subscribeToUpdates(): Observable<{ data: { type: string } }> {
@@ -57,6 +57,10 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
         await this.database.createMany(documents);
     }
 
+    /**
+     * TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-65]
+     * We need to decide how to handle deletes in the query layer.
+     */
     delete(_id: AggregateId): Promise<void> {
         throw new Error('Method not implemented.');
     }
@@ -133,36 +137,17 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
         id: AggregateId,
         text: String,
         languageCode: LanguageCode
+        // TODO should `role: MultilingualTextItemRole` come from the event as well?
     ): Promise<void> {
-        const query = `
-        FOR doc IN @@collectionName
-        FILTER doc._key == @id
-        let newItem = {
-                    text: @text,
-                    languageCode: @languageCode,
-                    role: @role
-        }
-        UPDATE doc WITH {
-            name: {
-                items: APPEND(doc.name.items,newItem)
-            }
-        } IN @@collectionName
-         RETURN OLD
-        `;
-
-        const bindVars = {
-            '@collectionName': 'playlist__VIEWS',
-            id: id,
-            text: text,
-            role: MultilingualTextItemRole.freeTranslation,
-            languageCode: languageCode,
-        };
-
         const cursor = await this.database
-            .query({
-                query,
-                bindVars,
-            })
+            .query(
+                this.baseResourceQueryBuilder.translateName(
+                    id,
+                    text,
+                    languageCode,
+                    MultilingualTextItemRole.freeTranslation
+                )
+            )
             .catch((reason) => {
                 throw new InternalError(`Failed to translate playlist name: ${reason}`);
             });

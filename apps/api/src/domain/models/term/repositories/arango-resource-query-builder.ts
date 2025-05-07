@@ -1,3 +1,4 @@
+import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { AqlQuery } from 'arangojs/aql';
 import { AggregateId } from '../../../types/AggregateId';
 
@@ -42,6 +43,42 @@ export class ArangoResourceQueryBuilder {
             '@collectionName': this.collectionName,
             id: resourceId,
             userId,
+        };
+
+        return {
+            query,
+            bindVars,
+        };
+    }
+
+    translateName(
+        id: AggregateId,
+        text: String,
+        languageCode: LanguageCode,
+        role: MultilingualTextItemRole
+    ): AqlQuery {
+        const query = `
+            FOR doc IN @@collectionName
+            FILTER doc._key == @id
+            let newItem = {
+                        text: @text,
+                        languageCode: @languageCode,
+                        role: @role
+            }
+            UPDATE doc WITH {
+                name: {
+                    items: APPEND(doc.name.items,newItem)
+                }
+            } IN @@collectionName
+            `;
+
+        const bindVars = {
+            '@collectionName': this.collectionName,
+            id: id,
+            text: text,
+            // TODO we may want this to be passed in, presumably from an event payload
+            role,
+            languageCode: languageCode,
         };
 
         return {

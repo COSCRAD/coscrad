@@ -31,7 +31,7 @@ export interface IPlaylistQueryRepository extends IPublishable, ICountable {
 
     translatePlaylistName(
         id: AggregateId,
-        translation: String,
+        translation: string,
         languageCode: LanguageCode
     ): Promise<void>;
 }
