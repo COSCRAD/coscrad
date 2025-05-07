@@ -99,7 +99,7 @@ describe(`LineItemTranslatedEventHandler`, () => {
         testRepositoryProvider = app.get(QUERY_REPOSITORY_PROVIDER_TOKEN);
 
         lineItemTranslatedEventHandler = new LineItemTranslatedEventHandler(
-            // @ts-expect-error TODO find a better way to sidestep this type issue
+            // @ts-expect-error We know that the provider will only ever be called with `provider.forResource(audioVisualResourceType)` not a general `ResourceType`
             testRepositoryProvider
         );
     });
@@ -113,25 +113,37 @@ describe(`LineItemTranslatedEventHandler`, () => {
     });
 
     describe(`when handling a LINE_ITEM_TRANSLATED`, () => {
-        beforeEach(async () => {
-            await testRepositoryProvider
-                .forResource(ResourceType.audioItem)
-                .create(existingAudioItem);
+        describe(`when the event is for an audio item`, () => {
+            beforeEach(async () => {
+                await testRepositoryProvider
+                    .forResource(ResourceType.audioItem)
+                    .create(existingAudioItem);
+            });
+
+            it(`should translate the line item`, async () => {
+                await lineItemTranslatedEventHandler.handle(lineItemTranslated);
+
+                const updatedView = (await testRepositoryProvider
+                    .forResource(ResourceType.audioItem)
+                    .fetchById(audioItemId)) as EventSourcedAudioItemViewModel;
+
+                const { text: foundMultilingualText } = updatedView.transcript.getLineItem(
+                    inPoint,
+                    outPoint
+                ) as TranscriptItem;
+
+                /**
+                 * We only do a sanity check here because the Arango query
+                 * repository is responsible for the full state update, which
+                 * is tested comprehensively in its own test.
+                 */
+                expect(foundMultilingualText.hasTranslation()).toBe(true);
+            });
         });
 
-        it(`should translate the line item`, async () => {
-            await lineItemTranslatedEventHandler.handle(lineItemTranslated);
-
-            const updatedView = (await testRepositoryProvider
-                .forResource(ResourceType.audioItem)
-                .fetchById(audioItemId)) as EventSourcedAudioItemViewModel;
-
-            const { text: foundMultilingualText } = updatedView.transcript.getLineItem(
-                inPoint,
-                outPoint
-            ) as TranscriptItem;
-
-            expect(foundMultilingualText.hasTranslation()).toBe(true);
+        describe(`when the event is for a video`, () => {
+            // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-24]
+            it.todo(`should have a test`);
         });
     });
 });

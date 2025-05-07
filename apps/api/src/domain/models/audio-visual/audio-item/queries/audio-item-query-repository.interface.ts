@@ -12,7 +12,6 @@ export const AUDIO_QUERY_REPOSITORY_TOKEN = 'AUDIO_QUERY_REPOSITORY_TOKEN';
 export interface TranslationLineItemDto {
     inPointMilliseconds: number;
     outPointMilliseconds: number;
-    speakerInitials: string;
     text: string;
     languageCode: LanguageCode;
 }

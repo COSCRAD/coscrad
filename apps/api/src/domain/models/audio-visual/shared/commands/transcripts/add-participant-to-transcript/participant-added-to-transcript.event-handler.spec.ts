@@ -69,7 +69,7 @@ describe('ParticipantAddedToTranscriptEventHandler', () => {
         testRepositoryProvider = app.get(QUERY_REPOSITORY_PROVIDER_TOKEN);
 
         participantAddedToTranscriptEventHandler = new ParticipantAddedToTranscriptEventHandler(
-            // @ts-expect-error TODO find a better way to sidestep this type issue
+            // @ts-expect-error We know that the provider will only ever be called with `provider.forResource(audioVisualResourceType)` not a general `ResourceType`
             testRepositoryProvider
         );
     });

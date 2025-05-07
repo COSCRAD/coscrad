@@ -442,6 +442,7 @@ describe(`ArangoAudioItemQueryRepository`, () => {
 
         const targetAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
             transcript: existingTranscript,
+            lengthMilliseconds: outPointMilliseconds * 10,
         });
 
         beforeEach(async () => {
@@ -454,7 +455,6 @@ describe(`ArangoAudioItemQueryRepository`, () => {
                 outPointMilliseconds,
                 text: translationText,
                 languageCode: translationLanguageCode,
-                speakerInitials: participant.initials,
             });
 
             const { transcript } = (await testQueryRepository.fetchById(

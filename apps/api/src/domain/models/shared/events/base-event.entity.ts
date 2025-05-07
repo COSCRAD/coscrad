@@ -53,7 +53,7 @@ export abstract class BaseEvent<
         return cloneToPlainObject({ ...this, id: this.id });
     }
 
-    // TODO Aaron- can we make this work`?
+    // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-66]
     // public static fromDto<T extends BaseEvent>(eventRecord: DTO<T>) {
     //     // @ts-expect-error we know more than the compiler here
     //     return new this.constructor(eventRecord);
