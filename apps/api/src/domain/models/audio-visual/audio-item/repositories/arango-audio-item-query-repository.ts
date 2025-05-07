@@ -19,7 +19,7 @@ import { ArangoResourceQueryBuilder } from '../../../term/repositories/arango-re
 import { TranscriptItem } from '../../shared/entities/transcript-item.entity';
 import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
 import { Transcript } from '../../shared/entities/transcript.entity';
-import { TranscriptLineItemDto } from '../commands';
+import { TranscriptLineItemDto, TranslationItem } from '../commands';
 import { EventSourcedAudioItemViewModel } from '../queries';
 import {
     IAudioItemQueryRepository,
@@ -292,6 +292,61 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
         };
 
         await this.database.query({ query, bindVars });
+    }
+
+    async importTranslationsForTranscript(
+        id: AggregateId,
+        translations: TranslationItem[]
+    ): Promise<void> {
+        const timeStampsAndNewMultilingualTextItems = translations.map(
+            ({ inPointMilliseconds, translation: text, languageCode }) => ({
+                inPointMilliseconds,
+                translationItem: new MultilingualTextItem({
+                    text,
+                    languageCode,
+                    role: MultilingualTextItemRole.freeTranslation,
+                }),
+            })
+        );
+
+        // TODO do we need to match on the outpoint as well?
+        // TODO can we just move to lower case keywords in AQL?
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+
+        let updatedTranscriptItems = (
+            for existingItem in doc.transcript.items
+            let index = position(@translations[*].inPointMilliseconds,existingItem.inPointMilliseconds,true)
+             return merge_recursive(existingItem,
+                index == -1 
+                    ? {}
+                    : {
+                        text: {
+                            items: append(existingItem.text.items,@translations[index].translationItem)
+                        }
+                    }
+            )
+        )
+
+        update doc with {
+            transcript: {
+                        items: updatedTranscriptItems
+                        }
+                    } in @@collectionName
+            `;
+
+        const bindVars = {
+            '@collectionName': 'audioItem__VIEWS',
+            id,
+            translations: timeStampsAndNewMultilingualTextItems,
+        };
+
+        const _cursor = await this.database.query({ query, bindVars });
+
+        const _foo = await _cursor.all();
+
+        _foo;
     }
 
     async count(): Promise<number> {

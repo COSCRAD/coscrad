@@ -37,6 +37,8 @@ import {
 } from '../shared/commands/transcripts/import-line-items-to-transcript';
 import { LineItemsImportedToTranscript } from '../shared/commands/transcripts/import-line-items-to-transcript/line-items-imported-to-transcript.event';
 import { LineItemsImportedToTranscriptEventHandler } from '../shared/commands/transcripts/import-line-items-to-transcript/line-items-imported-to-transcript.event-handler';
+import { TranslationsImportedForTranscsriptEventHandler } from '../shared/commands/transcripts/import-translations-for-transcript/translations-imported-for-transcript.event-handler';
+import { LineItemTranslatedEventHandler } from '../shared/commands/transcripts/translate-line-item/line-item-translated.event-handler';
 import {
     CreateVideo,
     CreateVideoCommandHandler,
@@ -92,6 +94,8 @@ import { VideoController } from './video.controller';
         ParticipantAddedToTranscriptEventHandler,
         LineItemAddedToTranscriptEventHandler,
         LineItemsImportedToTranscriptEventHandler,
+        LineItemTranslatedEventHandler,
+        TranslationsImportedForTranscsriptEventHandler,
     ],
     exports: [AudioItemQueryService, VideoQueryService],
 })

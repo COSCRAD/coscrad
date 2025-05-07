@@ -16,7 +16,7 @@ import {
     MultilingualText,
     MultilingualTextItem,
 } from '../../../../../domain/common/entities/multilingual-text';
-import { NotFound } from '../../../../../lib/types/not-found';
+import { isNotFound, NotFound } from '../../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
@@ -28,7 +28,7 @@ import { AccessControlList } from '../../../shared/access-control/access-control
 import { TranscriptItem } from '../../shared/entities/transcript-item.entity';
 import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
 import { Transcript } from '../../shared/entities/transcript.entity';
-import { TranscriptLineItemDto } from '../commands';
+import { TranscriptLineItemDto, TranslationItem } from '../commands';
 import { AudioItemCreated } from '../commands/create-audio-item/audio-item-created.event';
 import { EventSourcedAudioItemViewModel } from '../queries';
 import { IAudioItemQueryRepository } from '../queries/audio-item-query-repository.interface';
@@ -40,6 +40,30 @@ const compositeIdForSingleTerm = {
     type: AggregateType.audioItem,
     id: audioItemId,
 };
+
+const participant = new TranscriptParticipant({
+    initials: 'WO',
+    name: 'William Who',
+});
+
+const speakerInitials = participant.initials;
+
+const targetAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
+    transcript: Transcript.buildEmpty(),
+});
+
+const originalLanguageCode = LanguageCode.Chilcotin;
+const translationLanguageCode = LanguageCode.English;
+
+const lineItems = [1, 2, 3, 4, 5].map((i) =>
+    buildTestInstance(TranscriptLineItemDto, {
+        inPointMilliseconds: 100 * i,
+        outPointMilliseconds: 100 * i + 50,
+        speakerInitials,
+        text: `text for line item #${i}`,
+        languageCode: originalLanguageCode,
+    })
+);
 
 describe(`ArangoAudioItemQueryRepository`, () => {
     let testQueryRepository: IAudioItemQueryRepository;
@@ -93,10 +117,6 @@ describe(`ArangoAudioItemQueryRepository`, () => {
     });
 
     const [creationEvent] = audioItemCreated.as(compositeIdForSingleTerm) as [AudioItemCreated];
-
-    const originalLanguageCode = LanguageCode.Chilcotin;
-
-    const translationLanguageCode = LanguageCode.English;
 
     const additionalAudioItems = [101, 102, 103].map((sequenceNumber) => {
         const creationEvent = new TestEventStream()
@@ -371,31 +391,11 @@ describe(`ArangoAudioItemQueryRepository`, () => {
     });
 
     describe(`import line items`, () => {
-        const participant = new TranscriptParticipant({
-            initials: 'WO',
-            name: 'William Who',
-        });
-
-        const speakerInitials = participant.initials;
-
-        const targetAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
-            transcript: Transcript.buildEmpty(),
-        });
-
-        const lineItems = [1, 2, 3, 4, 5].map((i) =>
-            buildTestInstance(TranscriptLineItemDto, {
-                inPointMilliseconds: 100 * i,
-                outPointMilliseconds: 100 * i + 50,
-                speakerInitials,
-                text: `text for line item #${i}`,
-            })
-        );
-
         beforeEach(async () => {
             await testQueryRepository.create(targetAudioItem);
         });
 
-        it('should have a test', async () => {
+        it('should import the line items', async () => {
             await testQueryRepository.importLineItems(targetAudioItem.id, lineItems);
 
             const updatedView = (await testQueryRepository.fetchById(
@@ -479,6 +479,78 @@ describe(`ArangoAudioItemQueryRepository`, () => {
             expect(foundTranslationText).toEqual(translationText);
 
             expect(role).toBe(MultilingualTextItemRole.freeTranslation);
+        });
+    });
+
+    describe(`import line item transcripts`, () => {
+        const translations = lineItems.map(
+            ({ inPointMilliseconds }, index): TranslationItem => ({
+                inPointMilliseconds,
+                translation: `translation for lineitem #${index}`,
+                languageCode: translationLanguageCode,
+            })
+        );
+
+        const translationItems = lineItems.map(
+            ({ inPointMilliseconds, outPointMilliseconds, text, languageCode }) =>
+                TranscriptItem.fromDto({
+                    inPointMilliseconds,
+                    outPointMilliseconds,
+                    text: buildMultilingualTextWithSingleItem(text, languageCode),
+                    speakerInitials: participant.initials,
+                })
+        );
+
+        const targetAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
+            transcript: buildTestInstance(Transcript, {
+                items: translationItems,
+            }),
+        });
+
+        beforeEach(async () => {
+            await testQueryRepository.create(targetAudioItem);
+        });
+
+        it(`should import the translations`, async () => {
+            await testQueryRepository.importTranslationsForTranscript(
+                targetAudioItem.id,
+                translations
+            );
+
+            const { transcript: updatedTranscript } = (await testQueryRepository.fetchById(
+                targetAudioItem.id
+            )) as EventSourcedAudioItemViewModel;
+
+            const invalidOrMissingTranslations = translations.filter(
+                ({ inPointMilliseconds, translation: text, languageCode }) => {
+                    const translationLineItem = updatedTranscript.items.find(
+                        (updatedItem) => updatedItem.inPointMilliseconds === inPointMilliseconds
+                    );
+
+                    if (isNotFound(translationLineItem)) {
+                        return true;
+                    }
+
+                    const foundTranslationItem =
+                        translationLineItem.text.getTranslation(languageCode);
+
+                    if (isNotFound(foundTranslationItem)) {
+                        return true;
+                    }
+
+                    if (foundTranslationItem.text !== text) {
+                        return true;
+                    }
+
+                    if (foundTranslationItem.role !== MultilingualTextItemRole.freeTranslation) {
+                        return true;
+                    }
+
+                    return false;
+                }
+            );
+
+            expect(invalidOrMissingTranslations).toEqual([]);
         });
     });
 });
