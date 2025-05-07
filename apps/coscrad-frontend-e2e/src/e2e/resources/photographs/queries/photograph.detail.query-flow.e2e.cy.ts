@@ -47,6 +47,7 @@ const contributors = {
     creator: {
         id: buildDummyUuid(112),
         firstName: 'Jamethon',
+        lastName: 'Jones',
     },
 };
 
@@ -73,7 +74,7 @@ describe(`the photograph detail page`, () => {
             },
             shortBio: 'This is a hard-working language champion indeed!',
             firstName: contributors.creator.firstName,
-            // we don't bother with the last name
+            lastName: contributors.creator.lastName,
         });
 
         cy.seedTestMediaItem({
