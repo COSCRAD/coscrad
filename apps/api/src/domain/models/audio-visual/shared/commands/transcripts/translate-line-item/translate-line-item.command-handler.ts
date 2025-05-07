@@ -8,7 +8,7 @@ import { BaseUpdateCommandHandler } from '../../../../../shared/command-handlers
 import { BaseEvent } from '../../../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../../../shared/events/types/EventRecordMetadata';
 import { TranscribableResource } from '../add-line-item-to-transcript';
-import { LineItemTranslated } from './line-item-translated';
+import { LineItemTranslated } from './line-item-translated.event';
 import { TranslateLineItem } from './translate-line-item.command';
 
 @CommandHandler(TranslateLineItem)

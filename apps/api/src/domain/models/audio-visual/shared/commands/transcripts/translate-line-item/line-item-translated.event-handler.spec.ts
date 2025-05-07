@@ -1,10 +1,11 @@
-import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode, ResourceType } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../../../app/config/constants/environment';
+import { buildMultilingualTextWithSingleItem } from '../../../../../../../domain/common/build-multilingual-text-with-single-item';
 import buildDummyUuid from '../../../../../../../domain/models/__tests__/utilities/buildDummyUuid';
 import {
     IQueryRepositoryProvider,
@@ -16,32 +17,61 @@ import { PersistenceModule } from '../../../../../../../persistence/persistence.
 import generateDatabaseNameForTestSuite from '../../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestInstance } from '../../../../../../../test-data/utilities';
 import { EventSourcedAudioItemViewModel } from '../../../../audio-item/queries';
+import { TranscriptItem } from '../../../entities/transcript-item.entity';
 import { TranscriptParticipant } from '../../../entities/transcript-participant';
 import { Transcript } from '../../../entities/transcript.entity';
-import { ParticipantAddedToTranscript } from './participant-added-to-transcript.event';
-import { ParticipantAddedToTranscriptEventHandler } from './participant-added-to-transcript.event-handler';
+import { LineItemTranslated } from './line-item-translated.event';
+import { LineItemTranslatedEventHandler } from './line-item-translated.event-handler';
 
-const audioItemId = buildDummyUuid(50);
+const audioItemId = buildDummyUuid(60);
 
-const targetAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
-    id: audioItemId,
-    transcript: Transcript.buildEmpty(),
-});
+const translationLanguageCode = LanguageCode.English;
 
-const participantAdded = buildTestInstance(ParticipantAddedToTranscript, {
+const originalLanguageCode = LanguageCode.Chilcotin;
+
+const translationText = 'text of the translation';
+
+const participant = buildTestInstance(TranscriptParticipant);
+
+const inPoint = 1500;
+
+const outPoint = 3600;
+
+const lineItemTranslated = buildTestInstance(LineItemTranslated, {
     payload: {
-        aggregateCompositeIdentifier: { id: targetAudioItem.id, type: AggregateType.audioItem },
+        aggregateCompositeIdentifier: { id: audioItemId, type: AggregateType.audioItem },
+        translation: translationText,
+        languageCode: translationLanguageCode,
+        inPointMilliseconds: inPoint,
+        outPointMilliseconds: outPoint,
     },
 });
 
-describe('ParticipantAddedToTranscriptEventHandler', () => {
+const existingAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
+    id: audioItemId,
+    transcript: buildTestInstance(Transcript, {
+        participants: [participant],
+        items: [
+            buildTestInstance(TranscriptItem, {
+                inPointMilliseconds: inPoint,
+                outPointMilliseconds: outPoint,
+                text: buildMultilingualTextWithSingleItem(
+                    'existing transcript item text',
+                    originalLanguageCode
+                ),
+            }),
+        ],
+    }),
+});
+
+describe(`LineItemTranslatedEventHandler`, () => {
     let databaseProvider: ArangoDatabaseProvider;
 
     let app: INestApplication;
 
     let testRepositoryProvider: IQueryRepositoryProvider;
 
-    let participantAddedToTranscriptEventHandler: ParticipantAddedToTranscriptEventHandler;
+    let lineItemTranslatedEventHandler: LineItemTranslatedEventHandler;
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
@@ -68,7 +98,7 @@ describe('ParticipantAddedToTranscriptEventHandler', () => {
 
         testRepositoryProvider = app.get(QUERY_REPOSITORY_PROVIDER_TOKEN);
 
-        participantAddedToTranscriptEventHandler = new ParticipantAddedToTranscriptEventHandler(
+        lineItemTranslatedEventHandler = new LineItemTranslatedEventHandler(
             // @ts-expect-error We know that the provider will only ever be called with `provider.forResource(audioVisualResourceType)` not a general `ResourceType`
             testRepositoryProvider
         );
@@ -80,43 +110,40 @@ describe('ParticipantAddedToTranscriptEventHandler', () => {
 
     beforeEach(async () => {
         await databaseProvider.clearViews();
-
-        /**
-         * We attempted to use "handle" on a creation event for the test
-         * setup, but it failed due to an apparent race condition.
-         *
-         * We should investigate this further.
-         */
-        // await testQueryRepository.create(targetAudioItem);
     });
 
-    describe('when handling a PARTICIPANT_ADDED_TO_TRANSCRIPT', () => {
-        describe('when the target is an audio item', () => {
+    describe(`when handling a LINE_ITEM_TRANSLATED`, () => {
+        describe(`when the event is for an audio item`, () => {
             beforeEach(async () => {
                 await testRepositoryProvider
                     .forResource(ResourceType.audioItem)
-                    .create(targetAudioItem);
+                    .create(existingAudioItem);
             });
 
-            it('should add a participant to the existing transcript', async () => {
-                await participantAddedToTranscriptEventHandler.handle(participantAdded);
+            it(`should translate the line item`, async () => {
+                await lineItemTranslatedEventHandler.handle(lineItemTranslated);
 
                 const updatedView = (await testRepositoryProvider
                     .forResource(ResourceType.audioItem)
-                    .fetchById(targetAudioItem.id)) as EventSourcedAudioItemViewModel;
+                    .fetchById(audioItemId)) as EventSourcedAudioItemViewModel;
 
-                const { name } = updatedView.transcript.findParticipantByInitials(
-                    participantAdded.payload.initials
-                ) as TranscriptParticipant;
+                const { text: foundMultilingualText } = updatedView.transcript.getLineItem(
+                    inPoint,
+                    outPoint
+                ) as TranscriptItem;
 
-                expect(name).toBe(participantAdded.payload.name);
-
-                expect(updatedView.transcript.participants).toHaveLength(1);
+                /**
+                 * We only do a sanity check here because the Arango query
+                 * repository is responsible for the full state update, which
+                 * is tested comprehensively in its own test.
+                 */
+                expect(foundMultilingualText.hasTranslation()).toBe(true);
             });
         });
 
-        describe('when the target is a video', () => {
-            it.todo('should have a test');
+        describe(`when the event is for a video`, () => {
+            // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-24]
+            it.todo(`should have a test`);
         });
     });
 });

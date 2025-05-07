@@ -2,8 +2,10 @@ import {
     ICommandFormAndLabels,
     IDetailQueryResult,
     IMultilingualTextItem,
+    MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
+import { MultilingualTextItem } from '../../../../../domain/common/entities/multilingual-text';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../../lib/types/maybe';
@@ -19,7 +21,10 @@ import { TranscriptParticipant } from '../../shared/entities/transcript-particip
 import { Transcript } from '../../shared/entities/transcript.entity';
 import { TranscriptLineItemDto } from '../commands';
 import { EventSourcedAudioItemViewModel } from '../queries';
-import { IAudioItemQueryRepository } from '../queries/audio-item-query-repository.interface';
+import {
+    IAudioItemQueryRepository,
+    TranslationLineItemDto,
+} from '../queries/audio-item-query-repository.interface';
 
 export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository {
     private readonly database: ArangoDatabaseForCollection<
@@ -244,6 +249,46 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
                         speakerInitials,
                     })
             ),
+        };
+
+        await this.database.query({ query, bindVars });
+    }
+
+    // why are the speaker initials here?
+    async translateLineItem(
+        id: AggregateId,
+        { languageCode, text, inPointMilliseconds, outPointMilliseconds }: TranslationLineItemDto
+    ) {
+        const newMultilingualTextItem = new MultilingualTextItem({
+            languageCode,
+            text,
+            // TODO add this to the event payload
+            role: MultilingualTextItemRole.freeTranslation,
+        });
+
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+
+        let updatedItems = (
+            FOR item IN doc.transcript.items
+            let updatedItem = item.inPointMilliseconds == @inPointMilliseconds && item.outPointMilliseconds == @outPointMilliseconds ? MERGE(item,{ text: { items: APPEND(item.text.items,@newItem) }}) : item
+            return updatedItem
+        )
+
+        update doc with {
+            transcript: MERGE(doc.transcript,{
+                items: updatedItems
+            })
+        } IN @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'audioItem__VIEWS',
+            id,
+            inPointMilliseconds,
+            outPointMilliseconds,
+            newItem: newMultilingualTextItem,
         };
 
         await this.database.query({ query, bindVars });

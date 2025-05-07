@@ -52,4 +52,10 @@ export abstract class BaseEvent<
         // note that getters do not survive conversion to a plain object
         return cloneToPlainObject({ ...this, id: this.id });
     }
+
+    // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-66]
+    // public static fromDto<T extends BaseEvent>(eventRecord: DTO<T>) {
+    //     // @ts-expect-error we know more than the compiler here
+    //     return new this.constructor(eventRecord);
+    // }
 }
