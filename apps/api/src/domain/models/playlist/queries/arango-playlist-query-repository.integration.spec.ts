@@ -1,4 +1,4 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
+import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -17,6 +17,8 @@ import { ArangoRepositoryForAggregate } from '../../../../persistence/repositori
 import { PlaylistViewModel } from '../../../../queries/buildViewModelForResource/viewModels/playlist.view-model';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
+import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import buildInstanceFactory from '../../../factories/utilities/buildInstanceFactory';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
@@ -137,6 +139,22 @@ describe(`ArangoPlaylistQueryRepository`, () => {
         });
     });
 
+    describe(`count`, () => {
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.createMany(playlistViews);
+        });
+
+        describe(`when there are several views`, () => {
+            it(`should return them`, async () => {
+                const result = await testQueryRepository.count();
+
+                expect(result).toBe(playlistViews.length);
+            });
+        });
+    });
+
     describe(`addAudioItem`, () => {
         beforeEach(async () => {
             await databaseProvider.clearViews();
@@ -160,6 +178,52 @@ describe(`ArangoPlaylistQueryRepository`, () => {
             expect(mediaItemId).toBe(existingAudioItem.mediaItemId);
 
             expect(name).toEqual(existingAudioItem.name);
+        });
+    });
+
+    describe(`translatePlaylistName`, () => {
+        const translationLanguageCode = LanguageCode.English;
+
+        const translationText = 'translation of the text';
+
+        const targetPlaylist = buildTestInstance(PlaylistViewModel, {
+            name: buildMultilingualTextWithSingleItem('existing name', LanguageCode.Chilcotin),
+        });
+
+        beforeEach(async () => {
+            // ARRANGE
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetPlaylist);
+        });
+
+        it(`should translate the given playlist's name`, async () => {
+            // ACT
+            await testQueryRepository.translatePlaylistName(
+                targetPlaylist.id,
+                translationText,
+                translationLanguageCode
+            );
+
+            // ASSERT
+            const updatedView = (await testQueryRepository.fetchById(
+                targetPlaylist.id
+            )) as PlaylistViewModel;
+
+            const { name } = updatedView;
+
+            expect(name.has(translationLanguageCode)).toBe(true);
+
+            const translationItemSearchResult = name.getTranslation(translationLanguageCode);
+
+            expect(translationItemSearchResult).not.toBe(NotFound);
+
+            const { text: foundTranslationText, role: foundRole } =
+                translationItemSearchResult as MultilingualTextItem;
+
+            expect(foundTranslationText).toBe(translationText);
+
+            expect(foundRole).toBe(MultilingualTextItemRole.freeTranslation);
         });
     });
 

@@ -1,3 +1,4 @@
+import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { Inject, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { InternalError } from '../../../../lib/errors/InternalError';
@@ -37,8 +38,9 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
 
         this.baseResourceQueryBuilder = new ArangoResourceQueryBuilder('playlist__VIEWS');
     }
+
     count(): Promise<number> {
-        throw new Error('Method not implemented.');
+        return this.database.getCount();
     }
 
     subscribeToUpdates(): Observable<{ data: { type: string } }> {
@@ -55,6 +57,10 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
         await this.database.createMany(documents);
     }
 
+    /**
+     * TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-65]
+     * We need to decide how to handle deletes in the query layer.
+     */
     delete(_id: AggregateId): Promise<void> {
         throw new Error('Method not implemented.');
     }
@@ -125,6 +131,28 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
         const _new = await cursor.all();
 
         _new;
+    }
+
+    async translatePlaylistName(
+        id: AggregateId,
+        text: String,
+        languageCode: LanguageCode
+        // TODO should `role: MultilingualTextItemRole` come from the event as well?
+    ): Promise<void> {
+        const cursor = await this.database
+            .query(
+                this.baseResourceQueryBuilder.translateName(
+                    id,
+                    text,
+                    languageCode,
+                    MultilingualTextItemRole.freeTranslation
+                )
+            )
+            .catch((reason) => {
+                throw new InternalError(`Failed to translate playlist name: ${reason}`);
+            });
+
+        await cursor.all();
     }
 
     async attribute(id: AggregateId, contributorIds: AggregateId[]): Promise<void> {

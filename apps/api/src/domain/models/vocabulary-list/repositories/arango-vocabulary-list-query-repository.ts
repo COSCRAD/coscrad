@@ -135,35 +135,8 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
         id: AggregateId,
         { text, languageCode, role }: IMultilingualTextItem
     ): Promise<void> {
-        const query = `
-        FOR doc IN @@collectionName
-        FILTER doc._key == @id
-        let newItem = {
-                    text: @text,
-                    languageCode: @languageCode,
-                    role: @role
-        }
-        UPDATE doc WITH {
-            name: {
-                items: APPEND(doc.name.items,newItem)
-            }
-        } IN @@collectionName
-         RETURN OLD
-        `;
-
-        const bindVars = {
-            '@collectionName': 'vocabularyList__VIEWS',
-            id: id,
-            text: text,
-            role: role,
-            languageCode: languageCode,
-        };
-
         const cursor = await this.database
-            .query({
-                query,
-                bindVars,
-            })
+            .query(this.baseResourceQueryBuilder.translateName(id, text, languageCode, role))
             .catch((reason) => {
                 throw new InternalError(`Failed to translate vocabulary list name: ${reason}`);
             });
