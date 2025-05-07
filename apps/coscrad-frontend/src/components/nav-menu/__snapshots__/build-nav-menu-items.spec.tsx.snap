@@ -19,14 +19,6 @@ exports[`dynamic navigation menu when all properties are provided should return 
     "link": "Notes",
   },
   {
-    "label": "Links",
-    "link": "Links",
-  },
-  {
-    "label": "Additional Materials",
-    "link": "Additional Materials",
-  },
-  {
     "label": "Tree of Knowledge",
     "link": "TreeOfKnowledge",
   },
@@ -39,12 +31,20 @@ exports[`dynamic navigation menu when all properties are provided should return 
     "link": "Live",
   },
   {
-    "label": "Credits",
-    "link": "Credits",
-  },
-  {
     "label": "Alphabet",
     "link": "Alphabet",
+  },
+  {
+    "label": "Additional Materials",
+    "link": "Additional Materials",
+  },
+  {
+    "label": "Links",
+    "link": "Links",
+  },
+  {
+    "label": "Credits",
+    "link": "Credits",
   },
 ]
 `;

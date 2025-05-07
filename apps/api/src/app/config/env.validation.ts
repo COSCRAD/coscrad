@@ -119,7 +119,7 @@ export class EnvironmentVariables {
     ALLOWED_CLIENT_ORIGINS: string;
 }
 
-// Do we have a test of this?
+// this is tested in config.spec.ts
 export const validate = (config: Record<string, unknown>): EnvironmentVariables => {
     const configToValidate = plainToInstance(EnvironmentVariables, config, {
         enableImplicitConversion: true,

@@ -80,23 +80,6 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
             }),
         ],
         [
-            !isNullOrUndefined(externalLinks),
-            () => ({
-                path: 'Links',
-                label: 'Links',
-                element: <Links />,
-            }),
-        ],
-        [
-            additionalMaterials.length > 0,
-            () => ({
-                path: 'Additional Materials',
-                // TODO pull this label from the config
-                label: 'Additional Materials',
-                element: <AdditionalMaterials />,
-            }),
-        ],
-        [
             shouldEnableWebOfKnowledgeForResources,
             () => ({
                 path: 'TreeOfKnowledge',
@@ -132,6 +115,31 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
                 element: <ListenLivePage />,
             }),
         ],
+        [
+            isNonEmptyObject(contentConfig.alphabetConfig),
+            (_contentConfig: ConfigurableContent) => ({
+                path: 'Alphabet',
+                label: 'Alphabet',
+                element: <AlphabetPage />,
+            }),
+        ],
+        [
+            additionalMaterials.length > 0,
+            () => ({
+                path: 'Additional Materials',
+                // TODO pull this label from the config
+                label: 'Additional Materials',
+                element: <AdditionalMaterials />,
+            }),
+        ],
+        [
+            !isNullOrUndefined(externalLinks),
+            () => ({
+                path: 'Links',
+                label: 'Links',
+                element: <Links />,
+            }),
+        ],
         {
             path: 'Credits',
             label: 'Credits',
@@ -142,14 +150,6 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
             path: '*',
             element: <NotFoundPresenter />,
         },
-        [
-            isNonEmptyObject(contentConfig.alphabetConfig),
-            (_contentConfig: ConfigurableContent) => ({
-                path: 'Alphabet',
-                label: 'Alphabet',
-                element: <AlphabetPage />,
-            }),
-        ],
     ];
 
     return routeDefinitions

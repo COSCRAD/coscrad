@@ -7,7 +7,7 @@ import { FunctionalComponent } from '../../utils/types/functional-component';
 
 const LinkPresenter = ({ title, url, description }: ExternalLink) => {
     return (
-        <Card sx={{ p: 2, mb: 2 }}>
+        <Card key={url} sx={{ p: 2, mb: 2 }}>
             <Typography mb={0.5} variant="h3">
                 {title}
             </Typography>

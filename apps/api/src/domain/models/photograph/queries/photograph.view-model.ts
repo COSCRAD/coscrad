@@ -1,5 +1,11 @@
 import { AggregateType, IMultilingualText } from '@coscrad/api-interfaces';
-import { BooleanDataType, NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
+import {
+    BooleanDataType,
+    NestedDataType,
+    NonEmptyString,
+    PositiveInteger,
+    UUID,
+} from '@coscrad/data-types';
 import { isBoolean, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { ApiProperty } from '@nestjs/swagger';
 import { DetailScopedCommandWriteContext } from '../../../../app/controllers/command/services/command-info-service';
@@ -24,8 +30,10 @@ import { PhotographCreated } from '../commands';
         name: buildMultilingualTextWithSingleItem('nice photo'),
         id: buildDummyUuid(1),
         photographer: 'Jane Deer',
-        tags: [],
         mediaItemId: buildDummyUuid(55),
+        heightPx: 600,
+        widthPx: 800,
+        tags: [],
         actions: [],
         isPublished: false,
         contributions: [],
@@ -52,12 +60,32 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
     })
     public id: string;
 
+    @UUID({
+        label: 'media item',
+        description: 'a reference to the raw media item for this photograph',
+    })
+    public mediaItemId: string;
+
     @ApiProperty()
     @NonEmptyString({
         label: 'photographer',
         description: 'the full name of the photographer responsible for this photograph',
     })
     public photographer: string;
+
+    @ApiProperty()
+    @PositiveInteger({
+        label: 'Image Height PX',
+        description: 'Height of the image in pixels',
+    })
+    public heightPx: number;
+
+    @ApiProperty()
+    @PositiveInteger({
+        label: 'Image Height PX',
+        description: 'Width of the image in pixels',
+    })
+    public widthPx: number;
 
     @ApiProperty({
         type: TagViewModel,
@@ -69,10 +97,6 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
         isArray: true,
     })
     public tags: TagViewModel[];
-
-    // Do we need pixel height and width?
-
-    mediaItemId: string;
 
     // note that these are mapped to form specifications in the query service layer
     @ApiProperty()
@@ -128,6 +152,10 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
         payload: {
             title,
             languageCodeForTitle,
+            photographer,
+            mediaItemId,
+            heightPx,
+            widthPx,
             aggregateCompositeIdentifier: { id: photographId },
         },
         meta: { contributorIds },
@@ -137,6 +165,14 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
         photograph.name = buildMultilingualTextWithSingleItem(title, languageCodeForTitle);
 
         photograph.id = photographId;
+
+        photograph.photographer = photographer;
+
+        photograph.mediaItemId = mediaItemId;
+
+        photograph.heightPx = heightPx;
+
+        photograph.widthPx = widthPx;
 
         photograph.actions = [];
 
@@ -183,6 +219,9 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
             contributions,
             name,
             id,
+            photographer,
+            heightPx,
+            widthPx,
             actions,
             accessControlList,
             mediaItemId,
@@ -196,20 +235,26 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
 
         photograph.id = id;
 
+        photograph.photographer = photographer;
+
+        photograph.heightPx = heightPx;
+
+        photograph.widthPx = widthPx;
+
         photograph.actions = actions;
 
         photograph.accessControlList = new AccessControlList(accessControlList);
 
         photograph.isPublished = isBoolean(isPublished) ? isPublished : false;
 
+        if (!isNullOrUndefined(mediaItemId)) {
+            photograph.mediaItemId = mediaItemId;
+        }
+
         /**
          * TODO Populate tags
          */
         photograph.tags = [];
-
-        if (!isNullOrUndefined(mediaItemId)) {
-            photograph.mediaItemId = mediaItemId;
-        }
 
         return photograph;
     }

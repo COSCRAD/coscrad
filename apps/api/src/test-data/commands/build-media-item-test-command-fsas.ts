@@ -14,7 +14,6 @@ const createMediaItem: CommandFSA<CreateMediaItem> = {
         aggregateCompositeIdentifier: { id, type },
         title: 'Fishing Video',
         mimeType: MIMEType.mp4,
-        lengthMilliseconds: 100000,
     },
 };
 

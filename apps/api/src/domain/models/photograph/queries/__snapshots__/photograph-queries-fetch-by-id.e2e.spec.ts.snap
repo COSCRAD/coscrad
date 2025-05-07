@@ -240,6 +240,7 @@ exports[`when querying for a photograph: fetch by Id when the user is authentica
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110901",
     },
   ],
+  "heightPx": 600,
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
   "imageUrl": "https://www.photograph-queries-by-id.com/myapi/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100055",
   "isPublished": true,
@@ -252,6 +253,8 @@ exports[`when querying for a photograph: fetch by Id when the user is authentica
       },
     ],
   },
+  "photographer": "Jeff Thomas",
   "tags": [],
+  "widthPx": 800,
 }
 `;

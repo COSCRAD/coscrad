@@ -251,6 +251,19 @@ exports[` 1`] = `
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <span
+                    class="MuiTypography-root MuiTypography-body1 css-ms6d4r-MuiTypography-root"
+                  >
+                    Total Records: 
+                    3
+                       Filtered Records:
+                     
+                    3
+                  </span>
+                </div>
+                <div
+                  class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
+                >
+                  <span
                     class="MuiTypography-root MuiTypography-body1 css-nped9e-MuiTypography-root"
                   >
                     Rows per page:
@@ -611,6 +624,19 @@ exports[` 2`] = `
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <span
+                    class="MuiTypography-root MuiTypography-body1 css-ms6d4r-MuiTypography-root"
+                  >
+                    Total Records: 
+                    3
+                       Filtered Records:
+                     
+                    3
+                  </span>
+                </div>
+                <div
+                  class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
+                >
+                  <span
                     class="MuiTypography-root MuiTypography-body1 css-nped9e-MuiTypography-root"
                   >
                     Rows per page:
@@ -964,6 +990,19 @@ exports[` 2`] = `
               <div
                 class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-3 css-3tbyo6-MuiGrid-root"
               >
+                <div
+                  class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
+                >
+                  <span
+                    class="MuiTypography-root MuiTypography-body1 css-ms6d4r-MuiTypography-root"
+                  >
+                    Total Records: 
+                    3
+                       Filtered Records:
+                     
+                    3
+                  </span>
+                </div>
                 <div
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
@@ -1328,6 +1367,19 @@ exports[` 3`] = `
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <span
+                    class="MuiTypography-root MuiTypography-body1 css-ms6d4r-MuiTypography-root"
+                  >
+                    Total Records: 
+                    3
+                       Filtered Records:
+                     
+                    3
+                  </span>
+                </div>
+                <div
+                  class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
+                >
+                  <span
                     class="MuiTypography-root MuiTypography-body1 css-nped9e-MuiTypography-root"
                   >
                     Rows per page:
@@ -1685,6 +1737,19 @@ exports[` 3`] = `
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <span
+                    class="MuiTypography-root MuiTypography-body1 css-ms6d4r-MuiTypography-root"
+                  >
+                    Total Records: 
+                    3
+                       Filtered Records:
+                     
+                    3
+                  </span>
+                </div>
+                <div
+                  class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
+                >
+                  <span
                     class="MuiTypography-root MuiTypography-body1 css-nped9e-MuiTypography-root"
                   >
                     Rows per page:
@@ -2026,6 +2091,19 @@ exports[` 3`] = `
               <div
                 class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-3 css-3tbyo6-MuiGrid-root"
               >
+                <div
+                  class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
+                >
+                  <span
+                    class="MuiTypography-root MuiTypography-body1 css-ms6d4r-MuiTypography-root"
+                  >
+                    Total Records: 
+                    3
+                       Filtered Records:
+                     
+                    3
+                  </span>
+                </div>
                 <div
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
@@ -2438,6 +2516,19 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <span
+                    class="MuiTypography-root MuiTypography-body1 css-ms6d4r-MuiTypography-root"
+                  >
+                    Total Records: 
+                    3
+                       Filtered Records:
+                     
+                    3
+                  </span>
+                </div>
+                <div
+                  class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
+                >
+                  <span
                     class="MuiTypography-root MuiTypography-body1 css-nped9e-MuiTypography-root"
                   >
                     Rows per page:
@@ -2830,6 +2921,19 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <span
+                    class="MuiTypography-root MuiTypography-body1 css-ms6d4r-MuiTypography-root"
+                  >
+                    Total Records: 
+                    3
+                       Filtered Records:
+                     
+                    3
+                  </span>
+                </div>
+                <div
+                  class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
+                >
+                  <span
                     class="MuiTypography-root MuiTypography-body1 css-nped9e-MuiTypography-root"
                   >
                     Rows per page:
@@ -3186,6 +3290,19 @@ exports[`IndexTable when the table setup is valid when all properies are include
               <div
                 class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-3 css-3tbyo6-MuiGrid-root"
               >
+                <div
+                  class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
+                >
+                  <span
+                    class="MuiTypography-root MuiTypography-body1 css-ms6d4r-MuiTypography-root"
+                  >
+                    Total Records: 
+                    3
+                       Filtered Records:
+                     
+                    3
+                  </span>
+                </div>
                 <div
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
@@ -3547,6 +3664,19 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <span
+                    class="MuiTypography-root MuiTypography-body1 css-ms6d4r-MuiTypography-root"
+                  >
+                    Total Records: 
+                    3
+                       Filtered Records:
+                     
+                    3
+                  </span>
+                </div>
+                <div
+                  class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
+                >
+                  <span
                     class="MuiTypography-root MuiTypography-body1 css-nped9e-MuiTypography-root"
                   >
                     Rows per page:
@@ -3888,6 +4018,19 @@ exports[`IndexTable when the table setup is valid when all properies are include
               <div
                 class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-3 css-3tbyo6-MuiGrid-root"
               >
+                <div
+                  class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
+                >
+                  <span
+                    class="MuiTypography-root MuiTypography-body1 css-ms6d4r-MuiTypography-root"
+                  >
+                    Total Records: 
+                    3
+                       Filtered Records:
+                     
+                    3
+                  </span>
+                </div>
                 <div
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
@@ -4291,6 +4434,19 @@ exports[`IndexTable when the table setup is valid when all properies are include
               <div
                 class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-3 css-3tbyo6-MuiGrid-root"
               >
+                <div
+                  class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
+                >
+                  <span
+                    class="MuiTypography-root MuiTypography-body1 css-ms6d4r-MuiTypography-root"
+                  >
+                    Total Records: 
+                    3
+                       Filtered Records:
+                     
+                    3
+                  </span>
+                </div>
                 <div
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >

@@ -14,6 +14,8 @@ import {
 } from '@coscrad/data-types';
 import { LanguageCodeEnum } from '../../../../../domain/common/entities/multilingual-text';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
+import { CoscradDataExample } from '../../../../../test-data/utilities';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { AggregateTypeProperty } from '../../../shared/common-commands';
 
 export class PhotographCompositeIdentifier {
@@ -27,6 +29,19 @@ export class PhotographCompositeIdentifier {
     readonly id: AggregateId;
 }
 
+@CoscradDataExample<CreatePhotograph>({
+    example: {
+        aggregateCompositeIdentifier: {
+            id: buildDummyUuid(1),
+            type: AggregateType.photograph,
+        },
+        languageCodeForTitle: LanguageCode.English,
+        title: 'Test Photograph',
+        mediaItemId: buildDummyUuid(99),
+        heightPx: 1200,
+        widthPx: 900,
+    },
+})
 @Command({
     type: `CREATE_PHOTOGRAPH`,
     label: `Create Photograph`,
@@ -62,7 +77,7 @@ export class CreatePhotograph implements ICommandBase {
         label: 'photographer',
         description: 'the name of the person who took this photograph',
     })
-    readonly photographer: string;
+    readonly photographer?: string;
 
     @NonNegativeFiniteNumber({
         label: `height (px)`,

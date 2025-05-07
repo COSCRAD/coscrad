@@ -30,6 +30,16 @@ declare namespace Cypress {
             metaOverrides?: Record<string, unknown>
         ): void;
 
+        seedTestMediaItem({
+            id,
+            title,
+            mimeType,
+        }: {
+            id: string;
+            title: string;
+            mimeType: string;
+        }): void;
+
         seedDatabase(collectionName: string, documents: unknown[]): void;
 
         seedTestUuids(quantity: number): void;
@@ -175,27 +185,45 @@ Cypress.Commands.add(`executeCommandStreamByName`, (name: string) => {
     });
 });
 
-Cypress.Commands.add(
-    `seedDataWithCommand`,
-    (
-        type: string,
-        payloadOverrides: Record<string, unknown>,
-        metaOverrides: Record<string, unknown> = {}
-    ) => {
-        const serializedPayloadOverrides = JSON.stringify(payloadOverrides).replace(/"/g, `\\"`);
+const seedDataWithCommand = (
+    type: string,
+    payloadOverrides: Record<string, unknown>,
+    metaOverrides: Record<string, unknown> = {}
+) => {
+    const serializedPayloadOverrides = JSON.stringify(payloadOverrides).replace(/"/g, `\\"`);
 
-        const serializedMetaOverrides = JSON.stringify(metaOverrides).replace(/"/g, `\\"`);
+    const serializedMetaOverrides = JSON.stringify(metaOverrides).replace(/"/g, `\\"`);
 
-        // "{\\"foo\\": 5}"
-        const command = `node ../../dist/apps/coscrad-cli/main.js seed-test-data-with-command --type=${type} --payload-overrides="${serializedPayloadOverrides}" --meta-overrides="${serializedMetaOverrides}"`;
+    // "{\\"foo\\": 5}"
+    const command = `node ../../dist/apps/coscrad-cli/main.js seed-test-data-with-command --type=${type} --payload-overrides="${serializedPayloadOverrides}" --meta-overrides="${serializedMetaOverrides}"`;
 
-        cy.exec(command).then((_result) => {
-            if (command.includes(`FOOBARBAZ`))
-                /* eslint-disable-next-line */
-                debugger;
-        });
-    }
-);
+    cy.exec(command).then((_result) => {
+        if (command.includes(`FOOBARBAZ`))
+            /* eslint-disable-next-line */
+            debugger;
+    });
+};
+
+Cypress.Commands.add(`seedDataWithCommand`, seedDataWithCommand);
+
+Cypress.Commands.add(`seedTestMediaItem`, ({ id, mimeType, title }) => {
+    const aggregateCompositeIdentifier = {
+        id,
+        type: 'mediaItem',
+    };
+
+    seedDataWithCommand(`CREATE_MEDIA_ITEM`, {
+        aggregateCompositeIdentifier,
+        title: title,
+        mimeType: mimeType,
+        // Override default value to "remove" property from fsa for image media item
+        lengthMilliseconds: null,
+    });
+
+    seedDataWithCommand(`PUBLISH_RESOURCE`, {
+        aggregateCompositeIdentifier,
+    });
+});
 
 Cypress.Commands.add(`seedDatabase`, (collectionName: string, documents: unknown) => {
     const serializedDocuments = JSON.stringify(documents);

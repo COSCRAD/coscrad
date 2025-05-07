@@ -4,7 +4,7 @@ import { doesSomeMultilingualTextItemInclude } from './does-some-multilingual-te
 describe(`doesSomeMultilingualTextItemInclude`, () => {
     const textToFind = 'Bears eat';
 
-    describe(`when the search is language indpenendent`, () => {
+    describe(`when the search is language independent`, () => {
         describe(`when the multilingual text matches the search`, () => {
             it(`should return true`, () => {
                 const multilingualText: IMultilingualText = {

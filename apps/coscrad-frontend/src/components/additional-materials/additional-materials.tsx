@@ -76,7 +76,7 @@ export const AdditionalMaterials = (): JSX.Element => {
             {additionalMaterials
                 .filter(({ pdf, media }) => !isNullOrUndefined(pdf) || !isNullOrUndefined(media))
                 .map(({ pdf, media }) => (
-                    <Box p={2} component={Paper}>
+                    <Box key={media.name} p={2} component={Paper}>
                         {isNullOrUndefined(media) ? null : <MediaItemPresenter {...media} />}
                         {isNullOrUndefined(pdf) ? null : <PdfPresenter {...pdf} />}
                     </Box>
