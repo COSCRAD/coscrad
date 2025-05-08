@@ -42,7 +42,7 @@ const compositeIdForSingleTerm = {
 };
 
 const participant = new TranscriptParticipant({
-    initials: 'WO',
+    initials: 'WW',
     name: 'William Who',
 });
 

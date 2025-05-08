@@ -254,9 +254,9 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
         await this.database.query({ query, bindVars });
     }
 
-    // why are the speaker initials here?
     async translateLineItem(
         id: AggregateId,
+        // TODO Consider whether the out point is actually necessary here
         { languageCode, text, inPointMilliseconds, outPointMilliseconds }: TranslationLineItemDto
     ) {
         const newMultilingualTextItem = new MultilingualTextItem({
@@ -309,11 +309,9 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
             })
         );
 
-        // TODO do we need to match on the outpoint as well?
-        // TODO can we just move to lower case keywords in AQL?
         const query = `
-        FOR doc IN @@collectionName
-        FILTER doc._key == @id
+        for doc in @@collectionName
+        filter doc._key == @id
 
         let updatedTranscriptItems = (
             for existingItem in doc.transcript.items
@@ -342,11 +340,7 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
             translations: timeStampsAndNewMultilingualTextItems,
         };
 
-        const _cursor = await this.database.query({ query, bindVars });
-
-        const _foo = await _cursor.all();
-
-        _foo;
+        await this.database.query({ query, bindVars });
     }
 
     async count(): Promise<number> {
