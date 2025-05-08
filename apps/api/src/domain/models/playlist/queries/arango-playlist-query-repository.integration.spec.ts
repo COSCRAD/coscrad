@@ -1,4 +1,5 @@
 import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -47,7 +48,18 @@ const targetPlaylist = playlistViews[0];
 
 const targetPlaylistId = targetPlaylist.id;
 
-const existingAudioItem = buildTestInstance(EventSourcedAudioItemViewModel);
+const audioItemIds = [55, 56, 57].map(buildDummyUuid);
+
+const mediaItemIds = [66, 67, 68].map(buildDummyUuid);
+
+const existingAudioItems = audioItemIds.map((id, index) =>
+    buildTestInstance(EventSourcedAudioItemViewModel, {
+        id,
+        mediaItemId: mediaItemIds[index],
+    })
+);
+
+const existingAudioItem = existingAudioItems[0];
 
 describe(`ArangoPlaylistQueryRepository`, () => {
     let testQueryRepository: IPlaylistQueryRepository;
@@ -224,6 +236,63 @@ describe(`ArangoPlaylistQueryRepository`, () => {
             expect(foundTranslationText).toBe(translationText);
 
             expect(foundRole).toBe(MultilingualTextItemRole.freeTranslation);
+        });
+    });
+
+    describe(`importAudioItems`, () => {
+        const targetPlaylist = buildTestInstance(PlaylistViewModel, {
+            id: buildDummyUuid(4),
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetPlaylist);
+
+            await audioItemQueryRepository.createMany(existingAudioItems);
+        });
+
+        it(`should import the audio items to a playlist`, async () => {
+            await testQueryRepository.importAudioItems(targetPlaylist.id, audioItemIds);
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetPlaylist.id
+            )) as PlaylistViewModel;
+
+            const invalidItems = updatedView.episodes.filter(
+                ({ name, mediaItemId, isPublished, accessControlList }) => {
+                    const targetAudioItem = existingAudioItems.find(
+                        (audioItem) => audioItem.mediaItemId === mediaItemId
+                    );
+
+                    if (isNullOrUndefined(targetAudioItem)) {
+                        //. this item is missing a corresponding auto
+                        return true;
+                    }
+
+                    if (name.toString() !== targetAudioItem.name.toString()) {
+                        // the name is incorrect
+                        return true;
+                    }
+
+                    if (isPublished !== targetAudioItem.isPublished) {
+                        // wrong publication status
+                        return true;
+                    }
+
+                    if (`${accessControlList}` !== `${targetAudioItem.accessControlList}`) {
+                        // invalid ACL
+                        return true;
+                    }
+
+                    // !!valid, i.e., valid
+                    return false;
+                }
+            );
+
+            expect(invalidItems).toEqual([]);
+
+            expect(updatedView.episodes).toHaveLength(existingAudioItems.length);
         });
     });
 

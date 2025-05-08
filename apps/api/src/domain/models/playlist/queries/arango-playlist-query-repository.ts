@@ -130,6 +130,7 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
 
         const _new = await cursor.all();
 
+        // TODO remove this
         _new;
     }
 
@@ -153,6 +154,42 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
             });
 
         await cursor.all();
+    }
+
+    async importAudioItems(id: AggregateId, audioItemIds: AggregateId[]): Promise<void> {
+        // TODO handle ACL and publication status below as well
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+        LET newEpisodes = (
+            FOR a IN audioItem__VIEWS
+            FILTER CONTAINS(@audioItemIds,a._key)
+                RETURN {
+                    name: a.name,
+                    mediaItemId: a.mediaItemId
+                })
+
+        UPDATE doc WITH {
+            episodes: APPEND(doc.episodes,newEpisodes)
+        } IN @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'playlist__VIEWS',
+            id,
+            audioItemIds,
+        };
+
+        await this.database
+            .query({
+                query,
+                bindVars,
+            })
+            .catch((reason) => {
+                throw new InternalError(
+                    `Failed to import audio items as episodes to playlist via term query repository: ${reason}`
+                );
+            });
     }
 
     async attribute(id: AggregateId, contributorIds: AggregateId[]): Promise<void> {
