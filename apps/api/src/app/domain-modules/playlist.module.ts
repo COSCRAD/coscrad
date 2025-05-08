@@ -37,6 +37,7 @@ import { PlaylistController } from '../controllers/resources/playlist.controller
         PlaylistCreatedEventHandler,
         AudioItemAddedToPlaylistEventHandler,
         PlaylistNameTranslatedEventHandler,
+        AudioItemAddedToPlaylistEventHandler,
         // Data Classes
         ...[
             Playlist,
