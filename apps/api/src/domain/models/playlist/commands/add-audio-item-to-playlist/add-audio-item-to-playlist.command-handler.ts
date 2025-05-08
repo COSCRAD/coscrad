@@ -49,6 +49,7 @@ export class AddAudioItemToPlaylistCommandHandler extends BaseUpdateCommandHandl
     protected async fetchRequiredExternalState(
         _: AddAudioItemToPlaylist
     ): Promise<InMemorySnapshot> {
+        // shouldn't we simply fetch the single audio item that's being added?
         const audioItems = await this.repositoryProvider
             .forResource(ResourceType.audioItem)
             .fetchMany();

@@ -14,6 +14,7 @@ import {
 import { AudioItemAddedToPlaylist } from '../../domain/models/playlist/commands/add-audio-item-to-playlist/audio-item-added-to-playlist.event';
 import { AudioItemAddedToPlaylistEventHandler } from '../../domain/models/playlist/commands/add-audio-item-to-playlist/audio-item-added-to-playlist.event-handler';
 import { AudioItemsImportedToPlaylist } from '../../domain/models/playlist/commands/import-audio-items-to-playlist/audio-items-imported-to-playlist.event';
+import { AudioItemsImportedToPlaylistEventHandler } from '../../domain/models/playlist/commands/import-audio-items-to-playlist/audio-items-imported-to-playlist.event-handler';
 import { PlaylistCreated } from '../../domain/models/playlist/commands/playlist-created.event';
 import { PlaylistCreatedEventHandler } from '../../domain/models/playlist/commands/playlist-created.event-handler';
 import { PlaylistNameTranslated } from '../../domain/models/playlist/commands/translate-playlist-name/playlist-name-translated.event';
@@ -38,6 +39,7 @@ import { PlaylistController } from '../controllers/resources/playlist.controller
         AudioItemAddedToPlaylistEventHandler,
         PlaylistNameTranslatedEventHandler,
         AudioItemAddedToPlaylistEventHandler,
+        AudioItemsImportedToPlaylistEventHandler,
         // Data Classes
         ...[
             Playlist,

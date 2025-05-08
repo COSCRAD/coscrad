@@ -108,7 +108,6 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
         UPDATE doc WITH {
             episodes: APPEND(doc.episodes,nextEpisode)
         } IN @@collectionName
-         RETURN NEW
         `;
 
         const bindVars = {
@@ -117,7 +116,7 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
             audioItemId,
         };
 
-        const cursor = await this.database
+        await this.database
             .query({
                 query,
                 bindVars,
@@ -127,11 +126,6 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
                     `Failed to add audio item as episode to playlist via term query repository: ${reason}`
                 );
             });
-
-        const _new = await cursor.all();
-
-        // TODO remove this
-        _new;
     }
 
     async translatePlaylistName(
