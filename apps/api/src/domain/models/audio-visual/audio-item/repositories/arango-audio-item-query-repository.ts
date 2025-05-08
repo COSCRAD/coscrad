@@ -19,7 +19,7 @@ import { ArangoResourceQueryBuilder } from '../../../term/repositories/arango-re
 import { TranscriptItem } from '../../shared/entities/transcript-item.entity';
 import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
 import { Transcript } from '../../shared/entities/transcript.entity';
-import { TranscriptLineItemDto } from '../commands';
+import { TranscriptLineItemDto, TranslationItem } from '../commands';
 import { EventSourcedAudioItemViewModel } from '../queries';
 import {
     IAudioItemQueryRepository,
@@ -254,9 +254,9 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
         await this.database.query({ query, bindVars });
     }
 
-    // why are the speaker initials here?
     async translateLineItem(
         id: AggregateId,
+        // TODO Consider whether the out point is actually necessary here
         { languageCode, text, inPointMilliseconds, outPointMilliseconds }: TranslationLineItemDto
     ) {
         const newMultilingualTextItem = new MultilingualTextItem({
@@ -289,6 +289,55 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
             inPointMilliseconds,
             outPointMilliseconds,
             newItem: newMultilingualTextItem,
+        };
+
+        await this.database.query({ query, bindVars });
+    }
+
+    async importTranslationsForTranscript(
+        id: AggregateId,
+        translations: TranslationItem[]
+    ): Promise<void> {
+        const timeStampsAndNewMultilingualTextItems = translations.map(
+            ({ inPointMilliseconds, translation: text, languageCode }) => ({
+                inPointMilliseconds,
+                translationItem: new MultilingualTextItem({
+                    text,
+                    languageCode,
+                    role: MultilingualTextItemRole.freeTranslation,
+                }),
+            })
+        );
+
+        const query = `
+        for doc in @@collectionName
+        filter doc._key == @id
+
+        let updatedTranscriptItems = (
+            for existingItem in doc.transcript.items
+            let index = position(@translations[*].inPointMilliseconds,existingItem.inPointMilliseconds,true)
+             return merge_recursive(existingItem,
+                index == -1 
+                    ? {}
+                    : {
+                        text: {
+                            items: append(existingItem.text.items,@translations[index].translationItem)
+                        }
+                    }
+            )
+        )
+
+        update doc with {
+            transcript: {
+                        items: updatedTranscriptItems
+                        }
+                    } in @@collectionName
+            `;
+
+        const bindVars = {
+            '@collectionName': 'audioItem__VIEWS',
+            id,
+            translations: timeStampsAndNewMultilingualTextItems,
         };
 
         await this.database.query({ query, bindVars });
