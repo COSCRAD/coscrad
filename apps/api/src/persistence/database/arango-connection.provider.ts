@@ -96,6 +96,8 @@ export class ArangoConnectionProvider {
 
         await this.createCollectionIfNotExists('audioItem__VIEWS');
 
+        await this.createCollectionIfNotExists('video__VIEWS');
+
         await this.createCollectionIfNotExists('vocabularyList__VIEWS');
 
         await this.createCollectionIfNotExists('playlist__VIEWS');
