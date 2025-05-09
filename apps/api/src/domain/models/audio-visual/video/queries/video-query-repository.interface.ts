@@ -1,3 +1,4 @@
+import { IMultilingualTextItem } from '@coscrad/api-interfaces';
 import { Maybe } from '../../../../../lib/types/maybe';
 import { AggregateId } from '../../../../types/AggregateId';
 import { EventSourcedVideoViewModel } from './video-view-model.event-sourced';
@@ -15,17 +16,17 @@ export const VIDEO_QUERY_REPOSITORY_TOKEN = 'VIDEO_QUERY_REPOSITORY_TOKEN';
 export interface IVideoQueryRepository {
     create(view: EventSourcedVideoViewModel): Promise<void>;
 
-    // createMany(view: EventSourcedAudioItemViewModel[]): Promise<void>;
+    createMany(view: EventSourcedVideoViewModel[]): Promise<void>;
 
-    // delete(id: AggregateId): Promise<void>;
+    delete(id: AggregateId): Promise<void>;
 
     fetchById(id: AggregateId): Promise<Maybe<EventSourcedVideoViewModel>>;
 
-    // fetchMany(): Promise<EventSourcedAudioItemViewModel[]>;
+    fetchMany(): Promise<EventSourcedVideoViewModel[]>;
 
-    // translateName(id: AggregateId, translationItem: IMultilingualTextItem): Promise<void>;
+    translateName(id: AggregateId, translationItem: IMultilingualTextItem): Promise<void>;
 
-    // count(): Promise<number>;
+    count(): Promise<number>;
 
     // createTranscript(id: AggregateId): Promise<void>;
 
