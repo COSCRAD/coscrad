@@ -7,6 +7,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { buildMultilingualTextFromBilingualText } from '../../../../../domain/common/build-multilingual-text-from-bilingual-text';
+import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { CoscradDataExample } from '../../../../../test-data/utilities';
@@ -14,6 +15,7 @@ import { DTO } from '../../../../../types/DTO';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../../shared/access-control/access-control-list.entity';
 import { Transcript } from '../../shared/entities/transcript.entity';
+import { VideoCreated } from '../commands';
 
 @CoscradDataExample<EventSourcedVideoViewModel>({
     example: {
@@ -80,6 +82,31 @@ export class EventSourcedVideoViewModel {
         } else {
             this.transcript = Transcript.buildEmpty();
         }
+    }
+
+    static fromVideoCreated({
+        payload: {
+            aggregateCompositeIdentifier: { id: audioItemId },
+            name,
+            languageCodeForName,
+            mediaItemId,
+            lengthMilliseconds,
+        },
+        meta: { contributorIds: _ },
+    }: VideoCreated): EventSourcedVideoViewModel {
+        return new EventSourcedVideoViewModel({
+            name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
+            mediaItemId,
+            id: audioItemId,
+            actions: [],
+            contributions: [],
+            isPublished: false,
+            mimeType: MIMEType.mp4,
+            text: '',
+            lengthMilliseconds,
+            // in order to grant access, we need a `RESOURCE_READ_ACCESS_GRANTED_TO_USER`
+            accessControlList: new AccessControlList(),
+        });
     }
 
     public static fromDto(dto: DTO<EventSourcedVideoViewModel>) {

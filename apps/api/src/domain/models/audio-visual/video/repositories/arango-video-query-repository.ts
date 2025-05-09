@@ -1,4 +1,4 @@
-import { IDetailQueryResult } from '@coscrad/api-interfaces';
+import { IDetailQueryResult, IMultilingualTextItem } from '@coscrad/api-interfaces';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { Maybe } from '../../../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../../../lib/types/not-found';
@@ -24,8 +24,22 @@ export class ArangoVideoQueryRepository implements IVideoQueryRepository {
         );
     }
 
+    async createMany(view: EventSourcedVideoViewModel[]): Promise<void> {
+        await this.database.createMany(view.map(mapEntityDTOToDatabaseDocument));
+    }
+
+    async fetchMany(): Promise<EventSourcedVideoViewModel[]> {
+        const documents = await this.database.fetchMany();
+
+        return documents.map(mapDatabaseDocumentToAggregateDTO) as EventSourcedVideoViewModel[];
+    }
+
     async create(view: EventSourcedVideoViewModel): Promise<void> {
         await this.database.create(mapEntityDTOToDatabaseDocument(view));
+    }
+
+    async delete(id: AggregateId): Promise<void> {
+        return this.database.delete(id);
     }
 
     async fetchById(id: AggregateId): Promise<Maybe<EventSourcedVideoViewModel>> {
@@ -38,5 +52,13 @@ export class ArangoVideoQueryRepository implements IVideoQueryRepository {
         const dto = mapDatabaseDocumentToAggregateDTO(result);
 
         return EventSourcedVideoViewModel.fromDto(dto);
+    }
+
+    translateName(_id: AggregateId, _translationItem: IMultilingualTextItem): Promise<void> {
+        throw new Error('Method not implemented.');
+    }
+
+    async count(): Promise<number> {
+        return this.database.getCount();
     }
 }

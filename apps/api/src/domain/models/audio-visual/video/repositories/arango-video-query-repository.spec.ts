@@ -1,3 +1,4 @@
+import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -9,11 +10,16 @@ import { ArangoConnectionProvider } from '../../../../../persistence/database/ar
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { TestEventStream } from '../../../../../test-data/events';
 import { buildTestInstance } from '../../../../../test-data/utilities';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { VideoCreated } from '../commands';
 import { EventSourcedVideoViewModel, IVideoQueryRepository } from '../queries';
 import { ArangoVideoQueryRepository } from './arango-video-query-repository';
 
 const targetVideo = buildTestInstance(EventSourcedVideoViewModel, {});
+
+const originalLanguageCode = LanguageCode.Chilcotin;
 
 describe(`ArangoVideoQueryRepository`, () => {
     let testQueryRepository: IVideoQueryRepository;
@@ -57,6 +63,23 @@ describe(`ArangoVideoQueryRepository`, () => {
         databaseProvider.close();
     });
 
+    const additionalVideos = [10, 11, 12].map((sequenceNumber) => {
+        const creationEvent = new TestEventStream()
+            .andThen<VideoCreated>({
+                type: 'VIDEO_CREATED',
+                payload: {
+                    name: `video name: ${sequenceNumber}`,
+                    languageCodeForName: originalLanguageCode,
+                },
+            })
+            .as({
+                type: AggregateType.mediaItem,
+                id: buildDummyUuid(sequenceNumber),
+            })[0] as VideoCreated;
+
+        return EventSourcedVideoViewModel.fromVideoCreated(creationEvent);
+    });
+
     describe(`fetchById`, () => {
         describe(`when the video exists`, () => {
             beforeEach(async () => {
@@ -74,5 +97,60 @@ describe(`ArangoVideoQueryRepository`, () => {
         describe(`when the video does not exist`, () => {
             it.todo(`should have a test`);
         });
+    });
+
+    describe(`fetchMany`, () => {
+        beforeEach(async () => {
+            await testQueryRepository.createMany(additionalVideos);
+        });
+        it('should return the expected video views', async () => {
+            await testQueryRepository.fetchMany();
+
+            const actualCount = await testQueryRepository.count();
+
+            expect(actualCount).toBe(additionalVideos.length);
+        });
+    });
+
+    describe(`count`, () => {
+        beforeEach(async () => {
+            await testQueryRepository.createMany(additionalVideos);
+        });
+
+        it(`should return the correct count`, async () => {
+            const result = await testQueryRepository.count();
+
+            expect(result).toBe(additionalVideos.length);
+        });
+    });
+
+    describe(`delete`, () => {
+        beforeEach(async () => {
+            await testQueryRepository.createMany(additionalVideos);
+        });
+
+        it(`should delete the expected video`, async () => {
+            const targetAudioItemId = additionalVideos[0].id;
+
+            await testQueryRepository.delete(targetAudioItemId);
+
+            const newCount = await testQueryRepository.count();
+
+            expect(newCount).toBe(2);
+
+            const searchResult = await testQueryRepository.fetchById(targetAudioItemId);
+
+            expect(searchResult).toBe(NotFound);
+        });
+    });
+
+    describe(`translateName`, () => {
+        const targetAudioItem = additionalVideos[0];
+
+        beforeEach(async () => {
+            await testQueryRepository.create(targetAudioItem);
+        });
+
+        it.todo('should have a test');
     });
 });
