@@ -1,6 +1,24 @@
 import { ChilcotinTokenizer } from './chilcotin-tokenizer';
+import { Token } from './tokenizer.interface';
 
 const tokenizer = new ChilcotinTokenizer();
+
+const assertTokenizationResult = (result: Token[], expecteds: Token[] | string[][]) => {
+    if (expecteds.length === 0) {
+        throw new Error(`You must include an expectation for assertTokenizationResult`);
+    }
+
+    const test = expecteds[0];
+
+    if (Array.isArray(test)) {
+        const comparison = result.map(({ characters }) => characters.map(({ text }) => text));
+
+        expect(comparison).toEqual(expecteds);
+    } else {
+        // we have a full array of tokens
+        expect(result).toEqual(expecteds);
+    }
+};
 
 describe(`ChilcotinTokenizer`, () => {
     describe(`when the text includes a single word`, () => {
@@ -14,7 +32,7 @@ describe(`ChilcotinTokenizer`, () => {
 
                         expect(result).toHaveLength(1);
 
-                        const { text, isPunct, isSpace, isStop, symbols } = result[0];
+                        const { text, isPunct, isSpace, isStop } = result[0];
 
                         expect(text).toBe(input);
 
@@ -24,7 +42,7 @@ describe(`ChilcotinTokenizer`, () => {
 
                         expect(isStop).toBe(false);
 
-                        expect(symbols).toEqual(['d', 'e', 't', 'a', 'n']);
+                        assertTokenizationResult(result, [['d', 'e', 't', 'a', 'n']]);
                     });
                 });
             });
@@ -36,9 +54,7 @@ describe(`ChilcotinTokenizer`, () => {
 
                         const result = tokenizer.tokenize(input);
 
-                        const { symbols } = result[0];
-
-                        expect(symbols).toEqual(['ŝ', 'e', 't', 'a', 'n']);
+                        assertTokenizationResult(result, [['ŝ', 'e', 't', 'a', 'n']]);
                     });
                 });
             });
@@ -51,9 +67,7 @@ describe(`ChilcotinTokenizer`, () => {
 
                     const result = tokenizer.tokenize(input);
 
-                    const { symbols } = result[0];
-
-                    expect(symbols).toEqual(['t', 'e', 'y', 'a', 'tl', 'ɨ', 'g']);
+                    assertTokenizationResult(result, [['t', 'e', 'y', 'a', 'tl', 'ɨ', 'g']]);
                 });
             });
         });
@@ -66,9 +80,7 @@ describe(`ChilcotinTokenizer`, () => {
 
                         const result = tokenizer.tokenize(input);
 
-                        const { symbols } = result[0];
-
-                        expect(symbols).toEqual(['d', 'a', 'r', 'l', 'ʔ', 'u', 'lh']);
+                        assertTokenizationResult(result, [['d', 'a', 'r', 'l', 'ʔ', 'u', 'lh']]);
                     });
                 });
             });
@@ -80,9 +92,7 @@ describe(`ChilcotinTokenizer`, () => {
 
                         const result = tokenizer.tokenize(input);
 
-                        const { symbols } = result[0];
-
-                        expect(symbols).toEqual(['tl', 'i', 'b', 'e', 'c']);
+                        assertTokenizationResult(result, [['tl', 'i', 'b', 'e', 'c']]);
                     });
                 });
             });
@@ -95,9 +105,9 @@ describe(`ChilcotinTokenizer`, () => {
 
                     const result = tokenizer.tokenize(input);
 
-                    const { symbols } = result[0];
-
-                    expect(symbols).toEqual(['d', 'e', 'ch', 'e', 'n', '-', 'y', 'a', 'z']);
+                    assertTokenizationResult(result, [
+                        ['d', 'e', 'ch', 'e', 'n', '-', 'y', 'a', 'z'],
+                    ]);
                 });
             });
         });
@@ -109,26 +119,14 @@ describe(`ChilcotinTokenizer`, () => {
 
             const result = tokenizer.tokenize(input);
 
-            expect(result).toHaveLength(6);
-
-            expect(result[0].symbols).toEqual(['"', 'n', 'e', 'n', 'd', 'e', 'n']);
-            expect(result[1].symbols).toEqual(['n', 'e', 'n', 'd', 'a', 'n']);
-            expect(result[2].symbols).toEqual(['h', 'a', 'n', 't’', 'i', 'h', '!', '?', '"']);
-            expect(result[3].symbols).toEqual(['r', 'o', 'b', 'e', 'r', 't']);
-            expect(result[4].symbols).toEqual([
-                's',
-                'm',
-                'i',
-                't',
-                'h',
-                '-',
-                'j',
-                'o',
-                'n',
-                'e',
-                's',
+            assertTokenizationResult(result, [
+                ['"', 'n', 'e', 'n', 'd', 'e', 'n'],
+                ['n', 'e', 'n', 'd', 'a', 'n'],
+                ['h', 'a', 'n', 't’', 'i', 'h', '!', '?', '"'],
+                ['r', 'o', 'b', 'e', 'r', 't'],
+                ['s', 'm', 'i', 't', 'h', '-', 'j', 'o', 'n', 'e', 's'],
+                ['h', 'a', 'n', '.'],
             ]);
-            expect(result[5].symbols).toEqual(['h', 'a', 'n', '.']);
         });
     });
 });

@@ -3,12 +3,7 @@
 
 import assert = require('node:assert');
 import { InternalError } from '../../../../lib/errors/InternalError';
-
-type Letter = {
-    text: string;
-    isPunctuationOrWhiteSpace: boolean;
-    isOutOfAlphabet: boolean;
-};
+import { AlphabetCharacters } from './tokenizer.interface';
 
 class Node {
     text: string;
@@ -77,14 +72,14 @@ class Node {
 
 const isolatedLetters = 'aeiɨuobpmnjzŝẑŵhyʔ'.split('');
 
-export class AlphabetFiniteStateMachine {
+export class ChilcotinAlphabetParser {
     // we are flagging that the root is not a letter
     private root: Node = new Node(null, false);
 
     private punctuation: Set<string>;
 
-    constructor(punctuationSymbols: string[] = `"?.!-,`.split('')) {
-        this.punctuation = new Set(punctuationSymbols);
+    constructor(punctuationNativeCharacterss: string[] = `"?.!-,`.split('')) {
+        this.punctuation = new Set(punctuationNativeCharacterss);
 
         // 4 from d
         const d = new Node('d');
@@ -181,7 +176,7 @@ export class AlphabetFiniteStateMachine {
         return this.root.toList();
     }
 
-    parse(input: string): Letter[] {
+    parse(input: string): AlphabetCharacters[] {
         if (input.length === 0) {
             return [];
         }
@@ -189,7 +184,7 @@ export class AlphabetFiniteStateMachine {
         let current: Node = this.root;
         let charIndex = 0;
 
-        const letters: Letter[] = [];
+        const letters: AlphabetCharacters[] = [];
 
         // for each latin letter input
         while (charIndex < input.length) {
@@ -225,7 +220,7 @@ export class AlphabetFiniteStateMachine {
                 });
 
                 current = this.root;
-                // we have pushed the out-of-alphabet symbol, we are ready for the next one
+                // we have pushed the out-of-alphabet NativeCharacters, we are ready for the next one
                 charIndex++;
                 continue;
             }
@@ -238,7 +233,7 @@ export class AlphabetFiniteStateMachine {
             });
 
             current = this.root;
-            // we have pushed the out-of-alphabet symbol, we are ready for the next one
+            // we have pushed the out-of-alphabet NativeCharacters, we are ready for the next one
             charIndex++;
         }
 

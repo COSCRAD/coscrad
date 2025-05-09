@@ -1,84 +1,22 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
-import { AlphabetFiniteStateMachine } from './FooFsm';
-import { ITokenizer } from './tokenizer.interface';
-
-('’ɨʔŝẑŵ');
+import { ChilcotinAlphabetParser } from './ChilcotinAlphabetParser';
+import { ITokenizer, Token } from './tokenizer.interface';
 
 export class ChilcotinTokenizer implements ITokenizer {
-    private vowels = ['a', 'e', 'i', 'ɨ', 'u', 'o'];
+    private letterParser = new ChilcotinAlphabetParser();
 
-    private consonants = [
-        'b',
-        'p',
-        'm',
-        'd',
-        't',
-        't’',
-        'n',
-        'dl',
-        'tl’',
-        'lh',
-        'l',
-        'dẑ',
-        'tŝ',
-        'tŝ’',
-        'ŝ',
-        'ẑ',
-        'dz',
-        'ts',
-        'ts’',
-        's',
-        'z',
-        'j',
-        'ch',
-        'ch’',
-        'sh',
-        'y',
-        'g',
-        'k',
-        'k’',
-        'gw',
-        'kw',
-        'kw’',
-        'wh',
-        'w',
-        'gg',
-        'q',
-        'q’',
-        'x',
-        'gh',
-        'ggw',
-        'qw',
-        'qw’',
-        'xw',
-        'ŵ',
-        'ʔ',
-        'h',
-    ];
-
-    private alphabet = [...this.vowels, ...this.consonants];
-
-    private letterParser = new AlphabetFiniteStateMachine();
-
-    tokenize(document: string): {
-        text: string;
-        languageCode: LanguageCode;
-        symbols: string[];
-        isSpace: boolean;
-        isPunct: boolean;
-        isStop: boolean;
-    }[] {
+    tokenize(document: string): Token[] {
         const rawTokens = document.split(' ');
 
         return rawTokens.map((text) => {
             // TODO handle capitalization
             const lowerCaseText = text.toLowerCase();
 
-            const symbols = this.separateLetters(lowerCaseText);
+            const characters = this.letterParser.parse(lowerCaseText);
 
             return {
                 text,
-                symbols,
+                characters,
                 languageCode: LanguageCode.Chilcotin,
                 // TODO "zip" in the spaces
                 isSpace: false,
@@ -88,11 +26,5 @@ export class ChilcotinTokenizer implements ITokenizer {
                 isStop: false,
             };
         });
-    }
-
-    private separateLetters(token: string): string[] {
-        const letters = this.letterParser.parse(token);
-
-        return letters.map(({ text }) => text);
     }
 }

@@ -1,5 +1,17 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 
+/**
+ * TODO[naming] This is tough to name. It's meant to be
+ * either a (possibly length > 1) string of roman characters
+ * that represents either one atomic letter in the target language
+ * or punctuation or white space, or else an out-of-alphabet symbol (e.g. in a loan-word)
+ */
+export type AlphabetCharacters = {
+    text: string;
+    isPunctuationOrWhiteSpace: boolean;
+    isOutOfAlphabet: boolean;
+};
+
 export type Token = {
     text: string;
     languageCode: LanguageCode;
@@ -8,7 +20,7 @@ export type Token = {
      * be a list of the atomic letters for the given alphabet, which may use
      * multiple unicode symbols to indicate one letter.
      */
-    symbols?: string[];
+    characters?: AlphabetCharacters[];
     /**
      * Eventually, we would like to move our NLP to spacy. We are staying
      * close to their API for that reason.
