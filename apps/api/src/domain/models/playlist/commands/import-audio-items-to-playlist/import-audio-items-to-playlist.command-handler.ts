@@ -18,6 +18,7 @@ export class ImportAudioItemsToPlaylistCommandHandler extends BaseUpdateCommandH
     protected async fetchRequiredExternalState(
         _: ImportAudioItemsToPlaylist
     ): Promise<InMemorySnapshot> {
+        // TODO use ArrayIncludes filter
         const audioItems = await this.repositoryProvider
             .forResource(ResourceType.audioItem)
             .fetchMany();

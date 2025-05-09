@@ -21,6 +21,7 @@ import {
     TranslateAudioItemNameCommandHandler,
     TranslateLineItem,
     TranslateLineItemCommandHandler,
+    TranslationsImportedForTranscript,
 } from '../audio-item/commands';
 import { AudioItemCreated } from '../audio-item/commands/create-audio-item/audio-item-created.event';
 import { AudioItemCreatedEventHandler } from '../audio-item/commands/create-audio-item/audio-item-created.event-handler';
@@ -78,7 +79,6 @@ import { VideoController } from './video.controller';
         ImportLineItemsToTranscriptCommandHandler,
         ImportTranslationsForTranscript,
         ImportTranslationsForTranscriptCommandHandler,
-
         ...[
             // domain models
             AudioItem,
@@ -93,6 +93,7 @@ import { VideoController } from './video.controller';
             ParticipantAddedToTranscript,
             LineItemAddedToTranscript,
             LineItemsImportedToTranscript,
+            TranslationsImportedForTranscript,
         ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,

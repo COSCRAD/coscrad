@@ -34,4 +34,6 @@ export interface IPlaylistQueryRepository extends IPublishable, ICountable {
         translation: string,
         languageCode: LanguageCode
     ): Promise<void>;
+
+    importAudioItems(id: AggregateId, audioItemIds: AggregateId[]): Promise<void>;
 }

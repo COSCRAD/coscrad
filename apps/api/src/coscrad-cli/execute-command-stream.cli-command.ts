@@ -371,7 +371,10 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
                 commandTypeToReferentialPropertyPaths.get(commandType).forEach((fullPath) => {
                     const value = getDeepPropertyFromObject(fsaToExecute, fullPath);
 
-                    if (Array.isArray(value)) {
+                    if (
+                        Array.isArray(value) &&
+                        [APPEND_THIS_ID, GENERATE_THIS_ID].some((prefix) => value.includes(prefix))
+                    ) {
                         /**
                          * This is a major hack. We need to find a better way
                          * to deal with joining in slug references in general.
