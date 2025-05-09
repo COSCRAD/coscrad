@@ -146,6 +146,120 @@ exports[`GET /resources should return the expected result 1`] = `
           },
         },
       },
+      "vocabularyLists": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "a list of all the vocabulary lists that contain this term as an entry",
+        "isArray": true,
+        "isOptional": false,
+        "label": "vocabulary lists including this term",
+        "name": "VocabularyListRecordForTerm",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "system identifier for this vocabulary list",
+            "isArray": false,
+            "isOptional": false,
+            "label": "vocabulary list ID",
+          },
+          "name": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "name of this vocabulary list (including translations thereof)",
+            "isArray": false,
+            "isOptional": false,
+            "label": "vocabulary list name",
+            "name": "MultilingualText",
+            "schema": {
+              "items": {
+                "complexDataType": "NESTED_TYPE",
+                "description": "one item for each provided language",
+                "isArray": true,
+                "isOptional": false,
+                "label": "items",
+                "name": "MultilingualTextItem",
+                "schema": {
+                  "languageCode": {
+                    "complexDataType": "ENUM",
+                    "description": "an official identifier of the language",
+                    "enumLabel": "Language_Code",
+                    "enumName": "LangaugeCode",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "language code",
+                    "labelsAndValues": [
+                      {
+                        "label": "Chilcotin",
+                        "value": "clc",
+                      },
+                      {
+                        "label": "Haida",
+                        "value": "hai",
+                      },
+                      {
+                        "label": "English",
+                        "value": "en",
+                      },
+                      {
+                        "label": "French",
+                        "value": "fra",
+                      },
+                      {
+                        "label": "Chinook",
+                        "value": "chn",
+                      },
+                      {
+                        "label": "Zapotec",
+                        "value": "zap",
+                      },
+                      {
+                        "label": "Spanish",
+                        "value": "spa",
+                      },
+                    ],
+                  },
+                  "role": {
+                    "complexDataType": "ENUM",
+                    "description": "role of this text in the translation process",
+                    "enumLabel": "text item role",
+                    "enumName": "Multilingual Text Item Role",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "text item role",
+                    "labelsAndValues": [
+                      {
+                        "label": "original",
+                        "value": "original",
+                      },
+                      {
+                        "label": "glossed to",
+                        "value": "glossed to",
+                      },
+                      {
+                        "label": "free translation",
+                        "value": "free translation",
+                      },
+                      {
+                        "label": "literal translation",
+                        "value": "literal translation",
+                      },
+                      {
+                        "label": "elicited from a prompt",
+                        "value": "elicited from a prompt",
+                      },
+                    ],
+                  },
+                  "text": {
+                    "coscradDataType": "NON_EMPTY_STRING",
+                    "description": "plain text in the given language",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "text",
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     },
     "type": "term",
   },
