@@ -4,7 +4,13 @@ import {
     LanguageCode,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
-import { BooleanDataType, FromDomainModel, NestedDataType, ReferenceTo } from '@coscrad/data-types';
+import {
+    BooleanDataType,
+    FromDomainModel,
+    NestedDataType,
+    ReferenceTo,
+    UUID,
+} from '@coscrad/data-types';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { DetailScopedCommandWriteContext } from '../../../app/controllers/command/services/command-info-service';
 import { ICoscradEvent } from '../../../domain/common';
@@ -31,6 +37,26 @@ import { CoscradDataExample } from '../../../test-data/utilities';
 import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
 
+class VocabularyListRecordForTerm {
+    @UUID({
+        label: 'vocabulary list ID',
+        description: 'system identifier for this vocabulary list',
+    })
+    id: AggregateId;
+
+    @NestedDataType(MultilingualText, {
+        label: 'vocabulary list name',
+        description: 'name of this vocabulary list (including translations thereof)',
+    })
+    name: MultilingualText;
+
+    constructor({ id, name }: DTO<VocabularyListRecordForTerm>) {
+        this.id = id;
+
+        this.name = new MultilingualText(name);
+    }
+}
+
 const FromTerm = FromDomainModel(Term);
 
 /**
@@ -54,6 +80,7 @@ const FromTerm = FromDomainModel(Term);
             }
         ),
         contributions: [],
+        vocabularyLists: [],
     },
 })
 export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
@@ -87,6 +114,13 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
     actions: string[];
 
     accessControlList: AccessControlList;
+
+    @NestedDataType(VocabularyListRecordForTerm, {
+        label: 'vocabulary lists including this term',
+        description: 'a list of all the vocabulary lists that contain this term as an entry',
+        isArray: true,
+    })
+    vocabularyLists: VocabularyListRecordForTerm[];
 
     // notes
 
@@ -182,8 +216,16 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
     static fromDto(dto: DTO<TermViewModel>): TermViewModel {
         const term = new TermViewModel();
 
-        const { contributions, name, id, actions, accessControlList, mediaItemId, isPublished } =
-            dto;
+        const {
+            contributions,
+            name,
+            id,
+            actions,
+            accessControlList,
+            mediaItemId,
+            isPublished,
+            vocabularyLists,
+        } = dto;
 
         term.contributions = Array.isArray(contributions) ? contributions : [];
 
@@ -202,6 +244,10 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
         term.actions = actions;
 
         term.isPublished = isNullOrUndefined(isPublished) ? false : isPublished; // we want to be extra careful here
+
+        term.vocabularyLists = Array.isArray(vocabularyLists)
+            ? vocabularyLists.map((dto) => new VocabularyListRecordForTerm(dto))
+            : [];
 
         return term;
     }

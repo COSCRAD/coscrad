@@ -246,4 +246,31 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
     subscribeToUpdates(): Observable<{ data: { type: string } }> {
         return this.database.getViewUpdateNotifications();
     }
+
+    async indexVocabularyList(id: AggregateId, vocabularyListId: AggregateId): Promise<void> {
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @termId
+        FOR vlDoc IN vocabularyList__VIEWS
+        FILTER vlDoc._key == @vocabularyListId
+        UPDATE doc with { vocabularyLists: APPEND(doc.vocabularyLists,{ id: @vocabularyListId, name: vlDoc.name }) }
+        IN @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'term__VIEWS',
+            termId: id,
+            vocabularyListId,
+        };
+
+        const cursor = await this.database.query({ query, bindVars }).catch((reason) => {
+            throw new InternalError(
+                `Failed to register vocabulary list for term via TermRepository: ${reason}`
+            );
+        });
+
+        const _new = await cursor.all();
+
+        console.log({ newForTerm: _new });
+    }
 }

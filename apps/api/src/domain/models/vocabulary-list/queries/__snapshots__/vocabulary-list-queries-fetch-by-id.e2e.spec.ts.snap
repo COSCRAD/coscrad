@@ -112,6 +112,7 @@ exports[`when querying for a vocabulary list: fetch by ID when the user is a pro
             },
           ],
         },
+        "vocabularyLists": [],
       },
       "variableValues": {},
     },

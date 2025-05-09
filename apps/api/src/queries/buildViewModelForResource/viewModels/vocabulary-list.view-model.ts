@@ -76,6 +76,8 @@ const sample: DTO<VocabularyListViewModel> = {
                 actions: [],
                 mediaItemId: '555',
                 accessControlList: new AccessControlList().toDTO(),
+                // TODO can we omit this here?
+                vocabularyLists: [],
             },
             variableValues: {},
         },
