@@ -381,6 +381,7 @@ exports[`when querying for a term: fetch many when the user is a project admin s
           },
         ],
       },
+      "vocabularyLists": [],
     },
     {
       "accessControlList": {
@@ -762,6 +763,7 @@ exports[`when querying for a term: fetch many when the user is a project admin s
           },
         ],
       },
+      "vocabularyLists": [],
     },
     {
       "accessControlList": {
@@ -1141,6 +1143,7 @@ exports[`when querying for a term: fetch many when the user is a project admin s
           },
         ],
       },
+      "vocabularyLists": [],
     },
   ],
   "indexScopedActions": [

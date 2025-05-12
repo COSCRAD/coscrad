@@ -49,4 +49,6 @@ export interface ITermQueryRepository extends IAccessible, IPublishable {
     addAudio(id: AggregateId, languageCode: LanguageCode, audioItemId: string): Promise<void>;
 
     count(): Promise<number>;
+
+    indexVocabularyList(id: string, vocabularyListId: string): Promise<void>;
 }
