@@ -199,8 +199,6 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
                 }
                 } in @@collectionName
                 OPTIONS { mergeObjects: false }
-
-                RETURN NEW
         `;
 
         const cursor = await this.database
@@ -215,8 +213,7 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
                 );
             });
 
-        const _new = await cursor.all();
-        console.log({ _new: JSON.stringify(_new) });
+        await cursor.all();
     }
 
     async addTerm(vocabularyListId: AggregateId, termId: AggregateId): Promise<void> {

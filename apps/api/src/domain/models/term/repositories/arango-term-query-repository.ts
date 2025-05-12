@@ -269,8 +269,6 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             );
         });
 
-        const _new = await cursor.all();
-
-        console.log({ newForTerm: _new });
+        await cursor.all();
     }
 }
