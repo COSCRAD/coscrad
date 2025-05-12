@@ -1,6 +1,3 @@
-// import { isNonEmptyObject } from '@coscrad/validation-constraints';
-// import { InternalError } from 'apps/api/src/lib/errors/InternalError';
-
 import assert = require('node:assert');
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { AlphabetCharacters } from './tokenizer.interface';
@@ -62,7 +59,7 @@ class Node {
     transition(keystroke: string): Node {
         if (!this.hasTransition(keystroke)) {
             throw new InternalError(
-                `No transition found for keystroke: ${keystroke}. Did you forget to check "hasTransition(${keystroke})?" `
+                `No transition found for keystroke: ${keystroke}. Did you forget to check "hasTransition(${keystroke}) before calling transition(${keystroke})?" `
             );
         }
 

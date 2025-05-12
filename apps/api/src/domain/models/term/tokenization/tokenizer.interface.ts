@@ -5,6 +5,11 @@ import { LanguageCode } from '@coscrad/api-interfaces';
  * either a (possibly length > 1) string of roman characters
  * that represents either one atomic letter in the target language
  * or punctuation or white space, or else an out-of-alphabet symbol (e.g. in a loan-word)
+ *
+ * `Character` would be find if it didn't overlap with a basic data type.
+ * `Symbol` is also already taken.
+ * `Letter` is not sufficient because we want to include out-of-alphabet symbols
+ * and punctuation.
  */
 export type AlphabetCharacters = {
     text: string;
