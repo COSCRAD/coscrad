@@ -1,10 +1,20 @@
-import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    IDetailQueryResult,
+    IVideoViewModel,
+    LanguageCode,
+    MultilingualTextItemRole,
+} from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/environment';
+import {
+    MultilingualText,
+    MultilingualTextItem,
+} from '../../../../../domain/common/entities/multilingual-text';
 import { NotFound } from '../../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
@@ -20,6 +30,8 @@ import { ArangoVideoQueryRepository } from './arango-video-query-repository';
 const targetVideo = buildTestInstance(EventSourcedVideoViewModel, {});
 
 const originalLanguageCode = LanguageCode.Chilcotin;
+
+const translationLanguageCode = LanguageCode.English;
 
 describe(`ArangoVideoQueryRepository`, () => {
     let testQueryRepository: IVideoQueryRepository;
@@ -151,6 +163,32 @@ describe(`ArangoVideoQueryRepository`, () => {
             await testQueryRepository.create(targetAudioItem);
         });
 
-        it.todo('should have a test');
+        it(`should update the video's name`, async () => {
+            const translationOfName = 'translation of video name';
+
+            const role = MultilingualTextItemRole.freeTranslation;
+
+            await testQueryRepository.translateName(targetAudioItem.id, {
+                text: translationOfName,
+                languageCode: translationLanguageCode,
+                role,
+            });
+
+            const searchResult = await testQueryRepository.fetchById(targetAudioItem.id);
+
+            expect(searchResult).not.toBe(NotFound);
+
+            const updatedView = searchResult as unknown as IDetailQueryResult<IVideoViewModel>;
+
+            const name = new MultilingualText(updatedView.name);
+
+            const { role: foundTextRole, text: foundText } = name.getTranslation(
+                translationLanguageCode
+            ) as MultilingualTextItem;
+
+            expect(foundTextRole).toBe(role);
+
+            expect(foundText).toBe(translationOfName);
+        });
     });
 });

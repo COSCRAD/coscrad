@@ -1,5 +1,6 @@
 import { IDetailQueryResult, IMultilingualTextItem } from '@coscrad/api-interfaces';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
+import { InternalError } from '../../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
@@ -54,8 +55,44 @@ export class ArangoVideoQueryRepository implements IVideoQueryRepository {
         return EventSourcedVideoViewModel.fromDto(dto);
     }
 
-    translateName(_id: AggregateId, _translationItem: IMultilingualTextItem): Promise<void> {
-        throw new Error('Method not implemented.');
+    async translateName(
+        id: AggregateId,
+        { text, languageCode, role }: IMultilingualTextItem
+    ): Promise<void> {
+        const query = `
+                FOR doc IN @@collectionName
+                FILTER doc._key == @id
+                let newItem = {
+                            text: @text,
+                            languageCode: @languageCode,
+                            role: @role
+                }
+                UPDATE doc WITH {
+                    name: {
+                        items: APPEND(doc.name.items,newItem)
+                    }
+                } IN @@collectionName
+                 RETURN OLD
+                `;
+
+        const bindVars = {
+            '@collectionName': 'video__VIEWS',
+            id: id,
+            text: text,
+            role: role,
+            languageCode: languageCode,
+        };
+
+        const cursor = await this.database
+            .query({
+                query,
+                bindVars,
+            })
+            .catch((reason) => {
+                throw new InternalError(`Failed to translate video via VideoRepository: ${reason}`);
+            });
+
+        await cursor.all();
     }
 
     async count(): Promise<number> {
