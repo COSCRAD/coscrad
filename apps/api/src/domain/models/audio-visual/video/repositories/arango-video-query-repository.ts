@@ -25,6 +25,16 @@ export class ArangoVideoQueryRepository implements IVideoQueryRepository {
         );
     }
 
+    async allowUser(aggregateId: AggregateId, userId: AggregateId): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.allowUser(aggregateId, userId));
+    }
+
+    async publish(id: AggregateId): Promise<void> {
+        await this.database.update(id, {
+            isPublished: true,
+        });
+    }
+
     async createMany(view: EventSourcedVideoViewModel[]): Promise<void> {
         await this.database.createMany(view.map(mapEntityDTOToDatabaseDocument));
     }
@@ -59,35 +69,8 @@ export class ArangoVideoQueryRepository implements IVideoQueryRepository {
         id: AggregateId,
         { text, languageCode, role }: IMultilingualTextItem
     ): Promise<void> {
-        const query = `
-                FOR doc IN @@collectionName
-                FILTER doc._key == @id
-                let newItem = {
-                            text: @text,
-                            languageCode: @languageCode,
-                            role: @role
-                }
-                UPDATE doc WITH {
-                    name: {
-                        items: APPEND(doc.name.items,newItem)
-                    }
-                } IN @@collectionName
-                 RETURN OLD
-                `;
-
-        const bindVars = {
-            '@collectionName': 'video__VIEWS',
-            id: id,
-            text: text,
-            role: role,
-            languageCode: languageCode,
-        };
-
         const cursor = await this.database
-            .query({
-                query,
-                bindVars,
-            })
+            .query(this.baseResourceQueryBuilder.translateName(id, text, languageCode, role))
             .catch((reason) => {
                 throw new InternalError(`Failed to translate video via VideoRepository: ${reason}`);
             });

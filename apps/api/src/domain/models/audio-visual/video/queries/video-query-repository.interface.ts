@@ -1,19 +1,13 @@
 import { IMultilingualTextItem } from '@coscrad/api-interfaces';
 import { Maybe } from '../../../../../lib/types/maybe';
 import { AggregateId } from '../../../../types/AggregateId';
+import { IAccessible } from '../../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
+import { IPublishable } from '../../../shared/common-commands/publish-resource/resource-published.event-handler';
 import { EventSourcedVideoViewModel } from './video-view-model.event-sourced';
 
 export const VIDEO_QUERY_REPOSITORY_TOKEN = 'VIDEO_QUERY_REPOSITORY_TOKEN';
 
-// export interface TranslationLineItemDto {
-//     inPointMilliseconds: number;
-//     outPointMilliseconds: number;
-//     text: string;
-//     languageCode: LanguageCode;
-// }
-
-// export interface IAudioItemQueryRepository extends IPublishable, IAccessible {
-export interface IVideoQueryRepository {
+export interface IVideoQueryRepository extends IPublishable, IAccessible {
     create(view: EventSourcedVideoViewModel): Promise<void>;
 
     createMany(view: EventSourcedVideoViewModel[]): Promise<void>;

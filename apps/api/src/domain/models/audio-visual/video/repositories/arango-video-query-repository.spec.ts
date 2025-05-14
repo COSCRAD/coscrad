@@ -23,6 +23,7 @@ import generateDatabaseNameForTestSuite from '../../../../../persistence/reposit
 import { TestEventStream } from '../../../../../test-data/events';
 import { buildTestInstance } from '../../../../../test-data/utilities';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { AccessControlList } from '../../../shared/access-control/access-control-list.entity';
 import { VideoCreated } from '../commands';
 import { EventSourcedVideoViewModel, IVideoQueryRepository } from '../queries';
 import { ArangoVideoQueryRepository } from './arango-video-query-repository';
@@ -67,7 +68,6 @@ describe(`ArangoVideoQueryRepository`, () => {
     });
 
     beforeEach(async () => {
-        // is this preferred to `databaseProvider.clearViews()` ?
         await databaseProvider.getDatabaseForCollection('video__VIEWS').clear();
     });
 
@@ -107,7 +107,51 @@ describe(`ArangoVideoQueryRepository`, () => {
         });
 
         describe(`when the video does not exist`, () => {
-            it.todo(`should have a test`);
+            it(`should return not found`, async () => {
+                const result = await testQueryRepository.fetchById('bogusID');
+
+                expect(result).toBe(NotFound);
+            });
+        });
+    });
+
+    describe(`publish`, () => {
+        const targetAudioItem = additionalVideos[0];
+
+        beforeEach(async () => {
+            await testQueryRepository.create(targetAudioItem);
+        });
+
+        it(`should publish the video`, async () => {
+            await testQueryRepository.publish(targetAudioItem.id);
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetAudioItem.id
+            )) as EventSourcedVideoViewModel;
+
+            expect(updatedView.isPublished).toBe(true);
+        });
+    });
+
+    describe(`allowuser`, () => {
+        const targetAudioItem = buildTestInstance(EventSourcedVideoViewModel, {
+            accessControlList: new AccessControlList(),
+        });
+
+        const testUserId = buildDummyUuid(209);
+
+        beforeEach(async () => {
+            await testQueryRepository.create(targetAudioItem);
+        });
+
+        it(`should add the user the the query ACL`, async () => {
+            await testQueryRepository.allowUser(targetAudioItem.id, testUserId);
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetAudioItem.id
+            )) as EventSourcedVideoViewModel;
+
+            expect(updatedView.accessControlList.canUser(testUserId)).toBe(true);
         });
     });
 

@@ -20,7 +20,6 @@ import { VideoCreated } from '../commands';
 @CoscradDataExample<EventSourcedVideoViewModel>({
     example: {
         id: buildDummyUuid(6),
-        // are we still using this?
         actions: [],
         name: buildMultilingualTextFromBilingualText(
             { text: 'my video', languageCode: LanguageCode.English },
