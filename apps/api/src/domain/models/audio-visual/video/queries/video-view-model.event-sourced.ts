@@ -1,7 +1,6 @@
 import {
     ContributorWithId,
     ICommandFormAndLabels,
-    IMultilingualText,
     LanguageCode,
     MIMEType,
 } from '@coscrad/api-interfaces';
@@ -15,20 +14,19 @@ import { DTO } from '../../../../../types/DTO';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../../shared/access-control/access-control-list.entity';
 import { Transcript } from '../../shared/entities/transcript.entity';
-import { AudioItemCreated } from '../commands/create-audio-item/audio-item-created.event';
+import { VideoCreated } from '../commands';
 
-@CoscradDataExample<EventSourcedAudioItemViewModel>({
+@CoscradDataExample<EventSourcedVideoViewModel>({
     example: {
-        id: buildDummyUuid(3),
-        // are we still using this?
+        id: buildDummyUuid(6),
         actions: [],
         name: buildMultilingualTextFromBilingualText(
-            { text: 'my song', languageCode: LanguageCode.English },
-            { text: 'my song (clc)', languageCode: LanguageCode.Chilcotin }
+            { text: 'my video', languageCode: LanguageCode.English },
+            { text: 'my video (clc)', languageCode: LanguageCode.Chilcotin }
         ),
-        mediaItemId: buildDummyUuid(55),
-        mimeType: MIMEType.wav,
-        lengthMilliseconds: 1234,
+        mediaItemId: buildDummyUuid(54),
+        mimeType: MIMEType.mp4,
+        lengthMilliseconds: 432120,
         transcript: Transcript.buildEmpty(),
         text: '',
         contributions: [],
@@ -36,9 +34,9 @@ import { AudioItemCreated } from '../commands/create-audio-item/audio-item-creat
         isPublished: false,
     },
 })
-export class EventSourcedAudioItemViewModel {
+export class EventSourcedVideoViewModel {
     actions: ICommandFormAndLabels[];
-    name: IMultilingualText;
+    name: MultilingualText;
     mediaItemId: AggregateId;
     mimeType?: MIMEType;
     lengthMilliseconds: number;
@@ -47,14 +45,9 @@ export class EventSourcedAudioItemViewModel {
     id: string;
     accessControlList: AccessControlList;
     isPublished: boolean;
-    /**
-     * TODO Do we want a separate view model for this?
-     *
-     * TODO update `IAudioItemViewModel` in `api-interfaces`
-     */
     transcript?: Transcript;
 
-    constructor(dto: DTO<EventSourcedAudioItemViewModel>) {
+    constructor(dto: DTO<EventSourcedVideoViewModel>) {
         if (!dto) return;
 
         const { id, name, contributions, mediaItemId, accessControlList, isPublished, transcript } =
@@ -88,26 +81,25 @@ export class EventSourcedAudioItemViewModel {
         }
     }
 
-    static fromAudioItemCreated({
+    static fromVideoCreated({
         payload: {
-            aggregateCompositeIdentifier: { id: audioItemId },
+            aggregateCompositeIdentifier: { id: videoId },
             name,
             languageCodeForName,
             mediaItemId,
             lengthMilliseconds,
         },
+        // note that attribution must be joined separately at the event consumer level
         meta: { contributorIds: _ },
-    }: AudioItemCreated): EventSourcedAudioItemViewModel {
-        return new EventSourcedAudioItemViewModel({
+    }: VideoCreated): EventSourcedVideoViewModel {
+        return new EventSourcedVideoViewModel({
             name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
             mediaItemId,
-            id: audioItemId,
+            id: videoId,
             actions: [],
-            // TODO set this
             contributions: [],
             isPublished: false,
-            // TODO fix this
-            mimeType: MIMEType.wav,
+            mimeType: MIMEType.mp4,
             text: '',
             lengthMilliseconds,
             // in order to grant access, we need a `RESOURCE_READ_ACCESS_GRANTED_TO_USER`
@@ -115,7 +107,7 @@ export class EventSourcedAudioItemViewModel {
         });
     }
 
-    public static fromDto(dto: DTO<EventSourcedAudioItemViewModel>) {
-        return new EventSourcedAudioItemViewModel(dto);
+    public static fromDto(dto: DTO<EventSourcedVideoViewModel>) {
+        return new EventSourcedVideoViewModel(dto);
     }
 }
