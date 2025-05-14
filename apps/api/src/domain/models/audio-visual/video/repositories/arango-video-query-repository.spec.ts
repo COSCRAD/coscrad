@@ -76,18 +76,17 @@ describe(`ArangoVideoQueryRepository`, () => {
     });
 
     const additionalVideos = [10, 11, 12].map((sequenceNumber) => {
-        const creationEvent = new TestEventStream()
-            .andThen<VideoCreated>({
-                type: 'VIDEO_CREATED',
-                payload: {
-                    name: `video name: ${sequenceNumber}`,
-                    languageCodeForName: originalLanguageCode,
+        const creationEvent = new TestEventStream().buildSingle<VideoCreated>({
+            type: 'VIDEO_CREATED',
+            payload: {
+                aggregateCompositeIdentifier: {
+                    type: AggregateType.mediaItem,
+                    id: buildDummyUuid(sequenceNumber),
                 },
-            })
-            .as({
-                type: AggregateType.mediaItem,
-                id: buildDummyUuid(sequenceNumber),
-            })[0] as VideoCreated;
+                name: `video name: ${sequenceNumber}`,
+                languageCodeForName: originalLanguageCode,
+            },
+        });
 
         return EventSourcedVideoViewModel.fromVideoCreated(creationEvent);
     });
@@ -102,7 +101,24 @@ describe(`ArangoVideoQueryRepository`, () => {
                 const searchResult = await testQueryRepository.fetchById(targetVideo.id);
 
                 expect(searchResult).not.toBe(NotFound);
-                // TODO add more assertions
+
+                const {
+                    name: foundName,
+                    mediaItemId: foundMediaItemId,
+                    isPublished: foundPublicationStatus,
+                    mimeType: foundMimeType,
+                    lengthMilliseconds: foundLength,
+                } = searchResult as EventSourcedVideoViewModel;
+
+                expect(foundName.toString()).toEqual(targetVideo.name.toString());
+
+                expect(foundMediaItemId).toEqual(targetVideo.mediaItemId);
+
+                expect(foundPublicationStatus).toEqual(targetVideo.isPublished);
+
+                expect(foundMimeType).toEqual(targetVideo.mimeType);
+
+                expect(foundLength).toEqual(targetVideo.lengthMilliseconds);
             });
         });
 

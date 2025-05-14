@@ -1,7 +1,6 @@
 import {
     ContributorWithId,
     ICommandFormAndLabels,
-    IMultilingualText,
     LanguageCode,
     MIMEType,
 } from '@coscrad/api-interfaces';
@@ -31,14 +30,13 @@ import { VideoCreated } from '../commands';
         transcript: Transcript.buildEmpty(),
         text: '',
         contributions: [],
-        // we need this on the playlist view as well
         accessControlList: new AccessControlList(),
         isPublished: false,
     },
 })
 export class EventSourcedVideoViewModel {
     actions: ICommandFormAndLabels[];
-    name: IMultilingualText;
+    name: MultilingualText;
     mediaItemId: AggregateId;
     mimeType?: MIMEType;
     lengthMilliseconds: number;
@@ -85,18 +83,19 @@ export class EventSourcedVideoViewModel {
 
     static fromVideoCreated({
         payload: {
-            aggregateCompositeIdentifier: { id: audioItemId },
+            aggregateCompositeIdentifier: { id: videoId },
             name,
             languageCodeForName,
             mediaItemId,
             lengthMilliseconds,
         },
+        // note that attribution must be joined separately at the event consumer level
         meta: { contributorIds: _ },
     }: VideoCreated): EventSourcedVideoViewModel {
         return new EventSourcedVideoViewModel({
             name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
             mediaItemId,
-            id: audioItemId,
+            id: videoId,
             actions: [],
             contributions: [],
             isPublished: false,

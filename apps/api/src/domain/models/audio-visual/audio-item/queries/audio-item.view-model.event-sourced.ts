@@ -32,7 +32,6 @@ import { AudioItemCreated } from '../commands/create-audio-item/audio-item-creat
         transcript: Transcript.buildEmpty(),
         text: '',
         contributions: [],
-        // we need this on the playlist view as well
         accessControlList: new AccessControlList(),
         isPublished: false,
     },
