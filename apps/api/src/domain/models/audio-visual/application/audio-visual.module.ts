@@ -47,8 +47,11 @@ import {
     CreateVideoCommandHandler,
     TranslateVideoName,
     TranslateVideoNameCommandHandler,
+    VideoCreated,
 } from '../video';
+import { VideoCreatedEventHandler } from '../video/commands/create-video/video-created.event-handler';
 import { Video } from '../video/entities/video.entity';
+import { EventSourcedVideoViewModel } from '../video/queries';
 import { AudioItemController } from './audio-item.controller';
 import { VideoController } from './video.controller';
 
@@ -85,8 +88,10 @@ import { VideoController } from './video.controller';
             Video,
             // view models
             EventSourcedAudioItemViewModel,
+            EventSourcedVideoViewModel,
             // VideoViewModel,
             // events
+            // audio items
             AudioItemCreated,
             AudioItemNameTranslated,
             TranscriptCreated,
@@ -94,6 +99,8 @@ import { VideoController } from './video.controller';
             LineItemAddedToTranscript,
             LineItemsImportedToTranscript,
             TranslationsImportedForTranscript,
+            // videos
+            VideoCreated,
         ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
@@ -107,6 +114,7 @@ import { VideoController } from './video.controller';
         LineItemsImportedToTranscriptEventHandler,
         LineItemTranslatedEventHandler,
         TranslationsImportedForTranscsriptEventHandler,
+        VideoCreatedEventHandler,
     ],
     exports: [AudioItemQueryService, VideoQueryService],
 })
