@@ -1,6 +1,6 @@
 import {
-    ContributorWithId,
     ICommandFormAndLabels,
+    IContributionSummary,
     LanguageCode,
     MIMEType,
 } from '@coscrad/api-interfaces';
@@ -41,7 +41,7 @@ export class EventSourcedVideoViewModel {
     mimeType?: MIMEType;
     lengthMilliseconds: number;
     text: string;
-    contributions: ContributorWithId[];
+    contributions: IContributionSummary[];
     id: string;
     accessControlList: AccessControlList;
     isPublished: boolean;

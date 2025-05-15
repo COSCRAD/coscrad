@@ -23,14 +23,15 @@ export class PlaylistCreatedEventHandler implements ICoscradEventHandler {
             queryRepositoryProvider.forResource<IPlaylistQueryRepository>(ResourceType.playlist);
     }
 
-    async handle({
-        payload: {
-            name: textForName,
-            languageCodeForName,
-            aggregateCompositeIdentifier: { id },
-        },
-        meta: { contributorIds = [] },
-    }: PlaylistCreated): Promise<void> {
+    async handle(event: PlaylistCreated): Promise<void> {
+        const {
+            payload: {
+                name: textForName,
+                languageCodeForName,
+                aggregateCompositeIdentifier: { id },
+            },
+        } = event;
+
         await this.playlistQueryRepository.create(
             PlaylistViewModel.fromDto({
                 id,
@@ -39,12 +40,13 @@ export class PlaylistCreatedEventHandler implements ICoscradEventHandler {
                 name: buildMultilingualTextWithSingleItem(textForName, languageCodeForName),
                 episodes: [],
                 // we have to add the contributions separately
+                contributions: [],
             })
         );
 
         console.log('PLAYLIST HAS BEEN CREATED!');
 
         // TODO do this atomically in the repository
-        await this.playlistQueryRepository.attribute(id, contributorIds);
+        await this.playlistQueryRepository.attribute(id, event);
     }
 }

@@ -1,6 +1,6 @@
 import {
-    ContributorWithId,
     ICommandFormAndLabels,
+    IContributionSummary,
     IMultilingualText,
     LanguageCode,
     MIMEType,
@@ -43,7 +43,7 @@ export class EventSourcedAudioItemViewModel {
     mimeType?: MIMEType;
     lengthMilliseconds: number;
     text: string;
-    contributions: ContributorWithId[];
+    contributions: IContributionSummary[];
     id: string;
     accessControlList: AccessControlList;
     isPublished: boolean;
