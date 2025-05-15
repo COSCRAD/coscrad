@@ -5,6 +5,7 @@ import { TermViewModel } from '../../../../queries/buildViewModelForResource/vie
 import { AggregateId } from '../../../types/AggregateId';
 import { IAccessible } from '../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
 import { IPublishable } from '../../shared/common-commands/publish-resource/resource-published.event-handler';
+import { BaseEvent } from '../../shared/events/base-event.entity';
 
 export const TERM_QUERY_REPOSITORY_TOKEN = 'TERM_QUERY_REPOSITORY_TOKEN';
 
@@ -43,7 +44,7 @@ export interface ITermQueryRepository extends IAccessible, IPublishable {
      * each update query. We need to find a performant and extensible way to
      * do this.
      */
-    attribute(termId: AggregateId, contributorIds: AggregateId[]): Promise<void>;
+    attribute(termId: AggregateId, event: BaseEvent): Promise<void>;
 
     // TODO Is it the ID that we want here or the URL?
     addAudio(id: AggregateId, languageCode: LanguageCode, audioItemId: string): Promise<void>;

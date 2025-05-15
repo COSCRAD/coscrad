@@ -227,7 +227,9 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
             vocabularyLists,
         } = dto;
 
-        term.contributions = Array.isArray(contributions) ? contributions : [];
+        term.contributions = Array.isArray(contributions)
+            ? contributions.map((c) => ContributionSummary.fromDto(c))
+            : [];
 
         term.name = name;
 

@@ -20,6 +20,7 @@ import {
     AUDIO_QUERY_REPOSITORY_TOKEN,
     IAudioItemQueryRepository,
 } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
+import { BaseEvent } from '../../shared/events/base-event.entity';
 import { ITermQueryRepository } from '../queries';
 import { ArangoResourceQueryBuilder } from './arango-resource-query-builder';
 
@@ -213,8 +214,8 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
     }
 
     // TODO share this with other resources
-    async attribute(termId: AggregateId, contributorIds: AggregateId[]): Promise<void> {
-        const aqlQuery = this.baseResourceQueryBuilder.attribute(termId, contributorIds);
+    async attribute(termId: AggregateId, event: BaseEvent): Promise<void> {
+        const aqlQuery = this.baseResourceQueryBuilder.attribute(termId, event);
 
         await this.database.query(aqlQuery).catch((reason) => {
             throw new InternalError(

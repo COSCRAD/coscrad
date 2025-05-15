@@ -530,7 +530,12 @@ describe(`ArangoTermQueryRepository`, () => {
         it(`should add the given contributions`, async () => {
             await testQueryRepository.attribute(
                 targetTerm.id,
-                testContributors.map((c) => c.id)
+                buildTestInstance(PromptTermCreated, {
+                    type: 'PROMPT_TERM_CREATED',
+                    meta: {
+                        contributorIds: testContributors.map((c) => c.id),
+                    },
+                })
             );
 
             const updatedView = (await testQueryRepository.fetchById(
@@ -538,20 +543,20 @@ describe(`ArangoTermQueryRepository`, () => {
             )) as TermViewModel;
 
             const missingAttributions = updatedView.contributions.filter(
-                ({ id }) => !contributorIds.includes(id)
+                (contributionRecord) =>
+                    !contributorIds.some((id) => contributionRecord.contributorIds.includes(id))
             );
 
             expect(missingAttributions).toHaveLength(0);
 
-            const { contributorId: targetContributorId, fullName: expectedFullName } =
-                contributorIdsAndNames[0];
-
-            const contributionForFirstUser = updatedView.contributions.find(
-                ({ id }) => id === targetContributorId
+            const contributionForCreationEvent = updatedView.contributions.find(
+                ({ type }) => type === 'PROMPT_TERM_CREATED'
             );
 
-            expect(contributionForFirstUser.fullName).toBe(
-                `${expectedFullName.firstName} ${expectedFullName.lastName}`
+            expect(contributionForCreationEvent.statement).toMatchSnapshot();
+
+            expect(contributionForCreationEvent.contributorIds).toEqual(
+                testContributors.map(({ id }) => id)
             );
         });
     });

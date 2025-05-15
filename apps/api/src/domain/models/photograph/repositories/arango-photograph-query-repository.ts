@@ -9,6 +9,7 @@ import { ArangoDatabaseForCollection } from '../../../../persistence/database/ar
 import mapDatabaseDocumentToEntityDto from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDtoToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { AggregateId } from '../../../types/AggregateId';
+import { BaseEvent } from '../../shared/events/base-event.entity';
 import { ArangoResourceQueryBuilder } from '../../term/repositories/arango-resource-query-builder';
 import { IPhotographQueryRepository } from '../queries';
 import { PhotographViewModel } from '../queries/photograph.view-model';
@@ -109,9 +110,9 @@ export class ArangoPhotographQueryRepository implements IPhotographQueryReposito
         return this.database.delete(id);
     }
 
-    async attribute(photographId: AggregateId, contributorIds: AggregateId[]): Promise<void> {
+    async attribute(photographId: AggregateId, event: BaseEvent): Promise<void> {
         await this.database
-            .query(this.baseResourceQueryBuilder.attribute(photographId, contributorIds))
+            .query(this.baseResourceQueryBuilder.attribute(photographId, event))
             .catch((reason) => {
                 throw new InternalError(
                     `Failed to add attribution for photograph via PhotographRepository: ${reason}`
