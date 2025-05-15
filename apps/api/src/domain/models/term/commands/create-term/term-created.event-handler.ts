@@ -11,13 +11,11 @@ export class TermCreatedEventHandler implements ICoscradEventHandler {
     ) {}
 
     async handle(event: TermCreated): Promise<void> {
-        const { meta: { contributorIds = [] } = { contributorIds: [] } } = event;
-
         const term = TermViewModel.fromTermCreated(event);
 
         await this.termRepository.create(term);
 
         // TODO make this operation atomic, extensible
-        await this.termRepository.attribute(term.id, contributorIds);
+        await this.termRepository.attribute(term.id, event);
     }
 }
