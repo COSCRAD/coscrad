@@ -2,13 +2,12 @@ import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
-import { CommandFSA } from '../../../../../app/controllers/command/command-fsa/command-fsa.entity';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { clonePlainObjectWithOverrides } from '../../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { buildTestCommandFsaMap } from '../../../../../test-data/commands';
+import { buildTestInstance } from '../../../../../test-data/utilities';
 import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
 import { MultilingualTextItemRole } from '../../../../common/entities/multilingual-text';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
@@ -17,6 +16,7 @@ import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { assertCreateCommandError } from '../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../__tests__/command-helpers/assert-create-command-success';
+import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import AggregateIdAlreadyInUseError from '../../../shared/common-command-errors/AggregateIdAlreadyInUseError';
@@ -26,12 +26,24 @@ import { Term } from '../../entities/term.entity';
 import { buildTestTerm } from '../../test-data/build-test-term';
 import { CREATE_PROMPT_TERM } from './constants';
 import { CreatePromptTerm } from './create-prompt-term.command';
+import { PromptTermCreated } from './prompt-term-created.event';
 
 const commandType = CREATE_PROMPT_TERM;
 
-const emptyInitialState = new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat();
+const rawData = {
+    sourceProjectId: '22',
+    originalTermId: '3456a',
+    aspect: ``,
+};
 
-const commandFsa = buildTestCommandFsaMap().get(CREATE_PROMPT_TERM) as CommandFSA<CreatePromptTerm>;
+const commandPayload = buildTestInstance(CreatePromptTerm, {
+    rawData,
+});
+
+const commandFsa = {
+    type: 'CREATE_PROMPT_TERM',
+    payload: commandPayload,
+};
 
 const buildValidCommandFSA = (id: AggregateId) =>
     clonePlainObjectWithOverrides(commandFsa, {
@@ -39,6 +51,7 @@ const buildValidCommandFSA = (id: AggregateId) =>
             aggregateCompositeIdentifier: {
                 id,
             },
+            rawData,
         },
     });
 
@@ -88,7 +101,10 @@ describe(commandType, () => {
         it(`should succeed with the expected state updates`, async () => {
             await assertCreateCommandSuccess(assertionHelperDependencies, {
                 systemUserId: dummySystemUserId,
-                initialState: emptyInitialState,
+                seedInitialState: async () => {
+                    // nothing to add
+                    return Promise.resolve();
+                },
                 buildValidCommandFSA,
                 checkStateOnSuccess: async ({
                     aggregateCompositeIdentifier: { id },
@@ -108,6 +124,16 @@ describe(commandType, () => {
                     expect(termTextItem.role).toBe(MultilingualTextItemRole.original);
 
                     expect(termTextItem.languageCode).toBe(LanguageCode.English);
+
+                    assertEventRecordPersisted(term, 'PROMPT_TERM_CREATED', dummySystemUserId);
+
+                    const { eventHistory } = term;
+
+                    const { rawData: rawDataFromEventHistory } = (
+                        eventHistory[0] as PromptTermCreated
+                    ).payload;
+
+                    expect(rawDataFromEventHistory).toEqual(rawData);
                 },
             });
         });

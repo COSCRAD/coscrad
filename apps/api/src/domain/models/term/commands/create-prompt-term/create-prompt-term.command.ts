@@ -1,9 +1,23 @@
-import { ICommandBase } from '@coscrad/api-interfaces';
+import { AggregateType, ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
+import { NestedDataType, NonEmptyString, RawDataObject } from '@coscrad/data-types';
+import { CoscradDataExample } from '../../../../../test-data/utilities';
+import { DTO } from '../../../../../types/DTO';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { TermCompositeIdentifier } from '../create-term';
 import { CREATE_PROMPT_TERM } from './constants';
 
+@CoscradDataExample<CreatePromptTerm>({
+    example: {
+        aggregateCompositeIdentifier: {
+            id: buildDummyUuid(1),
+            type: AggregateType.term,
+        },
+        text: 'I am drinking cold water.',
+        // this is optional, provide it in the overrides to a clone util if needed
+        rawData: null,
+    },
+})
 @Command({
     type: CREATE_PROMPT_TERM,
     label: 'Create Prompt Term',
@@ -29,4 +43,15 @@ export class CreatePromptTerm implements ICommandBase {
      * ```
      */
     text: string;
+
+    @RawDataObject({
+        isOptional: true,
+        label: 'raw data',
+        description: 'additional data from a legacy \\ third-party system source of the data',
+    })
+    readonly rawData?: Record<string, unknown>;
+
+    public static fromDto(dto: DTO<CreatePromptTerm>) {
+        return dto;
+    }
 }
