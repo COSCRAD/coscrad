@@ -7,6 +7,8 @@ import {
     IAudioItemQueryRepository,
 } from '../domain/models/audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ArangoAudioItemQueryRepository } from '../domain/models/audio-visual/audio-item/repositories/arango-audio-item-query-repository';
+import { VIDEO_QUERY_REPOSITORY_TOKEN } from '../domain/models/audio-visual/video/queries';
+import { ArangoVideoQueryRepository } from '../domain/models/audio-visual/video/repositories/arango-video-query-repository';
 import {
     IPhotographQueryRepository,
     PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
@@ -146,6 +148,13 @@ export class PersistenceModule implements OnApplicationShutdown {
             inject: [ArangoConnectionProvider],
         };
 
+        const videoQueryRepositoryProvider = {
+            provide: VIDEO_QUERY_REPOSITORY_TOKEN,
+            useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
+                new ArangoVideoQueryRepository(arangoConnectionProvider),
+            inject: [ArangoConnectionProvider],
+        };
+
         const termQueryRepositoryProvider = {
             provide: TERM_QUERY_REPOSITORY_TOKEN,
             useFactory: (
@@ -231,6 +240,7 @@ export class PersistenceModule implements OnApplicationShutdown {
                 domainDataExporterProvider,
                 digitalTextQueryRepositoryProvider,
                 audioQueryRepositoryProvider,
+                videoQueryRepositoryProvider,
                 photographQueryRepository,
                 termQueryRepositoryProvider,
                 vocabularyListQueryRepository,
@@ -247,6 +257,7 @@ export class PersistenceModule implements OnApplicationShutdown {
                 domainDataExporterProvider,
                 digitalTextQueryRepositoryProvider,
                 audioQueryRepositoryProvider,
+                videoQueryRepositoryProvider,
                 termQueryRepositoryProvider,
                 playlistQueryRepository,
                 queryRepositoryProvider,

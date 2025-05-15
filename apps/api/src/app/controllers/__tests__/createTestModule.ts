@@ -63,6 +63,8 @@ import {
     VideoNameTranslated,
 } from '../../../domain/models/audio-visual/video';
 import { Video } from '../../../domain/models/audio-visual/video/entities/video.entity';
+import { VIDEO_QUERY_REPOSITORY_TOKEN } from '../../../domain/models/audio-visual/video/queries';
+import { ArangoVideoQueryRepository } from '../../../domain/models/audio-visual/video/repositories/arango-video-query-repository';
 import { CreateBookBibliographicCitation } from '../../../domain/models/bibliographic-citation/book-bibliographic-citation/commands/create-book-bibliographic-citation/create-book-bibliographic-citation.command';
 import { CreateBookBibliographicCitationCommandHandler } from '../../../domain/models/bibliographic-citation/book-bibliographic-citation/commands/create-book-bibliographic-citation/create-book-bibliographic-citation.command-handler';
 import BookBibliographicCitationData from '../../../domain/models/bibliographic-citation/book-bibliographic-citation/entities/book-bibliographic-citation-data.entity';
@@ -574,6 +576,12 @@ export default async (
                 provide: AUDIO_QUERY_REPOSITORY_TOKEN,
                 useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
                     new ArangoAudioItemQueryRepository(arangoConnectionProvider),
+                inject: [ArangoConnectionProvider],
+            },
+            {
+                provide: VIDEO_QUERY_REPOSITORY_TOKEN,
+                useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
+                    new ArangoVideoQueryRepository(arangoConnectionProvider),
                 inject: [ArangoConnectionProvider],
             },
             {

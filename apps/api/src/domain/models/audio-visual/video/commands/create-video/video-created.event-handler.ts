@@ -1,5 +1,5 @@
 import { Inject } from '@nestjs/common';
-import { ICoscradEventHandler } from '../../../../../../domain/common';
+import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../../domain/common';
 import {
     EventSourcedVideoViewModel,
     IVideoQueryRepository,
@@ -7,6 +7,7 @@ import {
 } from '../../queries';
 import { VideoCreated } from './video-created.event';
 
+@CoscradEventConsumer('VIDEO_CREATED')
 export class VideoCreatedEventHandler implements ICoscradEventHandler {
     constructor(
         @Inject(VIDEO_QUERY_REPOSITORY_TOKEN)
