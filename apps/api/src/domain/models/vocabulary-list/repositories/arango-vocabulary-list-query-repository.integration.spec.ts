@@ -28,6 +28,7 @@ import {
 } from '../../../../queries/buildViewModelForResource/viewModels';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { TestEventStream } from '../../../../test-data/events';
+import { buildTestInstance } from '../../../../test-data/utilities';
 import { DTO } from '../../../../types/DTO';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
@@ -386,7 +387,12 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
         it(`should add the expected attributions for contributors`, async () => {
             await testQueryRepository.attribute(
                 targetView.id,
-                testContributors.map(({ id }) => id)
+                buildTestInstance(VocabularyListCreated, {
+                    type: 'VOCABULARY_LIST_CREATED',
+                    meta: {
+                        contributorIds: testContributors.map(({ id }) => id),
+                    },
+                })
             );
 
             const updatedView = (await testQueryRepository.fetchById(
@@ -395,10 +401,12 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
 
             const { contributions } = updatedView;
 
-            expect(contributions).toHaveLength(testContributors.length);
+            expect(contributions).toHaveLength(1);
 
-            const missingContributions = contributions.filter(
-                ({ id: foundContributorId }) => !testContributors.some(idEquals(foundContributorId))
+            expect(contributions[0].contributorIds).toHaveLength(testContributors.length);
+
+            const missingContributions = contributions[0].contributorIds.filter(
+                (contributorId) => !testContributors.some(idEquals(contributorId))
             );
 
             expect(missingContributions).toEqual([]);

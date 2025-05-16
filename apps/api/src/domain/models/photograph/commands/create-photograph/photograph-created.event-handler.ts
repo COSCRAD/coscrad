@@ -12,12 +12,10 @@ export class PhotographCreatedEventHandler implements ICoscradEventHandler {
     ) {}
 
     async handle(event: PhotographCreated): Promise<void> {
-        const { meta: { contributorIds = [] } = { contributorIds: [] } } = event;
-
         const photograph = PhotographViewModel.fromPhotographCreated(event);
 
         await this.photographRepository.create(photograph);
 
-        await this.photographRepository.attribute(photograph.id, contributorIds);
+        await this.photographRepository.attribute(photograph.id, event);
     }
 }

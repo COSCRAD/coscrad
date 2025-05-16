@@ -16,7 +16,11 @@ const pageIdentifiers = ['I', 'II', 'III', 'IV', targetPageIdentifier].concat(
 
 const buildDetailRoute = (digitalTextId: string) => `/Resources/DigitalTexts/${digitalTextId}`;
 
-describe(`digital text- admin- add note`, () => {
+/**
+ * TODO Currently we have feature flagged out the notes and connections in prod.
+ * Opt-in to this test once we expose these featuers.
+ */
+describe.skip(`digital text- admin- add note`, () => {
     before(() => {
         cy.clearDatabase();
 

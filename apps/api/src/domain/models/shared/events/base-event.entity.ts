@@ -2,6 +2,7 @@ import {
     AGGREGATE_COMPOSITE_IDENTIFIER,
     AggregateCompositeIdentifier,
 } from '@coscrad/api-interfaces';
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { isDeepStrictEqual } from 'util';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
@@ -17,6 +18,8 @@ export abstract class BaseEvent<
     TPayload extends IEventPayload = IEventPayload
 > {
     abstract type: string;
+
+    protected attributionTemplate?: string;
 
     meta: EventRecordMetadata;
 
@@ -46,6 +49,21 @@ export abstract class BaseEvent<
 
     public isFor(compositeIdentifier: { type: string; id: string }): boolean {
         return isDeepStrictEqual(this.payload[AGGREGATE_COMPOSITE_IDENTIFIER], compositeIdentifier);
+    }
+
+    public buildAttributionStatement() {
+        /**
+         * We dynamically build this statement from the event type so that we can gracefully
+         * opt-in to generation little-by-little.
+         */
+        const eventDescription = isNonEmptyString(this.attributionTemplate)
+            ? this.attributionTemplate
+            : `${this.type
+                  .split('_')
+                  .map((s) => s.toLowerCase())
+                  .join(' ')} by: `;
+
+        return eventDescription;
     }
 
     public toDTO<T extends BaseEvent>(this: T): DTO<this> {

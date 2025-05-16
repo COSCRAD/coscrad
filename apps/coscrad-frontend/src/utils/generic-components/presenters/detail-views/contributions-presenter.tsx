@@ -1,4 +1,4 @@
-import { ContributorWithId } from '@coscrad/api-interfaces';
+import { IContributionSummary } from '@coscrad/api-interfaces';
 import { ListRounded } from '@mui/icons-material';
 import PersonIcon from '@mui/icons-material/Person';
 import {
@@ -15,10 +15,15 @@ import {
 export const ContributionsPresenter = ({
     contributions,
 }: {
-    contributions: ContributorWithId[];
+    contributions: IContributionSummary[];
 }): JSX.Element => (
     <>
-        <Box elevation={0} component={Paper} sx={{ flexGrow: 1 }}>
+        <Box
+            elevation={0}
+            component={Paper}
+            sx={{ flexGrow: 1 }}
+            data-testid="resource-contributions"
+        >
             <IconButton>
                 <ListRounded />
             </IconButton>
@@ -27,14 +32,14 @@ export const ContributionsPresenter = ({
 
         <Box ml={1}>
             <List>
-                {contributions.map((contribution) => (
+                {contributions.map((contribution, index) => (
                     <ListItem
                         disableGutters
                         style={{ borderBottom: '1px solid #ccc' }}
-                        key={`${contribution.fullName}-${contribution.id}`}
-                        data-testid={`${contribution.id}`}
+                        key={`${contribution.type}-${index}`}
+                        data-testid={`${contribution.type}-${index}`}
                     >
-                        <ContributionPresenter contributor={contribution} />
+                        <ContributionPresenter contribution={contribution} />
                         <Divider />
                     </ListItem>
                 ))}
@@ -44,16 +49,17 @@ export const ContributionsPresenter = ({
 );
 
 interface ContributionPresenterProps {
-    contributor: ContributorWithId;
+    contribution: IContributionSummary;
 }
 
-const ContributionPresenter = ({ contributor: { fullName } }: ContributionPresenterProps) => {
+const ContributionPresenter = ({ contribution: { statement } }: ContributionPresenterProps) => {
     return (
         <>
             <ListItemIcon>
+                {/* Is this still relevant? */}
                 <PersonIcon color="secondary" />
             </ListItemIcon>
-            <Typography variant="body1">{fullName}</Typography>
+            <Typography variant="body1">{statement}</Typography>
         </>
     );
 };

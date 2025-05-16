@@ -285,11 +285,7 @@ export class PlaylistViewModel {
         return NotFound;
     }
 
-    public static fromDto(
-        dto: DTO<Omit<PlaylistViewModel, 'contributions'>> & {
-            contributions?: ContributionSummary[];
-        }
-    ): PlaylistViewModel {
+    public static fromDto(dto: DTO<PlaylistViewModel>): PlaylistViewModel {
         if (!isNonEmptyObject(dto)) {
             return new PlaylistViewModel();
         }
@@ -302,7 +298,9 @@ export class PlaylistViewModel {
             new AccessControlList(queryAccessControlList),
             new MultilingualText(name),
             episodes.map((e) => new PlaylistEpisodeViewModel(e)),
-            contributions
+            Array.isArray(contributions)
+                ? contributions.map((c) => ContributionSummary.fromDto(c))
+                : []
         );
     }
 }

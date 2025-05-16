@@ -119,7 +119,7 @@ Cypress.Commands.add('login', () => {
 
     cy.get('#password').click();
 
-    cy.get('#password').type(Cypress.env('password'));
+    cy.get('#password').type(Cypress.env('password'), { log: false });
 
     // TODO why doesn't cy.contains("Continue") work?
     cy.getByDataAttribute('true', 'action-button-primary').click();
@@ -233,7 +233,11 @@ Cypress.Commands.add(`seedDatabase`, (collectionName: string, documents: unknown
         `\\"`
     )}"`;
 
-    cy.exec(command);
+    cy.exec(command).then((_result) => {
+        if (command.includes(`alphabet`))
+            /* eslint-disable-next-line */
+            debugger;
+    });
 });
 
 Cypress.Commands.add(`seedTestUuids`, (quantity: number) => {

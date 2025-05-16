@@ -17,6 +17,7 @@ import mapDatabaseDocumentToEntityDto from '../../../../persistence/database/uti
 import mapEntityDtoToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { VocabularyListViewModel } from '../../../../queries/buildViewModelForResource/viewModels/vocabulary-list.view-model';
 import { AggregateId } from '../../../types/AggregateId';
+import { BaseEvent } from '../../shared/events/base-event.entity';
 import { ArangoResourceQueryBuilder } from '../../term/repositories/arango-resource-query-builder';
 import { FilterPropertyType } from '../commands';
 import { VocabularyListEntryImportItem } from '../entities/vocabulary-list.entity';
@@ -119,13 +120,9 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
         });
     }
 
-    async attribute(
-        vocabularyListId: AggregateId,
-        contributorIds: AggregateId[]
-        // contributionStatementTemplate: string
-    ): Promise<void> {
+    async attribute(vocabularyListId: AggregateId, event: BaseEvent): Promise<void> {
         await this.database
-            .query(this.baseResourceQueryBuilder.attribute(vocabularyListId, contributorIds))
+            .query(this.baseResourceQueryBuilder.attribute(vocabularyListId, event))
             .catch((reason) => {
                 throw new InternalError(`Failed to add attribution to vocabulary list: ${reason}`);
             });

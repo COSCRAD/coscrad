@@ -1,6 +1,8 @@
 import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { AqlQuery } from 'arangojs/aql';
 import { AggregateId } from '../../../types/AggregateId';
+import { BaseEvent } from '../../shared/events/base-event.entity';
+import { CoscradDate } from '../../user-management/utilities';
 
 export class ArangoResourceQueryBuilder {
     constructor(private readonly collectionName: string) {}
@@ -87,19 +89,32 @@ export class ArangoResourceQueryBuilder {
         };
     }
 
-    attribute(resourceId: AggregateId, contributorIds: AggregateId[]): AqlQuery {
+    attribute(resourceId: AggregateId, event: BaseEvent): AqlQuery {
         const query = `
                 FOR doc IN @@collectionName
                 FILTER doc._key == @id
-                LET newContributions = (
+                LET contributorsForThisEvent = (
                     FOR contributorId IN @contributorIds
-                        FOR c in contributors
-                            FILTER c._key == contributorId
-                            return {
-                                id: c._key,
-                                fullName: CONCAT(CONCAT(c.fullName.firstName,' '),c.fullName.lastName)
-                            }
+                    FOR c IN contributors
+                    FILTER c._key == contributorId
+                    RETURN c
                 )
+                LET listOfContributors = (
+                    for c in contributorsForThisEvent
+                    return CONCAT_SEPARATOR(' ',[c.fullName.firstName,c.fullName.lastName])
+                )
+                LET contributorIds = (
+                    for c in contributorsForThisEvent
+                    return c._key
+                )
+                LET attribution = CONCAT(@template,LENGTH(listOfContributors)>0 ? CONCAT_SEPARATOR(', ',listOfContributors) : "admin")
+                LET newContributions = {
+                    type: @eventType,
+                    contributorIds,
+                    statement: attribution,
+                    date: @date,
+                    timestamp: @timestamp
+                }
                 LET updatedContributions = APPEND(doc.contributions,newContributions)
                 UPDATE doc WITH {
                     contributions: updatedContributions
@@ -110,7 +125,11 @@ export class ArangoResourceQueryBuilder {
         const bindVars = {
             '@collectionName': this.collectionName,
             id: resourceId,
-            contributorIds,
+            contributorIds: event.meta.contributorIds || [],
+            template: event.buildAttributionStatement(),
+            date: CoscradDate.fromUnixTimestamp(event.meta.dateCreated),
+            timestamp: event.meta.dateCreated,
+            eventType: event.type,
         };
 
         return {

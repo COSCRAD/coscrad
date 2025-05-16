@@ -21,5 +21,7 @@ export class TermElicitedFromPromptEventHandler implements ICoscradEventHandler 
             text,
             languageCode,
         });
+
+        // TODO attribute
     }
 }

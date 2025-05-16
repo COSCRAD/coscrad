@@ -47,6 +47,7 @@ import {
     CreateVideoCommandHandler,
     TranslateVideoName,
     TranslateVideoNameCommandHandler,
+    VideoCreated,
 } from '../video';
 import { Video } from '../video/entities/video.entity';
 import { AudioItemController } from './audio-item.controller';
@@ -94,6 +95,7 @@ import { VideoController } from './video.controller';
             LineItemAddedToTranscript,
             LineItemsImportedToTranscript,
             TranslationsImportedForTranscript,
+            VideoCreated,
         ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,

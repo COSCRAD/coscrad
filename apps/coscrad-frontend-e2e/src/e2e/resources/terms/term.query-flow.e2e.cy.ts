@@ -84,7 +84,7 @@ describe(`Term index-to-detail flow`, () => {
                         516
                     ),
                     text: termWithQDash,
-                    languageCode: LanguageCode.Haida,
+                    languageCode: LanguageCode.Chilcotin,
                 });
 
                 cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
@@ -130,9 +130,10 @@ describe(`Term index-to-detail flow`, () => {
                         });
                     });
 
-                    describe(`when the filter should return (with language query) 1 result (based on haida term)`, () => {
+                    // Note that we need to ensure that we use only 1 target Indigenous language code plus English
+                    describe(`when the filter should return (with language query) 1 result (based on Chilcotin term)`, () => {
                         it(`should return the correct result`, () => {
-                            const searchTerms = `{hai}:${haidaTextToFind}`;
+                            const searchTerms = `{clc}:${haidaTextToFind}`;
 
                             cy.getByDataAttribute(`index_search_bar`).click();
 
@@ -194,13 +195,15 @@ describe(`Term index-to-detail flow`, () => {
 
         const { id: idForTermToView } = compositeIdentifierOfTermToView;
 
+        const textForTermWithNoCredits = 'I have notes';
+
         const noteText =
             'This first 4 letters of this term form a syllable that indicates this is a plant ';
 
         before(() => {
             cy.seedDataWithCommand(`CREATE_TERM`, {
                 aggregateCompositeIdentifier: compositeIdentifierOfTermToView,
-                text: 'I have notes',
+                text: textForTermWithNoCredits,
             });
 
             cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
@@ -214,6 +217,18 @@ describe(`Term index-to-detail flow`, () => {
                 ),
                 resourceCompositeIdentifier: compositeIdentifierOfTermToView,
                 text: noteText,
+            });
+        });
+
+        describe(`when there are no contributors of record on the event history`, () => {
+            beforeEach(() => {
+                cy.visit(`/Resources/Terms/${idForTermToView}`);
+            });
+
+            it(`should display the defualt credits`, () => {
+                cy.contains(textForTermWithNoCredits);
+
+                cy.contains('created by: admin');
             });
         });
 

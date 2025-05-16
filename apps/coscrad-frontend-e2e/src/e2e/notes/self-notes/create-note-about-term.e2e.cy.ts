@@ -1,7 +1,11 @@
 import { AggregateType } from '@coscrad/api-interfaces';
 import { buildDummyUuid } from '../../../support/utilities';
 
-describe(`term detail view `, () => {
+/**
+ * TODO Currently we have feature flagged out the notes and connections in prod.
+ * Opt-in to this test once we expose these featuers.
+ */
+describe.skip(`term detail view `, () => {
     const termId = buildDummyUuid(2);
 
     const aggregateCompositeIdentifier = {

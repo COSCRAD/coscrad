@@ -26,8 +26,8 @@ import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
 import { IAudioItemQueryRepository } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ArangoAudioItemQueryRepository } from '../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
-import idEquals from '../../shared/functional/idEquals';
 import { CoscradContributor } from '../../user-management';
+import { PlaylistCreated } from '../commands/playlist-created.event';
 import { ArangoPlaylistQueryRepository } from './arango-playlist-query-repository';
 import { IPlaylistQueryRepository } from './playlist-query-repository.interface';
 
@@ -314,9 +314,16 @@ describe(`ArangoPlaylistQueryRepository`, () => {
         });
 
         it(`should add the expected attributions for contributors`, async () => {
+            const testContributorIds = testContributors.map(({ id }) => id);
+
             await testQueryRepository.attribute(
                 targetView.id,
-                testContributors.map(({ id }) => id)
+                buildTestInstance(PlaylistCreated, {
+                    type: 'PLAYLIST_CREATED',
+                    meta: {
+                        contributorIds: testContributorIds,
+                    },
+                })
             );
 
             const updatedView = (await testQueryRepository.fetchById(
@@ -325,12 +332,11 @@ describe(`ArangoPlaylistQueryRepository`, () => {
 
             const { contributions } = updatedView;
 
-            expect(contributions).toHaveLength(testContributors.length);
+            expect(contributions).toHaveLength(1);
 
-            const missingContributions = contributions.filter(
-                ({ id: foundContributorId }) => !testContributors.some(idEquals(foundContributorId))
+            const missingContributions = testContributors.filter(
+                (c) => !contributions[0].contributorIds.includes(c.id)
             );
-
             expect(missingContributions).toEqual([]);
         });
     });

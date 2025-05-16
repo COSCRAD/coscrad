@@ -34,9 +34,7 @@ describe(`the video flow`, () => {
             cy.get('[href="/Resources"] > .MuiButtonBase-root').click();
 
             cy.getByDataAttribute('video').click();
-        });
 
-        it(`should display the commands`, () => {
             cy.contains('Videos');
 
             cy.getByDataAttribute('loading').should('not.exist');
@@ -50,7 +48,7 @@ describe(`the video flow`, () => {
             });
 
             describe(`when the command is valid`, () => {
-                const videoNameText = 'Haida text for video name';
+                const videoNameText = 'Text for video name (in the language)';
 
                 const mediaItemAggregateCompositeIdentifier =
                     buildDummyAggregateCompositeIdentifier(AggregateType.mediaItem, 2);
@@ -72,19 +70,25 @@ describe(`the video flow`, () => {
                 beforeEach(() => {
                     cy.contains(`Create Video`).click();
 
+                    cy.getByDataAttribute('languageCodeForName_select').click();
+
                     cy.getByDataAttribute('languageCodeForName_select')
-                        .click()
-                        .get('[data-value="hai"')
+                        .get('[data-value="clc"')
                         .click();
 
-                    cy.getByDataAttribute('text_name').click().type(videoNameText);
+                    cy.getByDataAttribute('text_name').click();
+
+                    cy.getByDataAttribute('text_name').type(videoNameText);
+
+                    cy.get('#mui-component-select-mediaItemId').click();
 
                     cy.get('#mui-component-select-mediaItemId')
-                        .click()
                         .get(`[data-value="${mediaItemId}"]`)
                         .click();
 
-                    cy.get(`input[name=lengthMilliseconds]`).click().type('30000');
+                    cy.get(`input[name=lengthMilliseconds]`).click();
+
+                    cy.get(`input[name=lengthMilliseconds]`).type('30000');
 
                     cy.getByDataAttribute('submit-dynamic-form').click();
 
@@ -95,9 +99,7 @@ describe(`the video flow`, () => {
                     cy.getByDataAttribute('loading').should('not.exist');
 
                     cy.contains(videoNameText);
-                });
 
-                it(`should not yet be publicly visible`, () => {
                     cy.visit(`/Resources/Videos/`);
 
                     cy.contains(videoNameText).should('not.exist');
