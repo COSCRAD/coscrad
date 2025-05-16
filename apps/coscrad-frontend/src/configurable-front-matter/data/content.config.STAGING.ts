@@ -13,12 +13,10 @@ export const contentConfig: ConfigurableContent = {
     coscradLogoUrl: 'https://coscrad.org/wp-content/uploads/2023/05/COSCRAD-logo-prototype-1.png',
     organizationLogoUrl:
         'https://coscrad.org/wp-content/uploads/2023/05/Coscrad-alt-logo-prototype.png',
-    indexToDetailFlows: Object.values(CategorizableType)
-        .filter((t) => t !== CategorizableType.playlist)
-        .map((categorizableType) => ({
-            categorizableType,
-            detailViewType: DetailViewType.fullView,
-        })),
+    indexToDetailFlows: Object.values(CategorizableType).map((categorizableType) => ({
+        categorizableType,
+        detailViewType: DetailViewType.fullView,
+    })),
     externalLinks: [
         {
             title: 'Language Hub',

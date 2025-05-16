@@ -1,8 +1,10 @@
-import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode, MIMEType } from '@coscrad/api-interfaces';
+import { buildDummyUuid } from '../../../../src/support/utilities';
 
 const songTitleInLanguage = `The La La Song`;
 
-const originalLanguageCode = LanguageCode.Haida;
+// this has to line up with the content config
+const originalLanguageCode = LanguageCode.Chilcotin;
 
 const buildId = (id: string) => `9b1deb4d-3b7d-4bad-9bdd-2b0d7b100${id}`;
 
@@ -22,17 +24,37 @@ const lyrics = `la la la (that's the jam)`;
 
 const lyricsTranslation = `la la la (but in English!)`;
 
+const mediaCompositeId = {
+    type: AggregateType.mediaItem,
+    id: buildDummyUuid(8),
+};
+
+const audioCompositeId = {
+    type: AggregateType.audioItem,
+    id: buildDummyUuid(9),
+};
+
 describe(`the song detail page`, () => {
     before(() => {
         cy.clearDatabase();
 
-        cy.seedTestUuids(10);
+        cy.seedTestUuids(100);
+
+        cy.seedDataWithCommand(`CREATE_MEDIA_ITEM`, {
+            aggregateCompositeIdentifier: mediaCompositeId,
+            mimeType: MIMEType.wav,
+        });
+
+        cy.seedDataWithCommand(`CREATE_AUDIO_ITEM`, {
+            aggregateCompositeIdentifier: audioCompositeId,
+            mediaItemId: mediaCompositeId.id,
+        });
 
         // TODO We'll need to update this when there's a proper translation flow
         cy.seedDataWithCommand(`CREATE_SONG`, {
             title: songTitleInLanguage,
             aggregateCompositeIdentifier: songAggregateCompositeIdentifier,
-            audioURL: validUrl,
+            audioItemId: audioCompositeId.id,
         });
 
         cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
@@ -106,8 +128,6 @@ describe(`the song detail page`, () => {
         it(`should display the lyrics' translation`, () => {
             cy.getLoading().should('not.exist');
 
-            cy.contains(`Translations`).click();
-
             cy.contains(lyricsTranslation);
         });
 
@@ -149,7 +169,7 @@ describe(`the song detail page`, () => {
                     beforeEach(() => {
                         cy.seedDataWithCommand(`CREATE_NOTE_ABOUT_RESOURCE`, {
                             aggregateCompositeIdentifier: {
-                                id: buildId(`002`),
+                                id: buildId(`032`),
                                 type: AggregateType.note,
                             },
                             resourceCompositeIdentifier: songAggregateCompositeIdentifier,
@@ -184,7 +204,7 @@ describe(`the song detail page`, () => {
 
                 const termCompositeIdentifier = {
                     type: AggregateType.term,
-                    id: buildId(`003`),
+                    id: buildId(`033`),
                 };
 
                 beforeEach(() => {

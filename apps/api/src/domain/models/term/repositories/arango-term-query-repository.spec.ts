@@ -527,37 +527,63 @@ describe(`ArangoTermQueryRepository`, () => {
             await contributorRepository.createMany(testContributors);
         });
 
-        it(`should add the given contributions`, async () => {
-            await testQueryRepository.attribute(
-                targetTerm.id,
-                buildTestInstance(PromptTermCreated, {
-                    type: 'PROMPT_TERM_CREATED',
-                    meta: {
-                        contributorIds: testContributors.map((c) => c.id),
-                    },
-                })
-            );
+        describe(`when there are contributor IDs on the event meta`, () => {
+            it(`should add the given contributions`, async () => {
+                await testQueryRepository.attribute(
+                    targetTerm.id,
+                    buildTestInstance(PromptTermCreated, {
+                        type: 'PROMPT_TERM_CREATED',
+                        meta: {
+                            contributorIds: testContributors.map((c) => c.id),
+                        },
+                    })
+                );
 
-            const updatedView = (await testQueryRepository.fetchById(
-                targetTerm.id
-            )) as TermViewModel;
+                const updatedView = (await testQueryRepository.fetchById(
+                    targetTerm.id
+                )) as TermViewModel;
 
-            const missingAttributions = updatedView.contributions.filter(
-                (contributionRecord) =>
-                    !contributorIds.some((id) => contributionRecord.contributorIds.includes(id))
-            );
+                const missingAttributions = updatedView.contributions.filter(
+                    (contributionRecord) =>
+                        !contributorIds.some((id) => contributionRecord.contributorIds.includes(id))
+                );
 
-            expect(missingAttributions).toHaveLength(0);
+                expect(missingAttributions).toHaveLength(0);
 
-            const contributionForCreationEvent = updatedView.contributions.find(
-                ({ type }) => type === 'PROMPT_TERM_CREATED'
-            );
+                const contributionForCreationEvent = updatedView.contributions.find(
+                    ({ type }) => type === 'PROMPT_TERM_CREATED'
+                );
 
-            expect(contributionForCreationEvent.statement).toMatchSnapshot();
+                expect(contributionForCreationEvent.statement).toMatchSnapshot();
 
-            expect(contributionForCreationEvent.contributorIds).toEqual(
-                testContributors.map(({ id }) => id)
-            );
+                expect(contributionForCreationEvent.contributorIds).toEqual(
+                    testContributors.map(({ id }) => id)
+                );
+            });
+        });
+
+        describe(`when there are no contributor IDs on the event meta`, () => {
+            it(`should default the message to admin`, async () => {
+                await testQueryRepository.attribute(
+                    targetTerm.id,
+                    buildTestInstance(PromptTermCreated, {
+                        type: 'PROMPT_TERM_CREATED',
+                        meta: {
+                            contributorIds: [],
+                        },
+                    })
+                );
+
+                const updatedView = (await testQueryRepository.fetchById(
+                    targetTerm.id
+                )) as TermViewModel;
+
+                const targetContribution = updatedView.contributions[0];
+
+                expect(targetContribution.contributorIds).toHaveLength(0);
+
+                expect(targetContribution.statement.includes('by: admin')).toBe(true);
+            });
         });
     });
 

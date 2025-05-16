@@ -61,7 +61,7 @@ export abstract class BaseEvent<
             : `${this.type
                   .split('_')
                   .map((s) => s.toLowerCase())
-                  .join(' ')} by:`;
+                  .join(' ')} by: `;
 
         return eventDescription;
     }
