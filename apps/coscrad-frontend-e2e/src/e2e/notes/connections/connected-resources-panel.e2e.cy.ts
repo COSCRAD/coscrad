@@ -1,6 +1,10 @@
 import { AggregateType } from '@coscrad/api-interfaces';
 import { buildDummyAggregateCompositeIdentifier } from '../../../support/utilities';
 
+/**
+ * TODO Currently we have feature flagged out the notes and connections in prod.
+ * Opt-in to this test once we expose these featuers.
+ */
 describe(`open connected resources panel for resource`, () => {
     const transcribedAudioCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
         AggregateType.audioItem,

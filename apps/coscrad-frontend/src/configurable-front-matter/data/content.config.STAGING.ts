@@ -104,4 +104,9 @@ export const contentConfig: ConfigurableContent = {
         instagram: 'https://www.instagram.com/',
     },
     additionalMaterials: [],
+    alphabetConfig: {
+        alphabetChartName: 'alphabet',
+        baseDigitalAssetUrl:
+            'https://coscradapi.tsilhqotinlanguage.ca/api/resources/mediaItems/download?name=',
+    },
 };
