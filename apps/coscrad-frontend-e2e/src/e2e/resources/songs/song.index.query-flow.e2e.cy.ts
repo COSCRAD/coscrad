@@ -1,36 +1,57 @@
-import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode, MIMEType } from '@coscrad/api-interfaces';
+import { buildDummyUuid } from '../../../support/utilities';
 
 const dummySongTitle = 'Mary had a little lamb';
 
 const dummyEnglishTranslationOfSongTitle = `Mary's lamb ZZZ (English)`;
-
-// const dummyUuid = `9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001`;
 
 const buildAggregateCompositeIdentifier = (id: string) => ({
     type: AggregateType.song,
     id: `9b1deb4d-3b7d-4bad-9bdd-2b0d7b100${id}`,
 });
 
+const mediaItemId = buildDummyUuid(12);
+
+const audioItemId = buildDummyUuid(13);
+
 const aggregateCompositeIdentifier = buildAggregateCompositeIdentifier('001');
 
-const validUrl =
-    'https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav';
-
-// TODO[https://www.pivotaltracker.com/story/show/185717928] seed data with a title translation and unskip this test
-describe.skip(`Song Index-to-detail Query Flow`, () => {
+describe(`Song Index-to-detail Query Flow`, () => {
     before(() => {
         cy.clearDatabase();
 
-        cy.seedTestUuids(100);
+        cy.seedTestUuids(200);
 
         cy.executeCommandStreamByName('users:create-admin');
+
+        cy.seedDataWithCommand(`CREATE_MEDIA_ITEM`, {
+            aggregateCompositeIdentifier: {
+                type: AggregateType.mediaItem,
+                id: mediaItemId,
+            },
+            mimeType: MIMEType.wav,
+        });
+
+        cy.seedDataWithCommand(`CREATE_AUDIO_ITEM`, {
+            aggregateCompositeIdentifier: {
+                type: AggregateType.audioItem,
+                id: audioItemId,
+            },
+            mediaItemId,
+        });
 
         cy.seedDataWithCommand(`CREATE_SONG`, {
             title: dummySongTitle,
             languageCodeForTitle: LanguageCode.Chilcotin,
             // titleEnglish: dummyEnglishTranslationOfSongTitle,
             aggregateCompositeIdentifier,
-            audioURL: validUrl,
+            audioItemId,
+        });
+
+        cy.seedDataWithCommand(`TRANSLATE_SONG_TITLE`, {
+            aggregateCompositeIdentifier,
+            translation: dummyEnglishTranslationOfSongTitle,
+            languageCode: LanguageCode.English,
         });
 
         cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
@@ -59,20 +80,20 @@ describe.skip(`Song Index-to-detail Query Flow`, () => {
         });
 
         describe(`the search filter`, () => {
-            const songTitleWithQDash = `Q-Bert's Jam`;
+            const songTitleWithQDash = `Q-Bert's JamZ`;
 
             const searchScopes = [`allProperties`, `name`];
 
             before(() => {
                 cy.seedDataWithCommand(`CREATE_SONG`, {
                     title: songTitleWithQDash,
-                    titleEnglish: undefined,
-                    aggregateCompositeIdentifier: buildAggregateCompositeIdentifier('002'),
-                    audioURL: validUrl,
+                    languageCodeForTitle: LanguageCode.Chilcotin,
+                    aggregateCompositeIdentifier: buildAggregateCompositeIdentifier('052'),
+                    audioItemId,
                 });
 
                 cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
-                    aggregateCompositeIdentifier: buildAggregateCompositeIdentifier('002'),
+                    aggregateCompositeIdentifier: buildAggregateCompositeIdentifier('052'),
                 });
             });
 
@@ -81,8 +102,9 @@ describe.skip(`Song Index-to-detail Query Flow`, () => {
                     beforeEach(() => {
                         cy.visit('/Resources/Songs');
 
+                        cy.getByDataAttribute('select_index_search_scope').click();
+
                         cy.getByDataAttribute('select_index_search_scope')
-                            .click()
                             .get(`[data-value="${searchScope}"]`)
                             .click();
                     });
@@ -91,7 +113,9 @@ describe.skip(`Song Index-to-detail Query Flow`, () => {
                         it(`should return the correct result`, () => {
                             const searchTerms = `Q-`;
 
-                            cy.getByDataAttribute(`index_search_bar`).click().type(searchTerms);
+                            cy.getByDataAttribute(`index_search_bar`).click();
+
+                            cy.getByDataAttribute(`index_search_bar`).type(searchTerms);
 
                             cy.getLoading().should(`not.exist`);
 
@@ -105,7 +129,9 @@ describe.skip(`Song Index-to-detail Query Flow`, () => {
                         it(`should return the correct result`, () => {
                             const searchTerms = `ZZZ`;
 
-                            cy.getByDataAttribute(`index_search_bar`).click().type(searchTerms);
+                            cy.getByDataAttribute(`index_search_bar`).click();
+
+                            cy.getByDataAttribute(`index_search_bar`).type(searchTerms);
 
                             cy.getLoading().should(`not.exist`);
 
@@ -117,9 +143,11 @@ describe.skip(`Song Index-to-detail Query Flow`, () => {
 
                     describe(`when the filter should return no results`, () => {
                         it(`should show no results`, () => {
-                            const searchTerms = `BBQ Chicken`;
+                            const searchTerms = `BBQ ChickenZ`;
 
-                            cy.getByDataAttribute(`index_search_bar`).click().type(searchTerms);
+                            cy.getByDataAttribute(`index_search_bar`).click();
+
+                            cy.getByDataAttribute(`index_search_bar`).type(searchTerms);
 
                             cy.getLoading().should(`not.exist`);
 
@@ -133,9 +161,11 @@ describe.skip(`Song Index-to-detail Query Flow`, () => {
 
                     describe(`when the filter should return all results`, () => {
                         it(`should show all results`, () => {
-                            const searchTerms = `n`;
+                            const searchTerms = `Z`;
 
-                            cy.getByDataAttribute(`index_search_bar`).click().type(searchTerms);
+                            cy.getByDataAttribute(`index_search_bar`).click();
+
+                            cy.getByDataAttribute(`index_search_bar`).type(searchTerms);
 
                             cy.getLoading().should(`not.exist`);
 
@@ -168,27 +198,27 @@ describe.skip(`Song Index-to-detail Query Flow`, () => {
                          * key bindings, include one for each orthography any
                          * language group needs, and then update this test coverage.
                          */
-                        keyBindings.forEach(([keySequence, specialChar]) => {
+                        keyBindings.forEach(([keySequence, specialChar], index) => {
                             describe(`the special char: ${specialChar}`, () => {
                                 beforeEach(() => {
                                     cy.seedDataWithCommand(`CREATE_SONG`, {
                                         title: `foo bar ${specialChar}`,
-                                        titleEnglish: undefined,
+                                        languageCodeForTitle: LanguageCode.Chilcotin,
                                         aggregateCompositeIdentifier:
-                                            buildAggregateCompositeIdentifier('003'),
-                                        audioURL: validUrl,
+                                            buildAggregateCompositeIdentifier(`${index + 100}`),
+                                        audioItemId,
                                     });
 
                                     cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
                                         aggregateCompositeIdentifier:
-                                            buildAggregateCompositeIdentifier('003'),
+                                            buildAggregateCompositeIdentifier(`${index + 100}`),
                                     });
 
                                     cy.visit(`/Resources/Songs`);
 
-                                    cy.getByDataAttribute(`index_search_bar`)
-                                        .click()
-                                        .type(keySequence);
+                                    cy.getByDataAttribute(`index_search_bar`).click();
+
+                                    cy.getByDataAttribute(`index_search_bar`).type(keySequence);
                                 });
 
                                 describe(`when searching for a term with the special symbol`, () => {

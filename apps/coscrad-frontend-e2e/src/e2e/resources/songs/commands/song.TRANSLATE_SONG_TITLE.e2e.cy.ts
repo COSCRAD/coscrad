@@ -11,7 +11,8 @@ const buildSongDetailRoute = (id: string) => `/Resources/Songs/${id}`;
 
 const commandLabel = 'Translate Title';
 
-describe(`when translating a song's title`, () => {
+// TODO Opt in to admin e2e tests
+describe.skip(`when translating a song's title`, () => {
     before(() => {
         cy.clearDatabase();
 

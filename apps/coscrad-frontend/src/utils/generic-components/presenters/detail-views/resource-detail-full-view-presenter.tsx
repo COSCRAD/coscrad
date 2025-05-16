@@ -49,7 +49,10 @@ export const ResourceDetailFullViewPresenter = ({
                 {children}
                 {contributions.length > 0 ? (
                     <Box ml={1}>
-                        <ContributionsPresenter contributions={contributions} />
+                        <ContributionsPresenter
+                            contributions={contributions}
+                            data-testid="resource-contributions"
+                        />
                     </Box>
                 ) : null}
             </Grid>

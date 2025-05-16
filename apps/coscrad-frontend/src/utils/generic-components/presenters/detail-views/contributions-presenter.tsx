@@ -18,7 +18,12 @@ export const ContributionsPresenter = ({
     contributions: IContributionSummary[];
 }): JSX.Element => (
     <>
-        <Box elevation={0} component={Paper} sx={{ flexGrow: 1 }}>
+        <Box
+            elevation={0}
+            component={Paper}
+            sx={{ flexGrow: 1 }}
+            data-testid="resource-contributions"
+        >
             <IconButton>
                 <ListRounded />
             </IconButton>
