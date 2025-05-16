@@ -68,6 +68,10 @@ describe(`VideoCreatedEventHandler`, () => {
         videoCreatedEventHandler = new VideoCreatedEventHandler(testQueryRepository);
     });
 
+    beforeEach(async () => {
+        await databaseProvider.clearViews();
+    });
+
     afterAll(async () => {
         databaseProvider.close();
     });
