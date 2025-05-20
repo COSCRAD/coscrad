@@ -1,7 +1,10 @@
 import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { Steps, buildDummyAggregateCompositeIdentifier } from '../../../../support/utilities';
 
-describe(`TRANSLATE_LINE_ITEM`, () => {
+/**
+ * TODO Opt-in to this when we expose the admin panel in production.
+ */
+describe.skip(`TRANSLATE_LINE_ITEM`, () => {
     before(() => {
         cy.clearDatabase();
 

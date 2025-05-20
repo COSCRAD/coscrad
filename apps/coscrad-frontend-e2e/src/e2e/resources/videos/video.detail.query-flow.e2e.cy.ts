@@ -17,9 +17,6 @@ const mediaItemCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
 
 const videoDetailRoute = `/Resources/Videos/${basicVideoId}`;
 
-const validUrl =
-    'https://coscrad.org/wp-content/uploads/2023/05/Rexy-and-The-Egg-_3D-Dinosaur-Animation_-_-3D-Animation-_-Maya-3D.mp4';
-
 describe(`the video detail page`, () => {
     before(() => {
         cy.clearDatabase();
@@ -28,9 +25,9 @@ describe(`the video detail page`, () => {
 
         cy.seedDataWithCommand('CREATE_MEDIA_ITEM', {
             aggregateCompositeIdentifier: mediaItemCompositeIdentifier,
-            url: validUrl,
         });
 
+        // shouldn't we always have to publish media items (in other tests)
         cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
             aggregateCompositeIdentifier: mediaItemCompositeIdentifier,
         });
@@ -152,7 +149,7 @@ describe(`the video detail page`, () => {
 
         // TODO verify this
         it.skip(`should play the video`, () => {
-            cy.getByDataAttribute(`video-for-${validUrl}`).click();
+            cy.getByDataAttribute(`video-url`).click();
             // TODO spy on Audio and assert it gets played.
 
             expect(window.HTMLVideoElement.prototype.play).to.be.calledOnce;
