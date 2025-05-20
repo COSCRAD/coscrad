@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { Maybe } from '../../../../lib/types/maybe';
 import { VocabularyListViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
 import { AggregateId } from '../../../types/AggregateId';
+import { BaseEvent } from '../../shared/events/base-event.entity';
 import { FilterPropertyType } from '../commands';
 import { VocabularyListEntryImportItem } from '../entities/vocabulary-list.entity';
 
@@ -34,7 +35,7 @@ export interface IVocabularyListQueryRepository {
      * each update query. We need to find a performant and extensible way to
      * do this.
      */
-    attribute(id: AggregateId, contributorIds: AggregateId[]): Promise<void>;
+    attribute(id: AggregateId, event: BaseEvent): Promise<void>;
 
     translateName(id: AggregateId, translationItem: IMultilingualTextItem): Promise<void>;
 

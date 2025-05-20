@@ -140,6 +140,19 @@ export class CoscradDate extends BaseDomainModel {
         return date;
     }
 
+    static fromUnixTimestamp(timestamp: number): ResultOrError<CoscradDate> {
+        const date = new Date(timestamp);
+
+        const year = date.getFullYear();
+
+        // January is 0 indexed
+        const month = date.getMonth() + 1;
+
+        const day = date.getDate();
+
+        return CoscradDate.parseString(`${year}-${month}-${day}`);
+    }
+
     validateComplexInvariants(): InternalError[] {
         if (this.month === Month.February && this.day === 29) {
             if (!this.isLeapYear()) {
