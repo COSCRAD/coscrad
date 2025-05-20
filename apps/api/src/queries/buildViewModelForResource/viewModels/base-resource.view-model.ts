@@ -2,10 +2,8 @@ import { AggregateType } from '@coscrad/api-interfaces';
 import { NonEmptyString } from '@coscrad/data-types';
 import { DetailScopedCommandWriteContext } from '../../../app/controllers/command/services/command-info-service';
 import idEquals from '../../../domain/models/shared/functional/idEquals';
-import {
-    ContributionSummary,
-    CoscradContributor,
-} from '../../../domain/models/user-management/contributor';
+import { CoscradContributor } from '../../../domain/models/user-management/contributor';
+import { ContributionSummary } from '../../../domain/models/user-management/contributor/views/contribution-summary.view-model';
 import { CoscradDate } from '../../../domain/models/user-management/utilities';
 import { AggregateId } from '../../../domain/types/AggregateId';
 import { HasAggregateId } from '../../../domain/types/HasAggregateId';
