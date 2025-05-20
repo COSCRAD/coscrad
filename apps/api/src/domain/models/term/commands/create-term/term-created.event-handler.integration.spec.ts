@@ -146,9 +146,9 @@ describe(`TermCreatedEventHandler`, () => {
             // expect notes to be empty
 
             expect(
-                contributions.some(
+                contributions[0].contributorIds.some(
                     // this should actually be the name and ID
-                    (c) => c.id === dummyContributor.id
+                    (cid) => cid === dummyContributor.id
                 )
             ).toBe(true);
 

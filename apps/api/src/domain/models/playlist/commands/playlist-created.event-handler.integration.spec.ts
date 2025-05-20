@@ -138,9 +138,9 @@ describe(`PlaylistCreatedEventHandler`, () => {
 
             expect(contributions).not.toHaveLength(0);
 
-            const { fullName } = contributions[0];
-
-            expect(fullName).toBe(dummyContributor.fullName.toString());
+            expect(contributions[0].contributorIds.some((id) => id === dummyContributor.id)).toBe(
+                true
+            );
         });
     });
 });

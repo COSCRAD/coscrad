@@ -196,6 +196,7 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
          *  Note that the contributions must be handled separately as we need
          * to access the db to join in contributor names
          */
+        term.contributions = [];
 
         term.actions = [
             'ELICIT_TERM_FROM_PROMPT',

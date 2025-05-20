@@ -1,7 +1,9 @@
 import { NestedDataType, NonEmptyString, NonNegativeFiniteNumber } from '@coscrad/data-types';
 import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
+import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
+import { dummyDateNow } from '../../../__tests__/utilities/dummyDateNow';
 import { CoscradDate } from '../../utilities';
 
 /**
@@ -9,6 +11,15 @@ import { CoscradDate } from '../../utilities';
  * the view that is used when joining (eagerly in the event consumers) contribution
  * info into resource views.
  */
+@CoscradDataExample<ContributionSummary>({
+    example: {
+        contributorIds: [],
+        statement: 'Watchamacallit fabricated by: Willy Wankie',
+        type: 'WHATCHAMACALLIT_FABRICATED',
+        date: CoscradDate.fromUnixTimestamp(dummyDateNow) as CoscradDate,
+        timestamp: dummyDateNow,
+    },
+})
 export class ContributionSummary {
     @NonEmptyString({
         label: 'contributor IDs',
