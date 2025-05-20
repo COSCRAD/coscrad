@@ -1,19 +1,3 @@
-export interface IContributionSummary {
-    contributorIds: string[];
-
-    statement: string;
-
-    type: string;
-
-    date: {
-        day: number;
-        month: string;
-        year: number;
-    };
-
-    timestamp: number;
-}
-
 export interface IContribution {
     contributor: {
         firstName: string;
