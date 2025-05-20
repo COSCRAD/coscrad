@@ -11,7 +11,7 @@ import { buildMultilingualTextWithSingleItem } from '../../../domain/common/buil
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
 import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
-import { ContributionSummary } from '../../../domain/models/user-management';
+import { ContributionSummary } from '../../../domain/models/user-management/contributor/views';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { AggregateId } from '../../../domain/types/AggregateId';
 import { Maybe } from '../../../lib/types/maybe';

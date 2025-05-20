@@ -14,7 +14,7 @@ import { buildMultilingualTextWithSingleItem } from '../../../domain/common/buil
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
 import BaseDomainModel from '../../../domain/models/base-domain-model.entity';
 import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
-import { ContributionSummary } from '../../../domain/models/user-management';
+import { ContributionSummary } from '../../../domain/models/user-management/contributor/views';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import {
     FilterPropertyType,
