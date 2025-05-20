@@ -1,7 +1,7 @@
 import {
     AggregateType,
-    ContributorWithId,
     FormFieldType,
+    IContributionSummary,
     IDynamicForm,
     IFormField,
     IMultilingualText,
@@ -14,6 +14,7 @@ import { buildMultilingualTextWithSingleItem } from '../../../domain/common/buil
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
 import BaseDomainModel from '../../../domain/models/base-domain-model.entity';
 import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
+import { ContributionSummary } from '../../../domain/models/user-management';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import {
     FilterPropertyType,
@@ -106,7 +107,7 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
     // TODO We need a concrete class to include this on the API docs
     public form: IDynamicForm;
 
-    public contributions: ContributorWithId[];
+    public contributions: IContributionSummary[];
 
     @ApiProperty({
         type: MultilingualText,
@@ -178,7 +179,9 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
                   fields: [] as IFormField[],
               };
 
-        this.contributions = Array.isArray(contributions) ? contributions : [];
+        this.contributions = Array.isArray(contributions)
+            ? contributions.map((c) => new ContributionSummary(c as DTO<ContributionSummary>))
+            : [];
 
         this.name = new MultilingualText(name);
 

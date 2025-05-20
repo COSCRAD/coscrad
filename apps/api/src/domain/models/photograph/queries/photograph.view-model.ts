@@ -229,7 +229,9 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
             // tags,
         } = dto;
 
-        photograph.contributions = Array.isArray(contributions) ? contributions : [];
+        photograph.contributions = Array.isArray(contributions)
+            ? contributions.map((c) => ContributionSummary.fromDto(c))
+            : [];
 
         photograph.name = name;
 
