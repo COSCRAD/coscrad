@@ -92,8 +92,14 @@ exports[`when querying for a vocabulary list: fetch by ID when the user is a pro
         "actions": [],
         "contributions": [
           {
-            "fullName": "Erin Truck",
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100070",
+            "contributorIds": [],
+            "date": {
+              "day": 26,
+              "month": "09",
+              "year": 2022,
+            },
+            "statement": "Watchamacallit fabricated by: Willy Wankie",
+            "type": "WHATCHAMACALLIT_FABRICATED",
           },
         ],
         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100005",

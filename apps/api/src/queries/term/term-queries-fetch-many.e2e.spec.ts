@@ -11,6 +11,7 @@ import httpStatusCodes from '../../app/constants/httpStatusCodes';
 import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
 import getValidAggregateInstanceForTest from '../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { MultilingualText } from '../../domain/common/entities/multilingual-text';
+import { assertResourceHasContributionFor } from '../../domain/models/__tests__';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../domain/models/shared/access-control/access-control-list.entity';
 import { TermCreated } from '../../domain/models/term/commands';
@@ -18,6 +19,7 @@ import {
     ITermQueryRepository,
     TERM_QUERY_REPOSITORY_TOKEN,
 } from '../../domain/models/term/queries';
+import { ContributionSummary } from '../../domain/models/user-management';
 import { CoscradUserGroup } from '../../domain/models/user-management/group/entities/coscrad-user-group.entity';
 import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../domain/models/user-management/user/entities/user/coscrad-user.entity';
@@ -29,6 +31,7 @@ import TestRepositoryProvider from '../../persistence/repositories/__tests__/Tes
 import generateDatabaseNameForTestSuite from '../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestDataInFlatFormat from '../../test-data/buildTestDataInFlatFormat';
 import { TestEventStream } from '../../test-data/events';
+import { buildTestInstance } from '../../test-data/utilities';
 import { TermViewModel } from '../buildViewModelForResource/viewModels/term.view-model';
 
 const indexEndpoint = `/resources/terms`;
@@ -95,10 +98,9 @@ const dummyTermView = clonePlainObjectWithOverrides(
     TermViewModel.fromTermCreated(termCreated.as(termCompositeIdentifier)[0] as TermCreated),
     {
         contributions: [
-            {
-                id: dummyContributor.id,
-                fullName: dummyContributor.fullName.toString(),
-            },
+            buildTestInstance(ContributionSummary, {
+                contributorIds: [dummyContributor.id],
+            }),
         ],
     }
 );
@@ -203,16 +205,7 @@ describe(`when querying for a term: fetch many`, () => {
                     .getContributorRepository()
                     .fetchMany();
 
-                expect(
-                    result.contributions.some(({ fullName, id: foundContributorId }) => {
-                        return (
-                            // TODO we will want a test helper for this comparison in case we decide to change format
-                            fullName ===
-                                `${dummyContributorFirstName} ${dummyContributorLastName}` &&
-                            foundContributorId === dummyContributor.id
-                        );
-                    })
-                ).toBe(true);
+                assertResourceHasContributionFor(dummyContributor, result);
             });
         });
 

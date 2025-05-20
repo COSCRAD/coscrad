@@ -129,17 +129,14 @@ exports[`when querying for a playlist: fetch many (/resources/playlists) when th
       ],
       "contributions": [
         {
-          "fullName": "Oscar Myers",
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100123",
-          "name": {
-            "items": [
-              {
-                "languageCode": "en",
-                "role": "original",
-                "text": "Oscar Myers",
-              },
-            ],
+          "contributorIds": [],
+          "date": {
+            "day": 26,
+            "month": "09",
+            "year": 2022,
           },
+          "statement": "Watchamacallit fabricated by: Willy Wankie",
+          "type": "WHATCHAMACALLIT_FABRICATED",
         },
       ],
       "episodes": [
@@ -321,17 +318,14 @@ exports[`when querying for a playlist: fetch many (/resources/playlists) when th
       ],
       "contributions": [
         {
-          "fullName": "Oscar Myers",
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100123",
-          "name": {
-            "items": [
-              {
-                "languageCode": "en",
-                "role": "original",
-                "text": "Oscar Myers",
-              },
-            ],
+          "contributorIds": [],
+          "date": {
+            "day": 26,
+            "month": "09",
+            "year": 2022,
           },
+          "statement": "Watchamacallit fabricated by: Willy Wankie",
+          "type": "WHATCHAMACALLIT_FABRICATED",
         },
       ],
       "episodes": [],
@@ -473,17 +467,14 @@ exports[`when querying for a playlist: fetch many (/resources/playlists) when th
       ],
       "contributions": [
         {
-          "fullName": "Oscar Myers",
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100123",
-          "name": {
-            "items": [
-              {
-                "languageCode": "en",
-                "role": "original",
-                "text": "Oscar Myers",
-              },
-            ],
+          "contributorIds": [],
+          "date": {
+            "day": 26,
+            "month": "09",
+            "year": 2022,
           },
+          "statement": "Watchamacallit fabricated by: Willy Wankie",
+          "type": "WHATCHAMACALLIT_FABRICATED",
         },
       ],
       "episodes": [],

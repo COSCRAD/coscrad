@@ -10,6 +10,7 @@ import * as request from 'supertest';
 import httpStatusCodes from '../../app/constants/httpStatusCodes';
 import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
 import getValidAggregateInstanceForTest from '../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
+import { assertResourceHasContributionFor } from '../../domain/models/__tests__';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../domain/models/shared/access-control/access-control-list.entity';
 import { TermCreated } from '../../domain/models/term/commands';
@@ -17,7 +18,7 @@ import {
     ITermQueryRepository,
     TERM_QUERY_REPOSITORY_TOKEN,
 } from '../../domain/models/term/queries';
-import { CoscradContributor } from '../../domain/models/user-management/contributor';
+import { ContributionSummary } from '../../domain/models/user-management/contributor';
 import { CoscradUserGroup } from '../../domain/models/user-management/group/entities/coscrad-user-group.entity';
 import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../domain/models/user-management/user/entities/user/coscrad-user.entity';
@@ -29,7 +30,7 @@ import TestRepositoryProvider from '../../persistence/repositories/__tests__/Tes
 import generateDatabaseNameForTestSuite from '../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestDataInFlatFormat from '../../test-data/buildTestDataInFlatFormat';
 import { TestEventStream } from '../../test-data/events';
-import { BaseResourceViewModel } from '../buildViewModelForResource/viewModels/base-resource.view-model';
+import { buildTestInstance } from '../../test-data/utilities';
 import { TermViewModel } from '../buildViewModelForResource/viewModels/term.view-model';
 
 // Set up endpoints: index endpoint, id endpoint
@@ -91,10 +92,9 @@ const dummyTerm = TermViewModel.fromTermCreated(termCreated.as(termCompositeId)[
 const targetTermView = clonePlainObjectWithOverrides(dummyTerm, {
     isPublished: true,
     contributions: [
-        {
-            id: dummyContributor.id,
-            fullName: dummyContributor.fullName.toString(),
-        },
+        buildTestInstance(ContributionSummary, {
+            contributorIds: [dummyContributor.id],
+        }),
     ],
 });
 
@@ -108,19 +108,6 @@ const privateTermThatUserCanAccess = clonePlainObjectWithOverrides(dummyTerm, {
 
 // TODO Add happy path cases for a prompt term
 // const promptTermId = buildDummyUuid(2)
-
-const assertResourceHasContributionFor = (
-    { id: contributorId }: CoscradContributor,
-    resource: BaseResourceViewModel
-) => {
-    const hasContribution = resource.contributions.some(
-        ({ id }) => id === contributorId
-        // TODO support joining in contributors
-        // && fullName === `${firstName} ${lastName}`
-    );
-
-    expect(hasContribution).toBe(true);
-};
 
 describe(`when querying for a term: fetch by Id`, () => {
     const testDatabaseName = generateDatabaseNameForTestSuite();

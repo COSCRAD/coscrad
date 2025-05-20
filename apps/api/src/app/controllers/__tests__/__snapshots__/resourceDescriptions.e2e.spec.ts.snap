@@ -16,19 +16,116 @@ exports[`GET /resources should return the expected result 1`] = `
         "label": "contributions",
         "name": "ContributionSummary",
         "schema": {
-          "fullName": {
+          "contributorIds": {
             "coscradDataType": "NON_EMPTY_STRING",
-            "description": "the first and last name of the contributor",
+            "description": "system references identifying who contributed to the creation or editing of this resource",
             "isArray": false,
             "isOptional": false,
-            "label": "full name",
+            "label": "contributor IDs",
           },
-          "id": {
-            "coscradDataType": "NON_EMPTY_STRING",
-            "description": "ID of person who contributed to the creation or editing of this resource",
+          "date": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "the date the data update was made",
             "isArray": false,
             "isOptional": false,
-            "label": "contributor ID",
+            "label": "date of record",
+            "name": "CoscradDate",
+            "schema": {
+              "day": {
+                "coscradDataType": "POSITIVE_INTEGER",
+                "description": "Day of Month",
+                "isArray": false,
+                "isOptional": false,
+                "label": "day of month",
+              },
+              "month": {
+                "complexDataType": "ENUM",
+                "description": "a month of the year",
+                "enumLabel": "Month",
+                "enumName": "Month",
+                "isArray": false,
+                "isOptional": false,
+                "label": "month",
+                "labelsAndValues": [
+                  {
+                    "label": "January",
+                    "value": "01",
+                  },
+                  {
+                    "label": "February",
+                    "value": "02",
+                  },
+                  {
+                    "label": "March",
+                    "value": "03",
+                  },
+                  {
+                    "label": "April",
+                    "value": "04",
+                  },
+                  {
+                    "label": "May",
+                    "value": "05",
+                  },
+                  {
+                    "label": "June",
+                    "value": "06",
+                  },
+                  {
+                    "label": "July",
+                    "value": "07",
+                  },
+                  {
+                    "label": "August",
+                    "value": "08",
+                  },
+                  {
+                    "label": "September",
+                    "value": "09",
+                  },
+                  {
+                    "label": "October",
+                    "value": "10",
+                  },
+                  {
+                    "label": "November",
+                    "value": "11",
+                  },
+                  {
+                    "label": "December",
+                    "value": "12",
+                  },
+                ],
+              },
+              "year": {
+                "coscradDataType": "YEAR",
+                "description": "The Year",
+                "isArray": false,
+                "isOptional": false,
+                "label": "the year",
+              },
+            },
+          },
+          "statement": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "a statement of this contribution to serve as attribution",
+            "isArray": false,
+            "isOptional": false,
+            "label": "statement",
+          },
+          "timestamp": {
+            "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+            "description": "a unix timestamp for the purpose of sorting events",
+            "isArray": false,
+            "isOptional": false,
+            "label": "timestamp",
+          },
+          "type": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "system identifier for type of the",
+            "isArray": false,
+            "isOptional": false,
+            "label": "contribution type",
           },
         },
       },

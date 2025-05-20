@@ -10,7 +10,6 @@ import { ArangoConnectionProvider } from '../../../../persistence/database/arang
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
-import { CoscradContributorViewModel } from '../../../../queries/buildViewModelForResource/viewModels/coscrad-contributor.view-model';
 import {
     PlaylistEpisodeViewModel,
     PlaylistViewModel,
@@ -20,6 +19,7 @@ import { buildMultilingualTextWithSingleItem } from '../../../common/build-multi
 import { assertQueryResult } from '../../__tests__';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
+import { ContributionSummary } from '../../user-management';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../user-management/user/entities/user/coscrad-user.entity';
 import { ArangoPlaylistQueryRepository } from './arango-playlist-query-repository';
@@ -47,7 +47,7 @@ const unpublishedEpisodeWithAclAccessForOrdinaryUser = buildTestInstance(Playlis
     name: buildMultilingualTextWithSingleItem('unpublished episode with ACL access for viewer'),
 });
 
-const testContributor = buildTestInstance(CoscradContributorViewModel);
+const testContributor = buildTestInstance(ContributionSummary);
 
 const contributions = [testContributor];
 
