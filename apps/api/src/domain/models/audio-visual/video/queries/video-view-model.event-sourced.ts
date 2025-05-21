@@ -76,8 +76,6 @@ export class EventSourcedVideoViewModel {
 
         if (isNonEmptyObject(transcript)) {
             this.transcript = new Transcript(transcript);
-        } else {
-            this.transcript = Transcript.buildEmpty();
         }
     }
 

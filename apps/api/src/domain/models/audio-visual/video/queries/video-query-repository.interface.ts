@@ -3,11 +3,15 @@ import { Maybe } from '../../../../../lib/types/maybe';
 import { AggregateId } from '../../../../types/AggregateId';
 import { IAccessible } from '../../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
 import { IPublishable } from '../../../shared/common-commands/publish-resource/resource-published.event-handler';
+import { ITranscriptQueryRepository } from '../../shared/queries/transcript-repository.interface';
 import { EventSourcedVideoViewModel } from './video-view-model.event-sourced';
 
 export const VIDEO_QUERY_REPOSITORY_TOKEN = 'VIDEO_QUERY_REPOSITORY_TOKEN';
 
-export interface IVideoQueryRepository extends IPublishable, IAccessible {
+export interface IVideoQueryRepository
+    extends IPublishable,
+        IAccessible,
+        ITranscriptQueryRepository {
     create(view: EventSourcedVideoViewModel): Promise<void>;
 
     createMany(view: EventSourcedVideoViewModel[]): Promise<void>;

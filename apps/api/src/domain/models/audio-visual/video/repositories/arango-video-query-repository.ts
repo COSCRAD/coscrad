@@ -1,4 +1,5 @@
-import { IDetailQueryResult, IMultilingualTextItem } from '@coscrad/api-interfaces';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { IDetailQueryResult, IMultilingualTextItem, ResourceType } from '@coscrad/api-interfaces';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../../lib/types/maybe';
@@ -9,6 +10,10 @@ import { ArangoDatabaseForCollection } from '../../../../../persistence/database
 import mapDatabaseDocumentToAggregateDTO from '../../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { ArangoResourceQueryBuilder } from '../../../term/repositories/arango-resource-query-builder';
+import { TranslationLineItemDto } from '../../audio-item/queries/audio-item-query-repository.interface';
+import { TranscriptLineItemDto, TranslationItem } from '../../shared/commands';
+import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
+import { ArangoTranscriptQueryBuilder } from '../../shared/queries/transcript-query-builder';
 import { EventSourcedVideoViewModel, IVideoQueryRepository } from '../queries';
 
 export class ArangoVideoQueryRepository implements IVideoQueryRepository {
@@ -17,6 +22,8 @@ export class ArangoVideoQueryRepository implements IVideoQueryRepository {
     >;
 
     private readonly baseResourceQueryBuilder = new ArangoResourceQueryBuilder('video__VIEWS');
+
+    private readonly transcriptQueryBuilder = new ArangoTranscriptQueryBuilder(ResourceType.video);
 
     constructor(arangoConnectionProvider: ArangoConnectionProvider) {
         this.database = new ArangoDatabaseForCollection(
@@ -80,5 +87,39 @@ export class ArangoVideoQueryRepository implements IVideoQueryRepository {
 
     async count(): Promise<number> {
         return this.database.getCount();
+    }
+
+    /**
+     * Transcription
+     */
+    async createTranscript(id: AggregateId): Promise<void> {
+        const aqlQuery = this.transcriptQueryBuilder.createTranscript(id);
+
+        await this.database.query(aqlQuery);
+    }
+
+    async addParticipant(id: AggregateId, participant: TranscriptParticipant) {
+        await this.database.query(this.transcriptQueryBuilder.addParticipant(id, participant));
+    }
+
+    async addLineItem(id: AggregateId, lineItem: TranscriptLineItemDto): Promise<void> {
+        await this.database.query(this.transcriptQueryBuilder.addLineItem(id, lineItem));
+    }
+
+    async importLineItems(id: AggregateId, lineItems: TranscriptLineItemDto[]) {
+        await this.database.query(this.transcriptQueryBuilder.importLineItems(id, lineItems));
+    }
+
+    async translateLineItem(id: AggregateId, lineItem: TranslationLineItemDto) {
+        await this.database.query(this.transcriptQueryBuilder.translateLineItem(id, lineItem));
+    }
+
+    async importTranslationsForTranscript(
+        id: AggregateId,
+        translations: TranslationItem[]
+    ): Promise<void> {
+        await this.database.query(
+            this.transcriptQueryBuilder.importTranslationsForTranscript(id, translations)
+        );
     }
 }
