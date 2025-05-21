@@ -74,4 +74,12 @@ describe(`ArangoSongQueryRepository`, () => {
             });
         });
     });
+
+    describe(`count`, () => {
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.createMany();
+        });
+    });
 });
