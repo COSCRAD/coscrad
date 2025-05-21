@@ -89,7 +89,7 @@ exports[`when querying for a vocabulary list: fetch many when the user is a COSC
             "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100374",
           ],
           "date": {
-            "day": 26,
+            "day": 27,
             "month": "09",
             "year": 2022,
           },

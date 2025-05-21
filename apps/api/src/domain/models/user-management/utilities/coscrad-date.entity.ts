@@ -143,12 +143,12 @@ export class CoscradDate extends BaseDomainModel {
     static fromUnixTimestamp(timestamp: number): ResultOrError<CoscradDate> {
         const date = new Date(timestamp);
 
-        const year = date.getFullYear();
+        const year = date.getUTCFullYear();
 
         // January is 0 indexed
-        const month = date.getMonth() + 1;
+        const month = date.getUTCMonth() + 1;
 
-        const day = date.getDate();
+        const day = date.getUTCDate();
 
         return CoscradDate.parseString(`${year}-${month}-${day}`);
     }

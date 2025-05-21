@@ -21,13 +21,11 @@ import { buildMultilingualTextWithSingleItem } from '../../../common/build-multi
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { assertResourceHasContributionFor } from '../../__tests__';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
-import { dummyDateNow } from '../../__tests__/utilities/dummyDateNow';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import { ContributionSummary } from '../../user-management';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../user-management/user/entities/user/coscrad-user.entity';
 import { FullName } from '../../user-management/user/entities/user/full-name.entity';
-import { CoscradDate } from '../../user-management/utilities';
 import {
     IPhotographQueryRepository,
     PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
@@ -87,8 +85,6 @@ const dummyPhotographView = buildTestInstance(PhotographViewModel, {
             contributorIds: [dummyContributor.id],
             statement: `Photograph created by ${dummyContributor.fullName.toString()}`,
             type: 'PHOTOGRAPH_CREATED',
-            timestamp: dummyDateNow,
-            date: CoscradDate.fromUnixTimestamp(dummyDateNow) as CoscradDate,
         }),
     ],
 });

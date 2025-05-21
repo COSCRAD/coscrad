@@ -5,6 +5,7 @@ describe(`CoscradDate.fromJsonString`, () => {
     describe(`when given a valid date`, () => {
         it(`should return the expected result`, () => {
             // Mon Sep 26 2022 17:06:34 GMT-0700 (Pacific Daylight Time)
+            // +7 hours = Tue Sep 27 00:06:34 UTC
             const timestamp = 1664237194356;
 
             const result = CoscradDate.fromUnixTimestamp(timestamp);
@@ -17,7 +18,8 @@ describe(`CoscradDate.fromJsonString`, () => {
 
             expect(year).toBe(2022);
 
-            expect(day).toBe(26);
+            // UTC!
+            expect(day).toBe(27);
         });
     });
 });

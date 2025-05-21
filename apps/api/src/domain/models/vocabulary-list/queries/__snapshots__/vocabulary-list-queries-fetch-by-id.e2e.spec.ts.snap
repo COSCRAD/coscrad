@@ -94,7 +94,7 @@ exports[`when querying for a vocabulary list: fetch by ID when the user is a pro
           {
             "contributorIds": [],
             "date": {
-              "day": 26,
+              "day": 27,
               "month": "09",
               "year": 2022,
             },

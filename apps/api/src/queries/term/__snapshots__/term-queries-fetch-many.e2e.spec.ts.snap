@@ -365,7 +365,7 @@ exports[`when querying for a term: fetch many when the user is a project admin s
             "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110901",
           ],
           "date": {
-            "day": 26,
+            "day": 27,
             "month": "09",
             "year": 2022,
           },
@@ -755,7 +755,7 @@ exports[`when querying for a term: fetch many when the user is a project admin s
             "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110901",
           ],
           "date": {
-            "day": 26,
+            "day": 27,
             "month": "09",
             "year": 2022,
           },
@@ -1143,7 +1143,7 @@ exports[`when querying for a term: fetch many when the user is a project admin s
             "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110901",
           ],
           "date": {
-            "day": 26,
+            "day": 27,
             "month": "09",
             "year": 2022,
           },

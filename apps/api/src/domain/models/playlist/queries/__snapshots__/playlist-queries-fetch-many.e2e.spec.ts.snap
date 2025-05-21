@@ -131,7 +131,7 @@ exports[`when querying for a playlist: fetch many (/resources/playlists) when th
         {
           "contributorIds": [],
           "date": {
-            "day": 26,
+            "day": 27,
             "month": "09",
             "year": 2022,
           },
@@ -320,7 +320,7 @@ exports[`when querying for a playlist: fetch many (/resources/playlists) when th
         {
           "contributorIds": [],
           "date": {
-            "day": 26,
+            "day": 27,
             "month": "09",
             "year": 2022,
           },
@@ -469,7 +469,7 @@ exports[`when querying for a playlist: fetch many (/resources/playlists) when th
         {
           "contributorIds": [],
           "date": {
-            "day": 26,
+            "day": 27,
             "month": "09",
             "year": 2022,
           },
