@@ -108,7 +108,7 @@ exports[`GET /resources should return the expected result 1`] = `
           },
           "statement": {
             "coscradDataType": "NON_EMPTY_STRING",
-            "description": "a statement of this contribution to serve as attribution",
+            "description": "a written acknowledgement of the contribution",
             "isArray": false,
             "isOptional": false,
             "label": "statement",
@@ -122,7 +122,7 @@ exports[`GET /resources should return the expected result 1`] = `
           },
           "type": {
             "coscradDataType": "NON_EMPTY_STRING",
-            "description": "system identifier for type of the",
+            "description": "system identifier for the type of work that has been contributed",
             "isArray": false,
             "isOptional": false,
             "label": "contribution type",
