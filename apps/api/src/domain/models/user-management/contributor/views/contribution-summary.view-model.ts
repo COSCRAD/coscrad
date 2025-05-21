@@ -4,7 +4,7 @@ import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
 import { dummyDateNow } from '../../../__tests__/utilities/dummyDateNow';
-import { CoscradDate } from '../../utilities';
+import { CoscradDate, Month } from '../../utilities';
 
 /**
  * Note that this is not the "canonical view" for a contributor. Rather, this is
@@ -16,7 +16,12 @@ import { CoscradDate } from '../../utilities';
         contributorIds: [],
         statement: 'Watchamacallit fabricated by: Willy Wankie',
         type: 'WHATCHAMACALLIT_FABRICATED',
-        date: CoscradDate.fromUnixTimestamp(dummyDateNow) as CoscradDate,
+        date: new CoscradDate({
+            day: 26,
+            month: Month.September,
+            year: 2022,
+        }),
+        // TODO this should be Use ISO 8601 "2025-05-21T18:17:51Z"
         timestamp: dummyDateNow,
     },
 })
