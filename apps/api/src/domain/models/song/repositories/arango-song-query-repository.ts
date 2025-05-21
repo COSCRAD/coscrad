@@ -22,6 +22,14 @@ export class ArangoSongQueryRepository implements ISongQueryRepository {
         );
     }
 
+    async createMany(view: EventSourcedSongViewModel[]): Promise<void> {
+        throw new Error('Method not implemented.');
+    }
+
+    async count(): Promise<number> {
+        return this.database.getCount();
+    }
+
     async create(view: EventSourcedSongViewModel): Promise<void> {
         await this.database.create(mapEntityDTOToDatabaseDocument(view));
     }
