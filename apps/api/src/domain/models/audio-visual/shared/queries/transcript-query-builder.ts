@@ -45,7 +45,7 @@ export class ArangoTranscriptQueryBuilder {
         `;
 
         const bindVars = {
-            '@collectionName': 'audioItem__VIEWS',
+            '@collectionName': this.collectionName,
             id,
             transcriptDto: emptyTranscript.toDTO(),
         };
@@ -73,7 +73,7 @@ export class ArangoTranscriptQueryBuilder {
         `;
 
         const bindVars = {
-            '@collectionName': 'audioItem__VIEWS',
+            '@collectionName': this.collectionName,
             id,
             name,
             initials,
@@ -104,7 +104,7 @@ export class ArangoTranscriptQueryBuilder {
         `;
 
         const bindVars = {
-            '@collectionName': 'audioItem__VIEWS',
+            '@collectionName': this.collectionName,
             id,
             lineItem: new TranscriptItem({
                 text: buildMultilingualTextWithSingleItem(text, languageCode),
@@ -130,7 +130,7 @@ export class ArangoTranscriptQueryBuilder {
                 `;
 
         const bindVars = {
-            '@collectionName': 'audioItem__VIEWS',
+            '@collectionName': this.collectionName,
             id,
             lineItems: lineItems.map(
                 ({
@@ -182,7 +182,7 @@ export class ArangoTranscriptQueryBuilder {
                 `;
 
         const bindVars = {
-            '@collectionName': 'audioItem__VIEWS',
+            '@collectionName': this.collectionName,
             id,
             inPointMilliseconds,
             outPointMilliseconds,
@@ -230,7 +230,7 @@ export class ArangoTranscriptQueryBuilder {
             `;
 
         const bindVars = {
-            '@collectionName': 'audioItem__VIEWS',
+            '@collectionName': this.collectionName,
             id,
             translations: timeStampsAndNewMultilingualTextItems,
         };

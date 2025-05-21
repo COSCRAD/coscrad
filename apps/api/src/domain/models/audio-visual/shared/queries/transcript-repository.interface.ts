@@ -3,7 +3,7 @@ import { TranslationLineItemDto } from '../../audio-item/queries/audio-item-quer
 import { TranscriptLineItemDto, TranslationItem } from '../commands';
 import { TranscriptParticipant } from '../entities/transcript-participant';
 
-export interface ITranscriptRepository {
+export interface ITranscriptQueryRepository {
     createTranscript(id: AggregateId): Promise<void>;
 
     addParticipant(id: AggregateId, { name, initials }: TranscriptParticipant);
