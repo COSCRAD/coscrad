@@ -1,4 +1,3 @@
-import { ResourceType } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../../../domain/common';
 import { QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../../../../../../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
@@ -31,10 +30,6 @@ export class TranslationsImportedForTranscsriptEventHandler implements ICoscradE
             translationItems,
         },
     }: TranslationsImportedForTranscript): Promise<void> {
-        if (resourceType === ResourceType.video) {
-            console.log(`video transcription is not yet supported in the query layer`);
-        }
-
         await this.audiovisualItemRepositoryProvider
             .forResource(resourceType)
             .importTranslationsForTranscript(id, translationItems);
