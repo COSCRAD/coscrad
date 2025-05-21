@@ -11,7 +11,7 @@ import { LanguageCode } from '@coscrad/api-interfaces';
  * `Letter` is not sufficient because we want to include out-of-alphabet symbols
  * and punctuation.
  */
-export type AlphabetCharacters = {
+export type AlphabetCharacter = {
     text: string;
     isPunctuationOrWhiteSpace: boolean;
     isOutOfAlphabet: boolean;
@@ -25,7 +25,7 @@ export type Token = {
      * be a list of the atomic letters for the given alphabet, which may use
      * multiple unicode symbols to indicate one letter.
      */
-    characters?: AlphabetCharacters[];
+    characters?: AlphabetCharacter[];
     /**
      * Eventually, we would like to move our NLP to spacy. We are staying
      * close to their API for that reason.

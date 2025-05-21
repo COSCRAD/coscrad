@@ -1,7 +1,9 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
 import { TermViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { ITermQueryRepository, TERM_QUERY_REPOSITORY_TOKEN } from '../../queries';
+import { ChilcotinTokenizer } from '../../tokenization';
 import { TermCreated } from './term-created.event';
 
 @CoscradEventConsumer('TERM_CREATED')
@@ -12,6 +14,14 @@ export class TermCreatedEventHandler implements ICoscradEventHandler {
 
     async handle(event: TermCreated): Promise<void> {
         const term = TermViewModel.fromTermCreated(event);
+
+        const { languageCode, text } = event.payload;
+
+        if (languageCode === LanguageCode.Chilcotin) {
+            const tokens = new ChilcotinTokenizer().tokenize(text);
+
+            term.tokenizeText(languageCode, tokens);
+        }
 
         await this.termRepository.create(term);
 

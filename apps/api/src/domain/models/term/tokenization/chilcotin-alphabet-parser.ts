@@ -1,6 +1,6 @@
 import assert = require('node:assert');
 import { InternalError } from '../../../../lib/errors/InternalError';
-import { AlphabetCharacters } from './tokenizer.interface';
+import { AlphabetCharacter } from './tokenizer.interface';
 
 class Node {
     text: string;
@@ -173,7 +173,7 @@ export class ChilcotinAlphabetParser {
         return this.root.toList();
     }
 
-    parse(input: string): AlphabetCharacters[] {
+    parse(input: string): AlphabetCharacter[] {
         if (input.length === 0) {
             return [];
         }
@@ -181,7 +181,7 @@ export class ChilcotinAlphabetParser {
         let current: Node = this.root;
         let charIndex = 0;
 
-        const letters: AlphabetCharacters[] = [];
+        const letters: AlphabetCharacter[] = [];
 
         // for each latin letter input
         while (charIndex < input.length) {

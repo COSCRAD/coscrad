@@ -1,6 +1,6 @@
 import {
     AggregateType,
-    IMultilingualText,
+    ITextToken,
     LanguageCode,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
@@ -11,12 +11,15 @@ import {
     ReferenceTo,
     UUID,
 } from '@coscrad/data-types';
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { isNonEmptyObject, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { DetailScopedCommandWriteContext } from '../../../app/controllers/command/services/command-info-service';
 import { ICoscradEvent } from '../../../domain/common';
 import { buildMultilingualTextFromBilingualText } from '../../../domain/common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
-import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
+import {
+    MultilingualText,
+    MultilingualTextItem,
+} from '../../../domain/common/entities/multilingual-text';
 import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
 import {
@@ -29,6 +32,7 @@ import { ContributionSummary } from '../../../domain/models/user-management/cont
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { AggregateId } from '../../../domain/types/AggregateId';
 import { HasAggregateId } from '../../../domain/types/HasAggregateId';
+import { isInternalError } from '../../../lib/errors/InternalError';
 import { Maybe } from '../../../lib/types/maybe';
 import { NotFound } from '../../../lib/types/not-found';
 import { clonePlainObjectWithOverrides } from '../../../lib/utilities/clonePlainObjectWithOverrides';
@@ -97,7 +101,7 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
         // note that we call it `name` not `text` for consistency with other models
         description: 'name (text) includes the text as well as any translations for this term',
     })
-    name: IMultilingualText;
+    name: MultilingualText;
 
     @FromTerm
     id: AggregateId;
@@ -232,7 +236,9 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
             ? contributions.map((c) => ContributionSummary.fromDto(c))
             : [];
 
-        term.name = name;
+        if (isNonEmptyObject(name)) {
+            term.name = new MultilingualText(name);
+        }
 
         term.id = id;
 
@@ -269,6 +275,19 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
         return this;
     }
 
+    tokenizeText(languageCode: LanguageCode, tokens: ITextToken[]): TermViewModel {
+        const updatedName = this.name.tokenize(languageCode, tokens);
+
+        if (isInternalError(updatedName)) {
+            // this is a system error. TODO log failure in event consumer layer
+            return this;
+        }
+
+        this.name = updatedName;
+
+        return this;
+    }
+
     apply(event: ICoscradEvent): TermViewModel {
         if (
             !event.isFor({
@@ -283,11 +302,13 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
                 payload: { translation, languageCode },
             } = event as TermTranslated;
 
-            this.name.items.push({
-                text: translation,
-                languageCode,
-                role: MultilingualTextItemRole.freeTranslation,
-            });
+            this.name.items.push(
+                new MultilingualTextItem({
+                    text: translation,
+                    languageCode,
+                    role: MultilingualTextItemRole.freeTranslation,
+                })
+            );
 
             return this;
         }

@@ -28,7 +28,12 @@ import { ArangoTermQueryRepository } from '../../repositories/arango-term-query-
 import { TermCreated } from './term-created.event';
 import { TermCreatedEventHandler } from './term-created.event-handler';
 
-const textForTerm = 'boo yah';
+/**
+ * Nonsensical, but uses some multi-letter Chilcotin chars to test tokenization.
+ */
+const textForTerm = 'detli detlɨg';
+
+const numberOfTokensInTextForTerm = 2;
 
 const languageCode = LanguageCode.Chilcotin;
 
@@ -153,6 +158,8 @@ describe(`TermCreatedEventHandler`, () => {
             ).toBe(true);
 
             // TODO check the contributor's full name as well
+
+            expect(originalTextItem.tokens).toHaveLength(numberOfTokensInTextForTerm);
         });
     });
 });

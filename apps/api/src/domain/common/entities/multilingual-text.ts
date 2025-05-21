@@ -1,6 +1,7 @@
 import {
     IMultilingualText,
     IMultilingualTextItem,
+    ITextToken,
     LanguageCode,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
@@ -10,7 +11,8 @@ import {
     NonEmptyString,
     TypeDecoratorOptions,
 } from '@coscrad/data-types';
-import { InternalError } from '../../../lib/errors/InternalError';
+import { isNonEmptyObject } from '@coscrad/validation-constraints';
+import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { Maybe } from '../../../lib/types/maybe';
 import { NotFound } from '../../../lib/types/not-found';
 import { DTO } from '../../../types/DTO';
@@ -66,6 +68,9 @@ export class MultilingualTextItem extends BaseDomainModel implements IMultilingu
     })
     readonly text: string;
 
+    // TODO Introduce a class for this
+    readonly tokens?: ITextToken[];
+
     @ExternalEnum(
         {
             labelsAndValues: Object.values(MultilingualTextItemRole).map((label) => ({
@@ -95,13 +100,25 @@ export class MultilingualTextItem extends BaseDomainModel implements IMultilingu
 
         if (!dto) return;
 
-        const { languageCode, role, text } = dto;
+        const { languageCode, role, text, tokens } = dto;
 
         this.languageCode = languageCode;
 
         this.role = role;
 
         this.text = text;
+
+        if (Array.isArray(tokens)) {
+            // TODO use a factory and build instances
+            this.tokens = tokens;
+        }
+    }
+
+    tokenize(tokens: ITextToken[]): ResultOrError<MultilingualTextItem> {
+        // TODO prevent overwriting tokenization?
+        return this.clone({
+            tokens: tokens,
+        } as DeepPartial<DTO<this>>);
     }
 
     toString(): string {
@@ -180,6 +197,29 @@ export class MultilingualText extends BaseDomainModel implements IMultilingualTe
             // avoid shared references
             items: this.items.concat(item).map((item) => new MultilingualTextItem(item)),
         } as DeepPartial<DTO<this>>);
+    }
+
+    // TODO unit test
+    tokenize(languageCode: LanguageCode, tokens: ITextToken[]): ResultOrError<MultilingualText> {
+        const target = this.items.find((item) => item.languageCode === languageCode);
+
+        if (!isNonEmptyObject(target)) {
+            return new InternalError(
+                `You cannot tokenize text as there is no text with language code: ${languageCode}`
+            );
+        }
+
+        const updatedItem = target.tokenize(tokens);
+
+        if (isInternalError(updatedItem)) {
+            return updatedItem;
+        }
+
+        return this.clone<MultilingualText>({
+            items: this.items.map((item) =>
+                item.languageCode === target.languageCode ? updatedItem : item
+            ),
+        });
     }
 
     validateComplexInvariants(): ResultOrError<Valid> {
