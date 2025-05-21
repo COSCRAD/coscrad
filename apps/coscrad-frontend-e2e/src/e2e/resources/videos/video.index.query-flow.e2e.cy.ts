@@ -20,9 +20,6 @@ const mediaItemCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
     2
 );
 
-const validUrl =
-    'https://coscrad.org/wp-content/uploads/2023/05/Rexy-and-The-Egg-_3D-Dinosaur-Animation_-_-3D-Animation-_-Maya-3D.mp4';
-
 const secondMediaItemCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
     AggregateType.mediaItem,
     3
@@ -56,9 +53,8 @@ describe(`Video Index-to-detail Query Flow`, () => {
 
         cy.seedDataWithCommand(`CREATE_MEDIA_ITEM`, {
             aggregateCompositeIdentifier: mediaItemCompositeIdentifier,
-            titleEnglish: 'media item for the video',
+            title: 'media item for the video',
             mimeType: MIMEType.mp4,
-            url: validUrl,
         });
 
         cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
@@ -86,9 +82,8 @@ describe(`Video Index-to-detail Query Flow`, () => {
         // Create a video with a name only in Chilcotin
         cy.seedDataWithCommand(`CREATE_MEDIA_ITEM`, {
             aggregateCompositeIdentifier: secondMediaItemCompositeIdentifier,
-            titleEnglish: 'media item for the second video',
+            title: 'media item for the second video',
             mimeType: MIMEType.mp4,
-            url: validUrl,
         });
 
         cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
@@ -112,9 +107,8 @@ describe(`Video Index-to-detail Query Flow`, () => {
         // Create a third video with a name only in English
         cy.seedDataWithCommand(`CREATE_MEDIA_ITEM`, {
             aggregateCompositeIdentifier: thirdMediaItemCompositeIdentifier,
-            titleEnglish: 'media item for the third video',
+            title: 'media item for the third video',
             mimeType: MIMEType.mp4,
-            url: validUrl,
         });
 
         cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {

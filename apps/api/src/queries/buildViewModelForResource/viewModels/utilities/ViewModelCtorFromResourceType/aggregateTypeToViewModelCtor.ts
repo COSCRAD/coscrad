@@ -47,5 +47,8 @@ export const aggregateTypeToViewModelCtor: {
     [AggregateType.tag]: TagViewModel,
     [AggregateType.user]: CoscradUserViewModel,
     [AggregateType.userGroup]: CoscradUserGroupViewModel,
+    /**
+     * Note that this view model is only for admin UX. `ContributionSummary` is to be used for resource views, where the joins are done eagerly via event consumers.
+     **/
     [AggregateType.contributor]: CoscradContributorViewModel,
 };

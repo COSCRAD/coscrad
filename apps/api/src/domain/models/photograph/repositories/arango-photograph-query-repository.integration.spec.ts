@@ -89,6 +89,9 @@ const buildPhotographEventHistory = (
             photographer,
             mediaItemId,
         },
+        meta: {
+            contributorIds: testContributors.map(({ id }) => id),
+        },
     });
 
     return photographCreated.as({
@@ -97,14 +100,18 @@ const buildPhotographEventHistory = (
     });
 };
 
-const photographViews = photographIds.map((id, index) => {
-    const eventHistory = buildPhotographEventHistory(
+const photographEventStreams = photographIds.map((id, index) =>
+    buildPhotographEventHistory(
         id,
         buildPhotographTitle(id),
         originalLanguageCode,
         dummyPhotographer,
         mediaItemIds[index]
-    );
+    )
+);
+
+const photographViews = photographIds.map((_id, index) => {
+    const eventHistory = photographEventStreams[index];
 
     const creationEvent = eventHistory[0] as PhotographCreated;
 
@@ -365,6 +372,8 @@ describe(`ArangoPhotographQueryRepository`, () => {
     describe(`attribute`, () => {
         const targetPhotograph = photographViews[0];
 
+        const creationEvent = photographEventStreams[0][0];
+
         beforeEach(async () => {
             await arangoDatabaseForCollection.clear();
 
@@ -376,17 +385,15 @@ describe(`ArangoPhotographQueryRepository`, () => {
         });
 
         it(`should add the given contributions`, async () => {
-            await testQueryRepository.attribute(
-                targetPhotograph.id,
-                testContributors.map((c) => c.id)
-            );
+            await testQueryRepository.attribute(targetPhotograph.id, creationEvent);
 
             const updatedView = (await testQueryRepository.fetchById(
                 targetPhotograph.id
             )) as PhotographViewModel;
 
             const missingAttributions = updatedView.contributions.filter(
-                ({ id }) => !contributorIds.includes(id)
+                ({ contributorIds: foundContributorIds }) =>
+                    !contributorIds.some((id) => foundContributorIds.includes(id))
             );
 
             expect(missingAttributions).toHaveLength(0);
@@ -394,12 +401,12 @@ describe(`ArangoPhotographQueryRepository`, () => {
             const { contributorId: targetContributorId, fullName: expectedFullName } =
                 contributorIdsAndNames[0];
 
-            const contributionForFirstUser = updatedView.contributions.find(
-                ({ id }) => id === targetContributorId
+            const contributionForFirstUser = updatedView.contributions.find(({ contributorIds }) =>
+                contributorIds.includes(targetContributorId)
             );
 
-            expect(contributionForFirstUser.fullName).toBe(
-                `${expectedFullName.firstName} ${expectedFullName.lastName}`
+            expect(contributionForFirstUser.statement.includes(expectedFullName.toString())).toBe(
+                true
             );
         });
     });

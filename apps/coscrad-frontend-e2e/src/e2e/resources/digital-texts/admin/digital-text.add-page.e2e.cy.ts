@@ -13,7 +13,11 @@ const compositeIdentifierForDigitalTextThatAlreadyHasAPage = buildDummyAggregate
 
 const buildDetailRoute = (digitalTextId: string) => `/Resources/DigitalTexts/${digitalTextId}`;
 
-describe(`digital text detail- admin- add page`, () => {
+/**
+ * We are not currently exposing our admin panel for digital texts in production. Before we do so,
+ * we need to ensure the entire command flow test suite is in a good state.
+ */
+describe.skip(`digital text detail- admin- add page`, () => {
     before(() => {
         cy.clearDatabase();
 

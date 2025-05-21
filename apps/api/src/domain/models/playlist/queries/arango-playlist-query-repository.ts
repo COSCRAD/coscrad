@@ -12,6 +12,7 @@ import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/
 import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PlaylistViewModel } from '../../../../queries/buildViewModelForResource/viewModels/playlist.view-model';
 import { AggregateId } from '../../../types/AggregateId';
+import { BaseEvent } from '../../shared/events/base-event.entity';
 import { ArangoResourceQueryBuilder } from '../../term/repositories/arango-resource-query-builder';
 import { IPlaylistQueryRepository } from './playlist-query-repository.interface';
 
@@ -186,9 +187,9 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
             });
     }
 
-    async attribute(id: AggregateId, contributorIds: AggregateId[]): Promise<void> {
+    async attribute(id: AggregateId, event: BaseEvent): Promise<void> {
         const cursor = await this.database.query(
-            this.baseResourceQueryBuilder.attribute(id, contributorIds)
+            this.baseResourceQueryBuilder.attribute(id, event)
         );
 
         await cursor.all();

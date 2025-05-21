@@ -2,6 +2,7 @@ import { Observable } from 'rxjs';
 import { Maybe } from '../../../../lib/types/maybe';
 import { AggregateId } from '../../../types/AggregateId';
 import { IPublishable } from '../../shared/common-commands/publish-resource/resource-published.event-handler';
+import { BaseEvent } from '../../shared/events/base-event.entity';
 import { PhotographViewModel } from './photograph.view-model';
 
 export const PHOTOGRAPH_QUERY_REPOSITORY_TOKEN = 'PHOTOGRAPH_QUERY_REPOSITORY_TOKEN';
@@ -32,7 +33,7 @@ export interface IPhotographQueryRepository extends IPublishable {
      * each update query. We need to find a performant and extensible way to
      * do this.
      */
-    attribute(photographId: AggregateId, contributorIds: AggregateId[]): Promise<void>;
+    attribute(photographId: AggregateId, event: BaseEvent): Promise<void>;
 
     count(): Promise<number>;
 }

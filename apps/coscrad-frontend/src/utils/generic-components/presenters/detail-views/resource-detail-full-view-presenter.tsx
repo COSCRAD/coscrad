@@ -1,4 +1,4 @@
-import { ContributorWithId, IMultilingualText, ResourceType } from '@coscrad/api-interfaces';
+import { IContributionSummary, IMultilingualText, ResourceType } from '@coscrad/api-interfaces';
 import { Box, Grid } from '@mui/material';
 import { ReactNode } from 'react';
 import { buildDataAttributeForAggregateDetailComponent } from './build-data-attribute-for-aggregate-detail-component';
@@ -11,7 +11,7 @@ export interface ResourceDetailFullViewPresenterProps {
     imageUrl?: string;
     videoUrl?: string;
     audioUrl?: string;
-    contributions: ContributorWithId[];
+    contributions: IContributionSummary[];
     // TODO: Refactor the name property to eliminate this conditional type
     name: IMultilingualText | string;
     type: ResourceType;
@@ -49,7 +49,10 @@ export const ResourceDetailFullViewPresenter = ({
                 {children}
                 {contributions.length > 0 ? (
                     <Box ml={1}>
-                        <ContributionsPresenter contributions={contributions} />
+                        <ContributionsPresenter
+                            contributions={contributions}
+                            data-testid="resource-contributions"
+                        />
                     </Box>
                 ) : null}
             </Grid>

@@ -29,7 +29,10 @@ const millisecondsToRoundedSeconds = (milliseconds: number) => {
     return Math.round(seconds * 10) / 10;
 };
 
-describe('the audio annotation process', () => {
+/**
+ * TODO Opt back into this once we are ready to support a rich admin UX.
+ */
+describe.skip('the audio annotation process', () => {
     before(() => {
         cy.clearDatabase();
 

@@ -21,7 +21,7 @@ import { AggregateId } from '../../../types/AggregateId';
 import { HasAggregateId } from '../../../types/HasAggregateId';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
-import { ContributionSummary } from '../../user-management';
+import { ContributionSummary } from '../../user-management/contributor/views';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import { PhotographCreated } from '../commands';
 
@@ -229,7 +229,9 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
             // tags,
         } = dto;
 
-        photograph.contributions = Array.isArray(contributions) ? contributions : [];
+        photograph.contributions = Array.isArray(contributions)
+            ? contributions.map((c) => ContributionSummary.fromDto(c))
+            : [];
 
         photograph.name = name;
 

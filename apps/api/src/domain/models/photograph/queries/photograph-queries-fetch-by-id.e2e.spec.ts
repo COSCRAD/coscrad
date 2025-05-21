@@ -15,19 +15,18 @@ import { clonePlainObjectWithOverrides } from '../../../../lib/utilities/clonePl
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
-import { BaseResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/base-resource.view-model';
 import buildTestDataInFlatFormat from '../../../../test-data/buildTestDataInFlatFormat';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { AggregateId } from '../../../types/AggregateId';
-import { assertQueryResult } from '../../__tests__';
+import { assertQueryResult, assertResourceHasContributionFor } from '../../__tests__';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import {
     IPhotographQueryRepository,
     PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
 } from '../../photograph/queries';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
-import { CoscradContributor } from '../../user-management/contributor';
+import { ContributionSummary } from '../../user-management/contributor';
 import { CoscradUserGroup } from '../../user-management/group/entities/coscrad-user-group.entity';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../user-management/user/entities/user/coscrad-user.entity';
@@ -93,10 +92,9 @@ const dummyPhotograph = buildTestInstance(PhotographViewModel, {
     mediaItemId: existingMediaItem.id,
     photographer: testPhotographer,
     contributions: [
-        {
-            id: dummyContributor.id,
-            fullName: dummyContributor.fullName.toString(),
-        },
+        buildTestInstance(ContributionSummary, {
+            contributorIds: [dummyContributor.id],
+        }),
     ],
     heightPx: photographHeightPx,
     widthPx: photographWidthPx,
@@ -105,25 +103,11 @@ const dummyPhotograph = buildTestInstance(PhotographViewModel, {
 const targetPhotographView = clonePlainObjectWithOverrides(dummyPhotograph, {
     isPublished: true,
     contributions: [
-        {
-            id: dummyContributor.id,
-            fullName: dummyContributor.fullName.toString(),
-        },
+        buildTestInstance(ContributionSummary, {
+            contributorIds: [dummyContributor.id],
+        }),
     ],
 });
-
-const assertResourceHasContributionFor = (
-    { id: contributorId }: CoscradContributor,
-    resource: BaseResourceViewModel
-) => {
-    const hasContribution = resource.contributions.some(
-        ({ id }) => id === contributorId
-        // TODO support joining in contributors
-        // && fullName === `${firstName} ${lastName}`
-    );
-
-    expect(hasContribution).toBe(true);
-};
 
 describe(`when querying for a photograph: fetch by Id`, () => {
     const testDatabaseName = generateDatabaseNameForTestSuite();

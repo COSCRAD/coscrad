@@ -7,6 +7,7 @@ import {
     ICountable,
     IPublishable,
 } from '../../shared/common-commands/publish-resource/resource-published.event-handler';
+import { BaseEvent } from '../../shared/events/base-event.entity';
 
 export const PLAYLIST_QUERY_REPOSITORY_TOKEN = 'PLAYLIST_QUERY_REPOSITORY_TOKEN';
 
@@ -19,7 +20,8 @@ export interface IPlaylistQueryRepository extends IPublishable, ICountable {
 
     delete(id: AggregateId): Promise<void>;
 
-    attribute(id: AggregateId, contributorIds: AggregateId[]): Promise<void>;
+    // TODO introduce an interface for this
+    attribute(id: AggregateId, event: BaseEvent): Promise<void>;
 
     fetchById(id: AggregateId): Promise<Maybe<PlaylistViewModel>>;
 

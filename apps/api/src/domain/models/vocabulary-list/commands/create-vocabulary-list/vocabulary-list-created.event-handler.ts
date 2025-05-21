@@ -21,12 +21,7 @@ export class VocabularyListCreatedEventHandler implements ICoscradEventHandler {
 
         // todo make this atomic
         if (creationEvent.meta.contributorIds?.length > 0) {
-            await this.queryRepository.attribute(
-                listToCreate.id,
-                creationEvent.meta.contributorIds
-                // TODO include an attribution here?
-                // `Created by {}`
-            );
+            await this.queryRepository.attribute(listToCreate.id, creationEvent);
         }
     }
 }

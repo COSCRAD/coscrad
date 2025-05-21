@@ -91,14 +91,16 @@ export abstract class Resource extends Aggregate {
         return getAllowedContextsForModel(this.type);
     }
 
-    getContributions(): { contributorId: string; eventType: string; date: number }[] {
-        return this.eventHistory.flatMap(({ meta: { contributorIds, dateCreated }, type }) =>
-            contributorIds.map((contributorId) => ({
-                contributorId,
-                eventType: type,
-                date: dateCreated,
-            }))
-        );
+    getContributions(): {
+        type: string;
+        contributorIds: string[];
+        date: number;
+    }[] {
+        return this.eventHistory.map(({ type, meta: { contributorIds, dateCreated } }) => ({
+            type,
+            contributorIds,
+            date: dateCreated,
+        }));
     }
 
     /**

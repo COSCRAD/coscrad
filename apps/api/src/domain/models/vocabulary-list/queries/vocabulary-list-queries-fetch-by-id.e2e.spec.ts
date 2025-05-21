@@ -24,6 +24,7 @@ import { AggregateId } from '../../../types/AggregateId';
 import { assertQueryResult } from '../../__tests__';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
+import { ContributionSummary } from '../../user-management';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../user-management/user/entities/user/coscrad-user.entity';
 import {
@@ -47,10 +48,7 @@ const indexEndpoint = `/resources/vocabularyLists`;
 
 const buildDetailEndpoint = (id: AggregateId) => `${indexEndpoint}/${id}`;
 
-const dummyContribution = {
-    id: buildDummyUuid(70),
-    fullName: 'Erin Truck',
-};
+const dummyContribution = buildTestInstance(ContributionSummary);
 
 /**
  * TODO We may want to event source our test setup to give us a very high

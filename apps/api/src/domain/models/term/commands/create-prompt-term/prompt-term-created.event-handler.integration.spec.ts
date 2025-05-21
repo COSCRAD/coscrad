@@ -29,17 +29,18 @@ const termId = buildDummyUuid(1);
 
 const dummyContributor = getValidAggregateInstanceForTest(AggregateType.contributor);
 
-const creationEvent = new TestEventStream()
-    .andThen<PromptTermCreated>({
-        type: 'PROMPT_TERM_CREATED',
-        meta: {
-            contributorIds: [dummyContributor.id],
+const creationEvent = new TestEventStream().buildSingle<PromptTermCreated>({
+    type: 'PROMPT_TERM_CREATED',
+    payload: {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.term,
+            id: termId,
         },
-    })
-    .as({
-        type: AggregateType.term,
-        id: termId,
-    })[0] as PromptTermCreated;
+    },
+    meta: {
+        contributorIds: [dummyContributor.id],
+    },
+});
 
 describe(`PromptTermCreatedEventHandler.handle`, () => {
     let testQueryRepository: ITermQueryRepository;
@@ -104,12 +105,7 @@ describe(`PromptTermCreatedEventHandler.handle`, () => {
 
         const termView = searchResult as TermViewModel;
 
-        expect(termView.contributions).toEqual([
-            {
-                fullName: dummyContributor.fullName.toString(),
-                id: dummyContributor.id,
-            },
-        ]);
+        expect(termView.contributions[0].contributorIds.includes(dummyContributor.id)).toBe(true);
 
         const name = new MultilingualText(termView.name);
 

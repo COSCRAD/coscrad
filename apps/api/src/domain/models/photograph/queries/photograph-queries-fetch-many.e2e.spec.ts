@@ -19,8 +19,10 @@ import { buildTestInstance } from '../../../../test-data/utilities';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
+import { assertResourceHasContributionFor } from '../../__tests__';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
+import { ContributionSummary } from '../../user-management';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../user-management/user/entities/user/coscrad-user.entity';
 import { FullName } from '../../user-management/user/entities/user/full-name.entity';
@@ -79,10 +81,11 @@ const dummyPhotographView = buildTestInstance(PhotographViewModel, {
     ...photographCompositeIdentifier,
     name: buildMultilingualTextWithSingleItem(photographTitle, originalLanguage),
     contributions: [
-        {
-            id: dummyContributor.id,
-            fullName: dummyContributor.fullName.toString(),
-        },
+        buildTestInstance(ContributionSummary, {
+            contributorIds: [dummyContributor.id],
+            statement: `Photograph created by ${dummyContributor.fullName.toString()}`,
+            type: 'PHOTOGRAPH_CREATED',
+        }),
     ],
 });
 
@@ -189,20 +192,7 @@ describe(`when querying for a photograph: fetch many`, () => {
 
                 expect(result.id).toBe(photographId);
 
-                const _knownContributors = await testRepositoryProvider
-                    .getContributorRepository()
-                    .fetchMany();
-
-                expect(
-                    result.contributions.some(({ fullName, id: foundContributorId }) => {
-                        return (
-                            // TODO we will want a test helper for this comparison in case we decide to change format
-                            fullName ===
-                                `${dummyContributorFirstName} ${dummyContributorLastName}` &&
-                            foundContributorId === dummyContributor.id
-                        );
-                    })
-                ).toBe(true);
+                assertResourceHasContributionFor(dummyContributor, result);
             });
         });
 

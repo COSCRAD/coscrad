@@ -25,7 +25,7 @@ import {
     TermTranslated,
 } from '../../../domain/models/term/commands';
 import { Term } from '../../../domain/models/term/entities/term.entity';
-import { ContributionSummary } from '../../../domain/models/user-management';
+import { ContributionSummary } from '../../../domain/models/user-management/contributor/views';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { AggregateId } from '../../../domain/types/AggregateId';
 import { HasAggregateId } from '../../../domain/types/HasAggregateId';
@@ -196,6 +196,7 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
          *  Note that the contributions must be handled separately as we need
          * to access the db to join in contributor names
          */
+        term.contributions = [];
 
         term.actions = [
             'ELICIT_TERM_FROM_PROMPT',
@@ -227,7 +228,9 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
             vocabularyLists,
         } = dto;
 
-        term.contributions = Array.isArray(contributions) ? contributions : [];
+        term.contributions = Array.isArray(contributions)
+            ? contributions.map((c) => ContributionSummary.fromDto(c))
+            : [];
 
         term.name = name;
 

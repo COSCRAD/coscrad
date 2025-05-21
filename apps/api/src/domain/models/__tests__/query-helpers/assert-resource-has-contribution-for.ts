@@ -5,11 +5,8 @@ export const assertResourceHasContributionFor = (
     dummyContributor: CoscradContributor,
     resource: BaseResourceViewModel
 ) => {
-    const hasContribution = resource.contributions.some(
-        ({ fullName: foundFullName, id: foundContributorId }) =>
-            foundFullName === dummyContributor.fullName.toString() &&
-            foundContributorId === dummyContributor.id
+    const hasContribution = resource.contributions.some(({ contributorIds }) =>
+        contributorIds.includes(dummyContributor.id)
     );
-
     expect(hasContribution).toBe(true);
 };

@@ -1,9 +1,9 @@
-import { ContributorWithId } from '@coscrad/api-interfaces';
+import { IContributionSummary } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { parseLanguageCode } from './parse-language-code-from-query';
 
 export const doesSomeContributorInclude = (
-    contributorsWithIds: ContributorWithId[],
+    contributionSummaries: IContributionSummary[],
     query: string
 ) => {
     const languageCodeInQuery = parseLanguageCode(query);
@@ -12,10 +12,9 @@ export const doesSomeContributorInclude = (
         ? query
         : query.split(`{${languageCodeInQuery}}:`)[1];
 
-    if (isNullOrUndefined(searchTerms)) return undefined;
+    if (isNullOrUndefined(searchTerms)) return false;
 
-    return contributorsWithIds
-        .map(({ fullName }) => fullName.toLowerCase())
-        .join(' ')
-        .includes(searchTerms.toLowerCase());
+    return contributionSummaries.some(({ statement }) =>
+        statement.toLowerCase().includes(searchTerms.toLowerCase())
+    );
 };

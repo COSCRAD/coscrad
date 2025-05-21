@@ -8,4 +8,4 @@ export NODE_ENV="e2e"
 bash ./setup-cypress-environment.sh
 
 echo "Running Cypress..."
-npx cypress run
+npx cypress run --browser chrome

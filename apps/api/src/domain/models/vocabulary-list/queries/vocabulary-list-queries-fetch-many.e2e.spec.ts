@@ -26,6 +26,7 @@ import { assertQueryResult } from '../../__tests__';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../__tests__/utilities/dummySystemUserId';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
+import { ContributionSummary } from '../../user-management';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import { ArangoVocabularyListQueryRepository } from '../repositories';
 import { IVocabularyListQueryRepository } from './vocabulary-list-query-repository.interface';
@@ -72,10 +73,9 @@ const publishedTerm: TermViewModel = buildTestInstance(TermViewModel, {
         }
     ),
     contributions: [
-        {
-            id: buildDummyUuid(374),
-            fullName: 'Term Contributor',
-        },
+        buildTestInstance(ContributionSummary, {
+            contributorIds: [buildDummyUuid(374)],
+        }),
     ],
 });
 
@@ -109,10 +109,9 @@ const publishedVocabularyList = buildTestInstance(VocabularyListViewModel, {
         }
     ),
     contributions: [
-        {
-            id: buildDummyUuid(374),
-            fullName: 'Test McContributor',
-        },
+        buildTestInstance(ContributionSummary, {
+            contributorIds: [buildDummyUuid(374)],
+        }),
     ],
     actions: testActions,
 });

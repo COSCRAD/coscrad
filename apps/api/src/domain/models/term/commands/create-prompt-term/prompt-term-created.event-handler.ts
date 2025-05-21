@@ -11,11 +11,10 @@ export class PromptTermCreatedEventHandler implements ICoscradEventHandler {
     ) {}
 
     async handle(event: PromptTermCreated): Promise<void> {
-        await this.termRepository.create(TermViewModel.fromPromptTermCreated(event));
+        const term = TermViewModel.fromPromptTermCreated(event);
 
-        await this.termRepository.attribute(
-            event.payload.aggregateCompositeIdentifier.id,
-            event.meta.contributorIds || []
-        );
+        await this.termRepository.create(term);
+
+        await this.termRepository.attribute(event.payload.aggregateCompositeIdentifier.id, event);
     }
 }

@@ -238,8 +238,16 @@ exports[`when querying for a photograph: fetch many when the user is a project a
       ],
       "contributions": [
         {
-          "fullName": "Dumb McContributor",
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110901",
+          "contributorIds": [
+            "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110901",
+          ],
+          "date": {
+            "day": 27,
+            "month": "09",
+            "year": 2022,
+          },
+          "statement": "Photograph created by Dumb McContributor",
+          "type": "PHOTOGRAPH_CREATED",
         },
       ],
       "heightPx": 600,
@@ -501,8 +509,16 @@ exports[`when querying for a photograph: fetch many when the user is a project a
       ],
       "contributions": [
         {
-          "fullName": "Dumb McContributor",
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110901",
+          "contributorIds": [
+            "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110901",
+          ],
+          "date": {
+            "day": 27,
+            "month": "09",
+            "year": 2022,
+          },
+          "statement": "Photograph created by Dumb McContributor",
+          "type": "PHOTOGRAPH_CREATED",
         },
       ],
       "heightPx": 600,
@@ -762,8 +778,16 @@ exports[`when querying for a photograph: fetch many when the user is a project a
       ],
       "contributions": [
         {
-          "fullName": "Dumb McContributor",
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110901",
+          "contributorIds": [
+            "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110901",
+          ],
+          "date": {
+            "day": 27,
+            "month": "09",
+            "year": 2022,
+          },
+          "statement": "Photograph created by Dumb McContributor",
+          "type": "PHOTOGRAPH_CREATED",
         },
       ],
       "heightPx": 600,

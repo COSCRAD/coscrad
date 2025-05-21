@@ -11,6 +11,10 @@ export function NestedDataType(
     userOptions: TypeDecoratorOptions
 ): PropertyDecorator {
     return (target: Object, propertyKey: string | symbol) => {
+        if (!NestedDataClass) {
+            return;
+        }
+
         const options = mixinDefaultTypeDecoratorOptions(userOptions);
 
         /**
