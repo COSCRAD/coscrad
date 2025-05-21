@@ -44,8 +44,6 @@ export class PlaylistCreatedEventHandler implements ICoscradEventHandler {
             })
         );
 
-        console.log('PLAYLIST HAS BEEN CREATED!');
-
         // TODO do this atomically in the repository
         await this.playlistQueryRepository.attribute(id, event);
     }

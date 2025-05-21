@@ -240,7 +240,7 @@ exports[`when querying for a photograph: fetch by Id when the user is authentica
         "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110901",
       ],
       "date": {
-        "day": 26,
+        "day": 27,
         "month": "09",
         "year": 2022,
       },

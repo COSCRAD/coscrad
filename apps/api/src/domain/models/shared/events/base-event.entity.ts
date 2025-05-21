@@ -5,6 +5,7 @@ import {
 import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { isDeepStrictEqual } from 'util';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
+import capitalizeFirstLetter from '../../../../lib/utilities/strings/capitalizeFirstLetter';
 import { DTO } from '../../../../types/DTO';
 import { AggregateId } from '../../../types/AggregateId';
 import { EventRecordMetadata } from './types/EventRecordMetadata';
@@ -68,7 +69,7 @@ export abstract class BaseEvent<
                   .map((s) => s.toLowerCase())
                   .join(' ')} by: `;
 
-        return eventDescription;
+        return capitalizeFirstLetter(eventDescription);
     }
 
     // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-66]

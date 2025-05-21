@@ -31,13 +31,13 @@ export class ContributionSummary {
 
     @NonEmptyString({
         label: 'statement',
-        description: 'a statement of this contribution to serve as attribution',
+        description: 'a written acknowledgement of the contribution',
     })
     statement: string;
 
     @NonEmptyString({
         label: 'contribution type',
-        description: 'system identifier for type of the',
+        description: 'system identifier for the type of work that has been contributed',
     })
     type: string;
 
