@@ -16,22 +16,17 @@ import { PersistenceModule } from '../../../../../../../persistence/persistence.
 import generateDatabaseNameForTestSuite from '../../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestInstance } from '../../../../../../../test-data/utilities';
 import { EventSourcedAudioItemViewModel } from '../../../../audio-item/queries';
+import { EventSourcedVideoViewModel } from '../../../../video/queries';
 import { TranscriptParticipant } from '../../../entities/transcript-participant';
 import { Transcript } from '../../../entities/transcript.entity';
 import { ParticipantAddedToTranscript } from './participant-added-to-transcript.event';
 import { ParticipantAddedToTranscriptEventHandler } from './participant-added-to-transcript.event-handler';
 
-const audioItemId = buildDummyUuid(50);
+const resourceId = buildDummyUuid(50);
 
 const targetAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
-    id: audioItemId,
+    id: resourceId,
     transcript: Transcript.buildEmpty(),
-});
-
-const participantAdded = buildTestInstance(ParticipantAddedToTranscript, {
-    payload: {
-        aggregateCompositeIdentifier: { id: targetAudioItem.id, type: AggregateType.audioItem },
-    },
 });
 
 describe('ParticipantAddedToTranscriptEventHandler', () => {
@@ -98,6 +93,15 @@ describe('ParticipantAddedToTranscriptEventHandler', () => {
                     .create(targetAudioItem);
             });
 
+            const participantAdded = buildTestInstance(ParticipantAddedToTranscript, {
+                payload: {
+                    aggregateCompositeIdentifier: {
+                        id: targetAudioItem.id,
+                        type: AggregateType.audioItem,
+                    },
+                },
+            });
+
             it('should add a participant to the existing transcript', async () => {
                 await participantAddedToTranscriptEventHandler.handle(participantAdded);
 
@@ -116,7 +120,39 @@ describe('ParticipantAddedToTranscriptEventHandler', () => {
         });
 
         describe('when the target is a video', () => {
-            it.todo('should have a test');
+            beforeEach(async () => {
+                await testRepositoryProvider.forResource(ResourceType.video).create(
+                    buildTestInstance(EventSourcedVideoViewModel, {
+                        id: resourceId,
+                        transcript: Transcript.buildEmpty(),
+                    })
+                );
+            });
+
+            const participantAdded = buildTestInstance(ParticipantAddedToTranscript, {
+                payload: {
+                    aggregateCompositeIdentifier: {
+                        id: resourceId,
+                        type: AggregateType.video,
+                    },
+                },
+            });
+
+            it('should add a participant to the existing transcript', async () => {
+                await participantAddedToTranscriptEventHandler.handle(participantAdded);
+
+                const updatedView = (await testRepositoryProvider
+                    .forResource(ResourceType.video)
+                    .fetchById(resourceId)) as EventSourcedVideoViewModel;
+
+                const { name } = updatedView.transcript.findParticipantByInitials(
+                    participantAdded.payload.initials
+                ) as TranscriptParticipant;
+
+                expect(name).toBe(participantAdded.payload.name);
+
+                expect(updatedView.transcript.participants).toHaveLength(1);
+            });
         });
     });
 });

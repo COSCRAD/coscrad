@@ -1,18 +1,23 @@
-import { ResourceType } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../../../domain/common';
-import { InternalError } from '../../../../../../../lib/errors/InternalError';
-import {
-    AUDIO_QUERY_REPOSITORY_TOKEN,
-    IAudioItemQueryRepository,
-} from '../../../../audio-item/queries/audio-item-query-repository.interface';
+import { QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../../../../../../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
+import { AggregateId } from '../../../../../../../domain/types/AggregateId';
+import { AudiovisualResourceType } from '../../../../audio-item/entities/audio-item-composite-identifier';
 import { TranscriptCreated } from './transcript-created.event';
+
+interface IRepository {
+    createTranscript(id: AggregateId): Promise<void>;
+}
+
+interface IAudiovisualItemQueryRepositoryProvider<T extends IRepository = IRepository> {
+    forResource(audiovisualResourceType: AudiovisualResourceType): T;
+}
 
 @CoscradEventConsumer('TRANSCRIPT_CREATED')
 export class TranscriptCreatedEventHandler implements ICoscradEventHandler {
     constructor(
-        @Inject(AUDIO_QUERY_REPOSITORY_TOKEN)
-        private readonly queryRepository: IAudioItemQueryRepository
+        @Inject(QUERY_REPOSITORY_PROVIDER_TOKEN)
+        private readonly audiovisualItemRepositoryProvider: IAudiovisualItemQueryRepositoryProvider
     ) {}
 
     async handle({
@@ -20,10 +25,6 @@ export class TranscriptCreatedEventHandler implements ICoscradEventHandler {
             aggregateCompositeIdentifier: { id: id, type: resourceType },
         },
     }: TranscriptCreated): Promise<void> {
-        if (resourceType === ResourceType.video) {
-            throw new InternalError('event sourcing video views is not yet supported');
-        }
-
-        await this.queryRepository.createTranscript(id);
+        await this.audiovisualItemRepositoryProvider.forResource(resourceType).createTranscript(id);
     }
 }

@@ -6,6 +6,10 @@ import buildMockConfigService from '../../../../../../../app/config/__tests__/ut
 import buildConfigFilePath from '../../../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../../../app/config/constants/environment';
 import buildDummyUuid from '../../../../../../../domain/models/__tests__/utilities/buildDummyUuid';
+import {
+    IQueryRepositoryProvider,
+    QUERY_REPOSITORY_PROVIDER_TOKEN,
+} from '../../../../../../../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
 import { clonePlainObjectWithOverrides } from '../../../../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { ArangoConnectionProvider } from '../../../../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../../../../../../../persistence/database/database.provider';
@@ -13,26 +17,25 @@ import { PersistenceModule } from '../../../../../../../persistence/persistence.
 import generateDatabaseNameForTestSuite from '../../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestInstance } from '../../../../../../../test-data/utilities';
 import { EventSourcedAudioItemViewModel } from '../../../../audio-item/queries';
-import { IAudioItemQueryRepository } from '../../../../audio-item/queries/audio-item-query-repository.interface';
-import { ArangoAudioItemQueryRepository } from '../../../../audio-item/repositories/arango-audio-item-query-repository';
+import { EventSourcedVideoViewModel } from '../../../../video/queries';
 import { TranscriptCreated } from './transcript-created.event';
 import { TranscriptCreatedEventHandler } from './transcript-created.event-handler';
 
-const audioItemId = buildDummyUuid(543);
+const resourceId = buildDummyUuid(543);
 
 const transcriptCreated = buildTestInstance(TranscriptCreated, {
     payload: {
-        aggregateCompositeIdentifier: { type: AggregateType.audioItem, id: audioItemId },
+        aggregateCompositeIdentifier: { type: AggregateType.audioItem, id: resourceId },
     },
 });
 
 const targetAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
-    id: audioItemId,
+    id: resourceId,
     transcript: null,
 });
 
 describe(`TranscriptCreatedEventHandler.handle`, () => {
-    let testQueryRepository: IAudioItemQueryRepository;
+    let testQueryRepositoryProvider: IQueryRepositoryProvider;
 
     let databaseProvider: ArangoDatabaseProvider;
 
@@ -63,9 +66,12 @@ describe(`TranscriptCreatedEventHandler.handle`, () => {
 
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
 
-        testQueryRepository = new ArangoAudioItemQueryRepository(connectionProvider);
+        testQueryRepositoryProvider = app.get(QUERY_REPOSITORY_PROVIDER_TOKEN);
 
-        transcriptCreatedEventHandler = new TranscriptCreatedEventHandler(testQueryRepository);
+        transcriptCreatedEventHandler = new TranscriptCreatedEventHandler(
+            // @ts-expect-error We know that `forResource` will only be called for an `audioItem` or `video` here
+            testQueryRepositoryProvider
+        );
     });
 
     afterAll(async () => {
@@ -74,37 +80,51 @@ describe(`TranscriptCreatedEventHandler.handle`, () => {
 
     beforeEach(async () => {
         await databaseProvider.clearViews();
-
-        await testQueryRepository.create(targetAudioItem);
     });
 
     describe('when transcribing an audio item', () => {
+        beforeEach(async () => {
+            await testQueryRepositoryProvider
+                .forResource(ResourceType.audioItem)
+                .create(targetAudioItem);
+        });
+
         it(`should create an empty transcript`, async () => {
             await transcriptCreatedEventHandler.handle(transcriptCreated);
 
-            const { transcript } = (await testQueryRepository.fetchById(
-                audioItemId
-            )) as EventSourcedAudioItemViewModel;
+            const { transcript } = (await testQueryRepositoryProvider
+                .forResource(ResourceType.audioItem)
+                .fetchById(resourceId)) as EventSourcedAudioItemViewModel;
 
             expect(transcript).toBeTruthy();
         });
     });
 
     describe('when transcribing a video', () => {
-        it.skip(`should create an empty transcript`, async () => {
+        beforeEach(async () => {
+            await testQueryRepositoryProvider.forResource(ResourceType.video).create(
+                buildTestInstance(EventSourcedVideoViewModel, {
+                    id: resourceId,
+                    transcript: null,
+                })
+            );
+        });
+
+        it(`should create an empty transcript`, async () => {
             await transcriptCreatedEventHandler.handle(
                 clonePlainObjectWithOverrides(transcriptCreated, {
                     payload: {
                         aggregateCompositeIdentifier: {
                             type: ResourceType.video,
+                            id: resourceId,
                         },
                     },
                 })
             );
 
-            const { transcript } = (await testQueryRepository.fetchById(
-                audioItemId
-            )) as EventSourcedAudioItemViewModel;
+            const { transcript } = (await testQueryRepositoryProvider
+                .forResource(ResourceType.video)
+                .fetchById(resourceId)) as EventSourcedAudioItemViewModel;
 
             expect(transcript).toBeTruthy();
         });

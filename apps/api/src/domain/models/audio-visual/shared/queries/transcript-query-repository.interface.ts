@@ -1,4 +1,4 @@
-import { AggregateId } from '../../../../../domain/types/AggregateId';
+import { AggregateId } from '../../../../types/AggregateId';
 import { TranslationLineItemDto } from '../../audio-item/queries/audio-item-query-repository.interface';
 import { TranscriptLineItemDto, TranslationItem } from '../commands';
 import { TranscriptParticipant } from '../entities/transcript-participant';

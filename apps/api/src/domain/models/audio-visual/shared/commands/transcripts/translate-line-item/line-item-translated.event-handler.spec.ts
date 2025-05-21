@@ -17,13 +17,14 @@ import { PersistenceModule } from '../../../../../../../persistence/persistence.
 import generateDatabaseNameForTestSuite from '../../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestInstance } from '../../../../../../../test-data/utilities';
 import { EventSourcedAudioItemViewModel } from '../../../../audio-item/queries';
+import { EventSourcedVideoViewModel } from '../../../../video/queries';
 import { TranscriptItem } from '../../../entities/transcript-item.entity';
 import { TranscriptParticipant } from '../../../entities/transcript-participant';
 import { Transcript } from '../../../entities/transcript.entity';
 import { LineItemTranslated } from './line-item-translated.event';
 import { LineItemTranslatedEventHandler } from './line-item-translated.event-handler';
 
-const audioItemId = buildDummyUuid(60);
+const resourceId = buildDummyUuid(60);
 
 const translationLanguageCode = LanguageCode.English;
 
@@ -36,33 +37,6 @@ const participant = buildTestInstance(TranscriptParticipant);
 const inPoint = 1500;
 
 const outPoint = 3600;
-
-const lineItemTranslated = buildTestInstance(LineItemTranslated, {
-    payload: {
-        aggregateCompositeIdentifier: { id: audioItemId, type: AggregateType.audioItem },
-        translation: translationText,
-        languageCode: translationLanguageCode,
-        inPointMilliseconds: inPoint,
-        outPointMilliseconds: outPoint,
-    },
-});
-
-const existingAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
-    id: audioItemId,
-    transcript: buildTestInstance(Transcript, {
-        participants: [participant],
-        items: [
-            buildTestInstance(TranscriptItem, {
-                inPointMilliseconds: inPoint,
-                outPointMilliseconds: outPoint,
-                text: buildMultilingualTextWithSingleItem(
-                    'existing transcript item text',
-                    originalLanguageCode
-                ),
-            }),
-        ],
-    }),
-});
 
 describe(`LineItemTranslatedEventHandler`, () => {
     let databaseProvider: ArangoDatabaseProvider;
@@ -114,6 +88,36 @@ describe(`LineItemTranslatedEventHandler`, () => {
 
     describe(`when handling a LINE_ITEM_TRANSLATED`, () => {
         describe(`when the event is for an audio item`, () => {
+            const lineItemTranslated = buildTestInstance(LineItemTranslated, {
+                payload: {
+                    aggregateCompositeIdentifier: {
+                        id: resourceId,
+                        type: AggregateType.audioItem,
+                    },
+                    translation: translationText,
+                    languageCode: translationLanguageCode,
+                    inPointMilliseconds: inPoint,
+                    outPointMilliseconds: outPoint,
+                },
+            });
+
+            const existingAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
+                id: resourceId,
+                transcript: buildTestInstance(Transcript, {
+                    participants: [participant],
+                    items: [
+                        buildTestInstance(TranscriptItem, {
+                            inPointMilliseconds: inPoint,
+                            outPointMilliseconds: outPoint,
+                            text: buildMultilingualTextWithSingleItem(
+                                'existing transcript item text',
+                                originalLanguageCode
+                            ),
+                        }),
+                    ],
+                }),
+            });
+
             beforeEach(async () => {
                 await testRepositoryProvider
                     .forResource(ResourceType.audioItem)
@@ -125,7 +129,7 @@ describe(`LineItemTranslatedEventHandler`, () => {
 
                 const updatedView = (await testRepositoryProvider
                     .forResource(ResourceType.audioItem)
-                    .fetchById(audioItemId)) as EventSourcedAudioItemViewModel;
+                    .fetchById(resourceId)) as EventSourcedAudioItemViewModel;
 
                 const { text: foundMultilingualText } = updatedView.transcript.getLineItem(
                     inPoint,
@@ -142,8 +146,59 @@ describe(`LineItemTranslatedEventHandler`, () => {
         });
 
         describe(`when the event is for a video`, () => {
-            // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-24]
-            it.todo(`should have a test`);
+            const lineItemTranslated = buildTestInstance(LineItemTranslated, {
+                payload: {
+                    aggregateCompositeIdentifier: {
+                        id: resourceId,
+                        type: AggregateType.video,
+                    },
+                    translation: translationText,
+                    languageCode: translationLanguageCode,
+                    inPointMilliseconds: inPoint,
+                    outPointMilliseconds: outPoint,
+                },
+            });
+
+            const existingVideo = buildTestInstance(EventSourcedVideoViewModel, {
+                id: resourceId,
+                transcript: buildTestInstance(Transcript, {
+                    participants: [participant],
+                    items: [
+                        buildTestInstance(TranscriptItem, {
+                            inPointMilliseconds: inPoint,
+                            outPointMilliseconds: outPoint,
+                            text: buildMultilingualTextWithSingleItem(
+                                'existing transcript item text',
+                                originalLanguageCode
+                            ),
+                        }),
+                    ],
+                }),
+            });
+
+            beforeEach(async () => {
+                await testRepositoryProvider.forResource(ResourceType.video).create(existingVideo);
+            });
+
+            it(`should translate the line item`, async () => {
+                await lineItemTranslatedEventHandler.handle(lineItemTranslated);
+
+                const updatedView = (await testRepositoryProvider
+                    .forResource(ResourceType.video)
+                    .fetchById(resourceId)) as EventSourcedVideoViewModel;
+
+                const { text: foundMultilingualText } = updatedView.transcript.getLineItem(
+                    inPoint,
+                    outPoint
+                ) as TranscriptItem;
+
+                /**
+                 * We only do a sanity check here because the Arango query
+                 * repository is responsible for the full state update, which
+                 * is tested comprehensively in its own test.
+                 */
+                expect(foundMultilingualText.hasTranslation()).toBe(true);
+            });
         });
     });
 });

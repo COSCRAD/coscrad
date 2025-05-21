@@ -462,7 +462,7 @@ describe(`ArangoVideoQueryRepository`, () => {
         });
     });
 
-    describe(`import line item transcripts`, () => {
+    describe(`import line item translations`, () => {
         const translations = lineItems.map(
             ({ inPointMilliseconds }, index): TranslationItem => ({
                 inPointMilliseconds,

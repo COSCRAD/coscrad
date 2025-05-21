@@ -7,7 +7,10 @@ import {
     IAudioItemQueryRepository,
 } from '../domain/models/audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ArangoAudioItemQueryRepository } from '../domain/models/audio-visual/audio-item/repositories/arango-audio-item-query-repository';
-import { VIDEO_QUERY_REPOSITORY_TOKEN } from '../domain/models/audio-visual/video/queries';
+import {
+    IVideoQueryRepository,
+    VIDEO_QUERY_REPOSITORY_TOKEN,
+} from '../domain/models/audio-visual/video/queries';
 import { ArangoVideoQueryRepository } from '../domain/models/audio-visual/video/repositories/arango-video-query-repository';
 import {
     IPhotographQueryRepository,
@@ -208,6 +211,7 @@ export class PersistenceModule implements OnApplicationShutdown {
                 photographQueryRepository: IPhotographQueryRepository,
                 termQueryRepository: ITermQueryRepository,
                 audioItemQueryRepository: IAudioItemQueryRepository,
+                videoQueryRepository: IVideoQueryRepository,
                 vocabularyListQueryRepository: IVocabularyListQueryRepository,
                 playlistQueryRepository: IPlaylistQueryRepository
             ): IQueryRepositoryProvider =>
@@ -215,6 +219,7 @@ export class PersistenceModule implements OnApplicationShutdown {
                     photographQueryRepository,
                     termQueryRepository,
                     audioItemQueryRepository,
+                    videoQueryRepository,
                     vocabularyListQueryRepository,
                     playlistQueryRepository
                 ),
@@ -222,6 +227,7 @@ export class PersistenceModule implements OnApplicationShutdown {
                 PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
                 TERM_QUERY_REPOSITORY_TOKEN,
                 AUDIO_QUERY_REPOSITORY_TOKEN,
+                VIDEO_QUERY_REPOSITORY_TOKEN,
                 VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
                 PLAYLIST_QUERY_REPOSITORY_TOKEN,
             ],
