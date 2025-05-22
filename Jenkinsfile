@@ -218,7 +218,7 @@ void runFrontendBuild(String target) {
             sh 'node --version'
 
             copyContentConfig(target)
-            sh 'npx nx build coscrad-frontend --prod --skip-nx-cache'
+            sh 'npx nx build coscrad-frontend --prod --skip-nx-cache --verbose'
 
             echo 'build contents'
             sh 'ls dist/apps'
