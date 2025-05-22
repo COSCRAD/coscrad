@@ -1,4 +1,4 @@
-import { AggregateType, LanguageCode, ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { buildDummyAggregateCompositeIdentifier } from '../../../support/utilities';
 
 const buildByLetterQuery = (letter: string) => `|${letter}|`;
@@ -7,52 +7,54 @@ describe(`The term index view`, () => {
     describe(`search by letter`, () => {
         // TODO support tokenization \ parsing letters for other languages
         describe(`when the text is in Chilcotin`, () => {
-            const textForTerm = 'Dechen detŝ’en diẑtan';
+            describe(`when the term is an ordinary term (not a prompt term)`, () => {
+                const textForTerm = 'Dechen detŝ’en diẑtan';
 
-            const singleCharacterLetterThatIsInTerm = 'd';
+                const singleCharacterLetterThatIsInTerm = 'd';
 
-            const singleCharacterLetterThatIsNotInTerm = 'q';
+                const singleCharacterLetterThatIsNotInTerm = 'q';
 
-            const multiCharacterLetterThatIsInTerm = 'tŝ’';
+                const multiCharacterLetterThatIsInTerm = 'tŝ’';
 
-            const multiCharacterLetterThatIsNotInTerm = 'tl';
+                const multiCharacterLetterThatIsNotInTerm = 'tl';
 
-            const basicTermCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
-                AggregateType.term,
-                1
-            );
+                const basicTermCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
+                    AggregateType.term,
+                    1
+                );
 
-            before(() => {
-                cy.clearDatabase();
+                before(() => {
+                    cy.clearDatabase();
 
-                cy.seedTestUuids(999);
+                    cy.seedTestUuids(999);
 
-                cy.seedDataWithCommand(`CREATE_TERM`, {
-                    aggregateCompositeIdentifier: basicTermCompositeIdentifier,
-                    text: textForTerm,
-                    languageCode: LanguageCode.Chilcotin,
-                });
-
-                cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
-                    aggregateCompositeIdentifier: basicTermCompositeIdentifier,
-                });
-            });
-
-            describe(`when searching for a letter that is in the term`, () => {
-                describe(`when that letter has multiple characters: ${multiCharacterLetterThatIsInTerm}`, () => {
-                    before(() => {
-                        cy.navigateToResourceIndex(ResourceType.term);
+                    cy.seedDataWithCommand(`CREATE_TERM`, {
+                        aggregateCompositeIdentifier: basicTermCompositeIdentifier,
+                        text: textForTerm,
+                        languageCode: LanguageCode.Chilcotin,
                     });
-                    it(`should find the term`, () => {
-                        cy.getByDataAttribute(`index_search_bar`).click();
 
-                        cy.getByDataAttribute(`index_search_bar`).type(
-                            buildByLetterQuery(singleCharacterLetterThatIsInTerm)
-                        );
+                    cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+                        aggregateCompositeIdentifier: basicTermCompositeIdentifier,
+                    });
+                });
 
-                        cy.getLoading().should(`not.exist`);
+                describe(`when searching for a letter that is in the term`, () => {
+                    describe(`when that letter has multiple characters: ${multiCharacterLetterThatIsInTerm}`, () => {
+                        before(() => {
+                            cy.visit('/Resources/Terms');
+                        });
+                        it(`should find the term`, () => {
+                            cy.getByDataAttribute(`index_search_bar`).click();
 
-                        cy.contains(textForTerm);
+                            cy.getByDataAttribute(`index_search_bar`).type(
+                                buildByLetterQuery(singleCharacterLetterThatIsInTerm)
+                            );
+
+                            cy.getLoading().should(`not.exist`);
+
+                            cy.contains(textForTerm);
+                        });
                     });
                 });
             });
