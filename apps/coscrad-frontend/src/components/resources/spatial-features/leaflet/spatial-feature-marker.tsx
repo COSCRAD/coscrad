@@ -78,9 +78,11 @@ const lookupTable: {
     ),
 };
 
-const iconUrl = 'https://www.digiteched.com/content/images/2022/12/marker-icon.png';
+const iconUrl =
+    'https://coscradapi.tsilhqotinlanguage.ca/api/resources/mediaItems/download?name=tng_icon_semi-rev'; //'https://www.digiteched.com/content/images/2022/12/marker-icon.png';
 
-const shadowUrl = 'https://www.digiteched.com/content/images/2022/12/marker-shadow.png';
+const shadowUrl =
+    'https://coscradapi.tsilhqotinlanguage.ca/api/resources/mediaItems/download?name=tng_icon_semi-rev'; //'https://www.digiteched.com/content/images/2022/12/marker-shadow.png';
 
 interface Props {
     spatialFeature: ISpatialFeatureViewModel;
