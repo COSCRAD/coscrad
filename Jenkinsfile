@@ -65,7 +65,11 @@ pipeline {
                     echo 'Building COSCRAD'
                     echo 'with node version'
                     sh 'node --version'
-                    sh 'npm run build:coscrad:prod'
+                    echo 'Building the client (coscrad-frontend)'
+                    sh 'npx nx build coscrad-frontend --prod --skip-nx-cache --verbose'
+
+                    echo 'Building the back-end (api)'
+                    sh 'npx nx build api --prod --skip-nx-cache --verbose'
 
                     echo 'testing coscrad-frontend'
                     sh 'npx nx test coscrad-frontend --skip-nx-cache'
