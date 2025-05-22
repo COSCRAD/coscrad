@@ -225,7 +225,27 @@ describe(`ArangoAudioItemQueryRepository`, () => {
         });
     });
 
-    describe(`ArangoAudioItemQueryRepository.translateName`, () => {
+    describe(`createTranscript`, () => {
+        const targetAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
+            transcript: null,
+        });
+
+        beforeEach(async () => {
+            await testQueryRepository.create(targetAudioItem);
+        });
+
+        it(`should create the transcript`, async () => {
+            await testQueryRepository.createTranscript(targetAudioItem.id);
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetAudioItem.id
+            )) as EventSourcedAudioItemViewModel;
+
+            expect(updatedView.transcript).toEqual(Transcript.buildEmpty());
+        });
+    });
+
+    describe(`translateName`, () => {
         const targetAudioItem = additionalAudioItems[0];
 
         beforeEach(async () => {

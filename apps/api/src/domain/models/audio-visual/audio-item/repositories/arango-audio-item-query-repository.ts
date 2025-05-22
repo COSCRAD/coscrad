@@ -108,7 +108,6 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
         await cursor.all();
     }
 
-    // TODO Add a test case for this
     async createTranscript(id: AggregateId): Promise<void> {
         const cursor = await this.database.query(this.transcriptQueryBuilder.createTranscript(id));
 
