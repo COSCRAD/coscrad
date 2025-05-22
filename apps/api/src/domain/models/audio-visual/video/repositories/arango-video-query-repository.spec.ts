@@ -283,7 +283,9 @@ describe(`ArangoVideoQueryRepository`, () => {
      */
 
     describe(`create transcript`, () => {
-        const targetVideo = additionalVideos[0];
+        const targetVideo = buildTestInstance(EventSourcedVideoViewModel, {
+            transcript: null,
+        });
 
         beforeEach(async () => {
             await testQueryRepository.create(targetVideo);
@@ -296,7 +298,7 @@ describe(`ArangoVideoQueryRepository`, () => {
                 targetVideo.id
             )) as EventSourcedVideoViewModel;
 
-            expect(updatedView.transcript).toBeTruthy();
+            expect(updatedView.transcript).toEqual(Transcript.buildEmpty());
         });
     });
 
