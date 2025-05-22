@@ -1,6 +1,5 @@
 import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { CoscradDataExample } from '../../../../../test-data/utilities';
-import { DTO } from '../../../../../types/DTO';
 import { CoscradEvent } from '../../../../common';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../../__tests__/utilities/dummyDateNow';
@@ -35,8 +34,4 @@ const testEventId = buildDummyUuid(1);
 @CoscradEvent(`VOCABULARY_LIST_CREATED`)
 export class VocabularyListCreated extends BaseEvent<VocabularyListCreatedPayload> {
     readonly type = 'VOCABULARY_LIST_CREATED';
-
-    public static fromDto(dto: DTO<VocabularyListCreated>) {
-        return new VocabularyListCreated(dto.payload, dto.meta);
-    }
 }

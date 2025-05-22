@@ -2,7 +2,6 @@ import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import buildDummyUuid from '../../../../../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../../../../../../domain/models/__tests__/utilities/dummyDateNow';
 import { CoscradDataExample } from '../../../../../../../test-data/utilities';
-import { DTO } from '../../../../../../../types/DTO';
 import { CoscradEvent } from '../../../../../../common';
 import { BaseEvent } from '../../../../../shared/events/base-event.entity';
 import { TranslateLineItem } from './translate-line-item.command';
@@ -34,8 +33,4 @@ const testEventId = buildDummyUuid(545);
 @CoscradEvent('LINE_ITEM_TRANSLATED')
 export class LineItemTranslated extends BaseEvent<LineItemTranslatedPayload> {
     readonly type = 'LINE_ITEM_TRANSLATED';
-
-    public static fromDto({ meta, payload }: DTO<LineItemTranslated>) {
-        return new LineItemTranslated(payload, meta);
-    }
 }

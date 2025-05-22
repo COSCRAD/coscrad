@@ -3,7 +3,6 @@ import { CoscradEvent } from '../../../../../../../domain/common';
 import buildDummyUuid from '../../../../../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../../../../../../domain/models/__tests__/utilities/dummyDateNow';
 import { CoscradDataExample } from '../../../../../../../test-data/utilities';
-import { DTO } from '../../../../../../../types/DTO';
 import { BaseEvent } from '../../../../../shared/events/base-event.entity';
 import { AddLineItemToTranscript } from './add-line-item-to-transcript.command';
 
@@ -37,10 +36,4 @@ const eventId = buildDummyUuid(1);
 @CoscradEvent('LINE_ITEM_ADDED_TO_TRANSCRIPT')
 export class LineItemAddedToTranscript extends BaseEvent<LineItemAddedToTranscriptPayload> {
     readonly type = 'LINE_ITEM_ADDED_TO_TRANSCRIPT';
-
-    public static fromDto(dto: DTO<LineItemAddedToTranscript>) {
-        const { payload, meta } = dto;
-
-        return new LineItemAddedToTranscript(payload, meta);
-    }
 }
