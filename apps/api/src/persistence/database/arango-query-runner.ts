@@ -74,4 +74,8 @@ export class ArangoQueryRunner implements ICoscradQueryRunner {
 
         await this.arangoDatabase.delete(documentId, collectionName);
     }
+
+    async query(query: string, context: Record<string, unknown>): Promise<void> {
+        await this.arangoDatabase.query({ query, bindVars: context });
+    }
 }

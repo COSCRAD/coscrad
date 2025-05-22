@@ -1,7 +1,6 @@
 import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { CoscradEvent } from '../../../../../../domain/common';
 import { CoscradDataExample } from '../../../../../../test-data/utilities';
-import { DTO } from '../../../../../../types/DTO';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../../../__tests__/utilities/dummyDateNow';
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
@@ -34,12 +33,4 @@ const fixtureEventId = buildDummyUuid(2);
 @CoscradEvent('AUDIO_ITEM_NAME_TRANSLATED')
 export class AudioItemNameTranslated extends BaseEvent<AudioItemNameTranslatedPayload> {
     readonly type = 'AUDIO_ITEM_NAME_TRANSLATED';
-
-    public static fromDto(dto: DTO<AudioItemNameTranslated>) {
-        if (!dto) return;
-
-        const { payload, meta } = dto;
-
-        return new AudioItemNameTranslated(payload, meta);
-    }
 }

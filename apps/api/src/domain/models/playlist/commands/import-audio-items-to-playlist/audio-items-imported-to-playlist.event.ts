@@ -1,7 +1,6 @@
 import { AggregateType } from '@coscrad/api-interfaces';
 import { CoscradEvent } from '../../../../../domain/common';
 import { CoscradDataExample } from '../../../../../test-data/utilities';
-import { DTO } from '../../../../../types/DTO';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../../__tests__/utilities/dummyDateNow';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
@@ -33,8 +32,4 @@ const testEventId = buildDummyUuid(8);
 @CoscradEvent('AUDIO_ITEMS_IMPORTED_TO_PLAYLIST')
 export class AudioItemsImportedToPlaylist extends BaseEvent<AudioItemsImportedToPlaylistPayload> {
     readonly type = 'AUDIO_ITEMS_IMPORTED_TO_PLAYLIST';
-
-    public static fromDto(dto: DTO<AudioItemsImportedToPlaylist>) {
-        return new AudioItemsImportedToPlaylist(dto.payload, dto.meta);
-    }
 }
