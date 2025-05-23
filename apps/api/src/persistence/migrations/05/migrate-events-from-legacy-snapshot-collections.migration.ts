@@ -16,11 +16,24 @@ export class MigrateEventsFromLegacySnapshotCollections implements ICoscradMigra
             in events
         `;
 
-        const bindVars = {
-            '@collectionName': 'songs',
-        };
+        const targetCollections = [
+            'songs',
+            'terms',
+            'vocabulary_lists',
+            'playlists',
+            'audio_items',
+            'videos',
+        ];
 
-        await queryRunner.query(query, bindVars);
+        const queries = targetCollections.map((collectionName) => ({
+            query,
+            context: {
+                '@collectionName': collectionName,
+            },
+        }));
+
+        // Note that we also need to touch the events collection
+        await queryRunner.transaction(queries, [...targetCollections, 'events']);
     }
 
     async down(_queryRunner: ICoscradQueryRunner): Promise<void> {

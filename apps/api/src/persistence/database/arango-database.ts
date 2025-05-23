@@ -439,6 +439,31 @@ export class ArangoDatabase {
         return this.db.query(aqlQuery);
     }
 
+    async transaction(queries: AqlQuery[], collectionNames: string[]): Promise<void> {
+        if (queries.length === 0) {
+            return;
+        }
+
+        const transaction = await this.db.beginTransaction(collectionNames);
+
+        for (const query of queries) {
+            await transaction.step(async () => {
+                await this.db.query(query).catch(async (arangoError) => {
+                    await transaction.abort();
+
+                    throw new InternalError(
+                        `failed to execute Arango transaction on collections: ${collectionNames.join(
+                            ', '
+                        )}`,
+                        [arangoError]
+                    );
+                });
+            });
+        }
+
+        await transaction.commit();
+    }
+
     #getKeyOfDocument = <TEntityDTO>(document: ArangoDTO<TEntityDTO>): Maybe<string> =>
         typeof document._key === 'string' ? document._key : NotFound;
 
