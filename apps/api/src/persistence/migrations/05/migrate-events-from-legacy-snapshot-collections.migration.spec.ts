@@ -8,6 +8,8 @@ import { AudioItemNameTranslated } from '../../../domain/models/audio-visual/aud
 import { AudioItem } from '../../../domain/models/audio-visual/audio-item/entities/audio-item.entity';
 import { VideoCreated, VideoNameTranslated } from '../../../domain/models/audio-visual/video';
 import { Video } from '../../../domain/models/audio-visual/video/entities/video.entity';
+import { PhotographCreated } from '../../../domain/models/photograph';
+import { Photograph } from '../../../domain/models/photograph/entities/photograph.entity';
 import { Playlist } from '../../../domain/models/playlist';
 import { AudioItemAddedToPlaylist } from '../../../domain/models/playlist/commands/add-audio-item-to-playlist/audio-item-added-to-playlist.event';
 import { PlaylistCreated } from '../../../domain/models/playlist/commands/playlist-created.event';
@@ -329,6 +331,30 @@ describe(`MigrateEventsFromLegacySnapshotCollections`, () => {
         const oldVideoDocuments = oldVideos.map((v) => mapEntityDTOToDatabaseDocument(v.toDTO()));
 
         /**
+         * Photographs
+         */
+        const oldPhotographs = [190, 191, 192, 193].map(buildDummyUuid).map(
+            (photoId) =>
+                Photograph.fromEventHistory(
+                    new TestEventStream()
+                        .andThen<PhotographCreated>({
+                            type: 'PHOTOGRAPH_CREATED',
+                        })
+                        .as({
+                            type: AggregateType.photograph,
+                            id: photoId,
+                        }),
+                    photoId
+                ) as Photograph
+        );
+
+        const photographEvents = oldPhotographs.flatMap(({ eventHistory }) => eventHistory);
+
+        const oldPhotographDocuments = oldPhotographs.map((p) =>
+            mapEntityDTOToDatabaseDocument(p.toDTO())
+        );
+
+        /**
          * Playlists
          */
 
@@ -402,6 +428,10 @@ describe(`MigrateEventsFromLegacySnapshotCollections`, () => {
                 .createMany(oldVideoDocuments);
 
             await testDatabaseProvider
+                .getDatabaseForCollection('photographs')
+                .createMany(oldPhotographDocuments);
+
+            await testDatabaseProvider
                 .getDatabaseForCollection('playlists')
                 .createMany(oldPlaylistDocuments);
 
@@ -456,6 +486,13 @@ describe(`MigrateEventsFromLegacySnapshotCollections`, () => {
             );
 
             await assertEventsMigratedForResource(
+                oldPhotographDocuments,
+                photographEvents,
+                'photographs',
+                updatedEvents
+            );
+
+            await assertEventsMigratedForResource(
                 [
                     playlistWhoseEventsAreAlreadyIncollection,
                     ...playlistsWhoseEventsAreNotInEventsCollection,
@@ -475,6 +512,7 @@ describe(`MigrateEventsFromLegacySnapshotCollections`, () => {
                     vocabularyListEvents.length +
                     audioItemEvents.length +
                     videoEvents.length +
+                    photographEvents.length +
                     existingEvents.length +
                     playlistEventsNotInEventsCollection.length +
                     playlistEventsAlreadyInEventsCollection.length
