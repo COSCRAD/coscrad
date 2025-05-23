@@ -1,11 +1,20 @@
-import { AggregateType } from '@coscrad/api-interfaces';
+import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import createTestModule from '../../../app/controllers/__tests__/createTestModule';
 import { CoscradEventFactory } from '../../../domain/common';
 import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
+import { Resource } from '../../../domain/models/resource.entity';
+import { ResourcePublished } from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import { LyricsAddedForSong, SongCreated } from '../../../domain/models/song/commands';
 import { Song } from '../../../domain/models/song/song.entity';
-import { TermCreated, TermTranslated } from '../../../domain/models/term/commands';
+import {
+    PromptTermCreated,
+    TermCreated,
+    TermElicitedFromPrompt,
+    TermTranslated,
+} from '../../../domain/models/term/commands';
+import { Term } from '../../../domain/models/term/entities/term.entity';
+import { InternalError } from '../../../lib/errors/InternalError';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { BaseEvent } from '../../../queries/event-sourcing';
 import { TestEventStream } from '../../../test-data/events';
@@ -38,39 +47,21 @@ const removeArangoSystemProps = <T>(doc: WithArangoSystemProps<T>): T => {
     return out;
 };
 
-// TODO add some
 const existingEvents = [
-    buildTestInstance(TermCreated, {
+    buildTestInstance(ResourcePublished, {
         id: buildDummyUuid(900),
-    }),
-    buildTestInstance(TermTranslated, {
-        id: buildDummyUuid(901),
+        meta: {
+            id: buildDummyUuid(900),
+        },
+        payload: {
+            aggregateCompositeIdentifier: {
+                type: ResourceType.digitalText,
+            },
+        },
     }),
 ].map(mapEntityDTOToDatabaseDocument);
 
-const oldSongs = [1, 2, 3, 4, 5].map((n) => {
-    const songId = buildDummyUuid(n);
-
-    return Song.fromEventHistory(
-        new TestEventStream()
-            .andThen<SongCreated>({
-                type: 'SONG_CREATED',
-            })
-            .andThen<LyricsAddedForSong>({
-                type: 'LYRICS_ADDED_FOR_SONG',
-            })
-            .as({
-                type: AggregateType.song,
-                id: songId,
-            }),
-        songId
-        // We are asserting that the event history is valid
-    ) as Song;
-});
-
-const songEvents = oldSongs.flatMap(({ eventHistory }) => eventHistory);
-
-const oldSongDocuments = oldSongs.map((song) => song.toDTO()).map(mapEntityDTOToDatabaseDocument);
+const dummyUuuids = [1, 2, 3, 4, 5].map(buildDummyUuid);
 
 const migrationUnderTest = new MigrateEventsFromLegacySnapshotCollections();
 
@@ -80,6 +71,61 @@ describe(`MigrateEventsFromLegacySnapshotCollections`, () => {
     let testQueryRunner: ArangoQueryRunner;
 
     let testRepositoryProvider: TestRepositoryProvider;
+
+    const assertMigrationSuccess = async (oldResources: Resource[], collectionId: string) => {
+        if (oldResources.length === 0) {
+            throw new InternalError(
+                `You must provide at least one resource in the old format for a migration teset case`
+            );
+        }
+
+        const resourceEvents = oldResources.flatMap(({ eventHistory }) => eventHistory);
+
+        const oldDocuments = oldResources
+            .map((resource) => resource.toDTO())
+            .map(mapEntityDTOToDatabaseDocument);
+
+        await testDatabaseProvider.getDatabaseForCollection(collectionId).createMany(oldDocuments);
+
+        await testDatabaseProvider
+            .getDatabaseForCollection(ArangoCollectionId.events)
+            .createMany(existingEvents);
+
+        await migrationUnderTest.up(testQueryRunner);
+
+        const updatedDocs = await testDatabaseProvider
+            .getDatabaseForCollection(collectionId)
+            .fetchMany();
+
+        const oldResourceDocsWithoutArangoSystemProps = oldDocuments.map(removeArangoSystemProps);
+
+        // this migration should not change the data
+        // can we use a check sum for this colleciton?
+        expect(updatedDocs.map(removeArangoSystemProps)).toEqual(
+            oldResourceDocsWithoutArangoSystemProps
+        );
+
+        const updatedEvents = await testDatabaseProvider
+            .getDatabaseForCollection<BaseEvent>(ArangoCollectionId.events)
+            .fetchMany();
+
+        expect(updatedEvents).toHaveLength(resourceEvents.length + existingEvents.length);
+
+        const missingEvents = resourceEvents.filter(
+            ({ type, meta: { dateCreated, id } }) =>
+                !updatedEvents.some(
+                    (e) => e.type === type && dateCreated === e.meta.dateCreated && id === e._key
+                )
+        );
+
+        expect(missingEvents).toHaveLength(0);
+
+        const eventsWithAnIdProp = updatedEvents.filter(
+            (e) => !isNullOrUndefined((e as unknown as { id: string }).id)
+        );
+
+        expect(eventsWithAnIdProp).toHaveLength(0);
+    };
 
     beforeAll(async () => {
         const testModule = await createTestModule({
@@ -114,53 +160,81 @@ describe(`MigrateEventsFromLegacySnapshotCollections`, () => {
     });
 
     describe(`when migrating songs`, () => {
-        beforeEach(async () => {
-            await testDatabaseProvider
-                .getDatabaseForCollection(ArangoCollectionId.songs)
-                .createMany(oldSongDocuments);
-
-            await testDatabaseProvider
-                .getDatabaseForCollection(ArangoCollectionId.events)
-                .createMany(existingEvents);
+        const oldSongs = dummyUuuids.map((songId) => {
+            return Song.fromEventHistory(
+                new TestEventStream()
+                    .andThen<SongCreated>({
+                        type: 'SONG_CREATED',
+                    })
+                    .andThen<LyricsAddedForSong>({
+                        type: 'LYRICS_ADDED_FOR_SONG',
+                    })
+                    .as({
+                        type: AggregateType.song,
+                        id: songId,
+                    }),
+                songId
+                // We are asserting that the event history is valid
+            ) as Song;
         });
 
         it(`should append the events to the event collection`, async () => {
-            await migrationUnderTest.up(testQueryRunner);
-
-            const updatedDocs = await testDatabaseProvider
-                .getDatabaseForCollection(ArangoCollectionId.songs)
-                .fetchMany();
-
-            const oldSongDocsWithoutArangoSystemProps =
-                oldSongDocuments.map(removeArangoSystemProps);
-
-            // this migration should not change the data
-            // can we use a check sum for this colleciton?
-            expect(updatedDocs.map(removeArangoSystemProps)).toEqual(
-                oldSongDocsWithoutArangoSystemProps
-            );
-
-            const updatedEvents = await testDatabaseProvider
-                .getDatabaseForCollection<BaseEvent>(ArangoCollectionId.events)
-                .fetchMany();
-
-            expect(updatedEvents).toHaveLength(songEvents.length + existingEvents.length);
-
-            const missingEvents = songEvents.filter(
-                ({ type, meta: { dateCreated, id } }) =>
-                    !updatedEvents.some(
-                        (e) =>
-                            e.type === type && dateCreated === e.meta.dateCreated && id === e._key
-                    )
-            );
-
-            expect(missingEvents).toHaveLength(0);
-
-            const eventsWithAnIdProp = updatedEvents.filter(
-                (e) => !isNullOrUndefined((e as unknown as { id: string }).id)
-            );
-
-            expect(eventsWithAnIdProp).toHaveLength(0);
+            await assertMigrationSuccess(oldSongs, 'songs');
         });
     });
+
+    describe(`when some of the events are already in the database`, () => {
+        it.todo(`should have a test`);
+    });
+
+    describe(`when migrating terms`, () => {
+        const oldRegularTerms = dummyUuuids.map(
+            (termId) =>
+                Term.fromEventHistory(
+                    new TestEventStream()
+                        .andThen<TermCreated>({
+                            type: 'TERM_CREATED',
+                        })
+                        .andThen<TermTranslated>({
+                            type: 'TERM_TRANSLATED',
+                        })
+                        .andThen<ResourcePublished>({
+                            type: 'RESOURCE_PUBLISHED',
+                        })
+                        .as({
+                            type: AggregateType.term,
+                            id: termId,
+                        }),
+                    termId
+                ) as Term
+        );
+
+        const oldPromptTerms = [11, 12, 13, 14, 15].map(buildDummyUuid).map(
+            (termId) =>
+                Term.fromEventHistory(
+                    new TestEventStream()
+                        .andThen<PromptTermCreated>({
+                            type: 'PROMPT_TERM_CREATED',
+                        })
+                        .andThen<TermElicitedFromPrompt>({
+                            type: 'TERM_ELICITED_FROM_PROMPT',
+                        })
+                        .as({
+                            type: AggregateType.term,
+                            id: termId,
+                        }),
+                    termId
+                ) as Term
+        );
+
+        it(`should append the events to the event collection`, async () => {
+            await assertMigrationSuccess([...oldRegularTerms, ...oldPromptTerms], 'terms');
+        });
+    });
+
+    // AggregateType.term,
+    // AggregateType.vocabularyList,
+    // AggregateType.playlist,
+    // AggregateType.audioItem,
+    // AggregateType.video,
 });
