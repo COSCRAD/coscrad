@@ -8,7 +8,7 @@ import { Card, CardContent, Divider } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { routes } from '../../../app/routes/routes';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
-import { MultilingualTextPresenter } from '../../../utils/generic-components/presenters/multilingual-text-presenter';
+import { ExpandableMultilingualTextPresenter } from '../../../utils/generic-components/presenters/expandable-multilingual-text-presenter';
 
 export const VocabularyListDetailThumbnailPresenter = ({
     id,
@@ -25,7 +25,7 @@ export const VocabularyListDetailThumbnailPresenter = ({
         <Link to={`/${routes.resources.ofType(ResourceType.vocabularyList).detail(id)}`}>
             <Card>
                 <CardContent>
-                    <MultilingualTextPresenter text={name} />
+                    <ExpandableMultilingualTextPresenter text={name} />
                     <Divider />
                     Number of Entries: {entries.length}
                 </CardContent>

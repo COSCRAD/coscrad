@@ -1,5 +1,6 @@
 import {
     ICategorizableDetailQueryResult,
+    ITermViewModel,
     IVocabularyListEntry,
     IVocabularyListViewModel,
     ResourceType,
@@ -68,6 +69,13 @@ const filterEntriesForSelectedTerms = (
         return doValuesMatchFilters(variableValues, filter);
     });
 
+const TermPresenterForVocabularyListEntry = (
+    props: ICategorizableDetailQueryResult<ITermViewModel>
+): JSX.Element => (
+    // TODO Write a custom presenter here
+    <TermDetailFullViewPresenter {...props} />
+);
+
 export const VocabularyListDetailFullViewPresenter = ({
     id,
     name,
@@ -100,7 +108,18 @@ export const VocabularyListDetailFullViewPresenter = ({
             <Divider sx={{ marginTop: 2, marginBottom: 2, backgroundColor: 'primary.main' }} />
             <Carousel
                 propsForItems={selectedEntries.map(({ term }) => term)}
-                Presenter={TermDetailFullViewPresenter}
+                /**
+                 * Note that we do not want to reuse the term detail full-view \ thumbnail
+                 * presenter here. This is because there is a conflicting visual hierarchy
+                 * when nesting a resource heading within another. Instead, we define
+                 * a custom presenter for a term contained in the vocabulary list
+                 * as one of its entries.
+                 *
+                 * Also note that in principle the back-end could use a different
+                 * view (`IVocabularyListViewModelEntry["term"]`) for this. Our
+                 * design is more robust to that possibility.
+                 */
+                Presenter={TermPresenterForVocabularyListEntry}
             />
             <VocabularyListForm
                 fields={form.fields}

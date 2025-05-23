@@ -9,7 +9,7 @@ import { Box } from '@mui/material';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components';
-import { MultilingualTextPresenter } from '../../../utils/generic-components/presenters/multilingual-text-presenter';
+import { ExpandableMultilingualTextPresenter } from '../../../utils/generic-components/presenters/expandable-multilingual-text-presenter';
 import { Optional } from '../../../utils/generic-components/presenters/optional';
 
 export const SongDetailFullViewPresenter = ({
@@ -28,7 +28,7 @@ export const SongDetailFullViewPresenter = ({
             contributions={contributions}
         >
             <Optional predicateValue={lyrics}>
-                <MultilingualTextPresenter text={lyrics} />
+                <ExpandableMultilingualTextPresenter text={lyrics} />
             </Optional>
             <Box id="media-player">
                 <AudioClipPlayer audioUrl={audioURL} />
