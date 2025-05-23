@@ -1,3 +1,4 @@
+import { IMultilingualTextItem, LanguageCode } from '@coscrad/api-interfaces';
 import { Maybe } from '../../../../lib/types/maybe';
 import { AggregateId } from '../../../types/AggregateId';
 import { EventSourcedSongViewModel } from './song.view-model.event.sourced';
@@ -9,17 +10,17 @@ export interface ISongQueryRepository {
 
     createMany(view: EventSourcedSongViewModel[]): Promise<void>;
 
-    // delete(id: AggregateId): Promise<void>;
+    delete(id: AggregateId): Promise<void>;
 
     fetchById(id: AggregateId): Promise<Maybe<EventSourcedSongViewModel>>;
 
-    // fetchMany(): Promise<EventSourcedAudioItemViewModel[]>;
+    fetchMany(): Promise<EventSourcedSongViewModel[]>;
 
-    // translateName(id: AggregateId, translationItem: IMultilingualTextItem): Promise<void>;
+    translateName(id: AggregateId, translationItem: IMultilingualTextItem): Promise<void>;
 
     count(): Promise<number>;
 
-    // addLyrics(): Promise<void>;
+    addLyrics(id: AggregateId, textForLyrics: string, languageCode: LanguageCode): Promise<void>;
 
-    // translateLyrics(): Promise<void>;
+    translateLyrics(id: AggregateId, translation: IMultilingualTextItem): Promise<void>;
 }
