@@ -441,11 +441,11 @@ describe(`MigrateEventsFromLegacySnapshotCollections`, () => {
                     ...existingEvents,
                     ...playlistEventsAlreadyInEventsCollection.map(mapEntityDTOToDatabaseDocument),
                 ]);
-
-            await migrationUnderTest.up(testQueryRunner);
         });
 
         it(`should append the events to the event collection`, async () => {
+            await migrationUnderTest.up(testQueryRunner);
+
             const updatedEvents = await testDatabaseProvider
                 .getDatabaseForCollection<BaseEvent>(ArangoCollectionId.events)
                 .fetchMany();
@@ -517,6 +517,42 @@ describe(`MigrateEventsFromLegacySnapshotCollections`, () => {
                     playlistEventsNotInEventsCollection.length +
                     playlistEventsAlreadyInEventsCollection.length
             );
+        });
+
+        it(`should be reversible`, async () => {
+            await migrationUnderTest.up(testQueryRunner);
+
+            await migrationUnderTest.down(testQueryRunner);
+
+            const updatedEvents = await testDatabaseProvider
+                .getDatabaseForCollection<BaseEvent>(ArangoCollectionId.events)
+                .fetchMany();
+
+            /**
+             * Note that the events that are in the event collection already
+             * for playlist will also be removed. These will be re-added
+             * if you run `up` again.
+             */
+            // expect(updatedEvents).toHaveLength(existingEvents.length);
+
+            const boogerEvents = updatedEvents.filter(
+                ({
+                    payload: {
+                        aggregateCompositeIdentifier: { type },
+                    },
+                }) =>
+                    [
+                        ResourceType.song,
+                        ResourceType.video,
+                        ResourceType.audioItem,
+                        ResourceType.term,
+                        ResourceType.vocabularyList,
+                        ResourceType.playlist,
+                        ResourceType.photograph,
+                    ].includes(type as ResourceType)
+            );
+
+            expect(boogerEvents).toHaveLength(0);
         });
     });
 });
