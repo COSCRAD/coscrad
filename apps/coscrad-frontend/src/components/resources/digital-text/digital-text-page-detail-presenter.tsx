@@ -1,7 +1,7 @@
 import { IDigitalTextPage } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Typography, styled } from '@mui/material';
-import { MultilingualTextPresenter } from '../../../utils/generic-components/presenters/multilingual-text-presenter';
+import { ExpandableMultilingualTextPresenter } from '../../../utils/generic-components/presenters/expandable-multilingual-text-presenter';
 import { PageContentForm, TextAndLanguage } from './page-content-form';
 
 const StyledMuiPage = styled('div')({
@@ -37,7 +37,7 @@ export const DigitalTextPageDetailPresenter = ({
      */
     return (
         <StyledMuiPage data-testid={`digital-text.page:${identifier}`}>
-            {hasContent ? <MultilingualTextPresenter text={content} /> : null}
+            {hasContent ? <ExpandableMultilingualTextPresenter text={content} /> : null}
             <Typography sx={{ bottom: 0, right: 0, mb: 1, mr: 1, position: 'absolute' }}>
                 {isSelected ? '**' : ''}
                 {identifier}
