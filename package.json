@@ -15,7 +15,7 @@
         "start:db:production": "./scripts/arangodb-docker-container-setup/start-arango-db.sh production",
         "lint:coscrad": "nx lint api && nx lint coscrad-frontend && nx lint validation-constraints && nx lint commands",
         "test:coscrad": "nx test api && nx test coscrad-frontend && nx test validation-constraints && nx test commands",
-        "build:coscrad:prod": "nx build api --prod --skip-nx-cache && nx build coscrad-frontend --prod --skip-nx-cache --verbose",
+        "build:coscrad:prod": "nx build api --prod && nx build coscrad-frontend --prod",
         "quality-check:coscrad": "npm run lint:coscrad && npm run test:coscrad && npm run build:coscrad:prod",
         "test": "nx test",
         "lint": "nx workspace-lint && nx lint",
