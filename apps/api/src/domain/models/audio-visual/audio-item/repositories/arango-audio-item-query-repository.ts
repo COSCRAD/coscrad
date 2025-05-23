@@ -2,10 +2,8 @@ import {
     ICommandFormAndLabels,
     IDetailQueryResult,
     IMultilingualTextItem,
-    MultilingualTextItemRole,
+    ResourceType,
 } from '@coscrad/api-interfaces';
-import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
-import { MultilingualTextItem } from '../../../../../domain/common/entities/multilingual-text';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../../lib/types/maybe';
@@ -16,9 +14,8 @@ import { ArangoDatabaseForCollection } from '../../../../../persistence/database
 import mapDatabaseDocumentToAggregateDTO from '../../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { ArangoResourceQueryBuilder } from '../../../term/repositories/arango-resource-query-builder';
-import { TranscriptItem } from '../../shared/entities/transcript-item.entity';
 import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
-import { Transcript } from '../../shared/entities/transcript.entity';
+import { ArangoTranscriptQueryBuilder } from '../../shared/queries/transcript-query-builder';
 import { TranscriptLineItemDto, TranslationItem } from '../commands';
 import { EventSourcedAudioItemViewModel } from '../queries';
 import {
@@ -31,7 +28,12 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
         IDetailQueryResult<EventSourcedAudioItemViewModel & { actions: ICommandFormAndLabels[] }>
     >;
 
+    // Can we use the resource type for this as well or should we use the collection name below?
     private readonly baseResourceQueryBuilder = new ArangoResourceQueryBuilder('audioItem__VIEWS');
+
+    private readonly transcriptQueryBuilder = new ArangoTranscriptQueryBuilder(
+        ResourceType.audioItem
+    );
 
     constructor(arangoConnectionProvider: ArangoConnectionProvider) {
         this.database = new ArangoDatabaseForCollection(
@@ -97,36 +99,8 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
         id: AggregateId,
         { text, languageCode, role }: IMultilingualTextItem
     ): Promise<void> {
-        const query = `
-        FOR doc IN @@collectionName
-        FILTER doc._key == @id
-        let newItem = {
-                    text: @text,
-                    languageCode: @languageCode,
-                    role: @role
-        }
-        UPDATE doc WITH {
-            name: {
-                items: APPEND(doc.name.items,newItem)
-            }
-        } IN @@collectionName
-         RETURN OLD
-        `;
-
-        const bindVars = {
-            // TODO save this as an instance variable or global constant
-            '@collectionName': 'audioItem__VIEWS',
-            id: id,
-            text: text,
-            role: role,
-            languageCode: languageCode,
-        };
-
         const cursor = await this.database
-            .query({
-                query,
-                bindVars,
-            })
+            .query(this.baseResourceQueryBuilder.translateName(id, text, languageCode, role))
             .catch((reason) => {
                 throw new InternalError(`Failed to translate term via TermRepository: ${reason}`);
             });
@@ -134,213 +108,45 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
         await cursor.all();
     }
 
-    // TODO Add a test case for this
     async createTranscript(id: AggregateId): Promise<void> {
-        const emptyTranscript = Transcript.buildEmpty();
-
-        const query = `
-        FOR doc IN @@collectionName
-        FILTER doc._key == @id
-        UPDATE doc WITH {
-            transcript: @transcriptDto
-        } IN @@collectionName
-        `;
-
-        const bindVars = {
-            '@collectionName': 'audioItem__VIEWS',
-            id,
-            transcriptDto: emptyTranscript.toDTO(),
-        };
-
-        const cursor = await this.database.query({ query, bindVars });
+        const cursor = await this.database.query(this.transcriptQueryBuilder.createTranscript(id));
 
         await cursor.all();
     }
 
-    async addParticipant(id: AggregateId, { name, initials }: TranscriptParticipant) {
-        const query = `
-        FOR doc IN @@collectionName
-        FILTER doc._key == @id
-        let newParticipant = {
-            name: @name,
-            initials: @initials
-        }
-        update doc with {
-            transcript: MERGE(doc.transcript,{
-                participants: APPEND(doc.transcript.participants,newParticipant)
-            }) 
-        } IN @@collectionName
-        `;
-
-        const bindVars = {
-            '@collectionName': 'audioItem__VIEWS',
-            id,
-            name,
-            initials,
-        };
-
-        const cursor = await this.database.query({ query, bindVars });
+    async addParticipant(id: AggregateId, participant: TranscriptParticipant) {
+        const cursor = await this.database.query(
+            this.transcriptQueryBuilder.addParticipant(id, participant)
+        );
 
         await cursor.all();
     }
 
-    async addLineItem(
-        id: AggregateId,
-        {
-            speakerInitials,
-            inPointMilliseconds,
-            outPointMilliseconds,
-            text,
-            languageCode,
-        }: TranscriptLineItemDto
-    ): Promise<void> {
-        const query = `
-        FOR doc IN @@collectionName
-        FILTER doc._key == @id
-
-        update doc with {
-            transcript: MERGE(doc.transcript,{
-                items: APPEND(doc.transcript.items, @lineItem)
-            })
-        } IN @@collectionName
-        `;
-
-        const bindVars = {
-            '@collectionName': 'audioItem__VIEWS',
-            id,
-            lineItem: new TranscriptItem({
-                text: buildMultilingualTextWithSingleItem(text, languageCode),
-                inPointMilliseconds,
-                outPointMilliseconds,
-                speakerInitials,
-            }),
-        };
-
-        await this.database.query({ query, bindVars });
+    async addLineItem(id: AggregateId, lineItem: TranscriptLineItemDto): Promise<void> {
+        await this.database.query(this.transcriptQueryBuilder.addLineItem(id, lineItem));
     }
 
     async importLineItems(id: AggregateId, lineItems: TranscriptLineItemDto[]) {
-        const query = `
-        FOR doc IN @@collectionName
-        FILTER doc._key == @id
-
-        update doc with {
-            transcript: MERGE(doc.transcript,{
-                items: APPEND(doc.transcript.items, @lineItems)
-            })
-        } IN @@collectionName
-        `;
-
-        const bindVars = {
-            '@collectionName': 'audioItem__VIEWS',
-            id,
-            lineItems: lineItems.map(
-                ({
-                    inPointMilliseconds,
-                    outPointMilliseconds,
-                    text,
-                    languageCode,
-                    speakerInitials,
-                }) =>
-                    new TranscriptItem({
-                        text: buildMultilingualTextWithSingleItem(text, languageCode),
-                        inPointMilliseconds,
-                        outPointMilliseconds,
-                        speakerInitials,
-                    })
-            ),
-        };
-
-        await this.database.query({ query, bindVars });
+        await this.database.query(this.transcriptQueryBuilder.importLineItems(id, lineItems));
     }
 
     async translateLineItem(
         id: AggregateId,
         // TODO Consider whether the out point is actually necessary here
-        { languageCode, text, inPointMilliseconds, outPointMilliseconds }: TranslationLineItemDto
+        translationItem: TranslationLineItemDto
     ) {
-        const newMultilingualTextItem = new MultilingualTextItem({
-            languageCode,
-            text,
-            // TODO add this to the event payload
-            role: MultilingualTextItemRole.freeTranslation,
-        });
-
-        const query = `
-        FOR doc IN @@collectionName
-        FILTER doc._key == @id
-
-        let updatedItems = (
-            FOR item IN doc.transcript.items
-            let updatedItem = item.inPointMilliseconds == @inPointMilliseconds && item.outPointMilliseconds == @outPointMilliseconds ? MERGE(item,{ text: { items: APPEND(item.text.items,@newItem) }}) : item
-            return updatedItem
-        )
-
-        update doc with {
-            transcript: MERGE(doc.transcript,{
-                items: updatedItems
-            })
-        } IN @@collectionName
-        `;
-
-        const bindVars = {
-            '@collectionName': 'audioItem__VIEWS',
-            id,
-            inPointMilliseconds,
-            outPointMilliseconds,
-            newItem: newMultilingualTextItem,
-        };
-
-        await this.database.query({ query, bindVars });
+        await this.database.query(
+            this.transcriptQueryBuilder.translateLineItem(id, translationItem)
+        );
     }
 
     async importTranslationsForTranscript(
         id: AggregateId,
         translations: TranslationItem[]
     ): Promise<void> {
-        const timeStampsAndNewMultilingualTextItems = translations.map(
-            ({ inPointMilliseconds, translation: text, languageCode }) => ({
-                inPointMilliseconds,
-                translationItem: new MultilingualTextItem({
-                    text,
-                    languageCode,
-                    role: MultilingualTextItemRole.freeTranslation,
-                }),
-            })
+        await this.database.query(
+            this.transcriptQueryBuilder.importTranslationsForTranscript(id, translations)
         );
-
-        const query = `
-        for doc in @@collectionName
-        filter doc._key == @id
-
-        let updatedTranscriptItems = (
-            for existingItem in doc.transcript.items
-            let index = position(@translations[*].inPointMilliseconds,existingItem.inPointMilliseconds,true)
-             return merge_recursive(existingItem,
-                index == -1 
-                    ? {}
-                    : {
-                        text: {
-                            items: append(existingItem.text.items,@translations[index].translationItem)
-                        }
-                    }
-            )
-        )
-
-        update doc with {
-            transcript: {
-                        items: updatedTranscriptItems
-                        }
-                    } in @@collectionName
-            `;
-
-        const bindVars = {
-            '@collectionName': 'audioItem__VIEWS',
-            id,
-            translations: timeStampsAndNewMultilingualTextItems,
-        };
-
-        await this.database.query({ query, bindVars });
     }
 
     async count(): Promise<number> {

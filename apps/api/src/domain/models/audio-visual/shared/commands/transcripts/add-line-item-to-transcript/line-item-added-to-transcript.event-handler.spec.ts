@@ -17,29 +17,18 @@ import generateDatabaseNameForTestSuite from '../../../../../../../persistence/r
 import { buildTestInstance } from '../../../../../../../test-data/utilities';
 import { EventSourcedAudioItemViewModel } from '../../../../audio-item/queries';
 import { IAudioItemQueryRepository } from '../../../../audio-item/queries/audio-item-query-repository.interface';
+import { EventSourcedVideoViewModel } from '../../../../video/queries';
 import { TranscriptItem } from '../../../entities/transcript-item.entity';
 import { TranscriptParticipant } from '../../../entities/transcript-participant';
 import { Transcript } from '../../../entities/transcript.entity';
 import { LineItemAddedToTranscript } from './line-item-added-to-transcript.event';
 import { LineItemAddedToTranscriptEventHandler } from './line-item-added-to-transcript.event-handler';
 
-const audioItemId = buildDummyUuid(49);
+const resourceId = buildDummyUuid(49);
 
 const participant = new TranscriptParticipant({
     initials: 'BS',
     name: 'Bob Smith',
-});
-
-const targetAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
-    id: audioItemId,
-    transcript: Transcript.buildEmpty().addParticipant(participant) as Transcript,
-});
-
-const lineItemAdded = buildTestInstance(LineItemAddedToTranscript, {
-    payload: {
-        aggregateCompositeIdentifier: { id: targetAudioItem.id, type: AggregateType.audioItem },
-        speakerInitials: participant.initials,
-    },
 });
 
 describe(`LineItemAddedToTranscriptEventHandler`, () => {
@@ -91,44 +80,122 @@ describe(`LineItemAddedToTranscriptEventHandler`, () => {
     });
 
     describe(`when handling a LINE_ITEM_ADDED_TO_TRANSCRIPT`, () => {
-        beforeEach(async () => {
-            await testRepositoryProvider
-                .forResource(ResourceType.audioItem)
-                .create(targetAudioItem);
+        describe(`for an audio item`, () => {
+            const targetAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
+                id: resourceId,
+                transcript: Transcript.buildEmpty().addParticipant(participant) as Transcript,
+            });
+
+            const lineItemAdded = buildTestInstance(LineItemAddedToTranscript, {
+                payload: {
+                    aggregateCompositeIdentifier: {
+                        id: targetAudioItem.id,
+                        type: AggregateType.audioItem,
+                    },
+                    speakerInitials: participant.initials,
+                },
+            });
+
+            beforeEach(async () => {
+                await testRepositoryProvider
+                    .forResource(ResourceType.audioItem)
+                    .create(targetAudioItem);
+            });
+
+            it(`should add the expected line item`, async () => {
+                await lineItemAddedToTranscriptEventHandler.handle(lineItemAdded);
+
+                const { transcript } = (await testRepositoryProvider
+                    .forResource<IAudioItemQueryRepository>(ResourceType.audioItem)
+                    .fetchById(targetAudioItem.id)) as EventSourcedAudioItemViewModel;
+
+                expect(transcript.countLineItems()).toBe(1);
+
+                const {
+                    payload: {
+                        inPointMilliseconds,
+                        outPointMilliseconds,
+                        speakerInitials,
+                        languageCode,
+                        text: textFromPayload,
+                    },
+                } = lineItemAdded;
+
+                const {
+                    text: multilingualTextFoundForLineItem,
+                    speakerInitials: foundSpeakerInitials,
+                } = transcript.getLineItem(
+                    inPointMilliseconds,
+                    outPointMilliseconds
+                ) as TranscriptItem;
+
+                expect(foundSpeakerInitials).toBe(speakerInitials);
+
+                const { languageCode: foundOriginalLanguageCode, text: foundText } =
+                    multilingualTextFoundForLineItem.getOriginalTextItem();
+
+                expect(foundOriginalLanguageCode).toBe(languageCode);
+
+                expect(foundText).toBe(textFromPayload);
+            });
         });
 
-        it(`should add the expected line item`, async () => {
-            await lineItemAddedToTranscriptEventHandler.handle(lineItemAdded);
+        describe(`for a video`, () => {
+            const targetVideo = buildTestInstance(EventSourcedVideoViewModel, {
+                id: resourceId,
+                transcript: Transcript.buildEmpty().addParticipant(participant) as Transcript,
+            });
 
-            const { transcript } = (await testRepositoryProvider
-                .forResource<IAudioItemQueryRepository>(ResourceType.audioItem)
-                .fetchById(targetAudioItem.id)) as EventSourcedAudioItemViewModel;
-
-            expect(transcript.countLineItems()).toBe(1);
-
-            const {
+            const lineItemAdded = buildTestInstance(LineItemAddedToTranscript, {
                 payload: {
-                    inPointMilliseconds,
-                    outPointMilliseconds,
-                    speakerInitials,
-                    languageCode,
-                    text: textFromPayload,
+                    aggregateCompositeIdentifier: {
+                        id: targetVideo.id,
+                        type: AggregateType.video,
+                    },
+                    speakerInitials: participant.initials,
                 },
-            } = lineItemAdded;
+            });
 
-            const {
-                text: multilingualTextFoundForLineItem,
-                speakerInitials: foundSpeakerInitials,
-            } = transcript.getLineItem(inPointMilliseconds, outPointMilliseconds) as TranscriptItem;
+            beforeEach(async () => {
+                await testRepositoryProvider.forResource(ResourceType.video).create(targetVideo);
+            });
 
-            expect(foundSpeakerInitials).toBe(speakerInitials);
+            it(`should add the expected line item`, async () => {
+                await lineItemAddedToTranscriptEventHandler.handle(lineItemAdded);
 
-            const { languageCode: foundOriginalLanguageCode, text: foundText } =
-                multilingualTextFoundForLineItem.getOriginalTextItem();
+                const { transcript } = (await testRepositoryProvider
+                    .forResource<IAudioItemQueryRepository>(ResourceType.video)
+                    .fetchById(targetVideo.id)) as EventSourcedVideoViewModel;
 
-            expect(foundOriginalLanguageCode).toBe(languageCode);
+                expect(transcript.countLineItems()).toBe(1);
 
-            expect(foundText).toBe(textFromPayload);
+                const {
+                    payload: {
+                        inPointMilliseconds,
+                        outPointMilliseconds,
+                        speakerInitials,
+                        languageCode,
+                        text: textFromPayload,
+                    },
+                } = lineItemAdded;
+
+                const {
+                    text: multilingualTextFoundForLineItem,
+                    speakerInitials: foundSpeakerInitials,
+                } = transcript.getLineItem(
+                    inPointMilliseconds,
+                    outPointMilliseconds
+                ) as TranscriptItem;
+
+                expect(foundSpeakerInitials).toBe(speakerInitials);
+
+                const { languageCode: foundOriginalLanguageCode, text: foundText } =
+                    multilingualTextFoundForLineItem.getOriginalTextItem();
+
+                expect(foundOriginalLanguageCode).toBe(languageCode);
+
+                expect(foundText).toBe(textFromPayload);
+            });
         });
     });
 });

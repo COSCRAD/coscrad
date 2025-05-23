@@ -2,6 +2,7 @@ import { ResourceType } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { AUDIO_QUERY_REPOSITORY_TOKEN } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
+import { VIDEO_QUERY_REPOSITORY_TOKEN } from '../../audio-visual/video/queries';
 import { PHOTOGRAPH_QUERY_REPOSITORY_TOKEN } from '../../photograph/queries';
 import { PLAYLIST_QUERY_REPOSITORY_TOKEN } from '../../playlist/queries/playlist-query-repository.interface';
 import {
@@ -22,6 +23,7 @@ export class ArangoQueryRepositoryProvider implements IQueryRepositoryProvider {
         @Inject(PHOTOGRAPH_QUERY_REPOSITORY_TOKEN) private readonly photographQueryRepository,
         @Inject(TERM_QUERY_REPOSITORY_TOKEN) private readonly termQueryRepsitory,
         @Inject(AUDIO_QUERY_REPOSITORY_TOKEN) private readonly audioItemQueryRepository,
+        @Inject(VIDEO_QUERY_REPOSITORY_TOKEN) private readonly videoQueryRepository,
         @Inject(VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN)
         private readonly vocabularyListQueryRepository,
         @Inject(PLAYLIST_QUERY_REPOSITORY_TOKEN)
@@ -31,6 +33,10 @@ export class ArangoQueryRepositoryProvider implements IQueryRepositoryProvider {
     forResource<T extends IPublishable>(resourceType: ResourceType): T {
         if (resourceType === ResourceType.audioItem) {
             return this.audioItemQueryRepository;
+        }
+
+        if (resourceType === ResourceType.video) {
+            return this.videoQueryRepository;
         }
 
         if (resourceType === ResourceType.photograph) {

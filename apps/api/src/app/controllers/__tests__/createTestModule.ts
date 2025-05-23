@@ -598,6 +598,12 @@ export default async (
                 inject: [ArangoConnectionProvider, AUDIO_QUERY_REPOSITORY_TOKEN],
             },
             {
+                provide: VIDEO_QUERY_REPOSITORY_TOKEN,
+                useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
+                    new ArangoVideoQueryRepository(arangoConnectionProvider),
+                inject: [ArangoConnectionProvider],
+            },
+            {
                 provide: VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
                 useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
                     new ArangoVocabularyListQueryRepository(
@@ -625,6 +631,7 @@ export default async (
                     photographQueryRespository: ArangoPhotographQueryRepository,
                     termQueryRepository: ArangoTermQueryRepository,
                     audioItemQueryRepository: ArangoAudioItemQueryRepository,
+                    videoQueryRepository: ArangoVideoQueryRepository,
                     vocabularyListQueryRepository: ArangoVocabularyListQueryRepository,
                     playlistQueryRepository: ArangoPlaylistQueryRepository
                 ): IQueryRepositoryProvider => {
@@ -632,6 +639,7 @@ export default async (
                         photographQueryRespository,
                         termQueryRepository,
                         audioItemQueryRepository,
+                        videoQueryRepository,
                         vocabularyListQueryRepository,
                         playlistQueryRepository
                     );
@@ -640,6 +648,7 @@ export default async (
                     PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
                     TERM_QUERY_REPOSITORY_TOKEN,
                     AUDIO_QUERY_REPOSITORY_TOKEN,
+                    VIDEO_QUERY_REPOSITORY_TOKEN,
                     VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
                     PLAYLIST_QUERY_REPOSITORY_TOKEN,
                 ],
