@@ -23,6 +23,7 @@ export class MigrateEventsFromLegacySnapshotCollections implements ICoscradMigra
             'playlists',
             'audio_items',
             'videos',
+            'photographs',
         ];
 
         const queries = targetCollections.map((collectionName) => ({
