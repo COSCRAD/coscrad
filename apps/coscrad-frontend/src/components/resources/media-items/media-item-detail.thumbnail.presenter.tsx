@@ -5,7 +5,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { Card, Divider } from '@mui/material';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
-import { MultilingualTextPresenter } from '../../../utils/generic-components/presenters/multilingual-text-presenter';
+import { ExpandableMultilingualTextPresenter } from '../../../utils/generic-components/presenters/expandable-multilingual-text-presenter';
 import { renderMediaLengthInSeconds } from '../utils/render-media-length-in-seconds-cell';
 
 export const MediaItemDetailThumbnailPresenter = ({
@@ -20,7 +20,7 @@ export const MediaItemDetailThumbnailPresenter = ({
         >
             <Card className="detail-card">
                 <div id="detail-term" className="detail-meta">
-                    <MultilingualTextPresenter text={name} />
+                    <ExpandableMultilingualTextPresenter text={name} />
                 </div>
                 <Divider id="detail-divider" />
                 <div className="detail-meta">

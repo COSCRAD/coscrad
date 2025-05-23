@@ -1,3 +1,4 @@
+export * from './bilingual-multilingual-text-presenter';
 export * from './comma-separated-list';
 export * from './detail-views/resource-detail-full-view-presenter';
 export * from './detail-views/resource-detail-thumbnail-presenter';
