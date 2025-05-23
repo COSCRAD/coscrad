@@ -1,7 +1,6 @@
 import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { CoscradEvent } from '../../../../../../domain/common';
 import { CoscradDataExample } from '../../../../../../test-data/utilities';
-import { DTO } from '../../../../../../types/DTO';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../../../__tests__/utilities/dummyDateNow';
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
@@ -36,8 +35,4 @@ const testEventId = buildDummyUuid(4);
 @CoscradEvent('VIDEO_CREATED')
 export class VideoCreated extends BaseEvent<VideoCreatedPayload> {
     readonly type = 'VIDEO_CREATED';
-
-    public static fromDto(dto: DTO<VideoCreated>) {
-        return new VideoCreated(dto.payload, dto.meta);
-    }
 }

@@ -53,7 +53,6 @@ const songWithNoNameInLanguage = {
     id: buildDummyUuid(221),
 };
 
-// @ts-expect-error fix me
 const oldSongDocuments: ArangoDatabaseDocument<OldSongDto>[] = Array(7)
     .fill(null)
     .map((_, index) => ({

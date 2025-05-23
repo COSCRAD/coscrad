@@ -3,7 +3,6 @@ import { CoscradEvent } from '../../../../../../../domain/common';
 import buildDummyUuid from '../../../../../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../../../../../../domain/models/__tests__/utilities/dummyDateNow';
 import { CoscradDataExample } from '../../../../../../../test-data/utilities';
-import { DTO } from '../../../../../../../types/DTO';
 import { BaseEvent } from '../../../../../shared/events/base-event.entity';
 import { CreateTranscript } from './create-transcript.command';
 
@@ -31,12 +30,4 @@ const testEventId = buildDummyUuid(100);
 @CoscradEvent('TRANSCRIPT_CREATED')
 export class TranscriptCreated extends BaseEvent<TranscriptCreatedPayload> {
     readonly type = 'TRANSCRIPT_CREATED';
-
-    public static fromDto(dto: DTO<TranscriptCreated>) {
-        if (!dto) return;
-
-        const { payload, meta } = dto;
-
-        return new TranscriptCreated(payload, meta);
-    }
 }

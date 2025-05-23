@@ -1,7 +1,6 @@
 import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { CoscradEvent } from '../../../../../../domain/common';
 import { CoscradDataExample } from '../../../../../../test-data/utilities';
-import { DTO } from '../../../../../../types/DTO';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../../../__tests__/utilities/dummyDateNow';
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
@@ -34,8 +33,4 @@ const testEventId = buildDummyUuid(4);
 @CoscradEvent('VIDEO_NAME_TRANSLATED')
 export class VideoNameTranslated extends BaseEvent<VideoNameTranslatedPayload> {
     readonly type = 'VIDEO_NAME_TRANSLATED';
-
-    public static fromDto(dto: DTO<VideoNameTranslated>) {
-        return new VideoNameTranslated(dto.payload, dto.meta);
-    }
 }

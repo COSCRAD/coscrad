@@ -1,6 +1,5 @@
 import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { CoscradDataExample } from '../../../../test-data/utilities';
-import { DTO } from '../../../../types/DTO';
 import { CoscradEvent } from '../../../common';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../__tests__/utilities/dummyDateNow';
@@ -32,8 +31,4 @@ export type PlaylistCreatedPayload = CreatePlayList;
 @CoscradEvent('PLAYLIST_CREATED')
 export class PlaylistCreated extends BaseEvent<PlaylistCreatedPayload> {
     readonly type = 'PLAYLIST_CREATED';
-
-    public static fromDto({ payload, meta }: DTO<PlaylistCreated>) {
-        return new PlaylistCreated(payload, meta);
-    }
 }

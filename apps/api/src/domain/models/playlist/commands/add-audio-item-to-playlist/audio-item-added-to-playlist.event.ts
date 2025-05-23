@@ -1,7 +1,6 @@
 import { AggregateType } from '@coscrad/api-interfaces';
 import { CoscradEvent } from '../../../../../domain/common';
 import { CoscradDataExample } from '../../../../../test-data/utilities';
-import { DTO } from '../../../../../types/DTO';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../../__tests__/utilities/dummyDateNow';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
@@ -33,11 +32,4 @@ export type AudioItemAddedToPlaylistPayload = AddAudioItemToPlaylist;
 @CoscradEvent(`AUDIO_ITEM_ADDED_TO_PLAYLIST`)
 export class AudioItemAddedToPlaylist extends BaseEvent<AddAudioItemToPlaylist> {
     readonly type = 'AUDIO_ITEM_ADDED_TO_PLAYLIST';
-
-    /**
-     * Is there any  magic we can do to put this on the `BaseEvent`?
-     */
-    public static fromDto({ payload, meta }: DTO<AudioItemAddedToPlaylist>) {
-        return new AudioItemAddedToPlaylist(payload, meta);
-    }
 }

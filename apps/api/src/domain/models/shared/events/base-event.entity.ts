@@ -72,9 +72,12 @@ export abstract class BaseEvent<
         return capitalizeFirstLetter(eventDescription);
     }
 
-    // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-66]
-    // public static fromDto<T extends BaseEvent>(eventRecord: DTO<T>) {
-    //     // @ts-expect-error we know more than the compiler here
-    //     return new this.constructor(eventRecord);
-    // }
+    public static fromDto<T extends BaseEvent>(eventRecord: DTO<T>): T {
+        if (!eventRecord) {
+            return;
+        }
+
+        // @ts-expect-error we know more than the compiler here
+        return new this(eventRecord.payload, eventRecord.meta);
+    }
 }
