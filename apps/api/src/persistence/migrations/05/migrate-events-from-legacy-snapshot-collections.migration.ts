@@ -1,6 +1,16 @@
 import { ICoscradMigration } from '../coscrad-migration.interface';
 import { ICoscradQueryRunner } from '../coscrad-query-runner.interface';
 
+const targetCollections = [
+    'songs',
+    'terms',
+    'vocabulary_lists',
+    'playlists',
+    'audio_items',
+    'videos',
+    'photographs',
+];
+
 export class MigrateEventsFromLegacySnapshotCollections implements ICoscradMigration {
     sequenceNumber = 5;
 
@@ -16,16 +26,6 @@ export class MigrateEventsFromLegacySnapshotCollections implements ICoscradMigra
             in events
         `;
 
-        const targetCollections = [
-            'songs',
-            'terms',
-            'vocabulary_lists',
-            'playlists',
-            'audio_items',
-            'videos',
-            'photographs',
-        ];
-
         const queries = targetCollections.map((collectionName) => ({
             query,
             context: {
@@ -37,7 +37,13 @@ export class MigrateEventsFromLegacySnapshotCollections implements ICoscradMigra
         await queryRunner.transaction(queries, [...targetCollections, 'events']);
     }
 
-    async down(_queryRunner: ICoscradQueryRunner): Promise<void> {
-        throw new Error('Method not implemented.');
+    async down(queryRunner: ICoscradQueryRunner): Promise<void> {
+        const query = `
+            for e in events
+            filter position(['song','video','audioItem','playlist','photograph','term','vocabularyList'],e.payload.aggregateCompositeIdentifier.type)
+            remove e in events
+        `;
+
+        await queryRunner.query(query, {});
     }
 }
