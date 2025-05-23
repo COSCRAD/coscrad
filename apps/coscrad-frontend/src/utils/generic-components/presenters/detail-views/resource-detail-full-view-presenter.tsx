@@ -3,7 +3,10 @@ import { Box, Grid } from '@mui/material';
 import { ReactNode } from 'react';
 import { buildDataAttributeForAggregateDetailComponent } from './build-data-attribute-for-aggregate-detail-component';
 import { ContributionsPresenter } from './contributions-presenter';
-import { ResourceDetailPresenterHeader } from './resource-detail-presenter-header';
+import {
+    ResourceDetailPresenterHeader,
+    ResourceNamePresenter,
+} from './resource-detail-presenter-header';
 import { ResourcePreviewIconFactory } from './resource-preview-icon';
 
 export interface ResourceDetailFullViewPresenterProps {
@@ -12,10 +15,10 @@ export interface ResourceDetailFullViewPresenterProps {
     videoUrl?: string;
     audioUrl?: string;
     contributions: IContributionSummary[];
-    // TODO: Refactor the name property to eliminate this conditional type
-    name: IMultilingualText | string;
+    name: IMultilingualText;
     type: ResourceType;
     children?: ReactNode;
+    NamePresenter?: ResourceNamePresenter;
 }
 
 /**
@@ -32,6 +35,7 @@ export const ResourceDetailFullViewPresenter = ({
     type,
     children,
     contributions,
+    NamePresenter,
 }: ResourceDetailFullViewPresenterProps): JSX.Element => {
     return (
         <Grid container spacing={0} columns={{ xs: 2, sm: 4, md: 12 }}>
@@ -43,7 +47,13 @@ export const ResourceDetailFullViewPresenter = ({
             </Grid>
             <Grid item xs={2} sm={2} md={8}>
                 {/* TODO: consider putting a standardized name property on the view models */}
-                <ResourceDetailPresenterHeader id={id} type={type} name={name} variant="h3" />
+                <ResourceDetailPresenterHeader
+                    id={id}
+                    type={type}
+                    name={name}
+                    variant="h3"
+                    NamePresenter={NamePresenter}
+                />
 
                 <div data-testid={buildDataAttributeForAggregateDetailComponent(type, id)} />
                 {children}

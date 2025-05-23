@@ -16,6 +16,11 @@ import {
 import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { findOriginalTextItem } from '../../notes/shared/find-original-text-item';
 
+import { isNullOrUndefined, isString } from '@coscrad/validation-constraints';
+import { Typography } from '@mui/material';
+import { ResourceNamePresenterProps } from '../../../utils/generic-components/presenters/detail-views/resource-detail-presenter-header';
+import { ExpandableMultilingualTextPresenter } from '../../../utils/generic-components/presenters/expandable-multilingual-text-presenter';
+
 const VocabularyListRecordForTermPresenter = ({
     id: termId,
     vocabularyLists,
@@ -48,6 +53,25 @@ const VocabularyListRecordForTermPresenter = ({
     </Box>
 );
 
+const TermNamePresenter = ({ name, variant }: ResourceNamePresenterProps): JSX.Element => {
+    return (
+        <Typography
+            gutterBottom
+            component="span"
+            variant={variant}
+            fontWeight="bold"
+            color="primary"
+        >
+            {isString(name) || isNullOrUndefined(name) ? (
+                name
+            ) : (
+                // Should we inject the multilingual text presenter instead?
+                <ExpandableMultilingualTextPresenter text={name} />
+            )}
+        </Typography>
+    );
+};
+
 export const TermDetailFullViewPresenter = ({
     id,
     name,
@@ -61,6 +85,7 @@ export const TermDetailFullViewPresenter = ({
             id={id}
             type={ResourceType.term}
             contributions={contributions}
+            NamePresenter={TermNamePresenter}
         >
             <Box
                 data-testid={buildDataAttributeForAggregateDetailComponent(AggregateType.term, id)}
