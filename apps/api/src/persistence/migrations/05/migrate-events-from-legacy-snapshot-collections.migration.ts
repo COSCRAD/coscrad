@@ -1,3 +1,4 @@
+import { ArangoCollectionId } from '../../database/collection-references/ArangoCollectionId';
 import { ICoscradMigration } from '../coscrad-migration.interface';
 import { ICoscradQueryRunner } from '../coscrad-query-runner.interface';
 
@@ -71,18 +72,27 @@ export class MigrateEventsFromLegacySnapshotCollections implements ICoscradMigra
             collectionNameForRollingBackEvents,
         ]);
 
-        transaction.step(async () => {
+        await transaction.step(async () => {
             const backupEventDocs = await queryRunner.fetchMany(collectionNameForRollingBackEvents);
 
-            await db.collection('events').drop();
+            const deleteAllEventsQuery = `
+            for e in events
+            remove e in events
+            `;
 
-            const restoredEventsCollection = db.collection('events');
+            await db.query({
+                query: deleteAllEventsQuery,
+                bindVars: {},
+            });
 
-            await restoredEventsCollection.create();
-
-            await restoredEventsCollection.import(backupEventDocs);
+            await db.collection(ArangoCollectionId.events).import(backupEventDocs);
         });
 
         await transaction.commit();
+        const backupCollection = db.collection(collectionNameForRollingBackEvents);
+
+        if (await backupCollection.exists()) {
+            await backupCollection.drop();
+        }
     }
 }

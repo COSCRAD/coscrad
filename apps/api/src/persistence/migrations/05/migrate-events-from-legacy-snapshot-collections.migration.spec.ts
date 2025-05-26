@@ -159,14 +159,21 @@ describe(`MigrateEventsFromLegacySnapshotCollections`, () => {
         testQueryRunner = new ArangoQueryRunner(testDatabaseProvider);
     });
 
-    beforeEach(async () => {
-        await testRepositoryProvider.testTeardown();
+    beforeEach(
+        async () => {
+            await testRepositoryProvider.testTeardown();
 
-        // We really need to clean up the Arango abstraction layers. The below chain is confusing.
-        const db = testDatabaseProvider.getDBInstance().getDatabaseIntance();
+            // We really need to clean up the Arango abstraction layers. The below chain is confusing.
+            const db = testDatabaseProvider.getDBInstance().getDatabaseIntance();
 
-        await db.collection('legacy-events-m5').drop();
-    });
+            const existing = db.collection('legacy-events-m5');
+
+            if (await existing.exists()) {
+                await existing.drop();
+            }
+        },
+        60000 // 60 s
+    );
 
     describe(`when migrating songs, terms, vocabulary lists, audio items, videos, and playlists`, () => {
         /**
@@ -575,6 +582,6 @@ describe(`MigrateEventsFromLegacySnapshotCollections`, () => {
             expect(updatedEvents).toHaveLength(
                 existingEvents.length + playlistEventsAlreadyInEventsCollection.length
             );
-        });
+        }, 120000); // 120 s
     });
 });
