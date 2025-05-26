@@ -11,12 +11,26 @@ const targetCollections = [
     'photographs',
 ];
 
+const collectionNameForRollingBackEvents = 'legacy-events-m5';
+
 export class MigrateEventsFromLegacySnapshotCollections implements ICoscradMigration {
     sequenceNumber = 5;
 
     name = 'MigrateEventsFromLegacySnapshotCollections';
 
     async up(queryRunner: ICoscradQueryRunner): Promise<void> {
+        const db = queryRunner.getArangoDbInstance();
+
+        const backupEventsCollection = await db.createCollection(
+            collectionNameForRollingBackEvents
+        );
+
+        const transaction = await db.beginTransaction([
+            ...targetCollections,
+            'events',
+            collectionNameForRollingBackEvents,
+        ]);
+
         const query = `
             for doc in @@collectionName
             for e in doc.eventHistory
@@ -28,22 +42,47 @@ export class MigrateEventsFromLegacySnapshotCollections implements ICoscradMigra
 
         const queries = targetCollections.map((collectionName) => ({
             query,
-            context: {
+            bindVars: {
                 '@collectionName': collectionName,
             },
         }));
 
-        // Note that we also need to touch the events collection
-        await queryRunner.transaction(queries, [...targetCollections, 'events']);
+        // copy `events` => `legacy-events-m5`
+        await transaction.step(async () => {
+            const legacyEventdocs = await queryRunner.fetchMany('events');
+
+            backupEventsCollection.import(legacyEventdocs);
+        });
+
+        for (const q of queries) {
+            await transaction.step(async () => {
+                await db.query(q);
+            });
+        }
+
+        await transaction.commit();
     }
 
     async down(queryRunner: ICoscradQueryRunner): Promise<void> {
-        const query = `
-            for e in events
-            filter position(['song','video','audioItem','playlist','photograph','term','vocabularyList'],e.payload.aggregateCompositeIdentifier.type)
-            remove e in events
-        `;
+        const db = queryRunner.getArangoDbInstance();
 
-        await queryRunner.query(query, {});
+        const transaction = await db.beginTransaction([
+            'events',
+            collectionNameForRollingBackEvents,
+        ]);
+
+        transaction.step(async () => {
+            const backupEventDocs = await queryRunner.fetchMany(collectionNameForRollingBackEvents);
+
+            await db.collection('events').drop();
+
+            const restoredEventsCollection = db.collection('events');
+
+            await restoredEventsCollection.create();
+
+            await restoredEventsCollection.import(backupEventDocs);
+        });
+
+        await transaction.commit();
     }
 }

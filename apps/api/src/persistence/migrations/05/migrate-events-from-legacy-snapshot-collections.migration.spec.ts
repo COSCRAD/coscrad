@@ -161,6 +161,11 @@ describe(`MigrateEventsFromLegacySnapshotCollections`, () => {
 
     beforeEach(async () => {
         await testRepositoryProvider.testTeardown();
+
+        // We really need to clean up the Arango abstraction layers. The below chain is confusing.
+        const db = testDatabaseProvider.getDBInstance().getDatabaseIntance();
+
+        await db.collection('legacy-events-m5').drop();
     });
 
     describe(`when migrating songs, terms, vocabulary lists, audio items, videos, and playlists`, () => {
@@ -547,12 +552,29 @@ describe(`MigrateEventsFromLegacySnapshotCollections`, () => {
                         ResourceType.audioItem,
                         ResourceType.term,
                         ResourceType.vocabularyList,
-                        ResourceType.playlist,
+                        // This one had some existing events in the collection
+                        // ResourceType.playlist,
                         ResourceType.photograph,
                     ].includes(type as ResourceType)
             );
 
             expect(boogerEvents).toHaveLength(0);
+
+            const allCollections = await testDatabaseProvider.collections();
+
+            const collectionsWithEventInTheName = allCollections.filter((collection) =>
+                collection.name.includes('event')
+            );
+
+            /**
+             * We want to ensure that the `events` collection still exists, but the
+             * `events-legacy-m5` backup collection does not.
+             */
+            expect(collectionsWithEventInTheName).toHaveLength(1);
+
+            expect(updatedEvents).toHaveLength(
+                existingEvents.length + playlistEventsAlreadyInEventsCollection.length
+            );
         });
     });
 });

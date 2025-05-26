@@ -1,5 +1,6 @@
 import { HasId } from '@coscrad/api-interfaces';
 import { Injectable } from '@nestjs/common';
+import { Database } from 'arangojs';
 import { isDeepStrictEqual } from 'util';
 import { InternalError } from '../../lib/errors/InternalError';
 import { Maybe } from '../../lib/types/maybe';
@@ -90,5 +91,13 @@ export class ArangoQueryRunner implements ICoscradQueryRunner {
             })),
             collectionNames
         );
+    }
+
+    /**
+     * This is an escape hatch. Note that we should phase out the `ICoscradQueryRunner`
+     * abstraction as it has proven brittle with no real benefit.
+     */
+    getArangoDbInstance(): Database {
+        return this.arangoDatabase.getDatabaseIntance();
     }
 }

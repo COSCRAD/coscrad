@@ -46,6 +46,15 @@ export class ArangoDatabase {
         return this.db.name;
     }
 
+    /**
+     * This escape hatch is necessary because some of our earlier abstractions
+     * were brittle. We should refactor our ArangoDB implementation to clean up
+     * these layers at some point.
+     */
+    getDatabaseIntance(): Database {
+        return this.db;
+    }
+
     fetchById = async <TDatabaseDTO extends ArangoDocumentForAggregateRoot<HasAggregateId>>(
         id: string,
         collectionName: string
