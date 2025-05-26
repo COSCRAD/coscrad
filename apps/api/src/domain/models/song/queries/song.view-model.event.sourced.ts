@@ -60,6 +60,7 @@ export class EventSourcedSongViewModel {
             name,
             isPublished,
             accessControlList,
+            // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-76?atlOrigin=eyJpIjoiNjRhMTdkZmVlOWFiNDAxZThmZGZiYmViY2Y5ODE4MTUiLCJwIjoiaiJ9] support this in the query service
             // contributions,
         } = dto;
 
@@ -92,19 +93,19 @@ export class EventSourcedSongViewModel {
             aggregateCompositeIdentifier: { id },
             title,
             languageCodeForTitle,
-            // TODO use this
+            // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-76?atlOrigin=eyJpIjoiNjRhMTdkZmVlOWFiNDAxZThmZGZiYmViY2Y5ODE4MTUiLCJwIjoiaiJ9] use this
             audioItemId: _audioItemId,
         },
     }: SongCreated) {
         return new EventSourcedSongViewModel({
             id,
             name: buildMultilingualTextWithSingleItem(title, languageCodeForTitle),
-            // TODO join this in the query service layer
+            // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-76?atlOrigin=eyJpIjoiNjRhMTdkZmVlOWFiNDAxZThmZGZiYmViY2Y5ODE4MTUiLCJwIjoiaiJ9] join this in the query service layer
             audioURL: '',
             isPublished: false,
             accessControlList: new AccessControlList(),
             contributions: [],
-            // TODO join in media info
+            // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-76?atlOrigin=eyJpIjoiNjRhMTdkZmVlOWFiNDAxZThmZGZiYmViY2Y5ODE4MTUiLCJwIjoiaiJ9] join in media info
             lengthMilliseconds: 0,
         });
     }

@@ -12,23 +12,61 @@ import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
+import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
+import { ContributionSummary } from '../../user-management';
 import { ISongQueryRepository } from '../queries/song-query-repository.interface';
 import { EventSourcedSongViewModel } from '../queries/song.view-model.event.sourced';
 import { ArangoSongQueryRepository } from './arango-song-query-repository';
 
 const audioItemIds = [10, 11, 12].map(buildDummyUuid);
 
+const idOfSongToTestInDetail = audioItemIds[0];
+
 const existingSongWithoutLyrics = buildTestInstance(EventSourcedSongViewModel, {
     lyrics: null,
 });
+
+const testAcl = new AccessControlList().allowUser(buildDummyUuid(869));
+
+const testContributions = [
+    buildTestInstance(ContributionSummary, {
+        contributorIds: [44, 45].map(buildDummyUuid),
+        type: 'SONG_CREATED',
+    }),
+];
 
 const existingSongs = audioItemIds.map((id) =>
     buildTestInstance(EventSourcedSongViewModel, {
         id,
         name: buildMultilingualTextWithSingleItem(`song #${id}`),
+        isPublished: false,
+        accessControlList: testAcl,
+        contributions: testContributions,
     })
 );
+
+const assertTestSongAsExpected = ({
+    name,
+    id,
+    isPublished,
+}: // accessControlList,
+// contributions,
+EventSourcedSongViewModel) => {
+    expect(name.toString()).toEqual(
+        buildMultilingualTextWithSingleItem(`song #${idOfSongToTestInDetail}`).toString()
+    );
+
+    expect(id).toEqual(idOfSongToTestInDetail);
+
+    expect(isPublished).toEqual(false);
+
+    // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-76?atlOrigin=eyJpIjoiNjRhMTdkZmVlOWFiNDAxZThmZGZiYmViY2Y5ODE4MTUiLCJwIjoiaiJ9] opt-in
+    // expect(accessControlList.toDTO()).toEqual(testAcl.toDTO());
+
+    // expect(contributions).toEqual(testContributions);
+};
 
 const textForLyrics = 'my lalala';
 
@@ -78,14 +116,16 @@ describe(`ArangoSongQueryRepository`, () => {
     });
 
     describe(`create`, () => {
-        const viewToCreate = existingSongs[0];
+        const viewToCreate = existingSongs.find(({ id }) => idOfSongToTestInDetail === id);
 
         it(`should create the expected view`, async () => {
             await testQueryRepository.create(viewToCreate);
 
-            const searchResult = testQueryRepository.fetchById(viewToCreate.id);
+            const searchResult = await testQueryRepository.fetchById(idOfSongToTestInDetail);
 
             expect(searchResult).not.toBe(NotFound);
+
+            assertTestSongAsExpected(searchResult as EventSourcedSongViewModel);
         });
     });
 
@@ -96,6 +136,14 @@ describe(`ArangoSongQueryRepository`, () => {
             const numberOfViewsFound = await testQueryRepository.count();
 
             expect(numberOfViewsFound).toBe(existingSongs.length);
+
+            const foundViews = await testQueryRepository.fetchMany();
+
+            const viewToTestInDetail = foundViews.find(({ id }) => idOfSongToTestInDetail === id);
+
+            expect(viewToTestInDetail).toBeTruthy();
+
+            assertTestSongAsExpected(viewToTestInDetail);
         });
     });
 
@@ -139,6 +187,14 @@ describe(`ArangoSongQueryRepository`, () => {
                 );
             });
         });
+
+        describe(`when there is no song with the given ID`, () => {
+            it(`should return not found`, async () => {
+                const searchResult = await testQueryRepository.fetchById(buildDummyUuid(666));
+
+                expect(searchResult).toBe(NotFound);
+            });
+        });
     });
 
     describe(`fetchMany`, () => {
@@ -151,6 +207,10 @@ describe(`ArangoSongQueryRepository`, () => {
             it(`should return them`, async () => {
                 const result = await testQueryRepository.fetchMany();
 
+                /**
+                 * Note that a sanity check is ok here because we do a detailed
+                 * assertion in the symmetric `createMany` case.
+                 */
                 expect(result).toHaveLength(existingSongs.length);
             });
         });
@@ -208,7 +268,7 @@ describe(`ArangoSongQueryRepository`, () => {
             lyrics: buildMultilingualTextWithSingleItem(textForLyrics, languageCodeForLyrics),
         });
 
-        const translationLyrics = 'jajaja';
+        const translationOfLyrics = 'jajaja';
 
         beforeEach(async () => {
             await testQueryRepository.create(targetView);
@@ -216,10 +276,24 @@ describe(`ArangoSongQueryRepository`, () => {
 
         it(`should translate the lyrics for the given song`, async () => {
             await testQueryRepository.translateLyrics(targetView.id, {
-                text: translationLyrics,
+                text: translationOfLyrics,
                 languageCode: translationLanguageCodeForLyrics,
                 role: MultilingualTextItemRole.freeTranslation,
             });
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetView.id
+            )) as EventSourcedSongViewModel;
+
+            expect(updatedView.lyrics.has(translationLanguageCodeForLyrics)).toBe(true);
+
+            const { text, role } = updatedView.lyrics.getTranslation(
+                translationLanguageCodeForLyrics
+            ) as MultilingualTextItem;
+
+            expect(text).toBe(translationOfLyrics);
+
+            expect(role).toBe(MultilingualTextItemRole.freeTranslation);
         });
     });
 
@@ -248,6 +322,14 @@ describe(`ArangoSongQueryRepository`, () => {
             )) as EventSourcedSongViewModel;
 
             expect(updatedView.name.has(translationLanguageCode)).toBe(true);
+
+            const { text, role } = updatedView.name.getTranslation(
+                translationLanguageCode
+            ) as MultilingualTextItem;
+
+            expect(text).toBe(translationOfName);
+
+            expect(role).toBe(MultilingualTextItemRole.freeTranslation);
         });
     });
 });

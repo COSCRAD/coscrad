@@ -4,7 +4,6 @@ import { isNotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabase } from '../../../../persistence/database/arango-database';
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
-import { ArangoCollectionId } from '../../../../persistence/database/collection-references/ArangoCollectionId';
 import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
@@ -49,14 +48,14 @@ export class ArangoSongQueryRepository implements ISongQueryRepository {
             FOR doc IN @@collectionName
             FILTER doc._key == @id
             UPDATE doc WITH {
-                name: {
-                    items: APPEND(doc.name.items,@newItem)
+                lyrics: {
+                    items: APPEND(doc.lyrics.items,@newItem)
                 }
             } IN @@collectionName
             `;
 
         const bindVars = {
-            '@collectionName': ArangoCollectionId.songs,
+            '@collectionName': 'song__VIEWS',
             id: id,
             newItem: translation,
         };
@@ -66,7 +65,11 @@ export class ArangoSongQueryRepository implements ISongQueryRepository {
             bindVars,
         };
 
-        await this.database.query(q);
+        const cursor = await this.database.query(q);
+
+        const result = await cursor.all();
+
+        result;
     }
 
     async delete(id: AggregateId): Promise<void> {
