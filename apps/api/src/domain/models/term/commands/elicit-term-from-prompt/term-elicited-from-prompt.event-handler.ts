@@ -9,19 +9,21 @@ export class TermElicitedFromPromptEventHandler implements ICoscradEventHandler 
         @Inject(TERM_QUERY_REPOSITORY_TOKEN) private readonly termRepository: ITermQueryRepository
     ) {}
 
-    async handle({
-        payload: {
-            text,
-            languageCode,
-            aggregateCompositeIdentifier: { id: termId },
-        },
-    }: TermElicitedFromPrompt): Promise<void> {
+    async handle(event: TermElicitedFromPrompt): Promise<void> {
+        const {
+            payload: {
+                text,
+                languageCode,
+                aggregateCompositeIdentifier: { id: termId },
+            },
+        } = event;
+
         // TODO put the role on the event payload
         await this.termRepository.elicitFromPrompt(termId, {
             text,
             languageCode,
         });
 
-        // TODO attribute
+        await this.termRepository.attribute(termId, event);
     }
 }
