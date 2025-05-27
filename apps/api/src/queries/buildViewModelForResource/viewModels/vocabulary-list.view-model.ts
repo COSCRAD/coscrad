@@ -79,6 +79,7 @@ const sample: DTO<VocabularyListViewModel> = {
                 accessControlList: new AccessControlList().toDTO(),
                 // TODO can we omit this here?
                 vocabularyLists: [],
+                tags: [],
             },
             variableValues: {},
         },

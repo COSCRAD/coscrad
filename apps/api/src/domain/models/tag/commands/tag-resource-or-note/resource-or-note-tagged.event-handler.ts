@@ -3,7 +3,7 @@ import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domai
 import { QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../../shared/common-commands/publish-resource/resource-published.event-handler';
 import { ResourceOrNoteTagged } from './resource-or-note-tagged.event';
 
-interface IQueryRepositoryForTaggable {
+export interface IQueryRepositoryForTaggable {
     tag(id: string, tagId: string): Promise<void>;
 }
 

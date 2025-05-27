@@ -22,7 +22,7 @@ import {
 } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import { ITermQueryRepository } from '../queries';
-import { ArangoResourceQueryBuilder } from './arango-resource-query-builder';
+import { BaseArangoResourceViewQueryBuilder } from './arango-resource-query-builder';
 
 export class ArangoTermQueryRepository implements ITermQueryRepository {
     private readonly database: ArangoDatabaseForCollection<TermViewModel>;
@@ -30,7 +30,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
     /**
      * We use this helper to achieve composition over inheritance.
      */
-    private readonly baseResourceQueryBuilder: ArangoResourceQueryBuilder;
+    private readonly baseResourceQueryBuilder: BaseArangoResourceViewQueryBuilder;
 
     constructor(
         arangoConnectionProvider: ArangoConnectionProvider,
@@ -44,7 +44,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             'term__VIEWS'
         );
 
-        this.baseResourceQueryBuilder = new ArangoResourceQueryBuilder(`term__VIEWS`);
+        this.baseResourceQueryBuilder = new BaseArangoResourceViewQueryBuilder(`term__VIEWS`);
     }
 
     async create(view: TermViewModel): Promise<void> {
@@ -69,6 +69,10 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         });
 
         await cursor.all();
+    }
+
+    async tag(termId: string, tagId: string): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.tag(termId, tagId));
     }
 
     /**

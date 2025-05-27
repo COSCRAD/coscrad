@@ -6,6 +6,7 @@ import { AggregateId } from '../../../types/AggregateId';
 import { IAccessible } from '../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
 import { IPublishable } from '../../shared/common-commands/publish-resource/resource-published.event-handler';
 import { BaseEvent } from '../../shared/events/base-event.entity';
+import { IQueryRepositoryForTaggable } from '../../tag/commands/tag-resource-or-note/resource-or-note-tagged.event-handler';
 
 export const TERM_QUERY_REPOSITORY_TOKEN = 'TERM_QUERY_REPOSITORY_TOKEN';
 
@@ -15,7 +16,10 @@ export const TERM_QUERY_REPOSITORY_TOKEN = 'TERM_QUERY_REPOSITORY_TOKEN';
  * to serve as a constraint for the return of the query service and represents
  * a contract with the client.
  */
-export interface ITermQueryRepository extends IAccessible, IPublishable {
+export interface ITermQueryRepository
+    extends IAccessible,
+        IPublishable,
+        IQueryRepositoryForTaggable {
     subscribeToUpdates(): Observable<{ data: { type: string } }>;
 
     create(view: TermViewModel): Promise<void>;

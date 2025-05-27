@@ -16,7 +16,10 @@ import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/uti
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoRepositoryForAggregate } from '../../../../persistence/repositories/arango-repository-for-aggregate';
-import { VocabularyListViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
+import {
+    TagViewModel,
+    VocabularyListViewModel,
+} from '../../../../queries/buildViewModelForResource/viewModels';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { TestEventStream } from '../../../../test-data/events';
 import { buildTestInstance } from '../../../../test-data/utilities';
@@ -32,6 +35,7 @@ import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/qu
 import { IAudioItemQueryRepository } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ArangoAudioItemQueryRepository } from '../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
+import { Tag } from '../../tag/tag.entity';
 import { CoscradContributor } from '../../user-management/contributor';
 import { FullName } from '../../user-management/user/entities/user/full-name.entity';
 import { IVocabularyListQueryRepository } from '../../vocabulary-list/queries';
@@ -165,6 +169,7 @@ describe(`ArangoTermQueryRepository`, () => {
             isPublished: false,
             accessControlList: new AccessControlList(),
             vocabularyLists: [],
+            tags: [],
         })
     );
 
@@ -247,6 +252,60 @@ describe(`ArangoTermQueryRepository`, () => {
 
                 expect(result).toBe(0);
             });
+        });
+    });
+
+    describe(`tag`, () => {
+        const existingTagLabel = 'plants';
+
+        const existingTag: TagViewModel = {
+            id: buildDummyUuid(90),
+            label: existingTagLabel,
+            name: buildMultilingualTextWithSingleItem(existingTagLabel),
+            // TODO do we want this here?
+            members: [],
+        };
+
+        const newTagId = buildDummyUuid(91);
+
+        const newTagLabel = 'animals';
+
+        // TODO use event sourced setup?
+        const newTag = buildTestInstance(Tag, {
+            id: newTagId,
+            label: newTagLabel,
+        });
+
+        const targetTerm = buildTestInstance(TermViewModel, {
+            tags: [existingTag],
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.getDatabaseForCollection(ArangoCollectionId.tags).clear();
+
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetTerm);
+
+            await databaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.tags)
+                .create(mapEntityDTOToDatabaseDocument(newTag.toDTO()));
+        });
+
+        it(`should tag the term`, async () => {
+            await testQueryRepository.tag(targetTerm.id, newTag.id);
+
+            const { tags } = (await testQueryRepository.fetchById(targetTerm.id)) as TermViewModel;
+
+            expect(tags).toHaveLength(2);
+
+            const tagSearchResult = tags.find(({ id }) => id === newTag.id);
+
+            expect(tagSearchResult).toBeTruthy();
+
+            const { label } = tagSearchResult;
+
+            expect(label).toBe(newTagLabel);
         });
     });
 

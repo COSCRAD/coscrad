@@ -4,7 +4,7 @@ import { AggregateId } from '../../../types/AggregateId';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import { CoscradDate } from '../../user-management/utilities';
 
-export class ArangoResourceQueryBuilder {
+export class BaseArangoResourceViewQueryBuilder {
     constructor(private readonly collectionName: string) {}
 
     publish(id: AggregateId): AqlQuery {
@@ -20,6 +20,41 @@ export class ArangoResourceQueryBuilder {
         const bindVars = {
             '@collectionName': this.collectionName,
             id,
+        };
+
+        return {
+            query,
+            bindVars,
+        };
+    }
+
+    /**
+     * TODO This should not access the `tags` collection. It should only
+     * access a `tag__VIEWS` collection.
+     */
+    tag(resourceId: AggregateId, tagId: AggregateId) {
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @resourceId
+        LET tagsToAdd = (
+            FOR t IN tags
+            FILTER t._key == @tagId
+            RETURN {
+                id: t._key,
+                label: t.label,
+                members: t.members
+            }
+        )
+        UPDATE doc WITH  {
+            tags: APPEND(doc.tags,tagsToAdd)
+        }
+        IN @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': this.collectionName,
+            resourceId,
+            tagId,
         };
 
         return {

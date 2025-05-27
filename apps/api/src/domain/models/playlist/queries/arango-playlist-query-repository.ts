@@ -13,7 +13,7 @@ import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/uti
 import { PlaylistViewModel } from '../../../../queries/buildViewModelForResource/viewModels/playlist.view-model';
 import { AggregateId } from '../../../types/AggregateId';
 import { BaseEvent } from '../../shared/events/base-event.entity';
-import { ArangoResourceQueryBuilder } from '../../term/repositories/arango-resource-query-builder';
+import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/arango-resource-query-builder';
 import { IPlaylistQueryRepository } from './playlist-query-repository.interface';
 
 @Injectable()
@@ -24,7 +24,7 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
     /**
      * We use this helper to achieve composition over inheritance.
      */
-    private readonly baseResourceQueryBuilder: ArangoResourceQueryBuilder;
+    private readonly baseResourceQueryBuilder: BaseArangoResourceViewQueryBuilder;
 
     constructor(
         // should we inject the database directly?
@@ -37,7 +37,7 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
             'playlist__VIEWS'
         );
 
-        this.baseResourceQueryBuilder = new ArangoResourceQueryBuilder('playlist__VIEWS');
+        this.baseResourceQueryBuilder = new BaseArangoResourceViewQueryBuilder('playlist__VIEWS');
     }
 
     count(): Promise<number> {

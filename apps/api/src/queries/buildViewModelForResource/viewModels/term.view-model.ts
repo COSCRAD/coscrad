@@ -36,6 +36,7 @@ import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { CoscradDataExample } from '../../../test-data/utilities';
 import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
+import { TagViewModel } from './tag.view-model';
 
 class VocabularyListRecordForTerm {
     @UUID({
@@ -80,6 +81,7 @@ const FromTerm = FromDomainModel(Term);
             }
         ),
         contributions: [],
+        tags: [],
         vocabularyLists: [],
     },
 })
@@ -124,7 +126,12 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
 
     // notes
 
-    // tags
+    @NestedDataType(TagViewModel, {
+        label: 'tags',
+        description: 'a summary of the tags that have been applied to this resource',
+        isArray: true,
+    })
+    tags: TagViewModel[];
 
     // events ?
 
@@ -226,6 +233,7 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
             mediaItemId,
             isPublished,
             vocabularyLists,
+            tags,
         } = dto;
 
         term.contributions = Array.isArray(contributions)
@@ -251,6 +259,8 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
         term.vocabularyLists = Array.isArray(vocabularyLists)
             ? vocabularyLists.map((dto) => new VocabularyListRecordForTerm(dto))
             : [];
+
+        term.tags = Array.isArray(tags) ? tags : [];
 
         return term;
     }

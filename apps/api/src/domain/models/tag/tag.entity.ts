@@ -1,5 +1,6 @@
 import { CompositeIdentifier, NonEmptyString } from '@coscrad/data-types';
 import { isDeepStrictEqual } from 'util';
+import { CoscradDataExample } from '../../../../src/test-data/utilities';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
@@ -18,6 +19,7 @@ import { AggregateId } from '../../types/AggregateId';
 import { AggregateType } from '../../types/AggregateType';
 import { CategorizableType, isCategorizableType } from '../../types/CategorizableType';
 import { InMemorySnapshot } from '../../types/ResourceType';
+import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
 import { Aggregate } from '../aggregate.entity';
 import {
     CreationEventHandlerMap,
@@ -31,6 +33,14 @@ import { TagCreated } from './commands/create-tag/tag-created.event';
 import { DuplicateTagError } from './commands/errors';
 import { ResourceOrNoteTagged } from './commands/tag-resource-or-note/resource-or-note-tagged.event';
 
+@CoscradDataExample<Tag>({
+    example: {
+        type: AggregateType.tag,
+        id: buildDummyUuid(1),
+        label: 'food',
+        members: [],
+    },
+})
 @RegisterIndexScopedCommands(['CREATE_TAG'])
 export class Tag extends Aggregate implements HasLabel {
     type = AggregateType.tag;
@@ -225,5 +235,10 @@ export class Tag extends Aggregate implements HasLabel {
         }
 
         return buildResult;
+    }
+
+    // TODO put this on the base aggregate root class
+    public static fromDto(dto: DTO<Tag>) {
+        return new Tag(dto);
     }
 }

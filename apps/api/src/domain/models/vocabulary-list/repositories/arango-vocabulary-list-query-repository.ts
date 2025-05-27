@@ -18,7 +18,7 @@ import mapEntityDtoToDatabaseDocument from '../../../../persistence/database/uti
 import { VocabularyListViewModel } from '../../../../queries/buildViewModelForResource/viewModels/vocabulary-list.view-model';
 import { AggregateId } from '../../../types/AggregateId';
 import { BaseEvent } from '../../shared/events/base-event.entity';
-import { ArangoResourceQueryBuilder } from '../../term/repositories/arango-resource-query-builder';
+import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/arango-resource-query-builder';
 import { FilterPropertyType } from '../commands';
 import { VocabularyListEntryImportItem } from '../entities/vocabulary-list.entity';
 import { IVocabularyListQueryRepository } from '../queries/vocabulary-list-query-repository.interface';
@@ -30,7 +30,7 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
     /**
      * We use this helper to achieve composition over inheritance.
      */
-    private readonly baseResourceQueryBuilder: ArangoResourceQueryBuilder;
+    private readonly baseResourceQueryBuilder: BaseArangoResourceViewQueryBuilder;
 
     constructor(
         arangoConnectionProvider: ArangoConnectionProvider,
@@ -42,7 +42,9 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
             'vocabularyList__VIEWS'
         );
 
-        this.baseResourceQueryBuilder = new ArangoResourceQueryBuilder('vocabularyList__VIEWS');
+        this.baseResourceQueryBuilder = new BaseArangoResourceViewQueryBuilder(
+            'vocabularyList__VIEWS'
+        );
     }
 
     async fetchById(id: AggregateId): Promise<Maybe<VocabularyListViewModel>> {
