@@ -1,5 +1,6 @@
 import { HasId } from '@coscrad/api-interfaces';
 import { Injectable } from '@nestjs/common';
+import { Database } from 'arangojs';
 import { isDeepStrictEqual } from 'util';
 import { InternalError } from '../../lib/errors/InternalError';
 import { Maybe } from '../../lib/types/maybe';
@@ -73,5 +74,30 @@ export class ArangoQueryRunner implements ICoscradQueryRunner {
         }
 
         await this.arangoDatabase.delete(documentId, collectionName);
+    }
+
+    async query(query: string, context: Record<string, unknown>): Promise<void> {
+        await this.arangoDatabase.query({ query, bindVars: context });
+    }
+
+    async transaction(
+        queries: { query: string; context: Record<string, unknown> }[],
+        collectionNames: string[]
+    ): Promise<void> {
+        return this.arangoDatabase.transaction(
+            queries.map(({ query, context }) => ({
+                query,
+                bindVars: context,
+            })),
+            collectionNames
+        );
+    }
+
+    /**
+     * This is an escape hatch. Note that we should phase out the `ICoscradQueryRunner`
+     * abstraction as it has proven brittle with no real benefit.
+     */
+    getArangoDbInstance(): Database {
+        return this.arangoDatabase.getDatabaseIntance();
     }
 }

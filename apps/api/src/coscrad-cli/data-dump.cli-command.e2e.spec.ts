@@ -9,7 +9,6 @@ import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceC
 import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
 import { ArangoCollectionId } from '../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
-import { RemoveBaseDigitalAssetUrl } from '../persistence/migrations/01/remove-base-digital-asset-url.migration';
 import { ArangoMigrationRecord } from '../persistence/migrations/arango-migration-record';
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -84,10 +83,13 @@ describe('CLI Command: **data-dump**', () => {
              * Add non-aggregate-root collections
              */
             await databaseProvider.getDatabaseForCollection(ArangoCollectionId.migrations).create(
-                new ArangoMigrationRecord(new RemoveBaseDigitalAssetUrl(), {
-                    description: `dummy migration description`,
-                    dateAuthored: `20230518`,
-                })
+                new ArangoMigrationRecord(
+                    { name: 'test migration 1', sequenceNumber: 1 },
+                    {
+                        description: `dummy migration description`,
+                        dateAuthored: `20230518`,
+                    }
+                )
             );
 
             await new IdManagementService(new ArangoIdRepository(databaseProvider)).generate();

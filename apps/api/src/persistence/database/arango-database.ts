@@ -46,6 +46,15 @@ export class ArangoDatabase {
         return this.db.name;
     }
 
+    /**
+     * This escape hatch is necessary because some of our earlier abstractions
+     * were brittle. We should refactor our ArangoDB implementation to clean up
+     * these layers at some point.
+     */
+    getDatabaseIntance(): Database {
+        return this.db;
+    }
+
     fetchById = async <TDatabaseDTO extends ArangoDocumentForAggregateRoot<HasAggregateId>>(
         id: string,
         collectionName: string
@@ -437,6 +446,31 @@ export class ArangoDatabase {
      */
     async query(aqlQuery: AqlQuery) {
         return this.db.query(aqlQuery);
+    }
+
+    async transaction(queries: AqlQuery[], collectionNames: string[]): Promise<void> {
+        if (queries.length === 0) {
+            return;
+        }
+
+        const transaction = await this.db.beginTransaction(collectionNames);
+
+        for (const query of queries) {
+            await transaction.step(async () => {
+                await this.db.query(query).catch(async (arangoError) => {
+                    await transaction.abort();
+
+                    throw new InternalError(
+                        `failed to execute Arango transaction on collections: ${collectionNames.join(
+                            ', '
+                        )}`,
+                        [arangoError]
+                    );
+                });
+            });
+        }
+
+        await transaction.commit();
     }
 
     #getKeyOfDocument = <TEntityDTO>(document: ArangoDTO<TEntityDTO>): Maybe<string> =>
