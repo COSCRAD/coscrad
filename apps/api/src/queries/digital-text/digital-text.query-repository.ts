@@ -7,7 +7,8 @@ import { IAggregateRootQueryRepository } from '../interfaces';
 import { DigitalTextViewModel } from './digital-text.view-model';
 
 /**
- * TODO Generalize this for any aggregate root.
+ * TODO Use the eagerly cached, event-sourced materialized view approach as is
+ * done for terms, vocabulary lists, videos, etc.
  */
 export class DigitalTextQueryRepository
     implements IAggregateRootQueryRepository<IDigitalTextViewModel>
