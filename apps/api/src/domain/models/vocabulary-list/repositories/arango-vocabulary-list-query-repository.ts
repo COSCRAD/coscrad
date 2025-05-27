@@ -122,6 +122,10 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
         });
     }
 
+    async tag(vocabularyListId: string, tagId: string): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.tag(vocabularyListId, tagId));
+    }
+
     async attribute(vocabularyListId: AggregateId, event: BaseEvent): Promise<void> {
         await this.database
             .query(this.baseResourceQueryBuilder.attribute(vocabularyListId, event))

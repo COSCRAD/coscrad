@@ -8,13 +8,24 @@ import { FromDomainModel, NestedDataType } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
+import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { TagCreatedPayload } from '../../../domain/models/tag/commands/create-tag/tag-created.event';
 import { ResourceOrNoteTaggedPayload } from '../../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
 import { Tag } from '../../../domain/models/tag/tag.entity';
 import { AggregateId } from '../../../domain/types/AggregateId';
+import { CoscradDataExample } from '../../../test-data/utilities';
 import { DTO } from '../../../types/DTO';
 import { BaseEvent } from '../../event-sourcing';
 
+@CoscradDataExample<EventSourcedTagViewModel>({
+    example: {
+        type: AggregateType.tag,
+        id: buildDummyUuid(3),
+        label: 'trees',
+        members: [],
+        name: buildMultilingualTextWithSingleItem('trees'),
+    },
+})
 /**
  * We are moving to event sourcing of views for all resources and potentially all
  * aggregate roots. In the interim, we use our old state-based Tag view model
@@ -103,5 +114,9 @@ export class EventSourcedTagViewModel implements ITagViewModel {
         aggregateCompositeIdentifier: { type: string; id: string };
     }) {
         return type === this.type && id === this.id;
+    }
+
+    public static fromDto(dto: DTO<EventSourcedTagViewModel>) {
+        return new EventSourcedTagViewModel(dto);
     }
 }

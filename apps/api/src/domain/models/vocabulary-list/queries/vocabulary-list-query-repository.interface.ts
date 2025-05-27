@@ -3,13 +3,19 @@ import { Observable } from 'rxjs';
 import { Maybe } from '../../../../lib/types/maybe';
 import { VocabularyListViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
 import { AggregateId } from '../../../types/AggregateId';
+import { IAccessible } from '../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
+import { IPublishable } from '../../shared/common-commands/publish-resource/resource-published.event-handler';
 import { BaseEvent } from '../../shared/events/base-event.entity';
+import { IQueryRepositoryForTaggable } from '../../tag/commands/tag-resource-or-note/resource-or-note-tagged.event-handler';
 import { FilterPropertyType } from '../commands';
 import { VocabularyListEntryImportItem } from '../entities/vocabulary-list.entity';
 
 export const VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN = 'VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN';
 
-export interface IVocabularyListQueryRepository {
+export interface IVocabularyListQueryRepository
+    extends IPublishable,
+        IAccessible,
+        IQueryRepositoryForTaggable {
     subscribeToUpdates(): Observable<{ data: { type: string } }>;
 
     fetchById(id: AggregateId): Promise<Maybe<VocabularyListViewModel>>;
@@ -24,11 +30,7 @@ export interface IVocabularyListQueryRepository {
 
     delete(id: AggregateId): Promise<void>;
 
-    allowUser(id: AggregateId, userId: AggregateId): Promise<void>;
-
     // translateName(id: AggregateId, translationItem: IMultilingualTextItem): Promise<void>;
-
-    publish(id: AggregateId): Promise<void>;
 
     /**
      * A better approach would be to do this atomically as part of

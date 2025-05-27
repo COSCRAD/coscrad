@@ -1,20 +1,16 @@
 import {
     AggregateType,
     FormFieldType,
-    IContributionSummary,
     IDynamicForm,
     IFormField,
-    IMultilingualText,
+    ResourceType,
 } from '@coscrad/api-interfaces';
 import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { ApiProperty } from '@nestjs/swagger';
-import { DetailScopedCommandWriteContext } from '../../../app/controllers/command/services/command-info-service';
 import { ICoscradEvent } from '../../../domain/common';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
-import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
 import BaseDomainModel from '../../../domain/models/base-domain-model.entity';
 import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
-import { ContributionSummary } from '../../../domain/models/user-management/contributor/views';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import {
     FilterPropertyType,
@@ -22,7 +18,6 @@ import {
     VocabularyListFilterPropertyRegistered,
 } from '../../../domain/models/vocabulary-list/commands';
 import { AggregateId } from '../../../domain/types/AggregateId';
-import { HasAggregateId } from '../../../domain/types/HasAggregateId';
 import { Maybe } from '../../../lib/types/maybe';
 import { NotFound } from '../../../lib/types/not-found';
 import { clonePlainObjectWithOverrides } from '../../../lib/utilities/clonePlainObjectWithOverrides';
@@ -30,6 +25,7 @@ import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { buildTestInstance, CoscradDataExample } from '../../../test-data/utilities';
 import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
+import { BaseEventSourcedResourceViewModel } from './base-event-sourced-resource.view-model';
 import { TermViewModel } from './term.view-model';
 
 export class VocabularyListEntryViewModel extends BaseDomainModel {
@@ -67,6 +63,7 @@ export class VocabularyListEntryViewModel extends BaseDomainModel {
 }
 
 const sample: DTO<VocabularyListViewModel> = {
+    type: AggregateType.vocabularyList,
     entries: [
         {
             // TODO should we introduce a `TermViewForVocabularyList` instead?
@@ -94,12 +91,15 @@ const sample: DTO<VocabularyListViewModel> = {
     isPublished: false,
     contributions: [],
     accessControlList: new AccessControlList().toDTO(),
+    tags: [],
 };
 
 @CoscradDataExample({
     example: sample,
 })
-export class VocabularyListViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
+export class VocabularyListViewModel extends BaseEventSourcedResourceViewModel {
+    readonly type: ResourceType = ResourceType.vocabularyList;
+
     @ApiProperty({
         type: VocabularyListEntryViewModel,
         isArray: true,
@@ -107,19 +107,14 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
     public entries: VocabularyListEntryViewModel[];
 
     // TODO We need a concrete class to include this on the API docs
-    public form: IDynamicForm;
-
-    public contributions: IContributionSummary[];
-
-    @ApiProperty({
-        type: MultilingualText,
-    })
-    public name: IMultilingualText;
-
-    @ApiProperty()
-    public id: string;
+    /**
+     * Note that this might not be populated until events come through to register
+     * filter properties and analyze terms as entries.
+     */
+    public form?: IDynamicForm;
 
     // note that these are mapped to form specifications in the query service layer
+    // TODO remove these in favor of `getAvailableCommands`
     @ApiProperty()
     public actions: string[];
 
@@ -149,26 +144,14 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
         };
     }
 
-    constructor(dto?: Partial<DTO<VocabularyListViewModel>>) {
+    constructor(dto?: DTO<VocabularyListViewModel>) {
         if (!isNonEmptyObject(dto)) {
             return;
         }
 
-        const {
-            id,
-            isPublished,
-            entries,
-            form,
-            contributions,
-            name,
-            actions,
-            accessControlList: aclDto,
-        } = dto;
+        super(dto);
 
-        this.id = id;
-
-        // out of an abundance of caution
-        this.isPublished = typeof isPublished === 'boolean' ? isPublished : false;
+        const { entries, form, actions } = dto;
 
         this.entries = Array.isArray(entries)
             ? entries.map((entryDto) => new VocabularyListEntryViewModel(entryDto))
@@ -181,15 +164,7 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
                   fields: [] as IFormField[],
               };
 
-        this.contributions = Array.isArray(contributions)
-            ? contributions.map((c) => new ContributionSummary(c as DTO<ContributionSummary>))
-            : [];
-
-        this.name = new MultilingualText(name);
-
         this.actions = Array.isArray(actions) ? actions : [];
-
-        this.accessControlList = new AccessControlList(aclDto);
     }
 
     /**
@@ -242,7 +217,8 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
             aggregateCompositeIdentifier: { id: vocabularyListId },
         },
     }: VocabularyListCreated): VocabularyListViewModel {
-        const dto: Partial<DTO<VocabularyListViewModel>> = {
+        const dto: DTO<VocabularyListViewModel> = {
+            type: AggregateType.vocabularyList,
             name: buildMultilingualTextWithSingleItem(textForName, languageCodeForName),
             id: vocabularyListId,
             actions: [
@@ -253,6 +229,11 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
                 'TRANSLATE_VOCABULARY_LIST_NAME',
                 'REGISTER_VOCABULARY_LIST_FILTER_PROPERTY',
             ],
+            tags: [], // none yet
+            contributions: [], // must be joined externally
+            isPublished: false,
+            accessControlList: new AccessControlList(),
+            entries: [], // none yet
         };
 
         const view = new VocabularyListViewModel(dto);
