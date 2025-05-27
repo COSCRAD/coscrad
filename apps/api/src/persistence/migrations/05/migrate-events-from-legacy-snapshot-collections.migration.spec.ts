@@ -451,7 +451,18 @@ describe(`MigrateEventsFromLegacySnapshotCollections`, () => {
                 .getDatabaseForCollection(ArangoCollectionId.events)
                 .createMany([
                     ...existingEvents,
-                    ...playlistEventsAlreadyInEventsCollection.map(mapEntityDTOToDatabaseDocument),
+                    ...playlistEventsAlreadyInEventsCollection
+                        .map(mapEntityDTOToDatabaseDocument)
+                        .map((doc, index) => {
+                            /**
+                             * This is important because existing events use
+                             * sequential IDs for `keys` and set the id from
+                             * `event.meta.id`.
+                             */
+                            doc._key = `${index + 1000}`;
+
+                            return doc;
+                        }),
                 ]);
         });
 

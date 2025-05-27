@@ -1,6 +1,7 @@
 import { ArangoCollectionId } from '../../database/collection-references/ArangoCollectionId';
 import { ICoscradMigration } from '../coscrad-migration.interface';
 import { ICoscradQueryRunner } from '../coscrad-query-runner.interface';
+import { Migration } from '../decorators';
 
 const targetCollections = [
     'songs',
@@ -14,6 +15,10 @@ const targetCollections = [
 
 const collectionNameForRollingBackEvents = 'legacy-events-m5';
 
+@Migration({
+    description: 'copies events from legacy snapshot-persisted resources to the events collection',
+    dateAuthored: '20250526',
+})
 export class MigrateEventsFromLegacySnapshotCollections implements ICoscradMigration {
     sequenceNumber = 5;
 
@@ -35,7 +40,7 @@ export class MigrateEventsFromLegacySnapshotCollections implements ICoscradMigra
         const query = `
             for doc in @@collectionName
             for e in doc.eventHistory
-            upsert {_key: e.meta.id}
+            upsert { meta: { id: e.meta.id}} 
             insert merge(e,{_key: e.meta.id, id: null})
             update {}
             in events

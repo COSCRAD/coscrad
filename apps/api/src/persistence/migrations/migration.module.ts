@@ -1,9 +1,6 @@
 import { Module, OnApplicationBootstrap } from '@nestjs/common';
 import { PersistenceModule } from '../persistence.module';
-import { RemoveBaseDigitalAssetUrl } from './01/remove-base-digital-asset-url.migration';
-import { UpdateEnglishLanguageCode } from './02/update-english-language-code.migration';
-import { MigrateBilingualTermsAndVocabularyLists } from './03/migrate-bilingual-terms-and-vocabulary-lists.migration';
-import { MigrateBilingualSongs } from './04/migrate-bilingual-songs.migration';
+import { MigrateEventsFromLegacySnapshotCollections } from './05/migrate-events-from-legacy-snapshot-collections.migration';
 import { MigrationFinderService } from './migration-finder.service';
 import { Migrator } from './migrator';
 
@@ -11,10 +8,11 @@ import { Migrator } from './migrator';
     imports: [PersistenceModule],
     providers: [
         Migrator,
-        RemoveBaseDigitalAssetUrl,
-        UpdateEnglishLanguageCode,
-        MigrateBilingualTermsAndVocabularyLists,
-        MigrateBilingualSongs,
+        // RemoveBaseDigitalAssetUrl,
+        // UpdateEnglishLanguageCode,
+        // MigrateBilingualTermsAndVocabularyLists,
+        // MigrateBilingualSongs,
+        MigrateEventsFromLegacySnapshotCollections,
         MigrationFinderService,
     ],
     exports: [Migrator],
