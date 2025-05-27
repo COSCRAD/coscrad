@@ -1,4 +1,4 @@
-import { AggregateType, IPlaylistEpisode } from '@coscrad/api-interfaces';
+import { AggregateType, IPlaylistEpisode, ResourceType } from '@coscrad/api-interfaces';
 import {
     BooleanDataType,
     NestedDataType,
@@ -18,6 +18,7 @@ import { Maybe } from '../../../lib/types/maybe';
 import { NotFound } from '../../../lib/types/not-found';
 import { CoscradDataExample } from '../../../test-data/utilities';
 import { DTO } from '../../../types/DTO';
+import { BaseEventSourcedResourceViewModel } from './base-event-sourced-resource.view-model';
 
 // TODO move this file
 
@@ -99,15 +100,19 @@ export class PlaylistEpisodeViewModel {
 // TODO leverage this in `buildTestData`
 @CoscradDataExample<PlaylistViewModel>({
     example: {
+        type: ResourceType.playlist,
         id: buildDummyUuid(9001),
-        queryAccessControlList: new AccessControlList(),
         isPublished: false,
         name: buildMultilingualTextWithSingleItem('Metal Mondays'),
         episodes: [],
         contributions: [],
+        tags: [],
+        accessControlList: new AccessControlList(),
     },
 })
-export class PlaylistViewModel {
+export class PlaylistViewModel extends BaseEventSourcedResourceViewModel {
+    type: ResourceType = ResourceType.playlist;
+
     @UUID({
         label: 'Playlist ID',
         description: 'unique system-wide identifier for this playlist',
@@ -126,13 +131,6 @@ export class PlaylistViewModel {
     //     description: 'a summary of the work done by various contributors in creating this playlist',
     // })
     contributions: ContributionSummary[];
-
-    @NestedDataType(AccessControlList, {
-        label: 'query ACL',
-        description:
-            'the access control list determines which users and groups can see this playlist',
-    })
-    queryAccessControlList: AccessControlList;
 
     @NestedDataType(MultilingualText, {
         label: 'name',
@@ -164,31 +162,14 @@ export class PlaylistViewModel {
      * want to handle `playlists` and content-management, we should move to
      * a more performant way of managing queries.
      */
-    constructor(
-        id?: AggregateId,
-        isPublished?: boolean,
-        accessControlList?: AccessControlList,
-        name?: MultilingualText,
-        episodes: PlaylistEpisodeViewModel[] = [],
-        contributions: ContributionSummary[] = []
-    ) {
-        this.id = id;
+    constructor(dto: DTO<PlaylistViewModel>) {
+        super(dto);
 
-        this.isPublished = isBoolean(isPublished) ? isPublished : false;
+        if (!dto) return;
 
-        this.queryAccessControlList = isNonEmptyObject(accessControlList)
-            ? new AccessControlList(accessControlList)
-            : // no special access
-              new AccessControlList();
+        const { episodes = [] } = dto;
 
-        if (isNonEmptyObject(name)) {
-            // TODO Whose job is it to clone?
-            this.name = name;
-        }
-
-        this.episodes = episodes;
-
-        this.contributions = contributions;
+        this.episodes = episodes.map((e) => new PlaylistEpisodeViewModel(e));
     }
 
     public getCompositeIdentifier() {
@@ -245,7 +226,7 @@ export class PlaylistViewModel {
 
             const result = buildResult();
 
-            delete result.queryAccessControlList;
+            delete result.accessControlList;
 
             // @ts-expect-error remove read-only
             result.episodes = result.episodes.map((e) => {
@@ -262,10 +243,10 @@ export class PlaylistViewModel {
             };
         }
 
-        if (this.isPublished || this.queryAccessControlList.canUserWithGroups(userWithGroups)) {
+        if (this.isPublished || this.accessControlList.canUserWithGroups(userWithGroups)) {
             const result = buildResult();
 
-            delete result.queryAccessControlList;
+            delete result.accessControlList;
 
             // @ts-expect-error remove read-only
             result.episodes = result.episodes.map((e) => {
@@ -286,21 +267,6 @@ export class PlaylistViewModel {
     }
 
     public static fromDto(dto: DTO<PlaylistViewModel>): PlaylistViewModel {
-        if (!isNonEmptyObject(dto)) {
-            return new PlaylistViewModel();
-        }
-
-        const { id, name, episodes, isPublished, queryAccessControlList, contributions } = dto;
-
-        return new PlaylistViewModel(
-            id,
-            isPublished,
-            new AccessControlList(queryAccessControlList),
-            new MultilingualText(name),
-            episodes.map((e) => new PlaylistEpisodeViewModel(e)),
-            Array.isArray(contributions)
-                ? contributions.map((c) => ContributionSummary.fromDto(c))
-                : []
-        );
+        return new PlaylistViewModel(dto);
     }
 }

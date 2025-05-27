@@ -72,6 +72,10 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
         await cursor.all();
     }
 
+    async tag(playlistId: string, tagId: string): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.tag(playlistId, tagId));
+    }
+
     async fetchById(id: AggregateId): Promise<Maybe<PlaylistViewModel>> {
         const result = await this.database.fetchById(id);
 

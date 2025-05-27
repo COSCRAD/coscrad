@@ -15,6 +15,7 @@ import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/uti
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoRepositoryForAggregate } from '../../../../persistence/repositories/arango-repository-for-aggregate';
+import { TagViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
 import { PlaylistViewModel } from '../../../../queries/buildViewModelForResource/viewModels/playlist.view-model';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
@@ -26,6 +27,7 @@ import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
 import { IAudioItemQueryRepository } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ArangoAudioItemQueryRepository } from '../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
+import { Tag } from '../../tag/tag.entity';
 import { CoscradContributor } from '../../user-management';
 import { PlaylistCreated } from '../commands/playlist-created.event';
 import { ArangoPlaylistQueryRepository } from './arango-playlist-query-repository';
@@ -161,6 +163,62 @@ describe(`ArangoPlaylistQueryRepository`, () => {
 
                 expect(result).toBe(playlistViews.length);
             });
+        });
+    });
+
+    describe(`tag`, () => {
+        const existingTagLabel = 'plants';
+
+        const existingTag: TagViewModel = {
+            id: buildDummyUuid(90),
+            label: existingTagLabel,
+            name: buildMultilingualTextWithSingleItem(existingTagLabel),
+            // TODO do we want this here?
+            members: [],
+        };
+
+        const newTagId = buildDummyUuid(91);
+
+        const newTagLabel = 'animals';
+
+        // TODO use event sourced setup?
+        const newTag = buildTestInstance(Tag, {
+            id: newTagId,
+            label: newTagLabel,
+        });
+
+        const targetTerm = buildTestInstance(PlaylistViewModel, {
+            tags: [existingTag],
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.getDatabaseForCollection(ArangoCollectionId.tags).clear();
+
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetTerm);
+
+            await databaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.tags)
+                .create(mapEntityDTOToDatabaseDocument(newTag.toDTO()));
+        });
+
+        it(`should tag the playlist`, async () => {
+            await testQueryRepository.tag(targetTerm.id, newTag.id);
+
+            const { tags } = (await testQueryRepository.fetchById(
+                targetTerm.id
+            )) as PlaylistViewModel;
+
+            expect(tags).toHaveLength(2);
+
+            const tagSearchResult = tags.find(({ id }) => id === newTag.id);
+
+            expect(tagSearchResult).toBeTruthy();
+
+            const { label } = tagSearchResult;
+
+            expect(label).toBe(newTagLabel);
         });
     });
 

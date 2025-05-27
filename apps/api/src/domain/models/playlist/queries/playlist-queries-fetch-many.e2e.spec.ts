@@ -65,7 +65,7 @@ const privatePlaylist = buildTestInstance(PlaylistViewModel, {
     id: buildDummyUuid(2),
     isPublished: false,
     // no special access
-    queryAccessControlList: new AccessControlList(),
+    accessControlList: new AccessControlList(),
     contributions,
 });
 
@@ -73,7 +73,7 @@ const privatePlaylist = buildTestInstance(PlaylistViewModel, {
 const unpublishedPlaylistWithAclAccessForOrdinaryUser = buildTestInstance(PlaylistViewModel, {
     id: buildDummyUuid(3),
     isPublished: false,
-    queryAccessControlList: new AccessControlList().allowUser(ordinaryUser.id),
+    accessControlList: new AccessControlList().allowUser(ordinaryUser.id),
     contributions,
 });
 

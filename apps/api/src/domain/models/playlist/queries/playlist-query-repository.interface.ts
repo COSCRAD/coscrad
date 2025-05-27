@@ -3,15 +3,21 @@ import { Observable } from 'rxjs';
 import { Maybe } from '../../../../lib/types/maybe';
 import { PlaylistViewModel } from '../../../../queries/buildViewModelForResource/viewModels/playlist.view-model';
 import { AggregateId } from '../../../types/AggregateId';
+import { IAccessible } from '../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
 import {
     ICountable,
     IPublishable,
 } from '../../shared/common-commands/publish-resource/resource-published.event-handler';
 import { BaseEvent } from '../../shared/events/base-event.entity';
+import { IQueryRepositoryForTaggable } from '../../tag/commands/tag-resource-or-note/resource-or-note-tagged.event-handler';
 
 export const PLAYLIST_QUERY_REPOSITORY_TOKEN = 'PLAYLIST_QUERY_REPOSITORY_TOKEN';
 
-export interface IPlaylistQueryRepository extends IPublishable, ICountable {
+export interface IPlaylistQueryRepository
+    extends IPublishable,
+        ICountable,
+        IAccessible,
+        IQueryRepositoryForTaggable {
     subscribeToUpdates(): Observable<{ data: { type: string } }>;
 
     create(view: PlaylistViewModel): Promise<void>;
@@ -26,8 +32,6 @@ export interface IPlaylistQueryRepository extends IPublishable, ICountable {
     fetchById(id: AggregateId): Promise<Maybe<PlaylistViewModel>>;
 
     fetchMany(): Promise<PlaylistViewModel[]>;
-
-    allowUser(id: AggregateId, userId: AggregateId): Promise<void>;
 
     addAudioItem(id: AggregateId, audioItemId: AggregateId): Promise<void>;
 

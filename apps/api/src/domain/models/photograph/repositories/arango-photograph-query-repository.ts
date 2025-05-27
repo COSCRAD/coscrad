@@ -96,6 +96,10 @@ export class ArangoPhotographQueryRepository implements IPhotographQueryReposito
         await cursor.all();
     }
 
+    async tag(photographId: string, tagId: string): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.tag(photographId, tagId));
+    }
+
     async allowUser(photographId: AggregateId, userId: AggregateId): Promise<void> {
         await this.database
             .query(this.baseResourceQueryBuilder.allowUser(photographId, userId))

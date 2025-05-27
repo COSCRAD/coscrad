@@ -36,7 +36,7 @@ export class PlaylistCreatedEventHandler implements ICoscradEventHandler {
             PlaylistViewModel.fromDto({
                 id,
                 isPublished: false,
-                queryAccessControlList: new AccessControlList(),
+                accessControlList: new AccessControlList(),
                 name: buildMultilingualTextWithSingleItem(textForName, languageCodeForName),
                 episodes: [],
                 // we have to add the contributions separately

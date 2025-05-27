@@ -20,14 +20,18 @@ import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/uti
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoRepositoryForAggregate } from '../../../../persistence/repositories/arango-repository-for-aggregate';
+import { TagViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
 import { TestEventStream } from '../../../../test-data/events';
+import { buildTestInstance } from '../../../../test-data/utilities';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import buildInstanceFactory from '../../../factories/utilities/buildInstanceFactory';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { AggregateId } from '../../../types/AggregateId';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
+import { Tag } from '../../tag/tag.entity';
 import { CoscradContributor } from '../../user-management/contributor';
 import { FullName } from '../../user-management/user/entities/user/full-name.entity';
 import { PhotographCreated } from '../commands';
@@ -362,7 +366,64 @@ describe(`ArangoPhotographQueryRepository`, () => {
 
             expect(updatedView.isPublished).toBe(true);
 
-            expect(updatedView.actions).not.toContain('PUBLISH_RESOURCE');
+            expect(updatedView.getAvailableCommands()).not.toContain('PUBLISH_RESOURCE');
+        });
+    });
+
+    describe(`tag`, () => {
+        const existingTagLabel = 'plants';
+
+        const existingTag: TagViewModel = {
+            id: buildDummyUuid(90),
+            label: existingTagLabel,
+            name: buildMultilingualTextWithSingleItem(existingTagLabel),
+            // TODO do we want this here?
+            members: [],
+        };
+
+        const newTagId = buildDummyUuid(91);
+
+        const newTagLabel = 'animals';
+
+        // TODO use event sourced setup?
+        const newTag = buildTestInstance(Tag, {
+            id: newTagId,
+            label: newTagLabel,
+        });
+
+        const targetView = buildTestInstance(PhotographViewModel, {
+            // @ts-expect-error fix later
+            tags: [existingTag],
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.getDatabaseForCollection(ArangoCollectionId.tags).clear();
+
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetView);
+
+            await databaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.tags)
+                .create(mapEntityDTOToDatabaseDocument(newTag.toDTO()));
+        });
+
+        it(`should tag the term`, async () => {
+            await testQueryRepository.tag(targetView.id, newTag.id);
+
+            const { tags } = (await testQueryRepository.fetchById(
+                targetView.id
+            )) as PhotographViewModel;
+
+            expect(tags).toHaveLength(2);
+
+            const tagSearchResult = tags.find(({ id }) => id === newTag.id);
+
+            expect(tagSearchResult).toBeTruthy();
+
+            const { label } = tagSearchResult;
+
+            expect(label).toBe(newTagLabel);
         });
     });
 

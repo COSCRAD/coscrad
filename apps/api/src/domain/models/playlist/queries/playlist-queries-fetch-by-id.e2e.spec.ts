@@ -57,7 +57,7 @@ const playlistName = 'Smooth Jazz';
 const originalLanguageCode = LanguageCode.English;
 
 const publishedPlaylistWithNoSpecialAccess = buildTestInstance(PlaylistViewModel, {
-    queryAccessControlList: new AccessControlList(),
+    accessControlList: new AccessControlList(),
     isPublished: true,
     name: buildMultilingualTextWithSingleItem(playlistName, originalLanguageCode),
     episodes: [publicEpisode, privateEpisodeWithNoSpecialAccess],
@@ -263,7 +263,7 @@ describe(`when querying for a single playlist- by ID`, () => {
                                 clonePlainObjectWithOverrides(
                                     publishedPlaylistWithNoSpecialAccess,
                                     {
-                                        queryAccessControlList: new AccessControlList().allowUser(
+                                        accessControlList: new AccessControlList().allowUser(
                                             testUserThatIsAViewer.id
                                         ),
                                     }

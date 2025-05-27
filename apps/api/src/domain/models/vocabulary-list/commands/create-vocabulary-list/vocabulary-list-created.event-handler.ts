@@ -1,6 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
-import { VocabularyListViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
+import { VocabularyListViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/vocabulary-list.view-model';
 import {
     IVocabularyListQueryRepository,
     VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,

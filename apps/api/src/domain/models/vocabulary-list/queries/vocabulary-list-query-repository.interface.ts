@@ -1,7 +1,7 @@
 import { IMultilingualTextItem } from '@coscrad/api-interfaces';
 import { Observable } from 'rxjs';
 import { Maybe } from '../../../../lib/types/maybe';
-import { VocabularyListViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
+import { VocabularyListViewModel } from '../../../../queries/buildViewModelForResource/viewModels/vocabulary-list.view-model';
 import { AggregateId } from '../../../types/AggregateId';
 import { IAccessible } from '../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
 import { IPublishable } from '../../shared/common-commands/publish-resource/resource-published.event-handler';

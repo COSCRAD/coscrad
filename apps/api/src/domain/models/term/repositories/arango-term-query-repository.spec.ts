@@ -16,11 +16,9 @@ import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/uti
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoRepositoryForAggregate } from '../../../../persistence/repositories/arango-repository-for-aggregate';
-import {
-    TagViewModel,
-    VocabularyListViewModel,
-} from '../../../../queries/buildViewModelForResource/viewModels';
+import { TagViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
+import { VocabularyListViewModel } from '../../../../queries/buildViewModelForResource/viewModels/vocabulary-list.view-model';
 import { TestEventStream } from '../../../../test-data/events';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';

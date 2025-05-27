@@ -10,6 +10,7 @@ import { HasAggregateId } from '../../../domain/types/HasAggregateId';
 import { DTO } from '../../../types/DTO';
 import { TagViewModel } from './tag.view-model';
 import { EventSourcedTagViewModel } from './tag.view-model.event-sourced';
+// import { EventSourcedTagViewModel } from './tag.view-model.event-sourced';
 
 /**
  * We are slowly phasing out the `BaseResourceViewModel`, which is state-based,

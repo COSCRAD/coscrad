@@ -9,6 +9,8 @@ import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { ApiProperty } from '@nestjs/swagger';
 import { ICoscradEvent } from '../../../domain/common';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
+import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import BaseDomainModel from '../../../domain/models/base-domain-model.entity';
 import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
@@ -25,8 +27,47 @@ import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { buildTestInstance, CoscradDataExample } from '../../../test-data/utilities';
 import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
-import { BaseEventSourcedResourceViewModel } from './base-event-sourced-resource.view-model';
-import { TermViewModel } from './term.view-model';
+
+@CoscradDataExample<TermViewForVocabularyListEntry>({
+    example: {
+        id: buildDummyUuid(1),
+        text: buildMultilingualTextWithSingleItem('I am jumping'),
+        name: buildMultilingualTextWithSingleItem('I am jumping'),
+        mediaItemId: buildDummyUuid(22),
+        isPublished: false,
+        accessControlList: new AccessControlList(),
+    },
+})
+export class TermViewForVocabularyListEntry {
+    id: AggregateId;
+    text: MultilingualText;
+    name: MultilingualText;
+    mediaItemId?: string;
+    isPublished: boolean;
+    accessControlList: AccessControlList;
+
+    constructor(dto: DTO<TermViewForVocabularyListEntry>) {
+        if (!dto) return;
+
+        const { id, text, name, mediaItemId, isPublished, accessControlList } = dto;
+
+        this.id = id;
+
+        this.text = new MultilingualText(text);
+
+        this.name = new MultilingualText(name);
+
+        this.mediaItemId = mediaItemId;
+
+        this.isPublished = isPublished;
+
+        this.accessControlList = new AccessControlList(accessControlList);
+    }
+
+    public static fromDto(dto: DTO<TermViewForVocabularyListEntry>) {
+        return new TermViewForVocabularyListEntry(dto);
+    }
+}
 
 export class VocabularyListEntryViewModel extends BaseDomainModel {
     /**
@@ -36,7 +77,7 @@ export class VocabularyListEntryViewModel extends BaseDomainModel {
      * allow user actions to be nested in components on the client. We may consider
      * this if we move to SSR, but it's not important right now.
      */
-    term: TermViewModel;
+    term: TermViewForVocabularyListEntry;
 
     variableValues: Record<string, string | boolean>;
 
@@ -49,7 +90,7 @@ export class VocabularyListEntryViewModel extends BaseDomainModel {
 
         const { term: termDto, variableValues } = dto;
 
-        this.term = TermViewModel.fromDto(termDto);
+        this.term = TermViewForVocabularyListEntry.fromDto(termDto);
 
         this.variableValues = { ...variableValues };
     }
@@ -67,17 +108,13 @@ const sample: DTO<VocabularyListViewModel> = {
     entries: [
         {
             // TODO should we introduce a `TermViewForVocabularyList` instead?
-            term: buildTestInstance(TermViewModel, {
+            term: buildTestInstance(TermViewForVocabularyListEntry, {
                 id: '123',
                 name: buildMultilingualTextWithSingleItem('test term in vocabulary list'),
-                contributions: [],
                 isPublished: false,
-                actions: [],
                 mediaItemId: '555',
                 accessControlList: new AccessControlList().toDTO(),
-                // TODO can we omit this here?
-                vocabularyLists: [],
-                tags: [],
+                // tags
             }),
             variableValues: {},
         },
@@ -94,10 +131,13 @@ const sample: DTO<VocabularyListViewModel> = {
     tags: [],
 };
 
+/**
+ * TODO Why does extending the base cause a circular dependency here?
+ */
 @CoscradDataExample({
     example: sample,
 })
-export class VocabularyListViewModel extends BaseEventSourcedResourceViewModel {
+export class VocabularyListViewModel {
     readonly type: ResourceType = ResourceType.vocabularyList;
 
     @ApiProperty({
@@ -129,6 +169,12 @@ export class VocabularyListViewModel extends BaseEventSourcedResourceViewModel {
      * */
     public accessControlList: AccessControlList;
 
+    // move to base
+    id: string;
+    name: MultilingualText;
+    contributions: any[] = [];
+    tags: any[] = [];
+
     getAvailableCommands(): string[] {
         /**
          * TODO Let's not cache actions on the view documents. Let's instead
@@ -149,7 +195,10 @@ export class VocabularyListViewModel extends BaseEventSourcedResourceViewModel {
             return;
         }
 
-        super(dto);
+        // super(dto);
+        this.id = dto.id;
+        this.name = new MultilingualText(dto.name);
+        // ...
 
         const { entries, form, actions } = dto;
 

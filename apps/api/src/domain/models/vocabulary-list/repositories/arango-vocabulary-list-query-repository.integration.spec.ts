@@ -22,12 +22,14 @@ import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/uti
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoRepositoryForAggregate } from '../../../../persistence/repositories/arango-repository-for-aggregate';
-import {
-    VocabularyListEntryViewModel,
-    VocabularyListViewModel,
-} from '../../../../queries/buildViewModelForResource/viewModels';
+
 import { EventSourcedTagViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
+import {
+    TermViewForVocabularyListEntry,
+    VocabularyListEntryViewModel,
+    VocabularyListViewModel,
+} from '../../../../queries/buildViewModelForResource/viewModels/vocabulary-list.view-model';
 import { TestEventStream } from '../../../../test-data/events';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import { DTO } from '../../../../types/DTO';
@@ -361,6 +363,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
         });
 
         const targetView = buildTestInstance(VocabularyListViewModel, {
+            // @ts-expect-error fix me
             tags: [existingTag],
         });
 
@@ -376,7 +379,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
                 .create(mapEntityDTOToDatabaseDocument(newTag.toDTO()));
         });
 
-        it(`should tag the term`, async () => {
+        it(`should tag the vocabulary list`, async () => {
             await testQueryRepository.tag(targetView.id, newTag.id);
 
             const { tags } = (await testQueryRepository.fetchById(
@@ -646,7 +649,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
 
                     entries: [
                         {
-                            term: existingTerm,
+                            term: buildTestInstance(TermViewForVocabularyListEntry, existingTerm),
                             variableValues: {},
                         },
                     ].map((dto) => new VocabularyListEntryViewModel(dto)),
