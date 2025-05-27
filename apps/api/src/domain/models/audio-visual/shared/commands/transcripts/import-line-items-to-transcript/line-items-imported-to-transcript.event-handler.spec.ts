@@ -16,44 +16,18 @@ import { PersistenceModule } from '../../../../../../../persistence/persistence.
 import generateDatabaseNameForTestSuite from '../../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestInstance } from '../../../../../../../test-data/utilities';
 import { EventSourcedAudioItemViewModel } from '../../../../audio-item/queries';
+import { EventSourcedVideoViewModel } from '../../../../video/queries';
 import { TranscriptParticipant } from '../../../entities/transcript-participant';
 import { Transcript } from '../../../entities/transcript.entity';
 import { TranscriptLineItemDto } from './import-line-items-to-transcript.command';
 import { LineItemsImportedToTranscript } from './line-items-imported-to-transcript.event';
 import { LineItemsImportedToTranscriptEventHandler } from './line-items-imported-to-transcript.event-handler';
 
-const audioItemId = buildDummyUuid(1);
+const resourceId = buildDummyUuid(1);
 
 const participant = buildTestInstance(TranscriptParticipant, {});
 
 const transcript = Transcript.buildEmpty().addParticipant(participant) as Transcript;
-
-const targetAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
-    id: audioItemId,
-    transcript,
-});
-
-const lineItemsImported = buildTestInstance(LineItemsImportedToTranscript, {
-    payload: {
-        aggregateCompositeIdentifier: {
-            type: AggregateType.audioItem,
-            id: audioItemId,
-        },
-        lineItems: (
-            [
-                [100, 200],
-                [500, 900],
-                [1100, 3200],
-            ] as [number, number][]
-        ).map(([i, o]) =>
-            buildTestInstance(TranscriptLineItemDto, {
-                inPointMilliseconds: i,
-                outPointMilliseconds: o,
-                speakerInitials: participant.initials,
-            })
-        ),
-    },
-});
 
 describe('LineItemsImportedToTranscriptEventHandler', () => {
     let databaseProvider: ArangoDatabaseProvider;
@@ -105,6 +79,33 @@ describe('LineItemsImportedToTranscriptEventHandler', () => {
 
     describe(`when handling a LINE_ITEMS_IMPORTED_TO_TRANSCRIPT`, () => {
         describe(`for an audio item`, () => {
+            const targetAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
+                id: resourceId,
+                transcript,
+            });
+
+            const lineItemsImported = buildTestInstance(LineItemsImportedToTranscript, {
+                payload: {
+                    aggregateCompositeIdentifier: {
+                        type: AggregateType.audioItem,
+                        id: resourceId,
+                    },
+                    lineItems: (
+                        [
+                            [100, 200],
+                            [500, 900],
+                            [1100, 3200],
+                        ] as [number, number][]
+                    ).map(([i, o]) =>
+                        buildTestInstance(TranscriptLineItemDto, {
+                            inPointMilliseconds: i,
+                            outPointMilliseconds: o,
+                            speakerInitials: participant.initials,
+                        })
+                    ),
+                },
+            });
+
             describe(`when the target audio item view exists`, () => {
                 beforeEach(async () => {
                     await testRepositoryProvider
@@ -129,7 +130,50 @@ describe('LineItemsImportedToTranscriptEventHandler', () => {
         });
 
         describe(`for a video`, () => {
-            it.todo('should have a test');
+            const targetVideo = buildTestInstance(EventSourcedVideoViewModel, {
+                id: resourceId,
+                transcript,
+            });
+
+            const lineItemsImported = buildTestInstance(LineItemsImportedToTranscript, {
+                payload: {
+                    aggregateCompositeIdentifier: {
+                        type: AggregateType.video,
+                        id: resourceId,
+                    },
+                    lineItems: (
+                        [
+                            [100, 200],
+                            [500, 900],
+                            [1100, 3200],
+                        ] as [number, number][]
+                    ).map(([i, o]) =>
+                        buildTestInstance(TranscriptLineItemDto, {
+                            inPointMilliseconds: i,
+                            outPointMilliseconds: o,
+                            speakerInitials: participant.initials,
+                        })
+                    ),
+                },
+            });
+
+            beforeEach(async () => {
+                await testRepositoryProvider.forResource(ResourceType.video).create(targetVideo);
+            });
+
+            it(`should import the line items`, async () => {
+                await lineItemsImportedToTranscriptEventHandler.handle(lineItemsImported);
+
+                const updatedView = (await testRepositoryProvider
+                    .forResource(ResourceType.video)
+                    .fetchById(targetVideo.id)) as EventSourcedAudioItemViewModel;
+
+                const { transcript } = updatedView;
+
+                expect(transcript.countLineItems()).toBe(
+                    lineItemsImported.payload.lineItems.length
+                );
+            });
         });
     });
 });
