@@ -26,6 +26,11 @@ import {
     IQueryRepositoryProvider,
     QUERY_REPOSITORY_PROVIDER_TOKEN,
 } from '../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
+import {
+    ISongQueryRepository,
+    SONG_QUERY_REPOSITORY_TOKEN,
+} from '../domain/models/song/queries/song-query-repository.interface';
+import { ArangoSongQueryRepository } from '../domain/models/song/repositories/arango-song-query-repository';
 import { ITermQueryRepository, TERM_QUERY_REPOSITORY_TOKEN } from '../domain/models/term/queries';
 import { ArangoTermQueryRepository } from '../domain/models/term/repositories';
 import { ArangoQueryRepositoryProvider } from '../domain/models/term/repositories/arango-query-repository-provider';
@@ -205,6 +210,16 @@ export class PersistenceModule implements OnApplicationShutdown {
             inject: [ArangoConnectionProvider],
         };
 
+        const songQueryRepository = {
+            provide: SONG_QUERY_REPOSITORY_TOKEN,
+            useFactory: (arangoConnectionProvider: ArangoConnectionProvider) => {
+                const repo = new ArangoSongQueryRepository(arangoConnectionProvider);
+
+                return repo;
+            },
+            inject: [ArangoConnectionProvider],
+        };
+
         const queryRepositoryProvider = {
             provide: QUERY_REPOSITORY_PROVIDER_TOKEN,
             useFactory: (
@@ -213,7 +228,8 @@ export class PersistenceModule implements OnApplicationShutdown {
                 audioItemQueryRepository: IAudioItemQueryRepository,
                 videoQueryRepository: IVideoQueryRepository,
                 vocabularyListQueryRepository: IVocabularyListQueryRepository,
-                playlistQueryRepository: IPlaylistQueryRepository
+                playlistQueryRepository: IPlaylistQueryRepository,
+                songQueryRepository: ISongQueryRepository
             ): IQueryRepositoryProvider =>
                 new ArangoQueryRepositoryProvider(
                     photographQueryRepository,
@@ -221,7 +237,8 @@ export class PersistenceModule implements OnApplicationShutdown {
                     audioItemQueryRepository,
                     videoQueryRepository,
                     vocabularyListQueryRepository,
-                    playlistQueryRepository
+                    playlistQueryRepository,
+                    songQueryRepository
                 ),
             inject: [
                 PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
@@ -230,6 +247,7 @@ export class PersistenceModule implements OnApplicationShutdown {
                 VIDEO_QUERY_REPOSITORY_TOKEN,
                 VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
                 PLAYLIST_QUERY_REPOSITORY_TOKEN,
+                SONG_QUERY_REPOSITORY_TOKEN,
             ],
         };
 
@@ -251,6 +269,7 @@ export class PersistenceModule implements OnApplicationShutdown {
                 termQueryRepositoryProvider,
                 vocabularyListQueryRepository,
                 playlistQueryRepository,
+                songQueryRepository,
                 queryRepositoryProvider,
             ],
             exports: [
@@ -266,6 +285,7 @@ export class PersistenceModule implements OnApplicationShutdown {
                 videoQueryRepositoryProvider,
                 termQueryRepositoryProvider,
                 playlistQueryRepository,
+                songQueryRepository,
                 queryRepositoryProvider,
                 EventModule,
             ],

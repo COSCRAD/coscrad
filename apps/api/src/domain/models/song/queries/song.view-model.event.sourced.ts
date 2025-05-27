@@ -1,5 +1,5 @@
 import { FromDomainModel, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
-import { isNonEmptyObject, isNonEmptyString } from '@coscrad/validation-constraints';
+import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { CoscradDataExample } from '../../../../test-data/utilities';
 import { DTO } from '../../../../types/DTO';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
@@ -83,7 +83,7 @@ export class EventSourcedSongViewModel {
             this.name = new MultilingualText(name);
         }
 
-        this.accessControlList = isNonEmptyString(accessControlList)
+        this.accessControlList = isNonEmptyObject(accessControlList)
             ? new AccessControlList(accessControlList)
             : new AccessControlList();
     }

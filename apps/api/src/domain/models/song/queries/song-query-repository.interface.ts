@@ -1,11 +1,13 @@
 import { IMultilingualTextItem, LanguageCode } from '@coscrad/api-interfaces';
 import { Maybe } from '../../../../lib/types/maybe';
 import { AggregateId } from '../../../types/AggregateId';
+import { IAccessible } from '../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
+import { IPublishable } from '../../shared/common-commands/publish-resource/resource-published.event-handler';
 import { EventSourcedSongViewModel } from './song.view-model.event.sourced';
 
 export const SONG_QUERY_REPOSITORY_TOKEN = 'SONG_QUERY_REPOSITORY_TOKEN';
 
-export interface ISongQueryRepository {
+export interface ISongQueryRepository extends IPublishable, IAccessible {
     create(view: EventSourcedSongViewModel): Promise<void>;
 
     createMany(view: EventSourcedSongViewModel[]): Promise<void>;

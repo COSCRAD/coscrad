@@ -231,6 +231,46 @@ describe(`ArangoSongQueryRepository`, () => {
         });
     });
 
+    describe(`publish`, () => {
+        const targetSong = existingSongs[0];
+
+        beforeEach(async () => {
+            await testQueryRepository.create(targetSong);
+        });
+
+        it(`should publish the song`, async () => {
+            await testQueryRepository.publish(targetSong.id);
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetSong.id
+            )) as EventSourcedSongViewModel;
+
+            expect(updatedView.isPublished).toBe(true);
+        });
+    });
+
+    describe(`allowuser`, () => {
+        const targetSong = buildTestInstance(EventSourcedSongViewModel, {
+            accessControlList: new AccessControlList(),
+        });
+
+        const testUserId = buildDummyUuid(869);
+
+        beforeEach(async () => {
+            await testQueryRepository.create(targetSong);
+        });
+
+        it(`should add the user to the query ACL`, async () => {
+            await testQueryRepository.allowUser(targetSong.id, testUserId);
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetSong.id
+            )) as EventSourcedSongViewModel;
+
+            expect(updatedView.accessControlList.canUser(testUserId)).toBe(true);
+        });
+    });
+
     describe(`addLyrics`, () => {
         beforeEach(async () => {
             await databaseProvider.clearViews();
