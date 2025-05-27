@@ -363,7 +363,6 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
         });
 
         const targetView = buildTestInstance(VocabularyListViewModel, {
-            // @ts-expect-error fix me
             tags: [existingTag],
         });
 

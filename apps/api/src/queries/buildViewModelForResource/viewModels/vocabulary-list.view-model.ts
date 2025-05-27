@@ -11,7 +11,6 @@ import { ICoscradEvent } from '../../../domain/common';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
 import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
-import BaseDomainModel from '../../../domain/models/base-domain-model.entity';
 import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import {
@@ -27,6 +26,7 @@ import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { buildTestInstance, CoscradDataExample } from '../../../test-data/utilities';
 import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
+import { BaseEventSourcedResourceViewModel } from './base-event-sourced-resource.view-model';
 
 @CoscradDataExample<TermViewForVocabularyListEntry>({
     example: {
@@ -69,7 +69,7 @@ export class TermViewForVocabularyListEntry {
     }
 }
 
-export class VocabularyListEntryViewModel extends BaseDomainModel {
+export class VocabularyListEntryViewModel {
     /**
      * Note this doesn't quite line up with the `IVocabularyListViewModel` interface.
      * This isn't a problem because we don't need to know the available actions
@@ -82,8 +82,6 @@ export class VocabularyListEntryViewModel extends BaseDomainModel {
     variableValues: Record<string, string | boolean>;
 
     constructor(dto?: Partial<DTO<VocabularyListEntryViewModel>>) {
-        super();
-
         if (!isNonEmptyObject(dto)) {
             return;
         }
@@ -103,41 +101,39 @@ export class VocabularyListEntryViewModel extends BaseDomainModel {
     }
 }
 
-const sample: DTO<VocabularyListViewModel> = {
-    type: AggregateType.vocabularyList,
-    entries: [
-        {
-            // TODO should we introduce a `TermViewForVocabularyList` instead?
-            term: buildTestInstance(TermViewForVocabularyListEntry, {
-                id: '123',
-                name: buildMultilingualTextWithSingleItem('test term in vocabulary list'),
-                isPublished: false,
-                mediaItemId: '555',
-                accessControlList: new AccessControlList().toDTO(),
-                // tags
-            }),
-            variableValues: {},
-        },
-    ],
-    form: {
-        fields: [],
-    },
-    name: buildMultilingualTextWithSingleItem('vocab list name (orig)'),
-    id: '123',
-    actions: [],
-    isPublished: false,
-    contributions: [],
-    accessControlList: new AccessControlList().toDTO(),
-    tags: [],
-};
-
 /**
  * TODO Why does extending the base cause a circular dependency here?
  */
-@CoscradDataExample({
-    example: sample,
+@CoscradDataExample<VocabularyListViewModel>({
+    example: {
+        type: AggregateType.vocabularyList,
+        entries: [
+            {
+                // TODO should we introduce a `TermViewForVocabularyList` instead?
+                term: buildTestInstance(TermViewForVocabularyListEntry, {
+                    id: '123',
+                    name: buildMultilingualTextWithSingleItem('test term in vocabulary list'),
+                    isPublished: false,
+                    mediaItemId: '555',
+                    accessControlList: new AccessControlList().toDTO(),
+                    // tags
+                }),
+                variableValues: {},
+            },
+        ],
+        form: {
+            fields: [],
+        },
+        name: buildMultilingualTextWithSingleItem('vocab list name (orig)'),
+        id: '123',
+        actions: [],
+        isPublished: false,
+        contributions: [],
+        accessControlList: new AccessControlList().toDTO(),
+        tags: [],
+    },
 })
-export class VocabularyListViewModel {
+export class VocabularyListViewModel extends BaseEventSourcedResourceViewModel {
     readonly type: ResourceType = ResourceType.vocabularyList;
 
     @ApiProperty({
@@ -158,8 +154,8 @@ export class VocabularyListViewModel {
     @ApiProperty()
     public actions: string[];
 
-    @ApiProperty()
-    public isPublished: boolean;
+    // @ApiProperty()
+    // public isPublished: boolean;
 
     /**
      * This should be removed in query responses.
@@ -167,13 +163,13 @@ export class VocabularyListViewModel {
      * Note that if we leverage `forUser`, we should be able to make this
      * private.
      * */
-    public accessControlList: AccessControlList;
+    // public accessControlList: AccessControlList;
 
     // move to base
-    id: string;
-    name: MultilingualText;
-    contributions: any[] = [];
-    tags: any[] = [];
+    // id: string;
+    // name: MultilingualText;
+    // contributions: any[] = [];
+    // tags: any[] = [];
 
     getAvailableCommands(): string[] {
         /**
@@ -191,13 +187,15 @@ export class VocabularyListViewModel {
     }
 
     constructor(dto?: DTO<VocabularyListViewModel>) {
+        super(dto);
+
         if (!isNonEmptyObject(dto)) {
             return;
         }
 
         // super(dto);
-        this.id = dto.id;
-        this.name = new MultilingualText(dto.name);
+        // this.id = dto.id;
+        // this.name = new MultilingualText(dto.name);
         // ...
 
         const { entries, form, actions } = dto;
