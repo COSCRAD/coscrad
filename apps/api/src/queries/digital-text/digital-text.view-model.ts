@@ -20,6 +20,7 @@ import { TagCreated } from '../../domain/models/tag/commands/create-tag/tag-crea
 import { ResourceOrNoteTaggedPayload } from '../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
 import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { isNullOrUndefined } from '../../domain/utilities/validation/is-null-or-undefined';
+import { DTO } from '../../types/DTO';
 import { EventSourcedTagViewModel } from '../buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { BaseEvent } from '../event-sourcing';
 import { ApplyEvent } from '../event-sourcing/apply-event.interface';
@@ -203,7 +204,7 @@ export class DigitalTextViewModel
                 aggregateCompositeIdentifier: { id },
             } = payload as TagCreated['payload'];
 
-            const emptyTag = new EventSourcedTagViewModel(id);
+            const emptyTag = new EventSourcedTagViewModel({ id } as DTO<EventSourcedTagViewModel>);
 
             // TODO Do we need to update this.tags as well? Do we duplicate some tags between the two lists?
             this.#allTags = [...this.#allTags, emptyTag.apply(event)];

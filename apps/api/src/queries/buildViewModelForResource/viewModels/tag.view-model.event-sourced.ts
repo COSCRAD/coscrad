@@ -12,6 +12,7 @@ import { TagCreatedPayload } from '../../../domain/models/tag/commands/create-ta
 import { ResourceOrNoteTaggedPayload } from '../../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
 import { Tag } from '../../../domain/models/tag/tag.entity';
 import { AggregateId } from '../../../domain/types/AggregateId';
+import { DTO } from '../../../types/DTO';
 import { BaseEvent } from '../../event-sourcing';
 
 /**
@@ -43,8 +44,14 @@ export class EventSourcedTagViewModel implements ITagViewModel {
     })
     name: MultilingualText;
 
-    constructor(id: AggregateId) {
+    constructor({ id, label, members }: DTO<EventSourcedTagViewModel>) {
         this.id = id;
+
+        this.label = label;
+
+        this.members = Array.isArray(members) ? members : [];
+
+        this.name = buildMultilingualTextWithSingleItem(this.label);
     }
 
     apply(event: BaseEvent): EventSourcedTagViewModel {

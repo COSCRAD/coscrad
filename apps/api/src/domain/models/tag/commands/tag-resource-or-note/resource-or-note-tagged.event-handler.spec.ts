@@ -1,4 +1,4 @@
-import { ITagViewModel, ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -20,7 +20,7 @@ import mapEntityDTOToDatabaseDocument, {
 } from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { TagViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
+import { EventSourcedTagViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { TestEventStream } from '../../../../../test-data/events';
 import { DTO } from '../../../../../types/DTO';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
@@ -32,14 +32,14 @@ const WIDGET_COLLECTION = 'widgets';
 class WidgetViewModel {
     id: string;
     name: MultilingualText;
-    tags: ITagViewModel[];
+    tags: EventSourcedTagViewModel[];
 
     constructor({ id, name, tags }: DTO<WidgetViewModel>) {
         this.id = id;
 
         this.name = new MultilingualText(name);
 
-        this.tags = tags;
+        this.tags = tags.map((t) => new EventSourcedTagViewModel(t));
     }
 }
 
@@ -53,14 +53,15 @@ const targetTagLabel = 'car parts';
 
 const targetTagId = buildDummyUuid(2);
 
-const knownTags: TagViewModel[] = [
+const knownTags: EventSourcedTagViewModel[] = [
     {
+        type: AggregateType.tag,
         id: targetTagId,
         label: targetTagLabel,
         members: [],
         name: buildMultilingualTextWithSingleItem(targetTagLabel),
     },
-];
+].map((t) => new EventSourcedTagViewModel(t));
 
 /**
  * We do not want to couple this test to the domain, which is bound to shift
