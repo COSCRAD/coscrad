@@ -49,7 +49,7 @@ const eventHistory = resourcePublished.as(compositeId);
 
 const [creationEvent, publicationEvent] = eventHistory as [TermCreated, ResourcePublished];
 
-describe(`ResourcePublished.eventHandler`, () => {
+describe(`ResourcePublishedEventHandler`, () => {
     let testQueryRepository: ITermQueryRepository;
 
     let databaseProvider: ArangoDatabaseProvider;
