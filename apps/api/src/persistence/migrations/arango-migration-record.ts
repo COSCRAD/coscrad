@@ -13,7 +13,10 @@ export class ArangoMigrationRecord {
 
     readonly dateApplied: number;
 
-    constructor({ name, sequenceNumber }: ICoscradMigration, metadata: CoscradMigrationMetadata) {
+    constructor(
+        { name, sequenceNumber }: Pick<ICoscradMigration, 'name' | 'sequenceNumber'>,
+        metadata: CoscradMigrationMetadata
+    ) {
         this._key = sequenceNumber.toString();
 
         this.name = name;

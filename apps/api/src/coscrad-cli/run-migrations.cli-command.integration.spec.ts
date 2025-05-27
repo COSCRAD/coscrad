@@ -15,12 +15,115 @@ import { ArangoConnectionProvider } from '../persistence/database/arango-connect
 import { ArangoQueryRunner } from '../persistence/database/arango-query-runner';
 import { ArangoCollectionId } from '../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
-import { BASE_DIGITAL_ASSET_URL } from '../persistence/migrations/01/remove-base-digital-asset-url.migration';
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { CoscradCliModule } from './coscrad-cli.module';
 import { COSCRAD_LOGGER_TOKEN } from './logging';
 import { buildMockLogger } from './logging/__tests__';
+
+import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
+import { Module, OnApplicationBootstrap } from '@nestjs/common';
+import { Photograph } from '../domain/models/photograph/entities/photograph.entity';
+import { InternalError } from '../lib/errors/InternalError';
+import { ArangoDatabaseDocument } from '../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
+import {
+    ICoscradMigration,
+    ICoscradQueryRunner,
+    Migration,
+    MigrationFinderService,
+    MigrationModule,
+    Migrator,
+} from '../persistence/migrations';
+import { PersistenceModule } from '../persistence/persistence.module';
+import { DTO } from '../types/DTO';
+
+/**
+ * We don't want to depend on a real migration for this test. Otherwise, there
+ * could be a maintenance overhead as the domain models change.
+ */
+
+const defaultAudioExtension = 'mp3';
+
+type PhotographDocument = ArangoDatabaseDocument<DTO<Photograph>>;
+
+type OldPhotographDocument = Omit<PhotographDocument, 'imageUrl'> & { filename: string };
+
+const defaultPhotographExtension = 'png';
+
+/**
+ * This is the name of the environment variable where the base digital asset url
+ * (includes a trailing slash) should be stored.
+ */
+export const BASE_DIGITAL_ASSET_URL = 'BASE_DIGITAL_ASSET_URL';
+
+@Migration({
+    description: `convert legacy term and photograph media urls from relative to absolute paths and append extensions`,
+    // TODO Should this be a date instead?
+    dateAuthored: '20230513',
+})
+class TestMigration implements ICoscradMigration {
+    private readonly baseDigitalAssetUrl: string;
+
+    readonly sequenceNumber = 1;
+
+    readonly name = `RemoveBaseDigitalAssetUrl`;
+
+    constructor() {
+        this.baseDigitalAssetUrl = process.env[BASE_DIGITAL_ASSET_URL] || null;
+    }
+
+    async up(queryRunner: ICoscradQueryRunner): Promise<void> {
+        if (!isNonEmptyString(this.baseDigitalAssetUrl)) {
+            // fail fast
+            throw new InternalError(
+                `Failed to parse ${BASE_DIGITAL_ASSET_URL} from the environment for migration`
+            );
+        }
+
+        await queryRunner.update<any, any>(
+            ArangoCollectionId.terms,
+            ({ audioItemId: audioFilename }) =>
+                isNullOrUndefined(audioFilename)
+                    ? {}
+                    : {
+                          audioItemId: `${this.baseDigitalAssetUrl}${audioFilename}.${defaultAudioExtension}`,
+                      }
+        );
+
+        await queryRunner.update<any, any>(ArangoCollectionId.photographs, ({ filename }) =>
+            isNullOrUndefined(filename)
+                ? {}
+                : {
+                      imageUrl: `${this.baseDigitalAssetUrl}${filename}.${defaultPhotographExtension}`,
+                      filename: null,
+                  }
+        );
+    }
+
+    async down(queryRunner: ICoscradQueryRunner): Promise<void> {
+        if (!isNonEmptyString(this.baseDigitalAssetUrl)) {
+            // fail fast
+            throw new InternalError(
+                `Failed to parse ${BASE_DIGITAL_ASSET_URL} from the environment for migration`
+            );
+        }
+
+        await queryRunner.update<PhotographDocument, OldPhotographDocument>(
+            ArangoCollectionId.photographs,
+            // @ts-expect-error There's no need to maintain this
+            ({ imageUrl }) => {
+                if (imageUrl?.includes(this.baseDigitalAssetUrl)) {
+                    return {
+                        filename: imageUrl
+                            .replace(this.baseDigitalAssetUrl, '')
+                            .replace(`.${defaultPhotographExtension}`, ''),
+                        imageUrl: null,
+                    };
+                }
+            }
+        );
+    }
+}
 
 const cliCommandName = `run-migrations`;
 
@@ -54,6 +157,26 @@ const oldPhotographDocument = {
     published: true,
 };
 
+@Module({
+    imports: [PersistenceModule],
+    providers: [Migrator, TestMigration, MigrationFinderService],
+    exports: [Migrator],
+})
+export class MockMigrationModule implements OnApplicationBootstrap {
+    constructor(
+        private readonly finderService: MigrationFinderService,
+        private readonly migrator: Migrator
+    ) {}
+
+    async onApplicationBootstrap() {
+        const migrationCtorsAndMetadata = await this.finderService.find();
+
+        migrationCtorsAndMetadata.forEach(({ metadata, migrationCtor }) => {
+            this.migrator.register(migrationCtor, metadata);
+        });
+    }
+}
+
 /**
  * This test has been a source of spontaneous CI failures. We are disabling it for
  * now, as there isn't much risk of regression in this part of the code base.
@@ -86,6 +209,8 @@ describe.skip(`run migrations`, () => {
         })
             .overrideProvider(AppModule)
             .useValue(testAppModule)
+            .overrideProvider(MigrationModule)
+            .useValue(MockMigrationModule)
             .overrideProvider(REPOSITORY_PROVIDER_TOKEN)
             .useValue(testRepositoryProvider)
             .overrideProvider(COSCRAD_LOGGER_TOKEN)
@@ -99,7 +224,7 @@ describe.skip(`run migrations`, () => {
 
     // TODO Update the setup and write all other migrations as already run dynamically
     describe(`when there is one migration to run`, () => {
-        const dumpDir = `migration-1-RemoveBaseDigitalAssetUrl-${fakeTimersConfig.now}`;
+        const dumpDir = `migration-1-TestMigration-${fakeTimersConfig.now}`;
 
         beforeEach(async () => {
             // clear the database
