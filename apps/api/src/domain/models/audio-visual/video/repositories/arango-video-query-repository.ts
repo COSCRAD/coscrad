@@ -44,6 +44,10 @@ export class ArangoVideoQueryRepository implements IVideoQueryRepository {
         });
     }
 
+    async tag(videoId: string, tagId: string): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.tag(videoId, tagId));
+    }
+
     async createMany(view: EventSourcedVideoViewModel[]): Promise<void> {
         await this.database.createMany(view.map(mapEntityDTOToDatabaseDocument));
     }

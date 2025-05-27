@@ -1,14 +1,14 @@
 import {
     ICommandFormAndLabels,
-    IContributionSummary,
     LanguageCode,
     MIMEType,
+    ResourceType,
 } from '@coscrad/api-interfaces';
 import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { buildMultilingualTextFromBilingualText } from '../../../../../domain/common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
-import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
+import { BaseEventSourcedResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/base-event-sourced-resource.view-model';
 import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
@@ -18,6 +18,7 @@ import { VideoCreated } from '../commands';
 
 @CoscradDataExample<EventSourcedVideoViewModel>({
     example: {
+        type: ResourceType.video,
         id: buildDummyUuid(6),
         actions: [],
         name: buildMultilingualTextFromBilingualText(
@@ -32,47 +33,31 @@ import { VideoCreated } from '../commands';
         contributions: [],
         accessControlList: new AccessControlList(),
         isPublished: false,
+        tags: [],
     },
 })
-export class EventSourcedVideoViewModel {
+export class EventSourcedVideoViewModel extends BaseEventSourcedResourceViewModel {
+    // TODO be sure they are all read only
+    readonly type = ResourceType.video;
+
+    getAvailableCommands(): string[] {
+        throw new Error('Method not implemented.');
+    }
     actions: ICommandFormAndLabels[];
-    name: MultilingualText;
     mediaItemId: AggregateId;
     mimeType?: MIMEType;
     lengthMilliseconds: number;
     text: string;
-    contributions: IContributionSummary[];
-    id: string;
-    accessControlList: AccessControlList;
-    isPublished: boolean;
     transcript?: Transcript;
 
     constructor(dto: DTO<EventSourcedVideoViewModel>) {
+        super(dto);
+
         if (!dto) return;
 
-        const { id, name, contributions, mediaItemId, accessControlList, isPublished, transcript } =
-            dto;
-
-        this.id = id;
-
-        this.name = new MultilingualText(name);
-
-        // do we need to clone?
-        this.contributions = Array.isArray(contributions) ? contributions : [];
+        const { mediaItemId, transcript } = dto;
 
         this.mediaItemId = mediaItemId;
-
-        /**
-         * We need to share this logic. It's not dangerous to have a single
-         * `BaseResourceViewModel` class as long as all the properties we
-         * put there are essential to the notion of a web-of-knowledge "resource"
-         * (view).
-         */
-        this.accessControlList = isNonEmptyObject(accessControlList)
-            ? new AccessControlList(accessControlList)
-            : new AccessControlList();
-
-        this.isPublished = isPublished;
 
         if (isNonEmptyObject(transcript)) {
             this.transcript = new Transcript(transcript);
@@ -91,6 +76,7 @@ export class EventSourcedVideoViewModel {
         meta: { contributorIds: _ },
     }: VideoCreated): EventSourcedVideoViewModel {
         return new EventSourcedVideoViewModel({
+            type: ResourceType.video,
             name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
             mediaItemId,
             id: videoId,
@@ -102,6 +88,7 @@ export class EventSourcedVideoViewModel {
             lengthMilliseconds,
             // in order to grant access, we need a `RESOURCE_READ_ACCESS_GRANTED_TO_USER`
             accessControlList: new AccessControlList(),
+            tags: [],
         });
     }
 
