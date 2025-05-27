@@ -153,7 +153,7 @@ describe(`ArangoTermQueryRepository`, () => {
     );
 
     const termViews: TermViewModel[] = termIds.map((id) =>
-        TermViewModel.fromDto({
+        buildTestInstance(TermViewModel, {
             id,
             contributions: [],
             name: buildMultilingualTextWithSingleItem(buildTermText(id), originalLanguageCode),

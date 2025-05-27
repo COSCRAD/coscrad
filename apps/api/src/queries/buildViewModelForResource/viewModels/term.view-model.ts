@@ -1,18 +1,11 @@
 import {
     AggregateType,
-    IMultilingualText,
     LanguageCode,
     MultilingualTextItemRole,
+    ResourceType,
 } from '@coscrad/api-interfaces';
-import {
-    BooleanDataType,
-    FromDomainModel,
-    NestedDataType,
-    ReferenceTo,
-    UUID,
-} from '@coscrad/data-types';
+import { NestedDataType, ReferenceTo, UUID } from '@coscrad/data-types';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { DetailScopedCommandWriteContext } from '../../../app/controllers/command/services/command-info-service';
 import { ICoscradEvent } from '../../../domain/common';
 import { buildMultilingualTextFromBilingualText } from '../../../domain/common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
@@ -24,11 +17,10 @@ import {
     TermCreated,
     TermTranslated,
 } from '../../../domain/models/term/commands';
-import { Term } from '../../../domain/models/term/entities/term.entity';
 import { ContributionSummary } from '../../../domain/models/user-management/contributor/views';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { AggregateId } from '../../../domain/types/AggregateId';
-import { HasAggregateId } from '../../../domain/types/HasAggregateId';
+import { isInternalError } from '../../../lib/errors/InternalError';
 import { Maybe } from '../../../lib/types/maybe';
 import { NotFound } from '../../../lib/types/not-found';
 import { clonePlainObjectWithOverrides } from '../../../lib/utilities/clonePlainObjectWithOverrides';
@@ -36,7 +28,7 @@ import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { CoscradDataExample } from '../../../test-data/utilities';
 import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
-import { TagViewModel } from './tag.view-model';
+import { BaseEventSourcedResourceViewModel } from './base-event-sourced-resource.view-model';
 
 class VocabularyListRecordForTerm {
     @UUID({
@@ -58,14 +50,13 @@ class VocabularyListRecordForTerm {
     }
 }
 
-const FromTerm = FromDomainModel(Term);
-
 /**
  * This is the first view model leveraging a new approach that involves denormalized,
  * event-sourced, materialized views.
  */
 @CoscradDataExample<TermViewModel>({
     example: {
+        type: AggregateType.term,
         id: buildDummyUuid(1),
         isPublished: true,
         accessControlList: new AccessControlList().toDTO(),
@@ -85,37 +76,10 @@ const FromTerm = FromDomainModel(Term);
         vocabularyLists: [],
     },
 })
-export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
-    @NestedDataType(ContributionSummary, {
-        label: 'contributions',
-        description: 'a list of all contributions to the development of this resource',
-        // Can't we get this from reflection?
-        isArray: true,
-    })
-    contributions: ContributionSummary[];
-
-    @NestedDataType(MultilingualText, {
-        label: 'name',
-        // note that we call it `name` not `text` for consistency with other models
-        description: 'name (text) includes the text as well as any translations for this term',
-    })
-    name: IMultilingualText;
-
-    @FromTerm
-    id: AggregateId;
-
-    @BooleanDataType({
-        label: 'is published',
-        description: 'indicates whether this resource available to the public',
-    })
-    isPublished: boolean;
-
+export class TermViewModel extends BaseEventSourcedResourceViewModel {
+    type: ResourceType;
     @ReferenceTo(AggregateType.mediaItem)
     mediaItemId?: string;
-
-    actions: string[];
-
-    accessControlList: AccessControlList;
 
     @NestedDataType(VocabularyListRecordForTerm, {
         label: 'vocabulary lists including this term',
@@ -124,18 +88,30 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
     })
     vocabularyLists: VocabularyListRecordForTerm[];
 
-    // notes
+    // TODO remove this in favor of `getAvailableActions()`
+    actions: string[];
 
-    @NestedDataType(TagViewModel, {
-        label: 'tags',
-        description: 'a summary of the tags that have been applied to this resource',
-        isArray: true,
-    })
-    tags: TagViewModel[];
+    constructor(dto: DTO<TermViewModel>) {
+        const { contributions, actions, mediaItemId, vocabularyLists } = dto;
 
-    // events ?
+        super(dto);
 
-    // revision ?
+        this.contributions = Array.isArray(contributions)
+            ? contributions.map((c) => ContributionSummary.fromDto(c))
+            : [];
+
+        this.actions = actions;
+
+        if (!isNullOrUndefined(mediaItemId)) {
+            this.mediaItemId = mediaItemId;
+        }
+
+        this.actions = actions;
+
+        this.vocabularyLists = Array.isArray(vocabularyLists)
+            ? vocabularyLists.map((dto) => new VocabularyListRecordForTerm(dto))
+            : [];
+    }
 
     static fromTermCreated({
         payload: {
@@ -145,7 +121,21 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
         },
         meta: { contributorIds },
     }: TermCreated): TermViewModel {
-        const term = new TermViewModel();
+        const term = new TermViewModel({
+            type: AggregateType.term,
+            id: termId,
+            isPublished: false,
+            accessControlList: new AccessControlList(),
+            actions: [], // TODO build all actions
+            tags: [], // none yet
+            /**
+             * Note that this must be written in the DB by the event-handler, as
+             * we do not have access to the contributors in this scope.
+             */
+            contributions: [],
+            vocabularyLists: [], // none yet
+            name: buildMultilingualTextWithSingleItem(text, languageCode),
+        });
 
         term.name = buildMultilingualTextWithSingleItem(text, languageCode);
 
@@ -190,77 +180,30 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
             aggregateCompositeIdentifier: { id: termId },
         },
     }: PromptTermCreated): TermViewModel {
-        const term = new TermViewModel();
-
-        term.id = termId;
-
-        term.isPublished = false;
-
-        // currently, prompts are in English- should we hard wire this on the event payload to be future safe?
-        term.name = buildMultilingualTextWithSingleItem(text, LanguageCode.English);
-
-        /**
-         *  Note that the contributions must be handled separately as we need
-         * to access the db to join in contributor names
-         */
-        term.contributions = [];
-
-        term.actions = [
-            'ELICIT_TERM_FROM_PROMPT',
-            'PUBLISH_RESOURCE',
-            'ADD_AUDIO_FOR_TERM',
-            'TAG_RESOURCE',
-            'CONNECT_RESOURCES_WITH_NOTE',
-            'CREATE_NOTE_ABOUT_RESOURCE',
-        ];
-
-        // term.notes = []
-
-        // term.tags = []
+        const term = new TermViewModel({
+            type: AggregateType.term,
+            id: termId,
+            isPublished: false,
+            accessControlList: new AccessControlList(),
+            name: buildMultilingualTextWithSingleItem(text, LanguageCode.English),
+            contributions: [],
+            actions: [
+                'ELICIT_TERM_FROM_PROMPT',
+                'PUBLISH_RESOURCE',
+                'ADD_AUDIO_FOR_TERM',
+                'TAG_RESOURCE',
+                'CONNECT_RESOURCES_WITH_NOTE',
+                'CREATE_NOTE_ABOUT_RESOURCE',
+            ],
+            vocabularyLists: [],
+            tags: [],
+        });
 
         return term;
     }
 
     static fromDto(dto: DTO<TermViewModel>): TermViewModel {
-        const term = new TermViewModel();
-
-        const {
-            contributions,
-            name,
-            id,
-            actions,
-            accessControlList,
-            mediaItemId,
-            isPublished,
-            vocabularyLists,
-            tags,
-        } = dto;
-
-        term.contributions = Array.isArray(contributions)
-            ? contributions.map((c) => ContributionSummary.fromDto(c))
-            : [];
-
-        term.name = name;
-
-        term.id = id;
-
-        term.actions = actions;
-
-        if (!isNullOrUndefined(mediaItemId)) {
-            term.mediaItemId = mediaItemId;
-        }
-
-        term.accessControlList = new AccessControlList(accessControlList);
-
-        term.actions = actions;
-
-        term.isPublished = isNullOrUndefined(isPublished) ? false : isPublished; // we want to be extra careful here
-
-        term.vocabularyLists = Array.isArray(vocabularyLists)
-            ? vocabularyLists.map((dto) => new VocabularyListRecordForTerm(dto))
-            : [];
-
-        term.tags = Array.isArray(tags) ? tags : [];
+        const term = new TermViewModel(dto);
 
         return term;
     }
@@ -293,11 +236,15 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
                 payload: { translation, languageCode },
             } = event as TermTranslated;
 
-            this.name.items.push({
+            const updatedName = this.name.translate({
                 text: translation,
                 languageCode,
                 role: MultilingualTextItemRole.freeTranslation,
             });
+
+            if (!isInternalError(updatedName)) {
+                this.name = updatedName;
+            }
 
             return this;
         }

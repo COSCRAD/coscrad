@@ -27,7 +27,7 @@ import { Maybe } from '../../../lib/types/maybe';
 import { NotFound } from '../../../lib/types/not-found';
 import { clonePlainObjectWithOverrides } from '../../../lib/utilities/clonePlainObjectWithOverrides';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
-import { CoscradDataExample } from '../../../test-data/utilities';
+import { buildTestInstance, CoscradDataExample } from '../../../test-data/utilities';
 import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
 import { TermViewModel } from './term.view-model';
@@ -69,7 +69,8 @@ export class VocabularyListEntryViewModel extends BaseDomainModel {
 const sample: DTO<VocabularyListViewModel> = {
     entries: [
         {
-            term: {
+            // TODO should we introduce a `TermViewForVocabularyList` instead?
+            term: buildTestInstance(TermViewModel, {
                 id: '123',
                 name: buildMultilingualTextWithSingleItem('test term in vocabulary list'),
                 contributions: [],
@@ -80,7 +81,7 @@ const sample: DTO<VocabularyListViewModel> = {
                 // TODO can we omit this here?
                 vocabularyLists: [],
                 tags: [],
-            },
+            }),
             variableValues: {},
         },
     ],
