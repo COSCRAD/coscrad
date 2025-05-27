@@ -69,6 +69,10 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
         });
     }
 
+    async tag(audioItemId: string, tagId: string): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.tag(audioItemId, tagId));
+    }
+
     async fetchById(
         id: AggregateId
     ): Promise<Maybe<EventSourcedAudioItemViewModel & { actions: ICommandFormAndLabels[] }>> {
