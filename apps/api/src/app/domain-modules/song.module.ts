@@ -14,6 +14,7 @@ import { LyricsAddedForSong } from '../../domain/models/song/commands/add-lyrics
 import { CreateSong } from '../../domain/models/song/commands/create-song.command';
 import { CreateSongCommandHandler } from '../../domain/models/song/commands/create-song.command-handler';
 import { SongCreated } from '../../domain/models/song/commands/song-created.event';
+import { SongCreatedEventHandler } from '../../domain/models/song/commands/song-created.event-handler';
 import { Song } from '../../domain/models/song/song.entity';
 import { SongQueryService } from '../../domain/services/query-services/song-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
@@ -28,6 +29,7 @@ import { SongController } from '../controllers/resources/song.controller';
         CommandInfoService,
         SongQueryService,
         CreateSongCommandHandler,
+        SongCreatedEventHandler,
         AddLyricsForSongCommandHandler,
         TranslateSongLyricsCommandHandler,
         TranslateSongTitleCommandHandler,
@@ -40,7 +42,6 @@ import { SongController } from '../controllers/resources/song.controller';
             AddLyricsForSong,
             TranslateSongLyrics,
             TranslateSongTitle,
-            // Events
             SongCreated,
             SongTitleTranslated,
             LyricsAddedForSong,

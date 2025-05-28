@@ -24,7 +24,6 @@ import { BaseCreateCommandHandler } from '../../shared/command-handlers/base-cre
 import UuidNotGeneratedInternallyError from '../../shared/common-command-errors/UuidNotGeneratedInternallyError';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../shared/events/types/EventRecordMetadata';
-import { validAggregateOrThrow } from '../../shared/functional';
 import { Song } from '../song.entity';
 import { CreateSong } from './create-song.command';
 import { SongCreated } from './song-created.event';
@@ -75,23 +74,30 @@ export class CreateSongCommandHandler extends BaseCreateCommandHandler<Song> {
      * audio items. Consider if duplicate song titles should be allowed, and if so,
      * fetch only those songs with the same title.
      */
-    async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
+    async fetchRequiredExternalState({
+        aggregateCompositeIdentifier: { id: songId },
+        audioItemId,
+    }: CreateSong): Promise<InMemorySnapshot> {
         const [songSearchResult, audioItemSearchResult] = await Promise.all([
-            this.repositoryProvider.forResource<Song>(ResourceType.song).fetchMany(),
-            this.repositoryProvider.forResource<AudioItem>(ResourceType.audioItem).fetchMany(),
+            this.repositoryProvider.forResource<Song>(ResourceType.song).fetchById(songId),
+            this.repositoryProvider
+                .forResource<AudioItem>(ResourceType.audioItem)
+                .fetchById(audioItemId),
         ]);
 
-        const allSongs = songSearchResult.filter((song): song is Song => {
-            if (isInternalError(song)) {
-                throw song;
-            }
+        const allSongs =
+            isNotFound(songSearchResult) || isInternalError(songSearchResult)
+                ? []
+                : [songSearchResult];
 
-            return true;
-        });
+        const allAudioItems =
+            isNotFound(audioItemSearchResult) || isInternalError(audioItemSearchResult)
+                ? []
+                : [audioItemSearchResult];
 
         return new DeluxeInMemoryStore({
             song: allSongs,
-            audioItem: audioItemSearchResult.filter(validAggregateOrThrow),
+            audioItem: allAudioItems,
         }).fetchFullSnapshotInLegacyFormat();
     }
 

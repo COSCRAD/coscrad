@@ -66,10 +66,7 @@ describe(`SongCreatedEventHandler`, () => {
 
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
 
-        testQueryRepository = new ArangoSongQueryRepository(
-            connectionProvider
-            // new ConsoleCoscradCliLogger()
-        );
+        testQueryRepository = new ArangoSongQueryRepository(connectionProvider);
     });
 
     afterAll(async () => {

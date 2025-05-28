@@ -1,6 +1,6 @@
 import { ResourceType } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
-import { ICoscradEventHandler } from '../../../common';
+import { CoscradEventConsumer, ICoscradEventHandler } from '../../../common';
 import {
     IQueryRepositoryProvider,
     QUERY_REPOSITORY_PROVIDER_TOKEN,
@@ -9,6 +9,7 @@ import { ISongQueryRepository } from '../queries/song-query-repository.interface
 import { EventSourcedSongViewModel } from '../queries/song.view-model.event.sourced';
 import { SongCreated } from './song-created.event';
 
+@CoscradEventConsumer('SONG_CREATED')
 export class SongCreatedEventHandler implements ICoscradEventHandler {
     private readonly songQueryRepository: ISongQueryRepository;
 
