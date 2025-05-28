@@ -24,6 +24,16 @@ export class ArangoSongQueryRepository implements ISongQueryRepository {
         );
     }
 
+    async allowUser(aggregateId: AggregateId, userId: AggregateId): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.allowUser(aggregateId, userId));
+    }
+
+    async publish(id: AggregateId): Promise<void> {
+        const cursor = await this.database.query(this.baseResourceQueryBuilder.publish(id));
+
+        await cursor.all();
+    }
+
     async addLyrics(
         id: AggregateId,
         textForLyrics: string,

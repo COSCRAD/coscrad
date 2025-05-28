@@ -98,10 +98,7 @@ describe(`ArangoPlaylistQueryRepository`, () => {
         // TODO Use the DI system so this is more extensible to keep test maintenance lower
         audioItemQueryRepository = new ArangoAudioItemQueryRepository(connectionProvider);
 
-        testQueryRepository = new ArangoPlaylistQueryRepository(
-            connectionProvider
-            // new ConsoleCoscradCliLogger()
-        );
+        testQueryRepository = new ArangoPlaylistQueryRepository(connectionProvider);
 
         /**
          * Currently, the contributors are snapshot based (not event sourced).

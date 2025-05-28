@@ -9,6 +9,7 @@ import {
     IPublishable,
     IQueryRepositoryProvider,
 } from '../../shared/common-commands/publish-resource/resource-published.event-handler';
+import { SONG_QUERY_REPOSITORY_TOKEN } from '../../song/queries/song-query-repository.interface';
 import { VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN } from '../../vocabulary-list/queries';
 import { TERM_QUERY_REPOSITORY_TOKEN } from '../queries';
 
@@ -27,7 +28,9 @@ export class ArangoQueryRepositoryProvider implements IQueryRepositoryProvider {
         @Inject(VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN)
         private readonly vocabularyListQueryRepository,
         @Inject(PLAYLIST_QUERY_REPOSITORY_TOKEN)
-        private readonly playlistQueryRepository
+        private readonly playlistQueryRepository,
+        @Inject(SONG_QUERY_REPOSITORY_TOKEN)
+        private readonly songQueryRepository
     ) {}
 
     forResource<T extends IPublishable>(resourceType: ResourceType): T {
@@ -53,6 +56,10 @@ export class ArangoQueryRepositoryProvider implements IQueryRepositoryProvider {
 
         if (resourceType === ResourceType.playlist) {
             return this.playlistQueryRepository;
+        }
+
+        if (resourceType === ResourceType.song) {
+            return this.songQueryRepository;
         }
 
         throw new InternalError(

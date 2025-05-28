@@ -30,22 +30,6 @@ export class SongCompositeId {
     description: 'Creates a new song',
 })
 export class CreateSong implements ICommandBase {
-    /**
-     * TODO
-     * We need a migration for this schema change. The migration will
-     * remove `id`
-     * add `aggregateId` = `id` => ({id, type: AggregateType.song})
-     *
-     * Before merging this in, we need to get a 'snapshot' of the previous
-     * schema (system-wide), which will become v1. We want to persist the history
-     * of such changes for posterity.
-     */
-    // @UUID({
-    //     label: 'ID (generated)',
-    //     description: 'unique identifier for the song that will be created',
-    // })
-    // readonly id: AggregateId;
-
     @NestedDataType(SongCompositeId, {
         label: 'Composite Identifier',
         description: 'system-wide unique identifier',
@@ -78,6 +62,4 @@ export class CreateSong implements ICommandBase {
         description: 'additional data from a legacy \\ third-party system source of the data',
     })
     readonly rawData?: Record<string, unknown>;
-
-    // the length can be set later
 }

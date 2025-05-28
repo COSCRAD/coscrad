@@ -203,6 +203,8 @@ import {
     TranslateSongTitle,
     TranslateSongTitleCommandHandler,
 } from '../../../domain/models/song/commands';
+import { SONG_QUERY_REPOSITORY_TOKEN } from '../../../domain/models/song/queries/song-query-repository.interface';
+import { ArangoSongQueryRepository } from '../../../domain/models/song/repositories/arango-song-query-repository';
 import { Song } from '../../../domain/models/song/song.entity';
 import {
     CreatePoint,
@@ -625,6 +627,12 @@ export default async (
                 inject: [ArangoConnectionProvider],
             },
             {
+                provide: SONG_QUERY_REPOSITORY_TOKEN,
+                useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
+                    new ArangoSongQueryRepository(arangoConnectionProvider),
+                inject: [ArangoConnectionProvider],
+            },
+            {
                 //  TODO use a more extensible pattern
                 provide: QUERY_REPOSITORY_PROVIDER_TOKEN,
                 useFactory: (
@@ -633,7 +641,8 @@ export default async (
                     audioItemQueryRepository: ArangoAudioItemQueryRepository,
                     videoQueryRepository: ArangoVideoQueryRepository,
                     vocabularyListQueryRepository: ArangoVocabularyListQueryRepository,
-                    playlistQueryRepository: ArangoPlaylistQueryRepository
+                    playlistQueryRepository: ArangoPlaylistQueryRepository,
+                    songQueryRepository: ArangoSongQueryRepository
                 ): IQueryRepositoryProvider => {
                     return new ArangoQueryRepositoryProvider(
                         photographQueryRespository,
@@ -641,7 +650,8 @@ export default async (
                         audioItemQueryRepository,
                         videoQueryRepository,
                         vocabularyListQueryRepository,
-                        playlistQueryRepository
+                        playlistQueryRepository,
+                        songQueryRepository
                     );
                 },
                 inject: [
@@ -651,6 +661,7 @@ export default async (
                     VIDEO_QUERY_REPOSITORY_TOKEN,
                     VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
                     PLAYLIST_QUERY_REPOSITORY_TOKEN,
+                    SONG_QUERY_REPOSITORY_TOKEN,
                 ],
             },
             {
