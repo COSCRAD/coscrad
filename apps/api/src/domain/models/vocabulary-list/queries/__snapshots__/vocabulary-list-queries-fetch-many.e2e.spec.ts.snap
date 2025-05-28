@@ -104,7 +104,6 @@ exports[`when querying for a vocabulary list: fetch many when the user is a COSC
               "allowedGroupIds": [],
               "allowedUserIds": [],
             },
-            "actions": [],
             "contributions": [],
             "id": "123",
             "isPublished": false,
@@ -118,7 +117,15 @@ exports[`when querying for a vocabulary list: fetch many when the user is a COSC
                 },
               ],
             },
-            "vocabularyLists": [],
+            "text": {
+              "items": [
+                {
+                  "languageCode": "en",
+                  "role": "original",
+                  "text": "I am jumping",
+                },
+              ],
+            },
           },
           "variableValues": {},
         },
@@ -142,6 +149,8 @@ exports[`when querying for a vocabulary list: fetch many when the user is a COSC
           },
         ],
       },
+      "tags": [],
+      "type": "vocabularyList",
     },
     {
       "actions": [
@@ -233,10 +242,10 @@ exports[`when querying for a vocabulary list: fetch many when the user is a COSC
                 "system4d-3b7d-4bad-9bdd-2b0d70userid",
               ],
             },
-            "actions": [],
             "contributions": [],
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
             "isPublished": false,
+            "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100022",
             "name": {
               "items": [
                 {
@@ -246,7 +255,15 @@ exports[`when querying for a vocabulary list: fetch many when the user is a COSC
                 },
               ],
             },
-            "vocabularyLists": [],
+            "text": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "private term, but with ACL access for user",
+                },
+              ],
+            },
           },
           "variableValues": {},
         },
@@ -265,6 +282,8 @@ exports[`when querying for a vocabulary list: fetch many when the user is a COSC
           },
         ],
       },
+      "tags": [],
+      "type": "vocabularyList",
     },
     {
       "actions": [
@@ -354,10 +373,10 @@ exports[`when querying for a vocabulary list: fetch many when the user is a COSC
               "allowedGroupIds": [],
               "allowedUserIds": [],
             },
-            "actions": [],
             "contributions": [],
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
             "isPublished": false,
+            "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100022",
             "name": {
               "items": [
                 {
@@ -367,7 +386,15 @@ exports[`when querying for a vocabulary list: fetch many when the user is a COSC
                 },
               ],
             },
-            "vocabularyLists": [],
+            "text": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "private term",
+                },
+              ],
+            },
           },
           "variableValues": {},
         },
@@ -386,6 +413,8 @@ exports[`when querying for a vocabulary list: fetch many when the user is a COSC
           },
         ],
       },
+      "tags": [],
+      "type": "vocabularyList",
     },
   ],
   "indexScopedActions": [

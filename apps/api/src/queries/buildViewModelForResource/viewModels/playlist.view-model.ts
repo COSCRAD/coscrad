@@ -7,6 +7,7 @@ import {
     UUID,
 } from '@coscrad/data-types';
 import { isBoolean, isNonEmptyObject } from '@coscrad/validation-constraints';
+import { DetailScopedCommandWriteContext } from '../../../app/controllers/command/services/command-info-service';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
 import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
@@ -14,15 +15,15 @@ import { AccessControlList } from '../../../domain/models/shared/access-control/
 import { ContributionSummary } from '../../../domain/models/user-management/contributor/views';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { AggregateId } from '../../../domain/types/AggregateId';
+import { HasAggregateId } from '../../../domain/types/HasAggregateId';
 import { Maybe } from '../../../lib/types/maybe';
 import { NotFound } from '../../../lib/types/not-found';
 import { CoscradDataExample } from '../../../test-data/utilities';
 import { DTO } from '../../../types/DTO';
-import { BaseEventSourcedResourceViewModel } from './base-event-sourced-resource.view-model';
+import { EventSourcedTagRecordForResourceViewModel } from './tag.view-model.event-sourced';
 
 // TODO move this file
 
-// TODO move this to another file DO this
 @CoscradDataExample<PlaylistEpisodeViewModel>({
     example: {
         name: buildMultilingualTextWithSingleItem('Episode 1'),
@@ -110,33 +111,52 @@ export class PlaylistEpisodeViewModel {
         accessControlList: new AccessControlList(),
     },
 })
-export class PlaylistViewModel extends BaseEventSourcedResourceViewModel {
+export class PlaylistViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
+    // extends BaseEventSourcedResourceViewModel {
     type: ResourceType = ResourceType.playlist;
 
+    /**
+     * TODO extend base
+     */
+
     @UUID({
-        label: 'Playlist ID',
-        description: 'unique system-wide identifier for this playlist',
+        label: 'id',
+        description: 'system identifier for this resource',
     })
     id: AggregateId;
 
+    @NestedDataType(MultilingualText, {
+        label: 'name',
+        // note that we call it `name` not `text` for consistency with other models
+        description: 'name (text) includes the text as well as any translations for this term',
+    })
+    name: MultilingualText;
+
     @BooleanDataType({
         label: 'is published',
-        description: 'a flag indicating whether this playlist is published',
+        description: 'indicates whether this resource available to the public',
     })
     isPublished: boolean;
 
-    // @NestedDataType(ContributionSummary, {
-    //     isArray: true,
-    //     label: 'contributions',
-    //     description: 'a summary of the work done by various contributors in creating this playlist',
-    // })
+    accessControlList: AccessControlList;
+
+    // TODO add notes
+
+    @NestedDataType(ContributionSummary, {
+        label: 'contributions',
+        description: 'a list of all contributions to the development of this resource',
+        // Can't we get this from reflection?
+        isArray: true,
+    })
     contributions: ContributionSummary[];
 
-    @NestedDataType(MultilingualText, {
-        label: 'name',
-        description: 'name of the playlist',
+    @NestedDataType(EventSourcedTagRecordForResourceViewModel, {
+        label: 'tags',
+        description: 'a summary of the tags that have been applied to this resource',
+        isArray: true,
     })
-    readonly name: MultilingualText;
+    tags: EventSourcedTagRecordForResourceViewModel[];
+    // end TODO extend base
 
     /**
      * TODO[https://www.pivotaltracker.com/story/show/184634347]
@@ -163,7 +183,29 @@ export class PlaylistViewModel extends BaseEventSourcedResourceViewModel {
      * a more performant way of managing queries.
      */
     constructor(dto: DTO<PlaylistViewModel>) {
-        super(dto);
+        // TODO extend base
+        // super(dto);
+        const { contributions, name, id, accessControlList, tags, isPublished } = dto;
+
+        this.contributions = Array.isArray(contributions)
+            ? contributions.map((c) => ContributionSummary.fromDto(c))
+            : [];
+
+        if (isNonEmptyObject(name)) {
+            this.name = new MultilingualText(name);
+        }
+
+        this.id = id;
+
+        this.isPublished = isBoolean(isPublished) ? isPublished : false;
+
+        this.accessControlList = new AccessControlList(accessControlList);
+
+        this.tags = Array.isArray(tags)
+            ? tags.map((t) => new EventSourcedTagRecordForResourceViewModel(t))
+            : [];
+
+        // end TODO extend base
 
         if (!dto) return;
 

@@ -1,16 +1,28 @@
 import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
-import { NonEmptyString, PositiveInteger, UUID } from '@coscrad/data-types';
+import {
+    BooleanDataType,
+    NestedDataType,
+    NonEmptyString,
+    PositiveInteger,
+    UUID,
+} from '@coscrad/data-types';
+import { isBoolean, isNonEmptyObject } from '@coscrad/validation-constraints';
 import { ApiProperty } from '@nestjs/swagger';
+import { DetailScopedCommandWriteContext } from '../../../../app/controllers/command/services/command-info-service';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
-import { BaseEventSourcedResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/base-event-sourced-resource.view-model';
+import { TagViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
+import { EventSourcedTagRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { CoscradDataExample } from '../../../../test-data/utilities';
 import { DTO } from '../../../../types/DTO';
 import { ICoscradEvent } from '../../../common';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { AggregateId } from '../../../types/AggregateId';
+import { HasAggregateId } from '../../../types/HasAggregateId';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
+import { ContributionSummary } from '../../user-management';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import { PhotographCreated } from '../commands';
 
@@ -29,8 +41,52 @@ import { PhotographCreated } from '../commands';
         accessControlList: new AccessControlList().toDTO(),
     },
 })
-export class PhotographViewModel extends BaseEventSourcedResourceViewModel {
+export class PhotographViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
+    // extends BaseEventSourcedResourceViewModel {
     readonly type = ResourceType.photograph;
+
+    /**
+     * TODO extend base
+     */
+
+    @UUID({
+        label: 'id',
+        description: 'system identifier for this resource',
+    })
+    id: AggregateId;
+
+    @NestedDataType(MultilingualText, {
+        label: 'name',
+        // note that we call it `name` not `text` for consistency with other models
+        description: 'name (text) includes the text as well as any translations for this term',
+    })
+    name: MultilingualText;
+
+    @BooleanDataType({
+        label: 'is published',
+        description: 'indicates whether this resource available to the public',
+    })
+    isPublished: boolean;
+
+    accessControlList: AccessControlList;
+
+    // TODO add notes
+
+    @NestedDataType(ContributionSummary, {
+        label: 'contributions',
+        description: 'a list of all contributions to the development of this resource',
+        // Can't we get this from reflection?
+        isArray: true,
+    })
+    contributions: ContributionSummary[];
+
+    @NestedDataType(TagViewModel, {
+        label: 'tags',
+        description: 'a summary of the tags that have been applied to this resource',
+        isArray: true,
+    })
+    tags: EventSourcedTagRecordForResourceViewModel[];
+    // end TODO extend base
 
     @UUID({
         label: 'media item',
@@ -59,14 +115,6 @@ export class PhotographViewModel extends BaseEventSourcedResourceViewModel {
     })
     public widthPx: number;
 
-    /**
-     * This should be removed in query responses.
-     *
-     * Note that if we leverage `forUser`, we should be able to make this
-     * private.
-     * */
-    public accessControlList: AccessControlList;
-
     getAvailableCommands(): string[] {
         const allCommands = [
             'TAG_RESOURCE',
@@ -92,7 +140,29 @@ export class PhotographViewModel extends BaseEventSourcedResourceViewModel {
     }
 
     constructor(dto: DTO<PhotographViewModel>) {
-        super(dto);
+        // TODO extend base
+        // super(dto);
+
+        const { contributions, name, id, accessControlList, tags, isPublished } = dto;
+
+        this.contributions = Array.isArray(contributions)
+            ? contributions.map((c) => ContributionSummary.fromDto(c))
+            : [];
+
+        if (isNonEmptyObject(name)) {
+            this.name = new MultilingualText(name);
+        }
+
+        this.id = id;
+
+        this.isPublished = isBoolean(isPublished) ? isPublished : false;
+
+        this.accessControlList = new AccessControlList(accessControlList);
+
+        this.tags = Array.isArray(tags)
+            ? tags.map((t) => new EventSourcedTagRecordForResourceViewModel(t))
+            : [];
+        // end TODO extend base
 
         if (!dto) return;
 

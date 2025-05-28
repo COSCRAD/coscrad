@@ -4,8 +4,9 @@ import {
     MultilingualTextItemRole,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { NestedDataType, ReferenceTo, UUID } from '@coscrad/data-types';
+import { BooleanDataType, NestedDataType, ReferenceTo, UUID } from '@coscrad/data-types';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { DetailScopedCommandWriteContext } from '../../../app/controllers/command/services/command-info-service';
 import { ICoscradEvent } from '../../../domain/common';
 import { buildMultilingualTextFromBilingualText } from '../../../domain/common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
@@ -20,6 +21,7 @@ import {
 import { ContributionSummary } from '../../../domain/models/user-management/contributor/views';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { AggregateId } from '../../../domain/types/AggregateId';
+import { HasAggregateId } from '../../../domain/types/HasAggregateId';
 import { isInternalError } from '../../../lib/errors/InternalError';
 import { Maybe } from '../../../lib/types/maybe';
 import { NotFound } from '../../../lib/types/not-found';
@@ -28,7 +30,7 @@ import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { CoscradDataExample } from '../../../test-data/utilities';
 import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
-import { BaseEventSourcedResourceViewModel } from './base-event-sourced-resource.view-model';
+import { EventSourcedTagRecordForResourceViewModel } from './tag.view-model.event-sourced';
 
 class VocabularyListRecordForTerm {
     @UUID({
@@ -76,8 +78,52 @@ class VocabularyListRecordForTerm {
         vocabularyLists: [],
     },
 })
-export class TermViewModel extends BaseEventSourcedResourceViewModel {
-    type: ResourceType;
+export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
+    // extends BaseEventSourcedResourceViewModel {
+    readonly type = ResourceType.term;
+
+    /**
+     * TODO extend base
+     */
+    @UUID({
+        label: 'id',
+        description: 'system identifier for this resource',
+    })
+    id: AggregateId;
+
+    @NestedDataType(MultilingualText, {
+        label: 'name',
+        // note that we call it `name` not `text` for consistency with other models
+        description: 'name (text) includes the text as well as any translations for this term',
+    })
+    name: MultilingualText;
+
+    @BooleanDataType({
+        label: 'is published',
+        description: 'indicates whether this resource available to the public',
+    })
+    isPublished: boolean;
+
+    accessControlList: AccessControlList;
+
+    // TODO add notes
+
+    @NestedDataType(ContributionSummary, {
+        label: 'contributions',
+        description: 'a list of all contributions to the development of this resource',
+        // Can't we get this from reflection?
+        isArray: true,
+    })
+    contributions: ContributionSummary[];
+
+    @NestedDataType(EventSourcedTagRecordForResourceViewModel, {
+        label: 'tags',
+        description: 'a summary of the tags that have been applied to this resource',
+        isArray: true,
+    })
+    tags: EventSourcedTagRecordForResourceViewModel[];
+    // end TODO extend base
+
     @ReferenceTo(AggregateType.mediaItem)
     mediaItemId?: string;
 
@@ -94,7 +140,10 @@ export class TermViewModel extends BaseEventSourcedResourceViewModel {
     constructor(dto: DTO<TermViewModel>) {
         const { contributions, actions, mediaItemId, vocabularyLists } = dto;
 
-        super(dto);
+        // TODO extend base
+        // super(dto);
+
+        // end TODO extend base
 
         this.contributions = Array.isArray(contributions)
             ? contributions.map((c) => ContributionSummary.fromDto(c))

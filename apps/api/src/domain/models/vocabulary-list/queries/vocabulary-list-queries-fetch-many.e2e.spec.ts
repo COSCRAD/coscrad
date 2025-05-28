@@ -15,8 +15,10 @@ import { ArangoConnectionProvider } from '../../../../persistence/database/arang
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { VocabularyListViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
-import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
+import {
+    TermViewForVocabularyListEntry,
+    VocabularyListViewModel,
+} from '../../../../queries/buildViewModelForResource/viewModels/vocabulary-list.view-model';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
@@ -57,42 +59,49 @@ const ordinaryUser = getValidAggregateInstanceForTest(AggregateType.user).clone(
     roles: [CoscradUserRole.viewer],
 });
 
-const publishedTerm: TermViewModel = buildTestInstance(TermViewModel, {
+const publishedTermName = buildMultilingualTextFromBilingualText(
+    {
+        text: termOriginalText,
+        languageCode: termOriginalLanguageCode,
+    },
+    {
+        text: termTranslation,
+        languageCode: termTranslationLanguageCode,
+    }
+);
+
+const publishedTerm = TermViewForVocabularyListEntry.fromDto({
     id: buildDummyUuid(101),
     isPublished: true,
     accessControlList: new AccessControlList().toDTO(),
-    actions: ['TRANSLATE_VOCABULARY_LIST_NAME'],
-    name: buildMultilingualTextFromBilingualText(
-        {
-            text: termOriginalText,
-            languageCode: termOriginalLanguageCode,
-        },
-        {
-            text: termTranslation,
-            languageCode: termTranslationLanguageCode,
-        }
-    ),
+    name: publishedTermName,
+    text: publishedTermName,
     contributions: [
         buildTestInstance(ContributionSummary, {
             contributorIds: [buildDummyUuid(374)],
         }),
     ],
 });
+const privateTermName = buildMultilingualTextWithSingleItem('private term', LanguageCode.Chilcotin);
 
-const privateTerm = buildTestInstance(TermViewModel, {
+const privateTerm = buildTestInstance(TermViewForVocabularyListEntry, {
     id: buildDummyUuid(102),
     isPublished: false,
     accessControlList: new AccessControlList().toDTO(),
-    name: buildMultilingualTextWithSingleItem('private term', LanguageCode.Chilcotin),
+    name: privateTermName,
+    text: privateTermName,
 });
 
-const unpublishedTermOrdinaryUserCanAccess = buildTestInstance(TermViewModel, {
+const unpublishedTermOrdinaryUserCanAccessName = buildMultilingualTextWithSingleItem(
+    'private term, but with ACL access for user',
+    LanguageCode.Chilcotin
+);
+
+const unpublishedTermOrdinaryUserCanAccess = buildTestInstance(TermViewForVocabularyListEntry, {
     id: buildDummyUuid(103),
     isPublished: false,
-    name: buildMultilingualTextWithSingleItem(
-        'private term, but with ACL access for user',
-        LanguageCode.Chilcotin
-    ),
+    name: unpublishedTermOrdinaryUserCanAccessName,
+    text: unpublishedTermOrdinaryUserCanAccessName,
     accessControlList: new AccessControlList().allowUser(dummySystemUserId).toDTO(),
 });
 
@@ -130,13 +139,10 @@ const unpublishedVocabularyListOrdinaryUserCanAccess = buildTestInstance(Vocabul
     actions: testActions,
 });
 
-const buildEntryForTerm = (term: TermViewModel) => ({
+const buildEntryForTerm = (term: TermViewForVocabularyListEntry) => ({
     term,
     variableValues: {},
 });
-
-// TODO check that contributors are joined in
-// const existingContributor = getValidAggregateInstanceForTest(AggregateType.contributor)
 
 describe(`when querying for a vocabulary list: fetch many`, () => {
     const testDatabaseName = generateDatabaseNameForTestSuite();

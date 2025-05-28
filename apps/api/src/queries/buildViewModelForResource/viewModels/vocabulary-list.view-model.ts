@@ -6,8 +6,10 @@ import {
     IVocabularyListEntry,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { isNonEmptyObject } from '@coscrad/validation-constraints';
+import { BooleanDataType, NestedDataType, UUID } from '@coscrad/data-types';
+import { isBoolean, isNonEmptyObject } from '@coscrad/validation-constraints';
 import { ApiProperty } from '@nestjs/swagger';
+import { DetailScopedCommandWriteContext } from '../../../app/controllers/command/services/command-info-service';
 import { ICoscradEvent } from '../../../domain/common';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
@@ -21,6 +23,7 @@ import {
     VocabularyListFilterPropertyRegistered,
 } from '../../../domain/models/vocabulary-list/commands';
 import { AggregateId } from '../../../domain/types/AggregateId';
+import { HasAggregateId } from '../../../domain/types/HasAggregateId';
 import { Maybe } from '../../../lib/types/maybe';
 import { NotFound } from '../../../lib/types/not-found';
 import { clonePlainObjectWithOverrides } from '../../../lib/utilities/clonePlainObjectWithOverrides';
@@ -28,7 +31,8 @@ import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { buildTestInstance, CoscradDataExample } from '../../../test-data/utilities';
 import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
-import { BaseEventSourcedResourceViewModel } from './base-event-sourced-resource.view-model';
+import { TagViewModel } from './tag.view-model';
+import { EventSourcedTagRecordForResourceViewModel } from './tag.view-model.event-sourced';
 
 @CoscradDataExample<TermViewForVocabularyListEntry>({
     example: {
@@ -139,8 +143,50 @@ export class VocabularyListEntryViewModel implements IVocabularyListEntry<string
         tags: [],
     },
 })
-export class VocabularyListViewModel extends BaseEventSourcedResourceViewModel {
+export class VocabularyListViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
+    // extends BaseEventSourcedResourceViewModel {
     readonly type: ResourceType = ResourceType.vocabularyList;
+
+    // TODO extend base
+    @UUID({
+        label: 'id',
+        description: 'system identifier for this resource',
+    })
+    id: AggregateId;
+
+    @NestedDataType(MultilingualText, {
+        label: 'name',
+        // note that we call it `name` not `text` for consistency with other models
+        description: 'name (text) includes the text as well as any translations for this term',
+    })
+    name: MultilingualText;
+
+    @BooleanDataType({
+        label: 'is published',
+        description: 'indicates whether this resource available to the public',
+    })
+    isPublished: boolean;
+
+    accessControlList: AccessControlList;
+
+    // TODO add notes
+
+    @NestedDataType(ContributionSummary, {
+        label: 'contributions',
+        description: 'a list of all contributions to the development of this resource',
+        // Can't we get this from reflection?
+        isArray: true,
+    })
+    contributions: ContributionSummary[];
+
+    @NestedDataType(TagViewModel, {
+        label: 'tags',
+        description: 'a summary of the tags that have been applied to this resource',
+        isArray: true,
+    })
+    tags: EventSourcedTagRecordForResourceViewModel[];
+
+    // end TODO extend base
 
     @ApiProperty({
         type: VocabularyListEntryViewModel,
@@ -193,7 +239,29 @@ export class VocabularyListViewModel extends BaseEventSourcedResourceViewModel {
     }
 
     constructor(dto?: DTO<VocabularyListViewModel>) {
-        super(dto);
+        // TODO extend base
+        // super(dto);
+
+        const { contributions, name, id, accessControlList, tags, isPublished } = dto;
+
+        this.contributions = Array.isArray(contributions)
+            ? contributions.map((c) => ContributionSummary.fromDto(c))
+            : [];
+
+        if (isNonEmptyObject(name)) {
+            this.name = new MultilingualText(name);
+        }
+
+        this.id = id;
+
+        this.isPublished = isBoolean(isPublished) ? isPublished : false;
+
+        this.accessControlList = new AccessControlList(accessControlList);
+
+        this.tags = Array.isArray(tags)
+            ? tags.map((t) => new EventSourcedTagRecordForResourceViewModel(t))
+            : [];
+        // end TODO extend base
 
         if (!isNonEmptyObject(dto)) {
             return;
