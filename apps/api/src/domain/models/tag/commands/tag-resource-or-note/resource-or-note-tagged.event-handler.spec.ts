@@ -20,7 +20,7 @@ import mapEntityDTOToDatabaseDocument, {
 } from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { EventSourcedTagViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
+import { EventSourcedTagRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { TestEventStream } from '../../../../../test-data/events';
 import { DTO } from '../../../../../types/DTO';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
@@ -32,14 +32,14 @@ const WIDGET_COLLECTION = 'widgets';
 class WidgetViewModel {
     id: string;
     name: MultilingualText;
-    tags: EventSourcedTagViewModel[];
+    tags: EventSourcedTagRecordForResourceViewModel[];
 
     constructor({ id, name, tags }: DTO<WidgetViewModel>) {
         this.id = id;
 
         this.name = new MultilingualText(name);
 
-        this.tags = tags.map((t) => new EventSourcedTagViewModel(t));
+        this.tags = tags.map((t) => new EventSourcedTagRecordForResourceViewModel(t));
     }
 }
 
@@ -53,7 +53,7 @@ const targetTagLabel = 'car parts';
 
 const targetTagId = buildDummyUuid(2);
 
-const knownTags: EventSourcedTagViewModel[] = [
+const knownTags: EventSourcedTagRecordForResourceViewModel[] = [
     {
         type: AggregateType.tag,
         id: targetTagId,
@@ -61,7 +61,7 @@ const knownTags: EventSourcedTagViewModel[] = [
         members: [],
         name: buildMultilingualTextWithSingleItem(targetTagLabel),
     },
-].map((t) => new EventSourcedTagViewModel(t));
+].map((t) => new EventSourcedTagRecordForResourceViewModel(t));
 
 /**
  * We do not want to couple this test to the domain, which is bound to shift
