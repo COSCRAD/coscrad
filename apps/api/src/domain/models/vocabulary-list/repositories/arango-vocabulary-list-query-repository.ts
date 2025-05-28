@@ -18,7 +18,7 @@ import mapEntityDtoToDatabaseDocument from '../../../../persistence/database/uti
 import { VocabularyListViewModel } from '../../../../queries/buildViewModelForResource/viewModels/vocabulary-list.view-model';
 import { AggregateId } from '../../../types/AggregateId';
 import { BaseEvent } from '../../shared/events/base-event.entity';
-import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/arango-resource-query-builder';
+import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base-arango-resource-query-builder';
 import { FilterPropertyType } from '../commands';
 import { VocabularyListEntryImportItem } from '../entities/vocabulary-list.entity';
 import { IVocabularyListQueryRepository } from '../queries/vocabulary-list-query-repository.interface';

@@ -10,7 +10,7 @@ import mapDatabaseDocumentToEntityDto from '../../../../persistence/database/uti
 import mapEntityDtoToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { AggregateId } from '../../../types/AggregateId';
 import { BaseEvent } from '../../shared/events/base-event.entity';
-import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/arango-resource-query-builder';
+import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base-arango-resource-query-builder';
 import { IPhotographQueryRepository } from '../queries';
 import { PhotographViewModel } from '../queries/photograph.view-model';
 

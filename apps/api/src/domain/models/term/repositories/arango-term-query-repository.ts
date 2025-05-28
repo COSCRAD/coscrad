@@ -22,7 +22,7 @@ import {
 } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import { ITermQueryRepository } from '../queries';
-import { BaseArangoResourceViewQueryBuilder } from './arango-resource-query-builder';
+import { BaseArangoResourceViewQueryBuilder } from './base-arango-resource-query-builder';
 
 export class ArangoTermQueryRepository implements ITermQueryRepository {
     private readonly database: ArangoDatabaseForCollection<TermViewModel>;

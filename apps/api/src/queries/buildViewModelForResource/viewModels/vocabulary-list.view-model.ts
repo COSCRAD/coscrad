@@ -3,6 +3,7 @@ import {
     FormFieldType,
     IDynamicForm,
     IFormField,
+    IVocabularyListEntry,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { isNonEmptyObject } from '@coscrad/validation-constraints';
@@ -12,6 +13,7 @@ import { buildMultilingualTextWithSingleItem } from '../../../domain/common/buil
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
 import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
+import { ContributionSummary } from '../../../domain/models/user-management';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import {
     FilterPropertyType,
@@ -36,6 +38,7 @@ import { BaseEventSourcedResourceViewModel } from './base-event-sourced-resource
         mediaItemId: buildDummyUuid(22),
         isPublished: false,
         accessControlList: new AccessControlList(),
+        contributions: [],
     },
 })
 export class TermViewForVocabularyListEntry {
@@ -45,11 +48,12 @@ export class TermViewForVocabularyListEntry {
     mediaItemId?: string;
     isPublished: boolean;
     accessControlList: AccessControlList;
+    contributions: ContributionSummary[];
 
     constructor(dto: DTO<TermViewForVocabularyListEntry>) {
         if (!dto) return;
 
-        const { id, text, name, mediaItemId, isPublished, accessControlList } = dto;
+        const { id, text, name, mediaItemId, isPublished, accessControlList, contributions } = dto;
 
         this.id = id;
 
@@ -62,6 +66,8 @@ export class TermViewForVocabularyListEntry {
         this.isPublished = isPublished;
 
         this.accessControlList = new AccessControlList(accessControlList);
+
+        this.contributions = contributions.map((c) => new ContributionSummary(c));
     }
 
     public static fromDto(dto: DTO<TermViewForVocabularyListEntry>) {
@@ -69,7 +75,7 @@ export class TermViewForVocabularyListEntry {
     }
 }
 
-export class VocabularyListEntryViewModel {
+export class VocabularyListEntryViewModel implements IVocabularyListEntry<string | boolean> {
     /**
      * Note this doesn't quite line up with the `IVocabularyListViewModel` interface.
      * This isn't a problem because we don't need to know the available actions
@@ -144,10 +150,10 @@ export class VocabularyListViewModel extends BaseEventSourcedResourceViewModel {
 
     // TODO We need a concrete class to include this on the API docs
     /**
-     * Note that this might not be populated until events come through to register
+     * Note that this might not be an empty form until events come through to register
      * filter properties and analyze terms as entries.
      */
-    public form?: IDynamicForm;
+    public form: IDynamicForm;
 
     // note that these are mapped to form specifications in the query service layer
     // TODO remove these in favor of `getAvailableCommands`
@@ -280,7 +286,10 @@ export class VocabularyListViewModel extends BaseEventSourcedResourceViewModel {
             contributions: [], // must be joined externally
             isPublished: false,
             accessControlList: new AccessControlList(),
-            entries: [], // none yet
+            entries: [], // none yet,
+            form: {
+                fields: [],
+            },
         };
 
         const view = new VocabularyListViewModel(dto);

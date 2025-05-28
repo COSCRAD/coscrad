@@ -10,7 +10,7 @@ import {
     CommandInfoService,
 } from '../../../app/controllers/command/services/command-info-service';
 import { isNotFound, NotFound } from '../../../lib/types/not-found';
-import { VocabularyListViewModel } from '../../../queries/buildViewModelForResource/viewModels';
+import { VocabularyListViewModel } from '../../../queries/buildViewModelForResource/viewModels/vocabulary-list.view-model';
 import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';
 import { VocabularyList } from '../../models/vocabulary-list/entities/vocabulary-list.entity';
 import {

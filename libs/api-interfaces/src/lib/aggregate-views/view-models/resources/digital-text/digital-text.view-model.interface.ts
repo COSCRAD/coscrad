@@ -10,7 +10,7 @@ export interface IDigitalTextViewModel extends IBaseViewModel {
 
     isPublished: boolean;
 
-    tags: ITagViewModel[];
+    tags: Pick<ITagViewModel, 'label' | 'id'>[];
 
     pages: IDigitalTextPage[];
 }

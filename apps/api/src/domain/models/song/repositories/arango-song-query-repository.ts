@@ -8,7 +8,7 @@ import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/
 import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { AggregateId } from '../../../types/AggregateId';
-import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/arango-resource-query-builder';
+import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base-arango-resource-query-builder';
 import { ISongQueryRepository } from '../queries/song-query-repository.interface';
 import { EventSourcedSongViewModel } from '../queries/song.view-model.event.sourced';
 

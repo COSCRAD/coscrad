@@ -41,8 +41,7 @@ export class BaseArangoResourceViewQueryBuilder {
             FILTER t._key == @tagId
             RETURN {
                 id: t._key,
-                label: t.label,
-                members: t.members
+                label: t.label
             }
         )
         UPDATE doc WITH  {

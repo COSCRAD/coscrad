@@ -13,7 +13,7 @@ import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/uti
 import { PlaylistViewModel } from '../../../../queries/buildViewModelForResource/viewModels/playlist.view-model';
 import { AggregateId } from '../../../types/AggregateId';
 import { BaseEvent } from '../../shared/events/base-event.entity';
-import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/arango-resource-query-builder';
+import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base-arango-resource-query-builder';
 import { IPlaylistQueryRepository } from './playlist-query-repository.interface';
 
 @Injectable()
