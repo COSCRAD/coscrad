@@ -2,37 +2,19 @@ import { DynamicModule, Global, Module, OnApplicationShutdown } from '@nestjs/co
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ConsoleCoscradCliLogger } from '../coscrad-cli/logging';
 import { CoscradEventFactory, EventModule } from '../domain/common';
-import {
-    AUDIO_QUERY_REPOSITORY_TOKEN,
-    IAudioItemQueryRepository,
-} from '../domain/models/audio-visual/audio-item/queries/audio-item-query-repository.interface';
+import { AUDIO_QUERY_REPOSITORY_TOKEN } from '../domain/models/audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ArangoAudioItemQueryRepository } from '../domain/models/audio-visual/audio-item/repositories/arango-audio-item-query-repository';
-import {
-    IVideoQueryRepository,
-    VIDEO_QUERY_REPOSITORY_TOKEN,
-} from '../domain/models/audio-visual/video/queries';
+import { VIDEO_QUERY_REPOSITORY_TOKEN } from '../domain/models/audio-visual/video/queries';
 import { ArangoVideoQueryRepository } from '../domain/models/audio-visual/video/repositories/arango-video-query-repository';
-import {
-    IPhotographQueryRepository,
-    PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
-} from '../domain/models/photograph/queries';
+import { PHOTOGRAPH_QUERY_REPOSITORY_TOKEN } from '../domain/models/photograph/queries';
 import { ArangoPhotographQueryRepository } from '../domain/models/photograph/repositories';
 import { ArangoPlaylistQueryRepository } from '../domain/models/playlist/queries/arango-playlist-query-repository';
-import {
-    IPlaylistQueryRepository,
-    PLAYLIST_QUERY_REPOSITORY_TOKEN,
-} from '../domain/models/playlist/queries/playlist-query-repository.interface';
-import {
-    IQueryRepositoryProvider,
-    QUERY_REPOSITORY_PROVIDER_TOKEN,
-} from '../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
-import { ITermQueryRepository, TERM_QUERY_REPOSITORY_TOKEN } from '../domain/models/term/queries';
+import { PLAYLIST_QUERY_REPOSITORY_TOKEN } from '../domain/models/playlist/queries/playlist-query-repository.interface';
+import { QUERY_REPOSITORY_PROVIDER_TOKEN } from '../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
+import { TERM_QUERY_REPOSITORY_TOKEN } from '../domain/models/term/queries';
 import { ArangoTermQueryRepository } from '../domain/models/term/repositories';
 import { ArangoQueryRepositoryProvider } from '../domain/models/term/repositories/arango-query-repository-provider';
-import {
-    IVocabularyListQueryRepository,
-    VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
-} from '../domain/models/vocabulary-list/queries';
+import { VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN } from '../domain/models/vocabulary-list/queries';
 import { ArangoVocabularyListQueryRepository } from '../domain/models/vocabulary-list/repositories';
 import { ID_RESPOSITORY_TOKEN } from '../lib/id-generation/interfaces/id-repository.interface';
 import { DigitalTextQueryRepository } from '../queries/digital-text/digital-text.query-repository';
@@ -194,7 +176,7 @@ export class PersistenceModule implements OnApplicationShutdown {
             inject: [ArangoConnectionProvider],
         };
 
-        // TODO use dynamic registration
+        // TODO use dynamic registration- be sure to initialize
         const playlistQueryRepository = {
             provide: PLAYLIST_QUERY_REPOSITORY_TOKEN,
             useFactory: (arangoConnectionProvider: ArangoConnectionProvider) => {
@@ -207,30 +189,7 @@ export class PersistenceModule implements OnApplicationShutdown {
 
         const queryRepositoryProvider = {
             provide: QUERY_REPOSITORY_PROVIDER_TOKEN,
-            useFactory: (
-                photographQueryRepository: IPhotographQueryRepository,
-                termQueryRepository: ITermQueryRepository,
-                audioItemQueryRepository: IAudioItemQueryRepository,
-                videoQueryRepository: IVideoQueryRepository,
-                vocabularyListQueryRepository: IVocabularyListQueryRepository,
-                playlistQueryRepository: IPlaylistQueryRepository
-            ): IQueryRepositoryProvider =>
-                new ArangoQueryRepositoryProvider(
-                    photographQueryRepository,
-                    termQueryRepository,
-                    audioItemQueryRepository,
-                    videoQueryRepository,
-                    vocabularyListQueryRepository,
-                    playlistQueryRepository
-                ),
-            inject: [
-                PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
-                TERM_QUERY_REPOSITORY_TOKEN,
-                AUDIO_QUERY_REPOSITORY_TOKEN,
-                VIDEO_QUERY_REPOSITORY_TOKEN,
-                VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
-                PLAYLIST_QUERY_REPOSITORY_TOKEN,
-            ],
+            useClass: ArangoQueryRepositoryProvider,
         };
 
         return {
