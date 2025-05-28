@@ -1,12 +1,13 @@
 import { MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
-import { ICoscradEventHandler } from '../../../../../domain/common';
+import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
 import {
     ISongQueryRepository,
     SONG_QUERY_REPOSITORY_TOKEN,
 } from '../../queries/song-query-repository.interface';
 import { SongTitleTranslated } from './song-title-translated.event';
 
+@CoscradEventConsumer('SONG_TITLE_TRANSLATED')
 export class SongTitleTranslatedEventHandler implements ICoscradEventHandler {
     constructor(
         @Inject(SONG_QUERY_REPOSITORY_TOKEN)

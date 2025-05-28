@@ -15,6 +15,8 @@ import { CreateSong } from '../../domain/models/song/commands/create-song.comman
 import { CreateSongCommandHandler } from '../../domain/models/song/commands/create-song.command-handler';
 import { SongCreated } from '../../domain/models/song/commands/song-created.event';
 import { SongCreatedEventHandler } from '../../domain/models/song/commands/song-created.event-handler';
+import { SongTitleTranslatedEventHandler } from '../../domain/models/song/commands/translate-song-title/song-title-translated.event-handler';
+import { EventSourcedSongViewModel } from '../../domain/models/song/queries/song.view-model.event.sourced';
 import { Song } from '../../domain/models/song/song.entity';
 import { SongQueryService } from '../../domain/services/query-services/song-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
@@ -37,6 +39,8 @@ import { SongController } from '../controllers/resources/song.controller';
         ...[
             // Domain Model
             Song,
+            // view models
+            EventSourcedSongViewModel,
             // Commands
             CreateSong,
             AddLyricsForSong,
@@ -51,6 +55,9 @@ import { SongController } from '../controllers/resources/song.controller';
             provide: ctor,
             useValue: ctor,
         })),
+        // event handlers
+        SongCreatedEventHandler,
+        SongTitleTranslatedEventHandler,
     ],
 })
 export class SongModule {}
