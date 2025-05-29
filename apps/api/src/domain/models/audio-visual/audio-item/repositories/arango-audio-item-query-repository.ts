@@ -13,7 +13,7 @@ import { ArangoDatabase } from '../../../../../persistence/database/arango-datab
 import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
 import mapDatabaseDocumentToAggregateDTO from '../../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
-import { BaseArangoResourceViewQueryBuilder } from '../../../term/repositories/arango-resource-query-builder';
+import { BaseArangoResourceViewQueryBuilder } from '../../../term/repositories/base-arango-resource-query-builder';
 import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
 import { ArangoTranscriptQueryBuilder } from '../../shared/queries/transcript-query-builder';
 import { TranscriptLineItemDto, TranslationItem } from '../commands';
