@@ -122,7 +122,7 @@ exports[`when querying for a vocabulary list: fetch many when the user is a COSC
                 {
                   "languageCode": "en",
                   "role": "original",
-                  "text": "I am jumping",
+                  "text": "test term in vocabulary list",
                 },
               ],
             },

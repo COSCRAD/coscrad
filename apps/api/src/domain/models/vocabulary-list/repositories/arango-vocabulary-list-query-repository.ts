@@ -239,7 +239,7 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
             for t in term__VIEWS
             filter t._key == @termId
             let newEntry = {
-                term: MERGE(t,{id: t._key}),
+                term: MERGE(t,{id: t._key, text: t.name}),
                 variableValues: {}
             }
             update v with {

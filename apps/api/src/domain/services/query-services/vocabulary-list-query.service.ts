@@ -2,6 +2,7 @@ import {
     ICommandFormAndLabels,
     IDetailQueryResult,
     IIndexQueryResult,
+    IVocabularyListEntry,
     IVocabularyListViewModel,
 } from '@coscrad/api-interfaces';
 import { Inject, Injectable } from '@nestjs/common';
@@ -47,8 +48,19 @@ export class VocabularyListQueryService {
 
         const actions = this.fetchUserActions(userWithGroups, [vocabularyList]);
 
+        const entries = vocabularyList.entries.map((entryWithoutName) => {
+            const entryWithName = entryWithoutName as unknown as IVocabularyListEntry<
+                string | boolean
+            >;
+
+            entryWithName.term.name = entryWithoutName.term.text;
+
+            return entryWithName;
+        });
+
         return {
             ...vocabularyList,
+            entries,
             actions,
         };
     }
