@@ -15,7 +15,5 @@ export class PhotographCreatedEventHandler implements ICoscradEventHandler {
         const photograph = PhotographViewModel.fromPhotographCreated(event);
 
         await this.photographRepository.create(photograph);
-
-        await this.photographRepository.attribute(photograph.id, event);
     }
 }

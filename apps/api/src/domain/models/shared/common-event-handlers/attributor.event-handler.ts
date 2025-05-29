@@ -1,3 +1,4 @@
+import { isFunction } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../common';
 import { QUERY_REPOSITORY_PROVIDER_TOKEN } from '../common-commands/publish-resource/resource-published.event-handler';
@@ -19,8 +20,14 @@ export class Attributor implements ICoscradEventHandler {
     ) {}
 
     async handle(event: BaseEvent): Promise<void> {
-        await this.provider
-            .forResource(event.payload.aggregateCompositeIdentifier.type)
-            .attribute(event.payload.aggregateCompositeIdentifier.id, event);
+        const repo = this.provider.forResource(event.payload.aggregateCompositeIdentifier.type);
+
+        if (!isFunction(repo?.attribute)) {
+            return;
+
+            // TODO log failure? We will hit this for resource types that don't have a query repo registered yet.
+        }
+
+        await repo.attribute(event.payload.aggregateCompositeIdentifier.id, event);
     }
 }

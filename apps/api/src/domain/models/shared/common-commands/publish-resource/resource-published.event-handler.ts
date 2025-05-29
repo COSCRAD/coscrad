@@ -1,7 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
-import { InternalError } from '../../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../../lib/types/maybe';
 import { IAccessible } from '../grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
 import { ResourcePublished } from './resource-published.event';
@@ -46,23 +45,18 @@ export class ResourcePublishedEventHandler implements ICoscradEventHandler {
             },
         } = event;
 
-        console.log({
-            publishingAttempt: {
-                resourceType,
-                id,
-            },
-        });
-
         const queryRepository = this.queryRepositoryProvider.forResource(resourceType);
 
         if (typeof queryRepository.publish !== 'function') {
-            throw new InternalError(
-                `Failed to obtain a query repository with a publish method from query repository provider: ${JSON.stringify(
-                    this.queryRepositoryProvider
-                )} \n Received the query repository: ${JSON.stringify(queryRepository)} [${
-                    Object.getPrototypeOf(queryRepository).constructor.name
-                }]`
-            );
+            return;
+            // TODO log failure
+            // throw new InternalError(
+            //     `Failed to obtain a query repository with a publish method from query repository provider: ${JSON.stringify(
+            //         this.queryRepositoryProvider
+            //     )} \n Received the query repository: ${JSON.stringify(queryRepository)} [${
+            //         Object.getPrototypeOf(queryRepository).constructor.name
+            //     }]`
+            // );
         }
 
         await queryRepository.publish(id);

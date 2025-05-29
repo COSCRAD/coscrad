@@ -1,14 +1,7 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
-import {
-    GrantResourceReadAccessToUser,
-    GrantResourceReadAccessToUserCommandHandler,
-    PublishResource,
-    PublishResourceCommandHandler,
-    ResourceReadAccessGrantedToUser,
-} from '../../domain/models/shared/common-commands';
+import { ResourceReadAccessGrantedToUser } from '../../domain/models/shared/common-commands';
 import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
-import { ResourcePublishedEventHandler } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
 import {
     ContributorCreated,
     CreateContributor,
@@ -50,18 +43,11 @@ import { CoscradUserController } from '../controllers/coscrad-user.controller';
         GrantUserRoleCommandHandler,
         CreateContributor,
         CreateContributorCommandHandler,
-        // We include this command here for lack of a better place
-        GrantResourceReadAccessToUser,
-        GrantResourceReadAccessToUserCommandHandler,
-        PublishResource,
-        PublishResourceCommandHandler,
         // Events
         ...[ResourcePublished, ResourceReadAccessGrantedToUser, ContributorCreated].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
         })),
-        // Event Handlers
-        ResourcePublishedEventHandler,
     ],
 })
 export class UserManagementModule {}

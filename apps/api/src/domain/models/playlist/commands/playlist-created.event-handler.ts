@@ -43,8 +43,5 @@ export class PlaylistCreatedEventHandler implements ICoscradEventHandler {
                 contributions: [],
             })
         );
-
-        // TODO do this atomically in the repository
-        await this.playlistQueryRepository.attribute(id, event);
     }
 }
