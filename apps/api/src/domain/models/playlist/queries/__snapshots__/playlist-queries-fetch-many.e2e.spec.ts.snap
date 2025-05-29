@@ -191,6 +191,8 @@ exports[`when querying for a playlist: fetch many (/resources/playlists) when th
           },
         ],
       },
+      "tags": [],
+      "type": "playlist",
     },
     {
       "actions": [
@@ -340,6 +342,8 @@ exports[`when querying for a playlist: fetch many (/resources/playlists) when th
           },
         ],
       },
+      "tags": [],
+      "type": "playlist",
     },
     {
       "actions": [
@@ -489,6 +493,8 @@ exports[`when querying for a playlist: fetch many (/resources/playlists) when th
           },
         ],
       },
+      "tags": [],
+      "type": "playlist",
     },
   ],
   "indexScopedActions": [

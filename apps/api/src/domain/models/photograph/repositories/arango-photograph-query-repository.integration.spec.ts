@@ -392,7 +392,6 @@ describe(`ArangoPhotographQueryRepository`, () => {
         });
 
         const targetView = buildTestInstance(PhotographViewModel, {
-            // @ts-expect-error fix later
             tags: [existingTag],
         });
 

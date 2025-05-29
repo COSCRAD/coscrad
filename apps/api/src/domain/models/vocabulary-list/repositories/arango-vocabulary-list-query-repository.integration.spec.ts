@@ -23,7 +23,7 @@ import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoRepositoryForAggregate } from '../../../../persistence/repositories/arango-repository-for-aggregate';
 
-import { EventSourcedTagViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
+import { EventSourcedTagRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import {
     TermViewForVocabularyListEntry,
@@ -346,7 +346,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
     describe(`tag`, () => {
         const existingTagLabel = 'plants';
 
-        const existingTag = buildTestInstance(EventSourcedTagViewModel, {
+        const existingTag = buildTestInstance(EventSourcedTagRecordForResourceViewModel, {
             id: buildDummyUuid(90),
             label: existingTagLabel,
             name: buildMultilingualTextWithSingleItem(existingTagLabel),

@@ -2,7 +2,9 @@ import { LanguageCode } from '@coscrad/api-interfaces';
 import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { TagCreated } from '../../../domain/models/tag/commands/create-tag/tag-created.event';
 import { TestEventStream } from '../../../test-data/events/test-event-stream';
-import { EventSourcedTagViewModel } from './tag.view-model.event-sourced';
+import { DTO } from '../../../types/DTO';
+import { EventSourcedTagRecordForResourceViewModel } from './tag.view-model.event-sourced';
+
 describe(`EventSourcedTagViewModel.fromEventHistory`, () => {
     const tagId = buildDummyUuid(1);
 
@@ -22,7 +24,9 @@ describe(`EventSourcedTagViewModel.fromEventHistory`, () => {
     describe(`when a tag is first created`, () => {
         const eventHistory = tagCreated;
 
-        const result = new EventSourcedTagViewModel(tagId).applyStream(eventHistory);
+        const result = new EventSourcedTagRecordForResourceViewModel({
+            id: tagId,
+        } as DTO<EventSourcedTagRecordForResourceViewModel>).applyStream(eventHistory);
 
         it(`should apply the appropriate label and name`, () => {
             const { name } = result;

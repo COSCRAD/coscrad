@@ -60,7 +60,7 @@ const photographId = buildDummyUuid(101);
 const photographCompositeIdentifier = {
     type: AggregateType.photograph,
     id: photographId,
-};
+} as const;
 
 const photographIdUnpublishedNoUserAccessId = buildDummyUuid(102);
 

@@ -130,11 +130,11 @@ exports[`GET /resources should return the expected result 1`] = `
         },
       },
       "id": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "unique identifier",
+        "coscradDataType": "UUID",
+        "description": "system identifier for this resource",
         "isArray": false,
         "isOptional": false,
-        "label": "ID",
+        "label": "id",
       },
       "isPublished": {
         "coscradDataType": "BOOLEAN",
@@ -238,6 +238,127 @@ exports[`GET /resources should return the expected result 1`] = `
                 "isArray": false,
                 "isOptional": false,
                 "label": "text",
+              },
+            },
+          },
+        },
+      },
+      "tags": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "a summary of the tags that have been applied to this resource",
+        "isArray": true,
+        "isOptional": false,
+        "label": "tags",
+        "name": "EventSourcedTagRecordForResourceViewModel",
+        "schema": {
+          "id": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "label": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "a human readable text label for this tag",
+            "isArray": false,
+            "isOptional": false,
+            "label": "label",
+          },
+          "name": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "name",
+            "isArray": false,
+            "isOptional": false,
+            "label": "name",
+            "name": "MultilingualText",
+            "schema": {
+              "items": {
+                "complexDataType": "NESTED_TYPE",
+                "description": "one item for each provided language",
+                "isArray": true,
+                "isOptional": false,
+                "label": "items",
+                "name": "MultilingualTextItem",
+                "schema": {
+                  "languageCode": {
+                    "complexDataType": "ENUM",
+                    "description": "an official identifier of the language",
+                    "enumLabel": "Language_Code",
+                    "enumName": "LangaugeCode",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "language code",
+                    "labelsAndValues": [
+                      {
+                        "label": "Chilcotin",
+                        "value": "clc",
+                      },
+                      {
+                        "label": "Haida",
+                        "value": "hai",
+                      },
+                      {
+                        "label": "English",
+                        "value": "en",
+                      },
+                      {
+                        "label": "French",
+                        "value": "fra",
+                      },
+                      {
+                        "label": "Chinook",
+                        "value": "chn",
+                      },
+                      {
+                        "label": "Zapotec",
+                        "value": "zap",
+                      },
+                      {
+                        "label": "Spanish",
+                        "value": "spa",
+                      },
+                    ],
+                  },
+                  "role": {
+                    "complexDataType": "ENUM",
+                    "description": "role of this text in the translation process",
+                    "enumLabel": "text item role",
+                    "enumName": "Multilingual Text Item Role",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "text item role",
+                    "labelsAndValues": [
+                      {
+                        "label": "original",
+                        "value": "original",
+                      },
+                      {
+                        "label": "glossed to",
+                        "value": "glossed to",
+                      },
+                      {
+                        "label": "free translation",
+                        "value": "free translation",
+                      },
+                      {
+                        "label": "literal translation",
+                        "value": "literal translation",
+                      },
+                      {
+                        "label": "elicited from a prompt",
+                        "value": "elicited from a prompt",
+                      },
+                    ],
+                  },
+                  "text": {
+                    "coscradDataType": "NON_EMPTY_STRING",
+                    "description": "plain text in the given language",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "text",
+                  },
+                },
               },
             },
           },
@@ -365,7 +486,247 @@ exports[`GET /resources should return the expected result 1`] = `
     "label": "Vocabulary List",
     "link": "/resources/vocabularyLists",
     "pluralLabel": "Vocabulary Lists",
-    "schema": {},
+    "schema": {
+      "id": {
+        "coscradDataType": "UUID",
+        "description": "system identifier for this resource",
+        "isArray": false,
+        "isOptional": false,
+        "label": "id",
+      },
+      "isPublished": {
+        "coscradDataType": "BOOLEAN",
+        "description": "indicates whether this resource available to the public",
+        "isArray": false,
+        "isOptional": false,
+        "label": "is published",
+      },
+      "name": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "name (text) includes the text as well as any translations for this term",
+        "isArray": false,
+        "isOptional": false,
+        "label": "name",
+        "name": "MultilingualText",
+        "schema": {
+          "items": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "one item for each provided language",
+            "isArray": true,
+            "isOptional": false,
+            "label": "items",
+            "name": "MultilingualTextItem",
+            "schema": {
+              "languageCode": {
+                "complexDataType": "ENUM",
+                "description": "an official identifier of the language",
+                "enumLabel": "Language_Code",
+                "enumName": "LangaugeCode",
+                "isArray": false,
+                "isOptional": false,
+                "label": "language code",
+                "labelsAndValues": [
+                  {
+                    "label": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "label": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "label": "English",
+                    "value": "en",
+                  },
+                  {
+                    "label": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "label": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "label": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "label": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+              },
+              "role": {
+                "complexDataType": "ENUM",
+                "description": "role of this text in the translation process",
+                "enumLabel": "text item role",
+                "enumName": "Multilingual Text Item Role",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text item role",
+                "labelsAndValues": [
+                  {
+                    "label": "original",
+                    "value": "original",
+                  },
+                  {
+                    "label": "glossed to",
+                    "value": "glossed to",
+                  },
+                  {
+                    "label": "free translation",
+                    "value": "free translation",
+                  },
+                  {
+                    "label": "literal translation",
+                    "value": "literal translation",
+                  },
+                  {
+                    "label": "elicited from a prompt",
+                    "value": "elicited from a prompt",
+                  },
+                ],
+              },
+              "text": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "plain text in the given language",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text",
+              },
+            },
+          },
+        },
+      },
+      "tags": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "a summary of the tags that have been applied to this resource",
+        "isArray": true,
+        "isOptional": false,
+        "label": "tags",
+        "name": "TagViewModel",
+        "schema": {
+          "id": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "label": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "a human readable text label for this tag",
+            "isArray": false,
+            "isOptional": false,
+            "label": "label",
+          },
+          "members": {
+            "coscradDataType": "COMPOSITE_IDENTIFIER",
+            "description": "the composite identifier of every resource or note with this tag",
+            "isArray": true,
+            "isOptional": false,
+            "label": "members",
+          },
+          "name": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "multilingual text name of the entity",
+            "isArray": false,
+            "isOptional": false,
+            "label": "name",
+            "name": "MultilingualText",
+            "schema": {
+              "items": {
+                "complexDataType": "NESTED_TYPE",
+                "description": "one item for each provided language",
+                "isArray": true,
+                "isOptional": false,
+                "label": "items",
+                "name": "MultilingualTextItem",
+                "schema": {
+                  "languageCode": {
+                    "complexDataType": "ENUM",
+                    "description": "an official identifier of the language",
+                    "enumLabel": "Language_Code",
+                    "enumName": "LangaugeCode",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "language code",
+                    "labelsAndValues": [
+                      {
+                        "label": "Chilcotin",
+                        "value": "clc",
+                      },
+                      {
+                        "label": "Haida",
+                        "value": "hai",
+                      },
+                      {
+                        "label": "English",
+                        "value": "en",
+                      },
+                      {
+                        "label": "French",
+                        "value": "fra",
+                      },
+                      {
+                        "label": "Chinook",
+                        "value": "chn",
+                      },
+                      {
+                        "label": "Zapotec",
+                        "value": "zap",
+                      },
+                      {
+                        "label": "Spanish",
+                        "value": "spa",
+                      },
+                    ],
+                  },
+                  "role": {
+                    "complexDataType": "ENUM",
+                    "description": "role of this text in the translation process",
+                    "enumLabel": "text item role",
+                    "enumName": "Multilingual Text Item Role",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "text item role",
+                    "labelsAndValues": [
+                      {
+                        "label": "original",
+                        "value": "original",
+                      },
+                      {
+                        "label": "glossed to",
+                        "value": "glossed to",
+                      },
+                      {
+                        "label": "free translation",
+                        "value": "free translation",
+                      },
+                      {
+                        "label": "literal translation",
+                        "value": "literal translation",
+                      },
+                      {
+                        "label": "elicited from a prompt",
+                        "value": "elicited from a prompt",
+                      },
+                    ],
+                  },
+                  "text": {
+                    "coscradDataType": "NON_EMPTY_STRING",
+                    "description": "plain text in the given language",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "text",
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
     "type": "vocabularyList",
   },
   {
@@ -977,14 +1338,14 @@ exports[`GET /resources should return the expected result 1`] = `
       },
       "id": {
         "coscradDataType": "UUID",
-        "description": "System identifier for this photograph",
+        "description": "system identifier for this resource",
         "isArray": false,
         "isOptional": false,
-        "label": "ID",
+        "label": "id",
       },
       "isPublished": {
         "coscradDataType": "BOOLEAN",
-        "description": "a flag indicated if this photograph is available to the general public",
+        "description": "indicates whether this resource available to the public",
         "isArray": false,
         "isOptional": false,
         "label": "is published",
@@ -998,7 +1359,7 @@ exports[`GET /resources should return the expected result 1`] = `
       },
       "name": {
         "complexDataType": "NESTED_TYPE",
-        "description": "the name of this photograph",
+        "description": "name (text) includes the text as well as any translations for this term",
         "isArray": false,
         "isOptional": false,
         "label": "name",
@@ -1102,7 +1463,7 @@ exports[`GET /resources should return the expected result 1`] = `
       },
       "tags": {
         "complexDataType": "NESTED_TYPE",
-        "description": "the tags that apply to this photograph",
+        "description": "a summary of the tags that have been applied to this resource",
         "isArray": true,
         "isOptional": false,
         "label": "tags",
@@ -2028,7 +2389,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "isArray": true,
         "isOptional": false,
         "label": "tags",
-        "name": "EventSourcedTagViewModel",
+        "name": "EventSourcedTagRecordForResourceViewModel",
         "schema": {
           "id": {
             "coscradDataType": "NON_EMPTY_STRING",
@@ -2043,13 +2404,6 @@ exports[`GET /resources should return the expected result 1`] = `
             "isArray": false,
             "isOptional": false,
             "label": "label",
-          },
-          "members": {
-            "coscradDataType": "COMPOSITE_IDENTIFIER",
-            "description": "the composite identifier of every resource or note with this tag",
-            "isArray": true,
-            "isOptional": false,
-            "label": "members",
           },
           "name": {
             "complexDataType": "NESTED_TYPE",
@@ -2487,6 +2841,127 @@ exports[`GET /resources should return the expected result 1`] = `
     "link": "/resources/playlists",
     "pluralLabel": "Playlists",
     "schema": {
+      "contributions": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "a list of all contributions to the development of this resource",
+        "isArray": true,
+        "isOptional": false,
+        "label": "contributions",
+        "name": "ContributionSummary",
+        "schema": {
+          "contributorIds": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "system references identifying who contributed to the creation or editing of this resource",
+            "isArray": false,
+            "isOptional": false,
+            "label": "contributor IDs",
+          },
+          "date": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "the date the data update was made",
+            "isArray": false,
+            "isOptional": false,
+            "label": "date of record",
+            "name": "CoscradDate",
+            "schema": {
+              "day": {
+                "coscradDataType": "POSITIVE_INTEGER",
+                "description": "Day of Month",
+                "isArray": false,
+                "isOptional": false,
+                "label": "day of month",
+              },
+              "month": {
+                "complexDataType": "ENUM",
+                "description": "a month of the year",
+                "enumLabel": "Month",
+                "enumName": "Month",
+                "isArray": false,
+                "isOptional": false,
+                "label": "month",
+                "labelsAndValues": [
+                  {
+                    "label": "January",
+                    "value": "01",
+                  },
+                  {
+                    "label": "February",
+                    "value": "02",
+                  },
+                  {
+                    "label": "March",
+                    "value": "03",
+                  },
+                  {
+                    "label": "April",
+                    "value": "04",
+                  },
+                  {
+                    "label": "May",
+                    "value": "05",
+                  },
+                  {
+                    "label": "June",
+                    "value": "06",
+                  },
+                  {
+                    "label": "July",
+                    "value": "07",
+                  },
+                  {
+                    "label": "August",
+                    "value": "08",
+                  },
+                  {
+                    "label": "September",
+                    "value": "09",
+                  },
+                  {
+                    "label": "October",
+                    "value": "10",
+                  },
+                  {
+                    "label": "November",
+                    "value": "11",
+                  },
+                  {
+                    "label": "December",
+                    "value": "12",
+                  },
+                ],
+              },
+              "year": {
+                "coscradDataType": "YEAR",
+                "description": "The Year",
+                "isArray": false,
+                "isOptional": false,
+                "label": "the year",
+              },
+            },
+          },
+          "statement": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "a written acknowledgement of the contribution",
+            "isArray": false,
+            "isOptional": false,
+            "label": "statement",
+          },
+          "timestamp": {
+            "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+            "description": "a unix timestamp for the purpose of sorting events",
+            "isArray": false,
+            "isOptional": false,
+            "label": "timestamp",
+          },
+          "type": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "system identifier for the type of work that has been contributed",
+            "isArray": false,
+            "isOptional": false,
+            "label": "contribution type",
+          },
+        },
+      },
       "episodes": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "a summary description of each episode in this playlist",
@@ -2496,21 +2971,21 @@ exports[`GET /resources should return the expected result 1`] = `
       },
       "id": {
         "coscradDataType": "UUID",
-        "description": "unique system-wide identifier for this playlist",
+        "description": "system identifier for this resource",
         "isArray": false,
         "isOptional": false,
-        "label": "Playlist ID",
+        "label": "id",
       },
       "isPublished": {
         "coscradDataType": "BOOLEAN",
-        "description": "a flag indicating whether this playlist is published",
+        "description": "indicates whether this resource available to the public",
         "isArray": false,
         "isOptional": false,
         "label": "is published",
       },
       "name": {
         "complexDataType": "NESTED_TYPE",
-        "description": "name of the playlist",
+        "description": "name (text) includes the text as well as any translations for this term",
         "isArray": false,
         "isOptional": false,
         "label": "name",
@@ -2605,14 +3080,126 @@ exports[`GET /resources should return the expected result 1`] = `
           },
         },
       },
-      "queryAccessControlList": {
+      "tags": {
         "complexDataType": "NESTED_TYPE",
-        "description": "the access control list determines which users and groups can see this playlist",
-        "isArray": false,
+        "description": "a summary of the tags that have been applied to this resource",
+        "isArray": true,
         "isOptional": false,
-        "label": "query ACL",
-        "name": "AccessControlList",
-        "schema": {},
+        "label": "tags",
+        "name": "EventSourcedTagRecordForResourceViewModel",
+        "schema": {
+          "id": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "label": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "a human readable text label for this tag",
+            "isArray": false,
+            "isOptional": false,
+            "label": "label",
+          },
+          "name": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "name",
+            "isArray": false,
+            "isOptional": false,
+            "label": "name",
+            "name": "MultilingualText",
+            "schema": {
+              "items": {
+                "complexDataType": "NESTED_TYPE",
+                "description": "one item for each provided language",
+                "isArray": true,
+                "isOptional": false,
+                "label": "items",
+                "name": "MultilingualTextItem",
+                "schema": {
+                  "languageCode": {
+                    "complexDataType": "ENUM",
+                    "description": "an official identifier of the language",
+                    "enumLabel": "Language_Code",
+                    "enumName": "LangaugeCode",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "language code",
+                    "labelsAndValues": [
+                      {
+                        "label": "Chilcotin",
+                        "value": "clc",
+                      },
+                      {
+                        "label": "Haida",
+                        "value": "hai",
+                      },
+                      {
+                        "label": "English",
+                        "value": "en",
+                      },
+                      {
+                        "label": "French",
+                        "value": "fra",
+                      },
+                      {
+                        "label": "Chinook",
+                        "value": "chn",
+                      },
+                      {
+                        "label": "Zapotec",
+                        "value": "zap",
+                      },
+                      {
+                        "label": "Spanish",
+                        "value": "spa",
+                      },
+                    ],
+                  },
+                  "role": {
+                    "complexDataType": "ENUM",
+                    "description": "role of this text in the translation process",
+                    "enumLabel": "text item role",
+                    "enumName": "Multilingual Text Item Role",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "text item role",
+                    "labelsAndValues": [
+                      {
+                        "label": "original",
+                        "value": "original",
+                      },
+                      {
+                        "label": "glossed to",
+                        "value": "glossed to",
+                      },
+                      {
+                        "label": "free translation",
+                        "value": "free translation",
+                      },
+                      {
+                        "label": "literal translation",
+                        "value": "literal translation",
+                      },
+                      {
+                        "label": "elicited from a prompt",
+                        "value": "elicited from a prompt",
+                      },
+                    ],
+                  },
+                  "text": {
+                    "coscradDataType": "NON_EMPTY_STRING",
+                    "description": "plain text in the given language",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "text",
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     },
     "type": "playlist",

@@ -23,7 +23,7 @@ import { ArangoDatabaseProvider } from '../../../../../persistence/database/data
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { EventSourcedTagViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
+import { EventSourcedTagRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { TestEventStream } from '../../../../../test-data/events';
 import { buildTestInstance } from '../../../../../test-data/utilities';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
@@ -178,12 +178,10 @@ describe(`ArangoVideoQueryRepository`, () => {
     describe(`tag`, () => {
         const existingTagLabel = 'plants';
 
-        const existingTag = buildTestInstance(EventSourcedTagViewModel, {
+        const existingTag = buildTestInstance(EventSourcedTagRecordForResourceViewModel, {
             id: buildDummyUuid(90),
             label: existingTagLabel,
             name: buildMultilingualTextWithSingleItem(existingTagLabel),
-            // TODO do we want this here?
-            members: [],
         });
 
         const newTagId = buildDummyUuid(91);
