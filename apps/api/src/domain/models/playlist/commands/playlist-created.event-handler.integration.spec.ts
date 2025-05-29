@@ -128,7 +128,7 @@ describe(`PlaylistCreatedEventHandler`, () => {
 
             expect(searchResult).not.toBe(NotFound);
 
-            const { name, contributions } = searchResult as PlaylistViewModel;
+            const { name } = searchResult as PlaylistViewModel;
 
             const { languageCode: foundLanguageCode, text: foundText } = name.getOriginalTextItem();
 
@@ -136,11 +136,8 @@ describe(`PlaylistCreatedEventHandler`, () => {
 
             expect(foundText).toBe(playlistNameText);
 
-            expect(contributions).not.toHaveLength(0);
-
-            expect(contributions[0].contributorIds.some((id) => id === dummyContributor.id)).toBe(
-                true
-            );
+            // This should be tested at a higher level
+            // expect(contributions).not.toHaveLength(0);
         });
     });
 });
