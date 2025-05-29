@@ -1,7 +1,6 @@
 import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { AggregateType } from '../../domain/types/AggregateType';
 import { ResourceType } from '../../domain/types/ResourceType';
-import { InternalError } from '../../lib/errors/InternalError';
 
 type AggregateTypeAndLabel = {
     [K in AggregateType]: string;
@@ -32,7 +31,7 @@ export default (aggregateType: AggregateType): string => {
     const label = resourceTypeAndLabel[aggregateType];
 
     if (!isNonEmptyString(label)) {
-        throw new InternalError(`Failed to find label for resource type: ${aggregateType}`);
+        return aggregateType;
     }
 
     return label;
