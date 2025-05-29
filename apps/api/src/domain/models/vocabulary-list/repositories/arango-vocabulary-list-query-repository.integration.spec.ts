@@ -22,11 +22,14 @@ import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/uti
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoRepositoryForAggregate } from '../../../../persistence/repositories/arango-repository-for-aggregate';
+
+import { EventSourcedTagRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
+import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import {
+    TermViewForVocabularyListEntry,
     VocabularyListEntryViewModel,
     VocabularyListViewModel,
-} from '../../../../queries/buildViewModelForResource/viewModels';
-import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
+} from '../../../../queries/buildViewModelForResource/viewModels/vocabulary-list.view-model';
 import { TestEventStream } from '../../../../test-data/events';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import { DTO } from '../../../../types/DTO';
@@ -40,6 +43,7 @@ import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { ArangoAudioItemQueryRepository } from '../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import idEquals from '../../shared/functional/idEquals';
+import { Tag } from '../../tag/tag.entity';
 import { TermCreated } from '../../term/commands';
 import { ITermQueryRepository } from '../../term/queries';
 import { ArangoTermQueryRepository } from '../../term/repositories';
@@ -146,10 +150,6 @@ const allowedValuesAndLabels = [
     },
 ];
 
-/**
- * TODO Opt back into this test once we get to the bottom
- * of the dreaded `write-write` error in Arango.
- */
 describe(`ArangoVocabularyListQueryRepository`, () => {
     let testQueryRepository: IVocabularyListQueryRepository;
 
@@ -340,6 +340,60 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
             };
 
             expect(updatedView.isPublished).toBe(true);
+        });
+    });
+
+    describe(`tag`, () => {
+        const existingTagLabel = 'plants';
+
+        const existingTag = buildTestInstance(EventSourcedTagRecordForResourceViewModel, {
+            id: buildDummyUuid(90),
+            label: existingTagLabel,
+            name: buildMultilingualTextWithSingleItem(existingTagLabel),
+        });
+
+        const newTagId = buildDummyUuid(91);
+
+        const newTagLabel = 'animals';
+
+        // TODO use event sourced setup?
+        const newTag = buildTestInstance(Tag, {
+            id: newTagId,
+            label: newTagLabel,
+        });
+
+        const targetView = buildTestInstance(VocabularyListViewModel, {
+            tags: [existingTag],
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.getDatabaseForCollection(ArangoCollectionId.tags).clear();
+
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetView);
+
+            await databaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.tags)
+                .create(mapEntityDTOToDatabaseDocument(newTag.toDTO()));
+        });
+
+        it(`should tag the vocabulary list`, async () => {
+            await testQueryRepository.tag(targetView.id, newTag.id);
+
+            const { tags } = (await testQueryRepository.fetchById(
+                targetView.id
+            )) as VocabularyListViewModel;
+
+            expect(tags).toHaveLength(2);
+
+            const tagSearchResult = tags.find(({ id }) => id === newTag.id);
+
+            expect(tagSearchResult).toBeTruthy();
+
+            const { label } = tagSearchResult;
+
+            expect(label).toBe(newTagLabel);
         });
     });
 
@@ -544,7 +598,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
 
             expect(entrySearchResult).toBeTruthy();
 
-            const termText = new MultilingualText(entrySearchResult.term.name);
+            const termText = new MultilingualText(entrySearchResult.term.text);
 
             const { text: foundText, languageCode: foundLanguageCode } =
                 termText.getOriginalTextItem();
@@ -562,42 +616,45 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
             const targetVocabularyListId = buildDummyUuid(987);
 
             // TODO deal with this awkward type
-            const targetViewDto: DTO<VocabularyListViewModel> = {
-                id: targetVocabularyListId,
-                name: buildMultilingualTextWithSingleItem(
-                    'vocabulary list with existing entry',
-                    LanguageCode.English
-                ),
-                form: {
-                    fields: [
-                        {
-                            name: filterPropertyName,
-                            label: 'who is doing the action',
-                            description: 'select the subject of the verb in the paradigm',
-                            constraints: [],
-                            type:
-                                filterPropertyType === FilterPropertyType.selection
-                                    ? FormFieldType.staticSelect
-                                    : FormFieldType.switch,
-                            options: allowedValuesAndLabels.map(({ label, value }) => ({
-                                display: label,
-                                value,
-                            })),
-                        },
-                    ],
-                },
-                isPublished: false,
-                accessControlList: new AccessControlList(),
-                contributions: [],
-
-                entries: [
-                    {
-                        term: existingTerm,
-                        variableValues: {},
+            const targetViewDto: DTO<VocabularyListViewModel> = buildTestInstance(
+                VocabularyListViewModel,
+                {
+                    id: targetVocabularyListId,
+                    name: buildMultilingualTextWithSingleItem(
+                        'vocabulary list with existing entry',
+                        LanguageCode.English
+                    ),
+                    form: {
+                        fields: [
+                            {
+                                name: filterPropertyName,
+                                label: 'who is doing the action',
+                                description: 'select the subject of the verb in the paradigm',
+                                constraints: [],
+                                type:
+                                    filterPropertyType === FilterPropertyType.selection
+                                        ? FormFieldType.staticSelect
+                                        : FormFieldType.switch,
+                                options: allowedValuesAndLabels.map(({ label, value }) => ({
+                                    display: label,
+                                    value,
+                                })),
+                            },
+                        ],
                     },
-                ].map((dto) => new VocabularyListEntryViewModel(dto)),
-                actions: [],
-            };
+                    isPublished: false,
+                    accessControlList: new AccessControlList(),
+                    contributions: [],
+
+                    entries: [
+                        {
+                            term: buildTestInstance(TermViewForVocabularyListEntry, existingTerm),
+                            variableValues: {},
+                        },
+                    ].map((dto) => new VocabularyListEntryViewModel(dto)),
+                    actions: [],
+                }
+            );
 
             const targetView = VocabularyListViewModel.fromDto(targetViewDto);
 
@@ -646,39 +703,42 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
             const targetVocabularyListId = buildDummyUuid(987);
 
             // TODO deal with this awkward type
-            const targetViewDto: DTO<VocabularyListViewModel> = {
-                id: targetVocabularyListId,
-                name: buildMultilingualTextWithSingleItem(
-                    'vocabulary list with existing entry',
-                    LanguageCode.English
-                ),
-                form: {
-                    fields: [
-                        {
-                            name: filterPropertyName,
-                            label: 'who is doing the action',
-                            description: 'select the subject of the verb in the paradigm',
-                            constraints: [],
-                            type:
-                                filterPropertyType === FilterPropertyType.selection
-                                    ? FormFieldType.staticSelect
-                                    : FormFieldType.switch,
-                            options: allowedValuesAndLabels.map(({ label, value }) => ({
-                                display: label,
-                                value,
-                            })),
-                        },
-                    ],
-                },
-                isPublished: false,
-                accessControlList: new AccessControlList(),
-                contributions: [],
+            const targetViewDto: DTO<VocabularyListViewModel> = buildTestInstance(
+                VocabularyListViewModel,
+                {
+                    id: targetVocabularyListId,
+                    name: buildMultilingualTextWithSingleItem(
+                        'vocabulary list with existing entry',
+                        LanguageCode.English
+                    ),
+                    form: {
+                        fields: [
+                            {
+                                name: filterPropertyName,
+                                label: 'who is doing the action',
+                                description: 'select the subject of the verb in the paradigm',
+                                constraints: [],
+                                type:
+                                    filterPropertyType === FilterPropertyType.selection
+                                        ? FormFieldType.staticSelect
+                                        : FormFieldType.switch,
+                                options: allowedValuesAndLabels.map(({ label, value }) => ({
+                                    display: label,
+                                    value,
+                                })),
+                            },
+                        ],
+                    },
+                    isPublished: false,
+                    accessControlList: new AccessControlList(),
+                    contributions: [],
 
-                entries: [
-                    // empty
-                ],
-                actions: [],
-            };
+                    entries: [
+                        // empty
+                    ],
+                    actions: [],
+                }
+            );
 
             const targetView = VocabularyListViewModel.fromDto(targetViewDto);
 

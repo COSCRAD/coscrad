@@ -1,4 +1,4 @@
-import { ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { PlaylistViewModel } from '../../../../queries/buildViewModelForResource/viewModels/playlist.view-model';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../common';
@@ -34,13 +34,16 @@ export class PlaylistCreatedEventHandler implements ICoscradEventHandler {
 
         await this.playlistQueryRepository.create(
             PlaylistViewModel.fromDto({
+                // why do we need this here?
+                type: AggregateType.playlist,
                 id,
                 isPublished: false,
-                queryAccessControlList: new AccessControlList(),
+                accessControlList: new AccessControlList(),
                 name: buildMultilingualTextWithSingleItem(textForName, languageCodeForName),
                 episodes: [],
                 // we have to add the contributions separately
                 contributions: [],
+                tags: [],
             })
         );
     }

@@ -13,7 +13,7 @@ import { ArangoDatabase } from '../../../../../persistence/database/arango-datab
 import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
 import mapDatabaseDocumentToAggregateDTO from '../../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
-import { ArangoResourceQueryBuilder } from '../../../term/repositories/arango-resource-query-builder';
+import { BaseArangoResourceViewQueryBuilder } from '../../../term/repositories/base-arango-resource-query-builder';
 import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
 import { ArangoTranscriptQueryBuilder } from '../../shared/queries/transcript-query-builder';
 import { TranscriptLineItemDto, TranslationItem } from '../commands';
@@ -28,8 +28,9 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
         IDetailQueryResult<EventSourcedAudioItemViewModel & { actions: ICommandFormAndLabels[] }>
     >;
 
-    // Can we use the resource type for this as well or should we use the collection name below?
-    private readonly baseResourceQueryBuilder = new ArangoResourceQueryBuilder('audioItem__VIEWS');
+    private readonly baseResourceQueryBuilder = new BaseArangoResourceViewQueryBuilder(
+        'audioItem__VIEWS'
+    );
 
     private readonly transcriptQueryBuilder = new ArangoTranscriptQueryBuilder(
         ResourceType.audioItem
@@ -66,6 +67,10 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
         await this.database.update(id, {
             isPublished: true,
         });
+    }
+
+    async tag(audioItemId: string, tagId: string): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.tag(audioItemId, tagId));
     }
 
     async fetchById(

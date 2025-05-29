@@ -2,7 +2,11 @@ import { IMultilingualTextItem, LanguageCode } from '@coscrad/api-interfaces';
 import { Maybe } from '../../../../../lib/types/maybe';
 import { AggregateId } from '../../../../types/AggregateId';
 import { IAccessible } from '../../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
-import { IPublishable } from '../../../shared/common-commands/publish-resource/resource-published.event-handler';
+import {
+    ICountable,
+    IPublishable,
+} from '../../../shared/common-commands/publish-resource/resource-published.event-handler';
+import { IQueryRepositoryForTaggable } from '../../../tag/commands/tag-resource-or-note/resource-or-note-tagged.event-handler';
 import { ITranscriptQueryRepository } from '../../shared/queries/transcript-query-repository.interface';
 import { EventSourcedAudioItemViewModel } from './audio-item.view-model.event-sourced';
 
@@ -18,7 +22,9 @@ export interface TranslationLineItemDto {
 export interface IAudioItemQueryRepository
     extends IPublishable,
         IAccessible,
-        ITranscriptQueryRepository {
+        ITranscriptQueryRepository,
+        ICountable,
+        IQueryRepositoryForTaggable {
     create(view: EventSourcedAudioItemViewModel): Promise<void>;
 
     createMany(view: EventSourcedAudioItemViewModel[]): Promise<void>;
@@ -30,6 +36,4 @@ export interface IAudioItemQueryRepository
     fetchMany(): Promise<EventSourcedAudioItemViewModel[]>;
 
     translateName(id: AggregateId, translationItem: IMultilingualTextItem): Promise<void>;
-
-    count(): Promise<number>;
 }

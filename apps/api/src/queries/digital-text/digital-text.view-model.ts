@@ -20,7 +20,8 @@ import { TagCreated } from '../../domain/models/tag/commands/create-tag/tag-crea
 import { ResourceOrNoteTaggedPayload } from '../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
 import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { isNullOrUndefined } from '../../domain/utilities/validation/is-null-or-undefined';
-import { EventSourcedTagViewModel } from '../buildViewModelForResource/viewModels/tag.view-model.event-sourced';
+import { DTO } from '../../types/DTO';
+import { EventSourcedTagRecordForResourceViewModel } from '../buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { BaseEvent } from '../event-sourcing';
 import { ApplyEvent } from '../event-sourcing/apply-event.interface';
 
@@ -29,7 +30,7 @@ export class DigitalTextViewModel
 {
     #accessControlList: AccessControlList = new AccessControlList();
 
-    #allTags: EventSourcedTagViewModel[] = [];
+    #allTags: EventSourcedTagRecordForResourceViewModel[] = [];
 
     public readonly type = AggregateType.digitalText;
 
@@ -48,12 +49,12 @@ export class DigitalTextViewModel
     })
     public isPublished = false;
 
-    @NestedDataType(EventSourcedTagViewModel, {
+    @NestedDataType(EventSourcedTagRecordForResourceViewModel, {
         label: 'tags',
         description: 'tags that apply to this resource',
         isArray: true,
     })
-    public tags: EventSourcedTagViewModel[] = [];
+    public tags: EventSourcedTagRecordForResourceViewModel[] = [];
 
     @NestedDataType(DigitalTextPage, {
         label: 'pages',
@@ -203,7 +204,9 @@ export class DigitalTextViewModel
                 aggregateCompositeIdentifier: { id },
             } = payload as TagCreated['payload'];
 
-            const emptyTag = new EventSourcedTagViewModel(id);
+            const emptyTag = new EventSourcedTagRecordForResourceViewModel({
+                id,
+            } as DTO<EventSourcedTagRecordForResourceViewModel>);
 
             // TODO Do we need to update this.tags as well? Do we duplicate some tags between the two lists?
             this.#allTags = [...this.#allTags, emptyTag.apply(event)];

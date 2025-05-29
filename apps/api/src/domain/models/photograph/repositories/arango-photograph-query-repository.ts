@@ -10,7 +10,7 @@ import mapDatabaseDocumentToEntityDto from '../../../../persistence/database/uti
 import mapEntityDtoToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { AggregateId } from '../../../types/AggregateId';
 import { BaseEvent } from '../../shared/events/base-event.entity';
-import { ArangoResourceQueryBuilder } from '../../term/repositories/arango-resource-query-builder';
+import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base-arango-resource-query-builder';
 import { IPhotographQueryRepository } from '../queries';
 import { PhotographViewModel } from '../queries/photograph.view-model';
 
@@ -20,7 +20,7 @@ export class ArangoPhotographQueryRepository implements IPhotographQueryReposito
     /**
      * We use this helper to achieve composition over inheritance.
      */
-    private readonly baseResourceQueryBuilder: ArangoResourceQueryBuilder;
+    private readonly baseResourceQueryBuilder: BaseArangoResourceViewQueryBuilder;
 
     constructor(arangoConnectionProvider: ArangoConnectionProvider) {
         this.database = new ArangoDatabaseForCollection(
@@ -28,7 +28,7 @@ export class ArangoPhotographQueryRepository implements IPhotographQueryReposito
             'photograph__VIEWS'
         );
 
-        this.baseResourceQueryBuilder = new ArangoResourceQueryBuilder('photograph__VIEWS');
+        this.baseResourceQueryBuilder = new BaseArangoResourceViewQueryBuilder('photograph__VIEWS');
     }
 
     async fetchById(id: AggregateId): Promise<Maybe<PhotographViewModel>> {
@@ -94,6 +94,10 @@ export class ArangoPhotographQueryRepository implements IPhotographQueryReposito
             });
 
         await cursor.all();
+    }
+
+    async tag(photographId: string, tagId: string): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.tag(photographId, tagId));
     }
 
     async allowUser(photographId: AggregateId, userId: AggregateId): Promise<void> {

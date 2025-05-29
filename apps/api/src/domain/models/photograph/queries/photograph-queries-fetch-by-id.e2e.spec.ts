@@ -63,7 +63,7 @@ const photographId = buildDummyUuid(1);
 const photographCompositeId = {
     type: AggregateType.photograph,
     id: photographId,
-};
+} as const;
 
 const existingMediaItem = getValidAggregateInstanceForTest(AggregateType.mediaItem).clone({
     id: buildDummyUuid(55),

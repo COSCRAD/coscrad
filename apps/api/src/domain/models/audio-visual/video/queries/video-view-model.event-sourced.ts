@@ -1,23 +1,31 @@
 import {
+    AggregateType,
     ICommandFormAndLabels,
-    IContributionSummary,
     LanguageCode,
     MIMEType,
+    ResourceType,
 } from '@coscrad/api-interfaces';
-import { isNonEmptyObject } from '@coscrad/validation-constraints';
+import { BooleanDataType, NestedDataType, UUID } from '@coscrad/data-types';
+import { isBoolean, isNonEmptyObject } from '@coscrad/validation-constraints';
+import { DetailScopedCommandWriteContext } from '../../../../../app/controllers/command/services/command-info-service';
 import { buildMultilingualTextFromBilingualText } from '../../../../../domain/common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
+import { HasAggregateId } from '../../../../../domain/types/HasAggregateId';
+import { TagViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
+import { EventSourcedTagRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../../shared/access-control/access-control-list.entity';
+import { ContributionSummary } from '../../../user-management';
 import { Transcript } from '../../shared/entities/transcript.entity';
 import { VideoCreated } from '../commands';
 
 @CoscradDataExample<EventSourcedVideoViewModel>({
     example: {
+        type: ResourceType.video,
         id: buildDummyUuid(6),
         actions: [],
         name: buildMultilingualTextFromBilingualText(
@@ -32,51 +40,105 @@ import { VideoCreated } from '../commands';
         contributions: [],
         accessControlList: new AccessControlList(),
         isPublished: false,
+        tags: [],
     },
 })
-export class EventSourcedVideoViewModel {
-    actions: ICommandFormAndLabels[];
+export class EventSourcedVideoViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
+    readonly type = ResourceType.video;
+
+    // TODO extend base
+
+    @UUID({
+        label: 'id',
+        description: 'system identifier for this resource',
+    })
+    id: AggregateId;
+
+    @NestedDataType(MultilingualText, {
+        label: 'name',
+        // note that we call it `name` not `text` for consistency with other models
+        description: 'name (text) includes the text as well as any translations for this term',
+    })
     name: MultilingualText;
+
+    @BooleanDataType({
+        label: 'is published',
+        description: 'indicates whether this resource available to the public',
+    })
+    isPublished: boolean;
+
+    accessControlList: AccessControlList;
+
+    // TODO add notes
+
+    @NestedDataType(ContributionSummary, {
+        label: 'contributions',
+        description: 'a list of all contributions to the development of this resource',
+        // Can't we get this from reflection?
+        isArray: true,
+    })
+    contributions: ContributionSummary[];
+
+    @NestedDataType(TagViewModel, {
+        label: 'tags',
+        description: 'a summary of the tags that have been applied to this resource',
+        isArray: true,
+    })
+    tags: EventSourcedTagRecordForResourceViewModel[];
+    // end TODO extend base
+
+    actions: ICommandFormAndLabels[];
     mediaItemId: AggregateId;
     mimeType?: MIMEType;
     lengthMilliseconds: number;
     text: string;
-    contributions: IContributionSummary[];
-    id: string;
-    accessControlList: AccessControlList;
-    isPublished: boolean;
     transcript?: Transcript;
 
     constructor(dto: DTO<EventSourcedVideoViewModel>) {
         if (!dto) return;
 
-        const { id, name, contributions, mediaItemId, accessControlList, isPublished, transcript } =
-            dto;
+        // TODO extend base
+        // super(dto);
+        const { contributions, name, id, accessControlList, tags, isPublished } = dto;
+
+        this.contributions = Array.isArray(contributions)
+            ? contributions.map((c) => ContributionSummary.fromDto(c))
+            : [];
+
+        if (isNonEmptyObject(name)) {
+            this.name = new MultilingualText(name);
+        }
 
         this.id = id;
 
-        this.name = new MultilingualText(name);
+        this.isPublished = isBoolean(isPublished) ? isPublished : false;
 
-        // do we need to clone?
-        this.contributions = Array.isArray(contributions) ? contributions : [];
+        this.accessControlList = new AccessControlList(accessControlList);
+
+        this.tags = Array.isArray(tags)
+            ? tags.map((t) => new EventSourcedTagRecordForResourceViewModel(t))
+            : [];
+
+        // end TODO extend base
+
+        const { mediaItemId, transcript } = dto;
 
         this.mediaItemId = mediaItemId;
-
-        /**
-         * We need to share this logic. It's not dangerous to have a single
-         * `BaseResourceViewModel` class as long as all the properties we
-         * put there are essential to the notion of a web-of-knowledge "resource"
-         * (view).
-         */
-        this.accessControlList = isNonEmptyObject(accessControlList)
-            ? new AccessControlList(accessControlList)
-            : new AccessControlList();
-
-        this.isPublished = isPublished;
 
         if (isNonEmptyObject(transcript)) {
             this.transcript = new Transcript(transcript);
         }
+    }
+
+    getAvailableCommands(): string[] {
+        return []; // TODO implement this!
+    }
+
+    getCompositeIdentifier(): { type: AggregateType; id: AggregateId } {
+        return {
+            type: AggregateType.video,
+            id: this.id,
+        };
     }
 
     static fromVideoCreated({
@@ -91,6 +153,7 @@ export class EventSourcedVideoViewModel {
         meta: { contributorIds: _ },
     }: VideoCreated): EventSourcedVideoViewModel {
         return new EventSourcedVideoViewModel({
+            type: ResourceType.video,
             name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
             mediaItemId,
             id: videoId,
@@ -102,6 +165,7 @@ export class EventSourcedVideoViewModel {
             lengthMilliseconds,
             // in order to grant access, we need a `RESOURCE_READ_ACCESS_GRANTED_TO_USER`
             accessControlList: new AccessControlList(),
+            tags: [],
         });
     }
 

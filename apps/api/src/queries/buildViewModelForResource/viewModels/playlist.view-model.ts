@@ -1,4 +1,4 @@
-import { AggregateType, IPlaylistEpisode } from '@coscrad/api-interfaces';
+import { AggregateType, IPlaylistEpisode, ResourceType } from '@coscrad/api-interfaces';
 import {
     BooleanDataType,
     NestedDataType,
@@ -7,6 +7,7 @@ import {
     UUID,
 } from '@coscrad/data-types';
 import { isBoolean, isNonEmptyObject } from '@coscrad/validation-constraints';
+import { DetailScopedCommandWriteContext } from '../../../app/controllers/command/services/command-info-service';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
 import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
@@ -14,14 +15,15 @@ import { AccessControlList } from '../../../domain/models/shared/access-control/
 import { ContributionSummary } from '../../../domain/models/user-management/contributor/views';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { AggregateId } from '../../../domain/types/AggregateId';
+import { HasAggregateId } from '../../../domain/types/HasAggregateId';
 import { Maybe } from '../../../lib/types/maybe';
 import { NotFound } from '../../../lib/types/not-found';
 import { CoscradDataExample } from '../../../test-data/utilities';
 import { DTO } from '../../../types/DTO';
+import { EventSourcedTagRecordForResourceViewModel } from './tag.view-model.event-sourced';
 
 // TODO move this file
 
-// TODO move this to another file DO this
 @CoscradDataExample<PlaylistEpisodeViewModel>({
     example: {
         name: buildMultilingualTextWithSingleItem('Episode 1'),
@@ -99,46 +101,62 @@ export class PlaylistEpisodeViewModel {
 // TODO leverage this in `buildTestData`
 @CoscradDataExample<PlaylistViewModel>({
     example: {
+        type: ResourceType.playlist,
         id: buildDummyUuid(9001),
-        queryAccessControlList: new AccessControlList(),
         isPublished: false,
         name: buildMultilingualTextWithSingleItem('Metal Mondays'),
         episodes: [],
         contributions: [],
+        tags: [],
+        accessControlList: new AccessControlList(),
     },
 })
-export class PlaylistViewModel {
+export class PlaylistViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
+    // extends BaseEventSourcedResourceViewModel {
+    type: ResourceType = ResourceType.playlist;
+
+    /**
+     * TODO extend base
+     */
+
     @UUID({
-        label: 'Playlist ID',
-        description: 'unique system-wide identifier for this playlist',
+        label: 'id',
+        description: 'system identifier for this resource',
     })
     id: AggregateId;
 
+    @NestedDataType(MultilingualText, {
+        label: 'name',
+        // note that we call it `name` not `text` for consistency with other models
+        description: 'name (text) includes the text as well as any translations for this term',
+    })
+    name: MultilingualText;
+
     @BooleanDataType({
         label: 'is published',
-        description: 'a flag indicating whether this playlist is published',
+        description: 'indicates whether this resource available to the public',
     })
     isPublished: boolean;
 
-    // @NestedDataType(ContributionSummary, {
-    //     isArray: true,
-    //     label: 'contributions',
-    //     description: 'a summary of the work done by various contributors in creating this playlist',
-    // })
+    accessControlList: AccessControlList;
+
+    // TODO add notes
+
+    @NestedDataType(ContributionSummary, {
+        label: 'contributions',
+        description: 'a list of all contributions to the development of this resource',
+        // Can't we get this from reflection?
+        isArray: true,
+    })
     contributions: ContributionSummary[];
 
-    @NestedDataType(AccessControlList, {
-        label: 'query ACL',
-        description:
-            'the access control list determines which users and groups can see this playlist',
+    @NestedDataType(EventSourcedTagRecordForResourceViewModel, {
+        label: 'tags',
+        description: 'a summary of the tags that have been applied to this resource',
+        isArray: true,
     })
-    queryAccessControlList: AccessControlList;
-
-    @NestedDataType(MultilingualText, {
-        label: 'name',
-        description: 'name of the playlist',
-    })
-    readonly name: MultilingualText;
+    tags: EventSourcedTagRecordForResourceViewModel[];
+    // end TODO extend base
 
     /**
      * TODO[https://www.pivotaltracker.com/story/show/184634347]
@@ -164,31 +182,36 @@ export class PlaylistViewModel {
      * want to handle `playlists` and content-management, we should move to
      * a more performant way of managing queries.
      */
-    constructor(
-        id?: AggregateId,
-        isPublished?: boolean,
-        accessControlList?: AccessControlList,
-        name?: MultilingualText,
-        episodes: PlaylistEpisodeViewModel[] = [],
-        contributions: ContributionSummary[] = []
-    ) {
+    constructor(dto: DTO<PlaylistViewModel>) {
+        // TODO extend base
+        // super(dto);
+        const { contributions, name, id, accessControlList, tags, isPublished } = dto;
+
+        this.contributions = Array.isArray(contributions)
+            ? contributions.map((c) => ContributionSummary.fromDto(c))
+            : [];
+
+        if (isNonEmptyObject(name)) {
+            this.name = new MultilingualText(name);
+        }
+
         this.id = id;
 
         this.isPublished = isBoolean(isPublished) ? isPublished : false;
 
-        this.queryAccessControlList = isNonEmptyObject(accessControlList)
-            ? new AccessControlList(accessControlList)
-            : // no special access
-              new AccessControlList();
+        this.accessControlList = new AccessControlList(accessControlList);
 
-        if (isNonEmptyObject(name)) {
-            // TODO Whose job is it to clone?
-            this.name = name;
-        }
+        this.tags = Array.isArray(tags)
+            ? tags.map((t) => new EventSourcedTagRecordForResourceViewModel(t))
+            : [];
 
-        this.episodes = episodes;
+        // end TODO extend base
 
-        this.contributions = contributions;
+        if (!dto) return;
+
+        const { episodes = [] } = dto;
+
+        this.episodes = episodes.map((e) => new PlaylistEpisodeViewModel(e));
     }
 
     public getCompositeIdentifier() {
@@ -245,7 +268,7 @@ export class PlaylistViewModel {
 
             const result = buildResult();
 
-            delete result.queryAccessControlList;
+            delete result.accessControlList;
 
             // @ts-expect-error remove read-only
             result.episodes = result.episodes.map((e) => {
@@ -262,10 +285,10 @@ export class PlaylistViewModel {
             };
         }
 
-        if (this.isPublished || this.queryAccessControlList.canUserWithGroups(userWithGroups)) {
+        if (this.isPublished || this.accessControlList.canUserWithGroups(userWithGroups)) {
             const result = buildResult();
 
-            delete result.queryAccessControlList;
+            delete result.accessControlList;
 
             // @ts-expect-error remove read-only
             result.episodes = result.episodes.map((e) => {
@@ -286,21 +309,6 @@ export class PlaylistViewModel {
     }
 
     public static fromDto(dto: DTO<PlaylistViewModel>): PlaylistViewModel {
-        if (!isNonEmptyObject(dto)) {
-            return new PlaylistViewModel();
-        }
-
-        const { id, name, episodes, isPublished, queryAccessControlList, contributions } = dto;
-
-        return new PlaylistViewModel(
-            id,
-            isPublished,
-            new AccessControlList(queryAccessControlList),
-            new MultilingualText(name),
-            episodes.map((e) => new PlaylistEpisodeViewModel(e)),
-            Array.isArray(contributions)
-                ? contributions.map((c) => ContributionSummary.fromDto(c))
-                : []
-        );
+        return new PlaylistViewModel(dto);
     }
 }

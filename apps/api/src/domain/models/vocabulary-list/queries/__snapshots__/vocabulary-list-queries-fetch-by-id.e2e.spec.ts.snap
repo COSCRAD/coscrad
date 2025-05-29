@@ -89,7 +89,6 @@ exports[`when querying for a vocabulary list: fetch by ID when the user is a pro
           "allowedGroupIds": [],
           "allowedUserIds": [],
         },
-        "actions": [],
         "contributions": [
           {
             "contributorIds": [],
@@ -118,7 +117,20 @@ exports[`when querying for a vocabulary list: fetch by ID when the user is a pro
             },
           ],
         },
-        "vocabularyLists": [],
+        "text": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "I swim",
+            },
+            {
+              "languageCode": "en",
+              "role": "free translation",
+              "text": "I am swimming (English)",
+            },
+          ],
+        },
       },
       "variableValues": {},
     },
@@ -137,5 +149,7 @@ exports[`when querying for a vocabulary list: fetch by ID when the user is a pro
       },
     ],
   },
+  "tags": [],
+  "type": "vocabularyList",
 }
 `;

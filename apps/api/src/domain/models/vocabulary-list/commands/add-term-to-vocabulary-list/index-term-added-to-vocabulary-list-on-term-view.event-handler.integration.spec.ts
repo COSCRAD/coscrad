@@ -10,8 +10,8 @@ import { ArangoConnectionProvider } from '../../../../../persistence/database/ar
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { VocabularyListViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
 import { TermViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/term.view-model';
+import { VocabularyListViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/vocabulary-list.view-model';
 import { TestEventStream } from '../../../../../test-data/events';
 import { buildTestInstance } from '../../../../../test-data/utilities';
 import { buildMultilingualTextFromBilingualText } from '../../../../common/build-multilingual-text-from-bilingual-text';

@@ -9,7 +9,9 @@ import {
     TagResourceOrNote,
     TagResourceOrNoteCommandHandler,
 } from '../../domain/models/tag/commands';
+import { TagCreated } from '../../domain/models/tag/commands/create-tag/tag-created.event';
 import { ResourceOrNoteTagged } from '../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
+import { ResourceOrNoteTaggedEventHandler } from '../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event-handler';
 import { TagQueryService } from '../../domain/services/query-services/tag-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { ArangoEventRepository } from '../../persistence/repositories/arango-event-repository';
@@ -29,6 +31,7 @@ import { TagController } from '../controllers/tag.controller';
         RelabelTagCommandHandler,
         TagResourceOrNote,
         TagResourceOrNoteCommandHandler,
+        ResourceOrNoteTaggedEventHandler,
         // Does this belong here?
         ArangoEventRepository,
         CoscradEventFactory,
@@ -36,6 +39,7 @@ import { TagController } from '../controllers/tag.controller';
         // Data Classes
         ...[
             //Events
+            TagCreated,
             ResourceOrNoteTagged,
         ].map((Ctor) => ({
             provide: Ctor,

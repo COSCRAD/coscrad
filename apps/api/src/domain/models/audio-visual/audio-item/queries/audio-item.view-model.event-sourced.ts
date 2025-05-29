@@ -1,15 +1,14 @@
 import {
     ICommandFormAndLabels,
-    IContributionSummary,
-    IMultilingualText,
     LanguageCode,
     MIMEType,
+    ResourceType,
 } from '@coscrad/api-interfaces';
 import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { buildMultilingualTextFromBilingualText } from '../../../../../domain/common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
-import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
+import { BaseEventSourcedResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/base-event-sourced-resource.view-model';
 import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
@@ -19,6 +18,7 @@ import { AudioItemCreated } from '../commands/create-audio-item/audio-item-creat
 
 @CoscradDataExample<EventSourcedAudioItemViewModel>({
     example: {
+        type: ResourceType.audioItem,
         id: buildDummyUuid(3),
         // are we still using this?
         actions: [],
@@ -34,19 +34,21 @@ import { AudioItemCreated } from '../commands/create-audio-item/audio-item-creat
         contributions: [],
         accessControlList: new AccessControlList(),
         isPublished: false,
+        tags: [],
     },
 })
-export class EventSourcedAudioItemViewModel {
+export class EventSourcedAudioItemViewModel extends BaseEventSourcedResourceViewModel {
+    type: ResourceType = ResourceType.audioItem;
+
+    getAvailableCommands(): string[] {
+        throw new Error('Method not implemented.');
+    }
     actions: ICommandFormAndLabels[];
-    name: IMultilingualText;
     mediaItemId: AggregateId;
     mimeType?: MIMEType;
     lengthMilliseconds: number;
     text: string;
-    contributions: IContributionSummary[];
-    id: string;
-    accessControlList: AccessControlList;
-    isPublished: boolean;
+
     /**
      * TODO Do we want a separate view model for this?
      *
@@ -55,17 +57,11 @@ export class EventSourcedAudioItemViewModel {
     transcript?: Transcript;
 
     constructor(dto: DTO<EventSourcedAudioItemViewModel>) {
+        super(dto);
+
         if (!dto) return;
 
-        const { id, name, contributions, mediaItemId, accessControlList, isPublished, transcript } =
-            dto;
-
-        this.id = id;
-
-        this.name = new MultilingualText(name);
-
-        // do we need to clone?
-        this.contributions = Array.isArray(contributions) ? contributions : [];
+        const { mediaItemId, accessControlList, isPublished, transcript } = dto;
 
         this.mediaItemId = mediaItemId;
 
@@ -99,6 +95,7 @@ export class EventSourcedAudioItemViewModel {
         meta: { contributorIds: _ },
     }: AudioItemCreated): EventSourcedAudioItemViewModel {
         return new EventSourcedAudioItemViewModel({
+            type: ResourceType.audioItem,
             name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
             mediaItemId,
             id: audioItemId,
@@ -112,6 +109,7 @@ export class EventSourcedAudioItemViewModel {
             lengthMilliseconds,
             // in order to grant access, we need a `RESOURCE_READ_ACCESS_GRANTED_TO_USER`
             accessControlList: new AccessControlList(),
+            tags: [],
         });
     }
 

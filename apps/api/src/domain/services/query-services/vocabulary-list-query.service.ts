@@ -1,6 +1,8 @@
 import {
     ICommandFormAndLabels,
+    IDetailQueryResult,
     IIndexQueryResult,
+    IVocabularyListEntry,
     IVocabularyListViewModel,
 } from '@coscrad/api-interfaces';
 import { Inject, Injectable } from '@nestjs/common';
@@ -10,7 +12,7 @@ import {
     CommandInfoService,
 } from '../../../app/controllers/command/services/command-info-service';
 import { isNotFound, NotFound } from '../../../lib/types/not-found';
-import { VocabularyListViewModel } from '../../../queries/buildViewModelForResource/viewModels';
+import { VocabularyListViewModel } from '../../../queries/buildViewModelForResource/viewModels/vocabulary-list.view-model';
 import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';
 import { VocabularyList } from '../../models/vocabulary-list/entities/vocabulary-list.entity';
 import {
@@ -46,8 +48,19 @@ export class VocabularyListQueryService {
 
         const actions = this.fetchUserActions(userWithGroups, [vocabularyList]);
 
+        const entries = vocabularyList.entries.map((entryWithoutName) => {
+            const entryWithName = entryWithoutName as unknown as IVocabularyListEntry<
+                string | boolean
+            >;
+
+            entryWithName.term.name = entryWithoutName.term.text;
+
+            return entryWithName;
+        });
+
         return {
             ...vocabularyList,
+            entries,
             actions,
         };
     }
@@ -64,19 +77,31 @@ export class VocabularyListQueryService {
             const forUser = entity.forUser(userWithGroups);
 
             return isNotFound(forUser) ? [] : forUser;
-        });
+        }) as VocabularyListViewModel[];
 
         const indexScopedActions = this.fetchUserActions(userWithGroups, [VocabularyList]);
 
         const result = {
             // TODO ensure actions show up on entities DO this now!
             entities: availableEntities.map((entity) => {
+                const mappedEntity =
+                    entity as unknown as IDetailQueryResult<IVocabularyListViewModel>;
+
                 const actions =
                     Array.isArray(entity.actions) && entity.actions.length > 0
                         ? fetchActionsForUser(this.commandInfoService, userWithGroups, entity)
                         : [];
 
-                entity.actions = actions;
+                mappedEntity.actions = actions;
+
+                // @ts-expect-error TODO we need to formalize the mapping layer from repositories to query responses
+                entity.entries = entity.entries.map(({ term, variableValues }) => ({
+                    term: {
+                        ...term,
+                        name: term.text,
+                    },
+                    variableValues,
+                }));
 
                 return entity as unknown as Omit<VocabularyListViewModel, 'actions'> & {
                     actions: ICommandFormAndLabels[];
@@ -86,6 +111,7 @@ export class VocabularyListQueryService {
             indexScopedActions,
         };
 
+        // @ts-expect-error fix types here
         return result;
     }
 

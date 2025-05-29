@@ -1,19 +1,24 @@
-import {
-    AggregateType,
-    CategorizableCompositeIdentifier,
-    ITagViewModel,
-    LanguageCode,
-} from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { FromDomainModel, NestedDataType } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
+import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { TagCreatedPayload } from '../../../domain/models/tag/commands/create-tag/tag-created.event';
-import { ResourceOrNoteTaggedPayload } from '../../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
 import { Tag } from '../../../domain/models/tag/tag.entity';
 import { AggregateId } from '../../../domain/types/AggregateId';
+import { CoscradDataExample } from '../../../test-data/utilities';
+import { DTO } from '../../../types/DTO';
 import { BaseEvent } from '../../event-sourcing';
 
+@CoscradDataExample<EventSourcedTagRecordForResourceViewModel>({
+    example: {
+        type: AggregateType.tag,
+        id: buildDummyUuid(3),
+        label: 'trees',
+        name: buildMultilingualTextWithSingleItem('trees'),
+    },
+})
 /**
  * We are moving to event sourcing of views for all resources and potentially all
  * aggregate roots. In the interim, we use our old state-based Tag view model
@@ -21,8 +26,8 @@ import { BaseEvent } from '../../event-sourcing';
  * can help us create a denormalized representation of the tags for a given
  * resource. Hence the redundancy between this class and `TagViewModel`.
  */
-export class EventSourcedTagViewModel implements ITagViewModel {
-    type = AggregateType.tag;
+export class EventSourcedTagRecordForResourceViewModel {
+    readonly type = AggregateType.tag;
 
     @FromDomainModel(Tag)
     id: AggregateId;
@@ -34,20 +39,21 @@ export class EventSourcedTagViewModel implements ITagViewModel {
     @FromDomainModel(Tag)
     label: string;
 
-    @FromDomainModel(Tag)
-    members: CategorizableCompositeIdentifier[] = [];
-
     @NestedDataType(MultilingualText, {
         label: 'name',
         description: 'name',
     })
     name: MultilingualText;
 
-    constructor(id: AggregateId) {
+    constructor({ id, label }: DTO<EventSourcedTagRecordForResourceViewModel>) {
         this.id = id;
+
+        this.label = label;
+
+        this.name = buildMultilingualTextWithSingleItem(this.label);
     }
 
-    apply(event: BaseEvent): EventSourcedTagViewModel {
+    apply(event: BaseEvent): EventSourcedTagRecordForResourceViewModel {
         const { payload, type: eventType } = event;
 
         if (this.isForMe(payload)) {
@@ -71,9 +77,9 @@ export class EventSourcedTagViewModel implements ITagViewModel {
              * resource or note that is a member for efficiency.
              */
             if (eventType === 'RESOURCE_OR_NOTE_CREATED') {
-                const { taggedMemberCompositeIdentifier } = payload as ResourceOrNoteTaggedPayload;
+                // const { taggedMemberCompositeIdentifier } = payload as ResourceOrNoteTaggedPayload;
 
-                this.members = this.members.concat(taggedMemberCompositeIdentifier);
+                // this.members = this.members.concat(taggedMemberCompositeIdentifier);
 
                 return this;
             }
@@ -96,5 +102,9 @@ export class EventSourcedTagViewModel implements ITagViewModel {
         aggregateCompositeIdentifier: { type: string; id: string };
     }) {
         return type === this.type && id === this.id;
+    }
+
+    public static fromDto(dto: DTO<EventSourcedTagRecordForResourceViewModel>) {
+        return new EventSourcedTagRecordForResourceViewModel(dto);
     }
 }

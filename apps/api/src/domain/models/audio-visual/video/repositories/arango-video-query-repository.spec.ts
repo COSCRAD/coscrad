@@ -18,13 +18,17 @@ import {
 } from '../../../../../domain/common/entities/multilingual-text';
 import { isNotFound, NotFound } from '../../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
+import { ArangoCollectionId } from '../../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
+import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { EventSourcedTagRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { TestEventStream } from '../../../../../test-data/events';
 import { buildTestInstance } from '../../../../../test-data/utilities';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../../shared/access-control/access-control-list.entity';
+import { Tag } from '../../../tag/tag.entity';
 import { TranscriptLineItemDto, TranslationItem } from '../../shared/commands';
 import { TranscriptItem } from '../../shared/entities/transcript-item.entity';
 import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
@@ -168,6 +172,60 @@ describe(`ArangoVideoQueryRepository`, () => {
             )) as EventSourcedVideoViewModel;
 
             expect(updatedView.isPublished).toBe(true);
+        });
+    });
+
+    describe(`tag`, () => {
+        const existingTagLabel = 'plants';
+
+        const existingTag = buildTestInstance(EventSourcedTagRecordForResourceViewModel, {
+            id: buildDummyUuid(90),
+            label: existingTagLabel,
+            name: buildMultilingualTextWithSingleItem(existingTagLabel),
+        });
+
+        const newTagId = buildDummyUuid(91);
+
+        const newTagLabel = 'animals';
+
+        // TODO use event sourced setup?
+        const newTag = buildTestInstance(Tag, {
+            id: newTagId,
+            label: newTagLabel,
+        });
+
+        const targetTerm = buildTestInstance(EventSourcedVideoViewModel, {
+            tags: [existingTag],
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.getDatabaseForCollection(ArangoCollectionId.tags).clear();
+
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetTerm);
+
+            await databaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.tags)
+                .create(mapEntityDTOToDatabaseDocument(newTag.toDTO()));
+        });
+
+        it(`should tag the playlist`, async () => {
+            await testQueryRepository.tag(targetTerm.id, newTag.id);
+
+            const { tags } = (await testQueryRepository.fetchById(
+                targetTerm.id
+            )) as EventSourcedVideoViewModel;
+
+            expect(tags).toHaveLength(2);
+
+            const tagSearchResult = tags.find(({ id }) => id === newTag.id);
+
+            expect(tagSearchResult).toBeTruthy();
+
+            const { label } = tagSearchResult;
+
+            expect(label).toBe(newTagLabel);
         });
     });
 

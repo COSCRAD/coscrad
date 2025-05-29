@@ -8,14 +8,16 @@ import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/
 import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { AggregateId } from '../../../types/AggregateId';
-import { ArangoResourceQueryBuilder } from '../../term/repositories/arango-resource-query-builder';
+import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base-arango-resource-query-builder';
 import { ISongQueryRepository } from '../queries/song-query-repository.interface';
 import { EventSourcedSongViewModel } from '../queries/song.view-model.event.sourced';
 
 export class ArangoSongQueryRepository implements ISongQueryRepository {
     private readonly database: ArangoDatabaseForCollection<EventSourcedSongViewModel>;
 
-    private readonly baseResourceQueryBuilder = new ArangoResourceQueryBuilder('song__VIEWS');
+    private readonly baseResourceQueryBuilder = new BaseArangoResourceViewQueryBuilder(
+        'song__VIEWS'
+    );
 
     constructor(arangoConnectionProvider: ArangoConnectionProvider) {
         this.database = new ArangoDatabaseForCollection(

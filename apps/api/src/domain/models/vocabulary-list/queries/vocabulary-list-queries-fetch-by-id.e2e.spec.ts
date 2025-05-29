@@ -14,8 +14,10 @@ import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpInt
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { VocabularyListViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
-import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
+import {
+    TermViewForVocabularyListEntry,
+    VocabularyListViewModel,
+} from '../../../../queries/buildViewModelForResource/viewModels/vocabulary-list.view-model';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
@@ -56,23 +58,23 @@ const dummyContribution = buildTestInstance(ContributionSummary);
  * to query endpoint. Eagerly joining in terms, tags, notes, etc. into vocabulary
  * lists, for example, is a big risk.
  */
-const publishedTerm: TermViewModel = TermViewModel.fromDto({
+const testTermText = buildMultilingualTextFromBilingualText(
+    {
+        text: termOriginalText,
+        languageCode: termOriginalLanguageCode,
+    },
+    {
+        text: termTranslation,
+        languageCode: termTranslationLanguageCode,
+    }
+);
+
+const publishedTerm: TermViewForVocabularyListEntry = TermViewForVocabularyListEntry.fromDto({
     id: termId,
     isPublished: true,
     accessControlList: new AccessControlList().toDTO(),
-    actions: [],
-    name: buildMultilingualTextFromBilingualText(
-        {
-            text: termOriginalText,
-            languageCode: termOriginalLanguageCode,
-        },
-        {
-            text: termTranslation,
-            languageCode: termTranslationLanguageCode,
-        }
-    ),
+    text: testTermText,
     contributions: [dummyContribution],
-    vocabularyLists: [],
 });
 
 const publishedVocabularyList = buildTestInstance(VocabularyListViewModel, {
@@ -91,7 +93,8 @@ const publishedVocabularyListWithUnpublishedTerm = publishedVocabularyList.clone
     isPublished: true,
     entries: [
         {
-            term: publishedTerm.clone({
+            term: buildTestInstance(TermViewForVocabularyListEntry, {
+                id: termId,
                 isPublished: false,
             }),
             variableValues: {},
@@ -343,11 +346,14 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
                                 publishedVocabularyList.clone({
                                     entries: [
                                         {
-                                            term: publishedTerm.clone({
-                                                isPublished: false,
-                                                // empty
-                                                accessControlList: new AccessControlList().toDTO(),
-                                            }),
+                                            term: buildTestInstance(
+                                                TermViewForVocabularyListEntry,
+                                                {
+                                                    id: termId,
+                                                    isPublished: false,
+                                                    accessControlList: new AccessControlList(),
+                                                }
+                                            ),
                                         },
                                     ],
                                 });
@@ -369,12 +375,16 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
 
             describe(`when the term that is subject of an entry is not published, but the user has privileged read access via a query ACL`, () => {
                 it(`should return the term as one of the entries`, async () => {
-                    const privateTermUserCanAccess = publishedTerm.clone({
-                        isPublished: false,
-                        accessControlList: new AccessControlList().allowUser(
-                            nonAdminUserWithGroups.id
-                        ),
-                    });
+                    const privateTermUserCanAccess = buildTestInstance(
+                        TermViewForVocabularyListEntry,
+                        {
+                            id: termId,
+                            isPublished: false,
+                            accessControlList: new AccessControlList().allowUser(
+                                nonAdminUserWithGroups.id
+                            ),
+                        }
+                    );
 
                     await assertQueryResult({
                         app,
@@ -478,10 +488,13 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
                         endpoint: buildDetailEndpoint(vocabularyListId),
                         expectedStatus: HttpStatusCode.ok,
                         seedInitialState: async () => {
-                            const unpublishedTerm = publishedTerm.clone({
-                                id: buildDummyUuid(585),
-                                isPublished: false,
-                            });
+                            const unpublishedTerm = buildTestInstance(
+                                TermViewForVocabularyListEntry,
+                                {
+                                    id: buildDummyUuid(585),
+                                    isPublished: false,
+                                }
+                            );
 
                             const entriesWithUnpublishedTerm = [
                                 {
@@ -532,10 +545,15 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
                                     accessControlList: new AccessControlList().toDTO(),
                                     entries: [
                                         {
-                                            term: publishedTerm.clone({
-                                                isPublished: false,
-                                                accessControlList: new AccessControlList().toDTO(),
-                                            }),
+                                            term: buildTestInstance(
+                                                TermViewForVocabularyListEntry,
+                                                {
+                                                    id: termId,
+                                                    isPublished: false,
+                                                    accessControlList:
+                                                        new AccessControlList().toDTO(),
+                                                }
+                                            ),
                                             variableValues: {},
                                         },
                                     ],
@@ -616,10 +634,13 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
                         endpoint: buildDetailEndpoint(vocabularyListId),
                         expectedStatus: HttpStatusCode.ok,
                         seedInitialState: async () => {
-                            const unpublishedTerm = publishedTerm.clone({
-                                id: buildDummyUuid(585),
-                                isPublished: false,
-                            });
+                            const unpublishedTerm = buildTestInstance(
+                                TermViewForVocabularyListEntry,
+                                {
+                                    id: buildDummyUuid(585),
+                                    isPublished: false,
+                                }
+                            );
 
                             const entriesWithUnpublishedTerm = [
                                 {
@@ -670,10 +691,15 @@ describe(`when querying for a vocabulary list: fetch by ID`, () => {
                                     accessControlList: new AccessControlList().toDTO(),
                                     entries: [
                                         {
-                                            term: publishedTerm.clone({
-                                                isPublished: false,
-                                                accessControlList: new AccessControlList().toDTO(),
-                                            }),
+                                            term: buildTestInstance(
+                                                TermViewForVocabularyListEntry,
+                                                {
+                                                    id: termId,
+                                                    isPublished: false,
+                                                    accessControlList:
+                                                        new AccessControlList().toDTO(),
+                                                }
+                                            ),
                                             variableValues: {},
                                         },
                                     ],

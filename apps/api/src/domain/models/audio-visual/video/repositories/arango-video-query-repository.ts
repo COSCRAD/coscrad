@@ -9,7 +9,7 @@ import { ArangoDatabase } from '../../../../../persistence/database/arango-datab
 import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
 import mapDatabaseDocumentToAggregateDTO from '../../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
-import { ArangoResourceQueryBuilder } from '../../../term/repositories/arango-resource-query-builder';
+import { BaseArangoResourceViewQueryBuilder } from '../../../term/repositories/base-arango-resource-query-builder';
 import { TranslationLineItemDto } from '../../audio-item/queries/audio-item-query-repository.interface';
 import { TranscriptLineItemDto, TranslationItem } from '../../shared/commands';
 import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
@@ -21,7 +21,9 @@ export class ArangoVideoQueryRepository implements IVideoQueryRepository {
         IDetailQueryResult<EventSourcedVideoViewModel>
     >;
 
-    private readonly baseResourceQueryBuilder = new ArangoResourceQueryBuilder('video__VIEWS');
+    private readonly baseResourceQueryBuilder = new BaseArangoResourceViewQueryBuilder(
+        'video__VIEWS'
+    );
 
     private readonly transcriptQueryBuilder = new ArangoTranscriptQueryBuilder(ResourceType.video);
 
@@ -40,6 +42,10 @@ export class ArangoVideoQueryRepository implements IVideoQueryRepository {
         await this.database.update(id, {
             isPublished: true,
         });
+    }
+
+    async tag(videoId: string, tagId: string): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.tag(videoId, tagId));
     }
 
     async createMany(view: EventSourcedVideoViewModel[]): Promise<void> {
