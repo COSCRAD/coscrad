@@ -8,6 +8,7 @@ import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/environment';
 import { CommandInfoService } from '../../../../../app/controllers/command/services/command-info-service';
 import { TermCommandsModule } from '../../../../../app/domain-modules/term.commands.module';
+import { WebOfKnowledgeModule } from '../../../../../app/domain-modules/web-of-knowledge.module';
 import { ConsoleCoscradCliLogger } from '../../../../../coscrad-cli/logging';
 import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
@@ -23,6 +24,7 @@ import { TermViewModel } from '../../../../../queries/buildViewModelForResource/
 import { TestEventStream } from '../../../../../test-data/events';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { ArangoAudioItemQueryRepository } from '../../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
+import { Attributor } from '../../../shared/common-event-handlers/attributor.event-handler';
 import { ITermQueryRepository } from '../../queries';
 import { ArangoTermQueryRepository } from '../../repositories/arango-term-query-repository';
 import { TermCreated } from './term-created.event';
@@ -49,7 +51,7 @@ const termCreated = new TestEventStream()
     })
     .as({
         id: termId,
-        type: AggregateType.digitalText,
+        type: AggregateType.term,
     })[0]; // There is only one event in this stream, which is the target event
 
 describe(`TermCreatedEventHandler`, () => {
@@ -62,7 +64,19 @@ describe(`TermCreatedEventHandler`, () => {
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
             providers: [CommandInfoService, TermCreatedEventHandler],
-            imports: [PersistenceModule.forRootAsync(), CommandModule, TermCommandsModule],
+            imports: [
+                PersistenceModule.forRootAsync(),
+                CommandModule,
+                TermCommandsModule,
+                /**
+                 * This is necessary for attributions to be picked up
+                 * under our current approach.
+                 *
+                 * TODO Should we have a separate test for attribution
+                 * that uses a scenario test approach?
+                 */
+                WebOfKnowledgeModule,
+            ],
         })
             .overrideProvider(ConfigService)
             .useValue(
@@ -115,6 +129,24 @@ describe(`TermCreatedEventHandler`, () => {
 
             // @ts-expect-error Fix this issue
             await handler.handle(termCreated);
+
+            const _proto = Object.getPrototypeOf(handler);
+
+            const _handlerName = _proto.constructor.name;
+
+            /**
+             * TODO Move this out to a scenario test or do this with Cypress
+             *
+             * We don't want to test the attribution explicitly in event handler tests.
+             * We do this as a one-off in the present test so we have some test coverage for now.
+             * Eventually, we will update our approach so that each update is wrapped in a transaction
+             * that also writes the attribution. For now, we perform attribution in a separate,
+             * non-atomic handler, so that if this handler fails, attribution
+             * retries don't lead to duplicate writes. Alternatively, we could
+             * make handlers idempotent, but this complicates the logic for
+             * queries and makes them harder to understand.
+             */
+            await app.get(Attributor).handle(termCreated);
 
             const searchResult = await testQueryRepository.fetchById(termId);
 

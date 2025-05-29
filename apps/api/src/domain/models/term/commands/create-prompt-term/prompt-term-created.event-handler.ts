@@ -14,7 +14,5 @@ export class PromptTermCreatedEventHandler implements ICoscradEventHandler {
         const term = TermViewModel.fromPromptTermCreated(event);
 
         await this.termRepository.create(term);
-
-        await this.termRepository.attribute(event.payload.aggregateCompositeIdentifier.id, event);
     }
 }

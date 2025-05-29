@@ -1,6 +1,5 @@
 import { ResourceType } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
-import { InternalError } from '../../../../lib/errors/InternalError';
 import { AUDIO_QUERY_REPOSITORY_TOKEN } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { VIDEO_QUERY_REPOSITORY_TOKEN } from '../../audio-visual/video/queries';
 import { PHOTOGRAPH_QUERY_REPOSITORY_TOKEN } from '../../photograph/queries';
@@ -62,8 +61,16 @@ export class ArangoQueryRepositoryProvider implements IQueryRepositoryProvider {
             return this.songQueryRepository;
         }
 
-        throw new InternalError(
-            `Failed to provide a query repository for unsupported resource type: ${resourceType}`
-        );
+        /**
+         * We don't want event consumers to blow up. It's their job to check
+         * if the method exists. We might want a `Maybe<T>` return type instead
+         * to enforce this check.
+         */
+        return {} as T;
+
+        // TODO log here
+        // throw new InternalError(
+        //     `Failed to provide a query repository for unsupported resource type: ${resourceType}`
+        // );
     }
 }

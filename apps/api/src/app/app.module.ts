@@ -30,6 +30,7 @@ import { TagModule } from './domain-modules/tag.module';
 import { TermModule } from './domain-modules/term.module';
 import { UserManagementModule } from './domain-modules/user-management.module';
 import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
+import { WebOfKnowledgeModule } from './domain-modules/web-of-knowledge.module';
 
 @Module({
     providers: [ArangoDatabaseProvider, ArangoRepositoryProvider, CommandInfoService],
@@ -46,6 +47,7 @@ import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
         EventModule,
         IdGenerationModule,
         UserManagementModule,
+        WebOfKnowledgeModule,
         TagModule,
         EdgeConnectionModule,
         MediaItemModule,

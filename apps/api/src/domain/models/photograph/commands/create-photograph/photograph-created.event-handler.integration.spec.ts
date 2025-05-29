@@ -19,7 +19,6 @@ import { ArangoDatabaseProvider } from '../../../../../persistence/database/data
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { TestEventStream } from '../../../../../test-data/events';
-import { assertResourceHasContributionFor } from '../../../__tests__';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { PhotographModule } from '../../photograph.module';
 import { IPhotographQueryRepository } from '../../queries';
@@ -138,7 +137,8 @@ describe(`PhotographCreatedEventHandler`, () => {
             // expect categories to be empty
             // expect notes to be empty
 
-            assertResourceHasContributionFor(dummyContributor, view);
+            // This should be tested at a higher level
+            // assertResourceHasContributionFor(dummyContributor, view);
         });
     });
 });
