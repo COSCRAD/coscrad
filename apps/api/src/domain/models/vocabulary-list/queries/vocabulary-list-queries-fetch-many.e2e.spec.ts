@@ -74,7 +74,6 @@ const publishedTerm = TermViewForVocabularyListEntry.fromDto({
     id: buildDummyUuid(101),
     isPublished: true,
     accessControlList: new AccessControlList().toDTO(),
-    name: publishedTermName,
     text: publishedTermName,
     contributions: [
         buildTestInstance(ContributionSummary, {
@@ -88,7 +87,6 @@ const privateTerm = buildTestInstance(TermViewForVocabularyListEntry, {
     id: buildDummyUuid(102),
     isPublished: false,
     accessControlList: new AccessControlList().toDTO(),
-    name: privateTermName,
     text: privateTermName,
 });
 
@@ -100,7 +98,6 @@ const unpublishedTermOrdinaryUserCanAccessName = buildMultilingualTextWithSingle
 const unpublishedTermOrdinaryUserCanAccess = buildTestInstance(TermViewForVocabularyListEntry, {
     id: buildDummyUuid(103),
     isPublished: false,
-    name: unpublishedTermOrdinaryUserCanAccessName,
     text: unpublishedTermOrdinaryUserCanAccessName,
     accessControlList: new AccessControlList().allowUser(dummySystemUserId).toDTO(),
 });
