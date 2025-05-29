@@ -598,7 +598,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
 
             expect(entrySearchResult).toBeTruthy();
 
-            const termText = new MultilingualText(entrySearchResult.term.name);
+            const termText = new MultilingualText(entrySearchResult.term.text);
 
             const { text: foundText, languageCode: foundLanguageCode } =
                 termText.getOriginalTextItem();

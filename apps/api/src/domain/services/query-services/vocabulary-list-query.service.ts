@@ -1,5 +1,6 @@
 import {
     ICommandFormAndLabels,
+    IDetailQueryResult,
     IIndexQueryResult,
     IVocabularyListViewModel,
 } from '@coscrad/api-interfaces';
@@ -64,19 +65,31 @@ export class VocabularyListQueryService {
             const forUser = entity.forUser(userWithGroups);
 
             return isNotFound(forUser) ? [] : forUser;
-        });
+        }) as VocabularyListViewModel[];
 
         const indexScopedActions = this.fetchUserActions(userWithGroups, [VocabularyList]);
 
         const result = {
             // TODO ensure actions show up on entities DO this now!
             entities: availableEntities.map((entity) => {
+                const mappedEntity =
+                    entity as unknown as IDetailQueryResult<IVocabularyListViewModel>;
+
                 const actions =
                     Array.isArray(entity.actions) && entity.actions.length > 0
                         ? fetchActionsForUser(this.commandInfoService, userWithGroups, entity)
                         : [];
 
-                entity.actions = actions;
+                mappedEntity.actions = actions;
+
+                // @ts-expect-error TODO we need to formalize the mapping layer from repositories to query responses
+                entity.entries = entity.entries.map(({ term, variableValues }) => ({
+                    term: {
+                        ...term,
+                        name: term.text,
+                    },
+                    variableValues,
+                }));
 
                 return entity as unknown as Omit<VocabularyListViewModel, 'actions'> & {
                     actions: ICommandFormAndLabels[];
@@ -86,6 +99,7 @@ export class VocabularyListQueryService {
             indexScopedActions,
         };
 
+        // @ts-expect-error fix types here
         return result;
     }
 

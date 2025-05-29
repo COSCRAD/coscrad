@@ -73,7 +73,6 @@ const publishedTerm: TermViewForVocabularyListEntry = TermViewForVocabularyListE
     id: termId,
     isPublished: true,
     accessControlList: new AccessControlList().toDTO(),
-    name: testTermText,
     text: testTermText,
     contributions: [dummyContribution],
 });

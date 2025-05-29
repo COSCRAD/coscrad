@@ -6,21 +6,19 @@ import buildMockConfigService from '../../../../../app/config/__tests__/utilitie
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/environment';
 import { ConsoleCoscradCliLogger } from '../../../../../coscrad-cli/logging';
+import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import {
+    TermViewForVocabularyListEntry,
     VocabularyListEntryViewModel,
     VocabularyListViewModel,
-} from '../../../../../queries/buildViewModelForResource/viewModels';
-import { TermViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/term.view-model';
+} from '../../../../../queries/buildViewModelForResource/viewModels/vocabulary-list.view-model';
 import { TestEventStream } from '../../../../../test-data/events';
+import { buildTestInstance } from '../../../../../test-data/utilities';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
-import { ArangoAudioItemQueryRepository } from '../../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
-import { TermCreated } from '../../../term/commands';
-import { ITermQueryRepository } from '../../../term/queries';
-import { ArangoTermQueryRepository } from '../../../term/repositories';
 import { IVocabularyListQueryRepository } from '../../queries';
 import { ArangoVocabularyListQueryRepository } from '../../repositories';
 import { VocabularyListCreated } from '../create-vocabulary-list';
@@ -66,20 +64,10 @@ const termId = buildDummyUuid(368);
 
 const termText = 'I am running';
 
-const termCreated = new TestEventStream().andThen<TermCreated>({
-    type: 'TERM_CREATED',
-    payload: {
-        text: termText,
-        languageCode: originalLanguageCode,
-    },
-});
-
-const [termCreationEvent] = termCreated.as({
-    type: AggregateType.term,
+const existingTermView = buildTestInstance(TermViewForVocabularyListEntry, {
     id: termId,
-}) as [TermCreated];
-
-const existingTermView = TermViewModel.fromTermCreated(termCreationEvent);
+    text: buildMultilingualTextWithSingleItem(termText, originalLanguageCode),
+}); // TermViewModel.fromTermCreated(termCreationEvent);
 
 const termAnalyzed = vocabularyListCreated.andThen<TermInVocabularyListAnalyzed>({
     type: 'TERM_IN_VOCABULARY_LIST_ANALYZED',
@@ -128,8 +116,6 @@ existingView.form = {
 describe(`TermInVocabularyListAnalyzedEventHandler.handle`, () => {
     let testQueryRepository: IVocabularyListQueryRepository;
 
-    let termQueryRepository: ITermQueryRepository;
-
     let databaseProvider: ArangoDatabaseProvider;
 
     let app: INestApplication;
@@ -164,14 +150,6 @@ describe(`TermInVocabularyListAnalyzedEventHandler.handle`, () => {
             new ConsoleCoscradCliLogger()
         );
 
-        const audioRepository = new ArangoAudioItemQueryRepository(connectionProvider);
-
-        termQueryRepository = new ArangoTermQueryRepository(
-            connectionProvider,
-            audioRepository,
-            new ConsoleCoscradCliLogger()
-        );
-
         eventHandler = new TermInVocabularyListAnalyzedEventHandler(testQueryRepository);
     });
 
@@ -189,8 +167,6 @@ describe(`TermInVocabularyListAnalyzedEventHandler.handle`, () => {
          * We should investigate this further.
          */
         await testQueryRepository.create(existingView);
-
-        await termQueryRepository.create(existingTermView);
     });
 
     describe(`when there is an existing vocabulary list with the given term`, () => {

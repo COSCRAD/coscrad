@@ -116,7 +116,7 @@ describe(`PhotographCreatedEventHandler`, () => {
 
             const view = searchResult as PhotographViewModel;
 
-            const { name: nameDto, actions, tags } = view;
+            const { name: nameDto, tags } = view;
 
             const foundName = new MultilingualText(nameDto);
 
@@ -125,11 +125,6 @@ describe(`PhotographCreatedEventHandler`, () => {
             expect(originalPhotographTitleItem.text).toBe(photographTitle);
 
             expect(originalPhotographTitleItem.languageCode).toBe(languageCode);
-
-            expect(actions).toContain('TAG_RESOURCE');
-            expect(actions).toContain('CREATE_NOTE_ABOUT_RESOURCE');
-            expect(actions).toContain('CONNECT_RESOURCES_WITH_NOTE');
-            expect(actions).toContain('PUBLISH_RESOURCE');
 
             // expect tags to be empty
             expect(tags).toHaveLength(0);

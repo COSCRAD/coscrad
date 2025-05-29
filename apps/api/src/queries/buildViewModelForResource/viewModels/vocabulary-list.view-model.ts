@@ -3,7 +3,6 @@ import {
     FormFieldType,
     IDynamicForm,
     IFormField,
-    IVocabularyListEntry,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { BooleanDataType, NestedDataType, UUID } from '@coscrad/data-types';
@@ -38,7 +37,6 @@ import { EventSourcedTagRecordForResourceViewModel } from './tag.view-model.even
     example: {
         id: buildDummyUuid(1),
         text: buildMultilingualTextWithSingleItem('I am jumping'),
-        name: buildMultilingualTextWithSingleItem('I am jumping'),
         mediaItemId: buildDummyUuid(22),
         isPublished: false,
         accessControlList: new AccessControlList(),
@@ -48,7 +46,6 @@ import { EventSourcedTagRecordForResourceViewModel } from './tag.view-model.even
 export class TermViewForVocabularyListEntry {
     id: AggregateId;
     text: MultilingualText;
-    name: MultilingualText;
     mediaItemId?: string;
     isPublished: boolean;
     accessControlList: AccessControlList;
@@ -57,13 +54,11 @@ export class TermViewForVocabularyListEntry {
     constructor(dto: DTO<TermViewForVocabularyListEntry>) {
         if (!dto) return;
 
-        const { id, text, name, mediaItemId, isPublished, accessControlList, contributions } = dto;
+        const { id, text, mediaItemId, isPublished, accessControlList, contributions } = dto;
 
         this.id = id;
 
         this.text = new MultilingualText(text);
-
-        this.name = new MultilingualText(name);
 
         this.mediaItemId = mediaItemId;
 
@@ -79,7 +74,7 @@ export class TermViewForVocabularyListEntry {
     }
 }
 
-export class VocabularyListEntryViewModel implements IVocabularyListEntry<string | boolean> {
+export class VocabularyListEntryViewModel {
     /**
      * Note this doesn't quite line up with the `IVocabularyListViewModel` interface.
      * This isn't a problem because we don't need to know the available actions
@@ -122,7 +117,7 @@ export class VocabularyListEntryViewModel implements IVocabularyListEntry<string
                 // TODO should we introduce a `TermViewForVocabularyList` instead?
                 term: buildTestInstance(TermViewForVocabularyListEntry, {
                     id: '123',
-                    name: buildMultilingualTextWithSingleItem('test term in vocabulary list'),
+                    text: buildMultilingualTextWithSingleItem('test term in vocabulary list'),
                     isPublished: false,
                     mediaItemId: '555',
                     accessControlList: new AccessControlList().toDTO(),
