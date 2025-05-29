@@ -5,7 +5,7 @@ import {
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { BooleanDataType, NestedDataType, ReferenceTo, UUID } from '@coscrad/data-types';
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { isBoolean, isNonEmptyObject, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { DetailScopedCommandWriteContext } from '../../../app/controllers/command/services/command-info-service';
 import { ICoscradEvent } from '../../../domain/common';
 import { buildMultilingualTextFromBilingualText } from '../../../domain/common/build-multilingual-text-from-bilingual-text';
@@ -138,11 +138,29 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
     actions: string[];
 
     constructor(dto: DTO<TermViewModel>) {
-        const { contributions, actions, mediaItemId, vocabularyLists } = dto;
+        const { actions, mediaItemId, vocabularyLists } = dto;
 
         // TODO extend base
         // super(dto);
+        const { contributions, name, id, accessControlList, tags, isPublished } = dto;
 
+        this.contributions = Array.isArray(contributions)
+            ? contributions.map((c) => ContributionSummary.fromDto(c))
+            : [];
+
+        if (isNonEmptyObject(name)) {
+            this.name = new MultilingualText(name);
+        }
+
+        this.id = id;
+
+        this.isPublished = isBoolean(isPublished) ? isPublished : false;
+
+        this.accessControlList = new AccessControlList(accessControlList);
+
+        this.tags = Array.isArray(tags)
+            ? tags.map((t) => new EventSourcedTagRecordForResourceViewModel(t))
+            : [];
         // end TODO extend base
 
         this.contributions = Array.isArray(contributions)
