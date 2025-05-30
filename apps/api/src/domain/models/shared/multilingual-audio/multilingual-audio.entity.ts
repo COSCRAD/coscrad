@@ -14,6 +14,8 @@ export class MultilingualAudio extends BaseDomainModel {
         label: `audio items`,
         description: `a list of audio for each available`,
         isArray: true,
+        // i.e., can be empty
+        isOptional: true,
     })
     readonly items: MultilingualAudioItem[];
 
