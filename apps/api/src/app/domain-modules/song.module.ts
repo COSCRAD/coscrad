@@ -16,6 +16,7 @@ import { CreateSong } from '../../domain/models/song/commands/create-song.comman
 import { CreateSongCommandHandler } from '../../domain/models/song/commands/create-song.command-handler';
 import { SongCreated } from '../../domain/models/song/commands/song-created.event';
 import { SongCreatedEventHandler } from '../../domain/models/song/commands/song-created.event-handler';
+import { SongLyricsTranslatedEventHandler } from '../../domain/models/song/commands/translate-song-lyrics/song-lyrics-translated.event-handler';
 import { SongTitleTranslatedEventHandler } from '../../domain/models/song/commands/translate-song-title/song-title-translated.event-handler';
 import { EventSourcedSongViewModel } from '../../domain/models/song/queries/song.view-model.event.sourced';
 import { Song } from '../../domain/models/song/song.entity';
@@ -60,6 +61,7 @@ import { SongController } from '../controllers/resources/song.controller';
         SongCreatedEventHandler,
         SongTitleTranslatedEventHandler,
         LyricsAddedForSongEventHandler,
+        SongLyricsTranslatedEventHandler,
     ],
 })
 export class SongModule {}
