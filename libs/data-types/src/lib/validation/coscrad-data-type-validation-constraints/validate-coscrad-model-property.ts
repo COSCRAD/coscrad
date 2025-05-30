@@ -44,13 +44,13 @@ const validateArray = (
     // Double check that if it's not optional it has length
     if (isOptional && isDeepStrictEqual(inputValue, [])) return [];
 
-    if (
-        propertyName === 'manualCredits' &&
-        Array.isArray(inputValue) &&
-        inputValue.length > 0 &&
-        inputValue[0].type === 'widget'
-    ) {
-        console.log('stop!');
+    // TODO Add regression test in this lib
+    if (!isOptional && isDeepStrictEqual(inputValue, [])) {
+        return [
+            new Error(
+                `${propertyName}: ${inputValue} has failed validation constraint: Non-Empty Array`
+            ),
+        ];
     }
 
     // At this point, we are safe to validate each member and collect the results

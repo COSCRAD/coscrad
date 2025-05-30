@@ -24,14 +24,14 @@ import { ArangoDatabaseDocument } from '../database/utilities/mapEntityDTOToData
 export class ArangoRepositoryForAggregate<TEntity extends Aggregate>
     implements IRepositoryForAggregate<TEntity>
 {
-    #arangoDatabaseForEntitysCollection: ArangoDatabaseForCollection<TEntity>;
+    protected arangoDatabaseForEntitysCollection: ArangoDatabaseForCollection<TEntity>;
 
     // Typically just uses the model constructor
-    #instanceFactory: InstanceFactory<TEntity>;
+    protected instanceFactory: InstanceFactory<TEntity>;
 
-    #mapDocumentToEntityDTO: (doc: ArangoDatabaseDocument<TEntity>) => DTO<TEntity>;
+    protected mapDocumentToEntityDTO: (doc: ArangoDatabaseDocument<TEntity>) => DTO<TEntity>;
 
-    #mapEntityDTOToDocument: (dto: DTO<TEntity>) => ArangoDatabaseDocument<TEntity>;
+    protected mapEntityDTOToDocument: (dto: DTO<TEntity>) => ArangoDatabaseDocument<TEntity>;
 
     constructor(
         arangoDatabaseProvider: ArangoDatabaseProvider,
@@ -40,18 +40,18 @@ export class ArangoRepositoryForAggregate<TEntity extends Aggregate>
         documentToEntity,
         entityToDocument
     ) {
-        this.#arangoDatabaseForEntitysCollection =
+        this.arangoDatabaseForEntitysCollection =
             arangoDatabaseProvider.getDatabaseForCollection<TEntity>(collectionName);
 
-        this.#instanceFactory = instanceFactory;
+        this.instanceFactory = instanceFactory;
 
-        this.#mapDocumentToEntityDTO = documentToEntity;
+        this.mapDocumentToEntityDTO = documentToEntity;
 
-        this.#mapEntityDTOToDocument = entityToDocument;
+        this.mapEntityDTOToDocument = entityToDocument;
     }
 
     async fetchById(id: AggregateId): Promise<ResultOrError<Maybe<TEntity>>> {
-        const searchResultForDTO = await this.#arangoDatabaseForEntitysCollection
+        const searchResultForDTO = await this.arangoDatabaseForEntitysCollection
             .fetchById(id)
             .catch((error) => {
                 const innerErrors = error.message ? [new InternalError(error.message)] : [];
@@ -65,26 +65,26 @@ export class ArangoRepositoryForAggregate<TEntity extends Aggregate>
 
         return isNotFound(searchResultForDTO)
             ? NotFound
-            : this.#instanceFactory(this.#mapDocumentToEntityDTO(searchResultForDTO));
+            : this.instanceFactory(this.mapDocumentToEntityDTO(searchResultForDTO));
     }
 
     async fetchMany(specification?: ISpecification<TEntity>): Promise<ResultOrError<TEntity>[]> {
-        return this.#arangoDatabaseForEntitysCollection
+        return this.arangoDatabaseForEntitysCollection
             .fetchMany(specification)
-            .then((dtos) => dtos.map(this.#mapDocumentToEntityDTO).map(this.#instanceFactory));
+            .then((dtos) => dtos.map(this.mapDocumentToEntityDTO).map(this.instanceFactory));
     }
 
     async getCount(): Promise<number> {
         // We assume there are no invalid DTOs here- otherwise they are included in count
-        return this.#arangoDatabaseForEntitysCollection.getCount();
+        return this.arangoDatabaseForEntitysCollection.getCount();
     }
 
     async create(entity: TEntity) {
         /**
          * TODO Write the event to the event directory atomically with the query.
          */
-        return this.#arangoDatabaseForEntitysCollection
-            .create(this.#mapEntityDTOToDocument(entity.toDTO()))
+        return this.arangoDatabaseForEntitysCollection
+            .create(this.mapEntityDTOToDocument(entity.toDTO()))
             .catch((err) => {
                 throw new InternalError(
                     `Failed to create entity: ${JSON.stringify(
@@ -99,12 +99,12 @@ export class ArangoRepositoryForAggregate<TEntity extends Aggregate>
 
         const createDTOs = entities
             .map((entity) => entity.toDTO())
-            .map((dto) => this.#mapEntityDTOToDocument(dto));
+            .map((dto) => this.mapEntityDTOToDocument(dto));
 
         /**
          * TODO Write the event to the event directory atomically with the query.
          */
-        return this.#arangoDatabaseForEntitysCollection
+        return this.arangoDatabaseForEntitysCollection
             .createMany(createDTOs as ArangoDatabaseDocument<TEntity>[])
             .catch((err) => {
                 throw new InternalError(
@@ -125,9 +125,9 @@ export class ArangoRepositoryForAggregate<TEntity extends Aggregate>
      * directly.
      */
     async update(updatedEntity: TEntity) {
-        const updatedDTO = this.#mapEntityDTOToDocument(updatedEntity.toDTO());
+        const updatedDTO = this.mapEntityDTOToDocument(updatedEntity.toDTO());
 
-        return this.#arangoDatabaseForEntitysCollection.update(
+        return this.arangoDatabaseForEntitysCollection.update(
             updatedEntity.id,
             updatedDTO as DeepPartial<ArangoDatabaseDocument<TEntity>>
         );

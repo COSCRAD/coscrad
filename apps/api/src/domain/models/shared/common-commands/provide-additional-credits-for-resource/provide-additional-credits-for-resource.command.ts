@@ -64,6 +64,7 @@ export class ProvideAdditionalCreditsForResource implements ICommandBase {
         description:
             'list of system references to the contributors who contributed this work or information',
         isArray: true,
+        isOptional: false,
     })
     /**
      * Note that this is distinct from the `contributorIds` that will show up on the

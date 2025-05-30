@@ -1,4 +1,5 @@
-import { NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
+import { AggregateType } from '@coscrad/api-interfaces';
+import { NestedDataType, NonEmptyString, ReferenceTo, UUID } from '@coscrad/data-types';
 import { InternalError } from '../../lib/errors/InternalError';
 import capitalizeFirstLetter from '../../lib/utilities/strings/capitalizeFirstLetter';
 import { DTO } from '../../types/DTO';
@@ -27,7 +28,7 @@ class ManualCredits extends BaseDomainModel {
     })
     readonly type: string;
 
-    // TODO @ReferenceTo as array
+    @ReferenceTo(AggregateType.contributor)
     @UUID({
         label: 'contributor IDs',
         description: 'list of system identifiers for contributors who contributed this work',
@@ -131,9 +132,15 @@ export abstract class Resource extends Aggregate {
     }
 
     @UpdateMethod()
-    provideAdditionalCredits<T extends Resource>(this: T, credits: DTO<ManualCredits>) {
+    provideAdditionalCredits<T extends Resource>(this: T, creditsToAdd: DTO<ManualCredits>) {
+        if (this.manualCredits.some((manualCredits) => manualCredits.type === creditsToAdd.type)) {
+            return new InternalError(
+                `You cannot add a contribution with a duplicate type: ${creditsToAdd.type}`
+            );
+        }
+
         // TODO check for duplicate contribution types?
-        this.manualCredits.push(new ManualCredits(credits));
+        this.manualCredits.push(new ManualCredits(creditsToAdd));
 
         return this;
     }
