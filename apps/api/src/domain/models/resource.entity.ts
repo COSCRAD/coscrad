@@ -44,7 +44,15 @@ class ManualCredits extends BaseDomainModel {
 
         this.type = type;
 
-        this.contributorIds = Array.isArray(contributorIds) ? contributorIds : [];
+        /**
+         * It is important that we do not default to `[]` here. If we receive
+         * a DTO with a non-array value for `contributorIds`, we want the
+         * invariant validation to report this so we can fix the data anomaly.
+         */
+        if (Array.isArray(contributorIds)) {
+            // shallow clone
+            this.contributorIds = contributorIds.map((id) => id);
+        }
     }
 }
 
@@ -66,8 +74,9 @@ export abstract class Resource extends Aggregate {
         description:
             'a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource',
         isArray: true,
+        isOptional: true,
     })
-    // TODO make this required
+    // Note that this will default to []
     readonly manualCredits?: ManualCredits[];
 
     constructor(dto: DTO<Resource>) {

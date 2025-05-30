@@ -44,6 +44,15 @@ const validateArray = (
     // Double check that if it's not optional it has length
     if (isOptional && isDeepStrictEqual(inputValue, [])) return [];
 
+    if (
+        propertyName === 'manualCredits' &&
+        Array.isArray(inputValue) &&
+        inputValue.length > 0 &&
+        inputValue[0].type === 'widget'
+    ) {
+        console.log('stop!');
+    }
+
     // At this point, we are safe to validate each member and collect the results
     return inputValue.flatMap((elementOfInputValue) =>
         validateCoscradModelProperty(
