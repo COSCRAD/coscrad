@@ -1,1 +1,1 @@
-export * from './coscrad-contributor-repository.interface.spec';
+export * from './coscrad-contributor-repository.interface';

@@ -1,4 +1,4 @@
-import { IRepositoryForAggregate } from '../../../../../domain/repositories/interfaces/repository-for-aggregate.interface';
+import { IRepositoryForAggregate } from '../../../../repositories/interfaces/repository-for-aggregate.interface';
 import { CoscradContributor } from '../entities';
 
 export const COSCRAD_CONTRIBUTOR_REPOSITORY_INJECTION_TOKEN =
