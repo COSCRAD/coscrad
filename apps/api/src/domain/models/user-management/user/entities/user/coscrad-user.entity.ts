@@ -73,6 +73,8 @@ export class CoscradUser extends Aggregate {
         label: 'roles',
         description:
             "the user's roles, which grant privileges to perform certain read \\ write actions",
+        // i.e., can be empty
+        isOptional: true,
     })
     readonly roles: CoscradUserRole[];
 

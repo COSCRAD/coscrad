@@ -26,7 +26,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "coscradDataType": "COMPOSITE_IDENTIFIER",
         "description": "the composite identifier of every resource or note with this tag",
         "isArray": true,
-        "isOptional": false,
+        "isOptional": true,
         "label": "members",
       },
       "name": {
@@ -161,7 +161,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "coscradDataType": "COMPOSITE_IDENTIFIER",
             "description": "the composite identifier of every resource or note in this category",
             "isArray": true,
-            "isOptional": false,
+            "isOptional": true,
             "label": "members",
           },
           "name": {
@@ -281,7 +281,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "coscradDataType": "COMPOSITE_IDENTIFIER",
         "description": "the composite identifier of every resource or note in this category",
         "isArray": true,
-        "isOptional": false,
+        "isOptional": true,
         "label": "members",
       },
       "name": {
@@ -541,7 +541,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "enumLabel": "User Role",
         "enumName": "COSCRAD_USER_ROLE",
         "isArray": true,
-        "isOptional": false,
+        "isOptional": true,
         "label": "roles",
         "labelsAndValues": [
           {
@@ -851,7 +851,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "enumLabel": "User Role",
             "enumName": "COSCRAD_USER_ROLE",
             "isArray": true,
-            "isOptional": false,
+            "isOptional": true,
             "label": "roles",
             "labelsAndValues": [
               {

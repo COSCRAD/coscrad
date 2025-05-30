@@ -35,6 +35,8 @@ export class CoscradUserGroup extends Aggregate {
         isArray: true,
         label: 'user IDs',
         description: 'the ID of every user that is in this group',
+        // i.e., may be empty
+        isOptional: true,
     })
     readonly userIds: string[];
 

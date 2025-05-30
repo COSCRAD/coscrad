@@ -57,6 +57,8 @@ export class Tag extends Aggregate implements HasLabel {
         isArray: true,
         label: 'members',
         description: 'the composite identifier of every resource or note with this tag',
+        // i.e., can be empty
+        isOptional: true,
     })
     members: CategorizableCompositeIdentifier[];
 

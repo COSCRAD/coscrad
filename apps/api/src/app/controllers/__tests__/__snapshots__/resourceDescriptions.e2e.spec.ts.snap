@@ -2215,7 +2215,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "complexDataType": "NESTED_TYPE",
                 "description": "a list of audio for each available",
                 "isArray": true,
-                "isOptional": false,
+                "isOptional": true,
                 "label": "audio items",
                 "name": "MultilingualAudioItem",
                 "schema": {

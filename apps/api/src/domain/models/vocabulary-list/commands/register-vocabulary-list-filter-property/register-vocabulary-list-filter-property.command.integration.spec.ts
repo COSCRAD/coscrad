@@ -23,6 +23,7 @@ import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
+import InvalidCommandPayloadTypeError from '../../../shared/common-command-errors/InvalidCommandPayloadTypeError';
 import { InvalidValueForCheckboxFilterPropertyError } from '../../entities/invalid-value-for-checkbox-filter-property.error';
 import { InvalidValueForSelectFilterPropertyError } from '../../entities/invalid-value-for-select-filter-property.error';
 import { VocabularyList } from '../../entities/vocabulary-list.entity';
@@ -31,7 +32,6 @@ import {
     DuplicateValueForVocabularyListFilterPropertyValueError,
 } from '../../errors';
 import { DuplicateLabelForVocabularyListFilterPropertyValueError } from '../../errors/duplicate-label-for-vocabulary-list-filter-property-value.error';
-import { VocabularyListFilterPropertyMustHaveAtLeastOneAllowedValueError } from '../../errors/vocabulary-list-filter-property-must-have-at-least-one-allowed-value.error';
 import { VocabularyListCreated } from '../create-vocabulary-list';
 import { REGISTER_VOCABULARY_LIST_FILTER_PROPERTY } from './constants';
 import {
@@ -275,15 +275,15 @@ describe(commandType, () => {
                                 allowedValuesAndLabels: [],
                             }),
                         checkError: (error) => {
-                            assertErrorAsExpected(
-                                error,
-                                new CommandExecutionError([
-                                    new VocabularyListFilterPropertyMustHaveAtLeastOneAllowedValueError(
-                                        existingVocabularyList.id,
-                                        nameOfPropertyWithNoValues
-                                    ),
-                                ])
+                            expect(error).toBeInstanceOf(InvalidCommandPayloadTypeError);
+
+                            const invalidMessages = [error.toString()].filter(
+                                (m) =>
+                                    !m.includes('allowedValuesAndLabels') ||
+                                    !m.includes('Non-Empty Array')
                             );
+
+                            expect(invalidMessages).toEqual([]);
                         },
                     });
                 });

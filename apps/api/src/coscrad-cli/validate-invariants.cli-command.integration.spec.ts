@@ -5,7 +5,6 @@ import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
 import { buildMultilingualTextWithSingleItem } from '../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../domain/common/entities/multilingual-text';
-import { Valid } from '../domain/domainModelValidators/Valid';
 import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
 import { buildFakeTimersConfig } from '../domain/models/__tests__/utilities/buildFakeTimersConfig';
 import { buildTestTerm } from '../domain/models/term/test-data/build-test-term';
@@ -115,11 +114,9 @@ describe.skip(`**${cliCommandName}**`, () => {
 
         const termValidationError = invalidTerm.validateInvariants();
 
-        expect(termValidationError).not.toBe(Valid);
-
         const expectedErrorMessage = (
             termValidationError as InternalError
-        ).innerErrors[0].innerErrors[0].toString();
+        ).innerErrors[0].toString();
 
         const testDataWithoutTerms = buildTestDataInFlatFormat();
 
