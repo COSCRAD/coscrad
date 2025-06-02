@@ -52,18 +52,10 @@ export class AudioItemQueryService {
     ): Promise<Maybe<IDetailQueryResult<IAudioItemViewModel>>> {
         const result = await this.audioItemQueryRepository.fetchById(id);
 
-        if (isNotFound(result)) return result;
+        if (!isNotFound(result))
+            result.actions = fetchActionsForUser(this.commandInfoService, userWithGroups, result);
 
-        const audioItem = result.forUser(userWithGroups);
-
-        if (isNotFound(audioItem)) {
-            return audioItem;
-        }
-
-        return {
-            ...result,
-            actions: fetchActionsForUser(this.commandInfoService, userWithGroups, result),
-        };
+        return result;
     }
 
     async fetchMany(
@@ -78,21 +70,7 @@ export class AudioItemQueryService {
                 userWithGroups,
                 AudioItem
             ),
-            entities: result.flatMap((audioItem) => {
-                const result = audioItem.forUser(userWithGroups);
-
-                if (isNotFound(result)) {
-                    return [];
-                }
-
-                result.actions = fetchActionsForUser(
-                    this.commandInfoService,
-                    userWithGroups,
-                    result
-                );
-
-                return result;
-            }),
+            entities: result,
         };
     }
 
