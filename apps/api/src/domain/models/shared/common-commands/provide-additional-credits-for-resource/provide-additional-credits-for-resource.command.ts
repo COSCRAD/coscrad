@@ -78,7 +78,7 @@ export class ProvideAdditionalCreditsForResource implements ICommandBase {
      * TODO Can't we avoid this?
      */
     static fromDto(dto: DTO<ProvideAdditionalCreditsForResource>) {
-        const out = new ProvideAdditionalCreditsForResource();
+        const instance = new ProvideAdditionalCreditsForResource();
 
         if (!dto) {
             return;
@@ -86,12 +86,12 @@ export class ProvideAdditionalCreditsForResource implements ICommandBase {
 
         const { aggregateCompositeIdentifier, contributionType, contributorIds } = dto;
 
-        out[AGGREGATE_COMPOSITE_IDENTIFIER] = aggregateCompositeIdentifier;
+        instance[AGGREGATE_COMPOSITE_IDENTIFIER] = aggregateCompositeIdentifier;
 
-        out.contributionType = contributionType;
+        instance.contributionType = contributionType;
 
-        out.contributorIds = contributorIds;
+        instance.contributorIds = contributorIds;
 
-        return out;
+        return instance;
     }
 }

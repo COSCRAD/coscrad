@@ -37,11 +37,6 @@ import InvalidExternalStateError from '../../common-command-errors/InvalidExtern
 import { ProvideAdditionalCreditsForResource } from './provide-additional-credits-for-resource.command';
 import { ProvideAdditionalCreditsForResourceCommandHandler } from './provide-additional-credits-for-resource.command-handler';
 
-/**
- * Ideally, we would use any old string here. But for now, because the command
- * schema uses the `ResourceType` to build payload type constraitns, we have to use
- * a known resource type.
- */
 const WIDGET_TYPE = 'widget';
 
 const WIDGET_COLLECTION_NAME = 'widgets';
@@ -224,6 +219,24 @@ describe(commandType, () => {
                                     mapEntityDTOToDatabaseDocument(c.toDTO())
                                 )
                             );
+                    },
+                    checkStateOnSuccess: async () => {
+                        const result = (await testRepositoryProvider
+                            .forResource(WIDGET_TYPE as ResourceType)
+                            .fetchById(
+                                validCommandPayload.aggregateCompositeIdentifier.id
+                            )) as Widget;
+
+                        expect(result.manualCredits).toHaveLength(dummyContributorIds.length);
+
+                        const missingCredits = dummyContributorIds.filter(
+                            (testContributorId) =>
+                                !result.manualCredits.some(({ contributorIds }) =>
+                                    contributorIds.includes(testContributorId)
+                                )
+                        );
+
+                        expect(missingCredits).toEqual([]);
                     },
                 }
             );
