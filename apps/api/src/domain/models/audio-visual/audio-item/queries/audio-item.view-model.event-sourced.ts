@@ -4,15 +4,18 @@ import {
     MIMEType,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { isNonEmptyObject } from '@coscrad/validation-constraints';
+import { isNonEmptyObject, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { buildMultilingualTextFromBilingualText } from '../../../../../domain/common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
+import { Maybe } from '../../../../../lib/types/maybe';
+import { NotFound } from '../../../../../lib/types/not-found';
 import { BaseEventSourcedResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/base-event-sourced-resource.view-model';
 import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../../shared/access-control/access-control-list.entity';
+import { CoscradUserWithGroups } from '../../../user-management/user/entities/user/coscrad-user-with-groups';
 import { Transcript } from '../../shared/entities/transcript.entity';
 import { AudioItemCreated } from '../commands/create-audio-item/audio-item-created.event';
 
@@ -40,9 +43,6 @@ import { AudioItemCreated } from '../commands/create-audio-item/audio-item-creat
 export class EventSourcedAudioItemViewModel extends BaseEventSourcedResourceViewModel {
     type: ResourceType = ResourceType.audioItem;
 
-    getAvailableCommands(): string[] {
-        throw new Error('Method not implemented.');
-    }
     actions: ICommandFormAndLabels[];
     mediaItemId: AggregateId;
     mimeType?: MIMEType;
@@ -82,6 +82,47 @@ export class EventSourcedAudioItemViewModel extends BaseEventSourcedResourceView
         } else {
             this.transcript = Transcript.buildEmpty();
         }
+    }
+
+    public forUser(
+        userWithGroups?: CoscradUserWithGroups
+    ): Maybe<Omit<EventSourcedAudioItemViewModel, 'queryAccessControlList' | 'episodes'>> {
+        // TODO find a way to share this logic
+        if (isNullOrUndefined(userWithGroups)) {
+            if (this.isPublished) {
+                /**
+                 * we may want to remove media item IDs, although the media query
+                 * service will not return media in case the user has access to
+                 * the audio item but not the raw media item.
+                 */
+                return this;
+            }
+
+            return NotFound;
+        }
+
+        if (this.isPublished) {
+            return this;
+        }
+
+        if (!this.accessControlList.canUserWithGroups(userWithGroups)) {
+            return NotFound;
+        }
+
+        return this;
+    }
+
+    getAvailableCommands(): string[] {
+        const allCommands = [
+            'DELETE_RESOURCE',
+            'CREATE_NOTE_ABOUT_RESOURCE',
+            'CONNECT_RESOURCES_WITH_NOTE',
+            'TAG_RESOURCE',
+        ];
+
+        allCommands.push(this.isPublished ? 'UNPUBLISH_RESOURCE' : 'PUBLISH_RESOURCE');
+
+        return allCommands;
     }
 
     static fromAudioItemCreated({

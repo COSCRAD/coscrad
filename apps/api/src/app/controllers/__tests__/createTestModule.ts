@@ -688,16 +688,11 @@ export default async (
             {
                 provide: AudioItemQueryService,
                 useFactory: (
-                    repositoryProvider: ArangoRepositoryProvider,
+                    queryRepo: IAudioItemQueryRepository,
                     commandInfoService: CommandInfoService,
                     configService: ConfigService
-                ) =>
-                    new AudioItemQueryService(
-                        repositoryProvider,
-                        commandInfoService,
-                        configService
-                    ),
-                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService, ConfigService],
+                ) => new AudioItemQueryService(queryRepo, commandInfoService, configService),
+                inject: [AUDIO_QUERY_REPOSITORY_TOKEN, CommandInfoService, ConfigService],
             },
             {
                 provide: VideoQueryService,

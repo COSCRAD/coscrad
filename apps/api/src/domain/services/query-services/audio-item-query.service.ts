@@ -1,70 +1,66 @@
-import { AggregateType, IAudioItemViewModel, IMediaAnnotation } from '@coscrad/api-interfaces';
-import { Inject } from '@nestjs/common';
+import {
+    IAudioItemViewModel,
+    IDetailQueryResult,
+    IIndexQueryResult,
+    IMediaAnnotation,
+} from '@coscrad/api-interfaces';
+import { Inject, NotImplementedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
-import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
+import { Maybe } from '../../../lib/types/maybe';
+import { isNotFound } from '../../../lib/types/not-found';
 import { StateBasedAudioItemViewModel } from '../../../queries/buildViewModelForResource/viewModels/audio-visual/audio-item.view-model.state-based';
 import { AudioItem } from '../../models/audio-visual/audio-item/entities/audio-item.entity';
+import {
+    AUDIO_QUERY_REPOSITORY_TOKEN,
+    IAudioItemQueryRepository,
+} from '../../models/audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import BaseDomainModel from '../../models/base-domain-model.entity';
-import { MediaItem } from '../../models/media-item/entities/media-item.entity';
-import { validAggregateOrThrow } from '../../models/shared/functional';
-import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
+import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';
 import { AggregateId } from '../../types/AggregateId';
-import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
-import { buildAnnotationsFromSnapshot } from './build-annotations-from-snapshot';
-import { ResourceQueryService } from './resource-query.service';
+import { fetchActionsForUser } from './utilities/fetch-actions-for-user';
 
 export type AudioLineageRecord = {
     filename: string;
     audioItemId: AggregateId;
 };
 
-export class AudioItemQueryService extends ResourceQueryService<
-    AudioItem,
-    Omit<IAudioItemViewModel, 'actions'>
-> {
+export class AudioItemQueryService {
     protected readonly type = ResourceType.audioItem;
 
     constructor(
-        @Inject(REPOSITORY_PROVIDER_TOKEN) repositoryProvider: IRepositoryProvider,
-        @Inject(CommandInfoService) commandInfoService: CommandInfoService,
+        @Inject(AUDIO_QUERY_REPOSITORY_TOKEN)
+        private readonly audioItemQueryRepository: IAudioItemQueryRepository,
+        @Inject(CommandInfoService) private readonly commandInfoService: CommandInfoService,
         private readonly configService: ConfigService
-    ) {
-        super(repositoryProvider, commandInfoService);
+    ) {}
+
+    async fetchById(
+        id: AggregateId,
+        userWithGroups?: CoscradUserWithGroups
+    ): Promise<Maybe<IDetailQueryResult<IAudioItemViewModel>>> {
+        const result = await this.audioItemQueryRepository.fetchById(id);
+
+        if (isNotFound(result)) return result;
+
+        const audioItem = result.forUser(userWithGroups);
+
+        if (isNotFound(audioItem)) {
+            return audioItem;
+        }
+
+        return {
+            ...result,
+            actions: fetchActionsForUser(this.commandInfoService, userWithGroups, result),
+        };
     }
 
-    protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
-        const _audioItems = await this.repositoryProvider
-            .forResource<AudioItem>(AggregateType.audioItem)
-            .fetchMany()
-            .catch((error) => {
-                console.log(error);
-            });
-
-        const [
-            audioItemSearchResult,
-            mediaItemSearchResult,
-            noteSearchResult,
-            contributorSearchResult,
-            tagSearchResult,
-        ] = await Promise.all([
-            this.repositoryProvider.forResource<AudioItem>(AggregateType.audioItem).fetchMany(),
-            this.repositoryProvider.forResource<MediaItem>(AggregateType.mediaItem).fetchMany(),
-            // Can we at least put the `fetch notes for` here?
-            this.repositoryProvider.getEdgeConnectionRepository().fetchMany(),
-            this.repositoryProvider.getContributorRepository().fetchMany(),
-            this.repositoryProvider.getTagRepository().fetchMany(),
-        ]);
-
-        return new DeluxeInMemoryStore({
-            [AggregateType.audioItem]: audioItemSearchResult.filter(validAggregateOrThrow),
-            [AggregateType.mediaItem]: mediaItemSearchResult.filter(validAggregateOrThrow),
-            [AggregateType.note]: noteSearchResult.filter(validAggregateOrThrow),
-            [AggregateType.contributor]: contributorSearchResult.filter(validAggregateOrThrow),
-            [AggregateType.tag]: tagSearchResult.filter(validAggregateOrThrow),
-        }).fetchFullSnapshotInLegacyFormat();
+    async fetchMany(
+        _userWithGroups?: CoscradUserWithGroups
+    ): Promise<IIndexQueryResult<IAudioItemViewModel>> {
+        throw new NotImplementedException('fetchMany');
     }
 
     buildViewModel(
@@ -85,43 +81,16 @@ export class AudioItemQueryService extends ResourceQueryService<
     }
 
     async getAnnotations(): Promise<IMediaAnnotation[]> {
-        const flastSnapshot = await this.fetchRequiredExternalState();
+        throw new NotImplementedException('get annotations must be refactored');
 
-        const inMemoryStore = new DeluxeInMemoryStore(flastSnapshot);
+        // const flastSnapshot = await this.fetchRequiredExternalState();
 
-        return buildAnnotationsFromSnapshot(inMemoryStore);
+        // const inMemoryStore = new DeluxeInMemoryStore(flastSnapshot);
+
+        // return buildAnnotationsFromSnapshot(inMemoryStore);
     }
 
     async getMediaLineage(): Promise<AudioLineageRecord[]> {
-        const audioItems = await this.repositoryProvider
-            .forResource<AudioItem>(ResourceType.audioItem)
-            .fetchMany();
-
-        const mediaItems = await this.repositoryProvider
-            .forResource<MediaItem>(ResourceType.mediaItem)
-            .fetchMany();
-
-        const mediaFilenameById = mediaItems
-            .filter(validAggregateOrThrow)
-            .reduce(
-                (table, mediaItem) =>
-                    table.set(mediaItem.id, mediaItem.getName().getOriginalTextItem().text),
-                new Map()
-            );
-
-        const mediaFilenameByAudioItemId = audioItems
-            .filter(validAggregateOrThrow)
-            .reduce((table, audioItem) => {
-                const { id, mediaItemId } = audioItem;
-
-                const filename = mediaFilenameById.get(mediaItemId);
-
-                return table.set(id, filename);
-            }, new Map());
-
-        return Array.from(mediaFilenameByAudioItemId.entries()).map(([audioItemId, filename]) => ({
-            audioItemId,
-            filename,
-        }));
+        throw new NotImplementedException('get media lineage must be refactored');
     }
 }
