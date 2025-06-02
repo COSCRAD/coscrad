@@ -115,6 +115,31 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isOptional": false,
     "label": "ID",
   },
+  "manualCredits": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
+    "isArray": true,
+    "isOptional": true,
+    "label": "manual credits",
+    "name": "ManualCredits",
+    "schema": {
+      "contributorIds": {
+        "coscradDataType": "UUID",
+        "description": "list of system identifiers for contributors who contributed this work",
+        "isArray": true,
+        "isOptional": false,
+        "label": "contributor IDs",
+        "referenceTo": "contributor",
+      },
+      "type": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "statement of the type of work that was contributed",
+        "isArray": false,
+        "isOptional": false,
+        "label": "contribution type",
+      },
+    },
+  },
 }
 `;
 
@@ -178,6 +203,31 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "ID",
+  },
+  "manualCredits": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
+    "isArray": true,
+    "isOptional": true,
+    "label": "manual credits",
+    "name": "ManualCredits",
+    "schema": {
+      "contributorIds": {
+        "coscradDataType": "UUID",
+        "description": "list of system identifiers for contributors who contributed this work",
+        "isArray": true,
+        "isOptional": false,
+        "label": "contributor IDs",
+        "referenceTo": "contributor",
+      },
+      "type": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "statement of the type of work that was contributed",
+        "isArray": false,
+        "isOptional": false,
+        "label": "contribution type",
+      },
+    },
   },
 }
 `;
@@ -290,6 +340,31 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isOptional": false,
     "label": "ID",
   },
+  "manualCredits": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
+    "isArray": true,
+    "isOptional": true,
+    "label": "manual credits",
+    "name": "ManualCredits",
+    "schema": {
+      "contributorIds": {
+        "coscradDataType": "UUID",
+        "description": "list of system identifiers for contributors who contributed this work",
+        "isArray": true,
+        "isOptional": false,
+        "label": "contributor IDs",
+        "referenceTo": "contributor",
+      },
+      "type": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "statement of the type of work that was contributed",
+        "isArray": false,
+        "isOptional": false,
+        "label": "contribution type",
+      },
+    },
+  },
 }
 `;
 
@@ -299,7 +374,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the ID of every category that is a child (sub-cateogry) of this one",
     "isArray": true,
-    "isOptional": false,
+    "isOptional": true,
     "label": "children IDs",
   },
   "id": {
@@ -320,7 +395,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "coscradDataType": "COMPOSITE_IDENTIFIER",
     "description": "the composite identifier of every resource or note in this category",
     "isArray": true,
-    "isOptional": false,
+    "isOptional": true,
     "label": "members",
   },
 }
@@ -466,7 +541,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "complexDataType": "NESTED_TYPE",
         "description": "a list of audio for each available",
         "isArray": true,
-        "isOptional": false,
+        "isOptional": true,
         "label": "audio items",
         "name": "MultilingualAudioItem",
         "schema": {
@@ -536,6 +611,31 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isOptional": false,
     "label": "ID",
   },
+  "manualCredits": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
+    "isArray": true,
+    "isOptional": true,
+    "label": "manual credits",
+    "name": "ManualCredits",
+    "schema": {
+      "contributorIds": {
+        "coscradDataType": "UUID",
+        "description": "list of system identifiers for contributors who contributed this work",
+        "isArray": true,
+        "isOptional": false,
+        "label": "contributor IDs",
+        "referenceTo": "contributor",
+      },
+      "type": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "statement of the type of work that was contributed",
+        "isArray": false,
+        "isOptional": false,
+        "label": "contribution type",
+      },
+    },
+  },
   "pages": {
     "complexDataType": "NESTED_TYPE",
     "description": "a digital representation of the digital text's pages",
@@ -556,7 +656,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "complexDataType": "NESTED_TYPE",
             "description": "a list of audio for each available",
             "isArray": true,
-            "isOptional": false,
+            "isOptional": true,
             "label": "audio items",
             "name": "MultilingualAudioItem",
             "schema": {
@@ -864,6 +964,31 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isOptional": true,
     "label": "length (ms)",
   },
+  "manualCredits": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
+    "isArray": true,
+    "isOptional": true,
+    "label": "manual credits",
+    "name": "ManualCredits",
+    "schema": {
+      "contributorIds": {
+        "coscradDataType": "UUID",
+        "description": "list of system identifiers for contributors who contributed this work",
+        "isArray": true,
+        "isOptional": false,
+        "label": "contributor IDs",
+        "referenceTo": "contributor",
+      },
+      "type": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "statement of the type of work that was contributed",
+        "isArray": false,
+        "isOptional": false,
+        "label": "contribution type",
+      },
+    },
+  },
   "mimeType": {
     "complexDataType": "ENUM",
     "description": "technical specification of the format of the media item",
@@ -963,7 +1088,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "complexDataType": "NESTED_TYPE",
         "description": "a list of audio for each available",
         "isArray": true,
-        "isOptional": false,
+        "isOptional": true,
         "label": "audio items",
         "name": "MultilingualAudioItem",
         "schema": {
@@ -1360,6 +1485,31 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isOptional": false,
     "label": "ID",
   },
+  "manualCredits": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
+    "isArray": true,
+    "isOptional": true,
+    "label": "manual credits",
+    "name": "ManualCredits",
+    "schema": {
+      "contributorIds": {
+        "coscradDataType": "UUID",
+        "description": "list of system identifiers for contributors who contributed this work",
+        "isArray": true,
+        "isOptional": false,
+        "label": "contributor IDs",
+        "referenceTo": "contributor",
+      },
+      "type": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "statement of the type of work that was contributed",
+        "isArray": false,
+        "isOptional": false,
+        "label": "contribution type",
+      },
+    },
+  },
   "mediaItemId": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "reference to the media item for this photograph",
@@ -1523,6 +1673,31 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             ],
           },
         },
+      },
+    },
+  },
+  "manualCredits": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
+    "isArray": true,
+    "isOptional": true,
+    "label": "manual credits",
+    "name": "ManualCredits",
+    "schema": {
+      "contributorIds": {
+        "coscradDataType": "UUID",
+        "description": "list of system identifiers for contributors who contributed this work",
+        "isArray": true,
+        "isOptional": false,
+        "label": "contributor IDs",
+        "referenceTo": "contributor",
+      },
+      "type": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "statement of the type of work that was contributed",
+        "isArray": false,
+        "isOptional": false,
+        "label": "contribution type",
       },
     },
   },
@@ -1740,6 +1915,31 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
       },
     },
   },
+  "manualCredits": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
+    "isArray": true,
+    "isOptional": true,
+    "label": "manual credits",
+    "name": "ManualCredits",
+    "schema": {
+      "contributorIds": {
+        "coscradDataType": "UUID",
+        "description": "list of system identifiers for contributors who contributed this work",
+        "isArray": true,
+        "isOptional": false,
+        "label": "contributor IDs",
+        "referenceTo": "contributor",
+      },
+      "type": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "statement of the type of work that was contributed",
+        "isArray": false,
+        "isOptional": false,
+        "label": "contribution type",
+      },
+    },
+  },
   "title": {
     "complexDataType": "NESTED_TYPE",
     "description": "the title of the song",
@@ -1849,6 +2049,31 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isOptional": false,
     "label": "ID",
   },
+  "manualCredits": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
+    "isArray": true,
+    "isOptional": true,
+    "label": "manual credits",
+    "name": "ManualCredits",
+    "schema": {
+      "contributorIds": {
+        "coscradDataType": "UUID",
+        "description": "list of system identifiers for contributors who contributed this work",
+        "isArray": true,
+        "isOptional": false,
+        "label": "contributor IDs",
+        "referenceTo": "contributor",
+      },
+      "type": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "statement of the type of work that was contributed",
+        "isArray": false,
+        "isOptional": false,
+        "label": "contribution type",
+      },
+    },
+  },
 }
 `;
 
@@ -1861,6 +2086,31 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isOptional": false,
     "label": "ID",
   },
+  "manualCredits": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
+    "isArray": true,
+    "isOptional": true,
+    "label": "manual credits",
+    "name": "ManualCredits",
+    "schema": {
+      "contributorIds": {
+        "coscradDataType": "UUID",
+        "description": "list of system identifiers for contributors who contributed this work",
+        "isArray": true,
+        "isOptional": false,
+        "label": "contributor IDs",
+        "referenceTo": "contributor",
+      },
+      "type": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "statement of the type of work that was contributed",
+        "isArray": false,
+        "isOptional": false,
+        "label": "contribution type",
+      },
+    },
+  },
 }
 `;
 
@@ -1872,6 +2122,31 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "ID",
+  },
+  "manualCredits": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
+    "isArray": true,
+    "isOptional": true,
+    "label": "manual credits",
+    "name": "ManualCredits",
+    "schema": {
+      "contributorIds": {
+        "coscradDataType": "UUID",
+        "description": "list of system identifiers for contributors who contributed this work",
+        "isArray": true,
+        "isOptional": false,
+        "label": "contributor IDs",
+        "referenceTo": "contributor",
+      },
+      "type": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "statement of the type of work that was contributed",
+        "isArray": false,
+        "isOptional": false,
+        "label": "contribution type",
+      },
+    },
   },
 }
 `;
@@ -1896,7 +2171,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "coscradDataType": "COMPOSITE_IDENTIFIER",
     "description": "the composite identifier of every resource or note with this tag",
     "isArray": true,
-    "isOptional": false,
+    "isOptional": true,
     "label": "members",
   },
 }
@@ -1916,7 +2191,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "complexDataType": "NESTED_TYPE",
         "description": "a list of audio for each available",
         "isArray": true,
-        "isOptional": false,
+        "isOptional": true,
         "label": "audio items",
         "name": "MultilingualAudioItem",
         "schema": {
@@ -1984,6 +2259,31 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": true,
     "label": "is prompt term",
+  },
+  "manualCredits": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
+    "isArray": true,
+    "isOptional": true,
+    "label": "manual credits",
+    "name": "ManualCredits",
+    "schema": {
+      "contributorIds": {
+        "coscradDataType": "UUID",
+        "description": "list of system identifiers for contributors who contributed this work",
+        "isArray": true,
+        "isOptional": false,
+        "label": "contributor IDs",
+        "referenceTo": "contributor",
+      },
+      "type": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "statement of the type of work that was contributed",
+        "isArray": false,
+        "isOptional": false,
+        "label": "contribution type",
+      },
+    },
   },
   "sourceProject": {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -2107,6 +2407,31 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "length (ms)",
+  },
+  "manualCredits": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
+    "isArray": true,
+    "isOptional": true,
+    "label": "manual credits",
+    "name": "ManualCredits",
+    "schema": {
+      "contributorIds": {
+        "coscradDataType": "UUID",
+        "description": "list of system identifiers for contributors who contributed this work",
+        "isArray": true,
+        "isOptional": false,
+        "label": "contributor IDs",
+        "referenceTo": "contributor",
+      },
+      "type": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "statement of the type of work that was contributed",
+        "isArray": false,
+        "isOptional": false,
+        "label": "contribution type",
+      },
+    },
   },
   "mediaItemId": {
     "coscradDataType": "UUID",
@@ -2441,7 +2766,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "enumLabel": "User Role",
     "enumName": "COSCRAD_USER_ROLE",
     "isArray": true,
-    "isOptional": false,
+    "isOptional": true,
     "label": "roles",
     "labelsAndValues": [
       {
@@ -2495,7 +2820,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the ID of every user that is in this group",
     "isArray": true,
-    "isOptional": false,
+    "isOptional": true,
     "label": "user IDs",
   },
 }
@@ -2516,6 +2841,31 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "length (ms)",
+  },
+  "manualCredits": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
+    "isArray": true,
+    "isOptional": true,
+    "label": "manual credits",
+    "name": "ManualCredits",
+    "schema": {
+      "contributorIds": {
+        "coscradDataType": "UUID",
+        "description": "list of system identifiers for contributors who contributed this work",
+        "isArray": true,
+        "isOptional": false,
+        "label": "contributor IDs",
+        "referenceTo": "contributor",
+      },
+      "type": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "statement of the type of work that was contributed",
+        "isArray": false,
+        "isOptional": false,
+        "label": "contribution type",
+      },
+    },
   },
   "mediaItemId": {
     "coscradDataType": "UUID",
@@ -2812,6 +3162,31 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isArray": false,
     "isOptional": false,
     "label": "ID",
+  },
+  "manualCredits": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
+    "isArray": true,
+    "isOptional": true,
+    "label": "manual credits",
+    "name": "ManualCredits",
+    "schema": {
+      "contributorIds": {
+        "coscradDataType": "UUID",
+        "description": "list of system identifiers for contributors who contributed this work",
+        "isArray": true,
+        "isOptional": false,
+        "label": "contributor IDs",
+        "referenceTo": "contributor",
+      },
+      "type": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "statement of the type of work that was contributed",
+        "isArray": false,
+        "isOptional": false,
+        "label": "contribution type",
+      },
+    },
   },
   "name": {
     "complexDataType": "NESTED_TYPE",

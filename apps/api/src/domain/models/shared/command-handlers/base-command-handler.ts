@@ -5,6 +5,7 @@ import {
     ICommandBase,
 } from '@coscrad/api-interfaces';
 import { Ack, ICommand, ICommandHandler } from '@coscrad/commands';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
@@ -17,7 +18,7 @@ import { IRepositoryForAggregate } from '../../../repositories/interfaces/reposi
 import { IRepositoryProvider } from '../../../repositories/interfaces/repository-provider.interface';
 import { AggregateId } from '../../../types/AggregateId';
 import { DeluxeInMemoryStore } from '../../../types/DeluxeInMemoryStore';
-import { InMemorySnapshot, isResourceType } from '../../../types/ResourceType';
+import { InMemorySnapshot } from '../../../types/ResourceType';
 import { Aggregate } from '../../aggregate.entity';
 import InvalidExternalReferenceByAggregateError from '../../categories/errors/InvalidExternalReferenceByAggregateError';
 import CommandExecutionError from '../common-command-errors/CommandExecutionError';
@@ -56,10 +57,6 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
         const { type: aggregateType } = this.getAggregateIdFromCommand(command);
 
         // TODO a `forAggregate` method on the repository provider would be better
-        if (isResourceType(aggregateType))
-            return this.repositoryProvider.forResource(
-                aggregateType
-            ) as unknown as IRepositoryForAggregate<T>;
 
         if (aggregateType === AggregateType.note)
             return this.repositoryProvider.getEdgeConnectionRepository() as unknown as IRepositoryForAggregate<T>;
@@ -83,10 +80,23 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
             return this.repositoryProvider.getContributorRepository() as unknown as IRepositoryForAggregate<T>;
         }
 
-        const exhaustiveCheck: never = aggregateType;
+        /**
+         * Note that this is a catch all for `type:ResourceType`. We have removed
+         * the static type safety to support novel resource types in tests of
+         * generic handlers.
+         */
+        const searchResult = this.repositoryProvider.forResource(
+            aggregateType
+        ) as unknown as IRepositoryForAggregate<T>;
+
+        if (!isNullOrUndefined(searchResult)) {
+            return searchResult;
+        }
+
+        // const exhaustiveCheck: never = aggregateType;
 
         throw new InternalError(
-            `Failed to find repository for aggregate of type: ${exhaustiveCheck}`
+            `Failed to find repository for aggregate of type: ${aggregateType}`
         );
     }
 

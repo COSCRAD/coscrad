@@ -53,6 +53,8 @@ export class Category extends Aggregate implements HasLabel {
         isArray: true,
         label: 'members',
         description: 'the composite identifier of every resource or note in this category',
+        // i.e., can be empty
+        isOptional: true,
     })
     readonly members: CategorizableCompositeIdentifier[];
 
@@ -62,6 +64,8 @@ export class Category extends Aggregate implements HasLabel {
         isArray: true,
         label: 'children IDs',
         description: 'the ID of every category that is a child (sub-cateogry) of this one',
+        // i.e., can be empty
+        isOptional: true,
     })
     readonly childrenIDs: AggregateId[];
 

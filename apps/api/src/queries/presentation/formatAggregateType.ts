@@ -1,7 +1,6 @@
 import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { AggregateType } from '../../domain/types/AggregateType';
 import { ResourceType } from '../../domain/types/ResourceType';
-import { InternalError } from '../../lib/errors/InternalError';
 
 type AggregateTypeAndLabel = {
     [K in AggregateType]: string;
@@ -32,7 +31,13 @@ export default (aggregateType: AggregateType): string => {
     const label = resourceTypeAndLabel[aggregateType];
 
     if (!isNonEmptyString(label)) {
-        throw new InternalError(`Failed to find label for resource type: ${aggregateType}`);
+        /**
+         * Note that we used to throw in this case. But we want to leave
+         * aggregate types dynamic to avoid strongly coupling tests for
+         * generic commands and events to the concrete domain. This is especially
+         * important when it comes to avoiding the use of `ResourceType` here.
+         */
+        return aggregateType;
     }
 
     return label;

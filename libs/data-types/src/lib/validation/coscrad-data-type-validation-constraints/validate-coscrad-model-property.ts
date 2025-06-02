@@ -44,6 +44,15 @@ const validateArray = (
     // Double check that if it's not optional it has length
     if (isOptional && isDeepStrictEqual(inputValue, [])) return [];
 
+    // TODO Add regression test in this lib
+    if (!isOptional && isDeepStrictEqual(inputValue, [])) {
+        return [
+            new Error(
+                `${propertyName}: ${inputValue} has failed validation constraint: Non-Empty Array`
+            ),
+        ];
+    }
+
     // At this point, we are safe to validate each member and collect the results
     return inputValue.flatMap((elementOfInputValue) =>
         validateCoscradModelProperty(

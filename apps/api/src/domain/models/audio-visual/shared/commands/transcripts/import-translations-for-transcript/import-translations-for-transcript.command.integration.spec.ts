@@ -28,7 +28,6 @@ import { AudioVisualCompositeIdentifier } from '../../../../audio-item/entities/
 import { AudioItem } from '../../../../audio-item/entities/audio-item.entity';
 import { TranscriptItem } from '../../../entities/transcript-item.entity';
 import { Transcript } from '../../../entities/transcript.entity';
-import { NoTranslationsProvidedError } from '../../../transcript-errors';
 import { LineItemAddedToTranscript } from '../add-line-item-to-transcript/line-item-added-to-transcript.event';
 import { ParticipantAddedToTranscript } from '../add-participant-to-transcript/participant-added-to-transcript.event';
 import { IMPORT_TRANSLATIONS_FOR_TRANSCRIPT } from '../constants';
@@ -407,12 +406,9 @@ describe(commandType, () => {
                                 translationItems: [],
                             }),
                         checkError: (error) => {
-                            assertErrorAsExpected(
-                                error,
-                                //  TODO make this a type error
-                                // new InvalidCommandPayloadTypeError(commandType, [])
-                                new CommandExecutionError([new NoTranslationsProvidedError()])
-                            );
+                            expect(error).toBeInstanceOf(InvalidCommandPayloadTypeError);
+
+                            expect(error.toString().includes('Non-Empty Array')).toBe(true);
                         },
                     });
                 });

@@ -1,6 +1,5 @@
-import { CoscradContributor } from '../../models/user-management/contributor/entities/coscrad-contributor.entity';
-import { IRepositoryForAggregate } from './repository-for-aggregate.interface';
+import { ICoscradContributorRepository } from '../../models/user-management';
 
-export interface IContributorRepository {
-    getContributorRepository: () => IRepositoryForAggregate<CoscradContributor>;
+export interface IContributorRepositoryProvider {
+    getContributorRepository: () => ICoscradContributorRepository;
 }

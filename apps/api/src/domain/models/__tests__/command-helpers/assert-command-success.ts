@@ -1,6 +1,7 @@
-import { Ack, ICommand } from '@coscrad/commands';
+import { Ack, CommandHandlerService, ICommand } from '@coscrad/commands';
 import { CommandFSA } from '../../../../app/controllers/command/command-fsa/command-fsa.entity';
 import { InMemorySnapshot } from '../../../../domain/types/ResourceType';
+import { IRepositoryProvider } from '../../../repositories/interfaces/repository-provider.interface';
 import { AggregateId } from '../../../types/AggregateId';
 import { CommandAssertionDependencies } from '../command-helpers/types/CommandAssertionDependencies';
 
@@ -24,6 +25,12 @@ interface TestCaseV2 extends BaseTestCase {
     seedInitialState: () => Promise<void>;
 }
 
+interface DependenciesV2 {
+    // not `TestRepositoryProvider` so we can override this with mock implementations more easily
+    testRepositoryProvider: IRepositoryProvider;
+    commandHandlerService: CommandHandlerService;
+}
+
 const isTestCaseV2 = (input: StateBasedTestCase | TestCaseV2): input is TestCaseV2 =>
     typeof (input as TestCaseV2).seedInitialState === 'function';
 
@@ -36,7 +43,7 @@ export async function assertCommandSuccess(
 ): Promise<void>;
 
 export async function assertCommandSuccess(
-    dependencies: Omit<CommandAssertionDependencies, 'idManager'>,
+    dependencies: DependenciesV2,
     testCase: TestCaseV2
 ): Promise<void>;
 
@@ -45,7 +52,7 @@ export async function assertCommandSuccess(
  * which allows for ID generation.
  */
 export async function assertCommandSuccess(
-    dependencies: Omit<CommandAssertionDependencies, 'idManager'>,
+    dependencies: Omit<CommandAssertionDependencies, 'idManager'> | DependenciesV2,
     testCase: StateBasedTestCase | TestCaseV2
 ): Promise<void> {
     const { buildValidCommandFSA: buildCommandFSA, checkStateOnSuccess, systemUserId } = testCase;
@@ -55,6 +62,7 @@ export async function assertCommandSuccess(
     const resolvedSeedInitialState = isTestCaseV2(testCase)
         ? testCase.seedInitialState
         : async () => {
+              // @ts-expect-error TODO correlate input params
               await testRepositoryProvider.addFullSnapshot(testCase.initialState);
           };
 

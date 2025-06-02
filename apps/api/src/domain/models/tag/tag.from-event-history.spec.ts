@@ -81,16 +81,18 @@ describe(`Tag.fromEventHistory`, () => {
         });
 
         describe(`when a tag has been relabelled`, () => {
-            const result = Tag.fromEventHistory(
-                tagRelabelled.as(aggregateCompositeIdentifier),
-                tagId
-            );
+            it(`should apply the new label`, () => {
+                const result = Tag.fromEventHistory(
+                    tagRelabelled.as(aggregateCompositeIdentifier),
+                    tagId
+                );
 
-            expect(result).toBeInstanceOf(Tag);
+                expect(result).toBeInstanceOf(Tag);
 
-            const tag = result as Tag;
+                const tag = result as Tag;
 
-            expect(tag.label).toBe(newLabel);
+                expect(tag.label).toBe(newLabel);
+            });
         });
     });
 

@@ -5,7 +5,10 @@ import buildInstanceFactory from '../../domain/factories/utilities/buildInstance
 import { EdgeConnection } from '../../domain/models/context/edge-connection.entity';
 import { Resource } from '../../domain/models/resource.entity';
 import { Tag } from '../../domain/models/tag/tag.entity';
-import { CoscradContributor } from '../../domain/models/user-management/contributor/entities/coscrad-contributor.entity';
+import {
+    ArangoContributorRepository,
+    ICoscradContributorRepository,
+} from '../../domain/models/user-management';
 import { CoscradUserGroup } from '../../domain/models/user-management/group/entities/coscrad-user-group.entity';
 import { ICategoryRepository } from '../../domain/repositories/interfaces/category-repository.interface';
 import { IRepositoryForAggregate } from '../../domain/repositories/interfaces/repository-for-aggregate.interface';
@@ -86,14 +89,9 @@ export class ArangoRepositoryProvider implements IRepositoryProvider {
         );
     }
 
-    getContributorRepository(): IRepositoryForAggregate<CoscradContributor> {
-        return new ArangoRepositoryForAggregate(
-            this.databaseProvider,
-            ArangoCollectionId.contributors,
-            buildInstanceFactory(CoscradContributor),
-            mapDatabaseDTOToEntityDTO,
-            mapEntityDTOToDatabaseDTO
-        );
+    getContributorRepository(): ICoscradContributorRepository {
+        // Should this be called `ArangoCoscradContributorRepository`?
+        return new ArangoContributorRepository(this.databaseProvider);
     }
 
     getEventRepository(): IEventRepository {
