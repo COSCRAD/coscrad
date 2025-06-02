@@ -4,7 +4,7 @@ import {
     MultilingualTextItemRole,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { CommandHandler, ICommand } from '@coscrad/commands';
+import { CommandHandler } from '@coscrad/commands';
 import { DeluxeInMemoryStore } from '../../../../..//domain/types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../..//domain/types/ResourceType';
 import {
@@ -13,12 +13,12 @@ import {
 } from '../../../../../domain/common/entities/multilingual-text';
 import { Valid } from '../../../../../domain/domainModelValidators/Valid';
 import { InternalError } from '../../../../../lib/errors/InternalError';
+import { isNotFound } from '../../../../../lib/types/not-found';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import getInstanceFactoryForResource from '../../../../factories/get-instance-factory-for-resource';
 import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
-import { validAggregateOrThrow } from '../../../shared/functional';
 import { MultilingualAudio } from '../../../shared/multilingual-audio/multilingual-audio.entity';
 import { Term } from '../../entities/term.entity';
 import { CreatePromptTerm } from './create-prompt-term.command';
@@ -63,11 +63,15 @@ export class CreatePromptTermCommandHandler extends BaseCreateCommandHandler<Ter
         return factory(createDto) as ResultOrError<Term>;
     }
 
-    protected async fetchRequiredExternalState(_?: ICommand): Promise<InMemorySnapshot> {
-        const allTerms = await this.repositoryProvider.forResource(AggregateType.term).fetchMany();
+    protected async fetchRequiredExternalState({
+        aggregateCompositeIdentifier: { id },
+    }: CreatePromptTerm): Promise<InMemorySnapshot> {
+        const allTerms = await this.repositoryProvider
+            .forResource(AggregateType.term)
+            .fetchById(id);
 
         return new DeluxeInMemoryStore({
-            [AggregateType.term]: allTerms.filter(validAggregateOrThrow),
+            [AggregateType.term]: isNotFound(allTerms) ? [] : [allTerms as Term],
         }).fetchFullSnapshotInLegacyFormat();
     }
 

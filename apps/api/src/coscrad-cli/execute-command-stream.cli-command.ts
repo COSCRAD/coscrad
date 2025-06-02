@@ -367,7 +367,30 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
                 },
             });
 
-            if (commandTypeToReferentialPropertyPaths.has(commandType)) {
+            if (fsa.type === 'IMPORT_ENTRIES_TO_VOCABULARY_LIST') {
+                const newEntries = (
+                    fsaToExecute.payload as ImportEntriesToVocabularyList
+                ).entries.map((entry) => {
+                    const customIdParseResult = parseSlugDefinition(entry.termId);
+
+                    const referenceIdToUse = isInternalError(customIdParseResult)
+                        ? idOnPayload
+                        : // look up the UUID corresponding to this slug
+                          idMap.get(customIdParseResult[1]);
+
+                    return {
+                        propertyValues: entry.propertyValues,
+                        termId: referenceIdToUse,
+                    };
+                });
+
+                fsaToExecute = cloneWithOverridesByDeepPath(
+                    fsaToExecute,
+                    // payload.entries
+                    'payload.entries',
+                    newEntries
+                );
+            } else if (commandTypeToReferentialPropertyPaths.has(commandType)) {
                 commandTypeToReferentialPropertyPaths.get(commandType).forEach((fullPath) => {
                     const value = getDeepPropertyFromObject(fsaToExecute, fullPath);
 
@@ -384,39 +407,6 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
                                 `Using slugs for arrays of references is not yet supported. Found array with references: ${
                                     isNullOrUndefined(value) ? '' : JSON.stringify(value)
                                 } on command FSA: ${JSON.stringify(fsaToExecute)}`
-                            );
-                        }
-
-                        if (fsa.type === 'IMPORT_ENTRIES_TO_VOCABULARY_LIST') {
-                            const newEntries = (
-                                fsaToExecute.payload as ImportEntriesToVocabularyList
-                            ).entries.map((entry) => {
-                                const customIdParseResult = parseSlugDefinition(entry.termId);
-
-                                const referenceIdToUse = isInternalError(customIdParseResult)
-                                    ? idOnPayload
-                                    : // look up the UUID corresponding to this slug
-                                      idMap.get(customIdParseResult[1]);
-
-                                return {
-                                    propertyValues: entry.propertyValues,
-                                    termId: referenceIdToUse,
-                                };
-                            });
-
-                            fsaToExecute = cloneWithOverridesByDeepPath(
-                                fsaToExecute,
-                                // payload.entries
-                                'payload.entries',
-                                newEntries
-                            );
-
-                            this.logger.log(
-                                `Updated FSA with nested array of references: ${JSON.stringify(
-                                    fsaToExecute
-                                )} to add new entries: ${JSON.stringify(
-                                    newEntries
-                                )} at path: ${fullPath}`
                             );
                         }
                     }
