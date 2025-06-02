@@ -93,8 +93,8 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
     > {
         const documents = await this.database.fetchMany();
 
-        return documents.map(
-            mapDatabaseDocumentToAggregateDTO
+        return documents.map((doc) =>
+            EventSourcedAudioItemViewModel.fromDto(mapDatabaseDocumentToAggregateDTO(doc))
         ) as (EventSourcedAudioItemViewModel & {
             actions: ICommandFormAndLabels[];
         })[];

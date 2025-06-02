@@ -1,7 +1,6 @@
 import {
     Controller,
     Get,
-    NotImplementedException,
     Param,
     Request,
     UseFilters,
@@ -46,8 +45,8 @@ export class AudioItemController {
     @ApiBearerAuth('JWT')
     @UseGuards(OptionalJwtAuthGuard)
     @Get('')
-    async fetchMany(@Request() _req) {
-        throw new NotImplementedException('Controller.fetchMany');
+    async fetchMany(@Request() req) {
+        return this.audioItemQueryService.fetchMany(req.user || undefined);
     }
 
     // This is an interesting feature, but requires us to inject access to the domain database.

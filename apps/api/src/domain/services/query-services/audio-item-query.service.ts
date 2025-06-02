@@ -58,9 +58,33 @@ export class AudioItemQueryService {
     }
 
     async fetchMany(
-        _userWithGroups?: CoscradUserWithGroups
+        userWithGroups?: CoscradUserWithGroups
     ): Promise<IIndexQueryResult<IAudioItemViewModel>> {
-        throw new NotImplementedException('fetchMany');
+        const result = await this.audioItemQueryRepository.fetchMany();
+
+        return {
+            // TODO Use `AudioItemViewModel` here
+            indexScopedActions: fetchActionsForUser(
+                this.commandInfoService,
+                userWithGroups,
+                AudioItem
+            ),
+            entities: result.flatMap((audioItem) => {
+                const result = audioItem.forUser(userWithGroups);
+
+                if (isNotFound(result)) {
+                    return [];
+                }
+
+                result.actions = fetchActionsForUser(
+                    this.commandInfoService,
+                    userWithGroups,
+                    result
+                );
+
+                return result;
+            }),
+        };
     }
 
     buildViewModel(
