@@ -292,6 +292,7 @@ import {
     VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
 } from '../../../domain/models/vocabulary-list/queries';
 import { ArangoVocabularyListQueryRepository } from '../../../domain/models/vocabulary-list/repositories';
+import { IRepositoryProvider } from '../../../domain/repositories/interfaces/repository-provider.interface';
 import { AudioItemQueryService } from '../../../domain/services/query-services/audio-item-query.service';
 import { BibliographicCitationQueryService } from '../../../domain/services/query-services/bibliographic-citation-query.service';
 import { CoscradUserGroupQueryService } from '../../../domain/services/query-services/coscrad-user-group-query.service';
@@ -688,11 +689,23 @@ export default async (
             {
                 provide: AudioItemQueryService,
                 useFactory: (
+                    domainRepoProvider: IRepositoryProvider,
                     queryRepo: IAudioItemQueryRepository,
                     commandInfoService: CommandInfoService,
                     configService: ConfigService
-                ) => new AudioItemQueryService(queryRepo, commandInfoService, configService),
-                inject: [AUDIO_QUERY_REPOSITORY_TOKEN, CommandInfoService, ConfigService],
+                ) =>
+                    new AudioItemQueryService(
+                        domainRepoProvider,
+                        queryRepo,
+                        commandInfoService,
+                        configService
+                    ),
+                inject: [
+                    REPOSITORY_PROVIDER_TOKEN,
+                    AUDIO_QUERY_REPOSITORY_TOKEN,
+                    CommandInfoService,
+                    ConfigService,
+                ],
             },
             {
                 provide: VideoQueryService,

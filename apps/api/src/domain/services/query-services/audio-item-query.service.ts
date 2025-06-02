@@ -4,22 +4,25 @@ import {
     IIndexQueryResult,
     IMediaAnnotation,
 } from '@coscrad/api-interfaces';
-import { Inject, NotImplementedException } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
-import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { Maybe } from '../../../lib/types/maybe';
 import { isNotFound } from '../../../lib/types/not-found';
-import { StateBasedAudioItemViewModel } from '../../../queries/buildViewModelForResource/viewModels/audio-visual/audio-item.view-model.state-based';
+import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
 import { AudioItem } from '../../models/audio-visual/audio-item/entities/audio-item.entity';
 import {
     AUDIO_QUERY_REPOSITORY_TOKEN,
     IAudioItemQueryRepository,
 } from '../../models/audio-visual/audio-item/queries/audio-item-query-repository.interface';
-import BaseDomainModel from '../../models/base-domain-model.entity';
+import { MediaItem } from '../../models/media-item/entities/media-item.entity';
+import { validAggregateOrThrow } from '../../models/shared/functional';
 import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';
+import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
 import { AggregateId } from '../../types/AggregateId';
-import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
+import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
+import { ResourceType } from '../../types/ResourceType';
+import { buildAnnotationsFromSnapshot } from './build-annotations-from-snapshot';
 import { fetchActionsForUser } from './utilities/fetch-actions-for-user';
 
 export type AudioLineageRecord = {
@@ -31,6 +34,12 @@ export class AudioItemQueryService {
     protected readonly type = ResourceType.audioItem;
 
     constructor(
+        /**
+         * TODO remove this dependency. We only use it for media item joins. A
+         * good step would be to inject a `MediaManagementService` here instead.
+         */
+        @Inject(REPOSITORY_PROVIDER_TOKEN)
+        private readonly domainRepositoryProvider: IRepositoryProvider,
         @Inject(AUDIO_QUERY_REPOSITORY_TOKEN)
         private readonly audioItemQueryRepository: IAudioItemQueryRepository,
         @Inject(CommandInfoService) private readonly commandInfoService: CommandInfoService,
@@ -87,34 +96,51 @@ export class AudioItemQueryService {
         };
     }
 
-    buildViewModel(
-        transcribedAudioInstance: AudioItem,
-        { resources: { mediaItem: mediaItems }, contributor: allContributors }: InMemorySnapshot
-    ): // note that actions (available commands) are added at a higher level
-    Omit<IAudioItemViewModel, 'actions'> {
-        return new StateBasedAudioItemViewModel(
-            transcribedAudioInstance,
-            mediaItems,
-            allContributors,
-            `${this.configService.get('BASE_URL')}/${this.configService.get('GLOBAL_PREFIX')}`
-        );
-    }
-
-    getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {
-        return [AudioItem as unknown as DomainModelCtor<AudioItem>];
-    }
-
     async getAnnotations(): Promise<IMediaAnnotation[]> {
-        throw new NotImplementedException('get annotations must be refactored');
+        const audioItems = (
+            await this.domainRepositoryProvider.forResource(ResourceType.audioItem).fetchMany()
+        ).filter(validAggregateOrThrow);
 
-        // const flastSnapshot = await this.fetchRequiredExternalState();
+        const mediaItems = (
+            await this.domainRepositoryProvider
+                .forResource<MediaItem>(ResourceType.mediaItem)
+                .fetchMany()
+        ).filter(validAggregateOrThrow);
 
-        // const inMemoryStore = new DeluxeInMemoryStore(flastSnapshot);
+        const inMemoryStore = new DeluxeInMemoryStore({
+            audioItem: audioItems,
+            mediaItem: mediaItems,
+        });
 
-        // return buildAnnotationsFromSnapshot(inMemoryStore);
+        return buildAnnotationsFromSnapshot(inMemoryStore);
     }
 
     async getMediaLineage(): Promise<AudioLineageRecord[]> {
-        throw new NotImplementedException('get media lineage must be refactored');
+        const audioItems = await this.audioItemQueryRepository.fetchMany();
+
+        const mediaItems = await this.domainRepositoryProvider
+            .forResource<MediaItem>(ResourceType.mediaItem)
+            .fetchMany();
+
+        const mediaFilenameById = mediaItems
+            .filter(validAggregateOrThrow)
+            .reduce(
+                (table, mediaItem) =>
+                    table.set(mediaItem.id, mediaItem.getName().getOriginalTextItem().text),
+                new Map()
+            );
+
+        const mediaFilenameByAudioItemId = audioItems.reduce((table, audioItem) => {
+            const { id, mediaItemId } = audioItem;
+
+            const filename = mediaFilenameById.get(mediaItemId);
+
+            return table.set(id, filename);
+        }, new Map());
+
+        return Array.from(mediaFilenameByAudioItemId.entries()).map(([audioItemId, filename]) => ({
+            audioItemId,
+            filename,
+        }));
     }
 }
