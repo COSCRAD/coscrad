@@ -1,4 +1,5 @@
 import { IMultilingualText, ResourceType } from '@coscrad/api-interfaces';
+import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { Card, CardContent, Grid } from '@mui/material';
 import { ReactNode } from 'react';
 import { routes } from '../../../../app/routes/routes';
@@ -38,7 +39,14 @@ export const ResourceDetailThumbnailPresenter = ({
                 </Grid>
                 <Grid item xs={2} sm={2} md={7}>
                     {/* TODO: consider putting a standardized name property on the view models */}
-                    <ResourceDetailPresenterHeader id={id} type={type} name={name} variant="h5" />
+                    {isNonEmptyObject(name) ? (
+                        <ResourceDetailPresenterHeader
+                            id={id}
+                            type={type}
+                            name={name}
+                            variant="h5"
+                        />
+                    ) : null}
                     {children}
                 </Grid>
                 <Grid item xs={2} sm={1} md={3} sx={{ display: 'flex' }} justifyContent="flex-end">

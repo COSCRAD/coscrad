@@ -1,6 +1,9 @@
 import {
     IBibliographicCitationViewModel,
     IJournalArticleBibliographicCitationData,
+    IMultilingualText,
+    LanguageCode,
+    MultilingualTextItemRole,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import {
@@ -28,7 +31,15 @@ export const JournalArticleBibliographicCitationDetailFullViewPresenter = ({
     // Temporary workaround until `name` is on IBaseViewModel
     const { title, creators, url } = data;
 
-    const name = title;
+    const name: IMultilingualText = {
+        items: [
+            {
+                languageCode: LanguageCode.English,
+                text: title,
+                role: MultilingualTextItemRole.original,
+            },
+        ],
+    };
 
     return (
         <ResourceDetailFullViewPresenter
