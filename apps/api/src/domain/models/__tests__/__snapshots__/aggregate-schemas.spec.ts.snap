@@ -2171,7 +2171,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "coscradDataType": "COMPOSITE_IDENTIFIER",
     "description": "the composite identifier of every resource or note with this tag",
     "isArray": true,
-    "isOptional": false,
+    "isOptional": true,
     "label": "members",
   },
 }
@@ -2766,7 +2766,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "enumLabel": "User Role",
     "enumName": "COSCRAD_USER_ROLE",
     "isArray": true,
-    "isOptional": false,
+    "isOptional": true,
     "label": "roles",
     "labelsAndValues": [
       {
@@ -2820,7 +2820,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the ID of every user that is in this group",
     "isArray": true,
-    "isOptional": false,
+    "isOptional": true,
     "label": "user IDs",
   },
 }

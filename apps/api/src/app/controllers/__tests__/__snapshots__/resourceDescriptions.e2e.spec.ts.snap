@@ -624,7 +624,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "coscradDataType": "COMPOSITE_IDENTIFIER",
             "description": "the composite identifier of every resource or note with this tag",
             "isArray": true,
-            "isOptional": false,
+            "isOptional": true,
             "label": "members",
           },
           "name": {
@@ -1487,7 +1487,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "coscradDataType": "COMPOSITE_IDENTIFIER",
             "description": "the composite identifier of every resource or note with this tag",
             "isArray": true,
-            "isOptional": false,
+            "isOptional": true,
             "label": "members",
           },
           "name": {
