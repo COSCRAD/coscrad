@@ -12,5 +12,8 @@ const exceptions: Partial<Record<ResourceType, string>> = {
 const pluralizeResourceTypeInCamelCase = (resourceType: ResourceType): string =>
     exceptions[resourceType] || `${resourceType}s`;
 
+/**
+ * TODO "squeeze" this helper out in favor of `@ResourceController` then remove it.
+ */
 export default (resourceType: ResourceType): string =>
     `${RESOURCES_ROUTE_PREFIX}/${pluralizeResourceTypeInCamelCase(resourceType)}`;

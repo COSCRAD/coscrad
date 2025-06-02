@@ -8,7 +8,7 @@ import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/environment';
 import { CommandInfoService } from '../../../../../app/controllers/command/services/command-info-service';
 import { TermCommandsModule } from '../../../../../app/domain-modules/term.commands.module';
-import { WebOfKnowledgeModule } from '../../../../../app/domain-modules/web-of-knowledge.module';
+import { WebOfKnowledgeModule } from '../../../../../app/domain-modules/web-of-knowledge/web-of-knowledge.module';
 import { ConsoleCoscradCliLogger } from '../../../../../coscrad-cli/logging';
 import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
