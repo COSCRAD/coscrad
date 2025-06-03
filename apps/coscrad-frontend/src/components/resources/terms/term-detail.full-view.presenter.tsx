@@ -19,7 +19,7 @@ import { findOriginalTextItem } from '../../notes/shared/find-original-text-item
 import { isNullOrUndefined, isString } from '@coscrad/validation-constraints';
 import { Typography } from '@mui/material';
 import { ResourceNamePresenterProps } from '../../../utils/generic-components/presenters/detail-views/resource-detail-presenter-header';
-import { ExpandableMultilingualTextPresenter } from '../../../utils/generic-components/presenters/expandable-multilingual-text-presenter';
+import { MultilingualTextPresenter } from '../../../utils/generic-components/presenters/multilingual-text-presenter';
 
 const VocabularyListRecordForTermPresenter = ({
     id: termId,
@@ -66,7 +66,7 @@ const TermNamePresenter = ({ name, variant }: ResourceNamePresenterProps): JSX.E
                 name
             ) : (
                 // Should we inject the multilingual text presenter instead?
-                <ExpandableMultilingualTextPresenter text={name} />
+                <MultilingualTextPresenter text={name} expanded={true} />
             )}
         </Typography>
     );

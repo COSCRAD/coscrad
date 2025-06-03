@@ -6,13 +6,15 @@ import { MultilingualTextItemPresenter } from './multilingual-text-item-presente
 interface MultilingualTextWithTranslationsProps {
     primaryMultilingualTextItem: IMultilingualTextItem;
     translations: IMultilingualTextItem[];
+    expanded: boolean;
 }
 
 export const MultilingualTextWithTranslations = ({
     primaryMultilingualTextItem,
     translations,
+    expanded,
 }: MultilingualTextWithTranslationsProps): JSX.Element => (
-    <Accordion elevation={0}>
+    <Accordion elevation={0} expanded={expanded}>
         <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             data-testid="multilingual-text-main-text-item-with-translations"

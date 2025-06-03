@@ -8,11 +8,11 @@ import { isInLanguage } from './is-in-language';
 import { isOriginalTextItem } from './is-original-text-item';
 import { MultilingualTextWithoutTranslations } from './multilingual-text-without-translations-presenter';
 
-export interface MultilingualTextPresenterProps {
+export interface BilingualTextPresenterProps {
     text: IMultilingualText;
 }
 
-export const BilingualTextPresenter = ({ text }: MultilingualTextPresenterProps): JSX.Element => {
+export const BilingualTextPresenter = ({ text }: BilingualTextPresenterProps): JSX.Element => {
     const { defaultLanguageCode } = useContext(ConfigurableContentContext);
 
     const textItemWithDefaultLanguage = text.items.find((item) =>
