@@ -12,6 +12,7 @@ import { DetailScopedCommandWriteContext } from '../../../../app/controllers/com
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
 import { TagViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
+import { NoteRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
 import { EventSourcedTagRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { CoscradDataExample } from '../../../../test-data/utilities';
 import { DTO } from '../../../../types/DTO';
@@ -39,6 +40,7 @@ import { PhotographCreated } from '../commands';
         isPublished: false,
         contributions: [],
         accessControlList: new AccessControlList().toDTO(),
+        notes: [],
     },
 })
 export class PhotographViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
@@ -70,8 +72,6 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
 
     accessControlList: AccessControlList;
 
-    // TODO add notes
-
     @NestedDataType(ContributionSummary, {
         label: 'contributions',
         description: 'a list of all contributions to the development of this resource',
@@ -86,6 +86,13 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
         isArray: true,
     })
     tags: EventSourcedTagRecordForResourceViewModel[];
+
+    @NestedDataType(NoteRecordForResourceViewModel, {
+        label: 'notes',
+        description: 'a list of contextualized notes about this resource',
+        isArray: true,
+    })
+    notes: NoteRecordForResourceViewModel[];
     // end TODO extend base
 
     @UUID({
@@ -143,7 +150,7 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
         // TODO extend base
         // super(dto);
 
-        const { contributions, name, id, accessControlList, tags, isPublished } = dto;
+        const { contributions, name, id, accessControlList, tags, isPublished, notes } = dto;
 
         this.contributions = Array.isArray(contributions)
             ? contributions.map((c) => ContributionSummary.fromDto(c))
@@ -162,6 +169,9 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
         this.tags = Array.isArray(tags)
             ? tags.map((t) => new EventSourcedTagRecordForResourceViewModel(t))
             : [];
+
+        if (Array.isArray(notes))
+            this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));
         // end TODO extend base
 
         if (!dto) return;
@@ -202,6 +212,7 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
             contributions: [], // joined above
             accessControlList: new AccessControlList(),
             isPublished: false,
+            notes: [],
         });
     }
 

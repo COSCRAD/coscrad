@@ -23,7 +23,6 @@ import { isNotFound, NotFound } from '../../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
 import { ArangoCollectionId } from '../../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
-import mapEdgeConnectionDTOToArangoEdgeDocument from '../../../../../persistence/database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -239,7 +238,6 @@ describe(`ArangoVideoQueryRepository`, () => {
             notes: [],
         });
 
-        // TODO avoid using the domain model
         const targetNote = buildTestInstance(EdgeConnection, {
             members: [
                 {
@@ -262,17 +260,19 @@ describe(`ArangoVideoQueryRepository`, () => {
 
             await testQueryRepository.create(targetVideo);
 
-            await databaseProvider
-                .getDatabaseForCollection(ArangoCollectionId.edgeConnectionCollectionID)
-                .create(mapEdgeConnectionDTOToArangoEdgeDocument(targetNote.toDTO()));
+            /**
+             * Note that there is no need to put the target note in the domain
+             * database. The context is passed into the repo update method
+             * from the note creation event payload.
+             */
         });
 
         it(`should append a note to the video`, async () => {
-            await testQueryRepository.createNoteAbout(
-                targetVideo.id,
-                targetNote.id,
-                targetNote.members[0].context
-            );
+            await testQueryRepository.createNoteAbout(targetVideo.id, {
+                noteId: targetNote.id,
+                context: targetNote.members[0].context,
+                text: targetNote.note,
+            });
 
             const { notes } = (await testQueryRepository.fetchById(
                 targetVideo.id

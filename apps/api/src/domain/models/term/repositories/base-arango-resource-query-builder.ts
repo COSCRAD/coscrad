@@ -1,6 +1,8 @@
 import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { AqlQuery } from 'arangojs/aql';
+import { NoteRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
 import { AggregateId } from '../../../types/AggregateId';
+import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import { CoscradDate } from '../../user-management/utilities';
 
@@ -62,30 +64,26 @@ export class BaseArangoResourceViewQueryBuilder {
         };
     }
 
-    // TODO do not use domain collection
-    createNoteAbout(resourceId: AggregateId, noteId: AggregateId) {
+    createNoteAbout(resourceId: AggregateId, { noteId, context, text }: INoteCreationDto) {
         const query = `
-        LET notesToAdd = (
-            FOR n IN resource_edge_connections
-            FILTER n._key == @noteId
-            RETURN {
-                id: n._key,
-                note: n.note,
-                context: n.context
-            }
-        )
         FOR doc IN @@collectionName
         FILTER doc._key == @resourceId
         UPDATE doc WITH {
-            notes: APPEND(doc.notes,notesToAdd)
+            notes: APPEND(doc.notes,@newNote)
         }
         IN @@collectionName
         `;
 
+        const newNote = new NoteRecordForResourceViewModel({
+            id: noteId,
+            context,
+            note: text,
+        });
+
         const bindVars = {
             '@collectionName': this.collectionName,
             resourceId,
-            noteId,
+            newNote,
         };
 
         return {

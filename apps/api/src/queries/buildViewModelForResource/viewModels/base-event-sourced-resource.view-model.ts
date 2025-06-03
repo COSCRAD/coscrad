@@ -8,6 +8,7 @@ import { ContributionSummary } from '../../../domain/models/user-management';
 import { AggregateId } from '../../../domain/types/AggregateId';
 import { HasAggregateId } from '../../../domain/types/HasAggregateId';
 import { DTO } from '../../../types/DTO';
+import { NoteRecordForResourceViewModel } from './note-record-for-resource.view-model';
 import { TagViewModel } from './tag.view-model';
 import { EventSourcedTagRecordForResourceViewModel } from './tag.view-model.event-sourced';
 
@@ -41,7 +42,12 @@ export abstract class BaseEventSourcedResourceViewModel
 
     accessControlList: AccessControlList;
 
-    // TODO add notes
+    @NestedDataType(NoteRecordForResourceViewModel, {
+        label: 'notes',
+        description: 'a list of contextualized notes about this resource',
+        isArray: true,
+    })
+    notes: NoteRecordForResourceViewModel[];
 
     @NestedDataType(ContributionSummary, {
         label: 'contributions',
@@ -61,7 +67,7 @@ export abstract class BaseEventSourcedResourceViewModel
     constructor(dto: DTO<BaseEventSourcedResourceViewModel>) {
         if (!dto) return;
 
-        const { contributions, name, id, accessControlList, tags, isPublished } = dto;
+        const { contributions, name, id, accessControlList, tags, isPublished, notes } = dto;
 
         this.contributions = Array.isArray(contributions)
             ? contributions.map((c) => ContributionSummary.fromDto(c))
@@ -80,6 +86,9 @@ export abstract class BaseEventSourcedResourceViewModel
         this.tags = Array.isArray(tags)
             ? tags.map((t) => new EventSourcedTagRecordForResourceViewModel(t))
             : [];
+
+        if (Array.isArray(notes))
+            this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));
     }
 
     abstract getAvailableCommands(): string[];

@@ -9,6 +9,7 @@ import { ArangoDatabaseForCollection } from '../../../../persistence/database/ar
 import mapDatabaseDocumentToEntityDto from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDtoToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { AggregateId } from '../../../types/AggregateId';
+import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base-arango-resource-query-builder';
 import { IPhotographQueryRepository } from '../queries';
@@ -98,6 +99,10 @@ export class ArangoPhotographQueryRepository implements IPhotographQueryReposito
 
     async tag(photographId: string, tagId: string): Promise<void> {
         await this.database.query(this.baseResourceQueryBuilder.tag(photographId, tagId));
+    }
+
+    async createNoteAbout(id: string, dto: INoteCreationDto): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.createNoteAbout(id, dto));
     }
 
     async allowUser(photographId: AggregateId, userId: AggregateId): Promise<void> {

@@ -1,8 +1,4 @@
-import {
-    EdgeConnectionContextType,
-    IEdgeConnectionContext,
-    ResourceType,
-} from '@coscrad/api-interfaces';
+import { EdgeConnectionContextType, ResourceType } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -27,7 +23,11 @@ import { TestEventStream } from '../../../../../test-data/events';
 import { DTO } from '../../../../../types/DTO';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { NoteAboutResourceCreated } from './note-about-resource-created.event';
-import { NoteAboutResourceCreatedEventHandler } from './note-about-resource-created.event-handler';
+import {
+    INoteCreationDto,
+    IQueryRepositoryForAnnotatable,
+    NoteAboutResourceCreatedEventHandler,
+} from './note-about-resource-created.event-handler';
 
 const WIDGET_COLLECTION = 'widgets';
 
@@ -57,10 +57,9 @@ const knownNotes: NoteRecordForResourceViewModel[] = [
     },
 ];
 
-interface IWidgetQueryRepository {
+interface IWidgetQueryRepository extends IQueryRepositoryForAnnotatable {
     fetchById(id: string): Promise<Maybe<WidgetViewModel>>;
     create(w: WidgetViewModel): Promise<void>;
-    createNoteAbout(id: string, noteId: string, context: IEdgeConnectionContext): Promise<void>;
 }
 
 const existingWidgetView = new WidgetViewModel({
@@ -79,11 +78,7 @@ class WidgetQueryRepository implements IWidgetQueryRepository {
         );
     }
 
-    async createNoteAbout(
-        resourceId: string,
-        noteId: string,
-        _context: IEdgeConnectionContext
-    ): Promise<void> {
+    async createNoteAbout(resourceId: string, { noteId }: INoteCreationDto): Promise<void> {
         const searchResult = knownNotes.find(({ id }) => id === noteId);
 
         if (!searchResult) return;

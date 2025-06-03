@@ -1,5 +1,7 @@
 import { FromDomainModel, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
 import { isNonEmptyObject } from '@coscrad/validation-constraints';
+import { NoteRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
+import { EventSourcedTagRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { CoscradDataExample } from '../../../../test-data/utilities';
 import { DTO } from '../../../../types/DTO';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
@@ -24,6 +26,8 @@ const testEventId = buildDummyUuid(1);
         lyrics: buildMultilingualTextWithSingleItem('lalala'),
         audioURL: 'https://www.coscrad.org/lalala.mp3',
         lengthMilliseconds: 1500,
+        notes: [],
+        tags: [],
     },
 })
 export class EventSourcedSongViewModel {
@@ -33,6 +37,8 @@ export class EventSourcedSongViewModel {
     isPublished: boolean;
     accessControlList: AccessControlList;
     contributions: ContributionSummary[];
+    notes: NoteRecordForResourceViewModel[];
+    tags: EventSourcedTagRecordForResourceViewModel[];
 
     @FromSong
     readonly lyrics?: MultilingualText;
@@ -60,6 +66,9 @@ export class EventSourcedSongViewModel {
             name,
             isPublished,
             accessControlList,
+            notes,
+            tags,
+            // let's be sure we do this now
             // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-76?atlOrigin=eyJpIjoiNjRhMTdkZmVlOWFiNDAxZThmZGZiYmViY2Y5ODE4MTUiLCJwIjoiaiJ9] support this in the query service
             // contributions,
         } = dto;
@@ -86,6 +95,13 @@ export class EventSourcedSongViewModel {
         this.accessControlList = isNonEmptyObject(accessControlList)
             ? new AccessControlList(accessControlList)
             : new AccessControlList();
+
+        this.tags = Array.isArray(tags)
+            ? tags.map((t) => new EventSourcedTagRecordForResourceViewModel(t))
+            : [];
+
+        if (Array.isArray(notes))
+            this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));
     }
 
     static fromSongCreated({
@@ -107,6 +123,8 @@ export class EventSourcedSongViewModel {
             contributions: [],
             // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-76?atlOrigin=eyJpIjoiNjRhMTdkZmVlOWFiNDAxZThmZGZiYmViY2Y5ODE4MTUiLCJwIjoiaiJ9] join in media info
             lengthMilliseconds: 0,
+            tags: [],
+            notes: [],
         });
     }
 

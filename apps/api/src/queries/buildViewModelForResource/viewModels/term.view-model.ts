@@ -30,6 +30,7 @@ import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { CoscradDataExample } from '../../../test-data/utilities';
 import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
+import { NoteRecordForResourceViewModel } from './note-record-for-resource.view-model';
 import { EventSourcedTagRecordForResourceViewModel } from './tag.view-model.event-sourced';
 
 class VocabularyListRecordForTerm {
@@ -75,6 +76,7 @@ class VocabularyListRecordForTerm {
         ),
         contributions: [],
         tags: [],
+        notes: [],
         vocabularyLists: [],
     },
 })
@@ -106,8 +108,6 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
 
     accessControlList: AccessControlList;
 
-    // TODO add notes
-
     @NestedDataType(ContributionSummary, {
         label: 'contributions',
         description: 'a list of all contributions to the development of this resource',
@@ -122,6 +122,13 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
         isArray: true,
     })
     tags: EventSourcedTagRecordForResourceViewModel[];
+
+    @NestedDataType(NoteRecordForResourceViewModel, {
+        label: 'notes',
+        description: 'a list of contextualized notes about this resource',
+        isArray: true,
+    })
+    notes: NoteRecordForResourceViewModel[];
     // end TODO extend base
 
     @ReferenceTo(AggregateType.mediaItem)
@@ -142,7 +149,7 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
 
         // TODO extend base
         // super(dto);
-        const { contributions, name, id, accessControlList, tags, isPublished } = dto;
+        const { contributions, name, id, accessControlList, tags, isPublished, notes } = dto;
 
         this.contributions = Array.isArray(contributions)
             ? contributions.map((c) => ContributionSummary.fromDto(c))
@@ -161,6 +168,9 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
         this.tags = Array.isArray(tags)
             ? tags.map((t) => new EventSourcedTagRecordForResourceViewModel(t))
             : [];
+
+        if (Array.isArray(notes))
+            this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));
         // end TODO extend base
 
         this.contributions = Array.isArray(contributions)
@@ -202,6 +212,7 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
             contributions: [],
             vocabularyLists: [], // none yet
             name: buildMultilingualTextWithSingleItem(text, languageCode),
+            notes: [], // none at creation
         });
 
         term.name = buildMultilingualTextWithSingleItem(text, languageCode);
@@ -264,6 +275,7 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
             ],
             vocabularyLists: [],
             tags: [],
+            notes: [], // none at creation
         });
 
         return term;

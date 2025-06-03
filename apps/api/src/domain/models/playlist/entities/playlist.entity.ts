@@ -43,7 +43,7 @@ export class Playlist extends Resource {
     })
     name: MultilingualText;
 
-    // TODO add refrence to a photograph
+    // TODO add reference to a cover photograph
 
     @NestedDataType(PlaylistItem, {
         label: 'playlist items',

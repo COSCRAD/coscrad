@@ -12,6 +12,7 @@ import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/
 import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PlaylistViewModel } from '../../../../queries/buildViewModelForResource/viewModels/playlist.view-model';
 import { AggregateId } from '../../../types/AggregateId';
+import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base-arango-resource-query-builder';
 import { IPlaylistQueryRepository } from './playlist-query-repository.interface';
@@ -58,12 +59,8 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
         await this.database.createMany(documents);
     }
 
-    /**
-     * TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-65]
-     * We need to decide how to handle deletes in the query layer.
-     */
-    delete(_id: AggregateId): Promise<void> {
-        throw new Error('Method not implemented.');
+    async delete(id: AggregateId): Promise<void> {
+        await this.database.delete(id);
     }
 
     async publish(id: AggregateId): Promise<void> {
@@ -74,6 +71,10 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
 
     async tag(playlistId: string, tagId: string): Promise<void> {
         await this.database.query(this.baseResourceQueryBuilder.tag(playlistId, tagId));
+    }
+
+    async createNoteAbout(id: string, dto: INoteCreationDto): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.createNoteAbout(id, dto));
     }
 
     async fetchById(id: AggregateId): Promise<Maybe<PlaylistViewModel>> {

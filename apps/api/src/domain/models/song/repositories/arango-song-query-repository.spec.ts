@@ -1,4 +1,10 @@
-import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import {
+    EdgeConnectionContextType,
+    EdgeConnectionMemberRole,
+    LanguageCode,
+    MultilingualTextItemRole,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -7,14 +13,19 @@ import buildConfigFilePath from '../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../app/config/constants/environment';
 import { NotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
+import { ArangoCollectionId } from '../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
+import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { TagViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import { EdgeConnection } from '../../context/edge-connection.entity';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
+import { Tag } from '../../tag/tag.entity';
 import { ContributionSummary } from '../../user-management';
 import { ISongQueryRepository } from '../queries/song-query-repository.interface';
 import { EventSourcedSongViewModel } from '../queries/song.view-model.event.sourced';
@@ -246,6 +257,116 @@ describe(`ArangoSongQueryRepository`, () => {
             )) as EventSourcedSongViewModel;
 
             expect(updatedView.isPublished).toBe(true);
+        });
+    });
+
+    describe(`tag`, () => {
+        const existingTagLabel = 'plants';
+
+        const existingTag: TagViewModel = {
+            id: buildDummyUuid(90),
+            label: existingTagLabel,
+            name: buildMultilingualTextWithSingleItem(existingTagLabel),
+            // TODO do we want this here?
+            members: [],
+        };
+
+        const newTagId = buildDummyUuid(91);
+
+        const newTagLabel = 'animals';
+
+        // TODO use event sourced setup?
+        const newTag = buildTestInstance(Tag, {
+            id: newTagId,
+            label: newTagLabel,
+        });
+
+        const targetTerm = buildTestInstance(EventSourcedSongViewModel, {
+            tags: [existingTag],
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.getDatabaseForCollection(ArangoCollectionId.tags).clear();
+
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetTerm);
+
+            await databaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.tags)
+                .create(mapEntityDTOToDatabaseDocument(newTag.toDTO()));
+        });
+
+        it(`should tag the playlist`, async () => {
+            await testQueryRepository.tag(targetTerm.id, newTag.id);
+
+            const { tags } = (await testQueryRepository.fetchById(
+                targetTerm.id
+            )) as EventSourcedSongViewModel;
+
+            expect(tags).toHaveLength(2);
+
+            const tagSearchResult = tags.find(({ id }) => id === newTag.id);
+
+            expect(tagSearchResult).toBeTruthy();
+
+            const { label } = tagSearchResult;
+
+            expect(label).toBe(newTagLabel);
+        });
+    });
+
+    describe(`createNoteAbout`, () => {
+        const targetView = buildTestInstance(EventSourcedSongViewModel, {
+            notes: [],
+        });
+
+        const targetNote = buildTestInstance(EdgeConnection, {
+            members: [
+                {
+                    compositeIdentifier: {
+                        type: ResourceType.song,
+                        id: targetView.id,
+                    },
+                    context: { type: EdgeConnectionContextType.general },
+                    role: EdgeConnectionMemberRole.self,
+                },
+            ],
+        });
+
+        beforeEach(async () => {
+            await databaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.edgeConnectionCollectionID)
+                .clear();
+
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetView);
+
+            /**
+             * Note that there is no need to put the target note in the domain
+             * database. The context is passed into the repo update method
+             * from the note creation event payload.
+             */
+        });
+
+        it(`should append a note to the view`, async () => {
+            await testQueryRepository.createNoteAbout(targetView.id, {
+                noteId: targetNote.id,
+                context: targetNote.members[0].context,
+                text: targetNote.note,
+            });
+
+            const { notes } = (await testQueryRepository.fetchById(
+                targetView.id
+            )) as EventSourcedSongViewModel;
+
+            expect(notes).toHaveLength(1);
+
+            // TODO should the note properity have "text?"
+            const { note } = notes[0];
+
+            expect(note.toDTO()).toEqual(targetNote.note.toDTO());
         });
     });
 

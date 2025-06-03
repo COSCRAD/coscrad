@@ -1,6 +1,7 @@
 import { IMultilingualTextItem, LanguageCode } from '@coscrad/api-interfaces';
 import { Maybe } from '../../../../../lib/types/maybe';
 import { AggregateId } from '../../../../types/AggregateId';
+import { IQueryRepositoryForAnnotatable } from '../../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { IAccessible } from '../../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
 import {
     ICountable,
@@ -24,7 +25,8 @@ export interface IAudioItemQueryRepository
         IAccessible,
         ITranscriptQueryRepository,
         ICountable,
-        IQueryRepositoryForTaggable {
+        IQueryRepositoryForTaggable,
+        IQueryRepositoryForAnnotatable {
     create(view: EventSourcedAudioItemViewModel): Promise<void>;
 
     createMany(view: EventSourcedAudioItemViewModel[]): Promise<void>;

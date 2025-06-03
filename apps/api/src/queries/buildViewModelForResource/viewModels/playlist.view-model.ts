@@ -20,6 +20,7 @@ import { Maybe } from '../../../lib/types/maybe';
 import { NotFound } from '../../../lib/types/not-found';
 import { CoscradDataExample } from '../../../test-data/utilities';
 import { DTO } from '../../../types/DTO';
+import { NoteRecordForResourceViewModel } from './note-record-for-resource.view-model';
 import { EventSourcedTagRecordForResourceViewModel } from './tag.view-model.event-sourced';
 
 // TODO move this file
@@ -109,6 +110,7 @@ export class PlaylistEpisodeViewModel {
         contributions: [],
         tags: [],
         accessControlList: new AccessControlList(),
+        notes: [],
     },
 })
 export class PlaylistViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
@@ -156,6 +158,13 @@ export class PlaylistViewModel implements HasAggregateId, DetailScopedCommandWri
         isArray: true,
     })
     tags: EventSourcedTagRecordForResourceViewModel[];
+
+    @NestedDataType(NoteRecordForResourceViewModel, {
+        label: 'notes',
+        description: 'a list of contextualized notes about this resource',
+        isArray: true,
+    })
+    notes: NoteRecordForResourceViewModel[];
     // end TODO extend base
 
     /**
@@ -185,7 +194,7 @@ export class PlaylistViewModel implements HasAggregateId, DetailScopedCommandWri
     constructor(dto: DTO<PlaylistViewModel>) {
         // TODO extend base
         // super(dto);
-        const { contributions, name, id, accessControlList, tags, isPublished } = dto;
+        const { contributions, name, id, accessControlList, tags, isPublished, notes } = dto;
 
         this.contributions = Array.isArray(contributions)
             ? contributions.map((c) => ContributionSummary.fromDto(c))
@@ -205,6 +214,8 @@ export class PlaylistViewModel implements HasAggregateId, DetailScopedCommandWri
             ? tags.map((t) => new EventSourcedTagRecordForResourceViewModel(t))
             : [];
 
+        if (Array.isArray(notes))
+            this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));
         // end TODO extend base
 
         if (!dto) return;

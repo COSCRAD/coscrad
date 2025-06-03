@@ -4,13 +4,13 @@ import { AggregateId } from '../../../../types/AggregateId';
 import { IAccessible } from '../../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
 import { ITranscriptQueryRepository } from '../../shared/queries/transcript-query-repository.interface';
 
-import { IQueryRepositoryForNote } from '../../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
+import { IQueryRepositoryForAnnotatable } from '../../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import {
     ICountable,
     IPublishable,
 } from '../../../shared/common-commands/publish-resource/resource-published.event-handler';
 import { IQueryRepositoryForTaggable } from '../../../tag/commands/tag-resource-or-note/resource-or-note-tagged.event-handler';
-import { EventSourcedVideoViewModel } from './video-view-model.event-sourced';
+import { EventSourcedVideoViewModel } from './video.view-model.event-sourced';
 
 export const VIDEO_QUERY_REPOSITORY_TOKEN = 'VIDEO_QUERY_REPOSITORY_TOKEN';
 
@@ -19,9 +19,8 @@ export interface IVideoQueryRepository
         IAccessible,
         ITranscriptQueryRepository,
         ICountable,
-        // only substantial change on this branch - just opt in to this when rebasing
         IQueryRepositoryForTaggable,
-        IQueryRepositoryForNote {
+        IQueryRepositoryForAnnotatable {
     create(view: EventSourcedVideoViewModel): Promise<void>;
 
     createMany(view: EventSourcedVideoViewModel[]): Promise<void>;

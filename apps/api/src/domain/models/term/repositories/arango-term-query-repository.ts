@@ -20,6 +20,7 @@ import {
     AUDIO_QUERY_REPOSITORY_TOKEN,
     IAudioItemQueryRepository,
 } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
+import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import { ITermQueryRepository } from '../queries';
 import { BaseArangoResourceViewQueryBuilder } from './base-arango-resource-query-builder';
@@ -73,6 +74,12 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
 
     async tag(termId: string, tagId: string): Promise<void> {
         await this.database.query(this.baseResourceQueryBuilder.tag(termId, tagId));
+    }
+
+    async createNoteAbout(resourceId: string, noteCreationDto: INoteCreationDto) {
+        await this.database.query(
+            this.baseResourceQueryBuilder.createNoteAbout(resourceId, noteCreationDto)
+        );
     }
 
     /**
