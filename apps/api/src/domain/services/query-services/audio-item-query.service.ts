@@ -4,6 +4,7 @@ import {
     IIndexQueryResult,
     IMediaAnnotation,
 } from '@coscrad/api-interfaces';
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
@@ -52,8 +53,11 @@ export class AudioItemQueryService {
     ): Promise<Maybe<IDetailQueryResult<IAudioItemViewModel>>> {
         const result = await this.audioItemQueryRepository.fetchById(id);
 
-        if (!isNotFound(result))
+        if (!isNotFound(result)) {
+            (result as IAudioItemViewModel).audioURL = this.buildAudioUrl(result.mediaItemId);
+
             result.actions = fetchActionsForUser(this.commandInfoService, userWithGroups, result);
+        }
 
         return result;
     }
@@ -62,6 +66,12 @@ export class AudioItemQueryService {
         userWithGroups?: CoscradUserWithGroups
     ): Promise<IIndexQueryResult<IAudioItemViewModel>> {
         const result = await this.audioItemQueryRepository.fetchMany();
+
+        result.forEach((entity) => {
+            (entity as IAudioItemViewModel).audioURL = this.buildAudioUrl(entity.mediaItemId);
+
+            entity.actions = fetchActionsForUser(this.commandInfoService, userWithGroups, entity);
+        });
 
         return {
             // TODO Use `AudioItemViewModel` here
@@ -142,5 +152,13 @@ export class AudioItemQueryService {
             audioItemId,
             filename,
         }));
+    }
+
+    private buildAudioUrl(mediaItemId: AggregateId): string {
+        if (!isNonEmptyString(mediaItemId)) return undefined;
+
+        return `${this.configService.get('BASE_URL')}/${this.configService.get(
+            'GLOBAL_PREFIX'
+        )}/resources/mediaItems/download/${mediaItemId}`;
     }
 }

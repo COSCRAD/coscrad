@@ -15,7 +15,6 @@ import {
     Typography,
 } from '@mui/material';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
-import { SinglePropertyPresenter } from '../../../utils/generic-components/presenters/single-property-presenter';
 import { InteractiveAnnotator } from './interactive-annotator';
 
 const CREATE_NOTE_ABOUT_RESOURCE = 'CREATE_NOTE_ABOUT_RESOURCE';
@@ -60,7 +59,7 @@ export const AudioItemDetailFullViewPresenter = ({
                         display="Duration"
                         value={`${convertMillisecondsToSeconds(lengthMilliseconds)} secs`}
                     /> */}
-                    <SinglePropertyPresenter display="Audio Url" value={audioURL} />
+                    {/* <SinglePropertyPresenter display="Audio Url" value={audioURL} /> */}
                 </AccordionDetails>
             </Accordion>
             <Accordion elevation={0}>

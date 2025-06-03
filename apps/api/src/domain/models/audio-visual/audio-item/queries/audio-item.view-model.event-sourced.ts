@@ -79,8 +79,10 @@ export class EventSourcedAudioItemViewModel extends BaseEventSourcedResourceView
 
         if (isNonEmptyObject(transcript)) {
             this.transcript = new Transcript(transcript);
+            this.text = this.transcript.toString();
         } else {
             this.transcript = Transcript.buildEmpty();
+            this.text = '';
         }
     }
 
