@@ -4,6 +4,7 @@ import { AggregateId } from '../../../../types/AggregateId';
 import { IAccessible } from '../../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
 import { ITranscriptQueryRepository } from '../../shared/queries/transcript-query-repository.interface';
 
+import { IQueryRepositoryForNote } from '../../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import {
     ICountable,
     IPublishable,
@@ -19,7 +20,8 @@ export interface IVideoQueryRepository
         ITranscriptQueryRepository,
         ICountable,
         // only substantial change on this branch - just opt in to this when rebasing
-        IQueryRepositoryForTaggable {
+        IQueryRepositoryForTaggable,
+        IQueryRepositoryForNote {
     create(view: EventSourcedVideoViewModel): Promise<void>;
 
     createMany(view: EventSourcedVideoViewModel[]): Promise<void>;

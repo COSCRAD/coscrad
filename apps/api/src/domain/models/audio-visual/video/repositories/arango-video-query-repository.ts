@@ -1,5 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { IDetailQueryResult, IMultilingualTextItem, ResourceType } from '@coscrad/api-interfaces';
+import {
+    IDetailQueryResult,
+    IEdgeConnectionContext,
+    IMultilingualTextItem,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../../lib/types/maybe';
@@ -32,6 +37,14 @@ export class ArangoVideoQueryRepository implements IVideoQueryRepository {
             new ArangoDatabase(arangoConnectionProvider.getConnection()),
             'video__VIEWS'
         );
+    }
+
+    async createNoteAbout(
+        id: string,
+        noteId: string,
+        _context: IEdgeConnectionContext
+    ): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.createNoteAbout(id, noteId));
     }
 
     async allowUser(aggregateId: AggregateId, userId: AggregateId): Promise<void> {

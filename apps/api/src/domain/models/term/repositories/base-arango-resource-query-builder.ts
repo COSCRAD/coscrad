@@ -62,6 +62,38 @@ export class BaseArangoResourceViewQueryBuilder {
         };
     }
 
+    // TODO do not use domain collection
+    createNoteAbout(resourceId: AggregateId, noteId: AggregateId) {
+        const query = `
+        LET notesToAdd = (
+            FOR n IN resource_edge_connections
+            FILTER n._key == @noteId
+            RETURN {
+                id: n._key,
+                note: n.note,
+                context: n.context
+            }
+        )
+        FOR doc IN @@collectionName
+        FILTER doc._key == @resourceId
+        UPDATE doc WITH {
+            notes: APPEND(doc.notes,notesToAdd)
+        }
+        IN @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': this.collectionName,
+            resourceId,
+            noteId,
+        };
+
+        return {
+            query,
+            bindVars,
+        };
+    }
+
     allowUser(resourceId: AggregateId, userId: AggregateId): AqlQuery {
         const query = `
                 FOR doc IN @@collectionName

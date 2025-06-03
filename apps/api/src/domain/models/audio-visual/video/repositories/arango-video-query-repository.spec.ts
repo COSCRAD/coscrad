@@ -1,9 +1,12 @@
 import {
     AggregateType,
+    EdgeConnectionContextType,
+    EdgeConnectionMemberRole,
     IDetailQueryResult,
     IVideoViewModel,
     LanguageCode,
     MultilingualTextItemRole,
+    ResourceType,
 } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -20,6 +23,7 @@ import { isNotFound, NotFound } from '../../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
 import { ArangoCollectionId } from '../../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
+import mapEdgeConnectionDTOToArangoEdgeDocument from '../../../../../persistence/database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -27,6 +31,7 @@ import { EventSourcedTagRecordForResourceViewModel } from '../../../../../querie
 import { TestEventStream } from '../../../../../test-data/events';
 import { buildTestInstance } from '../../../../../test-data/utilities';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { EdgeConnection } from '../../../context/edge-connection.entity';
 import { AccessControlList } from '../../../shared/access-control/access-control-list.entity';
 import { Tag } from '../../../tag/tag.entity';
 import { TranscriptLineItemDto, TranslationItem } from '../../shared/commands';
@@ -194,7 +199,7 @@ describe(`ArangoVideoQueryRepository`, () => {
             label: newTagLabel,
         });
 
-        const targetTerm = buildTestInstance(EventSourcedVideoViewModel, {
+        const targetVideo = buildTestInstance(EventSourcedVideoViewModel, {
             tags: [existingTag],
         });
 
@@ -203,7 +208,7 @@ describe(`ArangoVideoQueryRepository`, () => {
 
             await databaseProvider.clearViews();
 
-            await testQueryRepository.create(targetTerm);
+            await testQueryRepository.create(targetVideo);
 
             await databaseProvider
                 .getDatabaseForCollection(ArangoCollectionId.tags)
@@ -211,10 +216,10 @@ describe(`ArangoVideoQueryRepository`, () => {
         });
 
         it(`should tag the playlist`, async () => {
-            await testQueryRepository.tag(targetTerm.id, newTag.id);
+            await testQueryRepository.tag(targetVideo.id, newTag.id);
 
             const { tags } = (await testQueryRepository.fetchById(
-                targetTerm.id
+                targetVideo.id
             )) as EventSourcedVideoViewModel;
 
             expect(tags).toHaveLength(2);
@@ -226,6 +231,59 @@ describe(`ArangoVideoQueryRepository`, () => {
             const { label } = tagSearchResult;
 
             expect(label).toBe(newTagLabel);
+        });
+    });
+
+    describe(`createNoteAbout`, () => {
+        const targetVideo = buildTestInstance(EventSourcedVideoViewModel, {
+            notes: [],
+        });
+
+        // TODO avoid using the domain model
+        const targetNote = buildTestInstance(EdgeConnection, {
+            members: [
+                {
+                    compositeIdentifier: {
+                        type: ResourceType.video,
+                        id: targetVideo.id,
+                    },
+                    context: { type: EdgeConnectionContextType.general },
+                    role: EdgeConnectionMemberRole.self,
+                },
+            ],
+        });
+
+        beforeEach(async () => {
+            await databaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.edgeConnectionCollectionID)
+                .clear();
+
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetVideo);
+
+            await databaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.edgeConnectionCollectionID)
+                .create(mapEdgeConnectionDTOToArangoEdgeDocument(targetNote.toDTO()));
+        });
+
+        it(`should append a note to the video`, async () => {
+            await testQueryRepository.createNoteAbout(
+                targetVideo.id,
+                targetNote.id,
+                targetNote.members[0].context
+            );
+
+            const { notes } = (await testQueryRepository.fetchById(
+                targetVideo.id
+            )) as EventSourcedVideoViewModel;
+
+            expect(notes).toHaveLength(1);
+
+            // TODO should the note properity have "text?"
+            const { note } = notes[0];
+
+            expect(note.toDTO()).toEqual(targetNote.note.toDTO());
         });
     });
 
