@@ -220,26 +220,21 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
     }
 
     async addTerm(vocabularyListId: AggregateId, termId: AggregateId): Promise<void> {
-        /**
-         * TODO We need to decide where to implement the "thin mapping layer"
-         * to convert Arango documents to view models (e.g., _key -> id) for
-         * eagerly joined data. See the way term ID is handled below.
-         *
-         * Because we are aiming to only send the "deltas" to the database
-         * in the query layer (with no fetching \ hydration of instances), we
-         * have to repeat `mapDatabaseDocumentToEntityDto` here. It feels more
-         * natural to do this in the query service.
-         */
-        /**
-         * Right now, there are no new commands available upon adding an entry.
-         */
         const query = `
             for v in @@collectionName
             filter v._key == @id
             for t in term__VIEWS
             filter t._key == @termId
             let newEntry = {
-                term: MERGE(t,{id: t._key, text: t.name}),
+                term: { 
+                    id: t._key, 
+                    text: t.name,  
+                    name: t.name,  
+                    mediaItemId: t.mediaItemId, 
+                    isPublished: t.isPublished, 
+                    accessControlList: t.accessControlList, 
+                    contributions: t.contributions
+                    },
                 variableValues: {}
             }
             update v with {
@@ -317,9 +312,15 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
             for t in term__VIEWS
             filter t._key == e.termId
             return {
-                term: MERGE(t,{
-                    id: t._key
-                }),
+                term: { 
+                        id: t._key, 
+                        text: t.name,  
+                        name: t.name,  
+                        mediaItemId: t.mediaItemId, 
+                        isPublished: t.isPublished, 
+                        accessControlList: t.accessControlList, 
+                        contributions: t.contributions
+                    },
                 variableValues: e.propertyValues
             }
         )

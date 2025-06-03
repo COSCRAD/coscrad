@@ -58,11 +58,13 @@ export class VocabularyListQueryService {
             return entryWithName;
         });
 
-        return {
-            ...vocabularyList,
-            entries,
-            actions,
-        };
+        const transformedView = vocabularyList as unknown as IVocabularyListViewModel;
+
+        transformedView.entries = entries;
+
+        transformedView.actions = actions;
+
+        return transformedView;
     }
 
     async fetchMany(

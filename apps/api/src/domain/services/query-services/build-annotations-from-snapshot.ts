@@ -10,6 +10,10 @@ import { EdgeConnectionContextType } from '../../models/context/types/EdgeConnec
 import { validAggregateOrThrow } from '../../models/shared/functional';
 import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 
+/**
+ * TODO Once the audio and video views are fully denormalized via event sourcing,
+ * we can project off the query database docs to provide this report.
+ */
 export const buildAnnotationsFromSnapshot = (state: DeluxeInMemoryStore): IMediaAnnotation[] => {
     const allAudioItems = state.fetchAllOfType(AggregateType.audioItem);
 

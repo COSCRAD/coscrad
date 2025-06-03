@@ -17,6 +17,7 @@ import {
     CreateTranscriptCommandHandler,
     ImportTranslationsForTranscript,
     ImportTranslationsForTranscriptCommandHandler,
+    LineItemTranslated,
     TranslateAudioItemName,
     TranslateAudioItemNameCommandHandler,
     TranslateLineItem,
@@ -99,6 +100,7 @@ import { VideoController } from './video.controller';
             TranscriptCreated,
             ParticipantAddedToTranscript,
             LineItemAddedToTranscript,
+            LineItemTranslated,
             LineItemsImportedToTranscript,
             TranslationsImportedForTranscript,
             // videos

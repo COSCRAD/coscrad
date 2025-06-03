@@ -172,7 +172,7 @@ export class PlaylistViewModel implements HasAggregateId, DetailScopedCommandWri
         description: 'a summary description of each episode in this playlist',
     })
     // TODO move this class here
-    readonly episodes: PlaylistEpisodeViewModel[];
+    episodes: PlaylistEpisodeViewModel[];
 
     /**
      * TODO This is not a performant way to handle joins. We have moved to
@@ -250,7 +250,6 @@ export class PlaylistViewModel implements HasAggregateId, DetailScopedCommandWri
                 return [e];
             });
 
-            // @ts-expect-error should we remove read only?
             this.episodes = availableEpisodes;
 
             return this;
@@ -267,8 +266,6 @@ export class PlaylistViewModel implements HasAggregateId, DetailScopedCommandWri
             }
 
             const result = buildResult();
-
-            delete result.accessControlList;
 
             // @ts-expect-error remove read-only
             result.episodes = result.episodes.map((e) => {
@@ -288,7 +285,7 @@ export class PlaylistViewModel implements HasAggregateId, DetailScopedCommandWri
         if (this.isPublished || this.accessControlList.canUserWithGroups(userWithGroups)) {
             const result = buildResult();
 
-            delete result.accessControlList;
+            // delete result.accessControlList;
 
             // @ts-expect-error remove read-only
             result.episodes = result.episodes.map((e) => {

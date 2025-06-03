@@ -17,7 +17,7 @@ export interface IAudioItemViewModel extends IBaseResourceViewModel {
 
     audioURL?: string;
 
-    mimeType: MIMEType;
+    mimeType?: MIMEType;
 
     lengthMilliseconds: number;
 

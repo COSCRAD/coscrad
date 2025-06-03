@@ -6,12 +6,12 @@ import {
     PublishResource,
     PublishResourceCommandHandler,
     ResourceReadAccessGrantedToUser,
-} from '../../domain/models/shared/common-commands';
-import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
-import { ResourcePublishedEventHandler } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
-import { Attributor } from '../../domain/models/shared/common-event-handlers/attributor.event-handler';
-import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
-import { PersistenceModule } from '../../persistence/persistence.module';
+} from '../../../domain/models/shared/common-commands';
+import { ResourcePublished } from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event';
+import { ResourcePublishedEventHandler } from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
+import { Attributor } from '../../../domain/models/shared/common-event-handlers/attributor.event-handler';
+import { IdGenerationModule } from '../../../lib/id-generation/id-generation.module';
+import { PersistenceModule } from '../../../persistence/persistence.module';
 
 @Module({
     imports: [PersistenceModule, CommandModule, IdGenerationModule],

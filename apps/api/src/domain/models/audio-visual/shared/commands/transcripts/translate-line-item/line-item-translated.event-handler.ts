@@ -3,11 +3,11 @@ import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../../..
 import { QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../../../../../../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
 import { AggregateId } from '../../../../../../../domain/types/AggregateId';
 import { AudiovisualResourceType } from '../../../../audio-item/entities/audio-item-composite-identifier';
+import { TranslationLineItemDto } from '../../../../audio-item/queries/audio-item-query-repository.interface';
 import { LineItemTranslated } from './line-item-translated.event';
-import { TranslateLineItem } from './translate-line-item.command';
 
 interface IRepository {
-    translateLineItem(id: AggregateId, lineItem: TranslateLineItem): Promise<void>;
+    translateLineItem(id: AggregateId, lineItem: TranslationLineItemDto): Promise<void>;
 }
 
 interface IAudiovisualItemQueryRepositoryProvider<T extends IRepository = IRepository> {
@@ -33,10 +33,9 @@ export class LineItemTranslatedEventHandler implements ICoscradEventHandler {
         await this.audioVisualItemRepositoryProvider
             .forResource(audioVisualItemType)
             .translateLineItem(id, {
-                aggregateCompositeIdentifier: { id, type: audioVisualItemType },
                 inPointMilliseconds,
                 outPointMilliseconds,
-                translation,
+                text: translation,
                 languageCode,
             });
     }

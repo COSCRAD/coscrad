@@ -6,6 +6,7 @@ import buildMockConfigService from '../../../../../../../app/config/__tests__/ut
 import buildConfigFilePath from '../../../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../../../app/config/constants/environment';
 import { buildMultilingualTextWithSingleItem } from '../../../../../../../domain/common/build-multilingual-text-with-single-item';
+import { MultilingualTextItem } from '../../../../../../../domain/common/entities/multilingual-text';
 import buildDummyUuid from '../../../../../../../domain/models/__tests__/utilities/buildDummyUuid';
 import {
     IQueryRepositoryProvider,
@@ -142,6 +143,16 @@ describe(`LineItemTranslatedEventHandler`, () => {
                  * is tested comprehensively in its own test.
                  */
                 expect(foundMultilingualText.hasTranslation()).toBe(true);
+
+                const searchForTextItem = foundMultilingualText.getTranslation(
+                    lineItemTranslated.payload.languageCode
+                );
+
+                expect(searchForTextItem).toBeTruthy();
+
+                const { text: foundText } = searchForTextItem as MultilingualTextItem;
+
+                expect(foundText).toBe(lineItemTranslated.payload.translation);
             });
         });
 
