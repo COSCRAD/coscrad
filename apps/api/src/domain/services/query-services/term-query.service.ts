@@ -1,4 +1,4 @@
-import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
+import { ICommandFormAndLabels, ITermViewModel } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -59,18 +59,14 @@ export class TermQueryService {
                 ? undefined
                 : this.buildAudioUrl(mediaItemId);
 
+            const transformed = result as unknown as ITermViewModel;
+
+            transformed.audioURL = audioItemURL;
+
+            transformed.actions = this.fetchUserActions(userWithGroups, [result]);
+
             // TODO do this more efficiently
-            return {
-                ...result,
-                audioItemURL,
-                /**
-                 * Currently, permission to execute commands is solely
-                 * role based and limited to project admin and COSCRAD admin.
-                 * In the future, command permissions may depend on the command
-                 * or the resource (row-level write permissions).
-                 */
-                actions: this.fetchUserActions(userWithGroups, [result]),
-            };
+            return transformed;
         }
 
         return NotFound;
@@ -103,14 +99,16 @@ export class TermQueryService {
             entities: availableEntities.map((entity) => {
                 Object.assign(entity, { audioURL: this.buildAudioUrl(entity.mediaItemId) });
 
-                return {
-                    ...entity,
-                    audioURL: this.buildAudioUrl(entity.mediaItemId),
-                    /**
-                     * See comment in `fetchById` about current RBAC for command execution.
-                     */
-                    actions: this.fetchUserActions(userWithGroups, [entity]),
-                };
+                (entity as unknown as ITermViewModel).audioURL = this.buildAudioUrl(
+                    entity.mediaItemId
+                );
+
+                (entity as unknown as ITermViewModel).actions = this.fetchUserActions(
+                    userWithGroups,
+                    [entity]
+                );
+
+                return entity;
             }),
             // TODO Should we register index-scoped commands in the view layer instead?
             indexScopedActions: this.fetchUserActions(userWithGroups, [Term]),
