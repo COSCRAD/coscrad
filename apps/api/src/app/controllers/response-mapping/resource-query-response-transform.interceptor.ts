@@ -50,16 +50,15 @@ export class ResourceQueryResponseTransformInterceptor<T> implements NestInterce
                 // How can we ensure that view models implement `HasEntities` \ 'HasForUser'?
                 if (hasEntities(result)) {
                     result.entities = result.entities.flatMap((entity) => {
-                        const forUser = this.transformDetailResponse(context, entity);
+                        const forUser = entity.forUser(context.switchToHttp().getRequest()?.user);
 
-                        return isNotFound(forUser) ? [] : [forUser];
+                        return isNotFound(forUser) ? [] : [removePrivateProperties(forUser)];
                     });
 
                     return result;
                 }
 
                 // We know we do not have an array at this point
-
                 return this.transformDetailResponse(context, result);
             })
         );

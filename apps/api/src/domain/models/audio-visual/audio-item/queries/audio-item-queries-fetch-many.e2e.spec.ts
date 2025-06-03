@@ -129,7 +129,7 @@ describe(`audio item queries- fetch many`, () => {
             await setItUp(userWithGroups);
         });
 
-        it(`should return public audio items only`, async () => {
+        it(`should return public audio items and the audio item the user has ACL based access to`, async () => {
             await assertQueryResult({
                 app,
                 endpoint,
