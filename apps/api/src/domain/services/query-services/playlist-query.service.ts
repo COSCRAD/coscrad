@@ -53,14 +53,15 @@ export class PlaylistQueryService {
             return NotFound;
         }
 
-        return {
-            ...playlist,
-            actions: this.fetchUserActions(userWithGroups, [playlist]),
-            contributions: [],
-            episodes: result.episodes.map((episodeWithMediaItemId) =>
-                this.appendMediaItemUrlToPlaylistEpisode(episodeWithMediaItemId)
-            ),
-        };
+        const withActionsAndEpisodes = playlist as unknown as IPlayListViewModel;
+
+        withActionsAndEpisodes.actions = this.fetchUserActions(userWithGroups, [playlist]);
+
+        withActionsAndEpisodes.episodes = result.episodes.map((episodeWithMediaItemId) =>
+            this.appendMediaItemUrlToPlaylistEpisode(episodeWithMediaItemId)
+        );
+
+        return withActionsAndEpisodes;
     }
 
     public async fetchMany(

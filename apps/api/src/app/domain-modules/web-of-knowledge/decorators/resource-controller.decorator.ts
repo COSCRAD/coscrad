@@ -2,7 +2,10 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Controller, UseFilters, UseInterceptors } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { RESOURCES_ROUTE_PREFIX } from '../../../controllers/resources/constants';
-import { QueryResponseTransformInterceptor } from '../../../controllers/response-mapping';
+import {
+    QueryResponseTransformInterceptor,
+    ResourceQueryResponseTransformInterceptor,
+} from '../../../controllers/response-mapping';
 import {
     CoscradInternalErrorFilter,
     CoscradInvalidUserInputFilter,
@@ -41,7 +44,13 @@ export function ResourceController({
             // @ts-expect-error we will only use this decorator on controller classes and tests will fail if we miss the annotation
         )(target);
 
-        // @ts-expect-error we will only use this decorator on controller classes and tests will fail if we miss the annotation
-        UseInterceptors(QueryResponseTransformInterceptor)(target);
+        UseInterceptors(
+            /**
+             * Note the order here.
+             */
+            ResourceQueryResponseTransformInterceptor,
+            QueryResponseTransformInterceptor
+            // @ts-expect-error we will only use this decorator on controller classes and tests will fail if we miss the annotation
+        )(target);
     };
 }

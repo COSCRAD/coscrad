@@ -75,6 +75,11 @@ export class AudioItemQueryService {
     }
 
     async getAnnotations(): Promise<IMediaAnnotation[]> {
+        /**
+         * TODO These joins are neither efficient nor atomic. Once we have finished
+         * denormalizing notes and tags onto the resource documents in the query
+         * database, we should leverage the query database for this query.
+         */
         const audioItems = (
             await this.domainRepositoryProvider.forResource(ResourceType.audioItem).fetchMany()
         ).filter(validAggregateOrThrow);
@@ -85,16 +90,33 @@ export class AudioItemQueryService {
                 .fetchMany()
         ).filter(validAggregateOrThrow);
 
+        const tags = (await this.domainRepositoryProvider.getTagRepository().fetchMany()).filter(
+            validAggregateOrThrow
+        );
+
+        const notes = (
+            await this.domainRepositoryProvider.getEdgeConnectionRepository().fetchMany()
+        ).filter(validAggregateOrThrow);
+
         const inMemoryStore = new DeluxeInMemoryStore({
             audioItem: audioItems,
             mediaItem: mediaItems,
+            tag: tags,
+            note: notes,
         });
 
         return buildAnnotationsFromSnapshot(inMemoryStore);
     }
 
     async getMediaLineage(): Promise<AudioLineageRecord[]> {
-        const audioItems = await this.audioItemQueryRepository.fetchMany();
+        /**
+         * TODO Use denormalized query database to perform this query.
+         */
+        const audioItems = (
+            await this.domainRepositoryProvider
+                .forResource<AudioItem>(ResourceType.audioItem)
+                .fetchMany()
+        ).filter(validAggregateOrThrow);
 
         const mediaItems = await this.domainRepositoryProvider
             .forResource<MediaItem>(ResourceType.mediaItem)

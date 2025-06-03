@@ -1,51 +1,28 @@
 import { ResourceType } from '@coscrad/api-interfaces';
-import {
-    Controller,
-    Get,
-    Param,
-    Request,
-    UseFilters,
-    UseGuards,
-    UseInterceptors,
-} from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
-import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
+import { Param, Request } from '@nestjs/common';
 import { PlaylistQueryService } from '../../../domain/services/query-services/playlist-query.service';
 import { PlaylistViewModel } from '../../../queries/buildViewModelForResource/viewModels/playlist.view-model';
-import { QueryResponseTransformInterceptor } from '../response-mapping';
-import {
-    CoscradInternalErrorFilter,
-    CoscradInvalidUserInputFilter,
-    CoscradNotFoundFilter,
-} from '../response-mapping/CoscradExceptions/exception-filters';
-import buildViewModelPathForResourceType from '../utilities/buildIndexPathForResourceType';
-import buildByIdApiParamMetadata from './common/buildByIdApiParamMetadata';
-import { RESOURCES_ROUTE_PREFIX } from './constants';
+import { ResourceController } from '../../domain-modules/web-of-knowledge';
+import { ResourceDetailEndpoint } from '../../domain-modules/web-of-knowledge/decorators/resource-detail-endpoint.decorator';
+import { ResourceIndexEndpoint } from '../../domain-modules/web-of-knowledge/decorators/resource-index-endpoint.decorator';
 
-@ApiTags(RESOURCES_ROUTE_PREFIX)
-@Controller(buildViewModelPathForResourceType(ResourceType.playlist))
-@UseFilters(
-    new CoscradNotFoundFilter(),
-    new CoscradInvalidUserInputFilter(),
-    new CoscradInternalErrorFilter()
-)
-@UseInterceptors(QueryResponseTransformInterceptor)
+@ResourceController({
+    resourceType: ResourceType.playlist,
+})
 export class PlaylistController {
     constructor(private readonly playlistQueryService: PlaylistQueryService) {}
 
-    @ApiBearerAuth('JWT')
-    @UseGuards(OptionalJwtAuthGuard)
-    @Get('')
-    async fetchMany(@Request() req) {
-        return this.playlistQueryService.fetchMany(req.user || undefined);
-    }
-
-    @ApiBearerAuth('JWT')
-    @UseGuards(OptionalJwtAuthGuard)
-    @ApiParam(buildByIdApiParamMetadata())
-    @ApiOkResponse({ type: PlaylistViewModel })
-    @Get(`/:id`)
+    @ResourceDetailEndpoint({
+        ViewModelType: PlaylistViewModel,
+    })
     async fetchById(@Request() req, @Param('id') id: string) {
         return this.playlistQueryService.fetchById(id, req.user || undefined);
+    }
+
+    @ResourceIndexEndpoint({
+        ViewModelType: PlaylistViewModel,
+    })
+    async fetchMany(@Request() req) {
+        return this.playlistQueryService.fetchMany(req.user || undefined);
     }
 }

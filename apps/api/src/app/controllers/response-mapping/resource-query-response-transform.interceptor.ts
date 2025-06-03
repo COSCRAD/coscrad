@@ -1,0 +1,86 @@
+import { CallHandler, ExecutionContext, NestInterceptor } from '@nestjs/common';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
+import { InternalError } from '../../../lib/errors/InternalError';
+import { Maybe } from '../../../lib/types/maybe';
+import { isNotFound } from '../../../lib/types/not-found';
+import { CoscradInternalException, CoscradNotFoundException } from './CoscradExceptions';
+
+interface ForUser {
+    forUser(user?: CoscradUserWithGroups): Maybe<unknown>;
+}
+
+const hasForUser = (input: unknown): input is ForUser =>
+    typeof (input as ForUser)?.forUser === 'function';
+
+interface HasEntities {
+    entities: ForUser[];
+}
+
+const hasEntities = (input: unknown): input is HasEntities => {
+    const test = input as HasEntities;
+
+    if (!Array.isArray(test?.entities)) {
+        return false;
+    }
+
+    if (test.entities.length === 0) {
+        // nothing to do here
+        return false;
+    }
+
+    const itemToTest = test.entities[0];
+
+    return hasForUser(itemToTest);
+};
+
+const removePrivateProperties = (entity: any) => {
+    if ('accessControlList' in entity) {
+        delete entity.accessControlList;
+    }
+
+    return entity;
+};
+
+export class ResourceQueryResponseTransformInterceptor<T> implements NestInterceptor<T, T> {
+    intercept(context: ExecutionContext, next: CallHandler): Observable<T> {
+        return next.handle().pipe(
+            map((result) => {
+                // How can we ensure that view models implement `HasEntities` \ 'HasForUser'?
+                if (hasEntities(result)) {
+                    result.entities = result.entities.flatMap((entity) => {
+                        const forUser = this.transformDetailResponse(context, entity);
+
+                        return isNotFound(forUser) ? [] : [forUser];
+                    });
+
+                    return result;
+                }
+
+                // We know we do not have an array at this point
+
+                return this.transformDetailResponse(context, result);
+            })
+        );
+    }
+
+    private transformDetailResponse(context: ExecutionContext, result: unknown) {
+        if (!hasForUser(result)) {
+            throw new CoscradInternalException(
+                new InternalError(
+                    `Encountered a resource query response without user permissions info`
+                )
+            );
+        }
+
+        const forUser = result.forUser(context.switchToHttp().getRequest()?.user);
+
+        if (isNotFound(forUser)) {
+            throw new CoscradNotFoundException();
+        }
+
+        // TODO remove private props
+        return removePrivateProperties(forUser);
+    }
+}
