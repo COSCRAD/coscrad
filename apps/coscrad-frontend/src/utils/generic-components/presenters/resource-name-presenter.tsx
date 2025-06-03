@@ -2,7 +2,7 @@ import { IMultilingualText } from '@coscrad/api-interfaces';
 import { isNullOrUndefined, isString } from '@coscrad/validation-constraints';
 import { Typography } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
-import { BilingualTextPresenter } from './bilingual-multilingual-text-presenter';
+import { MultilingualTextPresenter } from './multilingual-text-presenter';
 
 interface ResourceNamePresenterProps {
     name: IMultilingualText | string;
@@ -24,8 +24,7 @@ export const ResourceNamePresenter = ({
             {isString(name) || isNullOrUndefined(name) ? (
                 name
             ) : (
-                // Should we inject the multilingual text presenter instead?
-                <BilingualTextPresenter text={name} />
+                <MultilingualTextPresenter text={name} expanded={false} />
             )}
         </Typography>
     );

@@ -10,7 +10,7 @@ import { Box, Typography } from '@mui/material';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { ResourceNamePresenterProps } from '../../../utils/generic-components/presenters/detail-views/resource-detail-presenter-header';
-import { ExpandableMultilingualTextPresenter } from '../../../utils/generic-components/presenters/expandable-multilingual-text-presenter';
+import { MultilingualTextPresenter } from '../../../utils/generic-components/presenters/multilingual-text-presenter';
 
 const TermNamePresenter = ({ name, variant }: ResourceNamePresenterProps): JSX.Element => {
     return (
@@ -25,7 +25,7 @@ const TermNamePresenter = ({ name, variant }: ResourceNamePresenterProps): JSX.E
                 name
             ) : (
                 // Should we inject the multilingual text presenter instead?
-                <ExpandableMultilingualTextPresenter text={name} />
+                <MultilingualTextPresenter text={name} expanded={true} />
             )}
         </Typography>
     );
