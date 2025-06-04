@@ -68,8 +68,9 @@ export class BaseArangoResourceViewQueryBuilder {
         const query = `
         FOR doc IN @@collectionName
         FILTER doc._key == @resourceId
+        LET newNotes = [@newNote]
         UPDATE doc WITH {
-            notes: APPEND(doc.notes,@newNote)
+            notes: doc.notes == null ? newNotes : APPEND(doc.notes,newNotes)
         }
         IN @@collectionName
         `;

@@ -26,6 +26,7 @@ import { ArangoDatabaseProvider } from '../../../../../persistence/database/data
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { NoteRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
 import { EventSourcedTagRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { TestEventStream } from '../../../../../test-data/events';
 import { buildTestInstance } from '../../../../../test-data/utilities';
@@ -362,8 +363,13 @@ describe(`ArangoAudioItemQueryRepository`, () => {
     });
 
     describe(`createNoteAbout`, () => {
+        const existingNote = buildTestInstance(NoteRecordForResourceViewModel, {
+            id: buildDummyUuid(299),
+            note: buildMultilingualTextWithSingleItem('I am already there'),
+        });
+
         const targetView = buildTestInstance(EventSourcedAudioItemViewModel, {
-            notes: [],
+            notes: [existingNote],
         });
 
         const targetNote = buildTestInstance(EdgeConnection, {
@@ -406,10 +412,11 @@ describe(`ArangoAudioItemQueryRepository`, () => {
                 targetView.id
             )) as EventSourcedAudioItemViewModel;
 
-            expect(notes).toHaveLength(1);
+            // this includes the 1 existing note
+            expect(notes).toHaveLength(2);
 
             // TODO should the note properity have "text?"
-            const { note } = notes[0];
+            const { note } = notes.find(({ id }) => id === targetNote.id);
 
             expect(note.toDTO()).toEqual(targetNote.note.toDTO());
         });
