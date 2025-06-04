@@ -15,7 +15,14 @@ export class IndexEntriesImportedToVocabularyListOnTermViewEventHandler
         private readonly termQueryRepository: ITermQueryRepository
     ) {}
 
-    async handle(_event: EntriesImportedToVocabularyList): Promise<void> {
-        throw new Error('Method not implemented.');
+    async handle({
+        payload: {
+            aggregateCompositeIdentifier: { id: vocabularyListId },
+            entries,
+        },
+    }: EntriesImportedToVocabularyList): Promise<void> {
+        const termIds = entries.map(({ termId }) => termId);
+
+        await this.termQueryRepository.indexVocabularyLists(termIds, vocabularyListId);
     }
 }
