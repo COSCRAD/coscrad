@@ -38,11 +38,13 @@ import { Injectable } from '@nestjs/common';
 import { Maybe } from '../../../lib/types/maybe';
 import { NotFound } from '../../../lib/types/not-found';
 import formatAggregateCompositeIdentifier from '../../../queries/presentation/formatAggregateCompositeIdentifier';
+import { CoscradDataExample } from '../../../test-data/utilities/coscrad-data-example';
 import { ResultOrError } from '../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../common/entities/multilingual-text';
 import { UpdateMethod } from '../../decorators';
 import { AggregateId } from '../../types/AggregateId';
+import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
 import {
     CreationEventHandlerMap,
     buildAggregateRootFromEventHistory,
@@ -97,6 +99,16 @@ export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnecti
     }
 }
 
+@CoscradDataExample<EdgeConnection>({
+    example: {
+        type: 'note',
+        id: buildDummyUuid(2),
+        members: [],
+        connectionType: EdgeConnectionType.self,
+        note: buildMultilingualTextWithSingleItem('this is the note'),
+        audioForNote: MultilingualAudio.buildEmpty(),
+    },
+})
 @Injectable()
 @RegisterIndexScopedCommands([])
 export class EdgeConnection extends Aggregate {
@@ -401,5 +413,9 @@ export class EdgeConnection extends Aggregate {
         }
 
         return buildResult;
+    }
+
+    public static fromDto(dto: DTO<EdgeConnection>) {
+        return new EdgeConnection(dto);
     }
 }

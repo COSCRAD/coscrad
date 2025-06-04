@@ -9,6 +9,7 @@ import { ArangoDatabase } from '../../../../../persistence/database/arango-datab
 import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
 import mapDatabaseDocumentToAggregateDTO from '../../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
+import { INoteCreationDto } from '../../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { BaseArangoResourceViewQueryBuilder } from '../../../term/repositories/base-arango-resource-query-builder';
 import { TranslationLineItemDto } from '../../audio-item/queries/audio-item-query-repository.interface';
 import { TranscriptLineItemDto, TranslationItem } from '../../shared/commands';
@@ -32,6 +33,10 @@ export class ArangoVideoQueryRepository implements IVideoQueryRepository {
             new ArangoDatabase(arangoConnectionProvider.getConnection()),
             'video__VIEWS'
         );
+    }
+
+    async createNoteAbout(id: string, creationInfo: INoteCreationDto): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.createNoteAbout(id, creationInfo));
     }
 
     async allowUser(aggregateId: AggregateId, userId: AggregateId): Promise<void> {

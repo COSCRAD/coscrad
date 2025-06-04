@@ -1,4 +1,11 @@
-import { AggregateType, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    EdgeConnectionContextType,
+    EdgeConnectionMemberRole,
+    LanguageCode,
+    MultilingualTextItemRole,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -32,6 +39,7 @@ import { AudioItemCreated } from '../../audio-visual/audio-item/commands/create-
 import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
 import { IAudioItemQueryRepository } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ArangoAudioItemQueryRepository } from '../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
+import { EdgeConnection } from '../../context/edge-connection.entity';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import { Tag } from '../../tag/tag.entity';
 import { CoscradContributor } from '../../user-management/contributor';
@@ -304,6 +312,57 @@ describe(`ArangoTermQueryRepository`, () => {
             const { label } = tagSearchResult;
 
             expect(label).toBe(newTagLabel);
+        });
+    });
+
+    describe(`createNoteAbout`, () => {
+        const targetTerm = buildTestInstance(TermViewModel, {
+            notes: [],
+        });
+
+        const targetNote = buildTestInstance(EdgeConnection, {
+            members: [
+                {
+                    compositeIdentifier: {
+                        type: ResourceType.video,
+                        id: targetTerm.id,
+                    },
+                    context: { type: EdgeConnectionContextType.general },
+                    role: EdgeConnectionMemberRole.self,
+                },
+            ],
+        });
+
+        beforeEach(async () => {
+            await databaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.edgeConnectionCollectionID)
+                .clear();
+
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetTerm);
+
+            /**
+             * Note that there is no need to put the target note in the domain
+             * database. The context is passed into the repo update method
+             * from the note creation event payload.
+             */
+        });
+
+        it(`should append a note to the term`, async () => {
+            await testQueryRepository.createNoteAbout(targetTerm.id, {
+                noteId: targetNote.id,
+                context: targetNote.members[0].context,
+                text: targetNote.note,
+            });
+
+            const { notes } = (await testQueryRepository.fetchById(targetTerm.id)) as TermViewModel;
+
+            expect(notes).toHaveLength(1);
+
+            const { note } = notes[0];
+
+            expect(note.toDTO()).toEqual(targetNote.note.toDTO());
         });
     });
 

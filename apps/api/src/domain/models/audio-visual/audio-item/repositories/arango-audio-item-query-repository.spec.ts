@@ -1,9 +1,12 @@
 import {
     AggregateType,
+    EdgeConnectionContextType,
+    EdgeConnectionMemberRole,
     IAudioItemViewModel,
     IDetailQueryResult,
     LanguageCode,
     MultilingualTextItemRole,
+    ResourceType,
 } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -23,10 +26,12 @@ import { ArangoDatabaseProvider } from '../../../../../persistence/database/data
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { NoteRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
 import { EventSourcedTagRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { TestEventStream } from '../../../../../test-data/events';
 import { buildTestInstance } from '../../../../../test-data/utilities';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { EdgeConnection } from '../../../context/edge-connection.entity';
 import { AccessControlList } from '../../../shared/access-control/access-control-list.entity';
 import { Tag } from '../../../tag/tag.entity';
 import { TranscriptItem } from '../../shared/entities/transcript-item.entity';
@@ -354,6 +359,66 @@ describe(`ArangoAudioItemQueryRepository`, () => {
             const { label } = tagSearchResult;
 
             expect(label).toBe(newTagLabel);
+        });
+    });
+
+    describe(`createNoteAbout`, () => {
+        const existingNote = buildTestInstance(NoteRecordForResourceViewModel, {
+            id: buildDummyUuid(299),
+            note: buildMultilingualTextWithSingleItem('I am already there'),
+        });
+
+        const targetView = buildTestInstance(EventSourcedAudioItemViewModel, {
+            notes: [existingNote],
+        });
+
+        const targetNote = buildTestInstance(EdgeConnection, {
+            members: [
+                {
+                    compositeIdentifier: {
+                        type: ResourceType.audioItem,
+                        id: targetView.id,
+                    },
+                    context: { type: EdgeConnectionContextType.general },
+                    role: EdgeConnectionMemberRole.self,
+                },
+            ],
+        });
+
+        beforeEach(async () => {
+            await databaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.edgeConnectionCollectionID)
+                .clear();
+
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetView);
+
+            /**
+             * Note that there is no need to put the target note in the domain
+             * database. The context is passed into the repo update method
+             * from the note creation event payload.
+             */
+        });
+
+        it(`should append a note to the view`, async () => {
+            await testQueryRepository.createNoteAbout(targetView.id, {
+                noteId: targetNote.id,
+                context: targetNote.members[0].context,
+                text: targetNote.note,
+            });
+
+            const { notes } = (await testQueryRepository.fetchById(
+                targetView.id
+            )) as EventSourcedAudioItemViewModel;
+
+            // this includes the 1 existing note
+            expect(notes).toHaveLength(2);
+
+            // TODO should the note properity have "text?"
+            const { note } = notes.find(({ id }) => id === targetNote.id);
+
+            expect(note.toDTO()).toEqual(targetNote.note.toDTO());
         });
     });
 

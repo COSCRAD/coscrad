@@ -243,6 +243,15 @@ exports[`GET /resources should return the expected result 1`] = `
           },
         },
       },
+      "notes": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "a list of contextualized notes about this resource",
+        "isArray": true,
+        "isOptional": false,
+        "label": "notes",
+        "name": "NoteRecordForResourceViewModel",
+        "schema": {},
+      },
       "tags": {
         "complexDataType": "NESTED_TYPE",
         "description": "a summary of the tags that have been applied to this resource",
@@ -597,6 +606,15 @@ exports[`GET /resources should return the expected result 1`] = `
             },
           },
         },
+      },
+      "notes": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "a list of contextualized notes about this resource",
+        "isArray": true,
+        "isOptional": false,
+        "label": "notes",
+        "name": "NoteRecordForResourceViewModel",
+        "schema": {},
       },
       "tags": {
         "complexDataType": "NESTED_TYPE",
@@ -1453,6 +1471,15 @@ exports[`GET /resources should return the expected result 1`] = `
             },
           },
         },
+      },
+      "notes": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "a list of contextualized notes about this resource",
+        "isArray": true,
+        "isOptional": false,
+        "label": "notes",
+        "name": "NoteRecordForResourceViewModel",
+        "schema": {},
       },
       "photographer": {
         "coscradDataType": "NON_EMPTY_STRING",
@@ -3079,6 +3106,15 @@ exports[`GET /resources should return the expected result 1`] = `
             },
           },
         },
+      },
+      "notes": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "a list of contextualized notes about this resource",
+        "isArray": true,
+        "isOptional": false,
+        "label": "notes",
+        "name": "NoteRecordForResourceViewModel",
+        "schema": {},
       },
       "tags": {
         "complexDataType": "NESTED_TYPE",

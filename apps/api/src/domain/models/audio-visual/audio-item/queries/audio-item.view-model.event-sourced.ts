@@ -38,6 +38,7 @@ import { AudioItemCreated } from '../commands/create-audio-item/audio-item-creat
         accessControlList: new AccessControlList(),
         isPublished: false,
         tags: [],
+        notes: [],
     },
 })
 export class EventSourcedAudioItemViewModel extends BaseEventSourcedResourceViewModel {
@@ -153,6 +154,7 @@ export class EventSourcedAudioItemViewModel extends BaseEventSourcedResourceView
             // in order to grant access, we need a `RESOURCE_READ_ACCESS_GRANTED_TO_USER`
             accessControlList: new AccessControlList(),
             tags: [],
+            notes: [],
         });
     }
 

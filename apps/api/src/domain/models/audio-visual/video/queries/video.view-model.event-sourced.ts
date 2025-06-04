@@ -8,15 +8,16 @@ import {
 import { BooleanDataType, NestedDataType, UUID } from '@coscrad/data-types';
 import { isBoolean, isNonEmptyObject } from '@coscrad/validation-constraints';
 import { DetailScopedCommandWriteContext } from '../../../../../app/controllers/command/services/command-info-service';
-import { buildMultilingualTextFromBilingualText } from '../../../../../domain/common/build-multilingual-text-from-bilingual-text';
-import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
-import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
-import { AggregateId } from '../../../../../domain/types/AggregateId';
-import { HasAggregateId } from '../../../../../domain/types/HasAggregateId';
 import { TagViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
+import { NoteRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
 import { EventSourcedTagRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
+import { buildMultilingualTextFromBilingualText } from '../../../../common/build-multilingual-text-from-bilingual-text';
+import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../../../common/entities/multilingual-text';
+import { AggregateId } from '../../../../types/AggregateId';
+import { HasAggregateId } from '../../../../types/HasAggregateId';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../../shared/access-control/access-control-list.entity';
 import { ContributionSummary } from '../../../user-management';
@@ -41,6 +42,7 @@ import { VideoCreated } from '../commands';
         accessControlList: new AccessControlList(),
         isPublished: false,
         tags: [],
+        notes: [],
     },
 })
 export class EventSourcedVideoViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
@@ -69,8 +71,6 @@ export class EventSourcedVideoViewModel implements HasAggregateId, DetailScopedC
 
     accessControlList: AccessControlList;
 
-    // TODO add notes
-
     @NestedDataType(ContributionSummary, {
         label: 'contributions',
         description: 'a list of all contributions to the development of this resource',
@@ -85,6 +85,13 @@ export class EventSourcedVideoViewModel implements HasAggregateId, DetailScopedC
         isArray: true,
     })
     tags: EventSourcedTagRecordForResourceViewModel[];
+
+    @NestedDataType(NoteRecordForResourceViewModel, {
+        label: 'notes',
+        description: 'a list of contextualized notes about this resource',
+        isArray: true,
+    })
+    notes: NoteRecordForResourceViewModel[];
     // end TODO extend base
 
     actions: ICommandFormAndLabels[];
@@ -99,7 +106,7 @@ export class EventSourcedVideoViewModel implements HasAggregateId, DetailScopedC
 
         // TODO extend base
         // super(dto);
-        const { contributions, name, id, accessControlList, tags, isPublished } = dto;
+        const { contributions, name, id, accessControlList, tags, isPublished, notes } = dto;
 
         this.contributions = Array.isArray(contributions)
             ? contributions.map((c) => ContributionSummary.fromDto(c))
@@ -119,6 +126,8 @@ export class EventSourcedVideoViewModel implements HasAggregateId, DetailScopedC
             ? tags.map((t) => new EventSourcedTagRecordForResourceViewModel(t))
             : [];
 
+        if (Array.isArray(notes))
+            this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));
         // end TODO extend base
 
         const { mediaItemId, transcript } = dto;
@@ -166,6 +175,7 @@ export class EventSourcedVideoViewModel implements HasAggregateId, DetailScopedC
             // in order to grant access, we need a `RESOURCE_READ_ACCESS_GRANTED_TO_USER`
             accessControlList: new AccessControlList(),
             tags: [],
+            notes: [],
         });
     }
 

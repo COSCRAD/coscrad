@@ -165,6 +165,7 @@ exports[`when querying for a single playlist- by ID when the user is a COSCRAD a
       },
     ],
   },
+  "notes": [],
   "tags": [],
   "type": "playlist",
 }

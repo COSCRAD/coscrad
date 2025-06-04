@@ -30,6 +30,7 @@ import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { buildTestInstance, CoscradDataExample } from '../../../test-data/utilities';
 import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
+import { NoteRecordForResourceViewModel } from './note-record-for-resource.view-model';
 import { TagViewModel } from './tag.view-model';
 import { EventSourcedTagRecordForResourceViewModel } from './tag.view-model.event-sourced';
 
@@ -136,6 +137,7 @@ export class VocabularyListEntryViewModel {
         contributions: [],
         accessControlList: new AccessControlList().toDTO(),
         tags: [],
+        notes: [],
     },
 })
 export class VocabularyListViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
@@ -181,6 +183,12 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
     })
     tags: EventSourcedTagRecordForResourceViewModel[];
 
+    @NestedDataType(NoteRecordForResourceViewModel, {
+        label: 'notes',
+        description: 'a list of contextualized notes about this resource',
+        isArray: true,
+    })
+    notes: NoteRecordForResourceViewModel[];
     // end TODO extend base
 
     @ApiProperty({
@@ -237,7 +245,7 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
         // TODO extend base
         // super(dto);
 
-        const { contributions, name, id, accessControlList, tags, isPublished } = dto;
+        const { contributions, name, id, accessControlList, tags, isPublished, notes } = dto;
 
         this.contributions = Array.isArray(contributions)
             ? contributions.map((c) => ContributionSummary.fromDto(c))
@@ -256,6 +264,9 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
         this.tags = Array.isArray(tags)
             ? tags.map((t) => new EventSourcedTagRecordForResourceViewModel(t))
             : [];
+
+        if (Array.isArray(notes))
+            this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));
         // end TODO extend base
 
         if (!isNonEmptyObject(dto)) {
@@ -353,6 +364,7 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
             form: {
                 fields: [],
             },
+            notes: [], // empty at first
         };
 
         const view = new VocabularyListViewModel(dto);

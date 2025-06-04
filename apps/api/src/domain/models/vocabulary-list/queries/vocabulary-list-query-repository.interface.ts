@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { Maybe } from '../../../../lib/types/maybe';
 import { VocabularyListViewModel } from '../../../../queries/buildViewModelForResource/viewModels/vocabulary-list.view-model';
 import { AggregateId } from '../../../types/AggregateId';
+import { IQueryRepositoryForAnnotatable } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { IAccessible } from '../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
 import { IPublishable } from '../../shared/common-commands/publish-resource/resource-published.event-handler';
 import { BaseEvent } from '../../shared/events/base-event.entity';
@@ -15,7 +16,8 @@ export const VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN = 'VOCABULARY_LIST_QUERY_REP
 export interface IVocabularyListQueryRepository
     extends IPublishable,
         IAccessible,
-        IQueryRepositoryForTaggable {
+        IQueryRepositoryForTaggable,
+        IQueryRepositoryForAnnotatable {
     subscribeToUpdates(): Observable<{ data: { type: string } }>;
 
     fetchById(id: AggregateId): Promise<Maybe<VocabularyListViewModel>>;

@@ -1,6 +1,8 @@
 import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { AqlQuery } from 'arangojs/aql';
+import { NoteRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
 import { AggregateId } from '../../../types/AggregateId';
+import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import { CoscradDate } from '../../user-management/utilities';
 
@@ -54,6 +56,35 @@ export class BaseArangoResourceViewQueryBuilder {
             '@collectionName': this.collectionName,
             resourceId,
             tagId,
+        };
+
+        return {
+            query,
+            bindVars,
+        };
+    }
+
+    createNoteAbout(resourceId: AggregateId, { noteId, context, text }: INoteCreationDto) {
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @resourceId
+        LET newNotes = [@newNote]
+        UPDATE doc WITH {
+            notes: doc.notes == null ? newNotes : APPEND(doc.notes,newNotes)
+        }
+        IN @@collectionName
+        `;
+
+        const newNote = new NoteRecordForResourceViewModel({
+            id: noteId,
+            context,
+            note: text,
+        });
+
+        const bindVars = {
+            '@collectionName': this.collectionName,
+            resourceId,
+            newNote,
         };
 
         return {
