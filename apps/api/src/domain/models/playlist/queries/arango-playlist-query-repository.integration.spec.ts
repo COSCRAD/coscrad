@@ -276,7 +276,6 @@ describe(`ArangoPlaylistQueryRepository`, () => {
 
             expect(notes).toHaveLength(1);
 
-            // TODO should the note properity have "text?"
             const { note } = notes[0];
 
             expect(note.toDTO()).toEqual(targetNote.note.toDTO());

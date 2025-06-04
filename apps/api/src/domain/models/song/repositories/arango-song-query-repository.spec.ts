@@ -267,7 +267,6 @@ describe(`ArangoSongQueryRepository`, () => {
             id: buildDummyUuid(90),
             label: existingTagLabel,
             name: buildMultilingualTextWithSingleItem(existingTagLabel),
-            // TODO do we want this here?
             members: [],
         };
 
@@ -292,6 +291,10 @@ describe(`ArangoSongQueryRepository`, () => {
 
             await testQueryRepository.create(targetTerm);
 
+            /**
+             * TODO Remove this. We should seed the tag view in the query database
+             * instead.
+             */
             await databaseProvider
                 .getDatabaseForCollection(ArangoCollectionId.tags)
                 .create(mapEntityDTOToDatabaseDocument(newTag.toDTO()));
@@ -363,7 +366,6 @@ describe(`ArangoSongQueryRepository`, () => {
 
             expect(notes).toHaveLength(1);
 
-            // TODO should the note properity have "text?"
             const { note } = notes[0];
 
             expect(note.toDTO()).toEqual(targetNote.note.toDTO());

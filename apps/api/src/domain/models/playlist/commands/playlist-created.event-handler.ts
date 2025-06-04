@@ -44,6 +44,7 @@ export class PlaylistCreatedEventHandler implements ICoscradEventHandler {
                 // we have to add the contributions separately
                 contributions: [],
                 tags: [],
+                notes: [],
             })
         );
     }
