@@ -519,6 +519,7 @@ describe(`when querying for a single playlist- by ID`, () => {
       },
     ],
   },
+  "notes": [],
   "tags": [],
   "type": "playlist",
 }
@@ -767,6 +768,7 @@ describe(`when querying for a single playlist- by ID`, () => {
       },
     ],
   },
+  "notes": [],
   "tags": [],
   "type": "playlist",
 }

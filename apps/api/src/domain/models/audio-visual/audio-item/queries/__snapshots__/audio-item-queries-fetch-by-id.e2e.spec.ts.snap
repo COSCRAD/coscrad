@@ -210,6 +210,7 @@ exports[`when querying for an audio item: fetch by ID when the user is a COSCRAD
       },
     ],
   },
+  "notes": [],
   "tags": [],
   "text": "",
   "transcript": {
@@ -430,6 +431,7 @@ exports[`when querying for an audio item: fetch by ID when the user is a project
       },
     ],
   },
+  "notes": [],
   "tags": [],
   "text": "",
   "transcript": {
