@@ -21,6 +21,7 @@ import {
     VocabularyListCreatedEventHandler,
     VocabularyListFilterPropertyRegistered,
 } from '../../domain/models/vocabulary-list/commands';
+import { IndexEntriesImportedToVocabularyListOnTermViewEventHandler } from '../../domain/models/vocabulary-list/commands/add-term-to-vocabulary-list/index-entries-imported-to-vocabulary-list-on-term-view.event-handler';
 import { IndexTermAddedToVocabularyListOnTermViewEventHandler } from '../../domain/models/vocabulary-list/commands/add-term-to-vocabulary-list/index-term-added-to-vocabulary-list-on-term-view.event-handler';
 import { TermAddedToVocabularyListEventHandler } from '../../domain/models/vocabulary-list/commands/add-term-to-vocabulary-list/term-added-to-vocabulary-list.event-handler';
 import { TermInVocabularyListAnalyzedEventHandler } from '../../domain/models/vocabulary-list/commands/analyze-term-in-vocabulary-list/term-in-vocabulary-list-analyzed.event-handler';
@@ -89,6 +90,7 @@ const dataClasses = [
         TermInVocabularyListAnalyzedEventHandler,
         EntriesImportedToVocabularyListEventHandler,
         IndexTermAddedToVocabularyListOnTermViewEventHandler,
+        IndexEntriesImportedToVocabularyListOnTermViewEventHandler,
         // Data Classes
         ...dataClasses.map((ctor) => ({
             provide: ctor,
