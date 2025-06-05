@@ -371,6 +371,16 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
                 const newEntries = (
                     fsaToExecute.payload as ImportEntriesToVocabularyList
                 ).entries.map((entry) => {
+                    if (
+                        ![APPEND_THIS_ID, GENERATE_THIS_ID].some((prefix) =>
+                            entry.termId.includes(prefix)
+                        )
+                    ) {
+                        // TODO add a regression test
+                        // nothing to do here
+                        return entry;
+                    }
+
                     const customIdParseResult = parseSlugDefinition(entry.termId);
 
                     const referenceIdToUse = isInternalError(customIdParseResult)

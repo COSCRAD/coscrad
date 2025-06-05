@@ -84,5 +84,7 @@ export const buildReferenceTree = (Ctor: Object, instance: Object) => {
         []
     );
 
+    console.log({ allReferences });
+
     return ReferenceTree.fromCompositeIdentifierList(allReferences);
 };

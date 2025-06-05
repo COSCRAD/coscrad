@@ -1,3 +1,4 @@
+import { NotImplementedException } from '@nestjs/common';
 import { InstanceFactory } from '../../domain/factories/get-instance-factory-for-resource';
 import { Aggregate } from '../../domain/models/aggregate.entity';
 import { IRepositoryForAggregate } from '../../domain/repositories/interfaces/repository-for-aggregate.interface';
@@ -77,6 +78,18 @@ export class ArangoRepositoryForAggregate<TEntity extends Aggregate>
     async getCount(): Promise<number> {
         // We assume there are no invalid DTOs here- otherwise they are included in count
         return this.arangoDatabaseForEntitysCollection.getCount();
+    }
+
+    /**
+     * TODO We do not currently have a unit test for this but rely on higher
+     * level integration tests that drive this repository in the domain. As such,
+     * we shouldn't implement this until one of the commands that uses the snapshot
+     * instead of events relies upon this functionality. For now, we have only
+     * implemented this method for the `ArangoCommandRepositoryForAggregateRoot`, i.e.
+     * the event-sourced command repository.
+     */
+    async exist(_ids: AggregateId[]): Promise<AggregateId[]> {
+        throw new NotImplementedException();
     }
 
     async create(entity: TEntity) {

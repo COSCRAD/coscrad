@@ -17,6 +17,9 @@ export interface IRepositoryForAggregate<TEntity = unknown> {
 
     getCount: () => Promise<number>;
 
+    // returns an array of all IDs for resources that do not exist
+    exist: (ids: AggregateId[]) => Promise<AggregateId[]>;
+
     create: (entity: TEntity) => Promise<void>;
 
     createMany: (entities: TEntity[]) => Promise<void>;
