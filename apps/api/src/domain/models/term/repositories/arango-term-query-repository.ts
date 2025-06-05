@@ -233,8 +233,6 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
                 `Failed to add attribution for term via TermRepository: ${reason}`
             );
         });
-
-        console.log('attributed');
     }
 
     async fetchById(id: AggregateId): Promise<Maybe<TermViewModel>> {

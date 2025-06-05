@@ -220,36 +220,49 @@ describe(commandType, () => {
 
     describe(`when the command is invalid`, () => {
         describe(`when one of the terms is missing`, () => {
-            it(`should fail with the expected error`, async () => {
-                await assertCommandError(commandAssertionDependencies, {
-                    systemUserId: dummySystemUserId,
-                    seedInitialState: async () => {
-                        await testRepositoryProvider
-                            .forResource(ResourceType.vocabularyList)
-                            .create(existingVocabularyList);
+            describe(`when the missing term was never created to begin with`, () => {
+                it(`should fail with the expected error`, async () => {
+                    await assertCommandError(commandAssertionDependencies, {
+                        systemUserId: dummySystemUserId,
+                        seedInitialState: async () => {
+                            await testRepositoryProvider
+                                .forResource(ResourceType.vocabularyList)
+                                .create(existingVocabularyList);
 
-                        await testRepositoryProvider
-                            .forResource(ResourceType.term)
-                            // we skip adding the 0th term to the database
-                            .createMany(termsToImport.slice(1))
-                            .catch((e) => {
-                                throw new InternalError(`${e}`);
-                            });
-                    },
-                    buildCommandFSA: () => commandFsaFactory.build(),
-                    checkError: (result) => {
-                        assertErrorAsExpected(
-                            result,
+                            await testRepositoryProvider
+                                .forResource(ResourceType.term)
+                                // we skip adding the 0th term to the database
+                                .createMany(termsToImport.slice(1))
+                                .catch((e) => {
+                                    throw new InternalError(`${e}`);
+                                });
+                        },
+                        buildCommandFSA: () => commandFsaFactory.build(),
+                        checkError: (result) => {
+                            assertErrorAsExpected(
+                                result,
 
-                            new CommandExecutionError([
-                                new InvalidExternalReferenceByAggregateError(
-                                    existingVocabularyList.getCompositeIdentifier(),
-                                    [termsToImport[0].getCompositeIdentifier()]
-                                ),
-                            ])
-                        );
-                    },
+                                new CommandExecutionError([
+                                    new InvalidExternalReferenceByAggregateError(
+                                        existingVocabularyList.getCompositeIdentifier(),
+                                        [termsToImport[0].getCompositeIdentifier()]
+                                    ),
+                                ])
+                            );
+                        },
+                    });
                 });
+            });
+
+            describe(`when the missing term was previously deleted`, () => {
+                // const termThatWasDeleted = termsToImport[0];
+
+                /**
+                 * TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-94]
+                 * We need to merge down `DELETE_RESOURCE` before we can write
+                 * this test case. See [this PR](https://github.com/COSCRAD/coscrad/pull/608)
+                 */
+                it.todo(`should have a test`);
             });
         });
 

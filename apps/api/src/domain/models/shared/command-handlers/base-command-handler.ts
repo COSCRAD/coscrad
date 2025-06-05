@@ -174,7 +174,7 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
         return Valid;
     }
 
-    private validateReferences(
+    protected validateReferences(
         command: ICommandBase,
         snapshot: InMemorySnapshot
     ): ValidationResult {

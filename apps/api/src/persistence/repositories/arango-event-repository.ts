@@ -41,7 +41,7 @@ export class ArangoEventRepository implements IEventRepository {
         const docRef = 'e';
 
         const aqlQuery = `
-            FOR ${docRef} in events
+            FOR ${docRef} IN events
             ${this.buildAggregateFilter(docRef, aggregateContextIdentifier)}
             SORT e.meta.dateCreated
             return e
@@ -61,6 +61,41 @@ export class ArangoEventRepository implements IEventRepository {
         );
 
         return eventInstances;
+    }
+
+    async fetchLatest(
+        aggregateCompositeIdentifiers: AggregateCompositeIdentifier[]
+    ): Promise<BaseEvent[]> {
+        // TODO should we check for duplicates?
+        const query = `
+            FOR compId in @targetCompositeIds
+            let eventsForAggregateRoot = (
+                FOR e IN events
+                FILTER e.payload.aggregateCompositeIdentifier == compId
+                SORT e.meta.dateCreated DESC
+                LIMIT 1
+                return e
+            )
+            return eventsForAggregateRoot
+        `;
+
+        const bindVars = {
+            targetCompositeIds: aggregateCompositeIdentifiers,
+        };
+
+        const cursor = await this.arangoEventDatabase.query({
+            query,
+            bindVars,
+        });
+
+        // the above AQL query returns an array of arrays (possibly empty)
+        const documents = (await cursor.all()).flatMap(
+            (result) => result
+        ) as ArangoDocumentForAggregateRoot<BaseEvent>[];
+
+        return documents.map((eventDocument) =>
+            this.coscradEventFactory.build(mapDatabaseDocumentToAggregateDTO(eventDocument))
+        );
     }
 
     async appendEvent(event: BaseEvent): Promise<void> {

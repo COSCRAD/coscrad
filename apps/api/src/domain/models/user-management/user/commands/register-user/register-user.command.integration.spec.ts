@@ -91,8 +91,6 @@ describe('RegisterUser', () => {
             idManager,
             commandHandlerService,
         };
-
-        console.log('start here');
     });
 
     beforeEach(async () => {

@@ -1,4 +1,8 @@
-import { AggregateCompositeIdentifier } from '@coscrad/api-interfaces';
+import {
+    AggregateCompositeIdentifier,
+    CompositeIdentifier,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildMockConfigServiceSpec from '../../app/config/__tests__/utilities/buildMockConfigService';
@@ -6,7 +10,7 @@ import buildConfigFilePath from '../../app/config/buildConfigFilePath';
 import { Environment } from '../../app/config/constants/environment';
 import { CommandFSA } from '../../app/controllers/command/command-fsa/command-fsa.entity';
 import { SongModule } from '../../app/domain-modules/song.module';
-import { CoscradEventUnion, EventModule } from '../../domain/common';
+import { CoscradEvent, CoscradEventUnion, EventModule } from '../../domain/common';
 import { CoscradEventFactory } from '../../domain/common/events/coscrad-event-factory';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { buildFakeTimersConfig } from '../../domain/models/__tests__/utilities/buildFakeTimersConfig';
@@ -31,6 +35,20 @@ const fakeTimersConfig = buildFakeTimersConfig();
 
 const databaseName = generateDatabaseNameForTestSuite();
 
+const WIDGET_DELETED = 'WIDGET_DELETED';
+
+const THING_CREATED = 'THING_CREATED';
+
+@CoscradEvent(THING_CREATED)
+class ThingCreated extends BaseEvent {
+    readonly type = THING_CREATED;
+}
+
+@CoscradEvent(WIDGET_DELETED)
+class WidgetDeleted extends BaseEvent {
+    readonly type = WIDGET_DELETED;
+}
+
 describe(`Arango Event Repository`, () => {
     let arangoDatabaseProvider: ArangoDatabaseProvider;
 
@@ -52,6 +70,14 @@ describe(`Arango Event Repository`, () => {
                 {
                     provide: CoscradEventUnion,
                     useValue: CoscradEventUnion,
+                },
+                {
+                    provide: ThingCreated,
+                    useValue: ThingCreated,
+                },
+                {
+                    provide: WidgetDeleted,
+                    useValue: WidgetDeleted,
                 },
                 ConfigService,
                 ArangoEventRepository,
@@ -288,6 +314,100 @@ describe(`Arango Event Repository`, () => {
                 const foundEvents = await arangoEventRepository.fetchEvents();
 
                 expect(foundEvents.length).toBe(allEvents.length);
+            });
+        });
+    });
+
+    describe(`fetchLatest`, () => {
+        describe(`when some aggregates have events and others do not`, () => {
+            const compositeIds = [
+                {
+                    type: 'widget',
+                    id: buildDummyUuid(101),
+                },
+                {
+                    type: 'whatsit',
+                    id: buildDummyUuid(102),
+                },
+                {
+                    type: 'thing',
+                    id: buildDummyUuid(103),
+                },
+            ] as unknown as CompositeIdentifier<ResourceType>[];
+
+            const events = [
+                // 3 for widget
+                {
+                    type: 'WIDGET_CREATED',
+                    id: buildDummyUuid(200),
+                    meta: {
+                        userId: buildDummyUuid(33),
+                        id: buildDummyUuid(200),
+                        dateCreated: dummyDateNow,
+                    },
+                    payload: {
+                        aggregateCompositeIdentifier: compositeIds[0],
+                        name: 'big machine',
+                    },
+                },
+                {
+                    type: 'WIDGET_RENAMED',
+                    id: buildDummyUuid(201),
+                    meta: {
+                        userId: buildDummyUuid(33),
+                        id: buildDummyUuid(201),
+                        dateCreated: dummyDateNow + 1000,
+                    },
+                    payload: {
+                        aggregateCompositeIdentifier: compositeIds[0],
+                        name: 'broken machine',
+                    },
+                },
+                {
+                    type: WIDGET_DELETED,
+                    id: buildDummyUuid(202),
+                    meta: {
+                        userId: buildDummyUuid(33),
+                        id: buildDummyUuid(202),
+                        dateCreated: dummyDateNow + 2000,
+                    },
+                    payload: {
+                        aggregateCompositeIdentifier: compositeIds[0],
+                    },
+                },
+                // none for whatsit
+                // one for thing
+                {
+                    type: THING_CREATED,
+                    id: buildDummyUuid(203),
+                    meta: {
+                        userId: buildDummyUuid(33),
+                        id: buildDummyUuid(203),
+                        dateCreated: dummyDateNow + 2000,
+                    },
+                    payload: {
+                        aggregateCompositeIdentifier: compositeIds[2],
+                        type: 'magic thing',
+                    },
+                },
+            ];
+
+            beforeEach(async () => {
+                await arangoEventRepository.appendEvents(events);
+            });
+
+            it(`should return the expected events`, async () => {
+                const result = await arangoEventRepository.fetchLatest(compositeIds);
+
+                expect(result).toHaveLength(2);
+
+                const searchForLastWidgetEvent = result.find((e) => e.isFor(compositeIds[0]));
+
+                expect(searchForLastWidgetEvent.type).toBe(WIDGET_DELETED);
+
+                const searchResultForLastThingEvent = result.find((e) => e.isFor(compositeIds[2]));
+
+                expect(searchResultForLastThingEvent.type).toBe(THING_CREATED);
             });
         });
     });

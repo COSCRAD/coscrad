@@ -31,6 +31,15 @@ interface IEventSourceable<TAggregate extends Aggregate = Aggregate> {
 export interface IEventRepository {
     fetchEvents(aggregateContextIdentifier?: AggregateContextIdentifier): Promise<BaseEvent[]>;
 
+    /**
+     *
+     * @param aggregateCompositeIdentifiers A list of aggregate root whose latest events you'd like to fetch
+     * @returns A list with 0 or 1 events for each aggregate composite identifier, representing the most recent event for each, if there are events for the target
+     */
+    fetchLatest(
+        aggregateCompositeIdentifiers: AggregateCompositeIdentifier[]
+    ): Promise<BaseEvent[]>;
+
     // TODO Should the event be an instance or DTO?
     appendEvent(event: DTO<BaseEvent>): Promise<void>;
 
@@ -100,6 +109,28 @@ export class ArangoCommandRepositoryForAggregateRoot<TAggregate extends Aggregat
         const allTAggregates = await this.fetchMany(specification);
 
         return allTAggregates.length;
+    }
+
+    // TODO unit test
+    async exist(ids: AggregateId[]): Promise<AggregateId[]> {
+        const latestEvents = await this.eventRepository.fetchLatest(
+            ids.map((id) => ({
+                type: this.aggregateType,
+                id,
+            }))
+        );
+
+        const idsForAggregateRootsThatExistInTheDatabase = latestEvents.reduce((acc, e) => {
+            if (e.isOfType('RESOURCE_DELETED')) {
+                return acc;
+            }
+
+            return acc.add(e.payload.aggregateCompositeIdentifier.id);
+        }, new Set<AggregateId>());
+
+        const missingIds = ids.filter((id) => !idsForAggregateRootsThatExistInTheDatabase.has(id));
+
+        return missingIds;
     }
 
     async create(entity: TAggregate) {
