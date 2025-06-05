@@ -7,6 +7,8 @@ import {
     PublishResourceCommandHandler,
     ResourceReadAccessGrantedToUser,
 } from '../../../domain/models/shared/common-commands';
+import { ProvideAdditionalCreditsForResource } from '../../../domain/models/shared/common-commands/provide-additional-credits-for-resource/provide-additional-credits-for-resource.command';
+import { ProvideAdditionalCreditsForResourceCommandHandler } from '../../../domain/models/shared/common-commands/provide-additional-credits-for-resource/provide-additional-credits-for-resource.command-handler';
 import { ResourcePublished } from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import { ResourcePublishedEventHandler } from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
 import { Attributor } from '../../../domain/models/shared/common-event-handlers/attributor.event-handler';
@@ -21,6 +23,8 @@ import { PersistenceModule } from '../../../persistence/persistence.module';
         GrantResourceReadAccessToUserCommandHandler,
         PublishResource,
         PublishResourceCommandHandler,
+        ProvideAdditionalCreditsForResource,
+        ProvideAdditionalCreditsForResourceCommandHandler,
         // Events
         ...[ResourcePublished, ResourceReadAccessGrantedToUser].map((Ctor) => ({
             provide: Ctor,
