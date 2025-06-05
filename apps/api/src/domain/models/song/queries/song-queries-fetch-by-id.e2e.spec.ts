@@ -23,7 +23,7 @@ const buildDetailEndpoint = (id: AggregateId) => `${indexEndpoint}/${id}`;
 
 const songId = buildDummyUuid(1);
 
-describe(`when querying songs: fetch by ID`, () => {
+describe(`song queries: fetch by ID`, () => {
     const testDatabaseName = generateDatabaseNameForTestSuite();
 
     let app: INestApplication;

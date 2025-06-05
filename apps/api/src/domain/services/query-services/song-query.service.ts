@@ -1,4 +1,4 @@
-import { IDetailQueryResult, ISongViewModel } from '@coscrad/api-interfaces';
+import { IDetailQueryResult, IIndexQueryResult, ISongViewModel } from '@coscrad/api-interfaces';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -10,6 +10,7 @@ import {
     SONG_QUERY_REPOSITORY_TOKEN,
 } from '../../models/song/queries/song-query-repository.interface';
 import { EventSourcedSongViewModel } from '../../models/song/queries/song.view-model.event.sourced';
+import { Song } from '../../models/song/song.entity';
 import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';
 import { AggregateId } from '../../types/AggregateId';
 import { ResourceType } from '../../types/ResourceType';
@@ -45,6 +46,30 @@ export class SongQueryService {
         }
 
         return transformed;
+    }
+
+    async fetchMany(
+        userWithGroups?: CoscradUserWithGroups
+    ): Promise<IIndexQueryResult<ISongViewModel>> {
+        const result = await this.songQueryRepository.fetchMany();
+
+        result.forEach((entity) => {
+            const transformed = entity as unknown as ISongViewModel;
+
+            transformed.audioURL = this.buildAudioUrl(entity.mediaItemId);
+
+            transformed.actions = fetchActionsForUser(
+                this.commandInfoService,
+                userWithGroups,
+                entity
+            );
+        });
+
+        return {
+            // TODO Use `SongViewModel` here
+            indexScopedActions: fetchActionsForUser(this.commandInfoService, userWithGroups, Song),
+            entities: result as unknown as ISongViewModel[],
+        };
     }
 
     private buildAudioUrl(mediaItemId: AggregateId): string {

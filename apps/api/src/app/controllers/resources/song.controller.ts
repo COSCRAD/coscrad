@@ -1,4 +1,4 @@
-import { NotImplementedException, Param, Request } from '@nestjs/common';
+import { Param, Request } from '@nestjs/common';
 import { EventSourcedSongViewModel } from '../../../domain/models/song/queries/song.view-model.event.sourced';
 import { SongQueryService } from '../../../domain/services/query-services/song-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
@@ -22,7 +22,9 @@ export class SongController {
     @ResourceIndexEndpoint({
         ViewModelType: EventSourcedSongViewModel,
     })
-    async fetchMany(@Request() _req) {
-        throw new NotImplementedException();
+    async fetchMany(@Request() req) {
+        const result = await this.songQueryService.fetchMany(req?.user || undefined);
+
+        return result;
     }
 }
