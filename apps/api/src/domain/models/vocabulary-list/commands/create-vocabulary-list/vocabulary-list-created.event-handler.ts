@@ -51,10 +51,5 @@ export class VocabularyListCreatedEventHandler implements ICoscradEventHandler {
 
         // @ts-expect-error fix me
         await this.queryRepository.create(listToCreate);
-
-        // todo make this atomic
-        if (creationEvent.meta.contributorIds?.length > 0) {
-            await this.queryRepository.attribute(listToCreate.id, creationEvent);
-        }
     }
 }

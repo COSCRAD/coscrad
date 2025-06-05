@@ -1,4 +1,5 @@
 import { IMultilingualTextItem, LanguageCode } from '@coscrad/api-interfaces';
+import { InternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { isNotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
@@ -9,6 +10,7 @@ import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/uti
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { AggregateId } from '../../../types/AggregateId';
 import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
+import { BaseEvent } from '../../shared/events/base-event.entity';
 import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base-arango-resource-query-builder';
 import { ISongQueryRepository } from '../queries/song-query-repository.interface';
 import { EventSourcedSongViewModel } from '../queries/song.view-model.event.sourced';
@@ -29,6 +31,16 @@ export class ArangoSongQueryRepository implements ISongQueryRepository {
 
     async allowUser(aggregateId: AggregateId, userId: AggregateId): Promise<void> {
         await this.database.query(this.baseResourceQueryBuilder.allowUser(aggregateId, userId));
+    }
+
+    async attribute(songId: AggregateId, event: BaseEvent): Promise<void> {
+        const aqlQuery = this.baseResourceQueryBuilder.attribute(songId, event);
+
+        await this.database.query(aqlQuery).catch((reason) => {
+            throw new InternalError(
+                `Failed to add attribution for term via TermRepository: ${reason}`
+            );
+        });
     }
 
     async publish(id: AggregateId): Promise<void> {

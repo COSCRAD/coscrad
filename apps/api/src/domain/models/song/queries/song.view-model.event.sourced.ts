@@ -87,9 +87,7 @@ export class EventSourcedSongViewModel implements HasAggregateId, DetailScopedCo
             accessControlList,
             notes,
             tags,
-            // let's be sure we do this now
-            // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-76?atlOrigin=eyJpIjoiNjRhMTdkZmVlOWFiNDAxZThmZGZiYmViY2Y5ODE4MTUiLCJwIjoiaiJ9] support this in the query service
-            // contributions,
+            contributions,
         } = dto;
 
         if (isNonEmptyObject(lyrics)) {
@@ -108,8 +106,9 @@ export class EventSourcedSongViewModel implements HasAggregateId, DetailScopedCo
 
         this.isPublished = isPublished;
 
-        // TODO add this
-        this.contributions = [];
+        this.contributions = Array.isArray(contributions)
+            ? contributions.map((c) => new ContributionSummary(c))
+            : [];
 
         if (isNonEmptyObject(name)) {
             this.name = new MultilingualText(name);

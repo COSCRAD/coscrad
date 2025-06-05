@@ -224,7 +224,6 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         await cursor.all();
     }
 
-    // TODO share this with other resources
     async attribute(termId: AggregateId, event: BaseEvent): Promise<void> {
         const aqlQuery = this.baseResourceQueryBuilder.attribute(termId, event);
 
