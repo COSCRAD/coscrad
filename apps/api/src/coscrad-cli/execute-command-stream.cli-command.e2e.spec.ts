@@ -1,8 +1,15 @@
+import { AggregateType } from '@coscrad/api-interfaces';
 import { TestingModule } from '@nestjs/testing';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
+import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
+import { TermCreated } from '../domain/models/term/commands';
+import {
+    VocabularyListCreated,
+    VocabularyListFilterPropertyRegistered,
+} from '../domain/models/vocabulary-list/commands';
 import { VocabularyList } from '../domain/models/vocabulary-list/entities/vocabulary-list.entity';
 import { ResourceType } from '../domain/types/ResourceType';
 import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
@@ -10,6 +17,7 @@ import { ArangoConnectionProvider } from '../persistence/database/arango-connect
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { TestEventStream } from '../test-data/events';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../validation';
 import { CoscradCliModule } from './coscrad-cli.module';
 import { COSCRAD_LOGGER_TOKEN } from './logging';
@@ -20,6 +28,8 @@ const cliCommandName = 'execute-command-stream';
 const fixtureName = `users:create-admin`;
 
 const dataFile = `apps/api/src/coscrad-cli/execute-command-stream.cli-command.valid.SAMPLE.json`;
+
+const dataFileWithExistingUuids = `/home/tngdev/Apps/open-source-language-apps/COSCRAD/coscrad/apps/api/src/coscrad-cli/execute-command-stream.cli-command.valid.deep-real-uuids.SAMPLE.json`;
 
 const dataFileWithJoin = `apps/api/src/coscrad-cli/execute-command-stream.cli-command.valid.with-join.SAMPLE.json`;
 
@@ -145,6 +155,65 @@ describe(`CLI Command: ${cliCommandName}`, () => {
                     const numberOfEntries = (foundList as VocabularyList).entries.length;
 
                     expect(numberOfEntries).toBe(1);
+                });
+            });
+
+            describe(`when there are deep references using pre-existing UUIDs and not generated or appended IDs`, () => {
+                /**
+                 * The following 2 IDs are magic strings in the test FSAs file.
+                 */
+                const vocabularyListId = buildDummyUuid(1);
+
+                const termId = buildDummyUuid(2);
+
+                const vocabularyListEvents = new TestEventStream()
+                    .andThen<VocabularyListCreated>({
+                        type: 'VOCABULARY_LIST_CREATED',
+                    })
+                    .andThen<VocabularyListFilterPropertyRegistered>({
+                        type: 'VOCABULARY_LIST_PROPERTY_FILTER_REGISTERED',
+                        // this magically lines up with the fixture file
+                        payload: {
+                            name: 'number',
+                            allowedValuesAndLabels: [
+                                {
+                                    value: '1',
+                                    label: 'one',
+                                },
+                            ],
+                        },
+                    })
+                    .as({
+                        type: AggregateType.vocabularyList,
+                        id: vocabularyListId,
+                    });
+
+                const termEvents = new TestEventStream()
+                    .andThen<TermCreated>({
+                        type: 'TERM_CREATED',
+                    })
+                    .as({
+                        type: AggregateType.term,
+                        id: termId,
+                    });
+
+                beforeEach(async () => {
+                    await testRepositoryProvider
+                        .getEventRepository()
+                        .appendEvents([...vocabularyListEvents, ...termEvents]);
+                });
+
+                it(`should succeed`, async () => {
+                    await CommandTestFactory.run(commandInstance, [
+                        cliCommandName,
+                        `--data-file=${dataFileWithExistingUuids}`,
+                    ]);
+
+                    const numberOfTerms = await testRepositoryProvider
+                        .forResource(ResourceType.term)
+                        .getCount();
+
+                    expect(numberOfTerms).toBe(1);
                 });
             });
 

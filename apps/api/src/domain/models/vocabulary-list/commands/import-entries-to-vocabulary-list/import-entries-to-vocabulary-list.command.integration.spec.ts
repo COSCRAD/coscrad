@@ -257,7 +257,11 @@ describe(commandType, () => {
             describe(`when the missing term was previously deleted`, () => {
                 // const termThatWasDeleted = termsToImport[0];
 
-                // TODO we need to merge down `DELETE_RESOURCE` before we can write this test case
+                /**
+                 * TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-94]
+                 * We need to merge down `DELETE_RESOURCE` before we can write
+                 * this test case. See [this PR](https://github.com/COSCRAD/coscrad/pull/608)
+                 */
                 it.todo(`should have a test`);
             });
         });

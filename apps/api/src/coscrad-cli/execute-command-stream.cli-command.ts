@@ -376,7 +376,6 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
                             entry.termId.includes(prefix)
                         )
                     ) {
-                        // TODO add a regression test
                         // nothing to do here
                         return entry;
                     }

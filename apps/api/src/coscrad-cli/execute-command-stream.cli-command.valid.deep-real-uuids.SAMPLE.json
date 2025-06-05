@@ -1,0 +1,19 @@
+[
+    {
+        "type": "IMPORT_ENTRIES_TO_VOCABULARY_LIST",
+        "payload": {
+            "aggregateCompositeIdentifier": {
+                "type": "vocabularyList",
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001"
+            },
+            "entries": [
+                {
+                    "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100002",
+                    "variableValues": {
+                        "number": "1"
+                    }
+                }
+            ]
+        }
+    }
+]
