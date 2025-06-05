@@ -1,60 +1,57 @@
-import { AggregateType, ISongViewModel } from '@coscrad/api-interfaces';
-import { Injectable } from '@nestjs/common';
-import { isInternalError } from '../../../lib/errors/InternalError';
-import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
-import { SongViewModel } from '../../../queries/buildViewModelForResource/viewModels/song.view-model';
-import BaseDomainModel from '../../models/base-domain-model.entity';
-import { validAggregateOrThrow } from '../../models/shared/functional';
-import { Song } from '../../models/song/song.entity';
-import { Tag } from '../../models/tag/tag.entity';
-import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
-import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
-import { ResourceQueryService } from './resource-query.service';
+import { IDetailQueryResult, ISongViewModel } from '@coscrad/api-interfaces';
+import { isNonEmptyString } from '@coscrad/validation-constraints';
+import { Inject, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
+import { Maybe } from '../../../lib/types/maybe';
+import { isNotFound } from '../../../lib/types/not-found';
+import {
+    ISongQueryRepository,
+    SONG_QUERY_REPOSITORY_TOKEN,
+} from '../../models/song/queries/song-query-repository.interface';
+import { EventSourcedSongViewModel } from '../../models/song/queries/song.view-model.event.sourced';
+import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';
+import { AggregateId } from '../../types/AggregateId';
+import { ResourceType } from '../../types/ResourceType';
+import { fetchActionsForUser } from './utilities/fetch-actions-for-user';
 
 @Injectable()
-export class SongQueryService extends ResourceQueryService<Song, Omit<ISongViewModel, 'actions'>> {
+export class SongQueryService {
     protected readonly type = ResourceType.song;
 
-    buildViewModel(
-        song: Song,
-        {
-            resources: { audioItem: allAudioItems, mediaItem: allMediaItems },
-            contributor: allContributors,
-        }: InMemorySnapshot
-    ): Omit<ISongViewModel, 'actions'> {
-        return new SongViewModel(song, allAudioItems, allMediaItems, allContributors);
+    constructor(
+        @Inject(SONG_QUERY_REPOSITORY_TOKEN)
+        private readonly songQueryRepository: ISongQueryRepository,
+        private readonly commandInfoService: CommandInfoService,
+        private readonly configService: ConfigService
+    ) {}
+
+    async fetchById(
+        id: AggregateId,
+        userWithGroups?: CoscradUserWithGroups
+    ): Promise<Maybe<IDetailQueryResult<ISongViewModel>>> {
+        const result = (await this.songQueryRepository.fetchById(id)) as EventSourcedSongViewModel;
+
+        const transformed = result as unknown as ISongViewModel;
+
+        if (!isNotFound(result)) {
+            transformed.audioURL = this.buildAudioUrl(result.mediaItemId);
+
+            transformed.actions = fetchActionsForUser(
+                this.commandInfoService,
+                userWithGroups,
+                result
+            );
+        }
+
+        return transformed;
     }
 
-    getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {
-        return [Song];
-    }
+    private buildAudioUrl(mediaItemId: AggregateId): string {
+        if (!isNonEmptyString(mediaItemId)) return undefined;
 
-    protected override async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
-        const [
-            tagSearchResult,
-            audioItemSearchResult,
-            mediaItemSearchResult,
-            contributorSearchResult,
-        ] = await Promise.all([
-            this.repositoryProvider.getTagRepository().fetchMany(),
-            this.repositoryProvider.forResource(AggregateType.audioItem).fetchMany(),
-            this.repositoryProvider.forResource(AggregateType.mediaItem).fetchMany(),
-            this.repositoryProvider.getContributorRepository().fetchMany(),
-        ]);
-
-        const tags = tagSearchResult.filter((result): result is Tag => !isInternalError(result));
-
-        const audioItems = audioItemSearchResult.filter(validAggregateOrThrow);
-
-        const mediaItems = mediaItemSearchResult.filter(validAggregateOrThrow);
-
-        const contributors = contributorSearchResult.filter(validAggregateOrThrow);
-
-        return new DeluxeInMemoryStore({
-            tag: tags,
-            audioItem: audioItems,
-            mediaItem: mediaItems,
-            contributor: contributors,
-        }).fetchFullSnapshotInLegacyFormat();
+        return `${this.configService.get('BASE_URL')}/${this.configService.get(
+            'GLOBAL_PREFIX'
+        )}/resources/mediaItems/download/${mediaItemId}`;
     }
 }

@@ -107,18 +107,52 @@ export class ArangoSongQueryRepository implements ISongQueryRepository {
         return asViews;
     }
 
-    async createMany(view: EventSourcedSongViewModel[]): Promise<void> {
-        const documents = view.map(mapEntityDTOToDatabaseDocument);
-
-        await this.database.createMany(documents);
-    }
-
     async count(): Promise<number> {
         return this.database.getCount();
     }
 
     async create(view: EventSourcedSongViewModel): Promise<void> {
-        await this.database.create(mapEntityDTOToDatabaseDocument(view));
+        const query = `
+            LET mediaItemIds = (
+                FOR a IN audioItem__VIEWS
+                FILTER a._key == @songDoc.audioItemId
+                RETURN a.mediaItemId
+            )
+            INSERT MERGE(@songDoc, LENGTH(mediaItemIds) == 1 ? { mediaItemId: mediaItemIds[0]} : {})
+            in song__VIEWS
+        `;
+
+        const bindVars = {
+            // `view.toDto()` ?
+            songDoc: mapEntityDTOToDatabaseDocument(view),
+        };
+
+        await this.database.query({
+            query,
+            bindVars,
+        });
+    }
+
+    async createMany(views: EventSourcedSongViewModel[]): Promise<void> {
+        const query = `
+            FOR songDoc in @songDocs
+            LET mediaItemIds = (
+                FOR a IN audioItem__VIEWS
+                FILTER a._key == songDoc.audioItemId
+                RETURN a.mediaItemId
+            )
+            INSERT MERGE(songDoc, LENGTH(mediaItemIds) == 1 ? { mediaItemId: mediaItemIds[0]} : {})
+            in song__VIEWS
+        `;
+
+        const bindVars = {
+            songDocs: views.map(mapEntityDTOToDatabaseDocument),
+        };
+
+        await this.database.query({
+            query,
+            bindVars,
+        });
     }
 
     async fetchById(id: AggregateId): Promise<Maybe<EventSourcedSongViewModel>> {

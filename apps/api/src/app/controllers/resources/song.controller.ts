@@ -1,36 +1,28 @@
-import { Controller, Get, Param, Request, Res, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
-import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
+import { NotImplementedException, Param, Request } from '@nestjs/common';
+import { EventSourcedSongViewModel } from '../../../domain/models/song/queries/song.view-model.event.sourced';
 import { SongQueryService } from '../../../domain/services/query-services/song-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
-import { SongViewModel } from '../../../queries/buildViewModelForResource/viewModels/song.view-model';
-import buildViewModelPathForResourceType from '../utilities/buildIndexPathForResourceType';
-import buildByIdApiParamMetadata from './common/buildByIdApiParamMetadata';
-import sendInternalResultAsHttpResponse from './common/sendInternalResultAsHttpResponse';
-import { RESOURCES_ROUTE_PREFIX } from './constants';
+import { ResourceController } from '../../domain-modules/web-of-knowledge';
+import { ResourceDetailEndpoint } from '../../domain-modules/web-of-knowledge/decorators/resource-detail-endpoint.decorator';
+import { ResourceIndexEndpoint } from '../../domain-modules/web-of-knowledge/decorators/resource-index-endpoint.decorator';
 
-@ApiTags(RESOURCES_ROUTE_PREFIX)
-@Controller(buildViewModelPathForResourceType(ResourceType.song))
+@ResourceController({
+    resourceType: ResourceType.song,
+})
 export class SongController {
     constructor(private readonly songQueryService: SongQueryService) {}
 
-    @ApiBearerAuth('JWT')
-    @UseGuards(OptionalJwtAuthGuard)
-    @ApiParam(buildByIdApiParamMetadata())
-    @ApiOkResponse({ type: SongViewModel })
-    @Get('/:id')
-    async fetchById(@Request() req, @Res() res, @Param('id') id: unknown) {
-        const searchResult = await this.songQueryService.fetchById(id, req.user || undefined);
-
-        return sendInternalResultAsHttpResponse(res, searchResult);
+    @ResourceDetailEndpoint({
+        ViewModelType: EventSourcedSongViewModel,
+    })
+    async fetchById(@Request() req, @Param('id') id: string) {
+        return this.songQueryService.fetchById(id, req.user || undefined);
     }
 
-    @ApiBearerAuth('JWT')
-    @UseGuards(OptionalJwtAuthGuard)
-    @Get('')
-    async fetchMany(@Request() req) {
-        const result = await this.songQueryService.fetchMany(req.user || undefined);
-
-        return result;
+    @ResourceIndexEndpoint({
+        ViewModelType: EventSourcedSongViewModel,
+    })
+    async fetchMany(@Request() _req) {
+        throw new NotImplementedException();
     }
 }

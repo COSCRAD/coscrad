@@ -570,10 +570,16 @@ export default async (
             {
                 provide: SongQueryService,
                 useFactory: (
-                    repositoryProvider: ArangoRepositoryProvider,
-                    commandInfoService: CommandInfoService
-                ) => new SongQueryService(repositoryProvider, commandInfoService),
-                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService],
+                    arangoSongQueryRepository: ArangoSongQueryRepository,
+                    commandInfoService: CommandInfoService,
+                    configService: ConfigService
+                ) =>
+                    new SongQueryService(
+                        arangoSongQueryRepository,
+                        commandInfoService,
+                        configService
+                    ),
+                inject: [SONG_QUERY_REPOSITORY_TOKEN, CommandInfoService, ConfigService],
             },
             {
                 provide: AUDIO_QUERY_REPOSITORY_TOKEN,

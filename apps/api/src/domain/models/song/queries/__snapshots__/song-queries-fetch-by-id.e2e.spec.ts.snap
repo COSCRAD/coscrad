@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`when querying songs: fetch by ID when the user is an admin when the user is authenticated as a COSCRAD admin when there is a song with the given ID when the song is public should return the expected result 1`] = `
+{
+  "actions": [],
+  "audioItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100050",
+  "audioURL": "https://jaybam.com/home/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100049",
+  "contributions": [],
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
+  "isPublished": true,
+  "lengthMilliseconds": 1500,
+  "lyrics": {
+    "items": [
+      {
+        "languageCode": "en",
+        "role": "original",
+        "text": "lalala",
+      },
+    ],
+  },
+  "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100049",
+  "name": {
+    "items": [
+      {
+        "languageCode": "en",
+        "role": "original",
+        "text": "test song",
+      },
+    ],
+  },
+  "notes": [],
+  "tags": [],
+}
+`;
+
+exports[`when querying songs: fetch by ID when the user is an admin when the user is authenticated as a project admin when there is a song with the given ID when the song is public should return the expected result 1`] = `
+{
+  "actions": [],
+  "audioItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100050",
+  "audioURL": "https://jaybam.com/home/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100049",
+  "contributions": [],
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
+  "isPublished": true,
+  "lengthMilliseconds": 1500,
+  "lyrics": {
+    "items": [
+      {
+        "languageCode": "en",
+        "role": "original",
+        "text": "lalala",
+      },
+    ],
+  },
+  "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100049",
+  "name": {
+    "items": [
+      {
+        "languageCode": "en",
+        "role": "original",
+        "text": "test song",
+      },
+    ],
+  },
+  "notes": [],
+  "tags": [],
+}
+`;
