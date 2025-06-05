@@ -1,8 +1,18 @@
+import { IMultilingualTextItem } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { isInLanguage } from './is-in-language';
 import { isOriginalTextItem } from './is-original-text-item';
 
-export const getTextItemsForMultilingualTextPresenter = (text, defaultLanguageCode) => {
+interface TextItemsForMultilingualTextPresenterProps {
+    primaryMultilingualTextItem: IMultilingualTextItem;
+    translations: IMultilingualTextItem[];
+    isTranslated: boolean;
+}
+
+export const getTextItemsForMultilingualTextPresenter = (
+    text,
+    defaultLanguageCode
+): TextItemsForMultilingualTextPresenterProps => {
     const textItemWithDefaultLanguage = text.items.find((item) =>
         isInLanguage(defaultLanguageCode, item)
     );
