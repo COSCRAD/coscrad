@@ -4,9 +4,9 @@ import { Box } from '@mui/material';
 import { useContext } from 'react';
 import { formatBilingualText } from '../../../components/resources/vocabulary-lists/utils';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
+import { FlatMultilingualTextPresenter } from './flat-multilingual-text-presenter';
 import { isInLanguage } from './is-in-language';
 import { isOriginalTextItem } from './is-original-text-item';
-import { MultilingualTextWithoutTranslations } from './multilingual-text-without-translations-presenter';
 
 export interface BilingualTextPresenterProps {
     text: IMultilingualText;
@@ -52,8 +52,9 @@ export const BilingualTextPresenter = ({ text }: BilingualTextPresenterProps): J
                     ).text
                 )
             ) : (
-                <MultilingualTextWithoutTranslations
+                <FlatMultilingualTextPresenter
                     primaryMultilingualTextItem={primaryMultilingualTextItem}
+                    translations={[]}
                 />
             )}
         </Box>

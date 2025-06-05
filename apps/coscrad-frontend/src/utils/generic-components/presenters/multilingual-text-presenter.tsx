@@ -2,18 +2,16 @@ import { IMultilingualText } from '@coscrad/api-interfaces';
 import { Box } from '@mui/material';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
+import { FlatMultilingualTextPresenter } from './flat-multilingual-text-presenter';
 import { getTextItemsForMultilingualTextPresenter } from './get-text-items-for-multilingual-text-presenter';
-import { MultilingualTextWithTranslations } from './multilingual-text-with-translations-presenter';
-import { MultilingualTextWithoutTranslations } from './multilingual-text-without-translations-presenter';
+import { ExpandableMultilingualTextWithTranslationsPresenter } from './multilingual-text-with-translations-presenter';
 
 export interface MultilingualTextPresenterProps {
     text: IMultilingualText;
-    expanded: boolean;
 }
 
 export const MultilingualTextPresenter = ({
     text,
-    expanded,
 }: MultilingualTextPresenterProps): JSX.Element => {
     const { defaultLanguageCode } = useContext(ConfigurableContentContext);
 
@@ -23,14 +21,14 @@ export const MultilingualTextPresenter = ({
     return (
         <Box width={'fit-content'} data-testid="multilingual-text-display">
             {isTranslated ? (
-                <MultilingualTextWithTranslations
+                <ExpandableMultilingualTextWithTranslationsPresenter
                     primaryMultilingualTextItem={primaryMultilingualTextItem}
                     translations={translations}
-                    expanded={expanded}
                 />
             ) : (
-                <MultilingualTextWithoutTranslations
+                <FlatMultilingualTextPresenter
                     primaryMultilingualTextItem={primaryMultilingualTextItem}
+                    translations={[]}
                 />
             )}
         </Box>

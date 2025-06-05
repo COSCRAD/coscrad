@@ -7,9 +7,5 @@ interface EpisodePresenterProps {
 }
 
 export const EpisodePresenter = ({ episode: { name } }: EpisodePresenterProps): JSX.Element => {
-    return (
-        <Typography variant={'h4'}>
-            {<MultilingualTextPresenter text={name} expanded={false} />}
-        </Typography>
-    );
+    return <Typography variant={'h4'}>{<MultilingualTextPresenter text={name} />}</Typography>;
 };

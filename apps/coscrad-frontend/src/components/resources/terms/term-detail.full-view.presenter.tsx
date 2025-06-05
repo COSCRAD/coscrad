@@ -7,8 +7,10 @@ import {
 } from '@coscrad/api-interfaces';
 import { AudioClipPlayer } from '@coscrad/media-player';
 import { Box, Paper } from '@mui/material';
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { routes } from '../../../app/routes/routes';
+import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import {
     CommaSeparatedList,
     ResourceDetailFullViewPresenter,
@@ -16,10 +18,9 @@ import {
 import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { findOriginalTextItem } from '../../notes/shared/find-original-text-item';
 
-import { isNullOrUndefined, isString } from '@coscrad/validation-constraints';
-import { Typography } from '@mui/material';
 import { ResourceNamePresenterProps } from '../../../utils/generic-components/presenters/detail-views/resource-detail-presenter-header';
-import { MultilingualTextPresenter } from '../../../utils/generic-components/presenters/multilingual-text-presenter';
+import { FlatMultilingualTextPresenter } from '../../../utils/generic-components/presenters/flat-multilingual-text-presenter';
+import { getTextItemsForMultilingualTextPresenter } from '../../../utils/generic-components/presenters/get-text-items-for-multilingual-text-presenter';
 
 const VocabularyListRecordForTermPresenter = ({
     id: termId,
@@ -54,21 +55,18 @@ const VocabularyListRecordForTermPresenter = ({
 );
 
 const TermNamePresenter = ({ name, variant }: ResourceNamePresenterProps): JSX.Element => {
+    const { defaultLanguageCode } = useContext(ConfigurableContentContext);
+
+    const { primaryMultilingualTextItem, translations } = getTextItemsForMultilingualTextPresenter(
+        name,
+        defaultLanguageCode
+    );
+
     return (
-        <Typography
-            gutterBottom
-            component="span"
-            variant={variant}
-            fontWeight="bold"
-            color="primary"
-        >
-            {isString(name) || isNullOrUndefined(name) ? (
-                name
-            ) : (
-                // Should we inject the multilingual text presenter instead?
-                <MultilingualTextPresenter text={name} expanded={true} />
-            )}
-        </Typography>
+        <FlatMultilingualTextPresenter
+            primaryMultilingualTextItem={primaryMultilingualTextItem}
+            translations={translations}
+        />
     );
 };
 
@@ -79,6 +77,7 @@ export const TermDetailFullViewPresenter = ({
     audioURL,
     vocabularyLists,
 }: ICategorizableDetailQueryResult<ITermViewModel>): JSX.Element => {
+    console.log({ contributions });
     return (
         <ResourceDetailFullViewPresenter
             name={name}

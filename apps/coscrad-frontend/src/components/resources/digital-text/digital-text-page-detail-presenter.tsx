@@ -37,7 +37,7 @@ export const DigitalTextPageDetailPresenter = ({
      */
     return (
         <StyledMuiPage data-testid={`digital-text.page:${identifier}`}>
-            {hasContent ? <MultilingualTextPresenter text={content} expanded={false} /> : null}
+            {hasContent ? <MultilingualTextPresenter text={content} /> : null}
             <Typography sx={{ bottom: 0, right: 0, mb: 1, mr: 1, position: 'absolute' }}>
                 {isSelected ? '**' : ''}
                 {identifier}

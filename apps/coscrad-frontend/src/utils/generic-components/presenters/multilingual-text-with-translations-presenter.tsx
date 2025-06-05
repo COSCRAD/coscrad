@@ -3,18 +3,16 @@ import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material/';
 import { Accordion, AccordionDetails, AccordionSummary, Box } from '@mui/material';
 import { MultilingualTextItemPresenter } from './multilingual-text-item-presenter';
 
-interface MultilingualTextWithTranslationsProps {
+interface ExpandableMultilingualTextWithTranslationsPresenterProps {
     primaryMultilingualTextItem: IMultilingualTextItem;
     translations: IMultilingualTextItem[];
-    expanded: boolean;
 }
 
-export const MultilingualTextWithTranslations = ({
+export const ExpandableMultilingualTextWithTranslationsPresenter = ({
     primaryMultilingualTextItem,
     translations,
-    expanded,
-}: MultilingualTextWithTranslationsProps): JSX.Element => (
-    <Accordion elevation={0} expanded={expanded}>
+}: ExpandableMultilingualTextWithTranslationsPresenterProps): JSX.Element => (
+    <Accordion elevation={0}>
         <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             data-testid="multilingual-text-main-text-item-with-translations"

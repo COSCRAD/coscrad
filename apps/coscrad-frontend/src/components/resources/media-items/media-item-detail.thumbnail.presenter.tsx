@@ -20,7 +20,7 @@ export const MediaItemDetailThumbnailPresenter = ({
         >
             <Card className="detail-card">
                 <div id="detail-term" className="detail-meta">
-                    <MultilingualTextPresenter text={name} expanded={false} />
+                    <MultilingualTextPresenter text={name} />
                 </div>
                 <Divider id="detail-divider" />
                 <div className="detail-meta">

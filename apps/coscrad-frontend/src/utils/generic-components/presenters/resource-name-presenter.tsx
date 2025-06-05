@@ -24,7 +24,7 @@ export const ResourceNamePresenter = ({
             {isString(name) || isNullOrUndefined(name) ? (
                 name
             ) : (
-                <MultilingualTextPresenter text={name} expanded={false} />
+                <MultilingualTextPresenter text={name} />
             )}
         </Typography>
     );
