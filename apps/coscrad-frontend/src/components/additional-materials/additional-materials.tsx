@@ -69,14 +69,18 @@ const PdfPresenter = ({ url, name, description }: AdditionalMaterialItem['pdf'])
 export const AdditionalMaterials = (): JSX.Element => {
     const { additionalMaterials } = useContext(ConfigurableContentContext);
 
-    if (additionalMaterials.length === 0) return <NotFoundPresenter />;
+    const additionalMaterialsWithEmptyItemsRemoved = additionalMaterials.filter(
+        ({ media, pdf }) => !isNullOrUndefined(media) || !isNullOrUndefined(pdf)
+    );
+
+    if (additionalMaterialsWithEmptyItemsRemoved.length === 0) return <NotFoundPresenter />;
 
     return (
         <>
-            {additionalMaterials
+            {additionalMaterialsWithEmptyItemsRemoved
                 .filter(({ pdf, media }) => !isNullOrUndefined(pdf) || !isNullOrUndefined(media))
-                .map(({ pdf, media }) => (
-                    <Box key={media.name} p={2} component={Paper}>
+                .map(({ pdf, media }, index) => (
+                    <Box key={media?.name || pdf?.name || index} p={2} component={Paper}>
                         {isNullOrUndefined(media) ? null : <MediaItemPresenter {...media} />}
                         {isNullOrUndefined(pdf) ? null : <PdfPresenter {...pdf} />}
                     </Box>
