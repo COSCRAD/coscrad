@@ -1,7 +1,7 @@
 import { AggregateType } from '@coscrad/api-interfaces';
 import { CommandModule } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../app/config/buildConfigFilePath';
@@ -43,7 +43,16 @@ describe(`SongCreatedEventHandler`, () => {
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
             providers: [CommandInfoService, SongCreatedEventHandler],
-            imports: [PersistenceModule.forRootAsync(), CommandModule, SongModule],
+            imports: [
+                ConfigModule.forRoot({
+                    isGlobal: true,
+                    envFilePath: buildConfigFilePath(Environment.test),
+                    cache: false,
+                }),
+                PersistenceModule.forRootAsync(),
+                CommandModule,
+                SongModule,
+            ],
         })
             .overrideProvider(ConfigService)
             .useValue(
