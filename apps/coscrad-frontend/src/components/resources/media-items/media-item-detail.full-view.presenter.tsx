@@ -6,7 +6,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { Card, Divider } from '@mui/material';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
-import { formatBilingualText } from '../vocabulary-lists/utils';
+import { BilingualTextPresenter } from '../utils/bilingual-text-presenter';
 
 export const MediaItemDetailFullViewPresenter = ({
     id,
@@ -21,7 +21,10 @@ export const MediaItemDetailFullViewPresenter = ({
         >
             <Card className="detail-card">
                 <div id="detail-term" className="detail-meta">
-                    {formatBilingualText(title, titleEnglish)}
+                    <BilingualTextPresenter
+                        textInPrimaryLanguage={title}
+                        textInSecondaryLanguage={titleEnglish}
+                    />
                 </div>
                 <Divider id="detail-divider" />
                 {[MIMEType.png, MIMEType.jpg, MIMEType.bmp, MIMEType.svg].includes(mimeType) ? (

@@ -1,7 +1,7 @@
 import { IMultilingualText, LanguageCode } from '@coscrad/api-interfaces';
 import { Typography } from '@mui/material';
-import { formatBilingualText } from '../../../components/resources/vocabulary-lists/utils';
 import { getTextItemsForMultilingualTextPresenter } from '../../../utils/generic-components/presenters/get-text-items-for-multilingual-text-presenter';
+import { BilingualTextPresenter } from './bilingual-text-presenter';
 
 export const renderMultilingualTextCell = (
     text: IMultilingualText,
@@ -21,10 +21,10 @@ export const renderMultilingualTextCell = (
 
     return (
         <Typography variant="body1">
-            {formatBilingualText(
-                primaryMultilingualTextItem.text,
-                searchResultForSecondaryLanguage?.text
-            )}
+            <BilingualTextPresenter
+                textInPrimaryLanguage={primaryMultilingualTextItem.text}
+                textInSecondaryLanguage={searchResultForSecondaryLanguage?.text}
+            />
         </Typography>
     );
 };

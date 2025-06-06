@@ -2,8 +2,8 @@ import { AggregateType, IMediaItemViewModel } from '@coscrad/api-interfaces';
 import { MediaItemIndexState } from '../../../store/slices/resources/media-items/types';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
+import { BilingualTextPresenter } from '../utils/bilingual-text-presenter';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
-import { formatBilingualText } from '../vocabulary-lists/utils';
 
 export const MediaItemIndexPresenter = ({ entities: mediaItems }: MediaItemIndexState) => {
     const headingLabels: HeadingLabel<IMediaItemViewModel>[] = [
@@ -23,7 +23,12 @@ export const MediaItemIndexPresenter = ({ entities: mediaItems }: MediaItemIndex
 
     const cellRenderersDefinition: CellRenderersDefinition<IMediaItemViewModel> = {
         id: renderAggregateIdCell,
-        title: ({ title, titleEnglish }) => formatBilingualText(title, titleEnglish),
+        title: ({ title, titleEnglish }) => (
+            <BilingualTextPresenter
+                textInPrimaryLanguage={title}
+                textInSecondaryLanguage={titleEnglish}
+            />
+        ),
         // lengthMilliseconds: ({ lengthMilliseconds }) =>
         //     renderMediaLengthInSeconds(lengthMilliseconds),
     };

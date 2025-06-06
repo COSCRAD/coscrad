@@ -2,17 +2,19 @@ import { IMultilingualText } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box } from '@mui/material';
 import { useContext } from 'react';
-import { formatBilingualText } from '../../../components/resources/vocabulary-lists/utils';
+import { BilingualTextPresenter } from '../../../components/resources/utils/bilingual-text-presenter';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import { FlatMultilingualTextPresenter } from './flat-multilingual-text-presenter';
 import { isInLanguage } from './is-in-language';
 import { isOriginalTextItem } from './is-original-text-item';
 
-export interface BilingualTextPresenterProps {
+export interface BilingualMultilingualTextPresenterProps {
     text: IMultilingualText;
 }
 
-export const BilingualTextPresenter = ({ text }: BilingualTextPresenterProps): JSX.Element => {
+export const BilingualMultilingualTextPresenter = ({
+    text,
+}: BilingualMultilingualTextPresenterProps): JSX.Element => {
     const { defaultLanguageCode } = useContext(ConfigurableContentContext);
 
     const textItemWithDefaultLanguage = text.items.find((item) =>
@@ -43,15 +45,25 @@ export const BilingualTextPresenter = ({ text }: BilingualTextPresenterProps): J
                  * we need to update our logic here to be more robust to the fully
                  * multilingual case.
                  */
-                formatBilingualText(
-                    primaryMultilingualTextItem.text,
-                    (
-                        translations.find(
-                            ({ languageCode }) => languageCode === defaultLanguageCode
-                        ) || translations[0]
-                    ).text
-                )
+                <BilingualTextPresenter
+                    textInPrimaryLanguage={primaryMultilingualTextItem.text}
+                    textInSecondaryLanguage={
+                        (
+                            translations.find(
+                                ({ languageCode }) => languageCode === defaultLanguageCode
+                            ) || translations[0]
+                        ).text
+                    }
+                />
             ) : (
+                // formatBilingualText(
+                //     primaryMultilingualTextItem.text,
+                //     (
+                //         translations.find(
+                //             ({ languageCode }) => languageCode === defaultLanguageCode
+                //         ) || translations[0]
+                //     ).text
+                // )
                 <FlatMultilingualTextPresenter
                     primaryMultilingualTextItem={primaryMultilingualTextItem}
                     translations={[]}

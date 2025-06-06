@@ -6,7 +6,7 @@ import {
 import { AudioPlayer } from '@coscrad/media-player';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Card, Divider } from '@mui/material';
-import { formatBilingualText } from '../vocabulary-lists/utils';
+import { BilingualTextPresenter } from '../utils/bilingual-text-presenter';
 
 const buildLyricsStatusMessage = (lyrics: IMultilingualText | null | undefined): string =>
     isNullOrUndefined(lyrics) ? 'No Lyrics Available' : 'Lyrics are available for this song';
@@ -20,7 +20,10 @@ export const SongDetailThumbnailPresenter = ({
     <div data-testid={title}>
         <Card className="detail-card">
             <div id="detail-term" className="detail-meta">
-                {formatBilingualText(title, titleEnglish)}
+                <BilingualTextPresenter
+                    textInPrimaryLanguage={title}
+                    textInSecondaryLanguage={titleEnglish}
+                />
             </div>
             <Divider id="detail-divider" />
 
