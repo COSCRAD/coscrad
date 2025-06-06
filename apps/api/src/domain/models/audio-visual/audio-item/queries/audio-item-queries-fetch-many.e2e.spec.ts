@@ -47,7 +47,7 @@ const privateAudioItemWithUserAccess = buildTestInstance(EventSourcedAudioItemVi
 
 const allAudioItems = [publicAudioItem, privateAudioItem, privateAudioItemWithUserAccess];
 
-describe(`audio item queries- fetch many`, () => {
+describe(`audio item queries: fetch many`, () => {
     const testDatabaseName = generateDatabaseNameForTestSuite();
 
     let app: INestApplication;

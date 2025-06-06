@@ -23,6 +23,9 @@ import { buildTestInstance } from '../../../../test-data/utilities';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
+import { IAudioItemQueryRepository } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
+import { ArangoAudioItemQueryRepository } from '../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { EdgeConnection } from '../../context/edge-connection.entity';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import { Tag } from '../../tag/tag.entity';
@@ -31,9 +34,18 @@ import { ISongQueryRepository } from '../queries/song-query-repository.interface
 import { EventSourcedSongViewModel } from '../queries/song.view-model.event.sourced';
 import { ArangoSongQueryRepository } from './arango-song-query-repository';
 
-const audioItemIds = [10, 11, 12].map(buildDummyUuid);
+const testMediaItemId = buildDummyUuid(88);
 
-const idOfSongToTestInDetail = audioItemIds[0];
+const testAudioItemId = buildDummyUuid(89);
+
+const testAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
+    id: testAudioItemId,
+    mediaItemId: testMediaItemId,
+});
+
+const songIds = [10, 11, 12].map(buildDummyUuid);
+
+const idOfSongToTestInDetail = songIds[0];
 
 const existingSongWithoutLyrics = buildTestInstance(EventSourcedSongViewModel, {
     lyrics: null,
@@ -48,13 +60,14 @@ const testContributions = [
     }),
 ];
 
-const existingSongs = audioItemIds.map((id) =>
+const existingSongs = songIds.map((id) =>
     buildTestInstance(EventSourcedSongViewModel, {
         id,
         name: buildMultilingualTextWithSingleItem(`song #${id}`),
         isPublished: false,
         accessControlList: testAcl,
         contributions: testContributions,
+        audioItemId: testAudioItemId,
     })
 );
 
@@ -62,6 +75,8 @@ const assertTestSongAsExpected = ({
     name,
     id,
     isPublished,
+    audioItemId,
+    mediaItemId,
 }: // accessControlList,
 // contributions,
 EventSourcedSongViewModel) => {
@@ -72,6 +87,10 @@ EventSourcedSongViewModel) => {
     expect(id).toEqual(idOfSongToTestInDetail);
 
     expect(isPublished).toEqual(false);
+
+    expect(audioItemId).toEqual(testAudioItemId);
+
+    expect(mediaItemId).toBe(testMediaItemId);
 
     // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-76?atlOrigin=eyJpIjoiNjRhMTdkZmVlOWFiNDAxZThmZGZiYmViY2Y5ODE4MTUiLCJwIjoiaiJ9] opt-in
     // expect(accessControlList.toDTO()).toEqual(testAcl.toDTO());
@@ -87,6 +106,8 @@ const translationLanguageCodeForLyrics = LanguageCode.English;
 
 describe(`ArangoSongQueryRepository`, () => {
     let testQueryRepository: ISongQueryRepository;
+
+    let audioQueryRepository: IAudioItemQueryRepository;
 
     let databaseProvider: ArangoDatabaseProvider;
 
@@ -116,10 +137,16 @@ describe(`ArangoSongQueryRepository`, () => {
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
 
         testQueryRepository = new ArangoSongQueryRepository(connectionProvider);
+
+        audioQueryRepository = new ArangoAudioItemQueryRepository(connectionProvider);
     });
 
     beforeEach(async () => {
         await databaseProvider.getDatabaseForCollection('song__VIEWS').clear();
+
+        await databaseProvider.getDatabaseForCollection('audioItem__VIEWS').clear();
+
+        await audioQueryRepository.create(testAudioItem);
     });
 
     afterAll(async () => {
@@ -360,9 +387,11 @@ describe(`ArangoSongQueryRepository`, () => {
                 text: targetNote.note,
             });
 
-            const { notes } = (await testQueryRepository.fetchById(
+            const updatedView = (await testQueryRepository.fetchById(
                 targetView.id
             )) as EventSourcedSongViewModel;
+
+            const { notes } = updatedView;
 
             expect(notes).toHaveLength(1);
 

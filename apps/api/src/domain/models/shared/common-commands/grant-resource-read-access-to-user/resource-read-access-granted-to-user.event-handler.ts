@@ -1,4 +1,4 @@
-import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
+import { ResourceType } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { ICoscradEventHandler } from '../../../../../domain/common';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
@@ -27,7 +27,16 @@ export class ResourceReadAccessGrantedToUserEventHandler implements ICoscradEven
             },
         } = event;
 
-        if (resourceType !== AggregateType.term && resourceType !== AggregateType.photograph) {
+        if (
+            ![
+                ResourceType.song,
+                ResourceType.video,
+                ResourceType.audioItem,
+                ResourceType.term,
+                ResourceType.vocabularyList,
+                ResourceType.photograph,
+            ].includes(resourceType)
+        ) {
             // TODO support all resource types
             return;
         }

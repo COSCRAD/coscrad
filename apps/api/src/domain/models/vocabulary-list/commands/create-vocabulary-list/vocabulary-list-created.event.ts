@@ -33,5 +33,7 @@ const testEventId = buildDummyUuid(1);
 // @CoscradEvent((e)=> e.type === 'VOCABULARY_LIST_CREATED',{ contributionStatementTemplate: "created by $fullname"})
 @CoscradEvent(`VOCABULARY_LIST_CREATED`)
 export class VocabularyListCreated extends BaseEvent<VocabularyListCreatedPayload> {
+    protected attributionTemplate = `Vocabulary list template created by: `;
+
     readonly type = 'VOCABULARY_LIST_CREATED';
 }

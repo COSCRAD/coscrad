@@ -59,12 +59,16 @@ export class BaseResourceViewModel
                     );
                 }
 
-                const statement =
-                    capitalizeFirstLetter(eventType.split('_').join(' ').toLocaleLowerCase()) +
-                    contributorIds
-                        .map((id) => contributorsMap.get(id).fullName.toString())
-                        .join(', ') +
-                    '.';
+                const contributorNames =
+                    contributorIds.length === 0
+                        ? 'admin'
+                        : contributorIds
+                              .map((id) => contributorsMap.get(id).fullName.toString())
+                              .join(', ');
+
+                const statement = `${capitalizeFirstLetter(
+                    eventType.split('_').join(' ').toLocaleLowerCase()
+                )} by: ${contributorNames}`;
 
                 return new ContributionSummary({
                     type: eventType,

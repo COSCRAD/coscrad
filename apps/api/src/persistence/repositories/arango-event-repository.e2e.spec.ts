@@ -3,7 +3,7 @@ import {
     CompositeIdentifier,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildMockConfigServiceSpec from '../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../app/config/buildConfigFilePath';
@@ -61,6 +61,11 @@ describe(`Arango Event Repository`, () => {
     beforeAll(async () => {
         const testingModule = await Test.createTestingModule({
             imports: [
+                ConfigModule.forRoot({
+                    isGlobal: true,
+                    envFilePath: buildConfigFilePath(process.env.NODE_ENV),
+                    cache: false,
+                }),
                 DynamicDataTypeModule,
                 SongModule,
                 EventModule,

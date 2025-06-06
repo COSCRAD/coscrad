@@ -1,4 +1,5 @@
 import { IMultilingualTextItem, LanguageCode } from '@coscrad/api-interfaces';
+import { InternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { isNotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
@@ -9,6 +10,7 @@ import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/uti
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { AggregateId } from '../../../types/AggregateId';
 import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
+import { BaseEvent } from '../../shared/events/base-event.entity';
 import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base-arango-resource-query-builder';
 import { ISongQueryRepository } from '../queries/song-query-repository.interface';
 import { EventSourcedSongViewModel } from '../queries/song.view-model.event.sourced';
@@ -29,6 +31,16 @@ export class ArangoSongQueryRepository implements ISongQueryRepository {
 
     async allowUser(aggregateId: AggregateId, userId: AggregateId): Promise<void> {
         await this.database.query(this.baseResourceQueryBuilder.allowUser(aggregateId, userId));
+    }
+
+    async attribute(songId: AggregateId, event: BaseEvent): Promise<void> {
+        const aqlQuery = this.baseResourceQueryBuilder.attribute(songId, event);
+
+        await this.database.query(aqlQuery).catch((reason) => {
+            throw new InternalError(
+                `Failed to add attribution for term via TermRepository: ${reason}`
+            );
+        });
     }
 
     async publish(id: AggregateId): Promise<void> {
@@ -107,18 +119,52 @@ export class ArangoSongQueryRepository implements ISongQueryRepository {
         return asViews;
     }
 
-    async createMany(view: EventSourcedSongViewModel[]): Promise<void> {
-        const documents = view.map(mapEntityDTOToDatabaseDocument);
-
-        await this.database.createMany(documents);
-    }
-
     async count(): Promise<number> {
         return this.database.getCount();
     }
 
     async create(view: EventSourcedSongViewModel): Promise<void> {
-        await this.database.create(mapEntityDTOToDatabaseDocument(view));
+        const query = `
+            LET mediaItemIds = (
+                FOR a IN audioItem__VIEWS
+                FILTER a._key == @songDoc.audioItemId
+                RETURN a.mediaItemId
+            )
+            INSERT MERGE(@songDoc, LENGTH(mediaItemIds) == 1 ? { mediaItemId: mediaItemIds[0]} : {})
+            in song__VIEWS
+        `;
+
+        const bindVars = {
+            // `view.toDto()` ?
+            songDoc: mapEntityDTOToDatabaseDocument(view),
+        };
+
+        await this.database.query({
+            query,
+            bindVars,
+        });
+    }
+
+    async createMany(views: EventSourcedSongViewModel[]): Promise<void> {
+        const query = `
+            FOR songDoc in @songDocs
+            LET mediaItemIds = (
+                FOR a IN audioItem__VIEWS
+                FILTER a._key == songDoc.audioItemId
+                RETURN a.mediaItemId
+            )
+            INSERT MERGE(songDoc, LENGTH(mediaItemIds) == 1 ? { mediaItemId: mediaItemIds[0]} : {})
+            in song__VIEWS
+        `;
+
+        const bindVars = {
+            songDocs: views.map(mapEntityDTOToDatabaseDocument),
+        };
+
+        await this.database.query({
+            query,
+            bindVars,
+        });
     }
 
     async fetchById(id: AggregateId): Promise<Maybe<EventSourcedSongViewModel>> {
