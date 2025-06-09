@@ -1,13 +1,15 @@
+import { AggregateType, ICommandBase } from '@coscrad/api-interfaces';
 import { CommandHandler } from '@coscrad/commands';
+import { ValidationResult } from 'apps/api/src/lib/errors/types/ValidationResult';
 import { Valid } from '../../../../../domain/domainModelValidators/Valid';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../../../domain/types/ResourceType';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { ResultOrError } from '../../../../../types/ResultOrError';
+import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
-import { validAggregateOrThrow } from '../../../shared/functional';
 import { Playlist } from '../../entities';
 import { PlaylistItem } from '../../entities/playlist-item.entity';
 import { AudioItemsImportedToPlaylist } from './audio-items-imported-to-playlist.event';
@@ -18,13 +20,11 @@ export class ImportAudioItemsToPlaylistCommandHandler extends BaseUpdateCommandH
     protected async fetchRequiredExternalState(
         _: ImportAudioItemsToPlaylist
     ): Promise<InMemorySnapshot> {
-        // TODO use ArrayIncludes filter
-        const audioItems = await this.repositoryProvider
-            .forResource(ResourceType.audioItem)
-            .fetchMany();
-
         return new DeluxeInMemoryStore({
-            audioItem: audioItems.filter(validAggregateOrThrow),
+            /**
+             * We use `validateAdditionalConstraints` below in order to optimize
+             * the query.
+             */
         }).fetchFullSnapshotInLegacyFormat();
     }
 
@@ -32,7 +32,7 @@ export class ImportAudioItemsToPlaylistCommandHandler extends BaseUpdateCommandH
         _state: InMemorySnapshot,
         _instance: Playlist
     ): InternalError | Valid {
-        // References to audio items are validated via the schema in the base handler
+        // References to audio items are validated in `validateAdditionalConstraints` for performance
         return Valid;
     }
 
@@ -55,5 +55,37 @@ export class ImportAudioItemsToPlaylistCommandHandler extends BaseUpdateCommandH
         eventMeta: EventRecordMetadata
     ): BaseEvent {
         return new AudioItemsImportedToPlaylist(command, eventMeta);
+    }
+
+    protected override validateReferences(
+        _command: ICommandBase,
+        _snapshot: InMemorySnapshot
+    ): ValidationResult {
+        /**
+         * We opt out of this for performance reasons. References are validated
+         * in `validateAdditionalConstraints` instead.
+         */
+        return Valid;
+    }
+
+    protected async validateAdditionalConstraints(
+        { aggregateCompositeIdentifier, audioItemIds }: ImportAudioItemsToPlaylist,
+        __?: InMemorySnapshot
+    ): Promise<Valid | InternalError> {
+        const missingTerms = await this.repositoryProvider
+            .forResource(ResourceType.audioItem)
+            .exist(audioItemIds);
+
+        if (missingTerms.length == 0) {
+            return Valid;
+        }
+
+        return new InvalidExternalReferenceByAggregateError(
+            aggregateCompositeIdentifier,
+            missingTerms.map((id) => ({
+                type: AggregateType.audioItem,
+                id,
+            }))
+        );
     }
 }
