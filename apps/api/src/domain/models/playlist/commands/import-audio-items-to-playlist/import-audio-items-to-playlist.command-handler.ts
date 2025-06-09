@@ -1,10 +1,10 @@
 import { AggregateType, ICommandBase } from '@coscrad/api-interfaces';
 import { CommandHandler } from '@coscrad/commands';
-import { ValidationResult } from 'apps/api/src/lib/errors/types/ValidationResult';
 import { Valid } from '../../../../../domain/domainModelValidators/Valid';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../../../domain/types/ResourceType';
 import { InternalError } from '../../../../../lib/errors/InternalError';
+import { ValidationResult } from '../../../../../lib/errors/types/ValidationResult';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
