@@ -1,4 +1,8 @@
-import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import {
+    AGGREGATE_COMPOSITE_IDENTIFIER,
+    AggregateType,
+    LanguageCode,
+} from '@coscrad/api-interfaces';
 import { buildDummyAggregateCompositeIdentifier } from '../../../support/utilities';
 
 describe(`Term index-to-detail flow`, () => {
@@ -222,6 +226,8 @@ describe(`Term index-to-detail flow`, () => {
 
         describe(`when there are no contributors of record on the event history`, () => {
             beforeEach(() => {
+                cy.rehydrateViews();
+
                 cy.visit(`/Resources/Terms/${idForTermToView}`);
             });
 
@@ -229,6 +235,18 @@ describe(`Term index-to-detail flow`, () => {
                 cy.contains(textForTermWithNoCredits);
 
                 cy.contains('created by: admin');
+            });
+        });
+
+        describe(`when there are no vocabulary lists for the term (2)`, () => {
+            beforeEach(() => {
+                cy.visit(`/Resources/Terms/${idForTermToView}`);
+            });
+
+            it.only(`should not display vocabulary list info`, () => {
+                cy.getByDataAttribute(`vocbulary-lists-for-term-${idForTermToView}`).should(
+                    'not.exist'
+                );
             });
         });
 
@@ -258,6 +276,49 @@ describe(`Term index-to-detail flow`, () => {
                 cy.openPanel('notes');
 
                 cy.contains('No Notes Found');
+            });
+        });
+
+        describe(`when the term appears in a vocabulary list`, () => {
+            const vocabularyListName = 'survival words';
+
+            const languageCodeForVocabularyListName = LanguageCode.English;
+
+            const vocabularyListCompositeId = buildDummyAggregateCompositeIdentifier(
+                AggregateType.vocabularyList,
+                901
+            );
+
+            before(() => {
+                cy.seedDataWithCommand('CREATE_VOCABULARY_LIST', {
+                    aggregateCompositeIdentifier: vocabularyListCompositeId,
+                    name: vocabularyListName,
+                    languageCodeForName: languageCodeForVocabularyListName,
+                });
+
+                cy.seedDataWithCommand('ADD_TERM_TO_VOCABULARY_LIST', {
+                    // TODO Is this safe?
+                    [AGGREGATE_COMPOSITE_IDENTIFIER]: vocabularyListCompositeId,
+                    termId: basicTermCompositeIdentifier.id,
+                });
+
+                cy.seedDataWithCommand('PUBLISH_RESOURCE', {
+                    [AGGREGATE_COMPOSITE_IDENTIFIER]: vocabularyListCompositeId,
+                });
+            });
+
+            beforeEach(() => {
+                cy.visit(`/Resources/Terms/${basicTermId}`);
+
+                cy.getByDataAttribute('loading').should('not.exist');
+            });
+
+            it.only(`should display the vocabulary list`, () => {
+                cy.contains(vocabularyListName);
+
+                cy.get(
+                    `[href="/Resources/VocabularyLists/${vocabularyListCompositeId.id}"]`
+                ).click();
             });
         });
 

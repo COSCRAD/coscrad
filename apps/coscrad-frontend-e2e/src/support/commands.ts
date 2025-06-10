@@ -24,6 +24,13 @@ declare namespace Cypress {
 
         executeCommandStreamByName(name: string): Chainable<Subject>;
 
+        /**
+         * TODO Remove this. It is a temporary work around for a subtle issue
+         * by which creation events do not receive an attribution in Cypress,
+         * despite there being no problem when using the CLI manually or the UX.
+         */
+        rehydrateViews(): void;
+
         seedDataWithCommand(
             type: string,
             payloadOverrides: Record<string, unknown>,
@@ -185,6 +192,14 @@ Cypress.Commands.add(`executeCommandStreamByName`, (name: string) => {
     });
 });
 
+const rehydrateViews = () => {
+    const command = `node ../../dist/apps/coscrad-cli/main.js rehydrate-views`;
+
+    cy.exec(command);
+};
+
+Cypress.Commands.add(`rehydrateViews`, rehydrateViews);
+
 const seedDataWithCommand = (
     type: string,
     payloadOverrides: Record<string, unknown>,
@@ -198,7 +213,7 @@ const seedDataWithCommand = (
     const command = `node ../../dist/apps/coscrad-cli/main.js seed-test-data-with-command --type=${type} --payload-overrides="${serializedPayloadOverrides}" --meta-overrides="${serializedMetaOverrides}"`;
 
     cy.exec(command).then((_result) => {
-        if (command.includes(`FOOBARBAZ`))
+        if (command.includes(`CREATE_TERM`))
             /* eslint-disable-next-line */
             debugger;
     });

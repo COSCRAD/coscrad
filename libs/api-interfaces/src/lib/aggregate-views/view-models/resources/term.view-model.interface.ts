@@ -1,4 +1,11 @@
 import { IBaseResourceViewModel } from '../base.view-model.interface';
+import { IMultilingualText } from './common';
+
+export interface IVocabularyListRecordForTerm {
+    id: string;
+    name: IMultilingualText;
+    // TODO size
+}
 
 export interface ITermViewModel extends IBaseResourceViewModel {
     audioURL?: string;
@@ -11,4 +18,6 @@ export interface ITermViewModel extends IBaseResourceViewModel {
 
     // TODO put this on the base interface
     isPublished: boolean;
+
+    vocabularyLists: IVocabularyListRecordForTerm[];
 }
