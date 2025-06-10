@@ -11,7 +11,13 @@ describe(`Term index-to-detail flow`, () => {
         513
     );
 
-    const textForTerm = 'She is singing (lang)';
+    const letterThatIsInTheTerm = 'sh';
+
+    const letterThatIsNotInTerm = 'dz';
+
+    const outOfAlphabetSymbolInTerm = '(';
+
+    const textForTerm = `${letterThatIsInTheTerm}e is singing ${outOfAlphabetSymbolInTerm}lang)`;
 
     const { id: basicTermId } = basicTermCompositeIdentifier;
 
@@ -252,6 +258,54 @@ describe(`Term index-to-detail flow`, () => {
                         cy.getByDataAttribute(`index_search_bar`).type(
                             `Ain't no way nobody is going to name a vocabulary list this!!!foobarbaz>?`
                         );
+
+                        cy.getLoading().should(`not.exist`);
+
+                        cy.getByDataAttribute('not-found');
+                    });
+                });
+            });
+
+            describe(`when searching the letters in the term`, () => {
+                beforeEach(() => {
+                    cy.visit('/Resources/Terms');
+
+                    cy.getByDataAttribute('select_index_search_scope').click();
+
+                    cy.get(`[data-value="tokens"]`).click();
+                });
+
+                describe(`when the term has the letter`, () => {
+                    it.only('should return the list', () => {
+                        cy.getByDataAttribute(`index_search_bar`).click();
+
+                        cy.getByDataAttribute(`index_search_bar`).type(letterThatIsInTheTerm);
+
+                        cy.getLoading().should(`not.exist`);
+
+                        cy.contains(textForTerm);
+
+                        cy.contains('Filtered Records: 1');
+                    });
+                });
+
+                describe(`when the term does not have the letter`, () => {
+                    it.only('should return not found', () => {
+                        cy.getByDataAttribute(`index_search_bar`).click();
+
+                        cy.getByDataAttribute(`index_search_bar`).type(letterThatIsNotInTerm);
+
+                        cy.getLoading().should(`not.exist`);
+
+                        cy.getByDataAttribute('not-found');
+                    });
+                });
+
+                describe(`when the term has the letter, but it is out of alphabet`, () => {
+                    it.only(`should return not found`, () => {
+                        cy.getByDataAttribute(`index_search_bar`).click();
+
+                        cy.getByDataAttribute(`index_search_bar`).type(outOfAlphabetSymbolInTerm);
 
                         cy.getLoading().should(`not.exist`);
 
