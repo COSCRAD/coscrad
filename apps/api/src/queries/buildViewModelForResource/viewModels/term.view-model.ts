@@ -18,6 +18,7 @@ import {
     TermCreated,
     TermTranslated,
 } from '../../../domain/models/term/commands';
+import { Token } from '../../../domain/models/term/tokenization';
 import { ContributionSummary } from '../../../domain/models/user-management/contributor/views';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { AggregateId } from '../../../domain/types/AggregateId';
@@ -84,6 +85,7 @@ export class VocabularyListRecordForTerm {
         notes: [],
         connections: [],
         vocabularyLists: [],
+        tokens: [],
     },
 })
 export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
@@ -157,8 +159,10 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
     // TODO remove this in favor of `getAvailableActions()`
     actions: string[];
 
+    tokens: Token[];
+
     constructor(dto: DTO<TermViewModel>) {
-        const { actions, mediaItemId, vocabularyLists } = dto;
+        const { actions, mediaItemId, vocabularyLists, tokens } = dto;
 
         // TODO extend base
         // super(dto);
@@ -217,6 +221,8 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
                   return new VocabularyListRecordForTerm(vocabularyListDto);
               })
             : [];
+
+        this.tokens = Array.isArray(tokens) ? tokens : [];
     }
 
     static fromTermCreated({
@@ -243,6 +249,7 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
             name: buildMultilingualTextWithSingleItem(text, languageCode),
             notes: [], // none at creation
             connections: [],
+            tokens: [], // appended externally
         });
 
         term.name = buildMultilingualTextWithSingleItem(text, languageCode);
@@ -307,6 +314,7 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
             tags: [],
             notes: [], // none at creation
             connections: [],
+            tokens: [], // appended externally
         });
 
         return term;
