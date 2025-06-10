@@ -32,7 +32,7 @@ import { DTO } from '../../../../../types/DTO';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { ResourcesConnectedWithNote } from './resources-connected-with-note.event';
 import {
-    IQueryRepositoryForConnection,
+    IQueryRepositoryForConnectable,
     IResourceConnectionDto,
     ResourcesConnectedWithNoteEventHandler,
 } from './resources-connected-with-note.event-handler';
@@ -64,7 +64,7 @@ const existingWidgetViewForFromMember = new WidgetViewModel({
     connections: [],
 });
 
-interface IWidgetQueryRepository extends IQueryRepositoryForConnection {
+interface IWidgetQueryRepository extends IQueryRepositoryForConnectable {
     fetchById(id: string): Promise<Maybe<WidgetViewModel>>;
     create(w: WidgetViewModel): Promise<void>;
 }

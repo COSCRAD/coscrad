@@ -23,7 +23,7 @@ export interface IResourceConnectionDto {
     role: EdgeConnectionMemberRole;
 }
 
-export interface IQueryRepositoryForConnection {
+export interface IQueryRepositoryForConnectable {
     /**
      *
      * X toMemberCompositeIdentifier
@@ -40,7 +40,7 @@ export interface IQueryRepositoryForConnection {
 }
 
 interface IQueryRepositoryProvider {
-    forResource(resourceType: string): IQueryRepositoryForConnection;
+    forResource(resourceType: string): IQueryRepositoryForConnectable;
 }
 
 @CoscradEventConsumer('RESOURCES_CONNECTED_WITH_NOTE')

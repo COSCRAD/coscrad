@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { Maybe } from '../../../../lib/types/maybe';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { AggregateId } from '../../../types/AggregateId';
+import { IQueryRepositoryForConnectable } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { IQueryRepositoryForAnnotatable } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { IAccessible } from '../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
 import { IPublishable } from '../../shared/common-commands/publish-resource/resource-published.event-handler';
@@ -21,7 +22,8 @@ export interface ITermQueryRepository
     extends IAccessible,
         IPublishable,
         IQueryRepositoryForTaggable,
-        IQueryRepositoryForAnnotatable {
+        IQueryRepositoryForAnnotatable,
+        IQueryRepositoryForConnectable {
     subscribeToUpdates(): Observable<{ data: { type: string } }>;
 
     create(view: TermViewModel): Promise<void>;
