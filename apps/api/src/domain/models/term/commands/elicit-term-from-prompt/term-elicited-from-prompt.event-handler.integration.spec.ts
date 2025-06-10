@@ -20,7 +20,7 @@ import { ITermQueryRepository } from '../../queries';
 import { ArangoTermQueryRepository } from '../../repositories/arango-term-query-repository';
 import { PromptTermCreated } from '../create-prompt-term';
 import { TermElicitedFromPromptEventHandler } from './term-elicited-from-prompt.event-handler';
-import { TermElicitedFromPrompt } from './term.elicited.from.prompt';
+import { TermElicitedFromPrompt } from './term-elicited.from.prompt';
 
 const termId = buildDummyUuid(1);
 
