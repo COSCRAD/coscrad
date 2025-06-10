@@ -172,7 +172,7 @@ export class BaseArangoResourceViewQueryBuilder {
                     for c in contributorsForThisEvent
                     return c._key
                 )
-                LET attribution = CONCAT(@template,LENGTH(listOfContributors)>0 ? CONCAT_SEPARATOR(', ',listOfContributors) : "admin")
+                LET attribution = CONCAT(@template,LENGTH(listOfContributors)>0 ? CONCAT_SEPARATOR(', ',listOfContributors) : "(data entry) by: admin")
                 LET newContributions = {
                     type: @eventType,
                     contributorIds,
