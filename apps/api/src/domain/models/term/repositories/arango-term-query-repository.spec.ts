@@ -698,7 +698,7 @@ describe(`ArangoTermQueryRepository`, () => {
 
                 expect(targetContribution.contributorIds).toHaveLength(0);
 
-                expect(targetContribution.statement.includes('(data entry) by: admin')).toBe(true);
+                expect(targetContribution.statement.includes('by: (data entry) admin')).toBe(true);
             });
         });
     });
