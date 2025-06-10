@@ -1,7 +1,7 @@
 import { Inject } from '@nestjs/common';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
 import { ITermQueryRepository, TERM_QUERY_REPOSITORY_TOKEN } from '../../queries';
-import { TermElicitedFromPrompt } from './term.elicited.from.prompt';
+import { TermElicitedFromPrompt } from './term-elicited.from.prompt';
 
 @CoscradEventConsumer('TERM_ELICITED_FROM_PROMPT')
 export class TermElicitedFromPromptEventHandler implements ICoscradEventHandler {
@@ -21,7 +21,5 @@ export class TermElicitedFromPromptEventHandler implements ICoscradEventHandler 
             text,
             languageCode,
         });
-
-        // TODO attribute
     }
 }
