@@ -15,6 +15,17 @@ describe(`Term index-to-detail flow`, () => {
 
     const { id: basicTermId } = basicTermCompositeIdentifier;
 
+    const searchTermsForVocabularyListThatMatch = 'survival';
+
+    const vocabularyListName = `${searchTermsForVocabularyListThatMatch} words`;
+
+    const languageCodeForVocabularyListName = LanguageCode.English;
+
+    const vocabularyListCompositeId = buildDummyAggregateCompositeIdentifier(
+        AggregateType.vocabularyList,
+        901
+    );
+
     before(() => {
         cy.clearDatabase();
 
@@ -28,6 +39,22 @@ describe(`Term index-to-detail flow`, () => {
 
         cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
             aggregateCompositeIdentifier: basicTermCompositeIdentifier,
+        });
+
+        cy.seedDataWithCommand('CREATE_VOCABULARY_LIST', {
+            aggregateCompositeIdentifier: vocabularyListCompositeId,
+            name: vocabularyListName,
+            languageCodeForName: languageCodeForVocabularyListName,
+        });
+
+        cy.seedDataWithCommand('ADD_TERM_TO_VOCABULARY_LIST', {
+            // TODO Is this safe?
+            [AGGREGATE_COMPOSITE_IDENTIFIER]: vocabularyListCompositeId,
+            termId: basicTermCompositeIdentifier.id,
+        });
+
+        cy.seedDataWithCommand('PUBLISH_RESOURCE', {
+            [AGGREGATE_COMPOSITE_IDENTIFIER]: vocabularyListCompositeId,
         });
     });
 
@@ -70,6 +97,10 @@ describe(`Term index-to-detail flow`, () => {
             cy.contains(textForTerm);
 
             cy.location('pathname').should('contain', `/Resources/Terms/${basicTermId}`);
+        });
+
+        it(`should display the vocabulary list for the basic term`, () => {
+            cy.contains(vocabularyListName);
         });
 
         describe(`the search filter`, () => {
@@ -188,6 +219,46 @@ describe(`Term index-to-detail flow`, () => {
                     });
                 });
             });
+
+            describe(`when searching the vocabulary lists directly`, () => {
+                beforeEach(() => {
+                    cy.visit('/Resources/Terms');
+
+                    cy.getByDataAttribute('select_index_search_scope').click();
+
+                    cy.get(`[data-value="vocabularyLists"]`).click();
+                });
+
+                describe(`when the search terms are contained in the vocabulary list name`, () => {
+                    it(`should return the row for expected term`, () => {
+                        cy.getByDataAttribute(`index_search_bar`).click();
+
+                        cy.getByDataAttribute(`index_search_bar`).type(
+                            searchTermsForVocabularyListThatMatch
+                        );
+
+                        cy.getLoading().should(`not.exist`);
+
+                        cy.contains(textForTerm);
+
+                        cy.contains('Filtered Records: 1');
+                    });
+                });
+
+                describe(`when the search term does not match any lists`, () => {
+                    it(`should display not found`, () => {
+                        cy.getByDataAttribute(`index_search_bar`).click();
+
+                        cy.getByDataAttribute(`index_search_bar`).type(
+                            `Ain't no way nobody is going to name a vocabulary list this!!!foobarbaz>?`
+                        );
+
+                        cy.getLoading().should(`not.exist`);
+
+                        cy.getByDataAttribute('not-found');
+                    });
+                });
+            });
         });
     });
 
@@ -243,7 +314,7 @@ describe(`Term index-to-detail flow`, () => {
                 cy.visit(`/Resources/Terms/${idForTermToView}`);
             });
 
-            it.only(`should not display vocabulary list info`, () => {
+            it(`should not display vocabulary list info`, () => {
                 cy.getByDataAttribute(`vocbulary-lists-for-term-${idForTermToView}`).should(
                     'not.exist'
                 );
@@ -280,40 +351,13 @@ describe(`Term index-to-detail flow`, () => {
         });
 
         describe(`when the term appears in a vocabulary list`, () => {
-            const vocabularyListName = 'survival words';
-
-            const languageCodeForVocabularyListName = LanguageCode.English;
-
-            const vocabularyListCompositeId = buildDummyAggregateCompositeIdentifier(
-                AggregateType.vocabularyList,
-                901
-            );
-
-            before(() => {
-                cy.seedDataWithCommand('CREATE_VOCABULARY_LIST', {
-                    aggregateCompositeIdentifier: vocabularyListCompositeId,
-                    name: vocabularyListName,
-                    languageCodeForName: languageCodeForVocabularyListName,
-                });
-
-                cy.seedDataWithCommand('ADD_TERM_TO_VOCABULARY_LIST', {
-                    // TODO Is this safe?
-                    [AGGREGATE_COMPOSITE_IDENTIFIER]: vocabularyListCompositeId,
-                    termId: basicTermCompositeIdentifier.id,
-                });
-
-                cy.seedDataWithCommand('PUBLISH_RESOURCE', {
-                    [AGGREGATE_COMPOSITE_IDENTIFIER]: vocabularyListCompositeId,
-                });
-            });
-
             beforeEach(() => {
                 cy.visit(`/Resources/Terms/${basicTermId}`);
 
                 cy.getByDataAttribute('loading').should('not.exist');
             });
 
-            it.only(`should display the vocabulary list`, () => {
+            it(`should display the vocabulary list`, () => {
                 cy.contains(vocabularyListName);
 
                 cy.get(

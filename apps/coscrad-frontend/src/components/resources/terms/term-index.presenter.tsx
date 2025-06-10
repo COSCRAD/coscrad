@@ -1,13 +1,23 @@
-import { AggregateType, ITermViewModel } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    ITermViewModel,
+    IVocabularyListRecordForTerm,
+} from '@coscrad/api-interfaces';
 import { AudioClipPlayer } from '@coscrad/media-player';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { LinkOff } from '@mui/icons-material';
+import { Typography } from '@mui/material';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import { TermIndexState } from '../../../store/slices/resources/terms/types/term-index-state';
+import { CommaSeparatedList } from '../../../utils/generic-components';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
-import { Matchers } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/filter-table-data';
+import {
+    doesTextIncludeCaseInsensitive,
+    Matchers,
+} from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/filter-table-data';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
+import { findOriginalTextItem } from '../../notes/shared/find-original-text-item';
 import { doesSomeMultilingualTextItemInclude } from '../utils/query-matchers';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { renderContributionsTextCell } from '../utils/render-contributions-text-cell';
@@ -24,6 +34,7 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
         { propertyKey: 'name', headingLabel: 'Term' },
         { propertyKey: 'audioURL', headingLabel: 'Audio URL' },
         { propertyKey: 'contributions', headingLabel: 'Contributors' },
+        { propertyKey: 'vocabularyLists', headingLabel: 'Vocabulary Lists' },
     ];
 
     const cellRenderersDefinition: CellRenderersDefinition<ITermViewModel> = {
@@ -38,10 +49,21 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
             ),
         contributions: ({ contributions }: ITermViewModel) =>
             renderContributionsTextCell(contributions),
+        vocabularyLists: ({ vocabularyLists }: ITermViewModel) => (
+            <CommaSeparatedList>
+                {vocabularyLists.map(({ name }) => (
+                    <Typography>{findOriginalTextItem(name).text}</Typography>
+                ))}
+            </CommaSeparatedList>
+        ),
     };
 
     const matchers: Matchers<ITermViewModel> = {
         name: doesSomeMultilingualTextItemInclude,
+        vocabularyLists: (vocabularyLists: IVocabularyListRecordForTerm[], searchTerm: string) =>
+            vocabularyLists.some(({ name }) =>
+                name.items.some(({ text }) => doesTextIncludeCaseInsensitive(text, searchTerm))
+            ),
     };
 
     return (
@@ -51,7 +73,7 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
             tableData={terms}
             cellRenderersDefinition={cellRenderersDefinition}
             heading={'Terms'}
-            filterableProperties={['name', 'contributions']}
+            filterableProperties={['name', 'contributions', 'vocabularyLists']}
             matchers={matchers}
         />
     );
