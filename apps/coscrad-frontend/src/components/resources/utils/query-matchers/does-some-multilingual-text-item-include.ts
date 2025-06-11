@@ -21,9 +21,11 @@ export const doesSomeMultilingualTextItemInclude = (
 
     const searchTerms = query.split(`{${languageCodeInQuery}}:`)[1];
 
-    return multilingualText.items.some(
-        ({ text, languageCode }) =>
+    return multilingualText.items.some(({ text, languageCode }) => {
+        const isThereAMatch =
             text.toLowerCase().includes(searchTerms.toLowerCase()) &&
-            languageCodeInQuery === languageCode
-    );
+            languageCodeInQuery === languageCode;
+
+        return isThereAMatch;
+    });
 };

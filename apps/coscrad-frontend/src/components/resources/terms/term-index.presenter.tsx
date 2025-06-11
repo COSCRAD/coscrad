@@ -75,7 +75,13 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
             ),
         tokens: (tokens, searchTerm) =>
             (tokens || []).some(({ characters }) =>
-                characters.some((c) => !c.isOutOfAlphabet && c.text === searchTerm.toLowerCase())
+                characters.some((c) => {
+                    const doesMatch = c.text === searchTerm.toLowerCase();
+
+                    if (c.isOutOfAlphabet) return false;
+
+                    return doesMatch;
+                })
             ),
     };
 

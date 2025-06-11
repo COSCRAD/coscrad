@@ -33,7 +33,6 @@ export const NewPageForm = ({
             <TextField
                 data-testid="text:add-page-to-digital-text"
                 onChange={(e) => {
-                    console.log({ eTargetValue: e.target.value });
                     setPageIdentifier(e.target.value);
                 }}
             />

@@ -17,7 +17,13 @@ describe(`Term index-to-detail flow`, () => {
 
     const outOfAlphabetSymbolInTerm = '(';
 
-    const textForTerm = `${letterThatIsInTheTerm}e is singing ${outOfAlphabetSymbolInTerm}lang)`;
+    const cappedConsonants = [0x015d, 0x0175, 0x1e90].map((codePoint) =>
+        String.fromCodePoint(codePoint)
+    );
+
+    const textForTerm = `${letterThatIsInTheTerm}e is singing ${outOfAlphabetSymbolInTerm}lang) ${cappedConsonants.join(
+        ''
+    )}`;
 
     const { id: basicTermId } = basicTermCompositeIdentifier;
 
@@ -276,21 +282,123 @@ describe(`Term index-to-detail flow`, () => {
                 });
 
                 describe(`when the term has the letter`, () => {
-                    it.only('should return the list', () => {
-                        cy.getByDataAttribute(`index_search_bar`).click();
+                    describe(`when the letter is a standard Latin character`, () => {
+                        it('should return the term', () => {
+                            cy.getByDataAttribute(`index_search_bar`).click();
 
-                        cy.getByDataAttribute(`index_search_bar`).type(letterThatIsInTheTerm);
+                            cy.getByDataAttribute(`index_search_bar`).type(letterThatIsInTheTerm);
 
-                        cy.getLoading().should(`not.exist`);
+                            cy.getLoading().should(`not.exist`);
 
-                        cy.contains(textForTerm);
+                            cy.contains(textForTerm);
 
-                        cy.contains('Filtered Records: 1');
+                            cy.contains('Filtered Records: 1');
+                        });
+                    });
+
+                    describe(`when the letter contains a diacritic`, () => {
+                        const orphanedCap = '̂';
+
+                        describe(`when the user uses the virtual keyboard for data entry`, () => {
+                            describe('ŝ', () => {
+                                describe(`when typing s + cap (lone surrogate)`, () => {
+                                    it('should return the term', () => {
+                                        cy.getByDataAttribute(`index_search_bar`).click();
+
+                                        cy.getByDataAttribute(`index_search_bar`).type('s');
+
+                                        cy.getByDataAttribute(`index_search_bar`).type(orphanedCap);
+
+                                        cy.getLoading().should(`not.exist`);
+
+                                        cy.contains(textForTerm);
+
+                                        cy.contains('Filtered Records: 1');
+                                    });
+                                });
+                            });
+
+                            // this also may apply when using system keyboards
+                            describe(`when pasting the multi-part unicode s + cap (lone surrogate) from elsewhere`, () => {
+                                it(`should return the target term`, () => {
+                                    cy.getByDataAttribute(`index_search_bar`).click();
+
+                                    cy.getByDataAttribute(`index_search_bar`).type(
+                                        `${'\u0073'}${`\u0302`}`
+                                    );
+
+                                    cy.getLoading().should(`not.exist`);
+
+                                    cy.contains(textForTerm);
+
+                                    cy.contains('Filtered Records: 1');
+                                });
+                            });
+
+                            // this also may apply when using system keyboards
+                            describe(`when pasting the atomic unicode (no lone surrogate) from elsewhere`, () => {
+                                it(`should return the target term`, () => {
+                                    cy.getByDataAttribute(`index_search_bar`).click();
+
+                                    cy.getByDataAttribute(`index_search_bar`).type('ŝ');
+
+                                    cy.getLoading().should(`not.exist`);
+
+                                    cy.contains(textForTerm);
+
+                                    cy.contains('Filtered Records: 1');
+                                });
+                            });
+                        });
+
+                        describe(`when the user disables the simulated keyboard and types the text directly`, () => {
+                            describe('ŝ', () => {
+                                describe('s + cap - pasted', () => {
+                                    it('should return the term', () => {
+                                        // TODO better selector here?
+                                        cy.get('.PrivateSwitchBase-input').click();
+
+                                        cy.getByDataAttribute(`index_search_bar`).click();
+
+                                        cy.getByDataAttribute(`index_search_bar`).type(
+                                            // s + cap
+                                            `${'\u0073'}${`\u0302`}`
+                                            // cappedConsonants[0]
+                                        );
+
+                                        cy.getLoading().should(`not.exist`);
+
+                                        cy.contains(textForTerm);
+
+                                        cy.contains('Filtered Records: 1');
+                                    });
+                                });
+
+                                describe('full ŝ from unicode pasted', () => {
+                                    it('should return the term', () => {
+                                        // TODO better selector here?
+                                        cy.get('.PrivateSwitchBase-input').click();
+
+                                        cy.getByDataAttribute(`index_search_bar`).click();
+
+                                        cy.getByDataAttribute(`index_search_bar`).type(
+                                            cappedConsonants[0]
+                                        );
+
+                                        cy.getLoading().should(`not.exist`);
+
+                                        cy.contains(textForTerm);
+
+                                        cy.contains('Filtered Records: 1');
+                                    });
+                                });
+                            });
+                        });
                     });
                 });
 
                 describe(`when the term does not have the letter`, () => {
-                    it.only('should return not found', () => {
+                    it('should return not found', () => {
                         cy.getByDataAttribute(`index_search_bar`).click();
 
                         cy.getByDataAttribute(`index_search_bar`).type(letterThatIsNotInTerm);
@@ -302,7 +410,7 @@ describe(`Term index-to-detail flow`, () => {
                 });
 
                 describe(`when the term has the letter, but it is out of alphabet`, () => {
-                    it.only(`should return not found`, () => {
+                    it(`should return not found`, () => {
                         cy.getByDataAttribute(`index_search_bar`).click();
 
                         cy.getByDataAttribute(`index_search_bar`).type(outOfAlphabetSymbolInTerm);
@@ -359,7 +467,7 @@ describe(`Term index-to-detail flow`, () => {
             it(`should display the defualt credits`, () => {
                 cy.contains(textForTermWithNoCredits);
 
-                cy.contains('created by: admin');
+                cy.contains('created by: (data entry) admin');
             });
         });
 

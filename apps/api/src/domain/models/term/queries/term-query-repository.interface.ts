@@ -1,4 +1,4 @@
-import { IMultilingualTextItem, LanguageCode } from '@coscrad/api-interfaces';
+import { IMultilingualTextItem, IToken, LanguageCode } from '@coscrad/api-interfaces';
 import { Observable } from 'rxjs';
 import { Maybe } from '../../../../lib/types/maybe';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
@@ -42,7 +42,9 @@ export interface ITermQueryRepository
 
     elicitFromPrompt(
         id: AggregateId,
-        translationItem: Omit<IMultilingualTextItem, 'role'>
+        translationItem: Omit<IMultilingualTextItem, 'role'>,
+        // TODO Should we have a separate `updateTokens` method?
+        tokens: IToken[]
     ): Promise<void>;
 
     publish(id: AggregateId): Promise<void>;

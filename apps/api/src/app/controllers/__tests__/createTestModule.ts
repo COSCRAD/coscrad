@@ -1,4 +1,4 @@
-import { ResourceType } from '@coscrad/api-interfaces';
+import { LanguageCode, ResourceType } from '@coscrad/api-interfaces';
 import { CommandHandlerService, CommandModule } from '@coscrad/commands';
 import { bootstrapDynamicTypes } from '@coscrad/data-types';
 import { ConfigService } from '@nestjs/config';
@@ -249,6 +249,7 @@ import {
 } from '../../../domain/models/term/queries';
 import { ArangoQueryRepositoryProvider } from '../../../domain/models/term/repositories/arango-query-repository-provider';
 import { ArangoTermQueryRepository } from '../../../domain/models/term/repositories/arango-term-query-repository';
+import { ChilcotinTokenizer } from '../../../domain/models/term/tokenization';
 import {
     ContributorCreated,
     CreateContributor,
@@ -320,6 +321,7 @@ import { BibliographicCitationViewModel } from '../../../queries/buildViewModelF
 import { DigitalTextQueryService } from '../../../queries/digital-text';
 import { DigitalTextQueryRepository } from '../../../queries/digital-text/digital-text.query-repository';
 import { NoteViewModel } from '../../../queries/edgeConnectionViewModels/note.view-model';
+import { formatLanguageCode } from '../../../queries/presentation/formatLanguageCode';
 import { DTO } from '../../../types/DTO';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../../../validation';
 import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMockConfigService';
@@ -471,6 +473,24 @@ export default async (
                         configOverrides,
                         buildConfigFilePath(Environment.test)
                     ),
+            },
+            {
+                provide: 'TOKENIZER_PROVIDER',
+                useValue: {
+                    has(languageCode: LanguageCode) {
+                        return languageCode === LanguageCode.Chilcotin;
+                    },
+                    forLanguage(languageCode: LanguageCode) {
+                        if (languageCode === LanguageCode.Chilcotin)
+                            return new ChilcotinTokenizer();
+
+                        throw new InternalError(
+                            `Tokenization is not supported for language: ${formatLanguageCode(
+                                languageCode
+                            )}. Did you forget to check tokenizerProvider.has(${languageCode})?`
+                        );
+                    },
+                },
             },
             {
                 provide: EVENT_PUBLISHER_TOKEN,

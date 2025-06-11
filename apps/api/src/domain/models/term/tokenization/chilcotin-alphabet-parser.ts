@@ -36,9 +36,13 @@ class Node {
         );
     }
 
-    toList(list?: string[]): string[] {
+    toList(list?: string[], seenNodes?: Set<Node>): string[] {
         if (!list) {
             list = [];
+        }
+
+        if (!seenNodes) {
+            seenNodes = new Set<Node>();
         }
 
         if (this.text !== null && this.isLetter) {
@@ -46,7 +50,17 @@ class Node {
         }
 
         for (const childNode of this.transitions.values()) {
-            childNode.toList(list);
+            /**
+             * Note that there are multiple paths to some nodes due to the possibility
+             * of entering a plain consonant followed by a lone surrogate (e.g. "s" + cap).
+             * We are comparing by reference not value here. We **do not** want to
+             * hide the fact that there are multiple nodes with the same symbol,
+             * a state which breaks the uniqueness invariant checked below.
+             */
+            if (!seenNodes.has(childNode)) {
+                seenNodes.add(childNode);
+                childNode.toList(list, seenNodes);
+            }
         }
 
         return list;
@@ -67,7 +81,7 @@ class Node {
     }
 }
 
-const isolatedLetters = 'aeiɨuobpmnjzŝẑŵhyʔ'.split('');
+const isolatedLetters = 'aeiɨuobpmnjhyʔ'.split('');
 
 export class ChilcotinAlphabetParser {
     // we are flagging that the root is not a letter
@@ -128,15 +142,54 @@ export class ChilcotinAlphabetParser {
 
         this.root.registerTransition('x', x);
 
-        // 2 from s
+        // 3 from s
         const s = new Node('s').registerTransition('h', new Node('sh'));
+
+        const sCapCharacter = String.fromCharCode(0x015d);
+
+        const sCap = new Node(sCapCharacter);
+
+        this.root.registerTransition(sCapCharacter, sCap);
+
+        /**
+         * This is unfortunate, but sometimes the cap comes through as an
+         * independent character, and sometimes the capped letters come through
+         * as atomic letters.
+         */
+        s.registerTransition('̂', sCap);
 
         this.root.registerTransition('s', s);
 
         // 2 from w
         const w = new Node('w').registerTransition('h', new Node('wh'));
 
+        const wCapChar = String.fromCharCode(0x0175);
+
+        // see note for 'ŝ'
+        const wCap = new Node(wCapChar);
+
+        // enter w + cap (lone surrogate)
+        w.registerTransition('̂', wCap);
+
         this.root.registerTransition('w', w);
+
+        // enter the entire unicode character atomically
+        this.root.registerTransition(wCapChar, wCap);
+
+        // 2 from z
+        const z = new Node('z');
+
+        const zCapChar = String.fromCharCode(0x1e91);
+
+        const zCap = new Node(zCapChar);
+
+        // z + cap (lone surrogate)
+        z.registerTransition('̂', zCap);
+
+        // enter 'ẑ' atomically as one character
+        this.root.registerTransition(zCapChar, zCap);
+
+        this.root.registerTransition('z', z);
 
         // 2 from c (c doesn't count, as it isn't a valid letter on its own)
         const c = new Node('c', false).registerTransition(
@@ -154,10 +207,18 @@ export class ChilcotinAlphabetParser {
         const uniqueLetters = Array.from(new Set(letters));
 
         // check for duplicates
-        assert(letters.length === uniqueLetters.length);
+        // note that we include caps as well
+        assert(
+            letters.length === uniqueLetters.length,
+            `Duplicate letters found in alphabet: ${letters.join(', ')}`
+        );
 
         const NUMBER_OF_LETTERS_IN_ALPHABET = 53;
 
+        /**
+         * We have to include the cap as an independent symbol as in some
+         * cases this is how it comes through.
+         */
         const actualSize = uniqueLetters.length;
 
         assert(actualSize === NUMBER_OF_LETTERS_IN_ALPHABET);

@@ -1,4 +1,4 @@
-import { AggregateType, IMultilingualTextItem } from '@coscrad/api-interfaces';
+import { AggregateType, IMultilingualTextItem, LanguageCode } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -7,22 +7,37 @@ import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/environment';
 import { ConsoleCoscradCliLogger } from '../../../../../coscrad-cli/logging';
 import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
+import { InternalError } from '../../../../../lib/errors/InternalError';
 import { NotFound } from '../../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { TermViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/term.view-model';
+import { formatLanguageCode } from '../../../../../queries/presentation/formatLanguageCode';
 import { TestEventStream } from '../../../../../test-data/events';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { ArangoAudioItemQueryRepository } from '../../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { ITermQueryRepository } from '../../queries';
 import { ArangoTermQueryRepository } from '../../repositories/arango-term-query-repository';
+import { ChilcotinTokenizer } from '../../tokenization';
 import { PromptTermCreated } from '../create-prompt-term';
 import { TermElicitedFromPromptEventHandler } from './term-elicited-from-prompt.event-handler';
 import { TermElicitedFromPrompt } from './term-elicited.from.prompt';
 
 const termId = buildDummyUuid(1);
+
+const sCap = String.fromCodePoint(349);
+
+const lettersInElicitedTerm = [
+    ['lh', 'a'],
+    [sCap, 'i', 'n', 'j', 'e', 'n'],
+];
+
+// 'ŝ' is the one from the virtual keyboard
+const _foo = [0, 1].map((index) => 'ŝ'.charCodeAt(index));
+
+const elicitedTermText = `Lha ŝinjen`;
 
 const promptTermCreated = new TestEventStream().andThen<PromptTermCreated>({
     type: 'PROMPT_TERM_CREATED',
@@ -30,6 +45,11 @@ const promptTermCreated = new TestEventStream().andThen<PromptTermCreated>({
 
 const termElicitedFromPrompt = promptTermCreated.andThen<TermElicitedFromPrompt>({
     type: 'TERM_ELICITED_FROM_PROMPT',
+    payload: {
+        text: elicitedTermText,
+        // This must line up with the expected tokenization result
+        languageCode: LanguageCode.Chilcotin,
+    },
 });
 
 const [creationEvent, elicitationEvent] = termElicitedFromPrompt.as({
@@ -46,9 +66,30 @@ describe(`TermElicitedFromPromptEventHandler.handle`, () => {
 
     let termElicitedFromPromptEventHandler: TermElicitedFromPromptEventHandler;
 
+    const testTokenizerProvider = {
+        has(languageCode: LanguageCode) {
+            return languageCode === LanguageCode.Chilcotin;
+        },
+        forLanguage(languageCode: LanguageCode) {
+            if (languageCode === LanguageCode.Chilcotin) return new ChilcotinTokenizer();
+
+            throw new InternalError(
+                `Tokenization is not supported for language: ${formatLanguageCode(
+                    languageCode
+                )}. Did you forget to check tokenizerProvider.has(${languageCode})?`
+            );
+        },
+    };
+
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
             imports: [PersistenceModule.forRootAsync()],
+            providers: [
+                {
+                    provide: 'TOKENIZER_PROVIDER',
+                    useValue: testTokenizerProvider,
+                },
+            ],
         })
             .overrideProvider(ConfigService)
             .useValue(
@@ -76,7 +117,8 @@ describe(`TermElicitedFromPromptEventHandler.handle`, () => {
         );
 
         termElicitedFromPromptEventHandler = new TermElicitedFromPromptEventHandler(
-            testQueryRepository
+            testQueryRepository,
+            testTokenizerProvider
         );
     });
 
@@ -125,6 +167,18 @@ describe(`TermElicitedFromPromptEventHandler.handle`, () => {
             expect(languageCode).toBe(elicitationEvent.payload.languageCode);
 
             expect(updatedView.actions).not.toContain('ELICIT_TERM_FROM_PROMPT');
+
+            const { tokens } = updatedView;
+
+            const wordsThatAreMissingTokens = lettersInElicitedTerm.filter((letters, index) => {
+                tokens[index].text.toLowerCase() !== letters.join('').toLowerCase();
+            });
+
+            expect(wordsThatAreMissingTokens).toEqual([]);
+
+            const foundLetters = tokens.map(({ characters }) => characters.map(({ text }) => text));
+
+            expect(foundLetters).toEqual(lettersInElicitedTerm);
         });
     });
 

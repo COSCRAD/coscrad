@@ -98,7 +98,7 @@ export const IndexTable = <T,>({
         typeof allProperties | keyof T
     >(allProperties);
 
-    const [shouldUseVirtualKeyboard, _setShouldUseVirtualKeyboard] = useState<boolean>(true);
+    const [shouldUseVirtualKeyboard, setShouldUseVirtualKeyboard] = useState<boolean>(true);
 
     const propertiesToFilterBy =
         selectedFilterProperty === 'allProperties'
@@ -305,6 +305,13 @@ export const IndexTable = <T,>({
         </FormControl>
     );
 
+    const defaultCharacterReplacements = {
+        // (U+0073) - ◌̂ (U+0302)[
+        [`${'\u0073'}${`\u0302`}`]: '\u015d',
+        ŵ: '\u0175',
+        ẑ: '\u1e91',
+    };
+
     return (
         <Stack>
             <Typography variant="h2">{heading}</Typography>
@@ -316,15 +323,18 @@ export const IndexTable = <T,>({
                     onValueChange={setSearchValue}
                     specialCharacterReplacements={
                         shouldUseVirtualKeyboard
-                            ? simulatedKeyboard?.specialCharacterReplacements
-                            : undefined
+                            ? Object.assign(
+                                  simulatedKeyboard?.specialCharacterReplacements || {},
+                                  defaultCharacterReplacements
+                              )
+                            : defaultCharacterReplacements
                     }
                 />
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Checkbox
                     checked={shouldUseVirtualKeyboard}
-                    onChange={() => _setShouldUseVirtualKeyboard(!shouldUseVirtualKeyboard)}
+                    onChange={() => setShouldUseVirtualKeyboard(!shouldUseVirtualKeyboard)}
                 />
 
                 {!isNullOrUndefined(simulatedKeyboard) && shouldUseVirtualKeyboard ? (
