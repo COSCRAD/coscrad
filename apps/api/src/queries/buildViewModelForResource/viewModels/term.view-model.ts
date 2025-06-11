@@ -33,7 +33,7 @@ import { DTO } from '../../../types/DTO';
 import { NoteRecordForResourceViewModel } from './note-record-for-resource.view-model';
 import { EventSourcedTagRecordForResourceViewModel } from './tag.view-model.event-sourced';
 
-class VocabularyListRecordForTerm {
+export class VocabularyListRecordForTerm {
     @UUID({
         label: 'vocabulary list ID',
         description: 'system identifier for this vocabulary list',
@@ -50,6 +50,10 @@ class VocabularyListRecordForTerm {
         this.id = id;
 
         this.name = new MultilingualText(name);
+    }
+
+    public static fromDto(dto: DTO<VocabularyListRecordForTerm>) {
+        return new VocabularyListRecordForTerm(dto);
     }
 }
 
@@ -186,7 +190,9 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
         this.actions = actions;
 
         this.vocabularyLists = Array.isArray(vocabularyLists)
-            ? vocabularyLists.map((dto) => new VocabularyListRecordForTerm(dto))
+            ? vocabularyLists.map((vocabularyListDto) => {
+                  return new VocabularyListRecordForTerm(vocabularyListDto);
+              })
             : [];
     }
 

@@ -58,4 +58,6 @@ export interface ITermQueryRepository
     count(): Promise<number>;
 
     indexVocabularyList(id: string, vocabularyListId: string): Promise<void>;
+
+    indexVocabularyLists(termIds: string[], vocabularyListId: string): Promise<void>;
 }

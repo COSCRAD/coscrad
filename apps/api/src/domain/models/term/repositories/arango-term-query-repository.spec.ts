@@ -744,4 +744,100 @@ describe(`ArangoTermQueryRepository`, () => {
             });
         });
     });
+
+    describe(`indexVocabularyLists`, () => {
+        describe(`when all terms and the vocabulary lists exist`, () => {
+            const vocabularyListToAdd = buildTestInstance(VocabularyListViewModel, {
+                id: buildDummyUuid(10),
+                name: buildMultilingualTextWithSingleItem('vocabulary list for test terms'),
+            });
+
+            describe(`when this is the first vocabulary list for the term`, () => {
+                const existingTermIds = [1, 2, 3].map(buildDummyUuid);
+
+                const existingTerms = existingTermIds.map((id, index) =>
+                    buildTestInstance(TermViewModel, {
+                        id,
+                        name: buildMultilingualTextWithSingleItem(`term # ${index}`),
+                        vocabularyLists: [],
+                    })
+                );
+
+                beforeEach(async () => {
+                    await databaseProvider.clearViews();
+
+                    await testQueryRepository.createMany(existingTerms);
+
+                    await vocabularyListQueryRepository.create(vocabularyListToAdd);
+                });
+
+                it(`should add the vocabulary list to each term`, async () => {
+                    await testQueryRepository.indexVocabularyLists(
+                        existingTermIds,
+                        vocabularyListToAdd.id
+                    );
+
+                    const updatedViews = await testQueryRepository.fetchMany();
+
+                    updatedViews.forEach(({ vocabularyLists }) => {
+                        expect(vocabularyLists).toHaveLength(1);
+
+                        const { name, id } = vocabularyLists[0];
+
+                        expect(id).toBe(vocabularyListToAdd.id);
+
+                        expect(name.toDTO()).toEqual(vocabularyListToAdd.name.toDTO());
+                    });
+                });
+            });
+
+            describe(`when the terms already have a vocabulary list`, () => {
+                const existingTermIds = [1, 2, 3].map(buildDummyUuid);
+
+                const existingTerms = existingTermIds.map((id, index) =>
+                    buildTestInstance(TermViewModel, {
+                        id,
+                        name: buildMultilingualTextWithSingleItem(`term # ${index}`),
+                        vocabularyLists: [
+                            buildTestInstance(VocabularyListViewModel, {
+                                id: buildDummyUuid(55),
+                                name: buildMultilingualTextWithSingleItem(
+                                    'the terms already have me in their list'
+                                ),
+                            }),
+                        ],
+                    })
+                );
+
+                beforeEach(async () => {
+                    await databaseProvider.clearViews();
+
+                    await testQueryRepository.createMany(existingTerms);
+
+                    await vocabularyListQueryRepository.create(vocabularyListToAdd);
+                });
+
+                it(`should add the vocabulary list to each term`, async () => {
+                    await testQueryRepository.indexVocabularyLists(
+                        existingTermIds,
+                        vocabularyListToAdd.id
+                    );
+
+                    const updatedViews = await testQueryRepository.fetchMany();
+
+                    updatedViews.forEach(({ vocabularyLists }) => {
+                        expect(vocabularyLists).toHaveLength(2);
+
+                        const { name, id } = vocabularyLists.find(
+                            ({ id }) => id === vocabularyListToAdd.id
+                        );
+
+                        expect(id).toBe(vocabularyListToAdd.id);
+
+                        expect(name.toDTO()).toEqual(vocabularyListToAdd.name.toDTO());
+                    });
+                });
+            });
+        });
+    });
 });

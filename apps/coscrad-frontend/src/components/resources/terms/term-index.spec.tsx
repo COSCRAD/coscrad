@@ -16,16 +16,16 @@ import { renderResourceIndexPageForTest } from '../test-utils';
 const dummyTerms: ITermViewModel[] = [
     {
         id: '12',
-        contributions: ['Jane Doe'],
+        contributions: [],
     },
 
     {
         id: '13',
-        contributions: ['Jane Doe'],
+        contributions: [],
     },
     {
         id: '14',
-        contributions: ['Jane Doe', 'John Doe'],
+        contributions: [],
     },
 ].map((partial) => ({
     ...partial,
@@ -38,6 +38,10 @@ const dummyTerms: ITermViewModel[] = [
             },
         ],
     },
+    vocabularyLists: [],
+    actions: [],
+    isPublished: true,
+    tokens: [],
 }));
 
 const endpoint = `${getConfig().apiUrl}/Resources/Terms`;

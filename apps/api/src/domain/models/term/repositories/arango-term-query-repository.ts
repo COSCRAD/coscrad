@@ -247,7 +247,13 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
     async fetchMany(): Promise<TermViewModel[]> {
         const result = await this.database.fetchMany();
 
-        return result.map((doc) => TermViewModel.fromDto(mapDatabaseDocumentToAggregateDTO(doc)));
+        const buildResult = result.map((doc) => {
+            const dto = mapDatabaseDocumentToAggregateDTO(doc);
+
+            return TermViewModel.fromDto(dto);
+        });
+
+        return buildResult;
     }
 
     async count(): Promise<number> {
@@ -278,6 +284,37 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             throw new InternalError(
                 `Failed to register vocabulary list for term via TermRepository: ${reason}`
             );
+        });
+
+        await cursor.all();
+    }
+
+    async indexVocabularyLists(termIds: AggregateId[], vocabularyListId: AggregateId) {
+        const query = `
+        LET newVocabularyListRecords = (
+            FOR v IN vocabularyList__VIEWS
+            FILTER v._key == @vocabularyListId
+            return {
+                id: v._key,
+                name: v.name
+            }
+        )
+        FOR doc IN @@collectionName
+        FILTER CONTAINS_ARRAY(@termIds,doc._key)
+        UPDATE doc WITH {
+            vocabularyLists: LENGTH(doc.vocabularyLists) == 0 ? newVocabularyListRecords : APPEND(doc.vocabularyLists,newVocabularyListRecords)
+        } in @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'term__VIEWS',
+            termIds,
+            vocabularyListId,
+        };
+
+        const cursor = await this.database.query({
+            query,
+            bindVars,
         });
 
         await cursor.all();
