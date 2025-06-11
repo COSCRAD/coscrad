@@ -213,7 +213,7 @@ const seedDataWithCommand = (
     const command = `node ../../dist/apps/coscrad-cli/main.js seed-test-data-with-command --type=${type} --payload-overrides="${serializedPayloadOverrides}" --meta-overrides="${serializedMetaOverrides}"`;
 
     cy.exec(command).then((_result) => {
-        if (command.includes(`CREATE_TERM`))
+        if (command.includes(`FOOBARBAZ`))
             /* eslint-disable-next-line */
             debugger;
     });

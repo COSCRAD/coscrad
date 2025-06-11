@@ -52,7 +52,7 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
         vocabularyLists: ({ vocabularyLists }: ITermViewModel) => (
             <CommaSeparatedList>
                 {vocabularyLists.map(({ name }) => (
-                    <Typography>{findOriginalTextItem(name).text}</Typography>
+                    <Typography variant="body1">{findOriginalTextItem(name).text}</Typography>
                 ))}
             </CommaSeparatedList>
         ),
