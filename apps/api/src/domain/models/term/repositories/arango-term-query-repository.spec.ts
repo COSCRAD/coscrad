@@ -419,6 +419,7 @@ describe(`ArangoTermQueryRepository`, () => {
                 otherCompositeIdentifier: foundCompositeIdentifierForConnectedResource,
                 otherContext,
                 note,
+                role: edgeConnectionMemberRole,
             } = connections[0];
 
             expect(selfContext).toEqual(generalContext);
@@ -427,17 +428,14 @@ describe(`ArangoTermQueryRepository`, () => {
 
             expect(foundCompositeIdentifierForConnectedResource).toEqual(otherCompositeIdentifier);
 
-            const {
-                languageCode: foundLanguageCode,
-                text: foundNoteText,
-                role: foundConnectionRoleForResource,
-            } = note.getOriginalTextItem();
+            const { languageCode: foundLanguageCode, text: foundNoteText } =
+                note.getOriginalTextItem();
 
             expect(foundNoteText).toEqual(textForNote);
 
             expect(foundLanguageCode).toEqual(langaugeCodeForNote);
 
-            expect(foundConnectionRoleForResource).toEqual(role);
+            expect(edgeConnectionMemberRole).toEqual(role);
         });
 
         // TODO test when the term is the `from` member as well

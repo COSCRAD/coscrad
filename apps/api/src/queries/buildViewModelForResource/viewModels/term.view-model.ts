@@ -194,7 +194,7 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
         if (Array.isArray(notes))
             this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));
 
-        if (Array.isArray(this.connections))
+        if (Array.isArray(connections))
             this.connections = connections.map((n) =>
                 ConnectionRecordForResourceViewModel.fromDto(n)
             );

@@ -1,6 +1,7 @@
 import {
     EdgeConnectionContextType,
     EdgeConnectionMemberRole,
+    IEdgeConnectionContext,
     LanguageCode,
     MultilingualTextItemRole,
     ResourceType,
@@ -398,6 +399,75 @@ describe(`ArangoSongQueryRepository`, () => {
             const { note } = notes[0];
 
             expect(note.toDTO()).toEqual(targetNote.note.toDTO());
+        });
+    });
+
+    describe(`ConnectResourcesWith`, () => {
+        const targetSong = buildTestInstance(EventSourcedSongViewModel, {
+            connections: [],
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetSong);
+        });
+
+        it.only(`should add the connection info`, async () => {
+            const generalContext: IEdgeConnectionContext = {
+                type: EdgeConnectionContextType.general,
+            };
+
+            const otherCompositeIdentifier = {
+                type: 'widget' as ResourceType,
+                id: buildDummyUuid(89),
+            };
+
+            const noteId = buildDummyUuid(88);
+
+            const textForNote = 'this is why the widget is relevant to the song';
+
+            const langaugeCodeForNote = LanguageCode.Chilcotin;
+
+            const role = EdgeConnectionMemberRole.to;
+
+            await testQueryRepository.connectResourcesWith(targetSong.id, {
+                noteId,
+                selfContext: generalContext,
+                otherContext: generalContext,
+                compositeIdentifier: otherCompositeIdentifier,
+                text: buildMultilingualTextWithSingleItem(textForNote, langaugeCodeForNote),
+                role,
+            });
+
+            const { connections } = (await testQueryRepository.fetchById(
+                targetSong.id
+            )) as EventSourcedSongViewModel;
+
+            expect(connections).toHaveLength(1);
+
+            const {
+                selfContext,
+                otherCompositeIdentifier: foundCompositeIdentifierForConnectedResource,
+                otherContext,
+                note,
+                role: foundConnectionRoleForResource,
+            } = connections[0];
+
+            expect(selfContext).toEqual(generalContext);
+
+            expect(otherContext).toEqual(generalContext);
+
+            expect(foundCompositeIdentifierForConnectedResource).toEqual(otherCompositeIdentifier);
+
+            const { languageCode: foundLanguageCode, text: foundNoteText } =
+                note.getOriginalTextItem();
+
+            expect(foundNoteText).toEqual(textForNote);
+
+            expect(foundLanguageCode).toEqual(langaugeCodeForNote);
+
+            expect(foundConnectionRoleForResource).toEqual(role);
         });
     });
 

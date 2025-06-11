@@ -8,6 +8,7 @@ import {
 import { DetailScopedCommandWriteContext } from '../../../../app/controllers/command/services/command-info-service';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
+import { ConnectionRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
 import { NoteRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
 import { EventSourcedTagRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { CoscradDataExample } from '../../../../test-data/utilities';
@@ -40,6 +41,7 @@ const testEventId = buildDummyUuid(1);
         lengthMilliseconds: 1500,
         notes: [],
         tags: [],
+        connections: [],
     },
 })
 export class EventSourcedSongViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
@@ -50,6 +52,7 @@ export class EventSourcedSongViewModel implements HasAggregateId, DetailScopedCo
     accessControlList: AccessControlList;
     contributions: ContributionSummary[];
     notes: NoteRecordForResourceViewModel[];
+    connections: ConnectionRecordForResourceViewModel[];
     tags: EventSourcedTagRecordForResourceViewModel[];
 
     @FromSong
@@ -87,6 +90,7 @@ export class EventSourcedSongViewModel implements HasAggregateId, DetailScopedCo
             accessControlList,
             notes,
             tags,
+            connections,
             contributions,
         } = dto;
 
@@ -124,6 +128,11 @@ export class EventSourcedSongViewModel implements HasAggregateId, DetailScopedCo
 
         if (Array.isArray(notes))
             this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));
+
+        if (Array.isArray(connections))
+            this.connections = connections.map((n) =>
+                ConnectionRecordForResourceViewModel.fromDto(n)
+            );
     }
 
     getCompositeIdentifier(): { type: AggregateType; id: AggregateId } {
@@ -185,6 +194,7 @@ export class EventSourcedSongViewModel implements HasAggregateId, DetailScopedCo
             lengthMilliseconds: 0,
             tags: [],
             notes: [],
+            connections: [],
         });
     }
 
