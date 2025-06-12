@@ -64,7 +64,7 @@ const assertTokenizationResult = (result: Token[], expecteds: Token[] | string[]
  * 
  * See [here](https://www.compart.com/en/unicode/U+015D)
  */
-const orphanedCap = '̂';
+const orphanedCap = '̂'; // === String.fromCodePoint(0x0302) === String.fromCodePoint(770)
 
 const sCap = String.fromCharCode(0x015d);
 
@@ -171,96 +171,166 @@ describe(`ChilcotinTokenizer`, () => {
                 expect(first.isOutOfAlphabet).toBe(false);
             };
 
-            describe(`when the cap comes through as a separate character`, () => {
-                const inputForSCap = 's' + orphanedCap + 'en';
+            describe(`when the consonant is lower-cased`, () => {
+                describe(`when the cap comes through as a separate character`, () => {
+                    const inputForSCap = 's' + orphanedCap + 'en';
 
-                const inputForWCap = 'w' + orphanedCap + 'en';
+                    const inputForWCap = 'w' + orphanedCap + 'en';
 
-                const inputForZCap = 'z' + orphanedCap + 'en';
+                    const inputForZCap = 'z' + orphanedCap + 'en';
 
-                describe(inputForSCap, () => {
-                    it(`should return the expected result`, () => {
-                        const result = tokenizer.tokenize(inputForSCap);
+                    describe(inputForSCap, () => {
+                        it(`should return the expected result`, () => {
+                            const result = tokenizer.tokenize(inputForSCap);
 
-                        assertTokenizationResult(result, [[sCap, 'e', 'n']]);
+                            assertTokenizationResult(result, [[sCap, 'e', 'n']]);
 
-                        assertFirstLetterIsInAlphabet(result);
+                            assertFirstLetterIsInAlphabet(result);
+                        });
+                    });
+
+                    describe(inputForWCap, () => {
+                        it(`should return the expected result`, () => {
+                            const result = tokenizer.tokenize(inputForWCap);
+
+                            assertTokenizationResult(result, [[wCap, 'e', 'n']]);
+
+                            assertFirstLetterIsInAlphabet(result);
+                        });
+                    });
+
+                    describe(inputForZCap, () => {
+                        it(`should return the expected result`, () => {
+                            const result = tokenizer.tokenize(inputForZCap);
+
+                            assertTokenizationResult(result, [[zCap, 'e', 'n']]);
+
+                            assertFirstLetterIsInAlphabet(result);
+                        });
                     });
                 });
 
-                describe(inputForWCap, () => {
-                    it(`should return the expected result`, () => {
-                        const result = tokenizer.tokenize(inputForWCap);
+                describe(`when the capped consonant comes through as a single character`, () => {
+                    describe('ŝen', () => {
+                        it(`should return the expected result`, () => {
+                            // TODO use unicode escape to be sure
+                            const result = tokenizer.tokenize('\u015den');
 
-                        const _foo = result[0].characters[0].text;
+                            // assertTokenizationResult(result, [['ŝ', 'e', 'n']]);
 
-                        const _bar = _foo.charCodeAt(0);
+                            // const actualSCap = result[0].characters[0].text;
 
-                        const _baz = _foo.charCodeAt(1);
+                            // const unicodeCharCodeForFirstLetter = actualSCap.codePointAt(0);
 
-                        const _zap = _foo.codePointAt(0);
+                            // expect(unicodeCharCodeForFirstLetter).toBe('u015d');
 
-                        const _whyMe = wCap.codePointAt(0);
+                            assertTokenizationResult(result, [[sCap, 'e', 'n']]);
 
-                        assertTokenizationResult(result, [[wCap, 'e', 'n']]);
-
-                        assertFirstLetterIsInAlphabet(result);
+                            assertFirstLetterIsInAlphabet(result);
+                        });
                     });
-                });
 
-                describe(inputForZCap, () => {
-                    it(`should return the expected result`, () => {
-                        const result = tokenizer.tokenize(inputForZCap);
+                    describe('ŵen', () => {
+                        it(`should return the expected result`, () => {
+                            const unicodeChar = '\u0175';
 
-                        assertTokenizationResult(result, [[zCap, 'e', 'n']]);
+                            // TODO use unicode escape to be sure
+                            const result = tokenizer.tokenize(`${unicodeChar}en`);
 
-                        assertFirstLetterIsInAlphabet(result);
+                            assertTokenizationResult(result, [[wCap, 'e', 'n']]);
+
+                            assertFirstLetterIsInAlphabet(result);
+                        });
+                    });
+
+                    describe('ẑen', () => {
+                        it(`should return the expected result`, () => {
+                            const unicodeChar = '\u1e91';
+
+                            const result = tokenizer.tokenize(`${unicodeChar}en`);
+
+                            assertTokenizationResult(result, [[zCap, 'e', 'n']]);
+
+                            assertFirstLetterIsInAlphabet(result);
+                        });
                     });
                 });
             });
 
-            describe(`when the capped consonant comes through as a single character`, () => {
-                describe('ŝen', () => {
-                    it(`should return the expected result`, () => {
-                        // TODO use unicode escape to be sure
-                        const result = tokenizer.tokenize('\u015den');
+            describe(`when the consonant is upper-cased`, () => {
+                describe(`when the cap comes through as a separate character`, () => {
+                    const inputForSCap = 'S' + orphanedCap + 'en';
 
-                        // assertTokenizationResult(result, [['ŝ', 'e', 'n']]);
+                    const inputForWCap = 'W' + orphanedCap + 'en';
 
-                        // const actualSCap = result[0].characters[0].text;
+                    const inputForZCap = 'Z' + orphanedCap + 'en';
 
-                        // const unicodeCharCodeForFirstLetter = actualSCap.codePointAt(0);
+                    describe(inputForSCap, () => {
+                        it(`should return the expected result`, () => {
+                            const result = tokenizer.tokenize(inputForSCap);
 
-                        // expect(unicodeCharCodeForFirstLetter).toBe('u015d');
+                            assertTokenizationResult(result, [[sCap, 'e', 'n']]);
 
-                        assertTokenizationResult(result, [[sCap, 'e', 'n']]);
+                            assertFirstLetterIsInAlphabet(result);
+                        });
+                    });
 
-                        assertFirstLetterIsInAlphabet(result);
+                    describe(inputForWCap, () => {
+                        it(`should return the expected result`, () => {
+                            const result = tokenizer.tokenize(inputForWCap);
+
+                            assertTokenizationResult(result, [[wCap, 'e', 'n']]);
+
+                            assertFirstLetterIsInAlphabet(result);
+                        });
+                    });
+
+                    describe(inputForZCap, () => {
+                        it(`should return the expected result`, () => {
+                            const result = tokenizer.tokenize(inputForZCap);
+
+                            assertTokenizationResult(result, [[zCap, 'e', 'n']]);
+
+                            assertFirstLetterIsInAlphabet(result);
+                        });
                     });
                 });
 
-                describe('ŵen', () => {
-                    it(`should return the expected result`, () => {
-                        const unicodeChar = '\u0175';
+                describe(`when the capped consonant comes through as a single character`, () => {
+                    describe('ŝen', () => {
+                        it(`should return the expected result`, () => {
+                            // TODO use unicode escape to be sure
+                            const result = tokenizer.tokenize('\u015cen');
 
-                        // TODO use unicode escape to be sure
-                        const result = tokenizer.tokenize(`${unicodeChar}en`);
+                            assertTokenizationResult(result, [[sCap, 'e', 'n']]);
 
-                        assertTokenizationResult(result, [[wCap, 'e', 'n']]);
-
-                        assertFirstLetterIsInAlphabet(result);
+                            assertFirstLetterIsInAlphabet(result);
+                        });
                     });
-                });
 
-                describe('ẑen', () => {
-                    it(`should return the expected result`, () => {
-                        const unicodeChar = '\u1e91';
+                    describe('ŵen', () => {
+                        it(`should return the expected result`, () => {
+                            const unicodeChar = '\u0174';
 
-                        const result = tokenizer.tokenize(`${unicodeChar}en`);
+                            // TODO use unicode escape to be sure
+                            const result = tokenizer.tokenize(`${unicodeChar}en`);
 
-                        assertTokenizationResult(result, [[zCap, 'e', 'n']]);
+                            assertTokenizationResult(result, [[wCap, 'e', 'n']]);
 
-                        assertFirstLetterIsInAlphabet(result);
+                            assertFirstLetterIsInAlphabet(result);
+                        });
+                    });
+
+                    describe('ẑen', () => {
+                        it(`should return the expected result`, () => {
+                            const unicodeChar = '\u1e90';
+
+                            const result = tokenizer.tokenize(`${unicodeChar}en`);
+
+                            assertTokenizationResult(result, [[zCap, 'e', 'n']]);
+
+                            assertFirstLetterIsInAlphabet(result);
+                        });
                     });
                 });
             });

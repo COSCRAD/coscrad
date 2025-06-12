@@ -21,6 +21,8 @@ export const contentConfig: ConfigurableContent = {
         })),
     shouldEnableWebOfKnowledgeForResources: true,
     siteCredits: 'Credits here',
+    // TODO Move this to the database \ back-end and enable it here by language code
+    // TODO Decide how this connects to the `alphabet`
     simulatedKeyboard: {
         name: 'Tŝilhqot’in',
         specialCharacterReplacements: {

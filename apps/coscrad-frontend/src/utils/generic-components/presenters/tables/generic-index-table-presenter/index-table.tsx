@@ -305,11 +305,38 @@ export const IndexTable = <T,>({
         </FormControl>
     );
 
+    /**
+     * Note that the following is required in case text is pasted or entered
+     * from a system keyboard using the consonant + lone surrogate representation
+     * instead of the single Unicode keypoint. The resulting characters are not
+     * equivalent with respect to
+     * - string comparison
+     * - object keys
+     * - map keys
+     * in JavaScript.
+     *
+     * TODO support marked high tone on vowels:
+     *
+     * TODO Unit test the replacement logic
+     * Also, can we standardize either using the escape sequence
+     * in the string literal **or** String.fromCodePoint across the
+     * code base?
+     */
+    // TODO Named consonants \ dictionary
     const defaultCharacterReplacements = {
         // (U+0073) - ◌̂ (U+0302)[
-        [`${'\u0073'}${`\u0302`}`]: '\u015d',
-        ŵ: '\u0175',
-        ẑ: '\u1e91',
+        // ŝ
+        [`s${`\u0302`}`]: '\u015d',
+        // Ŝ
+        [`S${`\u0302`}`]: '\u015c',
+        // ŵ
+        [`w${`\u0302`}`]: '\u0175',
+        // Ŵ
+        [`W${`\u0302`}`]: '\u0174',
+        // ẑ:
+        [`z${`\u0302`}`]: '\u1e91',
+        // Ẑ
+        [`Z${`\u0302`}`]: '\u1e91',
     };
 
     return (

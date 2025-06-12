@@ -59,7 +59,9 @@ declare namespace Cypress {
 
         getLoading(): Chainable<Subject>;
 
-        filterTable(searchScope: string, searchText: string): void;
+        searchIndexTable(searchText: string, searchScope?: string): void;
+
+        toggleSimulatedKeyboard(): void;
     }
 }
 
@@ -287,7 +289,7 @@ Cypress.Commands.add(`openPanel`, (panelType: 'notes' | 'connections') => {
     throw new Error(`Failed to open panel of unknown type: ${panelType}`);
 });
 
-Cypress.Commands.add(`filterTable`, (searchScope: string, searchText: string) => {
+Cypress.Commands.add(`searchIndexTable`, (searchText: string, searchScope = 'allProperties') => {
     cy.getByDataAttribute('select_index_search_scope').click();
 
     cy.getByDataAttribute('select_index_search_scope').get(`[data-value="${searchScope}"]`).click();
@@ -301,4 +303,9 @@ Cypress.Commands.add(`filterTable`, (searchScope: string, searchText: string) =>
 
         cy.getByDataAttribute(`index_search_bar`).type(searchText);
     }
+});
+
+Cypress.Commands.add(`toggleSimulatedKeyboard`, (): void => {
+    // TODO better selector here?
+    cy.get('.PrivateSwitchBase-input').click();
 });
