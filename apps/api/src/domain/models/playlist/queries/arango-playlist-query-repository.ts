@@ -12,6 +12,7 @@ import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/
 import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PlaylistViewModel } from '../../../../queries/buildViewModelForResource/viewModels/playlist.view-model';
 import { AggregateId } from '../../../types/AggregateId';
+import { IResourceConnectionDto } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base-arango-resource-query-builder';
@@ -75,6 +76,10 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
 
     async createNoteAbout(id: string, dto: INoteCreationDto): Promise<void> {
         await this.database.query(this.baseResourceQueryBuilder.createNoteAbout(id, dto));
+    }
+
+    async connectResourcesWith(id: string, dto: IResourceConnectionDto): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.connectResourcesWithNote(id, dto));
     }
 
     async fetchById(id: AggregateId): Promise<Maybe<PlaylistViewModel>> {

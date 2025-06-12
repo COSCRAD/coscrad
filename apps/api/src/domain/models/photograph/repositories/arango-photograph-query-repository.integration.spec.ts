@@ -3,6 +3,7 @@ import {
     EdgeConnectionContextType,
     EdgeConnectionMemberRole,
     IDetailQueryResult,
+    IEdgeConnectionContext,
     IPhotographViewModel,
     LanguageCode,
     ResourceType,
@@ -480,6 +481,77 @@ describe(`ArangoPhotographQueryRepository`, () => {
             const { note } = notes[0];
 
             expect(note.toDTO()).toEqual(targetNote.note.toDTO());
+        });
+    });
+
+    describe(`connectResourcesWith`, () => {
+        const targetPhotograph = buildTestInstance(PhotographViewModel, {
+            // no connections to start
+            connections: [],
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetPhotograph);
+        });
+
+        it(`should add the connection info`, async () => {
+            const generalContext: IEdgeConnectionContext = {
+                type: EdgeConnectionContextType.general,
+            };
+
+            const otherCompositeIdentifier = {
+                type: 'widget' as ResourceType,
+                id: buildDummyUuid(88),
+            };
+
+            const noteId = buildDummyUuid(89);
+
+            const textForNote = 'This is why the widget is relevant to the term.';
+
+            const langaugeCodeForNote = LanguageCode.Chilcotin;
+
+            const role = EdgeConnectionMemberRole.to;
+
+            await testQueryRepository.connectResourcesWith(targetPhotograph.id, {
+                noteId,
+                selfContext: generalContext,
+                otherContext: generalContext,
+                // `otherCompositeIdentifier` ?
+                compositeIdentifier: otherCompositeIdentifier,
+                text: buildMultilingualTextWithSingleItem(textForNote, langaugeCodeForNote),
+                role,
+            });
+
+            const { connections } = (await testQueryRepository.fetchById(
+                targetPhotograph.id
+            )) as PhotographViewModel;
+
+            expect(connections).toHaveLength(1);
+
+            const {
+                selfContext,
+                otherCompositeIdentifier: foundCompositeIdentifierForConnectedResource,
+                otherContext,
+                note,
+                role: edgeConnectionMemberRole,
+            } = connections[0];
+
+            expect(selfContext).toEqual(generalContext);
+
+            expect(otherContext).toEqual(generalContext);
+
+            expect(foundCompositeIdentifierForConnectedResource).toEqual(otherCompositeIdentifier);
+
+            const { languageCode: foundLanguageCode, text: foundNoteText } =
+                note.getOriginalTextItem();
+
+            expect(foundNoteText).toEqual(textForNote);
+
+            expect(foundLanguageCode).toEqual(langaugeCodeForNote);
+
+            expect(edgeConnectionMemberRole).toEqual(role);
         });
     });
 

@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { Maybe } from '../../../../lib/types/maybe';
 import { PlaylistViewModel } from '../../../../queries/buildViewModelForResource/viewModels/playlist.view-model';
 import { AggregateId } from '../../../types/AggregateId';
+import { IQueryRepositoryForConnectable } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { IQueryRepositoryForAnnotatable } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { IAccessible } from '../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
 import {
@@ -19,7 +20,8 @@ export interface IPlaylistQueryRepository
         ICountable,
         IAccessible,
         IQueryRepositoryForTaggable,
-        IQueryRepositoryForAnnotatable {
+        IQueryRepositoryForAnnotatable,
+        IQueryRepositoryForConnectable {
     subscribeToUpdates(): Observable<{ data: { type: string } }>;
 
     create(view: PlaylistViewModel): Promise<void>;

@@ -30,6 +30,7 @@ import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { buildTestInstance, CoscradDataExample } from '../../../test-data/utilities';
 import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
+import { ConnectionRecordForResourceViewModel } from './connection-record-for-resource.view-model';
 import { NoteRecordForResourceViewModel } from './note-record-for-resource.view-model';
 import { TagViewModel } from './tag.view-model';
 import { EventSourcedTagRecordForResourceViewModel } from './tag.view-model.event-sourced';
@@ -138,6 +139,7 @@ export class VocabularyListEntryViewModel {
         accessControlList: new AccessControlList().toDTO(),
         tags: [],
         notes: [],
+        connections: [],
     },
 })
 export class VocabularyListViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
@@ -190,6 +192,13 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
     })
     notes: NoteRecordForResourceViewModel[];
     // end TODO extend base
+
+    @NestedDataType(ConnectionRecordForResourceViewModel, {
+        label: 'connections',
+        description: 'a list of contextualized connections to other resources about with a note',
+        isArray: true,
+    })
+    connections: ConnectionRecordForResourceViewModel[];
 
     @ApiProperty({
         type: VocabularyListEntryViewModel,
@@ -245,7 +254,16 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
         // TODO extend base
         // super(dto);
 
-        const { contributions, name, id, accessControlList, tags, isPublished, notes } = dto;
+        const {
+            contributions,
+            name,
+            id,
+            accessControlList,
+            tags,
+            isPublished,
+            notes,
+            connections,
+        } = dto;
 
         this.contributions = Array.isArray(contributions)
             ? contributions.map((c) => ContributionSummary.fromDto(c))
@@ -268,6 +286,11 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
         if (Array.isArray(notes))
             this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));
         // end TODO extend base
+
+        if (Array.isArray(connections))
+            this.connections = connections.map((n) =>
+                ConnectionRecordForResourceViewModel.fromDto(n)
+            );
 
         if (!isNonEmptyObject(dto)) {
             return;
@@ -365,6 +388,7 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
                 fields: [],
             },
             notes: [], // empty at first
+            connections: [],
         };
 
         const view = new VocabularyListViewModel(dto);

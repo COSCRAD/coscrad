@@ -17,6 +17,7 @@ import mapDatabaseDocumentToEntityDto from '../../../../persistence/database/uti
 import mapEntityDtoToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { VocabularyListViewModel } from '../../../../queries/buildViewModelForResource/viewModels/vocabulary-list.view-model';
 import { AggregateId } from '../../../types/AggregateId';
+import { IResourceConnectionDto } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base-arango-resource-query-builder';
@@ -129,6 +130,10 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
 
     async createNoteAbout(id: string, dto: INoteCreationDto): Promise<void> {
         await this.database.query(this.baseResourceQueryBuilder.createNoteAbout(id, dto));
+    }
+
+    async connectResourcesWith(id: string, dto: IResourceConnectionDto): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.connectResourcesWithNote(id, dto));
     }
 
     async attribute(vocabularyListId: AggregateId, event: BaseEvent): Promise<void> {
