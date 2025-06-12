@@ -392,6 +392,22 @@ exports[`when querying for a term: fetch many when the user is a project admin s
       },
       "notes": [],
       "tags": [],
+      "tokens": [
+        {
+          "characters": [
+            {
+              "isOutOfAlphabet": false,
+              "isPunctuationOrWhiteSpace": false,
+              "text": "t",
+            },
+          ],
+          "isPunct": false,
+          "isSpace": false,
+          "isStop": false,
+          "languageCode": "en",
+          "text": "t (test tokens)",
+        },
+      ],
       "type": "term",
       "vocabularyLists": [],
     },
@@ -786,6 +802,22 @@ exports[`when querying for a term: fetch many when the user is a project admin s
       },
       "notes": [],
       "tags": [],
+      "tokens": [
+        {
+          "characters": [
+            {
+              "isOutOfAlphabet": false,
+              "isPunctuationOrWhiteSpace": false,
+              "text": "t",
+            },
+          ],
+          "isPunct": false,
+          "isSpace": false,
+          "isStop": false,
+          "languageCode": "en",
+          "text": "t (test tokens)",
+        },
+      ],
       "type": "term",
       "vocabularyLists": [],
     },
@@ -1178,6 +1210,22 @@ exports[`when querying for a term: fetch many when the user is a project admin s
       },
       "notes": [],
       "tags": [],
+      "tokens": [
+        {
+          "characters": [
+            {
+              "isOutOfAlphabet": false,
+              "isPunctuationOrWhiteSpace": false,
+              "text": "t",
+            },
+          ],
+          "isPunct": false,
+          "isSpace": false,
+          "isStop": false,
+          "languageCode": "en",
+          "text": "t (test tokens)",
+        },
+      ],
       "type": "term",
       "vocabularyLists": [],
     },

@@ -8,6 +8,8 @@ import { Environment } from '../../../../../app/config/constants/environment';
 import { ConsoleCoscradCliLogger } from '../../../../../coscrad-cli/logging';
 import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
 import { InternalError } from '../../../../../lib/errors/InternalError';
+import { CoscradNLPModule } from '../../../../../lib/nlp';
+import { ChilcotinTokenizer } from '../../../../../lib/nlp/tokenization';
 import { NotFound } from '../../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
@@ -20,7 +22,6 @@ import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { ArangoAudioItemQueryRepository } from '../../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { ITermQueryRepository } from '../../queries';
 import { ArangoTermQueryRepository } from '../../repositories/arango-term-query-repository';
-import { ChilcotinTokenizer } from '../../tokenization';
 import { PromptTermCreated } from '../create-prompt-term';
 import { TermElicitedFromPromptEventHandler } from './term-elicited-from-prompt.event-handler';
 import { TermElicitedFromPrompt } from './term-elicited.from.prompt';
@@ -83,13 +84,7 @@ describe(`TermElicitedFromPromptEventHandler.handle`, () => {
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
-            imports: [PersistenceModule.forRootAsync()],
-            providers: [
-                {
-                    provide: 'TOKENIZER_PROVIDER',
-                    useValue: testTokenizerProvider,
-                },
-            ],
+            imports: [PersistenceModule.forRootAsync(), CoscradNLPModule],
         })
             .overrideProvider(ConfigService)
             .useValue(

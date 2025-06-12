@@ -1,5 +1,7 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 
+export const TOKENIZER_PROVIDER_INJECTION_TOKEN = 'TOKENIZER_PROVIDER_INJECTION_TOKEN';
+
 /**
  * TODO[naming] This is tough to name. It's meant to be
  * either a (possibly length > 1) string of roman characters
@@ -42,4 +44,10 @@ export interface ITokenizer {
      * event handler that receives publications from a messaging queue?
      */
     tokenize(document: string): Token[];
+}
+
+export interface ITokenizerProvider {
+    has(langaugeCode: LanguageCode): boolean;
+
+    forLanguage(languageCode: LanguageCode): ITokenizer;
 }

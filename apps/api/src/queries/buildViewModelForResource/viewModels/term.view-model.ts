@@ -18,12 +18,12 @@ import {
     TermCreated,
     TermTranslated,
 } from '../../../domain/models/term/commands';
-import { Token } from '../../../domain/models/term/tokenization';
 import { ContributionSummary } from '../../../domain/models/user-management/contributor/views';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { AggregateId } from '../../../domain/types/AggregateId';
 import { HasAggregateId } from '../../../domain/types/HasAggregateId';
 import { isInternalError } from '../../../lib/errors/InternalError';
+import { Token } from '../../../lib/nlp/tokenization';
 import { Maybe } from '../../../lib/types/maybe';
 import { NotFound } from '../../../lib/types/not-found';
 import { clonePlainObjectWithOverrides } from '../../../lib/utilities/clonePlainObjectWithOverrides';

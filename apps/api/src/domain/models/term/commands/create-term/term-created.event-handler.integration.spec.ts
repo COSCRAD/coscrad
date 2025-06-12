@@ -13,7 +13,7 @@ import { ConsoleCoscradCliLogger } from '../../../../../coscrad-cli/logging';
 import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
 import { IRepositoryProvider } from '../../../../../domain/repositories/interfaces/repository-provider.interface';
-import { InternalError } from '../../../../../lib/errors/InternalError';
+import { CoscradNLPModule } from '../../../../../lib/nlp';
 import { NotFound } from '../../../../../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
@@ -22,14 +22,12 @@ import { ArangoDatabaseProvider } from '../../../../../persistence/database/data
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { TermViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/term.view-model';
-import { formatLanguageCode } from '../../../../../queries/presentation/formatLanguageCode';
 import { TestEventStream } from '../../../../../test-data/events';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { ArangoAudioItemQueryRepository } from '../../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { Attributor } from '../../../shared/common-event-handlers/attributor.event-handler';
 import { ITermQueryRepository } from '../../queries';
 import { ArangoTermQueryRepository } from '../../repositories/arango-term-query-repository';
-import { ChilcotinTokenizer } from '../../tokenization';
 import { TermCreated } from './term-created.event';
 import { TermCreatedEventHandler } from './term-created.event-handler';
 
@@ -71,30 +69,10 @@ describe(`TermCreatedEventHandler`, () => {
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
-            providers: [
-                CommandInfoService,
-                TermCreatedEventHandler,
-                {
-                    provide: 'TOKENIZER_PROVIDER',
-                    useValue: {
-                        has(languageCode: LanguageCode) {
-                            return languageCode === LanguageCode.Chilcotin;
-                        },
-                        forLanguage(languageCode: LanguageCode) {
-                            if (languageCode === LanguageCode.Chilcotin)
-                                return new ChilcotinTokenizer();
-
-                            throw new InternalError(
-                                `Tokenization is not supported for language: ${formatLanguageCode(
-                                    languageCode
-                                )}. Did you forget to check tokenizerProvider.has(${languageCode})?`
-                            );
-                        },
-                    },
-                },
-            ],
+            providers: [CommandInfoService, TermCreatedEventHandler],
             imports: [
                 PersistenceModule.forRootAsync(),
+                CoscradNLPModule,
                 CommandModule,
                 TermCommandsModule,
                 /**

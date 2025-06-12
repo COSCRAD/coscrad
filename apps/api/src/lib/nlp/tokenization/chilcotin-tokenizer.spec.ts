@@ -1,5 +1,5 @@
+import { Token } from '../interfaces/tokenizer.interface';
 import { ChilcotinTokenizer } from './chilcotin-tokenizer';
-import { Token } from './tokenizer.interface';
 
 const tokenizer = new ChilcotinTokenizer();
 

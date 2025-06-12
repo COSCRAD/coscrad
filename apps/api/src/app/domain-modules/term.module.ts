@@ -1,4 +1,3 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
 import { ConsoleCoscradCliLogger } from '../../coscrad-cli/logging';
@@ -20,13 +19,11 @@ import { TermTranslatedEventHandler } from '../../domain/models/term/commands/tr
 import { Term } from '../../domain/models/term/entities/term.entity';
 import { TERM_QUERY_REPOSITORY_TOKEN } from '../../domain/models/term/queries';
 import { ArangoTermQueryRepository } from '../../domain/models/term/repositories';
-import { ChilcotinTokenizer } from '../../domain/models/term/tokenization';
 import { TermQueryService } from '../../domain/services/query-services/term-query.service';
-import { InternalError } from '../../lib/errors/InternalError';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
+import { CoscradNLPModule } from '../../lib/nlp';
 import { ArangoConnectionProvider } from '../../persistence/database/arango-connection.provider';
 import { PersistenceModule } from '../../persistence/persistence.module';
-import { formatLanguageCode } from '../../queries/presentation/formatLanguageCode';
 import { DynamicDataTypeModule } from '../../validation';
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
 import { TermController } from '../controllers/resources/term.controller';
@@ -40,6 +37,7 @@ import { TermCommandsModule } from './term.commands.module';
         IdGenerationModule,
         EventModule,
         TermCommandsModule,
+        CoscradNLPModule,
     ],
     controllers: [TermController],
     providers: [
@@ -63,24 +61,6 @@ import { TermCommandsModule } from './term.commands.module';
                     new ConsoleCoscradCliLogger()
                 ),
             inject: [ArangoConnectionProvider, AUDIO_QUERY_REPOSITORY_TOKEN],
-        },
-        // TODO export from a `CoscradNlpModule`
-        {
-            provide: 'TOKENIZER_PROVIDER',
-            useValue: {
-                has(languageCode: LanguageCode) {
-                    return languageCode === LanguageCode.Chilcotin;
-                },
-                forLanguage(languageCode: LanguageCode) {
-                    if (languageCode === LanguageCode.Chilcotin) return new ChilcotinTokenizer();
-
-                    throw new InternalError(
-                        `Tokenization is not supported for language: ${formatLanguageCode(
-                            languageCode
-                        )}. Did you forget to check tokenizerProvider.has(${languageCode})?`
-                    );
-                },
-            },
         },
         // Data Classes
         ...[

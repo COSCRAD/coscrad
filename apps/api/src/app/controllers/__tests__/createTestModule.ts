@@ -1,4 +1,4 @@
-import { LanguageCode, ResourceType } from '@coscrad/api-interfaces';
+import { ResourceType } from '@coscrad/api-interfaces';
 import { CommandHandlerService, CommandModule } from '@coscrad/commands';
 import { bootstrapDynamicTypes } from '@coscrad/data-types';
 import { ConfigService } from '@nestjs/config';
@@ -249,7 +249,6 @@ import {
 } from '../../../domain/models/term/queries';
 import { ArangoQueryRepositoryProvider } from '../../../domain/models/term/repositories/arango-query-repository-provider';
 import { ArangoTermQueryRepository } from '../../../domain/models/term/repositories/arango-term-query-repository';
-import { ChilcotinTokenizer } from '../../../domain/models/term/tokenization';
 import {
     ContributorCreated,
     CreateContributor,
@@ -309,6 +308,7 @@ import { VocabularyListQueryService } from '../../../domain/services/query-servi
 import { InternalError } from '../../../lib/errors/InternalError';
 import { IdManagementService } from '../../../lib/id-generation/id-management.service';
 import { MockIdManagementService } from '../../../lib/id-generation/mock-id-management.service';
+import { CoscradNLPModule } from '../../../lib/nlp';
 import { Ctor } from '../../../lib/types/Ctor';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
@@ -321,7 +321,6 @@ import { BibliographicCitationViewModel } from '../../../queries/buildViewModelF
 import { DigitalTextQueryService } from '../../../queries/digital-text';
 import { DigitalTextQueryRepository } from '../../../queries/digital-text/digital-text.query-repository';
 import { NoteViewModel } from '../../../queries/edgeConnectionViewModels/note.view-model';
-import { formatLanguageCode } from '../../../queries/presentation/formatLanguageCode';
 import { DTO } from '../../../types/DTO';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../../../validation';
 import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMockConfigService';
@@ -463,6 +462,7 @@ export default async (
             PassportModule.register({ defaultStrategy: 'jwt' }),
             DynamicDataTypeModule,
             EventModule,
+            CoscradNLPModule,
         ],
         providers: [
             CommandInfoService,
@@ -473,24 +473,6 @@ export default async (
                         configOverrides,
                         buildConfigFilePath(Environment.test)
                     ),
-            },
-            {
-                provide: 'TOKENIZER_PROVIDER',
-                useValue: {
-                    has(languageCode: LanguageCode) {
-                        return languageCode === LanguageCode.Chilcotin;
-                    },
-                    forLanguage(languageCode: LanguageCode) {
-                        if (languageCode === LanguageCode.Chilcotin)
-                            return new ChilcotinTokenizer();
-
-                        throw new InternalError(
-                            `Tokenization is not supported for language: ${formatLanguageCode(
-                                languageCode
-                            )}. Did you forget to check tokenizerProvider.has(${languageCode})?`
-                        );
-                    },
-                },
             },
             {
                 provide: EVENT_PUBLISHER_TOKEN,

@@ -1,22 +1,16 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
+import { ITokenizerProvider, TOKENIZER_PROVIDER_INJECTION_TOKEN } from '../../../../../lib/nlp';
 import { TermViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { ITermQueryRepository, TERM_QUERY_REPOSITORY_TOKEN } from '../../queries';
-import { ITokenizer } from '../../tokenization';
 import { TermCreated } from './term-created.event';
-
-interface ITokenizerProvider {
-    has(langaugeCode: LanguageCode): boolean;
-
-    forLanguage(languageCode: LanguageCode): ITokenizer;
-}
 
 @CoscradEventConsumer('TERM_CREATED')
 export class TermCreatedEventHandler implements ICoscradEventHandler {
     constructor(
         @Inject(TERM_QUERY_REPOSITORY_TOKEN) private readonly termRepository: ITermQueryRepository,
-        @Inject('TOKENIZER_PROVIDER') private readonly tokenizerProvider: ITokenizerProvider
+        @Inject(TOKENIZER_PROVIDER_INJECTION_TOKEN)
+        private readonly tokenizerProvider: ITokenizerProvider
     ) {}
 
     async handle(event: TermCreated): Promise<void> {

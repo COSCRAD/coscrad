@@ -1,8 +1,11 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
+import {
+    ITokenizer,
+    TOKENIZER_PROVIDER_INJECTION_TOKEN,
+} from '../../../../../lib/nlp/tokenization';
 import { ITermQueryRepository, TERM_QUERY_REPOSITORY_TOKEN } from '../../queries';
-import { ITokenizer } from '../../tokenization';
 import { TermElicitedFromPrompt } from './term-elicited.from.prompt';
 
 // TODO share this with other handlers
@@ -16,7 +19,8 @@ interface ITokenizerProvider {
 export class TermElicitedFromPromptEventHandler implements ICoscradEventHandler {
     constructor(
         @Inject(TERM_QUERY_REPOSITORY_TOKEN) private readonly termRepository: ITermQueryRepository,
-        @Inject('TOKENIZER_PROVIDER') private readonly tokenizerProvider: ITokenizerProvider
+        @Inject(TOKENIZER_PROVIDER_INJECTION_TOKEN)
+        private readonly tokenizerProvider: ITokenizerProvider
     ) {}
 
     async handle({
