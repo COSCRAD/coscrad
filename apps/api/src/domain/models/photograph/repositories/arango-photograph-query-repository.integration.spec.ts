@@ -508,7 +508,7 @@ describe(`ArangoPhotographQueryRepository`, () => {
 
             const noteId = buildDummyUuid(89);
 
-            const textForNote = 'This is why the widget is relevant to the term.';
+            const textForNote = 'This is why the widget is relevant to the photograph.';
 
             const langaugeCodeForNote = LanguageCode.Chilcotin;
 
