@@ -182,7 +182,41 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
             : [];
 
         if (isNonEmptyObject(name)) {
-            this.name = new MultilingualText(name);
+            this.name = new MultilingualText({
+                ...name,
+                items: name.items.map((item) => {
+                    if (item.languageCode !== LanguageCode.Chilcotin) {
+                        return item;
+                    }
+
+                    const defaultCharacterReplacements = {
+                        // (U+0073) - ◌̂ (U+0302)[
+                        // ŝ
+                        [`s${`\u0302`}`]: '\u015d',
+                        // Ŝ
+                        [`S${`\u0302`}`]: '\u015c',
+                        // ŵ
+                        [`w${`\u0302`}`]: '\u0175',
+                        // Ŵ
+                        [`W${`\u0302`}`]: '\u0174',
+                        // ẑ:
+                        [`z${`\u0302`}`]: '\u1e91',
+                        // Ẑ
+                        [`Z${`\u0302`}`]: '\u1e91',
+                    };
+
+                    Object.entries(defaultCharacterReplacements).reduce(
+                        (updatedText, [twoCharSequenceWithLoneSurrogate, singleUnicodeChar]) =>
+                            updatedText.replace(
+                                twoCharSequenceWithLoneSurrogate,
+                                singleUnicodeChar
+                            ),
+                        item.text
+                    );
+
+                    return item;
+                }),
+            });
         }
 
         this.id = id;
