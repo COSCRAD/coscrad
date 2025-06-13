@@ -485,7 +485,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
 
             const role = EdgeConnectionMemberRole.to;
 
-            await testQueryRepository.connectResourcesWith(targetVocabularyList.id, {
+            await testQueryRepository.createConnection(targetVocabularyList.id, {
                 noteId,
                 selfContext: generalContext,
                 otherContext: generalContext,

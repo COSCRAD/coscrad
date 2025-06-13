@@ -37,7 +37,7 @@ export class ArangoVideoQueryRepository implements IVideoQueryRepository {
         );
     }
 
-    async connectResourcesWith(id: string, dto: IResourceConnectionDto): Promise<void> {
+    async createConnection(id: string, dto: IResourceConnectionDto): Promise<void> {
         await this.database.query(this.baseResourceQueryBuilder.connectResourcesWithNote(id, dto));
     }
 

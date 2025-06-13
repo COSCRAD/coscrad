@@ -514,7 +514,7 @@ describe(`ArangoPhotographQueryRepository`, () => {
 
             const role = EdgeConnectionMemberRole.to;
 
-            await testQueryRepository.connectResourcesWith(targetPhotograph.id, {
+            await testQueryRepository.createConnection(targetPhotograph.id, {
                 noteId,
                 selfContext: generalContext,
                 otherContext: generalContext,

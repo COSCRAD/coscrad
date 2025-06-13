@@ -367,8 +367,7 @@ describe(`ArangoTermQueryRepository`, () => {
         });
     });
 
-    // connectResourcesWithNote?
-    describe(`connectResourcesWith`, () => {
+    describe(`createConnection`, () => {
         const targetTerm = buildTestInstance(TermViewModel, {
             // no connections to start
             connections: [],
@@ -398,7 +397,7 @@ describe(`ArangoTermQueryRepository`, () => {
 
             const role = EdgeConnectionMemberRole.to;
 
-            await testQueryRepository.connectResourcesWith(targetTerm.id, {
+            await testQueryRepository.createConnection(targetTerm.id, {
                 noteId,
                 selfContext: generalContext,
                 otherContext: generalContext,

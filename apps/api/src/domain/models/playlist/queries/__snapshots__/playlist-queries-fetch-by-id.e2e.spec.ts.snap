@@ -125,6 +125,7 @@ exports[`when querying for a single playlist- by ID when the user is a COSCRAD a
       "type": "CREATE_NOTE_ABOUT_RESOURCE",
     },
   ],
+  "connections": [],
   "contributions": [],
   "episodes": [
     {

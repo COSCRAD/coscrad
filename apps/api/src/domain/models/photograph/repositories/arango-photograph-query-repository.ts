@@ -106,7 +106,7 @@ export class ArangoPhotographQueryRepository implements IPhotographQueryReposito
         await this.database.query(this.baseResourceQueryBuilder.createNoteAbout(id, dto));
     }
 
-    async connectResourcesWith(id: string, dto: IResourceConnectionDto): Promise<void> {
+    async createConnection(id: string, dto: IResourceConnectionDto): Promise<void> {
         await this.database.query(this.baseResourceQueryBuilder.connectResourcesWithNote(id, dto));
     }
 

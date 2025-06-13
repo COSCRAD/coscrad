@@ -316,7 +316,7 @@ describe(`ArangoVideoQueryRepository`, () => {
 
             const role = EdgeConnectionMemberRole.to;
 
-            await testQueryRepository.connectResourcesWith(targetVideo.id, {
+            await testQueryRepository.createConnection(targetVideo.id, {
                 noteId,
                 selfContext: generalContext,
                 otherContext: generalContext,

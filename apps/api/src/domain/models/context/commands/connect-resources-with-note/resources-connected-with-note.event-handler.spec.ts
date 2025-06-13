@@ -97,7 +97,7 @@ class WidgetQueryRepository implements IWidgetQueryRepository {
         await this.arangoDb.update(id, w);
     }
 
-    async connectResourcesWith(
+    async createConnection(
         id: string,
         {
             noteId,
@@ -234,13 +234,13 @@ describe(`ResourcesConnectedWithNoteEventHandler`, () => {
 
             expect(newConnectionForToMember.role).toBe(EdgeConnectionMemberRole.to);
 
-            expect(newConnectionForToMember.note.toDTO()).toEqual(
-                // this looks too much like the implementation
+            const expectedNote = // this looks too much like the implementation
                 buildMultilingualTextWithSingleItem(
                     resourcesConnected.payload.text,
                     resourcesConnected.payload.languageCode
-                ).toDTO()
-            );
+                );
+
+            expect(newConnectionForToMember.note.toDTO()).toEqual(expectedNote.toDTO());
 
             expect(newConnectionForToMember.id).toBe(
                 resourcesConnected.payload.aggregateCompositeIdentifier.id
@@ -253,7 +253,25 @@ describe(`ResourcesConnectedWithNoteEventHandler`, () => {
 
             expect(updatedFromMember.connections).toHaveLength(1);
 
-            // TODO check the content of the connections
+            const {
+                id: connectionId,
+                selfContext,
+                otherCompositeIdentifier,
+                otherContext,
+                note,
+            } = updatedFromMember.connections[0];
+
+            expect(selfContext).toEqual(generalContext);
+
+            expect(otherContext).toEqual(generalContext);
+
+            expect(note.toDTO()).toEqual(expectedNote.toDTO());
+
+            expect(connectionId).toBe(resourcesConnected.payload.aggregateCompositeIdentifier.id);
+
+            expect(otherCompositeIdentifier).toEqual(
+                resourcesConnected.payload.toMemberCompositeIdentifier
+            );
         });
     });
 });

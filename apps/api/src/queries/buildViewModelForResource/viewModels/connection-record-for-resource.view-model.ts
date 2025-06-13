@@ -41,8 +41,7 @@ export class ConnectionRecordForResourceViewModel {
 
     otherContext: IEdgeConnectionContext;
 
-    // TODO limit this to `to` or `from` but not `self`
-    role: EdgeConnectionMemberRole;
+    role: typeof EdgeConnectionMemberRole.to | typeof EdgeConnectionMemberRole.from;
 
     constructor(dto: DTO<ConnectionRecordForResourceViewModel>) {
         if (!dto) return;

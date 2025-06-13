@@ -479,6 +479,7 @@ describe(`when querying for a single playlist- by ID`, () => {
       "type": "CREATE_NOTE_ABOUT_RESOURCE",
     },
   ],
+  "connections": [],
   "contributions": [],
   "episodes": [
     {
@@ -728,6 +729,7 @@ describe(`when querying for a single playlist- by ID`, () => {
       "type": "CREATE_NOTE_ABOUT_RESOURCE",
     },
   ],
+  "connections": [],
   "contributions": [],
   "episodes": [
     {

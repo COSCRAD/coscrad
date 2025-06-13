@@ -312,7 +312,7 @@ describe(`ArangoPlaylistQueryRepository`, () => {
 
             const role = EdgeConnectionMemberRole.to;
 
-            await testQueryRepository.connectResourcesWith(targetPlaylist.id, {
+            await testQueryRepository.createConnection(targetPlaylist.id, {
                 noteId,
                 selfContext: generalContext,
                 otherContext: generalContext,

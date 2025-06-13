@@ -20,7 +20,7 @@ export interface IResourceConnectionDto {
     // this is the note
     text: IMultilingualText;
     // the front-end doesn't currently use this
-    role: EdgeConnectionMemberRole;
+    role: typeof EdgeConnectionMemberRole.to | typeof EdgeConnectionMemberRole.from;
 }
 
 export interface IQueryRepositoryForConnectable {
@@ -36,7 +36,7 @@ export interface IQueryRepositoryForConnectable {
      * text: string
      * languageCode: LangaugeCode
      */
-    connectResourcesWith(id: string, dto: IResourceConnectionDto): Promise<void>;
+    createConnection(id: string, dto: IResourceConnectionDto): Promise<void>;
 }
 
 interface IQueryRepositoryProvider {
@@ -69,7 +69,7 @@ export class ResourcesConnectedWithNoteEventHandler implements ICoscradEventHand
 
         await this.repositoryProvider
             .forResource(toMemberCompositeIdentifier.type)
-            .connectResourcesWith(toMemberCompositeIdentifier.id, {
+            .createConnection(toMemberCompositeIdentifier.id, {
                 noteId,
                 selfContext: toMemberContext,
                 compositeIdentifier: fromMemberCompositeIdentifier,
@@ -80,7 +80,7 @@ export class ResourcesConnectedWithNoteEventHandler implements ICoscradEventHand
 
         await this.repositoryProvider
             .forResource(fromMemberCompositeIdentifier.type)
-            .connectResourcesWith(fromMemberCompositeIdentifier.id, {
+            .createConnection(fromMemberCompositeIdentifier.id, {
                 noteId,
                 selfContext: fromMemberContext,
                 compositeIdentifier: toMemberCompositeIdentifier,

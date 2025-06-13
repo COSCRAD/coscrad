@@ -234,6 +234,7 @@ exports[`when querying for a photograph: fetch by Id when the user is authentica
       "type": "CONNECT_RESOURCES_WITH_NOTE",
     },
   ],
+  "connections": [],
   "contributions": [
     {
       "contributorIds": [

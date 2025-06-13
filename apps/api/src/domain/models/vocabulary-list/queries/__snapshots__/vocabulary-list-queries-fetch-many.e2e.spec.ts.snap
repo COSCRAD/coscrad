@@ -83,6 +83,7 @@ exports[`when querying for a vocabulary list: fetch many when the user is a COSC
           "type": "TRANSLATE_VOCABULARY_LIST_NAME",
         },
       ],
+      "connections": [],
       "contributions": [
         {
           "contributorIds": [
@@ -233,6 +234,7 @@ exports[`when querying for a vocabulary list: fetch many when the user is a COSC
           "type": "TRANSLATE_VOCABULARY_LIST_NAME",
         },
       ],
+      "connections": [],
       "contributions": [],
       "entries": [
         {
@@ -367,6 +369,7 @@ exports[`when querying for a vocabulary list: fetch many when the user is a COSC
           "type": "TRANSLATE_VOCABULARY_LIST_NAME",
         },
       ],
+      "connections": [],
       "contributions": [],
       "entries": [
         {
