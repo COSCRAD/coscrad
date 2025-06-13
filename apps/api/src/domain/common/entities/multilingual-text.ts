@@ -115,6 +115,7 @@ export interface ITextStandardizer {
 }
 
 export interface ITextStandardizerProvider {
+    has(languageCode: LanguageCode): boolean;
     forLanguage(languageCode: LanguageCode): ITextStandardizer;
 }
 
@@ -195,7 +196,9 @@ export class MultilingualText extends BaseDomainModel implements IMultilingualTe
         return this.clone({
             items: this.items.map((item) => ({
                 ...item,
-                text: provider.forLanguage(item.languageCode).standardize(item.text),
+                text: provider.has(item.languageCode)
+                    ? provider.forLanguage(item.languageCode).standardize(item.text)
+                    : item.text,
             })),
         } as DeepPartial<DTO<this>>);
     }

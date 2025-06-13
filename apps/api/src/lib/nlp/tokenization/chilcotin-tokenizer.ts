@@ -34,16 +34,20 @@ export class ChilcotinTokenizer implements ITokenizer {
     }
 
     standardize(input: string): string {
-        /**
-         * TODO Make tokenization "non-destructive" so that you can always
-         * join the output.
-         */
-        return this.tokenize(input)
-            .flatMap(({ characters }) =>
-                characters.map(({ text: textForChar, isUpperCase }) =>
-                    isUpperCase ? textForChar.toUpperCase() : textForChar
+        return (
+            this.tokenize(input)
+                .flatMap(({ characters }) =>
+                    characters
+                        .map(({ text: textForChar, isUpperCase }) =>
+                            isUpperCase ? textForChar.toUpperCase() : textForChar
+                        )
+                        .join('')
                 )
-            )
-            .join('');
+                /**
+                 * Note that at some point, we may want to store white space as tokens
+                 * so that this is fully "non-destructive"
+                 */
+                .join(' ')
+        );
     }
 }

@@ -369,12 +369,13 @@ describe(`ChilcotinTokenizer`, () => {
     describe(`standardize`, () => {
         describe(`when an input contains lone surrogates`, () => {
             it(`should replace these with the character with the corresponding single unicode key point`, () => {
-                const input = 'swzSWZ'
-                    .split('')
-                    .map((c) => `${c}${loneSurrogateCap}`)
-                    .join('');
+                const input =
+                    'swzSWZ'
+                        .split('')
+                        .map((c) => `${c}${loneSurrogateCap}`)
+                        .join('') + ' more text';
 
-                const expectedOutput = `${sCap}${wCap}${zCap}${sCap.toUpperCase()}${wCap.toUpperCase()}${zCap.toUpperCase()}`;
+                const expectedOutput = `${sCap}${wCap}${zCap}${sCap.toUpperCase()}${wCap.toUpperCase()}${zCap.toUpperCase()} more text`;
 
                 const result = tokenizer.standardize(input);
 

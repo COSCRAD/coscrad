@@ -21,12 +21,13 @@ import { PlaylistNameTranslated } from '../../domain/models/playlist/commands/tr
 import { PlaylistNameTranslatedEventHandler } from '../../domain/models/playlist/commands/translate-playlist-name/playlist-name-translated.event-handler';
 import { PlaylistQueryService } from '../../domain/services/query-services/playlist-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
+import { CoscradNLPModule } from '../../lib/nlp';
 import { PersistenceModule } from '../../persistence/persistence.module';
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
 import { PlaylistController } from '../controllers/resources/playlist.controller';
 
 @Module({
-    imports: [PersistenceModule, CommandModule, IdGenerationModule],
+    imports: [PersistenceModule, CommandModule, IdGenerationModule, CoscradNLPModule],
     controllers: [PlaylistController],
     providers: [
         CommandInfoService,

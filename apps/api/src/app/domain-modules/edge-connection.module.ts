@@ -33,9 +33,10 @@ import { ResourcesConnectedWithNote } from '../../domain/models/context/commands
 import { NoteAboutResourceCreated } from '../../domain/models/context/commands/create-note-about-resource/note-about-resource-created.event';
 import { NoteAboutResourceCreatedEventHandler } from '../../domain/models/context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { EdgeConnectionContextUnion } from '../../domain/models/context/edge-connection-context-union';
+import { CoscradNLPModule } from '../../lib/nlp';
 
 @Module({
-    imports: [PersistenceModule, CommandModule, IdGenerationModule],
+    imports: [PersistenceModule, CommandModule, IdGenerationModule, CoscradNLPModule],
     controllers: [EdgeConnectionController],
     providers: [
         CommandInfoService,

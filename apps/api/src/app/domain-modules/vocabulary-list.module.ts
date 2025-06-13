@@ -34,6 +34,7 @@ import { VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN } from '../../domain/models/voca
 import { ArangoVocabularyListQueryRepository } from '../../domain/models/vocabulary-list/repositories';
 import { VocabularyListQueryService } from '../../domain/services/query-services/vocabulary-list-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
+import { CoscradNLPModule } from '../../lib/nlp';
 import { ArangoConnectionProvider } from '../../persistence/database/arango-connection.provider';
 import { PersistenceModule } from '../../persistence/persistence.module';
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
@@ -60,7 +61,7 @@ const dataClasses = [
 ];
 
 @Module({
-    imports: [PersistenceModule, IdGenerationModule, CommandModule],
+    imports: [PersistenceModule, IdGenerationModule, CommandModule, CoscradNLPModule],
     controllers: [VocabularyListController],
     providers: [
         {
