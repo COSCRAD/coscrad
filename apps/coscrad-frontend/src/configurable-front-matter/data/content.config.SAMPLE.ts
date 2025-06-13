@@ -26,9 +26,14 @@ export const contentConfig: ConfigurableContent = {
     simulatedKeyboard: {
         name: 'Tŝilhqot’in',
         specialCharacterReplacements: {
-            's[': 'ŝ',
-            'w[': 'ŵ',
-            'z[': 'ẑ',
+            // Note that these can also be represented as `C + '\u0302'` (UTF16: 0x0302)
+            's[': String.fromCodePoint(0x015d),
+            'S[': String.fromCodePoint(0x015c),
+            'w[': String.fromCodePoint(0x0175),
+            'W[': String.fromCodePoint(0x0174),
+            'z[': String.fromCodePoint(0x1e91),
+            'Z[': String.fromCodePoint(0x1e90),
+            // These have only a single code point representation
             ']': 'ʔ',
             ';': 'ɨ',
             "'": '’',

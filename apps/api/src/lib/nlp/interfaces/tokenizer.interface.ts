@@ -17,6 +17,7 @@ export type AlphabetCharacters = {
     text: string;
     isPunctuationOrWhiteSpace: boolean;
     isOutOfAlphabet: boolean;
+    isUpperCase: boolean;
 };
 
 export type Token = {

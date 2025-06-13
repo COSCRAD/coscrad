@@ -241,6 +241,7 @@ export class ChilcotinAlphabetParser {
 
         let current: Node = this.root;
         let charIndex = 0;
+        let isUpperCase = false;
 
         const letters: AlphabetCharacters[] = [];
 
@@ -248,8 +249,14 @@ export class ChilcotinAlphabetParser {
         while (charIndex < input.length) {
             const keystroke = input.charAt(charIndex);
 
-            if (current.hasTransition(keystroke)) {
-                current = current.transition(keystroke);
+            if (current === this.root && keystroke === keystroke.toUpperCase()) {
+                isUpperCase = true;
+            }
+
+            const lowerCaseKeystroke = keystroke.toLowerCase();
+
+            if (current.hasTransition(lowerCaseKeystroke)) {
+                current = current.transition(lowerCaseKeystroke);
                 charIndex++;
                 continue;
             }
@@ -261,38 +268,44 @@ export class ChilcotinAlphabetParser {
                     text: current.text,
                     isOutOfAlphabet: false,
                     isPunctuationOrWhiteSpace: false,
+                    isUpperCase,
                 });
 
                 // reset
                 current = this.root;
+                isUpperCase = false;
                 // we do not increment `charIndex` at this point
                 continue;
             }
 
             // do we have punctuation?
-            if (this.punctuation.has(keystroke)) {
+            if (this.punctuation.has(lowerCaseKeystroke)) {
                 letters.push({
-                    text: keystroke,
+                    text: lowerCaseKeystroke,
                     isOutOfAlphabet: true,
                     isPunctuationOrWhiteSpace: true,
+                    isUpperCase,
                 });
 
                 current = this.root;
                 // we have pushed the out-of-alphabet NativeCharacters, we are ready for the next one
                 charIndex++;
+                isUpperCase = false;
                 continue;
             }
 
             // do we have an exceptional char?
             letters.push({
-                text: keystroke,
+                text: lowerCaseKeystroke,
                 isOutOfAlphabet: true,
                 isPunctuationOrWhiteSpace: false,
+                isUpperCase,
             });
 
             current = this.root;
             // we have pushed the out-of-alphabet NativeCharacters, we are ready for the next one
             charIndex++;
+            isUpperCase = false;
         }
 
         // is there a better way to resolve the last result?
@@ -301,6 +314,7 @@ export class ChilcotinAlphabetParser {
                 text: current.text,
                 isOutOfAlphabet: false,
                 isPunctuationOrWhiteSpace: false,
+                isUpperCase,
             });
         } else if (!this.punctuation.has(input.charAt(charIndex - 1))) {
             const lastChar = input.charAt(charIndex - 1);
@@ -309,9 +323,13 @@ export class ChilcotinAlphabetParser {
                 text: lastChar,
                 isOutOfAlphabet: true,
                 isPunctuationOrWhiteSpace: false,
+                isUpperCase,
             });
         }
 
-        return letters;
+        return letters.map((letter) => ({
+            text: letter.isUpperCase ? letter.text.toUpperCase() : letter.text,
+            ...letter,
+        }));
     }
 }

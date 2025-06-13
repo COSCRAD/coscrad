@@ -17,13 +17,10 @@ export class ChilcotinTokenizer implements ITokenizer {
         const rawTokens = document.split(' ');
 
         return rawTokens.map((text) => {
-            // TODO handle capitalization
-            const lowerCaseText = text.toLowerCase();
-
-            const characters = this.letterParser.parse(lowerCaseText);
+            const characters = this.letterParser.parse(text);
 
             return {
-                text,
+                text: characters.map(({ text }) => text).join(''),
                 characters,
                 languageCode: LanguageCode.Chilcotin,
                 // TODO "zip" in the spaces
@@ -34,5 +31,19 @@ export class ChilcotinTokenizer implements ITokenizer {
                 isStop: false,
             };
         });
+    }
+
+    standardize(input: string): string {
+        /**
+         * TODO Make tokenization "non-destructive" so that you can always
+         * join the output.
+         */
+        return this.tokenize(input)
+            .flatMap(({ characters }) =>
+                characters.map(({ text: textForChar, isUpperCase }) =>
+                    isUpperCase ? textForChar.toUpperCase() : textForChar
+                )
+            )
+            .join('');
     }
 }

@@ -73,284 +73,321 @@ const wCap = String.fromCharCode(0x0175);
 const zCap = String.fromCharCode(0x1e91);
 
 describe(`ChilcotinTokenizer`, () => {
-    describe(`when the text includes a single word`, () => {
-        describe(`when each letter is one unicode symbol`, () => {
-            describe(`when there are no special symbols`, () => {
-                describe(`detan`, () => {
-                    it(`should return the expected tokens`, () => {
-                        const input = 'detan';
+    describe(`tokenize`, () => {
+        describe(`when the text includes a single word`, () => {
+            describe(`when each letter is one unicode symbol`, () => {
+                describe(`when there are no special symbols`, () => {
+                    describe(`detan`, () => {
+                        it(`should return the expected tokens`, () => {
+                            const input = 'detan';
 
-                        const result = tokenizer.tokenize(input);
+                            const result = tokenizer.tokenize(input);
 
-                        expect(result).toHaveLength(1);
+                            expect(result).toHaveLength(1);
 
-                        const { text, isPunct, isSpace, isStop } = result[0];
+                            const { text, isPunct, isSpace, isStop } = result[0];
 
-                        expect(text).toBe(input);
+                            expect(text).toBe(input);
 
-                        expect(isPunct).toBe(false);
+                            expect(isPunct).toBe(false);
 
-                        expect(isSpace).toBe(false);
+                            expect(isSpace).toBe(false);
 
-                        expect(isStop).toBe(false);
+                            expect(isStop).toBe(false);
 
-                        assertTokenizationResult(result, [['d', 'e', 't', 'a', 'n']]);
+                            assertTokenizationResult(result, [['d', 'e', 't', 'a', 'n']]);
+                        });
+                    });
+                });
+
+                describe(`when there are special symbols`, () => {
+                    describe(`ŝetan`, () => {
+                        it(`should return the expected result`, () => {
+                            const input = `ŝetan`;
+
+                            const result = tokenizer.tokenize(input);
+
+                            assertTokenizationResult(result, [['ŝ', 'e', 't', 'a', 'n']]);
+                        });
                     });
                 });
             });
 
-            describe(`when there are special symbols`, () => {
-                describe(`ŝetan`, () => {
-                    it(`should return the expected result`, () => {
-                        const input = `ŝetan`;
-
-                        const result = tokenizer.tokenize(input);
-
-                        assertTokenizationResult(result, [['ŝ', 'e', 't', 'a', 'n']]);
-                    });
-                });
-            });
-        });
-
-        describe(`when some letters require multiple unicode symbols`, () => {
-            describe(`teyatlɨg`, () => {
-                it(`should return the correct result`, () => {
-                    const input = `teyatlɨg`;
-
-                    const result = tokenizer.tokenize(input);
-
-                    assertTokenizationResult(result, [['t', 'e', 'y', 'a', 'tl', 'ɨ', 'g']]);
-                });
-            });
-        });
-
-        describe(`when there are out-of-alphabet symbols`, () => {
-            describe(`when the out-of-alphabet symbol occurs in the middle of the word`, () => {
-                describe(`darlʔulh`, () => {
+            describe(`when some letters require multiple latin symbols`, () => {
+                describe(`teyatlɨg`, () => {
                     it(`should return the correct result`, () => {
-                        const input = `darlʔulh`;
+                        const input = `teyatlɨg`;
 
                         const result = tokenizer.tokenize(input);
 
-                        assertTokenizationResult(result, [['d', 'a', 'r', 'l', 'ʔ', 'u', 'lh']]);
+                        assertTokenizationResult(result, [['t', 'e', 'y', 'a', 'tl', 'ɨ', 'g']]);
                     });
                 });
             });
 
-            describe(`when the out-of-alphabet symbol occurs at the end of a word`, () => {
-                describe(`tlibec`, () => {
+            describe(`when there are out-of-alphabet symbols`, () => {
+                describe(`when the out-of-alphabet symbol occurs in the middle of the word`, () => {
+                    describe(`darlʔulh`, () => {
+                        it(`should return the correct result`, () => {
+                            const input = `darlʔulh`;
+
+                            const result = tokenizer.tokenize(input);
+
+                            assertTokenizationResult(result, [
+                                ['d', 'a', 'r', 'l', 'ʔ', 'u', 'lh'],
+                            ]);
+                        });
+                    });
+                });
+
+                describe(`when the out-of-alphabet symbol occurs at the end of a word`, () => {
+                    describe(`tlibec`, () => {
+                        it(`should return the expected result`, () => {
+                            const input = `tlibec`;
+
+                            const result = tokenizer.tokenize(input);
+
+                            assertTokenizationResult(result, [['tl', 'i', 'b', 'e', 'c']]);
+                        });
+                    });
+                });
+            });
+
+            describe(`when there is punctuation`, () => {
+                describe(`dechen-ya`, () => {
                     it(`should return the expected result`, () => {
-                        const input = `tlibec`;
+                        const input = 'dechen-yaz';
 
                         const result = tokenizer.tokenize(input);
 
-                        assertTokenizationResult(result, [['tl', 'i', 'b', 'e', 'c']]);
+                        assertTokenizationResult(result, [
+                            ['d', 'e', 'ch', 'e', 'n', '-', 'y', 'a', 'z'],
+                        ]);
+                    });
+                });
+            });
+
+            describe(`when there is a capped consonant`, () => {
+                const assertFirstLetterIsInAlphabet = (tokens: Token[]) => {
+                    const first = tokens[0].characters[0];
+
+                    expect(first.isOutOfAlphabet).toBe(false);
+                };
+
+                describe(`when the consonant is lower-cased`, () => {
+                    describe(`when the cap comes through as a separate character`, () => {
+                        const inputForSCap = 's' + orphanedCap + 'en';
+
+                        const inputForWCap = 'w' + orphanedCap + 'en';
+
+                        const inputForZCap = 'z' + orphanedCap + 'en';
+
+                        describe(inputForSCap, () => {
+                            it(`should return the expected result`, () => {
+                                const result = tokenizer.tokenize(inputForSCap);
+
+                                assertTokenizationResult(result, [[sCap, 'e', 'n']]);
+
+                                assertFirstLetterIsInAlphabet(result);
+                            });
+                        });
+
+                        describe(inputForWCap, () => {
+                            it(`should return the expected result`, () => {
+                                const result = tokenizer.tokenize(inputForWCap);
+
+                                assertTokenizationResult(result, [[wCap, 'e', 'n']]);
+
+                                assertFirstLetterIsInAlphabet(result);
+                            });
+                        });
+
+                        describe(inputForZCap, () => {
+                            it(`should return the expected result`, () => {
+                                const result = tokenizer.tokenize(inputForZCap);
+
+                                assertTokenizationResult(result, [[zCap, 'e', 'n']]);
+
+                                assertFirstLetterIsInAlphabet(result);
+                            });
+                        });
+                    });
+
+                    describe(`when the capped consonant comes through as a single character`, () => {
+                        describe('ŝen', () => {
+                            it(`should return the expected result`, () => {
+                                // TODO use unicode escape to be sure
+                                const result = tokenizer.tokenize('\u015den');
+
+                                // assertTokenizationResult(result, [['ŝ', 'e', 'n']]);
+
+                                // const actualSCap = result[0].characters[0].text;
+
+                                // const unicodeCharCodeForFirstLetter = actualSCap.codePointAt(0);
+
+                                // expect(unicodeCharCodeForFirstLetter).toBe('u015d');
+
+                                assertTokenizationResult(result, [[sCap, 'e', 'n']]);
+
+                                assertFirstLetterIsInAlphabet(result);
+                            });
+                        });
+
+                        describe('ŵen', () => {
+                            it(`should return the expected result`, () => {
+                                const unicodeChar = '\u0175';
+
+                                // TODO use unicode escape to be sure
+                                const result = tokenizer.tokenize(`${unicodeChar}en`);
+
+                                assertTokenizationResult(result, [[wCap, 'e', 'n']]);
+
+                                assertFirstLetterIsInAlphabet(result);
+                            });
+                        });
+
+                        describe('ẑen', () => {
+                            it(`should return the expected result`, () => {
+                                const unicodeChar = '\u1e91';
+
+                                const result = tokenizer.tokenize(`${unicodeChar}en`);
+
+                                assertTokenizationResult(result, [[zCap, 'e', 'n']]);
+
+                                assertFirstLetterIsInAlphabet(result);
+                            });
+                        });
+                    });
+                });
+
+                describe(`when the consonant is upper-cased`, () => {
+                    describe(`when the cap comes through as a separate character`, () => {
+                        const inputForSCap = 'S' + orphanedCap + 'en';
+
+                        const inputForWCap = 'W' + orphanedCap + 'en';
+
+                        const inputForZCap = 'Z' + orphanedCap + 'en';
+
+                        describe(inputForSCap, () => {
+                            it(`should return the expected result`, () => {
+                                const result = tokenizer.tokenize(inputForSCap);
+
+                                assertTokenizationResult(result, [[sCap, 'e', 'n']]);
+
+                                assertFirstLetterIsInAlphabet(result);
+
+                                const { isUpperCase } = result[0].characters[0];
+
+                                expect(isUpperCase).toBe(true);
+                            });
+                        });
+
+                        describe(inputForWCap, () => {
+                            it(`should return the expected result`, () => {
+                                const result = tokenizer.tokenize(inputForWCap);
+
+                                assertTokenizationResult(result, [[wCap, 'e', 'n']]);
+
+                                assertFirstLetterIsInAlphabet(result);
+                            });
+                        });
+
+                        describe(inputForZCap, () => {
+                            it(`should return the expected result`, () => {
+                                const result = tokenizer.tokenize(inputForZCap);
+
+                                assertTokenizationResult(result, [[zCap, 'e', 'n']]);
+
+                                assertFirstLetterIsInAlphabet(result);
+                            });
+                        });
+                    });
+
+                    describe(`when the capped consonant comes through as a single character`, () => {
+                        describe('ŝen', () => {
+                            it(`should return the expected result`, () => {
+                                // TODO use unicode escape to be sure
+                                const result = tokenizer.tokenize('\u015cen');
+
+                                assertTokenizationResult(result, [[sCap, 'e', 'n']]);
+
+                                assertFirstLetterIsInAlphabet(result);
+
+                                const { isUpperCase } = result[0].characters[0];
+
+                                expect(isUpperCase).toBe(true);
+                            });
+                        });
+
+                        describe('ŵen', () => {
+                            it(`should return the expected result`, () => {
+                                const unicodeChar = '\u0174';
+
+                                // TODO use unicode escape to be sure
+                                const result = tokenizer.tokenize(`${unicodeChar}en`);
+
+                                assertTokenizationResult(result, [[wCap, 'e', 'n']]);
+
+                                assertFirstLetterIsInAlphabet(result);
+                            });
+                        });
+
+                        describe('ẑen', () => {
+                            it(`should return the expected result`, () => {
+                                const unicodeChar = '\u1e90';
+
+                                const result = tokenizer.tokenize(`${unicodeChar}en`);
+
+                                assertTokenizationResult(result, [[zCap, 'e', 'n']]);
+
+                                assertFirstLetterIsInAlphabet(result);
+                            });
+                        });
                     });
                 });
             });
         });
 
-        describe(`when there is punctuation`, () => {
-            describe(`dechen-ya`, () => {
-                it(`should return the expected result`, () => {
-                    const input = 'dechen-yaz';
+        describe(`when the text includes multiple words`, () => {
+            it(`should return the expected result`, () => {
+                const input = `"Nenden nendan hant’ih!?" Robert Smith-Jones han.`;
 
-                    const result = tokenizer.tokenize(input);
+                const result = tokenizer.tokenize(input);
 
-                    assertTokenizationResult(result, [
-                        ['d', 'e', 'ch', 'e', 'n', '-', 'y', 'a', 'z'],
-                    ]);
-                });
-            });
-        });
-
-        describe(`when there is a capped consonant`, () => {
-            const assertFirstLetterIsInAlphabet = (tokens: Token[]) => {
-                const first = tokens[0].characters[0];
-
-                expect(first.isOutOfAlphabet).toBe(false);
-            };
-
-            describe(`when the consonant is lower-cased`, () => {
-                describe(`when the cap comes through as a separate character`, () => {
-                    const inputForSCap = 's' + orphanedCap + 'en';
-
-                    const inputForWCap = 'w' + orphanedCap + 'en';
-
-                    const inputForZCap = 'z' + orphanedCap + 'en';
-
-                    describe(inputForSCap, () => {
-                        it(`should return the expected result`, () => {
-                            const result = tokenizer.tokenize(inputForSCap);
-
-                            assertTokenizationResult(result, [[sCap, 'e', 'n']]);
-
-                            assertFirstLetterIsInAlphabet(result);
-                        });
-                    });
-
-                    describe(inputForWCap, () => {
-                        it(`should return the expected result`, () => {
-                            const result = tokenizer.tokenize(inputForWCap);
-
-                            assertTokenizationResult(result, [[wCap, 'e', 'n']]);
-
-                            assertFirstLetterIsInAlphabet(result);
-                        });
-                    });
-
-                    describe(inputForZCap, () => {
-                        it(`should return the expected result`, () => {
-                            const result = tokenizer.tokenize(inputForZCap);
-
-                            assertTokenizationResult(result, [[zCap, 'e', 'n']]);
-
-                            assertFirstLetterIsInAlphabet(result);
-                        });
-                    });
-                });
-
-                describe(`when the capped consonant comes through as a single character`, () => {
-                    describe('ŝen', () => {
-                        it(`should return the expected result`, () => {
-                            // TODO use unicode escape to be sure
-                            const result = tokenizer.tokenize('\u015den');
-
-                            // assertTokenizationResult(result, [['ŝ', 'e', 'n']]);
-
-                            // const actualSCap = result[0].characters[0].text;
-
-                            // const unicodeCharCodeForFirstLetter = actualSCap.codePointAt(0);
-
-                            // expect(unicodeCharCodeForFirstLetter).toBe('u015d');
-
-                            assertTokenizationResult(result, [[sCap, 'e', 'n']]);
-
-                            assertFirstLetterIsInAlphabet(result);
-                        });
-                    });
-
-                    describe('ŵen', () => {
-                        it(`should return the expected result`, () => {
-                            const unicodeChar = '\u0175';
-
-                            // TODO use unicode escape to be sure
-                            const result = tokenizer.tokenize(`${unicodeChar}en`);
-
-                            assertTokenizationResult(result, [[wCap, 'e', 'n']]);
-
-                            assertFirstLetterIsInAlphabet(result);
-                        });
-                    });
-
-                    describe('ẑen', () => {
-                        it(`should return the expected result`, () => {
-                            const unicodeChar = '\u1e91';
-
-                            const result = tokenizer.tokenize(`${unicodeChar}en`);
-
-                            assertTokenizationResult(result, [[zCap, 'e', 'n']]);
-
-                            assertFirstLetterIsInAlphabet(result);
-                        });
-                    });
-                });
-            });
-
-            describe(`when the consonant is upper-cased`, () => {
-                describe(`when the cap comes through as a separate character`, () => {
-                    const inputForSCap = 'S' + orphanedCap + 'en';
-
-                    const inputForWCap = 'W' + orphanedCap + 'en';
-
-                    const inputForZCap = 'Z' + orphanedCap + 'en';
-
-                    describe(inputForSCap, () => {
-                        it(`should return the expected result`, () => {
-                            const result = tokenizer.tokenize(inputForSCap);
-
-                            assertTokenizationResult(result, [[sCap, 'e', 'n']]);
-
-                            assertFirstLetterIsInAlphabet(result);
-                        });
-                    });
-
-                    describe(inputForWCap, () => {
-                        it(`should return the expected result`, () => {
-                            const result = tokenizer.tokenize(inputForWCap);
-
-                            assertTokenizationResult(result, [[wCap, 'e', 'n']]);
-
-                            assertFirstLetterIsInAlphabet(result);
-                        });
-                    });
-
-                    describe(inputForZCap, () => {
-                        it(`should return the expected result`, () => {
-                            const result = tokenizer.tokenize(inputForZCap);
-
-                            assertTokenizationResult(result, [[zCap, 'e', 'n']]);
-
-                            assertFirstLetterIsInAlphabet(result);
-                        });
-                    });
-                });
-
-                describe(`when the capped consonant comes through as a single character`, () => {
-                    describe('ŝen', () => {
-                        it(`should return the expected result`, () => {
-                            // TODO use unicode escape to be sure
-                            const result = tokenizer.tokenize('\u015cen');
-
-                            assertTokenizationResult(result, [[sCap, 'e', 'n']]);
-
-                            assertFirstLetterIsInAlphabet(result);
-                        });
-                    });
-
-                    describe('ŵen', () => {
-                        it(`should return the expected result`, () => {
-                            const unicodeChar = '\u0174';
-
-                            // TODO use unicode escape to be sure
-                            const result = tokenizer.tokenize(`${unicodeChar}en`);
-
-                            assertTokenizationResult(result, [[wCap, 'e', 'n']]);
-
-                            assertFirstLetterIsInAlphabet(result);
-                        });
-                    });
-
-                    describe('ẑen', () => {
-                        it(`should return the expected result`, () => {
-                            const unicodeChar = '\u1e90';
-
-                            const result = tokenizer.tokenize(`${unicodeChar}en`);
-
-                            assertTokenizationResult(result, [[zCap, 'e', 'n']]);
-
-                            assertFirstLetterIsInAlphabet(result);
-                        });
-                    });
-                });
+                assertTokenizationResult(result, [
+                    ['"', 'n', 'e', 'n', 'd', 'e', 'n'],
+                    ['n', 'e', 'n', 'd', 'a', 'n'],
+                    ['h', 'a', 'n', 't’', 'i', 'h', '!', '?', '"'],
+                    ['r', 'o', 'b', 'e', 'r', 't'],
+                    ['s', 'm', 'i', 't', 'h', '-', 'j', 'o', 'n', 'e', 's'],
+                    ['h', 'a', 'n', '.'],
+                ]);
             });
         });
     });
 
-    describe(`when the text includes multiple words`, () => {
-        it(`should return the expected result`, () => {
-            const input = `"Nenden nendan hant’ih!?" Robert Smith-Jones han.`;
+    describe(`standardize`, () => {
+        describe(`when an input contains lone surrogates`, () => {
+            it(`should replace these with the character with the corresponding single unicode key point`, () => {
+                const input = 'swzSWZ'
+                    .split('')
+                    .map((c) => `${c}${orphanedCap}`)
+                    .join('');
 
-            const result = tokenizer.tokenize(input);
+                const expectedOutput = `${sCap}${wCap}${zCap}${sCap.toUpperCase()}${wCap.toUpperCase()}${zCap.toUpperCase()}`;
 
-            assertTokenizationResult(result, [
-                ['"', 'n', 'e', 'n', 'd', 'e', 'n'],
-                ['n', 'e', 'n', 'd', 'a', 'n'],
-                ['h', 'a', 'n', 't’', 'i', 'h', '!', '?', '"'],
-                ['r', 'o', 'b', 'e', 'r', 't'],
-                ['s', 'm', 'i', 't', 'h', '-', 'j', 'o', 'n', 'e', 's'],
-                ['h', 'a', 'n', '.'],
-            ]);
+                const result = tokenizer.standardize(input);
+
+                // const _charCodeForSCap = result.codePointAt(0);
+
+                // const charCodeForWCap = result.codePointAt(1);
+
+                // expect(charCodeForSCap).toBe(0x015d);
+
+                // expect(charCodeForWCap).toBe(0x0175);
+
+                expect(result).toEqual(expectedOutput);
+            });
         });
     });
 });
