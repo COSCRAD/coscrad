@@ -19,8 +19,8 @@ import { VocabularyListViewModel } from '../../../../queries/buildViewModelForRe
 import { AggregateId } from '../../../types/AggregateId';
 import { IResourceConnectionDto } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
-import { BaseEvent } from '../../shared/events/base-event.entity';
 import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base-arango-resource-query-builder';
+import { ContributionSummary } from '../../user-management';
 import { FilterPropertyType } from '../commands';
 import { VocabularyListEntryImportItem } from '../entities/vocabulary-list.entity';
 import { IVocabularyListQueryRepository } from '../queries/vocabulary-list-query-repository.interface';
@@ -133,9 +133,9 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
         await this.database.query(this.baseResourceQueryBuilder.connectResourcesWithNote(id, dto));
     }
 
-    async attribute(vocabularyListId: AggregateId, event: BaseEvent): Promise<void> {
+    async attribute(vocabularyListId: AggregateId, summary: ContributionSummary): Promise<void> {
         await this.database
-            .query(this.baseResourceQueryBuilder.attribute(vocabularyListId, event))
+            .query(this.baseResourceQueryBuilder.attribute(vocabularyListId, summary))
             .catch((reason) => {
                 throw new InternalError(`Failed to add attribution to vocabulary list: ${reason}`);
             });

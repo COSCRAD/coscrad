@@ -11,8 +11,8 @@ import { buildMultilingualTextWithSingleItem } from '../../../common/build-multi
 import { AggregateId } from '../../../types/AggregateId';
 import { IResourceConnectionDto } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
-import { BaseEvent } from '../../shared/events/base-event.entity';
 import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base-arango-resource-query-builder';
+import { ContributionSummary } from '../../user-management';
 import { ISongQueryRepository } from '../queries/song-query-repository.interface';
 import { EventSourcedSongViewModel } from '../queries/song.view-model.event.sourced';
 
@@ -34,8 +34,8 @@ export class ArangoSongQueryRepository implements ISongQueryRepository {
         await this.database.query(this.baseResourceQueryBuilder.allowUser(aggregateId, userId));
     }
 
-    async attribute(songId: AggregateId, event: BaseEvent): Promise<void> {
-        const aqlQuery = this.baseResourceQueryBuilder.attribute(songId, event);
+    async attribute(songId: AggregateId, summary: ContributionSummary): Promise<void> {
+        const aqlQuery = this.baseResourceQueryBuilder.attribute(songId, summary);
 
         await this.database.query(aqlQuery).catch((reason) => {
             throw new InternalError(

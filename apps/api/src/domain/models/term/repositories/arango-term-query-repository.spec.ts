@@ -733,7 +733,7 @@ describe(`ArangoTermQueryRepository`, () => {
                         meta: {
                             contributorIds: testContributors.map((c) => c.id),
                         },
-                    })
+                    }).buildContributionSummary()
                 );
 
                 const updatedView = (await testQueryRepository.fetchById(
@@ -768,7 +768,7 @@ describe(`ArangoTermQueryRepository`, () => {
                         meta: {
                             contributorIds: [],
                         },
-                    })
+                    }).buildContributionSummary()
                 );
 
                 const updatedView = (await testQueryRepository.fetchById(

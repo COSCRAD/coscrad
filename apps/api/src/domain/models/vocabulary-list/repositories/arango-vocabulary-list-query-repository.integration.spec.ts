@@ -574,7 +574,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
                     meta: {
                         contributorIds: testContributors.map(({ id }) => id),
                     },
-                })
+                }).buildContributionSummary()
             );
 
             const updatedView = (await testQueryRepository.fetchById(

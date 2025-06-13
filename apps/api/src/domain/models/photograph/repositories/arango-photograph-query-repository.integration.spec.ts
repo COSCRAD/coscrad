@@ -573,7 +573,10 @@ describe(`ArangoPhotographQueryRepository`, () => {
         });
 
         it(`should add the given contributions`, async () => {
-            await testQueryRepository.attribute(targetPhotograph.id, creationEvent);
+            await testQueryRepository.attribute(
+                targetPhotograph.id,
+                creationEvent.buildContributionSummary()
+            );
 
             const updatedView = (await testQueryRepository.fetchById(
                 targetPhotograph.id

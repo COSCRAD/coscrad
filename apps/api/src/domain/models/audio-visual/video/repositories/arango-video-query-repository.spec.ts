@@ -234,6 +234,8 @@ describe(`ArangoVideoQueryRepository`, () => {
         });
     });
 
+    // TODO attribute
+
     describe(`createNoteAbout`, () => {
         const targetVideo = buildTestInstance(EventSourcedVideoViewModel, {
             notes: [],

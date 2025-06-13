@@ -11,8 +11,8 @@ import mapEntityDtoToDatabaseDocument from '../../../../persistence/database/uti
 import { AggregateId } from '../../../types/AggregateId';
 import { IResourceConnectionDto } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
-import { BaseEvent } from '../../shared/events/base-event.entity';
 import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base-arango-resource-query-builder';
+import { ContributionSummary } from '../../user-management';
 import { IPhotographQueryRepository } from '../queries';
 import { PhotographViewModel } from '../queries/photograph.view-model';
 
@@ -121,9 +121,9 @@ export class ArangoPhotographQueryRepository implements IPhotographQueryReposito
         return this.database.delete(id);
     }
 
-    async attribute(photographId: AggregateId, event: BaseEvent): Promise<void> {
+    async attribute(photographId: AggregateId, summary: ContributionSummary): Promise<void> {
         await this.database
-            .query(this.baseResourceQueryBuilder.attribute(photographId, event))
+            .query(this.baseResourceQueryBuilder.attribute(photographId, summary))
             .catch((reason) => {
                 throw new InternalError(
                     `Failed to add attribution for photograph via PhotographRepository: ${reason}`

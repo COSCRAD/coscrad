@@ -4,10 +4,13 @@ import {
 } from '@coscrad/api-interfaces';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { isDeepStrictEqual } from 'util';
+import { isInternalError } from '../../../../lib/errors/InternalError';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import capitalizeFirstLetter from '../../../../lib/utilities/strings/capitalizeFirstLetter';
 import { DTO } from '../../../../types/DTO';
 import { AggregateId } from '../../../types/AggregateId';
+import { ContributionSummary } from '../../user-management';
+import { CoscradDate } from '../../user-management/utilities';
 import { EventRecordMetadata } from './types/EventRecordMetadata';
 
 export interface IEventPayload {
@@ -70,6 +73,21 @@ export abstract class BaseEvent<
                   .join(' ')} by: `;
 
         return capitalizeFirstLetter(eventDescription);
+    }
+
+    public buildContributionSummary(): ContributionSummary {
+        const date = CoscradDate.fromUnixTimestamp(this.meta.dateCreated);
+
+        const contributionSummary: ContributionSummary = {
+            contributorIds: this.meta.contributorIds,
+            statement: this.buildAttributionStatement(),
+            type: this.type,
+            // This is a system error. What's the best way to fail gracefully?
+            date: isInternalError(date) ? null : date,
+            timestamp: this.meta.dateCreated,
+        };
+
+        return contributionSummary;
     }
 
     public static fromDto<T extends BaseEvent>(eventRecord: DTO<T>): T {
