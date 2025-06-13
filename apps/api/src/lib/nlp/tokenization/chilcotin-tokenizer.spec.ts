@@ -64,7 +64,7 @@ const assertTokenizationResult = (result: Token[], expecteds: Token[] | string[]
  * 
  * See [here](https://www.compart.com/en/unicode/U+015D)
  */
-const orphanedCap = '̂'; // === String.fromCodePoint(0x0302) === String.fromCodePoint(770)
+const loneSurrogateCap = '̂'; // === String.fromCodePoint(0x0302) === String.fromCodePoint(770)
 
 const sCap = String.fromCharCode(0x015d);
 
@@ -176,11 +176,11 @@ describe(`ChilcotinTokenizer`, () => {
 
                 describe(`when the consonant is lower-cased`, () => {
                     describe(`when the cap comes through as a separate character`, () => {
-                        const inputForSCap = 's' + orphanedCap + 'en';
+                        const inputForSCap = 's' + loneSurrogateCap + 'en';
 
-                        const inputForWCap = 'w' + orphanedCap + 'en';
+                        const inputForWCap = 'w' + loneSurrogateCap + 'en';
 
-                        const inputForZCap = 'z' + orphanedCap + 'en';
+                        const inputForZCap = 'z' + loneSurrogateCap + 'en';
 
                         describe(inputForSCap, () => {
                             it(`should return the expected result`, () => {
@@ -262,11 +262,11 @@ describe(`ChilcotinTokenizer`, () => {
 
                 describe(`when the consonant is upper-cased`, () => {
                     describe(`when the cap comes through as a separate character`, () => {
-                        const inputForSCap = 'S' + orphanedCap + 'en';
+                        const inputForSCap = 'S' + loneSurrogateCap + 'en';
 
-                        const inputForWCap = 'W' + orphanedCap + 'en';
+                        const inputForWCap = 'W' + loneSurrogateCap + 'en';
 
-                        const inputForZCap = 'Z' + orphanedCap + 'en';
+                        const inputForZCap = 'Z' + loneSurrogateCap + 'en';
 
                         describe(inputForSCap, () => {
                             it(`should return the expected result`, () => {
@@ -371,7 +371,7 @@ describe(`ChilcotinTokenizer`, () => {
             it(`should replace these with the character with the corresponding single unicode key point`, () => {
                 const input = 'swzSWZ'
                     .split('')
-                    .map((c) => `${c}${orphanedCap}`)
+                    .map((c) => `${c}${loneSurrogateCap}`)
                     .join('');
 
                 const expectedOutput = `${sCap}${wCap}${zCap}${sCap.toUpperCase()}${wCap.toUpperCase()}${zCap.toUpperCase()}`;

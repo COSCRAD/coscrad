@@ -114,7 +114,7 @@ export interface ITextStandardizer {
     standardize(input: string): string;
 }
 
-interface ITextStandardizerProvider {
+export interface ITextStandardizerProvider {
     forLanguage(languageCode: LanguageCode): ITextStandardizer;
 }
 
