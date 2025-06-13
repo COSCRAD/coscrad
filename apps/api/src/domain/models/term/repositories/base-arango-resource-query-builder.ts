@@ -1,7 +1,10 @@
 import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { AqlQuery } from 'arangojs/aql';
+import { ConnectionRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
 import { NoteRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
+import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { AggregateId } from '../../../types/AggregateId';
+import { IResourceConnectionDto } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import { CoscradDate } from '../../user-management/utilities';
@@ -93,6 +96,46 @@ export class BaseArangoResourceViewQueryBuilder {
         };
     }
 
+    connectResourcesWithNote(
+        id: string,
+        {
+            compositeIdentifier: otherCompositeIdentifier,
+            selfContext,
+            otherContext,
+            noteId,
+            text,
+            role,
+        }: IResourceConnectionDto
+    ) {
+        const newConnection = ConnectionRecordForResourceViewModel.fromDto({
+            id: noteId,
+            selfContext,
+            otherCompositeIdentifier,
+            otherContext,
+            note: new MultilingualText(text),
+            role,
+        }); // .toDto() ?
+
+        const query = `
+            FOR doc IN @@collectionName
+            FILTER doc._key == @id
+            UPDATE doc WITH {
+                connections: doc.connections == null ? [@newConnection] : APPEND(doc.connections,[@newConnection])
+            } IN @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': this.collectionName,
+            id,
+            newConnection,
+        };
+
+        return {
+            query,
+            bindVars,
+        };
+    }
+
     allowUser(resourceId: AggregateId, userId: AggregateId): AqlQuery {
         const query = `
                 FOR doc IN @@collectionName
@@ -102,9 +145,7 @@ export class BaseArangoResourceViewQueryBuilder {
                         allowedUserIds: APPEND(doc.accessControlList.allowedUserIds,[@userId])
                     }
                 } IN @@collectionName
-                 RETURN OLD
                 `;
-        // TODO remove return value?
 
         const bindVars = {
             '@collectionName': this.collectionName,

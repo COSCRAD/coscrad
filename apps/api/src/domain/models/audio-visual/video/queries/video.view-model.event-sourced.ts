@@ -8,7 +8,10 @@ import {
 import { BooleanDataType, NestedDataType, UUID } from '@coscrad/data-types';
 import { isBoolean, isNonEmptyObject } from '@coscrad/validation-constraints';
 import { DetailScopedCommandWriteContext } from '../../../../../app/controllers/command/services/command-info-service';
-import { TagViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
+import {
+    ConnectionRecordForResourceViewModel,
+    TagViewModel,
+} from '../../../../../queries/buildViewModelForResource/viewModels';
 import { NoteRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
 import { EventSourcedTagRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { CoscradDataExample } from '../../../../../test-data/utilities';
@@ -43,6 +46,7 @@ import { VideoCreated } from '../commands';
         isPublished: false,
         tags: [],
         notes: [],
+        connections: [],
     },
 })
 export class EventSourcedVideoViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
@@ -94,6 +98,13 @@ export class EventSourcedVideoViewModel implements HasAggregateId, DetailScopedC
     notes: NoteRecordForResourceViewModel[];
     // end TODO extend base
 
+    @NestedDataType(ConnectionRecordForResourceViewModel, {
+        label: 'connections',
+        description: 'a list of contextualized connections to other resources about with a note',
+        isArray: true,
+    })
+    connections: ConnectionRecordForResourceViewModel[];
+
     actions: ICommandFormAndLabels[];
     mediaItemId: AggregateId;
     mimeType?: MIMEType;
@@ -106,7 +117,16 @@ export class EventSourcedVideoViewModel implements HasAggregateId, DetailScopedC
 
         // TODO extend base
         // super(dto);
-        const { contributions, name, id, accessControlList, tags, isPublished, notes } = dto;
+        const {
+            contributions,
+            name,
+            id,
+            accessControlList,
+            tags,
+            isPublished,
+            notes,
+            connections,
+        } = dto;
 
         this.contributions = Array.isArray(contributions)
             ? contributions.map((c) => ContributionSummary.fromDto(c))
@@ -129,6 +149,11 @@ export class EventSourcedVideoViewModel implements HasAggregateId, DetailScopedC
         if (Array.isArray(notes))
             this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));
         // end TODO extend base
+
+        if (Array.isArray(connections))
+            this.connections = connections.map((n) =>
+                ConnectionRecordForResourceViewModel.fromDto(n)
+            );
 
         const { mediaItemId, transcript } = dto;
 
@@ -176,6 +201,7 @@ export class EventSourcedVideoViewModel implements HasAggregateId, DetailScopedC
             accessControlList: new AccessControlList(),
             tags: [],
             notes: [],
+            connections: [],
         });
     }
 

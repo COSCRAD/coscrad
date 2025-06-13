@@ -127,6 +127,7 @@ exports[`when querying for a playlist: fetch many (/resources/playlists) when th
           "type": "CREATE_NOTE_ABOUT_RESOURCE",
         },
       ],
+      "connections": [],
       "contributions": [
         {
           "contributorIds": [],
@@ -319,6 +320,7 @@ exports[`when querying for a playlist: fetch many (/resources/playlists) when th
           "type": "CREATE_NOTE_ABOUT_RESOURCE",
         },
       ],
+      "connections": [],
       "contributions": [
         {
           "contributorIds": [],
@@ -471,6 +473,7 @@ exports[`when querying for a playlist: fetch many (/resources/playlists) when th
           "type": "CREATE_NOTE_ABOUT_RESOURCE",
         },
       ],
+      "connections": [],
       "contributions": [
         {
           "contributorIds": [],
