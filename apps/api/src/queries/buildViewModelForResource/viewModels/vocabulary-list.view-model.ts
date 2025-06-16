@@ -39,6 +39,7 @@ import { EventSourcedTagRecordForResourceViewModel } from './tag.view-model.even
     example: {
         id: buildDummyUuid(1),
         text: buildMultilingualTextWithSingleItem('I am jumping'),
+        name: buildMultilingualTextWithSingleItem('I am jumping'),
         mediaItemId: buildDummyUuid(22),
         isPublished: false,
         accessControlList: new AccessControlList(),
@@ -48,6 +49,8 @@ import { EventSourcedTagRecordForResourceViewModel } from './tag.view-model.even
 export class TermViewForVocabularyListEntry {
     id: AggregateId;
     text: MultilingualText;
+    // TODO deduplicate this
+    name: MultilingualText;
     mediaItemId?: string;
     isPublished: boolean;
     accessControlList: AccessControlList;
@@ -56,11 +59,13 @@ export class TermViewForVocabularyListEntry {
     constructor(dto: DTO<TermViewForVocabularyListEntry>) {
         if (!dto) return;
 
-        const { id, text, mediaItemId, isPublished, accessControlList, contributions } = dto;
+        const { id, text, mediaItemId, isPublished, accessControlList, contributions, name } = dto;
 
         this.id = id;
 
         this.text = new MultilingualText(text);
+
+        this.name = new MultilingualText(name);
 
         this.mediaItemId = mediaItemId;
 
@@ -265,9 +270,9 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
             connections,
         } = dto;
 
-        this.contributions = Array.isArray(contributions)
-            ? contributions.map((c) => ContributionSummary.fromDto(c))
-            : [];
+        if (Array.isArray(contributions)) {
+            this.contributions = contributions.map((c) => ContributionSummary.fromDto(c));
+        }
 
         if (isNonEmptyObject(name)) {
             this.name = new MultilingualText(name);

@@ -2,6 +2,7 @@ import {
     AggregateType,
     FormFieldType,
     IMultilingualText,
+    IVocabularyListEntry,
     IVocabularyListViewModel,
     LanguageCode,
     MultilingualTextItemRole,
@@ -106,7 +107,7 @@ const ASPECT = 'aspect';
 const USITATIVE = 'usitative';
 
 // positive, person, aspect, usitative, text
-const entries = (
+const entries: IVocabularyListEntry<boolean | string>[] = (
     [
         // 1. present (imperfective)
         [1, 11, 1, 0, 'I am singing'],
@@ -209,10 +210,12 @@ const entries = (
 ).map(([positive, person, aspect, usitative, text], index) => ({
     term: {
         name: buildMultilingualTextWithSingleItem(text, languageCodeForTerms),
+        text: buildMultilingualTextWithSingleItem(text, languageCodeForTerms),
         id: buildDummyUuid(100 + index),
         isPublished: true,
         // TODO check that these come through as well
         contributions: [],
+        tokens: [],
     },
     variableValues: {
         [POSITIVE]: positive.toString(),
@@ -340,8 +343,19 @@ const comprehensiveParadigm: IVocabularyListViewModel = {
         ],
     },
     isPublished: true,
-    // we have other test cases for the contributions
-    contributions: [],
+    contributions: [
+        {
+            contributorIds: [buildDummyUuid(99)],
+            statement: `Vocabulary List Created by: ${contributors.creator.firstName} ${contributors.creator.lastName}`,
+            type: 'VOCABULARY_LIST_CREATED',
+            date: {
+                month: 'January',
+                year: 2025,
+                day: 1,
+            },
+            timestamp: 0,
+        },
+    ],
     // note that we have separate command tests for the actions
     actions: [],
     // what about tags?
@@ -437,6 +451,8 @@ describe(`the vocabulary list detail page`, () => {
                 cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
                     aggregateCompositeIdentifier,
                 });
+
+                cy.rehydrateViews();
             });
 
             it(`should display the list's original name`, () => {
@@ -596,7 +612,7 @@ describe(`the vocabulary list detail page`, () => {
             });
 
             describe(`when filters match multiple terms`, () => {
-                it.only(`should display the list`, () => {
+                it(`should display the list`, () => {
                     /**
                      * TODO make a cypress command for the next two steps:
                      * cy.fillStaticSelect('positive','0');

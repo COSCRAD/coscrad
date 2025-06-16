@@ -102,7 +102,7 @@ export class SyncInMemoryEventPublisher implements ICoscradEventPublisher {
 
         if (isInternalError(result)) {
             if (retried < 5) {
-                this.handleWithRetries(event, handler, retried + 1);
+                await this.handleWithRetries(event, handler, retried + 1);
             } else {
                 const error = new InternalError(
                     `Failed to handle event of type: ${event.type} after 5 retries`,
