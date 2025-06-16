@@ -32,7 +32,9 @@ export class DigitalTextQueryRepository
          * - which other resources is this resource connected to
          * - which categories apply to this resource
          */
-        const hydratedViewModel = new DigitalTextViewModel(id).applyStream(fullEventHistory);
+        const hydratedViewModel = new DigitalTextViewModel({
+            id,
+        } as DigitalTextViewModel).applyStream(fullEventHistory);
 
         return hydratedViewModel;
     }
@@ -56,7 +58,7 @@ export class DigitalTextQueryRepository
         const digitalTextIds = [...new Set(allIdsWithDuplicates)];
 
         const hydratedViewModels = digitalTextIds.map((id) =>
-            new DigitalTextViewModel(id).applyStream(fullEventHistory)
+            new DigitalTextViewModel({ id } as DigitalTextViewModel).applyStream(fullEventHistory)
         );
 
         return hydratedViewModels;

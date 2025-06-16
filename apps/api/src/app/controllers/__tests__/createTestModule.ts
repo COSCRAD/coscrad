@@ -137,6 +137,8 @@ import {
     PhotographAddedToDigitalTextPage,
 } from '../../../domain/models/digital-text/commands/add-photograph-to-digital-text-page';
 import { DigitalText } from '../../../domain/models/digital-text/entities/digital-text.entity';
+import { ArangoDigitalTextQueryRepository } from '../../../domain/models/digital-text/queries/arango-digital-text-query-repository';
+import { DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../../domain/models/digital-text/queries/digital-text-query-repository.interface';
 import { CreateMediaItem } from '../../../domain/models/media-item/commands/create-media-item/create-media-item.command';
 import { CreateMediaItemCommandHandler } from '../../../domain/models/media-item/commands/create-media-item/create-media-item.command-handler';
 import { MEDIA_MANGAER_INJECTION_TOKEN } from '../../../domain/models/media-item/media-manager.interface';
@@ -319,7 +321,6 @@ import { ArangoIdRepository } from '../../../persistence/repositories/arango-id-
 import { ArangoRepositoryProvider } from '../../../persistence/repositories/arango-repository.provider';
 import { BibliographicCitationViewModel } from '../../../queries/buildViewModelForResource/viewModels/bibliographic-citation/bibliographic-citation.view-model';
 import { DigitalTextQueryService } from '../../../queries/digital-text';
-import { DigitalTextQueryRepository } from '../../../queries/digital-text/digital-text.query-repository';
 import { NoteViewModel } from '../../../queries/edgeConnectionViewModels/note.view-model';
 import { DTO } from '../../../types/DTO';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../../../validation';
@@ -642,6 +643,12 @@ export default async (
                 inject: [ArangoConnectionProvider],
             },
             {
+                provide: DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN,
+                useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
+                    new ArangoDigitalTextQueryRepository(arangoConnectionProvider),
+                inject: [ArangoConnectionProvider],
+            },
+            {
                 //  TODO use a more extensible pattern
                 provide: QUERY_REPOSITORY_PROVIDER_TOKEN,
                 useFactory: (
@@ -651,7 +658,8 @@ export default async (
                     videoQueryRepository: ArangoVideoQueryRepository,
                     vocabularyListQueryRepository: ArangoVocabularyListQueryRepository,
                     playlistQueryRepository: ArangoPlaylistQueryRepository,
-                    songQueryRepository: ArangoSongQueryRepository
+                    songQueryRepository: ArangoSongQueryRepository,
+                    digitalTextQueryRepository: ArangoDigitalTextQueryRepository
                 ): IQueryRepositoryProvider => {
                     return new ArangoQueryRepositoryProvider(
                         photographQueryRespository,
@@ -660,7 +668,8 @@ export default async (
                         videoQueryRepository,
                         vocabularyListQueryRepository,
                         playlistQueryRepository,
-                        songQueryRepository
+                        songQueryRepository,
+                        digitalTextQueryRepository
                     );
                 },
                 inject: [
@@ -671,6 +680,7 @@ export default async (
                     VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
                     PLAYLIST_QUERY_REPOSITORY_TOKEN,
                     SONG_QUERY_REPOSITORY_TOKEN,
+                    DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN,
                 ],
             },
             {
@@ -782,15 +792,15 @@ export default async (
             {
                 provide: DigitalTextQueryService,
                 useFactory: (
-                    eventRepository: ArangoEventRepository,
+                    connectionProvider: ArangoConnectionProvider,
                     commandInfoService: CommandInfoService
                 ) =>
                     new DigitalTextQueryService(
-                        new DigitalTextQueryRepository(eventRepository),
+                        new ArangoDigitalTextQueryRepository(connectionProvider),
                         commandInfoService
                     ),
 
-                inject: [ArangoEventRepository, CommandInfoService],
+                inject: [ArangoConnectionProvider, CommandInfoService],
             },
             {
                 provide: ID_MANAGER_TOKEN,

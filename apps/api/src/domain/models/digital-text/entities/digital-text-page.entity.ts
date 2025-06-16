@@ -5,6 +5,7 @@ import { isDeepStrictEqual } from 'util';
 import { isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
+import { CoscradDataExample } from '../../../../test-data/utilities';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
@@ -18,6 +19,13 @@ import { CannotOverwritePageContentError } from '../errors/cannot-overwrite-page
 import { CannotOverwritePhotographForPageError } from '../errors/cannot-overwrite-photograph-for-page.error';
 import { PageIdentifier } from './types/page-identifier';
 
+@CoscradDataExample<DigitalTextPage>({
+    example: {
+        identifier: 'XV',
+        content: buildMultilingualTextWithSingleItem('test content for page'),
+        audio: MultilingualAudio.buildEmpty(),
+    },
+})
 export default class DigitalTextPage extends BaseDomainModel implements IDigitalTextPage {
     @PageNumber({
         label: 'identifier',
@@ -174,5 +182,9 @@ export default class DigitalTextPage extends BaseDomainModel implements IDigital
             identifier,
             audio: MultilingualAudio.buildEmpty(),
         });
+    }
+
+    public static fromDto(dto: DTO<DigitalTextPage>) {
+        return new DigitalTextPage(dto);
     }
 }

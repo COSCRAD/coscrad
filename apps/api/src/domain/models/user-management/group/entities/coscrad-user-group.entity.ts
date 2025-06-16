@@ -2,6 +2,7 @@ import { NonEmptyString } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { UpdateMethod } from '../../../../../domain/decorators';
 import { InternalError } from '../../../../../lib/errors/InternalError';
+import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
 import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../../common/entities/multilingual-text';
@@ -10,6 +11,7 @@ import { AggregateCompositeIdentifier } from '../../../../types/AggregateComposi
 import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
 import { InMemorySnapshot } from '../../../../types/ResourceType';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { Aggregate } from '../../../aggregate.entity';
 import InvalidExternalStateError from '../../../shared/common-command-errors/InvalidExternalStateError';
 import getId from '../../../shared/functional/getId';
@@ -17,6 +19,15 @@ import { UserDoesNotExistError } from '../errors/external-state-errors/UserDoesN
 import { UserGroupLabelAlreadyInUseError } from '../errors/external-state-errors/UserGroupLabelAlreadyInUseError';
 import UserIsAlreadyInGroupError from '../errors/invalid-state-transition-errors/UserIsAlreadyInGroupError';
 
+@CoscradDataExample<CoscradUserGroup>({
+    example: {
+        type: AggregateType.userGroup,
+        id: buildDummyUuid(78),
+        label: 'test user group name',
+        description: 'a group to be used in tests',
+        userIds: [],
+    },
+})
 @RegisterIndexScopedCommands(['CREATE_USER_GROUP'])
 export class CoscradUserGroup extends Aggregate {
     type = AggregateType.userGroup;
@@ -127,5 +138,9 @@ export class CoscradUserGroup extends Aggregate {
         }
 
         return allErrors.length > 0 ? new InvalidExternalStateError(allErrors) : Valid;
+    }
+
+    public static fromDto(dto: DTO<CoscradUserGroup>) {
+        return new CoscradUserGroup(dto);
     }
 }

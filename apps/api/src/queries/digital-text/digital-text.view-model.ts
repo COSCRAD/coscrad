@@ -3,9 +3,11 @@ import {
     AggregateType,
     IDigitalTextViewModel,
 } from '@coscrad/api-interfaces';
-import { BooleanDataType, FromDomainModel, NestedDataType } from '@coscrad/data-types';
+import { BooleanDataType, FromDomainModel, NestedDataType, UUID } from '@coscrad/data-types';
+import { isBoolean, isNonEmptyObject } from '@coscrad/validation-constraints';
 import { buildMultilingualTextWithSingleItem } from '../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../domain/common/entities/multilingual-text';
+import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import {
     DigitalTextCreatedPayload,
     PageAddedToDigitalTextPayload,
@@ -20,19 +22,44 @@ import { TagCreated } from '../../domain/models/tag/commands/create-tag/tag-crea
 import { ResourceOrNoteTaggedPayload } from '../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
 import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { isNullOrUndefined } from '../../domain/utilities/validation/is-null-or-undefined';
+import { Maybe } from '../../lib/types/maybe';
+import { NotFound } from '../../lib/types/not-found';
+import { CoscradDataExample } from '../../test-data/utilities';
 import { DTO } from '../../types/DTO';
+import { ConnectionRecordForResourceViewModel } from '../buildViewModelForResource/viewModels';
+import { NoteRecordForResourceViewModel } from '../buildViewModelForResource/viewModels/note-record-for-resource.view-model';
 import { EventSourcedTagRecordForResourceViewModel } from '../buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { BaseEvent } from '../event-sourcing';
 import { ApplyEvent } from '../event-sourcing/apply-event.interface';
 
+@CoscradDataExample<DigitalTextViewModel>({
+    example: {
+        type: AggregateType.digitalText,
+        id: buildDummyUuid(88),
+        title: buildMultilingualTextWithSingleItem('my book'),
+        name: buildMultilingualTextWithSingleItem('my book'),
+        isPublished: false,
+        tags: [],
+        pages: [],
+        accessControlList: new AccessControlList(),
+        notes: [],
+        connections: [],
+    },
+})
 export class DigitalTextViewModel
     implements ApplyEvent<DigitalTextViewModel>, IDigitalTextViewModel
 {
-    #accessControlList: AccessControlList = new AccessControlList();
+    accessControlList: AccessControlList = new AccessControlList();
 
     #allTags: EventSourcedTagRecordForResourceViewModel[] = [];
 
     public readonly type = AggregateType.digitalText;
+
+    @UUID({
+        label: 'ID',
+        description: 'system identifier for this digital text',
+    })
+    public id: string;
 
     @FromDomainModel(DigitalText)
     public title: MultilingualText;
@@ -62,7 +89,59 @@ export class DigitalTextViewModel
     })
     public pages: DigitalTextPage[] = [];
 
-    constructor(public readonly id: string) {}
+    @NestedDataType(NoteRecordForResourceViewModel, {
+        label: 'notes',
+        description: 'contextualized notes about this digital text',
+        isArray: true,
+        // i.e., can be empty
+        isOptional: true,
+    })
+    public notes: NoteRecordForResourceViewModel[];
+
+    @NestedDataType(ConnectionRecordForResourceViewModel, {
+        label: 'connections',
+        description:
+            'a list of contextualized connections to other resources in the web-of-knowledge',
+        isArray: true,
+        // i.e., can be empty
+        isOptional: true,
+    })
+    public connections: ConnectionRecordForResourceViewModel[];
+
+    constructor(dto: DTO<DigitalTextViewModel>) {
+        if (!dto) return;
+
+        const { id, title, name, isPublished, tags, pages, accessControlList, notes, connections } =
+            dto;
+
+        this.id = id;
+
+        this.title = new MultilingualText(title);
+
+        this.name = new MultilingualText(name);
+
+        this.isPublished = isBoolean(isPublished) ? isPublished : false;
+
+        if (Array.isArray(tags)) {
+            this.tags = tags.map((t) => new EventSourcedTagRecordForResourceViewModel(t));
+        }
+
+        if (Array.isArray(pages)) {
+            this.pages = pages.map((p) => new DigitalTextPage(p));
+        }
+
+        if (Array.isArray(notes)) {
+            this.notes = notes.map((n) => new NoteRecordForResourceViewModel(n));
+        }
+
+        if (Array.isArray(connections)) {
+            this.connections = connections.map((c) => new ConnectionRecordForResourceViewModel(c));
+        }
+
+        this.accessControlList = isNonEmptyObject(accessControlList)
+            ? new AccessControlList(accessControlList)
+            : new AccessControlList();
+    }
 
     /**
      * TODO We should establish an alternative approach where the views are updated
@@ -137,7 +216,7 @@ export class DigitalTextViewModel
                  * Note that `AccessControlList` is an immutable data structure,
                  * so we need to save an updated reference to it.
                  */
-                this.#accessControlList = this.#accessControlList.allowUser(idOfCreatingUser);
+                this.accessControlList = this.accessControlList.allowUser(idOfCreatingUser);
 
                 return this;
             }
@@ -178,7 +257,7 @@ export class DigitalTextViewModel
                 const { userId } = payload as ResourceReadAccessGrantedToUserPayload;
 
                 // Note that `AccessControlList` is an immutable data structure
-                this.#accessControlList = this.#accessControlList.allowUser(userId);
+                this.accessControlList = this.accessControlList.allowUser(userId);
 
                 return this;
             }
@@ -252,6 +331,10 @@ export class DigitalTextViewModel
         return this;
     }
 
+    public canUser(userId: string): boolean {
+        return this.accessControlList.canUser(userId);
+    }
+
     /**
      * @param events A temporally ordered event history, filtered for this particular aggregate.
      * @returns `DigitalTextViewModel`
@@ -277,8 +360,8 @@ export class DigitalTextViewModel
         const { id: userId, groups } = userWithGroups;
 
         return (
-            this.#accessControlList.canUser(userId) ||
-            groups.some(({ id: userGroupId }) => this.#accessControlList.canGroup(userGroupId))
+            this.accessControlList.canUser(userId) ||
+            groups.some(({ id: userGroupId }) => this.accessControlList.canGroup(userGroupId))
         );
     }
 
@@ -332,5 +415,22 @@ export class DigitalTextViewModel
 
     static getIndexScopedCommands(): string[] {
         return ['CREATE_DIGITAL_TEXT'];
+    }
+
+    public static fromDto(dto: DTO<DigitalTextViewModel>) {
+        return new DigitalTextViewModel(dto);
+    }
+
+    public forUser(userWithGroups: CoscradUserWithGroups): Maybe<DigitalTextViewModel> {
+        /**
+         * TODO We need to respect media item access control lists (audio and photographs).
+         * For now, attaching audio or a photo to a digital text effectively publishes the
+         * media.
+         */
+        if (this.isPublished || this.accessControlList.canUserWithGroups(userWithGroups)) {
+            return this;
+        }
+
+        return NotFound;
     }
 }
