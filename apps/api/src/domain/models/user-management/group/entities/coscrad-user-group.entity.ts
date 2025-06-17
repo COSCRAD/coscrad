@@ -139,8 +139,4 @@ export class CoscradUserGroup extends Aggregate {
 
         return allErrors.length > 0 ? new InvalidExternalStateError(allErrors) : Valid;
     }
-
-    public static fromDto(dto: DTO<CoscradUserGroup>) {
-        return new CoscradUserGroup(dto);
-    }
 }

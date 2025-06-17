@@ -164,9 +164,4 @@ export class CoscradUser extends Aggregate {
 
         return allErrors.length > 0 ? new InvalidExternalStateError(allErrors) : Valid;
     }
-
-    // can we make this generic?
-    public static fromDto(dto: DTO<CoscradUser>): CoscradUser {
-        return new CoscradUser(dto);
-    }
 }

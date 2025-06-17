@@ -427,7 +427,7 @@ describe(`ArangoSongQueryRepository`, () => {
 
             const textForNote = 'this is why the widget is relevant to the song';
 
-            const langaugeCodeForNote = LanguageCode.Chilcotin;
+            const languageCodeForNote = LanguageCode.Chilcotin;
 
             const role = EdgeConnectionMemberRole.to;
 
@@ -435,8 +435,8 @@ describe(`ArangoSongQueryRepository`, () => {
                 noteId,
                 selfContext: generalContext,
                 otherContext: generalContext,
-                compositeIdentifier: otherCompositeIdentifier,
-                text: buildMultilingualTextWithSingleItem(textForNote, langaugeCodeForNote),
+                otherCompositeIdentifier: otherCompositeIdentifier,
+                text: buildMultilingualTextWithSingleItem(textForNote, languageCodeForNote),
                 role,
             });
 
@@ -465,7 +465,7 @@ describe(`ArangoSongQueryRepository`, () => {
 
             expect(foundNoteText).toEqual(textForNote);
 
-            expect(foundLanguageCode).toEqual(langaugeCodeForNote);
+            expect(foundLanguageCode).toEqual(languageCodeForNote);
 
             expect(foundConnectionRoleForResource).toEqual(role);
         });

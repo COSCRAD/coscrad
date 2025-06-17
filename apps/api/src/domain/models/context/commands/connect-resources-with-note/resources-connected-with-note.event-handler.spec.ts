@@ -101,7 +101,7 @@ class WidgetQueryRepository implements IWidgetQueryRepository {
         id: string,
         {
             noteId,
-            compositeIdentifier,
+            otherCompositeIdentifier: compositeIdentifier,
             selfContext,
             otherContext,
             text,
@@ -133,7 +133,7 @@ const generalContext: IEdgeConnectionContext = {
 
 const textForConnectionNote = 'This is why the widgets are related';
 
-const langaugeCodeForNote = LanguageCode.English;
+const languageCodeForNote = LanguageCode.English;
 
 const resourcesConnected = new TestEventStream().buildSingle<ResourcesConnectedWithNote>({
     type: 'RESOURCES_CONNECTED_WITH_NOTE',
@@ -149,7 +149,7 @@ const resourcesConnected = new TestEventStream().buildSingle<ResourcesConnectedW
         },
         fromMemberContext: generalContext,
         text: textForConnectionNote,
-        languageCode: langaugeCodeForNote,
+        languageCode: languageCodeForNote,
     },
 });
 

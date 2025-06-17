@@ -814,10 +814,14 @@ export class TestEventStream {
     // TODO share this implementation with the `as` method below
     public buildSingle<TEvent extends BaseEvent>({
         type,
-        payload: payloadOverrides,
+        payload,
         meta,
     }: EventTypeAndPayloadOverrides<TEvent>): TEvent {
         const metaOverrides = isNonEmptyObject(meta) ? meta : {};
+
+        const payloadOverrides = isNonEmptyObject(payload)
+            ? payload
+            : ({} as DeepPartial<TEvent['payload']>);
 
         if (!this.eventBuilderMap.has(type)) {
             throw new InternalError(

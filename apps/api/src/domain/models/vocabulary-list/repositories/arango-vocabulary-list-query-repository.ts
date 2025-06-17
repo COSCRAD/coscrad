@@ -29,9 +29,6 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
     // TODO rename the file for `VocabularyListViewModel`
     private readonly database: ArangoDatabaseForCollection<VocabularyListViewModel>;
 
-    /**
-     * We use this helper to achieve composition over inheritance.
-     */
     private readonly baseResourceQueryBuilder: BaseArangoResourceViewQueryBuilder;
 
     constructor(

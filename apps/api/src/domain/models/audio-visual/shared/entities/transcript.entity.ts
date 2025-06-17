@@ -328,8 +328,4 @@ export class Transcript extends BaseDomainModel implements ITranscript {
             participants: [],
         });
     }
-
-    public static fromDto(dto: DTO<Transcript>) {
-        return new Transcript(dto);
-    }
 }

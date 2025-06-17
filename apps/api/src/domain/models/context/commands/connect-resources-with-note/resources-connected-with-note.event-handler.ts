@@ -11,10 +11,9 @@ import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../../shared/common-commands/publish-resource/resource-published.event-handler';
 import { ResourcesConnectedWithNote } from './resources-connected-with-note.event';
 
-// TODO share with API Interfaces?
 export interface IResourceConnectionDto {
     noteId: AggregateId;
-    compositeIdentifier: ResourceCompositeIdentifier;
+    otherCompositeIdentifier: ResourceCompositeIdentifier;
     selfContext: IEdgeConnectionContext;
     otherContext: IEdgeConnectionContext;
     // this is the note
@@ -72,7 +71,7 @@ export class ResourcesConnectedWithNoteEventHandler implements ICoscradEventHand
             .createConnection(toMemberCompositeIdentifier.id, {
                 noteId,
                 selfContext: toMemberContext,
-                compositeIdentifier: fromMemberCompositeIdentifier,
+                otherCompositeIdentifier: fromMemberCompositeIdentifier,
                 otherContext: fromMemberContext,
                 text,
                 role,
@@ -83,7 +82,7 @@ export class ResourcesConnectedWithNoteEventHandler implements ICoscradEventHand
             .createConnection(fromMemberCompositeIdentifier.id, {
                 noteId,
                 selfContext: fromMemberContext,
-                compositeIdentifier: toMemberCompositeIdentifier,
+                otherCompositeIdentifier: toMemberCompositeIdentifier,
                 otherContext: toMemberContext,
                 text,
                 role,

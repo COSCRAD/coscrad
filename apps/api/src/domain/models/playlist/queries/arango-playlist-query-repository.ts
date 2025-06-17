@@ -23,9 +23,6 @@ import { IPlaylistQueryRepository } from './playlist-query-repository.interface'
 export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
     private readonly database: ArangoDatabaseForCollection<PlaylistViewModel>;
 
-    /**
-     * We use this helper to achieve composition over inheritance.
-     */
     private readonly baseResourceQueryBuilder: BaseArangoResourceViewQueryBuilder;
 
     constructor(

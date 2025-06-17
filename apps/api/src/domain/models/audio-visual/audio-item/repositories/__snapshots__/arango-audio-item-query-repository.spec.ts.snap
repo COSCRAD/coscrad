@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ArangoAudioItemQueryRepository attribute when there are contributor IDs on the event meta should add the given contributions 1`] = `"Audio item created by: Contributor Number-101, Contributor Number-102, Contributor Number-103"`;

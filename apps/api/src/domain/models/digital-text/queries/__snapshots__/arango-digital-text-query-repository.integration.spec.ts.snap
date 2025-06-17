@@ -1,0 +1,219 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ArangoDigitalTextQueryRepository attribute when there are contributor IDs on the event meta should add the given contributions 1`] = `"Digital text created by: Contributor Number-101, Contributor Number-102, Contributor Number-103"`;
+
+exports[`ArangoDigitalTextQueryRepository fetchById when there is a digital text with the given ID should return the expected result 1`] = `
+DigitalTextViewModel {
+  "accessControlList": AccessControlList {
+    "allowedGroupIds": [],
+    "allowedUserIds": [],
+  },
+  "connections": [
+    ConnectionRecordForResourceViewModel {
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100040",
+      "note": MultilingualText {
+        "items": [
+          MultilingualTextItem {
+            "languageCode": "en",
+            "role": "original",
+            "text": "this is why the texts are connected",
+          },
+        ],
+      },
+      "otherCompositeIdentifier": {
+        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100901",
+        "type": "digitalText",
+      },
+      "otherContext": {
+        "type": "general",
+      },
+      "role": "from",
+      "selfContext": {
+        "type": "general",
+      },
+    },
+  ],
+  "contributions": [
+    ContributionSummary {
+      "contributorIds": [
+        "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100078",
+      ],
+      "date": CoscradDate {
+        "day": 27,
+        "month": "09",
+        "year": 2022,
+      },
+      "statement": "Digital Text Created by: Janis Deeris",
+      "type": "DIGITAL_TEXT_CREATED",
+    },
+  ],
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
+  "isPublished": false,
+  "name": MultilingualText {
+    "items": [
+      MultilingualTextItem {
+        "languageCode": "en",
+        "role": "original",
+        "text": "my book",
+      },
+    ],
+  },
+  "notes": [
+    NoteRecordForResourceViewModel {
+      "context": {
+        "type": "general",
+      },
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100010",
+      "note": MultilingualText {
+        "items": [
+          MultilingualTextItem {
+            "languageCode": "en",
+            "role": "original",
+            "text": "note # 10",
+          },
+        ],
+      },
+    },
+    NoteRecordForResourceViewModel {
+      "context": {
+        "type": "general",
+      },
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100020",
+      "note": MultilingualText {
+        "items": [
+          MultilingualTextItem {
+            "languageCode": "en",
+            "role": "original",
+            "text": "note # 20",
+          },
+        ],
+      },
+    },
+    NoteRecordForResourceViewModel {
+      "context": {
+        "type": "general",
+      },
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100030",
+      "note": MultilingualText {
+        "items": [
+          MultilingualTextItem {
+            "languageCode": "en",
+            "role": "original",
+            "text": "note # 30",
+          },
+        ],
+      },
+    },
+  ],
+  "pages": [
+    DigitalTextPage {
+      "audio": MultilingualAudio {
+        "items": [
+          MultilingualAudioItem {
+            "audioItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100210",
+            "languageCode": "en",
+          },
+        ],
+      },
+      "content": MultilingualText {
+        "items": [
+          MultilingualTextItem {
+            "languageCode": "en",
+            "role": "original",
+            "text": "English content for page: a",
+          },
+        ],
+      },
+      "identifier": "a",
+      "photographId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100200",
+    },
+    DigitalTextPage {
+      "audio": MultilingualAudio {
+        "items": [
+          MultilingualAudioItem {
+            "audioItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100211",
+            "languageCode": "en",
+          },
+        ],
+      },
+      "content": MultilingualText {
+        "items": [
+          MultilingualTextItem {
+            "languageCode": "en",
+            "role": "original",
+            "text": "English content for page: b",
+          },
+        ],
+      },
+      "identifier": "b",
+      "photographId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100201",
+    },
+    DigitalTextPage {
+      "audio": MultilingualAudio {
+        "items": [
+          MultilingualAudioItem {
+            "audioItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100212",
+            "languageCode": "en",
+          },
+        ],
+      },
+      "content": MultilingualText {
+        "items": [
+          MultilingualTextItem {
+            "languageCode": "en",
+            "role": "original",
+            "text": "English content for page: c",
+          },
+        ],
+      },
+      "identifier": "c",
+      "photographId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100202",
+    },
+  ],
+  "tags": [
+    EventSourcedTagRecordForResourceViewModel {
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",
+      "label": "plants",
+      "name": MultilingualText {
+        "items": [
+          MultilingualTextItem {
+            "languageCode": "en",
+            "role": "original",
+            "text": "plants",
+          },
+        ],
+      },
+      "type": "tag",
+    },
+    EventSourcedTagRecordForResourceViewModel {
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",
+      "label": "animals",
+      "name": MultilingualText {
+        "items": [
+          MultilingualTextItem {
+            "languageCode": "en",
+            "role": "original",
+            "text": "animals",
+          },
+        ],
+      },
+      "type": "tag",
+    },
+  ],
+  "title": MultilingualText {
+    "items": [
+      MultilingualTextItem {
+        "languageCode": "en",
+        "role": "original",
+        "text": "English title",
+      },
+      MultilingualTextItem {
+        "languageCode": "clc",
+        "role": "free translation",
+        "text": "Chilcotin title",
+      },
+    ],
+  },
+  "type": "digitalText",
+}
+`;

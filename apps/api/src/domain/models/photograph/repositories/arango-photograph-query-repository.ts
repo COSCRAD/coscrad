@@ -19,9 +19,6 @@ import { PhotographViewModel } from '../queries/photograph.view-model';
 export class ArangoPhotographQueryRepository implements IPhotographQueryRepository {
     private readonly database: ArangoDatabaseForCollection<PhotographViewModel>;
 
-    /**
-     * We use this helper to achieve composition over inheritance.
-     */
     private readonly baseResourceQueryBuilder: BaseArangoResourceViewQueryBuilder;
 
     constructor(arangoConnectionProvider: ArangoConnectionProvider) {

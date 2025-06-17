@@ -15,7 +15,7 @@ export class BaseViewModel implements IBaseViewModel {
         example: '12',
         description: 'uniquely identifies an entity from other entities of the same type',
     })
-    @FromDomainModel(Aggregate as Ctor<unknown>)
+    @FromDomainModel(Aggregate as unknown as Ctor<unknown>)
     readonly id: ViewModelId;
 
     @NestedDataType(MultilingualText, {

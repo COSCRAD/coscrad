@@ -15,29 +15,56 @@ import { NotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoCollectionId } from '../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
+import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { TagViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
+import { ArangoRepositoryForAggregate } from '../../../../persistence/repositories/arango-repository-for-aggregate';
+import {
+    ConnectionRecordForResourceViewModel,
+    TagViewModel,
+} from '../../../../queries/buildViewModelForResource/viewModels';
+import { NoteRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
+import { EventSourcedTagRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { DigitalTextViewModel } from '../../../../queries/digital-text';
+import { TestEventStream } from '../../../../test-data/events';
 import { buildTestInstance } from '../../../../test-data/utilities';
+import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
+import buildInstanceFactory from '../../../factories/utilities/buildInstanceFactory';
+import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { EdgeConnection } from '../../context/edge-connection.entity';
+import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import { Tag } from '../../tag/tag.entity';
+import { ContributionSummary, CoscradContributor } from '../../user-management';
+import { DigitalTextCreated } from '../commands';
+import DigitalTextPage from '../entities/digital-text-page.entity';
 import { ArangoDigitalTextQueryRepository } from './arango-digital-text-query-repository';
 import { IDigitalTextQueryRepository } from './digital-text-query-repository.interface';
 
 const digitalTextIds = [1, 2, 3].map(buildDummyUuid);
+
+const contributorIds = [101, 102, 103].map(buildDummyUuid);
+
+const testContributors = contributorIds.map((id, index) =>
+    buildTestInstance(CoscradContributor, {
+        id,
+        fullName: {
+            firstName: 'Contributor',
+            lastName: `Number-${index + 101}`,
+        },
+    })
+);
 
 describe(`ArangoDigitalTextQueryRepository`, () => {
     let testQueryRepository: IDigitalTextQueryRepository;
 
     let databaseProvider: ArangoDatabaseProvider;
 
-    // let contributorRepository: IRepositoryForAggregate<CoscradContributor>;
-
     let app: INestApplication;
+
+    let contributorRepository: IRepositoryForAggregate<CoscradContributor>;
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
@@ -67,13 +94,13 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
         /**
          * Currently, the contributors are snapshot based (not event sourced).
          */
-        // contributorRepository = new ArangoRepositoryForAggregate(
-        //     databaseProvider,
-        //     ArangoCollectionId.contributors,
-        //     buildInstanceFactory(CoscradContributor),
-        //     mapDatabaseDocumentToAggregateDTO,
-        //     mapEntityDTOToDatabaseDocument
-        // );
+        contributorRepository = new ArangoRepositoryForAggregate(
+            databaseProvider,
+            ArangoCollectionId.contributors,
+            buildInstanceFactory(CoscradContributor),
+            mapDatabaseDocumentToAggregateDTO,
+            mapEntityDTOToDatabaseDocument
+        );
     });
 
     beforeEach(async () => {
@@ -87,8 +114,75 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
     describe(`fetchById`, () => {
         const digitalTextId = digitalTextIds[0];
 
+        const pageIds = ['a', 'b', 'c'];
+
+        const pages = pageIds.map((identifier, index) =>
+            buildTestInstance(DigitalTextPage, {
+                identifier,
+                content: buildMultilingualTextWithSingleItem(
+                    `English content for page: ${identifier}`
+                ),
+                photographId: buildDummyUuid(200 + index),
+                audio: MultilingualAudio.buildEmpty().addAudio(
+                    buildDummyUuid(210 + index),
+                    LanguageCode.English
+                ) as MultilingualAudio, // we are asserting that this will not fail
+            })
+        );
+
         const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
             id: digitalTextId,
+            tags: ['plants', 'animals'].map((label) =>
+                buildTestInstance(EventSourcedTagRecordForResourceViewModel, {
+                    label,
+                })
+            ),
+            notes: [10, 20, 30].map((sequenceNumber) =>
+                buildTestInstance(NoteRecordForResourceViewModel, {
+                    id: buildDummyUuid(sequenceNumber),
+                    note: buildMultilingualTextWithSingleItem(`note # ${sequenceNumber}`),
+                    context: {
+                        type: EdgeConnectionContextType.general,
+                    },
+                })
+            ),
+            connections: [
+                buildTestInstance(ConnectionRecordForResourceViewModel, {
+                    id: buildDummyUuid(40),
+                    note: buildMultilingualTextWithSingleItem(
+                        `this is why the texts are connected`
+                    ),
+                    otherCompositeIdentifier: {
+                        type: ResourceType.digitalText,
+                        id: buildDummyUuid(901),
+                    },
+                    otherContext: {
+                        type: EdgeConnectionContextType.general,
+                    },
+                    selfContext: {
+                        type: EdgeConnectionContextType.general,
+                    },
+                }),
+            ],
+            // TODO support contributions
+            title: buildMultilingualTextFromBilingualText(
+                {
+                    text: 'English title',
+                    languageCode: LanguageCode.English,
+                },
+                {
+                    text: 'Chilcotin title',
+                    languageCode: LanguageCode.Chilcotin,
+                }
+            ),
+            pages,
+            contributions: [
+                buildTestInstance(ContributionSummary, {
+                    type: 'DIGITAL_TEXT_CREATED',
+                    statement: 'Digital Text Created by: Janis Deeris',
+                    contributorIds: [buildDummyUuid(78)],
+                }),
+            ],
         });
 
         beforeEach(async () => {
@@ -101,7 +195,12 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
 
                 expect(result).not.toBe(NotFound);
 
-                // check all properties
+                /**
+                 * What we really want is to make sure that all properties are
+                 * being persisted \ set in the factories. It's tedious to
+                 * check each property one at a time.
+                 */
+                expect(result).toMatchSnapshot();
             });
         });
 
@@ -312,7 +411,7 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
 
             const textForNote = 'This is why the widget is relevant to the term.';
 
-            const langaugeCodeForNote = LanguageCode.Chilcotin;
+            const languageCodeForNote = LanguageCode.Chilcotin;
 
             const role = EdgeConnectionMemberRole.to;
 
@@ -320,9 +419,8 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
                 noteId,
                 selfContext: generalContext,
                 otherContext: generalContext,
-                // `otherCompositeIdentifier` ?
-                compositeIdentifier: otherCompositeIdentifier,
-                text: buildMultilingualTextWithSingleItem(textForNote, langaugeCodeForNote),
+                otherCompositeIdentifier,
+                text: buildMultilingualTextWithSingleItem(textForNote, languageCodeForNote),
                 role,
             });
 
@@ -351,7 +449,7 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
 
             expect(foundNoteText).toEqual(textForNote);
 
-            expect(foundLanguageCode).toEqual(langaugeCodeForNote);
+            expect(foundLanguageCode).toEqual(languageCodeForNote);
 
             expect(edgeConnectionMemberRole).toEqual(role);
         });
@@ -385,6 +483,80 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
             const canUser = updatedView.canUser(userId);
 
             expect(canUser).toBe(true);
+        });
+    });
+
+    describe(`attribute`, () => {
+        const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+            id: digitalTextIds[0],
+            contributions: [],
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await databaseProvider.getDatabaseForCollection('contributors').clear();
+
+            await testQueryRepository.create(targetDigitalText);
+
+            await contributorRepository.createMany(testContributors);
+        });
+
+        describe(`when there are contributor IDs on the event meta`, () => {
+            it(`should add the given contributions`, async () => {
+                await testQueryRepository.attribute(
+                    targetDigitalText.id,
+                    new TestEventStream().buildSingle<DigitalTextCreated>({
+                        type: 'DIGITAL_TEXT_CREATED',
+                        meta: { contributorIds },
+                    })
+                );
+
+                const updatedView = (await testQueryRepository.fetchById(
+                    targetDigitalText.id
+                )) as DigitalTextViewModel;
+
+                const missingAttributions = updatedView.contributions.filter(
+                    (contributionRecord) =>
+                        !contributorIds.some((id) => contributionRecord.contributorIds.includes(id))
+                );
+
+                expect(missingAttributions).toHaveLength(0);
+
+                const contributionForCreationEvent = updatedView.contributions.find(
+                    ({ type }) => type === 'DIGITAL_TEXT_CREATED'
+                );
+
+                expect(contributionForCreationEvent.statement).toMatchSnapshot();
+
+                expect(contributionForCreationEvent.contributorIds).toEqual(
+                    testContributors.map(({ id }) => id)
+                );
+            });
+        });
+
+        describe(`when there are no contributor IDs on the event meta`, () => {
+            it(`should default the message to admin`, async () => {
+                await testQueryRepository.attribute(
+                    targetDigitalText.id,
+                    new TestEventStream().buildSingle<DigitalTextCreated>({
+                        type: 'DIGITAL_TEXT_CREATED',
+                        meta: {
+                            contributorIds: [],
+                        },
+                    })
+                );
+
+                const updatedView = (await testQueryRepository.fetchById(
+                    targetDigitalText.id
+                )) as DigitalTextViewModel;
+
+                const targetContribution = updatedView.contributions[0];
+
+                expect(targetContribution.contributorIds).toHaveLength(0);
+
+                expect(targetContribution.statement.includes('by: (data entry) admin')).toBe(true);
+            });
         });
     });
 });

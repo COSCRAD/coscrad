@@ -41,5 +41,7 @@ export const getSpatialFeatureCtorFromGeometricFeatureType = <T extends Geometri
         );
     }
 
-    return lookupResult as DomainModelCtor<GeometricFeatureTypeToSpatialFeatureInstance[T]>;
+    return lookupResult as unknown as DomainModelCtor<
+        GeometricFeatureTypeToSpatialFeatureInstance[T]
+    >;
 };

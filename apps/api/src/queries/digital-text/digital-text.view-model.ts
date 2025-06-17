@@ -16,6 +16,7 @@ import { ResourceReadAccessGrantedToUserPayload } from '../../domain/models/shar
 import { MultilingualAudio } from '../../domain/models/shared/multilingual-audio/multilingual-audio.entity';
 import { TagCreated } from '../../domain/models/tag/commands/create-tag/tag-created.event';
 import { ResourceOrNoteTaggedPayload } from '../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
+import { ContributionSummary } from '../../domain/models/user-management';
 import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { isNullOrUndefined } from '../../domain/utilities/validation/is-null-or-undefined';
 import { Maybe } from '../../lib/types/maybe';
@@ -40,6 +41,7 @@ import { ApplyEvent } from '../event-sourcing/apply-event.interface';
         accessControlList: new AccessControlList(),
         notes: [],
         connections: [],
+        contributions: [],
     },
 })
 export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
@@ -102,11 +104,28 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
     })
     public connections: ConnectionRecordForResourceViewModel[];
 
+    @NestedDataType(ContributionSummary, {
+        label: 'contributions',
+        description: 'a list of all contributions to the development of this resource',
+        isArray: true,
+    })
+    contributions: ContributionSummary[];
+
     constructor(dto: DTO<DigitalTextViewModel>) {
         if (!dto) return;
 
-        const { id, title, name, isPublished, tags, pages, accessControlList, notes, connections } =
-            dto;
+        const {
+            id,
+            title,
+            name,
+            isPublished,
+            tags,
+            pages,
+            accessControlList,
+            notes,
+            connections,
+            contributions,
+        } = dto;
 
         this.id = id;
 
@@ -130,6 +149,10 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
 
         if (Array.isArray(connections)) {
             this.connections = connections.map((c) => new ConnectionRecordForResourceViewModel(c));
+        }
+
+        if (Array.isArray(contributions)) {
+            this.contributions = contributions.map((c) => new ContributionSummary(c));
         }
 
         this.accessControlList = isNonEmptyObject(accessControlList)

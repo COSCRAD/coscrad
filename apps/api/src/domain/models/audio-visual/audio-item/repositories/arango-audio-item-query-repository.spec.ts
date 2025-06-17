@@ -20,13 +20,17 @@ import {
     MultilingualText,
     MultilingualTextItem,
 } from '../../../../../domain/common/entities/multilingual-text';
+import buildInstanceFactory from '../../../../../domain/factories/utilities/buildInstanceFactory';
+import { IRepositoryForAggregate } from '../../../../../domain/repositories/interfaces/repository-for-aggregate.interface';
 import { isNotFound, NotFound } from '../../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
 import { ArangoCollectionId } from '../../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
+import mapDatabaseDocumentToAggregateDTO from '../../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { ArangoRepositoryForAggregate } from '../../../../../persistence/repositories/arango-repository-for-aggregate';
 import { NoteRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
 import { EventSourcedTagRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { TestEventStream } from '../../../../../test-data/events';
@@ -35,6 +39,7 @@ import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { EdgeConnection } from '../../../context/edge-connection.entity';
 import { AccessControlList } from '../../../shared/access-control/access-control-list.entity';
 import { Tag } from '../../../tag/tag.entity';
+import { CoscradContributor } from '../../../user-management';
 import { TranscriptItem } from '../../shared/entities/transcript-item.entity';
 import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
 import { Transcript } from '../../shared/entities/transcript.entity';
@@ -75,12 +80,26 @@ const lineItems = [1, 2, 3, 4, 5].map((i) =>
     })
 );
 
+const contributorIds = [101, 102, 103].map(buildDummyUuid);
+
+const testContributors = contributorIds.map((id, index) =>
+    buildTestInstance(CoscradContributor, {
+        id,
+        fullName: {
+            firstName: 'Contributor',
+            lastName: `Number-${index + 101}`,
+        },
+    })
+);
+
 describe(`ArangoAudioItemQueryRepository`, () => {
     let testQueryRepository: IAudioItemQueryRepository;
 
     let databaseProvider: ArangoDatabaseProvider;
 
     let app: INestApplication;
+
+    let contributorRepository: IRepositoryForAggregate<CoscradContributor>;
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
@@ -106,6 +125,17 @@ describe(`ArangoAudioItemQueryRepository`, () => {
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
 
         testQueryRepository = new ArangoAudioItemQueryRepository(connectionProvider);
+
+        /**
+         * Currently, the contributors are snapshot based (not event sourced).
+         */
+        contributorRepository = new ArangoRepositoryForAggregate(
+            databaseProvider,
+            ArangoCollectionId.contributors,
+            buildInstanceFactory(CoscradContributor),
+            mapDatabaseDocumentToAggregateDTO,
+            mapEntityDTOToDatabaseDocument
+        );
     });
 
     beforeEach(async () => {
@@ -448,7 +478,7 @@ describe(`ArangoAudioItemQueryRepository`, () => {
 
             const textForNote = 'This is why the widget is relevant to the audio item';
 
-            const langaugeCodeForNote = LanguageCode.Chilcotin;
+            const languageCodeForNote = LanguageCode.Chilcotin;
 
             const role = EdgeConnectionMemberRole.to;
 
@@ -456,8 +486,8 @@ describe(`ArangoAudioItemQueryRepository`, () => {
                 noteId,
                 selfContext: generalContext,
                 otherContext: generalContext,
-                compositeIdentifier: otherCompositeIdentifier,
-                text: buildMultilingualTextWithSingleItem(textForNote, langaugeCodeForNote),
+                otherCompositeIdentifier: otherCompositeIdentifier,
+                text: buildMultilingualTextWithSingleItem(textForNote, languageCodeForNote),
                 role,
             });
 
@@ -486,7 +516,7 @@ describe(`ArangoAudioItemQueryRepository`, () => {
 
             expect(foundNoteText).toEqual(textForNote);
 
-            expect(foundLanguageCode).toEqual(langaugeCodeForNote);
+            expect(foundLanguageCode).toEqual(languageCodeForNote);
 
             expect(edgeConnectionMemberRole).toEqual(role);
         });
@@ -764,6 +794,80 @@ describe(`ArangoAudioItemQueryRepository`, () => {
             );
 
             expect(invalidOrMissingTranslations).toEqual([]);
+        });
+    });
+
+    describe(`attribute`, () => {
+        const targetDigitalText = buildTestInstance(EventSourcedAudioItemViewModel, {
+            id: buildDummyUuid(905),
+            contributions: [],
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await databaseProvider.getDatabaseForCollection('contributors').clear();
+
+            await testQueryRepository.create(targetDigitalText);
+
+            await contributorRepository.createMany(testContributors);
+        });
+
+        describe(`when there are contributor IDs on the event meta`, () => {
+            it(`should add the given contributions`, async () => {
+                await testQueryRepository.attribute(
+                    targetDigitalText.id,
+                    new TestEventStream().buildSingle<AudioItemCreated>({
+                        type: 'AUDIO_ITEM_CREATED',
+                        meta: { contributorIds },
+                    })
+                );
+
+                const updatedView = (await testQueryRepository.fetchById(
+                    targetDigitalText.id
+                )) as EventSourcedAudioItemViewModel;
+
+                const missingAttributions = updatedView.contributions.filter(
+                    (contributionRecord) =>
+                        !contributorIds.some((id) => contributionRecord.contributorIds.includes(id))
+                );
+
+                expect(missingAttributions).toHaveLength(0);
+
+                const contributionForCreationEvent = updatedView.contributions.find(
+                    ({ type }) => type === 'AUDIO_ITEM_CREATED'
+                );
+
+                expect(contributionForCreationEvent.statement).toMatchSnapshot();
+
+                expect(contributionForCreationEvent.contributorIds).toEqual(
+                    testContributors.map(({ id }) => id)
+                );
+            });
+        });
+
+        describe(`when there are no contributor IDs on the event meta`, () => {
+            it(`should default the message to admin`, async () => {
+                await testQueryRepository.attribute(
+                    targetDigitalText.id,
+                    new TestEventStream().buildSingle<AudioItemCreated>({
+                        type: 'AUDIO_ITEM_CREATED',
+                        meta: {
+                            contributorIds: [],
+                        },
+                    })
+                );
+
+                const updatedView = (await testQueryRepository.fetchById(
+                    targetDigitalText.id
+                )) as EventSourcedAudioItemViewModel;
+
+                const targetContribution = updatedView.contributions[0];
+
+                expect(targetContribution.contributorIds).toHaveLength(0);
+
+                expect(targetContribution.statement.includes('by: (data entry) admin')).toBe(true);
+            });
         });
     });
 });

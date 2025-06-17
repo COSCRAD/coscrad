@@ -183,8 +183,4 @@ export default class DigitalTextPage extends BaseDomainModel implements IDigital
             audio: MultilingualAudio.buildEmpty(),
         });
     }
-
-    public static fromDto(dto: DTO<DigitalTextPage>) {
-        return new DigitalTextPage(dto);
-    }
 }

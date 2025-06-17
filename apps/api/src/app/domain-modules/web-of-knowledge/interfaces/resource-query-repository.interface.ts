@@ -1,0 +1,24 @@
+import { IQueryRepositoryForConnectable } from '../../../../domain/models/context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
+import { IQueryRepositoryForAnnotatable } from '../../../../domain/models/context/commands/create-note-about-resource/note-about-resource-created.event-handler';
+import { IAccessible } from '../../../../domain/models/shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
+import {
+    ICountable,
+    IPublishable,
+} from '../../../../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
+import { IQueryRepositoryForAttributable } from '../../../../domain/models/shared/common-event-handlers/attributor.event-handler';
+import { IQueryRepositoryForTaggable } from '../../../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event-handler';
+import { Maybe } from '../../../../lib/types/maybe';
+
+export interface IResourceQueryRepository<T = unknown>
+    extends ICountable,
+        IPublishable,
+        IQueryRepositoryForAnnotatable,
+        IQueryRepositoryForConnectable,
+        IQueryRepositoryForTaggable,
+        IQueryRepositoryForAttributable,
+        IAccessible {
+    create(view: T): Promise<void>;
+    createMany(views: T[]): Promise<void>;
+    fetchById(id: string): Promise<Maybe<T>>;
+    fetchMany(): Promise<T[]>;
+}

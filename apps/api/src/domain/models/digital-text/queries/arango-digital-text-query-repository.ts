@@ -9,15 +9,13 @@ import { DigitalTextViewModel } from '../../../../queries/digital-text';
 import { AggregateId } from '../../../types/AggregateId';
 import { IResourceConnectionDto } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
+import { BaseEvent } from '../../shared/events/base-event.entity';
 import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base-arango-resource-query-builder';
 import { IDigitalTextQueryRepository } from './digital-text-query-repository.interface';
 
 export class ArangoDigitalTextQueryRepository implements IDigitalTextQueryRepository {
     private readonly database: ArangoDatabaseForCollection<DigitalTextViewModel>;
 
-    /**
-     * We use this helper to achieve composition over inheritance.
-     */
     private readonly baseResourceQueryBuilder: BaseArangoResourceViewQueryBuilder;
 
     constructor(private readonly connectionProvider: ArangoConnectionProvider) {
@@ -83,5 +81,9 @@ export class ArangoDigitalTextQueryRepository implements IDigitalTextQueryReposi
         await this.database.update(id, {
             isPublished: true,
         });
+    }
+
+    async attribute(id: string, event: BaseEvent): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.attribute(id, event));
     }
 }

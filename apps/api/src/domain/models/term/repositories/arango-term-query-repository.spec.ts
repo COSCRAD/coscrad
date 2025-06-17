@@ -393,7 +393,7 @@ describe(`ArangoTermQueryRepository`, () => {
 
             const textForNote = 'This is why the widget is relevant to the term.';
 
-            const langaugeCodeForNote = LanguageCode.Chilcotin;
+            const languageCodeForNote = LanguageCode.Chilcotin;
 
             const role = EdgeConnectionMemberRole.to;
 
@@ -401,9 +401,8 @@ describe(`ArangoTermQueryRepository`, () => {
                 noteId,
                 selfContext: generalContext,
                 otherContext: generalContext,
-                // `otherCompositeIdentifier` ?
-                compositeIdentifier: otherCompositeIdentifier,
-                text: buildMultilingualTextWithSingleItem(textForNote, langaugeCodeForNote),
+                otherCompositeIdentifier,
+                text: buildMultilingualTextWithSingleItem(textForNote, languageCodeForNote),
                 role,
             });
 
@@ -432,7 +431,7 @@ describe(`ArangoTermQueryRepository`, () => {
 
             expect(foundNoteText).toEqual(textForNote);
 
-            expect(foundLanguageCode).toEqual(langaugeCodeForNote);
+            expect(foundLanguageCode).toEqual(languageCodeForNote);
 
             expect(edgeConnectionMemberRole).toEqual(role);
         });

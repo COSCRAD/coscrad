@@ -238,9 +238,4 @@ export class Tag extends Aggregate implements HasLabel {
 
         return buildResult;
     }
-
-    // TODO put this on the base aggregate root class
-    public static fromDto(dto: DTO<Tag>) {
-        return new Tag(dto);
-    }
 }

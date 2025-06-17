@@ -510,7 +510,7 @@ describe(`ArangoPhotographQueryRepository`, () => {
 
             const textForNote = 'This is why the widget is relevant to the photograph.';
 
-            const langaugeCodeForNote = LanguageCode.Chilcotin;
+            const languageCodeForNote = LanguageCode.Chilcotin;
 
             const role = EdgeConnectionMemberRole.to;
 
@@ -518,9 +518,8 @@ describe(`ArangoPhotographQueryRepository`, () => {
                 noteId,
                 selfContext: generalContext,
                 otherContext: generalContext,
-                // `otherCompositeIdentifier` ?
-                compositeIdentifier: otherCompositeIdentifier,
-                text: buildMultilingualTextWithSingleItem(textForNote, langaugeCodeForNote),
+                otherCompositeIdentifier,
+                text: buildMultilingualTextWithSingleItem(textForNote, languageCodeForNote),
                 role,
             });
 
@@ -549,7 +548,7 @@ describe(`ArangoPhotographQueryRepository`, () => {
 
             expect(foundNoteText).toEqual(textForNote);
 
-            expect(foundLanguageCode).toEqual(langaugeCodeForNote);
+            expect(foundLanguageCode).toEqual(languageCodeForNote);
 
             expect(edgeConnectionMemberRole).toEqual(role);
         });
