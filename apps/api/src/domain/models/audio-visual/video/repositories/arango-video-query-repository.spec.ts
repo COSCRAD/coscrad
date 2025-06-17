@@ -312,7 +312,7 @@ describe(`ArangoVideoQueryRepository`, () => {
 
             const textForNote = 'this is why the widget is revevant to the video';
 
-            const langaugeCodeForNote = LanguageCode.Chilcotin;
+            const languageCodeForNote = LanguageCode.Chilcotin;
 
             const role = EdgeConnectionMemberRole.to;
 
@@ -320,8 +320,8 @@ describe(`ArangoVideoQueryRepository`, () => {
                 noteId,
                 selfContext: generalContext,
                 otherContext: generalContext,
-                compositeIdentifier: otherCompositeIdentifier,
-                text: buildMultilingualTextWithSingleItem(textForNote, langaugeCodeForNote),
+                otherCompositeIdentifier: otherCompositeIdentifier,
+                text: buildMultilingualTextWithSingleItem(textForNote, languageCodeForNote),
                 role,
             });
 
@@ -350,7 +350,7 @@ describe(`ArangoVideoQueryRepository`, () => {
 
             expect(foundNoteText).toEqual(textForNote);
 
-            expect(foundLanguageCode).toEqual(langaugeCodeForNote);
+            expect(foundLanguageCode).toEqual(languageCodeForNote);
 
             expect(edgeConnectionMemberRole).toEqual(role);
         });
@@ -660,7 +660,7 @@ describe(`ArangoVideoQueryRepository`, () => {
 
         const translationItems = lineItems.map(
             ({ inPointMilliseconds, outPointMilliseconds, text, languageCode }) =>
-                TranscriptItem.fromDto({
+                buildTestInstance(TranscriptItem, {
                     inPointMilliseconds,
                     outPointMilliseconds,
                     text: buildMultilingualTextWithSingleItem(text, languageCode),

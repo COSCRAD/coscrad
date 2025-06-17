@@ -4,12 +4,12 @@ import { CoscradEventConsumer, ICoscradEventHandler } from '../../../common';
 import { QUERY_REPOSITORY_PROVIDER_TOKEN } from '../common-commands/publish-resource/resource-published.event-handler';
 import { BaseEvent } from '../events/base-event.entity';
 
-interface IRepository {
+export interface IQueryRepositoryForAttributable {
     attribute(id: string, event: BaseEvent): Promise<void>;
 }
 
 interface IRepositoryProvider {
-    forResource(type: string): IRepository;
+    forResource(type: string): IQueryRepositoryForAttributable;
 }
 
 // handles all events

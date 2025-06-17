@@ -13,6 +13,7 @@ import { ArangoDatabase } from '../../../../../persistence/database/arango-datab
 import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
 import mapDatabaseDocumentToAggregateDTO from '../../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
+import { BaseEvent } from '../../../../../queries/event-sourcing';
 import { IResourceConnectionDto } from '../../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { INoteCreationDto } from '../../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { BaseArangoResourceViewQueryBuilder } from '../../../term/repositories/base-arango-resource-query-builder';
@@ -73,6 +74,10 @@ export class ArangoAudioItemQueryRepository implements IAudioItemQueryRepository
 
     async tag(audioItemId: string, tagId: string): Promise<void> {
         await this.database.query(this.baseResourceQueryBuilder.tag(audioItemId, tagId));
+    }
+
+    async attribute(id: string, event: BaseEvent): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.attribute(id, event));
     }
 
     async createNoteAbout(id: string, dto: INoteCreationDto): Promise<void> {

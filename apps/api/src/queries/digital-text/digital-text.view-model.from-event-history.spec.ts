@@ -87,7 +87,9 @@ describe(`DigitalTextViewModel.fromEventHistory`, () => {
             id: digitalTextId,
         });
 
-        const result = new DigitalTextViewModel(digitalTextId).applyStream(eventHistory);
+        const result = new DigitalTextViewModel({
+            id: digitalTextId,
+        } as DigitalTextViewModel).applyStream(eventHistory);
 
         describe(`immediately after creation`, () => {
             it(`should have the appropriate title`, () => {
@@ -147,7 +149,9 @@ describe(`DigitalTextViewModel.fromEventHistory`, () => {
                         id: digitalTextId,
                     });
 
-                const result = new DigitalTextViewModel(digitalTextId).applyStream(eventHistory);
+                const result = new DigitalTextViewModel({
+                    id: digitalTextId,
+                } as DigitalTextViewModel).applyStream(eventHistory);
 
                 expect(result.isPublished).toBe(false);
 
@@ -161,7 +165,9 @@ describe(`DigitalTextViewModel.fromEventHistory`, () => {
             it(`should be explicitly marked as published`, () => {
                 const eventHistory = digitalTextPublished.as(aggregateCompositeIdentifier);
 
-                const result = new DigitalTextViewModel(digitalTextId).applyStream(eventHistory);
+                const result = new DigitalTextViewModel({
+                    id: digitalTextId,
+                } as DigitalTextViewModel).applyStream(eventHistory);
 
                 expect(result.isPublished).toBe(true);
             });
@@ -171,7 +177,9 @@ describe(`DigitalTextViewModel.fromEventHistory`, () => {
             describe(`when a single page has been added with no content`, () => {
                 const eventHistory = pageAddedToDigitalText.as(aggregateCompositeIdentifier);
 
-                const result = new DigitalTextViewModel(digitalTextId).applyStream(eventHistory);
+                const result = new DigitalTextViewModel({
+                    id: digitalTextId,
+                } as DigitalTextViewModel).applyStream(eventHistory);
 
                 expect(result.pages).toHaveLength(1);
             });
@@ -179,7 +187,9 @@ describe(`DigitalTextViewModel.fromEventHistory`, () => {
             describe(`when content has been added for a page`, () => {
                 const eventHistory = contentAddedToDigitalTextPage.as(aggregateCompositeIdentifier);
 
-                const result = new DigitalTextViewModel(digitalTextId).applyStream(eventHistory);
+                const result = new DigitalTextViewModel({
+                    id: digitalTextId,
+                } as DigitalTextViewModel).applyStream(eventHistory);
 
                 const targetPage = result.pages[0];
 
@@ -226,7 +236,9 @@ describe(`DigitalTextViewModel.fromEventHistory`, () => {
 
             const fullEventHistory = [...eventHistoryForTag, ...eventHistoryForDigitalText];
 
-            const result = new DigitalTextViewModel(digitalTextId).applyStream(fullEventHistory);
+            const result = new DigitalTextViewModel({
+                id: digitalTextId,
+            } as DigitalTextViewModel).applyStream(fullEventHistory);
 
             const { tags } = result;
 

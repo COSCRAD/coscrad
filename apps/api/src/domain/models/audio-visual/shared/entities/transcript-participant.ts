@@ -31,8 +31,4 @@ export class TranscriptParticipant extends BaseDomainModel {
 
         this.name = id;
     }
-
-    public static fromDto(dto: DTO<TranscriptParticipant>) {
-        return new TranscriptParticipant(dto);
-    }
 }

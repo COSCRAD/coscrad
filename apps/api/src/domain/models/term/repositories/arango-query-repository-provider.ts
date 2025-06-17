@@ -2,6 +2,7 @@ import { ResourceType } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { AUDIO_QUERY_REPOSITORY_TOKEN } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { VIDEO_QUERY_REPOSITORY_TOKEN } from '../../audio-visual/video/queries';
+import { DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../digital-text/queries/digital-text-query-repository.interface';
 import { PHOTOGRAPH_QUERY_REPOSITORY_TOKEN } from '../../photograph/queries';
 import { PLAYLIST_QUERY_REPOSITORY_TOKEN } from '../../playlist/queries/playlist-query-repository.interface';
 import {
@@ -29,7 +30,9 @@ export class ArangoQueryRepositoryProvider implements IQueryRepositoryProvider {
         @Inject(PLAYLIST_QUERY_REPOSITORY_TOKEN)
         private readonly playlistQueryRepository,
         @Inject(SONG_QUERY_REPOSITORY_TOKEN)
-        private readonly songQueryRepository
+        private readonly songQueryRepository,
+        @Inject(DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN)
+        private readonly digitalTextRepository
     ) {}
 
     forResource<T extends IPublishable>(resourceType: ResourceType): T {
@@ -59,6 +62,10 @@ export class ArangoQueryRepositoryProvider implements IQueryRepositoryProvider {
 
         if (resourceType === ResourceType.song) {
             return this.songQueryRepository;
+        }
+
+        if (resourceType === ResourceType.digitalText) {
+            return this.digitalTextRepository;
         }
 
         /**

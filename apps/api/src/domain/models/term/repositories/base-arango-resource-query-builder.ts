@@ -99,7 +99,7 @@ export class BaseArangoResourceViewQueryBuilder {
     connectResourcesWithNote(
         id: string,
         {
-            compositeIdentifier: otherCompositeIdentifier,
+            otherCompositeIdentifier: otherCompositeIdentifier,
             selfContext,
             otherContext,
             noteId,

@@ -1,9 +1,9 @@
-import { IBaseViewModel } from '../../base.view-model.interface';
+import { IBaseResourceViewModel } from '../../base.view-model.interface';
 import { ITagViewModel } from '../../tag.view-model.interface';
 import { IMultilingualText } from '../common';
 import { IDigitalTextPage } from './digital-text-page.interface';
 
-export interface IDigitalTextViewModel extends IBaseViewModel {
+export interface IDigitalTextViewModel extends IBaseResourceViewModel {
     type: 'digitalText';
 
     title: IMultilingualText;

@@ -30,9 +30,6 @@ import { BaseArangoResourceViewQueryBuilder } from './base-arango-resource-query
 export class ArangoTermQueryRepository implements ITermQueryRepository {
     private readonly database: ArangoDatabaseForCollection<TermViewModel>;
 
-    /**
-     * We use this helper to achieve composition over inheritance.
-     */
     private readonly baseResourceQueryBuilder: BaseArangoResourceViewQueryBuilder;
 
     constructor(

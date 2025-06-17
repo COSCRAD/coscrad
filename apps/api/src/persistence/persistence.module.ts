@@ -12,6 +12,11 @@ import {
     VIDEO_QUERY_REPOSITORY_TOKEN,
 } from '../domain/models/audio-visual/video/queries';
 import { ArangoVideoQueryRepository } from '../domain/models/audio-visual/video/repositories/arango-video-query-repository';
+import { ArangoDigitalTextQueryRepository } from '../domain/models/digital-text/queries/arango-digital-text-query-repository';
+import {
+    DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN,
+    IDigitalTextQueryRepository,
+} from '../domain/models/digital-text/queries/digital-text-query-repository.interface';
 import {
     IPhotographQueryRepository,
     PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
@@ -40,14 +45,12 @@ import {
 } from '../domain/models/vocabulary-list/queries';
 import { ArangoVocabularyListQueryRepository } from '../domain/models/vocabulary-list/repositories';
 import { ID_RESPOSITORY_TOKEN } from '../lib/id-generation/interfaces/id-repository.interface';
-import { DigitalTextQueryRepository } from '../queries/digital-text/digital-text.query-repository';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../validation';
 import { REPOSITORY_PROVIDER_TOKEN } from './constants/persistenceConstants';
 import { ArangoConnectionProvider } from './database/arango-connection.provider';
 import { ArangoQueryRunner } from './database/arango-query-runner';
 import { ArangoDatabaseProvider } from './database/database.provider';
 import { ArangoDataExporter } from './repositories/arango-data-exporter';
-import { ArangoEventRepository } from './repositories/arango-event-repository';
 import { ArangoIdRepository } from './repositories/arango-id-repository';
 import { ArangoRepositoryProvider } from './repositories/arango-repository.provider';
 import { DomainDataExporter } from './repositories/domain-data-exporter';
@@ -131,16 +134,11 @@ export class PersistenceModule implements OnApplicationShutdown {
 
         // TODO Remove this in favor of generic `QueryRepositoryProvider`
         const digitalTextQueryRepositoryProvider = {
-            provide: DigitalTextQueryRepository,
-            useFactory: (
-                databaseProvider: ArangoDatabaseProvider,
-                coscradEventFactory: CoscradEventFactory
-            ) => {
-                return new DigitalTextQueryRepository(
-                    new ArangoEventRepository(databaseProvider, coscradEventFactory)
-                );
+            provide: DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN,
+            useFactory: (connecitonProvider: ArangoConnectionProvider) => {
+                return new ArangoDigitalTextQueryRepository(connecitonProvider);
             },
-            inject: [ArangoDatabaseProvider, CoscradEventFactory],
+            inject: [ArangoConnectionProvider],
         };
 
         /**
@@ -229,7 +227,8 @@ export class PersistenceModule implements OnApplicationShutdown {
                 videoQueryRepository: IVideoQueryRepository,
                 vocabularyListQueryRepository: IVocabularyListQueryRepository,
                 playlistQueryRepository: IPlaylistQueryRepository,
-                songQueryRepository: ISongQueryRepository
+                songQueryRepository: ISongQueryRepository,
+                digitalTextRepository: IDigitalTextQueryRepository
             ): IQueryRepositoryProvider =>
                 new ArangoQueryRepositoryProvider(
                     photographQueryRepository,
@@ -238,7 +237,8 @@ export class PersistenceModule implements OnApplicationShutdown {
                     videoQueryRepository,
                     vocabularyListQueryRepository,
                     playlistQueryRepository,
-                    songQueryRepository
+                    songQueryRepository,
+                    digitalTextRepository
                 ),
             inject: [
                 PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
@@ -248,6 +248,7 @@ export class PersistenceModule implements OnApplicationShutdown {
                 VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,
                 PLAYLIST_QUERY_REPOSITORY_TOKEN,
                 SONG_QUERY_REPOSITORY_TOKEN,
+                DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN,
             ],
         };
 

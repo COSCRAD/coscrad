@@ -88,8 +88,4 @@ export class CoscradContributor extends Aggregate {
     protected getExternalReferences(): AggregateCompositeIdentifier[] {
         return [];
     }
-
-    public static fromDto(dto: DTO<CoscradContributor>): CoscradContributor {
-        return new CoscradContributor(dto);
-    }
 }

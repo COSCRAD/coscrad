@@ -34,4 +34,13 @@ export default class BaseDomainModel {
             ...(overrides || {}),
         });
     }
+
+    public static fromDto<T extends BaseDomainModel>(dto: DTO<T>): T {
+        if (!dto) {
+            return;
+        }
+
+        // @ts-expect-error we know more than the compiler here
+        return new this(dto);
+    }
 }

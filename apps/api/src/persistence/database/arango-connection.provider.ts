@@ -104,6 +104,8 @@ export class ArangoConnectionProvider {
 
         await this.createCollectionIfNotExists('song__VIEWS');
 
+        await this.createCollectionIfNotExists('digitalText__VIEWS');
+
         this.isInitialized = true;
     }
 

@@ -173,8 +173,4 @@ export class TranscriptItem extends BaseDomainModel implements ITranscriptItem {
             ? new InternalError(`Encountered an invalid transcript line item`, allErrors)
             : Valid;
     }
-
-    public static fromDto(dto: DTO<TranscriptItem>) {
-        return new TranscriptItem(dto);
-    }
 }

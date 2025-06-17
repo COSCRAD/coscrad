@@ -414,8 +414,4 @@ export class EdgeConnection extends Aggregate {
 
         return buildResult;
     }
-
-    public static fromDto(dto: DTO<EdgeConnection>) {
-        return new EdgeConnection(dto);
-    }
 }
