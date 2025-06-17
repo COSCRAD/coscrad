@@ -1,5 +1,6 @@
 import { IMultilingualTextItem } from '@coscrad/api-interfaces';
 import { Box, Paper, styled } from '@mui/material';
+import { Variant } from '@mui/material/styles/createTypography';
 import { MultilingualTextItemPresenter } from './multilingual-text-item-presenter';
 
 const MultilingualTextBox = styled(Paper)({
@@ -9,11 +10,13 @@ const MultilingualTextBox = styled(Paper)({
 interface FlatMultilingualTextPresenterProps {
     primaryMultilingualTextItem: IMultilingualTextItem;
     translations: IMultilingualTextItem[];
+    variant?: Variant;
 }
 
 export const FlatMultilingualTextPresenter = ({
     primaryMultilingualTextItem,
     translations,
+    variant,
 }: FlatMultilingualTextPresenterProps): JSX.Element => {
     const { text, languageCode, role } = primaryMultilingualTextItem;
 
@@ -24,7 +27,7 @@ export const FlatMultilingualTextPresenter = ({
         >
             <MultilingualTextItemPresenter
                 key={languageCode}
-                variant="h4"
+                variant={variant || 'h4'}
                 text={text}
                 languageCode={languageCode}
                 role={role}
@@ -35,7 +38,7 @@ export const FlatMultilingualTextPresenter = ({
                         <Box mt={1}>
                             <MultilingualTextItemPresenter
                                 key={languageCode}
-                                variant="h5"
+                                variant={variant || 'h5'}
                                 text={text}
                                 languageCode={languageCode}
                                 role={role}

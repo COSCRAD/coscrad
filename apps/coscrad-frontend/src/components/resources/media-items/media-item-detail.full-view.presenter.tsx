@@ -4,14 +4,12 @@ import {
     IMediaItemViewModel,
     MIMEType,
 } from '@coscrad/api-interfaces';
-import { Card, Divider } from '@mui/material';
+import { Card, Divider, Typography } from '@mui/material';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
-import { BilingualTextPresenter } from '../utils/bilingual-text-presenter';
 
 export const MediaItemDetailFullViewPresenter = ({
     id,
     title,
-    titleEnglish,
     url,
     mimeType,
 }: ICategorizableDetailQueryResult<IMediaItemViewModel>): JSX.Element => {
@@ -21,10 +19,9 @@ export const MediaItemDetailFullViewPresenter = ({
         >
             <Card className="detail-card">
                 <div id="detail-term" className="detail-meta">
-                    <BilingualTextPresenter
-                        textInPrimaryLanguage={title}
-                        textInSecondaryLanguage={titleEnglish}
-                    />
+                    <Typography component="span" variant="h6">
+                        {title}
+                    </Typography>
                 </div>
                 <Divider id="detail-divider" />
                 {[MIMEType.png, MIMEType.jpg, MIMEType.bmp, MIMEType.svg].includes(mimeType) ? (

@@ -1,16 +1,21 @@
 import {
+    AggregateType,
     ICategorizableDetailQueryResult,
-    ITermViewModel,
+    ITermViewForVocabularyListEntry,
     IVocabularyListEntry,
     IVocabularyListViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
+import { AudioClipPlayer } from '@coscrad/media-player';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Divider } from '@mui/material';
-import { useReducer } from 'react';
-import { ResourceDetailFullViewPresenter } from '../../../../../../apps/coscrad-frontend/src/utils/generic-components';
+import { Box, Divider } from '@mui/material';
+import { useContext, useReducer } from 'react';
+import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
+import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components';
+import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
+import { FlatMultilingualTextPresenter } from '../../../utils/generic-components/presenters/flat-multilingual-text-presenter';
+import { groupMultilingualTextItems } from '../../../utils/generic-components/presenters/group-multilingual-text-items';
 import { Carousel } from '../../higher-order-components/carousel';
-import { TermDetailFullViewPresenter } from '../terms/term-detail.full-view.presenter';
 import doValuesMatchFilters from './do-values-match-filters';
 import { VocabularyListForm } from './vocabulary-list-form';
 
@@ -69,13 +74,6 @@ const filterEntriesForSelectedTerms = (
         return doValuesMatchFilters(variableValues, filter);
     });
 
-const TermPresenterForVocabularyListEntry = (
-    props: ICategorizableDetailQueryResult<ITermViewModel>
-): JSX.Element => (
-    // TODO Write a custom presenter here
-    <TermDetailFullViewPresenter {...props} />
-);
-
 export const VocabularyListDetailFullViewPresenter = ({
     id,
     name,
@@ -96,7 +94,47 @@ export const VocabularyListDetailFullViewPresenter = ({
         {}
     );
 
+    const { defaultLanguageCode } = useContext(ConfigurableContentContext);
+
     const selectedEntries = filterEntriesForSelectedTerms(entries, filterWithoutNullAndUndefined);
+
+    const TermPresenterForVocabularyListEntry = ({
+        id,
+        name,
+        contributions,
+        audioURL,
+    }: ITermViewForVocabularyListEntry): JSX.Element => {
+        return (
+            <ResourceDetailFullViewPresenter
+                name={name}
+                id={id}
+                type={ResourceType.term}
+                contributions={contributions}
+                NamePresenter={({ name }) => {
+                    const { primaryMultilingualTextItem, translations } =
+                        groupMultilingualTextItems(name, defaultLanguageCode);
+
+                    return (
+                        <FlatMultilingualTextPresenter
+                            primaryMultilingualTextItem={primaryMultilingualTextItem}
+                            translations={translations}
+                            variant={'body1'}
+                        />
+                    );
+                }}
+            >
+                <Box
+                    data-testid={buildDataAttributeForAggregateDetailComponent(
+                        AggregateType.term,
+                        id
+                    )}
+                />
+                <Box id="media-player">
+                    <AudioClipPlayer audioUrl={audioURL} />
+                </Box>
+            </ResourceDetailFullViewPresenter>
+        );
+    };
 
     return (
         <ResourceDetailFullViewPresenter

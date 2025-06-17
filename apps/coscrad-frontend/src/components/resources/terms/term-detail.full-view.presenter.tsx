@@ -20,7 +20,7 @@ import { findOriginalTextItem } from '../../notes/shared/find-original-text-item
 
 import { ResourceNamePresenterProps } from '../../../utils/generic-components/presenters/detail-views/resource-detail-presenter-header';
 import { FlatMultilingualTextPresenter } from '../../../utils/generic-components/presenters/flat-multilingual-text-presenter';
-import { getTextItemsForMultilingualTextPresenter } from '../../../utils/generic-components/presenters/get-text-items-for-multilingual-text-presenter';
+import { groupMultilingualTextItems } from '../../../utils/generic-components/presenters/group-multilingual-text-items';
 
 const VocabularyListRecordForTermPresenter = ({
     id: termId,
@@ -54,10 +54,10 @@ const VocabularyListRecordForTermPresenter = ({
     </Box>
 );
 
-const TermNamePresenter = ({ name, variant }: ResourceNamePresenterProps): JSX.Element => {
+const TermNamePresenter = ({ name }: ResourceNamePresenterProps): JSX.Element => {
     const { defaultLanguageCode } = useContext(ConfigurableContentContext);
 
-    const { primaryMultilingualTextItem, translations } = getTextItemsForMultilingualTextPresenter(
+    const { primaryMultilingualTextItem, translations } = groupMultilingualTextItems(
         name,
         defaultLanguageCode
     );
@@ -77,7 +77,6 @@ export const TermDetailFullViewPresenter = ({
     audioURL,
     vocabularyLists,
 }: ICategorizableDetailQueryResult<ITermViewModel>): JSX.Element => {
-    console.log({ contributions });
     return (
         <ResourceDetailFullViewPresenter
             name={name}

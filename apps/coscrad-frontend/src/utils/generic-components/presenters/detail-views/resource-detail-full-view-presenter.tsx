@@ -46,7 +46,6 @@ export const ResourceDetailFullViewPresenter = ({
                 )}
             </Grid>
             <Grid item xs={2} sm={2} md={8}>
-                {/* TODO: consider putting a standardized name property on the view models */}
                 <ResourceDetailPresenterHeader
                     id={id}
                     type={type}

@@ -1,9 +1,6 @@
 import {
     IBibliographicCitationViewModel,
     ICourtCaseBibliographicCitationData,
-    IMultilingualText,
-    LanguageCode,
-    MultilingualTextItemRole,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import {
@@ -18,6 +15,7 @@ export const CourtCaseBibliographicCitationDetailFullViewPresenter = ({
     id,
     data,
     contributions,
+    name,
 }: IBibliographicCitationViewModel<ICourtCaseBibliographicCitationData>): JSX.Element => {
     const keysAndLabels: PropertyLabels<ICourtCaseBibliographicCitationData> = {
         abstract: 'Abstract',
@@ -26,17 +24,7 @@ export const CourtCaseBibliographicCitationDetailFullViewPresenter = ({
         pages: 'First Page',
     };
 
-    // Temporary workaround until `name` is on IBaseViewModel
-    const { caseName, url } = data;
-    const name: IMultilingualText = {
-        items: [
-            {
-                languageCode: LanguageCode.English,
-                text: caseName,
-                role: MultilingualTextItemRole.original,
-            },
-        ],
-    };
+    const { url } = data;
 
     return (
         <ResourceDetailFullViewPresenter

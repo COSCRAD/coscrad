@@ -9,7 +9,11 @@ interface TextItemsForMultilingualTextPresenterProps {
     isTranslated: boolean;
 }
 
-export const getTextItemsForMultilingualTextPresenter = (
+/**
+ * TODO If we find a way to share the MultilingualText class with the client,
+ * we can just use the methods we have already written and tested on the back-end.
+ */
+export const groupMultilingualTextItems = (
     text,
     defaultLanguageCode
 ): TextItemsForMultilingualTextPresenterProps => {

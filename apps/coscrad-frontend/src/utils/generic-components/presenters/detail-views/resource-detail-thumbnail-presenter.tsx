@@ -38,7 +38,6 @@ export const ResourceDetailThumbnailPresenter = ({
                     <ResourcePreviewIconFactory resourceType={type} size="md" />
                 </Grid>
                 <Grid item xs={2} sm={2} md={7}>
-                    {/* TODO: consider putting a standardized name property on the view models */}
                     {isNonEmptyObject(name) ? (
                         <ResourceDetailPresenterHeader
                             id={id}

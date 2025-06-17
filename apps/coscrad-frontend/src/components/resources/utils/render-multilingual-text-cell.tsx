@@ -1,13 +1,13 @@
 import { IMultilingualText, LanguageCode } from '@coscrad/api-interfaces';
 import { Typography } from '@mui/material';
-import { getTextItemsForMultilingualTextPresenter } from '../../../utils/generic-components/presenters/get-text-items-for-multilingual-text-presenter';
+import { groupMultilingualTextItems } from '../../../utils/generic-components/presenters/group-multilingual-text-items';
 import { BilingualTextPresenter } from './bilingual-text-presenter';
 
 export const renderMultilingualTextCell = (
     text: IMultilingualText,
     defaultLanguageCode: LanguageCode
 ) => {
-    const { primaryMultilingualTextItem, translations } = getTextItemsForMultilingualTextPresenter(
+    const { primaryMultilingualTextItem, translations } = groupMultilingualTextItems(
         text,
         defaultLanguageCode
     );
