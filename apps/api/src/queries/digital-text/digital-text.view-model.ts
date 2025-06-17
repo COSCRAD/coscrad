@@ -1,8 +1,4 @@
-import {
-    AggregateCompositeIdentifier,
-    AggregateType,
-    IDigitalTextViewModel,
-} from '@coscrad/api-interfaces';
+import { AggregateCompositeIdentifier, AggregateType } from '@coscrad/api-interfaces';
 import { BooleanDataType, FromDomainModel, NestedDataType, UUID } from '@coscrad/data-types';
 import { isBoolean, isNonEmptyObject } from '@coscrad/validation-constraints';
 import { buildMultilingualTextWithSingleItem } from '../../domain/common/build-multilingual-text-with-single-item';
@@ -46,9 +42,7 @@ import { ApplyEvent } from '../event-sourcing/apply-event.interface';
         connections: [],
     },
 })
-export class DigitalTextViewModel
-    implements ApplyEvent<DigitalTextViewModel>, IDigitalTextViewModel
-{
+export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
     accessControlList: AccessControlList = new AccessControlList();
 
     #allTags: EventSourcedTagRecordForResourceViewModel[] = [];
