@@ -1,3 +1,4 @@
+import { isFunction } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
 import { ContributionSummary } from '../../../user-management';
@@ -19,7 +20,28 @@ export class AdditionalCreditsProvidedForResourceEventHandler implements ICoscra
         private readonly provider: IRepositoryProvider
     ) {}
 
-    async handle(_event: AdditionalCreditsProvidedForResource): Promise<void> {
-        throw new Error('Method not implemented.');
+    async handle({
+        payload: {
+            aggregateCompositeIdentifier: { type: resourceType, id: resourceId },
+            contributionType,
+            contributorIds,
+        },
+        meta: { dateCreated },
+    }: AdditionalCreditsProvidedForResource): Promise<void> {
+        const repo = this.provider.forResource(resourceType);
+
+        if (!isFunction(repo?.attribute)) {
+            return;
+        }
+
+        const contributionSummary: ContributionSummary = {
+            contributorIds,
+            statement: contributionType,
+            type: contributionType,
+            date: undefined,
+            timestamp: dateCreated,
+        };
+
+        await repo.attribute(resourceId, contributionSummary);
     }
 }

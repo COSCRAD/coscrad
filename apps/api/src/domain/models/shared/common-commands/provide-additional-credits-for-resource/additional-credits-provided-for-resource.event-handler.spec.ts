@@ -16,7 +16,7 @@ import mapDatabaseDocumentToAggregateDTO from '../../../../../persistence/databa
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { TestEventStream } from '../../../../../test-data/events';
+import { buildTestInstance } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { ContributionSummary } from '../../../user-management';
@@ -27,9 +27,12 @@ const WIDGET_COLLECTION = 'widgets';
 
 class WidgetViewModel {
     id: string;
+    contributions: ContributionSummary[];
 
-    constructor({ id }: DTO<WidgetViewModel>) {
+    constructor({ id, contributions }: DTO<WidgetViewModel>) {
         this.id = id;
+
+        this.contributions = contributions.map((c) => new ContributionSummary(c));
     }
 }
 
@@ -49,8 +52,12 @@ class WidgetQueryRepository implements IWidgetQueryRepository {
         );
     }
 
-    async attribute(_id: string, _contributionSummary: ContributionSummary): Promise<void> {
-        throw new Error('Method not implemented.');
+    async attribute(id: string, contributionSummary: ContributionSummary): Promise<void> {
+        const existingWidget = (await this.fetchById(id)) as WidgetViewModel;
+
+        existingWidget.contributions.push(contributionSummary);
+
+        await this.arangoDb.update(id, { contributions: existingWidget.contributions });
     }
 
     async fetchById(id: string): Promise<Maybe<WidgetViewModel>> {
@@ -70,6 +77,7 @@ class WidgetQueryRepository implements IWidgetQueryRepository {
 
 const existingWidgetView = new WidgetViewModel({
     id: buildDummyUuid(2),
+    contributions: [],
 });
 
 describe(`AdditionalCreditsProvidedForResourceEventHandler`, () => {
@@ -133,15 +141,15 @@ describe(`AdditionalCreditsProvidedForResourceEventHandler`, () => {
     });
 
     describe(`when the target is a resource`, () => {
-        const additionalCreditsForWidget =
-            new TestEventStream().buildSingle<AdditionalCreditsProvidedForResource>({
-                type: 'ADDITIONAL_CREDITS_PROVIDED_FOR_RESOURCE',
-                payload: {
-                    aggregateCompositeIdentifier: {
-                        id: buildDummyUuid(56),
-                    },
+        const additionalCreditsForWidget = buildTestInstance(AdditionalCreditsProvidedForResource, {
+            payload: {
+                aggregateCompositeIdentifier: {
+                    id: existingWidgetView.id,
+                    type: 'widget' as ResourceType,
                 },
-            });
+            },
+        });
+
         it('should provide the credits to the resource', async () => {
             await additionalCreditsProvidedForResourceEventHandler.handle(
                 additionalCreditsForWidget
@@ -151,7 +159,9 @@ describe(`AdditionalCreditsProvidedForResourceEventHandler`, () => {
                 existingWidgetView.id
             )) as WidgetViewModel;
 
-            expect(updatedView).toBe(true);
+            const { contributions } = updatedView;
+
+            expect(contributions).toHaveLength(1);
         });
     });
 });
