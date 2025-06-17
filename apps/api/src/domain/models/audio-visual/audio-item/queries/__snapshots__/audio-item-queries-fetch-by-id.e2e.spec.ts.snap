@@ -28,7 +28,6 @@ exports[`when querying for an audio item: fetch by ID when the user is a COSCRAD
             "name": "resourceCompositeIdentifier",
             "type": "JSON_INPUT",
           },
-          {},
           {
             "constraints": [
               {
@@ -113,7 +112,6 @@ exports[`when querying for an audio item: fetch by ID when the user is a COSCRAD
             "name": "toMemberCompositeIdentifier",
             "type": "JSON_INPUT",
           },
-          {},
           {
             "constraints": [],
             "description": "system-wide unique identifier for the resource from which you are making a connection",
@@ -121,7 +119,6 @@ exports[`when querying for an audio item: fetch by ID when the user is a COSCRAD
             "name": "fromMemberCompositeIdentifier",
             "type": "JSON_INPUT",
           },
-          {},
           {
             "constraints": [
               {
@@ -250,7 +247,6 @@ exports[`when querying for an audio item: fetch by ID when the user is a project
             "name": "resourceCompositeIdentifier",
             "type": "JSON_INPUT",
           },
-          {},
           {
             "constraints": [
               {
@@ -335,7 +331,6 @@ exports[`when querying for an audio item: fetch by ID when the user is a project
             "name": "toMemberCompositeIdentifier",
             "type": "JSON_INPUT",
           },
-          {},
           {
             "constraints": [],
             "description": "system-wide unique identifier for the resource from which you are making a connection",
@@ -343,7 +338,6 @@ exports[`when querying for an audio item: fetch by ID when the user is a project
             "name": "fromMemberCompositeIdentifier",
             "type": "JSON_INPUT",
           },
-          {},
           {
             "constraints": [
               {

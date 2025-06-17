@@ -1,3 +1,4 @@
+import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { CallHandler, ExecutionContext, Inject, NestInterceptor } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -39,6 +40,10 @@ const hasEntities = (input: unknown): input is HasEntities => {
 };
 
 const removePrivateProperties = (entity: any) => {
+    if (!isNonEmptyObject(entity)) {
+        return entity;
+    }
+
     if ('accessControlList' in entity) {
         delete entity.accessControlList;
     }

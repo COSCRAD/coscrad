@@ -3,6 +3,9 @@ import { ChilcotinTokenizer } from '../../../lib/nlp/tokenization';
 import { buildMultilingualTextFromBilingualText } from '../build-multilingual-text-from-bilingual-text';
 
 const standardizerProvider = {
+    has(_languageCode: LanguageCode) {
+        return true;
+    },
     forLanguage(languageCode: LanguageCode) {
         if (languageCode === LanguageCode.Chilcotin) {
             return new ChilcotinTokenizer();

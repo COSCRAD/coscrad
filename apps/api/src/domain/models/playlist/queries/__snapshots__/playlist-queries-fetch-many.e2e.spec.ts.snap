@@ -52,7 +52,6 @@ exports[`when querying for a playlist: fetch many (/resources/playlists) when th
                 "name": "resourceCompositeIdentifier",
                 "type": "JSON_INPUT",
               },
-              {},
               {
                 "constraints": [
                   {
@@ -245,7 +244,6 @@ exports[`when querying for a playlist: fetch many (/resources/playlists) when th
                 "name": "resourceCompositeIdentifier",
                 "type": "JSON_INPUT",
               },
-              {},
               {
                 "constraints": [
                   {
@@ -398,7 +396,6 @@ exports[`when querying for a playlist: fetch many (/resources/playlists) when th
                 "name": "resourceCompositeIdentifier",
                 "type": "JSON_INPUT",
               },
-              {},
               {
                 "constraints": [
                   {

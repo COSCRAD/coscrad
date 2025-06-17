@@ -5,6 +5,9 @@ import { deepStandardizeMultilingualText } from './deep-standardize-multilingual
 import { MultilingualText } from './multilingual-text';
 
 const standardizerProvider = {
+    has(_l: LanguageCode) {
+        return true;
+    },
     forLanguage(languageCode: LanguageCode) {
         if (languageCode === LanguageCode.Chilcotin) {
             return new ChilcotinTokenizer();

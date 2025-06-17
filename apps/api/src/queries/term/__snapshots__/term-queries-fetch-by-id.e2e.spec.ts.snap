@@ -32,7 +32,6 @@ exports[`when querying for a term: fetch by Id when the user is authenticated wh
             "name": "resourceCompositeIdentifier",
             "type": "JSON_INPUT",
           },
-          {},
           {
             "constraints": [
               {
@@ -117,7 +116,6 @@ exports[`when querying for a term: fetch by Id when the user is authenticated wh
             "name": "toMemberCompositeIdentifier",
             "type": "JSON_INPUT",
           },
-          {},
           {
             "constraints": [],
             "description": "system-wide unique identifier for the resource from which you are making a connection",
@@ -125,7 +123,6 @@ exports[`when querying for a term: fetch by Id when the user is authenticated wh
             "name": "fromMemberCompositeIdentifier",
             "type": "JSON_INPUT",
           },
-          {},
           {
             "constraints": [
               {
@@ -357,6 +354,7 @@ exports[`when querying for a term: fetch by Id when the user is authenticated wh
       "type": "ADD_AUDIO_FOR_TERM",
     },
   ],
+  "connections": [],
   "contributions": [
     {
       "contributorIds": [
