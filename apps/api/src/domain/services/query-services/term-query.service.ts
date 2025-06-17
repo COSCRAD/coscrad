@@ -3,11 +3,14 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Observable } from 'rxjs';
+import { CommandFSA } from '../../../app/controllers/command/command-fsa/command-fsa.entity';
 import {
     CommandContext,
     CommandInfoService,
 } from '../../../app/controllers/command/services/command-info-service';
 import { isNotFound, NotFound } from '../../../lib/types/not-found';
+import { TermViewModel } from '../../../queries/buildViewModelForResource/viewModels/term.view-model';
+import { EventSourcedAudioItemViewModel } from '../../models/audio-visual/audio-item/queries';
 import { AccessControlList } from '../../models/shared/access-control/access-control-list.entity';
 import { Term } from '../../models/term/entities/term.entity';
 import { ITermQueryRepository, TERM_QUERY_REPOSITORY_TOKEN } from '../../models/term/queries';
@@ -15,6 +18,20 @@ import { CoscradUserWithGroups } from '../../models/user-management/user/entitie
 import { AggregateId } from '../../types/AggregateId';
 import { ResourceType } from '../../types/ResourceType';
 import { fetchActionsForUser } from './utilities/fetch-actions-for-user';
+
+interface DiscoverAudioForTermsOptions {
+    shouldPublishAudio: boolean;
+}
+
+interface AudioItemAndImportActions {
+    audioItem: EventSourcedAudioItemViewModel;
+    action: CommandFSA[];
+}
+
+interface AudioForTerm {
+    term: TermViewModel;
+    importOptions: AudioItemAndImportActions;
+}
 
 @Injectable()
 export class TermQueryService {
@@ -114,6 +131,8 @@ export class TermQueryService {
             indexScopedActions: this.fetchUserActions(userWithGroups, [Term]),
         };
     }
+
+    async discoverAudio(): Promise<> {}
 
     public subscribeToWriteNotifications(): Observable<{ data: { type: string } }> {
         return this.termQueryRepository.subscribeToUpdates();

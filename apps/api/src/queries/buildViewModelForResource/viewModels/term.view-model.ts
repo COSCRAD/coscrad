@@ -86,6 +86,7 @@ export class VocabularyListRecordForTerm {
         connections: [],
         vocabularyLists: [],
         tokens: [],
+        possibleAudioFilenames: [],
     },
 })
 export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
@@ -161,8 +162,17 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
 
     tokens: Token[];
 
+    // TODO remove this when returning general queries?
+    possibleAudioFilenames: string[];
+
     constructor(dto: DTO<TermViewModel>) {
-        const { actions, mediaItemId, vocabularyLists, tokens } = dto;
+        const {
+            actions,
+            mediaItemId,
+            vocabularyLists,
+            tokens,
+            possibleAudioFilenames: possibleAudioFilenames,
+        } = dto;
 
         // TODO extend base
         // super(dto);
@@ -238,6 +248,10 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
             );
         // end TODO extend base
 
+        this.possibleAudioFilenames = Array.isArray(possibleAudioFilenames)
+            ? possibleAudioFilenames
+            : [];
+
         this.contributions = Array.isArray(contributions)
             ? contributions.map((c) => ContributionSummary.fromDto(c))
             : [];
@@ -284,6 +298,7 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
             notes: [], // none at creation
             connections: [],
             tokens: [], // appended externally
+            possibleAudioFilenames: [],
         });
 
         term.name = buildMultilingualTextWithSingleItem(text, languageCode);
@@ -349,6 +364,7 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
             notes: [], // none at creation
             connections: [],
             tokens: [], // appended externally
+            possibleAudioFilenames: [],
         });
 
         return term;
