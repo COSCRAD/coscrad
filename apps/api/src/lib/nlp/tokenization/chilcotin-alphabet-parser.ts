@@ -92,24 +92,6 @@ export class ChilcotinAlphabetParser {
     constructor(punctuationNativeCharacterss: string[] = `"?.!-,`.split('')) {
         this.punctuation = new Set(punctuationNativeCharacterss);
 
-        // 4 from d
-        const d = new Node('d');
-
-        d.registerTransition('z', new Node('dz'))
-            .registerTransition('ẑ', new Node('dẑ'))
-            .registerTransition('l', new Node('dl'));
-
-        this.root.registerTransition('d', d);
-
-        // 7 from t
-        const t = new Node('t')
-            .registerTransition('’', new Node('t’'))
-            .registerTransition('s', new Node('ts').registerTransition('’', new Node('ts’')))
-            .registerTransition('ŝ', new Node('tŝ').registerTransition('’', new Node('tŝ’')))
-            .registerTransition('l', new Node('tl').registerTransition('’', new Node('tl’')));
-
-        this.root.registerTransition('t', t);
-
         // 4 from k
         const k = new Node('k')
             .registerTransition('w', new Node('kw').registerTransition('’', new Node('kw’')))
@@ -190,6 +172,35 @@ export class ChilcotinAlphabetParser {
         this.root.registerTransition(zCapChar, zCap);
 
         this.root.registerTransition('z', z);
+
+        const tSCap = new Node('tŝ').registerTransition('’', new Node('tŝ’'));
+
+        // 7 from t
+        const t = new Node('t')
+            .registerTransition('’', new Node('t’'))
+            .registerTransition(
+                's',
+                new Node('ts')
+                    .registerTransition('̂', tSCap)
+                    .registerTransition('’', new Node('ts’'))
+            )
+            .registerTransition('ŝ', tSCap)
+            .registerTransition('l', new Node('tl').registerTransition('’', new Node('tl’')));
+
+        this.root.registerTransition('t', t);
+
+        // 4 from d
+        const d = new Node('d');
+
+        const dZCap = new Node('dẑ');
+
+        const dz = new Node('dz').registerTransition('̂', dZCap);
+
+        d.registerTransition('z', dz)
+            .registerTransition('ẑ', dZCap)
+            .registerTransition('l', new Node('dl'));
+
+        this.root.registerTransition('d', d);
 
         // 2 from c (c doesn't count, as it isn't a valid letter on its own)
         const c = new Node('c', false).registerTransition(
