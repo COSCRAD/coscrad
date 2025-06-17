@@ -174,6 +174,12 @@ describe(`ChilcotinTokenizer`, () => {
                     expect(first.isOutOfAlphabet).toBe(false);
                 };
 
+                const assertFirstLetterIsUpperCase = (tokens: Token[]) => {
+                    const { isUpperCase } = tokens[0].characters[0];
+
+                    expect(isUpperCase).toBe(true);
+                };
+
                 describe(`when the consonant is lower-cased`, () => {
                     describe(`when the cap comes through as a separate character`, () => {
                         const inputForSCap = 's' + loneSurrogateCap + 'en';
@@ -211,21 +217,43 @@ describe(`ChilcotinTokenizer`, () => {
                                 assertFirstLetterIsInAlphabet(result);
                             });
                         });
+
+                        describe(`d${inputForZCap}`, () => {
+                            it(`should return the expected result`, () => {
+                                const result = tokenizer.tokenize(`d${inputForZCap}`);
+
+                                assertTokenizationResult(result, [[`d${zCap}`, 'e', 'n']]);
+
+                                assertFirstLetterIsInAlphabet(result);
+                            });
+                        });
+
+                        describe(`t${inputForSCap}`, () => {
+                            it(`should return the expected result`, () => {
+                                const result = tokenizer.tokenize(`t${inputForSCap}`);
+
+                                assertTokenizationResult(result, [[`t${sCap}`, 'e', 'n']]);
+
+                                assertFirstLetterIsInAlphabet(result);
+                            });
+                        });
+
+                        describe(`ts${loneSurrogateCap}’en`, () => {
+                            it(`should return the expected result`, () => {
+                                const result = tokenizer.tokenize(`ts${loneSurrogateCap}’en`);
+
+                                assertTokenizationResult(result, [[`t${sCap}’`, 'e', 'n']]);
+
+                                assertFirstLetterIsInAlphabet(result);
+                            });
+                        });
                     });
 
                     describe(`when the capped consonant comes through as a single character`, () => {
                         describe('ŝen', () => {
                             it(`should return the expected result`, () => {
-                                // TODO use unicode escape to be sure
+                                // use unicode escape to be sure
                                 const result = tokenizer.tokenize('\u015den');
-
-                                // assertTokenizationResult(result, [['ŝ', 'e', 'n']]);
-
-                                // const actualSCap = result[0].characters[0].text;
-
-                                // const unicodeCharCodeForFirstLetter = actualSCap.codePointAt(0);
-
-                                // expect(unicodeCharCodeForFirstLetter).toBe('u015d');
 
                                 assertTokenizationResult(result, [[sCap, 'e', 'n']]);
 
@@ -257,6 +285,40 @@ describe(`ChilcotinTokenizer`, () => {
                                 assertFirstLetterIsInAlphabet(result);
                             });
                         });
+
+                        describe('tŝen', () => {
+                            it(`should return the expected result`, () => {
+                                // TODO use unicode escape to be sure
+                                const result = tokenizer.tokenize('t\u015den');
+
+                                assertTokenizationResult(result, [[`t${sCap}`, 'e', 'n']]);
+
+                                assertFirstLetterIsInAlphabet(result);
+                            });
+                        });
+
+                        describe('tŝ’en', () => {
+                            it(`should return the expected result`, () => {
+                                // TODO use unicode escape to be sure
+                                const result = tokenizer.tokenize('t\u015d’en');
+
+                                assertTokenizationResult(result, [[`t${sCap}’`, 'e', 'n']]);
+
+                                assertFirstLetterIsInAlphabet(result);
+                            });
+                        });
+
+                        describe('dẑen', () => {
+                            it(`should return the expected result`, () => {
+                                const unicodeChar = '\u1e91';
+
+                                const result = tokenizer.tokenize(`d${unicodeChar}en`);
+
+                                assertTokenizationResult(result, [[`d${zCap}`, 'e', 'n']]);
+
+                                assertFirstLetterIsInAlphabet(result);
+                            });
+                        });
                     });
                 });
 
@@ -276,9 +338,37 @@ describe(`ChilcotinTokenizer`, () => {
 
                                 assertFirstLetterIsInAlphabet(result);
 
-                                const { isUpperCase } = result[0].characters[0];
+                                assertFirstLetterIsUpperCase(result);
+                            });
+                        });
 
-                                expect(isUpperCase).toBe(true);
+                        describe(`Dz${loneSurrogateCap}en`, () => {
+                            it(`should return the expected result`, () => {
+                                const result = tokenizer.tokenize(`Dz${loneSurrogateCap}en`);
+
+                                assertTokenizationResult(result, [[`d${zCap}`, 'e', 'n']]);
+
+                                assertFirstLetterIsUpperCase(result);
+                            });
+                        });
+
+                        describe(`Ts${loneSurrogateCap}en`, () => {
+                            it(`should return the expected result`, () => {
+                                const result = tokenizer.tokenize(`Ts${loneSurrogateCap}en`);
+
+                                assertTokenizationResult(result, [[`t${sCap}`, 'e', 'n']]);
+
+                                assertFirstLetterIsUpperCase(result);
+                            });
+                        });
+
+                        describe(`Ts${loneSurrogateCap}’en`, () => {
+                            it(`should return the expected result`, () => {
+                                const result = tokenizer.tokenize(`Ts${loneSurrogateCap}’en`);
+
+                                assertTokenizationResult(result, [[`t${sCap}’`, 'e', 'n']]);
+
+                                assertFirstLetterIsUpperCase(result);
                             });
                         });
 
@@ -289,6 +379,8 @@ describe(`ChilcotinTokenizer`, () => {
                                 assertTokenizationResult(result, [[wCap, 'e', 'n']]);
 
                                 assertFirstLetterIsInAlphabet(result);
+
+                                assertFirstLetterIsUpperCase(result);
                             });
                         });
 
@@ -299,12 +391,14 @@ describe(`ChilcotinTokenizer`, () => {
                                 assertTokenizationResult(result, [[zCap, 'e', 'n']]);
 
                                 assertFirstLetterIsInAlphabet(result);
+
+                                assertFirstLetterIsUpperCase(result);
                             });
                         });
                     });
 
                     describe(`when the capped consonant comes through as a single character`, () => {
-                        describe('ŝen', () => {
+                        describe('\u015cen', () => {
                             it(`should return the expected result`, () => {
                                 // TODO use unicode escape to be sure
                                 const result = tokenizer.tokenize('\u015cen');
@@ -313,13 +407,51 @@ describe(`ChilcotinTokenizer`, () => {
 
                                 assertFirstLetterIsInAlphabet(result);
 
-                                const { isUpperCase } = result[0].characters[0];
-
-                                expect(isUpperCase).toBe(true);
+                                assertFirstLetterIsUpperCase(result);
                             });
                         });
 
-                        describe('ŵen', () => {
+                        describe('D\u1e91en', () => {
+                            it(`should return the expected result`, () => {
+                                const unicodeChar = 'D\u1e91';
+
+                                const result = tokenizer.tokenize(`${unicodeChar}en`);
+
+                                assertTokenizationResult(result, [[`d${zCap}`, 'e', 'n']]);
+
+                                assertFirstLetterIsInAlphabet(result);
+
+                                assertFirstLetterIsUpperCase(result);
+                            });
+                        });
+
+                        describe('T\u015den', () => {
+                            it(`should return the expected result`, () => {
+                                // TODO use unicode escape to be sure
+                                const result = tokenizer.tokenize('T\u015den');
+
+                                assertTokenizationResult(result, [[`t${sCap}`, 'e', 'n']]);
+
+                                assertFirstLetterIsInAlphabet(result);
+
+                                assertFirstLetterIsUpperCase(result);
+                            });
+                        });
+
+                        describe('T\u015d’en', () => {
+                            it(`should return the expected result`, () => {
+                                // TODO use unicode escape to be sure
+                                const result = tokenizer.tokenize('T\u015d’en');
+
+                                assertTokenizationResult(result, [[`t${sCap}’`, 'e', 'n']]);
+
+                                assertFirstLetterIsInAlphabet(result);
+
+                                assertFirstLetterIsUpperCase(result);
+                            });
+                        });
+
+                        describe('\u0174en', () => {
                             it(`should return the expected result`, () => {
                                 const unicodeChar = '\u0174';
 
@@ -329,10 +461,12 @@ describe(`ChilcotinTokenizer`, () => {
                                 assertTokenizationResult(result, [[wCap, 'e', 'n']]);
 
                                 assertFirstLetterIsInAlphabet(result);
+
+                                assertFirstLetterIsUpperCase(result);
                             });
                         });
 
-                        describe('ẑen', () => {
+                        describe('\u1e90en', () => {
                             it(`should return the expected result`, () => {
                                 const unicodeChar = '\u1e90';
 
@@ -341,6 +475,8 @@ describe(`ChilcotinTokenizer`, () => {
                                 assertTokenizationResult(result, [[zCap, 'e', 'n']]);
 
                                 assertFirstLetterIsInAlphabet(result);
+
+                                assertFirstLetterIsUpperCase(result);
                             });
                         });
                     });
@@ -378,14 +514,6 @@ describe(`ChilcotinTokenizer`, () => {
                 const expectedOutput = `${sCap}${wCap}${zCap}${sCap.toUpperCase()}${wCap.toUpperCase()}${zCap.toUpperCase()} more text`;
 
                 const result = tokenizer.standardize(input);
-
-                // const _charCodeForSCap = result.codePointAt(0);
-
-                // const charCodeForWCap = result.codePointAt(1);
-
-                // expect(charCodeForSCap).toBe(0x015d);
-
-                // expect(charCodeForWCap).toBe(0x0175);
 
                 expect(result).toEqual(expectedOutput);
             });
