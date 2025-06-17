@@ -404,7 +404,6 @@ describe(`when querying for a single playlist- by ID`, () => {
             "name": "resourceCompositeIdentifier",
             "type": "JSON_INPUT",
           },
-          {},
           {
             "constraints": [
               {
@@ -654,7 +653,6 @@ describe(`when querying for a single playlist- by ID`, () => {
             "name": "resourceCompositeIdentifier",
             "type": "JSON_INPUT",
           },
-          {},
           {
             "constraints": [
               {

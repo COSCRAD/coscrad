@@ -34,7 +34,6 @@ exports[`when querying for a term: fetch many when the user is a project admin s
                 "name": "resourceCompositeIdentifier",
                 "type": "JSON_INPUT",
               },
-              {},
               {
                 "constraints": [
                   {
@@ -119,7 +118,6 @@ exports[`when querying for a term: fetch many when the user is a project admin s
                 "name": "toMemberCompositeIdentifier",
                 "type": "JSON_INPUT",
               },
-              {},
               {
                 "constraints": [],
                 "description": "system-wide unique identifier for the resource from which you are making a connection",
@@ -127,7 +125,6 @@ exports[`when querying for a term: fetch many when the user is a project admin s
                 "name": "fromMemberCompositeIdentifier",
                 "type": "JSON_INPUT",
               },
-              {},
               {
                 "constraints": [
                   {
@@ -392,6 +389,22 @@ exports[`when querying for a term: fetch many when the user is a project admin s
       },
       "notes": [],
       "tags": [],
+      "tokens": [
+        {
+          "characters": [
+            {
+              "isOutOfAlphabet": false,
+              "isPunctuationOrWhiteSpace": false,
+              "text": "t",
+            },
+          ],
+          "isPunct": false,
+          "isSpace": false,
+          "isStop": false,
+          "languageCode": "en",
+          "text": "t (test tokens)",
+        },
+      ],
       "type": "term",
       "vocabularyLists": [],
     },
@@ -428,7 +441,6 @@ exports[`when querying for a term: fetch many when the user is a project admin s
                 "name": "resourceCompositeIdentifier",
                 "type": "JSON_INPUT",
               },
-              {},
               {
                 "constraints": [
                   {
@@ -513,7 +525,6 @@ exports[`when querying for a term: fetch many when the user is a project admin s
                 "name": "toMemberCompositeIdentifier",
                 "type": "JSON_INPUT",
               },
-              {},
               {
                 "constraints": [],
                 "description": "system-wide unique identifier for the resource from which you are making a connection",
@@ -521,7 +532,6 @@ exports[`when querying for a term: fetch many when the user is a project admin s
                 "name": "fromMemberCompositeIdentifier",
                 "type": "JSON_INPUT",
               },
-              {},
               {
                 "constraints": [
                   {
@@ -786,6 +796,22 @@ exports[`when querying for a term: fetch many when the user is a project admin s
       },
       "notes": [],
       "tags": [],
+      "tokens": [
+        {
+          "characters": [
+            {
+              "isOutOfAlphabet": false,
+              "isPunctuationOrWhiteSpace": false,
+              "text": "t",
+            },
+          ],
+          "isPunct": false,
+          "isSpace": false,
+          "isStop": false,
+          "languageCode": "en",
+          "text": "t (test tokens)",
+        },
+      ],
       "type": "term",
       "vocabularyLists": [],
     },
@@ -820,7 +846,6 @@ exports[`when querying for a term: fetch many when the user is a project admin s
                 "name": "resourceCompositeIdentifier",
                 "type": "JSON_INPUT",
               },
-              {},
               {
                 "constraints": [
                   {
@@ -905,7 +930,6 @@ exports[`when querying for a term: fetch many when the user is a project admin s
                 "name": "toMemberCompositeIdentifier",
                 "type": "JSON_INPUT",
               },
-              {},
               {
                 "constraints": [],
                 "description": "system-wide unique identifier for the resource from which you are making a connection",
@@ -913,7 +937,6 @@ exports[`when querying for a term: fetch many when the user is a project admin s
                 "name": "fromMemberCompositeIdentifier",
                 "type": "JSON_INPUT",
               },
-              {},
               {
                 "constraints": [
                   {
@@ -1178,6 +1201,22 @@ exports[`when querying for a term: fetch many when the user is a project admin s
       },
       "notes": [],
       "tags": [],
+      "tokens": [
+        {
+          "characters": [
+            {
+              "isOutOfAlphabet": false,
+              "isPunctuationOrWhiteSpace": false,
+              "text": "t",
+            },
+          ],
+          "isPunct": false,
+          "isSpace": false,
+          "isStop": false,
+          "languageCode": "en",
+          "text": "t (test tokens)",
+        },
+      ],
       "type": "term",
       "vocabularyLists": [],
     },

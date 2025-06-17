@@ -35,6 +35,7 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
         { propertyKey: 'audioURL', headingLabel: 'Audio URL' },
         { propertyKey: 'contributions', headingLabel: 'Contributors' },
         { propertyKey: 'vocabularyLists', headingLabel: 'Vocabulary Lists' },
+        { propertyKey: 'tokens', headingLabel: 'Letters' },
     ];
 
     const cellRenderersDefinition: CellRenderersDefinition<ITermViewModel> = {
@@ -56,6 +57,14 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
                 ))}
             </CommaSeparatedList>
         ),
+        tokens: ({ tokens }: ITermViewModel) => (
+            <CommaSeparatedList>
+                {/* TODO one big reduce would be better here but I suppose the number of tokens is always small */}
+                {tokens
+                    .map(({ characters }) => characters.map(({ text }) => text).join('|'))
+                    .join(' ')}
+            </CommaSeparatedList>
+        ),
     };
 
     const matchers: Matchers<ITermViewModel> = {
@@ -63,6 +72,16 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
         vocabularyLists: (vocabularyLists: IVocabularyListRecordForTerm[], searchTerm: string) =>
             vocabularyLists.some(({ name }) =>
                 name.items.some(({ text }) => doesTextIncludeCaseInsensitive(text, searchTerm))
+            ),
+        tokens: (tokens, searchTerm) =>
+            (tokens || []).some(({ characters }) =>
+                characters.some((c) => {
+                    const doesMatch = c.text === searchTerm.toLowerCase();
+
+                    if (c.isOutOfAlphabet) return false;
+
+                    return doesMatch;
+                })
             ),
     };
 
@@ -73,7 +92,7 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
             tableData={terms}
             cellRenderersDefinition={cellRenderersDefinition}
             heading={'Terms'}
-            filterableProperties={['name', 'contributions', 'vocabularyLists']}
+            filterableProperties={['name', 'contributions', 'vocabularyLists', 'tokens']}
             matchers={matchers}
         />
     );

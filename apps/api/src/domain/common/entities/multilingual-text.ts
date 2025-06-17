@@ -110,6 +110,15 @@ export class MultilingualTextItem extends BaseDomainModel implements IMultilingu
     }
 }
 
+export interface ITextStandardizer {
+    standardize(input: string): string;
+}
+
+export interface ITextStandardizerProvider {
+    has(languageCode: LanguageCode): boolean;
+    forLanguage(languageCode: LanguageCode): ITextStandardizer;
+}
+
 export class MultilingualText extends BaseDomainModel implements IMultilingualText {
     @NestedDataType(MultilingualTextItem, {
         label: 'items',
@@ -179,6 +188,18 @@ export class MultilingualText extends BaseDomainModel implements IMultilingualTe
         return this.clone({
             // avoid shared references
             items: this.items.concat(item).map((item) => new MultilingualTextItem(item)),
+        } as DeepPartial<DTO<this>>);
+    }
+
+    // TODO Unit test
+    standardize(provider: ITextStandardizerProvider) {
+        return this.clone({
+            items: this.items.map((item) => ({
+                ...item,
+                text: provider.has(item.languageCode)
+                    ? provider.forLanguage(item.languageCode).standardize(item.text)
+                    : item.text,
+            })),
         } as DeepPartial<DTO<this>>);
     }
 

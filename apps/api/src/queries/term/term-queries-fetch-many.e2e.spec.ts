@@ -2,6 +2,7 @@ import {
     AggregateType,
     CoscradUserRole,
     HttpStatusCode,
+    IToken,
     LanguageCode,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
@@ -105,6 +106,27 @@ const dummyTermView = clonePlainObjectWithOverrides(
     }
 );
 
+/**
+ * Although these are not consistent with the test data, we test elsewhere
+ * that the event consumers write them correctly.
+ */
+const dummyTokens: IToken[] = [
+    {
+        text: 't (test tokens)',
+        languageCode: LanguageCode.English,
+        isPunct: false,
+        isSpace: false,
+        isStop: false,
+        characters: [
+            {
+                text: 't',
+                isOutOfAlphabet: false,
+                isPunctuationOrWhiteSpace: false,
+            },
+        ],
+    },
+];
+
 const publicTermView = clonePlainObjectWithOverrides(dummyTermView, {
     isPublished: true,
     name: new MultilingualText(dummyTermView.name).translate({
@@ -113,6 +135,7 @@ const publicTermView = clonePlainObjectWithOverrides(dummyTermView, {
         role: MultilingualTextItemRole.freeTranslation,
         // we are insisting by casting that the call to `translate` won't fail above
     }) as MultilingualText,
+    tokens: dummyTokens,
 });
 
 const privateTermThatUserCanAccess = clonePlainObjectWithOverrides(publicTermView, {

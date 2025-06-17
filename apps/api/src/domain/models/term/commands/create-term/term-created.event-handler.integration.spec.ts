@@ -13,6 +13,7 @@ import { ConsoleCoscradCliLogger } from '../../../../../coscrad-cli/logging';
 import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
 import { IRepositoryProvider } from '../../../../../domain/repositories/interfaces/repository-provider.interface';
+import { CoscradNLPModule } from '../../../../../lib/nlp';
 import { NotFound } from '../../../../../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
@@ -30,7 +31,12 @@ import { ArangoTermQueryRepository } from '../../repositories/arango-term-query-
 import { TermCreated } from './term-created.event';
 import { TermCreatedEventHandler } from './term-created.event-handler';
 
-const textForTerm = 'boo yah';
+const lettersInTerm = [
+    ['ts’', 'e', 'd'],
+    ['n', 'e', 'n', 'ch', 'a', 'gh'],
+];
+
+const textForTerm = lettersInTerm.map((lettersInWord) => lettersInWord.join('')).join(' ');
 
 const languageCode = LanguageCode.Chilcotin;
 
@@ -66,6 +72,7 @@ describe(`TermCreatedEventHandler`, () => {
             providers: [CommandInfoService, TermCreatedEventHandler],
             imports: [
                 PersistenceModule.forRootAsync(),
+                CoscradNLPModule,
                 CommandModule,
                 TermCommandsModule,
                 /**
@@ -130,10 +137,6 @@ describe(`TermCreatedEventHandler`, () => {
             // @ts-expect-error Fix this issue
             await handler.handle(termCreated);
 
-            const _proto = Object.getPrototypeOf(handler);
-
-            const _handlerName = _proto.constructor.name;
-
             /**
              * TODO Move this out to a scenario test or do this with Cypress
              *
@@ -154,7 +157,7 @@ describe(`TermCreatedEventHandler`, () => {
 
             const foundTerm = searchResult as TermViewModel;
 
-            const { name: nameDto, contributions, actions } = foundTerm;
+            const { name: nameDto, contributions, actions, tokens } = foundTerm;
 
             const name = new MultilingualText(nameDto);
 
@@ -172,6 +175,16 @@ describe(`TermCreatedEventHandler`, () => {
             expect(actions).toContain('CONNECT_RESOURCES_WITH_NOTE');
             expect(actions).toContain('PUBLISH_RESOURCE');
             expect(actions).toContain('ADD_AUDIO_FOR_TERM');
+
+            const wordsThatAreMissingTokens = lettersInTerm.filter(
+                (letters, index) => tokens[index].text !== letters.join('')
+            );
+
+            expect(wordsThatAreMissingTokens).toEqual([]);
+
+            expect(tokens.map(({ characters }) => characters.map(({ text }) => text))).toEqual(
+                lettersInTerm
+            );
 
             // expect tags to be empty
             // expect categories to be empty

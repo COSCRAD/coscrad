@@ -22,12 +22,13 @@ import { EventSourcedSongViewModel } from '../../domain/models/song/queries/song
 import { Song } from '../../domain/models/song/song.entity';
 import { SongQueryService } from '../../domain/services/query-services/song-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
+import { CoscradNLPModule } from '../../lib/nlp';
 import { PersistenceModule } from '../../persistence/persistence.module';
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
 import { SongController } from '../controllers/resources/song.controller';
 
 @Module({
-    imports: [PersistenceModule, CommandModule, IdGenerationModule],
+    imports: [PersistenceModule, CommandModule, IdGenerationModule, CoscradNLPModule],
     controllers: [SongController],
     providers: [
         CommandInfoService,

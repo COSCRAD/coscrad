@@ -13,7 +13,13 @@ import {
 import { buildFormFieldForCommandPayloadProp } from './buildFormFieldForCommandPayloadProp';
 
 // TODO We should have a SST for `rawData` as a key on all CREATE_X payloads.
-const propertyKeysToOmitFromForms = [AGGREGATE_COMPOSITE_IDENTIFIER, 'rawData'];
+const propertyKeysToOmitFromForms = [
+    AGGREGATE_COMPOSITE_IDENTIFIER,
+    'rawData',
+    'resourceContext',
+    'toMemberContext',
+    'fromMemberContext',
+];
 
 const isPropertyOmittedFromForm = (key, propertySchema) => {
     if (propertyKeysToOmitFromForms.includes(key)) return true;

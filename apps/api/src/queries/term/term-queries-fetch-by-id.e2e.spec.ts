@@ -3,6 +3,7 @@ import {
     CoscradUserRole,
     IDetailQueryResult,
     ITermViewModel,
+    IToken,
     LanguageCode,
 } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
@@ -89,6 +90,27 @@ const termCreated = new TestEventStream().andThen<TermCreated>({
 
 const dummyTerm = TermViewModel.fromTermCreated(termCreated.as(termCompositeId)[0] as TermCreated);
 
+/**
+ * Although these are not consistent with the test data, we test elsewhere
+ * that the event consumers write them correctly.
+ */
+const dummyTokens: IToken[] = [
+    {
+        text: 't (test tokens)',
+        languageCode: LanguageCode.English,
+        isPunct: false,
+        isSpace: false,
+        isStop: false,
+        characters: [
+            {
+                text: 't',
+                isOutOfAlphabet: false,
+                isPunctuationOrWhiteSpace: false,
+            },
+        ],
+    },
+];
+
 const targetTermView = clonePlainObjectWithOverrides(dummyTerm, {
     isPublished: true,
     contributions: [
@@ -96,6 +118,7 @@ const targetTermView = clonePlainObjectWithOverrides(dummyTerm, {
             contributorIds: [dummyContributor.id],
         }),
     ],
+    tokens: dummyTokens,
 });
 
 const privateTermThatUserCanAccess = clonePlainObjectWithOverrides(dummyTerm, {
@@ -370,7 +393,7 @@ describe(`when querying for a term: fetch by Id`, () => {
                          * that the correct actions come through in different
                          * scenarios.
                          */
-                        expect(actions).toMatchSnapshot();
+                        expect(res.body).toMatchSnapshot();
                     });
                 });
 

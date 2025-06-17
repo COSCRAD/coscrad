@@ -14,6 +14,7 @@ import JournalArticleBibliographicCitationData from '../../domain/models/bibliog
 import { BibliographicCitationDataUnion } from '../../domain/models/bibliographic-citation/shared';
 import { BibliographicCitationQueryService } from '../../domain/services/query-services/bibliographic-citation-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
+import { CoscradNLPModule } from '../../lib/nlp';
 import { PersistenceModule } from '../../persistence/persistence.module';
 import { BibliographicCitationViewModel } from '../../queries/buildViewModelForResource/viewModels/bibliographic-citation/bibliographic-citation.view-model';
 import { DynamicDataTypeModule } from '../../validation';
@@ -21,7 +22,13 @@ import { CommandInfoService } from '../controllers/command/services/command-info
 import { BibliographicCitationController } from '../controllers/resources/bibliographic-citation.controller';
 
 @Module({
-    imports: [PersistenceModule, CommandModule, IdGenerationModule, DynamicDataTypeModule],
+    imports: [
+        PersistenceModule,
+        CommandModule,
+        IdGenerationModule,
+        DynamicDataTypeModule,
+        CoscradNLPModule,
+    ],
     controllers: [BibliographicCitationController],
     providers: [
         CommandInfoService,

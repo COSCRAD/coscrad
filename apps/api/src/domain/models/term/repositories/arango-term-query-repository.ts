@@ -1,5 +1,6 @@
 import {
     IMultilingualTextItem,
+    IToken,
     LanguageCode,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
@@ -137,7 +138,8 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
 
     async elicitFromPrompt(
         id: AggregateId,
-        { text, languageCode }: Omit<IMultilingualTextItem, 'role'>
+        { text, languageCode }: Omit<IMultilingualTextItem, 'role'>,
+        tokens: IToken[]
     ): Promise<void> {
         /**
          * Note that the only difference between this and `translate` is currently
@@ -158,6 +160,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             name: {
                 items: APPEND(doc.name.items,newItem)
             },
+            tokens: @tokens
         } IN @@collectionName
          RETURN OLD
         `;
@@ -168,6 +171,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             text: text,
             role: MultilingualTextItemRole.elicitedFromPrompt,
             languageCode: languageCode,
+            tokens,
         };
 
         const cursor = await this.database

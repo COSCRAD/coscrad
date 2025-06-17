@@ -308,6 +308,7 @@ import { VocabularyListQueryService } from '../../../domain/services/query-servi
 import { InternalError } from '../../../lib/errors/InternalError';
 import { IdManagementService } from '../../../lib/id-generation/id-management.service';
 import { MockIdManagementService } from '../../../lib/id-generation/mock-id-management.service';
+import { CoscradNLPModule } from '../../../lib/nlp';
 import { Ctor } from '../../../lib/types/Ctor';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
@@ -461,6 +462,7 @@ export default async (
             PassportModule.register({ defaultStrategy: 'jwt' }),
             DynamicDataTypeModule,
             EventModule,
+            CoscradNLPModule,
         ],
         providers: [
             CommandInfoService,

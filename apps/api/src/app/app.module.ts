@@ -7,6 +7,7 @@ import { AudioVisualModule } from '../domain/models/audio-visual/application/aud
 import { MediaItemModule } from '../domain/models/media-item';
 import { PhotographModule } from '../domain/models/photograph/photograph.module';
 import { IdGenerationModule } from '../lib/id-generation/id-generation.module';
+import { CoscradNLPModule } from '../lib/nlp';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
 import { PersistenceModule } from '../persistence/persistence.module';
 import { ArangoRepositoryProvider } from '../persistence/repositories/arango-repository.provider';
@@ -33,7 +34,13 @@ import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
 import { WebOfKnowledgeModule } from './domain-modules/web-of-knowledge/web-of-knowledge.module';
 
 @Module({
-    providers: [ArangoDatabaseProvider, ArangoRepositoryProvider, CommandInfoService],
+    providers: [
+        ArangoDatabaseProvider,
+        ArangoRepositoryProvider,
+        CommandInfoService,
+        // This one is global. It is used by all resource modules.
+        CoscradNLPModule,
+    ],
     imports: [
         ConfigModule.forRoot({
             isGlobal: true,

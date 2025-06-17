@@ -1,8 +1,12 @@
-import { CallHandler, ExecutionContext, NestInterceptor } from '@nestjs/common';
+import { isNonEmptyObject } from '@coscrad/validation-constraints';
+import { CallHandler, ExecutionContext, Inject, NestInterceptor } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { deepStandardizeMultilingualText } from '../../../domain/common/entities/deep-standardize-multilingual-text';
+import { ITextStandardizerProvider } from '../../../domain/common/entities/multilingual-text';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { InternalError } from '../../../lib/errors/InternalError';
+import { TOKENIZER_PROVIDER_INJECTION_TOKEN } from '../../../lib/nlp';
 import { Maybe } from '../../../lib/types/maybe';
 import { isNotFound } from '../../../lib/types/not-found';
 import { CoscradInternalException, CoscradNotFoundException } from './CoscradExceptions';
@@ -36,6 +40,10 @@ const hasEntities = (input: unknown): input is HasEntities => {
 };
 
 const removePrivateProperties = (entity: any) => {
+    if (!isNonEmptyObject(entity)) {
+        return entity;
+    }
+
     if ('accessControlList' in entity) {
         delete entity.accessControlList;
     }
@@ -44,6 +52,11 @@ const removePrivateProperties = (entity: any) => {
 };
 
 export class ResourceQueryResponseTransformInterceptor<T> implements NestInterceptor<T, T> {
+    constructor(
+        @Inject(TOKENIZER_PROVIDER_INJECTION_TOKEN)
+        private readonly textStandardizerProvider: ITextStandardizerProvider
+    ) {}
+
     intercept(context: ExecutionContext, next: CallHandler): Observable<T> {
         return next.handle().pipe(
             map((result) => {
@@ -52,7 +65,16 @@ export class ResourceQueryResponseTransformInterceptor<T> implements NestInterce
                     result.entities = result.entities.flatMap((entity) => {
                         const forUser = entity.forUser(context.switchToHttp().getRequest()?.user);
 
-                        return isNotFound(forUser) ? [] : [removePrivateProperties(forUser)];
+                        const withoutPrivateProps = removePrivateProperties(forUser);
+
+                        return isNotFound(forUser)
+                            ? []
+                            : [
+                                  deepStandardizeMultilingualText(
+                                      this.textStandardizerProvider,
+                                      withoutPrivateProps
+                                  ),
+                              ];
                     });
 
                     return result;
@@ -80,6 +102,12 @@ export class ResourceQueryResponseTransformInterceptor<T> implements NestInterce
         }
 
         // TODO remove private props
-        return removePrivateProperties(forUser);
+        const withoutPrivateProps = removePrivateProperties(forUser);
+
+        /**
+         * TODO We may want to do this using the event consumers intead for
+         * performance.
+         */
+        return deepStandardizeMultilingualText(this.textStandardizerProvider, withoutPrivateProps);
     }
 }

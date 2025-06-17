@@ -500,10 +500,18 @@ describe(`ArangoTermQueryRepository`, () => {
         it(`should append the expected multilingual text item`, async () => {
             const targetTranslationRole = MultilingualTextItemRole.elicitedFromPrompt;
 
-            await testQueryRepository.elicitFromPrompt(targetTerm.id, {
-                text: textTranslation,
-                languageCode: originalLanguageCode,
-            });
+            await testQueryRepository.elicitFromPrompt(
+                targetTerm.id,
+                {
+                    text: textTranslation,
+                    languageCode: originalLanguageCode,
+                },
+                /**
+                 * TODO test tokenization at this level (it's only tested in the
+                 * event conumers for `TERM_CREATED` and `PROMPT_TERM_CREATED`)
+                 */
+                []
+            );
 
             const updatedTerm = await testQueryRepository.fetchById(targetTerm.id);
 

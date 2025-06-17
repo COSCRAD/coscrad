@@ -11,7 +11,27 @@ describe(`Term index-to-detail flow`, () => {
         513
     );
 
-    const textForTerm = 'She is singing (lang)';
+    const letterThatIsInTheTerm = 'sh';
+
+    const letterThatIsNotInTerm = 'dz';
+
+    const outOfAlphabetSymbolInTerm = '(';
+
+    const cappedConsonants = {
+        s: { lower: String.fromCodePoint(0x015d), upper: String.fromCodePoint(0x015c) },
+        w: { lower: String.fromCodePoint(0x0175), upper: String.fromCodePoint(0x0174) },
+        z: { lower: String.fromCodePoint(0x1e90), upper: String.fromCodePoint(0x1e91) },
+    };
+
+    const textForTerm = `${letterThatIsInTheTerm}e is singing ${outOfAlphabetSymbolInTerm}lang) ${Object.values(
+        cappedConsonants
+    )
+        .reduce((acc: string[], { lower }) => {
+            acc.push(lower);
+
+            return acc;
+        }, [])
+        .join('')}`;
 
     const { id: basicTermId } = basicTermCompositeIdentifier;
 
@@ -259,6 +279,355 @@ describe(`Term index-to-detail flow`, () => {
                     });
                 });
             });
+
+            /**
+             * TODO If we allow searching other properties by letter for other
+             * resources (or in a full-text search), we may want to move the following
+             * to a component test or Jest test. This is a lot of extra logic to think
+             * about when trying to read the main index-to-detail flow.
+             */
+            describe(`when searching the letters in the term`, () => {
+                beforeEach(() => {
+                    cy.visit('/Resources/Terms');
+
+                    cy.getByDataAttribute('select_index_search_scope').click();
+
+                    /**
+                     * We can only share this step with all test cases below
+                     * if we avoid an abstraction like "search index table".
+                     */
+                    cy.get(`[data-value="tokens"]`).click();
+                });
+
+                describe(`when the term has the letter`, () => {
+                    /**
+                     * This is probably not worth making a general helper
+                     * unless we decide to allow and test searching by letter
+                     * for every multilingual text property in the index view
+                     * for every resource type.
+                     */
+                    const expectToFindOne = (keystrokes: string[], textForTerm: string) => {
+                        cy.getByDataAttribute(`index_search_bar`).click();
+
+                        keystrokes.forEach((keystroke) => {
+                            cy.getByDataAttribute(`index_search_bar`).type(keystroke);
+                        });
+
+                        cy.getLoading().should(`not.exist`);
+
+                        cy.contains(textForTerm);
+
+                        cy.contains('Filtered Records: 1');
+                    };
+
+                    describe(`when the letter is a standard Latin character`, () => {
+                        it('should return the term', () => {
+                            expectToFindOne([letterThatIsInTheTerm], textForTerm);
+                        });
+                    });
+
+                    describe(`when the letter contains a diacritic`, () => {
+                        // TODO use the unicode keypoint for this?
+                        const orphanedCap = '̂'; // === String.fromCodePoint(0x0302) === String.fromCodePoint(770)
+
+                        describe(`when the user uses the simulated keyboard for data entry`, () => {
+                            describe(cappedConsonants.s.lower, () => {
+                                describe(`when typing s + cap (lone surrogate)`, () => {
+                                    it('should return the term', () => {
+                                        expectToFindOne(['s', orphanedCap], textForTerm);
+                                    });
+                                });
+
+                                // this also may apply when using system keyboards
+                                describe(`when pasting the multi-part unicode s + cap (lone surrogate) from elsewhere`, () => {
+                                    it(`should return the target term`, () => {
+                                        /**
+                                         * Note the distinction that the two (combining)
+                                         * characters are pasted together atomically, not entered
+                                         * one at a time. This targets a different
+                                         * behaviour of the simulated keyboard.
+                                         */
+                                        // TODO named constants for all unicode keypoints, including orphaned caps and latin letters here
+                                        expectToFindOne([`${'\u0073'}${`\u0302`}`], textForTerm);
+                                    });
+                                });
+
+                                // this also may apply when using system keyboards
+                                describe(`when pasting the atomic unicode (no lone surrogate) from elsewhere`, () => {
+                                    it(`should return the target term`, () => {
+                                        expectToFindOne([cappedConsonants.s.lower], textForTerm);
+                                    });
+                                });
+                            });
+
+                            describe(cappedConsonants.s.upper, () => {
+                                describe(`when typing S + cap (lone surrogate)`, () => {
+                                    it('should return the term', () => {
+                                        expectToFindOne(['S', orphanedCap], textForTerm);
+                                    });
+                                });
+
+                                // this also may apply when using system keyboards
+                                describe(`when pasting the multi-part unicode S + cap (lone surrogate) from elsewhere`, () => {
+                                    it(`should return the target term`, () => {
+                                        /**
+                                         * Note the distinction that the two (combining)
+                                         * characters are pasted together atomically, not entered
+                                         * one at a time. This targets a different
+                                         * behaviour of the simulated keyboard.
+                                         */
+                                        // TODO named constants for all unicode keypoints, including orphaned caps and latin letters here
+                                        expectToFindOne([`S${orphanedCap}`], textForTerm);
+                                    });
+                                });
+
+                                // this also may apply when using system keyboards
+                                describe(`when pasting the atomic unicode Ŝ (no lone surrogate) from elsewhere`, () => {
+                                    it(`should return the target term`, () => {
+                                        expectToFindOne([cappedConsonants.s.upper], textForTerm);
+                                    });
+                                });
+                            });
+
+                            describe(cappedConsonants.w.lower, () => {
+                                describe(`when typing w + cap (lone surrogate)`, () => {
+                                    it('should return the term', () => {
+                                        expectToFindOne(['w', orphanedCap], textForTerm);
+                                    });
+                                });
+
+                                // this also may apply when using system keyboards
+                                describe(`when pasting the multi-part unicode w + cap (lone surrogate) from elsewhere`, () => {
+                                    it(`should return the target term`, () => {
+                                        /**
+                                         * Note the distinction that the two (combining)
+                                         * characters are pasted together atomically, not entered
+                                         * one at a time. This targets a different
+                                         * behaviour of the simulated keyboard.
+                                         */
+                                        // TODO named constants for all unicode keypoints, including orphaned caps and latin letters here
+                                        expectToFindOne([`w${`\u0302`}`], textForTerm);
+                                    });
+                                });
+
+                                // this also may apply when using system keyboards
+                                describe(`when pasting the atomic unicode (no lone surrogate) from elsewhere`, () => {
+                                    it(`should return the target term`, () => {
+                                        expectToFindOne([cappedConsonants.w.lower], textForTerm);
+                                    });
+                                });
+                            });
+
+                            describe(cappedConsonants.w.upper, () => {
+                                describe(`when typing W + cap (lone surrogate)`, () => {
+                                    it('should return the term', () => {
+                                        expectToFindOne(['W', orphanedCap], textForTerm);
+                                    });
+                                });
+
+                                // this also may apply when using system keyboards
+                                describe(`when pasting the multi-part unicode W + cap (lone surrogate) from elsewhere`, () => {
+                                    it(`should return the target term`, () => {
+                                        /**
+                                         * Note the distinction that the two (combining)
+                                         * characters are pasted together atomically, not entered
+                                         * one at a time. This targets a different
+                                         * behaviour of the simulated keyboard.
+                                         */
+                                        // TODO named constants for all unicode keypoints, including orphaned caps and latin letters here
+                                        expectToFindOne([`S${orphanedCap}`], textForTerm);
+                                    });
+                                });
+
+                                // this also may apply when using system keyboards
+                                describe(`when pasting the atomic unicode Ŵ (no lone surrogate) from elsewhere`, () => {
+                                    it(`should return the target term`, () => {
+                                        expectToFindOne([cappedConsonants.w.upper], textForTerm);
+                                    });
+                                });
+                            });
+
+                            describe(cappedConsonants.z.lower, () => {
+                                describe(`when typing z + cap (lone surrogate)`, () => {
+                                    it('should return the term', () => {
+                                        expectToFindOne(['z', orphanedCap], textForTerm);
+                                    });
+                                });
+
+                                // this also may apply when using system keyboards
+                                describe(`when pasting the multi-part unicode z + cap (lone surrogate) from elsewhere`, () => {
+                                    it(`should return the target term`, () => {
+                                        /**
+                                         * Note the distinction that the two (combining)
+                                         * characters are pasted together atomically, not entered
+                                         * one at a time. This targets a different
+                                         * behaviour of the simulated keyboard.
+                                         */
+                                        // TODO named constants for all unicode keypoints, including orphaned caps and latin letters here
+                                        expectToFindOne([`z${`\u0302`}`], textForTerm);
+                                    });
+                                });
+
+                                // this also may apply when using system keyboards
+                                describe(`when pasting the atomic unicode (no lone surrogate) from elsewhere`, () => {
+                                    it(`should return the target term`, () => {
+                                        expectToFindOne([cappedConsonants.z.lower], textForTerm);
+                                    });
+                                });
+                            });
+
+                            describe(cappedConsonants.z.upper, () => {
+                                describe(`when typing Z + cap (lone surrogate)`, () => {
+                                    it('should return the term', () => {
+                                        expectToFindOne(['Z', orphanedCap], textForTerm);
+                                    });
+                                });
+
+                                // this also may apply when using system keyboards
+                                describe(`when pasting the multi-part unicode Z + cap (lone surrogate) from elsewhere`, () => {
+                                    it(`should return the target term`, () => {
+                                        /**
+                                         * Note the distinction that the two (combining)
+                                         * characters are pasted together atomically, not entered
+                                         * one at a time. This targets a different
+                                         * behaviour of the simulated keyboard.
+                                         */
+                                        // TODO named constants for all unicode keypoints, including orphaned caps and latin letters here
+                                        expectToFindOne([`Z${orphanedCap}`], textForTerm);
+                                    });
+                                });
+
+                                // this also may apply when using system keyboards
+                                describe(`when pasting the atomic unicode Ẑ (no lone surrogate) from elsewhere`, () => {
+                                    it(`should return the target term`, () => {
+                                        expectToFindOne([cappedConsonants.z.upper], textForTerm);
+                                    });
+                                });
+                            });
+                        });
+
+                        describe(`when the user disables the simulated keyboard and types the text directly`, () => {
+                            beforeEach(() => {
+                                cy.toggleSimulatedKeyboard();
+                            });
+
+                            describe(cappedConsonants.s.lower, () => {
+                                describe('s + cap - pasted', () => {
+                                    it('should return the term', () => {
+                                        expectToFindOne([`s${orphanedCap}`], textForTerm);
+                                    });
+                                });
+
+                                describe('full ŝ from unicode pasted', () => {
+                                    it('should return the term', () => {
+                                        expectToFindOne([cappedConsonants.s.lower], textForTerm);
+                                    });
+                                });
+                            });
+
+                            describe(cappedConsonants.s.upper, () => {
+                                describe('S + cap - pasted', () => {
+                                    it('should return the term', () => {
+                                        expectToFindOne([`S${orphanedCap}`], textForTerm);
+                                    });
+                                });
+
+                                describe('full Ŝ from unicode pasted', () => {
+                                    it('should return the term', () => {
+                                        expectToFindOne([cappedConsonants.s.upper], textForTerm);
+                                    });
+                                });
+                            });
+
+                            describe(cappedConsonants.w.lower, () => {
+                                describe('w + cap - pasted', () => {
+                                    it('should return the term', () => {
+                                        expectToFindOne([`w${orphanedCap}`], textForTerm);
+                                    });
+                                });
+
+                                describe('full ŵ from unicode pasted', () => {
+                                    it('should return the term', () => {
+                                        expectToFindOne([cappedConsonants.w.lower], textForTerm);
+                                    });
+                                });
+                            });
+
+                            describe(cappedConsonants.w.upper, () => {
+                                describe('W + cap - pasted', () => {
+                                    it('should return the term', () => {
+                                        expectToFindOne([`W${orphanedCap}`], textForTerm);
+                                    });
+                                });
+
+                                describe('full Ŵ from unicode pasted', () => {
+                                    it('should return the term', () => {
+                                        expectToFindOne([cappedConsonants.w.upper], textForTerm);
+                                    });
+                                });
+                            });
+
+                            describe(cappedConsonants.z.lower, () => {
+                                describe('z + cap - pasted', () => {
+                                    it('should return the term', () => {
+                                        expectToFindOne([`w${orphanedCap}`], textForTerm);
+                                    });
+                                });
+
+                                describe('full ẑ from unicode pasted', () => {
+                                    it('should return the term', () => {
+                                        expectToFindOne([cappedConsonants.z.lower], textForTerm);
+                                    });
+                                });
+                            });
+
+                            describe(cappedConsonants.z.upper, () => {
+                                describe('Z + cap - pasted', () => {
+                                    it('should return the term', () => {
+                                        expectToFindOne([`W${orphanedCap}`], textForTerm);
+                                    });
+                                });
+
+                                describe('full Ẑ from unicode pasted', () => {
+                                    it('should return the term', () => {
+                                        expectToFindOne([cappedConsonants.z.upper], textForTerm);
+                                    });
+                                });
+                            });
+                        });
+
+                        /**
+                         * TODO Test vowels with marked high tone. Currently, we
+                         * don't have these in the database, but there are some
+                         * data sets on-deck that have marked tone.
+                         */
+                    });
+                });
+
+                describe(`when the term does not have the letter`, () => {
+                    it('should return not found', () => {
+                        cy.getByDataAttribute(`index_search_bar`).click();
+
+                        cy.getByDataAttribute(`index_search_bar`).type(letterThatIsNotInTerm);
+
+                        cy.getLoading().should(`not.exist`);
+
+                        cy.getByDataAttribute('not-found');
+                    });
+                });
+
+                describe(`when the term has the letter, but it is out of alphabet`, () => {
+                    it(`should return not found`, () => {
+                        cy.getByDataAttribute(`index_search_bar`).click();
+
+                        cy.getByDataAttribute(`index_search_bar`).type(outOfAlphabetSymbolInTerm);
+
+                        cy.getLoading().should(`not.exist`);
+
+                        cy.getByDataAttribute('not-found');
+                    });
+                });
+            });
         });
     });
 
@@ -305,7 +674,7 @@ describe(`Term index-to-detail flow`, () => {
             it(`should display the defualt credits`, () => {
                 cy.contains(textForTermWithNoCredits);
 
-                cy.contains('created by: admin');
+                cy.contains('created by: (data entry) admin');
             });
         });
 

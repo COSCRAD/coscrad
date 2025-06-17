@@ -33,7 +33,9 @@ describe(`Create Tag`, () => {
                 it(`should succeed`, () => {
                     cy.get('@commandButton').click();
 
-                    cy.getByDataAttribute('text_label').click().type(firstTagLabel);
+                    cy.getByDataAttribute('text_label').click();
+
+                    cy.getByDataAttribute('text_label').type(firstTagLabel);
 
                     cy.getCommandFormSubmissionButton().click();
 
@@ -51,7 +53,9 @@ describe(`Create Tag`, () => {
                 it(`should succeed`, () => {
                     cy.get('@commandButton').click();
 
-                    cy.getByDataAttribute('text_label').click().type(firstTagLabel);
+                    cy.getByDataAttribute('text_label').click();
+
+                    cy.getByDataAttribute('text_label').type(firstTagLabel);
 
                     cy.getCommandFormSubmissionButton().click();
 
@@ -61,7 +65,9 @@ describe(`Create Tag`, () => {
 
                     cy.get('@commandButton').click();
 
-                    cy.getByDataAttribute('text_label').click().type(secondTagLabel);
+                    cy.getByDataAttribute('text_label').click();
+
+                    cy.getByDataAttribute('text_label').type(secondTagLabel);
 
                     cy.getCommandFormSubmissionButton().click();
 
@@ -80,7 +86,9 @@ describe(`Create Tag`, () => {
                     // TODO Use `execute-command-stream` to set up the state
                     cy.get('@commandButton').click();
 
-                    cy.getByDataAttribute('text_label').click().type(firstTagLabel);
+                    cy.getByDataAttribute('text_label').click();
+
+                    cy.getByDataAttribute('text_label').type(firstTagLabel);
 
                     cy.getCommandFormSubmissionButton().click();
 
@@ -95,7 +103,9 @@ describe(`Create Tag`, () => {
 
                     cy.contains(`Relabel Tag`).click();
 
-                    cy.getByDataAttribute('text_newLabel').click().type(newLabel);
+                    cy.getByDataAttribute('text_newLabel').click();
+
+                    cy.getByDataAttribute('text_newLabel').type(newLabel);
 
                     cy.getCommandFormSubmissionButton().click();
 
@@ -110,7 +120,9 @@ describe(`Create Tag`, () => {
                     // TODO Use `execute-command-stream` to set up the state
                     cy.get('@commandButton').click();
 
-                    cy.getByDataAttribute('text_label').click().type(firstTagLabel);
+                    cy.getByDataAttribute('text_label').click();
+
+                    cy.getByDataAttribute('text_label').type(firstTagLabel);
 
                     cy.getCommandFormSubmissionButton().click();
 
@@ -121,7 +133,9 @@ describe(`Create Tag`, () => {
                     // TODO Use `execute-command-stream` to set up the state
                     cy.get('@commandButton').click();
 
-                    cy.getByDataAttribute('text_label').click().type(firstTagLabel);
+                    cy.getByDataAttribute('text_label').click();
+
+                    cy.getByDataAttribute('text_label').type(firstTagLabel);
 
                     cy.getCommandFormSubmissionButton().click();
                 });

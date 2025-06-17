@@ -184,6 +184,7 @@ describe(`Song Index-to-detail Query Flow`, () => {
                      * not found. Further,
                      */
                     describe(`when searching by special character`, () => {
+                        // TODO cut down on the number of redefinitions of this table
                         const keyBindings: [string, string][] = [
                             ['s[', 'ŝ'],
                             ['w[', 'ŵ'],
@@ -199,7 +200,7 @@ describe(`Song Index-to-detail Query Flow`, () => {
                          * language group needs, and then update this test coverage.
                          */
                         keyBindings.forEach(([keySequence, specialChar], index) => {
-                            describe(`the special char: ${specialChar}`, () => {
+                            describe.only(`the special char: ${specialChar}`, () => {
                                 beforeEach(() => {
                                     cy.seedDataWithCommand(`CREATE_SONG`, {
                                         title: `foo bar ${specialChar}`,

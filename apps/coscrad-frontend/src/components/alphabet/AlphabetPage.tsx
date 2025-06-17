@@ -31,8 +31,6 @@ export const AlphabetPage = (): JSX.Element => {
             // don't fetch if the alphabet has been fetched or if the alphabet has not been configured
             if (alphabet !== null || !isNonEmptyObject(alphabetConfig)) return;
 
-            console.log({ result });
-
             if (result.status !== 200) {
                 setIsError(true);
                 setIsLoading(false);

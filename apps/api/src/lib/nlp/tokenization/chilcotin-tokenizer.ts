@@ -1,6 +1,6 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
-import { ChilcotinAlphabetParser } from './ChilcotinAlphabetParser';
-import { ITokenizer, Token } from './tokenizer.interface';
+import { ITokenizer, Token } from '../interfaces/tokenizer.interface';
+import { ChilcotinAlphabetParser } from './chilcotin-alphabet-parser';
 
 /**
  * TODO Split this out into an `@coscrad/nlp` lib. This could potentially belong with
@@ -17,13 +17,10 @@ export class ChilcotinTokenizer implements ITokenizer {
         const rawTokens = document.split(' ');
 
         return rawTokens.map((text) => {
-            // TODO handle capitalization
-            const lowerCaseText = text.toLowerCase();
-
-            const characters = this.letterParser.parse(lowerCaseText);
+            const characters = this.letterParser.parse(text);
 
             return {
-                text,
+                text: characters.map(({ text }) => text).join(''),
                 characters,
                 languageCode: LanguageCode.Chilcotin,
                 // TODO "zip" in the spaces
@@ -34,5 +31,23 @@ export class ChilcotinTokenizer implements ITokenizer {
                 isStop: false,
             };
         });
+    }
+
+    standardize(input: string): string {
+        return (
+            this.tokenize(input)
+                .flatMap(({ characters }) =>
+                    characters
+                        .map(({ text: textForChar, isUpperCase }) =>
+                            isUpperCase ? textForChar.toUpperCase() : textForChar
+                        )
+                        .join('')
+                )
+                /**
+                 * Note that at some point, we may want to store white space as tokens
+                 * so that this is fully "non-destructive"
+                 */
+                .join(' ')
+        );
     }
 }

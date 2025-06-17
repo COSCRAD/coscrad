@@ -75,6 +75,7 @@ const publishedTerm = TermViewForVocabularyListEntry.fromDto({
     isPublished: true,
     accessControlList: new AccessControlList().toDTO(),
     text: publishedTermName,
+    name: publishedTermName,
     contributions: [
         buildTestInstance(ContributionSummary, {
             contributorIds: [buildDummyUuid(374)],

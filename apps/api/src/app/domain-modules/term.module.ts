@@ -21,6 +21,7 @@ import { TERM_QUERY_REPOSITORY_TOKEN } from '../../domain/models/term/queries';
 import { ArangoTermQueryRepository } from '../../domain/models/term/repositories';
 import { TermQueryService } from '../../domain/services/query-services/term-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
+import { CoscradNLPModule } from '../../lib/nlp';
 import { ArangoConnectionProvider } from '../../persistence/database/arango-connection.provider';
 import { PersistenceModule } from '../../persistence/persistence.module';
 import { DynamicDataTypeModule } from '../../validation';
@@ -36,6 +37,7 @@ import { TermCommandsModule } from './term.commands.module';
         IdGenerationModule,
         EventModule,
         TermCommandsModule,
+        CoscradNLPModule,
     ],
     controllers: [TermController],
     providers: [

@@ -2,6 +2,7 @@ import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
 import { CommandInfoService } from '../../../../app/controllers/command/services/command-info-service';
 import { IdGenerationModule } from '../../../../lib/id-generation/id-generation.module';
+import { CoscradNLPModule } from '../../../../lib/nlp';
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import { AudioItemQueryService } from '../../../services/query-services/audio-item-query.service';
 import { VideoQueryService } from '../../../services/query-services/video-query.service';
@@ -59,7 +60,7 @@ import { AudioItemController } from './audio-item.controller';
 import { VideoController } from './video.controller';
 
 @Module({
-    imports: [PersistenceModule, CommandModule, IdGenerationModule],
+    imports: [PersistenceModule, CommandModule, IdGenerationModule, CoscradNLPModule],
     controllers: [AudioItemController, VideoController],
     providers: [
         CommandInfoService,

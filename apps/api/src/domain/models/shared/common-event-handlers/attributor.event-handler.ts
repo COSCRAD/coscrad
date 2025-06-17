@@ -23,6 +23,10 @@ export class Attributor implements ICoscradEventHandler {
         const repo = this.provider.forResource(event.payload.aggregateCompositeIdentifier.type);
 
         if (!isFunction(repo?.attribute)) {
+            console.log(
+                `failed to attribute for: ${event.payload.aggregateCompositeIdentifier.type}`
+            );
+
             return;
 
             // TODO log failure? We will hit this for resource types that don't have a query repo registered yet.

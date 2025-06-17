@@ -5,7 +5,7 @@ const commonSearchTerms = 'video name';
 
 const textUniqueToFirstVideoName = `Dinosaur`;
 
-const specialCharInFirstVideoName = 'ŝ';
+const specialCharInFirstVideoName = '\u015d';
 
 const firstVideoName = `${textUniqueToFirstVideoName} ${commonSearchTerms} in Chilcotin ${specialCharInFirstVideoName}`;
 
@@ -172,7 +172,7 @@ describe(`Video Index-to-detail Query Flow`, () => {
 
                 describe(`when the search matches all terms`, () => {
                     it(`should return all videos`, () => {
-                        cy.filterTable(searchScope, commonSearchTerms);
+                        cy.searchIndexTable(commonSearchTerms, searchScope);
 
                         cy.contains(firstVideoName);
 
@@ -186,7 +186,7 @@ describe(`Video Index-to-detail Query Flow`, () => {
                     const searchTextThatMatchesNoRows = 'zqrst';
 
                     it(`should return the expected result`, () => {
-                        cy.filterTable(searchScope, searchTextThatMatchesNoRows);
+                        cy.searchIndexTable(searchTextThatMatchesNoRows, searchScope);
 
                         cy.contains(firstVideoName).should('not.exist');
 
@@ -198,7 +198,7 @@ describe(`Video Index-to-detail Query Flow`, () => {
 
                 describe(`when the search matches only one of the terms`, () => {
                     it(`should return the expected result`, () => {
-                        cy.filterTable(searchScope, textUniqueToFirstVideoName);
+                        cy.searchIndexTable(textUniqueToFirstVideoName, searchScope);
 
                         cy.contains(firstVideoName);
 
@@ -211,7 +211,7 @@ describe(`Video Index-to-detail Query Flow`, () => {
                 describe(`when using the simulated keyboard`, () => {
                     describe(`when searching for the special character: ${specialCharInFirstVideoName}`, () => {
                         it(`should find the video with ${specialCharInFirstVideoName} in its name`, () => {
-                            cy.filterTable(searchScope, specialCharInFirstVideoName);
+                            cy.searchIndexTable(specialCharInFirstVideoName, searchScope);
                         });
                     });
                 });
@@ -222,7 +222,7 @@ describe(`Video Index-to-detail Query Flow`, () => {
 
                 describe(`when the filter matches all of the terms with Chilcotin names`, () => {
                     it(`should return both results`, () => {
-                        cy.filterTable(searchScope, commonSearchTerms);
+                        cy.searchIndexTable(commonSearchTerms, searchScope);
 
                         cy.contains(firstVideoName);
 
@@ -237,7 +237,7 @@ describe(`Video Index-to-detail Query Flow`, () => {
                     const searchTextThatMatchesNoRows = 'zqrst';
 
                     it(`should return the expected result`, () => {
-                        cy.filterTable(searchScope, searchTextThatMatchesNoRows);
+                        cy.searchIndexTable(searchTextThatMatchesNoRows, searchScope);
 
                         cy.contains(firstVideoName).should('not.exist');
 
@@ -249,7 +249,7 @@ describe(`Video Index-to-detail Query Flow`, () => {
 
                 describe(`when the search matches only one of the terms`, () => {
                     it(`should return the expected result`, () => {
-                        cy.filterTable(searchScope, textUniqueToFirstVideoName);
+                        cy.searchIndexTable(textUniqueToFirstVideoName, searchScope);
 
                         cy.contains(firstVideoName);
 
@@ -265,7 +265,7 @@ describe(`Video Index-to-detail Query Flow`, () => {
 
                 describe(`when the search text is empty`, () => {
                     it(`should return all videos`, () => {
-                        cy.filterTable(searchScope, '');
+                        cy.searchIndexTable('', searchScope);
 
                         cy.contains(firstVideoName);
 
@@ -277,7 +277,7 @@ describe(`Video Index-to-detail Query Flow`, () => {
 
                 describe(`when the filter matches all of the terms with an English name`, () => {
                     it(`should return both results`, () => {
-                        cy.filterTable(searchScope, commonSearchTerms);
+                        cy.searchIndexTable(commonSearchTerms, searchScope);
 
                         cy.contains(firstVideoName);
 
@@ -291,7 +291,7 @@ describe(`Video Index-to-detail Query Flow`, () => {
                     const searchTextThatMatchesNoRows = 'zqrst';
 
                     it(`should return the expected result`, () => {
-                        cy.filterTable(searchScope, searchTextThatMatchesNoRows);
+                        cy.searchIndexTable(searchTextThatMatchesNoRows, searchScope);
 
                         cy.contains(firstVideoName).should('not.exist');
 
@@ -303,7 +303,10 @@ describe(`Video Index-to-detail Query Flow`, () => {
 
                 describe(`when the search matches only one of the terms`, () => {
                     it(`should return the expected result`, () => {
-                        cy.filterTable(searchScope, textUniqueToEnglishTranslationOfFirstVideoName);
+                        cy.searchIndexTable(
+                            textUniqueToEnglishTranslationOfFirstVideoName,
+                            searchScope
+                        );
 
                         /**
                          * note that the first video has a translation into

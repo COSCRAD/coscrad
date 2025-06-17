@@ -43,9 +43,11 @@ const validPhotographDetailRoute = buildRoute(photographAggregateCompositeIdenti
 
 const noteText = 'This is a note about a photograph';
 
+const contributorIds = [buildDummyUuid(112)];
+
 const contributors = {
     creator: {
-        id: buildDummyUuid(112),
+        id: contributorIds[0],
         firstName: 'Jamethon',
         lastName: 'Jones',
     },
