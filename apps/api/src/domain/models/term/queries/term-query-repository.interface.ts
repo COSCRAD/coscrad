@@ -15,6 +15,8 @@ export const TERM_QUERY_REPOSITORY_TOKEN = 'TERM_QUERY_REPOSITORY_TOKEN';
 export interface ITermQueryRepository extends IResourceQueryRepository<TermViewModel> {
     subscribeToUpdates(): Observable<{ data: { type: string } }>;
 
+    delete(id: string): Promise<void>;
+
     translate(id: AggregateId, translationItem: IMultilingualTextItem): Promise<void>;
 
     elicitFromPrompt(

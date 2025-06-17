@@ -736,7 +736,7 @@ describe(`ArangoAudioItemQueryRepository`, () => {
 
         const translationItems = lineItems.map(
             ({ inPointMilliseconds, outPointMilliseconds, text, languageCode }) =>
-                TranscriptItem.fromDto({
+                buildTestInstance(TranscriptItem, {
                     inPointMilliseconds,
                     outPointMilliseconds,
                     text: buildMultilingualTextWithSingleItem(text, languageCode),

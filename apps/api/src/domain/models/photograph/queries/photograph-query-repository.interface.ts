@@ -12,4 +12,6 @@ export const PHOTOGRAPH_QUERY_REPOSITORY_TOKEN = 'PHOTOGRAPH_QUERY_REPOSITORY_TO
  */
 export interface IPhotographQueryRepository extends IResourceQueryRepository<PhotographViewModel> {
     subscribeToUpdates(): Observable<{ data: { type: string } }>;
+
+    delete(id: string): Promise<void>;
 }
