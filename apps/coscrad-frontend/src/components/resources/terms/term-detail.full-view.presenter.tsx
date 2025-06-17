@@ -7,14 +7,20 @@ import {
 } from '@coscrad/api-interfaces';
 import { AudioClipPlayer } from '@coscrad/media-player';
 import { Box, Paper } from '@mui/material';
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { routes } from '../../../app/routes/routes';
+import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import {
     CommaSeparatedList,
     ResourceDetailFullViewPresenter,
 } from '../../../utils/generic-components/';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { findOriginalTextItem } from '../../notes/shared/find-original-text-item';
+
+import { ResourceNamePresenterProps } from '../../../utils/generic-components/presenters/detail-views/resource-detail-presenter-header';
+import { FlatMultilingualTextPresenter } from '../../../utils/generic-components/presenters/flat-multilingual-text-presenter';
+import { groupMultilingualTextItems } from '../../../utils/generic-components/presenters/group-multilingual-text-items';
 
 const VocabularyListRecordForTermPresenter = ({
     id: termId,
@@ -48,6 +54,22 @@ const VocabularyListRecordForTermPresenter = ({
     </Box>
 );
 
+const TermNamePresenter = ({ name }: ResourceNamePresenterProps): JSX.Element => {
+    const { defaultLanguageCode } = useContext(ConfigurableContentContext);
+
+    const { primaryMultilingualTextItem, translations } = groupMultilingualTextItems(
+        name,
+        defaultLanguageCode
+    );
+
+    return (
+        <FlatMultilingualTextPresenter
+            primaryMultilingualTextItem={primaryMultilingualTextItem}
+            translations={translations}
+        />
+    );
+};
+
 export const TermDetailFullViewPresenter = ({
     id,
     name,
@@ -61,6 +83,7 @@ export const TermDetailFullViewPresenter = ({
             id={id}
             type={ResourceType.term}
             contributions={contributions}
+            NamePresenter={TermNamePresenter}
         >
             <Box
                 data-testid={buildDataAttributeForAggregateDetailComponent(AggregateType.term, id)}

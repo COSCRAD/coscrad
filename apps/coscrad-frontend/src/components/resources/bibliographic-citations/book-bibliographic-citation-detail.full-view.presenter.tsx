@@ -16,8 +16,9 @@ export const BookBibliographicCitationDetailFullViewPresenter = ({
     id,
     data,
     contributions,
+    name,
 }: IBibliographicCitationViewModel<IBookBibliographicCitationData>): JSX.Element => {
-    const { title, creators, url } = data;
+    const { creators, url } = data;
 
     const keysAndLabels: PropertyLabels<IBookBibliographicCitationData> = {
         abstract: 'Abstract',
@@ -27,9 +28,6 @@ export const BookBibliographicCitationDetailFullViewPresenter = ({
         year: 'Year',
         isbn: 'ISBN',
     };
-
-    // Temporary workaround until `name` is on IBaseViewModel
-    const name = title;
 
     return (
         <ResourceDetailFullViewPresenter

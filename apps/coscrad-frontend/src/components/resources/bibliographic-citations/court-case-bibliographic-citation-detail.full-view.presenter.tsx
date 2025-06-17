@@ -15,6 +15,7 @@ export const CourtCaseBibliographicCitationDetailFullViewPresenter = ({
     id,
     data,
     contributions,
+    name,
 }: IBibliographicCitationViewModel<ICourtCaseBibliographicCitationData>): JSX.Element => {
     const keysAndLabels: PropertyLabels<ICourtCaseBibliographicCitationData> = {
         abstract: 'Abstract',
@@ -23,9 +24,7 @@ export const CourtCaseBibliographicCitationDetailFullViewPresenter = ({
         pages: 'First Page',
     };
 
-    // Temporary workaround until `name` is on IBaseViewModel
-    const { caseName, url } = data;
-    const name = caseName;
+    const { url } = data;
 
     return (
         <ResourceDetailFullViewPresenter

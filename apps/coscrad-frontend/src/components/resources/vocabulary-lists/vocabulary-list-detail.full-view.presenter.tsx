@@ -1,15 +1,21 @@
 import {
+    AggregateType,
     ICategorizableDetailQueryResult,
+    ITermViewForVocabularyListEntry,
     IVocabularyListEntry,
     IVocabularyListViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
+import { AudioClipPlayer } from '@coscrad/media-player';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Divider } from '@mui/material';
-import { useReducer } from 'react';
-import { ResourceDetailFullViewPresenter } from '../../../../../../apps/coscrad-frontend/src/utils/generic-components';
+import { Box, Divider } from '@mui/material';
+import { useContext, useReducer } from 'react';
+import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
+import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components';
+import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
+import { FlatMultilingualTextPresenter } from '../../../utils/generic-components/presenters/flat-multilingual-text-presenter';
+import { groupMultilingualTextItems } from '../../../utils/generic-components/presenters/group-multilingual-text-items';
 import { Carousel } from '../../higher-order-components/carousel';
-import { TermDetailFullViewPresenter } from '../terms/term-detail.full-view.presenter';
 import doValuesMatchFilters from './do-values-match-filters';
 import { VocabularyListForm } from './vocabulary-list-form';
 
@@ -88,7 +94,47 @@ export const VocabularyListDetailFullViewPresenter = ({
         {}
     );
 
+    const { defaultLanguageCode } = useContext(ConfigurableContentContext);
+
     const selectedEntries = filterEntriesForSelectedTerms(entries, filterWithoutNullAndUndefined);
+
+    const TermPresenterForVocabularyListEntry = ({
+        id,
+        name,
+        contributions,
+        audioURL,
+    }: ITermViewForVocabularyListEntry): JSX.Element => {
+        return (
+            <ResourceDetailFullViewPresenter
+                name={name}
+                id={id}
+                type={ResourceType.term}
+                contributions={contributions}
+                NamePresenter={({ name }) => {
+                    const { primaryMultilingualTextItem, translations } =
+                        groupMultilingualTextItems(name, defaultLanguageCode);
+
+                    return (
+                        <FlatMultilingualTextPresenter
+                            primaryMultilingualTextItem={primaryMultilingualTextItem}
+                            translations={translations}
+                            variant={'body1'}
+                        />
+                    );
+                }}
+            >
+                <Box
+                    data-testid={buildDataAttributeForAggregateDetailComponent(
+                        AggregateType.term,
+                        id
+                    )}
+                />
+                <Box id="media-player">
+                    <AudioClipPlayer audioUrl={audioURL} />
+                </Box>
+            </ResourceDetailFullViewPresenter>
+        );
+    };
 
     return (
         <ResourceDetailFullViewPresenter
@@ -100,7 +146,18 @@ export const VocabularyListDetailFullViewPresenter = ({
             <Divider sx={{ marginTop: 2, marginBottom: 2, backgroundColor: 'primary.main' }} />
             <Carousel
                 propsForItems={selectedEntries.map(({ term }) => term)}
-                Presenter={TermDetailFullViewPresenter}
+                /**
+                 * Note that we do not want to reuse the term detail full-view \ thumbnail
+                 * presenter here. This is because there is a conflicting visual hierarchy
+                 * when nesting a resource heading within another. Instead, we define
+                 * a custom presenter for a term contained in the vocabulary list
+                 * as one of its entries.
+                 *
+                 * Also note that in principle the back-end could use a different
+                 * view (`IVocabularyListViewModelEntry["term"]`) for this. Our
+                 * design is more robust to that possibility.
+                 */
+                Presenter={TermPresenterForVocabularyListEntry}
             />
             <VocabularyListForm
                 fields={form.fields}
