@@ -243,6 +243,7 @@ exports[`when querying for a photograph: fetch by Id when the user is authentica
         "year": 2022,
       },
       "statement": "Watchamacallit fabricated by: Willy Wankie",
+      "timestamp": 1664237194356,
       "type": "WHATCHAMACALLIT_FABRICATED",
     },
   ],
