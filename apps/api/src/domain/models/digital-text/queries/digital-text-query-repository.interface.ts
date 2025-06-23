@@ -39,4 +39,10 @@ export interface IDigitalTextQueryRepository
         audioItemId: string,
         languageCode: LanguageCode
     ): Promise<void>;
+
+    addPhotographToPage(
+        digitalTextId: string,
+        pageIdentifier: string,
+        photographId: string
+    ): Promise<void>;
 }

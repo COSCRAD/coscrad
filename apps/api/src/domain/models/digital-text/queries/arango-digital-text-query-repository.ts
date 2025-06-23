@@ -230,4 +230,34 @@ export class ArangoDigitalTextQueryRepository implements IDigitalTextQueryReposi
 
         await this.database.query({ query, bindVars });
     }
+
+    async addPhotographToPage(
+        digitalTextId: string,
+        pageIdentifier: string,
+        photographId: string
+    ): Promise<void> {
+        const query = `
+            FOR doc IN @@collectionName
+            FILTER doc._key == @id
+            LET newPages = (
+                FOR p IN doc.pages == null ? [] : doc.pages
+                RETURN MERGE(
+                    p,
+                    p.identifier == @pageIdentifier ? { photographId: @photographId } : {}
+                )
+            )
+            UPDATE doc WITH {
+                pages: newPages
+            } in @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'digitalText__VIEWS',
+            id: digitalTextId,
+            pageIdentifier,
+            photographId,
+        };
+
+        await this.database.query({ query, bindVars });
+    }
 }
