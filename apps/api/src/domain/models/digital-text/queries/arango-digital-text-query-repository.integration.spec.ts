@@ -506,10 +506,12 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
             it(`should add the given contributions`, async () => {
                 await testQueryRepository.attribute(
                     targetDigitalText.id,
-                    new TestEventStream().buildSingle<DigitalTextCreated>({
-                        type: 'DIGITAL_TEXT_CREATED',
-                        meta: { contributorIds },
-                    })
+                    new TestEventStream()
+                        .buildSingle<DigitalTextCreated>({
+                            type: 'DIGITAL_TEXT_CREATED',
+                            meta: { contributorIds },
+                        })
+                        .buildContributionSummary()
                 );
 
                 const updatedView = (await testQueryRepository.fetchById(
@@ -539,12 +541,14 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
             it(`should default the message to admin`, async () => {
                 await testQueryRepository.attribute(
                     targetDigitalText.id,
-                    new TestEventStream().buildSingle<DigitalTextCreated>({
-                        type: 'DIGITAL_TEXT_CREATED',
-                        meta: {
-                            contributorIds: [],
-                        },
-                    })
+                    new TestEventStream()
+                        .buildSingle<DigitalTextCreated>({
+                            type: 'DIGITAL_TEXT_CREATED',
+                            meta: {
+                                contributorIds: [],
+                            },
+                        })
+                        .buildContributionSummary()
                 );
 
                 const updatedView = (await testQueryRepository.fetchById(

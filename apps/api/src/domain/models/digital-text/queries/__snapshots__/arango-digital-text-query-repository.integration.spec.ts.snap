@@ -44,6 +44,7 @@ DigitalTextViewModel {
         "year": 2022,
       },
       "statement": "Digital Text Created by: Janis Deeris",
+      "timestamp": 1664237194356,
       "type": "DIGITAL_TEXT_CREATED",
     },
   ],
