@@ -1151,4 +1151,53 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
             });
         });
     });
+
+    describe(`addPhotographToPage`, () => {
+        const pageIdentifier = 'F2';
+
+        const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+            pages: [
+                buildTestInstance(DigitalTextPage, {
+                    identifier: pageIdentifier,
+                    content: null,
+                    audio: MultilingualAudio.buildEmpty(),
+                }),
+            ],
+        });
+
+        const targetPhotograph = buildTestInstance(PhotographViewModel, {
+            id: buildDummyUuid(999),
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetDigitalText);
+
+            /**
+             * At present, this is not necessary. However, we may want to add a
+             * denormalized view of the photograph on the digital text, at which
+             * point this becomes important.
+             */
+            await new ArangoPhotographQueryRepository(connectionProvider).create(targetPhotograph);
+        });
+
+        it(`should add the photograph to the page`, async () => {
+            await testQueryRepository.addPhotographToPage(
+                targetDigitalText.id,
+                pageIdentifier,
+                targetPhotograph.id
+            );
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetDigitalText.id
+            )) as DigitalTextViewModel;
+
+            const { photographId } = updatedView.pages.find(
+                ({ identifier }) => identifier === pageIdentifier
+            );
+
+            expect(photographId).toEqual(targetPhotograph.id);
+        });
+    });
 });
