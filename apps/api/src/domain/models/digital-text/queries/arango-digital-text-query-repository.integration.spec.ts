@@ -3,6 +3,7 @@ import {
     EdgeConnectionMemberRole,
     IEdgeConnectionContext,
     LanguageCode,
+    MultilingualTextItemRole,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
@@ -31,6 +32,7 @@ import { TestEventStream } from '../../../../test-data/events';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
+import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import buildInstanceFactory from '../../../factories/utilities/buildInstanceFactory';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
@@ -164,8 +166,7 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
                     },
                 }),
             ],
-            // TODO support contributions
-            title: buildMultilingualTextFromBilingualText(
+            name: buildMultilingualTextFromBilingualText(
                 {
                     text: 'English title',
                     languageCode: LanguageCode.English,
@@ -561,6 +562,75 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
 
                 expect(targetContribution.statement.includes('by: (data entry) admin')).toBe(true);
             });
+        });
+    });
+
+    describe(`translateTitle`, () => {
+        const translationLanguageCode = LanguageCode.English;
+
+        const translateTitle = 'translation of title';
+
+        const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+            name: buildMultilingualTextWithSingleItem('existing title', LanguageCode.Chilcotin),
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetDigitalText);
+        });
+
+        it('should translate the title', async () => {
+            await testQueryRepository.translateTitle(
+                targetDigitalText.id,
+                translateTitle,
+                translationLanguageCode
+            );
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetDigitalText.id
+            )) as DigitalTextViewModel;
+
+            const { name } = updatedView;
+
+            expect(name.has(translationLanguageCode)).toBe(true);
+
+            const translationItemSearchResult = name.getTranslation(translationLanguageCode);
+
+            expect(translationItemSearchResult).not.toBe(NotFound);
+
+            const { text: foundTranslationText, role: foundRole } =
+                translationItemSearchResult as MultilingualTextItem;
+
+            expect(foundTranslationText).toBe(translateTitle);
+
+            expect(foundRole).toBe(MultilingualTextItemRole.freeTranslation);
+        });
+    });
+
+    describe(`addPage`, () => {
+        const newPageIdentifier = '55';
+
+        const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+            pages: [],
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetDigitalText);
+        });
+
+        it('should add the page', async () => {
+            await testQueryRepository.addPage(targetDigitalText.id, newPageIdentifier);
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetDigitalText.id
+            )) as DigitalTextViewModel;
+
+            const { pages } = updatedView;
+
+            expect(pages).toHaveLength(1);
         });
     });
 });

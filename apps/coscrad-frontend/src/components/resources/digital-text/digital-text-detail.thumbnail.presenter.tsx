@@ -7,10 +7,10 @@ import { ResourceDetailThumbnailPresenter } from '../../../utils/generic-compone
 
 export const DigitalTextDetailThumbnailPresenter = ({
     id,
-    title,
+    name,
 }: ICategorizableDetailQueryResult<IDigitalTextViewModel>): JSX.Element => {
     return (
-        <ResourceDetailThumbnailPresenter id={id} name={title} type={ResourceType.digitalText}>
+        <ResourceDetailThumbnailPresenter id={id} name={name} type={ResourceType.digitalText}>
             hello
         </ResourceDetailThumbnailPresenter>
     );

@@ -1,3 +1,4 @@
+import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { Maybe } from '../../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
@@ -9,8 +10,10 @@ import { DigitalTextViewModel } from '../../../../queries/digital-text';
 import { AggregateId } from '../../../types/AggregateId';
 import { IResourceConnectionDto } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
+import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base-arango-resource-query-builder';
 import { ContributionSummary } from '../../user-management';
+import DigitalTextPage from '../entities/digital-text-page.entity';
 import { IDigitalTextQueryRepository } from './digital-text-query-repository.interface';
 
 export class ArangoDigitalTextQueryRepository implements IDigitalTextQueryRepository {
@@ -85,5 +88,37 @@ export class ArangoDigitalTextQueryRepository implements IDigitalTextQueryReposi
 
     async attribute(id: string, contributionSummary: ContributionSummary): Promise<void> {
         await this.database.query(this.baseResourceQueryBuilder.attribute(id, contributionSummary));
+    }
+
+    async translateTitle(id: string, translation: string, languageCode: LanguageCode) {
+        await this.database.query(
+            this.baseResourceQueryBuilder.translateName(
+                id,
+                translation,
+                languageCode,
+                MultilingualTextItemRole.freeTranslation
+            )
+        );
+    }
+
+    async addPage(digitalTextId: string, pageIdentifier: string): Promise<void> {
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+        UPDATE doc WITH {
+            pages: doc.pages == null ? [@newPage] : APPEND(doc.pages,@newPage)
+        } IN @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'digitalText__VIEWS',
+            id: digitalTextId,
+            newPage: new DigitalTextPage({
+                identifier: pageIdentifier,
+                audio: MultilingualAudio.buildEmpty(),
+            }).toDTO(),
+        };
+
+        await this.database.query({ query, bindVars });
     }
 }

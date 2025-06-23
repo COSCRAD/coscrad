@@ -1,5 +1,5 @@
 import { AggregateCompositeIdentifier, AggregateType } from '@coscrad/api-interfaces';
-import { BooleanDataType, FromDomainModel, NestedDataType, UUID } from '@coscrad/data-types';
+import { BooleanDataType, NestedDataType, UUID } from '@coscrad/data-types';
 import { isBoolean, isNonEmptyObject } from '@coscrad/validation-constraints';
 import { buildMultilingualTextWithSingleItem } from '../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../domain/common/entities/multilingual-text';
@@ -10,7 +10,7 @@ import {
     PageAddedToDigitalTextPayload,
 } from '../../domain/models/digital-text/commands';
 import { ContentAddedToDigitalTextPagePayload } from '../../domain/models/digital-text/commands/add-content-to-digital-text-page';
-import { DigitalText, PageIdentifier } from '../../domain/models/digital-text/entities';
+import { PageIdentifier } from '../../domain/models/digital-text/entities';
 import DigitalTextPage from '../../domain/models/digital-text/entities/digital-text-page.entity';
 import { AccessControlList } from '../../domain/models/shared/access-control/access-control-list.entity';
 import { ResourceReadAccessGrantedToUserPayload } from '../../domain/models/shared/common-commands';
@@ -34,7 +34,6 @@ import { ApplyEvent } from '../event-sourcing/apply-event.interface';
     example: {
         type: AggregateType.digitalText,
         id: buildDummyUuid(88),
-        title: buildMultilingualTextWithSingleItem('my book'),
         name: buildMultilingualTextWithSingleItem('my book'),
         isPublished: false,
         tags: [],
@@ -57,9 +56,6 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
         description: 'system identifier for this digital text',
     })
     public id: string;
-
-    @FromDomainModel(DigitalText)
-    public title: MultilingualText;
 
     @NestedDataType(MultilingualText, {
         label: 'name',
@@ -117,7 +113,6 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
 
         const {
             id,
-            title,
             name,
             isPublished,
             tags,
@@ -129,8 +124,6 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
         } = dto;
 
         this.id = id;
-
-        this.title = new MultilingualText(title);
 
         this.name = new MultilingualText(name);
 
@@ -221,13 +214,7 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
                     meta: { userId: idOfCreatingUser },
                 } = event;
 
-                this.title = buildMultilingualTextWithSingleItem(title, languageCodeForTitle);
-
-                /**
-                 * This denormalization provides consistency that the client
-                 * relies on for consistent presentation.
-                 */
-                this.name = this.title.clone({});
+                this.name = buildMultilingualTextWithSingleItem(title, languageCodeForTitle);
 
                 /**
                  * If we switch to a model in which the admin role does not

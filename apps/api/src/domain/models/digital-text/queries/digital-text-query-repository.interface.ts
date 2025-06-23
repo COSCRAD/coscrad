@@ -1,3 +1,4 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { IResourceQueryRepository } from '../../../../app/domain-modules/web-of-knowledge/interfaces/resource-query-repository.interface';
 import { DigitalTextViewModel } from '../../../../queries/digital-text';
 
@@ -9,4 +10,12 @@ export const DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN =
  */
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface IDigitalTextQueryRepository
-    extends IResourceQueryRepository<DigitalTextViewModel> {}
+    extends IResourceQueryRepository<DigitalTextViewModel> {
+    translateTitle(
+        digitalTextId: string,
+        translation: string,
+        languageCode: LanguageCode
+    ): Promise<void>;
+
+    addPage(digitalTextId: string, pageIdentifier: string): Promise<void>;
+}

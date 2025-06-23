@@ -55,7 +55,12 @@ DigitalTextViewModel {
       MultilingualTextItem {
         "languageCode": "en",
         "role": "original",
-        "text": "my book",
+        "text": "English title",
+      },
+      MultilingualTextItem {
+        "languageCode": "clc",
+        "role": "free translation",
+        "text": "Chilcotin title",
       },
     ],
   },
@@ -201,20 +206,6 @@ DigitalTextViewModel {
       "type": "tag",
     },
   ],
-  "title": MultilingualText {
-    "items": [
-      MultilingualTextItem {
-        "languageCode": "en",
-        "role": "original",
-        "text": "English title",
-      },
-      MultilingualTextItem {
-        "languageCode": "clc",
-        "role": "free translation",
-        "text": "Chilcotin title",
-      },
-    ],
-  },
   "type": "digitalText",
 }
 `;
