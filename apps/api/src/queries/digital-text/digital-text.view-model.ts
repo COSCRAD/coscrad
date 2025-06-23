@@ -5,6 +5,7 @@ import { buildMultilingualTextWithSingleItem } from '../../domain/common/build-m
 import { MultilingualText } from '../../domain/common/entities/multilingual-text';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import {
+    DigitalTextCreated,
     DigitalTextCreatedPayload,
     PageAddedToDigitalTextPayload,
 } from '../../domain/models/digital-text/commands';
@@ -137,22 +138,32 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
 
         if (Array.isArray(tags)) {
             this.tags = tags.map((t) => new EventSourcedTagRecordForResourceViewModel(t));
+        } else {
+            this.tags = [];
         }
 
         if (Array.isArray(pages)) {
             this.pages = pages.map((p) => new DigitalTextPage(p));
+        } else {
+            this.pages = [];
         }
 
         if (Array.isArray(notes)) {
             this.notes = notes.map((n) => new NoteRecordForResourceViewModel(n));
+        } else {
+            this.notes = [];
         }
 
         if (Array.isArray(connections)) {
             this.connections = connections.map((c) => new ConnectionRecordForResourceViewModel(c));
+        } else {
+            this.connections = [];
         }
 
         if (Array.isArray(contributions)) {
             this.contributions = contributions.map((c) => new ContributionSummary(c));
+        } else {
+            this.contributions = [];
         }
 
         this.accessControlList = isNonEmptyObject(accessControlList)
@@ -449,5 +460,13 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
         }
 
         return NotFound;
+    }
+
+    public static fromDigitalTextCreated(creationEvent: DigitalTextCreated) {
+        const view = new DigitalTextViewModel({
+            id: creationEvent.payload.aggregateCompositeIdentifier.id,
+        } as DTO<DigitalTextViewModel>).apply(creationEvent);
+
+        return view;
     }
 }
