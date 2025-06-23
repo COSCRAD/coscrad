@@ -611,26 +611,55 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
     describe(`addPage`, () => {
         const newPageIdentifier = '55';
 
-        const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
-            pages: [],
+        describe(`when there are no pages`, () => {
+            const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+                pages: [],
+            });
+
+            beforeEach(async () => {
+                await databaseProvider.clearViews();
+
+                await testQueryRepository.create(targetDigitalText);
+            });
+
+            it('should add the page', async () => {
+                await testQueryRepository.addPage(targetDigitalText.id, newPageIdentifier);
+
+                const updatedView = (await testQueryRepository.fetchById(
+                    targetDigitalText.id
+                )) as DigitalTextViewModel;
+
+                const { pages } = updatedView;
+
+                expect(pages).toHaveLength(1);
+            });
         });
 
-        beforeEach(async () => {
-            await databaseProvider.clearViews();
+        describe(`when there are already some pages`, () => {
+            const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+                pages: ['a', 'b', 'c'].map(
+                    (identifier) =>
+                        new DigitalTextPage({
+                            identifier,
+                            audio: MultilingualAudio.buildEmpty(),
+                        })
+                ),
+            });
 
-            await testQueryRepository.create(targetDigitalText);
-        });
+            beforeEach(async () => {
+                await databaseProvider.clearViews();
 
-        it('should add the page', async () => {
-            await testQueryRepository.addPage(targetDigitalText.id, newPageIdentifier);
+                await testQueryRepository.create(targetDigitalText);
+            });
+            it(`should add the new page`, async () => {
+                await testQueryRepository.addPage(targetDigitalText.id, newPageIdentifier);
 
-            const updatedView = (await testQueryRepository.fetchById(
-                targetDigitalText.id
-            )) as DigitalTextViewModel;
+                const { pages } = (await testQueryRepository.fetchById(
+                    targetDigitalText.id
+                )) as DigitalTextViewModel;
 
-            const { pages } = updatedView;
-
-            expect(pages).toHaveLength(1);
+                expect(pages).toHaveLength(targetDigitalText.pages.length + 1);
+            });
         });
     });
 });
