@@ -691,12 +691,6 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
             ],
         });
 
-        beforeEach(async () => {
-            await databaseProvider.clearViews();
-
-            await testQueryRepository.create(targetDigitalText);
-        });
-
         it(`should add the content to the page`, async () => {
             await testQueryRepository.addContentToPage(
                 targetDigitalText.id,
