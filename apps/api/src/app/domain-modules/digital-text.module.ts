@@ -20,6 +20,7 @@ import {
 import { CreateDigitalText } from '../../domain/models/digital-text/commands/create-digital-text.command';
 import { CreateDigitalTextCommandHandler } from '../../domain/models/digital-text/commands/create-digital-text.command-handler';
 import { DigitalTextCreated } from '../../domain/models/digital-text/commands/digital-text-created.event';
+import { DigitalTextCreatedEventHandler } from '../../domain/models/digital-text/commands/digital-text-created.event-handler';
 import { DigitalText } from '../../domain/models/digital-text/entities/digital-text.entity';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { CoscradNLPModule } from '../../lib/nlp';
@@ -42,7 +43,7 @@ import { DigitalTextQueryController } from '../controllers/resources/digital-tex
         AddContentToDigitalTextPageCommandHandler,
         AddAudioForDigitalTextPageCommandHandler,
         DigitalTextQueryService,
-
+        DigitalTextCreatedEventHandler,
         ...[
             // Domain Model
             DigitalText,
