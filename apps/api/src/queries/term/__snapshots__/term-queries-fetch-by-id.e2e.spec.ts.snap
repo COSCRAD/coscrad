@@ -366,6 +366,7 @@ exports[`when querying for a term: fetch by Id when the user is authenticated wh
         "year": 2022,
       },
       "statement": "Watchamacallit fabricated by: Willy Wankie",
+      "timestamp": 1664237194356,
       "type": "WHATCHAMACALLIT_FABRICATED",
     },
   ],

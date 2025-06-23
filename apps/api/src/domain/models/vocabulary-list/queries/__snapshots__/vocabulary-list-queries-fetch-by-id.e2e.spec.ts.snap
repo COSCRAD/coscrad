@@ -99,6 +99,7 @@ exports[`when querying for a vocabulary list: fetch by ID when the user is a pro
               "year": 2022,
             },
             "statement": "Watchamacallit fabricated by: Willy Wankie",
+            "timestamp": 1664237194356,
             "type": "WHATCHAMACALLIT_FABRICATED",
           },
         ],

@@ -1,11 +1,12 @@
 import { isFunction } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../common';
+import { ContributionSummary } from '../../user-management';
 import { QUERY_REPOSITORY_PROVIDER_TOKEN } from '../common-commands/publish-resource/resource-published.event-handler';
 import { BaseEvent } from '../events/base-event.entity';
 
 export interface IQueryRepositoryForAttributable {
-    attribute(id: string, event: BaseEvent): Promise<void>;
+    attribute(id: string, contributionSummary: ContributionSummary): Promise<void>;
 }
 
 interface IRepositoryProvider {
@@ -32,6 +33,9 @@ export class Attributor implements ICoscradEventHandler {
             // TODO log failure? We will hit this for resource types that don't have a query repo registered yet.
         }
 
-        await repo.attribute(event.payload.aggregateCompositeIdentifier.id, event);
+        await repo.attribute(
+            event.payload.aggregateCompositeIdentifier.id,
+            event.buildContributionSummary()
+        );
     }
 }

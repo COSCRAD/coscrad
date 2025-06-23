@@ -9,10 +9,10 @@ import { ArangoDatabase } from '../../../../../persistence/database/arango-datab
 import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
 import mapDatabaseDocumentToAggregateDTO from '../../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
-import { BaseEvent } from '../../../../../queries/event-sourcing';
 import { IResourceConnectionDto } from '../../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { INoteCreationDto } from '../../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { BaseArangoResourceViewQueryBuilder } from '../../../term/repositories/base-arango-resource-query-builder';
+import { ContributionSummary } from '../../../user-management';
 import { TranslationLineItemDto } from '../../audio-item/queries/audio-item-query-repository.interface';
 import { TranscriptLineItemDto, TranslationItem } from '../../shared/commands';
 import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
@@ -49,12 +49,12 @@ export class ArangoVideoQueryRepository implements IVideoQueryRepository {
         await this.database.query(this.baseResourceQueryBuilder.allowUser(aggregateId, userId));
     }
 
-    async attribute(videoId: AggregateId, event: BaseEvent): Promise<void> {
-        const aqlQuery = this.baseResourceQueryBuilder.attribute(videoId, event);
+    async attribute(videoId: AggregateId, summary: ContributionSummary): Promise<void> {
+        const aqlQuery = this.baseResourceQueryBuilder.attribute(videoId, summary);
 
         await this.database.query(aqlQuery).catch((reason) => {
             throw new InternalError(
-                `Failed to add attribution for term via TermRepository: ${reason}`
+                `Failed to add attribution for term via VideoRepository: ${reason}`
             );
         });
     }

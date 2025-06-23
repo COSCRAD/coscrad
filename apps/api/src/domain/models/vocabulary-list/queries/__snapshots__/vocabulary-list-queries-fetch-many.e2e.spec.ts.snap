@@ -95,6 +95,7 @@ exports[`when querying for a vocabulary list: fetch many when the user is a COSC
             "year": 2022,
           },
           "statement": "Watchamacallit fabricated by: Willy Wankie",
+          "timestamp": 1664237194356,
           "type": "WHATCHAMACALLIT_FABRICATED",
         },
       ],

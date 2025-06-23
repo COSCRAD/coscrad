@@ -817,10 +817,12 @@ describe(`ArangoAudioItemQueryRepository`, () => {
             it(`should add the given contributions`, async () => {
                 await testQueryRepository.attribute(
                     targetDigitalText.id,
-                    new TestEventStream().buildSingle<AudioItemCreated>({
-                        type: 'AUDIO_ITEM_CREATED',
-                        meta: { contributorIds },
-                    })
+                    new TestEventStream()
+                        .buildSingle<AudioItemCreated>({
+                            type: 'AUDIO_ITEM_CREATED',
+                            meta: { contributorIds },
+                        })
+                        .buildContributionSummary()
                 );
 
                 const updatedView = (await testQueryRepository.fetchById(
@@ -850,12 +852,14 @@ describe(`ArangoAudioItemQueryRepository`, () => {
             it(`should default the message to admin`, async () => {
                 await testQueryRepository.attribute(
                     targetDigitalText.id,
-                    new TestEventStream().buildSingle<AudioItemCreated>({
-                        type: 'AUDIO_ITEM_CREATED',
-                        meta: {
-                            contributorIds: [],
-                        },
-                    })
+                    new TestEventStream()
+                        .buildSingle<AudioItemCreated>({
+                            type: 'AUDIO_ITEM_CREATED',
+                            meta: {
+                                contributorIds: [],
+                            },
+                        })
+                        .buildContributionSummary()
                 );
 
                 const updatedView = (await testQueryRepository.fetchById(

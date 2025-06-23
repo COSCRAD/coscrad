@@ -7,6 +7,8 @@ import {
     PublishResourceCommandHandler,
     ResourceReadAccessGrantedToUser,
 } from '../../../domain/models/shared/common-commands';
+import { AdditionalCreditsProvidedForResource } from '../../../domain/models/shared/common-commands/provide-additional-credits-for-resource/additional-credits-provided-for-resource.event';
+import { AdditionalCreditsProvidedForResourceEventHandler } from '../../../domain/models/shared/common-commands/provide-additional-credits-for-resource/additional-credits-provided-for-resource.event-handler';
 import { ProvideAdditionalCreditsForResource } from '../../../domain/models/shared/common-commands/provide-additional-credits-for-resource/provide-additional-credits-for-resource.command';
 import { ProvideAdditionalCreditsForResourceCommandHandler } from '../../../domain/models/shared/common-commands/provide-additional-credits-for-resource/provide-additional-credits-for-resource.command-handler';
 import { ResourcePublished } from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event';
@@ -18,7 +20,6 @@ import { PersistenceModule } from '../../../persistence/persistence.module';
 @Module({
     imports: [PersistenceModule, CommandModule, IdGenerationModule],
     providers: [
-        // We include this command here for lack of a better place
         GrantResourceReadAccessToUser,
         GrantResourceReadAccessToUserCommandHandler,
         PublishResource,
@@ -26,11 +27,16 @@ import { PersistenceModule } from '../../../persistence/persistence.module';
         ProvideAdditionalCreditsForResource,
         ProvideAdditionalCreditsForResourceCommandHandler,
         // Events
-        ...[ResourcePublished, ResourceReadAccessGrantedToUser].map((Ctor) => ({
+        ...[
+            ResourcePublished,
+            ResourceReadAccessGrantedToUser,
+            AdditionalCreditsProvidedForResource,
+        ].map((Ctor) => ({
             provide: Ctor,
             useValue: Ctor,
         })),
         // Event Handlers
+        AdditionalCreditsProvidedForResourceEventHandler,
         // TODO These should be part of a different module. Ultimately there should be a `WebOfKnowledge` module.
         ResourcePublishedEventHandler,
         Attributor,

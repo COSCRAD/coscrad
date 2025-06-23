@@ -23,7 +23,7 @@ import {
 } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { IResourceConnectionDto } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
-import { BaseEvent } from '../../shared/events/base-event.entity';
+import { ContributionSummary } from '../../user-management';
 import { ITermQueryRepository } from '../queries';
 import { BaseArangoResourceViewQueryBuilder } from './base-arango-resource-query-builder';
 
@@ -230,12 +230,12 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         await cursor.all();
     }
 
-    async attribute(termId: AggregateId, event: BaseEvent): Promise<void> {
-        const aqlQuery = this.baseResourceQueryBuilder.attribute(termId, event);
+    async attribute(termId: AggregateId, contributionSummary: ContributionSummary): Promise<void> {
+        const aqlQuery = this.baseResourceQueryBuilder.attribute(termId, contributionSummary);
 
         await this.database.query(aqlQuery).catch((reason) => {
             throw new InternalError(
-                `Failed to add attribution for term via TermRepository: ${reason}`
+                `Failed to add attribution for term via VideoRepository: ${reason}`
             );
         });
     }

@@ -508,7 +508,7 @@ describe(`ArangoPlaylistQueryRepository`, () => {
                     meta: {
                         contributorIds: testContributorIds,
                     },
-                })
+                }).buildContributionSummary()
             );
 
             const updatedView = (await testQueryRepository.fetchById(

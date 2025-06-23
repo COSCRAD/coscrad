@@ -61,7 +61,7 @@ export class ContributionSummary {
     constructor(dto: DTO<ContributionSummary>) {
         if (!dto) return;
 
-        const { contributorIds, statement, type, date } = dto;
+        const { contributorIds, statement, type, date, timestamp } = dto;
 
         this.contributorIds = contributorIds;
 
@@ -72,6 +72,8 @@ export class ContributionSummary {
         if (isNonEmptyObject(date)) {
             this.date = new CoscradDate(date);
         }
+
+        this.timestamp = timestamp;
     }
 
     public static fromDto(dto: DTO<ContributionSummary>) {

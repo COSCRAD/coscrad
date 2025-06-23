@@ -2,6 +2,7 @@ import { ResourceType } from '@coscrad/api-interfaces';
 import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../__tests__/utilities/dummyDateNow';
+import { ContributionSummary } from '../../user-management';
 import { BaseEvent } from '../events/base-event.entity';
 import { Attributor } from './attributor.event-handler';
 
@@ -40,7 +41,7 @@ class WidgetRepository {
         }
     }
 
-    async attribute(id: string, { meta: { contributorIds } }: BaseEvent) {
+    async attribute(id: string, { contributorIds }: ContributionSummary) {
         const target = await this.fetchById(id);
 
         if (isNotFound(target)) {

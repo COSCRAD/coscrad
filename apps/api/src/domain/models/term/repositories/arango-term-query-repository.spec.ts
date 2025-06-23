@@ -36,6 +36,7 @@ import { MultilingualText, MultilingualTextItem } from '../../../common/entities
 import buildInstanceFactory from '../../../factories/utilities/buildInstanceFactory';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import { dummyDateNow } from '../../__tests__/utilities/dummyDateNow';
 import { AudioItemCreated } from '../../audio-visual/audio-item/commands/create-audio-item/audio-item-created.event';
 import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
 import { IAudioItemQueryRepository } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
@@ -726,14 +727,17 @@ describe(`ArangoTermQueryRepository`, () => {
 
         describe(`when there are contributor IDs on the event meta`, () => {
             it(`should add the given contributions`, async () => {
+                const testTimestamp = dummyDateNow;
+
                 await testQueryRepository.attribute(
                     targetTerm.id,
                     buildTestInstance(PromptTermCreated, {
                         type: 'PROMPT_TERM_CREATED',
                         meta: {
                             contributorIds: testContributors.map((c) => c.id),
+                            dateCreated: testTimestamp,
                         },
-                    })
+                    }).buildContributionSummary()
                 );
 
                 const updatedView = (await testQueryRepository.fetchById(
@@ -756,6 +760,8 @@ describe(`ArangoTermQueryRepository`, () => {
                 expect(contributionForCreationEvent.contributorIds).toEqual(
                     testContributors.map(({ id }) => id)
                 );
+
+                expect(contributionForCreationEvent.timestamp).toEqual(testTimestamp);
             });
         });
 
@@ -768,7 +774,7 @@ describe(`ArangoTermQueryRepository`, () => {
                         meta: {
                             contributorIds: [],
                         },
-                    })
+                    }).buildContributionSummary()
                 );
 
                 const updatedView = (await testQueryRepository.fetchById(

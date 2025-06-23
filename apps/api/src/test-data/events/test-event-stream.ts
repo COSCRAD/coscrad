@@ -37,6 +37,7 @@ import {
     ResourceReadAccessGrantedToUser,
     ResourceUnpublished,
 } from '../../domain/models/shared/common-commands';
+import { AdditionalCreditsProvidedForResource } from '../../domain/models/shared/common-commands/provide-additional-credits-for-resource/additional-credits-provided-for-resource.event';
 import { ResourcePublished } from '../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import { EventRecordMetadata } from '../../domain/models/shared/events/types/EventRecordMetadata';
 import {
@@ -228,6 +229,20 @@ const buildResourceUnpublishedEvent = (
             {
                 aggregateCompositeIdentifier,
             } as ResourceUnpublished['payload'],
+            payloadOverrides
+        ),
+        buildMetadata()
+    );
+
+const buildAdditionalCreditsProvidedForResourceEvent = (
+    payloadOverrides: DeepPartial<AdditionalCreditsProvidedForResource['payload']>,
+    buildMetadata: EventMetadataBuilder
+) =>
+    new AdditionalCreditsProvidedForResource(
+        clonePlainObjectWithOverrides(
+            {
+                aggregateCompositeIdentifier,
+            } as AdditionalCreditsProvidedForResource['payload'],
             payloadOverrides
         ),
         buildMetadata()
@@ -754,6 +769,10 @@ export class TestEventStream {
             )
             .registerBuilder('RESOURCE_PUBLISHED', buildResourcePublishedEvent)
             .registerBuilder('RESOURCE_UNPUBLISHED', buildResourceUnpublishedEvent)
+            .registerBuilder(
+                'ADDITIONAL_CREDITS_PROVIDED_FOR_RESOURCE',
+                buildAdditionalCreditsProvidedForResourceEvent
+            )
             .registerBuilder(
                 'CONTENT_ADDED_TO_DIGITAL_TEXT_PAGE',
                 buildContentAddedToDigitalTextPage

@@ -14,8 +14,8 @@ import { PlaylistViewModel } from '../../../../queries/buildViewModelForResource
 import { AggregateId } from '../../../types/AggregateId';
 import { IResourceConnectionDto } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
-import { BaseEvent } from '../../shared/events/base-event.entity';
 import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base-arango-resource-query-builder';
+import { ContributionSummary } from '../../user-management';
 import { IPlaylistQueryRepository } from './playlist-query-repository.interface';
 
 @Injectable()
@@ -194,9 +194,9 @@ export class ArangoPlaylistQueryRepository implements IPlaylistQueryRepository {
             });
     }
 
-    async attribute(id: AggregateId, event: BaseEvent): Promise<void> {
+    async attribute(id: AggregateId, summary: ContributionSummary): Promise<void> {
         const cursor = await this.database.query(
-            this.baseResourceQueryBuilder.attribute(id, event)
+            this.baseResourceQueryBuilder.attribute(id, summary)
         );
 
         await cursor.all();
