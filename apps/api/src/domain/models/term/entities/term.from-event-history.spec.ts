@@ -8,6 +8,7 @@ import {
     RESOURCE_READ_ACCESS_GRANTED_TO_USER,
     ResourceReadAccessGrantedToUser,
 } from '../../shared/common-commands';
+import { AdditionalCreditsProvidedForResource } from '../../shared/common-commands/provide-additional-credits-for-resource/additional-credits-provided-for-resource.event';
 import { ResourcePublished } from '../../shared/common-commands/publish-resource/resource-published.event';
 import {
     AudioAddedForTerm,
@@ -175,6 +176,39 @@ describe(`Term.fromEventHistory`, () => {
                     const term = result as Term;
 
                     expect(term.queryAccessControlList.canUser(userId)).toBe(true);
+                });
+            });
+
+            /**
+             * TODO move this test to a generic
+             * `resource.from-event-history.spec.ts`
+             */
+            describe(`when additional (manual) credits have been added`, () => {
+                it(`should return these credits`, () => {
+                    const contributionType = 'Info added';
+
+                    const contributorIds = [11, 12, 13].map(buildDummyUuid);
+
+                    const additionalCreditsAddedEvents = termTranslated
+                        .andThen<AdditionalCreditsProvidedForResource>({
+                            type: 'ADDITIONAL_CREDITS_PROVIDED_FOR_RESOURCE',
+                            payload: {
+                                contributionType,
+                                contributorIds,
+                            },
+                        })
+                        .as({
+                            type: AggregateType.term,
+                            id: termId,
+                        });
+
+                    const result = Term.fromEventHistory(additionalCreditsAddedEvents, termId);
+
+                    expect(result).toBeInstanceOf(Term);
+
+                    const term = result as Term;
+
+                    expect(term.manualCredits).toHaveLength(1);
                 });
             });
         });

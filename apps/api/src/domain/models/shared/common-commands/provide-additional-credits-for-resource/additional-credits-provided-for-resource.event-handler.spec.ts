@@ -20,10 +20,18 @@ import { buildTestInstance } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { ContributionSummary } from '../../../user-management';
+import { CoscradDate } from '../../../user-management/utilities';
 import { AdditionalCreditsProvidedForResource } from './additional-credits-provided-for-resource.event';
-import { AdditionalCreditsProvidedForResourceEventHandler } from './additional-credits-provided-for-resource.event-handler';
+import {
+    AdditionalCreditsProvidedForResourceEventHandler,
+    IQueryRepositoryForAttributable,
+} from './additional-credits-provided-for-resource.event-handler';
 
 const WIDGET_COLLECTION = 'widgets';
+
+const WIDGET_RESOURCE_TYPE = 'widget' as ResourceType;
+
+const RESOURCE_TYPE_FOR_REPO_WITH_NO_ATTRIBUTE_METHOD = 'non-attributing-resource' as ResourceType;
 
 class WidgetViewModel {
     id: string;
@@ -117,13 +125,16 @@ describe(`AdditionalCreditsProvidedForResourceEventHandler`, () => {
         additionalCreditsProvidedForResourceEventHandler =
             new AdditionalCreditsProvidedForResourceEventHandler({
                 forResource: (resourceType) => {
-                    if (resourceType !== ('widget' as ResourceType)) {
-                        throw new InternalError(
-                            `this test only supports resources of type 'widget'`
-                        );
+                    if (resourceType === RESOURCE_TYPE_FOR_REPO_WITH_NO_ATTRIBUTE_METHOD) {
+                        // no attribute method
+                        return {} as IQueryRepositoryForAttributable;
                     }
 
-                    return testQueryRepository;
+                    if (resourceType === WIDGET_RESOURCE_TYPE) {
+                        return testQueryRepository;
+                    }
+
+                    throw new InternalError(`this test only supports resources of type 'widget'`);
                 },
             });
 
@@ -140,7 +151,7 @@ describe(`AdditionalCreditsProvidedForResourceEventHandler`, () => {
         await testQueryRepository.create(existingWidgetView);
     });
 
-    describe(`when the target is a resource`, () => {
+    describe(`when the target is a resource whose repository has an 'attribute' method`, () => {
         const additionalCreditsForWidget = buildTestInstance(AdditionalCreditsProvidedForResource, {
             payload: {
                 aggregateCompositeIdentifier: {
@@ -162,6 +173,33 @@ describe(`AdditionalCreditsProvidedForResourceEventHandler`, () => {
             const { contributions } = updatedView;
 
             expect(contributions).toHaveLength(1);
+
+            const { contributorIds, timestamp, date } = contributions[0];
+
+            expect(timestamp).toBe(additionalCreditsForWidget.meta.dateCreated);
+
+            expect(date).toEqual(
+                CoscradDate.fromUnixTimestamp(additionalCreditsForWidget.meta.dateCreated)
+            );
+
+            expect(contributorIds).toEqual(additionalCreditsForWidget.payload.contributorIds);
+        });
+    });
+
+    describe(`when the target is a resource whose repository has not implemented 'attribute'`, () => {
+        it(`should not throw`, async () => {
+            const tryIt = additionalCreditsProvidedForResourceEventHandler.handle(
+                buildTestInstance(AdditionalCreditsProvidedForResource, {
+                    payload: {
+                        aggregateCompositeIdentifier: {
+                            id: buildDummyUuid(99),
+                            type: RESOURCE_TYPE_FOR_REPO_WITH_NO_ATTRIBUTE_METHOD,
+                        },
+                    },
+                })
+            );
+
+            expect(tryIt).resolves;
         });
     });
 });

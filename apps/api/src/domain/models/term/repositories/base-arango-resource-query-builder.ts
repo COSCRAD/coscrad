@@ -218,7 +218,7 @@ export class BaseArangoResourceViewQueryBuilder {
                     contributorIds,
                     statement: attribution,
                     date: @summary.date,
-                    timestamp: @summary.timeStamp
+                    timestamp: @summary.timestamp
                 }
                 LET updatedContributions = APPEND(doc.contributions,newContributions)
                 UPDATE doc WITH {

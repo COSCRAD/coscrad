@@ -1,7 +1,9 @@
 import { isFunction } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
+import { isInternalError } from '../../../../../lib/errors/InternalError';
 import { ContributionSummary } from '../../../user-management';
+import { CoscradDate } from '../../../user-management/utilities';
 import { QUERY_REPOSITORY_PROVIDER_TOKEN } from '../publish-resource/resource-published.event-handler';
 import { AdditionalCreditsProvidedForResource } from './additional-credits-provided-for-resource.event';
 
@@ -13,7 +15,7 @@ interface IRepositoryProvider {
     forResource(type: string): IQueryRepositoryForAttributable;
 }
 
-@CoscradEventConsumer('AdditionalCreditsProvidedForResource')
+@CoscradEventConsumer('ADDITIONAL_CREDITS_PROVIDED_FOR_RESOURCE')
 export class AdditionalCreditsProvidedForResourceEventHandler implements ICoscradEventHandler {
     constructor(
         @Inject(QUERY_REPOSITORY_PROVIDER_TOKEN)
@@ -34,11 +36,13 @@ export class AdditionalCreditsProvidedForResourceEventHandler implements ICoscra
             return;
         }
 
+        const dateBuildResult = CoscradDate.fromUnixTimestamp(dateCreated);
+
         const contributionSummary: ContributionSummary = {
             contributorIds,
-            statement: contributionType,
+            statement: `${contributionType} by: `,
             type: contributionType,
-            date: undefined,
+            date: !isInternalError(dateBuildResult) ? dateBuildResult : undefined,
             timestamp: dateCreated,
         };
 

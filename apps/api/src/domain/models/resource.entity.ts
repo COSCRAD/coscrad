@@ -20,6 +20,7 @@ import ResourceNotYetPublishedError from './resource-not-yet-published.error';
 import { AccessControlList } from './shared/access-control/access-control-list.entity';
 import UserAlreadyHasReadAccessError from './shared/common-command-errors/invalid-state-transition-errors/UserAlreadyHasReadAccessError';
 import { ResourceReadAccessGrantedToUser } from './shared/common-commands';
+import { AdditionalCreditsProvidedForResource } from './shared/common-commands/provide-additional-credits-for-resource/additional-credits-provided-for-resource.event';
 
 class ManualCredits extends BaseDomainModel {
     @NonEmptyString({
@@ -152,6 +153,20 @@ export abstract class Resource extends Aggregate {
     // TODO add test coverage
     handleResourceUnpublished<T extends Resource>(this: T) {
         return this.unpublish<T>();
+    }
+
+    handleAdditionalCreditsProvidedForResource<T extends Resource>(
+        this: T,
+        additionalCreditsProvided: AdditionalCreditsProvidedForResource
+    ) {
+        const {
+            payload: { contributionType, contributorIds },
+        } = additionalCreditsProvided;
+
+        return this.provideAdditionalCredits<T>({
+            contributorIds,
+            type: contributionType,
+        });
     }
 
     getAllowedContextTypes() {
