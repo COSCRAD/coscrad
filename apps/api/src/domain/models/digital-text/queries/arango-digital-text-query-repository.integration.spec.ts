@@ -714,4 +714,63 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
             expect(foundText).toBe(textToAdd);
         });
     });
+
+    describe(`translatePageContent`, () => {
+        const pageIdentifier = '100';
+
+        const originalLanguageCode = LanguageCode.English;
+
+        const translationLanguageCode = LanguageCode.Chilcotin;
+
+        const translationText = 'translation of content on page 100';
+
+        const existingPageContent = buildMultilingualTextWithSingleItem(
+            'existing content text',
+            originalLanguageCode
+        );
+
+        const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+            pages: [
+                buildTestInstance(DigitalTextPage, {
+                    identifier: pageIdentifier,
+                    content: existingPageContent,
+                }),
+            ],
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetDigitalText);
+        });
+
+        it(`should translate the page's content`, async () => {
+            await testQueryRepository.translatePageContent(
+                targetDigitalText.id,
+                pageIdentifier,
+                translationText,
+                translationLanguageCode
+            );
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetDigitalText.id
+            )) as DigitalTextViewModel;
+
+            const targetPage = updatedView.pages.find(
+                ({ identifier }) => identifier === pageIdentifier
+            );
+
+            const translationItemSearchResult =
+                targetPage.content.getTranslation(translationLanguageCode);
+
+            expect(translationItemSearchResult).not.toBe(NotFound);
+
+            const { text: foundTranslationText, role: foundRole } =
+                translationItemSearchResult as MultilingualTextItem;
+
+            expect(foundTranslationText).toBe(translationText);
+
+            expect(foundRole).toBe(MultilingualTextItemRole.freeTranslation);
+        });
+    });
 });

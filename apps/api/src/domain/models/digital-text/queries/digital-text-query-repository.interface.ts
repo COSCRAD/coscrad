@@ -25,4 +25,11 @@ export interface IDigitalTextQueryRepository
         text: string,
         languageCode: LanguageCode
     ): Promise<void>;
+
+    translatePageContent(
+        digitalTextId: string,
+        pageIdentifier: string,
+        translation: string,
+        languageCode: LanguageCode
+    ): Promise<void>;
 }
