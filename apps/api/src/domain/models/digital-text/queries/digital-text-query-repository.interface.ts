@@ -32,4 +32,11 @@ export interface IDigitalTextQueryRepository
         translation: string,
         languageCode: LanguageCode
     ): Promise<void>;
+
+    addAudioToPage(
+        digitalTextId: string,
+        pageIdentifier: string,
+        audioItemId: string,
+        languageCode: LanguageCode
+    ): Promise<void>;
 }

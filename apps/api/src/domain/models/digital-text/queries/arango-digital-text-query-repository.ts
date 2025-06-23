@@ -12,6 +12,7 @@ import { MultilingualTextItem } from '../../../common/entities/multilingual-text
 import { AggregateId } from '../../../types/AggregateId';
 import { IResourceConnectionDto } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
+import { MultilingualAudioItem } from '../../shared/multilingual-audio/multilingual-audio-item.entity';
 import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base-arango-resource-query-builder';
 import { ContributionSummary } from '../../user-management';
@@ -194,5 +195,39 @@ export class ArangoDigitalTextQueryRepository implements IDigitalTextQueryReposi
             query,
             bindVars,
         });
+    }
+
+    async addAudioToPage(
+        digitalTextId: string,
+        pageIdentifier: string,
+        audioItemId: string,
+        languageCode: LanguageCode
+    ): Promise<void> {
+        const query = `
+            FOR doc IN @@collectionName
+            FILTER doc._key == @id
+            LET newPages = (
+                FOR p IN doc.pages == null ? [] : doc.pages
+                RETURN MERGE(
+                    p,
+                    p.identifier == @pageIdentifier ? { audio: { items: APPEND(p.audio.items,@newAudioItem) }} : {}
+                )
+            )
+            UPDATE doc WITH {
+                pages: newPages
+            } in @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'digitalText__VIEWS',
+            id: digitalTextId,
+            pageIdentifier,
+            newAudioItem: new MultilingualAudioItem({
+                audioItemId,
+                languageCode,
+            }).toDTO(),
+        };
+
+        await this.database.query({ query, bindVars });
     }
 }

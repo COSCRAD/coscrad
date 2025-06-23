@@ -36,6 +36,9 @@ import { MultilingualTextItem } from '../../../common/entities/multilingual-text
 import buildInstanceFactory from '../../../factories/utilities/buildInstanceFactory';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
+import { IAudioItemQueryRepository } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
+import { ArangoAudioItemQueryRepository } from '../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { EdgeConnection } from '../../context/edge-connection.entity';
 import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import { Tag } from '../../tag/tag.entity';
@@ -61,6 +64,8 @@ const testContributors = contributorIds.map((id, index) =>
 
 describe(`ArangoDigitalTextQueryRepository`, () => {
     let testQueryRepository: IDigitalTextQueryRepository;
+
+    let testAudioRepository: IAudioItemQueryRepository;
 
     let databaseProvider: ArangoDatabaseProvider;
 
@@ -92,6 +97,8 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
 
         testQueryRepository = new ArangoDigitalTextQueryRepository(connectionProvider);
+
+        testAudioRepository = new ArangoAudioItemQueryRepository(connectionProvider);
 
         /**
          * Currently, the contributors are snapshot based (not event sourced).
@@ -771,6 +778,62 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
             expect(foundTranslationText).toBe(translationText);
 
             expect(foundRole).toBe(MultilingualTextItemRole.freeTranslation);
+        });
+    });
+
+    describe(`addAudioToPage`, () => {
+        const pageIdentifier = 'V';
+
+        const targetLanguageCode = LanguageCode.English;
+
+        const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+            pages: [
+                buildTestInstance(DigitalTextPage, {
+                    identifier: pageIdentifier,
+                    content: buildMultilingualTextWithSingleItem(
+                        'existing content text',
+                        targetLanguageCode
+                    ),
+                    audio: MultilingualAudio.buildEmpty(),
+                }),
+            ],
+        });
+
+        const existingAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
+            id: buildDummyUuid(890),
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetDigitalText);
+
+            await testAudioRepository.create(existingAudioItem);
+        });
+
+        it(`should add audio to the page`, async () => {
+            await testQueryRepository.addAudioToPage(
+                targetDigitalText.id,
+                pageIdentifier,
+                existingAudioItem.id,
+                targetLanguageCode
+            );
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetDigitalText.id
+            )) as DigitalTextViewModel;
+
+            const targetPage = updatedView.pages.find(
+                ({ identifier }) => identifier === pageIdentifier
+            );
+
+            expect(targetPage.hasAudio()).toBe(true);
+
+            const audioItemSearchResult = targetPage.getAudioIn(targetLanguageCode);
+
+            expect(audioItemSearchResult).not.toBe(NotFound);
+
+            expect(audioItemSearchResult).toEqual(existingAudioItem.id);
         });
     });
 });
