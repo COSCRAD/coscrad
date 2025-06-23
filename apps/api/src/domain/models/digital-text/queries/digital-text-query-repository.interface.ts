@@ -18,4 +18,11 @@ export interface IDigitalTextQueryRepository
     ): Promise<void>;
 
     addPage(digitalTextId: string, pageIdentifier: string): Promise<void>;
+
+    addContentToPage(
+        digitalTextId: string,
+        pageIdentifier: string,
+        text: string,
+        languageCode: LanguageCode
+    ): Promise<void>;
 }

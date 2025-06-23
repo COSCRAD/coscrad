@@ -7,6 +7,7 @@ import { ArangoDatabaseForCollection } from '../../../../persistence/database/ar
 import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { DigitalTextViewModel } from '../../../../queries/digital-text';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { AggregateId } from '../../../types/AggregateId';
 import { IResourceConnectionDto } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
@@ -120,5 +121,39 @@ export class ArangoDigitalTextQueryRepository implements IDigitalTextQueryReposi
         };
 
         await this.database.query({ query, bindVars });
+    }
+
+    async addContentToPage(
+        digitalTextId: string,
+        pageIdentifier: string,
+        text: string,
+        languageCode: LanguageCode
+    ): Promise<void> {
+        const query = `
+        FOR doc in @@collectionName
+        FILTER doc._key == @id
+        LET newPages = (
+            FOR p IN doc.pages == null ? [] : doc.pages
+            RETURN MERGE(
+                p,
+                p.identifier == @pageIdentifier ? { content: @content } : {}
+            )
+        )
+        UPDATE doc WITH {
+            pages: newPages
+        } in @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'digitalText__VIEWS',
+            id: digitalTextId,
+            pageIdentifier,
+            content: buildMultilingualTextWithSingleItem(text, languageCode).toDTO(),
+        };
+
+        await this.database.query({
+            query,
+            bindVars,
+        });
     }
 }

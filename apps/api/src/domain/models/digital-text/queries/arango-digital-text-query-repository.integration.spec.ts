@@ -651,6 +651,7 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
 
                 await testQueryRepository.create(targetDigitalText);
             });
+
             it(`should add the new page`, async () => {
                 await testQueryRepository.addPage(targetDigitalText.id, newPageIdentifier);
 
@@ -660,6 +661,57 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
 
                 expect(pages).toHaveLength(targetDigitalText.pages.length + 1);
             });
+        });
+    });
+
+    describe(`addContentToPage`, () => {
+        const pageIdentifier = 'XII';
+
+        const textToAdd = 'bla bla bla';
+
+        const languageCode = LanguageCode.English;
+
+        const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+            pages: [
+                new DigitalTextPage({
+                    identifier: pageIdentifier,
+                    audio: MultilingualAudio.buildEmpty(),
+                }),
+            ],
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetDigitalText);
+        });
+
+        it(`should add the content to the page`, async () => {
+            await testQueryRepository.addContentToPage(
+                targetDigitalText.id,
+                pageIdentifier,
+                textToAdd,
+                languageCode
+            );
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetDigitalText.id
+            )) as DigitalTextViewModel;
+
+            const targetPage = updatedView.pages.find(
+                ({ identifier }) => identifier === pageIdentifier
+            );
+
+            const { content } = targetPage;
+
+            expect(content).toBeTruthy();
+
+            const { languageCode: foundLanguageCode, text: foundText } =
+                content.getOriginalTextItem();
+
+            expect(foundLanguageCode).toBe(languageCode);
+
+            expect(foundText).toBe(textToAdd);
         });
     });
 });
