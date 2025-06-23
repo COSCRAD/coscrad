@@ -1,4 +1,5 @@
 import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import { isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
@@ -8,7 +9,7 @@ import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/
 import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { DigitalTextViewModel } from '../../../../queries/digital-text';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
-import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
+import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import { AggregateId } from '../../../types/AggregateId';
 import { IResourceConnectionDto } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
@@ -16,6 +17,7 @@ import { MultilingualAudioItem } from '../../shared/multilingual-audio/multiling
 import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base-arango-resource-query-builder';
 import { ContributionSummary } from '../../user-management';
+import { DigitalTextPageImportRecord } from '../commands';
 import DigitalTextPage from '../entities/digital-text-page.entity';
 import { IDigitalTextQueryRepository } from './digital-text-query-repository.interface';
 
@@ -256,6 +258,55 @@ export class ArangoDigitalTextQueryRepository implements IDigitalTextQueryReposi
             id: digitalTextId,
             pageIdentifier,
             photographId,
+        };
+
+        await this.database.query({ query, bindVars });
+    }
+
+    async importPages(digitalTextId: string, pages: DigitalTextPageImportRecord[]): Promise<void> {
+        const query = `
+            FOR doc IN @@collectionName
+            FILTER doc._key == @id
+            UPDATE doc WITH {
+                pages: APPEND(doc.pages ==  null ? [] : doc.pages,@newPages)
+            } in @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'digitalText__VIEWS',
+            id: digitalTextId,
+            // TODO one big reduce?
+            newPages: pages.map(({ pageIdentifier, photographId, content }) => {
+                const audioBuildResult = content.reduce(
+                    (multilingualAudio, { audioItemId, languageCode }) =>
+                        multilingualAudio.addAudio(audioItemId, languageCode),
+                    MultilingualAudio.buildEmpty()
+                );
+
+                const textItems: MultilingualTextItem[] = content.map(
+                    ({ isOriginalLanguage, text, languageCode }) =>
+                        new MultilingualTextItem({
+                            text,
+                            languageCode,
+                            role: isOriginalLanguage
+                                ? MultilingualTextItemRole.original
+                                : MultilingualTextItemRole.freeTranslation,
+                        })
+                );
+
+                const page = new DigitalTextPage({
+                    identifier: pageIdentifier,
+                    photographId,
+                    audio: isInternalError(audioBuildResult)
+                        ? MultilingualAudio.buildEmpty()
+                        : audioBuildResult,
+                    content: new MultilingualText({
+                        items: textItems,
+                    }),
+                });
+
+                return page;
+            }),
         };
 
         await this.database.query({ query, bindVars });

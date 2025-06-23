@@ -1,6 +1,7 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { IResourceQueryRepository } from '../../../../app/domain-modules/web-of-knowledge/interfaces/resource-query-repository.interface';
 import { DigitalTextViewModel } from '../../../../queries/digital-text';
+import { DigitalTextPageImportRecord } from '../commands';
 
 export const DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN =
     'DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN';
@@ -45,4 +46,6 @@ export interface IDigitalTextQueryRepository
         pageIdentifier: string,
         photographId: string
     ): Promise<void>;
+
+    importPages(digitalTextId: string, pages: DigitalTextPageImportRecord[]): Promise<void>;
 }
