@@ -95,7 +95,7 @@ describe(`DigitalTextViewModel.fromEventHistory`, () => {
             it(`should have the appropriate title`, () => {
                 expect(result).toBeInstanceOf(DigitalTextViewModel);
 
-                const { title: multilingualTextTitleFromViewModel } = result;
+                const { name: multilingualTextTitleFromViewModel } = result;
 
                 const originalTextItem = multilingualTextTitleFromViewModel.getOriginalTextItem();
 
