@@ -30,8 +30,8 @@ const hasEntities = (input: unknown): input is HasEntities => {
     }
 
     if (test.entities.length === 0) {
-        // nothing to do here
-        return false;
+        // nothing to do here, but we need to identify this as an index response
+        return true;
     }
 
     const itemToTest = test.entities[0];

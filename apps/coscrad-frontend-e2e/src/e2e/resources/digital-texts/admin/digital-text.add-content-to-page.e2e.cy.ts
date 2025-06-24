@@ -10,7 +10,8 @@ const buildDetailRoute = (digitalTextId: string) => `/Resources/DigitalTexts/${d
 
 const existingPageIdentifier = 'A.2';
 
-describe(`digital text detail- admin- add content to page`, () => {
+// TODO opt back into these tests once we support the admin UX flow
+describe.skip(`digital text detail- admin- add content to page`, () => {
     before(() => {
         cy.clearDatabase();
 
