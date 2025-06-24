@@ -11,6 +11,7 @@ import {
     DigitalTextTitleTranslated,
     PageAddedToDigitalText,
     TranslateDigitalTextPageContent,
+    TranslateDigitalTextTitle,
 } from '../../domain/models/digital-text/commands';
 import {
     AddContentToDigitalTextPage,
@@ -21,6 +22,7 @@ import { CreateDigitalText } from '../../domain/models/digital-text/commands/cre
 import { CreateDigitalTextCommandHandler } from '../../domain/models/digital-text/commands/create-digital-text.command-handler';
 import { DigitalTextCreated } from '../../domain/models/digital-text/commands/digital-text-created.event';
 import { DigitalTextCreatedEventHandler } from '../../domain/models/digital-text/commands/digital-text-created.event-handler';
+import { DigitalTextTitleTranslatedEventHandler } from '../../domain/models/digital-text/commands/translate-digital-text-title/digital-text-title-translated.event-handler';
 import { DigitalText } from '../../domain/models/digital-text/entities/digital-text.entity';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { CoscradNLPModule } from '../../lib/nlp';
@@ -44,6 +46,7 @@ import { DigitalTextQueryController } from '../controllers/resources/digital-tex
         AddAudioForDigitalTextPageCommandHandler,
         DigitalTextQueryService,
         DigitalTextCreatedEventHandler,
+        DigitalTextTitleTranslatedEventHandler,
         ...[
             // Domain Model
             DigitalText,
@@ -52,12 +55,14 @@ import { DigitalTextQueryController } from '../controllers/resources/digital-tex
             AddPageToDigitalText,
             AddContentToDigitalTextPage,
             TranslateDigitalTextPageContent,
+            TranslateDigitalTextTitle,
             AddAudioForDigitalTextPage,
             // Events
             DigitalTextCreated,
             PageAddedToDigitalText,
             ContentAddedToDigitalTextPage,
             DigitalTextPageContentTranslated,
+            DigitalTextTitleTranslated,
             AudioAddedForDigitalTextPage,
             DigitalTextTitleTranslated,
         ].map((ctor) => ({
