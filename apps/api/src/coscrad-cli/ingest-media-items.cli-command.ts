@@ -6,7 +6,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { MIMEType } from '@coscrad/data-types';
-import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
+import { isNonEmptyString, isNullOrUndefined, isUUID } from '@coscrad/validation-constraints';
 import { Inject, NotImplementedException } from '@nestjs/common';
 import { copyFileSync, existsSync, readdirSync } from 'fs';
 import { CommandFSA } from '../app/controllers/command/command-fsa/command-fsa.entity';
@@ -42,6 +42,8 @@ interface IngestMediaItemsCliCommandOptions {
     publish?: boolean;
     createResources?: boolean;
     tags?: string[];
+    // TODO make this a full meta overrides?
+    contributorIds: string[];
 }
 
 const buildCreateResourceFsaForMediaItem = (
@@ -138,16 +140,19 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
         super();
     }
 
-    async run(
-        _passedParams: string[],
-        {
+    async run(_passedParams: string[], options: IngestMediaItemsCliCommandOptions): Promise<void> {
+        const {
             directory,
             staticAssetDestinationDirectory,
             publish: shouldPublishMediaItems = false,
             createResources: shouldCreateResources = false,
+            contributorIds,
             tags = [],
-        }: IngestMediaItemsCliCommandOptions
-    ): Promise<void> {
+        } = options;
+
+        const metaOverrides =
+            Array.isArray(contributorIds) && contributorIds.length > 0 ? { contributorIds } : {};
+
         this.logger.log(`Attempting to import media from: ${directory}`);
 
         /**
@@ -289,6 +294,7 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
         for (const fsa of createMediaItemFsas) {
             const result = await this.commandHandlerService.execute(fsa, {
                 userId: 'COSCRAD Admin',
+                ...metaOverrides,
             });
 
             if (isInternalError(result)) {
@@ -316,6 +322,7 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
                     },
                     {
                         userId: 'COSCRAD Admin',
+                        ...metaOverrides,
                     }
                 );
 
@@ -364,6 +371,7 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
         for (const fsa of createResourceFsas) {
             const result = await this.commandHandlerService.execute(fsa, {
                 userId: 'COSCRAD Admin',
+                ...metaOverrides,
             });
 
             if (isInternalError(result)) {
@@ -388,6 +396,7 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
                     },
                 },
                 {
+                    // the admin was responsible for publishing
                     userId: 'COSCRAD Admin',
                 }
             );
@@ -437,6 +446,37 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
         }
 
         return isNonEmptyString(input) ? input : undefined;
+    }
+
+    @CliCommandOption({
+        flags: '-cids, --contributorIds [contributorIds]',
+        description: 'comma separated list of contributor IDs for the media and resources',
+        required: false,
+    })
+    parseContributorIds(input: string): string[] {
+        if (!isNonEmptyString(input)) {
+            return [];
+        }
+
+        const parsedIds = input.split(',');
+
+        const parseErrors = parsedIds
+            .filter((id) => !isUUID(id))
+            .map(
+                (id) =>
+                    new InternalError(
+                        `Encountered an invalid ID for a contributor: ${id}. Expected a UUID.`
+                    )
+            );
+
+        if (parseErrors.length > 0) {
+            throw new InternalError(
+                `Failed to ingest media items due to invalid contributor IDs on metadata`,
+                parseErrors
+            );
+        }
+
+        return parsedIds;
     }
 
     @CliCommandOption({
