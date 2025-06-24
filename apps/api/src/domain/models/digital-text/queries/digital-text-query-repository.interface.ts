@@ -50,4 +50,10 @@ export interface IDigitalTextQueryRepository
     importPages(digitalTextId: string, pages: DigitalTextPageImportRecord[]): Promise<void>;
 
     addCoverPhotograph(digitalTextId: string, photographId: string): Promise<void>;
+
+    addAudioForTitle(
+        digitalTextId: string,
+        audioItemId: string,
+        languageCode: LanguageCode
+    ): Promise<void>;
 }

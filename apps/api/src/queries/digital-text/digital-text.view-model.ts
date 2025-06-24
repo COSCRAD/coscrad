@@ -38,6 +38,7 @@ import { ApplyEvent } from '../event-sourcing/apply-event.interface';
         isPublished: false,
         tags: [],
         pages: [],
+        audioForTitle: MultilingualAudio.buildEmpty(),
         accessControlList: new AccessControlList(),
         notes: [],
         connections: [],
@@ -86,6 +87,12 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
     // TODO event source this
     public coverPhotograph?: { id: string };
 
+    @NestedDataType(MultilingualAudio, {
+        label: 'audio for title',
+        description: 'audio in one or more languages for the title of this digital text',
+    })
+    public audioForTitle: MultilingualAudio;
+
     @NestedDataType(NoteRecordForResourceViewModel, {
         label: 'notes',
         description: 'contextualized notes about this digital text',
@@ -122,6 +129,7 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
             tags,
             pages,
             coverPhotograph,
+            audioForTitle,
             accessControlList,
             notes,
             connections,
@@ -149,6 +157,10 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
         if (isNonEmptyObject(coverPhotograph)) {
             this.coverPhotograph = coverPhotograph;
         }
+
+        this.audioForTitle = isNonEmptyObject(audioForTitle)
+            ? new MultilingualAudio(audioForTitle)
+            : MultilingualAudio.buildEmpty();
 
         if (Array.isArray(notes)) {
             this.notes = notes.map((n) => new NoteRecordForResourceViewModel(n));

@@ -334,4 +334,34 @@ export class ArangoDigitalTextQueryRepository implements IDigitalTextQueryReposi
 
         await this.database.query({ query, bindVars });
     }
+
+    async addAudioForTitle(
+        digitalTextId: string,
+        audioItemId: string,
+        languageCode: LanguageCode
+    ): Promise<void> {
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+        FOR a IN audioItem__VIEWS
+        FILTER a._key == @audioItemId
+        UPDATE doc WITH {
+            audioForTitle: {
+                items: APPEND(doc.audioForTitle.items, @newMultilingualAudioItem)
+            }
+        } IN @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'digitalText__VIEWS',
+            id: digitalTextId,
+            audioItemId,
+            newMultilingualAudioItem: new MultilingualAudioItem({
+                audioItemId,
+                languageCode,
+            }).toDTO(),
+        };
+
+        await this.database.query({ query, bindVars });
+    }
 }

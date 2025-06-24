@@ -989,4 +989,41 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
             expect(foundPhotographId).toBe(targetPhotograph.id);
         });
     });
+
+    describe(`addAudioForTitle`, () => {
+        const languageCodeForTitle = LanguageCode.English;
+
+        const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+            name: buildMultilingualTextWithSingleItem('digital text name', languageCodeForTitle),
+            audioForTitle: MultilingualAudio.buildEmpty(),
+        });
+
+        const targetAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
+            id: buildDummyUuid(454),
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetDigitalText);
+
+            await testAudioRepository.create(targetAudioItem);
+        });
+
+        it(`should add the audio for the title`, async () => {
+            await testQueryRepository.addAudioForTitle(
+                targetDigitalText.id,
+                targetAudioItem.id,
+                languageCodeForTitle
+            );
+
+            const { audioForTitle } = (await testQueryRepository.fetchById(
+                targetDigitalText.id
+            )) as DigitalTextViewModel;
+
+            expect(audioForTitle.hasAudioIn(languageCodeForTitle)).toBe(true);
+
+            expect(audioForTitle.getIdForAudioIn(languageCodeForTitle)).toBe(targetAudioItem.id);
+        });
+    });
 });
