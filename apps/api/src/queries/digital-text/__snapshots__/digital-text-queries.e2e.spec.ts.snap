@@ -200,15 +200,6 @@ exports[`When querying for a digital text when the user is a COSCRAD admin detai
       "type": "tag",
     },
   ],
-  "title": {
-    "items": [
-      {
-        "languageCode": "en",
-        "role": "original",
-        "text": "my book",
-      },
-    ],
-  },
   "type": "digitalText",
 }
 `;
@@ -315,15 +306,6 @@ exports[`When querying for a digital text when the user is a COSCRAD admin index
           "type": "tag",
         },
       ],
-      "title": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "my book",
-          },
-        ],
-      },
       "type": "digitalText",
     },
     {
@@ -525,15 +507,6 @@ exports[`When querying for a digital text when the user is a COSCRAD admin index
           "type": "tag",
         },
       ],
-      "title": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "my book",
-          },
-        ],
-      },
       "type": "digitalText",
     },
   ],
@@ -814,15 +787,6 @@ exports[`When querying for a digital text when the user is a project admin detai
       "type": "tag",
     },
   ],
-  "title": {
-    "items": [
-      {
-        "languageCode": "en",
-        "role": "original",
-        "text": "my book",
-      },
-    ],
-  },
   "type": "digitalText",
 }
 `;
@@ -929,15 +893,6 @@ exports[`When querying for a digital text when the user is a project admin index
           "type": "tag",
         },
       ],
-      "title": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "my book",
-          },
-        ],
-      },
       "type": "digitalText",
     },
     {
@@ -1139,15 +1094,6 @@ exports[`When querying for a digital text when the user is a project admin index
           "type": "tag",
         },
       ],
-      "title": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "my book",
-          },
-        ],
-      },
       "type": "digitalText",
     },
   ],

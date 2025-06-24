@@ -222,9 +222,9 @@ describe(`When querying for a digital text`, () => {
                             ) => {
                                 expect(result.id).toBe(publicDigitalText.id);
 
-                                const expectedTitle = new MultilingualText(publicDigitalText.title);
+                                const expectedTitle = new MultilingualText(publicDigitalText.name);
 
-                                expect(result.title).toEqual(expectedTitle.toDTO());
+                                expect(result.name).toEqual(expectedTitle.toDTO());
 
                                 const searchResult = result.tags.find(
                                     ({ label }) => label === publicDigitalText.tags[0].label
