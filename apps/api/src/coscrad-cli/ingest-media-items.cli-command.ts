@@ -449,7 +449,7 @@ export class IngestMediaItemsCliCommand extends CliCommandRunner {
     }
 
     @CliCommandOption({
-        flags: '-c, --contributorIds [contributorIds]',
+        flags: '-cids, --contributorIds [contributorIds]',
         description: 'comma separated list of contributor IDs for the media and resources',
         required: false,
     })
