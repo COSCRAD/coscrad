@@ -1,7 +1,11 @@
-import { ICommandFormAndLabels, ITermViewModel } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    ICommandFormAndLabels,
+    ITermViewModel,
+    LanguageCode,
+} from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject, Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Observable } from 'rxjs';
 import { CommandFSA } from '../../../app/controllers/command/command-fsa/command-fsa.entity';
 import {
@@ -12,6 +16,7 @@ import { isNotFound, NotFound } from '../../../lib/types/not-found';
 import { TermViewModel } from '../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { EventSourcedAudioItemViewModel } from '../../models/audio-visual/audio-item/queries';
 import { AccessControlList } from '../../models/shared/access-control/access-control-list.entity';
+import { AddAudioForTerm } from '../../models/term/commands';
 import { Term } from '../../models/term/entities/term.entity';
 import { ITermQueryRepository, TERM_QUERY_REPOSITORY_TOKEN } from '../../models/term/queries';
 import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';
@@ -21,6 +26,7 @@ import { fetchActionsForUser } from './utilities/fetch-actions-for-user';
 
 interface DiscoverAudioForTermsOptions {
     shouldPublishAudio: boolean;
+    languageCodeForAudio: LanguageCode;
 }
 
 interface AudioItemAndImportActions {
@@ -30,7 +36,7 @@ interface AudioItemAndImportActions {
 
 interface AudioForTerm {
     term: TermViewModel;
-    importOptions: AudioItemAndImportActions;
+    importOptions: AudioItemAndImportActions[];
 }
 
 @Injectable()
@@ -42,8 +48,7 @@ export class TermQueryService {
     constructor(
         @Inject(TERM_QUERY_REPOSITORY_TOKEN)
         private readonly termQueryRepository: ITermQueryRepository,
-        @Inject(CommandInfoService) private readonly commandInfoService: CommandInfoService,
-        private readonly configService: ConfigService
+        @Inject(CommandInfoService) private readonly commandInfoService: CommandInfoService
     ) {
         // TODO we need the base URL as part of the config
         // this.audioUrlPrefix = `http://localhost:${this.configService.get(
@@ -132,7 +137,37 @@ export class TermQueryService {
         };
     }
 
-    async discoverAudio(): Promise<> {}
+    async discoverAudio({
+        languageCodeForAudio: languageCode,
+    }: DiscoverAudioForTermsOptions): Promise<AudioForTerm[]> {
+        const termsWithAudioCandidates = await this.termQueryRepository.discoverAudio();
+
+        const result = termsWithAudioCandidates.map(
+            ({ term, possibleAudioItems }): AudioForTerm => ({
+                term,
+                importOptions: possibleAudioItems.map((audioItem) => {
+                    const addAudioForTerm: CommandFSA<AddAudioForTerm> = {
+                        type: 'ADD_AUDIO_FOR_TERM',
+                        payload: {
+                            aggregateCompositeIdentifier: {
+                                type: AggregateType.term,
+                                id: term.id,
+                            },
+                            audioItemId: audioItem.id,
+                            languageCode,
+                        },
+                    };
+
+                    return {
+                        audioItem,
+                        action: [addAudioForTerm],
+                    };
+                }),
+            })
+        );
+
+        return result;
+    }
 
     public subscribeToWriteNotifications(): Observable<{ data: { type: string } }> {
         return this.termQueryRepository.subscribeToUpdates();

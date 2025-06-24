@@ -927,4 +927,151 @@ describe(`ArangoTermQueryRepository`, () => {
             });
         });
     });
+
+    describe(`discoverAudio`, () => {
+        const audioItemSequenceNumbers = [101, 102, 103, 104];
+
+        const mediaItemIds = audioItemSequenceNumbers.map((sequenceNumber) =>
+            buildDummyUuid(sequenceNumber + 200)
+        );
+
+        const audioItems = audioItemSequenceNumbers.map((sequenceNumber, index) =>
+            buildTestInstance(EventSourcedAudioItemViewModel, {
+                id: buildDummyUuid(sequenceNumber),
+                name: buildMultilingualTextWithSingleItem(`audio item #${sequenceNumber}`),
+                mediaItemId: mediaItemIds[index],
+            })
+        );
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await audioItemQueryRepository.createMany(audioItems);
+        });
+
+        describe(`when no term has audio, but each term has one audio candidate`, () => {
+            const termSequenceNumbers = [1, 2, 3, 4];
+
+            const terms = termSequenceNumbers.map((sequenceNumber, index) =>
+                buildTestInstance(TermViewModel, {
+                    id: buildDummyUuid(sequenceNumber),
+                    name: buildMultilingualTextWithSingleItem(`term #${sequenceNumber}`),
+                    mediaItemId: null,
+                    possibleAudioFilenames: [audioItems[index].name.getOriginalTextItem().text],
+                })
+            );
+
+            beforeEach(async () => {
+                await testQueryRepository.createMany(terms);
+            });
+
+            it(`should return the expected result`, async () => {
+                const result = await testQueryRepository.discoverAudio();
+
+                expect(result).toHaveLength(terms.length);
+
+                const invalidResults = result.filter(({ term, possibleAudioItems }, index) => {
+                    if (term.id !== terms[index].id) {
+                        return true; // invalid
+                    }
+
+                    if (possibleAudioItems.length !== 1) {
+                        return true; // invalid
+                    }
+
+                    if (possibleAudioItems[0].id !== audioItems[index].id) {
+                        return true; // invalid
+                    }
+
+                    return false;
+                });
+
+                expect(invalidResults).toEqual([]);
+            });
+        });
+
+        describe(`when no term has audio, but each term has several audio candidates`, () => {
+            const termSequenceNumbers = [1, 2, 3, 4];
+
+            const terms = termSequenceNumbers.map((sequenceNumber) =>
+                buildTestInstance(TermViewModel, {
+                    id: buildDummyUuid(sequenceNumber),
+                    name: buildMultilingualTextWithSingleItem(`term #${sequenceNumber}`),
+                    mediaItemId: null,
+                    possibleAudioFilenames: audioItems.map(
+                        ({ name }) => name.getOriginalTextItem().text
+                    ),
+                })
+            );
+
+            beforeEach(async () => {
+                await testQueryRepository.createMany(terms);
+            });
+
+            it(`should return the expected result`, async () => {
+                const result = await testQueryRepository.discoverAudio();
+
+                expect(result).toHaveLength(terms.length);
+
+                const invalidResults = result.filter(({ term, possibleAudioItems }, index) => {
+                    if (term.id !== terms[index].id) {
+                        return true; // invalid
+                    }
+
+                    if (possibleAudioItems.length !== audioItems.length) {
+                        return true; // invalid
+                    }
+
+                    return false;
+                });
+
+                expect(invalidResults).toEqual([]);
+            });
+        });
+
+        describe(`when the terms already have audio`, () => {
+            const termSequenceNumbers = [1, 2, 3, 4];
+
+            const terms = termSequenceNumbers.map((sequenceNumber, index) =>
+                buildTestInstance(TermViewModel, {
+                    id: buildDummyUuid(sequenceNumber),
+                    name: buildMultilingualTextWithSingleItem(`term #${sequenceNumber}`),
+                    // this indicates that the term already has audio
+                    mediaItemId: buildDummyUuid(index + 400),
+                    possibleAudioFilenames: [audioItems[index].name.getOriginalTextItem().text],
+                })
+            );
+
+            beforeEach(async () => {
+                await testQueryRepository.createMany(terms);
+            });
+            it(`should return an empty list`, async () => {
+                const result = await testQueryRepository.discoverAudio();
+
+                expect(result).toHaveLength(0);
+            });
+        });
+
+        describe(`when the terms have no known possible audio filenames`, () => {
+            const termSequenceNumbers = [1, 2, 3, 4];
+
+            const terms = termSequenceNumbers.map((sequenceNumber) =>
+                buildTestInstance(TermViewModel, {
+                    id: buildDummyUuid(sequenceNumber),
+                    name: buildMultilingualTextWithSingleItem(`term #${sequenceNumber}`),
+                    mediaItemId: null,
+                    possibleAudioFilenames: null,
+                })
+            );
+
+            beforeEach(async () => {
+                await testQueryRepository.createMany(terms);
+            });
+            it(`should return an empty list`, async () => {
+                const result = await testQueryRepository.discoverAudio();
+
+                expect(result).toHaveLength(0);
+            });
+        });
+    });
 });
