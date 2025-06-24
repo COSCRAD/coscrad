@@ -208,6 +208,8 @@ export class ArangoDigitalTextQueryRepository implements IDigitalTextQueryReposi
         const query = `
             FOR doc IN @@collectionName
             FILTER doc._key == @id
+            FOR a in audioItem__VIEWS
+            FILTER a._key == @newAudioItem.audioItemId
             LET newPages = (
                 FOR p IN doc.pages == null ? [] : doc.pages
                 RETURN MERGE(
@@ -241,6 +243,8 @@ export class ArangoDigitalTextQueryRepository implements IDigitalTextQueryReposi
         const query = `
             FOR doc IN @@collectionName
             FILTER doc._key == @id
+            FOR photo in photograph__VIEWS
+            FILTER photo._key == @photographId
             LET newPages = (
                 FOR p IN doc.pages == null ? [] : doc.pages
                 RETURN MERGE(
@@ -264,6 +268,12 @@ export class ArangoDigitalTextQueryRepository implements IDigitalTextQueryReposi
     }
 
     async importPages(digitalTextId: string, pages: DigitalTextPageImportRecord[]): Promise<void> {
+        /**
+         * TODO Execute this query in a way that builds the pages only for
+         * the audio and photographs that actually exist in the database.
+         * It would be a system error for audio or a photograph to be missing,
+         * but it's good to be robust to that possibility.
+         */
         const query = `
             FOR doc IN @@collectionName
             FILTER doc._key == @id
