@@ -74,13 +74,6 @@ export class DigitalTextQueryService {
         };
     }
 
-    private isVisibleToUser(
-        viewModel: { isPublished: boolean; hasReadAccess: (uwg: CoscradUserWithGroups) => boolean },
-        userWithGroups: CoscradUserWithGroups
-    ): boolean {
-        return viewModel.isPublished || viewModel.hasReadAccess(userWithGroups);
-    }
-
     /**
      * TODO [https://www.pivotaltracker.com/story/show/184098960]
      *

@@ -31,6 +31,8 @@ describe(`Digital Text publication`, () => {
             });
 
             it(`should display "not found"`, () => {
+                cy.getLoading().should('not.exist');
+
                 cy.getByDataAttribute('not-found');
             });
         });
