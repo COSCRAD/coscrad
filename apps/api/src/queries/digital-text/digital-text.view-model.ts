@@ -82,6 +82,10 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
     })
     public pages: DigitalTextPage[] = [];
 
+    // TODO data type decorator
+    // TODO event source this
+    public coverPhotograph?: { id: string };
+
     @NestedDataType(NoteRecordForResourceViewModel, {
         label: 'notes',
         description: 'contextualized notes about this digital text',
@@ -117,6 +121,7 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
             isPublished,
             tags,
             pages,
+            coverPhotograph,
             accessControlList,
             notes,
             connections,
@@ -139,6 +144,10 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
             this.pages = pages.map((p) => new DigitalTextPage(p));
         } else {
             this.pages = [];
+        }
+
+        if (isNonEmptyObject(coverPhotograph)) {
+            this.coverPhotograph = coverPhotograph;
         }
 
         if (Array.isArray(notes)) {

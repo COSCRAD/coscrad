@@ -311,4 +311,27 @@ export class ArangoDigitalTextQueryRepository implements IDigitalTextQueryReposi
 
         await this.database.query({ query, bindVars });
     }
+
+    async addCoverPhotograph(digitalTextId: string, photographId: string): Promise<void> {
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+        FOR p IN photograph__VIEWS
+        FILTER p._key == @photographId
+        LET newCoverPhotograph = {
+            id: p._key
+        }
+        UPDATE doc WITH {
+            coverPhotograph: newCoverPhotograph
+        } IN @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'digitalText__VIEWS',
+            id: digitalTextId,
+            photographId,
+        };
+
+        await this.database.query({ query, bindVars });
+    }
 }

@@ -957,4 +957,36 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
             expect(pages).toHaveLength(pagesToImport.length);
         });
     });
+
+    describe(`addCoverPhotograph`, () => {
+        const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+            coverPhotograph: null,
+        });
+
+        const targetPhotograph = buildTestInstance(PhotographViewModel, {
+            id: buildDummyUuid(800),
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetDigitalText);
+
+            await new ArangoPhotographQueryRepository(connectionProvider).create(targetPhotograph);
+        });
+
+        it(`should add the cover photograph to the digital text`, async () => {
+            await testQueryRepository.addCoverPhotograph(targetDigitalText.id, targetPhotograph.id);
+
+            const { coverPhotograph } = (await testQueryRepository.fetchById(
+                targetDigitalText.id
+            )) as DigitalTextViewModel;
+
+            expect(coverPhotograph).toBeTruthy();
+
+            const { id: foundPhotographId } = coverPhotograph;
+
+            expect(foundPhotographId).toBe(targetPhotograph.id);
+        });
+    });
 });

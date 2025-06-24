@@ -48,4 +48,6 @@ export interface IDigitalTextQueryRepository
     ): Promise<void>;
 
     importPages(digitalTextId: string, pages: DigitalTextPageImportRecord[]): Promise<void>;
+
+    addCoverPhotograph(digitalTextId: string, photographId: string): Promise<void>;
 }
