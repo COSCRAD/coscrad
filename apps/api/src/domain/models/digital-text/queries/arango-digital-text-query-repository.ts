@@ -1,3 +1,5 @@
+import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import { isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
@@ -6,11 +8,17 @@ import { ArangoDatabaseForCollection } from '../../../../persistence/database/ar
 import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { DigitalTextViewModel } from '../../../../queries/digital-text';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
+import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import { AggregateId } from '../../../types/AggregateId';
 import { IResourceConnectionDto } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
+import { MultilingualAudioItem } from '../../shared/multilingual-audio/multilingual-audio-item.entity';
+import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base-arango-resource-query-builder';
 import { ContributionSummary } from '../../user-management';
+import { DigitalTextPageImportRecord } from '../commands';
+import DigitalTextPage from '../entities/digital-text-page.entity';
 import { IDigitalTextQueryRepository } from './digital-text-query-repository.interface';
 
 export class ArangoDigitalTextQueryRepository implements IDigitalTextQueryRepository {
@@ -85,5 +93,285 @@ export class ArangoDigitalTextQueryRepository implements IDigitalTextQueryReposi
 
     async attribute(id: string, contributionSummary: ContributionSummary): Promise<void> {
         await this.database.query(this.baseResourceQueryBuilder.attribute(id, contributionSummary));
+    }
+
+    async translateTitle(id: string, translation: string, languageCode: LanguageCode) {
+        await this.database.query(
+            this.baseResourceQueryBuilder.translateName(
+                id,
+                translation,
+                languageCode,
+                MultilingualTextItemRole.freeTranslation
+            )
+        );
+    }
+
+    async addPage(digitalTextId: string, pageIdentifier: string): Promise<void> {
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+        UPDATE doc WITH {
+            pages: doc.pages == null ? [@newPage] : APPEND(doc.pages,@newPage)
+        } IN @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'digitalText__VIEWS',
+            id: digitalTextId,
+            newPage: new DigitalTextPage({
+                identifier: pageIdentifier,
+                audio: MultilingualAudio.buildEmpty(),
+            }).toDTO(),
+        };
+
+        await this.database.query({ query, bindVars });
+    }
+
+    async addContentToPage(
+        digitalTextId: string,
+        pageIdentifier: string,
+        text: string,
+        languageCode: LanguageCode
+    ): Promise<void> {
+        const query = `
+        FOR doc in @@collectionName
+        FILTER doc._key == @id
+        LET newPages = (
+            FOR p IN doc.pages == null ? [] : doc.pages
+            RETURN MERGE(
+                p,
+                p.identifier == @pageIdentifier ? { content: @content } : {}
+            )
+        )
+        UPDATE doc WITH {
+            pages: newPages
+        } in @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'digitalText__VIEWS',
+            id: digitalTextId,
+            pageIdentifier,
+            content: buildMultilingualTextWithSingleItem(text, languageCode).toDTO(),
+        };
+
+        await this.database.query({
+            query,
+            bindVars,
+        });
+    }
+
+    async translatePageContent(
+        digitalTextId: string,
+        pageIdentifier: string,
+        translation: string,
+        languageCode: LanguageCode
+    ): Promise<void> {
+        const query = `
+            FOR doc IN @@collectionName
+            FILTER doc._key == @id
+            LET newPages = (
+                FOR p IN doc.pages == null ? [] : doc.pages
+                RETURN MERGE(
+                    p,
+                    p.identifier == @pageIdentifier ? { content: { items: APPEND(p.content.items,@translationItem)}} : {}
+                )
+            )
+            UPDATE doc WITH {
+                pages: newPages
+            } in @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'digitalText__VIEWS',
+            id: digitalTextId,
+            pageIdentifier,
+            translationItem: new MultilingualTextItem({
+                text: translation,
+                languageCode,
+                role: MultilingualTextItemRole.freeTranslation,
+            }).toDTO(),
+        };
+
+        await this.database.query({
+            query,
+            bindVars,
+        });
+    }
+
+    async addAudioToPage(
+        digitalTextId: string,
+        pageIdentifier: string,
+        audioItemId: string,
+        languageCode: LanguageCode
+    ): Promise<void> {
+        const query = `
+            FOR doc IN @@collectionName
+            FILTER doc._key == @id
+            FOR a in audioItem__VIEWS
+            FILTER a._key == @newAudioItem.audioItemId
+            LET newPages = (
+                FOR p IN doc.pages == null ? [] : doc.pages
+                RETURN MERGE(
+                    p,
+                    p.identifier == @pageIdentifier ? { audio: { items: APPEND(p.audio.items,@newAudioItem) }} : {}
+                )
+            )
+            UPDATE doc WITH {
+                pages: newPages
+            } in @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'digitalText__VIEWS',
+            id: digitalTextId,
+            pageIdentifier,
+            newAudioItem: new MultilingualAudioItem({
+                audioItemId,
+                languageCode,
+            }).toDTO(),
+        };
+
+        await this.database.query({ query, bindVars });
+    }
+
+    async addPhotographToPage(
+        digitalTextId: string,
+        pageIdentifier: string,
+        photographId: string
+    ): Promise<void> {
+        const query = `
+            FOR doc IN @@collectionName
+            FILTER doc._key == @id
+            FOR photo in photograph__VIEWS
+            FILTER photo._key == @photographId
+            LET newPages = (
+                FOR p IN doc.pages == null ? [] : doc.pages
+                RETURN MERGE(
+                    p,
+                    p.identifier == @pageIdentifier ? { photographId: @photographId } : {}
+                )
+            )
+            UPDATE doc WITH {
+                pages: newPages
+            } in @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'digitalText__VIEWS',
+            id: digitalTextId,
+            pageIdentifier,
+            photographId,
+        };
+
+        await this.database.query({ query, bindVars });
+    }
+
+    async importPages(digitalTextId: string, pages: DigitalTextPageImportRecord[]): Promise<void> {
+        /**
+         * TODO Execute this query in a way that builds the pages only for
+         * the audio and photographs that actually exist in the database.
+         * It would be a system error for audio or a photograph to be missing,
+         * but it's good to be robust to that possibility.
+         */
+        const query = `
+            FOR doc IN @@collectionName
+            FILTER doc._key == @id
+            UPDATE doc WITH {
+                pages: APPEND(doc.pages ==  null ? [] : doc.pages,@newPages)
+            } in @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'digitalText__VIEWS',
+            id: digitalTextId,
+            // TODO one big reduce?
+            newPages: pages.map(({ pageIdentifier, photographId, content }) => {
+                const audioBuildResult = content.reduce(
+                    (multilingualAudio, { audioItemId, languageCode }) =>
+                        multilingualAudio.addAudio(audioItemId, languageCode),
+                    MultilingualAudio.buildEmpty()
+                );
+
+                const textItems: MultilingualTextItem[] = content.map(
+                    ({ isOriginalLanguage, text, languageCode }) =>
+                        new MultilingualTextItem({
+                            text,
+                            languageCode,
+                            role: isOriginalLanguage
+                                ? MultilingualTextItemRole.original
+                                : MultilingualTextItemRole.freeTranslation,
+                        })
+                );
+
+                const page = new DigitalTextPage({
+                    identifier: pageIdentifier,
+                    photographId,
+                    audio: isInternalError(audioBuildResult)
+                        ? MultilingualAudio.buildEmpty()
+                        : audioBuildResult,
+                    content: new MultilingualText({
+                        items: textItems,
+                    }),
+                });
+
+                return page;
+            }),
+        };
+
+        await this.database.query({ query, bindVars });
+    }
+
+    async addCoverPhotograph(digitalTextId: string, photographId: string): Promise<void> {
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+        FOR p IN photograph__VIEWS
+        FILTER p._key == @photographId
+        LET newCoverPhotograph = {
+            id: p._key
+        }
+        UPDATE doc WITH {
+            coverPhotograph: newCoverPhotograph
+        } IN @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'digitalText__VIEWS',
+            id: digitalTextId,
+            photographId,
+        };
+
+        await this.database.query({ query, bindVars });
+    }
+
+    async addAudioForTitle(
+        digitalTextId: string,
+        audioItemId: string,
+        languageCode: LanguageCode
+    ): Promise<void> {
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+        FOR a IN audioItem__VIEWS
+        FILTER a._key == @audioItemId
+        UPDATE doc WITH {
+            audioForTitle: {
+                items: APPEND(doc.audioForTitle.items, @newMultilingualAudioItem)
+            }
+        } IN @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'digitalText__VIEWS',
+            id: digitalTextId,
+            audioItemId,
+            newMultilingualAudioItem: new MultilingualAudioItem({
+                audioItemId,
+                languageCode,
+            }).toDTO(),
+        };
+
+        await this.database.query({ query, bindVars });
     }
 }

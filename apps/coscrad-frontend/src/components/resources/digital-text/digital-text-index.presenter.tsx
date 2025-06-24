@@ -14,12 +14,12 @@ export const DigitalTextIndexPresenter = ({
 
     const headingLabels: HeadingLabel<IDigitalTextViewModel>[] = [
         { propertyKey: 'id', headingLabel: 'Link' },
-        { propertyKey: 'title', headingLabel: 'Title' },
+        { propertyKey: 'name', headingLabel: 'Title' },
     ];
 
     const cellRenderersDefinition: CellRenderersDefinition<IDigitalTextViewModel> = {
         id: renderAggregateIdCell,
-        title: ({ title }) => renderMultilingualTextCell(title, defaultLanguageCode),
+        name: ({ name }) => renderMultilingualTextCell(name, defaultLanguageCode),
     };
 
     return (
@@ -30,7 +30,7 @@ export const DigitalTextIndexPresenter = ({
             cellRenderersDefinition={cellRenderersDefinition}
             // This should be a resource label from resource info
             heading={'Digital Texts'}
-            filterableProperties={['title']}
+            filterableProperties={['name']}
         />
     );
 };

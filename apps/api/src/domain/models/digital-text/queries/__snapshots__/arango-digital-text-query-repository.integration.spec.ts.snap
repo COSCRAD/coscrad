@@ -8,6 +8,9 @@ DigitalTextViewModel {
     "allowedGroupIds": [],
     "allowedUserIds": [],
   },
+  "audioForTitle": MultilingualAudio {
+    "items": [],
+  },
   "connections": [
     ConnectionRecordForResourceViewModel {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100040",
@@ -55,7 +58,12 @@ DigitalTextViewModel {
       MultilingualTextItem {
         "languageCode": "en",
         "role": "original",
-        "text": "my book",
+        "text": "English title",
+      },
+      MultilingualTextItem {
+        "languageCode": "clc",
+        "role": "free translation",
+        "text": "Chilcotin title",
       },
     ],
   },
@@ -201,20 +209,6 @@ DigitalTextViewModel {
       "type": "tag",
     },
   ],
-  "title": MultilingualText {
-    "items": [
-      MultilingualTextItem {
-        "languageCode": "en",
-        "role": "original",
-        "text": "English title",
-      },
-      MultilingualTextItem {
-        "languageCode": "clc",
-        "role": "free translation",
-        "text": "Chilcotin title",
-      },
-    ],
-  },
   "type": "digitalText",
 }
 `;

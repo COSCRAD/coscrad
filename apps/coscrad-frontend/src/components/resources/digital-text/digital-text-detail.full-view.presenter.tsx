@@ -21,7 +21,7 @@ import { PagesPresenter } from './pages-presenter';
 
 export const DigitalTextDetailFullViewPresenter = ({
     id,
-    title: name,
+    name,
     pages,
     isPublished,
     tags,

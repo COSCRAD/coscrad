@@ -1,5 +1,5 @@
 import { AggregateCompositeIdentifier, AggregateType } from '@coscrad/api-interfaces';
-import { BooleanDataType, FromDomainModel, NestedDataType, UUID } from '@coscrad/data-types';
+import { BooleanDataType, NestedDataType, UUID } from '@coscrad/data-types';
 import { isBoolean, isNonEmptyObject } from '@coscrad/validation-constraints';
 import { buildMultilingualTextWithSingleItem } from '../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../domain/common/entities/multilingual-text';
@@ -10,7 +10,7 @@ import {
     PageAddedToDigitalTextPayload,
 } from '../../domain/models/digital-text/commands';
 import { ContentAddedToDigitalTextPagePayload } from '../../domain/models/digital-text/commands/add-content-to-digital-text-page';
-import { DigitalText, PageIdentifier } from '../../domain/models/digital-text/entities';
+import { PageIdentifier } from '../../domain/models/digital-text/entities';
 import DigitalTextPage from '../../domain/models/digital-text/entities/digital-text-page.entity';
 import { AccessControlList } from '../../domain/models/shared/access-control/access-control-list.entity';
 import { ResourceReadAccessGrantedToUserPayload } from '../../domain/models/shared/common-commands';
@@ -34,11 +34,11 @@ import { ApplyEvent } from '../event-sourcing/apply-event.interface';
     example: {
         type: AggregateType.digitalText,
         id: buildDummyUuid(88),
-        title: buildMultilingualTextWithSingleItem('my book'),
         name: buildMultilingualTextWithSingleItem('my book'),
         isPublished: false,
         tags: [],
         pages: [],
+        audioForTitle: MultilingualAudio.buildEmpty(),
         accessControlList: new AccessControlList(),
         notes: [],
         connections: [],
@@ -57,9 +57,6 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
         description: 'system identifier for this digital text',
     })
     public id: string;
-
-    @FromDomainModel(DigitalText)
-    public title: MultilingualText;
 
     @NestedDataType(MultilingualText, {
         label: 'name',
@@ -85,6 +82,16 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
         description: 'digital representation of the pages in this digital text',
     })
     public pages: DigitalTextPage[] = [];
+
+    // TODO data type decorator
+    // TODO event source this
+    public coverPhotograph?: { id: string };
+
+    @NestedDataType(MultilingualAudio, {
+        label: 'audio for title',
+        description: 'audio in one or more languages for the title of this digital text',
+    })
+    public audioForTitle: MultilingualAudio;
 
     @NestedDataType(NoteRecordForResourceViewModel, {
         label: 'notes',
@@ -117,11 +124,12 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
 
         const {
             id,
-            title,
             name,
             isPublished,
             tags,
             pages,
+            coverPhotograph,
+            audioForTitle,
             accessControlList,
             notes,
             connections,
@@ -129,8 +137,6 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
         } = dto;
 
         this.id = id;
-
-        this.title = new MultilingualText(title);
 
         this.name = new MultilingualText(name);
 
@@ -147,6 +153,14 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
         } else {
             this.pages = [];
         }
+
+        if (isNonEmptyObject(coverPhotograph)) {
+            this.coverPhotograph = coverPhotograph;
+        }
+
+        this.audioForTitle = isNonEmptyObject(audioForTitle)
+            ? new MultilingualAudio(audioForTitle)
+            : MultilingualAudio.buildEmpty();
 
         if (Array.isArray(notes)) {
             this.notes = notes.map((n) => new NoteRecordForResourceViewModel(n));
@@ -221,13 +235,7 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
                     meta: { userId: idOfCreatingUser },
                 } = event;
 
-                this.title = buildMultilingualTextWithSingleItem(title, languageCodeForTitle);
-
-                /**
-                 * This denormalization provides consistency that the client
-                 * relies on for consistent presentation.
-                 */
-                this.name = this.title.clone({});
+                this.name = buildMultilingualTextWithSingleItem(title, languageCodeForTitle);
 
                 /**
                  * If we switch to a model in which the admin role does not

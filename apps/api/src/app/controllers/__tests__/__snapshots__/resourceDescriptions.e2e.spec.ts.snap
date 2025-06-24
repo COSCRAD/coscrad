@@ -2145,6 +2145,73 @@ exports[`GET /resources should return the expected result 1`] = `
     "link": "/resources/digitalTexts",
     "pluralLabel": "Digital Texts",
     "schema": {
+      "audioForTitle": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "audio in one or more languages for the title of this digital text",
+        "isArray": false,
+        "isOptional": false,
+        "label": "audio for title",
+        "name": "MultilingualAudio",
+        "schema": {
+          "items": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "a list of audio for each available",
+            "isArray": true,
+            "isOptional": true,
+            "label": "audio items",
+            "name": "MultilingualAudioItem",
+            "schema": {
+              "audioItemId": {
+                "coscradDataType": "UUID",
+                "description": "a reference to the relevant audio item",
+                "isArray": false,
+                "isOptional": false,
+                "label": "audio item ID",
+                "referenceTo": "audioItem",
+              },
+              "languageCode": {
+                "complexDataType": "ENUM",
+                "description": "language of the audio",
+                "enumLabel": "language code",
+                "enumName": "LanguageCode",
+                "isArray": false,
+                "isOptional": false,
+                "label": "language",
+                "labelsAndValues": [
+                  {
+                    "label": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "label": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "label": "English",
+                    "value": "en",
+                  },
+                  {
+                    "label": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "label": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "label": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "label": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
       "connections": {
         "complexDataType": "NESTED_TYPE",
         "description": "a list of contextualized connections to other resources in the web-of-knowledge",
@@ -2578,103 +2645,6 @@ exports[`GET /resources should return the expected result 1`] = `
                     "label": "text",
                   },
                 },
-              },
-            },
-          },
-        },
-      },
-      "title": {
-        "complexDataType": "NESTED_TYPE",
-        "description": "the title of the digital text",
-        "isArray": false,
-        "isOptional": false,
-        "label": "title",
-        "name": "MultilingualText",
-        "schema": {
-          "items": {
-            "complexDataType": "NESTED_TYPE",
-            "description": "one item for each provided language",
-            "isArray": true,
-            "isOptional": false,
-            "label": "items",
-            "name": "MultilingualTextItem",
-            "schema": {
-              "languageCode": {
-                "complexDataType": "ENUM",
-                "description": "an official identifier of the language",
-                "enumLabel": "Language_Code",
-                "enumName": "LangaugeCode",
-                "isArray": false,
-                "isOptional": false,
-                "label": "language code",
-                "labelsAndValues": [
-                  {
-                    "label": "Chilcotin",
-                    "value": "clc",
-                  },
-                  {
-                    "label": "Haida",
-                    "value": "hai",
-                  },
-                  {
-                    "label": "English",
-                    "value": "en",
-                  },
-                  {
-                    "label": "French",
-                    "value": "fra",
-                  },
-                  {
-                    "label": "Chinook",
-                    "value": "chn",
-                  },
-                  {
-                    "label": "Zapotec",
-                    "value": "zap",
-                  },
-                  {
-                    "label": "Spanish",
-                    "value": "spa",
-                  },
-                ],
-              },
-              "role": {
-                "complexDataType": "ENUM",
-                "description": "role of this text in the translation process",
-                "enumLabel": "text item role",
-                "enumName": "Multilingual Text Item Role",
-                "isArray": false,
-                "isOptional": false,
-                "label": "text item role",
-                "labelsAndValues": [
-                  {
-                    "label": "original",
-                    "value": "original",
-                  },
-                  {
-                    "label": "glossed to",
-                    "value": "glossed to",
-                  },
-                  {
-                    "label": "free translation",
-                    "value": "free translation",
-                  },
-                  {
-                    "label": "literal translation",
-                    "value": "literal translation",
-                  },
-                  {
-                    "label": "elicited from a prompt",
-                    "value": "elicited from a prompt",
-                  },
-                ],
-              },
-              "text": {
-                "coscradDataType": "NON_EMPTY_STRING",
-                "description": "plain text in the given language",
-                "isArray": false,
-                "isOptional": false,
-                "label": "text",
               },
             },
           },

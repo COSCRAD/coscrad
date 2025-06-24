@@ -3,6 +3,7 @@ import {
     EdgeConnectionMemberRole,
     IEdgeConnectionContext,
     LanguageCode,
+    MultilingualTextItemRole,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
@@ -31,14 +32,20 @@ import { TestEventStream } from '../../../../test-data/events';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
+import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import buildInstanceFactory from '../../../factories/utilities/buildInstanceFactory';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
+import { IAudioItemQueryRepository } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
+import { ArangoAudioItemQueryRepository } from '../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { EdgeConnection } from '../../context/edge-connection.entity';
+import { PhotographViewModel } from '../../photograph/queries/photograph.view-model';
+import { ArangoPhotographQueryRepository } from '../../photograph/repositories';
 import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import { Tag } from '../../tag/tag.entity';
 import { ContributionSummary, CoscradContributor } from '../../user-management';
-import { DigitalTextCreated } from '../commands';
+import { DigitalTextCreated, DigitalTextPageImportRecord } from '../commands';
 import DigitalTextPage from '../entities/digital-text-page.entity';
 import { ArangoDigitalTextQueryRepository } from './arango-digital-text-query-repository';
 import { IDigitalTextQueryRepository } from './digital-text-query-repository.interface';
@@ -59,6 +66,10 @@ const testContributors = contributorIds.map((id, index) =>
 
 describe(`ArangoDigitalTextQueryRepository`, () => {
     let testQueryRepository: IDigitalTextQueryRepository;
+
+    let testAudioRepository: IAudioItemQueryRepository;
+
+    let connectionProvider: ArangoConnectionProvider;
 
     let databaseProvider: ArangoDatabaseProvider;
 
@@ -85,11 +96,13 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
 
         app = moduleRef.createNestApplication();
 
-        const connectionProvider = app.get(ArangoConnectionProvider);
+        connectionProvider = app.get(ArangoConnectionProvider);
 
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
 
         testQueryRepository = new ArangoDigitalTextQueryRepository(connectionProvider);
+
+        testAudioRepository = new ArangoAudioItemQueryRepository(connectionProvider);
 
         /**
          * Currently, the contributors are snapshot based (not event sourced).
@@ -164,8 +177,7 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
                     },
                 }),
             ],
-            // TODO support contributions
-            title: buildMultilingualTextFromBilingualText(
+            name: buildMultilingualTextFromBilingualText(
                 {
                     text: 'English title',
                     languageCode: LanguageCode.English,
@@ -560,6 +572,588 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
                 expect(targetContribution.contributorIds).toHaveLength(0);
 
                 expect(targetContribution.statement.includes('by: (data entry) admin')).toBe(true);
+            });
+        });
+    });
+
+    describe(`translateTitle`, () => {
+        const translationLanguageCode = LanguageCode.English;
+
+        const translateTitle = 'translation of title';
+
+        const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+            name: buildMultilingualTextWithSingleItem('existing title', LanguageCode.Chilcotin),
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetDigitalText);
+        });
+
+        it('should translate the title', async () => {
+            await testQueryRepository.translateTitle(
+                targetDigitalText.id,
+                translateTitle,
+                translationLanguageCode
+            );
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetDigitalText.id
+            )) as DigitalTextViewModel;
+
+            const { name } = updatedView;
+
+            expect(name.has(translationLanguageCode)).toBe(true);
+
+            const translationItemSearchResult = name.getTranslation(translationLanguageCode);
+
+            expect(translationItemSearchResult).not.toBe(NotFound);
+
+            const { text: foundTranslationText, role: foundRole } =
+                translationItemSearchResult as MultilingualTextItem;
+
+            expect(foundTranslationText).toBe(translateTitle);
+
+            expect(foundRole).toBe(MultilingualTextItemRole.freeTranslation);
+        });
+    });
+
+    describe(`addPage`, () => {
+        const newPageIdentifier = '55';
+
+        describe(`when there are no pages`, () => {
+            const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+                pages: [],
+            });
+
+            beforeEach(async () => {
+                await databaseProvider.clearViews();
+
+                await testQueryRepository.create(targetDigitalText);
+            });
+
+            it('should add the page', async () => {
+                await testQueryRepository.addPage(targetDigitalText.id, newPageIdentifier);
+
+                const updatedView = (await testQueryRepository.fetchById(
+                    targetDigitalText.id
+                )) as DigitalTextViewModel;
+
+                const { pages } = updatedView;
+
+                expect(pages).toHaveLength(1);
+            });
+        });
+
+        describe(`when there are already some pages`, () => {
+            const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+                pages: ['a', 'b', 'c'].map(
+                    (identifier) =>
+                        new DigitalTextPage({
+                            identifier,
+                            audio: MultilingualAudio.buildEmpty(),
+                        })
+                ),
+            });
+
+            beforeEach(async () => {
+                await databaseProvider.clearViews();
+
+                await testQueryRepository.create(targetDigitalText);
+            });
+
+            it(`should add the new page`, async () => {
+                await testQueryRepository.addPage(targetDigitalText.id, newPageIdentifier);
+
+                const { pages } = (await testQueryRepository.fetchById(
+                    targetDigitalText.id
+                )) as DigitalTextViewModel;
+
+                expect(pages).toHaveLength(targetDigitalText.pages.length + 1);
+            });
+        });
+    });
+
+    describe(`addContentToPage`, () => {
+        const pageIdentifier = 'XII';
+
+        const textToAdd = 'bla bla bla';
+
+        const languageCode = LanguageCode.English;
+
+        const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+            pages: [
+                new DigitalTextPage({
+                    identifier: pageIdentifier,
+                    audio: MultilingualAudio.buildEmpty(),
+                }),
+            ],
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetDigitalText);
+        });
+
+        it(`should add the content to the page`, async () => {
+            await testQueryRepository.addContentToPage(
+                targetDigitalText.id,
+                pageIdentifier,
+                textToAdd,
+                languageCode
+            );
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetDigitalText.id
+            )) as DigitalTextViewModel;
+
+            const targetPage = updatedView.pages.find(
+                ({ identifier }) => identifier === pageIdentifier
+            );
+
+            const { content } = targetPage;
+
+            expect(content).toBeTruthy();
+
+            const { languageCode: foundLanguageCode, text: foundText } =
+                content.getOriginalTextItem();
+
+            expect(foundLanguageCode).toBe(languageCode);
+
+            expect(foundText).toBe(textToAdd);
+        });
+    });
+
+    describe(`translatePageContent`, () => {
+        const pageIdentifier = '100';
+
+        const originalLanguageCode = LanguageCode.English;
+
+        const translationLanguageCode = LanguageCode.Chilcotin;
+
+        const translationText = 'translation of content on page 100';
+
+        const existingPageContent = buildMultilingualTextWithSingleItem(
+            'existing content text',
+            originalLanguageCode
+        );
+
+        const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+            pages: [
+                buildTestInstance(DigitalTextPage, {
+                    identifier: pageIdentifier,
+                    content: existingPageContent,
+                }),
+            ],
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetDigitalText);
+        });
+
+        it(`should translate the page's content`, async () => {
+            await testQueryRepository.translatePageContent(
+                targetDigitalText.id,
+                pageIdentifier,
+                translationText,
+                translationLanguageCode
+            );
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetDigitalText.id
+            )) as DigitalTextViewModel;
+
+            const targetPage = updatedView.pages.find(
+                ({ identifier }) => identifier === pageIdentifier
+            );
+
+            const translationItemSearchResult =
+                targetPage.content.getTranslation(translationLanguageCode);
+
+            expect(translationItemSearchResult).not.toBe(NotFound);
+
+            const { text: foundTranslationText, role: foundRole } =
+                translationItemSearchResult as MultilingualTextItem;
+
+            expect(foundTranslationText).toBe(translationText);
+
+            expect(foundRole).toBe(MultilingualTextItemRole.freeTranslation);
+        });
+    });
+
+    describe(`addAudioToPage`, () => {
+        const pageIdentifier = 'V';
+
+        const targetLanguageCode = LanguageCode.English;
+
+        const languageCodeWithAudioAlready = LanguageCode.Chilcotin;
+
+        describe(`when there is no audio on the page yet`, () => {
+            const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+                pages: [
+                    buildTestInstance(DigitalTextPage, {
+                        identifier: pageIdentifier,
+                        content: buildMultilingualTextWithSingleItem(
+                            'existing content text',
+                            targetLanguageCode
+                        ),
+                        audio: MultilingualAudio.buildEmpty(),
+                    }),
+                ],
+            });
+
+            const existingAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
+                id: buildDummyUuid(890),
+            });
+
+            beforeEach(async () => {
+                await databaseProvider.clearViews();
+
+                await testQueryRepository.create(targetDigitalText);
+
+                await testAudioRepository.create(existingAudioItem);
+            });
+
+            it(`should add audio to the page`, async () => {
+                await testQueryRepository.addAudioToPage(
+                    targetDigitalText.id,
+                    pageIdentifier,
+                    existingAudioItem.id,
+                    targetLanguageCode
+                );
+
+                const updatedView = (await testQueryRepository.fetchById(
+                    targetDigitalText.id
+                )) as DigitalTextViewModel;
+
+                const targetPage = updatedView.pages.find(
+                    ({ identifier }) => identifier === pageIdentifier
+                );
+
+                expect(targetPage.hasAudio()).toBe(true);
+
+                const audioItemSearchResult = targetPage.getAudioIn(targetLanguageCode);
+
+                expect(audioItemSearchResult).not.toBe(NotFound);
+
+                expect(audioItemSearchResult).toEqual(existingAudioItem.id);
+            });
+        });
+
+        describe(`when there is already audio for another language on this page`, () => {
+            const audioItemIdForOtherLangauge = buildDummyUuid(9);
+
+            const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+                pages: [
+                    buildTestInstance(DigitalTextPage, {
+                        identifier: pageIdentifier,
+                        content: buildMultilingualTextFromBilingualText(
+                            {
+                                text: 'existing content with audio',
+                                languageCode: languageCodeWithAudioAlready,
+                            },
+                            {
+                                text: 'existing content text (translated to English)',
+                                languageCode: targetLanguageCode,
+                            }
+                        ),
+                        audio: MultilingualAudio.buildEmpty().addAudio(
+                            audioItemIdForOtherLangauge,
+                            languageCodeWithAudioAlready
+                        ) as MultilingualAudio,
+                    }),
+                ],
+            });
+
+            const existingAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
+                id: buildDummyUuid(890),
+            });
+
+            beforeEach(async () => {
+                await databaseProvider.clearViews();
+
+                await testQueryRepository.create(targetDigitalText);
+
+                await testAudioRepository.create(existingAudioItem);
+            });
+
+            it(`should add the audio`, async () => {
+                await testQueryRepository.addAudioToPage(
+                    targetDigitalText.id,
+                    pageIdentifier,
+                    existingAudioItem.id,
+                    targetLanguageCode
+                );
+
+                const updatedView = (await testQueryRepository.fetchById(
+                    targetDigitalText.id
+                )) as DigitalTextViewModel;
+
+                const targetPage = updatedView.pages.find(
+                    ({ identifier }) => identifier === pageIdentifier
+                );
+
+                expect(targetPage.hasAudio()).toBe(true);
+
+                const audioItemSearchResult = targetPage.getAudioIn(targetLanguageCode);
+
+                expect(audioItemSearchResult).not.toBe(NotFound);
+
+                expect(audioItemSearchResult).toEqual(existingAudioItem.id);
+
+                expect(targetPage.getAudioIn(languageCodeWithAudioAlready)).toBe(
+                    audioItemIdForOtherLangauge
+                );
+            });
+        });
+    });
+
+    describe(`addPhotographToPage`, () => {
+        const pageIdentifier = 'F2';
+
+        const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+            pages: [
+                buildTestInstance(DigitalTextPage, {
+                    identifier: pageIdentifier,
+                    content: null,
+                    audio: MultilingualAudio.buildEmpty(),
+                }),
+            ],
+        });
+
+        const targetPhotograph = buildTestInstance(PhotographViewModel, {
+            id: buildDummyUuid(999),
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetDigitalText);
+
+            /**
+             * At present, this is not necessary. However, we may want to add a
+             * denormalized view of the photograph on the digital text, at which
+             * point this becomes important.
+             */
+            await new ArangoPhotographQueryRepository(connectionProvider).create(targetPhotograph);
+        });
+
+        it(`should add the photograph to the page`, async () => {
+            await testQueryRepository.addPhotographToPage(
+                targetDigitalText.id,
+                pageIdentifier,
+                targetPhotograph.id
+            );
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetDigitalText.id
+            )) as DigitalTextViewModel;
+
+            const { photographId } = updatedView.pages.find(
+                ({ identifier }) => identifier === pageIdentifier
+            );
+
+            expect(photographId).toEqual(targetPhotograph.id);
+        });
+    });
+
+    describe(`importPages`, () => {
+        const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+            pages: [],
+        });
+
+        const audioIds = [301, 302, 303, 304, 305, 306].map(buildDummyUuid);
+
+        const existingAudioItems = audioIds.map((id) =>
+            buildTestInstance(EventSourcedAudioItemViewModel, {
+                id,
+                name: buildMultilingualTextWithSingleItem(`audio item: ${id}`),
+            })
+        );
+
+        const photographIds = [401, 402, 403, 404, 405, 406].map(buildDummyUuid);
+
+        const existingPhotographs = photographIds.map((id) => {
+            return buildTestInstance(PhotographViewModel, {
+                id,
+                name: buildMultilingualTextWithSingleItem(`photograph: ${id}`),
+            });
+        });
+
+        const pagesToImport: DigitalTextPageImportRecord[] = [1, 2, 3].map((sequenceNumber) => ({
+            pageIdentifier: sequenceNumber.toString(),
+            photographId: buildDummyUuid(200 + sequenceNumber),
+            content: [
+                {
+                    text: 'text for Chilcotin (original language)',
+                    languageCode: LanguageCode.English,
+                    audioItemId: audioIds[sequenceNumber - 1],
+                    photographId: photographIds[sequenceNumber - 1],
+                    isOriginalLanguage: true,
+                },
+                {
+                    text: 'text for English (translation language)',
+                    languageCode: LanguageCode.English,
+                    // -1 for 0-indexed + 3 to offset by the number of original audio items
+                    audioItemId: audioIds[sequenceNumber + 2],
+                    photographId: photographIds[sequenceNumber + 2],
+                    isOriginalLanguage: false,
+                },
+            ],
+        }));
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetDigitalText);
+
+            await testAudioRepository.createMany(existingAudioItems);
+
+            await new ArangoPhotographQueryRepository(connectionProvider).createMany(
+                existingPhotographs
+            );
+        });
+
+        it(`should import all page content`, async () => {
+            await testQueryRepository.importPages(targetDigitalText.id, pagesToImport);
+
+            const { pages } = (await testQueryRepository.fetchById(
+                targetDigitalText.id
+            )) as DigitalTextViewModel;
+
+            expect(pages).toHaveLength(pagesToImport.length);
+        });
+    });
+
+    describe(`addCoverPhotograph`, () => {
+        const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+            coverPhotograph: null,
+        });
+
+        const targetPhotograph = buildTestInstance(PhotographViewModel, {
+            id: buildDummyUuid(800),
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetDigitalText);
+
+            await new ArangoPhotographQueryRepository(connectionProvider).create(targetPhotograph);
+        });
+
+        it(`should add the cover photograph to the digital text`, async () => {
+            await testQueryRepository.addCoverPhotograph(targetDigitalText.id, targetPhotograph.id);
+
+            const { coverPhotograph } = (await testQueryRepository.fetchById(
+                targetDigitalText.id
+            )) as DigitalTextViewModel;
+
+            expect(coverPhotograph).toBeTruthy();
+
+            const { id: foundPhotographId } = coverPhotograph;
+
+            expect(foundPhotographId).toBe(targetPhotograph.id);
+        });
+    });
+
+    describe(`addAudioForTitle`, () => {
+        const languageCodeForTitle = LanguageCode.English;
+
+        const languageCodeForExistingAudio = LanguageCode.Chilcotin;
+
+        const targetAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
+            id: buildDummyUuid(454),
+        });
+
+        const audioItemIdForOtherLanguage = buildDummyUuid(99);
+
+        describe(`when there is no audio for the title yet`, () => {
+            const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+                name: buildMultilingualTextWithSingleItem(
+                    'digital text name',
+                    languageCodeForTitle
+                ),
+                audioForTitle: MultilingualAudio.buildEmpty(),
+            });
+
+            beforeEach(async () => {
+                await databaseProvider.clearViews();
+
+                await testQueryRepository.create(targetDigitalText);
+
+                await testAudioRepository.create(targetAudioItem);
+            });
+
+            it(`should add the audio for the title`, async () => {
+                await testQueryRepository.addAudioForTitle(
+                    targetDigitalText.id,
+                    targetAudioItem.id,
+                    languageCodeForTitle
+                );
+
+                const { audioForTitle } = (await testQueryRepository.fetchById(
+                    targetDigitalText.id
+                )) as DigitalTextViewModel;
+
+                expect(audioForTitle.hasAudioIn(languageCodeForTitle)).toBe(true);
+
+                expect(audioForTitle.getIdForAudioIn(languageCodeForTitle)).toBe(
+                    targetAudioItem.id
+                );
+            });
+        });
+
+        describe(`when there is audio in one language for the title already`, () => {
+            const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+                name: buildMultilingualTextFromBilingualText(
+                    {
+                        text: 'digital text name',
+                        languageCode: languageCodeForExistingAudio,
+                    },
+                    {
+                        text: 'digital text name (translated)',
+                        languageCode: languageCodeForExistingAudio,
+                    }
+                ),
+                audioForTitle: MultilingualAudio.buildEmpty().addAudio(
+                    audioItemIdForOtherLanguage,
+                    languageCodeForExistingAudio
+                ) as MultilingualAudio,
+            });
+
+            beforeEach(async () => {
+                await databaseProvider.clearViews();
+
+                await testQueryRepository.create(targetDigitalText);
+
+                await testAudioRepository.create(targetAudioItem);
+            });
+
+            it(`should add the audio for the title`, async () => {
+                await testQueryRepository.addAudioForTitle(
+                    targetDigitalText.id,
+                    targetAudioItem.id,
+                    languageCodeForTitle
+                );
+
+                const { audioForTitle } = (await testQueryRepository.fetchById(
+                    targetDigitalText.id
+                )) as DigitalTextViewModel;
+
+                expect(audioForTitle.hasAudioIn(languageCodeForTitle)).toBe(true);
+
+                expect(audioForTitle.getIdForAudioIn(languageCodeForTitle)).toBe(
+                    targetAudioItem.id
+                );
+
+                expect(audioForTitle.getIdForAudioIn(languageCodeForExistingAudio)).toBe(
+                    audioItemIdForOtherLanguage
+                );
             });
         });
     });
