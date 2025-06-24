@@ -83,6 +83,9 @@ exports[`When querying for a digital text when the user is a COSCRAD admin detai
       "type": "PUBLISH_RESOURCE",
     },
   ],
+  "audioForTitle": {
+    "items": [],
+  },
   "connections": [
     {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
@@ -275,6 +278,9 @@ exports[`When querying for a digital text when the user is a COSCRAD admin index
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
+      "audioForTitle": {
+        "items": [],
+      },
       "connections": [],
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
@@ -390,6 +396,9 @@ exports[`When querying for a digital text when the user is a COSCRAD admin index
           "type": "PUBLISH_RESOURCE",
         },
       ],
+      "audioForTitle": {
+        "items": [],
+      },
       "connections": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
@@ -670,6 +679,9 @@ exports[`When querying for a digital text when the user is a project admin detai
       "type": "PUBLISH_RESOURCE",
     },
   ],
+  "audioForTitle": {
+    "items": [],
+  },
   "connections": [
     {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
@@ -862,6 +874,9 @@ exports[`When querying for a digital text when the user is a project admin index
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
+      "audioForTitle": {
+        "items": [],
+      },
       "connections": [],
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
@@ -977,6 +992,9 @@ exports[`When querying for a digital text when the user is a project admin index
           "type": "PUBLISH_RESOURCE",
         },
       ],
+      "audioForTitle": {
+        "items": [],
+      },
       "connections": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",

@@ -105,7 +105,6 @@ describe(`DigitalTextCreatedEventHandler`, () => {
             expect(searchResult).not.toBe(NotFound);
 
             const {
-                title,
                 name,
                 tags,
                 notes,
@@ -116,10 +115,7 @@ describe(`DigitalTextCreatedEventHandler`, () => {
                 accessControlList,
             } = searchResult as DigitalTextViewModel;
 
-            expect(title.toDTO()).toEqual(name.toDTO());
-
-            const { languageCode: foundLanguageCode, text: foundText } =
-                title.getOriginalTextItem();
+            const { languageCode: foundLanguageCode, text: foundText } = name.getOriginalTextItem();
 
             expect(foundLanguageCode).toBe(languageCodeForTitle);
 
