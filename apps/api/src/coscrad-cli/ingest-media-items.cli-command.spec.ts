@@ -9,6 +9,7 @@ import buildMockConfigServiceSpec from '../app/config/__tests__/utilities/buildM
 import buildConfigFilePath from '../app/config/buildConfigFilePath';
 import { Environment } from '../app/config/constants/environment';
 import { CoscradEventFactory, EventModule } from '../domain/common';
+import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
 import { AudioItemCreated } from '../domain/models/audio-visual/audio-item/commands/create-audio-item/audio-item-created.event';
 import { AudioItem } from '../domain/models/audio-visual/audio-item/entities/audio-item.entity';
 import { VideoCreated } from '../domain/models/audio-visual/video';
@@ -42,6 +43,8 @@ const buildDirectoryPath = (suffix: string) => `${inputFilePrefix}/${suffix}`;
 const expectedNumberOfMediaItemsCreated = 13;
 
 const testDbName = generateDatabaseNameForTestSuite();
+
+const contributorIds = [1, 2, 3, 4, 5].map(buildDummyUuid);
 
 /**
  * TODO Diagnose why this test is flakey when run by the CI.
@@ -161,6 +164,7 @@ describe(`CLI Command: **ingest-media-items**`, () => {
                     cliCommandName,
                     `--directory=${buildDirectoryPath(`mediaItemsOnly`)}`,
                     `--staticAssetDestinationDirectory=${destinationDir}`,
+                    `--contributorIds=${contributorIds.join(',')}`,
                     `--createResources`,
                     `--publish`,
                     // TODO support tags
@@ -186,6 +190,18 @@ describe(`CLI Command: **ingest-media-items**`, () => {
                 expect(testMp3MediaItem).toBeInstanceOf(MediaItem);
 
                 const { lengthMilliseconds } = testMp3MediaItem;
+
+                // TODO assertHasContribution
+                const contributions = testMp3MediaItem.getContributions();
+
+                const missingContributions = contributorIds.filter(
+                    (id) =>
+                        !contributions.some((contribution) =>
+                            contribution.contributorIds.includes(id)
+                        )
+                );
+
+                expect(missingContributions).toEqual([]);
 
                 const actualMediaItemLength = 8.35916 * 1000; // ms, determined with Audacity
 
