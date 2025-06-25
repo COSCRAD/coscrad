@@ -3,7 +3,19 @@ import { parseTermRawData, TermDataLineage } from './parse-term-raw-data';
 
 describe(`parseTermRawData`, () => {
     describe(`when the raw data is missing`, () => {
-        it.todo(`should return an empty object`);
+        describe(`when rawData is null`, () => {
+            it(`should return an empty object`, () => {
+                const result = parseTermRawData(null);
+
+                expect(result).toEqual({});
+            });
+        });
+
+        describe(`when rawData is undefined`, () => {
+            const result = parseTermRawData(undefined);
+
+            expect(result).toEqual({});
+        });
     });
 
     describe(`when the raw data is provided`, () => {

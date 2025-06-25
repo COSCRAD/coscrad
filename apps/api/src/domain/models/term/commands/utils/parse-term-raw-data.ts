@@ -1,4 +1,8 @@
-import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
+import {
+    isNonEmptyObject,
+    isNonEmptyString,
+    isNullOrUndefined,
+} from '@coscrad/validation-constraints';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { RawDataForTermImports } from './raw-data-for-term-imports.entity';
@@ -8,6 +12,10 @@ export interface TermDataLineage {
 }
 
 export const parseTermRawData = (input: unknown): ResultOrError<TermDataLineage> => {
+    if (!isNonEmptyObject(input)) {
+        return {};
+    }
+
     /**
      * TODO use class transformer and schema validation
      */
@@ -15,17 +23,23 @@ export const parseTermRawData = (input: unknown): ResultOrError<TermDataLineage>
 
     const allErrors: InternalError[] = [];
 
-    const result = isNullOrUndefined(possibleAudioFilenames)
-        ? []
-        : // shallow-clone to avoid modifying the input (strings are primitives)
-          possibleAudioFilenames.map((f) => f);
+    const result = [];
 
-    if (!Array.isArray(result) || !result.every(isNonEmptyString)) {
-        allErrors.push(
-            new InternalError(
-                `Invalid value discovered for "possibleAudioFilenames". Expected a list of non-empty text.`
-            )
-        );
+    if (!isNullOrUndefined(possibleAudioFilenames)) {
+        if (
+            !Array.isArray(possibleAudioFilenames) ||
+            !possibleAudioFilenames.every(isNonEmptyString)
+        ) {
+            allErrors.push(
+                new InternalError(
+                    `Invalid value encountered for property 'possibleAudioFilenames. Expected a list of non-empty text.'`
+                )
+            );
+        } else {
+            possibleAudioFilenames.forEach((f) => {
+                result.push(f);
+            });
+        }
     }
 
     if (!isNullOrUndefined(audioFilename)) {
