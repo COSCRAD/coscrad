@@ -62,7 +62,7 @@ const allowedValuesAndLabels: { label: string; value: string }[] = [
     },
 ];
 
-const vocabularyListNameTranslated =
+const vocabularyListFilterPropertyRegistered =
     vocabularyListCreated.andThen<VocabularyListFilterPropertyRegistered>({
         type: 'VOCABULARY_LIST_PROPERTY_FILTER_REGISTERED',
         payload: {
@@ -91,12 +91,13 @@ const [termCreationEvent] = termCreated.as({
 
 const existingTermView = TermViewModel.fromTermCreated(termCreationEvent);
 
-const termAddedToVocabularyList = vocabularyListNameTranslated.andThen<TermAddedToVocabularyList>({
-    type: 'TERM_ADDED_TO_VOCABULARY_LIST',
-    payload: {
-        termId,
-    },
-});
+const termAddedToVocabularyList =
+    vocabularyListFilterPropertyRegistered.andThen<TermAddedToVocabularyList>({
+        type: 'TERM_ADDED_TO_VOCABULARY_LIST',
+        payload: {
+            termId,
+        },
+    });
 
 const [creationEvent, registrationEvent, termAddedEvent] = termAddedToVocabularyList.as({
     type: AggregateType.vocabularyList,
