@@ -1,4 +1,4 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { CommandModule } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -139,7 +139,8 @@ describe(`when querying terms`, () => {
                 result
                     .flatMap(({ importOptions }) => importOptions.map(({ action }) => action))
                     .forEach((commands, index) => {
-                        expect(commands).toHaveLength(1);
+                        // add audio for term, publish audio
+                        expect(commands).toHaveLength(2);
 
                         const target = commands[0];
 
@@ -161,23 +162,137 @@ describe(`when querying terms`, () => {
         });
 
         describe(`when there are no terms without audio`, () => {
-            it.todo(`should return the correct result`);
+            const audioItemSequentialIds = [1, 2, 3, 4, 5];
+
+            const termSequentialIds = [11, 12, 13, 14, 15];
+
+            const audioItems = audioItemSequentialIds.map((sequentialId) =>
+                buildTestInstance(EventSourcedAudioItemViewModel, {
+                    id: buildDummyUuid(sequentialId),
+                    name: buildMultilingualTextWithSingleItem(`audio item #${sequentialId}`),
+                })
+            );
+
+            const terms = termSequentialIds.map((sequentialId, index) =>
+                buildTestInstance(TermViewModel, {
+                    id: buildDummyUuid(sequentialId),
+                    name: buildMultilingualTextWithSingleItem(`term #${sequentialId}`),
+                    // the term already has audio
+                    mediaItemId: buildDummyUuid(200 + index),
+                })
+            );
+
+            beforeEach(async () => {
+                await termQueryRepository.createMany(terms);
+
+                await audioQueryRepository.createMany(audioItems);
+            });
+
+            it(`should return the expected result`, async () => {
+                const result = await termQueryService.discoverAudio({
+                    shouldPublishAudio: true,
+                    languageCodeForAudio,
+                });
+
+                expect(result).toHaveLength(0);
+            });
         });
 
-        describe(`when some terms have audio`, () => {
-            describe(`when audio publication is requested`, () => {
-                it.todo(`should return the correct result`);
+        describe(`when some terms already have audio, some have no possible audio file names, and others have possible audio filename candidates`, () => {
+            const audioItemSequentialIds = [1, 2, 3, 4, 5];
 
-                describe(`when executing a resulting import command stream`, () => {
-                    `the command should succeed`;
+            const termSequentialIds = [11, 12, 13, 14, 15];
+
+            const audioItems = audioItemSequentialIds.map((sequentialId) =>
+                buildTestInstance(EventSourcedAudioItemViewModel, {
+                    id: buildDummyUuid(sequentialId),
+                    name: buildMultilingualTextWithSingleItem(`audio item #${sequentialId}`),
+                })
+            );
+
+            const terms = termSequentialIds.map((sequentialId, index) =>
+                buildTestInstance(TermViewModel, {
+                    id: buildDummyUuid(sequentialId),
+                    name: buildMultilingualTextWithSingleItem(`term #${sequentialId}`),
+                    mediaItemId: index === 0 ? buildDummyUuid(300) : null,
+                    /**
+                     * Term 0 has existing audio so `possibleAudioFilenames` is omitted
+                     * Term 1 has no existing audio but no `possibleAudioFilenames`
+                     */
+                    possibleAudioFilenames: [0, 1].includes(index)
+                        ? null
+                        : [audioItems[index].name.getOriginalTextItem().text],
+                })
+            );
+
+            // Term 0 and Term 1 do not have a possible audio result
+            const expectedNumberOfResults = terms.length - 2;
+
+            beforeEach(async () => {
+                await termQueryRepository.createMany(terms);
+
+                await audioQueryRepository.createMany(audioItems);
+            });
+
+            describe(`when audio publication is requested`, () => {
+                it(`should include RESOURCE_PUBLISHED commands in the import actions`, async () => {
+                    const result = await termQueryService.discoverAudio({
+                        shouldPublishAudio: true,
+                        languageCodeForAudio,
+                    });
+
+                    expect(result).toHaveLength(expectedNumberOfResults);
+
+                    const allImportOptions = result.map(({ importOptions }) =>
+                        importOptions.map(({ action }) => action)
+                    );
+
+                    allImportOptions.forEach((importOptions) => {
+                        expect(importOptions).toHaveLength(1);
+
+                        const fsas = importOptions[0];
+
+                        expect(fsas).toHaveLength(2);
+
+                        expect(fsas[0].type).toBe('ADD_AUDIO_FOR_TERM');
+
+                        const {
+                            type,
+                            payload: { aggregateCompositeIdentifier },
+                        } = fsas[1];
+
+                        expect(type).toBe('PUBLISH_RESOURCE');
+
+                        expect(aggregateCompositeIdentifier.type).toEqual(AggregateType.audioItem);
+                    });
                 });
             });
 
             describe(`when audio publication is not requested`, () => {
-                it.todo(`should return the correct result`);
+                it(`should not include RESOURCE_PUBLISHED commands in the import actions`, async () => {
+                    const result = await termQueryService.discoverAudio({
+                        // do not request audio publication
+                        shouldPublishAudio: false,
+                        languageCodeForAudio,
+                    });
 
-                describe(`when executing a resulting import command stream`, () => {
-                    `the command should succeed`;
+                    expect(result).toHaveLength(expectedNumberOfResults);
+
+                    const allImportOptions = result.map(({ importOptions }) =>
+                        importOptions.map(({ action }) => action)
+                    );
+
+                    allImportOptions.forEach((importOptions) => {
+                        expect(importOptions).toHaveLength(1);
+
+                        const fsas = importOptions[0];
+
+                        expect(fsas).toHaveLength(1);
+
+                        const { type: commandType } = fsas[0];
+
+                        expect(commandType).toBe('ADD_AUDIO_FOR_TERM');
+                    });
                 });
             });
         });

@@ -16,6 +16,7 @@ import { isNotFound, NotFound } from '../../../lib/types/not-found';
 import { TermViewModel } from '../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { EventSourcedAudioItemViewModel } from '../../models/audio-visual/audio-item/queries';
 import { AccessControlList } from '../../models/shared/access-control/access-control-list.entity';
+import { PublishResource } from '../../models/shared/common-commands';
 import { AddAudioForTerm } from '../../models/term/commands';
 import { Term } from '../../models/term/entities/term.entity';
 import { ITermQueryRepository, TERM_QUERY_REPOSITORY_TOKEN } from '../../models/term/queries';
@@ -34,7 +35,7 @@ interface AudioItemAndImportActions {
     action: CommandFSA[];
 }
 
-interface AudioForTerm {
+export interface AudioForTerm {
     term: TermViewModel;
     importOptions: AudioItemAndImportActions[];
 }
@@ -139,6 +140,7 @@ export class TermQueryService {
 
     async discoverAudio({
         languageCodeForAudio: languageCode,
+        shouldPublishAudio,
     }: DiscoverAudioForTermsOptions): Promise<AudioForTerm[]> {
         const termsWithAudioCandidates = await this.termQueryRepository.discoverAudio();
 
@@ -146,6 +148,8 @@ export class TermQueryService {
             ({ term, possibleAudioItems }): AudioForTerm => ({
                 term,
                 importOptions: possibleAudioItems.map((audioItem) => {
+                    const allCommandFsas: CommandFSA[] = [];
+
                     const addAudioForTerm: CommandFSA<AddAudioForTerm> = {
                         type: 'ADD_AUDIO_FOR_TERM',
                         payload: {
@@ -158,9 +162,26 @@ export class TermQueryService {
                         },
                     };
 
+                    allCommandFsas.push(addAudioForTerm);
+
+                    if (shouldPublishAudio) {
+                        const publishAudio: CommandFSA<PublishResource> = {
+                            // TODO shouldn't we get intellisence here?
+                            type: 'PUBLISH_RESOURCE',
+                            payload: {
+                                aggregateCompositeIdentifier: {
+                                    type: AggregateType.audioItem,
+                                    id: audioItem.id,
+                                },
+                            },
+                        };
+
+                        allCommandFsas.push(publishAudio);
+                    }
+
                     return {
                         audioItem,
-                        action: [addAudioForTerm],
+                        action: allCommandFsas,
                     };
                 }),
             })
