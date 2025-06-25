@@ -32,12 +32,24 @@ interface DiscoverAudioForTermsOptions {
 
 interface AudioItemAndImportActions {
     audioItem: EventSourcedAudioItemViewModel;
-    action: CommandFSA[];
+    actions: CommandFSA[];
 }
 
 export interface AudioForTerm {
     term: TermViewModel;
     importOptions: AudioItemAndImportActions[];
+}
+
+export interface AudioDiscoveryResult {
+    byTerm: AudioForTerm[];
+    /**
+     * This is a convenience for those using the CLI. If there are no terms with
+     * multiple import options, all command FSAs across all import options will
+     * be flattened into a single command stream.
+     *
+     * TODO Introduce an admin UX for this process instead.
+     */
+    bulkCommandStream?: CommandFSA[];
 }
 
 @Injectable()
@@ -141,7 +153,7 @@ export class TermQueryService {
     async discoverAudio({
         languageCodeForAudio: languageCode,
         shouldPublishAudio,
-    }: DiscoverAudioForTermsOptions): Promise<AudioForTerm[]> {
+    }: DiscoverAudioForTermsOptions): Promise<AudioDiscoveryResult> {
         const termsWithAudioCandidates = await this.termQueryRepository.discoverAudio();
 
         const result = termsWithAudioCandidates.map(
@@ -181,13 +193,21 @@ export class TermQueryService {
 
                     return {
                         audioItem,
-                        action: allCommandFsas,
+                        actions: allCommandFsas,
                     };
                 }),
             })
         );
 
-        return result;
+        const hasExactlyOneResultForEachApplicableTerm =
+            result.length > 0 && result.every(({ importOptions }) => importOptions.length === 1);
+
+        return {
+            byTerm: result,
+            bulkCommandStream: hasExactlyOneResultForEachApplicableTerm
+                ? result.flatMap(({ importOptions }) => importOptions[0].actions)
+                : null,
+        };
     }
 
     public subscribeToWriteNotifications(): Observable<{ data: { type: string } }> {

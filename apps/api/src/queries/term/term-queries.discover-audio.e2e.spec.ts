@@ -134,10 +134,10 @@ describe(`when querying terms`, () => {
                     languageCodeForAudio,
                 });
 
-                expect(result).toHaveLength(audioItems.length);
+                expect(result.byTerm).toHaveLength(audioItems.length);
 
-                result
-                    .flatMap(({ importOptions }) => importOptions.map(({ action }) => action))
+                result.byTerm
+                    .flatMap(({ importOptions }) => importOptions.map(({ actions }) => actions))
                     .forEach((commands, index) => {
                         // add audio for term, publish audio
                         expect(commands).toHaveLength(2);
@@ -158,6 +158,8 @@ describe(`when querying terms`, () => {
 
                         expect(foundTermId).toBe(terms[index].id);
                     });
+
+                expect(result.bulkCommandStream).toHaveLength(2 * terms.length);
             });
         });
 
@@ -194,7 +196,9 @@ describe(`when querying terms`, () => {
                     languageCodeForAudio,
                 });
 
-                expect(result).toHaveLength(0);
+                expect(result.byTerm).toHaveLength(0);
+
+                expect(result.bulkCommandStream).toBeFalsy();
             });
         });
 
@@ -241,10 +245,10 @@ describe(`when querying terms`, () => {
                         languageCodeForAudio,
                     });
 
-                    expect(result).toHaveLength(expectedNumberOfResults);
+                    expect(result.byTerm).toHaveLength(expectedNumberOfResults);
 
-                    const allImportOptions = result.map(({ importOptions }) =>
-                        importOptions.map(({ action }) => action)
+                    const allImportOptions = result.byTerm.map(({ importOptions }) =>
+                        importOptions.map(({ actions }) => actions)
                     );
 
                     allImportOptions.forEach((importOptions) => {
@@ -265,6 +269,13 @@ describe(`when querying terms`, () => {
 
                         expect(aggregateCompositeIdentifier.type).toEqual(AggregateType.audioItem);
                     });
+
+                    /**
+                     * ADD_AUDIO_TO_TERM
+                     * PUBLISH_RESOURCE
+                     * for each applicable term
+                     */
+                    expect(result.bulkCommandStream).toHaveLength(2 * expectedNumberOfResults);
                 });
             });
 
@@ -276,10 +287,10 @@ describe(`when querying terms`, () => {
                         languageCodeForAudio,
                     });
 
-                    expect(result).toHaveLength(expectedNumberOfResults);
+                    expect(result.byTerm).toHaveLength(expectedNumberOfResults);
 
-                    const allImportOptions = result.map(({ importOptions }) =>
-                        importOptions.map(({ action }) => action)
+                    const allImportOptions = result.byTerm.map(({ importOptions }) =>
+                        importOptions.map(({ actions }) => actions)
                     );
 
                     allImportOptions.forEach((importOptions) => {
@@ -293,6 +304,12 @@ describe(`when querying terms`, () => {
 
                         expect(commandType).toBe('ADD_AUDIO_FOR_TERM');
                     });
+
+                    /**
+                     * ADD_AUDIO_TO_TERM
+                     * for each applicable term
+                     */
+                    expect(result.bulkCommandStream).toHaveLength(expectedNumberOfResults);
                 });
             });
         });
