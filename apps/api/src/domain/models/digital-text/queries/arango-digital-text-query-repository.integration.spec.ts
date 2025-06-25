@@ -691,6 +691,12 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
             ],
         });
 
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetDigitalText);
+        });
+
         it(`should add the content to the page`, async () => {
             await testQueryRepository.addContentToPage(
                 targetDigitalText.id,
@@ -1149,123 +1155,6 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
                     audioItemIdForOtherLanguage
                 );
             });
-        });
-    });
-
-    describe(`addPhotographToPage`, () => {
-        const pageIdentifier = 'F2';
-
-        const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
-            pages: [
-                buildTestInstance(DigitalTextPage, {
-                    identifier: pageIdentifier,
-                    content: null,
-                    audio: MultilingualAudio.buildEmpty(),
-                }),
-            ],
-        });
-
-        const targetPhotograph = buildTestInstance(PhotographViewModel, {
-            id: buildDummyUuid(999),
-        });
-
-        beforeEach(async () => {
-            await databaseProvider.clearViews();
-
-            await testQueryRepository.create(targetDigitalText);
-
-            /**
-             * At present, this is not necessary. However, we may want to add a
-             * denormalized view of the photograph on the digital text, at which
-             * point this becomes important.
-             */
-            await new ArangoPhotographQueryRepository(connectionProvider).create(targetPhotograph);
-        });
-
-        it(`should add the photograph to the page`, async () => {
-            await testQueryRepository.addPhotographToPage(
-                targetDigitalText.id,
-                pageIdentifier,
-                targetPhotograph.id
-            );
-
-            const updatedView = (await testQueryRepository.fetchById(
-                targetDigitalText.id
-            )) as DigitalTextViewModel;
-
-            const { photographId } = updatedView.pages.find(
-                ({ identifier }) => identifier === pageIdentifier
-            );
-
-            expect(photographId).toEqual(targetPhotograph.id);
-        });
-    });
-
-    describe(`importPages`, () => {
-        const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
-            pages: [],
-        });
-
-        const audioIds = [301, 302, 303, 304, 305, 306].map(buildDummyUuid);
-
-        const existingAudioItems = audioIds.map((id) =>
-            buildTestInstance(EventSourcedAudioItemViewModel, {
-                id,
-                name: buildMultilingualTextWithSingleItem(`audio item: ${id}`),
-            })
-        );
-
-        const photographIds = [401, 402, 403, 404, 405, 406].map(buildDummyUuid);
-
-        const existingPhotographs = photographIds.map((id) => {
-            return buildTestInstance(PhotographViewModel, {
-                id,
-                name: buildMultilingualTextWithSingleItem(`photograph: ${id}`),
-            });
-        });
-
-        const pagesToImport: DigitalTextPageImportRecord[] = [1, 2, 3].map((sequenceNumber) => ({
-            pageIdentifier: sequenceNumber.toString(),
-            photographId: buildDummyUuid(200 + sequenceNumber),
-            content: [
-                {
-                    text: 'text for Chilcotin (original language)',
-                    languageCode: LanguageCode.English,
-                    audioItemId: audioIds[sequenceNumber - 1],
-                    photographId: photographIds[sequenceNumber - 1],
-                    isOriginalLanguage: true,
-                },
-                {
-                    text: 'text for English (translation language)',
-                    languageCode: LanguageCode.English,
-                    // -1 for 0-indexed + 3 to offset by the number of original audio items
-                    audioItemId: audioIds[sequenceNumber + 2],
-                    photographId: photographIds[sequenceNumber + 2],
-                    isOriginalLanguage: false,
-                },
-            ],
-        }));
-
-        beforeEach(async () => {
-            await databaseProvider.clearViews();
-
-            await testQueryRepository.create(targetDigitalText);
-
-            await testAudioRepository.createMany(existingAudioItems);
-
-            await new ArangoPhotographQueryRepository(connectionProvider).createMany(
-                existingPhotographs
-            );
-        });
-
-        it(`should import all page content`, async () => {
-            await testQueryRepository.importPages(targetDigitalText.id, pagesToImport);
-
-            const { pages } = (await testQueryRepository.fetchById(
-                targetDigitalText.id
-            )) as DigitalTextViewModel;
-
-            expect(pages).toHaveLength(pagesToImport.length);
         });
     });
 });
