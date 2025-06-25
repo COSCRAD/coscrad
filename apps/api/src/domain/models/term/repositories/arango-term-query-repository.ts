@@ -341,7 +341,8 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             FILTER t.mediaItemId == null && LENGTH(t.possibleAudioFilenames) > 0
             LET possibleAudioItems = (
                 FOR a in audioItem__VIEWS
-                filter CONTAINS_ARRAY(t.possibleAudioFilenames,a.name.items[0].text)
+                FOR pfn in t.possibleAudioFilenames
+                FILTER CONTAINS(a.name.items[0],pfn)
                 return a
             )
             return { term: t, possibleAudioItems }

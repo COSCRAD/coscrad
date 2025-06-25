@@ -957,7 +957,10 @@ describe(`ArangoTermQueryRepository`, () => {
                     id: buildDummyUuid(sequenceNumber),
                     name: buildMultilingualTextWithSingleItem(`term #${sequenceNumber}`),
                     mediaItemId: null,
-                    possibleAudioFilenames: [audioItems[index].name.getOriginalTextItem().text],
+                    // the match is by "string contains", not exact match
+                    possibleAudioFilenames: [
+                        audioItems[index].name.getOriginalTextItem().text.slice(2),
+                    ],
                 })
             );
 

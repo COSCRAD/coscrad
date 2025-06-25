@@ -225,7 +225,8 @@ describe(`when querying terms`, () => {
                      */
                     possibleAudioFilenames: [0, 1].includes(index)
                         ? null
-                        : [audioItems[index].name.getOriginalTextItem().text],
+                        : // the match is by string-contains
+                          [audioItems[index].name.getOriginalTextItem().text.slice(2)],
                 })
             );
 
