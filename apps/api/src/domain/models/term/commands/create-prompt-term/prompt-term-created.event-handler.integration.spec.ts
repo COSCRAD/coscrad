@@ -29,12 +29,20 @@ const termId = buildDummyUuid(1);
 
 const dummyContributor = getValidAggregateInstanceForTest(AggregateType.contributor);
 
+const possibleAudioFilenames = ['af1', 'af2'];
+
+const audioFilename = 'af3';
+
 const creationEvent = new TestEventStream().buildSingle<PromptTermCreated>({
     type: 'PROMPT_TERM_CREATED',
     payload: {
         aggregateCompositeIdentifier: {
             type: AggregateType.term,
             id: termId,
+        },
+        rawData: {
+            possibleAudioFilenames,
+            audioFilename,
         },
     },
     meta: {
@@ -126,5 +134,8 @@ describe(`PromptTermCreatedEventHandler.handle`, () => {
         expect(termView.actions).toContain('CONNECT_RESOURCES_WITH_NOTE');
         expect(termView.actions).toContain('PUBLISH_RESOURCE');
         expect(termView.actions).toContain('ADD_AUDIO_FOR_TERM');
+
+        // 2 in `possibleAudioFilenames` plus one specified on `audioFilename`
+        expect(termView.possibleAudioFilenames).toHaveLength(possibleAudioFilenames.length + 1);
     });
 });

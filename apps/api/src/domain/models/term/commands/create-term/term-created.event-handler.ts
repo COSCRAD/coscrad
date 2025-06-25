@@ -29,14 +29,12 @@ export class TermCreatedEventHandler implements ICoscradEventHandler {
 
         const termLineageInfo = parseTermRawData(rawData);
 
-        if (isInternalError(termLineageInfo)) {
-            return;
-        }
-
-        const { possibleAudioFilenames } = termLineageInfo;
-
-        if (Array.isArray(possibleAudioFilenames) && possibleAudioFilenames.length > 0) {
-            term.possibleAudioFilenames = possibleAudioFilenames;
+        if (
+            !isInternalError(termLineageInfo) &&
+            Array.isArray(termLineageInfo.possibleAudioFilenames) &&
+            termLineageInfo.possibleAudioFilenames.length > 0
+        ) {
+            term.possibleAudioFilenames = termLineageInfo.possibleAudioFilenames;
         }
 
         term.tokens = this.tokenizerProvider.has(languageCode)
