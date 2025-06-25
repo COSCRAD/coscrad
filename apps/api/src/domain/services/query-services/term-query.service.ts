@@ -1,20 +1,56 @@
-import { ICommandFormAndLabels, ITermViewModel } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    ICommandFormAndLabels,
+    ITermViewModel,
+    LanguageCode,
+} from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject, Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Observable } from 'rxjs';
+import { CommandFSA } from '../../../app/controllers/command/command-fsa/command-fsa.entity';
 import {
     CommandContext,
     CommandInfoService,
 } from '../../../app/controllers/command/services/command-info-service';
 import { isNotFound, NotFound } from '../../../lib/types/not-found';
+import { TermViewModel } from '../../../queries/buildViewModelForResource/viewModels/term.view-model';
+import { EventSourcedAudioItemViewModel } from '../../models/audio-visual/audio-item/queries';
 import { AccessControlList } from '../../models/shared/access-control/access-control-list.entity';
+import { PublishResource } from '../../models/shared/common-commands';
+import { AddAudioForTerm } from '../../models/term/commands';
 import { Term } from '../../models/term/entities/term.entity';
 import { ITermQueryRepository, TERM_QUERY_REPOSITORY_TOKEN } from '../../models/term/queries';
 import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';
 import { AggregateId } from '../../types/AggregateId';
 import { ResourceType } from '../../types/ResourceType';
 import { fetchActionsForUser } from './utilities/fetch-actions-for-user';
+
+interface DiscoverAudioForTermsOptions {
+    shouldPublishAudio: boolean;
+    languageCodeForAudio: LanguageCode;
+}
+
+interface AudioItemAndImportActions {
+    audioItem: EventSourcedAudioItemViewModel;
+    actions: CommandFSA[];
+}
+
+export interface AudioForTerm {
+    term: TermViewModel;
+    importOptions: AudioItemAndImportActions[];
+}
+
+export interface AudioDiscoveryResult {
+    byTerm: AudioForTerm[];
+    /**
+     * This is a convenience for those using the CLI. If there are no terms with
+     * multiple import options, all command FSAs across all import options will
+     * be flattened into a single command stream.
+     *
+     * TODO Introduce an admin UX for this process instead.
+     */
+    bulkCommandStream?: CommandFSA[];
+}
 
 @Injectable()
 export class TermQueryService {
@@ -25,8 +61,7 @@ export class TermQueryService {
     constructor(
         @Inject(TERM_QUERY_REPOSITORY_TOKEN)
         private readonly termQueryRepository: ITermQueryRepository,
-        @Inject(CommandInfoService) private readonly commandInfoService: CommandInfoService,
-        private readonly configService: ConfigService
+        @Inject(CommandInfoService) private readonly commandInfoService: CommandInfoService
     ) {
         // TODO we need the base URL as part of the config
         // this.audioUrlPrefix = `http://localhost:${this.configService.get(
@@ -112,6 +147,66 @@ export class TermQueryService {
             }),
             // TODO Should we register index-scoped commands in the view layer instead?
             indexScopedActions: this.fetchUserActions(userWithGroups, [Term]),
+        };
+    }
+
+    async discoverAudio({
+        languageCodeForAudio: languageCode,
+        shouldPublishAudio,
+    }: DiscoverAudioForTermsOptions): Promise<AudioDiscoveryResult> {
+        const termsWithAudioCandidates = await this.termQueryRepository.discoverAudio();
+
+        const result = termsWithAudioCandidates.map(
+            ({ term, possibleAudioItems }): AudioForTerm => ({
+                term,
+                importOptions: possibleAudioItems.map((audioItem) => {
+                    const allCommandFsas: CommandFSA[] = [];
+
+                    const addAudioForTerm: CommandFSA<AddAudioForTerm> = {
+                        type: 'ADD_AUDIO_FOR_TERM',
+                        payload: {
+                            aggregateCompositeIdentifier: {
+                                type: AggregateType.term,
+                                id: term.id,
+                            },
+                            audioItemId: audioItem.id,
+                            languageCode,
+                        },
+                    };
+
+                    allCommandFsas.push(addAudioForTerm);
+
+                    if (shouldPublishAudio) {
+                        const publishAudio: CommandFSA<PublishResource> = {
+                            // TODO shouldn't we get intellisence here?
+                            type: 'PUBLISH_RESOURCE',
+                            payload: {
+                                aggregateCompositeIdentifier: {
+                                    type: AggregateType.audioItem,
+                                    id: audioItem.id,
+                                },
+                            },
+                        };
+
+                        allCommandFsas.push(publishAudio);
+                    }
+
+                    return {
+                        audioItem,
+                        actions: allCommandFsas,
+                    };
+                }),
+            })
+        );
+
+        const hasExactlyOneResultForEachApplicableTerm =
+            result.length > 0 && result.every(({ importOptions }) => importOptions.length === 1);
+
+        return {
+            byTerm: result,
+            bulkCommandStream: hasExactlyOneResultForEachApplicableTerm
+                ? result.flatMap(({ importOptions }) => importOptions[0].actions)
+                : null,
         };
     }
 

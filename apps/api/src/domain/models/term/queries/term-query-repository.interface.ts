@@ -3,8 +3,19 @@ import { Observable } from 'rxjs';
 import { IResourceQueryRepository } from '../../../../app/domain-modules/web-of-knowledge/interfaces/resource-query-repository.interface';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { AggregateId } from '../../../types/AggregateId';
+import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
 
 export const TERM_QUERY_REPOSITORY_TOKEN = 'TERM_QUERY_REPOSITORY_TOKEN';
+
+// TODO
+// interface CoscradQueryParams {
+//     limit: number;
+// }
+
+export interface AudioCandidatesForTerm {
+    term: TermViewModel;
+    possibleAudioItems: EventSourcedAudioItemViewModel[];
+}
 
 /**
  * Note that we are abstracting over the database, not the view model so
@@ -32,4 +43,7 @@ export interface ITermQueryRepository extends IResourceQueryRepository<TermViewM
     indexVocabularyList(id: string, vocabularyListId: string): Promise<void>;
 
     indexVocabularyLists(termIds: string[], vocabularyListId: string): Promise<void>;
+
+    // read query methods
+    discoverAudio(): Promise<AudioCandidatesForTerm[]>;
 }

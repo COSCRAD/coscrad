@@ -687,10 +687,9 @@ export default async (
                 provide: TermQueryService,
                 useFactory: (
                     termQueryRepository: ITermQueryRepository,
-                    commandInfoService: CommandInfoService,
-                    configService: ConfigService
-                ) => new TermQueryService(termQueryRepository, commandInfoService, configService),
-                inject: [TERM_QUERY_REPOSITORY_TOKEN, CommandInfoService, ConfigService],
+                    commandInfoService: CommandInfoService
+                ) => new TermQueryService(termQueryRepository, commandInfoService),
+                inject: [TERM_QUERY_REPOSITORY_TOKEN, CommandInfoService],
             },
             {
                 provide: VocabularyListQueryService,

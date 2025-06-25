@@ -44,12 +44,20 @@ const termId = buildDummyUuid(1);
 
 const dummyContributor = getValidAggregateInstanceForTest(AggregateType.contributor);
 
+const possibleAudioFilenames = ['myaudio'];
+
+const standaloneAudioFilename = '12345';
+
 const termCreated = new TestEventStream()
     .andThen<TermCreated>({
         type: 'TERM_CREATED',
         payload: {
             text: textForTerm,
             languageCode,
+            rawData: {
+                possibleAudioFilenames,
+                audioFilename: standaloneAudioFilename,
+            },
         },
         meta: {
             contributorIds: [dummyContributor.id],
@@ -157,7 +165,13 @@ describe(`TermCreatedEventHandler`, () => {
 
             const foundTerm = searchResult as TermViewModel;
 
-            const { name: nameDto, contributions, actions, tokens } = foundTerm;
+            const {
+                name: nameDto,
+                contributions,
+                actions,
+                tokens,
+                possibleAudioFilenames: foundAudioFilenameCandidates,
+            } = foundTerm;
 
             const name = new MultilingualText(nameDto);
 
@@ -196,6 +210,13 @@ describe(`TermCreatedEventHandler`, () => {
                     (cid) => cid === dummyContributor.id
                 )
             ).toBe(true);
+
+            // the array plus the standalone prop
+            expect(foundAudioFilenameCandidates).toHaveLength(possibleAudioFilenames.length + 1);
+
+            expect(foundAudioFilenameCandidates[0]).toBe(possibleAudioFilenames[0]);
+
+            expect(foundAudioFilenameCandidates[1]).toBe(standaloneAudioFilename);
 
             // TODO check the contributor's full name as well
         });

@@ -17,6 +17,7 @@ import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/
 import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { AggregateId } from '../../../types/AggregateId';
+import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
 import {
     AUDIO_QUERY_REPOSITORY_TOKEN,
     IAudioItemQueryRepository,
@@ -24,7 +25,7 @@ import {
 import { IResourceConnectionDto } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { ContributionSummary } from '../../user-management';
-import { ITermQueryRepository } from '../queries';
+import { AudioCandidatesForTerm, ITermQueryRepository } from '../queries';
 import { BaseArangoResourceViewQueryBuilder } from './base-arango-resource-query-builder';
 
 export class ArangoTermQueryRepository implements ITermQueryRepository {
@@ -324,5 +325,37 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         });
 
         await cursor.all();
+    }
+
+    /**
+     * Read-only query methods
+     */
+    async discoverAudio(): Promise<AudioCandidatesForTerm[]> {
+        /**
+         * TODO
+         * - filter out terms with no known `possibleAudioFilenames`
+         * - include pagination
+         */
+        const query = `
+            FOR t IN term__VIEWS
+            FILTER t.mediaItemId == null && LENGTH(t.possibleAudioFilenames) > 0
+            LET possibleAudioItems = (
+                FOR a in audioItem__VIEWS
+                filter CONTAINS_ARRAY(t.possibleAudioFilenames,a.name.items[0].text)
+                return a
+            )
+            return { term: t, possibleAudioItems }
+        `;
+
+        const cursor = await this.database.query({ query, bindVars: {} });
+
+        const result = await cursor.all();
+
+        return result.map(({ term, possibleAudioItems }) => ({
+            term: TermViewModel.fromDto(mapDatabaseDocumentToAggregateDTO(term)),
+            possibleAudioItems: possibleAudioItems.map((audioItem) =>
+                EventSourcedAudioItemViewModel.fromDto(mapDatabaseDocumentToAggregateDTO(audioItem))
+            ),
+        }));
     }
 }
