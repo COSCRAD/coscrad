@@ -26,7 +26,7 @@ const pageAddedToDigitalText = buildTestInstance(PageAddedToDigitalText, {
 });
 
 const existingDigitalTextView = buildTestInstance(DigitalTextViewModel, {
-    pages: [],
+    pages: [{ identifier: '55' }],
 });
 
 describe(`PageAddedToDigitalTextEventHandler`, () => {
@@ -86,7 +86,9 @@ describe(`PageAddedToDigitalTextEventHandler`, () => {
                 existingDigitalTextView.id
             )) as DigitalTextViewModel;
 
-            expect(updatedView.pages).toBeTruthy();
+            expect(updatedView.pages).toHaveLength(1);
+
+            expect(updatedView.pages[0].identifier).toBe(pageAddedToDigitalText.payload.identifier);
         });
     });
 });
