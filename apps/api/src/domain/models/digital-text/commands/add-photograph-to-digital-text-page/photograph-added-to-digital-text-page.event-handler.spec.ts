@@ -1,4 +1,4 @@
-import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -10,100 +10,57 @@ import { ArangoDatabaseProvider } from '../../../../../persistence/database/data
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DigitalTextViewModel } from '../../../../../queries/digital-text';
+import { buildSingleLanguageText } from '../../../../../test-data/buildAudioItemTestData';
 import { TestEventStream } from '../../../../../test-data/events';
+import { buildTestInstance } from '../../../../../test-data/utilities';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
-import { PhotographCreated } from '../../../photograph';
-import { IPhotographQueryRepository } from '../../../photograph/queries';
+import {
+    IPhotographQueryRepository,
+    PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
+} from '../../../photograph/queries';
 import { PhotographViewModel } from '../../../photograph/queries/photograph.view-model';
-import { ArangoPhotographQueryRepository } from '../../../photograph/repositories';
 import { ArangoDigitalTextQueryRepository } from '../../queries/arango-digital-text-query-repository';
 import {
     DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN,
     IDigitalTextQueryRepository,
 } from '../../queries/digital-text-query-repository.interface';
-import { ContentAddedToDigitalTextPage } from '../add-content-to-digital-text-page';
-import { PageAddedToDigitalText } from '../add-page-to-digital-text/page-added-to-digital-text.event';
-import { DigitalTextCreated } from '../digital-text-created.event';
 import { PhotographAddedToDigitalTextPage } from './photograph-added-to-digital-text-page.event';
 import { PhotographAddedToDigitalTextPageEventHandler } from './photograph-added-to-digital-text-page.event-handler';
 
 const digitalTextId = buildDummyUuid(12);
 
-const compositeId = {
-    type: AggregateType.digitalText,
-    id: digitalTextId,
-};
+const languageCodeForTest = LanguageCode.English;
 
-const digitalTextTitle = 'The new book';
-
-const languageCodeForTitle = LanguageCode.English;
-
-const digitalTextCreated = new TestEventStream().andThen<DigitalTextCreated>({
-    type: 'DIGITAL_TEXT_CREATED',
-    payload: {
-        title: digitalTextTitle,
-        languageCodeForTitle,
-    },
-});
+const digitalTextTitle = buildSingleLanguageText('The new book', languageCodeForTest);
 
 const pageIdentifier = '20';
 
-const digitalTextPageAdded = digitalTextCreated
-    .andThen<PageAddedToDigitalText>({
-        type: 'PAGE_ADDED_TO_DIGITAL_TEXT',
-        payload: {
-            identifier: pageIdentifier,
-        },
-    })
-    .andThen<ContentAddedToDigitalTextPage>({
-        type: 'CONTENT_ADDED_TO_DIGITAL_TEXT_PAGE',
-        payload: {
-            pageIdentifier,
-            text: 'dummy page content',
-            languageCode: LanguageCode.English,
-        },
-    });
+const pageContent = buildSingleLanguageText('dummy page content', languageCodeForTest);
 
 const photographId = buildDummyUuid(2);
 
-const photographTitle = 'A photo of a dolphin';
+const photographTitle = buildSingleLanguageText('A photo of a dolphin', languageCodeForTest);
 
-const photographCreated = new TestEventStream().andThen<PhotographCreated>({
-    type: 'PHOTOGRAPH_CREATED',
-    payload: {
-        title: photographTitle,
-        languageCodeForTitle,
-    },
+const existingPhotographView = buildTestInstance(PhotographViewModel, {
+    id: photographId,
+    name: photographTitle,
+    photographer: 'Jean Simmons',
 });
 
-const [photographCreationEvent] = photographCreated.as({
-    type: AggregateType.photograph,
-    id: photographId,
-}) as [PhotographCreated];
+const existingView = buildTestInstance(DigitalTextViewModel, {
+    id: digitalTextId,
+    name: digitalTextTitle,
+    pages: [{ identifier: pageIdentifier, content: pageContent }],
+});
 
-const existingPhotographView = PhotographViewModel.fromPhotographCreated(photographCreationEvent);
-
-const photographAddedToDigitalTextPage =
-    digitalTextPageAdded.andThen<PhotographAddedToDigitalTextPage>({
-        type: 'PHOTOGRAPH_ADDED_TO_DIGITAL_TEXT_PAGE',
-        payload: {
-            aggregateCompositeIdentifier: { id: digitalTextId },
-            pageIdentifier,
-            photographId,
-        },
-    });
-
-const [creationEvent, pageAddedEvent, contentAddedToPageEvent, photographAddedToPageEvent] =
-    photographAddedToDigitalTextPage.as(compositeId) as [
-        DigitalTextCreated,
-        PageAddedToDigitalText,
-        ContentAddedToDigitalTextPage,
-        PhotographAddedToDigitalTextPage
-    ];
-
-const existingView = DigitalTextViewModel.fromDigitalTextCreated(creationEvent)
-    .apply(pageAddedEvent)
-    .apply(contentAddedToPageEvent);
+const photographAddedToPage = new TestEventStream().buildSingle<PhotographAddedToDigitalTextPage>({
+    type: 'PHOTOGRAPH_ADDED_TO_DIGITAL_TEXT_PAGE',
+    payload: {
+        aggregateCompositeIdentifier: { id: digitalTextId },
+        pageIdentifier: pageIdentifier,
+        photographId: photographId,
+    },
+});
 
 describe(`PhotographAddedToDigitalTextPageEventHandler`, () => {
     let testQueryRepository: IDigitalTextQueryRepository;
@@ -114,7 +71,7 @@ describe(`PhotographAddedToDigitalTextPageEventHandler`, () => {
 
     let app: INestApplication;
 
-    let eventHandler: PhotographAddedToDigitalTextPageEventHandler;
+    let photographAddedToDigitalTextPageEventHandler: PhotographAddedToDigitalTextPageEventHandler;
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
@@ -158,9 +115,10 @@ describe(`PhotographAddedToDigitalTextPageEventHandler`, () => {
 
         testQueryRepository = new ArangoDigitalTextQueryRepository(connectionProvider);
 
-        photographQueryRepository = new ArangoPhotographQueryRepository(connectionProvider);
+        photographQueryRepository = app.get(PHOTOGRAPH_QUERY_REPOSITORY_TOKEN);
 
-        eventHandler = new PhotographAddedToDigitalTextPageEventHandler(testQueryRepository);
+        photographAddedToDigitalTextPageEventHandler =
+            new PhotographAddedToDigitalTextPageEventHandler(testQueryRepository);
     });
 
     afterAll(async () => {
@@ -175,19 +133,19 @@ describe(`PhotographAddedToDigitalTextPageEventHandler`, () => {
         await photographQueryRepository.create(existingPhotographView);
     });
 
-    describe(`when there is an existing digital text with a page added`, () => {
+    describe(`when there is an existing digital text with a page that does not yet have a photograph`, () => {
         it(`should add the given photograph to the digital text page`, async () => {
-            await eventHandler.handle(photographAddedToPageEvent);
+            await photographAddedToDigitalTextPageEventHandler.handle(photographAddedToPage);
 
             const updatedView = (await testQueryRepository.fetchById(
                 existingView.id
             )) as DigitalTextViewModel;
 
-            const photographSearchResult = updatedView.pages.find(
+            const pageSearchResult = updatedView.pages.find(
                 ({ identifier }) => identifier === pageIdentifier
             );
 
-            expect(photographSearchResult.photographId).toEqual(photographId);
+            expect(pageSearchResult.photographId).toEqual(photographId);
         });
     });
 });
