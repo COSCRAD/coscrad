@@ -18,6 +18,7 @@ import {
     AddContentToDigitalTextPageCommandHandler,
     ContentAddedToDigitalTextPage,
 } from '../../domain/models/digital-text/commands/add-content-to-digital-text-page';
+import { ContentAddedToDigitalTextPageEventHandler } from '../../domain/models/digital-text/commands/add-content-to-digital-text-page/content-added-to-digital-text-page.event-handler';
 import { PageAddedToDigitalTextEventHandler } from '../../domain/models/digital-text/commands/add-page-to-digital-text/page-added-to-digital-text.event-handler';
 import { CreateDigitalText } from '../../domain/models/digital-text/commands/create-digital-text.command';
 import { CreateDigitalTextCommandHandler } from '../../domain/models/digital-text/commands/create-digital-text.command-handler';
@@ -49,6 +50,7 @@ import { DigitalTextQueryController } from '../controllers/resources/digital-tex
         DigitalTextCreatedEventHandler,
         DigitalTextTitleTranslatedEventHandler,
         PageAddedToDigitalTextEventHandler,
+        ContentAddedToDigitalTextPageEventHandler,
         ...[
             // Domain Model
             DigitalText,
