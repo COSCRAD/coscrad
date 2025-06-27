@@ -27,6 +27,7 @@ const identifier = '56';
 
 const existingDigitalTextView = buildTestInstance(DigitalTextViewModel, {
     id: digitalTextId,
+    pages: [{ identifier: identifier }],
 });
 
 const contentAddedToDigitalTextPage = buildTestInstance(ContentAddedToDigitalTextPage, {
@@ -95,7 +96,13 @@ describe(`ContentAddedToDigitalTextPageEventHandler`, () => {
                 existingDigitalTextView.id
             )) as DigitalTextViewModel;
 
-            expect(updatedView.pages).toBeTruthy();
+            const pageSearchResult = updatedView.pages.find(
+                ({ identifier }) => identifier === identifier
+            );
+
+            const { content } = pageSearchResult;
+
+            expect(content).toBeTruthy();
         });
     });
 });
