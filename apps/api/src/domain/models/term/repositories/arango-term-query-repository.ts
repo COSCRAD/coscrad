@@ -352,11 +352,24 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
 
         const result = await cursor.all();
 
-        return result.map(({ term, possibleAudioItems }) => ({
-            term: TermViewModel.fromDto(mapDatabaseDocumentToAggregateDTO(term)),
-            possibleAudioItems: possibleAudioItems.map((audioItem) =>
-                EventSourcedAudioItemViewModel.fromDto(mapDatabaseDocumentToAggregateDTO(audioItem))
-            ),
-        }));
+        // filter + map
+        const audioForTerms = result.flatMap(({ term, possibleAudioItems }) => {
+            if (possibleAudioItems.length === 0) {
+                return [];
+            }
+
+            return [
+                {
+                    term: TermViewModel.fromDto(mapDatabaseDocumentToAggregateDTO(term)),
+                    possibleAudioItems: possibleAudioItems.map((audioItem) =>
+                        EventSourcedAudioItemViewModel.fromDto(
+                            mapDatabaseDocumentToAggregateDTO(audioItem)
+                        )
+                    ),
+                },
+            ];
+        });
+
+        return audioForTerms;
     }
 }

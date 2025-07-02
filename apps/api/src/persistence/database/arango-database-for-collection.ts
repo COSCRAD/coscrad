@@ -180,4 +180,8 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
 
         return cursor;
     }
+
+    getDbName(): string {
+        return this.#arangoDatabase.getDatabaseName();
+    }
 }

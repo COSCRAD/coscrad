@@ -7,6 +7,7 @@ import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.de
 interface DiscoverAudioItemsCliCommandOptions {
     filepath: string;
     languageCodeForAudio: LanguageCode;
+    publish: boolean;
 }
 
 @CliCommand({
@@ -20,12 +21,16 @@ export class DiscoverAudioItemsCliCommand extends CliCommandRunner {
 
     async run(
         _passedParams: string[],
-        { filepath, languageCodeForAudio }: DiscoverAudioItemsCliCommandOptions
+        {
+            filepath,
+            languageCodeForAudio,
+            publish: shouldPublishTerms,
+        }: DiscoverAudioItemsCliCommandOptions
     ): Promise<void> {
         const audioForTerms = await this.termQueryService.discoverAudio({
             languageCodeForAudio,
             // TODO CLI optoin
-            shouldPublishAudio: false,
+            shouldPublishTerms,
         });
 
         // TODO add time stamp
@@ -66,5 +71,14 @@ export class DiscoverAudioItemsCliCommand extends CliCommandRunner {
         throw new InternalError(
             `Encountered an invalid language code {${value}} when discovering audio for terms`
         );
+    }
+
+    @CliCommandOption({
+        flags: '-p, --publish [publish]',
+        description: 'should the term be published?',
+        required: false,
+    })
+    parsePublish(value: string): boolean {
+        return JSON.parse(value);
     }
 }

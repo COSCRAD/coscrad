@@ -10,7 +10,8 @@ import buildConfigFilePath from '../app/config/buildConfigFilePath';
 import { Environment } from '../app/config/constants/environment';
 import { EdgeConnectionModule } from '../app/domain-modules/edge-connection.module';
 import { TermModule } from '../app/domain-modules/term.module';
-import { CoscradEventFactory, EventModule } from '../domain/common';
+import { EventModule } from '../domain/common';
+import { buildMultilingualTextWithSingleItem } from '../domain/common/build-multilingual-text-with-single-item';
 import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
 import { AudioVisualModule } from '../domain/models/audio-visual/application/audio-visual.module';
 import { AudioItemCreated } from '../domain/models/audio-visual/audio-item/commands/create-audio-item/audio-item-created.event';
@@ -24,15 +25,13 @@ import { ResourcePublished } from '../domain/models/shared/common-commands/publi
 import { ITermQueryRepository, TERM_QUERY_REPOSITORY_TOKEN } from '../domain/models/term/queries';
 import { AudioDiscoveryResult } from '../domain/services/query-services/term-query.service';
 import { AggregateId } from '../domain/types/AggregateId';
-import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
 import { PersistenceModule } from '../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
 import { TermViewModel } from '../queries/buildViewModelForResource/viewModels/term.view-model';
 import { buildTestInstance } from '../test-data/utilities';
-import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../validation';
+import { DynamicDataTypeModule } from '../validation';
 import { CoscradCliModule } from './coscrad-cli.module';
 import { COSCRAD_LOGGER_TOKEN } from './logging';
 import { buildMockLogger } from './logging/__tests__';
@@ -43,10 +42,15 @@ const targetAudioFilePrefixes = audioSequenceNumbers.map(
     (sequenceNumber) => `filename-${sequenceNumber}`
 );
 
-const audioItems = audioSequenceNumbers.map((sequenceNumber) =>
+const buildAudioFilenameFromPrefix = (prefix: string) => `audio-${prefix}_JD`;
+
+const audioItems = audioSequenceNumbers.map((sequenceNumber, index) =>
     buildTestInstance(EventSourcedAudioItemViewModel, {
         id: buildDummyUuid(sequenceNumber + 200),
         mediaItemId: buildDummyUuid(sequenceNumber + 100),
+        name: buildMultilingualTextWithSingleItem(
+            buildAudioFilenameFromPrefix(targetAudioFilePrefixes[index])
+        ),
     })
 );
 
@@ -58,8 +62,6 @@ const outputDir = `__cli-command-test-files__`;
 
 const outputFilepath = `${outputDir}/discover-audio-items.cli-command.valid-case.data.json`;
 
-const buildAudioFilenameFromPrefix = (prefix: string) => `audio-${prefix}_JD`;
-
 const termWithAudio = buildTestInstance(TermViewModel, {
     id: buildDummyUuid(1),
     // this should not collide with a target audio item's media item ID
@@ -69,7 +71,8 @@ const termWithAudio = buildTestInstance(TermViewModel, {
 const termWithOneAudioCandidate = buildTestInstance(TermViewModel, {
     id: buildDummyUuid(2),
     mediaItemId: undefined,
-    possibleAudioFilenames: [buildAudioFilenameFromPrefix(targetAudioFilePrefixes[0])],
+    // this ensures we support "string contains" (partial match for infixes of file names)
+    possibleAudioFilenames: [targetAudioFilePrefixes[0]],
 });
 
 const termWithMultipleAudioCandidatesAndOneMatch = buildTestInstance(TermViewModel, {
@@ -126,8 +129,6 @@ const allTerms = [
 describe(`CLI Command: **${cliCommandName}**`, () => {
     let commandInstance: TestingModule;
 
-    let testRepositoryProvider: TestRepositoryProvider;
-
     let databaseProvider: ArangoDatabaseProvider;
 
     let testAppModule: TestingModule;
@@ -172,20 +173,10 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
 
         await testAppModule.init();
 
-        const dynamicDataTypeFinderService = testAppModule.get(DynamicDataTypeFinderService);
-
-        await dynamicDataTypeFinderService.bootstrapDynamicTypes();
-
         const arangoConnectionProvider =
             testAppModule.get<ArangoConnectionProvider>(ArangoConnectionProvider);
 
         databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
-
-        testRepositoryProvider = new TestRepositoryProvider(
-            databaseProvider,
-            testAppModule.get(CoscradEventFactory),
-            testAppModule.get(DynamicDataTypeFinderService)
-        );
 
         audioItemQueryRepository = testAppModule.get(AUDIO_QUERY_REPOSITORY_TOKEN);
 
@@ -194,18 +185,23 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
         commandInstance = await CommandTestFactory.createTestingCommand({
             imports: [CoscradCliModule],
         })
+            .overrideProvider(ConfigService)
+            .useValue(
+                buildMockConfigServiceSpec(
+                    {
+                        ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+                    },
+                    buildConfigFilePath(Environment.test)
+                )
+            )
             .overrideProvider(AppModule)
             .useValue(testAppModule)
-            .overrideProvider(REPOSITORY_PROVIDER_TOKEN)
-            .useValue(testRepositoryProvider)
             .overrideProvider(COSCRAD_LOGGER_TOKEN)
             .useValue(mockLogger)
             .compile();
     });
 
     beforeEach(async () => {
-        await testRepositoryProvider.testSetup();
-
         jest.resetAllMocks();
 
         if (!existsSync(outputDir)) {
@@ -225,71 +221,128 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
     describe(`when there are terms with valid audio candidates`, () => {
         beforeEach(async () => {
             await audioItemQueryRepository.createMany(audioItems);
-
-            await termQueryRepository.createMany(allTerms);
         });
 
-        it(`should return the expected result`, async () => {
-            await CommandTestFactory.run(commandInstance, [
-                cliCommandName,
-                `--filepath=${outputFilepath}`,
-                `--languageCode=${languageCodeForAudio}`,
-            ]);
+        describe(`when publication is requested`, () => {
+            beforeEach(async () => {
+                await termQueryRepository.createMany(allTerms);
+            });
 
-            // TODO assert file contents helper?
-            const fileExists = existsSync(outputFilepath);
+            it(`should return the expected result`, async () => {
+                await CommandTestFactory.run(commandInstance, [
+                    cliCommandName,
+                    `--filepath=${outputFilepath}`,
+                    `--languageCode=${languageCodeForAudio}`,
+                    `--publish`,
+                ]);
 
-            expect(fileExists).toBe(true);
+                // TODO assert file contents helper?
+                const fileExists = existsSync(outputFilepath);
 
-            const raw = readFileSync(outputFilepath);
+                expect(fileExists).toBe(true);
 
-            const { bulkCommandStream, byTerm } = JSON.parse(
-                raw.toString()
-            ) as AudioDiscoveryResult;
+                const raw = readFileSync(outputFilepath);
 
-            expect(bulkCommandStream).toBeInstanceOf(Array);
+                const { bulkCommandStream, byTerm } = JSON.parse(
+                    raw.toString()
+                ) as AudioDiscoveryResult;
 
-            expect(bulkCommandStream).not.toHaveLength(0);
+                // because one of the terms has multiple options, this property is not populated
+                expect(bulkCommandStream).toEqual(null);
 
-            const assertNoEntryForTerm = (termId: AggregateId) => {
-                const searchResult = byTerm.find(({ term }) => term.id === termId);
+                const assertNoEntryForTerm = (termId: AggregateId) => {
+                    const searchResult = byTerm.find(({ term }) => term.id === termId);
 
-                expect(searchResult).toBe(undefined);
-            };
+                    expect(searchResult).toBe(undefined);
+                };
 
-            /**
-             * Discovery should not find audio for any of the following terms.
-             */
-            assertNoEntryForTerm(termWithAudio.id);
+                /**
+                 * Discovery should not find audio for any of the following terms.
+                 */
+                assertNoEntryForTerm(termWithAudio.id);
 
-            assertNoEntryForTerm(termWithAudioAndPossibleAudioFilenames.id);
+                assertNoEntryForTerm(termWithAudioAndPossibleAudioFilenames.id);
 
-            assertNoEntryForTerm(termWithOneAudioCandidateAndNoMatches.id);
+                assertNoEntryForTerm(termWithOneAudioCandidateAndNoMatches.id);
 
-            assertNoEntryForTerm(termWithSeveralAudioCandidatesAndNoMatches.id);
+                assertNoEntryForTerm(termWithSeveralAudioCandidatesAndNoMatches.id);
 
-            const { importOptions: importOptionsForTermWithOneAudioCandidate } = byTerm.find(
-                ({ term }) => term.id === termWithOneAudioCandidate.id
-            );
+                const { importOptions: importOptionsForTermWithOneAudioCandidate } = byTerm.find(
+                    ({ term }) => term.id === termWithOneAudioCandidate.id
+                );
 
-            expect(importOptionsForTermWithOneAudioCandidate).toHaveLength(1);
+                expect(importOptionsForTermWithOneAudioCandidate).toHaveLength(1);
 
-            const {
-                importOptions: importOptionsForTermWithMultipleAudioCandidatesAndMultipleMatches,
-            } = byTerm.find(
-                ({ term }) => term.id === termWithMultipleAudioCandidatesAndMultipleMatches.id
-            );
+                const {
+                    importOptions:
+                        importOptionsForTermWithMultipleAudioCandidatesAndMultipleMatches,
+                } = byTerm.find(
+                    ({ term }) => term.id === termWithMultipleAudioCandidatesAndMultipleMatches.id
+                );
 
-            expect(importOptionsForTermWithMultipleAudioCandidatesAndMultipleMatches).toHaveLength(
-                2
-            );
+                expect(
+                    importOptionsForTermWithMultipleAudioCandidatesAndMultipleMatches
+                ).toHaveLength(2);
 
-            const { importOptions: importOptionsForTermWithMultipleAudioCandidatesAndOneMatch } =
-                byTerm.find(
+                const {
+                    importOptions: importOptionsForTermWithMultipleAudioCandidatesAndOneMatch,
+                } = byTerm.find(
                     ({ term }) => term.id === termWithMultipleAudioCandidatesAndOneMatch.id
                 );
 
-            expect(importOptionsForTermWithMultipleAudioCandidatesAndOneMatch).toHaveLength(1);
+                expect(importOptionsForTermWithMultipleAudioCandidatesAndOneMatch).toHaveLength(1);
+
+                const { actions } = importOptionsForTermWithMultipleAudioCandidatesAndOneMatch[0];
+
+                // add audio, publish term
+                expect(actions).toHaveLength(2);
+
+                expect(actions[0].type).toBe('ADD_AUDIO_FOR_TERM');
+
+                expect(actions[1].type).toBe('PUBLISH_RESOURCE');
+            });
         });
+
+        describe(`when publication is not requested`, () => {
+            beforeEach(async () => {
+                await termQueryRepository.create(termWithMultipleAudioCandidatesAndOneMatch);
+            });
+
+            it(`should not publish the term`, async () => {
+                await CommandTestFactory.run(commandInstance, [
+                    cliCommandName,
+                    `--filepath=${outputFilepath}`,
+                    `--languageCode=${languageCodeForAudio}`,
+                    // `--publish`,
+                ]);
+
+                // TODO assert file contents helper?
+                const fileExists = existsSync(outputFilepath);
+
+                expect(fileExists).toBe(true);
+
+                const raw = readFileSync(outputFilepath);
+
+                const { bulkCommandStream, byTerm } = JSON.parse(
+                    raw.toString()
+                ) as AudioDiscoveryResult;
+
+                /**
+                 * Since the only term with a result has exactly 1 candidate,
+                 * all commands are flattened into `bulkCommandStream`.
+                 */
+                expect(bulkCommandStream).toHaveLength(1);
+
+                expect(
+                    byTerm.find(
+                        ({ term }) => term.id == termWithMultipleAudioCandidatesAndOneMatch.id
+                    ).importOptions
+                ).toHaveLength(1);
+            });
+        });
+    });
+
+    describe(`when a required parameter is omitted`, () => {
+        it.todo(`should have a test`);
     });
 });
