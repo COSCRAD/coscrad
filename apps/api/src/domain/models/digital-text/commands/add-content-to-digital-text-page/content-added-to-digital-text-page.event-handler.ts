@@ -1,11 +1,12 @@
 import { Inject } from '@nestjs/common';
 import { ContentAddedToDigitalTextPage } from '.';
-import { ICoscradEventHandler } from '../../../../../domain/common';
+import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
 import {
     DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN,
     IDigitalTextQueryRepository,
 } from '../../queries/digital-text-query-repository.interface';
 
+@CoscradEventConsumer('CONTENT_ADDED_TO_DIGITAL_TEXT_PAGE')
 export class ContentAddedToDigitalTextPageEventHandler implements ICoscradEventHandler {
     constructor(
         @Inject(DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN)

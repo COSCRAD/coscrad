@@ -1,4 +1,4 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
+import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -19,7 +19,7 @@ import { ContentAddedToDigitalTextPageEventHandler } from './content-added-to-di
 
 const digitalTextId = buildDummyUuid(34);
 
-const existingText = 'content for page';
+const newPageContent = 'content for page';
 
 const languageCodeForContent = LanguageCode.Chilcotin;
 
@@ -33,7 +33,7 @@ const existingDigitalTextView = buildTestInstance(DigitalTextViewModel, {
 const contentAddedToDigitalTextPage = buildTestInstance(ContentAddedToDigitalTextPage, {
     payload: {
         aggregateCompositeIdentifier: { id: digitalTextId },
-        text: existingText,
+        text: newPageContent,
         languageCode: languageCodeForContent,
         pageIdentifier: identifier,
     },
@@ -103,6 +103,12 @@ describe(`ContentAddedToDigitalTextPageEventHandler`, () => {
             const { content } = pageSearchResult;
 
             expect(content).toBeTruthy();
+
+            const pageContentOriginalTextItem = content.items.find(
+                ({ role }) => role === MultilingualTextItemRole.original
+            ).text;
+
+            expect(pageContentOriginalTextItem).toEqual(newPageContent);
         });
     });
 });
