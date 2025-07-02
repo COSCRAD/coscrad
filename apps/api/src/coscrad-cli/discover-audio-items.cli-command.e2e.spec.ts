@@ -1,3 +1,4 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandModule } from '@coscrad/commands';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -102,7 +103,7 @@ const termWithSeveralAudioCandidatesAndNoMatches = buildTestInstance(TermViewMod
 });
 
 const termWithAudioAndPossibleAudioFilenames = buildTestInstance(TermViewModel, {
-    id: buildDummyUuid(1),
+    id: buildDummyUuid(7),
     // this should not collide with a target audio item's media item ID
     mediaItemId: buildDummyUuid(191),
     possibleAudioFilenames: [
@@ -219,6 +220,8 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
         await databaseProvider.clearViews();
     });
 
+    const languageCodeForAudio = LanguageCode.Chilcotin;
+
     describe(`when there are terms with valid audio candidates`, () => {
         beforeEach(async () => {
             await audioItemQueryRepository.createMany(audioItems);
@@ -230,6 +233,7 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
             await CommandTestFactory.run(commandInstance, [
                 cliCommandName,
                 `--filepath=${outputFilepath}`,
+                `--languageCode=${languageCodeForAudio}`,
             ]);
 
             // TODO assert file contents helper?

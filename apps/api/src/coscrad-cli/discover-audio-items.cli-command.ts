@@ -1,12 +1,39 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
+import { writeFileSync } from 'fs';
+import { TermQueryService } from '../domain/services/query-services/term-query.service';
+import { InternalError } from '../lib/errors/InternalError';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
+
+interface DiscoverAudioItemsCliCommandOptions {
+    filepath: string;
+    languageCodeForAudio: LanguageCode;
+}
 
 @CliCommand({
     name: 'discover-audio-for-terms',
     description: 'export a json file identifying possible audio items for each term without audio',
 })
 export class DiscoverAudioItemsCliCommand extends CliCommandRunner {
-    async run(_passedParams: string[], _options?: Record<string, any>): Promise<void> {
-        throw new Error('Method not implemented.');
+    constructor(private readonly termQueryService: TermQueryService) {
+        super();
+    }
+
+    async run(
+        _passedParams: string[],
+        { filepath, languageCodeForAudio }: DiscoverAudioItemsCliCommandOptions
+    ): Promise<void> {
+        const audioForTerms = await this.termQueryService.discoverAudio({
+            languageCodeForAudio,
+            // TODO CLI optoin
+            shouldPublishAudio: false,
+        });
+
+        // TODO add time stamp
+        writeFileSync(
+            filepath,
+
+            JSON.stringify(audioForTerms, null, 4)
+        );
     }
 
     @CliCommandOption({
@@ -22,5 +49,22 @@ export class DiscoverAudioItemsCliCommand extends CliCommandRunner {
         // TODO  non-empty string? dir exists?
 
         return value;
+    }
+
+    @CliCommandOption({
+        flags: '-l, --languageCode [languageCode]',
+        description: 'the language of the audio',
+        required: true,
+    })
+    parseLanguageCode(value: string): LanguageCode {
+        const test = value as LanguageCode;
+
+        if (Object.values(LanguageCode).includes(test)) {
+            return test;
+        }
+
+        throw new InternalError(
+            `Encountered an invalid language code {${value}} when discovering audio for terms`
+        );
     }
 }

@@ -2,6 +2,7 @@ import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
 import { AppModule } from '../app/app.module';
 import { EdgeConnectionModule } from '../app/domain-modules/edge-connection.module';
+import { TermModule } from '../app/domain-modules/term.module';
 import { VocabularyListModule } from '../app/domain-modules/vocabulary-list.module';
 import { EventModule } from '../domain/common';
 import { AudioVisualModule } from '../domain/models/audio-visual/application/audio-visual.module';
@@ -60,6 +61,7 @@ import { ValidateInvariantsCliCommand } from './validate-invariants.cli-command'
         CommandModule,
         VocabularyListModule,
         AudioVisualModule,
+        TermModule,
         MediaItemModule,
         EdgeConnectionModule,
         EventModule,
