@@ -187,6 +187,15 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
     }
 
     async addAudio(termId: AggregateId, _languageCode: LanguageCode, audioItemId: string) {
+        /**
+         * TODO We need to find an extensible way to cascade updates across denormalized
+         * views.
+         *
+         * One option is to have a standard `dependents` prop and then update the dependents
+         * in a write hook. We should always project nested views off the current state. So
+         * we should be able to create a `new TermViewModelForVocabularyList(termView)` and
+         * merge with the existing view. One question is how to name these properties.
+         */
         const query = `
         FOR term IN @@collectionName
         FILTER term._key == @id
@@ -204,18 +213,29 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             audioItemId,
         };
 
-        const cursor = await this.database
-            .query({
-                query,
-                bindVars,
-            })
-            .catch((reason) => {
-                throw new InternalError(
-                    `Failed to add audio for term via term query repository: ${reason}`
-                );
-            });
+        const cascadeUpdateToVocabularyLists = `
+        FOR t IN term__VIEWS
+        FILTER t._key == @id
+        FOR v IN vocabularyList__VIEWS
+        FILTER @id IN (v.entries[*].term.id)[**]
+        LET newEntries = (
+        FOR e IN v.entries
+        RETURN MERGE(e, e.term.id == t._key ? {term: MERGE(e.term, { mediaItemId: t.mediaItemId })} : {})
+        )
+        UPDATE v with {
+            entries: newEntries
+        } in vocabularyList__VIEWS
+       `;
 
-        await cursor.all();
+        const cascadeUpdateBindVars = { id: termId };
+
+        await this.database.getDb().transaction(
+            [
+                { query, bindVars },
+                { query: cascadeUpdateToVocabularyLists, bindVars: cascadeUpdateBindVars },
+            ],
+            ['term__VIEWS', 'audioItem__VIEWS', 'vocabularyList__VIEWS']
+        );
     }
 
     // note that it is important to pass APPEND an array of items to append when appending a string value to an existing array

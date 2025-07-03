@@ -26,7 +26,10 @@ import generateDatabaseNameForTestSuite from '../../../../persistence/repositori
 import { ArangoRepositoryForAggregate } from '../../../../persistence/repositories/arango-repository-for-aggregate';
 import { TagViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
-import { VocabularyListViewModel } from '../../../../queries/buildViewModelForResource/viewModels/vocabulary-list.view-model';
+import {
+    VocabularyListEntryViewModel,
+    VocabularyListViewModel,
+} from '../../../../queries/buildViewModelForResource/viewModels/vocabulary-list.view-model';
 import { TestEventStream } from '../../../../test-data/events';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
@@ -191,18 +194,20 @@ describe(`ArangoTermQueryRepository`, () => {
         });
 
         describe(`when there is a term with the given ID`, () => {
-            it(`should return the expected view`, async () => {
-                const result = await testQueryRepository.fetchById(targetTermId);
+            describe(`when the term is not in a vocabulary list`, () => {
+                it(`should return the expected view`, async () => {
+                    const result = await testQueryRepository.fetchById(targetTermId);
 
-                expect(result).not.toBe(NotFound);
+                    expect(result).not.toBe(NotFound);
 
-                const { name } = result as TermViewModel;
+                    const { name } = result as TermViewModel;
 
-                const foundOriginalTextForTerm = name.items.find(
-                    ({ languageCode }) => languageCode === originalLanguageCode
-                ).text;
+                    const foundOriginalTextForTerm = name.items.find(
+                        ({ languageCode }) => languageCode === originalLanguageCode
+                    ).text;
 
-                expect(foundOriginalTextForTerm).toBe(termText);
+                    expect(foundOriginalTextForTerm).toBe(termText);
+                });
             });
         });
 
@@ -542,7 +547,19 @@ describe(`ArangoTermQueryRepository`, () => {
     });
 
     describe(`addAudio`, () => {
-        const targetTerm = termViews[0];
+        const vocabularyList = buildTestInstance(VocabularyListViewModel, {
+            id: buildDummyUuid(909),
+            entries: [],
+        });
+
+        const targetTerm = buildTestInstance(TermViewModel, {
+            id: termViews[0].id,
+            vocabularyLists: [vocabularyList],
+            // no audio to start
+            mediaItemId: undefined,
+        });
+
+        vocabularyList.entries.push(VocabularyListEntryViewModel.fromTermView(targetTerm));
 
         const audioItemId = buildDummyUuid(55);
 
@@ -572,17 +589,47 @@ describe(`ArangoTermQueryRepository`, () => {
             await audioItemQueryRepository.create(targetAudioItemView);
         });
 
-        it(`should append the audio item`, async () => {
-            await testQueryRepository.addAudio(targetTerm.id, originalLanguageCode, audioItemId);
+        describe(`when the term is not in a vocabulary list`, () => {
+            it(`should append the audio item`, async () => {
+                await testQueryRepository.addAudio(
+                    targetTerm.id,
+                    originalLanguageCode,
+                    audioItemId
+                );
 
-            const updatedView = (await testQueryRepository.fetchById(
-                targetTerm.id
-            )) as TermViewModel;
+                const updatedView = (await testQueryRepository.fetchById(
+                    targetTerm.id
+                )) as TermViewModel;
 
-            // TODO In the future, we should use multilingual audio for terms
-            expect(updatedView.mediaItemId).toBe(mediaItemId);
+                // TODO In the future, we should use multilingual audio for terms
+                expect(updatedView.mediaItemId).toBe(mediaItemId);
 
-            expect(updatedView.actions).not.toContain('ADD_AUDIO_FOR_TERM');
+                expect(updatedView.actions).not.toContain('ADD_AUDIO_FOR_TERM');
+            });
+        });
+
+        describe(`when the term is in a vocabulary list`, () => {
+            beforeEach(async () => {
+                await vocabularyListQueryRepository.create(vocabularyList);
+            });
+
+            it(`should update the nested term view on the vocabulary list`, async () => {
+                await testQueryRepository.addAudio(
+                    targetTerm.id,
+                    originalLanguageCode,
+                    audioItemId
+                );
+
+                const updatedVocabularyList = (await vocabularyListQueryRepository.fetchById(
+                    vocabularyList.id
+                )) as VocabularyListViewModel;
+
+                const targetEntry = updatedVocabularyList.entries.find(
+                    ({ term }) => term.id === targetTerm.id
+                );
+
+                expect(targetEntry.term.mediaItemId).toBe(mediaItemId);
+            });
         });
     });
 

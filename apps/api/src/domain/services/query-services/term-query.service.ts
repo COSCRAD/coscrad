@@ -199,14 +199,14 @@ export class TermQueryService {
             })
         );
 
-        const hasExactlyOneResultForEachApplicableTerm =
-            result.length > 0 && result.every(({ importOptions }) => importOptions.length === 1);
+        // we flatten the non-ambiguous options for convenience
+        const bulkCommandStream = result.flatMap(({ importOptions }) =>
+            importOptions.length === 1 ? importOptions[0].actions : []
+        );
 
         return {
             byTerm: result,
-            bulkCommandStream: hasExactlyOneResultForEachApplicableTerm
-                ? result.flatMap(({ importOptions }) => importOptions[0].actions)
-                : null,
+            bulkCommandStream: bulkCommandStream.length > 0 ? bulkCommandStream : null,
         };
     }
 

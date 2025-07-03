@@ -116,13 +116,23 @@ const termWithAudioAndPossibleAudioFilenames = buildTestInstance(TermViewModel, 
     ],
 });
 
+const numberOfTermsWithASingleAudioMatch = 2;
+
+// 2 unambiguous results, 1 term with multiple audio candidates
 const allTerms = [
+    // 0 results
     termWithAudio,
+    // 0 results
     termWithAudioAndPossibleAudioFilenames,
+    // multiple results
     termWithMultipleAudioCandidatesAndMultipleMatches,
+    // 1 result
     termWithMultipleAudioCandidatesAndOneMatch,
+    // 1 result
     termWithOneAudioCandidate,
+    // 0 results
     termWithOneAudioCandidateAndNoMatches,
+    // 0 results
     termWithSeveralAudioCandidatesAndNoMatches,
 ];
 
@@ -137,7 +147,7 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
 
     let termQueryRepository: ITermQueryRepository;
 
-    beforeAll(async () => {
+    beforeEach(async () => {
         testAppModule = await Test.createTestingModule({
             imports: [
                 ConfigModule.forRoot({
@@ -247,8 +257,8 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
                     raw.toString()
                 ) as AudioDiscoveryResult;
 
-                // because one of the terms has multiple options, this property is not populated
-                expect(bulkCommandStream).toEqual(null);
+                // one option has multiple audio candidates, 2 have exactly 1, rest 0, with publication for each
+                expect(bulkCommandStream).toHaveLength(numberOfTermsWithASingleAudioMatch * 2);
 
                 const assertNoEntryForTerm = (termId: AggregateId) => {
                     const searchResult = byTerm.find(({ term }) => term.id === termId);

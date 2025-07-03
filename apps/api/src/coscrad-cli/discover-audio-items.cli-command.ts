@@ -1,4 +1,5 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
+import { isBoolean } from '@coscrad/validation-constraints';
 import { writeFileSync } from 'fs';
 import { TermQueryService } from '../domain/services/query-services/term-query.service';
 import { InternalError } from '../lib/errors/InternalError';
@@ -6,7 +7,7 @@ import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.de
 
 interface DiscoverAudioItemsCliCommandOptions {
     filepath: string;
-    languageCodeForAudio: LanguageCode;
+    languageCode: LanguageCode;
     publish: boolean;
 }
 
@@ -23,7 +24,7 @@ export class DiscoverAudioItemsCliCommand extends CliCommandRunner {
         _passedParams: string[],
         {
             filepath,
-            languageCodeForAudio,
+            languageCode: languageCodeForAudio,
             publish: shouldPublishTerms,
         }: DiscoverAudioItemsCliCommandOptions
     ): Promise<void> {
@@ -79,6 +80,11 @@ export class DiscoverAudioItemsCliCommand extends CliCommandRunner {
         required: false,
     })
     parsePublish(value: string): boolean {
-        return JSON.parse(value);
+        const result = JSON.parse(value);
+
+        if (isBoolean(result)) return result;
+
+        // default
+        return false;
     }
 }

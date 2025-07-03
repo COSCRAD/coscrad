@@ -298,7 +298,7 @@ describe(`when querying terms`, () => {
 
                         expect(type).toBe('PUBLISH_RESOURCE');
 
-                        expect(aggregateCompositeIdentifier.type).toEqual(AggregateType.audioItem);
+                        expect(aggregateCompositeIdentifier.type).toEqual(AggregateType.term);
                     });
 
                     /**
