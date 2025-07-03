@@ -34,6 +34,7 @@ import { ConnectionRecordForResourceViewModel } from './connection-record-for-re
 import { NoteRecordForResourceViewModel } from './note-record-for-resource.view-model';
 import { TagViewModel } from './tag.view-model';
 import { EventSourcedTagRecordForResourceViewModel } from './tag.view-model.event-sourced';
+import { TermViewModel } from './term.view-model';
 
 @CoscradDataExample<TermViewForVocabularyListEntry>({
     example: {
@@ -77,7 +78,27 @@ export class TermViewForVocabularyListEntry {
     }
 
     public static fromDto(dto: DTO<TermViewForVocabularyListEntry>) {
+        // getting dropped here?
         return new TermViewForVocabularyListEntry(dto);
+    }
+
+    public static fromTermView({
+        id,
+        name,
+        mediaItemId,
+        isPublished,
+        accessControlList,
+        contributions,
+    }: TermViewModel): TermViewForVocabularyListEntry {
+        return new TermViewForVocabularyListEntry({
+            id,
+            text: name,
+            name,
+            mediaItemId,
+            isPublished,
+            accessControlList,
+            contributions,
+        });
     }
 }
 
@@ -110,6 +131,16 @@ export class VocabularyListEntryViewModel {
             this.term.isPublished || this.term.accessControlList.canUserWithGroups(userWithGroups);
 
         return isAllowed;
+    }
+
+    public static fromTermView(
+        term: TermViewModel,
+        variableValues: Record<string, string | boolean> = {}
+    ): VocabularyListEntryViewModel {
+        return new VocabularyListEntryViewModel({
+            term: TermViewForVocabularyListEntry.fromTermView(term),
+            variableValues,
+        });
     }
 }
 
@@ -259,6 +290,10 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
         // TODO extend base
         // super(dto);
 
+        if (!isNonEmptyObject(dto)) {
+            return;
+        }
+
         const {
             contributions,
             name,
@@ -297,10 +332,6 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
                 ConnectionRecordForResourceViewModel.fromDto(n)
             );
 
-        if (!isNonEmptyObject(dto)) {
-            return;
-        }
-
         // super(dto);
         // this.id = dto.id;
         // this.name = new MultilingualText(dto.name);
@@ -309,7 +340,9 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
         const { entries, form, actions } = dto;
 
         this.entries = Array.isArray(entries)
-            ? entries.map((entryDto) => new VocabularyListEntryViewModel(entryDto))
+            ? entries.map((entryDto) => {
+                  return new VocabularyListEntryViewModel(entryDto);
+              })
             : [];
 
         // TODO investigate the need for a cast here

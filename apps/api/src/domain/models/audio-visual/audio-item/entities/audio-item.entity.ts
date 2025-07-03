@@ -276,7 +276,7 @@ export class AudioItem extends Resource {
     }
 
     private isMIMETypeAllowed(mimeType: MIMEType): boolean {
-        return [MIMEType.mp3, MIMEType.wav].includes(mimeType);
+        return isAudioMimeType(mimeType);
     }
 
     handleAudioItemNameTranslated({ payload: { text, languageCode } }: AudioItemNameTranslated) {

@@ -26,7 +26,7 @@ import { ResourceType } from '../../types/ResourceType';
 import { fetchActionsForUser } from './utilities/fetch-actions-for-user';
 
 interface DiscoverAudioForTermsOptions {
-    shouldPublishAudio: boolean;
+    shouldPublishTerms: boolean;
     languageCodeForAudio: LanguageCode;
 }
 
@@ -152,7 +152,7 @@ export class TermQueryService {
 
     async discoverAudio({
         languageCodeForAudio: languageCode,
-        shouldPublishAudio,
+        shouldPublishTerms,
     }: DiscoverAudioForTermsOptions): Promise<AudioDiscoveryResult> {
         const termsWithAudioCandidates = await this.termQueryRepository.discoverAudio();
 
@@ -176,19 +176,19 @@ export class TermQueryService {
 
                     allCommandFsas.push(addAudioForTerm);
 
-                    if (shouldPublishAudio) {
-                        const publishAudio: CommandFSA<PublishResource> = {
+                    if (shouldPublishTerms) {
+                        const publishTerm: CommandFSA<PublishResource> = {
                             // TODO shouldn't we get intellisence here?
                             type: 'PUBLISH_RESOURCE',
                             payload: {
                                 aggregateCompositeIdentifier: {
-                                    type: AggregateType.audioItem,
-                                    id: audioItem.id,
+                                    type: AggregateType.term,
+                                    id: term.id,
                                 },
                             },
                         };
 
-                        allCommandFsas.push(publishAudio);
+                        allCommandFsas.push(publishTerm);
                     }
 
                     return {
@@ -199,14 +199,14 @@ export class TermQueryService {
             })
         );
 
-        const hasExactlyOneResultForEachApplicableTerm =
-            result.length > 0 && result.every(({ importOptions }) => importOptions.length === 1);
+        // we flatten the non-ambiguous options for convenience
+        const bulkCommandStream = result.flatMap(({ importOptions }) =>
+            importOptions.length === 1 ? importOptions[0].actions : []
+        );
 
         return {
             byTerm: result,
-            bulkCommandStream: hasExactlyOneResultForEachApplicableTerm
-                ? result.flatMap(({ importOptions }) => importOptions[0].actions)
-                : null,
+            bulkCommandStream: bulkCommandStream.length > 0 ? bulkCommandStream : null,
         };
     }
 

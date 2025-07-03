@@ -130,7 +130,7 @@ describe(`when querying terms`, () => {
 
             it(`should return the expected result`, async () => {
                 const result = await termQueryService.discoverAudio({
-                    shouldPublishAudio: true,
+                    shouldPublishTerms: true,
                     languageCodeForAudio,
                 });
 
@@ -192,13 +192,43 @@ describe(`when querying terms`, () => {
 
             it(`should return the expected result`, async () => {
                 const result = await termQueryService.discoverAudio({
-                    shouldPublishAudio: true,
+                    shouldPublishTerms: true,
                     languageCodeForAudio,
                 });
 
                 expect(result.byTerm).toHaveLength(0);
 
                 expect(result.bulkCommandStream).toBeFalsy();
+            });
+        });
+
+        describe(`when a term has possible audio filenames that match no audio`, () => {
+            const audioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
+                id: buildDummyUuid(1),
+                name: buildMultilingualTextWithSingleItem('no match!'),
+            });
+
+            const term = buildTestInstance(TermViewModel, {
+                id: buildDummyUuid(2),
+                mediaItemId: undefined,
+                possibleAudioFilenames: ['not this one', 'not this one either'],
+            });
+
+            beforeEach(async () => {
+                await termQueryRepository.create(term);
+
+                await audioQueryRepository.create(audioItem);
+            });
+
+            it(`should return no results`, async () => {
+                const { byTerm, bulkCommandStream } = await termQueryService.discoverAudio({
+                    languageCodeForAudio: LanguageCode.Chilcotin,
+                    shouldPublishTerms: true,
+                });
+
+                expect(bulkCommandStream).toBeNull();
+
+                expect(byTerm).toEqual([]);
             });
         });
 
@@ -242,7 +272,7 @@ describe(`when querying terms`, () => {
             describe(`when audio publication is requested`, () => {
                 it(`should include RESOURCE_PUBLISHED commands in the import actions`, async () => {
                     const result = await termQueryService.discoverAudio({
-                        shouldPublishAudio: true,
+                        shouldPublishTerms: true,
                         languageCodeForAudio,
                     });
 
@@ -268,7 +298,7 @@ describe(`when querying terms`, () => {
 
                         expect(type).toBe('PUBLISH_RESOURCE');
 
-                        expect(aggregateCompositeIdentifier.type).toEqual(AggregateType.audioItem);
+                        expect(aggregateCompositeIdentifier.type).toEqual(AggregateType.term);
                     });
 
                     /**
@@ -284,7 +314,7 @@ describe(`when querying terms`, () => {
                 it(`should not include RESOURCE_PUBLISHED commands in the import actions`, async () => {
                     const result = await termQueryService.discoverAudio({
                         // do not request audio publication
-                        shouldPublishAudio: false,
+                        shouldPublishTerms: false,
                         languageCodeForAudio,
                     });
 
