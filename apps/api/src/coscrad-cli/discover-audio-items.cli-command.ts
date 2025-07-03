@@ -1,9 +1,11 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { isBoolean } from '@coscrad/validation-constraints';
-import { writeFileSync } from 'fs';
+import { Inject } from '@nestjs/common';
+import { existsSync, writeFileSync } from 'fs';
 import { TermQueryService } from '../domain/services/query-services/term-query.service';
 import { InternalError } from '../lib/errors/InternalError';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
+import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
 
 interface DiscoverAudioItemsCliCommandOptions {
     filepath: string;
@@ -16,7 +18,10 @@ interface DiscoverAudioItemsCliCommandOptions {
     description: 'export a json file identifying possible audio items for each term without audio',
 })
 export class DiscoverAudioItemsCliCommand extends CliCommandRunner {
-    constructor(private readonly termQueryService: TermQueryService) {
+    constructor(
+        private readonly termQueryService: TermQueryService,
+        @Inject(COSCRAD_LOGGER_TOKEN) private readonly logger: ICoscradLogger
+    ) {
         super();
     }
 
@@ -48,9 +53,12 @@ export class DiscoverAudioItemsCliCommand extends CliCommandRunner {
         required: true,
     })
     parseFilepath(value: string): string {
-        // if(existsSync(value)){
-        //     throw new InternalError(`Cannot overwrite file: ${value}`)
-        // }
+        if (existsSync(value)) {
+            const error = new InternalError(`Cannot overwrite file: ${value}`);
+
+            // TODO logger.error
+            this.logger.log(error.toString());
+        }
 
         // TODO  non-empty string? dir exists?
 

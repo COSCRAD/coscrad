@@ -2,7 +2,7 @@ import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandModule } from '@coscrad/commands';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { existsSync, mkdirSync, readFileSync, unlinkSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import buildMockConfigServiceSpec from '../app/config/__tests__/utilities/buildMockConfigService';
@@ -354,5 +354,46 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
 
     describe(`when a required parameter is omitted`, () => {
         it.todo(`should have a test`);
+    });
+
+    describe(`when the file already exists`, () => {
+        beforeEach(async () => {
+            if (!existsSync(outputFilepath)) {
+                writeFileSync(
+                    outputFilepath,
+
+                    JSON.stringify({ test: 'overwrite should fail' }, null, 4)
+                );
+            }
+        });
+
+        afterEach(async () => {
+            if (existsSync(outputFilepath)) {
+                unlinkSync(outputFilepath);
+            }
+        });
+
+        it(`should fail with the expectd log`, async () => {
+            await CommandTestFactory.run(commandInstance, [
+                cliCommandName,
+                `--filepath=${outputFilepath}`,
+                `--languageCode=${languageCodeForAudio}`,
+                `--publish`,
+            ]);
+
+            const message = mockLogger.log.mock.calls[0][0] as string;
+
+            const invalidMessages = [message].filter((m) => {
+                const lowerCaseMessage = m.toLowerCase();
+
+                if (!lowerCaseMessage.includes('cannot overwrite')) {
+                    return true;
+                }
+
+                return !lowerCaseMessage.includes(outputFilepath);
+            });
+
+            expect(invalidMessages).toEqual([]);
+        });
     });
 });
