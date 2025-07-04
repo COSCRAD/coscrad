@@ -23,8 +23,8 @@ export class DigitalTextPageContentTranslatedEventHandler implements ICoscradEve
     }: DigitalTextPageContentTranslated): Promise<void> {
         await this.queryRepository.translatePageContent(
             digitalTextId,
-            translation,
             pageIdentifier,
+            translation,
             languageCode
         );
     }
