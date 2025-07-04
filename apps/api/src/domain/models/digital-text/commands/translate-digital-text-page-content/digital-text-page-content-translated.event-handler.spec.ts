@@ -100,7 +100,15 @@ describe(`DigitalTextPageContentTranslated`, () => {
                 digitalTextId
             )) as DigitalTextViewModel;
 
-            expect(updatedView).toHaveLength(1);
+            const { content: updatedContent } = updatedView.pages.find(
+                ({ identifier }) => identifier === pageIdentifier
+            );
+
+            const translationItem = updatedContent.getTranslation(translationLanguageCode);
+
+            expect(translationItem).toBe(translatedContent);
+
+            // expect(translationItem).toBe(MultilingualTextItemRole.freeTranslation);
         });
     });
 });
