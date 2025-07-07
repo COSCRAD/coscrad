@@ -1,8 +1,17 @@
 import { ResourceType } from '@coscrad/api-interfaces';
+import { INestApplication } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
+import { ConsoleCoscradCliLogger, COSCRAD_LOGGER_TOKEN } from '../../../../coscrad-cli/logging';
+import { buildMockLogger } from '../../../../coscrad-cli/logging/__tests__';
 import { isNotFound, NotFound } from '../../../../lib/types/not-found';
+import { TestEventStream } from '../../../../test-data/events';
+import { EVENT_PUBLISHER_TOKEN, EventModule } from '../../../common';
+import { SyncInMemoryEventPublisher } from '../../../common/events/sync-in-memory-event-publisher';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../__tests__/utilities/dummyDateNow';
+import { NoteAboutResourceCreated } from '../../context/commands/create-note-about-resource/note-about-resource-created.event';
 import { ContributionSummary } from '../../user-management';
+import { QUERY_REPOSITORY_PROVIDER_TOKEN } from '../common-commands/publish-resource/resource-published.event-handler';
 import { BaseEvent } from '../events/base-event.entity';
 import { Attributor } from './attributor.event-handler';
 
@@ -94,23 +103,23 @@ const widgetCreated = new WidgetCreated(
     }
 );
 
+const testQueryRepository = new WidgetRepository();
+
+const provider = {
+    forResource(type: string) {
+        if (type !== TEST_RESOURCE_TYPE) {
+            throw new Error(`only widgets are supported`);
+        }
+
+        return testQueryRepository;
+    },
+};
+
 describe(`Attributor`, () => {
     describe(`when there is an existing resource`, () => {
-        const testQueryRepository = new WidgetRepository();
-
-        const provider = {
-            forResource(type: string) {
-                if (type !== TEST_RESOURCE_TYPE) {
-                    throw new Error(`only widgets are supported`);
-                }
-
-                return testQueryRepository;
-            },
-        };
-
         const targetResource = new Widget({ id: targetResourceId, name: widgetName });
 
-        const attributor = new Attributor(provider);
+        const attributor = new Attributor(provider, new ConsoleCoscradCliLogger());
 
         beforeAll(async () => {
             await testQueryRepository.create(targetResource);
@@ -133,6 +142,50 @@ describe(`Attributor`, () => {
             );
 
             expect(missingContributorIds).toEqual([]);
+        });
+    });
+
+    describe(`when handling events for non-resource aggregate roots`, () => {
+        let app: INestApplication;
+
+        let publisher: SyncInMemoryEventPublisher;
+
+        const mockLogger = buildMockLogger({ isEnabled: true });
+
+        beforeAll(async () => {
+            const testModule = await Test.createTestingModule({
+                imports: [EventModule],
+                providers: [
+                    Attributor,
+                    {
+                        provide: QUERY_REPOSITORY_PROVIDER_TOKEN,
+                        useValue: provider,
+                    },
+                    {
+                        provide: COSCRAD_LOGGER_TOKEN,
+                        useValue: mockLogger,
+                    },
+                ],
+            }).compile();
+
+            app = testModule.createNestApplication();
+
+            await app.init();
+
+            publisher = app.get(EVENT_PUBLISHER_TOKEN);
+        });
+
+        describe(`when the event is for a note`, () => {
+            const event = new TestEventStream().buildSingle<NoteAboutResourceCreated>({
+                type: 'NOTE_ABOUT_RESOURCE_CREATED',
+                payload: {},
+            });
+
+            it(`should not handle the event`, async () => {
+                const foundHandlers = publisher.getHandlersFor(event);
+
+                expect(foundHandlers).toEqual([]);
+            });
         });
     });
 });
