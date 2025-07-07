@@ -24,6 +24,7 @@ import { CreateDigitalText } from '../../domain/models/digital-text/commands/cre
 import { CreateDigitalTextCommandHandler } from '../../domain/models/digital-text/commands/create-digital-text.command-handler';
 import { DigitalTextCreated } from '../../domain/models/digital-text/commands/digital-text-created.event';
 import { DigitalTextCreatedEventHandler } from '../../domain/models/digital-text/commands/digital-text-created.event-handler';
+import { DigitalTextPageContentTranslatedEventHandler } from '../../domain/models/digital-text/commands/translate-digital-text-page-content/digital-text-page-content-translated.event-handler';
 import { DigitalTextTitleTranslatedEventHandler } from '../../domain/models/digital-text/commands/translate-digital-text-title/digital-text-title-translated.event-handler';
 import { DigitalText } from '../../domain/models/digital-text/entities/digital-text.entity';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
@@ -51,6 +52,7 @@ import { DigitalTextQueryController } from '../controllers/resources/digital-tex
         DigitalTextTitleTranslatedEventHandler,
         PageAddedToDigitalTextEventHandler,
         ContentAddedToDigitalTextPageEventHandler,
+        DigitalTextPageContentTranslatedEventHandler,
         ...[
             // Domain Model
             DigitalText,
