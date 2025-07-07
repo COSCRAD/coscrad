@@ -43,7 +43,6 @@ import { PhotographQueryService } from './queries/photograph-query.service';
         CreatePhotographCommandHandler,
         // Event Handlers
         PhotographCreatedEventHandler,
-        PhotographAddedToDigitalTextPage,
         PhotographAddedToDigitalTextPageEventHandler,
         // Data classes
         ...[
@@ -51,6 +50,7 @@ import { PhotographQueryService } from './queries/photograph-query.service';
             Photograph,
             // Events
             PhotographCreated,
+            PhotographAddedToDigitalTextPage,
         ].map((Ctor) => ({
             provide: Ctor,
             useValue: Ctor,
