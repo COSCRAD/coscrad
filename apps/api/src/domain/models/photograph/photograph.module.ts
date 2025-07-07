@@ -9,6 +9,8 @@ import { IdGenerationModule } from '../../../lib/id-generation/id-generation.mod
 import { PersistenceModule } from '../../../persistence/persistence.module';
 import { DynamicDataTypeModule } from '../../../validation';
 import { EventModule } from '../../common';
+import { PhotographAddedToDigitalTextPage } from '../digital-text/commands/add-photograph-to-digital-text-page';
+import { PhotographAddedToDigitalTextPageEventHandler } from '../digital-text/commands/add-photograph-to-digital-text-page/photograph-added-to-digital-text-page.event-handler';
 import { QUERY_REPOSITORY_PROVIDER_TOKEN } from '../shared/common-commands/publish-resource/resource-published.event-handler';
 import { ArangoQueryRepositoryProvider } from '../term/repositories/arango-query-repository-provider';
 import { CreatePhotographCommandHandler } from './commands/create-photograph/create-photograph.command-handler';
@@ -41,12 +43,14 @@ import { PhotographQueryService } from './queries/photograph-query.service';
         CreatePhotographCommandHandler,
         // Event Handlers
         PhotographCreatedEventHandler,
+        PhotographAddedToDigitalTextPageEventHandler,
         // Data classes
         ...[
             // Domain Model
             Photograph,
             // Events
             PhotographCreated,
+            PhotographAddedToDigitalTextPage,
         ].map((Ctor) => ({
             provide: Ctor,
             useValue: Ctor,

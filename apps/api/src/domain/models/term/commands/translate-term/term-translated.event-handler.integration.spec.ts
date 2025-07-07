@@ -29,7 +29,7 @@ import { TermTranslatedEventHandler } from './term-translated.event-handler';
 const termId = buildDummyUuid(1);
 
 const compositeId = {
-    type: AggregateType.digitalText,
+    type: AggregateType.term,
     id: termId,
 };
 
