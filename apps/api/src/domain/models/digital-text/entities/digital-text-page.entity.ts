@@ -71,6 +71,7 @@ export default class DigitalTextPage extends BaseDomainModel implements IDigital
 
         this.content = !isNullOrUndefined(content) ? new MultilingualText(content) : null;
 
+        // TODO defult to empty
         this.audio = !isNullOrUndefined(audio) ? new MultilingualAudio(audio) : null;
 
         if (isNonEmptyString(photographId)) {
