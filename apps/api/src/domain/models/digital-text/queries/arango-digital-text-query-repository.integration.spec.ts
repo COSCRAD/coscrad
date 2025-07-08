@@ -792,7 +792,59 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
 
         const languageCodeWithAudioAlready = LanguageCode.Chilcotin;
 
-        describe(`when there is no audio on the page yet`, () => {
+        describe(`when there the audio property is null to start with`, () => {
+            const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+                pages: [
+                    buildTestInstance(DigitalTextPage, {
+                        identifier: pageIdentifier,
+                        content: buildMultilingualTextWithSingleItem(
+                            'existing content text',
+                            targetLanguageCode
+                        ),
+                        audio: null, // we don't want to assume anything about how the view layer defaults data
+                    }),
+                ],
+            });
+
+            const existingAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
+                id: buildDummyUuid(890),
+            });
+
+            beforeEach(async () => {
+                await databaseProvider.clearViews();
+
+                await testQueryRepository.create(targetDigitalText);
+
+                await testAudioRepository.create(existingAudioItem);
+            });
+
+            it(`should add audio to the page`, async () => {
+                await testQueryRepository.addAudioToPage(
+                    targetDigitalText.id,
+                    pageIdentifier,
+                    existingAudioItem.id,
+                    targetLanguageCode
+                );
+
+                const updatedView = (await testQueryRepository.fetchById(
+                    targetDigitalText.id
+                )) as DigitalTextViewModel;
+
+                const targetPage = updatedView.pages.find(
+                    ({ identifier }) => identifier === pageIdentifier
+                );
+
+                expect(targetPage.hasAudio()).toBe(true);
+
+                const audioItemSearchResult = targetPage.getAudioIn(targetLanguageCode);
+
+                expect(audioItemSearchResult).not.toBe(NotFound);
+
+                expect(audioItemSearchResult).toEqual(existingAudioItem.id);
+            });
+        });
+
+        describe(`when there is empty audio on the page`, () => {
             const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
                 pages: [
                     buildTestInstance(DigitalTextPage, {

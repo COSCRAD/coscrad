@@ -237,6 +237,8 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
 
                 this.name = buildMultilingualTextWithSingleItem(title, languageCodeForTitle);
 
+                this.audioForTitle = MultilingualAudio.buildEmpty();
+
                 /**
                  * If we switch to a model in which the admin role does not
                  * automatically grant read access to all resources, the user
@@ -407,7 +409,7 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
             ...this.pages,
             new DigitalTextPage({
                 identifier: pageIdentifier,
-                audio: new MultilingualAudio({ items: [] }),
+                audio: MultilingualAudio.buildEmpty(),
             }),
         ].sort((a, b) => a.identifier.localeCompare(b.identifier));
 

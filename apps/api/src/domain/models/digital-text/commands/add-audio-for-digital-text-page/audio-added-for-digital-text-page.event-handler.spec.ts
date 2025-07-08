@@ -16,6 +16,7 @@ import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { EventSourcedAudioItemViewModel } from '../../../audio-visual/audio-item/queries';
 import { IAudioItemQueryRepository } from '../../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ArangoAudioItemQueryRepository } from '../../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
+import { MultilingualAudio } from '../../../shared/multilingual-audio/multilingual-audio.entity';
 import { ArangoDigitalTextQueryRepository } from '../../queries/arango-digital-text-query-repository';
 import { IDigitalTextQueryRepository } from '../../queries/digital-text-query-repository.interface';
 import { AudioAddedForDigitalTextPage } from './audio-added-for-digital-text-page.event';
@@ -38,7 +39,7 @@ const existingDigitalTextView = buildTestInstance(DigitalTextViewModel, {
                 'existing text for page',
                 languageCodeForPage
             ),
-            // audio: MultilingualAudio.buildEmpty(),
+            audio: MultilingualAudio.buildEmpty(),
         },
     ],
 });
