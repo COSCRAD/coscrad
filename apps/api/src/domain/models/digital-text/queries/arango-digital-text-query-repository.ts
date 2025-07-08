@@ -214,7 +214,7 @@ export class ArangoDigitalTextQueryRepository implements IDigitalTextQueryReposi
                 FOR p IN doc.pages == null ? [] : doc.pages
                 RETURN MERGE(
                     p,
-                    p.identifier == @pageIdentifier ? { audio: { items: APPEND(p.audio.items,@newAudioItem) }} : {}
+                    p.identifier == @pageIdentifier ? { audio: { items: APPEND(p.audio == null ? [] : p.audio.items,@newAudioItem) }} : {}
                 )
             )
             UPDATE doc WITH {
