@@ -1,17 +1,14 @@
-import { ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { ConsoleCoscradCliLogger, COSCRAD_LOGGER_TOKEN } from '../../../../coscrad-cli/logging';
 import { buildMockLogger } from '../../../../coscrad-cli/logging/__tests__';
 import { isNotFound, NotFound } from '../../../../lib/types/not-found';
-import { buildTestInstance } from '../../../../test-data/utilities';
 import { EVENT_PUBLISHER_TOKEN, EventModule } from '../../../common';
 import { SyncInMemoryEventPublisher } from '../../../common/events/sync-in-memory-event-publisher';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../__tests__/utilities/dummyDateNow';
-import { TagCreated } from '../../tag/commands/create-tag/tag-created.event';
-import { ContributionSummary, ContributorCreated } from '../../user-management';
-import { UserRegistered } from '../../user-management/user/commands/register-user/user-registered.event';
+import { ContributionSummary } from '../../user-management';
 import { QUERY_REPOSITORY_PROVIDER_TOKEN } from '../common-commands/publish-resource/resource-published.event-handler';
 import { BaseEvent } from '../events/base-event.entity';
 import { Attributor } from './attributor.event-handler';
@@ -146,7 +143,7 @@ describe(`Attributor`, () => {
         });
     });
 
-    describe(`when handling events for non-resource aggregate roots`, () => {
+    describe(`when handling events for non-categorizable aggregate roots`, () => {
         let app: INestApplication;
 
         let publisher: SyncInMemoryEventPublisher;
@@ -176,7 +173,31 @@ describe(`Attributor`, () => {
             publisher = app.get(EVENT_PUBLISHER_TOKEN);
         });
 
-        const assertEventIsNotHandled = (event: BaseEvent) => {
+        class GenericTestEvent extends BaseEvent {
+            type: 'AGGREGATE_TESTED';
+
+            constructor(type: AggregateType) {
+                super(
+                    {
+                        aggregateCompositeIdentifier: {
+                            type,
+                            id: buildDummyUuid(1),
+                        },
+                    },
+                    // TODO `buildTestEventMeta` ?
+                    {
+                        id: buildDummyUuid(2),
+                        dateCreated: dummyDateNow,
+                        userId: buildDummyUuid(3),
+                        contributorIds: [],
+                    }
+                );
+            }
+        }
+
+        const assertEventIsNotHandled = (type: AggregateType) => {
+            const event = new GenericTestEvent(type);
+
             const foundHandlers = publisher.getHandlersFor(event);
 
             expect(foundHandlers).toEqual([]);
@@ -184,19 +205,31 @@ describe(`Attributor`, () => {
 
         describe(`when the event is for a user`, () => {
             it(`should not handle the event`, async () => {
-                assertEventIsNotHandled(buildTestInstance(UserRegistered));
+                assertEventIsNotHandled(AggregateType.user);
+            });
+        });
+
+        describe(`when the event is for a user group`, () => {
+            it(`should not handle the event`, async () => {
+                assertEventIsNotHandled(AggregateType.userGroup);
             });
         });
 
         describe(`when the event is for a tag`, () => {
             it(`should not handle the event`, async () => {
-                assertEventIsNotHandled(buildTestInstance(TagCreated));
+                assertEventIsNotHandled(AggregateType.tag);
+            });
+        });
+
+        describe(`when the event is for a category`, () => {
+            it(`should not handle the event`, async () => {
+                assertEventIsNotHandled(AggregateType.category);
             });
         });
 
         describe(`when the event is for a contributor`, () => {
             it(`should not handle the event`, async () => {
-                assertEventIsNotHandled(buildTestInstance(ContributorCreated));
+                assertEventIsNotHandled(AggregateType.contributor);
             });
         });
     });
