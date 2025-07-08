@@ -13,6 +13,7 @@ import {
     TranslateDigitalTextPageContent,
     TranslateDigitalTextTitle,
 } from '../../domain/models/digital-text/commands';
+import { AudioAddedForDigitalTextPageEventHandler } from '../../domain/models/digital-text/commands/add-audio-for-digital-text-page/audio-added-for-digital-text-page.event-handler';
 import {
     AddContentToDigitalTextPage,
     AddContentToDigitalTextPageCommandHandler,
@@ -53,6 +54,7 @@ import { DigitalTextQueryController } from '../controllers/resources/digital-tex
         PageAddedToDigitalTextEventHandler,
         ContentAddedToDigitalTextPageEventHandler,
         DigitalTextPageContentTranslatedEventHandler,
+        AudioAddedForDigitalTextPageEventHandler,
         ...[
             // Domain Model
             DigitalText,
