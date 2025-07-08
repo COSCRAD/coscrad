@@ -4,13 +4,14 @@ import { Test } from '@nestjs/testing';
 import { ConsoleCoscradCliLogger, COSCRAD_LOGGER_TOKEN } from '../../../../coscrad-cli/logging';
 import { buildMockLogger } from '../../../../coscrad-cli/logging/__tests__';
 import { isNotFound, NotFound } from '../../../../lib/types/not-found';
-import { TestEventStream } from '../../../../test-data/events';
+import { buildTestInstance } from '../../../../test-data/utilities';
 import { EVENT_PUBLISHER_TOKEN, EventModule } from '../../../common';
 import { SyncInMemoryEventPublisher } from '../../../common/events/sync-in-memory-event-publisher';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../__tests__/utilities/dummyDateNow';
-import { NoteAboutResourceCreated } from '../../context/commands/create-note-about-resource/note-about-resource-created.event';
-import { ContributionSummary } from '../../user-management';
+import { TagCreated } from '../../tag/commands/create-tag/tag-created.event';
+import { ContributionSummary, ContributorCreated } from '../../user-management';
+import { UserRegistered } from '../../user-management/user/commands/register-user/user-registered.event';
 import { QUERY_REPOSITORY_PROVIDER_TOKEN } from '../common-commands/publish-resource/resource-published.event-handler';
 import { BaseEvent } from '../events/base-event.entity';
 import { Attributor } from './attributor.event-handler';
@@ -175,16 +176,27 @@ describe(`Attributor`, () => {
             publisher = app.get(EVENT_PUBLISHER_TOKEN);
         });
 
-        describe(`when the event is for a note`, () => {
-            const event = new TestEventStream().buildSingle<NoteAboutResourceCreated>({
-                type: 'NOTE_ABOUT_RESOURCE_CREATED',
-                payload: {},
-            });
+        const assertEventIsNotHandled = (event: BaseEvent) => {
+            const foundHandlers = publisher.getHandlersFor(event);
 
+            expect(foundHandlers).toEqual([]);
+        };
+
+        describe(`when the event is for a user`, () => {
             it(`should not handle the event`, async () => {
-                const foundHandlers = publisher.getHandlersFor(event);
+                assertEventIsNotHandled(buildTestInstance(UserRegistered));
+            });
+        });
 
-                expect(foundHandlers).toEqual([]);
+        describe(`when the event is for a tag`, () => {
+            it(`should not handle the event`, async () => {
+                assertEventIsNotHandled(buildTestInstance(TagCreated));
+            });
+        });
+
+        describe(`when the event is for a contributor`, () => {
+            it(`should not handle the event`, async () => {
+                assertEventIsNotHandled(buildTestInstance(ContributorCreated));
             });
         });
     });
