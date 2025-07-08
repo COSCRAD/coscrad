@@ -1,6 +1,8 @@
 import { isFunction } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
+import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from '../../../../coscrad-cli/logging';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../common';
+import { isCategorizableType } from '../../../types/CategorizableType';
 import { ContributionSummary } from '../../user-management';
 import { QUERY_REPOSITORY_PROVIDER_TOKEN } from '../common-commands/publish-resource/resource-published.event-handler';
 import { BaseEvent } from '../events/base-event.entity';
@@ -13,11 +15,18 @@ interface IRepositoryProvider {
     forResource(type: string): IQueryRepositoryForAttributable;
 }
 
-// handles all events
-@CoscradEventConsumer(() => true)
+// handles all resource and note events
+@CoscradEventConsumer(
+    ({
+        payload: {
+            aggregateCompositeIdentifier: { type: aggregateType },
+        },
+    }) => isCategorizableType(aggregateType)
+)
 export class Attributor implements ICoscradEventHandler {
     constructor(
-        @Inject(QUERY_REPOSITORY_PROVIDER_TOKEN) private readonly provider: IRepositoryProvider
+        @Inject(QUERY_REPOSITORY_PROVIDER_TOKEN) private readonly provider: IRepositoryProvider,
+        @Inject(COSCRAD_LOGGER_TOKEN) private readonly logger: ICoscradLogger
     ) {}
 
     async handle(event: BaseEvent): Promise<void> {

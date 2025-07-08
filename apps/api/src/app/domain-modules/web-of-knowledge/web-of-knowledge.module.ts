@@ -1,5 +1,6 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
+import { ConsoleCoscradCliLogger, COSCRAD_LOGGER_TOKEN } from '../../../coscrad-cli/logging';
 import {
     GrantResourceReadAccessToUser,
     GrantResourceReadAccessToUserCommandHandler,
@@ -20,6 +21,11 @@ import { PersistenceModule } from '../../../persistence/persistence.module';
 @Module({
     imports: [PersistenceModule, CommandModule, IdGenerationModule],
     providers: [
+        // TODO use NestJS approach to logging
+        {
+            provide: COSCRAD_LOGGER_TOKEN,
+            useValue: new ConsoleCoscradCliLogger(),
+        },
         GrantResourceReadAccessToUser,
         GrantResourceReadAccessToUserCommandHandler,
         PublishResource,

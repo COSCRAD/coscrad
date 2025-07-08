@@ -17,17 +17,44 @@ export class SyncInMemoryEventPublisher implements ICoscradEventPublisher {
         for (const e of events) {
             const { type: eventType } = e;
 
-            const applicableHandlers = Array.from(this.eventConsumers.values())
+            const applicableHandlers = this.getHandlersFor(e);
+
+            for (const handler of applicableHandlers) {
+                if (!isFunction(handler.handle)) {
+                    this.logger.log(
+                        `Encountered an invalid handler (missing a handle method) for event of type: ${eventType}`
+                    );
+                }
+
+                if (!(handler as unknown as { handles(e: any): boolean }).handles(e)) {
+                    continue;
+                }
+
+                await this.handleWithRetries(e, handler);
+            }
+        }
+    }
+
+    register(eventConsumer: ICoscradEventHandler): void {
+        // we want to make sure registration is idempotent so events are only handled once per handler (if matched)
+        if (!this.eventConsumers.has(eventConsumer)) {
+            this.eventConsumers.add(eventConsumer);
+        }
+    }
+
+    getHandlersFor(event: ICoscradEvent) {
+        return (
+            Array.from(this.eventConsumers.values())
                 .filter((handler) => {
                     if (!isFunction(handler.handle)) {
                         this.logger.log(
-                            `Encountered an invalid handler (missing a handle method) for event of type: ${eventType}`
+                            `Encountered an invalid handler (missing a handle method) for event of type: ${event.type}`
                         );
 
                         return false;
                     }
 
-                    if (!(handler as unknown as { handles(e: any): boolean }).handles(e)) {
+                    if (!(handler as unknown as { handles(e: any): boolean }).handles(event)) {
                         return false;
                     }
 
@@ -60,29 +87,8 @@ export class SyncInMemoryEventPublisher implements ICoscradEventPublisher {
                     }
 
                     return nameA.localeCompare(nameB);
-                });
-
-            for (const handler of applicableHandlers) {
-                if (!isFunction(handler.handle)) {
-                    this.logger.log(
-                        `Encountered an invalid handler (missing a handle method) for event of type: ${eventType}`
-                    );
-                }
-
-                if (!(handler as unknown as { handles(e: any): boolean }).handles(e)) {
-                    continue;
-                }
-
-                await this.handleWithRetries(e, handler);
-            }
-        }
-    }
-
-    register(eventConsumer: ICoscradEventHandler): void {
-        // we want to make sure registration is idempotent so events are only handled once per handler (if matched)
-        if (!this.eventConsumers.has(eventConsumer)) {
-            this.eventConsumers.add(eventConsumer);
-        }
+                })
+        );
     }
 
     private async handleWithRetries(
