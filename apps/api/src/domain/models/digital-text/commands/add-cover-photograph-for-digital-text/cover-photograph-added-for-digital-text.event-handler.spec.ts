@@ -124,21 +124,47 @@ describe(`PhotographAddedToDigitalTextPageEventHandler`, () => {
         await databaseProvider.clearViews();
 
         await testQueryRepository.create(existingView);
-
-        await photographQueryRepository.create(existingPhotographView);
     });
 
     describe(`when there is an existing digital text`, () => {
-        it('should add the given photograph for the digital text', async () => {
-            await coverPhotographAddedForDigitalTextEventHandler.handle(
-                coverPhotographAddedForDigitalText
-            );
+        describe(`when there is no valid photograph in 'photograph__VIEWS'`, () => {
+            it(`should not throw`, async () => {
+                const tryIt = await coverPhotographAddedForDigitalTextEventHandler.handle(
+                    coverPhotographAddedForDigitalText
+                );
 
-            const updatedView = (await testQueryRepository.fetchById(
-                existingView.id
-            )) as DigitalTextViewModel;
+                expect(tryIt).resolves;
+            });
 
-            expect(updatedView.coverPhotograph.id).toEqual(photographId);
+            it(`should not add the given photograph for the digital text`, async () => {
+                await coverPhotographAddedForDigitalTextEventHandler.handle(
+                    coverPhotographAddedForDigitalText
+                );
+
+                const updatedView = (await testQueryRepository.fetchById(
+                    existingView.id
+                )) as DigitalTextViewModel;
+
+                expect(updatedView.coverPhotograph).not.toBeDefined();
+            });
+        });
+
+        describe(`when there is a valid photograph in 'photograph__VIEWS'`, () => {
+            beforeEach(async () => {
+                await photographQueryRepository.create(existingPhotographView);
+            });
+
+            it(`should add the given photograph for the digital text`, async () => {
+                await coverPhotographAddedForDigitalTextEventHandler.handle(
+                    coverPhotographAddedForDigitalText
+                );
+
+                const updatedView = (await testQueryRepository.fetchById(
+                    existingView.id
+                )) as DigitalTextViewModel;
+
+                expect(updatedView.coverPhotograph.id).toEqual(photographId);
+            });
         });
     });
 });

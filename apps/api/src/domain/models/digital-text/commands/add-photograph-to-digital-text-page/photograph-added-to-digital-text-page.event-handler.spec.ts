@@ -129,23 +129,51 @@ describe(`PhotographAddedToDigitalTextPageEventHandler`, () => {
         await databaseProvider.clearViews();
 
         await testQueryRepository.create(existingView);
-
-        await photographQueryRepository.create(existingPhotographView);
     });
 
     describe(`when there is an existing digital text with a page that does not yet have a photograph`, () => {
-        it(`should add the given photograph to the digital text page`, async () => {
-            await photographAddedToDigitalTextPageEventHandler.handle(photographAddedToPage);
+        describe(`when there is no valid photograph in 'photograph__VIEWS'`, () => {
+            it(`should not throw`, async () => {
+                const tryIt = await photographAddedToDigitalTextPageEventHandler.handle(
+                    photographAddedToPage
+                );
 
-            const updatedView = (await testQueryRepository.fetchById(
-                existingView.id
-            )) as DigitalTextViewModel;
+                expect(tryIt).resolves;
+            });
 
-            const pageSearchResult = updatedView.pages.find(
-                ({ identifier }) => identifier === pageIdentifier
-            );
+            it(`should add the given photograph to the digital text page`, async () => {
+                await photographAddedToDigitalTextPageEventHandler.handle(photographAddedToPage);
 
-            expect(pageSearchResult.photographId).toEqual(photographId);
+                const updatedView = (await testQueryRepository.fetchById(
+                    existingView.id
+                )) as DigitalTextViewModel;
+
+                const pageSearchResult = updatedView.pages.find(
+                    ({ identifier }) => identifier === pageIdentifier
+                );
+
+                expect(pageSearchResult.photographId).not.toBeDefined();
+            });
+        });
+
+        describe(`when there is a valid photograph in 'photograph__VIEWS'`, () => {
+            beforeEach(async () => {
+                await photographQueryRepository.create(existingPhotographView);
+            });
+
+            it(`should add the given photograph to the digital text page`, async () => {
+                await photographAddedToDigitalTextPageEventHandler.handle(photographAddedToPage);
+
+                const updatedView = (await testQueryRepository.fetchById(
+                    existingView.id
+                )) as DigitalTextViewModel;
+
+                const pageSearchResult = updatedView.pages.find(
+                    ({ identifier }) => identifier === pageIdentifier
+                );
+
+                expect(pageSearchResult.photographId).toEqual(photographId);
+            });
         });
     });
 });
