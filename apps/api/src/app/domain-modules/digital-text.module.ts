@@ -4,9 +4,11 @@ import { CoscradEventFactory } from '../../domain/common';
 import {
     AddAudioForDigitalTextPage,
     AddAudioForDigitalTextPageCommandHandler,
+    AddAudioForDigitalTextTitle,
     AddPageToDigitalText,
     AddPageToDigitalTextCommandHandler,
     AudioAddedForDigitalTextPage,
+    AudioAddedForDigitalTextTitle,
     DigitalTextPageContentTranslated,
     DigitalTextTitleTranslated,
     PageAddedToDigitalText,
@@ -14,6 +16,7 @@ import {
     TranslateDigitalTextTitle,
 } from '../../domain/models/digital-text/commands';
 import { AudioAddedForDigitalTextPageEventHandler } from '../../domain/models/digital-text/commands/add-audio-for-digital-text-page/audio-added-for-digital-text-page.event-handler';
+import { AudioAddedForDigitalTextTitleEventHandler } from '../../domain/models/digital-text/commands/add-audio-for-digital-text-title/audio-added-for-digital-text-title.event-handler';
 import {
     AddContentToDigitalTextPage,
     AddContentToDigitalTextPageCommandHandler,
@@ -55,6 +58,7 @@ import { DigitalTextQueryController } from '../controllers/resources/digital-tex
         ContentAddedToDigitalTextPageEventHandler,
         DigitalTextPageContentTranslatedEventHandler,
         AudioAddedForDigitalTextPageEventHandler,
+        AudioAddedForDigitalTextTitleEventHandler,
         ...[
             // Domain Model
             DigitalText,
@@ -65,6 +69,7 @@ import { DigitalTextQueryController } from '../controllers/resources/digital-tex
             TranslateDigitalTextPageContent,
             TranslateDigitalTextTitle,
             AddAudioForDigitalTextPage,
+            AddAudioForDigitalTextTitle,
             // Events
             DigitalTextCreated,
             PageAddedToDigitalText,
@@ -72,6 +77,7 @@ import { DigitalTextQueryController } from '../controllers/resources/digital-tex
             DigitalTextPageContentTranslated,
             DigitalTextTitleTranslated,
             AudioAddedForDigitalTextPage,
+            AudioAddedForDigitalTextTitle,
             DigitalTextTitleTranslated,
         ].map((ctor) => ({
             provide: ctor,
