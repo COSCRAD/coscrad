@@ -24,18 +24,14 @@ import {
     DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN,
     IDigitalTextQueryRepository,
 } from '../../queries/digital-text-query-repository.interface';
-import { PhotographAddedToDigitalTextPage } from './photograph-added-to-digital-text-page.event';
-import { PhotographAddedToDigitalTextPageEventHandler } from './photograph-added-to-digital-text-page.event-handler';
+import { CoverPhotographAddedForDigitalText } from './cover-photograph-added-for-digital-text.event';
+import { CoverPhotographAddedForDigitalTextEventHandler } from './cover-photograph-added-for-digital-text.event-handler';
 
 const digitalTextId = buildDummyUuid(12);
 
 const languageCodeForTest = LanguageCode.English;
 
 const digitalTextTitle = buildSingleLanguageText('The new book', languageCodeForTest);
-
-const pageIdentifier = '20';
-
-const pageContent = buildSingleLanguageText('dummy page content', languageCodeForTest);
 
 const photographId = buildDummyUuid(2);
 
@@ -50,17 +46,16 @@ const existingPhotographView = buildTestInstance(PhotographViewModel, {
 const existingView = buildTestInstance(DigitalTextViewModel, {
     id: digitalTextId,
     name: digitalTextTitle,
-    pages: [{ identifier: pageIdentifier, content: pageContent }],
 });
 
-const photographAddedToPage = new TestEventStream().buildSingle<PhotographAddedToDigitalTextPage>({
-    type: 'PHOTOGRAPH_ADDED_TO_DIGITAL_TEXT_PAGE',
-    payload: {
-        aggregateCompositeIdentifier: { id: digitalTextId },
-        pageIdentifier: pageIdentifier,
-        photographId: photographId,
-    },
-});
+const coverPhotographAddedForDigitalText =
+    new TestEventStream().buildSingle<CoverPhotographAddedForDigitalText>({
+        type: 'COVER_PHOTOGRAPH_ADDED_FOR_DIGITAL_TEXT',
+        payload: {
+            aggregateCompositeIdentifier: { id: digitalTextId },
+            photographId: photographId,
+        },
+    });
 
 describe(`PhotographAddedToDigitalTextPageEventHandler`, () => {
     let testQueryRepository: IDigitalTextQueryRepository;
@@ -71,7 +66,7 @@ describe(`PhotographAddedToDigitalTextPageEventHandler`, () => {
 
     let app: INestApplication;
 
-    let photographAddedToDigitalTextPageEventHandler: PhotographAddedToDigitalTextPageEventHandler;
+    let coverPhotographAddedForDigitalTextEventHandler: CoverPhotographAddedForDigitalTextEventHandler;
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
@@ -91,7 +86,7 @@ describe(`PhotographAddedToDigitalTextPageEventHandler`, () => {
                     },
                     inject: [ArangoConnectionProvider],
                 },
-                PhotographAddedToDigitalTextPageEventHandler,
+                CoverPhotographAddedForDigitalTextEventHandler,
             ],
         })
             .overrideProvider(ConfigService)
@@ -117,8 +112,8 @@ describe(`PhotographAddedToDigitalTextPageEventHandler`, () => {
 
         photographQueryRepository = app.get(PHOTOGRAPH_QUERY_REPOSITORY_TOKEN);
 
-        photographAddedToDigitalTextPageEventHandler =
-            new PhotographAddedToDigitalTextPageEventHandler(testQueryRepository);
+        coverPhotographAddedForDigitalTextEventHandler =
+            new CoverPhotographAddedForDigitalTextEventHandler(testQueryRepository);
     });
 
     afterAll(async () => {
@@ -131,28 +126,26 @@ describe(`PhotographAddedToDigitalTextPageEventHandler`, () => {
         await testQueryRepository.create(existingView);
     });
 
-    describe(`when there is an existing digital text with a page that does not yet have a photograph`, () => {
+    describe(`when there is an existing digital text`, () => {
         describe(`when there is no valid photograph in 'photograph__VIEWS'`, () => {
             it(`should not throw`, async () => {
-                const tryIt = await photographAddedToDigitalTextPageEventHandler.handle(
-                    photographAddedToPage
+                const tryIt = await coverPhotographAddedForDigitalTextEventHandler.handle(
+                    coverPhotographAddedForDigitalText
                 );
 
                 expect(tryIt).resolves;
             });
 
-            it(`should add the given photograph to the digital text page`, async () => {
-                await photographAddedToDigitalTextPageEventHandler.handle(photographAddedToPage);
+            it(`should not add the given photograph for the digital text`, async () => {
+                await coverPhotographAddedForDigitalTextEventHandler.handle(
+                    coverPhotographAddedForDigitalText
+                );
 
                 const updatedView = (await testQueryRepository.fetchById(
                     existingView.id
                 )) as DigitalTextViewModel;
 
-                const pageSearchResult = updatedView.pages.find(
-                    ({ identifier }) => identifier === pageIdentifier
-                );
-
-                expect(pageSearchResult.photographId).not.toBeDefined();
+                expect(updatedView.coverPhotograph).not.toBeDefined();
             });
         });
 
@@ -161,18 +154,16 @@ describe(`PhotographAddedToDigitalTextPageEventHandler`, () => {
                 await photographQueryRepository.create(existingPhotographView);
             });
 
-            it(`should add the given photograph to the digital text page`, async () => {
-                await photographAddedToDigitalTextPageEventHandler.handle(photographAddedToPage);
+            it(`should add the given photograph for the digital text`, async () => {
+                await coverPhotographAddedForDigitalTextEventHandler.handle(
+                    coverPhotographAddedForDigitalText
+                );
 
                 const updatedView = (await testQueryRepository.fetchById(
                     existingView.id
                 )) as DigitalTextViewModel;
 
-                const pageSearchResult = updatedView.pages.find(
-                    ({ identifier }) => identifier === pageIdentifier
-                );
-
-                expect(pageSearchResult.photographId).toEqual(photographId);
+                expect(updatedView.coverPhotograph.id).toEqual(photographId);
             });
         });
     });

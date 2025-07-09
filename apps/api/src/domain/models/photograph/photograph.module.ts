@@ -9,6 +9,8 @@ import { IdGenerationModule } from '../../../lib/id-generation/id-generation.mod
 import { PersistenceModule } from '../../../persistence/persistence.module';
 import { DynamicDataTypeModule } from '../../../validation';
 import { EventModule } from '../../common';
+import { CoverPhotographAddedForDigitalText } from '../digital-text/commands';
+import { CoverPhotographAddedForDigitalTextEventHandler } from '../digital-text/commands/add-cover-photograph-for-digital-text/cover-photograph-added-for-digital-text.event-handler';
 import { PhotographAddedToDigitalTextPage } from '../digital-text/commands/add-photograph-to-digital-text-page';
 import { PhotographAddedToDigitalTextPageEventHandler } from '../digital-text/commands/add-photograph-to-digital-text-page/photograph-added-to-digital-text-page.event-handler';
 import { QUERY_REPOSITORY_PROVIDER_TOKEN } from '../shared/common-commands/publish-resource/resource-published.event-handler';
@@ -44,12 +46,14 @@ import { PhotographQueryService } from './queries/photograph-query.service';
         // Event Handlers
         PhotographCreatedEventHandler,
         PhotographAddedToDigitalTextPageEventHandler,
+        CoverPhotographAddedForDigitalTextEventHandler,
         // Data classes
         ...[
             // Domain Model
             Photograph,
             // Events
             PhotographCreated,
+            CoverPhotographAddedForDigitalText,
             PhotographAddedToDigitalTextPage,
         ].map((Ctor) => ({
             provide: Ctor,
