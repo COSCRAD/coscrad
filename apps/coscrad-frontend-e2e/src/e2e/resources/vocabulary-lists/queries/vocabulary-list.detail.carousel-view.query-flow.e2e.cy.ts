@@ -361,7 +361,11 @@ const comprehensiveParadigm: IVocabularyListViewModel = {
     // what about tags?
 };
 
-describe(`the vocabulary list detail page`, () => {
+/**
+ * We have a seperate test for carousel and list view because each test case is quite involved
+ */
+
+describe(`the vocabulary list detail page "carousel view"`, () => {
     describe(`when list with the given ID (123) does not exist`, () => {
         beforeEach(() => {
             cy.visit(buildRoute(`123`));
@@ -375,6 +379,8 @@ describe(`the vocabulary list detail page`, () => {
     describe(`when the list exists`, () => {
         beforeEach(() => {
             cy.visit(validVocabularyListDetailRoute);
+
+            cy.get('[value="Carousel"]').click();
         });
 
         describe(`when the list has a couple of distinct terms with no property filters`, () => {

@@ -2,20 +2,28 @@ import {
     AggregateType,
     ICategorizableDetailQueryResult,
     ITermViewForVocabularyListEntry,
+    ITermViewModel,
     IVocabularyListEntry,
     IVocabularyListViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { AudioClipPlayer } from '@coscrad/media-player';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Box, Divider } from '@mui/material';
-import { useContext, useReducer } from 'react';
+import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import {
+    HeadingLabel,
+    IndexTable,
+} from 'apps/coscrad-frontend/src/utils/generic-components/presenters/tables';
+import { CellRenderersDefinition } from 'apps/coscrad-frontend/src/utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
+import React, { useContext, useReducer } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { FlatMultilingualTextPresenter } from '../../../utils/generic-components/presenters/flat-multilingual-text-presenter';
 import { groupMultilingualTextItems } from '../../../utils/generic-components/presenters/group-multilingual-text-items';
 import { Carousel } from '../../higher-order-components/carousel';
+import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
+import { renderMultilingualTextCell } from '../utils/render-multilingual-text-cell';
 import doValuesMatchFilters from './do-values-match-filters';
 import { VocabularyListForm } from './vocabulary-list-form';
 
@@ -73,6 +81,11 @@ const filterEntriesForSelectedTerms = (
     allEntries.filter(({ variableValues }) => {
         return doValuesMatchFilters(variableValues, filter);
     });
+
+enum EntryViewType {
+    carousel = `Carousel`,
+    table = `Table`,
+}
 
 export const VocabularyListDetailFullViewPresenter = ({
     id,
@@ -136,14 +149,16 @@ export const VocabularyListDetailFullViewPresenter = ({
         );
     };
 
-    return (
-        <ResourceDetailFullViewPresenter
-            name={name}
-            id={id}
-            type={ResourceType.vocabularyList}
-            contributions={contributions}
-        >
-            <Divider sx={{ marginTop: 2, marginBottom: 2, backgroundColor: 'primary.main' }} />
+    //TODO make default view configurable
+
+    const [entryViewType, setEntryViewType] = React.useState(EntryViewType.carousel);
+
+    const handleChange = (_event: React.MouseEvent<HTMLElement>, entryViewType: EntryViewType) => {
+        setEntryViewType(entryViewType);
+    };
+
+    const carouselView = (
+        <Box>
             <Carousel
                 propsForItems={selectedEntries.map(({ term }) => term)}
                 /**
@@ -159,6 +174,7 @@ export const VocabularyListDetailFullViewPresenter = ({
                  */
                 Presenter={TermPresenterForVocabularyListEntry}
             />
+
             <VocabularyListForm
                 fields={form.fields}
                 onFormChange={(key: string, value: VocabularyListFilterProperty) =>
@@ -166,6 +182,86 @@ export const VocabularyListDetailFullViewPresenter = ({
                 }
                 formState={filterWithoutNullAndUndefined}
             />
+        </Box>
+    );
+
+    const tableHeadings: HeadingLabel<ITermViewModel & Record<string, unknown>>[] = [
+        { propertyKey: 'id', headingLabel: 'Link' },
+        { propertyKey: 'name', headingLabel: 'Term' },
+        { propertyKey: 'contributions', headingLabel: 'Contributions' },
+        { propertyKey: 'audioURL', headingLabel: 'Audio' },
+        { propertyKey: 'tokens', headingLabel: 'Letters' },
+        // { propertyKey: 'foo', headingLabel: '' },
+    ];
+
+    const cellRenderersDefinition: CellRenderersDefinition<ITermViewModel> = {
+        id: renderAggregateIdCell,
+        name: ({ name }: ITermViewModel) => renderMultilingualTextCell(name, defaultLanguageCode),
+    };
+
+    const uniquePropertyNames = selectedEntries.reduce((acc, { variableValues }) => {
+        Object.keys(variableValues).forEach((filterPropertyName) => {
+            if (!acc.has(filterPropertyName)) {
+                acc.add(filterPropertyName);
+            }
+        });
+
+        return acc;
+    }, new Set<string>());
+
+    const headings = Array.from(uniquePropertyNames).map((propertyName) => ({
+        propertyKey: buildFilterPropertyKey(propertyName),
+        // TODO convert camel case to title case?
+        headingLabel: propertyName,
+    }));
+
+    const tableView = (
+        <Box data-testid="tableview">
+            <IndexTable
+                type={AggregateType.term}
+                headingLabels={tableHeadings}
+                tableData={[]}
+                cellRenderersDefinition={cellRenderersDefinition}
+                heading={''}
+                filterableProperties={[]}
+            />
+        </Box>
+    );
+
+    return (
+        <ResourceDetailFullViewPresenter
+            name={name}
+            id={id}
+            type={ResourceType.vocabularyList}
+            contributions={contributions}
+        >
+            <Box sx={{ textAlign: 'center', mb: 1 }}>
+                <ToggleButtonGroup
+                    color="primary"
+                    value={entryViewType}
+                    exclusive
+                    onChange={handleChange}
+                    aria-label="Vocabulary List"
+                >
+                    {Object.values(EntryViewType).map((viewType) => (
+                        <ToggleButton sx={{ borderRadius: 10 }} value={viewType}>
+                            {viewType}
+                        </ToggleButton>
+                    ))}
+                </ToggleButtonGroup>
+            </Box>
+
+            {/* <Box>
+                <Button
+                    variant="contained"
+                    onClick={() => setEntryViewType(EntryViewType.carousel)}
+                >
+                    Carousel
+                </Button>
+                <Button onClick={() => setEntryViewType(EntryViewType.table)}>Table</Button>
+            </Box> */}
+
+            {entryViewType === EntryViewType.carousel ? carouselView : tableView}
         </ResourceDetailFullViewPresenter>
     );
 };
