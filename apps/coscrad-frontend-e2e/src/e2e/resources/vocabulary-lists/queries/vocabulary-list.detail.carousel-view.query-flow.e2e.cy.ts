@@ -358,6 +358,11 @@ const comprehensiveParadigm: IVocabularyListViewModel = {
     ],
     // note that we have separate command tests for the actions
     actions: [],
+    // this isn't used in the current test
+    table: {
+        dynamicColumnHeadings: [],
+        data: [],
+    },
     // what about tags?
 };
 

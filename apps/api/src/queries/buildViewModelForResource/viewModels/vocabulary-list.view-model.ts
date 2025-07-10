@@ -3,6 +3,7 @@ import {
     FormFieldType,
     IDynamicForm,
     IFormField,
+    IVocabularyListEntryTable,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { BooleanDataType, NestedDataType, UUID } from '@coscrad/data-types';
@@ -167,6 +168,10 @@ export class VocabularyListEntryViewModel {
         form: {
             fields: [],
         },
+        table: {
+            dynamicColumnHeadings: [],
+            data: [],
+        },
         name: buildMultilingualTextWithSingleItem('vocab list name (orig)'),
         id: '123',
         actions: [],
@@ -249,6 +254,8 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
      */
     public form: IDynamicForm;
 
+    table: IVocabularyListEntryTable;
+
     // note that these are mapped to form specifications in the query service layer
     // TODO remove these in favor of `getAvailableCommands`
     @ApiProperty()
@@ -303,6 +310,7 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
             isPublished,
             notes,
             connections,
+            table,
         } = dto;
 
         if (Array.isArray(contributions)) {
@@ -353,6 +361,8 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
               };
 
         this.actions = Array.isArray(actions) ? actions : [];
+
+        this.table = table;
     }
 
     /**
@@ -427,6 +437,10 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
             },
             notes: [], // empty at first
             connections: [],
+            table: {
+                dynamicColumnHeadings: [],
+                data: [],
+            },
         };
 
         const view = new VocabularyListViewModel(dto);
@@ -436,6 +450,8 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
 
     static fromDto(dto: DTO<VocabularyListViewModel>): VocabularyListViewModel {
         const vl = new VocabularyListViewModel(dto);
+
+        console.log({ table: vl.table });
 
         return vl;
     }

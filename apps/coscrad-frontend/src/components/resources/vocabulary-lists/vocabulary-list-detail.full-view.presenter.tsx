@@ -1,26 +1,27 @@
 import {
     AggregateType,
+    DropboxOrCheckbox,
     ICategorizableDetailQueryResult,
+    IMultilingualText,
     ITermViewForVocabularyListEntry,
     ITermViewModel,
     IVocabularyListEntry,
+    IVocabularyListEntryTableRow,
     IVocabularyListViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { AudioClipPlayer } from '@coscrad/media-player';
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { isBoolean, isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import {
-    HeadingLabel,
-    IndexTable,
-} from 'apps/coscrad-frontend/src/utils/generic-components/presenters/tables';
-import { CellRenderersDefinition } from 'apps/coscrad-frontend/src/utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import React, { useContext, useReducer } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { FlatMultilingualTextPresenter } from '../../../utils/generic-components/presenters/flat-multilingual-text-presenter';
 import { groupMultilingualTextItems } from '../../../utils/generic-components/presenters/group-multilingual-text-items';
+import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
+import { Matchers } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/filter-table-data';
+import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { Carousel } from '../../higher-order-components/carousel';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { renderMultilingualTextCell } from '../utils/render-multilingual-text-cell';
@@ -93,6 +94,7 @@ export const VocabularyListDetailFullViewPresenter = ({
     entries,
     form,
     contributions,
+    table,
 }: ICategorizableDetailQueryResult<IVocabularyListViewModel>): JSX.Element => {
     const [filter, dispatch] = useReducer(filterReducer, {});
 
@@ -185,45 +187,130 @@ export const VocabularyListDetailFullViewPresenter = ({
         </Box>
     );
 
+    const { dynamicColumnHeadings, data: tableData } = table;
+
     const tableHeadings: HeadingLabel<ITermViewModel & Record<string, unknown>>[] = [
         { propertyKey: 'id', headingLabel: 'Link' },
         { propertyKey: 'name', headingLabel: 'Term' },
         { propertyKey: 'contributions', headingLabel: 'Contributions' },
         { propertyKey: 'audioURL', headingLabel: 'Audio' },
         { propertyKey: 'tokens', headingLabel: 'Letters' },
-        // { propertyKey: 'foo', headingLabel: '' },
     ];
+
+    dynamicColumnHeadings.forEach((h) => tableHeadings.push(h));
 
     const cellRenderersDefinition: CellRenderersDefinition<ITermViewModel> = {
         id: renderAggregateIdCell,
         name: ({ name }: ITermViewModel) => renderMultilingualTextCell(name, defaultLanguageCode),
     };
 
-    const uniquePropertyNames = selectedEntries.reduce((acc, { variableValues }) => {
-        Object.keys(variableValues).forEach((filterPropertyName) => {
-            if (!acc.has(filterPropertyName)) {
-                acc.add(filterPropertyName);
+    const renderTableCellForSelectionFilterProperty = (
+        value: string,
+        labels: Record<string, string>
+    ): JSX.Element => <div>{labels[value] || '-'}</div>;
+
+    const renderTableCellForCheckboxFilterProperty = (
+        value: string,
+        labelsForTrueAndFalse: {
+            true: string;
+            false: string;
+        }
+    ): JSX.Element => <div>{labelsForTrueAndFalse[value]}</div>;
+
+    dynamicColumnHeadings.forEach(
+        ({ propertyKey, type: filterPropertyType, allowedValuesAndLabels }) => {
+            cellRenderersDefinition[propertyKey] =
+                filterPropertyType === DropboxOrCheckbox.dropbox
+                    ? (row) => {
+                          // TODO do this on the backend?
+                          const lookupTableForLabels = allowedValuesAndLabels.reduce(
+                              (acc, { value, label }) => {
+                                  acc[isNonEmptyString(value) ? value : JSON.stringify(value)] =
+                                      label;
+
+                                  return acc;
+                              },
+                              {}
+                          );
+
+                          return renderTableCellForSelectionFilterProperty(
+                              row[propertyKey],
+                              lookupTableForLabels
+                          );
+                      }
+                    : (row) => {
+                          const valueForThisRow = row[propertyKey];
+
+                          const labelForTrueAndFalse = {
+                              true:
+                                  allowedValuesAndLabels.find(
+                                      ({ value }) => isBoolean(value) && value
+                                  )?.label || 'True',
+                              false:
+                                  allowedValuesAndLabels.find(
+                                      ({ value }) => isBoolean(value) && !value
+                                  )?.label || 'False',
+                          };
+
+                          return renderTableCellForCheckboxFilterProperty(
+                              valueForThisRow,
+                              labelForTrueAndFalse
+                          );
+                      };
+        }
+    );
+
+    const filterableProperties = ['name', 'tokens'];
+
+    dynamicColumnHeadings.forEach(({ propertyKey }) => {
+        filterableProperties.push(propertyKey);
+    });
+
+    // @ts-expect-error fix me
+    const matchers: Matchers<IVocabularyListEntryTableRow> = {
+        // TODO Is there a helper for this?
+        name: ({ items }: IMultilingualText, search) =>
+            items.some(({ text }) => text.toLowerCase().includes(search.toLowerCase())),
+        // TODO export to a util and share with term index view
+        tokens: (tokens, searchTerm) =>
+            // TODO why is there no type safety here?
+            (tokens || []).some(({ characters }) =>
+                characters.some((c) => {
+                    const doesMatch = c.text === searchTerm.toLowerCase();
+
+                    if (c.isOutOfAlphabet) return false;
+
+                    return doesMatch;
+                })
+            ),
+    };
+
+    dynamicColumnHeadings.forEach(
+        ({ propertyKey, allowedValuesAndLabels, type: filterPropertyType }) => {
+            // TODO consider matching by value as well
+
+            // TODO Unit test these
+            if (filterPropertyType === DropboxOrCheckbox.dropbox) {
+                matchers[propertyKey] = (row, search: string) => {
+                    return search === 'hi';
+                };
             }
-        });
 
-        return acc;
-    }, new Set<string>());
-
-    const headings = Array.from(uniquePropertyNames).map((propertyName) => ({
-        propertyKey: buildFilterPropertyKey(propertyName),
-        // TODO convert camel case to title case?
-        headingLabel: propertyName,
-    }));
+            matchers[propertyKey] = (_) => true;
+        }
+    );
 
     const tableView = (
         <Box data-testid="tableview">
             <IndexTable
-                type={AggregateType.term}
+                type={'vocabularyListEntryTableRow'}
                 headingLabels={tableHeadings}
-                tableData={[]}
+                // @ts-expect-error dynamic keys are difficult to type
+                tableData={tableData}
                 cellRenderersDefinition={cellRenderersDefinition}
                 heading={''}
-                filterableProperties={[]}
+                filterableProperties={filterableProperties}
+                matchers={matchers}
             />
         </Box>
     );
