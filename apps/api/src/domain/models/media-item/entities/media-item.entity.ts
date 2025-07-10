@@ -6,12 +6,16 @@ import {
     NonEmptyString,
     NonNegativeFiniteNumber,
 } from '@coscrad/data-types';
+import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
+import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { CoscradDataExample } from '../../../../test-data/utilities';
 import { DTO } from '../../../../types/DTO';
+import { ResultOrError } from '../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
+import { UpdateMethod } from '../../../decorators';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../../types/ResourceType';
@@ -26,9 +30,10 @@ import { Resource } from '../../resource.entity';
 import validateTimeRangeContextForModel from '../../shared/contextValidators/validateTimeRangeContextForModel';
 import newInstance from '../../shared/functional/newInstance';
 import { ContributorAndRole } from '../../song/ContributorAndRole';
-import { InconsistentMediaItemPropertyError } from '../errors';
+import { EmptyTranscriptForMediaItemError, InconsistentMediaItemPropertyError } from '../errors';
 import { getExtensionForMimeType } from './get-extension-for-mime-type';
 import { MediaItemDimensions } from './media-item-dimensions';
+import { RawMediaItemTranscript } from './raw-media-item-transcript.entity';
 
 const ID_OFFSET = 10000;
 
@@ -48,6 +53,7 @@ const buildId = (sequenceNumber: number) => buildDummyUuid(sequenceNumber + ID_O
         mimeType: MIMEType.wav,
         published: true,
         type: ResourceType.mediaItem,
+        transcripts: [],
     },
 })
 @CoscradDataExample<MediaItem>({
@@ -64,6 +70,7 @@ const buildId = (sequenceNumber: number) => buildDummyUuid(sequenceNumber + ID_O
         mimeType: MIMEType.mp4,
         published: true,
         type: ResourceType.mediaItem,
+        transcripts: [],
     },
 })
 @CoscradDataExample<MediaItem>({
@@ -80,6 +87,7 @@ const buildId = (sequenceNumber: number) => buildDummyUuid(sequenceNumber + ID_O
         mimeType: MIMEType.mp3,
         published: true,
         type: ResourceType.mediaItem,
+        transcripts: [],
     },
 })
 @CoscradDataExample<MediaItem>({
@@ -90,6 +98,7 @@ const buildId = (sequenceNumber: number) => buildDummyUuid(sequenceNumber + ID_O
         mimeType: MIMEType.png,
         published: true,
         type: ResourceType.mediaItem,
+        transcripts: [],
     },
 })
 @CoscradDataExample<MediaItem>({
@@ -100,6 +109,7 @@ const buildId = (sequenceNumber: number) => buildDummyUuid(sequenceNumber + ID_O
         mimeType: MIMEType.png,
         published: true,
         type: ResourceType.mediaItem,
+        transcripts: [],
     },
 })
 @CoscradDataExample<MediaItem>({
@@ -110,6 +120,7 @@ const buildId = (sequenceNumber: number) => buildDummyUuid(sequenceNumber + ID_O
         mimeType: MIMEType.png,
         published: true,
         type: ResourceType.mediaItem,
+        transcripts: [],
     },
 })
 @CoscradDataExample<MediaItem>({
@@ -120,6 +131,7 @@ const buildId = (sequenceNumber: number) => buildDummyUuid(sequenceNumber + ID_O
         mimeType: MIMEType.png,
         published: true,
         type: ResourceType.mediaItem,
+        transcripts: [],
     },
 })
 @CoscradDataExample<MediaItem>({
@@ -130,6 +142,7 @@ const buildId = (sequenceNumber: number) => buildDummyUuid(sequenceNumber + ID_O
         mimeType: MIMEType.wav,
         published: true,
         type: ResourceType.mediaItem,
+        transcripts: [],
     },
 })
 @CoscradDataExample<MediaItem>({
@@ -140,6 +153,7 @@ const buildId = (sequenceNumber: number) => buildDummyUuid(sequenceNumber + ID_O
         mimeType: MIMEType.wav,
         published: true,
         type: ResourceType.mediaItem,
+        transcripts: [],
     },
 })
 @RegisterIndexScopedCommands(['CREATE_MEDIA_ITEM'])
@@ -189,6 +203,16 @@ export class MediaItem extends Resource implements ITimeBoundable {
     })
     readonly dimensions?: MediaItemDimensions;
 
+    @NestedDataType(RawMediaItemTranscript, {
+        label: 'transcripts',
+        description:
+            'a list of machine generated or legacy text transcripts or labels for this media item',
+        isArray: true,
+        isOptional: true, // can be empty
+    })
+    // TODO do we want this property if the media item is not an audio visual type?
+    readonly transcripts: RawMediaItemTranscript[];
+
     constructor(dto: DTO<MediaItem>) {
         super(dto);
 
@@ -201,6 +225,7 @@ export class MediaItem extends Resource implements ITimeBoundable {
             mimeType,
             lengthMilliseconds,
             dimensions: dimensionsDto,
+            transcripts,
         } = dto;
 
         this.title = title;
@@ -215,6 +240,21 @@ export class MediaItem extends Resource implements ITimeBoundable {
 
         if (!isNullOrUndefined(dimensionsDto))
             this.dimensions = new MediaItemDimensions(dimensionsDto);
+
+        if (Array.isArray(transcripts)) {
+            this.transcripts = transcripts.map(cloneToPlainObject);
+        }
+    }
+
+    @UpdateMethod()
+    addTranscript(transcript: DTO<RawMediaItemTranscript>): ResultOrError<this> {
+        if (!isNonEmptyObject(transcript)) {
+            return new EmptyTranscriptForMediaItemError(this.id);
+        }
+
+        this.transcripts.push(new RawMediaItemTranscript(transcript));
+
+        return this;
     }
 
     getName(): MultilingualText {
@@ -227,19 +267,40 @@ export class MediaItem extends Resource implements ITimeBoundable {
     }
 
     protected validateComplexInvariants(): InternalError[] {
+        const allErrors = [];
+
         if (
             !isAudioMimeType(this.mimeType) &&
             !isVideoMimeType(this.mimeType) &&
             !isNullOrUndefined(this.lengthMilliseconds)
         ) {
-            return [new InconsistentMediaItemPropertyError(`lengthMilliseconds`, this.mimeType)];
+            allErrors.push(
+                new InconsistentMediaItemPropertyError(`lengthMilliseconds`, this.mimeType)
+            );
+        }
+
+        if (
+            !isAudioMimeType(this.mimeType) &&
+            !isVideoMimeType(this.mimeType) &&
+            this.transcripts.length > 0
+        ) {
+            allErrors.push(new InconsistentMediaItemPropertyError(`transcripts`, this.mimeType));
         }
 
         if (!isPhotographMimeType(this.mimeType) && !isNullOrUndefined(this.dimensions)) {
-            return [new InconsistentMediaItemPropertyError('dimensions', this.mimeType)];
+            allErrors.push(new InconsistentMediaItemPropertyError('dimensions', this.mimeType));
         }
 
-        return [];
+        const invalidTranscripts =
+            this.transcripts?.filter(({ data }) => {
+                return !isNonEmptyObject(data);
+            }) || [];
+
+        invalidTranscripts.forEach(() =>
+            allErrors.push(new EmptyTranscriptForMediaItemError(this.id))
+        );
+
+        return allErrors;
     }
 
     protected getExternalReferences(): AggregateCompositeIdentifier[] {
