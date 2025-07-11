@@ -5,9 +5,9 @@ import {
     IVocabularyListEntryTable,
 } from '@coscrad/api-interfaces';
 import { ErrorDisplay } from '../../../error-display/error-display';
-import { NotFoundPresenter } from '../../../not-found';
 import { VocabularyListEntryViewType } from './vocabulary-list-entry-view-type.enum';
 import { VocabularyListEntryCarouselPresenter } from './vocabulary-list-entry.carousel.presenter';
+import { VocabularyListEntryTableViewPresenter } from './vocabulary-list-entry.table.presenter';
 
 export interface VocabularyListEntryPresenterProps {
     viewType: VocabularyListEntryViewType;
@@ -16,17 +16,18 @@ export interface VocabularyListEntryPresenterProps {
     table: IVocabularyListEntryTable;
 }
 
-const VocabularyListTableViewPresenter = (): JSX.Element => {
-    return <NotFoundPresenter />;
-};
-
 export const VocabularyListEntryPresenter = ({
     viewType,
     form,
     entries,
+    table,
 }: VocabularyListEntryPresenterProps): JSX.Element => {
     if (viewType === VocabularyListEntryViewType.Carousel) {
         return <VocabularyListEntryCarouselPresenter entries={entries} form={form} />;
+    }
+
+    if (viewType === VocabularyListEntryViewType.Table) {
+        return <VocabularyListEntryTableViewPresenter table={table} />;
     }
 
     // exhaustive check

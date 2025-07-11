@@ -171,10 +171,10 @@ const entries: IVocabularyListEntry<boolean | string>[] = (
         tokens: [],
     },
     variableValues: {
-        [POSITIVE]: positive.toString(),
+        [POSITIVE]: positive.toString() == '1',
         [PERSON]: person.toString(),
         [ASPECT]: aspect.toString(),
-        [USITATIVE]: usitative.toString(),
+        [USITATIVE]: usitative.toString() === '1',
     },
 }));
 
@@ -194,6 +194,83 @@ const dynamicColumnHeadings = [
             },
         ],
     },
+    {
+        type: DropboxOrCheckbox.checkbox,
+        propertyKey: `filterProperty${USITATIVE}Value`,
+        headingLabel: 'Usitative',
+        allowedValuesAndLabels: [
+            {
+                value: true,
+                label: 'usitative',
+            },
+            {
+                value: false,
+                label: '-',
+            },
+        ],
+    },
+    {
+        type: DropboxOrCheckbox.dropbox,
+        propertyKey: `filterProperty${PERSON}Value`,
+        headingLabel: 'Person',
+        allowedValuesAndLabels: [
+            {
+                value: '11',
+                label: 'I',
+            },
+            {
+                value: '21',
+                label: 'you',
+            },
+            {
+                value: '31',
+                label: 'he or she',
+            },
+            {
+                value: '12',
+                label: 'we',
+            },
+            {
+                value: '22',
+                label: 'you all',
+            },
+            {
+                value: '32',
+                label: 'they',
+            },
+            {
+                value: '0',
+                label: 'someone',
+            },
+        ],
+    },
+    {
+        type: DropboxOrCheckbox.dropbox,
+        propertyKey: `filterProperty${ASPECT}Value`,
+        headingLabel: 'Aspect',
+        allowedValuesAndLabels: [
+            {
+                value: '1',
+                label: 'present',
+            },
+            {
+                value: '2',
+                label: 'past-perfective',
+            },
+            {
+                value: '3',
+                label: 'future',
+            },
+            {
+                value: '4',
+                label: 'optative',
+            },
+            {
+                value: '5',
+                label: 'inceptive-perfective',
+            },
+        ],
+    },
 ];
 
 const table: IVocabularyListEntryTable = {
@@ -203,12 +280,29 @@ const table: IVocabularyListEntryTable = {
         const result = { ...term };
 
         Object.entries(variableValues).forEach(([k, v]) => {
-            const { allowedValuesAndLabels } = dynamicColumnHeadings.find(
-                (dch) => dch.propertyKey === k
+            // note that the back-end name-spaces the `filterPropertyValue` keys in this way in order to flatten the data into rows
+            const targetKeyInFlatRow = `filterProperty${k}Value`;
+
+            const search = dynamicColumnHeadings.find(
+                (dch) => dch.propertyKey === targetKeyInFlatRow
             );
 
-            result[`filterProperty${k}Value`] = allowedValuesAndLabels[JSON.stringify(v)];
+            if (!search) {
+                throw new Error(
+                    `There is no property key in headings: ${JSON.stringify(
+                        dynamicColumnHeadings
+                    )} with key: ${targetKeyInFlatRow}`
+                );
+            }
+
+            const { allowedValuesAndLabels } = search;
+
+            result[`filterProperty${k}Value`] = allowedValuesAndLabels.flatMap(({ label, value }) =>
+                value === v ? [label] : []
+            )[0];
         });
+
+        console.log({ result });
 
         return result;
     }),
@@ -256,8 +350,6 @@ describe(`the vocabulary list detail page "table view"`, () => {
 
         // TODO move this mapping to `cy.seedDatabase()`
         const doc = { ...comprehensiveParadigm, _key: aggregateCompositeIdentifier.id };
-
-        console.log({ doc });
 
         cy.seedDatabase('vocabularyList__VIEWS', [doc]);
     });
