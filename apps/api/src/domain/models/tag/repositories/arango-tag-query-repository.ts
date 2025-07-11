@@ -1,17 +1,18 @@
+import { CategorizableCompositeIdentifier } from '@coscrad/api-interfaces';
 import { Maybe } from '../../../../lib/types/maybe';
+import { isNotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabase } from '../../../../persistence/database/arango-database';
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
-import { TagViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
+import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
+import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
+import { EventSourcedTagRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { AggregateId } from '../../../types/AggregateId';
-import { IResourceConnectionDto } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
-import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base-arango-resource-query-builder';
-import { ContributionSummary } from '../../user-management';
 import { ITagQueryRepository } from './tag-query-repository.interface';
 
 export class ArangoTagQueryRepository implements ITagQueryRepository {
-    private readonly database: ArangoDatabaseForCollection<TagViewModel>;
+    private readonly database: ArangoDatabaseForCollection<EventSourcedTagRecordForResourceViewModel>;
 
     private readonly baseResouceQueryBuilder: BaseArangoResourceViewQueryBuilder;
 
@@ -24,51 +25,53 @@ export class ArangoTagQueryRepository implements ITagQueryRepository {
         this.baseResouceQueryBuilder = new BaseArangoResourceViewQueryBuilder('tag__VIEWS');
     }
 
-    create(_view: TagViewModel): Promise<void> {
-        throw new Error('Method not implemented.');
+    async fetchById(id: AggregateId): Promise<Maybe<EventSourcedTagRecordForResourceViewModel>> {
+        const result = await this.database.fetchById(id);
+
+        if (isNotFound(result)) {
+            return result;
+        }
+
+        return EventSourcedTagRecordForResourceViewModel.fromDto(
+            mapDatabaseDocumentToAggregateDTO(result)
+        );
     }
 
-    async createMany(_views: TagViewModel[]): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
+    async fetchMany(): Promise<EventSourcedTagRecordForResourceViewModel[]> {
+        const docs = await this.database.fetchMany();
 
-    async fetchById(_id: string): Promise<Maybe<TagViewModel>> {
-        throw new Error('Method not implemented.');
-    }
-
-    async fetchMany(): Promise<TagViewModel[]> {
-        throw new Error('Method not implemented.');
+        return docs.map((doc) =>
+            EventSourcedTagRecordForResourceViewModel.fromDto(
+                mapDatabaseDocumentToAggregateDTO(doc)
+            )
+        );
     }
 
     async count(): Promise<number> {
         throw new Error('Method not implemented.');
     }
 
-    async publish(_id: AggregateId): Promise<void> {
+    async create(tag: EventSourcedTagRecordForResourceViewModel): Promise<void> {
+        // TODO add toDto
+        return this.database.create(mapEntityDTOToDatabaseDocument(tag));
+    }
+
+    async createMany(tags: EventSourcedTagRecordForResourceViewModel[]): Promise<void> {
+        await this.database.createMany(tags.map(mapEntityDTOToDatabaseDocument));
+    }
+
+    async delete(_id: AggregateId): Promise<void> {
         throw new Error('Method not implemented.');
     }
 
-    async createNoteAbout(_id: string, _dto: INoteCreationDto): Promise<void> {
+    async relabel(_tagId: string, _newLabel: string): Promise<void> {
         throw new Error('Method not implemented.');
     }
 
-    async createConnection(_id: string, _dto: IResourceConnectionDto): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
-    async tag(_id: string, _tagId: string): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
-    async attribute(_id: string, _contributionSummary: ContributionSummary): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
-    async allowUser(_aggregateId: AggregateId, _userId: AggregateId): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
-    async CreateTag(_label: string): Promise<void> {
+    async tagResourceOrNote(
+        _tagId: string,
+        _categorizableCompositeIdentifier: CategorizableCompositeIdentifier
+    ): Promise<void> {
         throw new Error('Method not implemented.');
     }
 }

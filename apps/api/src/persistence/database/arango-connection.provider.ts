@@ -106,6 +106,8 @@ export class ArangoConnectionProvider {
 
         await this.createCollectionIfNotExists('digitalText__VIEWS');
 
+        await this.createCollectionIfNotExists('tag__VIEWS');
+
         this.isInitialized = true;
     }
 
