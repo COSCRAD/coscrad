@@ -451,6 +451,8 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
     static fromDto(dto: DTO<VocabularyListViewModel>): VocabularyListViewModel {
         const vl = new VocabularyListViewModel(dto);
 
+        console.log({ dtoTable: dto.table });
+
         console.log({ table: vl.table });
 
         return vl;

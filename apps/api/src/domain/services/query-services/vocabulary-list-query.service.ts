@@ -117,6 +117,8 @@ export class VocabularyListQueryService {
                 //     data: [],
                 // };
 
+                console.log({ entities });
+
                 return entity as unknown as Omit<VocabularyListViewModel, 'actions'> & {
                     actions: ICommandFormAndLabels[];
                 };

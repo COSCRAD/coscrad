@@ -178,29 +178,36 @@ const entries: IVocabularyListEntry<boolean | string>[] = (
     },
 }));
 
+const dynamicColumnHeadings = [
+    {
+        type: DropboxOrCheckbox.checkbox,
+        propertyKey: `filterProperty${POSITIVE}Value`,
+        headingLabel: 'Positive',
+        allowedValuesAndLabels: [
+            {
+                value: true,
+                label: 'positive',
+            },
+            {
+                value: false,
+                label: 'negative',
+            },
+        ],
+    },
+];
+
 const table: IVocabularyListEntryTable = {
-    dynamicColumnHeadings: [
-        {
-            type: DropboxOrCheckbox.checkbox,
-            propertyKey: `filterProperty${POSITIVE}Value`,
-            headingLabel: 'Positive',
-            allowedValuesAndLabels: [
-                {
-                    value: true,
-                    label: 'positive',
-                },
-                {
-                    value: false,
-                    label: 'negative',
-                },
-            ],
-        },
-    ],
+    // @ts-expect-error dynamic keys destroy static analysis maybe we should give up on the template type
+    dynamicColumnHeadings,
     data: entries.map(({ term, variableValues }) => {
         const result = { ...term };
 
         Object.entries(variableValues).forEach(([k, v]) => {
-            result[`filterProperty${k}Value`] = v;
+            const { allowedValuesAndLabels } = dynamicColumnHeadings.find(
+                (dch) => dch.propertyKey === k
+            );
+
+            result[`filterProperty${k}Value`] = allowedValuesAndLabels[JSON.stringify(v)];
         });
 
         return result;
@@ -239,7 +246,6 @@ const comprehensiveParadigm: IVocabularyListViewModel = {
     ],
     // note that we have separate command tests for the actions
     actions: [],
-    // this isn't used in the current test
     table: table,
     // what about tags?
 };
@@ -248,9 +254,12 @@ describe(`the vocabulary list detail page "table view"`, () => {
     before(() => {
         cy.clearDatabase();
 
-        cy.seedDatabase('vocabularyList__VIEWS', [
-            { ...comprehensiveParadigm, _key: aggregateCompositeIdentifier.id },
-        ]);
+        // TODO move this mapping to `cy.seedDatabase()`
+        const doc = { ...comprehensiveParadigm, _key: aggregateCompositeIdentifier.id };
+
+        console.log({ doc });
+
+        cy.seedDatabase('vocabularyList__VIEWS', [doc]);
     });
 
     beforeEach(() => {

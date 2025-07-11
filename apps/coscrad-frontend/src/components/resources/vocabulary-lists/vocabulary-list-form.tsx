@@ -1,6 +1,6 @@
 import { IFormField } from '@coscrad/api-interfaces';
 import { Box, FormControl, FormHelperText, Stack } from '@mui/material';
-import { VocabularyListFilter } from './vocabulary-list-detail.full-view.presenter';
+import { VocabularyListFilter } from './vocabulary-list-entry.presenter';
 import { VocabularyListFormElement } from './vocabulary-list-form-element';
 
 type VocabularyListFormProps = {
