@@ -49,11 +49,7 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
         | CoscradRoute
         | [RouteFlag, (config?: ConfigurableContent) => CoscradRoute]
     )[] = [
-        {
-            path: '/',
-            label: 'Home',
-            element: <Home />,
-        },
+        // note that the base route '/' is configured dynamically according to `contentConfig.landingPage` below
         {
             path: 'About',
             label: 'About',
@@ -151,6 +147,41 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
             element: <NotFoundPresenter />,
         },
     ];
+
+    const searchResultForDynamicLandingRoute = routeDefinitions.flatMap((routeDefinition) => {
+        let targetRouteDefinition: CoscradRoute;
+
+        if (Array.isArray(routeDefinition)) {
+            // this is an optional route depending on the content config
+            if (!routeDefinition[0]) {
+                return [];
+            }
+
+            targetRouteDefinition = routeDefinition[1](contentConfig);
+        } else {
+            targetRouteDefinition = routeDefinition;
+        }
+
+        // match
+        if (targetRouteDefinition.path === contentConfig.landingPage) {
+            return [targetRouteDefinition];
+        }
+
+        // no result found
+        return [];
+    });
+
+    routeDefinitions.push({
+        path: '/',
+        label: 'Home',
+        element:
+            searchResultForDynamicLandingRoute.length === 1 &&
+            isNonEmptyObject(searchResultForDynamicLandingRoute[0]) ? (
+                searchResultForDynamicLandingRoute[0].element
+            ) : (
+                <Home />
+            ),
+    });
 
     return routeDefinitions
         .filter((input) => !Array.isArray(input) || input[0])

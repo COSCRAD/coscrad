@@ -1,4 +1,7 @@
 import { CategorizableType, ResourceType } from '@coscrad/api-interfaces';
+import { Home } from '../components/home/home';
+import { ListenLivePage } from '../components/listen-live-page/listen-live-page';
+import { ResourceInfoContainer } from '../components/resource-info/resource-info.container';
 import {
     DetailViewType,
     IndexToDetailFlowDefinition,
@@ -92,6 +95,77 @@ describe(`dynamic routes`, () => {
                         expect(matchingPaths.length).toBe(1);
                     });
                 });
+            });
+        });
+    });
+
+    describe(`the landing page`, () => {
+        describe(`when no landing page is specified in the config`, () => {
+            it(`should render the home page at the base route`, () => {
+                const contentConfig = buildDummyConfig({
+                    landingPage: undefined,
+                });
+
+                const result = buildRoutes(contentConfig);
+
+                const baseRoute = result.find(({ path }) => path === `/`);
+
+                expect(baseRoute.element).toEqual(<Home />);
+            });
+        });
+
+        describe(`when listen live is configured as the landing page`, () => {
+            it(`should return the listen live page`, () => {
+                const liveRoute = 'LiveMetal';
+
+                const contentConfig = buildDummyConfig({
+                    listenLive: {
+                        title: 'Listen to our Station',
+                        logoUrl: 'https:/www.coscrad.org/logo.png',
+                        iceCastLink: 'https://www.coscrad.org/dummystream',
+                        playingMessage: 'We are live!',
+                        missionStatement:
+                            'We play awesome jams all day long and infomercials at night.',
+                        route: liveRoute,
+                        label: 'Listen Live',
+                    },
+                    landingPage: liveRoute,
+                });
+
+                const result = buildRoutes(contentConfig);
+
+                const baseRoute = result.find(({ path }) => path === `/`);
+
+                expect(baseRoute.element).toEqual(<ListenLivePage />);
+            });
+        });
+
+        describe(`when the big resource index page is configured as the landing page`, () => {
+            it(`should render the resources page as root`, () => {
+                const contentConfig = buildDummyConfig({
+                    shouldEnableWebOfKnowledgeForResources: true,
+                    landingPage: 'Resources',
+                });
+
+                const result = buildRoutes(contentConfig);
+
+                const baseRoute = result.find(({ path }) => path === `/`);
+
+                expect(baseRoute.element).toEqual(<ResourceInfoContainer />);
+            });
+        });
+
+        describe(`when a the landing page is configured to a route that does not exist`, () => {
+            it(`should fall back to Home`, () => {
+                const contentConfig = buildDummyConfig({
+                    landingPage: 'DoesNotExist',
+                });
+
+                const result = buildRoutes(contentConfig);
+
+                const baseRoute = result.find(({ path }) => path === '/');
+
+                expect(baseRoute.element).toEqual(<Home />);
             });
         });
     });
