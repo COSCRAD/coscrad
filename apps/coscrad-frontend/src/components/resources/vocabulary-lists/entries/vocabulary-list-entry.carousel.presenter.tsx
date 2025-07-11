@@ -1,26 +1,22 @@
 import {
     AggregateType,
-    HttpStatusCode,
     IDynamicForm,
     ITermViewForVocabularyListEntry,
     IVocabularyListEntry,
-    IVocabularyListEntryTable,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { AudioClipPlayer } from '@coscrad/media-player';
 import { Box } from '@mui/material';
 import { useContext, useReducer } from 'react';
 import { isNullOrUndefined } from 'util';
-import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
-import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components';
-import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
-import { FlatMultilingualTextPresenter } from '../../../utils/generic-components/presenters/flat-multilingual-text-presenter';
-import { groupMultilingualTextItems } from '../../../utils/generic-components/presenters/group-multilingual-text-items';
-import { ErrorDisplay } from '../../error-display/error-display';
-import { Carousel } from '../../higher-order-components/carousel';
-import { NotFoundPresenter } from '../../not-found';
-import doValuesMatchFilters from './do-values-match-filters';
-import { VocabularyListForm } from './vocabulary-list-form';
+import { ConfigurableContentContext } from '../../../../configurable-front-matter/configurable-content-provider';
+import { ResourceDetailFullViewPresenter } from '../../../../utils/generic-components';
+import { buildDataAttributeForAggregateDetailComponent } from '../../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
+import { FlatMultilingualTextPresenter } from '../../../../utils/generic-components/presenters/flat-multilingual-text-presenter';
+import { groupMultilingualTextItems } from '../../../../utils/generic-components/presenters/group-multilingual-text-items';
+import { Carousel } from '../../../higher-order-components/carousel';
+import doValuesMatchFilters from '../do-values-match-filters';
+import { VocabularyListForm } from '../vocabulary-list-form';
 
 type VocabularyListFilterProperty = string | boolean;
 
@@ -36,27 +32,6 @@ type UpdateVocabularyListFilterPayload = {
 type FSA<T, U> = {
     type: T;
     payload: U;
-};
-
-export enum VocabularyListEntryViewType {
-    Carousel = `Carousel`,
-    Table = `Table`,
-}
-
-export const isVocabularyListEntryViewType = (
-    input: unknown
-): input is VocabularyListEntryViewType =>
-    Object.values(VocabularyListEntryViewType).includes(input as VocabularyListEntryViewType);
-
-export interface VocabularyListEntryPresenterProps {
-    viewType: VocabularyListEntryViewType;
-    entries: IVocabularyListEntry<boolean | string>[];
-    form: IDynamicForm;
-    table: IVocabularyListEntryTable;
-}
-
-const VocabularyListTableViewPresenter = (): JSX.Element => {
-    return <NotFoundPresenter />;
 };
 
 const updateVocabularyListFilter = (
@@ -98,12 +73,12 @@ const filterEntriesForSelectedTerms = (
         return doValuesMatchFilters(variableValues, filter);
     });
 
-interface VocabularyListCarouselPresenterProps {
+export interface VocabularyListCarouselPresenterProps {
     form: IDynamicForm;
     entries: IVocabularyListEntry<string | boolean>[];
 }
 
-const VocabularyListCarouselPresenter = ({
+export const VocabularyListEntryCarouselPresenter = ({
     form,
     entries,
 }: VocabularyListCarouselPresenterProps): JSX.Element => {
@@ -193,22 +168,4 @@ const VocabularyListCarouselPresenter = ({
     );
 
     return carouselView;
-};
-
-export const VocabularyListEntryPresenter = ({
-    viewType,
-    form,
-    entries,
-}: VocabularyListEntryPresenterProps): JSX.Element => {
-    if (viewType === VocabularyListEntryViewType.Carousel) {
-        return <VocabularyListCarouselPresenter entries={entries} form={form} />;
-    }
-
-    // exhaustive check
-    return (
-        <ErrorDisplay
-            code={HttpStatusCode.internalError}
-            message={`Unsupported view type: ${viewType}`}
-        />
-    );
 };

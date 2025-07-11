@@ -7,10 +7,10 @@ import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import React from 'react';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components';
 import {
-    isVocabularyListEntryViewType,
-    VocabularyListEntryPresenter,
     VocabularyListEntryViewType,
-} from './vocabulary-list-entry.presenter';
+    isVocabularyListEntryViewType,
+} from './entries/vocabulary-list-entry-view-type.enum';
+import { VocabularyListEntryPresenter } from './entries/vocabulary-list-entry.presenter';
 
 export const VocabularyListDetailFullViewPresenter = ({
     id,
