@@ -58,7 +58,9 @@ export class CommandHandlerService {
             if (result !== Ack) {
                 const e = new Error(
                     // note that we have yet to push, so the current length will become the index for this command result
-                    `Failed at command [${allResults.length}] (${fsa.type}). \n ${result.message}`
+                    `Failed at command [${allResults.length}] (${
+                        fsa.type
+                    }). \n ${result.toString()}`
                 );
 
                 allResults.push({

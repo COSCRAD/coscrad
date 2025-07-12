@@ -95,6 +95,39 @@ export class CommandController {
         return res.status(httpStatusCodes.ok).send();
     }
 
+    @ApiBearerAuth('JWT')
+    @UseGuards(AdminJwtGuard)
+    @Post('bulk')
+    async executeCommandStream(
+        @Request() req,
+        @Res() res,
+        @Body() { stream: commandStream }: { stream: CommandFSA[] }
+    ) {
+        const { user } = req;
+
+        if (!user || !(user instanceof CoscradUserWithGroups)) {
+            throw new UnauthorizedException();
+        }
+
+        if (!user.isAdmin()) {
+            throw new UnauthorizedException();
+        }
+
+        // TODO validate that meta comes through
+        const resultsForAllCommands = await this.commandHandlerService.executeStream(commandStream);
+
+        if (
+            resultsForAllCommands.some(
+                (singleCommandResultRecord) => singleCommandResultRecord.result !== Ack
+            )
+        )
+            return sendInternalResultAsHttpResponse(res, resultsForAllCommands);
+
+        // notify client?
+
+        return res.status(httpStatusCodes.ok).send(resultsForAllCommands);
+    }
+
     @Sse('notifications')
     commandSuccessNotifications(): Observable<MessageEvent> {
         return this.commandResultSubject.asObservable();
