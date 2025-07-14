@@ -49,6 +49,7 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
         | CoscradRoute
         | [RouteFlag, (config?: ConfigurableContent) => CoscradRoute]
     )[] = [
+        // note that the base route '/' is configured dynamically according to `contentConfig.landingPage` and this static home page may be overridden below
         {
             path: '/',
             label: 'Home',
@@ -152,7 +153,52 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
         },
     ];
 
-    return routeDefinitions
-        .filter((input) => !Array.isArray(input) || input[0])
-        .map((input) => (Array.isArray(input) ? input[1](contentConfig) : input));
+    const searchResultForDynamicLandingRoute = routeDefinitions.flatMap((routeDefinition) => {
+        let targetRouteDefinition: CoscradRoute;
+
+        if (Array.isArray(routeDefinition)) {
+            // this is an optional route depending on the content config
+            if (!routeDefinition[0]) {
+                return [];
+            }
+
+            targetRouteDefinition = routeDefinition[1](contentConfig);
+        } else {
+            targetRouteDefinition = routeDefinition;
+        }
+
+        // match
+        if (targetRouteDefinition.path === contentConfig.landingPage) {
+            return [targetRouteDefinition];
+        }
+
+        // no result found
+        return [];
+    });
+
+    if (
+        searchResultForDynamicLandingRoute.length === 1 &&
+        isNonEmptyObject(searchResultForDynamicLandingRoute[0])
+    ) {
+        const dynamicHomeRouteDefinition = {
+            path: '/',
+            label: 'Home',
+            element: searchResultForDynamicLandingRoute[0].element,
+        };
+
+        routeDefinitions[0] = dynamicHomeRouteDefinition;
+    }
+
+    return routeDefinitions.flatMap(
+        // filter + map
+        (input) =>
+            // keep static routes and dynamic ones with true for the 0th element of the tuple (the keep flag)
+            !Array.isArray(input) || input[0]
+                ? // If we have a tuple, the 1st element is a route definition factory and we inject the config, otherwise, we have a static route definition
+                  [Array.isArray(input) ? input[1](contentConfig) : input]
+                : []
+    );
+
+    //    .filter((input) => !Array.isArray(input) || input[0])
+    //  .map((input) => (Array.isArray(input) ? input[1](contentConfig) : input));
 };

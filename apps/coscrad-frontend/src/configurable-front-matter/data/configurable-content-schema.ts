@@ -97,6 +97,7 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     socialMediaLinks: SocialMediaLinks;
     alphabetConfig?: AlphabetConfig;
     additionalMaterials: AdditionalMaterialItem[];
+    landingPage?: string;
 };
 
 // is this still necessary?
